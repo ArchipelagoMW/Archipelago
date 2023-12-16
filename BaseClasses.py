@@ -252,15 +252,20 @@ class MultiWorld():
                                  range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
+        # TODO - remove this section once all worlds use options dataclasses
+        all_keys: Set[str] = {key for player in self.player_ids for key in
+                              AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
+        for option_key in all_keys:
+            option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
+                                         f"Please use `self.options.{option_key}` instead.")
+            option.update(getattr(args, option_key, {}))
+            setattr(self, option_key, option)
+
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
-            for option_key in world_type.options_dataclass.type_hints:
-                option_values = getattr(args, option_key, {})
-                setattr(self, option_key, option_values)
-                # TODO - remove this loop once all worlds use options dataclasses
-            options_dataclass: typing.Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
+            options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 

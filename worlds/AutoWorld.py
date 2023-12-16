@@ -77,6 +77,10 @@ class AutoWorldRegister(type):
         # create missing options_dataclass from legacy option_definitions
         # TODO - remove this once all worlds use options dataclasses
         if "options_dataclass" not in dct and "option_definitions" in dct:
+            # TODO - switch to deprecate after a version
+            if __debug__:
+                from warnings import warn
+                warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
