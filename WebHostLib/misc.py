@@ -110,7 +110,8 @@ def generate_yaml(game):
             if key_parts[-1] == "qty":
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
-                options[key_parts[0]][key_parts[1]] = val
+                if val != "0":
+                    options[key_parts[0]][key_parts[1]] = val
                 del options[key]
 
         # Error checking
