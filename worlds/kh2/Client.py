@@ -169,6 +169,13 @@ class KH2Context(CommonContext):
         self.ability_code_list = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
+        self.base_hp = 20
+        self.base_mp = 100
+        self.base_drive = 5
+        self.base_accessory_slots = 1
+        self.base_armor_slots = 1
+        self.base_item_slots = 3
+
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
@@ -211,13 +218,19 @@ class KH2Context(CommonContext):
         return self.kh2.read_short(self.kh2.base_address + address)
 
     def kh2_write_short(self, address, value):
-        return self.kh2.write_short(self.kh2.base_address + address, value)
+        self.kh2.write_short(self.kh2.base_address + address, value)
 
     def kh2_write_byte(self, address, value):
-        return self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
+        self.kh2.write_bytes(self.kh2.base_address + address, value.to_bytes(1, 'big'), 1)
 
     def kh2_read_byte(self, address):
         return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1), "big")
+
+    def kh2_read_int(self, address):
+        return self.kh2.read_int(self.kh2.base_address + address)
+
+    def kh2_write_int(self, address, value):
+        self.kh2.write_int(self.kh2.base_address + address, value)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
@@ -740,15 +753,61 @@ class KH2Context(CommonContext):
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
-                item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][item_name]
+                # checking if increases are actually going to sora
+                if self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5:
+                    if item_name == ItemName.MaxHPUp:
+                        if self.kh2_read_byte(self.Save + 0x2498) < 3:  # Non-Critical
+                            Bonus = 5
+                        else:  # Critical
+                            Bonus = 2
+                        if self.kh2_read_int(self.Slot1 + 0x004) != self.base_hp + (Bonus * amount_of_items):
+                            self.kh2_write_int(self.Slot1 + 0x004, self.base_hp + (Bonus * amount_of_items))
 
+                    elif item_name == ItemName.MaxMPUp:
+                        if self.kh2_read_byte(self.Save + 0x2498) < 3:  # Non-Critical
+                            Bonus = 10
+                        else:  # Critical
+                            Bonus = 5
+                        if self.kh2_read_int(self.Slot1 + 0x184) != self.base_mp + (Bonus * amount_of_items):
+                            self.kh2_write_int(self.Slot1 + 0x184, self.base_mp + (Bonus * amount_of_items))
+
+                    elif item_name == ItemName.DriveGaugeUp:
+                        current_max_drive = self.kh2_read_byte(self.Slot1 + 0x1B2)
+                        # change when max drive is changed from 6 to 4
+                        if current_max_drive < 9 and current_max_drive != self.base_drive + amount_of_items:
+                            self.kh2_write_byte(self.Slot1 + 0x1B2, self.base_drive + amount_of_items)
+
+                    elif item_name == ItemName.AccessorySlotUp:
+                        current_accessory = self.kh2_read_byte(self.Save + 0x2501)
+                        if current_accessory != self.base_accessory_slots + amount_of_items:
+                            if 4 > current_accessory < self.base_accessory_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2501, current_accessory + 1)
+                            elif self.base_accessory_slots + amount_of_items < 4:
+                                self.kh2_write_byte(self.Save + 0x2501, self.base_accessory_slots + amount_of_items)
+
+                    elif item_name == ItemName.ArmorSlotUp:
+                        current_armor_slots = self.kh2_read_byte(self.Save + 0x2500)
+                        if current_armor_slots != self.base_armor_slots + amount_of_items:
+                            if 4 > current_armor_slots < self.base_armor_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2500, current_armor_slots + 1)
+                            elif self.base_armor_slots + amount_of_items < 4:
+                                self.kh2_write_byte(self.Save + 0x2500, self.base_armor_slots + amount_of_items)
+
+                    elif item_name == ItemName.ItemSlotUp:
+                        current_item_slots = self.kh2_read_byte(self.Save + 0x2502)
+                        if current_item_slots != self.base_item_slots + amount_of_items:
+                            if 8 > current_item_slots < self.base_item_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
+                            elif self.base_item_slots + amount_of_items < 8:
+                                self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
                 # if slot1 has 5 drive gauge and goa lost illusion is checked and they are not in a cutscene
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
-                        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
-                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
-                    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+                # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
+                #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
+                #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
+                #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+
             if "PoptrackerVersionCheck" in self.kh2slotdata:
                 if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
                     self.kh2_write_byte(self.Save + 0x3607, 1)
