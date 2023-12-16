@@ -73,7 +73,7 @@
         <td>{{ OptionTitle(option_name, option) }}</td>
         <td>
             <div class="named-range-container">
-                <select data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
+                <select id="{{ option_name }}-select" data-option-name="{{ option_name }}" {{ "disabled" if option.default == "random" }}>
                     {% for key, val in option.special_range_names.items() %}
                         {% if option.default == val %}
                             <option value="{{ val }}" selected>{{ key }} ({{ val }})</option>

@@ -1,4 +1,6 @@
 window.addEventListener('load', () => {
+  // Load settings from localStorage, if available
+  loadSettings();
 
   // Handle changes to range inputs
   document.querySelectorAll('input[type=range]').forEach((range) => {
@@ -66,4 +68,60 @@ window.addEventListener('load', () => {
       document.getElementById(`${optionName}-custom`).value = '';
     });
   });
+
+  // Save settings to localStorage when form is submitted
+  document.getElementById('options-form').addEventListener('submit', saveSettings);
 });
+
+// Save all settings to localStorage
+const saveSettings = () => {
+  const options = {
+    inputs: {},
+    checkboxes: {},
+  };
+  document.querySelectorAll('input, select').forEach((input) => {
+    if (input.type === 'submit') {
+      // Ignore submit inputs
+    }
+    else if (input.type === 'checkbox') {
+      options.checkboxes[input.id] = input.checked;
+    }
+    else {
+      options.inputs[input.id] = input.value
+    }
+  });
+  const game = document.getElementById('player-options').getAttribute('data-game');
+  localStorage.setItem(game, JSON.stringify(options));
+};
+
+// Load all options from localStorage
+const loadSettings = () => {
+  const game = document.getElementById('player-options').getAttribute('data-game');
+  const options = JSON.parse(localStorage.getItem(game));
+  if (options) {
+    if (!options.inputs || !options.checkboxes) {
+      localStorage.removeItem(game);
+      return;
+    }
+
+    // Restore value-based inputs and selects
+    Object.keys(options.inputs).forEach((key) => {
+      try{
+        document.getElementById(key).value = options.inputs[key];
+      } catch (err) {
+        console.error(`Unable to restore value to input with id ${key}`);
+      }
+    });
+
+    // Restore checkboxes
+    Object.keys(options.checkboxes).forEach((key) => {
+      try{
+        if (options.checkboxes[key]) {
+          document.getElementById(key).setAttribute('checked', '1');
+        }
+      } catch (err) {
+        console.error(`Unable to restore value to input with id ${key}`);
+      }
+    });
+  }
+};
