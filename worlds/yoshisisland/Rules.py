@@ -62,7 +62,7 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
 
     set_rule(multiworld.get_location("Bigger Boo's Fort: Red Coins", player), lambda state: state.has_all({'! Switch', 'Key', 'Dashed Stairs'}, player))
     set_rule(multiworld.get_location("Bigger Boo's Fort: Flowers", player), lambda state: state.has_all({'! Switch', 'Key', 'Dashed Stairs'}, player))
-    set_rule(multiworld.get_location("Bigger Boo's Fort: Stars", player), lambda state: state.has_all({'! Switch', 'Dashed Stairs'}, player) and logic.has_midring(state))
+    set_rule(multiworld.get_location("Bigger Boo's Fort: Stars", player), lambda state: state.has_all({'! Switch', 'Key', 'Dashed Stairs'}, player) and logic.has_midring(state))
 
     set_rule(multiworld.get_location("Watch Out For Lakitu: Red Coins", player), lambda state: state.has_all({'Chomp Rock'}, player))
     set_rule(multiworld.get_location("Watch Out For Lakitu: Flowers", player), lambda state: state.has_all({'Key', 'Train Morph', 'Chomp Rock'}, player))
@@ -321,7 +321,7 @@ def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("What's Gusty Taste Like?: Level Clear", player), lambda state: True)
 
     set_rule(multiworld.get_location("Bigger Boo's Fort: Red Coins", player), lambda state: state.has_all({'! Switch', 'Key', 'Dashed Stairs'}, player))
-    set_rule(multiworld.get_location("Bigger Boo's Fort: Flowers", player), lambda state: state.has_all({'! Switch', 'Key'}, player))
+    set_rule(multiworld.get_location("Bigger Boo's Fort: Flowers", player), lambda state: state.has_all({'! Switch', 'Key', 'Dashed Stairs'}, player))
     set_rule(multiworld.get_location("Bigger Boo's Fort: Stars", player), lambda state: state.has_all({'! Switch', 'Dashed Stairs'}, player))
 
     set_rule(multiworld.get_location("Watch Out For Lakitu: Red Coins", player), lambda state: True)
