@@ -1064,6 +1064,9 @@ doors:
     Hallway Door:
       item: 444459
       location: 445214
+    Lookout Entrance:
+      item: 444579
+      location: 445271
   Dread Hallway:
     Tenacious Entrance:
       item: 444462
@@ -1402,7 +1405,7 @@ doors:
       item: 444570
       location: 445266
   Room Room:
-    Shortcut to Fifth Floor:
+    Cellar Exit:
       item: 444571
       location: 445076
   Outside The Wise:
