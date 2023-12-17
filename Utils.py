@@ -779,6 +779,25 @@ def deprecate(message: str):
     import warnings
     warnings.warn(message)
 
+
+class DeprecateDict(dict):
+    log_message: str
+    should_error: bool
+
+    def __init__(self, message, error: bool = False) -> None:
+        self.log_message = message
+        self.should_error = error
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        if self.should_error:
+            deprecate(self.log_message)
+        elif __debug__:
+            import warnings
+            warnings.warn(self.log_message)
+        return super().__getitem__(item)
+
+
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
     # upstream issue: https://github.com/python/cpython/issues/76327
