@@ -34,7 +34,7 @@ class SC2WoLWorld(World):
 
     game = "Starcraft 2 Wings of Liberty"
     web = Starcraft2WoLWebWorld()
-    data_version = 4
+    data_version = 5
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
@@ -46,7 +46,7 @@ class SC2WoLWorld(World):
     mission_req_table = {}
     final_mission_id: int
     victory_item: str
-    required_client_version = 0, 3, 6
+    required_client_version = 0, 4, 3
 
     def __init__(self, multiworld: MultiWorld, player: int):
         super(SC2WoLWorld, self).__init__(multiworld, player)

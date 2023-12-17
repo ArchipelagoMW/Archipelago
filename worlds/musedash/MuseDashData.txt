@@ -404,7 +404,7 @@ trippers feeling!|8-4|Give Up TREATMENT Vol.3|True|5|7|9|11
 Lilith ambivalence lovers|8-5|Give Up TREATMENT Vol.3|False|5|8|10|
 Brave My Soul|7-0|Give Up TREATMENT Vol.2|False|4|6|8|
 Halcyon|7-1|Give Up TREATMENT Vol.2|False|4|7|10|
-Crimson Nightingle|7-2|Give Up TREATMENT Vol.2|True|4|7|10|
+Crimson Nightingale|7-2|Give Up TREATMENT Vol.2|True|4|7|10|
 Invader|7-3|Give Up TREATMENT Vol.2|True|3|7|11|
 Lyrith|7-4|Give Up TREATMENT Vol.2|False|5|7|10|
 GOODBOUNCE|7-5|Give Up TREATMENT Vol.2|False|4|6|9|
@@ -489,3 +489,16 @@ The Vampire|66-6|Miku in Museland|False|4|6|9|
 Future Eve|66-7|Miku in Museland|False|4|8|11|
 Unknown Mother Goose|66-8|Miku in Museland|False|4|8|10|
 Shun-ran|66-9|Miku in Museland|False|4|7|9|
+NICE TYPE feat. monii|43-41|MD Plus Project|True|3|6|8|
+Rainy Angel|67-0|Happy Otaku Pack Vol.18|True|4|6|9|11
+Gullinkambi|67-1|Happy Otaku Pack Vol.18|True|4|7|10|
+RakiRaki Rebuilders!!!|67-2|Happy Otaku Pack Vol.18|True|5|7|10|
+Laniakea|67-3|Happy Otaku Pack Vol.18|False|5|8|10|
+OTTAMA GAZER|67-4|Happy Otaku Pack Vol.18|True|5|8|10|
+Sleep Tight feat.Macoto|67-5|Happy Otaku Pack Vol.18|True|3|5|8|
+New York Back Raise|68-0|Gambler's Tricks|True|6|8|10|
+slic.hertz|68-1|Gambler's Tricks|True|5|7|9|
+Fuzzy-Navel|68-2|Gambler's Tricks|True|6|8|10|11
+Swing Edge|68-3|Gambler's Tricks|True|4|8|10|
+Twisted Escape|68-4|Gambler's Tricks|True|5|8|10|11
+Swing Sweet Twee Dance|68-5|Gambler's Tricks|False|4|7|10|

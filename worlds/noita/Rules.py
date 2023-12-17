@@ -50,10 +50,9 @@ wand_tiers: List[str] = [
 ]
 
 
-items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+items_hidden_from_shops: List[str] = ["Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
-                                     "Powder Pouch"}
-
+                                     "Powder Pouch"]
 
 perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
@@ -64,11 +63,11 @@ perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
 
 def has_perk_count(state: CollectionState, player: int, amount: int) -> bool:
-    return sum(state.item_count(perk, player) for perk in perk_list) >= amount
+    return sum(state.count(perk, player) for perk in perk_list) >= amount
 
 
 def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
-    return state.item_count("Orb", player) >= amount
+    return state.count("Orb", player) >= amount
 
 
 def forbid_items_at_location(world: NoitaWorld, location_name: str, items: Set[str]):
@@ -160,11 +159,12 @@ def victory_unlock_conditions(world: NoitaWorld) -> None:
 
 
 def create_all_rules(world: NoitaWorld) -> None:
-    ban_items_from_shops(world)
-    ban_early_high_tier_wands(world)
-    lock_holy_mountains_into_spheres(world)
-    holy_mountain_unlock_conditions(world)
-    biome_unlock_conditions(world)
+    if world.multiworld.players > 1:
+        ban_items_from_shops(world)
+        ban_early_high_tier_wands(world)
+        lock_holy_mountains_into_spheres(world)
+        holy_mountain_unlock_conditions(world)
+        biome_unlock_conditions(world)
     victory_unlock_conditions(world)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
