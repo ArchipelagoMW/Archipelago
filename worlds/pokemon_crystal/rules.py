@@ -99,7 +99,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Cherrygrove
     set_rule(get_location("Cherrygrove City - Mystic Water from Island Man"), can_surf)
 
-    set_rule(get_entrance("REGION_ROUTE_31 -> REGION_DARK_CAVE_VIOLET_ENTRANCE"),    can_flash)
+    set_rule(get_entrance("REGION_ROUTE_31 -> REGION_DARK_CAVE_VIOLET_ENTRANCE"), can_flash)
 
     set_rule(get_location("Route 31 - TM50 for Delivering Kenya"),
              lambda state: state.has("EVENT_GOT_KENYA", world.player))
@@ -204,7 +204,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Burned Tower B1F - Item"), can_strength)
 
     set_rule(get_entrance("REGION_ECRUTEAK_CITY -> REGION_TIN_TOWER_1F"), lambda state: state.has("Clear Bell",
-             world.player) and state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
+                                                                                                  world.player) and state.has(
+        "EVENT_CLEARED_RADIO_TOWER", world.player))
 
     # Olivine City
     set_rule(get_location("EVENT_JASMINE_RETURNED_TO_GYM"), lambda state: state.has("Secretpotion", world.player))
@@ -459,13 +460,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
              lambda state: can_cut(state) or can_surf(state))
 
-    set_rule(get_location("Vermilion City - HP Up from Lance"), lambda state: has_n_badges(state, 16))
+    set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), lambda state: has_n_badges(state, 16))
 
-    set_rule(get_location("Vermilion City - HP Up from Lance"), lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO",
-             world.player) and state.has("EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM", world.player))
+    set_rule(get_location("Vermilion City - Lost Item from Guy in Fan Club"),
+             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
+                 "EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM", world.player))
 
     if hidden():
-        set_rule(get_location("Vermilion Port - Hidden Item in Buoy"),    can_surf)
+        set_rule(get_location("Vermilion Port - Hidden Item in Buoy"), can_surf)
 
     set_rule(get_location("EVENT_FOUGHT_SNORLAX"), lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
 
