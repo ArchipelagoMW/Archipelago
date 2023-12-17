@@ -220,3 +220,5 @@ for location_group in location_region_mapping.values():
 
         location_name_to_id.update(entries)
         location_name_groups[locinfo.ltype].update(entries.keys())
+
+shop_locations = {name for name in location_name_to_id.keys() if "Shop Item" in name}

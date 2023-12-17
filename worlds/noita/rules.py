@@ -85,8 +85,7 @@ def forbid_items_at_locations(world: "NoitaWorld", shop_locations: Set[str], for
 #         if "Shop Item" in location_name:
 #             forbid_items_at_location(world, location_name, items_hidden_from_shops)
 def ban_items_from_shops(world: "NoitaWorld") -> None:
-    shop_locations = {name for name in locations.location_name_to_id.keys() if "Shop Item" in name}
-    forbid_items_at_locations(world, shop_locations, items_hidden_from_shops)
+    forbid_items_at_locations(world, locations.shop_locations, items_hidden_from_shops)
 
 
 # Prevent high tier wands from appearing in early Holy Mountain shops
