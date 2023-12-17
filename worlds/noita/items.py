@@ -3,7 +3,7 @@ from collections import Counter
 from typing import Dict, List, NamedTuple, Set, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
+from .options import BossesAsChecks, VictoryCondition, ExtraOrbs
 
 if TYPE_CHECKING:
     from . import NoitaWorld

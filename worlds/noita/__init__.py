@@ -1,8 +1,8 @@
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from typing import Dict, Any
-from . import Events, Items, Locations, Regions, Rules
-from .Options import NoitaOptions
+from . import events, items, locations, regions, rules
+from .options import NoitaOptions
 
 
 class NoitaWeb(WebWorld):
@@ -29,11 +29,11 @@ class NoitaWorld(World):
     options: NoitaOptions
     options_dataclass = NoitaOptions
 
-    item_name_to_id = Items.item_name_to_id
-    location_name_to_id = Locations.location_name_to_id
+    item_name_to_id = items.item_name_to_id
+    location_name_to_id = locations.location_name_to_id
 
-    item_name_groups = Items.item_name_groups
-    location_name_groups = Locations.location_name_groups
+    item_name_groups = items.item_name_groups
+    location_name_groups = locations.location_name_groups
     data_version = 2
 
     web = NoitaWeb()
@@ -44,16 +44,16 @@ class NoitaWorld(World):
                                     "pedestal_checks", "orbs_as_checks", "bosses_as_checks", "extra_orbs", "shop_price")
 
     def create_regions(self) -> None:
-        Regions.create_all_regions_and_connections(self)
+        regions.create_all_regions_and_connections(self)
 
     def create_item(self, name: str) -> Item:
-        return Items.create_item(self.player, name)
+        return items.create_item(self.player, name)
 
     def create_items(self) -> None:
-        Items.create_all_items(self)
+        items.create_all_items(self)
 
     def set_rules(self) -> None:
-        Rules.create_all_rules(self)
+        rules.create_all_rules(self)
 
     def get_filler_item_name(self) -> str:
-        return self.random.choice(Items.filler_items)
+        return self.random.choice(items.filler_items)

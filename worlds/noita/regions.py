@@ -2,31 +2,31 @@
 from typing import Dict, List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
-from . import Locations
-from .Events import create_all_events
+from . import locations
+from .events import create_all_events
 
 if TYPE_CHECKING:
     from . import NoitaWorld
 
 
 def create_locations(world: "NoitaWorld", region: Region) -> None:
-    locations = Locations.location_region_mapping.get(region.name, {})
-    for location_name, location_data in locations.items():
+    locs = locations.location_region_mapping.get(region.name, {})
+    for location_name, location_data in locs.items():
         location_type = location_data.ltype
         flag = location_data.flag
 
         is_orb_allowed = location_type == "orb" and flag <= world.options.orbs_as_checks
         is_boss_allowed = location_type == "boss" and flag <= world.options.bosses_as_checks
         amount = 0
-        if flag == Locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
+        if flag == locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
             amount = 1
         elif location_type == "chest" and flag <= world.options.path_option:
             amount = world.options.hidden_chests.value
         elif location_type == "pedestal" and flag <= world.options.path_option:
             amount = world.options.pedestal_checks.value
 
-        region.add_locations(Locations.make_location_range(location_name, location_data.id, amount),
-                             Locations.NoitaLocation)
+        region.add_locations(locations.make_location_range(location_name, location_data.id, amount),
+                             locations.NoitaLocation)
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.

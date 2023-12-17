@@ -1,17 +1,17 @@
 from typing import Dict, TYPE_CHECKING
 from BaseClasses import Item, ItemClassification, Location, Region
-from . import Items, Locations
+from . import items, locations
 
 if TYPE_CHECKING:
     from . import NoitaWorld
 
 
 def create_event(player: int, name: str) -> Item:
-    return Items.NoitaItem(name, ItemClassification.progression, None, player)
+    return items.NoitaItem(name, ItemClassification.progression, None, player)
 
 
 def create_location(player: int, name: str, region: Region) -> Location:
-    return Locations.NoitaLocation(player, name, None, region)
+    return locations.NoitaLocation(player, name, None, region)
 
 
 def create_locked_location_event(player: int, region: Region, item: str) -> Location:
