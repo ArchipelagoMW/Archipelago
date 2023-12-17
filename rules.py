@@ -35,11 +35,11 @@ def needs_items(player: int, requirements: Iterable[Iterable[RequiredItem]]) -> 
     return has_requirements
 
 
-def get_access_rule(player: int, level: str):
-    rule = level_rules[level]
+def get_access_rule(player: int, region_name: str):
+    rule = region_rules[region_name]
     if rule is None:
         return None
-    return needs_items(player, level_rules[level])
+    return needs_items(player, region_rules[region_name])
 
 
 def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
@@ -60,36 +60,47 @@ def set_access_rules(multiworld: MultiWorld, player: int):
                 raise ValueError(f'Location {name} does not exist') from k
 
 
-level_rules = {
-    'Hall of Hieroglyphs':   [['Dash Attack', 'Grab', 'Super Ground Pound']],
 
-    'Palm Tree Paradise':       None,
-    'Wildflower Fields':     [['Super Ground Pound', 'Swim']],
-    'Mystic Lake':           [['Swim', 'Head Smash']],
-    'Monsoon Jungle':        [['Ground Pound']],
+# Regions are linear, so each region from the same level adds to the previous
+region_rules = {
+    'Hall of Hieroglyphs':                  [['Dash Attack', 'Grab', 'Super Ground Pound']],
 
-    'The Curious Factory':      None,
-    'The Toxic Landfill':    [['Dash Attack', 'Super Ground Pound', 'Head Smash']],
-    '40 Below Fridge':       [['Super Ground Pound']],
-    'Pinball Zone':          [['Grab', 'Ground Pound', 'Head Smash']],
+    'Palm Tree Paradise':                     None,
+    'Wildflower Fields - Before Sunflower': [['Super Ground Pound']],
+    'Wildflower Fields - After Sunflower':  [['Swim']],
+    'Mystic Lake - Early':                  [['Swim']],
+    'Mystic Lake - Late':                   [['Head Smash']],
+    'Monsoon Jungle - Upper':                 None,
+    'Monsoon Jungle - Lower':               [['Ground Pound']],
 
-    'Toy Block Tower':       [['Heavy Grab']],
-    'The Big Board':         [['Ground Pound']],
-    'Doodle Woods':             None,
+    'The Curious Factory':                    None,
+    'The Toxic Landfill':                   [['Dash Attack', 'Super Ground Pound', 'Head Smash']],
+    '40 Below Fridge':                      [['Super Ground Pound']],
+    'Pinball Zone - Early Rooms':           [['Grab']],
+    'Pinball Zone - Late Rooms':            [['Ground Pound']],
+    'Pinball Zone - Escape':                [['Head Smash']],
+
+    'Toy Block Tower':                      [['Heavy Grab']],
+    'The Big Board':                        [['Ground Pound']],
+    'Doodle Woods':                           None,
     # Note: You can also open the way to the exit by throwing a Toy Car across
     # the green room, but that feels obscure enough that I should just ignore it
-    'Domino Row':            [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
+    'Domino Row - Before Lake':               None,
+    'Domino Row - After Lake':              [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
 
-    'Crescent Moon Village': [['Head Smash', 'Dash Attack']],
-    'Arabian Night':         [['Swim']],
-    'Fiery Cavern':          [['Ground Pound', 'Dash Attack', 'Head Smash']],
-    'Hotel Horror':          [['Heavy Grab']],
+    'Crescent Moon Village - Upper':        [['Head Smash']],
+    'Crescent Moon Village - Lower':        [['Dash Attack']],
+    'Arabian Night - Town':                   None,
+    'Arabian Night - Sewer':                [['Swim']],
+    'Fiery Cavern - Flaming':                 None,
+    'Fiery Cavern - Frozen':                [['Ground Pound', 'Dash Attack', 'Head Smash']],
+    'Hotel Horror':                         [['Heavy Grab']],
 
     # This one's weird. You need swim to get anything, but Keyzer also requires
     # grab. Logic considers the escape necessary to get the items in a level and
     # Keyzer to advance, but Golden Passage is the only level where the two have
     # different requirements.
-    'Golden Passage':        [['Swim']],
+    'Golden Passage':                       [['Swim']],
 }
 
 

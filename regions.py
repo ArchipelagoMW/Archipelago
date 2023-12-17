@@ -63,13 +63,54 @@ def create_main_regions(world: MultiWorld, player: int, location_table: Set[str]
     ]
 
 
+# Eventually I'll want to make trees out of the regions in the levels for
+# diamond shuffle, but sequences will work for now
+regions_in_levels = {
+    'Hall of Hieroglyphs':   None,
+
+    'Palm Tree Paradise':    None,
+    'Wildflower Fields':     ['Before Sunflower', 'After Sunflower'],
+    'Mystic Lake':           ['Early', 'Late'],
+    'Monsoon Jungle':        ['Upper', 'Lower'],
+
+    'The Curious Factory':   None,
+    'The Toxic Landfill':    None,
+    '40 Below Fridge':       None,
+    'Pinball Zone':          ['Early Rooms', 'Late Rooms', 'Escape'],
+
+    'Toy Block Tower':       None,
+    'The Big Board':         None,
+    'Doodle Woods':          None,
+    'Domino Row':            ['Before Lake', 'After Lake'],
+
+    'Crescent Moon Village': ['Upper', 'Lower'],
+    'Arabian Night':         ['Town', 'Sewer'],
+    'Fiery Cavern':          ['Flaming', 'Frozen'],
+    'Hotel Horror':          None,
+
+    'Golden Passage':        None,
+}
+
+
+def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
+    entrance = f'{level_name} (entrance)'
+    regions = regions_in_levels[level_name]
+    if regions and not merge:
+        regions = (f'{level_name} - {region}' for region in regions)
+    else:
+        regions = ()
+    return entrance, level_name, *regions
+
+
 def create_level_regions(world: MultiWorld, player: int, location_table: Set[str]):
     basic_region = basic_region_creator(world, player, location_table)
 
     def level_regions(name: str, passage: Passage, level: int):
-        entrance = basic_region(f'{name} (entrance)')
-        boxes = basic_region(name, get_level_locations(passage, level))
-        return entrance, boxes
+        region_names = get_region_names(name, merge=True)
+        regions = [basic_region(region) for region in region_names]
+        add_locations_to_region(regions[-1], player, location_table,
+                                get_level_locations(passage, level))
+        return regions
 
     hall_of_hieroglyphs = level_regions('Hall of Hieroglyphs', Passage.ENTRY, 0)
 
@@ -118,12 +159,19 @@ def create_level_regions(world: MultiWorld, player: int, location_table: Set[str
 
 
 def connect_regions(world: MultiWorld, player: int):
+    def make_level_access_rule(level) -> AccessRule:
+        regions = get_region_names(level)
+        if level == 'Hotel Horror' and world.difficulty[player].value == 2:
+            return None
+        if len(regions) == 2:
+            return rules.get_access_rule(player, regions[1])
+        # FIXME: This fails unit tests if it's a generator expression?
+        region_rules = [rules.get_access_rule(player, region) for region in regions[2:]]
+        return lambda state: all(rule(state) for rule in filter(None, region_rules))
+
     def connect_level(level_name):
-        if level_name == 'Hotel Horror' and world.difficulty[player].value == 2:
-            rule = None
-        else:
-            rule = rules.get_access_rule(player, level_name)
-        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name, rule)
+        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name,
+                         make_level_access_rule(level_name))
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')
@@ -219,10 +267,15 @@ def connect_regions(world: MultiWorld, player: int):
 def create_region(world: MultiWorld, player: int, location_table: Set[str],
                   name: str, locations: Iterable[str] = ()) -> WL4Region:
     region = WL4Region(name, player, world)
+    add_locations_to_region(region, player, location_table, locations)
+    return region
+
+
+def add_locations_to_region(region: WL4Region, player: int,
+                            location_table: Set[str], locations: Iterable[str]):
     for location in locations:
         if location in location_table:
             region.locations.append(WL4Location.from_name(player, location, region))
-    return region
 
 
 def connect_entrance(world: MultiWorld, player: int, name: str,
