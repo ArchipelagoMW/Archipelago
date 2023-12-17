@@ -27,8 +27,10 @@ from .models import Command, GameDataPackage, Room, db
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
 
-    def _cmd_video(self, platform, user):
-        """Set a link for your name in the WebHostLib tracker pointing to a video stream"""
+    def _cmd_video(self, platform: str, user: str):
+        """Set a link for your name in the WebHostLib tracker pointing to a video stream.
+        Currently, only YouTube and Twitch platforms are supported.
+        """
         if platform.lower().startswith("t"):  # twitch
             self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
             self.ctx.save()
@@ -203,6 +205,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
         await ctx.shutdown_task
+
+        # ensure auto launch is on the same page in regard to room activity.
+        with db_session:
+            room: Room = Room.get(id=ctx.room_id)
+            room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
+
         logging.info("Shutting down")
 
     with Locker(room_id):
