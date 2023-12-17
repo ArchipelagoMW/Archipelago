@@ -12,11 +12,11 @@ snes_logger = logging.getLogger("SNES")
 
 # FXPAK Pro protocol memory mapping used by SNI
 ROM_START = 0x000000
-WRAM_START = 0xF50000
-WRAM_SIZE = 0x20000
 SRAM_1_START = 0xE00000
 
 # KDL3
+KDL3_HALKEN = SRAM_1_START + 0x80F0
+KDL3_NINTEN = SRAM_1_START + 0x8FF0
 KDL3_ROMNAME = SRAM_1_START + 0x8100
 KDL3_DEATH_LINK_ADDR = SRAM_1_START + 0x9010
 KDL3_GOAL_ADDR = SRAM_1_START + 0x9012
@@ -208,8 +208,11 @@ class KDL3SNIClient(SNIClient):
         rom = await snes_read(ctx, KDL3_ROMNAME, 0x15)
         if rom != ctx.rom:
             ctx.rom = None
-        halken = await snes_read(ctx, WRAM_START, 6)
+        halken = await snes_read(ctx, KDL3_HALKEN, 6)
         if halken != b"halken":
+            return
+        ninten = await snes_read(ctx, KDL3_NINTEN, 6)
+        if ninten != b"ninten":
             return
         if not ctx.server:
             return

@@ -5,6 +5,7 @@
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Kirby's Dream Land 3 Patch Setup`
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
+        - snes9x-emunwa from: [snes9x-emunwa Releases Page](https://github.com/Skarsnik/snes9x-emunwa/releases)
         - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
         - BizHawk from: [BizHawk Website](http://tasvideos.org/BizHawk.html)
         - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)

@@ -417,6 +417,25 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                               0x6B,  # RTL
                               ])
 
+    rom.write_bytes(0x23FC, [0x22, 0x30, 0xA0, 0x07,  # JSL $07A030
+                             0xEA, ])  # NOP
+
+    # write halken/ninten validation into bwram
+    rom.write_bytes(0x3A030, [0xA2, 0x05, 0x00,  # LDX #$0005
+                              0xBF, 0x05, 0xA4, 0x00,  # LDA $A405, X - loop head (halken)
+                              0x9F, 0xF0, 0x80, 0x40,  # STA $4080F0, X
+                              0xCA,  # DEX
+                              0x10, 0xF5,  # BPL loop head - branch if more letters to copy
+                              0xA2, 0x05, 0x00,  # LDX #$0005
+                              0xBF, 0x0B, 0xA4, 0x00,  # LDA $A40B, X - loop head (ninten)
+                              0x9F, 0xF0, 0x8F, 0x40,  # STA $408FF0, X
+                              0xCA,  # DEX
+                              0x10, 0xF5,  # BPL loop head - branch if more letters to copy
+                              0xC2, 0x20,  # REP #$20
+                              0xA9, 0x01, 0x00,  # LDA #$0001
+                              0x6B,  # RTL
+                              ])
+
     # Copy Ability
     rom.write_bytes(0x399A0, [0xB9, 0xF3, 0x54,  # LDA $54F3
                               0x48,  # PHA
