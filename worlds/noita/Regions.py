@@ -1,5 +1,5 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, Set, TYPE_CHECKING, List
+from typing import Dict, List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 from . import Locations
@@ -7,11 +7,9 @@ from .Events import create_all_events
 
 if TYPE_CHECKING:
     from . import NoitaWorld
-else:
-    NoitaWorld = object
 
 
-def add_locations(world: NoitaWorld, region: Region) -> None:
+def create_locations(world: "NoitaWorld", region: Region) -> None:
     locations = Locations.location_region_mapping.get(region.name, {})
     for location_name, location_data in locations.items():
         location_type = location_data.ltype
@@ -32,13 +30,13 @@ def add_locations(world: NoitaWorld, region: Region) -> None:
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
-def create_region(world: NoitaWorld, region_name: str) -> Region:
+def create_region(world: "NoitaWorld", region_name: str) -> Region:
     new_region = Region(region_name, world.player, world.multiworld)
-    add_locations(world, new_region)
+    create_locations(world, new_region)
     return new_region
 
 
-def create_regions(world: NoitaWorld) -> Dict[str, Region]:
+def create_regions(world: "NoitaWorld") -> Dict[str, Region]:
     return {name: create_region(world, name) for name in noita_regions}
 
 
@@ -57,7 +55,7 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 
 # Creates all regions and connections. Called from NoitaWorld.
-def create_all_regions_and_connections(world: NoitaWorld) -> None:
+def create_all_regions_and_connections(world: "NoitaWorld") -> None:
     created_regions = create_regions(world)
     create_connections(world.player, created_regions)
     create_all_events(world, created_regions)

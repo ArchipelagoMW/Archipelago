@@ -59,7 +59,8 @@ def create_random_items(world: NoitaWorld, weights: Dict[str, int], count: int) 
                                 k=count)
 
 
-def create_all_items(world: NoitaWorld, player: int) -> None:
+def create_all_items(world: NoitaWorld) -> None:
+    player = world.player
     locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
 
     itempool = (
@@ -72,7 +73,7 @@ def create_all_items(world: NoitaWorld, player: int) -> None:
     # if there's not enough shop-allowed items in the pool, we can encounter gen issues
     # 39 is the number of shop-valid items we need to guarantee
     if len(itempool) < 39:
-        itempool += create_random_items(world, player, shop_only_filler_weights, 39 - len(itempool))
+        itempool += create_random_items(world, shop_only_filler_weights, 39 - len(itempool))
         # this is so that it passes tests and gens if you have minimal locations and only one player
         if world.multiworld.players == 1:
             for location in world.multiworld.get_unfilled_locations(player):
@@ -80,7 +81,7 @@ def create_all_items(world: NoitaWorld, player: int) -> None:
                     location.item = create_item(player, itempool.pop())
             locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
 
-    itempool += create_random_items(world, player, filler_weights, locations_to_fill - len(itempool))
+    itempool += create_random_items(world, filler_weights, locations_to_fill - len(itempool))
     world.multiworld.itempool += [create_item(player, name) for name in itempool]
 
 

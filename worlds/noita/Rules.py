@@ -7,8 +7,6 @@ from worlds.generic import Rules as GenericRules
 
 if TYPE_CHECKING:
     from . import NoitaWorld
-else:
-    NoitaWorld = object
 
 
 class EntranceLock(NamedTuple):
@@ -50,9 +48,9 @@ wand_tiers: List[str] = [
 ]
 
 
-items_hidden_from_shops: List[str] = ["Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
-                                     "Powder Pouch"]
+                                     "Powder Pouch"}
 
 perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
@@ -70,9 +68,10 @@ def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
     return state.count("Orb", player) >= amount
 
 
-def forbid_items_at_location(world: NoitaWorld, location_name: str, items: Set[str]):
-    location = world.multiworld.get_location(location_name, world.player)
-    GenericRules.forbid_items_for_player(location, items, world.player)
+def forbid_items_at_locations(world: "NoitaWorld", shop_locations: Set[str], items: Set[str]):
+    for shop_location in shop_locations:
+        location = world.multiworld.get_location(shop_location, world.player)
+        GenericRules.forbid_items_for_player(location, items, world.player)
 
 
 # ----------------
@@ -81,35 +80,36 @@ def forbid_items_at_location(world: NoitaWorld, location_name: str, items: Set[s
 
 
 # Prevent gold and potions from appearing as purchasable items in shops (because physics will destroy them)
-def ban_items_from_shops(world: NoitaWorld) -> None:
-    for location_name in Locations.location_name_to_id.keys():
-        if "Shop Item" in location_name:
-            forbid_items_at_location(world, location_name, items_hidden_from_shops)
+# def ban_items_from_shops(world: "NoitaWorld") -> None:
+#     for location_name in Locations.location_name_to_id.keys():
+#         if "Shop Item" in location_name:
+#             forbid_items_at_location(world, location_name, items_hidden_from_shops)
+def ban_items_from_shops(world: "NoitaWorld") -> None:
+    shop_locations = {name for name in Locations.location_name_to_id.keys() if "Shop Item" in name}
+    forbid_items_at_locations(world, shop_locations, items_hidden_from_shops)
 
 
 # Prevent high tier wands from appearing in early Holy Mountain shops
-def ban_early_high_tier_wands(world: NoitaWorld) -> None:
+def ban_early_high_tier_wands(world: "NoitaWorld") -> None:
     for i, region_name in enumerate(holy_mountain_regions):
         wands_to_forbid = set(wand_tiers[i+1:])
 
-        locations_in_region = Locations.location_region_mapping[region_name].keys()
-        for location_name in locations_in_region:
-            forbid_items_at_location(world, location_name, wands_to_forbid)
+        locations_in_region = set(Locations.location_region_mapping[region_name].keys())
+        forbid_items_at_locations(world, locations_in_region, wands_to_forbid)
 
     # Prevent high tier wands from appearing in the Secret shop
     wands_to_forbid = set(wand_tiers[3:])
-    locations_in_region = Locations.location_region_mapping["Secret Shop"].keys()
-    for location_name in locations_in_region:
-        forbid_items_at_location(world, location_name, wands_to_forbid)
+    locations_in_region = set(Locations.location_region_mapping["Secret Shop"].keys())
+    forbid_items_at_locations(world, locations_in_region, wands_to_forbid)
 
 
-def lock_holy_mountains_into_spheres(world: NoitaWorld) -> None:
+def lock_holy_mountains_into_spheres(world: "NoitaWorld") -> None:
     for lock in entrance_locks:
         location = world.multiworld.get_entrance(f"From {lock.source} To {lock.destination}", world.player)
         GenericRules.set_rule(location, lambda state, evt=lock.event: state.has(evt, world.player))
 
 
-def holy_mountain_unlock_conditions(world: NoitaWorld) -> None:
+def holy_mountain_unlock_conditions(world: "NoitaWorld") -> None:
     victory_condition = world.options.victory_condition.value
     for lock in entrance_locks:
         location = world.multiworld.get_location(lock.event, world.player)
@@ -130,7 +130,7 @@ def holy_mountain_unlock_conditions(world: NoitaWorld) -> None:
             )
 
 
-def biome_unlock_conditions(world: NoitaWorld):
+def biome_unlock_conditions(world: "NoitaWorld"):
     lukki_entrances = world.multiworld.get_region("Lukki Lair", world.player).entrances
     magical_entrances = world.multiworld.get_region("Magical Temple", world.player).entrances
     wizard_entrances = world.multiworld.get_region("Wizards' Den", world.player).entrances
@@ -143,7 +143,7 @@ def biome_unlock_conditions(world: NoitaWorld):
         entrance.access_rule = lambda state: state.has("All-Seeing Eye Perk", world.player)
 
 
-def victory_unlock_conditions(world: NoitaWorld) -> None:
+def victory_unlock_conditions(world: "NoitaWorld") -> None:
     victory_condition = world.options.victory_condition.value
     victory_location = world.multiworld.get_location("Victory", world.player)
 
@@ -158,7 +158,7 @@ def victory_unlock_conditions(world: NoitaWorld) -> None:
 # ----------------
 
 
-def create_all_rules(world: NoitaWorld) -> None:
+def create_all_rules(world: "NoitaWorld") -> None:
     if world.multiworld.players > 1:
         ban_items_from_shops(world)
         ban_early_high_tier_wands(world)
@@ -169,4 +169,5 @@ def create_all_rules(world: NoitaWorld) -> None:
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)
     if world.options.bosses_as_checks.value >= BossesAsChecks.option_all_bosses:
-        forbid_items_at_location(world, "Toveri", {"Spatial Awareness Perk"})
+        toveri = world.multiworld.get_location("Toveri", world.player)
+        GenericRules.forbid_items_for_player(toveri, {"Spatial Awareness Perk"}, world.player)
