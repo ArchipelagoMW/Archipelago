@@ -129,18 +129,18 @@ class ShortHikeWorld(World):
         slot_data: Dict[str, Any] = {}
         locations: Dict[int, Any] = {}
 
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
         options = self.options
 
-        for loc in world.get_filled_locations(player):
+        for loc in multiworld.get_filled_locations(player):
             if loc.item.code == None:
                 continue
             else:
                 data = {
                     "ap_id": loc.address,
                     "item_name": loc.item.name,
-                    "player_name": world.player_name[loc.item.player],
+                    "player_name": multiworld.player_name[loc.item.player],
                     "type": int(loc.item.classification),
                     "chest_angle": self.location_name_to_chest_angle[loc.name]
                 }
