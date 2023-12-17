@@ -4,6 +4,8 @@ import tempfile
 from typing import List, Dict, Union
 
 import flask
+import requests
+import json
 import yaml
 
 import jinja2.exceptions
@@ -96,6 +98,7 @@ def player_options(game: str, message: str = None):
 def generate_yaml(game):
     if request.method == "POST":
         options = {}
+        intent_generate = False
         for key, val in request.form.items(multi=True):
             if key in options:
                 if not isinstance(options[key], list):
@@ -111,7 +114,7 @@ def generate_yaml(game):
                 if key_parts[0] not in options:
                     options[key_parts[0]] = {}
                 if val != "0":
-                    options[key_parts[0]][key_parts[1]] = val
+                    options[key_parts[0]][key_parts[1]] = int(val)
                 del options[key]
 
         # Error checking
@@ -120,6 +123,7 @@ def generate_yaml(game):
 
         # Remove POST data irrelevant to YAML
         if "intent-generate" in options:
+            intent_generate = True
             del options["intent-generate"]
         if "intent-export" in options:
             del options["intent-export"]
@@ -135,10 +139,29 @@ def generate_yaml(game):
             game: options,
         }
 
-        response = flask.Response(yaml.dump(formatted_options))
-        response.headers["Content-Type"] = "text/yaml"
-        response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
-        return response
+        if intent_generate:
+            payload = {
+                "race": 0,
+                "hint_cost": 10,
+                "forfeit_mode": "auto",
+                "remaining_mode": "disabled",
+                "collect_mode": "goal",
+                "weights": {
+                    player_name: formatted_options,
+                },
+            }
+            r = requests.post("https://archipelago.gg/api/generate", json=payload)
+            if 200 <= r.status_code <= 299:
+                response_data = r.json()
+                return redirect(response_data["url"])
+            else:
+                return r.text
+
+        else:
+            response = flask.Response(yaml.dump(formatted_options))
+            response.headers["Content-Type"] = "text/yaml"
+            response.headers["Content-Disposition"] = f"attachment; filename={player_name}.yaml"
+            return response
 
 
 # Game Info Pages
