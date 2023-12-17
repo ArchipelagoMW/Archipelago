@@ -117,6 +117,12 @@ def generate_yaml(game):
                     options[key_parts[0]][key_parts[1]] = int(val)
                 del options[key]
 
+        # Detect random-* keys and set their options accordingly
+        for key, val in options.copy().items():
+            if key.startswith("random-"):
+                options[key.removeprefix("random-")] = "random"
+                del options[key]
+
         # Error checking
         if not options["name"]:
             return "Player name is required."
