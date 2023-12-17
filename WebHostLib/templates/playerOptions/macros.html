@@ -190,6 +190,9 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if world.location_name_groups.keys()|length > 1 %}
+                    <div class="option-divider">&nbsp;</div>
+                {% endif %}
                 {% for location_name in world.location_names|sort %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}" value="{{ location_name }}" {{ "checked" if location_name in option.default }} />
@@ -214,6 +217,9 @@
                         </div>
                     {% endif %}
                 {% endfor %}
+                {% if world.item_name_groups.keys()|length > 1 %}
+                    <div class="option-divider">&nbsp;</div>
+                {% endif %}
                 {% for item_name in world.item_names|sort %}
                     <div class="option-entry">
                         <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}" value="{{ item_name }}" {{ "checked" if item_name in option.default }} />
