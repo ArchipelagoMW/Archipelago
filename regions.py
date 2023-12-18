@@ -1,9 +1,10 @@
+import itertools
 from typing import Iterable, Sequence, Set
 
 from BaseClasses import MultiWorld, Region, Entrance
 
 from . import rules
-from .locations import WL4Location, get_level_locations
+from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
 
 
@@ -70,7 +71,7 @@ regions_in_levels = {
 
     'Palm Tree Paradise':    None,
     'Wildflower Fields':     ['Before Sunflower', 'After Sunflower'],
-    'Mystic Lake':           ['Early', 'Late'],
+    'Mystic Lake':           ['Shore', 'Shallows', 'Depths'],
     'Monsoon Jungle':        ['Upper', 'Lower'],
 
     'The Curious Factory':   None,
@@ -81,14 +82,14 @@ regions_in_levels = {
     'Toy Block Tower':       None,
     'The Big Board':         None,
     'Doodle Woods':          None,
-    'Domino Row':            ['Before Lake', 'After Lake'],
+    'Domino Row':            ['Before Lake', 'After Lake', 'Escape'],
 
     'Crescent Moon Village': ['Upper', 'Lower'],
     'Arabian Night':         ['Town', 'Sewer'],
     'Fiery Cavern':          ['Flaming', 'Frozen'],
-    'Hotel Horror':          None,
+    'Hotel Horror':          ['Hotel', 'Switch Room'],
 
-    'Golden Passage':        None,
+    'Golden Passage':        ['Passage', 'Keyzer Area'],
 }
 
 
@@ -98,19 +99,28 @@ def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
     if regions and not merge:
         regions = (f'{level_name} - {region}' for region in regions)
     else:
-        regions = ()
-    return entrance, level_name, *regions
+        regions = (level_name,)
+    return entrance, *regions
 
 
 def create_level_regions(world: MultiWorld, player: int, location_table: Set[str]):
     basic_region = basic_region_creator(world, player, location_table)
 
     def level_regions(name: str, passage: Passage, level: int):
-        region_names = get_region_names(name, merge=True)
-        regions = [basic_region(region) for region in region_names]
-        add_locations_to_region(regions[-1], player, location_table,
-                                get_level_locations(passage, level))
-        return regions
+        portal_setting = world.portal[player].value
+        region_names = get_region_names(name)
+        regions = {region: basic_region(region) for region in region_names}
+        for loc_name, location in get_level_location_data(passage, level):
+            if not portal_setting:
+                region_name = rules.get_frog_switch_region(name)
+            elif location.region_in_level is not None:
+                region_name = f'{name} - {location.region_in_level}'
+            else:
+                region_name = name
+            if loc_name in location_table:
+                location = WL4Location.from_name(player, loc_name, regions[region_name])
+                regions[region_name].locations.append(location)
+        return regions.values()
 
     hall_of_hieroglyphs = level_regions('Hall of Hieroglyphs', Passage.ENTRY, 0)
 
@@ -159,19 +169,19 @@ def create_level_regions(world: MultiWorld, player: int, location_table: Set[str
 
 
 def connect_regions(world: MultiWorld, player: int):
-    def make_level_access_rule(level) -> AccessRule:
-        regions = get_region_names(level)
-        if level == 'Hotel Horror' and world.difficulty[player].value == 2:
-            return None
-        if len(regions) == 2:
-            return rules.get_access_rule(player, regions[1])
-        # FIXME: This fails unit tests if it's a generator expression?
-        region_rules = [rules.get_access_rule(player, region) for region in regions[2:]]
-        return lambda state: all(rule(state) for rule in filter(None, region_rules))
+    portal_setting = world.portal[player].value
 
     def connect_level(level_name):
-        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name,
-                         make_level_access_rule(level_name))
+        regions = get_region_names(level_name)
+        for source, dest in itertools.pairwise(regions):
+            # The Ringosuki is usually on the ground and needs to be carried to
+            # the top of the room with Heavy Grab, but it's already there on S-Hard.
+            # Probably the only region in the game with a difficulty-dependent access rule
+            if dest == 'Hotel Horror - Switch Room' and world.difficulty[player].value == 2:
+                access_rule = None
+            else:
+                access_rule = rules.get_access_rule(player, dest)
+            connect_entrance(world, player, dest, source, dest, access_rule)
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')
@@ -198,13 +208,16 @@ def connect_regions(world: MultiWorld, player: int):
     def connect(source, destination, rule: AccessRule = None):
         connect_with_name(source, destination, f'{source} -> {destination}', rule)
 
-    def connect_level_exit(source, destination, rule: AccessRule = None):
-        level = source
+    def connect_level_exit(level, destination, rule: AccessRule = None):
         # No Keyzer means you can just walk past the actual entrance to the next level
         open_doors = world.open_doors[player].value
         if open_doors == 2 or (open_doors == 1 and level != 'Golden Passage'):
-            source += ' (entrance)'
-        connect_with_name(source, destination, f'{level} Gate', rule)
+            region = f'{level} (entrance)'
+        elif portal_setting:
+            region = rules.get_keyzer_region(level)
+        else:
+            region = get_region_names(level)[-1]
+        connect_with_name(region, destination, f'{level} Gate', rule)
 
     required_jewels = world.required_jewels[player].value
     required_jewels_entry = min(1, required_jewels)
@@ -256,10 +269,7 @@ def connect_regions(world: MultiWorld, player: int):
                                      'Topaz Passage Clear', 'Sapphire Passage Clear'}, player))
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     # Golden Passage is the only level where escaping has different requirements from getting Keyzer
-    connect_level_exit('Golden Passage', 'Golden Minigame Shop',
-            lambda state: world.open_doors[player].value == 2 or
-                          (state.has('Progressive Grab', player) and
-                           state.has('Progressive Ground Pound', player)))
+    connect_level_exit('Golden Passage', 'Golden Minigame Shop')
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
             rules.make_boss_access_rule(player, Passage.GOLDEN, required_jewels_entry))
 

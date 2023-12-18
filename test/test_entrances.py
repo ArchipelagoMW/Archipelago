@@ -141,6 +141,30 @@ class TestEntrancesBasic(TestEntrances):
         ])
 
 
+class TestEntrancesOpenPortal(TestEntrances):
+    options = {'portal': options.Portal.option_open}
+
+    def test_sapphire_levels(self):
+        self.starting_regions = ['Crescent Moon Village (entrance)', 'Arabian Night (entrance)',
+                                 'Fiery Cavern (entrance)', 'Hotel Horror (entrance)']
+        self.run_entrance_tests([
+            ['Crescent Moon Village Gate', False, []],
+            ['Crescent Moon Village Gate', False, [], ['Dash Attack']],
+            ['Crescent Moon Village Gate', False, [], ['Head Smash']],
+            ['Crescent Moon Village Gate', True, ['Dash Attack', 'Head Smash']],
+
+            ['Arabian Night Gate', True, []],
+
+            ['Fiery Cavern Gate', False, []],
+            ['Fiery Cavern Gate', False, [], ['Head Smash']],
+            ['Fiery Cavern Gate', False, [], ['Dash Attack']],
+            ['Fiery Cavern Gate', False, [], ['Progressive Ground Pound']],
+            ['Fiery Cavern Gate', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
+
+            ['Hotel Horror Gate', True, []],
+        ])
+
+
 class TestEntrancesOpenDoors(TestEntrances):
     options = {'open_doors': options.OpenDoors.option_open}
 

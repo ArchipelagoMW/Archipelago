@@ -3,7 +3,7 @@ from . import TestSHard
 
 # Format:
 # [location, expected_result, given_items, [excluded_items]]
-class TestGoldenPyramid(TestSHard):
+class TestGoldenPyramidSHard(TestSHard):
 
     def test_golden_passage(self):
         self.starting_regions = ['Golden Passage (entrance)']

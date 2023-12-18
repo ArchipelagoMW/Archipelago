@@ -1,5 +1,5 @@
 
-from typing import Mapping, Iterable, Tuple, Union
+from typing import Mapping, Iterable, Optional, Tuple, Union
 from BaseClasses import CollectionState, MultiWorld
 
 from . import items
@@ -35,11 +35,28 @@ def needs_items(player: int, requirements: Iterable[Iterable[RequiredItem]]) -> 
     return has_requirements
 
 
+def _get_escape_region(level_name: str, lookup: Mapping[str, Optional[str]]):
+    region = lookup[level_name]
+    if region is None:
+        region = level_name
+    else:
+        region = f'{level_name} - {lookup[level_name]}'
+    return region
+
+
+def get_keyzer_region(level_name: str):
+    return _get_escape_region(level_name, keyzer_regions)
+
+
+def get_frog_switch_region(level_name: str):
+    return _get_escape_region(level_name, frog_switch_regions)
+
+
 def get_access_rule(player: int, region_name: str):
     rule = region_rules[region_name]
     if rule is None:
         return None
-    return needs_items(player, region_rules[region_name])
+    return needs_items(player, rule)
 
 
 def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
@@ -60,16 +77,53 @@ def set_access_rules(multiworld: MultiWorld, player: int):
                 raise ValueError(f'Location {name} does not exist') from k
 
 
+escape_regions = {
+    'Hall of Hieroglyphs':    None,
+
+    'Palm Tree Paradise':     None,
+    'Wildflower Fields':     'After Sunflower',
+    'Mystic Lake':           'Depths',
+    'Monsoon Jungle':        'Lower',
+
+    'The Curious Factory':    None,
+    'The Toxic Landfill':     None,
+    '40 Below Fridge':        None,
+    'Pinball Zone':          'Escape',
+
+    'Toy Block Tower':        None,
+    'The Big Board':          None,
+    'Doodle Woods':           None,
+    'Domino Row':            'Escape',
+
+    'Crescent Moon Village': 'Lower',
+    'Fiery Cavern':          'Frozen',
+}
+
+keyzer_regions = {
+    **escape_regions,
+    'Arabian Night':         'Town',
+    'Hotel Horror':          'Hotel',
+    'Golden Passage':        'Keyzer Area',
+}
+
+frog_switch_regions = {
+    **escape_regions,
+    'Arabian Night':         'Sewer',
+    'Hotel Horror':          'Switch Room',
+    'Golden Passage':        'Passage',
+}
+
 
 # Regions are linear, so each region from the same level adds to the previous
 region_rules = {
     'Hall of Hieroglyphs':                  [['Dash Attack', 'Grab', 'Super Ground Pound']],
 
     'Palm Tree Paradise':                     None,
-    'Wildflower Fields - Before Sunflower': [['Super Ground Pound']],
-    'Wildflower Fields - After Sunflower':  [['Swim']],
-    'Mystic Lake - Early':                  [['Swim']],
-    'Mystic Lake - Late':                   [['Head Smash']],
+    'Wildflower Fields - Before Sunflower':   None,
+    'Wildflower Fields - After Sunflower':  [['Super Ground Pound', 'Swim']],
+    'Mystic Lake - Shore':                    None,
+    'Mystic Lake - Shallows':               [['Swim']],
+    'Mystic Lake - Depths':                 [['Head Smash']],
     'Monsoon Jungle - Upper':                 None,
     'Monsoon Jungle - Lower':               [['Ground Pound']],
 
@@ -83,10 +137,11 @@ region_rules = {
     'Toy Block Tower':                      [['Heavy Grab']],
     'The Big Board':                        [['Ground Pound']],
     'Doodle Woods':                           None,
+    'Domino Row - Before Lake':               None,
+    'Domino Row - After Lake':              [['Swim']],
     # Note: You can also open the way to the exit by throwing a Toy Car across
     # the green room, but that feels obscure enough that I should just ignore it
-    'Domino Row - Before Lake':               None,
-    'Domino Row - After Lake':              [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
+    'Domino Row - Escape':                  [['Ground Pound'], ['Head Smash']],
 
     'Crescent Moon Village - Upper':        [['Head Smash']],
     'Crescent Moon Village - Lower':        [['Dash Attack']],
@@ -94,13 +149,11 @@ region_rules = {
     'Arabian Night - Sewer':                [['Swim']],
     'Fiery Cavern - Flaming':                 None,
     'Fiery Cavern - Frozen':                [['Ground Pound', 'Dash Attack', 'Head Smash']],
-    'Hotel Horror':                         [['Heavy Grab']],
+    'Hotel Horror - Hotel':                   None,
+    'Hotel Horror - Switch Room':           [['Heavy Grab']],
 
-    # This one's weird. You need swim to get anything, but Keyzer also requires
-    # grab. Logic considers the escape necessary to get the items in a level and
-    # Keyzer to advance, but Golden Passage is the only level where the two have
-    # different requirements.
-    'Golden Passage':                       [['Swim']],
+    'Golden Passage - Passage':             [['Swim']],
+    'Golden Passage - Keyzer Area':         [['Ground Pound', 'Grab']],
 }
 
 
@@ -111,11 +164,13 @@ location_rules_all = {
     'Catbat':        [['Ground Pound']],
     'Golden Diva':   [['Grab']],
 
+    'Mystic Lake - Air Pocket Box':                   [['Head Smash']],
     'Mystic Lake - Small Cave Box':                   [['Dash Attack']],
     'Mystic Lake - Rock Cave Box':                    [['Grab']],
     'Mystic Lake - CD Box':                           [['Dash Attack']],
     'Monsoon Jungle - Puffy Hallway Box':             [['Dash Attack']],
     'Monsoon Jungle - Full Health Item Box':          [['Swim']],
+    'Monsoon Jungle - CD Box':                        [['Ground Pound']],
 
     'The Curious Factory - Gear Elevator Box':        [['Dash Attack']],
     'The Toxic Landfill - Current Circle Box':        [['Swim']],
@@ -147,7 +202,7 @@ location_rules_normal = {
 
     'Mystic Lake - Full Health Item Box': [['Grab']],
     'Doodle Woods - CD Box':              [['Ground Pound']],
-    'Domino Row - Swimming Detour Box':      [['Head Smash']],
+    'Domino Row - Swimming Detour Box':   [['Head Smash']],
 }
 
 location_rules_hard = {
