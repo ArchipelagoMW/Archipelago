@@ -252,7 +252,6 @@ html{
                 margin-bottom: 0.125rem;
                 margin-top: 0.125rem;
                 user-select: none;
-                position: relative;
 
                 &:hover{
                     background-color: rgba(20, 20, 20, 0.25);
@@ -281,11 +280,6 @@ html{
                     margin-right: 0;
                     min-width: unset;
                     display: unset;
-                }
-
-                /* Override tooltip style to allow display outside of containing div */
-                [data-tooltip], .tooltip {
-                    position: absolute;
                 }
             }
         }

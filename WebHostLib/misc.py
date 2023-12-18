@@ -1,6 +1,5 @@
 import datetime
 import os
-import tempfile
 from typing import List, Dict, Union
 
 import flask
@@ -91,6 +90,27 @@ def player_options(game: str, message: str = None):
         Options=Options,
         theme=get_world_theme(game),
     )
+
+
+@app.route("/games/<string:game>/option-presets", methods=["GET"])
+@cache.cached()
+def option_presets(game):
+    world = AutoWorldRegister.world_types[game]
+    presets = {}
+
+    if world.web.options_presets:
+        presets = presets | world.web.options_presets
+
+    class SetEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, set):
+                return list(obj)
+            return json.JSONEncoder.default(self, obj)
+
+    json_data = json.dumps(presets, cls=SetEncoder)
+    response = flask.Response(json_data)
+    response.headers["Content-Type"] = "application/json"
+    return response
 
 
 # YAML generator for player-options

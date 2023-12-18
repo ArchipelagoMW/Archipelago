@@ -210,8 +210,6 @@ html {
   margin-bottom: 0.125rem;
   margin-top: 0.125rem;
   user-select: none;
-  position: relative;
-  /* Override tooltip style to allow display outside of containing div */
 }
 #player-options table .option-container .option-entry:hover {
   background-color: rgba(20, 20, 20, 0.25);
@@ -236,9 +234,6 @@ html {
   margin-right: 0;
   min-width: unset;
   display: unset;
-}
-#player-options table .option-container .option-entry [data-tooltip], #player-options table .option-container .option-entry .tooltip {
-  position: absolute;
 }
 #player-options table .randomize-button {
   display: flex;

@@ -19,7 +19,7 @@
 
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
-    <div id="player-options" class="markdown" data-game="{{ game }}">
+    <div id="player-options" class="markdown" data-game="{{ game }}" data-presets="{{ presets }}">
         {% if message %}
             <div id="user-message">{{ message }}</div>
         {% endif %}
@@ -50,9 +50,12 @@
                     <label for="game-options-preset">
                         Options Preset: <span class="interactive" data-tooltip="Select from a list of developer-curated presets (if any) or reset all options to their defaults.">(?)</span>
                     </label>
-                    <select id="game-options-preset">
-                        <option value="__default">Defaults</option>
-                        <option value="__custom" hidden>Custom</option>
+                    <select id="game-options-preset" disabled>
+                        <option value="default">Default</option>
+                        {% for preset_name in world.web.options_presets %}
+                            <option value="{{ preset_name }}">{{ preset_name }}</option>
+                        {% endfor %}
+                        <option value="custom" hidden>Custom</option>
                     </select>
                 </div>
             </div>
@@ -66,7 +69,7 @@
                                 {{ group_name }}
                             </label>
                         </h2>
-                        <input type="checkbox" id="{{ group_name }}-toggle" class="group-toggle" />
+                        <input type="checkbox" id="{{ group_name }}-toggle" class="group-toggle" checked />
 
                         <div class="game-options">
                             <table class="left">

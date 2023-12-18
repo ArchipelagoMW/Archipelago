@@ -1,6 +1,11 @@
-window.addEventListener('load', () => {
+let presets = {};
+
+window.addEventListener('load', async () => {
   // Load settings from localStorage, if available
   loadSettings();
+
+  // Fetch presets if available
+  await fetchPresets();
 
   // Handle changes to range inputs
   document.querySelectorAll('input[type=range]').forEach((range) => {
@@ -69,6 +74,9 @@ window.addEventListener('load', () => {
     });
   });
 
+  // Handle changes to presets select
+  document.getElementById('game-options-preset').addEventListener('change', choosePreset);
+
   // Save settings to localStorage when form is submitted
   document.getElementById('options-form').addEventListener('submit', saveSettings);
 });
@@ -97,6 +105,7 @@ const saveSettings = () => {
 // Load all options from localStorage
 const loadSettings = () => {
   const game = document.getElementById('player-options').getAttribute('data-game');
+
   const options = JSON.parse(localStorage.getItem(game));
   if (options) {
     if (!options.inputs || !options.checkboxes) {
@@ -108,6 +117,10 @@ const loadSettings = () => {
     Object.keys(options.inputs).forEach((key) => {
       try{
         document.getElementById(key).value = options.inputs[key];
+        const rangeValue = document.getElementById(`${key}-value`);
+        if (rangeValue) {
+          rangeValue.innerText = options.inputs[key];
+        }
       } catch (err) {
         console.error(`Unable to restore value to input with id ${key}`);
       }
@@ -124,4 +137,135 @@ const loadSettings = () => {
       }
     });
   }
+
+  // Ensure any input for which the randomize checkbox is checked by default, the relevant inputs are disabled
+  document.querySelectorAll('.randomize-checkbox').forEach((checkbox) => {
+    const optionName = checkbox.getAttribute('data-option-name');
+    if (checkbox.checked) {
+      const input = document.getElementById(optionName);
+      if (input) {
+        input.setAttribute('disabled', '1');
+      }
+      const customInput = document.getElementById(`${optionName}-custom`);
+      if (customInput) {
+        customInput.setAttribute('disabled', '1');
+      }
+    }
+  });
+};
+
+/**
+ * Fetch the preset data for this game and apply the presets if localStorage indicates one was previously chosen
+ * @returns {Promise<void>}
+ */
+const fetchPresets = async () => {
+  const response = await fetch('option-presets');
+  presets = await response.json();
+  const presetSelect = document.getElementById('game-options-preset');
+  presetSelect.removeAttribute('disabled');
+
+  const game = document.getElementById('player-options').getAttribute('data-game');
+  const presetToApply = localStorage.getItem(`${game}-preset`);
+  const playerName = localStorage.getItem(`${game}-player`);
+  if (presetToApply) {
+    localStorage.removeItem(`${game}-preset`);
+    presetSelect.value = presetToApply;
+    applyPresets(presetToApply);
+  }
+
+  if (playerName) {
+    document.getElementById('player-name').value = playerName;
+    localStorage.removeItem(`${game}-player`);
+  }
+};
+
+/**
+ * Clear the localStorage for this game and set a preset to be loaded upon page reload
+ * @param evt
+ */
+const choosePreset = (evt) => {
+  const game = document.getElementById('player-options').getAttribute('data-game');
+  localStorage.removeItem(game);
+
+  localStorage.setItem(`${game}-player`, document.getElementById('player-name').value);
+  if (evt.target.value !== 'default') {
+    localStorage.setItem(`${game}-preset`, evt.target.value);
+  }
+
+  document.querySelectorAll('#options-form input, #options-form select').forEach((input) => {
+    if (input.classList.contains('group-toggle')) { return; }
+    if (input.id === 'player-name') { return; }
+    input.removeAttribute('value');
+  });
+
+  window.location.replace(window.location.href);
+};
+
+const applyPresets = (presetName) => {
+  // Ignore the "default" preset, because it gets set automatically by Jinja
+  if (presetName === 'default') {
+    saveSettings();
+    return;
+  }
+
+  if (!presets[presetName]) {
+    console.error(`Unknown preset ${presetName} chosen`);
+    return;
+  }
+
+  const preset = presets[presetName];
+  Object.keys(preset).forEach((optionName) => {
+    const optionValue = preset[optionName];
+
+    // Handle List and Set options
+    if (Array.isArray(optionValue)) {
+      document.querySelectorAll(`input[type=checkbox][name=${optionName}]`).forEach((checkbox) => {
+        if (optionValue.includes(checkbox.value)) {
+          checkbox.setAttribute('checked', '1');
+        } else {
+          checkbox.removeAttribute('checked');
+        }
+      });
+      return;
+    }
+
+    // Handle Dict options
+    if (typeof(optionValue) === 'object' && optionValue !== null) {
+      const itemNames = Object.keys(optionValue);
+      document.querySelectorAll(`input[type=number][data-option-name=${optionName}]`).forEach((input) => {
+        const itemName = input.getAttribute('data-item-name');
+        input.value = (itemNames.includes(itemName)) ? optionValue[itemName] : 0
+      });
+      return;
+    }
+
+    // Handle normal (text, number, select, etc.) and custom inputs (custom inputs exist with TextChoice only)
+    const normalInput = document.getElementById(optionName);
+    const customInput = document.getElementById(`${optionName}-custom`);
+    const rangeValue = document.getElementById(`${optionName}-value`);
+    const randomizeInput = document.getElementById(`random-${optionName}`);
+    if (optionValue === 'random') {
+      normalInput.setAttribute('disabled', '1');
+      randomizeInput.setAttribute('checked', '1');
+      if (customInput) {
+        customInput.setAttribute('disabled', '1');
+      }
+      if (rangeValue) {
+        rangeValue.innerText = normalInput.value;
+      }
+      return;
+    }
+
+    normalInput.value = optionValue;
+    normalInput.removeAttribute('disabled');
+    randomizeInput.removeAttribute('checked');
+    if (customInput) {
+      document.getElementById(`${optionName}-custom`).removeAttribute('disabled');
+    }
+    if (rangeValue) {
+      rangeValue.innerText = optionValue;
+    }
+  });
+
+  saveSettings();
 };
