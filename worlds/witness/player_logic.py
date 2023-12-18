@@ -323,7 +323,7 @@ class WitnessPlayerLogic:
             self.VICTORY_LOCATION = "0xFFF00"
 
         # Long box can usually only be solved by opening the mountain entry. If it's 7 lasers or less, that's no longer
-        # true. Also, if the user used the secret ">7 mountain lasers", they are expecting to have to do the snipe.
+        # true. Also, if the user sets mountain_lasers > 7, the box is rotated to not require the hatch either.
         if chal_lasers <= 7 or mnt_lasers > 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
