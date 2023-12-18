@@ -79,6 +79,7 @@ class RandomizeMusic(Toggle):
 
 sml2options = {
     "golden_coins": GoldenCoins,
+    "required_golden_coins": GoldenCoinsRequired,
     "difficulty_mode": DifficultyMode,
     "shuffle_midway_bells":ShuffleMidwayBells,
     "shuffle_space_physics": ShuffleSpacePhysics,

@@ -11,6 +11,7 @@ rom_addresses = {
     "Invincibility_Star_C": 0x34a8,
     "Enable_Bubble": 0x34e5,
     "Coin_Shuffle": 0x304ce,
+    "Required_Golden_Coins": 0x306e9,
     "Disable_Midway_Bell": 0x3ef1e,
     "Get_Carrot_C": 0x6092f,
     "Get_Mushroom_C": 0x60930,

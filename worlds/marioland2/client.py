@@ -114,9 +114,13 @@ class MarioLand2Client(BizHawkClient):
             (0x0848, modified_level_data, "CartRAM")
         ]
 
+        # TODO: Remove check that midway_bells is present, just here for temporary backwards compatibility
+        if midway_point == 0xFF and ctx.slot_data and "midway_bells" in ctx.slot_data and ctx.slot_data["midway_bells"]:
+            # after registering the check for the midway bell, clear the value just for safety.
+            data_writes.append((0x02A0, 0, "CartRAM"))
+
         if "Auto Scroll" in items_received:
-            if auto_scroll_enabled == 0xaf:
-                # auto scroll has not yet been enabled
+            if auto_scroll_enabled == 0xaf:  # auto scroll has not yet been enabled
                 data_writes.append((rom_addresses["Auto_Scroll_Disable"], [0x7e], "ROM"))
                 # if the current level is an auto scroll level, turn on auto scrolling now
                 if auto_scroll_levels[current_level] == 1:

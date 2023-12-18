@@ -201,13 +201,20 @@ class MarioLand2World(World):
             self.multiworld.get_location(level, self.player).access_rule = rule
 
         if self.multiworld.golden_coins[self.player] == "progressive":
-            self.multiworld.completion_condition[self.player] = lambda state: (
-                state.has("Progressive Space Zone", self.player, 3) and state.has("Progressive Tree Zone", self.player, 4)
-                and state.has("Progressive Macro Zone", self.player, 4) and state.has("Progressive Pumpkin Zone", self.player, 4)
-                and state.has("Progressive Mario Zone", self.player, 4) and state.has("Progressive Turtle Zone", self.player, 3))
+            self.multiworld.completion_condition[self.player] = lambda state: [
+                state.has("Progressive Space Zone", self.player, 3),
+                state.has("Progressive Tree Zone", self.player, 4),
+                state.has("Progressive Macro Zone", self.player, 4),
+                state.has("Progressive Pumpkin Zone", self.player, 4),
+                state.has("Progressive Mario Zone", self.player, 4),
+                state.has("Progressive Turtle Zone", self.player, 3)
+                ].count(True) >= self.multiworld.required_golden_coins[self.player]
         else:
-            self.multiworld.completion_condition[self.player] = lambda state: state.has_all(["Tree Coin", "Space Coin",
-                "Macro Coin", "Pumpkin Coin", "Mario Coin", "Turtle Coin"], self.player)
+            self.multiworld.completion_condition[self.player] = lambda state: [
+                state.has("Tree Coin", self.player), state.has("Space Coin", self.player),
+                state.has("Macro Coin", self.player), state.has("Pumpkin Coin", self.player),
+                state.has("Mario Coin", self.player), state.has("Turtle Coin", self.player)
+                ].count(True) >= self.multiworld.required_golden_coins[self.player]
 
     def create_items(self):
         item_counts = {
@@ -272,7 +279,8 @@ class MarioLand2World(World):
         return {
             "mode": self.multiworld.difficulty_mode[self.player].value,
             "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
-                              and loc.item.name == "Progressive Invincibility Star"]), 1)
+                              and loc.item.name == "Progressive Invincibility Star"]), 1),
+            "midway_bells": self.multiworld.shuffle_midway_bells[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

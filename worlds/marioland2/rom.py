@@ -189,6 +189,8 @@ def generate_output(self, output_directory: str):
     if self.multiworld.shuffle_midway_bells[self.player]:
         data[rom_addresses["Disable_Midway_Bell"]] = 0xC9
 
+    data[rom_addresses["Required_Golden_Coins"]] = self.multiworld.required_golden_coins[self.player].value
+
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
                          'utf8')[:21]
     rom_name.extend([0] * (21 - len(rom_name)))
