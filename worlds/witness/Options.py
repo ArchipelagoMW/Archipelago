@@ -133,7 +133,9 @@ class PuzzleRandomization(Choice):
 
 
 class MountainLasers(Range):
-    """Sets the amount of beams required to enter the final area."""
+    """Sets the amount of lasers required to enter the Mountain.
+    You can set this to a value higher than 7 by editing your .yaml directly,
+    but it will require doing an advanced trick."""
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
     range_end = 7
