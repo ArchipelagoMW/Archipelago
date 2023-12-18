@@ -72,7 +72,7 @@ location_table = {
     'Mystic Lake - Large Cave Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_NE),      'Shallows',         _HARDER),
     'Mystic Lake - Hill Room Box':                        LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),      'Depths',           _NORMAL),
     'Mystic Lake - Small Cave Box':                       LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),      'Depths',           _HARD),
-    'Mystic Lake - Rock Cave Box':                        LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),      'Depths',           _S_HARD),
+    'Mystic Lake - Rock Cave Box':                        LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SE),      'Shore',            _S_HARD),
     'Mystic Lake - Cavern Box':                           LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SW),      'Depths',           _NORMAL),
     'Mystic Lake - Spring Cave Box':                      LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_SW),      'Depths',           _HARDER),
     'Mystic Lake - Box Before Bridge':                    LocationData(LocationType.BOX,  (Passage.EMERALD,  2, ItemFlag.JEWEL_NW),      'Depths',           _NORMAL),
@@ -175,11 +175,11 @@ location_table = {
 
     # Domino Row
     'Domino Row - Racing Box':                            LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_NE),      'Before Lake',      _ALL),
-    'Domino Row - Rolling Box':                           LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_SE),      'Escape',           _ALL),
+    'Domino Row - Rolling Box':                           LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_SE),      'After Lake',       _ALL),
     'Domino Row - Swimming Detour Box':                   LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_SW),      'After Lake',       _EASIER),
-    'Domino Row - Swimming Room Escape Box':              LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_SW),      'Escape',           _S_HARD),
-    'Domino Row - Keyzer Room Box':                       LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_NW),      'Escape',           _ALL),
-    'Domino Row - CD Box':                                LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.CD),            'Escape',           _ALL),
+    'Domino Row - Swimming Room Escape Box':              LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_SW),      'After Lake',       _S_HARD),
+    'Domino Row - Keyzer Room Box':                       LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.JEWEL_NW),      'After Lake',       _ALL),
+    'Domino Row - CD Box':                                LocationData(LocationType.BOX,  (Passage.TOPAZ,    3, ItemFlag.CD),            'After Lake',       _ALL),
 
     'Aerodent':                                           LocationData(LocationType.BOSS, (Passage.TOPAZ,    4, ItemFlag.KEYZER),         None,              _ALL),
 
@@ -220,7 +220,7 @@ location_table = {
     'Hotel Horror - Room 402 Box':                        LocationData(LocationType.BOX,  (Passage.SAPPHIRE, 3, ItemFlag.JEWEL_SW),      'Hotel',            _HARDER),
     'Hotel Horror - 4F Hallway Box':                      LocationData(LocationType.BOX,  (Passage.SAPPHIRE, 3, ItemFlag.JEWEL_NW),      'Hotel',            _NORMAL),
     'Hotel Horror - Exterior Box':                        LocationData(LocationType.BOX,  (Passage.SAPPHIRE, 3, ItemFlag.JEWEL_NW),      'Hotel',            _HARDER),
-    'Hotel Horror - CD Box':                              LocationData(LocationType.BOX,  (Passage.SAPPHIRE, 3, ItemFlag.CD),            'Hotel',            _ALL),
+    'Hotel Horror - CD Box':                              LocationData(LocationType.BOX,  (Passage.SAPPHIRE, 3, ItemFlag.CD),            'Switch Room',      _ALL),
 
     'Catbat':                                             LocationData(LocationType.BOSS, (Passage.SAPPHIRE, 4, ItemFlag.KEYZER),         None,              _ALL),
 

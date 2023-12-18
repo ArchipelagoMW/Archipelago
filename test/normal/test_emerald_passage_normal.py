@@ -206,9 +206,7 @@ class TestEmeraldPassageNormalOpenPortal(TestNormalOpenPortal):
         self.run_location_tests([
             ['Mystic Lake - Air Pocket Box', False, []],
             ['Mystic Lake - Air Pocket Box', False, [], ['Swim']],
-            ['Mystic Lake - Air Pocket Box', False, [], ['Head Smash']],
-            ['Mystic Lake - Air Pocket Box', True,
-             ['Swim', 'Head Smash']],
+            ['Mystic Lake - Air Pocket Box', True, ['Swim']],
 
             ['Mystic Lake - Hill Room Box', False, []],
             ['Mystic Lake - Hill Room Box', False, [], ['Swim']],

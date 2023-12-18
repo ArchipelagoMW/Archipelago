@@ -93,7 +93,7 @@ escape_regions = {
     'Toy Block Tower':        None,
     'The Big Board':          None,
     'Doodle Woods':           None,
-    'Domino Row':            'Escape',
+    'Domino Row':            'After Lake',
 
     'Crescent Moon Village': 'Lower',
     'Fiery Cavern':          'Frozen',
@@ -138,10 +138,9 @@ region_rules = {
     'The Big Board':                        [['Ground Pound']],
     'Doodle Woods':                           None,
     'Domino Row - Before Lake':               None,
-    'Domino Row - After Lake':              [['Swim']],
     # Note: You can also open the way to the exit by throwing a Toy Car across
     # the green room, but that feels obscure enough that I should just ignore it
-    'Domino Row - Escape':                  [['Ground Pound'], ['Head Smash']],
+    'Domino Row - After Lake':              [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
 
     'Crescent Moon Village - Upper':        [['Head Smash']],
     'Crescent Moon Village - Lower':        [['Dash Attack']],
@@ -164,7 +163,7 @@ location_rules_all = {
     'Catbat':        [['Ground Pound']],
     'Golden Diva':   [['Grab']],
 
-    'Mystic Lake - Air Pocket Box':                   [['Head Smash']],
+    'Mystic Lake - Large Cave Box':                   [['Head Smash']],
     'Mystic Lake - Small Cave Box':                   [['Dash Attack']],
     'Mystic Lake - Rock Cave Box':                    [['Grab']],
     'Mystic Lake - CD Box':                           [['Dash Attack']],
@@ -208,8 +207,9 @@ location_rules_normal = {
 location_rules_hard = {
     **location_rules_all,
 
-    'Wildflower Fields - 8-Shaped Cave Box': [['Grab']],
+    'Wildflower Fields - 8-Shaped Cave Box': [['Super Ground Pound', 'Grab']],
     'Mystic Lake - Full Health Item Box':    [['Grab']],
+    'Monsoon Jungle - Fat Plummet Box':      [['Ground Pound']],
     'Monsoon Jungle - Buried Cave Box':      [['Grab']],
 
     'Domino Row - Swimming Detour Box':      [['Head Smash']],
@@ -221,8 +221,12 @@ location_rules_hard = {
 location_rules_s_hard = {
     **location_rules_all,
 
-    'Wildflower Fields - 8-Shaped Cave Box': [['Heavy Grab']],
-    'Mystic Lake - Full Health Item Box':    [['Dash Attack']],
+    'Wildflower Fields - 8-Shaped Cave Box': [['Super Ground Pound', 'Heavy Grab']],
+    'Mystic Lake - Rock Cave Box':           [['Grab']],
+    # HACK: It should be in the depths, but I don't have handling for this
+    # box's region varying with difficulty
+    'Mystic Lake - Full Health Item Box':    [['Swim', 'Head Smash', 'Dash Attack']],
+    'Monsoon Jungle - Fat Plummet Box':      [['Ground Pound']],
     'Monsoon Jungle - Buried Cave Box':      [['Grab']],
 
     'Arabian Night - Onomi Box':             [['Ground Pound'], ['Head Smash']],

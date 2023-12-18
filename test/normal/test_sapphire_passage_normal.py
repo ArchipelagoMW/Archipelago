@@ -212,7 +212,9 @@ class TestSapphirePassageNormalOpenPortal(TestNormalOpenPortal):
 
             ['Hotel Horror - 4F Hallway Box', True, []],
 
-            ['Hotel Horror - CD Box', True, []],
+            ['Hotel Horror - CD Box', False, []],
+            ['Hotel Horror - CD Box', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
         ])
 
     def test_catbat(self):

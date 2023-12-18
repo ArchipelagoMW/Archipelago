@@ -93,7 +93,7 @@ regions_in_levels = {
     'Toy Block Tower':       None,
     'The Big Board':         None,
     'Doodle Woods':          None,
-    'Domino Row':            ['Before Lake', 'After Lake', 'Escape'],
+    'Domino Row':            ['Before Lake', 'After Lake'],
 
     'Crescent Moon Village': ['Upper', 'Lower'],
     'Arabian Night':         ['Town', 'Sewer'],
