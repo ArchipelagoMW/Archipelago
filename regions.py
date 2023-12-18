@@ -8,6 +8,17 @@ from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
 
 
+# itertools.pairwise from Python 3.10
+def pairwise(iterable):
+    try:
+        return itertools.pairwise(iterable)
+    except AttributeError:
+        # https://docs.python.org/3.9/library/itertools.html#itertools-recipes
+        a, b = itertools.tee(iterable)
+        next(b, None)
+        return zip(a, b)
+
+
 class WL4Region(Region):
     clear_rule: AccessRule
 
@@ -173,7 +184,7 @@ def connect_regions(world: MultiWorld, player: int):
 
     def connect_level(level_name):
         regions = get_region_names(level_name)
-        for source, dest in itertools.pairwise(regions):
+        for source, dest in pairwise(regions):
             # The Ringosuki is usually on the ground and needs to be carried to
             # the top of the room with Heavy Grab, but it's already there on S-Hard.
             # Probably the only region in the game with a difficulty-dependent access rule

@@ -53,15 +53,22 @@ def next_int(iterator: Iterator[bytes]) -> int:
     return int.from_bytes(next(iterator), 'little')
 
 
+# itertools.batched from Python 3.12
 # https://docs.python.org/3.11/library/itertools.html#itertools-recipes
-def batches(iterable: Iterable, n: int):
-    '''Batch data into tuples of length n. The last batch may be shorter.'''
-
+def _batched(iterable, n):
     if n < 1:
         raise ValueError('n must be at least 1')
     it = iter(iterable)
     while batch := tuple(itertools.islice(it, n)):
         yield batch
+
+def batches(iterable: Iterable, n: int):
+    '''Batch data into tuples of length n. The last batch may be shorter.'''
+
+    try:
+        return itertools.batched(iterable, n)
+    except AttributeError:
+        return _batched(iterable, n)
 
 
 # class WL4CommandProcessor(ClientCommandProcessor):
