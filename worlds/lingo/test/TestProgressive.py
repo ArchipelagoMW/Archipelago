@@ -7,6 +7,8 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -58,6 +60,8 @@ class TestSimpleHallwayRoom(LingoTestBase):
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -86,6 +90,8 @@ class TestProgressiveArtGallery(LingoTestBase):
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
