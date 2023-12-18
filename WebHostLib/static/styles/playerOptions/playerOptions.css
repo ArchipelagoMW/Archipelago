@@ -16,6 +16,15 @@ html {
   color: #eeffeb;
   word-break: break-all;
 }
+#player-options #player-options-header h1 {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+#player-options #player-options-header h1:nth-child(2) {
+  font-size: 1.4rem;
+  margin-top: -8px;
+  margin-bottom: 0.5rem;
+}
 #player-options .group-container {
   padding: 0;
   margin: 0;
@@ -241,6 +250,7 @@ html {
   flex-direction: column;
   justify-content: center;
   height: 22px;
+  max-width: 30px;
   margin: 0 0 0 0.25rem;
   font-size: 14px;
   border: 1px solid black;
