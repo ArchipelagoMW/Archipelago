@@ -134,7 +134,7 @@ class TestSapphirePassageHard(TestHard):
         ])
 
 
-class TestSapphirePassageHardOpenPortal(TestHardOpenPortal):
+class TestSapphirePassageHardOpenPortal(TestHardOpenPortal, TestSapphirePassageHard):
 
     def test_crescent_moon_village(self):
         self.starting_regions = ['Crescent Moon Village (entrance)']
@@ -239,12 +239,4 @@ class TestSapphirePassageHardOpenPortal(TestHardOpenPortal):
             ['Hotel Horror - CD Box', False, []],
             ['Hotel Horror - CD Box', False, ['Progressive Grab'], ['Progressive Grab']],
             ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
-        ])
-
-    def test_catbat(self):
-        self.starting_regions = ['Sapphire Passage Boss']
-        self.run_location_tests([
-            ['Catbat', False, []],
-            ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', True, ['Progressive Ground Pound']],
         ])

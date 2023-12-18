@@ -120,7 +120,7 @@ class TestSapphirePassageSHard(TestSHard):
         ])
 
 
-class TestSapphirePassageSHardOpenPortal(TestSHardOpenPortal):
+class TestSapphirePassageSHardOpenPortal(TestSHardOpenPortal, TestSapphirePassageSHard):
 
     def test_crescent_moon_village(self):
         self.starting_regions = ['Crescent Moon Village (entrance)']
@@ -208,22 +208,4 @@ class TestSapphirePassageSHardOpenPortal(TestSHardOpenPortal):
             ['Fiery Cavern - CD Box', False, [], ['Dash Attack']],
             ['Fiery Cavern - CD Box', False, [], ['Progressive Ground Pound']],
             ['Fiery Cavern - CD Box', True, ['Dash Attack', 'Progressive Ground Pound', 'Head Smash']],
-        ])
-
-    def test_hotel_horror(self):
-        self.starting_regions = ['Hotel Horror (entrance)']
-        self.run_location_tests([
-            ['Hotel Horror - Room 102 Box', True, []],
-            ['Hotel Horror - Room 303 Box', True, []],
-            ['Hotel Horror - Room 402 Box', True, []],
-            ['Hotel Horror - Exterior Box', True, []],
-            ['Hotel Horror - CD Box', True, []],
-        ])
-
-    def test_catbat(self):
-        self.starting_regions = ['Sapphire Passage Boss']
-        self.run_location_tests([
-            ['Catbat', False, []],
-            ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', True, ['Progressive Ground Pound']],
         ])

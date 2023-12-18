@@ -147,23 +147,7 @@ class TestEmeraldPassageNormal(TestNormal):
         ])
 
 
-class TestEmeraldPassageNormalOpenPortal(TestNormalOpenPortal):
-
-    def test_palm_tree_paradise(self):
-        self.starting_regions = ['Palm Tree Paradise (entrance)']
-        self.run_location_tests([
-            ['Palm Tree Paradise - First Box', True, []],
-
-            ['Palm Tree Paradise - Box Before Cave', True, []],
-
-            ['Palm Tree Paradise - Platform Cave Jewel Box', True, []],
-
-            ['Palm Tree Paradise - Ladder Cave Box', True, []],
-
-            ['Palm Tree Paradise - CD Box', True, []],
-
-            ['Palm Tree Paradise - Full Health Item Box', True, []],
-        ])
+class TestEmeraldPassageNormalOpenPortal(TestNormalOpenPortal, TestEmeraldPassageNormal):
 
     def test_wildflower_fields(self):
         self.starting_regions = ['Wildflower Fields (entrance)']
@@ -266,12 +250,4 @@ class TestEmeraldPassageNormalOpenPortal(TestNormalOpenPortal):
             ['Monsoon Jungle - Full Health Item Box', False, []],
             ['Monsoon Jungle - Full Health Item Box', False, [], ['Swim']],
             ['Monsoon Jungle - Full Health Item Box', True, ['Swim']],
-        ])
-
-    def test_cractus(self):
-        self.starting_regions = ['Emerald Passage Boss']
-        self.run_location_tests([
-            ['Cractus', False, []],
-            ['Cractus', False, [], ['Progressive Ground Pound']],
-            ['Cractus', True, ['Progressive Ground Pound']],
         ])
