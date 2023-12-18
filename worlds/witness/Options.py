@@ -134,18 +134,12 @@ class PuzzleRandomization(Choice):
 
 class MountainLasers(Range):
     """Sets the amount of lasers required to enter the Mountain.
-    You can set this to a value higher than 7, but doing so will require doing an advanced trick. So, as a safety
-    measure, this is only possible by editing your yaml directly."""
+    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve.
+    This will then also change the logic for the long solution ("Challenge Lasers" option)."""
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
-    range_end = 7
+    range_end = 11
     default = 7
-
-    def __init__(self, value: int) -> None:
-        if 8 <= value <= 11:  # undocumented advanced difficulty options
-            self.value = value
-        else:
-            super().__init__(value)
 
 
 class ChallengeLasers(Range):
