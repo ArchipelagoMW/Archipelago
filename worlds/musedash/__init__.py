@@ -175,7 +175,7 @@ class MuseDashWorld(World):
         if name == self.md_collection.MUSIC_SHEET_NAME:
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.md_collection.MUSIC_SHEET_CODE, self.player)
-        
+
         filler = self.md_collection.filler_items.get(name)
         if filler:
             return MuseDashFixedItem(name, ItemClassification.filler, filler, self.player)
@@ -208,8 +208,13 @@ class MuseDashWorld(World):
         for _ in range(0, item_count):
             self.multiworld.itempool.append(self.create_item(self.md_collection.MUSIC_SHEET_NAME))
 
-        # Then add all traps
-        trap_count = self.get_trap_count()
+        # Then add 1 copy of every song
+        item_count += len(self.included_songs)
+        for song in self.included_songs:
+            self.multiworld.itempool.append(self.create_item(song))
+
+        # Then add all traps, making sure we don't over fill
+        trap_count = min(self.location_count - item_count, self.get_trap_count())
         trap_list = self.get_available_traps()
         if len(trap_list) > 0 and trap_count > 0:
             for _ in range(0, trap_count):
