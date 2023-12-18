@@ -86,6 +86,7 @@ class PokemonEmeraldWorld(World):
     badge_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     free_fly_location_id: int
+    blacklisted_moves: Set[int]
 
     modified_species: List[Optional[SpeciesData]]
     modified_maps: Dict[str, MapData]
@@ -99,6 +100,7 @@ class PokemonEmeraldWorld(World):
         self.badge_shuffle_info = None
         self.hm_shuffle_info = None
         self.free_fly_location_id = 0
+        self.blacklisted_moves = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
 
@@ -113,6 +115,8 @@ class PokemonEmeraldWorld(World):
         return "Great Ball"
 
     def generate_early(self) -> None:
+        self.blacklisted_moves = {emerald_data.move_labels[label] for label in self.options.move_blacklist.value}
+
         # In race mode we don't patch any item location information into the ROM
         if self.multiworld.is_race and not self.options.remote_items:
             logging.warning("Pokemon Emerald: Forcing Player %s (%s) to use remote items due to race mode.",
@@ -745,8 +749,9 @@ class PokemonEmeraldWorld(World):
                 i = 0
                 while old_learnset[i].move_id == 0:
                     if self.options.level_up_moves == LevelUpMoves.option_start_with_four_moves:
-                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias,
-                                                   normal_bias, species.types)
+                        new_move = get_random_move(self.random,
+                                                   {move.move_id for move in new_learnset} | self.blacklisted_moves,
+                                                   type_bias, normal_bias, species.types)
                     else:
                         new_move = 0
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
@@ -758,8 +763,9 @@ class PokemonEmeraldWorld(World):
                     if i == 3:
                         new_move = get_random_damaging_move(self.random, {move.move_id for move in new_learnset})
                     else:
-                        new_move = get_random_move(self.random, {move.move_id for move in new_learnset}, type_bias,
-                                                   normal_bias, species.types)
+                        new_move = get_random_move(self.random,
+                                                   {move.move_id for move in new_learnset} | self.blacklisted_moves,
+                                                   type_bias, normal_bias, species.types)
                     new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
                     i += 1
 
@@ -793,7 +799,7 @@ class PokemonEmeraldWorld(World):
             new_moves: Set[int] = set()
 
             for i in range(50):
-                new_move = get_random_move(self.random, new_moves)
+                new_move = get_random_move(self.random, new_moves | self.blacklisted_moves)
                 new_moves.add(new_move)
                 self.modified_tmhm_moves[i] = new_move
 

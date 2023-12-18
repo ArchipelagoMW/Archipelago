@@ -452,6 +452,14 @@ class MoveNormalTypeBias(Range):
     default = 0
 
 
+class MoveBlacklist(OptionSet):
+    """
+    A list of moves which should be excluded from learnsets, TMs, and move tutors.
+    """
+    display_name = "Move Blacklist"
+    valid_keys = frozenset(data.move_labels.keys())
+
+
 class HmCompatibility(Choice):
     """
     Modifies the compatibility of HMs
@@ -766,6 +774,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     tm_moves: TmMoves
     reusable_tms: ReusableTms
     move_tutor_moves: MoveTutorMoves
+    move_blacklist: MoveBlacklist
 
     min_catch_rate: MinCatchRate
     guaranteed_catch: GuaranteedCatch

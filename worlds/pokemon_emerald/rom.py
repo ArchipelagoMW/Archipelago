@@ -670,5 +670,5 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
                                                data.constants["MOVE_FLASH"],
                                                data.constants["MOVE_ROCK_SMASH"],
                                                data.constants["MOVE_WATERFALL"],
-                                               data.constants["MOVE_DIVE"]})
+                                               data.constants["MOVE_DIVE"]} | world.blacklisted_moves)
             )
