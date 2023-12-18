@@ -66,20 +66,13 @@ def player_settings(game: str):
 @cache.cached()
 def player_options(game: str, message: str = None):
     world = AutoWorldRegister.world_types[game]
-    all_options: Dict[str, Options.AssembleOptions] = world.options_dataclass.type_hints
-    grouped_options = {}
-    for option_name, option in all_options.items():
-        if issubclass(option, (Options.ItemDict, Options.ItemSet)) and not option.verify_item_name:
-            continue
-
-        if issubclass(option, Options.LocationSet) and not option.verify_location_name:
-            continue
-
-        if issubclass(option, (Options.OptionList, Options.OptionSet)) and not hasattr(option, "valid_keys"):
-            continue
-
-        grouped_options.setdefault(getattr(option, "group_name", "Game Options"), {})[option_name] = option
-
+    option_groups = {option: option_group.name
+                     for option_group in world.web.option_groups
+                     for option in option_group.options}
+    ordered_groups = ["Game Options", *[group.name for group in world.web.option_groups]]
+    grouped_options = {group: {} for group in ordered_groups}
+    for option_name, option in world.options_dataclass.type_hints.items():
+        grouped_options[option_groups.get(option, "Game Options")][option_name] = option
     return render_template(
         "playerOptions/playerOptions.html",
         message=message,

@@ -108,9 +108,6 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     name_lookup: typing.Dict[T, str]
     options: typing.Dict[str, int]
 
-    group_name: typing.ClassVar[str] = "Game Options"
-    """Name of the group to categorize this option in for display on the WebHost and in generated YAMLS."""
-
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
 
@@ -985,20 +982,17 @@ class CommonOptions(metaclass=OptionsMetaProperty):
 class LocalItems(ItemSet):
     """Forces these items to be in their native world."""
     display_name = "Local Items"
-    group_name = "Item & Location Options"
 
 
 class NonLocalItems(ItemSet):
     """Forces these items to be outside their native world."""
     display_name = "Not Local Items"
-    group_name = "Item & Location Options"
 
 
 class StartInventory(ItemDict):
     """Start with these items."""
     verify_item_name = True
     display_name = "Start Inventory"
-    group_name = "Item & Location Options"
 
 
 class StartInventoryPool(StartInventory):
@@ -1006,13 +1000,11 @@ class StartInventoryPool(StartInventory):
     The game decides what the replacement items will be."""
     verify_item_name = True
     display_name = "Start Inventory from Pool"
-    group_name = "Item & Location Options"
 
 
 class StartHints(ItemSet):
     """Start with these item's locations prefilled into the !hint command."""
     display_name = "Start Hints"
-    group_name = "Item & Location Options"
 
 
 class LocationSet(OptionSet):
@@ -1023,19 +1015,16 @@ class LocationSet(OptionSet):
 class StartLocationHints(LocationSet):
     """Start with these locations and their item prefilled into the !hint command"""
     display_name = "Start Location Hints"
-    group_name = "Item & Location Options"
 
 
 class ExcludeLocations(LocationSet):
     """Prevent these locations from having an important item"""
     display_name = "Excluded Locations"
-    group_name = "Item & Location Options"
 
 
 class PriorityLocations(LocationSet):
     """Prevent these locations from having an unimportant item"""
     display_name = "Priority Locations"
-    group_name = "Item & Location Options"
 
 
 class DeathLink(Toggle):
@@ -1046,7 +1035,6 @@ class DeathLink(Toggle):
 class ItemLinks(OptionList):
     """Share part of your item pool with other players."""
     display_name = "Item Links"
-    group_name = "Item & Location Options"
     default = []
     schema = Schema([
         {
@@ -1159,11 +1147,14 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options = world.options_dataclass.type_hints
-
-            grouped_options = {}
-            for option_name, option in all_options.items():
-                grouped_options.setdefault(option.group_name, {})[option_name] = option
+            option_groups = {option: option_group.name
+                             for option_group in world.web.option_groups
+                             for option in option_group.options}
+            ordered_groups = ["Game Options"]
+            [ordered_groups.append(group) for group in option_groups.values() if group not in ordered_groups]
+            grouped_options = {group: {} for group in ordered_groups}
+            for option_name, option in world.options_dataclass.type_hints.items():
+                grouped_options[option_groups.get(option, "Game Options")][option_name] = option
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()

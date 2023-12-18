@@ -35,15 +35,20 @@ def create():
         all_options = world.options_dataclass.type_hints
         game_option_groups = {}
 
+        option_groups = {option: option_group.name
+                         for option_group in world.web.option_groups
+                         for option in option_group.options}
+        # ordered_groups = ["Game Options", *[group.name for group in world.web.option_groups]]
         for option_name, option in all_options.items():
             if option_name in handled_in_js:
                 continue
 
-            this_option = game_option_groups.setdefault(option.group_name, {}).setdefault(option_name, {})
+            group_name = option_groups.get(option, "Game Options")
+            this_option = game_option_groups.setdefault(group_name, {}).setdefault(option_name, {})
             if issubclass(option, Options.Choice) or issubclass(option, Options.Toggle):
                 this_option.update({
                     "type": "select",
-                    "groupName": option.group_name,
+                    "groupName": group_name,
                     "displayName": getattr(option, "display_name", option_name),
                     "description": get_html_doc(option),
                     "defaultValue": None,
@@ -61,7 +66,7 @@ def create():
             elif issubclass(option, Options.Range):
                 this_option.update({
                     "type": "range",
-                    "groupName": option.group_name,
+                    "groupName": group_name,
                     "displayName": getattr(option, "display_name", option_name),
                     "description": get_html_doc(option),
                     "defaultValue": getattr(option, "default", option.range_start),
@@ -76,7 +81,7 @@ def create():
             elif issubclass(option, (Options.ItemSet, Options.LocationSet)):
                 this_option.update({
                     "type": "items-list",
-                    "groupName": option.group_name,
+                    "groupName": group_name,
                     "displayName": getattr(option, "display_name", option_name),
                     "description": get_html_doc(option),
                     "defaultValue": list(option.default),
@@ -86,17 +91,17 @@ def create():
                 if option.valid_keys:
                     this_option.update({
                         "type": "custom-list",
-                        "groupName": getattr(option, "group_name", "Game Options"),
+                        "groupName": group_name,
                         "displayName": getattr(option, "display_name", option_name),
                         "description": get_html_doc(option),
                         "options": list(option.valid_keys),
                         "defaultValue": list(getattr(option, "default", [])),
                     })
                 else:
-                    del game_option_groups[option.group_name][option_name]
+                    del game_option_groups[group_name][option_name]
 
             else:
-                del game_option_groups[option.group_name][option_name]
+                del game_option_groups[group_name][option_name]
                 logging.debug(f"{option} not exported to Web Options.")
 
         if not world.hidden and world.web.options_page is True:
