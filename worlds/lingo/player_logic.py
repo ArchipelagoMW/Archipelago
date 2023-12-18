@@ -6,7 +6,6 @@ from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
     RoomAndPanel
-from .testing import LingoTestOptions
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -224,7 +223,7 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
-                and not early_color_hallways and LingoTestOptions.disable_forced_good_item is False:
+                and not early_color_hallways is False:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
             # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
