@@ -61,7 +61,7 @@
             </div>
 
             <div id="option-groups">
-                {% for group_name, group_options in option_groups | dictsort %}
+                {% for group_name, group_options in option_groups.items() %}
                     <div class="group-container">
                         <h2>
                             <label for="{{ group_name }}-toggle">
