@@ -57,6 +57,8 @@ class MuseDashWorld(World):
 
     # Necessary Data
     md_collection = MuseDashCollections()
+    filler_item_names = list(md_collection.filler_item_weights.keys())
+    filler_item_weights = list(md_collection.filler_item_weights.values())
 
     item_name_to_id = {name: code for name, code in md_collection.item_names_to_id.items()}
     location_name_to_id = {name: code for name, code in md_collection.location_names_to_id.items()}
@@ -173,6 +175,10 @@ class MuseDashWorld(World):
         if name == self.md_collection.MUSIC_SHEET_NAME:
             return MuseDashFixedItem(name, ItemClassification.progression_skip_balancing,
                                      self.md_collection.MUSIC_SHEET_CODE, self.player)
+        
+        filler = self.md_collection.filler_items.get(name)
+        if filler:
+            return MuseDashFixedItem(name, ItemClassification.filler, filler, self.player)
 
         trap = self.md_collection.vfx_trap_items.get(name)
         if trap:
@@ -188,6 +194,9 @@ class MuseDashWorld(World):
 
         song = self.md_collection.song_items.get(name)
         return MuseDashSongItem(name, self.player, song)
+
+    def get_filler_item_name(self) -> str:
+        return self.random.choices(self.filler_item_names, self.filler_item_weights)[0]
 
     def create_items(self) -> None:
         song_keys_in_pool = self.included_songs.copy()
@@ -209,23 +218,30 @@ class MuseDashWorld(World):
 
             item_count += trap_count
 
-        # Next fill all remaining slots with song items
-        needed_item_count = self.location_count
-        while item_count < needed_item_count:
-            # If we have more items needed than keys, just iterate the list and add them all
-            if len(song_keys_in_pool) <= needed_item_count - item_count:
-                for key in song_keys_in_pool:
-                    self.multiworld.itempool.append(self.create_item(key))
+        items_left = self.location_count - item_count
+        if items_left <= 0:
+            return
 
-                item_count += len(song_keys_in_pool)
-                continue
+        # When it comes to filling remaining spaces, we have 2 options. A useless filler or additional songs.
+        # First fill 50% with the filler. The rest is to be duplicate songs.
+        filler_count = floor(0.5 * items_left)
+        items_left -= filler_count
 
-            # Otherwise add a random assortment of songs
-            self.random.shuffle(song_keys_in_pool)
-            for i in range(0, needed_item_count - item_count):
-                self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
+        for _ in range(0, filler_count):
+            self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
 
-            item_count = needed_item_count
+        # This is for the extraordinary case of needing to fill a lot of items.
+        while items_left > len(song_keys_in_pool):
+            for key in song_keys_in_pool:
+                self.multiworld.itempool.append(self.create_item(key))
+
+            items_left -= len(song_keys_in_pool)
+            continue
+
+        # Otherwise add a random assortment of songs
+        self.random.shuffle(song_keys_in_pool)
+        for i in range(0, items_left):
+            self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
