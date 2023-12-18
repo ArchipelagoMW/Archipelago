@@ -389,7 +389,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             WaterItem.green_algae: self.fishing.can_fish_in_freshwater(),
             WaterItem.nautilus_shell: self.tool.can_forage(Season.winter, Region.beach),
             WaterItem.sea_urchin: self.tool.can_forage(Generic.any, Region.tide_pools),
-            WaterItem.seaweed: self.skill.can_fish(Region.beach) | self.region.can_reach(Region.tide_pools),
+            WaterItem.seaweed: self.skill.can_fish(Region.tide_pools),
             WaterItem.white_algae: self.skill.can_fish(Region.mines_floor_20),
             WildSeeds.grass_starter: self.money.can_spend_at(Region.pierre_store, 100),
         })
