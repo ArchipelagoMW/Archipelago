@@ -322,7 +322,9 @@ class WitnessPlayerLogic:
         elif victory == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        if chal_lasers <= 7:
+        # Long box can usually only be solved by opening the mountain entry. If it's 7 lasers or less, that's no longer
+        # true. Also, if the user used the secret ">7 mountain lasers", they are expecting to have to do the snipe.
+        if chal_lasers <= 7 or mnt_lasers > 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
                 "0xFFF00 - 11 Lasers - True",

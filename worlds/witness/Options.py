@@ -139,6 +139,12 @@ class MountainLasers(Range):
     range_end = 7
     default = 7
 
+    def __init__(self, value: int) -> None:
+        if 8 <= value <= 11:  # undocumented advanced difficulty options
+            self.value = value
+        else:
+            super().__init__(value)
+
 
 class ChallengeLasers(Range):
     """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
