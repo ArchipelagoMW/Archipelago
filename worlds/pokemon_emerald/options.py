@@ -346,6 +346,14 @@ class AllowTrainerLegendaries(DefaultOnToggle):
     """
     display_name = "Allow Trainer Legendaries"
 
+class ForceFullyEvolved(Range):
+    """
+    Enemy trainers will only use fully evolved pokemon starting at the specified level.
+    """
+    display_name = "Force Fully Evolved"
+    range_start = 1
+    range_end = 100
+    default = 100
 
 class RandomizeStaticEncounters(Choice):
     """
@@ -761,6 +769,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     allow_starter_legendaries: AllowStarterLegendaries
     trainer_parties: RandomizeTrainerParties
     allow_trainer_legendaries: AllowTrainerLegendaries
+    force_fully_evolved: ForceFullyEvolved
     static_encounters: RandomizeStaticEncounters
     types: RandomizeTypes
     abilities: RandomizeAbilities

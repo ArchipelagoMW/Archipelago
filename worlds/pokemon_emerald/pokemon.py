@@ -1,7 +1,6 @@
 """
 Functions related to pokemon species and moves
 """
-import time
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
 from .data import SpeciesData, data
@@ -96,6 +95,7 @@ LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
     "SPECIES_JIRACHI",
     "SPECIES_DEOXYS"
 ]])
+UNEVOLVED_POKEMON = {species.species_id for species in data.species if species is not None and len(species.evolutions) > 0}
 
 
 national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}

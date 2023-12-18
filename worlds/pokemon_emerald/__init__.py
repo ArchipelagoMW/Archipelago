@@ -5,7 +5,7 @@ from collections import Counter
 import copy
 import logging
 import os
-from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO
+from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import FillError, fill_restrictive
@@ -24,7 +24,8 @@ from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
                       PokemonEmeraldOptions)
-from .pokemon import LEGENDARY_POKEMON, get_random_species, get_random_move, get_random_damaging_move, get_random_type
+from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
+                      get_random_damaging_move, get_random_type)
 from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
 from .rules import set_rules
@@ -844,7 +845,6 @@ class PokemonEmeraldWorld(World):
                 RandomizeTrainerParties.option_match_type,
                 RandomizeTrainerParties.option_match_base_stats_and_type
             }
-            allow_legendaries = self.options.allow_trainer_legendaries == Toggle.option_true
 
             per_species_tmhm_moves: Dict[int, List[int]] = {}
 
@@ -855,12 +855,18 @@ class PokemonEmeraldWorld(World):
                     target_bst = sum(original_species.base_stats) if should_match_bst else None
                     target_type = self.random.choice(original_species.types) if should_match_type else None
 
+                    blacklist = set()
+                    if self.options.allow_trainer_legendaries:
+                        blacklist |= LEGENDARY_POKEMON
+                    if self.options.force_fully_evolved >= pokemon.level:
+                        blacklist |= UNEVOLVED_POKEMON
+
                     new_species = get_random_species(
                         self.random,
                         self.modified_species,
                         target_bst,
                         target_type,
-                        LEGENDARY_POKEMON if allow_legendaries else set()
+                        blacklist
                     )
 
                     if new_species.species_id not in per_species_tmhm_moves:
