@@ -23,8 +23,6 @@ def create_rules(self, location_table):
         lambda state: state.has("Toy Shovel", player))
 
     # Fishing Rules
-    add_rule(multiworld.get_location("Catch All Fish Reward", player),
-        lambda state: state.has("Fishing Journal", player))
     add_rule(multiworld.get_location("Catch 3 Fish Reward", player),
         lambda state: state.has("Fishing Rod", player))
     add_rule(multiworld.get_location("Catch Fish with Permit", player),

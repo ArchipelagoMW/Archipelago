@@ -25,7 +25,7 @@ item_table: List[ItemDict] = [
     {"name": "Wristwatch", "id": base_id + 13, "count": 1, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Motorboat Key", "id": base_id + 14, "count": 1, "classification": ItemClassification.progression_skip_balancing},
     {"name": "Pickaxe", "id": base_id + 15, "count": 3, "classification": ItemClassification.useful},
-    {"name": "Fishing Journal", "id": base_id + 16, "count": 1, "classification": ItemClassification.progression},
+    {"name": "Fishing Journal", "id": base_id + 16, "count": 1, "classification": ItemClassification.useful},
     {"name": "A Stormy View Map", "id": base_id + 17, "count": 1, "classification": ItemClassification.filler},
     {"name": "The King Map", "id": base_id + 18, "count": 1, "classification": ItemClassification.filler},
     {"name": "The Treasure of Sid Beach Map", "id": base_id + 19, "count": 1, "classification": ItemClassification.filler},

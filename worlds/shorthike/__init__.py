@@ -120,7 +120,7 @@ class ShortHikeWorld(World):
         elif self.options.goal == 4:
             # Fishmonger
             self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 6, 8, 7, state)
-                and state.has("Fishing Rod", self.player) and state.has("Fishing Journal", self.player))
+                and state.has("Fishing Rod", self.player))
 
     def set_rules(self):
         create_rules(self, location_table)
