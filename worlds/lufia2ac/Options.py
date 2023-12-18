@@ -593,6 +593,20 @@ class HealingFloorChance(Range):
     default = 16
 
 
+class InactiveExpGain(Choice):
+    """The rate at which characters not currently in the active party gain EXP.
+
+    Supported values: disabled, half, full
+    Default value: disabled (same as in an unmodified game)
+    """
+
+    display_name = "Inactive character EXP gain"
+    option_disabled = 0
+    option_half = 50
+    option_full = 100
+    default = option_disabled
+
+
 class InitialFloor(Range):
     """The initial floor, where you begin your journey.
 
@@ -838,6 +852,7 @@ class L2ACOptions(PerGameCommonOptions):
     goal: Goal
     gold_modifier: GoldModifier
     healing_floor_chance: HealingFloorChance
+    inactive_exp_gain: InactiveExpGain
     initial_floor: InitialFloor
     iris_floor_chance: IrisFloorChance
     iris_treasures_required: IrisTreasuresRequired

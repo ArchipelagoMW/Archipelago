@@ -499,6 +499,73 @@ pullpc
 
 
 
+; allow inactive characters to gain exp
+pushpc
+org $81DADD
+    ; DB=$81, x=0, m=1
+    NOP                     ; overwrites BNE $81DAE2 : JMP $DBED
+    JML HandleActiveExp
+AwardExp:
+    ; isolate exp distribution into a subroutine, to be reused for both active party members and inactive characters
+org $81DAE9
+    NOP #2                  ; overwrites JMP $DBBD
+    RTL
+org $81DB42
+    NOP #2                  ; overwrites JMP $DBBD
+    RTL
+org $81DD11
+    ; DB=$81, x=0, m=1
+    JSL HandleInactiveExp    ; overwrites LDA $0A8A : CLC
+pullpc
+
+HandleActiveExp:
+    BNE +                   ; (overwritten instruction; modified) check if statblock not empty
+    JML $81DBED             ; (overwritten instruction; modified) abort
++:  JSL AwardExp            ; award exp (X=statblock pointer, Y=position in battle order, $00=position in menu order)
+    JML $81DBBD             ; (overwritten instruction; modified) continue to next level text
+
+HandleInactiveExp:
+    LDA $F0201B             ; load inactive exp gain rate
+    BEQ +                   ; zero gain; skip everything
+    CMP.b #$64
+    BCS ++                  ; full gain
+    LSR $1607
+    ROR $1606               ; half gain
+    ROR $1605
+++: LDY.w #$0000            ; start looping through all characters
+-:  TDC
+    TYA
+    LDX.w #$0003            ; start looping through active party
+--: CMP $0A7B,X
+    BEQ ++                  ; skip if character in active party
+    DEX
+    BPL --                  ; continue looping through active party
+    STA $153D               ; inactive character detected; overwrite character index of 1st slot in party battle order
+    ASL
+    TAX
+    REP #$20
+    LDA $859EBA,X           ; convert character index to statblock pointer
+    SEP #$20
+    TAX
+    PHY                     ; stash character loop index
+    LDY $0A80
+    PHY                     ; stash 1st (in menu order) party member statblock pointer
+    STX $0A80               ; overwrite 1st (in menu order) party member statblock pointer
+    LDY.w #$0000            ; set to use 1st position (in battle order)
+    STY $00                 ; set to use 1st position (in menu order)
+    JSL AwardExp            ; award exp (X=statblock pointer, Y=position in battle order, $00=position in menu order)
+    PLY                     ; restore 1st (in menu order) party member statblock pointer
+    STY $0A80
+    PLY                     ; restore character loop index
+++: INY
+    CPY.w #$0007
+    BCC -                   ; continue looping through all characters
++:  LDA $0A8A               ; (overwritten instruction) load current gold
+    CLC                     ; (overwritten instruction)
+    RTL
+
+
+
 ; receive death link
 pushpc
 org $83BC91
@@ -1235,6 +1302,7 @@ pullpc
 ; $F02018   1   party members available
 ; $F02019   1   capsule monsters available
 ; $F0201A   1   shop interval
+; $F0201B   1   inactive exp gain rate
 ; $F02030   1   selected goal
 ; $F02031   1   goal completion: boss
 ; $F02032   1   goal completion: iris_treasure_hunt
