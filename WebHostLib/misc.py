@@ -64,7 +64,7 @@ def player_settings(game: str):
 # Player options pages
 @app.route("/games/<string:game>/player-options")
 @cache.cached()
-def player_options(game: str, message: str = None):
+def player_options(game: str):
     world = AutoWorldRegister.world_types[game]
     option_groups = {option: option_group.name
                      for option_group in world.web.option_groups
@@ -75,7 +75,6 @@ def player_options(game: str, message: str = None):
         grouped_options[option_groups.get(option, "Game Options")][option_name] = option
     return render_template(
         "playerOptions/playerOptions.html",
-        message=message,
         game=game,
         world=world,
         option_groups=grouped_options,

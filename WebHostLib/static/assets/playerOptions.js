@@ -74,11 +74,36 @@ window.addEventListener('load', async () => {
     });
   });
 
+  // Update the "Option Preset" select to read "custom" when changes are made to relevant inputs
+  const presetSelect = document.getElementById('game-options-preset');
+  document.querySelectorAll('input, select').forEach((input) => {
+    if ( // Ignore inputs which have no effect on yaml generation
+      (input.id === 'player-name') ||
+      (input.id === 'game-options-preset') ||
+      (input.classList.contains('group-toggle')) ||
+      (input.type === 'submit')
+    ) {
+      return;
+    }
+    input.addEventListener('change', () => {
+      presetSelect.value = 'custom';
+    });
+  });
+
   // Handle changes to presets select
   document.getElementById('game-options-preset').addEventListener('change', choosePreset);
 
   // Save settings to localStorage when form is submitted
-  document.getElementById('options-form').addEventListener('submit', saveSettings);
+  document.getElementById('options-form').addEventListener('submit', (evt) => {
+    const playerName = document.getElementById('player-name');
+    if (!playerName.value.trim()) {
+      evt.preventDefault();
+      window.scrollTo(0, 0);
+      showUserMessage('You must enter a player name!');
+    }
+
+    saveSettings();
+  });
 });
 
 // Save all settings to localStorage
@@ -184,6 +209,8 @@ const fetchPresets = async () => {
  * @param evt
  */
 const choosePreset = (evt) => {
+  if (evt.target.value === 'custom') { return; }
+
   const game = document.getElementById('player-options').getAttribute('data-game');
   localStorage.removeItem(game);
 
@@ -268,4 +295,17 @@ const applyPresets = (presetName) => {
   });
 
   saveSettings();
+};
+
+const showUserMessage = (text) => {
+  const userMessage = document.getElementById('user-message');
+  userMessage.innerText = text;
+  userMessage.addEventListener('click', hideUserMessage);
+  userMessage.style.display = 'block';
+};
+
+const hideUserMessage = () => {
+  const userMessage = document.getElementById('user-message');
+  userMessage.removeEventListener('click', hideUserMessage);
+  userMessage.style.display = 'none';
 };

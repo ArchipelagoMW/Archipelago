@@ -20,9 +20,7 @@
 {% block body %}
     {% include 'header/'+theme+'Header.html' %}
     <div id="player-options" class="markdown" data-game="{{ game }}" data-presets="{{ presets }}">
-        {% if message %}
-            <div id="user-message">{{ message }}</div>
-        {% endif %}
+        <div id="user-message">{{ message }}</div>
 
         <div id="player-options-header">
             <h1>{{ game }}</h1>
