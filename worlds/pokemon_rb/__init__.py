@@ -414,7 +414,7 @@ class PokemonRedBlueWorld(World):
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
                 intervene_move = "Cut"
             elif ((not logic.can_learn_hm(test_state, "Flash", self.player)) and self.multiworld.dark_rock_tunnel_logic[self.player]
-                    and (((self.multiworld.accessibility[self.player] != "minimal" and
+                    and (((self.multiworld.accessibility[self.player] != "minimal" or
                     (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])) or
                     self.multiworld.door_shuffle[self.player]))):
                 intervene_move = "Flash"
