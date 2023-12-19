@@ -453,7 +453,6 @@ class SC2Logic:
                     and state.has_any({ItemNames.DARK_TEMPLAR, ItemNames.BLOOD_HUNTER, ItemNames.AVENGER}, self.player)
             )
 
-
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any(
             {ItemNames.SCOUT, ItemNames.TEMPEST,
