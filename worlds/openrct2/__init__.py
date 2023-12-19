@@ -420,6 +420,10 @@ class OpenRCT2World(World):
                                 nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
                                 [random.randint(1, 3), chosen_prereq, excitement, intensity, nausea,0]
+                        elif chosen_prereq in item_info["transport_rides"]:
+                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
+                        elif chosen_prereq in item_info["water_rides"]:
+                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
                     else:  # Prereq is not a specific ride
