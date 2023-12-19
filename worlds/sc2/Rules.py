@@ -446,10 +446,19 @@ class SC2Logic:
                 and state.has_any({ItemNames.IMMORTAL, ItemNames.ANNIHILATOR}, self.player)
                 and state.has(ItemNames.IMMORTAL_ANNIHILATOR_ADVANCED_TARGETING_MECHANICS, self.player))
 
+    def protoss_has_blink(self, state: CollectionState) -> bool:
+        return state.has_any({ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER}, self.player) \
+            or (
+                    state.has(ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK, self.player)
+                    and state.has_any({ItemNames.DARK_TEMPLAR, ItemNames.BLOOD_HUNTER, ItemNames.AVENGER}, self.player)
+            )
+
+
     def protoss_can_attack_behind_chasm(self, state: CollectionState) -> bool:
         return state.has_any(
-            {ItemNames.STALKER, ItemNames.SLAYER, ItemNames.INSTIGATOR, ItemNames.SCOUT, ItemNames.TEMPEST,
+            {ItemNames.SCOUT, ItemNames.TEMPEST,
              ItemNames.CARRIER, ItemNames.VOID_RAY, ItemNames.DESTROYER, ItemNames.MOTHERSHIP}, self.player) \
+            or self.protoss_has_blink(state) \
             or (state.has(ItemNames.WARP_PRISM, self.player)
                 and (self.protoss_common_unit(state) or state.has(ItemNames.WARP_PRISM_PHASE_BLASTER, self.player))) \
             or (self.advanced_tactics

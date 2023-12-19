@@ -1469,7 +1469,7 @@ item_table = {
     ItemNames.WRATHWALKER_EYE_OF_WRATH: ItemData(352 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 22, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WRATHWALKER),
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHROUD_OF_ADUN: ItemData(353 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 23, SC2Race.PROTOSS, origin={"ext"}),
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_SHADOW_GUARD_TRAINING: ItemData(354 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 24, SC2Race.PROTOSS, origin={"bw"}),
-    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK: ItemData(355 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 25, SC2Race.PROTOSS, origin={"ext"}),
+    ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_BLINK: ItemData(355 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 25, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}),
     ItemNames.DARK_TEMPLAR_AVENGER_BLOOD_HUNTER_RESOURCE_EFFICIENCY: ItemData(356 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 26, SC2Race.PROTOSS, origin={"ext"}),
     ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD: ItemData(357 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 27, SC2Race.PROTOSS, origin={"bw"}, important_for_filtering=True ,parent_item=ItemNames.DARK_TEMPLAR),
     ItemNames.HIGH_TEMPLAR_SIGNIFIER_UNSHACKLED_PSIONIC_STORM: ItemData(358 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 28, SC2Race.PROTOSS, origin={"bw"}),
