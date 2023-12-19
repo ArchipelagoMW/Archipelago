@@ -89,7 +89,6 @@ def create_itempool(world: World) -> List[Item]:
 
 def calculate_yarn_costs(world: World):
     mw = world.multiworld
-    p = world.player
     min_yarn_cost = int(min(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
     max_yarn_cost = int(max(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
 

@@ -286,7 +286,6 @@ def get_total_dw_stamps(state: CollectionState, world: World) -> int:
         if state.has(f"2 Stamps - {name}", world.player):
             count += 2
         elif name not in dw_candles:
-            # most non-candle bonus requirements allow the player to get the other stamp (like not having One Hit Hero)
             count += 1
 
     return count

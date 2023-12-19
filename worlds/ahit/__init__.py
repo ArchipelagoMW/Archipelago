@@ -10,8 +10,19 @@ from .DeathWishLocations import create_dw_regions, dw_classes, death_wishes
 from .DeathWishRules import set_dw_rules, create_enemy_events
 from worlds.AutoWorld import World, WebWorld
 from typing import List, Dict, TextIO
-from worlds.LauncherComponents import Component, components, icon_paths
+from worlds.LauncherComponents import Component, components, icon_paths, launch_subprocess, Type
 from Utils import local_path
+
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="AHITClient")
+
+
+components.append(Component("A Hat in Time Client", "AHITClient", func=launch_client,
+                            component_type=Type.CLIENT, icon='yatta'))
+
+icon_paths['yatta'] = local_path('data', 'yatta.png')
 
 hat_craft_order: Dict[int, List[HatType]] = {}
 hat_yarn_costs: Dict[int, Dict[HatType, int]] = {}
@@ -21,9 +32,6 @@ excluded_bonuses: Dict[int, List[str]] = {}
 dw_shuffle: Dict[int, List[str]] = {}
 nyakuza_thug_items: Dict[int, Dict[str, int]] = {}
 badge_seller_count: Dict[int, int] = {}
-
-components.append(Component("A Hat in Time Client", "AHITClient", icon='yatta'))
-icon_paths['yatta'] = local_path('data', 'yatta.png')
 
 
 class AWebInTime(WebWorld):
@@ -85,7 +93,8 @@ class HatInTimeWorld(World):
         nyakuza_thug_items[self.player] = {}
         badge_seller_count[self.player] = 0
         self.shop_locs = []
-        self.topology_present = self.options.ActRandomizer.value
+        # noinspection PyClassVar
+        self.topology_present = bool(self.options.ActRandomizer.value)
 
         create_regions(self)
         if self.options.EnableDeathWish.value > 0:
@@ -231,7 +240,9 @@ class HatInTimeWorld(World):
             return
 
         new_hint_data = {}
-        alpine_regions = ["The Birdhouse", "The Lava Cake", "The Windmill", "The Twilight Bell", "Alpine Skyline Area"]
+        alpine_regions = ["The Birdhouse", "The Lava Cake", "The Windmill",
+                          "The Twilight Bell", "Alpine Skyline Area", "Alpine Skyline Area (TIHS)"]
+
         metro_regions = ["Yellow Overpass Station", "Green Clean Station", "Bluefin Tunnel", "Pink Paw Station"]
 
         for key, data in location_table.items():
@@ -245,6 +256,8 @@ class HatInTimeWorld(World):
                 region_name = "Alpine Free Roam"
             elif data.region in metro_regions:
                 region_name = "Nyakuza Free Roam"
+            elif "Dead Bird Studio - " in data.region:
+                region_name = "Dead Bird Studio"
             elif data.region in chapter_act_info.keys():
                 region_name = location.parent_region.name
             else:
@@ -303,19 +316,19 @@ class HatInTimeWorld(World):
     def is_dw_excluded(self, name: str) -> bool:
         # don't exclude Seal the Deal if it's our goal
         if self.options.EndGoal.value == 3 and name == "Seal the Deal" \
-           and f"{name} - Main Objective" not in self.multiworld.exclude_locations[self.player]:
+           and f"{name} - Main Objective" not in self.options.exclude_locations:
             return False
 
         if name in excluded_dws[self.player]:
             return True
 
-        return f"{name} - Main Objective" in self.multiworld.exclude_locations[self.player]
+        return f"{name} - Main Objective" in self.options.exclude_locations
 
     def is_bonus_excluded(self, name: str) -> bool:
         if self.is_dw_excluded(name) or name in excluded_bonuses[self.player]:
             return True
 
-        return f"{name} - All Clear" in self.multiworld.exclude_locations[self.player]
+        return f"{name} - All Clear" in self.options.exclude_locations
 
     def get_dw_shuffle(self):
         return dw_shuffle[self.player]

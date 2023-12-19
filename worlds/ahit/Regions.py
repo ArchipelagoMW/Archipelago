@@ -439,7 +439,7 @@ def create_rift_connections(world: World, region: Region):
 def create_tasksanity_locations(world: World):
     ship_shape: Region = world.multiworld.get_region("Ship Shape", world.player)
     id_start: int = TASKSANITY_START_ID
-    for i in range(world.multiworld.TasksanityCheckCount[world.player].value):
+    for i in range(world.options.TasksanityCheckCount.value):
         location = HatInTimeLocation(world.player, f"Tasksanity Check {i+1}", id_start+i, ship_shape)
         ship_shape.locations.append(location)
 

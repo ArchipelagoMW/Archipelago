@@ -322,7 +322,7 @@ def set_rules(world: World):
                      and can_use_hookshot(state, world)
                      and can_hit(state, world, True))
 
-            difficulty: Difficulty = Difficulty(world.multiworld.LogicDifficulty[world.player].value)
+            difficulty: Difficulty = Difficulty(world.options.LogicDifficulty.value)
             if difficulty >= Difficulty.MODERATE:
                 add_rule(loc, lambda state: state.has("TIHS Access", world.player)
                          and can_use_hat(state, world, HatType.SPRINT), "or")
@@ -534,7 +534,7 @@ def set_hard_rules(world: World):
                  lambda state: can_use_hat(state, world, HatType.ICE))
 
         # Hard: clear Rush Hour with Brewing Hat only
-        if world.multiworld.NoTicketSkips[world.player].value != 1:
+        if world.options.NoTicketSkips.value != 1:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
                      lambda state: can_use_hat(state, world, HatType.BREWING))
         else:
@@ -610,7 +610,7 @@ def set_expert_rules(world: World):
 
     if world.is_dlc2():
         # Expert: clear Rush Hour with nothing
-        if world.multiworld.NoTicketSkips[world.player].value == 0:
+        if world.options.NoTicketSkips.value == 0:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player), lambda state: True)
         else:
             set_rule(world.multiworld.get_location("Act Completion (Rush Hour)", world.player),
