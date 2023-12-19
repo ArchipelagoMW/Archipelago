@@ -62,7 +62,6 @@ Output Logs/
 /installdelete.iss
 /data/user.kv
 /datapackage
-/oot/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -199,5 +198,3 @@ minecraft_versions.json
 .LSOverride
 Thumbs.db
 [Dd]esktop.ini
-A Hat in Time.yaml
-ahit.apworld
