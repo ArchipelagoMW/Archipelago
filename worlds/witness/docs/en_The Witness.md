@@ -25,7 +25,7 @@ This includes symbols such as "Dots", "Black/White Squares", "Colored Squares", 
 
 Alternatively (or additionally), you can play "Door shuffle", where some doors won't open until you receive their "key".
 
-Receiving lasers as items is also a possible option.
+You can also choose to receive lasers as items as an option.
 
 ## What else can I find in the world?
 
