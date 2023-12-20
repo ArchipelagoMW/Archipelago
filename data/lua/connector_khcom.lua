@@ -1009,10 +1009,12 @@ function check_journal()
     for k,v in pairs(journal_bit_location_ids) do
         for ik, iv in pairs(journal_bit_location_ids[k]) do
             if toBits(memory.readbyte(k))[ik] == 1 and iv ~= nil then
-                file = io.open(client_communication_path .. "send" .. tostring(iv), "w")
-                io.output(file)
-                io.write("")
-                io.close(file)
+                if not file_exists(client_communication_path .. "send" .. tostring(iv)) then
+                    file = io.open(client_communication_path .. "send" .. tostring(iv), "w")
+                    io.output(file)
+                    io.write("")
+                    io.close(file)
+                end
             end
         end
     end
@@ -1259,7 +1261,7 @@ function main_loop(last_variables)
         reassign_deck_pointers(last_deck_pointers)
         set_moogle_points(last_variables["Last Moogle Points"])
     end
-    if frame % 180 and current_playtime > 3 then
+    if frame % 180 == 0 and current_playtime > 3 then
         check_journal()
         last_deck_pointers = get_deck_pointers()
         receive_items()
