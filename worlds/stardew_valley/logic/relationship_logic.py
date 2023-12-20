@@ -11,8 +11,9 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
+from ..mods.mod_data import mods_with_multiple_villager_sources
 from ..options import Friendsanity
-from ..stardew_rule import StardewRule, True_, And, Or
+from ..stardew_rule import StardewRule, True_, False_, And, Or, Count
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
@@ -176,4 +177,11 @@ class RelationshipLogic(BaseLogic[Union[
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
         mod = npc.mod_name
-        return mod is None or mod in self.options.mods
+        if mod not in mods_with_multiple_villager_sources:
+            mod_rule_if_exists = mod in self.options.mods
+        else:
+            sources = mod.split(",")
+            mod_rule_if_exists = False_()
+            for single_mod in sources:
+                mod_rule_if_exists = mod_rule_if_exists | (single_mod in self.options.mods)
+        return not mod or mod_rule_if_exists

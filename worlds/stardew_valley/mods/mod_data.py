@@ -25,6 +25,11 @@ class ModNames:
     alecto = "Alecto the Witch"
     distant_lands = "Distant Lands - Witch Swamp Overhaul"
 
+    jasper_sve = jasper + "," + sve
+
+
+mods_with_multiple_villager_sources = [ModNames.jasper_sve]
+
 
 all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
                       ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
