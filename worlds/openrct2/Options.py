@@ -616,8 +616,9 @@ class Roller_Coaster_Nausea(Range):
 #     display_name = "Include Park Rating Objective"
 
 class Required_Unique_Rides(Range):
-    """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game."""
-    display_name = "Nausea Requirement"
+    """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
+    It's highly recommended to have this set to at least 1!"""
+    display_name = "Uniqe Ride Requirement"
     range_start = 0
     range_end = 10
     default = 5
