@@ -170,7 +170,7 @@ class KH2Context(CommonContext):
         self.base_accessory_slots = 1
         self.base_armor_slots = 1
         self.base_item_slots = 3
-        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276C, 0x276E, 0x2770]
+        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E, 0x2770,0x2772]
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
