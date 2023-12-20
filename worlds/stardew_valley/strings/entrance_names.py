@@ -324,6 +324,8 @@ class SVEEntrance:
     first_slash_guild_to_hallway = "First Slash Guild to First Slash Hallway"
     first_slash_hallway_to_room = "First Slash Hallway to First Slash Spare Room"
     sprite_spring_to_cave = "Sprite Spring to Sprite Spring Cave"
+    fish_shop_to_willy_bedroom = "Willy's Fish Shop to Willy's Bedroom"
+    museum_to_gunther_bedroom = "Museum to Gunther's Bedroom"
 
 
 class AlectoEntrance:

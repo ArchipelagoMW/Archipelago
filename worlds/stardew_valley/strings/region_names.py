@@ -271,6 +271,7 @@ class SVERegion:
     first_slash_hallway = "First Slash Hallway"
     first_slash_spare_room = "First Slash Spare Room"
     sprite_spring_cave = "Sprite Spring Cave"
+    willy_bedroom = "Willy's Bedroom"
 
 
 class AlectoRegion:

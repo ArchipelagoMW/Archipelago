@@ -165,6 +165,8 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.jenkins_cellar),
     RegionData(SVERegion.unclaimed_plot, [SVEEntrance.plot_to_bridge]),
     RegionData(SVERegion.shearwater),
+    RegionData(Region.fish_shop, [SVEEntrance.fish_shop_to_willy_bedroom]),
+    RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, [SVEEntrance.mountain_to_guild_summit]),
     RegionData(SVERegion.guild_summit, [SVEEntrance.guild_to_interior, SVEEntrance.guild_to_mines,
                                         SVEEntrance.summit_to_highlands]),
@@ -193,7 +195,6 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.lost_woods, [SVEEntrance.lost_woods_to_junimo_woods]),
     RegionData(SVERegion.junimo_woods, [SVEEntrance.use_purple_junimo]),
     RegionData(SVERegion.purple_junimo_shop),
-
     RegionData(SVERegion.alesia_shop),
     RegionData(SVERegion.isaac_shop),
     RegionData(SVERegion.summit),
@@ -267,7 +268,8 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.grampleton_suburbs_to_scarlett_house, SVERegion.scarlett_house, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.first_slash_guild_to_hallway, SVERegion.first_slash_hallway, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(SVEEntrance.sprite_spring_to_cave,  SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS)
+    ConnectionData(SVEEntrance.sprite_spring_to_cave,  SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
 
 alecto_regions = [
