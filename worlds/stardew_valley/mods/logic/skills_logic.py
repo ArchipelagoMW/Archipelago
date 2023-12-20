@@ -16,6 +16,7 @@ from ...mods.mod_data import ModNames
 from ...options import SkillProgression
 from ...stardew_rule import StardewRule, False_, True_
 from ...strings.ap_names.mods.mod_items import SkillItem
+from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
 from ...strings.machine_names import Machine
@@ -85,8 +86,8 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
         shifter_rule = True_()
         preservation_rule = True_()
         if self.options.skill_progression == self.options.skill_progression.option_progressive:
-            shifter_rule = self.logic.received(SkillItem.archaeology_level, 4)
-            preservation_rule = self.logic.received(SkillItem.archaeology_level, 7)
+            shifter_rule = self.logic.has(ModCraftable.water_shifter)
+            preservation_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         if level >= 8:
             return (self.logic.action.can_pan() & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.gold)) & shifter_rule & preservation_rule
         if level >= 5:
