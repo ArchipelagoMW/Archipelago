@@ -44,8 +44,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The Player Settings page on the website allows you to configure your personal settings and export a config file from
-them. Player settings page: [Super Mario World Player Settings Page](/games/Super%20Mario%20World/player-settings)
+The Player Options page on the website allows you to configure your personal options and export a config file from
+them. Player options page: [Super Mario World Player Options Page](/games/Super%20Mario%20World/player-options)
 
 ### Verifying your config file
 

@@ -1,8 +1,8 @@
 # Stardew Valley
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
@@ -13,7 +13,7 @@ For these objectives, if they have a vanilla reward, this reward will instead be
 
 ## What is the goal of Stardew Valley?
 
-The player can choose from a number of goals, using their YAML settings.
+The player can choose from a number of goals, using their YAML options.
 - Complete the [Community Center](https://stardewvalleywiki.com/Bundles)
 - Succeed [Grandpa's Evaluation](https://stardewvalleywiki.com/Grandpa) with 4 lit candles
 - Reach the bottom of the [Pelican Town Mineshaft](https://stardewvalleywiki.com/The_Mines)
@@ -53,7 +53,7 @@ There also are a number of location checks that are optional, and individual pla
 Every normal reward from the above locations can be in another player's world.
 For the locations which do not include a normal reward, Resource Packs and traps are instead added to the pool. Traps are optional.
 
-A player can enable some settings that will add some items to the pool that are relevant to progression
+A player can enable some options that will add some items to the pool that are relevant to progression
 - Seasons Randomizer:
   - All 4 seasons will be items, and one of them will be selected randomly and be added to the player's start inventory
   - At the end of each month, the player can choose the next season, instead of following the vanilla season order. On Seasons Randomizer, they can only choose from the seasons they have received.
@@ -90,7 +90,7 @@ In some cases, like receiving Carpenter and Wizard buildings, the player will st
 ## Mods
 
 Starting in version 4.x.x, some Stardew Valley mods unrelated to Archipelago are officially "supported".
-This means that, for these specific mods, if you decide to include them in your yaml settings, the multiworld will be generated with the assumption that you will install and play with these mods.
+This means that, for these specific mods, if you decide to include them in your yaml options, the multiworld will be generated with the assumption that you will install and play with these mods.
 The multiworld will contain related items and locations for these mods, the specifics will vary from mod to mod
 
 [Supported Mods Documentation](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)

@@ -21,14 +21,14 @@ to obtain a config file for StarCraft 2.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
-The [Player Settings](https://archipelago.gg/games/Starcraft%202%20Wings%20of%20Liberty/player-settings) page on this
-website allows you to choose your personal settings for the randomizer and download them into a config file. Remember
+The [Player Options](https://archipelago.gg/games/Starcraft%202%20Wings%20of%20Liberty/player-options) page on this
+website allows you to choose your personal options for the randomizer and download them into a config file. Remember
 the name you type in the `Player Name` box; that's the "slot name" the client will ask you for when you attempt to
 connect!
 
 ### And why do I need a config file?
 
-Config files tell Archipelago how you'd like your game to be randomized, even if you're only using default settings.
+Config files tell Archipelago how you'd like your game to be randomized, even if you're only using default options.
 When you're setting up a multiworld, every world needs its own config file.
 Check out [Creating a YAML](https://archipelago.gg/tutorial/Archipelago/setup/en#creating-a-yaml) for more information.
 

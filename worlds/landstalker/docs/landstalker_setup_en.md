@@ -30,7 +30,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The [Player Settings Page](../player-settings) on the website allows you to easily configure your personal settings 
+The [Player Options Page](../player-options) on the website allows you to easily configure your personal options 
 and export a config file from them.
 
 ## How-to-play

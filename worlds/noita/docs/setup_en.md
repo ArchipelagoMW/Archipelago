@@ -42,7 +42,7 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) h
 about why Archipelago uses YAML files and what they're for.
 
 ### Where do I get a YAML?
-You can use the [game settings page for Noita](/games/Noita/player-settings) here on the Archipelago website to
+You can use the [game options page for Noita](/games/Noita/player-options) here on the Archipelago website to
 generate a YAML using a graphical interface.
 
 ## Poptracker Pack

@@ -4,9 +4,9 @@
 
 This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
-<h2 style="text-transform:none";>Where is the settings page</h2>
+<h2 style="text-transform:none";>Where is the options page</h2>
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 
 <h2 style="text-transform:none";>What is randomized in this game?</h2>
