@@ -9,7 +9,7 @@ config file.
 
 Noita is a procedurally generated action roguelike. During runs in Noita you will find potions, wands, spells, perks,
 chests, etc. Shop items, chests/hearts hidden in the environment, and pedestal items will be replaced with location
-checks. Orbs and boss drops can give location checks as well, if they are enabled in the options.
+checks. Orbs and boss drops can give location checks as well, if their respective options are enabled.
 Noita items that can be found in other players' games include specific perks, orbs (optional), wands, hearts, gold,
 potions, and other items. If traps are enabled, some randomized negative effects can affect your game when found.
 
