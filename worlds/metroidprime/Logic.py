@@ -1,5 +1,6 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
+from Items import artifact_table
 
 
 class MetroidPrimeLogic(LogicMixin):
@@ -13,6 +14,13 @@ class MetroidPrimeLogic(LogicMixin):
         if self.has({'Main Missile'}, player):
             count = 1
         count += self.prog_items['Missile Expansion', player] * 5
+        return count
+
+    def prime_artifact_count(self, world: MultiWorld, player: int) -> int:
+        count = 0
+        for i in artifact_table:
+            if self.has(i, player):
+                count += 1
         return count
 
     def prime_can_bomb(self, world: MultiWorld, player: int) -> bool:
