@@ -870,7 +870,7 @@ TestBase, and can then define options to test in the class body, and run tests i
 Example `__init__.py`
 
 ```python
-from test.test_base import WorldTestBase
+from test.bases import WorldTestBase
 
 
 class MyGameTestBase(WorldTestBase):
@@ -879,7 +879,7 @@ class MyGameTestBase(WorldTestBase):
 
 Next using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
 
-Example `testChestAccess.py`
+Example `test_chest_access.py`
 ```python
 from . import MyGameTestBase
 
@@ -899,3 +899,5 @@ class TestChestAccess(MyGameTestBase):
         # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
         self.assertAccessDependency(locations, items)
 ```
+
+For more information on tests check the [tests doc](tests.md).

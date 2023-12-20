@@ -170,7 +170,8 @@ class GraphBuilder(object):
         ap = "Landing Site" # dummy value it'll be overwritten at first collection
         while len(itemLocs) > 0 and not (sm.canPassG4() and graph.canAccess(sm, ap, "Landing Site", maxDiff)):
             il = itemLocs.pop(0)
-            if il.Location.restricted or il.Item.Type == "ArchipelagoItem":
+            # can happen with item links replacement items that its not in the container's itemPool
+            if il.Location.restricted or il.Item.Type == "ArchipelagoItem" or il.Item not in container.itemPool:
                 continue
             self.log.debug("collecting " + getItemLocStr(il))
             container.collect(il)
