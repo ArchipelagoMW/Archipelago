@@ -161,7 +161,7 @@ class ModCraftable:
 
 class ModMachine:
     preservation_chamber = "Preservation Chamber"
-    hardwood_preservation_chamber = "hardwood Preservation Chamber"
+    hardwood_preservation_chamber = "Hardwood Preservation Chamber"
     grinder = "Grinder"
     ancient_battery = "Ancient Battery Production Station"
 
