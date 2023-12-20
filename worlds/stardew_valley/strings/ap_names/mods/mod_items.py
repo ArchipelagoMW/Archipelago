@@ -38,10 +38,12 @@ class SVELocation:
 
 class SVERunes:
     nexus_guild = "Nexus: Adventurer's Guild Runes"
-    nexus_junimo_outpost = "Nexus: Junimo and Outpost Runes"
+    nexus_junimo = "Nexus: Junimo Woods Runes"
+    nexus_outpost = "Nexus: Outpost Runes"
     nexus_aurora = "Nexus: Aurora Vineyard Runes"
     nexus_spring = "Nexus: Sprite Spring Runes"
-    nexus_farm_wizard = "Nexus: Farm and Wizard Runes"
+    nexus_farm = "Nexus: Farm Runes"
+    nexus_wizard = "Nexus: Wizard Runes"
 
-    nexus_items: List[str] = [nexus_farm_wizard, nexus_spring, nexus_aurora, nexus_guild, nexus_junimo_outpost]
+    nexus_items: List[str] = [nexus_farm, nexus_wizard, nexus_spring, nexus_aurora, nexus_guild, nexus_junimo, nexus_outpost]
 
