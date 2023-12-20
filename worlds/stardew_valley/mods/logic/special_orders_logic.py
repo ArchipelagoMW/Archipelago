@@ -1,5 +1,6 @@
 from typing import Union
 
+from ...data.craftable_data import all_crafting_recipes_by_name
 from ..mod_data import ModNames
 from ...logic.action_logic import ActionLogicMixin
 from ...logic.artisan_logic import ArtisanLogicMixin
@@ -58,7 +59,8 @@ RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
                                               self.logic.region.can_reach(Region.island_south) & (
                                                       self.logic.action.can_open_geode(Geode.frozen) | self.logic.action.can_open_geode(Geode.omni)) &
                                               self.logic.region.can_reach(SVERegion.blue_moon_vineyard),
-                ModSpecialOrder.homemade_fertilizer: self.logic.has(Fertilizer.quality) & self.logic.region.can_reach(SVERegion.susans_house)
+                ModSpecialOrder.homemade_fertilizer: self.logic.crafting.can_craft(all_crafting_recipes_by_name[Fertilizer.quality]) &
+                                                     self.logic.region.can_reach(SVERegion.susans_house)  # quest requires you make the fertilizer
             })
 
         return special_orders
