@@ -1697,7 +1697,6 @@ item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission i
 
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
-# TODO needs zerg items
 second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Global weapon/armor upgrades
     ItemNames.PROGRESSIVE_TERRAN_ARMOR_UPGRADE,
@@ -1736,12 +1735,15 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Mercenaries (All races)
     *[item_name for item_name, item_data in get_full_item_list().items()
       if item_data.type == "Mercenary"],
-    # Kerrigan levels and abilities
+    # Kerrigan levels, abilities and generally useful stuff
     *[item_name for item_name, item_data in get_full_item_list().items()
-      if item_data.type in ("Level", "Ability") and "hots" in item_data.origin],
+      if item_data.type in ("Level", "Ability", "Evolution Pit")],
     # Zerg static defenses
     ItemNames.SPORE_CRAWLER,
     ItemNames.SPINE_CRAWLER,
+    # Defiler, Aberration (no upgrades)
+    ItemNames.DEFILER,
+    ItemNames.ABERRATION,
     # Spear of Adun Abilities
     ItemNames.SOA_CHRONO_SURGE,
     ItemNames.SOA_PROGRESSIVE_PROXY_PYLON,
