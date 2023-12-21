@@ -623,7 +623,7 @@ class KH2Context(CommonContext):
             master_sell = master_equipment | master_staff | master_shield
 
             await asyncio.create_task(self.IsInShop(master_sell))
-            print(self.kh2_seed_save_cache["AmountInvo"]["Ability"])
+            #print(self.kh2_seed_save_cache["AmountInvo"]["Ability"])
             for item_name in master_amount:
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
