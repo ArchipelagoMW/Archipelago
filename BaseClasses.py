@@ -252,15 +252,20 @@ class MultiWorld():
                                  range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
+        # TODO - remove this section once all worlds use options dataclasses
+        all_keys: Set[str] = {key for player in self.player_ids for key in
+                              AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
+        for option_key in all_keys:
+            option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
+                                         f"Please use `self.options.{option_key}` instead.")
+            option.update(getattr(args, option_key, {}))
+            setattr(self, option_key, option)
+
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
-            for option_key in world_type.options_dataclass.type_hints:
-                option_values = getattr(args, option_key, {})
-                setattr(self, option_key, option_values)
-                # TODO - remove this loop once all worlds use options dataclasses
-            options_dataclass: typing.Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
+            options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 
@@ -646,34 +651,34 @@ class CollectionState():
 
     def update_reachable_regions(self, player: int):
         self.stale[player] = False
-        rrp = self.reachable_regions[player]
-        bc = self.blocked_connections[player]
+        reachable_regions = self.reachable_regions[player]
+        blocked_connections = self.blocked_connections[player]
         queue = deque(self.blocked_connections[player])
-        start = self.multiworld.get_region('Menu', player)
+        start = self.multiworld.get_region("Menu", player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if start not in rrp:
-            rrp.add(start)
-            bc.update(start.exits)
+        if start not in reachable_regions:
+            reachable_regions.add(start)
+            blocked_connections.update(start.exits)
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
         while queue:
             connection = queue.popleft()
             new_region = connection.connected_region
-            if new_region in rrp:
-                bc.remove(connection)
+            if new_region in reachable_regions:
+                blocked_connections.remove(connection)
             elif connection.can_reach(self):
                 assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
-                rrp.add(new_region)
-                bc.remove(connection)
-                bc.update(new_region.exits)
+                reachable_regions.add(new_region)
+                blocked_connections.remove(connection)
+                blocked_connections.update(new_region.exits)
                 queue.extend(new_region.exits)
                 self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
                 # Retry connections if the new region can unblock them
                 for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
-                    if new_entrance in bc and new_entrance not in queue:
+                    if new_entrance in blocked_connections and new_entrance not in queue:
                         queue.append(new_entrance)
 
     def copy(self) -> CollectionState:
