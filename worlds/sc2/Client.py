@@ -143,21 +143,23 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         " or Default to select based on difficulty.")
             return False
 
-    def _cmd_disable_forced_camera(self, toggle: bool) -> None:
-        if toggle:
-            self.output("Blocking campaign triggers from forcing camera movement; repeat this command with 'False' to allow it again.")
-            self.ctx.disable_forced_camera = 1
-        else:
-            self.output("Allowing campaign triggers to force camera movement; repeat this command with 'True' to block them again.")
+    def _cmd_disable_forced_camera(self, toggle: str = "") -> None:
+        """Blocks missions from moving/locking the camera. Takes arguments 'true' or 'false.'"""
+        if toggle.lower() in {"off", "0", "false", "none", "null", "no"}:
+            self.output("Forced camera no longer disabled.")
             self.ctx.disable_forced_camera = 0
-
-    def _cmd_skip_cutscenes(self, toggle: bool) -> None:
-        if toggle:
-            self.output("Skipping all cutscenes and overly long dialogues; repeat this command with 'False' to stop.")
-            self.ctx.skip_cutscenes = 1
         else:
-            self.output("No longer skipping cutscenes or dialog; repeat this command with 'True' to skip them again.")
+            self.output("Forced camera now disabled.")
+            self.ctx.disable_forced_camera = 1
+
+    def _cmd_skip_cutscenes(self, toggle: str = "") -> None:
+        """Skips all cutscenes and prevents dialog from blocking progress. Takes arguments 'true' or 'false.'"""
+        if toggle.lower() in {"off", "0", "false", "none", "null", "no"}:
+            self.output("Cutscenes no longer being skipped.")
             self.ctx.skip_cutscenes = 0
+        else:
+            self.output("Cutscenes will now be skipped.")
+            self.ctx.skip_cutscenes = 1
 
     def _cmd_color(self, color: str = "") -> None:
         player_colors = [
