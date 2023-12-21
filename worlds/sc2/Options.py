@@ -339,27 +339,6 @@ class MaxNumberOfUpgrades(Range):
     default = -1
 
 
-
-class IncludeMutations(Range):
-    """Determines how many of the 3 mutations for the 7 units that have them can appear."""
-    display_name = "Include Mutations"
-    range_start = 0
-    range_end = 3
-    default = 3
-
-
-class IncludeStrains(Range):
-    """
-    Determines how many of the 2 strains for the 7 units that have them can appear.
-
-    Doesn't affect morphs (Lurker, Impaler, Brood Lord, Viper).
-    """
-    display_name = "Include Strains"
-    range_start = 0
-    range_end = 2
-    default = 2
-
-
 class KerriganPresence(Choice):
     """
     Determines whether Kerrigan is playable outside of missions that require her.
@@ -432,11 +411,6 @@ class KerriganLevelItemDistribution(Choice):
     option_size_1 = 9
     default = option_smooth
 
-
-class IncludeAllKerriganAbilities(DefaultOnToggle):
-    """If turned on, all abilities from every Kerrigan ability tier will be able to appear.
-    If turned off, one random passive or active ability per tier will be included."""
-    display_name = "Include All Kerrigan Abilities"
 
 
 class StartPrimaryAbilities(Range):
@@ -708,14 +682,11 @@ sc2_options: Dict[str, Option] = {
     "generic_upgrade_missions": GenericUpgradeMissions,
     "generic_upgrade_research": GenericUpgradeResearch,
     "generic_upgrade_items": GenericUpgradeItems,
-    "include_mutations": IncludeMutations,
-    "include_strains": IncludeStrains,
     "kerrigan_presence": KerriganPresence,
     "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
     "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
     "kerrigan_level_item_sum": KerriganLevelItemSum,
     "kerrigan_level_item_distribution": KerriganLevelItemDistribution,
-    "include_all_kerrigan_abilities": IncludeAllKerriganAbilities,
     "start_primary_abilities": StartPrimaryAbilities,
     "kerrigan_primal_status": KerriganPrimalStatus,
     "spear_of_adun_presence": SpearOfAdunPresence,

@@ -173,15 +173,6 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
         if exclude_amount > 0:
             excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
 
-    # pick a random mutation & strain for each unit and exclude the rest
-    for name in UPGRADABLE_ITEMS:
-        mutations = {child_name for child_name, item in item_table.items()
-                   if item.parent_item == name and item.type == "Mutation"}
-        smart_exclude(mutations, mutation_count)
-        strains = {child_name for child_name, item in item_table.items()
-                   if item.parent_item == name and item.type == "Strain" and child_name not in excluded_items}
-        smart_exclude(strains, strain_count)
-
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
     # no Kerrigan & remove all passives => remove all abilities
     if kerrigan_presence == KerriganPresence.option_not_present_and_no_passives:
@@ -193,40 +184,6 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
             smart_exclude(kerrigan_only_passives, 0)
             for tier in range(7):
                 smart_exclude(kerrigan_actives[tier], 0)
-        # pick a random ability per tier and remove all others
-        if not get_option_value(multiworld, player, "include_all_kerrigan_abilities"):
-            for tier in range(7):
-                # ignore active abilities if Kerrigan is off
-                if kerrigan_presence == KerriganPresence.option_not_present:
-                    smart_exclude(kerrigan_passives[tier], 0)
-                else:
-                    smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 1)
-            # TODO: Do these mission-bases stuff only if the mission is rolled instead of these mission able to roll
-            excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
-            # ensure Kerrigan has an active T1 or T2 ability for no-build missions on Standard - Back in the Saddle and Conviction
-            if get_option_value(multiworld, player, "required_tactics") == RequiredTactics.option_standard and \
-                    get_option_value(multiworld, player, "shuffle_no_build") == Options.ShuffleNoBuild.option_true and \
-                    get_option_value(multiworld, player, "grant_story_tech") == Options.GrantStoryTech.option_false and \
-                    not excluded_mission_names.intersection(
-                        {SC2Mission.BACK_IN_THE_SADDLE.name, SC2Mission.CONVICTION.name}
-                    ):
-                active_t1_t2 = kerrigan_actives[0].union(kerrigan_actives[1])
-                if active_t1_t2.issubset(excluded_items):
-                    # all T1 and T2 actives were excluded
-                    tier = multiworld.random.choice([0, 1])
-                    excluded_items.update(kerrigan_passives[tier])
-                    active_ability = multiworld.random.choice(sorted(kerrigan_actives[tier]))
-                    excluded_items.remove(active_ability)
-            # These items must exist in order to complete Supreme
-            if get_option_value(multiworld, player, "shuffle_no_build") == Options.ShuffleNoBuild.option_true and \
-                    get_option_value(multiworld, player, "grant_story_tech") == Options.GrantStoryTech.option_false and \
-                    SC2Mission.SUPREME.name not in excluded_mission_names:
-                excluded_items.remove(ItemNames.KERRIGAN_LEAPING_STRIKE)
-                excluded_items.remove(ItemNames.KERRIGAN_MEND)
-                excluded_items.union({ItemNames.KERRIGAN_HEROIC_FORTITUDE, ItemNames.KERRIGAN_KINETIC_BLAST,
-                                      ItemNames.KERRIGAN_WILD_MUTATION, ItemNames.KERRIGAN_SPAWN_BANELINGS})
-    # if Kerrigan exists and all abilities are included,
-    # no ability needs to be excluded
 
     # SOA exclusion, other cases are handled by generic race logic
     if (soa_presence == SpearOfAdunPresence.option_lotv_protoss and SC2Campaign.LOTV not in enabled_campaigns) \

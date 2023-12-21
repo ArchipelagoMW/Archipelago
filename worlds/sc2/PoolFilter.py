@@ -387,22 +387,36 @@ class ValidInventory:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.TERRAN_SHIP_UPGRADE_PREFIX)]
         # HotS
         # Baneling without sources => remove Baneling and upgrades
-        if (ItemNames.BANELING in self.logical_inventory
-            and ItemNames.ZERGLING not in self.logical_inventory
-            and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
+        if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
+                and ItemNames.ZERGLING not in self.logical_inventory
+                and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
         ):
-            inventory = [item for item in inventory if ItemNames.BANELING not in item.name]
-        # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades
-        if (ItemNames.BANELING in self.logical_inventory
+            inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.ZERGLING_BANELING_ASPECT]
+        # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades except macro ones
+        if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
             and ItemNames.ZERGLING not in self.logical_inventory
             and ItemNames.KERRIGAN_SPAWN_BANELINGS in self.logical_inventory
         ):
-            inventory = [item for item in inventory if item.name != ItemNames.BANELING]
+            inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item.name != ItemNames.BANELING_RAPID_METAMORPH]
         if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.SCOURGE} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
             locked_items = [item for item in locked_items if not item.name.startswith(ItemNames.ZERG_FLYER_UPGRADE_PREFIX)]
+        # T3 items removal rules - remove morph and its upgrades if the basic unit isn't in
         if not {ItemNames.MUTALISK, ItemNames.CORRUPTOR} & logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Mutalisk/Corruptor)")]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
+        if not ItemNames.ROACH not in logical_inventory_set:
+            inventory = [item for item in inventory if item.name != ItemNames.ROACH_RAVAGER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.ROACH_RAVAGER_ASPECT]
+        if not ItemNames.HYDRALISK not in logical_inventory_set:
+            inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.HYDRALISK_LURKER_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.HYDRALISK_IMPALER_ASPECT]
         # LotV
         # Shared unit upgrades between several units
         if not {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER} & logical_inventory_set:

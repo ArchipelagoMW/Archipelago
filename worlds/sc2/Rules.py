@@ -316,7 +316,7 @@ class SC2Logic:
         return state.has_any(self.basic_zerg_units, self.player)
 
     def zerg_competent_anti_air(self, state: CollectionState) -> bool:
-        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR}, self.player) \
+        return state.has_any({ItemNames.HYDRALISK, ItemNames.MUTALISK, ItemNames.CORRUPTOR, ItemNames.BROOD_QUEEN}, self.player) \
             or state.has_all({ItemNames.SWARM_HOST, ItemNames.SWARM_HOST_PRESSURIZED_GLANDS}, self.player) \
             or state.has_all({ItemNames.SCOURGE, ItemNames.SCOURGE_RESOURCE_EFFICIENCY}, self.player) \
             or (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
@@ -341,7 +341,7 @@ class SC2Logic:
         core_unit = state.has_any({ItemNames.ROACH, ItemNames.ABERRATION, ItemNames.ZERGLING}, self.player)
         support_unit = state.has_any({ItemNames.SWARM_QUEEN, ItemNames.HYDRALISK}, self.player) \
                        or self.morph_brood_lord(state) \
-                       or advanced and (state.has(ItemNames.INFESTOR, self.player) or self.morph_viper(state))
+                       or advanced and (state.has_any({ItemNames.INFESTOR, ItemNames.DEFILER}, self.player) or self.morph_viper(state))
         if core_unit and support_unit:
             return True
         vespene_unit = state.has_any({ItemNames.ULTRALISK, ItemNames.ABERRATION}, self.player) \
