@@ -33,6 +33,8 @@ LIBERATOR      = "Liberator"
 VALKYRIE       = "Valkyrie"
 WIDOW_MINE     = "Widow Mine"
 CYCLONE        = "Cyclone"
+HERC           = "HERC"
+WARHOUND       = "Warhound"
 
 # Terran Buildings
 BUNKER                              = "Bunker"

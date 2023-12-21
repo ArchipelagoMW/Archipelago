@@ -190,6 +190,22 @@ item_table = {
                      Mobile assault vehicle. Can use Lock On to quickly fire while moving.
                      """
                  )),
+    ItemNames.HERC:
+        ItemData(22 + SC2WOL_ITEM_ID_OFFSET, "Unit", 26, SC2Race.TERRAN,
+                 classification=ItemClassification.useful, origin={"ext"},
+                 description=inspect.cleandoc(
+                     """
+                     Front-line infantry. Can use Grapple.
+                     """
+                 )),
+    ItemNames.WARHOUND:
+        ItemData(23 + SC2WOL_ITEM_ID_OFFSET, "Unit", 27, SC2Race.TERRAN,
+                 classification=ItemClassification.progression, origin={"ext"},
+                 description=inspect.cleandoc(
+                     """
+                     Anti-vehicle mech. Haywire missiles do bonus damage to mechanical units.
+                     """
+                 )),
 
     # Some other items are moved to Upgrade group because of the way how the bot message is parsed
     ItemNames.PROGRESSIVE_TERRAN_INFANTRY_WEAPON:
@@ -1597,6 +1613,7 @@ basic_units = {
         ItemNames.GOLIATH,
         ItemNames.HELLION,
         ItemNames.VULTURE,
+        ItemNames.WARHOUND,
     },
     SC2Race.ZERG: {
         ItemNames.ZERGLING,
@@ -1649,7 +1666,8 @@ no_logic_starting_units = {
         ItemNames.WRAITH,
         ItemNames.RAVEN,
         ItemNames.PREDATOR,
-        ItemNames.LIBERATOR
+        ItemNames.LIBERATOR,
+        ItemNames.HERC,
     }),
     SC2Race.ZERG: advanced_basic_units[SC2Race.ZERG].union({
         ItemNames.ULTRALISK,
@@ -1714,6 +1732,9 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.HIVE_MIND_EMULATOR,
     ItemNames.PSI_DISRUPTER,
     ItemNames.PERDITION_TURRET,
+    # Terran units without upgrades
+    ItemNames.HERC,
+    ItemNames.WARHOUND,
     # General Terran upgrades without any dependencies
     ItemNames.SCV_ADVANCED_CONSTRUCTION,
     ItemNames.SCV_DUAL_FUSION_WELDERS,

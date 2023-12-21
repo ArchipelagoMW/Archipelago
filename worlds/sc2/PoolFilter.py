@@ -17,12 +17,12 @@ UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() i
 
 BARRACKS_UNITS = {
     ItemNames.MARINE, ItemNames.MEDIC, ItemNames.FIREBAT, ItemNames.MARAUDER,
-    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE,
+    ItemNames.REAPER, ItemNames.GHOST, ItemNames.SPECTRE, ItemNames.HERC,
 }
 FACTORY_UNITS = {
     ItemNames.HELLION, ItemNames.VULTURE, ItemNames.GOLIATH, ItemNames.DIAMONDBACK,
     ItemNames.SIEGE_TANK, ItemNames.THOR, ItemNames.PREDATOR, ItemNames.WIDOW_MINE,
-    ItemNames.CYCLONE,
+    ItemNames.CYCLONE, ItemNames.WARHOUND,
 }
 STARPORT_UNITS = {
     ItemNames.MEDIVAC, ItemNames.WRAITH, ItemNames.VIKING, ItemNames.BANSHEE,
