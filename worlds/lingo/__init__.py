@@ -1,6 +1,8 @@
 """
 Archipelago init file for Lingo
 """
+from logging import warning
+
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .items import ALL_ITEM_TABLE, LingoItem
@@ -9,7 +11,6 @@ from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 from .static_logic import Room, RoomEntrance
-from .testing import LingoTestOptions
 
 
 class LingoWebWorld(WebWorld):
@@ -49,6 +50,14 @@ class LingoWorld(World):
     player_logic: LingoPlayerLogic
 
     def generate_early(self):
+        if not (self.options.shuffle_doors or self.options.shuffle_colors):
+            if self.multiworld.players == 1:
+                warning(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any progression"
+                        f" items. Please turn on Door Shuffle or Color Shuffle if that doesn't seem right.")
+            else:
+                raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Lingo world doesn't have any"
+                                f" progression items. Please turn on Door Shuffle or Color Shuffle.")
+
         self.player_logic = LingoPlayerLogic(self)
 
     def create_regions(self):
@@ -94,9 +103,11 @@ class LingoWorld(World):
         classification = item.classification
         if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
                 and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.painting_mapping
-                                                    for painting_id in item.painting_ids):
+                                                    for painting_id in item.painting_ids)\
+                and "pilgrim_painting2" not in item.painting_ids:
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
-            # go nowhere, then this item should not be progression.
+            # go nowhere, then this item should not be progression. The Pilgrim Room painting is special and needs to be
+            # excluded from this.
             classification = ItemClassification.filler
 
         return LingoItem(name, classification, item.code, self.player)

@@ -117,6 +117,17 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
         for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
+            # remove from_pool items also from early items handling, as starting is plenty early.
+            early = world.early_items[player].get(item_name, 0)
+            if early:
+                world.early_items[player][item_name] = max(0, early-count)
+                remaining_count = count-early
+                if remaining_count > 0:
+                    local_early = world.early_local_items[player].get(item_name, 0)
+                    if local_early:
+                        world.early_items[player][item_name] = max(0, local_early - remaining_count)
+                    del local_early
+            del early
 
     logger.info('Creating World.')
     AutoWorld.call_all(world, "create_regions")
