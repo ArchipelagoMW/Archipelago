@@ -58,6 +58,9 @@ junimo = (SVERegion.junimo_woods,)
 witch_swamp = (Region.witch_swamp,)
 witch_attic = (AlectoRegion.witch_attic,)
 
+# Hat Mouse
+hat_house = (LaceyRegion.hat_house,)
+
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)
 pearl = ("Pearl",)
@@ -424,6 +427,7 @@ yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
 zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
 alecto = villager(ModNPC.alecto, False, witch_attic, Generic.any, universal_loves, False, ModNames.alecto)
+lacey = villager(ModNPC.lacey, True, hat_house, Season.spring, universal_loves, True, ModNames.lacey)
 
 # SVE Villagers
 claire = villager(ModNPC.claire, True, town + jojamart, Season.fall, universal_loves + claire_loves, True, ModNames.sve)

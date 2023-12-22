@@ -331,3 +331,7 @@ class SVEEntrance:
 class AlectoEntrance:
     witch_hut_to_witch_attic = "Witch's Hut to Witch's Attic"
 
+
+class LaceyEntrance:
+    forest_to_hat_house = "Forest to Mouse House"
+

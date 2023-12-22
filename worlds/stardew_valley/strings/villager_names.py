@@ -63,3 +63,4 @@ class ModNPC:
     susan = "Susan"
     alecto = "Alecto"
     goblin = "Zic"
+    lacey = "Lacey"

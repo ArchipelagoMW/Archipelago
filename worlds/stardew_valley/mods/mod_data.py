@@ -24,6 +24,7 @@ class ModNames:
     sve = "Stardew Valley Expanded"
     alecto = "Alecto the Witch"
     distant_lands = "Distant Lands - Witch Swamp Overhaul"
+    lacey = "Hat Mouse Lacey"
 
     jasper_sve = jasper + "," + sve
 
@@ -34,4 +35,4 @@ all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpac
                       ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
                       ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
                       ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator, ModNames.sve, ModNames.alecto,
-                      ModNames.distant_lands})
+                      ModNames.distant_lands, ModNames.lacey})

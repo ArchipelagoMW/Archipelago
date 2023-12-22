@@ -277,3 +277,7 @@ class SVERegion:
 
 class AlectoRegion:
     witch_attic = "Witch's Attic"
+
+
+class LaceyRegion:
+    hat_house = "Mouse House"
