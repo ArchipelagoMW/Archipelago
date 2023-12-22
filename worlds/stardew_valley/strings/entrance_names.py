@@ -335,3 +335,24 @@ class AlectoEntrance:
 class LaceyEntrance:
     forest_to_hat_house = "Forest to Mouse House"
 
+
+class BoardingHouseEntrance:
+    bus_stop_to_boarding_house_plateau = "Bus Stop to Boarding House Outside"
+    boarding_house_plateau_to_boarding_house_first = "Boarding House Outside to Boarding House - First Floor"
+    boarding_house_first_to_boarding_house_second = "Boarding House - First Floor to Boarding House - Second Floor"
+    boarding_house_plateau_to_abandoned_mines_entrance = "Boarding House Outside to Abandoned Mines Entrance"
+    abandoned_mines_entrance_to_abandoned_mines_1a = "Abandoned Mines Entrance to Abandoned Mines - 1A"
+    abandoned_mines_1a_to_abandoned_mines_1b = "Abandoned Mines - 1A to Abandoned Mines - 1B"
+    abandoned_mines_1b_to_abandoned_mines_2a = "Abandoned Mines - 1B to Abandoned Mines - 2A"
+    abandoned_mines_2a_to_abandoned_mines_2b = "Abandoned Mines - 2A to Abandoned Mines - 2B"
+    abandoned_mines_2b_to_abandoned_mines_3 = "Abandoned Mines - 2B to Abandoned Mines - 3"
+    abandoned_mines_3_to_abandoned_mines_4 = "Abandoned Mines - 3 to Abandoned Mines - 4"
+    abandoned_mines_4_to_abandoned_mines_5 = "Abandoned Mines - 4 to Abandoned Mines - 5"
+    abandoned_mines_5_to_the_lost_valley = "Abandoned Mines - 5 to The Lost Valley"
+    abandoned_mines_entrance_to_the_lost_valley = "Abandoned Mines Entrance to The Lost Valley"
+    the_lost_valley_to_gregory_tent = "The Lost Valley to Gregory's Tent"
+    the_lost_valley_to_lost_valley_ruins = "The Lost Valley to Lost Valley Ruins"
+    lost_valley_ruins_to_lost_valley_house_1 = "Lost Valley Ruins to Lost Valley Ruins - First House"
+    lost_valley_ruins_to_lost_valley_house_2 = "Lost Valley Ruins to Lost Valley Ruins - Second House"
+    boarding_house_plateau_to_buffalo_ranch = "Boarding House Outside to Buffalo's Ranch"
+

@@ -64,3 +64,6 @@ class ModNPC:
     alecto = "Alecto"
     goblin = "Zic"
     lacey = "Lacey"
+    gregory = "Gregory"
+    sheila = "Sheila"
+    joel = "Joel"
