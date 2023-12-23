@@ -138,14 +138,9 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     # Starter items are also excluded items
     starter_items: Set[str] = set(get_option_value(multiworld, player, 'start_inventory'))
     item_table = get_full_item_list()
-    mutation_count = get_option_value(multiworld, player, "include_mutations")
-    strain_count = get_option_value(multiworld, player, "include_strains")
     soa_presence = get_option_value(multiworld, player, "spear_of_adun_presence")
     soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
-
-    assert isinstance(mutation_count, int)
-    assert isinstance(strain_count, int)
 
     # Exclude Primal Form item if option is not set
     if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item:
