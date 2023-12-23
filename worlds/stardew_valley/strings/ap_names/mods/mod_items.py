@@ -23,8 +23,9 @@ class SVEQuestItem:
     diamond_wand = "Diamond Wand"
     marlon_boat_paddle = "Marlon's Boat Paddle"
     fable_reef_portal = "Fable Reef Portal"
+    grandpa_shed = "Grandpa's Shed"
 
-    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, kittyfish_spell, scarlett_job_offer, morgan_schooling]
+    sve_quest_items: List[str] = [aurora_vineyard_tablet, iridium_bomb, void_soul, kittyfish_spell, scarlett_job_offer, morgan_schooling, grandpa_shed]
     sve_quest_items_ginger_island: List[str] = [diamond_wand, marlon_boat_paddle, fable_reef_portal]
 
 

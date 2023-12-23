@@ -19,7 +19,7 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
 from .strings.ap_names.event_names import Event
-from .strings.ap_names.mods.mod_items import SVEQuestItem
+from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
 from .strings.ap_names.mods.mod_items import SVELocation
 from .strings.artisan_good_names import ArtisanGood
@@ -908,23 +908,23 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_shed_to_interior, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.aurora_warp_to_aurora, player),
-                             logic.received("Nexus: Aurora Vineyard Runes"))
+                             logic.received(SVERunes.nexus_aurora))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.farm_warp_to_farm, player),
-                             logic.received("Nexus: Farm Runes"))
+                             logic.received(SVERunes.nexus_farm))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.guild_warp_to_guild, player),
-                             logic.received("Nexus: Adventurer's Guild Runes"))
+                             logic.received(SVERunes.nexus_guild))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.junimo_warp_to_junimo, player),
-                             logic.received("Nexus: Junimo Woods Runes"))
+                             logic.received(SVERunes.nexus_junimo))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.spring_warp_to_spring, player),
-                             logic.received("Nexus: Sprite Spring Runes"))
+                             logic.received(SVERunes.nexus_spring))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.outpost_warp_to_outpost, player),
-                             logic.received("Nexus: Outpost Runes"))
+                             logic.received(SVERunes.nexus_outpost))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_warp_to_wizard, player),
-                             logic.received("Nexus: Wizard Runes"))
+                             logic.received(SVERunes.nexus_wizard))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_purple_junimo, player),
                              logic.relationship.has_hearts(ModNPC.apples, 10))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_interior_to_upstairs, player),
-                             logic.quest.can_complete_quest(ModQuest.GrandpasShed))
+                             logic.received(SVEQuestItem.grandpa_shed))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
                              (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
                               logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic)))
@@ -941,9 +941,9 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.summit_to_highlands, player),
-                             logic.received("Marlon's Boat Paddle"))
+                             logic.received(SVEQuestItem.marlon_boat_paddle))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
-                             logic.received("Fable Reef Portal"))
+                             logic.received(SVEQuestItem.fable_reef_portal))
     MultiWorldRules.set_rule(multiworld.get_location(SVELocation.diamond_wand, player),
                              logic.quest.can_complete_quest(ModQuest.MonsterCrops) & logic.region.can_reach(SVERegion.lances_house))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
