@@ -158,6 +158,7 @@ sea_sponge = create_fish(SVEFish.sea_sponge, ginger_island_ocean, season.all_sea
 dulse_seaweed = create_fish(SVEFish.dulse_seaweed, vineyard, season.all_seasons, 50, mod_name=ModNames.sve)
 
 void_minnow = create_fish(DistantLandsFish.void_minnow, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
+purple_algae = create_fish(DistantLandsFish.purple_algae, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
 swamp_leech = create_fish(DistantLandsFish.swamp_leech, witch_swamp, season.all_seasons, 15, mod_name=ModNames.distant_lands)
 giant_horsehoe_crab = create_fish(DistantLandsFish.giant_horsehoe_crab, witch_swamp, season.all_seasons, 90, mod_name=ModNames.distant_lands)
 

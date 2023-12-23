@@ -12,7 +12,7 @@ from ...logic.time_logic import TimeLogicMixin
 from ...stardew_rule import StardewRule
 from ...strings.animal_product_names import AnimalProduct
 from ...strings.artisan_good_names import ArtisanGood
-from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable
+from ...strings.crop_names import Fruit, SVEFruit, SVEVegetable, Vegetable
 from ...strings.fertilizer_names import Fertilizer
 from ...strings.food_names import Meal, Beverage
 from ...strings.forageable_names import SVEForage
@@ -20,7 +20,7 @@ from ...strings.material_names import Material
 from ...strings.metal_names import Ore, MetalBar
 from ...strings.monster_drop_names import Loot
 from ...strings.quest_names import Quest, ModQuest
-from ...strings.region_names import Region, SVERegion
+from ...strings.region_names import Region, SVERegion, BoardingHouseRegion
 from ...strings.season_names import Season
 from ...strings.villager_names import ModNPC
 from ...strings.wallet_item_names import Wallet
@@ -88,14 +88,15 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
         if ModNames.distant_lands not in self.options.mods:
             return {}
 
-        return{
+        return {
             ModQuest.CorruptedCropsTask: self.logic.region.can_reach(Region.wizard_tower) & self.logic.has(Fertilizer.deluxe) &
                                          self.logic.quest.can_complete_quest(Quest.magic_ink),
             ModQuest.WitchOrder: self.logic.region.can_reach(Region.witch_swamp) & self.logic.has(Fertilizer.deluxe) &
                                  self.logic.quest.can_complete_quest(Quest.magic_ink),
             ModQuest.ANewPot: self.logic.region.can_reach(Region.saloon) &
                               self.logic.region.can_reach(Region.sam_house) & self.logic.region.can_reach(Region.pierre_store) &
-                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin, 6),
+                              self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
+                                                                                                                                                  6),
             ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
                                        self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10)
 

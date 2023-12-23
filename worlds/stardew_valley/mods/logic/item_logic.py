@@ -127,7 +127,6 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         return{
             DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
             DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
-            DistantLandsFish.purple_algae: self.logic.fishing.can_fish_at(Region.witch_swamp),
             DistantLandsSeed.vile_ancient_fruit: self.logic.money.can_spend_at(Region.oasis, 50) & self.has_seed_unlocked(DistantLandsSeed.vile_ancient_fruit),
             DistantLandsSeed.void_mint: self.logic.money.can_spend_at(Region.oasis, 80) & self.has_seed_unlocked(DistantLandsSeed.void_mint),
             DistantLandsCrop.void_mint: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.void_mint),
