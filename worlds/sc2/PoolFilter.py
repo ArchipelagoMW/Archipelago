@@ -410,10 +410,10 @@ class ValidInventory:
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT]
-        if not ItemNames.ROACH not in logical_inventory_set:
+        if ItemNames.ROACH not in logical_inventory_set:
             inventory = [item for item in inventory if item.name != ItemNames.ROACH_RAVAGER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.ROACH_RAVAGER_ASPECT]
-        if not ItemNames.HYDRALISK not in logical_inventory_set:
+        if ItemNames.HYDRALISK not in logical_inventory_set:
             inventory = [item for item in inventory if not item.name.endswith("(Hydralisk)")]
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.HYDRALISK_LURKER_ASPECT]
             inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.HYDRALISK_IMPALER_ASPECT]
