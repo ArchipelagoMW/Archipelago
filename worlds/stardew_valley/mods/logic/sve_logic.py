@@ -14,7 +14,10 @@ from ...logic.season_logic import SeasonLogicMixin
 from ...logic.time_logic import TimeLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...strings.ap_names.mods.mod_items import SVELocation, SVERunes, SVEQuestItem
-from ...strings.quest_names import ModQuest
+from ...strings.quest_names import Quest
+from ...strings.region_names import Region
+from ...strings.tool_names import Tool, ToolMaterial
+from ...strings.wallet_item_names import Wallet
 from ...stardew_rule import Or
 from ...strings.quest_names import ModQuest
 
@@ -42,3 +45,11 @@ class SVELogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, QuestLogicMixi
         if self.options.quest_locations < 0:
             return self.logic.quest.can_complete_quest(ModQuest.RailroadBoulder)
         return self.logic.received(SVEQuestItem.iridium_bomb)
+
+    def can_buy_bear_recipe(self):
+        access_rule = (self.logic.quest.can_complete_quest(Quest.strange_note) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
+                       self.logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic))
+        forage_rule = self.logic.region.can_reach_any((Region.forest, Region.backwoods, Region.mountain))
+        knowledge_rule = self.logic.received(Wallet.bears_knowledge)
+        return access_rule & forage_rule & knowledge_rule
+

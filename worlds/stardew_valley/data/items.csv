@@ -81,7 +81,7 @@ id,name,classification,groups,mod_name
 95,Adventurer's Guild,progression,DEPRECATED,
 96,Club Card,progression,,
 97,Magnifying Glass,progression,,
-98,Bear's Knowledge,useful,,
+98,Bear's Knowledge,progression,,
 99,Iridium Snake Milk,useful,,
 100,JotPK: Progressive Boots,progression,ARCADE_MACHINE_BUFFS,
 101,JotPK: Progressive Gun,progression,ARCADE_MACHINE_BUFFS,

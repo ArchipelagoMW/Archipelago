@@ -926,8 +926,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.grandpa_interior_to_upstairs, player),
                              logic.received(SVEQuestItem.grandpa_shed))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.use_bear_shop, player),
-                             (logic.quest.can_complete_quest(Quest.strange_note) & logic.tool.has_tool(Tool.axe, ToolMaterial.basic) &
-                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.basic)))
+                             (logic.mod.sve.can_buy_bear_recipe()))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.railroad_to_grampleton_station, player),
                              logic.received(SVEQuestItem.scarlett_job_offer))
     logic.mod.sve.initialize_rules()

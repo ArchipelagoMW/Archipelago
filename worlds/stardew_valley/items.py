@@ -355,7 +355,10 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     # items.append(item_factory("Adventurer's Guild")) # Now unlocked always!
     items.append(item_factory(Wallet.club_card))
     items.append(item_factory(Wallet.magnifying_glass))
-    items.append(item_factory(Wallet.bears_knowledge))
+    if ModNames.sve in options.mods:
+        items.append(item_factory(Wallet.bears_knowledge))
+    else:
+        items.append(item_factory(Wallet.bears_knowledge, ItemClassification.useful))  # Not necessary outside of SVE
     items.append(item_factory(Wallet.iridium_snake_milk))
     items.append(item_factory("Fairy Dust Recipe"))
     items.append(item_factory("Dark Talisman"))

@@ -174,11 +174,11 @@ tropical_curry = shop_recipe(Meal.tropical_curry, Region.island_resort, 2000, {F
 trout_soup = queen_of_sauce_recipe(Meal.trout_soup, 1, Season.fall, 14, {Fish.rainbow_trout: 1, WaterItem.green_algae: 1})
 vegetable_medley = friendship_recipe(Meal.vegetable_medley, NPC.caroline, 7, {Vegetable.tomato: 1, Vegetable.beet: 1})
 
-baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 12500, {Forageable.salmonberry: 15, Forageable.blackberry: 15,
+baked_berry_oatmeal = shop_recipe(SVEMeal.baked_berry_oatmeal, SVERegion.bear_shop, 0, {Forageable.salmonberry: 15, Forageable.blackberry: 15,
                                                                                             Ingredient.sugar: 1, Ingredient.wheat_flour: 2}, ModNames.sve)
 big_bark_burger = friendship_and_shop_recipe(SVEMeal.big_bark_burger, NPC.gus, 5, Region.saloon, 5500,
                                              {SVEFish.puppyfish: 1, Meal.bread: 1, Ingredient.oil: 1}, ModNames.sve)
-flower_cookie = shop_recipe(SVEMeal.flower_cookie, SVERegion.bear_shop, 8750, {SVEForage.ferngill_primrose: 1, SVEForage.goldenrod: 1,
+flower_cookie = shop_recipe(SVEMeal.flower_cookie, SVERegion.bear_shop, 0, {SVEForage.ferngill_primrose: 1, SVEForage.goldenrod: 1,
                                                                                SVEForage.winter_star_rose: 1, Ingredient.wheat_flour: 1, Ingredient.sugar: 1,
                                                                                AnimalProduct.large_egg: 1}, ModNames.sve)
 frog_legs = shop_recipe(SVEMeal.frog_legs, Region.adventurer_guild, 2000, {SVEFish.frog: 1, Ingredient.oil: 1, Ingredient.wheat_flour: 1}, ModNames.sve)
