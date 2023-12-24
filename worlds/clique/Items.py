@@ -1,6 +1,7 @@
 from typing import Callable, Dict, NamedTuple, Optional
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification
+from Options import PerGameCommonOptions
 
 
 class CliqueItem(Item):
@@ -10,7 +11,7 @@ class CliqueItem(Item):
 class CliqueItemData(NamedTuple):
     code: Optional[int] = None
     type: ItemClassification = ItemClassification.filler
-    can_create: Callable[[MultiWorld, int], bool] = lambda multiworld, player: True
+    can_create: Callable[[PerGameCommonOptions], bool] = lambda options: True
 
 
 item_data_table: Dict[str, CliqueItemData] = {
@@ -21,11 +22,11 @@ item_data_table: Dict[str, CliqueItemData] = {
     "Button Activation": CliqueItemData(
         code=69696968,
         type=ItemClassification.progression,
-        can_create=lambda multiworld, player: bool(getattr(multiworld, "hard_mode")[player]),
+        can_create=lambda options: bool(getattr(options, "hard_mode")),
     ),
     "A Cool Filler Item (No Satisfaction Guaranteed)": CliqueItemData(
         code=69696967,
-        can_create=lambda multiworld, player: False  # Only created from `get_filler_item_name`.
+        can_create=lambda options: False  # Only created from `get_filler_item_name`.
     ),
     "The Urge to Push": CliqueItemData(
         type=ItemClassification.progression,
