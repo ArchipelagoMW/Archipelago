@@ -156,7 +156,7 @@ class WeightedSettings {
 
     const hintText = document.createElement('p');
     hintText.classList.add('hint-text');
-    hintText.innerText = 'If a game\'s value is greater than zero, you can click it\'s name to jump ' +
+    hintText.innerText = 'If a game\'s value is greater than zero, you can click its name to jump ' +
       'to that section.'
     gameChoiceDiv.appendChild(hintText);
 
