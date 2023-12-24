@@ -199,16 +199,12 @@ class TLoZWorld(World):
         # become type 1 boss roars, so we at least keep the sound of roaring where it should be.
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
-            if i == 0x45:
-                print(hex(item))
             if item & 0b00100000:
                 item = item & 0b11011111
                 item = item | 0b01000000
                 rom_data[first_quest_dungeon_items_early + i] = item
             if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
-            if i == 0x45:
-                print(hex(rom_data[first_quest_dungeon_items_early + i]))
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
