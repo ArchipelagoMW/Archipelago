@@ -117,7 +117,7 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Twilight Town Room of Beginnings":                                  KHRECOMLocationData("Progression",  269_1102),
     "Twilight Town Room of Beginnings (Enemy Cards Vexen)":              KHRECOMLocationData("Progression",  269_1103),
     "Twilight Town Room of Rewards (Enemy Cards Roxas)":                 KHRECOMLocationData("Days"       ,  269_1104), #Days Location
-    "Twilight Town Bounty (Enemy Cards Ansem)":                          KHRECOMLocationData("Days"       ,  269_1105), #Days Location
+   #"Twilight Town Bounty (Enemy Cards Ansem)":                          KHRECOMLocationData("Days"       ,  269_1105), #Days Location
     
     "Destiny Islands Post Floor (Attack Cards Oathkeeper)":              KHRECOMLocationData("Progression",  269_1201),
     "Destiny Islands Post Floor (Attack Cards Oblivion)":                KHRECOMLocationData("Progression",  269_1202),
@@ -127,13 +127,13 @@ location_table: Dict[str, KHRECOMLocationData] = {
     "Destiny Islands Room of Guidance":                                  KHRECOMLocationData("Progression",  269_1206),
     "Destiny Islands Room of Guidance (Enemy Cards Darkside)":           KHRECOMLocationData("Progression",  269_1207),
     "Destiny Islands Room of Rewards (Item Cards Megalixir)":            KHRECOMLocationData("Progression",  269_1208),
-    "Destiny Islands Bounty (Enemy Cards Zexion)":                       KHRECOMLocationData("Days"       ,  269_1209), #Days Location
+   #"Destiny Islands Bounty (Enemy Cards Zexion)":                       KHRECOMLocationData("Days"       ,  269_1209), #Days Location
     "Destiny Islands Room of Rewards (Attack Cards Two Become One)":     KHRECOMLocationData("Days"       ,  269_1210), #Days Location
     
     "Castle Oblivion Field Marluxia":                                    KHRECOMLocationData("Progression",  269_1301),
     "Castle Oblivion Room of Beginnings":                                KHRECOMLocationData("Progression",  269_1302),
     "Castle Oblivion Room of Beginnings (Enemy Cards Axel)":             KHRECOMLocationData("Progression",  269_1303),
-    "Castle Oblivion Bounty (Enemy Cards Lexaeus)":                      KHRECOMLocationData("Days"       ,  269_1304), #Days Location
+   #"Castle Oblivion Bounty (Enemy Cards Lexaeus)":                      KHRECOMLocationData("Days"       ,  269_1304), #Days Location
     "Castle Oblivion Room of Rewards (Attack Cards Star Seeker)":        KHRECOMLocationData("Days"       ,  269_1305), #Days Location
     
     "Heartless Air Pirate":                                              KHRECOMLocationData("Progression",  269_1401),

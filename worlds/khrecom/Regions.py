@@ -136,7 +136,7 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     regions["Floor 11"].locations.append("Twilight Town Room of Beginnings (Enemy Cards Vexen)")
     if days:
         regions["Floor 11"].locations.append("Twilight Town Room of Rewards (Enemy Cards Roxas)")
-        regions["Floor 11"].locations.append("Twilight Town Bounty (Enemy Cards Ansem)")
+       #regions["Floor 11"].locations.append("Twilight Town Bounty (Enemy Cards Ansem)")
     
     regions["Floor 12"].locations.append("Destiny Islands Post Floor (Attack Cards Oathkeeper)")
     regions["Floor 12"].locations.append("Destiny Islands Post Floor (Attack Cards Oblivion)")
@@ -147,14 +147,14 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     regions["Floor 12"].locations.append("Destiny Islands Room of Guidance (Enemy Cards Darkside)")
     regions["Floor 12"].locations.append("Destiny Islands Room of Rewards (Item Cards Megalixir)")
     if days:
-        regions["Floor 12"].locations.append("Destiny Islands Bounty (Enemy Cards Zexion)")
+       #regions["Floor 12"].locations.append("Destiny Islands Bounty (Enemy Cards Zexion)")
         regions["Floor 12"].locations.append("Destiny Islands Room of Rewards (Attack Cards Two Become One)")
     
     regions["Floor 13"].locations.append("Castle Oblivion Field Marluxia")
     regions["Floor 13"].locations.append("Castle Oblivion Room of Beginnings")
     regions["Floor 13"].locations.append("Castle Oblivion Room of Beginnings (Enemy Cards Axel)")
     if days:
-        regions["Floor 13"].locations.append("Castle Oblivion Bounty (Enemy Cards Lexaeus)")
+       #regions["Floor 13"].locations.append("Castle Oblivion Bounty (Enemy Cards Lexaeus)")
         regions["Floor 13"].locations.append("Castle Oblivion Room of Rewards (Attack Cards Star Seeker)")
     
     regions["Heartless"].locations.append("Heartless Air Pirate")                                              
