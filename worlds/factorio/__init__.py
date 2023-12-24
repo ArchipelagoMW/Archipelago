@@ -11,7 +11,7 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution
+from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution, TechCostMix
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
@@ -538,7 +538,7 @@ class FactorioScienceLocation(FactorioLocation):
     ingredients: typing.Dict[str, int]
     count: int = 0
 
-    def __init__(self, player: int, name: str, address: int, parent: Region, tech_cost_mix: Options.TechCostMix):
+    def __init__(self, player: int, name: str, address: int, parent: Region, tech_cost_mix: TechCostMix):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
         # "AP-{Complexity}-{Cost}"
         self.complexity = int(self.name[3]) - 1
