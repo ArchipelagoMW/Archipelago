@@ -72,47 +72,47 @@ class DarkSouls3World(World):
 
 
     def generate_early(self):
-        if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
+        if self.options.enable_weapon_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.WEAPON)
-        if self.multiworld.enable_shield_locations[self.player] == Toggle.option_true:
+        if self.options.enable_shield_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SHIELD)
-        if self.multiworld.enable_armor_locations[self.player] == Toggle.option_true:
+        if self.options.enable_armor_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.ARMOR)
-        if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
+        if self.options.enable_ring_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.RING)
-        if self.multiworld.enable_spell_locations[self.player] == Toggle.option_true:
+        if self.options.enable_spell_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
+        if self.options.enable_npc_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.NPC)
-        if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
+        if self.options.enable_key_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.KEY)
-            if self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_global:
-                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
-            elif self.multiworld.early_banner[self.player] == EarlySmallLothricBanner.option_early_local:
-                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
-        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
+            if self.options.early_banner == EarlySmallLothricBanner.option_early_global:
+                self.options.early_items['Small Lothric Banner'] = 1
+            elif self.options.early_banner == EarlySmallLothricBanner.option_early_local:
+                self.options.local_early_items['Small Lothric Banner'] = 1
+        if self.options.enable_boss_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.BOSS)
-        if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+        if self.options.enable_misc_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.MISC)
-        if self.multiworld.enable_health_upgrade_locations[self.player] == Toggle.option_true:
+        if self.options.enable_health_upgrade_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
-        if self.multiworld.enable_progressive_locations[self.player] == Toggle.option_true:
+        if self.options.enable_progressive_locations == Toggle.option_true:
             self.enabled_location_categories.add(DS3LocationCategory.PROGRESSIVE_ITEM)
 
 
     def create_regions(self):
         progressive_location_table = []
-        if self.multiworld.enable_progressive_locations[self.player]:
+        if self.options.enable_progressive_locations:
             progressive_location_table = [] + \
                 location_tables["Progressive Items 1"] + \
                 location_tables["Progressive Items 2"] + \
                 location_tables["Progressive Items 3"] + \
                 location_tables["Progressive Items 4"]
 
-            if self.multiworld.enable_dlc[self.player].value:
+            if self.options.enable_dlc.value:
                 progressive_location_table += location_tables["Progressive Items DLC"]
 
-        if self.multiworld.enable_health_upgrade_locations[self.player]:
+        if self.options.enable_health_upgrade_locations:
             progressive_location_table += location_tables["Progressive Items Health"]
 
         # Create Vanilla Regions
@@ -146,7 +146,7 @@ class DarkSouls3World(World):
         regions["Consumed King's Garden"].locations.append(potd_location)
 
         # Create DLC Regions
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             regions.update({region_name: self.create_region(region_name, location_tables[region_name]) for region_name in [
                 "Painted World of Ariandel 1",
                 "Painted World of Ariandel 2",
@@ -192,7 +192,7 @@ class DarkSouls3World(World):
         create_connection("Consumed King's Garden", "Untended Graves")
 
         # Connect DLC Regions
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             create_connection("Cathedral of the Deep", "Painted World of Ariandel 1")
             create_connection("Painted World of Ariandel 1", "Painted World of Ariandel 2")
             create_connection("Painted World of Ariandel 2", "Dreg Heap")
@@ -240,7 +240,7 @@ class DarkSouls3World(World):
 
 
     def create_items(self):
-        dlc_enabled = self.multiworld.enable_dlc[self.player] == Toggle.option_true
+        dlc_enabled = self.options.enable_dlc == Toggle.option_true
 
         itempool_by_category = {category: [] for category in self.enabled_location_categories}
 
@@ -254,7 +254,7 @@ class DarkSouls3World(World):
                     itempool_by_category[location.category].append(location.default_item_name)
 
         # Replace each item category with a random sample of items of those types
-        if self.multiworld.pool_type[self.player] == PoolTypeOption.option_various:
+        if self.options.pool_type == PoolTypeOption.option_various:
             def create_random_replacement_list(item_categories: Set[DS3ItemCategory], num_items: int):
                 candidates = [
                     item.name for item
@@ -300,7 +300,7 @@ class DarkSouls3World(World):
         # A list of items we can replace
         removable_items = [item for item in itempool if item.classification != ItemClassification.progression]
 
-        guaranteed_items = self.multiworld.guaranteed_items[self.player].value
+        guaranteed_items = self.options.guaranteed_items.value
         for item_name in guaranteed_items:
             # Break early just in case nothing is removable (if user is trying to guarantee more
             # items than the pool can hold, for example)
@@ -384,22 +384,22 @@ class DarkSouls3World(World):
                                state.has("Cinders of a Lord - Aldrich", self.player) and
                                state.has("Cinders of a Lord - Lothric Prince", self.player))
 
-        if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
+        if self.options.late_basin_of_vows == Toggle.option_true:
             add_rule(self.multiworld.get_entrance("Go To Lothric Castle", self.player),
                      lambda state: state.has("Small Lothric Banner", self.player))
 
         # DLC Access Rules Below
-        if self.multiworld.enable_dlc[self.player]:
+        if self.options.enable_dlc:
             set_rule(self.multiworld.get_entrance("Go To Ringed City", self.player),
                      lambda state: state.has("Small Envoy Banner", self.player))
 
             # If key items are randomized, must have contraption key to enter second half of Ashes DLC
             # If key items are not randomized, Contraption Key is guaranteed to be accessible before it is needed
-            if self.multiworld.enable_key_locations[self.player] == Toggle.option_true:
+            if self.options.enable_key_locations == Toggle.option_true:
                 add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 2", self.player),
                          lambda state: state.has("Contraption Key", self.player))
 
-            if self.multiworld.late_dlc[self.player] == Toggle.option_true:
+            if self.options.late_dlc == Toggle.option_true:
                 add_rule(self.multiworld.get_entrance("Go To Painted World of Ariandel 1", self.player),
                          lambda state: state.has("Small Doll", self.player))
 
@@ -407,7 +407,7 @@ class DarkSouls3World(World):
         set_rule(self.multiworld.get_location("PC: Cinders of a Lord - Yhorm the Giant", self.player),
                  lambda state: state.has("Storm Ruler", self.player))
 
-        if self.multiworld.enable_ring_locations[self.player] == Toggle.option_true:
+        if self.options.enable_ring_locations == Toggle.option_true:
             set_rule(self.multiworld.get_location("ID: Bellowing Dragoncrest Ring", self.player),
                      lambda state: state.has("Jailbreaker's Key", self.player))
             set_rule(self.multiworld.get_location("ID: Covetous Gold Serpent Ring", self.player),
@@ -415,7 +415,7 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_location("UG: Hornet Ring", self.player),
                      lambda state: state.has("Small Lothric Banner", self.player))
 
-        if self.multiworld.enable_npc_locations[self.player] == Toggle.option_true:
+        if self.options.enable_npc_locations == Toggle.option_true:
             set_rule(self.multiworld.get_location("HWL: Greirat's Ashes", self.player),
                      lambda state: state.has("Cell Key", self.player))
             set_rule(self.multiworld.get_location("HWL: Blue Tearstone Ring", self.player),
@@ -431,11 +431,11 @@ class DarkSouls3World(World):
             set_rule(self.multiworld.get_location("ID: Karla's Trousers", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
 
-        if self.multiworld.enable_misc_locations[self.player] == Toggle.option_true:
+        if self.options.enable_misc_locations == Toggle.option_true:
             set_rule(self.multiworld.get_location("ID: Prisoner Chief's Ashes", self.player),
                      lambda state: state.has("Jailer's Key Ring", self.player))
 
-        if self.multiworld.enable_boss_locations[self.player] == Toggle.option_true:
+        if self.options.enable_boss_locations == Toggle.option_true:
             set_rule(self.multiworld.get_location("PC: Soul of Yhorm the Giant", self.player),
                      lambda state: state.has("Storm Ruler", self.player))
             set_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
@@ -443,7 +443,7 @@ class DarkSouls3World(World):
 
             # Lump Soul of the Dancer in with LC for locations that should not be reachable
             # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
-            if self.multiworld.late_basin_of_vows[self.player] == Toggle.option_true:
+            if self.options.late_basin_of_vows == Toggle.option_true:
                 add_rule(self.multiworld.get_location("HWL: Soul of the Dancer", self.player),
                          lambda state: state.has("Small Lothric Banner", self.player))
 
@@ -453,10 +453,10 @@ class DarkSouls3World(World):
 
         set_rule(self.multiworld.get_location("LC: Grand Archives Key", self.player), gotthard_corpse_rule)
 
-        if self.multiworld.enable_weapon_locations[self.player] == Toggle.option_true:
+        if self.options.enable_weapon_locations == Toggle.option_true:
             set_rule(self.multiworld.get_location("LC: Gotthard Twinswords", self.player), gotthard_corpse_rule)
 
-        self.multiworld.completion_condition[self.player] = lambda state: \
+        self.options.completion_condition = lambda state: \
             state.has("Cinders of a Lord - Abyss Watcher", self.player) and \
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
@@ -470,13 +470,13 @@ class DarkSouls3World(World):
         name_to_ds3_code = {item.name: item.ds3_code for item in item_dictionary.values()}
 
         # Randomize some weapon upgrades
-        if self.multiworld.randomize_weapon_level[self.player] != RandomizeWeaponLevelOption.option_none:
+        if self.options.randomize_weapon_level != RandomizeWeaponLevelOption.option_none:
             # if the user made an error and set a min higher than the max we default to the max
-            max_5 = self.multiworld.max_levels_in_5[self.player]
-            min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
-            max_10 = self.multiworld.max_levels_in_10[self.player]
-            min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
-            weapon_level_percentage = self.multiworld.randomize_weapon_level_percentage[self.player]
+            max_5 = self.options.max_levels_in_5
+            min_5 = min(self.options.min_levels_in_5, max_5)
+            max_10 = self.options.max_levels_in_10
+            min_10 = min(self.options.min_levels_in_10, max_10)
+            weapon_level_percentage = self.options.randomize_weapon_level_percentage
 
             for item in item_dictionary.values():
                 if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < weapon_level_percentage:
@@ -486,8 +486,8 @@ class DarkSouls3World(World):
                         name_to_ds3_code[item.name] += self.multiworld.per_slot_randoms[self.player].randint(min_10, max_10)
 
         # Randomize some weapon infusions
-        if self.multiworld.randomize_infusion[self.player] == Toggle.option_true:
-            infusion_percentage = self.multiworld.randomize_infusion_percentage[self.player]
+        if self.options.randomize_infusion == Toggle.option_true:
+            infusion_percentage = self.options.randomize_infusion_percentage
             for item in item_dictionary.values():
                 if item.category in {DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE, DS3ItemCategory.SHIELD_INFUSIBLE}:
                     if self.multiworld.per_slot_randoms[self.player].randint(0, 99) < infusion_percentage:
@@ -518,22 +518,22 @@ class DarkSouls3World(World):
 
         slot_data = {
             "options": {
-                "enable_weapon_locations": self.multiworld.enable_weapon_locations[self.player].value,
-                "enable_shield_locations": self.multiworld.enable_shield_locations[self.player].value,
-                "enable_armor_locations": self.multiworld.enable_armor_locations[self.player].value,
-                "enable_ring_locations": self.multiworld.enable_ring_locations[self.player].value,
-                "enable_spell_locations": self.multiworld.enable_spell_locations[self.player].value,
-                "enable_key_locations": self.multiworld.enable_key_locations[self.player].value,
-                "enable_boss_locations": self.multiworld.enable_boss_locations[self.player].value,
-                "enable_npc_locations": self.multiworld.enable_npc_locations[self.player].value,
-                "enable_misc_locations": self.multiworld.enable_misc_locations[self.player].value,
-                "auto_equip": self.multiworld.auto_equip[self.player].value,
-                "lock_equip": self.multiworld.lock_equip[self.player].value,
-                "no_weapon_requirements": self.multiworld.no_weapon_requirements[self.player].value,
-                "death_link": self.multiworld.death_link[self.player].value,
-                "no_spell_requirements": self.multiworld.no_spell_requirements[self.player].value,
-                "no_equip_load": self.multiworld.no_equip_load[self.player].value,
-                "enable_dlc": self.multiworld.enable_dlc[self.player].value
+                "enable_weapon_locations": self.options.enable_weapon_locations.value,
+                "enable_shield_locations": self.options.enable_shield_locations.value,
+                "enable_armor_locations": self.options.enable_armor_locations.value,
+                "enable_ring_locations": self.options.enable_ring_locations.value,
+                "enable_spell_locations": self.options.enable_spell_locations.value,
+                "enable_key_locations": self.options.enable_key_locations.value,
+                "enable_boss_locations": self.options.enable_boss_locations.value,
+                "enable_npc_locations": self.options.enable_npc_locations.value,
+                "enable_misc_locations": self.options.enable_misc_locations.value,
+                "auto_equip": self.options.auto_equip.value,
+                "lock_equip": self.options.lock_equip.value,
+                "no_weapon_requirements": self.options.no_weapon_requirements.value,
+                "death_link": self.options.death_link.value,
+                "no_spell_requirements": self.options.no_spell_requirements.value,
+                "no_equip_load": self.options.no_equip_load.value,
+                "enable_dlc": self.options.enable_dlc.value
             },
             "seed": self.multiworld.seed_name,  # to verify the server's multiworld
             "slot": self.multiworld.player_name[self.player],  # to connect to server
