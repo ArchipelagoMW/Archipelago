@@ -88,6 +88,7 @@ class FactorioModFile(worlds.Files.APContainer):
 def generate_mod(world: "Factorio", output_directory: str):
     player = world.player
     multiworld = world.multiworld
+    options = world.options
     global data_final_template, locale_template, control_template, data_template, settings_template
     with template_load_lock:
         if not data_final_template:
@@ -129,40 +130,40 @@ def generate_mod(world: "Factorio", output_directory: str):
         "base_tech_table": base_tech_table,
         "tech_to_progressive_lookup": tech_to_progressive_lookup,
         "mod_name": mod_name,
-        "allowed_science_packs": multiworld.max_science_pack[player].get_allowed_packs(),
+        "allowed_science_packs": options.max_science_pack.get_allowed_packs(),
         "custom_technologies": multiworld.worlds[player].custom_technologies,
         "tech_tree_layout_prerequisites": world.tech_tree_layout_prerequisites,
         "slot_name": multiworld.player_name[player], "seed_name": multiworld.seed_name,
         "slot_player": player,
-        "starting_items": multiworld.starting_items[player], "recipes": recipes,
+        "starting_items": options.starting_items, "recipes": recipes,
         "random": random, "flop_random": flop_random,
-        "recipe_time_scale": recipe_time_scales.get(multiworld.recipe_time[player].value, None),
-        "recipe_time_range": recipe_time_ranges.get(multiworld.recipe_time[player].value, None),
+        "recipe_time_scale": recipe_time_scales.get(options.recipe_time.value, None),
+        "recipe_time_range": recipe_time_ranges.get(options.recipe_time.value, None),
         "free_sample_blacklist": {item: 1 for item in free_sample_exclusions},
         "progressive_technology_table": {tech.name: tech.progressive for tech in
                                          progressive_technology_table.values()},
         "custom_recipes": world.custom_recipes,
-        "max_science_pack": multiworld.max_science_pack[player].value,
+        "max_science_pack": options.max_science_pack.value,
         "liquids": fluids,
-        "goal": multiworld.goal[player].value,
-        "energy_link": multiworld.energy_link[player].value,
+        "goal": options.goal.value,
+        "energy_link": options.energy_link.value,
         "useless_technologies": useless_technologies,
-        "chunk_shuffle": multiworld.chunk_shuffle[player].value if hasattr(multiworld, "chunk_shuffle") else 0,
+        "chunk_shuffle": options.chunk_shuffle.value if hasattr(options, "chunk_shuffle") else 0,
     }
 
     for factorio_option in Options.factorio_options:
         if factorio_option in ["free_sample_blacklist", "free_sample_whitelist"]:
             continue
-        template_data[factorio_option] = getattr(multiworld, factorio_option)[player].value
+        template_data[factorio_option] = getattr(options, factorio_option).value
 
-    if getattr(multiworld, "silo")[player].value == Options.Silo.option_randomize_recipe:
+    if getattr(options, "silo").value == Options.Silo.option_randomize_recipe:
         template_data["free_sample_blacklist"]["rocket-silo"] = 1
 
-    if getattr(multiworld, "satellite")[player].value == Options.Satellite.option_randomize_recipe:
+    if getattr(options, "satellite").value == Options.Satellite.option_randomize_recipe:
         template_data["free_sample_blacklist"]["satellite"] = 1
 
-    template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
-    template_data["free_sample_blacklist"].update({item: 0 for item in multiworld.free_sample_whitelist[player].value})
+    template_data["free_sample_blacklist"].update({item: 1 for item in options.free_sample_blacklist.value})
+    template_data["free_sample_blacklist"].update({item: 0 for item in options.free_sample_whitelist.value})
 
     zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
     mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])

@@ -20,10 +20,10 @@ def _sorter(location: "FactorioScienceLocation"):
 
 
 def get_shapes(factorio_world: "Factorio") -> Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]]:
+    options = factorio_world.options
     world = factorio_world.multiworld
-    player = factorio_world.player
     prerequisites: Dict["FactorioScienceLocation", Set["FactorioScienceLocation"]] = {}
-    layout = world.tech_tree_layout[player].value
+    layout = options.tech_tree_layout.value
     locations: List["FactorioScienceLocation"] = sorted(factorio_world.science_locations, key=lambda loc: loc.name)
     world.random.shuffle(locations)
 
