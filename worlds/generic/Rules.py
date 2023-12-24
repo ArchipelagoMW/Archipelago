@@ -15,9 +15,9 @@ else:
 
 def locality_needed(world: MultiWorld) -> bool:
     for player in world.player_ids:
-        if world.local_items[player].value:
+        if world.worlds[player].options.local_items.value:
             return True
-        if world.non_local_items[player].value:
+        if world.worlds[player].options.non_local_items.value:
             return True
 
     # Group
@@ -40,12 +40,12 @@ def locality_rules(world: MultiWorld):
             forbid_data[sender][receiver].update(items)
 
         for receiving_player in world.player_ids:
-            local_items: typing.Set[str] = world.local_items[receiving_player].value
+            local_items: typing.Set[str] = world.worlds[receiving_player].options.local_items.value
             if local_items:
                 for sending_player in world.player_ids:
                     if receiving_player != sending_player:
                         forbid(sending_player, receiving_player, local_items)
-            non_local_items: typing.Set[str] = world.non_local_items[receiving_player].value
+            non_local_items: typing.Set[str] = world.worlds[receiving_player].options.non_local_items.value
             if non_local_items:
                 forbid(receiving_player, receiving_player, non_local_items)
 
