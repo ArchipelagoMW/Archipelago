@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import typing
 import enum
+import warnings
 from json import JSONEncoder, JSONDecoder
 
 import websockets
 
-from Utils import Version
+from Utils import ByValue, Version
 
 
 class JSONMessagePart(typing.TypedDict, total=False):
@@ -20,7 +21,7 @@ class JSONMessagePart(typing.TypedDict, total=False):
     flags: int
 
 
-class ClientStatus(enum.IntEnum):
+class ClientStatus(ByValue, enum.IntEnum):
     CLIENT_UNKNOWN = 0
     CLIENT_CONNECTED = 5
     CLIENT_READY = 10
@@ -28,7 +29,7 @@ class ClientStatus(enum.IntEnum):
     CLIENT_GOAL = 30
 
 
-class SlotType(enum.IntFlag):
+class SlotType(ByValue, enum.IntFlag):
     spectator = 0b00
     player = 0b01
     group = 0b10
@@ -39,7 +40,7 @@ class SlotType(enum.IntFlag):
         return self.value != 0b01
 
 
-class Permission(enum.IntFlag):
+class Permission(ByValue, enum.IntFlag):
     disabled = 0b000  # 0, completely disables access
     enabled = 0b001  # 1, allows manual use
     goal = 0b010  # 2, allows manual use after goal completion
@@ -343,3 +344,85 @@ class Hint(typing.NamedTuple):
     @property
     def local(self):
         return self.receiving_player == self.finding_player
+
+
+class _LocationStore(dict, typing.MutableMapping[int, typing.Dict[int, typing.Tuple[int, int, int]]]):
+    def __init__(self, values: typing.MutableMapping[int, typing.Dict[int, typing.Tuple[int, int, int]]]):
+        super().__init__(values)
+
+        if not self:
+            raise ValueError(f"Rejecting game with 0 players")
+
+        if len(self) != max(self):
+            raise ValueError("Player IDs not continuous")
+
+        if len(self.get(0, {})):
+            raise ValueError("Invalid player id 0 for location")
+
+    def find_item(self, slots: typing.Set[int], seeked_item_id: int
+                  ) -> typing.Generator[typing.Tuple[int, int, int, int, int], None, None]:
+        for finding_player, check_data in self.items():
+            for location_id, (item_id, receiving_player, item_flags) in check_data.items():
+                if receiving_player in slots and item_id == seeked_item_id:
+                    yield finding_player, location_id, item_id, receiving_player, item_flags
+
+    def get_for_player(self, slot: int) -> typing.Dict[int, typing.Set[int]]:
+        import collections
+        all_locations: typing.Dict[int, typing.Set[int]] = collections.defaultdict(set)
+        for source_slot, location_data in self.items():
+            for location_id, values in location_data.items():
+                if values[1] == slot:
+                    all_locations[source_slot].add(location_id)
+        return all_locations
+
+    def get_checked(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                    ) -> typing.List[int]:
+        checked = state[team, slot]
+        if not checked:
+            # This optimizes the case where everyone connects to a fresh game at the same time.
+            return []
+        return [location_id for
+                location_id in self[slot] if
+                location_id in checked]
+
+    def get_missing(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                    ) -> typing.List[int]:
+        checked = state[team, slot]
+        if not checked:
+            # This optimizes the case where everyone connects to a fresh game at the same time.
+            return list(self[slot])
+        return [location_id for
+                location_id in self[slot] if
+                location_id not in checked]
+
+    def get_remaining(self, state: typing.Dict[typing.Tuple[int, int], typing.Set[int]], team: int, slot: int
+                      ) -> typing.List[int]:
+        checked = state[team, slot]
+        player_locations = self[slot]
+        return sorted([player_locations[location_id][0] for
+                       location_id in player_locations if
+                       location_id not in checked])
+
+
+if typing.TYPE_CHECKING:  # type-check with pure python implementation until we have a typing stub
+    LocationStore = _LocationStore
+else:
+    try:
+        from _speedups import LocationStore
+        import _speedups
+        import os.path
+        if os.path.isfile("_speedups.pyx") and os.path.getctime(_speedups.__file__) < os.path.getctime("_speedups.pyx"):
+            warnings.warn(f"{_speedups.__file__} outdated! "
+                          f"Please rebuild with `cythonize -b -i _speedups.pyx` or delete it!")
+    except ImportError:
+        try:
+            import pyximport
+            pyximport.install()
+        except ImportError:
+            pyximport = None
+        try:
+            from _speedups import LocationStore
+        except ImportError:
+            warnings.warn("_speedups not available. Falling back to pure python LocationStore. "
+                          "Install a matching C++ compiler for your platform to compile _speedups.")
+            LocationStore = _LocationStore

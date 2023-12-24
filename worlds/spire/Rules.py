@@ -5,11 +5,11 @@ from ..generic.Rules import set_rule
 
 class SpireLogic(LogicMixin):
     def _spire_has_relics(self, player: int, amount: int) -> bool:
-        count: int = self.item_count("Relic", player) + self.item_count("Boss Relic", player)
+        count: int = self.count("Relic", player) + self.count("Boss Relic", player)
         return count >= amount
 
     def _spire_has_cards(self, player: int, amount: int) -> bool:
-        count = self.item_count("Card Draw", player) + self.item_count("Rare Card Draw", player)
+        count = self.count("Card Draw", player) + self.count("Rare Card Draw", player)
         return count >= amount
 
 
@@ -69,8 +69,6 @@ def set_rules(world: MultiWorld, player: int):
     # Act 3 Boss Event
     set_rule(world.get_location("Act 3 Boss", player), lambda state: state.has("Beat Act 2 Boss", player) and state._spire_has_relics(player, 7) and state.has("Boss Relic", player, 2))
 
-    # Act 3 Boss Rewards
-    set_rule(world.get_location("Rare Card Draw 3", player), lambda state: state.has("Beat Act 3 Boss", player))
-    set_rule(world.get_location("Boss Relic 3", player), lambda state: state.has("Beat Act 3 Boss", player))
-
     set_rule(world.get_location("Heart Room", player), lambda state: state.has("Beat Act 3 Boss", player))
+
+    world.completion_condition[player] = lambda state: state.has("Victory", player)

@@ -10,13 +10,30 @@ class Goal(Choice):
     Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone
     Finalhazard Chaos Emerald Hunt: Find the Seven Chaos Emeralds and reach Green Hill Zone, then defeat Finalhazard
     Grand Prix: Win every race in Kart Race Mode (all standard levels are disabled)
+    Boss Rush: Beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Cannon's Core Boss Rush: Beat Cannon's Core, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Boss Rush Chaos Emerald Hunt: Find the Seven Chaos Emeralds, then beat all of the bosses in the Boss Rush, ending with Finalhazard
+    Chaos Chao: Raise a Chaos Chao to win
     """
     display_name = "Goal"
     option_biolizard = 0
     option_chaos_emerald_hunt = 1
     option_finalhazard_chaos_emerald_hunt = 2
     option_grand_prix = 3
+    option_boss_rush = 4
+    option_cannons_core_boss_rush = 5
+    option_boss_rush_chaos_emerald_hunt = 6
+    option_chaos_chao = 7
     default = 0
+
+    @classmethod
+    def get_option_name(cls, value) -> str:
+        if cls.auto_display_name and value == 5:
+            return "Cannon's Core Boss Rush"
+        elif cls.auto_display_name:
+            return cls.name_lookup[value].replace("_", " ").title()
+        else:
+            return cls.name_lookup[value]
 
 
 class MissionShuffle(Toggle):
@@ -24,6 +41,22 @@ class MissionShuffle(Toggle):
     Determines whether missions order will be shuffled per level
     """
     display_name = "Mission Shuffle"
+
+
+class BossRushShuffle(Choice):
+    """
+    Determines how bosses in Boss Rush Mode are shuffled
+    Vanilla: Bosses appear in the Vanilla ordering
+    Shuffled: The same bosses appear, but in a random order
+    Chaos: Each boss is randomly chosen separately (one will always be King Boom Boo)
+    Singularity: One boss is chosen and placed in every slot (one will always be replaced with King Boom Boo)
+    """
+    display_name = "Boss Rush Shuffle"
+    option_vanilla = 0
+    option_shuffled = 1
+    option_chaos = 2
+    option_singularity = 3
+    default = 0
 
 
 class BaseTrapWeight(Choice):
@@ -39,51 +72,79 @@ class BaseTrapWeight(Choice):
 
 class OmochaoTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which spawns several Omochao around the player
+    Likelihood of receiving a trap which spawns several Omochao around the player
     """
     display_name = "OmoTrap Weight"
 
 
 class TimestopTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which briefly stops time
+    Likelihood of receiving a trap which briefly stops time
     """
     display_name = "Chaos Control Trap Weight"
 
 
 class ConfusionTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which causes the controls to be skewed for a period of time
+    Likelihood of receiving a trap which causes the controls to be skewed for a period of time
     """
     display_name = "Confusion Trap Weight"
 
 
 class TinyTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which causes the player to become tiny
+    Likelihood of receiving a trap which causes the player to become tiny
     """
     display_name = "Tiny Trap Weight"
 
 
 class GravityTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which increases gravity
+    Likelihood of receiving a trap which increases gravity
     """
     display_name = "Gravity Trap Weight"
 
 
 class ExpositionTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which tells you the story
+    Likelihood of receiving a trap which tells you the story
     """
     display_name = "Exposition Trap Weight"
 
 
 class DarknessTrapWeight(BaseTrapWeight):
     """
-    Likelihood of a receiving a trap which makes the world dark
+    Likelihood of receiving a trap which makes the world dark
     """
     display_name = "Darkness Trap Weight"
+
+
+class IceTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes the world slippery
+    """
+    display_name = "Ice Trap Weight"
+
+
+class SlowTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes you gotta go slow
+    """
+    display_name = "Slow Trap Weight"
+
+
+class CutsceneTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which makes you watch an unskippable cutscene
+    """
+    display_name = "Cutscene Trap Weight"
+
+
+class ReverseTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which reverses your controls
+    """
+    display_name = "Reverse Trap Weight"
 
 
 class PongTrapWeight(BaseTrapWeight):
@@ -124,25 +185,10 @@ class TrapFillPercentage(Range):
     default = 0
 
 
-class IncludeMissions(Range):
-    """
-    Allows logic to place items in a range of Missions for each level
-    Each mission setting includes lower settings
-    1: Base Story Missions
-    2: 100 Ring Missions
-    3: Lost Chao Missions
-    4: Timer Missions
-    5: Hard Mode Missions
-    """
-    display_name = "Include Missions"
-    range_start = 1
-    range_end = 5
-    default = 2
-
-
 class Keysanity(Toggle):
     """
     Determines whether picking up Chao Keys grants checks
+    (86 Locations)
     """
     display_name = "Keysanity"
 
@@ -151,9 +197,9 @@ class Whistlesanity(Choice):
     """
     Determines whether whistling at various spots grants checks
     None: No Whistle Spots grant checks
-    Pipes: Whistling at Pipes grants checks
-    Hidden: Whistling at Hidden Whistle Spots grants checks
-    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks
+    Pipes: Whistling at Pipes grants checks (97 Locations)
+    Hidden: Whistling at Hidden Whistle Spots grants checks (32 Locations)
+    Both: Whistling at both Pipes and Hidden Whistle Spots grants checks (129 Locations)
     """
     display_name = "Whistlesanity"
     option_none = 0
@@ -166,6 +212,7 @@ class Whistlesanity(Choice):
 class Beetlesanity(Toggle):
     """
     Determines whether destroying Gold Beetles grants checks
+    (27 Locations)
     """
     display_name = "Beetlesanity"
 
@@ -173,8 +220,17 @@ class Beetlesanity(Toggle):
 class Omosanity(Toggle):
     """
     Determines whether activating Omochao grants checks
+    (192 Locations)
     """
     display_name = "Omosanity"
+
+
+class Animalsanity(Toggle):
+    """
+    Determines whether picking up counted small animals grants checks
+    (421 Locations)
+    """
+    display_name = "Animalsanity"
 
 
 class KartRaceChecks(Choice):
@@ -236,6 +292,18 @@ class LevelGateCosts(Choice):
     default = 2
 
 
+class MaximumEmblemCap(Range):
+    """
+    Determines the maximum number of emblems that can be in the item pool.
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
+    Gate and Cannon's Core costs will be calculated based off of that number.
+    """
+    display_name = "Max Emblem Cap"
+    range_start = 50
+    range_end = 1000
+    default = 180
+
+
 class RequiredRank(Choice):
     """
     Determines what minimum Rank is required to send a check for a mission
@@ -249,15 +317,15 @@ class RequiredRank(Choice):
     default = 0
 
 
-class ChaoGardenDifficulty(Choice):
+class ChaoRaceDifficulty(Choice):
     """
-    Determines the number of chao garden difficulty levels included. Easier difficulty settings means fewer chao garden checks
-    None: No Chao Garden Activities have checks
+    Determines the number of Chao Race difficulty levels included. Easier difficulty settings means fewer Chao Race checks
+    None: No Chao Races have checks
     Beginner: Beginner Races
-    Intermediate: Beginner and Jewel Races
-    Expert: Beginner, Jewel, Challenge, Hero, and Dark Races
+    Intermediate: Beginner, Challenge, Hero, and Dark Races
+    Expert: Beginner, Challenge, Hero, Dark and Jewel Races
     """
-    display_name = "Chao Garden Difficulty"
+    display_name = "Chao Race Difficulty"
     option_none = 0
     option_beginner = 1
     option_intermediate = 2
@@ -265,29 +333,141 @@ class ChaoGardenDifficulty(Choice):
     default = 0
 
 
-class IncludeChaoKarate(Toggle):
+class ChaoKarateDifficulty(Choice):
     """
-    Determines whether the Chao Karate should be included as checks (Note: This setting requires purchase of the "Battle" DLC)
+    Determines the number of Chao Karate difficulty levels included. (Note: This setting requires purchase of the "Battle" DLC)
     """
-    display_name = "Include Chao Karate"
+    display_name = "Chao Karate Difficulty"
+    option_none = 0
+    option_beginner = 1
+    option_standard = 2
+    option_expert = 3
+    option_super = 4
+    default = 0
 
 
-class ChaoRaceChecks(Choice):
+class ChaoStadiumChecks(Choice):
     """
-    Determines which Chao Races grant checks
-    All: Each individual race grants a check
+    Determines which Chao Stadium activities grant checks
+    All: Each individual race and karate fight grants a check
     Prize: Only the races which grant Chao Toys grant checks (final race of each Beginner and Jewel cup, 4th, 8th, and
-           12th Challenge Races, 2nd and 4th Hero and Dark Races)
+           12th Challenge Races, 2nd and 4th Hero and Dark Races, final fight of each Karate difficulty)
     """
-    display_name = "Chao Race Checks"
+    display_name = "Chao Stadium Checks"
     option_all = 0
     option_prize = 1
     default = 0
 
 
+class ChaoStats(Range):
+    """
+    Determines the highest level in each Chao Stat that grants checks
+    (Swim, Fly, Run, Power)
+    """
+    display_name = "Chao Stats"
+    range_start = 0
+    range_end = 99
+    default = 0
+
+
+class ChaoStatsFrequency(Range):
+    """
+    Determines how many levels in each Chao Stat grant checks (up to the maximum set in the `chao_stats` option)
+    `1` means every level is included, `2` means every other level is included, `3` means every third, and so on
+    """
+    display_name = "Chao Stats Frequency"
+    range_start = 1
+    range_end = 20
+    default = 5
+
+
+class ChaoStatsStamina(Toggle):
+    """
+    Determines whether Stamina is included in the `chao_stats` option
+    """
+    display_name = "Chao Stats - Stamina"
+
+
+class ChaoStatsHidden(Toggle):
+    """
+    Determines whether the hidden stats (Luck and Intelligence) are included in the `chao_stats` option
+    """
+    display_name = "Chao Stats - Luck and Intelligence"
+
+
+class ChaoAnimalParts(Toggle):
+    """
+    Determines whether giving Chao various animal parts grants checks
+    (73 Locations)
+    """
+    display_name = "Chao Animal Parts"
+
+
+class ChaoKindergarten(Choice):
+    """
+    Determines whether learning the lessons from the Kindergarten Classroom grants checks
+    (WARNING: VERY SLOW)
+    None: No Kindergarten classes have checks
+    Basics: One class from each category (Drawing, Dance, Song, and Instrument) is a check (4 Locations)
+    Full: Every class is a check (23 Locations)
+    """
+    display_name = "Chao Kindergarten Checks"
+    option_none = 0
+    option_basics = 1
+    option_full = 2
+    default = 0
+
+
+class BlackMarketSlots(Range):
+    """
+    Determines how many multiworld items are available to purchase from the Black Market
+    """
+    display_name = "Black Market Slots"
+    range_start = 0
+    range_end = 64
+    default = 0
+
+
+class BlackMarketUnlockCosts(Choice):
+    """
+    Determines how many Chao Coins are required to unlock sets of Black Market items
+    """
+    display_name = "Black Market Unlock Costs"
+    option_low = 0
+    option_medium = 1
+    option_high = 2
+    default = 1
+
+
+class BlackMarketPriceMultiplier(Range):
+    """
+    Determines how many rings the Black Market items cost
+    The base ring costs of items in the Black Market range from 50-100,
+    and are then multiplied by this value
+    """
+    display_name = "Black Market Price Multiplier"
+    range_start = 0
+    range_end = 40
+    default = 1
+
+
+class ShuffleStartingChaoEggs(DefaultOnToggle):
+    """
+    Determines whether the starting Chao eggs in the gardens are random
+    """
+    display_name = "Shuffle Starting Chao Eggs"
+
+
+class ChaoEntranceRandomization(Toggle):
+    """
+    Determines whether entrances in Chao World are randomized
+    """
+    display_name = "Chao Entrance Randomization"
+
+
 class RequiredCannonsCoreMissions(Choice):
     """
-    Determines how many Cannon's Core missions must be completed to unlock the Biolizard (for the "Biolizard" goal)
+    Determines how many Cannon's Core missions must be completed (for Biolizard or Cannon's Core goals)
     First: Only the first mission must be completed
     All Active: All active Cannon's Core missions must be completed
     """
@@ -502,6 +682,13 @@ class RingLoss(Choice):
             return cls.name_lookup[value]
 
 
+class RingLink(Toggle):
+    """
+    Whether your in-level ring gain/loss is linked to other players
+    """
+    display_name = "Ring Link"
+
+
 class SADXMusic(Choice):
     """
     Whether the randomizer will include Sonic Adventure DX Music in the music pool
@@ -527,7 +714,7 @@ class SADXMusic(Choice):
 class MusicShuffle(Choice):
     """
     What type of Music Shuffle is used
-    Off: No music is shuffled.
+    None: No music is shuffled.
     Levels: Level music is shuffled.
     Full: Level, Menu, and Additional music is shuffled.
     Singularity: Level, Menu, and Additional music is all replaced with a single random song.
@@ -537,6 +724,24 @@ class MusicShuffle(Choice):
     option_levels = 1
     option_full = 2
     option_singularity = 3
+    default = 0
+
+
+class VoiceShuffle(Choice):
+    """
+    What type of Voice Shuffle is used
+    None: No voices are shuffled.
+    Shuffled: Voices are shuffled.
+    Rude: Voices are shuffled, but some are replaced with rude words.
+    Chao: All voices are replaced with chao sounds.
+    Singularity: All voices are replaced with a single random voice.
+    """
+    display_name = "Voice Shuffle Type"
+    option_none = 0
+    option_shuffled = 1
+    option_rude = 2
+    option_chao = 3
+    option_singularity = 4
     default = 0
 
 
@@ -573,21 +778,42 @@ class LogicDifficulty(Choice):
 
 sa2b_options: typing.Dict[str, type(Option)] = {
     "goal": Goal,
+
     "mission_shuffle": MissionShuffle,
+    "boss_rush_shuffle": BossRushShuffle,
+
     "keysanity": Keysanity,
     "whistlesanity": Whistlesanity,
     "beetlesanity": Beetlesanity,
     "omosanity": Omosanity,
+    "animalsanity": Animalsanity,
     "kart_race_checks": KartRaceChecks,
+
+    "logic_difficulty": LogicDifficulty,
     "required_rank": RequiredRank,
-    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "required_cannons_core_missions": RequiredCannonsCoreMissions,
+
+    "emblem_percentage_for_cannons_core": EmblemPercentageForCannonsCore,
     "number_of_level_gates": NumberOfLevelGates,
     "level_gate_distribution": LevelGateDistribution,
     "level_gate_costs": LevelGateCosts,
-    "chao_garden_difficulty": ChaoGardenDifficulty,
-    "include_chao_karate": IncludeChaoKarate,
-    "chao_race_checks": ChaoRaceChecks,
+    "max_emblem_cap": MaximumEmblemCap,
+
+    "chao_race_difficulty": ChaoRaceDifficulty,
+    "chao_karate_difficulty": ChaoKarateDifficulty,
+    "chao_stadium_checks": ChaoStadiumChecks,
+    "chao_stats": ChaoStats,
+    "chao_stats_frequency": ChaoStatsFrequency,
+    "chao_stats_stamina": ChaoStatsStamina,
+    "chao_stats_hidden": ChaoStatsHidden,
+    "chao_animal_parts": ChaoAnimalParts,
+    "chao_kindergarten": ChaoKindergarten,
+    "black_market_slots": BlackMarketSlots,
+    "black_market_unlock_costs": BlackMarketUnlockCosts,
+    "black_market_price_multiplier": BlackMarketPriceMultiplier,
+    "shuffle_starting_chao_eggs": ShuffleStartingChaoEggs,
+    "chao_entrance_randomization": ChaoEntranceRandomization,
+
     "junk_fill_percentage": JunkFillPercentage,
     "trap_fill_percentage": TrapFillPercentage,
     "omochao_trap_weight": OmochaoTrapWeight,
@@ -597,37 +823,49 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "gravity_trap_weight": GravityTrapWeight,
     "exposition_trap_weight": ExpositionTrapWeight,
     #"darkness_trap_weight": DarknessTrapWeight,
+    "ice_trap_weight": IceTrapWeight,
+    "slow_trap_weight": SlowTrapWeight,
+    "cutscene_trap_weight": CutsceneTrapWeight,
+    "reverse_trap_weight": ReverseTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
-    "ring_loss": RingLoss,
+
     "sadx_music": SADXMusic,
     "music_shuffle": MusicShuffle,
+    "voice_shuffle": VoiceShuffle,
     "narrator": Narrator,
-    "logic_difficulty": LogicDifficulty,
+    "ring_loss": RingLoss,
+
     "speed_mission_count": SpeedMissionCount,
     "speed_mission_2": SpeedMission2,
     "speed_mission_3": SpeedMission3,
     "speed_mission_4": SpeedMission4,
     "speed_mission_5": SpeedMission5,
+
     "mech_mission_count": MechMissionCount,
     "mech_mission_2": MechMission2,
     "mech_mission_3": MechMission3,
     "mech_mission_4": MechMission4,
     "mech_mission_5": MechMission5,
+
     "hunt_mission_count": HuntMissionCount,
     "hunt_mission_2": HuntMission2,
     "hunt_mission_3": HuntMission3,
     "hunt_mission_4": HuntMission4,
     "hunt_mission_5": HuntMission5,
+
     "kart_mission_count": KartMissionCount,
     "kart_mission_2": KartMission2,
     "kart_mission_3": KartMission3,
     "kart_mission_4": KartMission4,
     "kart_mission_5": KartMission5,
+
     "cannons_core_mission_count": CannonsCoreMissionCount,
     "cannons_core_mission_2": CannonsCoreMission2,
     "cannons_core_mission_3": CannonsCoreMission3,
     "cannons_core_mission_4": CannonsCoreMission4,
     "cannons_core_mission_5": CannonsCoreMission5,
+
+    "ring_link": RingLink,
     "death_link": DeathLink,
 }

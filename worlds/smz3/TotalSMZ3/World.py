@@ -1,51 +1,51 @@
 ﻿from typing import Dict, List
 import random
 
-import worlds.smz3.TotalSMZ3.Region as Region
-import worlds.smz3.TotalSMZ3.Config as Config
-import worlds.smz3.TotalSMZ3.Item as Item
-import worlds.smz3.TotalSMZ3.Location as Location
+from . import Region
+from . import Config
+from . import Item
+from . import Location
 
-from worlds.smz3.TotalSMZ3.Regions.Zelda.CastleTower import CastleTower
-from worlds.smz3.TotalSMZ3.Regions.Zelda.EasternPalace import EasternPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DesertPalace import DesertPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.TowerOfHera import TowerOfHera
-from worlds.smz3.TotalSMZ3.Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
-from worlds.smz3.TotalSMZ3.Regions.Zelda.SwampPalace import SwampPalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.SkullWoods import SkullWoods
-from worlds.smz3.TotalSMZ3.Regions.Zelda.ThievesTown import ThievesTown
-from worlds.smz3.TotalSMZ3.Regions.Zelda.IcePalace import IcePalace
-from worlds.smz3.TotalSMZ3.Regions.Zelda.MiseryMire import MiseryMire
-from worlds.smz3.TotalSMZ3.Regions.Zelda.TurtleRock import TurtleRock
-from worlds.smz3.TotalSMZ3.Regions.Zelda.GanonsTower import GanonsTower
-from worlds.smz3.TotalSMZ3.Regions.Zelda.LightWorld.DeathMountain.West import West as LightWorldDeathMountainWest
-from worlds.smz3.TotalSMZ3.Regions.Zelda.LightWorld.DeathMountain.East import East as LightWorldDeathMountainEast
-from worlds.smz3.TotalSMZ3.Regions.Zelda.LightWorld.NorthWest import NorthWest as LightWorldNorthWest
-from worlds.smz3.TotalSMZ3.Regions.Zelda.LightWorld.NorthEast import NorthEast as LightWorldNorthEast
-from worlds.smz3.TotalSMZ3.Regions.Zelda.LightWorld.South import South as LightWorldSouth
-from worlds.smz3.TotalSMZ3.Regions.Zelda.HyruleCastle import HyruleCastle
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.DeathMountain.West import West as DarkWorldDeathMountainWest
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.DeathMountain.East import East as DarkWorldDeathMountainEast
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.NorthWest import NorthWest as DarkWorldNorthWest
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.NorthEast import NorthEast as DarkWorldNorthEast
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.South import South as DarkWorldSouth
-from worlds.smz3.TotalSMZ3.Regions.Zelda.DarkWorld.Mire import Mire as DarkWorldMire
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Crateria.Central import Central
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Crateria.West import West as CrateriaWest 
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Crateria.East import East as CrateriaEast
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Blue import Blue
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Green import Green
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Kraid import Kraid
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Pink import Pink
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Brinstar.Red import Red
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Maridia.Outer import Outer
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.Maridia.Inner import Inner
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairUpper.West import West as NorfairUpperWest
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairUpper.East import East as NorfairUpperEast
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairUpper.Crocomire import Crocomire
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairLower.West import West as NorfairLowerWest
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.NorfairLower.East import East as NorfairLowerEast
-from worlds.smz3.TotalSMZ3.Regions.SuperMetroid.WreckedShip import WreckedShip
+from .Regions.Zelda.CastleTower import CastleTower
+from .Regions.Zelda.EasternPalace import EasternPalace
+from .Regions.Zelda.DesertPalace import DesertPalace
+from .Regions.Zelda.TowerOfHera import TowerOfHera
+from .Regions.Zelda.PalaceOfDarkness import PalaceOfDarkness
+from .Regions.Zelda.SwampPalace import SwampPalace
+from .Regions.Zelda.SkullWoods import SkullWoods
+from .Regions.Zelda.ThievesTown import ThievesTown
+from .Regions.Zelda.IcePalace import IcePalace
+from .Regions.Zelda.MiseryMire import MiseryMire
+from .Regions.Zelda.TurtleRock import TurtleRock
+from .Regions.Zelda.GanonsTower import GanonsTower
+from .Regions.Zelda.LightWorld.DeathMountain.West import West as LightWorldDeathMountainWest
+from .Regions.Zelda.LightWorld.DeathMountain.East import East as LightWorldDeathMountainEast
+from .Regions.Zelda.LightWorld.NorthWest import NorthWest as LightWorldNorthWest
+from .Regions.Zelda.LightWorld.NorthEast import NorthEast as LightWorldNorthEast
+from .Regions.Zelda.LightWorld.South import South as LightWorldSouth
+from .Regions.Zelda.HyruleCastle import HyruleCastle
+from .Regions.Zelda.DarkWorld.DeathMountain.West import West as DarkWorldDeathMountainWest
+from .Regions.Zelda.DarkWorld.DeathMountain.East import East as DarkWorldDeathMountainEast
+from .Regions.Zelda.DarkWorld.NorthWest import NorthWest as DarkWorldNorthWest
+from .Regions.Zelda.DarkWorld.NorthEast import NorthEast as DarkWorldNorthEast
+from .Regions.Zelda.DarkWorld.South import South as DarkWorldSouth
+from .Regions.Zelda.DarkWorld.Mire import Mire as DarkWorldMire
+from .Regions.SuperMetroid.Crateria.Central import Central
+from .Regions.SuperMetroid.Crateria.West import West as CrateriaWest 
+from .Regions.SuperMetroid.Crateria.East import East as CrateriaEast
+from .Regions.SuperMetroid.Brinstar.Blue import Blue
+from .Regions.SuperMetroid.Brinstar.Green import Green
+from .Regions.SuperMetroid.Brinstar.Kraid import Kraid
+from .Regions.SuperMetroid.Brinstar.Pink import Pink
+from .Regions.SuperMetroid.Brinstar.Red import Red
+from .Regions.SuperMetroid.Maridia.Outer import Outer
+from .Regions.SuperMetroid.Maridia.Inner import Inner
+from .Regions.SuperMetroid.NorfairUpper.West import West as NorfairUpperWest
+from .Regions.SuperMetroid.NorfairUpper.East import East as NorfairUpperEast
+from .Regions.SuperMetroid.NorfairUpper.Crocomire import Crocomire
+from .Regions.SuperMetroid.NorfairLower.West import West as NorfairLowerWest
+from .Regions.SuperMetroid.NorfairLower.East import East as NorfairLowerEast
+from .Regions.SuperMetroid.WreckedShip import WreckedShip
 
 class World:
     Locations: List[Location.Location]

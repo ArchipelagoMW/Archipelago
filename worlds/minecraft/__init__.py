@@ -1,5 +1,7 @@
 import os
 import json
+import settings
+import typing
 from base64 import b64encode, b64decode
 from typing import Dict, Any
 
@@ -13,6 +15,22 @@ from .ItemPool import build_item_pool, get_junk_item_names
 from .Rules import set_rules
 
 client_version = 9
+
+
+class MinecraftSettings(settings.Group):
+    class ForgeDirectory(settings.OptionalUserFolderPath):
+        pass
+
+    class ReleaseChannel(str):
+        """
+        release channel, currently "release", or "beta"
+        any games played on the "beta" channel have a high likelihood of no longer working on the "release" channel.
+        """
+
+    forge_directory: ForgeDirectory = ForgeDirectory("Minecraft Forge server")
+    max_heap_size: str = "2G"
+    release_channel: ReleaseChannel = ReleaseChannel("release")
+
 
 class MinecraftWebWorld(WebWorld):
     theme = "jungle"
@@ -67,6 +85,7 @@ class MinecraftWorld(World):
     """
     game: str = "Minecraft"
     option_definitions = minecraft_options
+    settings: typing.ClassVar[MinecraftSettings]
     topology_present = True
     web = MinecraftWebWorld()
 
@@ -154,7 +173,7 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         data = self._get_mc_data()
-        filename = f"AP_{self.multiworld.get_out_file_name_base(self.player)}.apmc"
+        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 

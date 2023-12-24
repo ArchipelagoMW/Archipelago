@@ -2,6 +2,8 @@ import binascii
 import importlib.util
 import importlib.machinery
 import os
+import pkgutil
+from collections import defaultdict
 
 from .romTables import ROMWithTables
 from . import assembler
@@ -53,15 +55,24 @@ from .patches import multiworld as _
 from .patches import tradeSequence as _
 from . import hints
 
-from .locations.keyLocation import KeyLocation
 from .patches import bank34
+from .utils import formatText
+from ..Options import TrendyGame, Palette
+from .roomEditor import RoomEditor, Object
+from .patches.aesthetics import rgb_to_bin, bin_to_rgb
 
+from .locations.keyLocation import KeyLocation
+
+from BaseClasses import ItemClassification
+from ..Locations import LinksAwakeningLocation
 from ..Options import TrendyGame, Palette, MusicChangeCondition
 
 
 # Function to generate a final rom, this patches the rom with all required patches
 def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, multiworld=None, player_name=None, player_names=[], player_id = 0):
-    rom = ROMWithTables(args.input_filename)
+    rom_patches = []
+
+    rom = ROMWithTables(args.input_filename, rom_patches)
     rom.player_names = player_names
     pymods = []
     if args.pymod:
@@ -127,7 +138,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     patches.core.fixWrongWarp(rom)
     patches.core.alwaysAllowSecretBook(rom)
     patches.core.injectMainLoop(rom)
-    
+
     from ..Options import ShuffleSmallKeys, ShuffleNightmareKeys
 
     if ap_settings["shuffle_small_keys"] != ShuffleSmallKeys.option_original_dungeon or  ap_settings["shuffle_nightmare_keys"] != ShuffleNightmareKeys.option_original_dungeon:
@@ -232,13 +243,47 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         patches.core.quickswap(rom, 1)
     elif settings.quickswap == 'b':
         patches.core.quickswap(rom, 0)
-    
-    # TODO: hints bad
 
     world_setup = logic.world_setup
 
+    JUNK_HINT = 0.33
+    RANDOM_HINT= 0.66
+    # USEFUL_HINT = 1.0
+    # TODO: filter events, filter unshuffled keys
+    all_items = multiworld.get_items()
+    our_items = [item for item in all_items if item.player == player_id and item.location and item.code is not None and item.location.show_in_spoiler]
+    our_useful_items = [item for item in our_items if ItemClassification.progression in item.classification]
 
-    hints.addHints(rom, rnd, item_list)
+    def gen_hint():
+        chance = rnd.uniform(0, 1)
+        if chance < JUNK_HINT:
+            return None
+        elif chance < RANDOM_HINT:
+            location = rnd.choice(our_items).location
+        else: # USEFUL_HINT
+            location = rnd.choice(our_useful_items).location
+
+        if location.item.player == player_id:
+            name = "Your"
+        else:
+            name = f"{multiworld.player_name[location.item.player]}'s"
+
+        if isinstance(location, LinksAwakeningLocation):
+            location_name = location.ladxr_item.metadata.name
+        else:
+            location_name = location.name
+
+        hint = f"{name} {location.item} is at {location_name}"
+        if location.player != player_id:
+            hint += f" in {multiworld.player_name[location.player]}'s world"
+
+        # Cap hint size at 85
+        # Realistically we could go bigger but let's be safe instead
+        hint = hint[:85]
+
+        return hint
+
+    hints.addHints(rom, rnd, gen_hint)
 
     if world_setup.goal == "raft":
         patches.goal.setRaftGoal(rom)
@@ -259,9 +304,9 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
         mw = None
         if spot.item_owner != spot.location_owner:
             mw = spot.item_owner
-            if mw > 255:
-                # Don't torture the game with higher slot numbers
-                mw = 255
+            if mw > 100:
+                # There are only 101 player name slots (99 + "The Server" + "another world"), so don't use more than that
+                mw = 100
         spot.patch(rom, spot.item, multiworld=mw)
     patches.enemies.changeBosses(rom, world_setup.boss_mapping)
     patches.enemies.changeMiniBosses(rom, world_setup.miniboss_mapping)
@@ -271,16 +316,34 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
 
     patches.core.warpHome(rom)  # Needs to be done after setting the start location.
     patches.titleScreen.setRomInfo(rom, auth, seed_name, settings, player_name, player_id)
+    if ap_settings["ap_title_screen"]:
+        patches.titleScreen.setTitleGraphics(rom)
     patches.endscreen.updateEndScreen(rom)
     patches.aesthetics.updateSpriteData(rom)
     if args.doubletrouble:
         patches.enemies.doubleTrouble(rom)
 
+    if ap_settings["text_shuffle"]:
+        buckets = defaultdict(list)
+        # For each ROM bank, shuffle text within the bank
+        for n, data in enumerate(rom.texts._PointerTable__data):
+            # Don't muck up which text boxes are questions and which are statements
+            if type(data) != int and data and data != b'\xFF':
+                buckets[(rom.texts._PointerTable__banks[n], data[len(data) - 1] == 0xfe)].append((n, data))
+        for bucket in buckets.values():
+            # For each bucket, make a copy and shuffle
+            shuffled = bucket.copy()
+            rnd.shuffle(shuffled)
+            # Then put new text in
+            for bucket_idx, (orig_idx, data) in enumerate(bucket):
+                rom.texts[shuffled[bucket_idx][0]] = data
+    
+
     if ap_settings["trendy_game"] != TrendyGame.option_normal:
 
         # TODO: if 0 or 4, 5, remove inaccurate conveyor tiles
 
-        from .roomEditor import RoomEditor, Object
+
         room_editor = RoomEditor(rom, 0x2A0)
 
         if ap_settings["trendy_game"] == TrendyGame.option_easy:
@@ -309,12 +372,12 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 }
                 def speed():
                     return rnd.randint(*speeds[ap_settings["trendy_game"]])
-                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()                
+                rom.banks[0x4][0x76A0-0x4000] = 0xFF - speed()
                 rom.banks[0x4][0x76A2-0x4000] = speed()
                 rom.banks[0x4][0x76A6-0x4000] = speed()
                 rom.banks[0x4][0x76A8-0x4000] = 0xFF - speed()
                 if int(ap_settings["trendy_game"]) >= TrendyGame.option_hardest:
-                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()                
+                    rom.banks[0x4][0x76A1-0x4000] = 0xFF - speed()
                     rom.banks[0x4][0x76A3-0x4000] = speed()
                     rom.banks[0x4][0x76A5-0x4000] = speed()
                     rom.banks[0x4][0x76A7-0x4000] = 0xFF - speed()
@@ -331,12 +394,14 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
             [0x0f, 0x38, 0x0f],
             [0x30, 0x62, 0x30],
             [0x8b, 0xac, 0x0f],
-            [0x9b, 0xbc, 0x0f], 
+            [0x9b, 0xbc, 0x0f],
         ]
         for color in gb_colors:
             for channel in range(3):
                 color[channel] = color[channel] * 31 // 0xbc
-        
+
+    if ap_settings["warp_improvements"]:
+        patches.core.addWarpImprovements(rom, ap_settings["additional_warp_points"])
 
     palette = ap_settings["palette"]
     if palette != Palette.option_normal:
@@ -363,20 +428,11 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
                 if x > max:
                     return max
                 return x
-            def bin_to_rgb(word):
-                red   = word & 0b11111
-                word >>= 5
-                green = word & 0b11111
-                word >>= 5
-                blue  = word & 0b11111
-                return (red, green, blue)
-            def rgb_to_bin(r, g, b):
-                return (b << 10) | (g << 5) | r
 
             for address in range(start, end, 2):
                 packed = (rom.banks[bank][address + 1] << 8) | rom.banks[bank][address]
                 r,g,b = bin_to_rgb(packed)
-                
+
                 # 1 bit
                 if palette == Palette.option_1bit:
                     r &= 0b10000
@@ -416,9 +472,7 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assert(len(auth) == 12)
     rom.patch(0x00, SEED_LOCATION, None, binascii.hexlify(auth))
 
-
     for pymod in pymods:
         pymod.postPatch(rom)
-
 
     return rom

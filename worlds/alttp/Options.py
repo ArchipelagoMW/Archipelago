@@ -1,7 +1,7 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, TextChoice, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
 
 
 class Logic(Choice):
@@ -99,6 +99,12 @@ class map_shuffle(DungeonItem):
     """Map Placement"""
     item_name_group = "Maps"
     display_name = "Map Shuffle"
+
+
+class key_drop_shuffle(Toggle):
+    """Shuffle keys found in pots and dropped from killed enemies,
+    respects the small key and big key shuffle options."""
+    display_name = "Key Drop Shuffle"
 
 
 class Crystals(Range):
@@ -432,6 +438,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "open_pyramid": OpenPyramid,
     "bigkey_shuffle": bigkey_shuffle,
     "smallkey_shuffle": smallkey_shuffle,
+    "key_drop_shuffle": key_drop_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "progressive": Progressive,
@@ -466,5 +473,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "beemizer_total_chance": BeemizerTotalChance,
     "beemizer_trap_chance": BeemizerTrapChance,
     "death_link": DeathLink,
-    "allow_collect": AllowCollect
+    "allow_collect": AllowCollect,
+    "start_inventory_from_pool": StartInventoryPool,
 }

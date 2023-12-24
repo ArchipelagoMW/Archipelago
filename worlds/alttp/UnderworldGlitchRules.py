@@ -1,12 +1,11 @@
-
 from BaseClasses import Entrance
-from .SubClasses import LTTPRegion
 from worlds.generic.Rules import set_rule, add_rule
 from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
 
+
 # We actually need the logic to properly "mark" these regions as Light or Dark world. 
-# Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules. 
-def underworld_glitch_connections(world, player): 
+# Therefore we need to make these connections during the normal link_entrances stage, rather than during set_rules.
+def underworld_glitch_connections(world, player):
     specrock = world.get_region('Spectacle Rock Cave (Bottom)', player)
     mire = world.get_region('Misery Mire (West)', player)
 
@@ -32,7 +31,7 @@ def fake_pearl_state(state, player):
     if state.has('Moon Pearl', player):
         return state
     fake_state = state.copy()
-    fake_state.prog_items['Moon Pearl', player] += 1
+    fake_state.prog_items[player]['Moon Pearl'] += 1
     return fake_state
 
 
@@ -67,9 +66,12 @@ def underworld_glitches_rules(world, player):
     fix_fake_worlds = world.fix_fake_world[player]
 
     # Ice Palace Entrance Clip
-    # This is the easiest one since it's a simple internal clip. Just need to also add melting to freezor chest since it's otherwise assumed. 
-    add_rule(world.get_entrance('Ice Palace Entrance Room', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
+    # This is the easiest one since it's a simple internal clip.
+    # Need to also add melting to freezor chest since it's otherwise assumed.
+    # Also can pick up the first jelly key from behind.
+    add_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
     add_rule(world.get_location('Ice Palace - Freezor Chest', player), lambda state: can_melt_things(state, player))
+    add_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_bomb_clip(state, world.get_region('Ice Palace (Entrance)', player), player), combine='or')
 
 
     # Kiki Skip

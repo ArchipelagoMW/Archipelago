@@ -115,8 +115,8 @@ class Tokenizer:
             assert kind is not None
             value: Union[str, int] = mo.group()
             if kind == 'MISMATCH':
-                print(code.split("\n")[line_num-1])
-                raise RuntimeError("Syntax error on line: %d: %s\n%s", line_num, value)
+                line = code.split("\n")[line_num - 1]
+                raise RuntimeError(f"Syntax error on line: {line_num}: {kind}:`{line}`")
             elif kind == 'SKIP':
                 pass
             elif kind == 'COMMENT':

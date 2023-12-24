@@ -14,7 +14,11 @@ If the Biolizard goal is selected, the objective is to unlock and complete the r
 
 ## What items and locations get shuffled?
 
-All 30 story stages leading up to Cannon's Core will be shuffled and can be optionally placed behind emblem requirement gates. Mission order can be shuffled for each stage. Chao keys, animal pipes, hidden whistle spots, omochao, and gold beetles can be added as additional locations to check in each stage. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled. At most 250 emblems will be added to the item pool, after which remaining items added will be random collectables (rings, shields, etc). Traps can also be optionally included.
+All 30 story stages leading up to Cannon's Core will be shuffled and can be optionally placed behind emblem requirement gates. Mission order can be shuffled for each stage. Chao keys, animal pipes, hidden whistle spots, omochao, gold beetles, and small animals can be added as additional locations to check in each stage. Chao Garden emblems can optionally be added to the randomizer. All emblems from the selected mission range and all 28 character upgrade items get shuffled. At most 250 emblems will be added to the item pool, after which remaining items added will be random collectables (rings, shields, etc). Traps can also be optionally included.
+
+## Is there a guide that lists where each of those things can be found in every level?
+
+Yes! The guide can be found [here](https://github.com/JoshuaEagles/SA2-Archipelago-Locations-Wiki/blob/master/README.md).
 
 ## Which items can be in another player's world?
 

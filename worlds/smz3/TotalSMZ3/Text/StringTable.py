@@ -1,15 +1,15 @@
 ﻿    
 from typing import Any, List
 import copy
-from worlds.smz3.TotalSMZ3.Text.Dialog import Dialog
-from worlds.smz3.TotalSMZ3.Text.Texts import text_folder
+from ..Text.Dialog import Dialog
+from ..Text.Texts import openFile
 from Utils import unsafe_parse_yaml
 
 class StringTable:
 
     @staticmethod
     def ParseEntries(resource: str):
-        with open(resource, 'rb') as f:
+        with openFile(resource, 'rb') as f:
             yaml = str(f.read(), "utf-8")
         content = unsafe_parse_yaml(yaml)
 
@@ -23,7 +23,7 @@ class StringTable:
             else: raise Exception(f"Did not expect an object of type {type(value)}")
         return result
 
-    template = ParseEntries.__func__(text_folder + "/Scripts/StringTable.yaml")
+    template = ParseEntries.__func__("smz3/TotalSMZ3/Text/Scripts/StringTable.yaml")
 
     def __init__(self):
         self.entries = copy.deepcopy(StringTable.template)

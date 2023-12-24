@@ -2,7 +2,7 @@
 
 <h2 style="text-transform:none";>Changes from the vanilla game</h2>
 
-This randomizer takes Kingdom Hearts 2 and randomizes the locations of the items for a more dynamic play experience. The items that randomize currently are all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels. This allows abilities that Sora would normally have to also be placed on Keyblades with random stats. With several options on ways to finish the game.
+This randomizer creates a more dynamic play experience by randomizing the locations of most items in Kingdom Hearts 2. Currently all items within Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels are randomized. This allows abilities that Sora would normally have to be placed on Keyblades with random stats. Additionally, there are several options for ways to finish the game, allowing for different goals beyond beating the final boss.
 
 <h2 style="text-transform:none";>Where is the settings page</h2>
 
@@ -12,12 +12,18 @@ The [player settings page for this game](../player-settings) contains all the op
 <h2 style="text-transform:none";>What is randomized in this game?</h2>
 
 
-The Chests, Popups, Get Bonuses, Form Levels, and Sora's Levels.
+- Chests
+- Popups
+- Get Bonuses
+- Form Levels
+- Sora's Levels
+- Keyblade Stats
+- Keyblade Abilities
 
 <h2 style="text-transform:none";>What Kingdom Hearts 2 items can appear in other players' worlds?</h2>
 
 
-Every item in the game with the exception being party members' abilities.
+Every item in the game except for party members' abilities.
 
 <h2 style="text-transform:none";>What is The Garden of Assemblage "GoA"?</h2>
 
@@ -37,10 +43,10 @@ It is added to your inventory. If you obtain magic, you will need to pause your 
 <h2 style="text-transform:none";>What Happens if I die before Room Saving?</h2>
 
 
-When you die in Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, unlike vanilla Kingdom Hearts 2.
+When you die in vanilla Kingdom Hearts 2, you are reverted to the last non-boss room you entered and your status is reverted to what it was at that time. However, in archipelago, any item that you have sent/received will not be taken away from the player, any chest you have opened will remain open, and you will keep your level, but lose the experience.
 
 
-For example, if you are fighting Roxas and you receive Reflect Element and you die fighting Roxas, you will keep that reflect. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
+For example, if you are fighting Roxas, receive Reflect Element, then die mid-fight, you will keep that Reflect Element. You will still need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
 
 <h2 style="text-transform:none";>Customization options:</h2>
 
@@ -49,14 +55,29 @@ For example, if you are fighting Roxas and you receive Reflect Element and you d
     1. Obtain Three Proofs.
     2. Obtain a desired amount of Lucky Emblems.
     3. Obtain a desired amount of Bounties that are on late locations.
-- Customize how many World Locking Items You Need to Progress in that World.
-- Customize the Amount of World Locking Items You Start With.
-- Customize how many locations you want on Sora's Levels.
-- Customize the EXP Multiplier of everything that affects Sora.
-- Customize the Available Abilities on Keyblades.
-- Customize the level of Progressive Movement (Growth Abilities) you start with.
-- Customize the amount of Progressive Movement (Growth Abilities) you start with.
+- Customize how many World-Locking Items you need to progress in that world.
+- Customize the amount of World-Locking Items you start with.
+- Customize how many of Sora's Levels are locations.
+- Customize the EXP multiplier for Sora, his Drive Forms, and his Summons.
+- Customize the available abilities on keyblades.
+- Customize the amount and level of progressive movement (Growth Abilities) you start with.
 - Customize start inventory, i.e., begin every run with certain items or spells of your choice.
+
+<h2 style="text-transform:none";>What are Lucky Emblems?</h2>
+Lucky Emblems are items that are required to beat the game if your goal is "Lucky Emblem Hunt".<br>
+You can think of these as requiring X number of Proofs of Nonexistence to open the final door.
+
+<h2 style="text-transform:none";>What is Hitlist/Bounties?</h2>
+The Hitlist goal adds "bounty" items to select late-game fights and locations, and you need to collect X number of them to win.<br>
+The list of possible locations that can contain a bounty:
+
+- Each of the 13 Data Fights
+- Max level (7) for each Drive Form
+- Sephiroth
+- Lingering Will
+- Starry Hill
+- Transport to Remembrance
+- Godess of Fate cup and Hades Paradox cup
 
 <h2 style="text-transform:none";>Quality of life:</h2>
 
@@ -72,34 +93,3 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
 - Removal of Absent Silhouette and go straight into the Data Fights.
 - And much more can be found at [Kingdom Hearts 2 GoA Overview](https://tommadness.github.io/KH2Randomizer/overview/)
 
-<h2 style="text-transform:none";>Recommendation</h2>
-
-- Recommended making a save at the start of the GoA before opening anything. This will be the recommended file to load if/when your game crashes.
-    - If you don't want to have a save in the GoA. Disconnect the client, load the auto save, and then reconnect the client after it loads the auto save.
-- Recommended to set fps limit to 60fps.
-- Recommended to run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
-- Recommend viewing [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
-
-<h2 style="text-transform:none";>F.A.Q.</h2>
-
-- Why am I not getting magic?
-    - If you obtain magic, you will need to pause your game to have it show up in your inventory, then enter a new room for it to become properly usable.
-- Why am I missing worlds/portals in the GoA?
-    - You are missing the required visit locking item to access the world/portal.
-- What versions of Kingdom Hearts 2 are supported?
-    - Currently `only` the most up to date version on the Epic Game Store is supported `1.0.0.8_WW`. Emulator may be added in the future.
-- Why did I crash?
-    - The port of Kingdom Hearts 2 can and will randomly crash, this is the fault of the game not the randomizer or the archipelago client.
-      - If you have a continuous/constant crash (in the same area/event every time) you will want to reverify your installed files. This can be done by doing the following: Open Epic Game Store --> Library --> Click Triple Dots --> Manage --> Verify
-- Why am I getting dummy items or letters?
-    - You will need to get the `JaredWeakStrike/APCompanion` (you can find how to get this in the setup guide)
-- Why am I not sending or receiving items?
-    - Make sure you are connected to the KH2 client and the correct room (for more information reference the setup guide)
-- Why did I not load in to the correct visit
-    - You need to trigger a cutscene or visit The World That Never Was for it to update you have recevied the item.
-- Why should I install the auto save mod at `KH2FM-Mods-equations19/auto-save`?
-    - Because Kingdom Hearts 2 is prone to crashes and will keep you from losing your progress.
-- How do I load an auto save?
-    - To load an auto-save, hold down the Select or your equivalent on your prefered controller while choosing a file. Make sure to hold the button down the whole time.
-- How do I do a soft reset?
-    - Hold L1+L2+R1+R2+Start or your equivalent on your prefered controller at the same time to immediately reset the game to the start screen.

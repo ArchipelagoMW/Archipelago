@@ -219,6 +219,12 @@ item_table: List[ItemDict] = [
     {'name': "Three Gnarled Tongues",
         'count': 1,
         'classification': ItemClassification.progression},
+    {'name': "Boots of Pleading",
+        'count': 1,
+        'classification': ItemClassification.progression},
+    {'name': "Purified Hand of the Nun",
+        'count': 1,
+        'classification': ItemClassification.progression},
 
     # Mea Culpa Hearts
     {'name': "Smoking Heart of Incense",
@@ -372,7 +378,7 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
     {'name': "Quicksilver",
         'count': 5,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Petrified Bell",
         'count': 1,
         'classification': ItemClassification.progression},
@@ -398,7 +404,7 @@ item_table: List[ItemDict] = [
     # Skills
     {'name': "Combo Skill",
         'count': 3,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
     {'name': "Charged Skill",
         'count': 3,
         'classification': ItemClassification.progression},
@@ -410,7 +416,13 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.progression},
     {'name': "Lunge Skill",
         'count': 3,
-        'classification': ItemClassification.useful},
+        'classification': ItemClassification.progression},
+    {'name': "Dash Ability",
+        'count': 1,
+        'classification': ItemClassification.progression},
+    {'name': "Wall Climb Ability",
+        'count': 1,
+        'classification': ItemClassification.progression},
 
     # Other
     {'name': "Parietal bone of Lasser, the Inquisitor",
@@ -625,6 +637,23 @@ item_table: List[ItemDict] = [
         'classification': ItemClassification.filler}
 ]
 
+event_table: Dict[str, str] = {
+    "OpenedDCGateW": "D01Z05S24",
+    "OpenedDCGateE": "D01Z05S12",
+    "OpenedDCLadder": "D01Z05S20",
+    "OpenedWOTWCave": "D02Z01S06",
+    "RodeGOTPElevator": "D02Z02S11",
+    "OpenedConventLadder": "D02Z03S11",
+    "BrokeJondoBellW": "D03Z02S09",
+    "BrokeJondoBellE": "D03Z02S05",
+    "OpenedMOMLadder": "D04Z02S06",
+    "OpenedTSCGate": "D05Z02S11",
+    "OpenedARLadder": "D06Z01S23",
+    "BrokeBOTTCStatue": "D08Z01S02",
+    "OpenedWOTHPGate": "D09Z01S05",
+    "OpenedBOTSSLadder": "D17Z01S04"
+}
+
 group_table: Dict[str, Set[str]] = {
     "wounds"  : ["Holy Wound of Attrition",
                  "Holy Wound of Contrition",
@@ -633,6 +662,10 @@ group_table: Dict[str, Set[str]] = {
     "masks"   : ["Deformed Mask of Orestes",
                  "Mirrored Mask of Dolphos",
                  "Embossed Mask of Crescente"],
+
+    "marks"   : ["Mark of the First Refuge",
+                 "Mark of the Second Refuge",
+                 "Mark of the Third Refuge"],
 
     "tirso"   : ["Bouquet of Rosemary",
                  "Incense Garlic",

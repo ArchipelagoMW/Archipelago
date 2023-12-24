@@ -10,23 +10,19 @@ ModuleUpdate.update()
 
 # in case app gets imported by something like gunicorn
 import Utils
+import settings
 
 Utils.local_path.cached_path = os.path.dirname(__file__) or "."  # py3.8 is not abs. remove "." when dropping 3.8
-
-from WebHostLib import register, app as raw_app
-from waitress import serve
-
-from WebHostLib.models import db
-from WebHostLib.autolauncher import autohost, autogen
-from WebHostLib.lttpsprites import update_sprites_lttp
-from WebHostLib.options import create as create_options_files
-
+settings.no_gui = True
 configpath = os.path.abspath("config.yaml")
 if not os.path.exists(configpath):  # fall back to config.yaml in home
     configpath = os.path.abspath(Utils.user_path('config.yaml'))
 
 
 def get_app():
+    from WebHostLib import register, cache, app as raw_app
+    from WebHostLib.models import db
+
     register()
     app = raw_app
     if os.path.exists(configpath) and not app.config["TESTING"]:
@@ -38,6 +34,7 @@ def get_app():
         app.config["HOST_ADDRESS"] = Utils.get_public_ipv4()
         logging.info(f"HOST_ADDRESS was set to {app.config['HOST_ADDRESS']}")
 
+    cache.init_app(app)
     db.bind(**app.config["PONY"])
     db.generate_mapping(create_tables=True)
     return app
@@ -72,6 +69,7 @@ def create_ordered_tutorials_file() -> typing.List[typing.Dict[str, typing.Any]]
             with zipfile.ZipFile(zipfile_path) as zf:
                 for zfile in zf.infolist():
                     if not zfile.is_dir() and "/docs/" in zfile.filename:
+                        zfile.filename = os.path.basename(zfile.filename)
                         zf.extract(zfile, target_path)
         else:
             source_path = Utils.local_path(os.path.dirname(world.__file__), "docs")
@@ -117,6 +115,11 @@ if __name__ == "__main__":
     multiprocessing.freeze_support()
     multiprocessing.set_start_method('spawn')
     logging.basicConfig(format='[%(asctime)s] %(message)s', level=logging.INFO)
+
+    from WebHostLib.lttpsprites import update_sprites_lttp
+    from WebHostLib.autolauncher import autohost, autogen
+    from WebHostLib.options import create as create_options_files
+
     try:
         update_sprites_lttp()
     except Exception as e:
@@ -133,4 +136,5 @@ if __name__ == "__main__":
         if app.config["DEBUG"]:
             app.run(debug=True, port=app.config["PORT"])
         else:
+            from waitress import serve
             serve(app, port=app.config["PORT"], threads=app.config["WAITRESS_THREADS"])

@@ -34,7 +34,7 @@ app.config['MAX_CONTENT_LENGTH'] = 64 * 1024 * 1024  # 64 megabyte limit
 # if you want to deploy, make sure you have a non-guessable secret key
 app.config["SECRET_KEY"] = bytes(socket.gethostname(), encoding="utf-8")
 # at what amount of worlds should scheduling be used, instead of rolling in the web-thread
-app.config["JOB_THRESHOLD"] = 2
+app.config["JOB_THRESHOLD"] = 1
 # after what time in seconds should generation be aborted, freeing the queue slot. Can be set to None to disable.
 app.config["JOB_TIME"] = 600
 app.config['SESSION_PERMANENT'] = True
@@ -49,11 +49,10 @@ app.config["PONY"] = {
     'create_db': True
 }
 app.config["MAX_ROLL"] = 20
-app.config["CACHE_TYPE"] = "flask_caching.backends.SimpleCache"
-app.config["JSON_AS_ASCII"] = False
+app.config["CACHE_TYPE"] = "SimpleCache"
 app.config["HOST_ADDRESS"] = ""
 
-cache = Cache(app)
+cache = Cache()
 Compress(app)
 
 

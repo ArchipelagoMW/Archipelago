@@ -175,7 +175,7 @@ class RhindleMinimumSpeed(Range):
 class ConnectorMultiSlot(Toggle):
     """If true, the client and lua connector will add lowest 8 bits of the player slot
     to the port number used to connect to each other, to simplify connecting multiple local
-    clients to local BizHawks.
+    clients to local EmuHawk instances.
     Set in the yaml, since the connector has to read this out of the rom file before connecting.
     """
     display_name = "Connector Multi-Slot"

@@ -11,6 +11,7 @@ import socket
 import threading
 import time
 import typing
+import sys
 
 import websockets
 from pony.orm import commit, db_session, select
@@ -18,15 +19,18 @@ from pony.orm import commit, db_session, select
 import Utils
 
 from MultiServer import Context, server, auto_shutdown, ServerCommandProcessor, ClientMessageProcessor, load_server_cert
-from Utils import get_public_ipv4, get_public_ipv6, restricted_loads, cache_argsless
+from Utils import restricted_loads, cache_argsless
+from .locker import Locker
 from .models import Command, GameDataPackage, Room, db
 
 
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
 
-    def _cmd_video(self, platform, user):
-        """Set a link for your name in the WebHostLib tracker pointing to a video stream"""
+    def _cmd_video(self, platform: str, user: str):
+        """Set a link for your name in the WebHostLib tracker pointing to a video stream.
+        Currently, only YouTube and Twitch platforms are supported.
+        """
         if platform.lower().startswith("t"):  # twitch
             self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
             self.ctx.save()
@@ -94,7 +98,7 @@ class WebHostContext(Context):
 
         multidata = self.decompress(room.seed.multidata)
         game_data_packages = {}
-        for game in list(multidata["datapackage"]):
+        for game in list(multidata.get("datapackage", {})):
             game_data = multidata["datapackage"][game]
             if "checksum" in game_data:
                 if self.gamespackage.get(game, {}).get("checksum") == game_data["checksum"]:
@@ -102,8 +106,9 @@ class WebHostContext(Context):
                     # games package could be dropped from static data once all rooms embed data package
                     del multidata["datapackage"][game]
                 else:
-                    data = Utils.restricted_loads(GameDataPackage.get(checksum=game_data["checksum"]).data)
-                    game_data_packages[game] = data
+                    row = GameDataPackage.get(checksum=game_data["checksum"])
+                    if row:  # None if rolled on >= 0.3.9 but uploaded to <= 0.3.8. multidata should be complete
+                        game_data_packages[game] = Utils.restricted_loads(row.data)
 
         return self._load(multidata, game_data_packages, True)
 
@@ -162,19 +167,22 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     db.generate_mapping(check_tables=False)
 
     async def main():
+        if "worlds" in sys.modules:
+            raise Exception("Worlds system should not be loaded in the custom server.")
+
+        import gc
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
         ctx.init_save()
         ssl_context = load_server_cert(cert_file, cert_key_file) if cert_file else None
+        gc.collect()  # free intermediate objects used during setup
         try:
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, ctx.port, ssl=ssl_context)
 
             await ctx.server
-        except Exception:  # likely port in use - in windows this is OSError, but I didn't check the others
-            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ping_timeout=None,
-                                          ping_interval=None, ssl=ssl_context)
+        except OSError:  # likely port in use
+            ctx.server = websockets.serve(functools.partial(server, ctx=ctx), ctx.host, 0, ssl=ssl_context)
 
             await ctx.server
         port = 0
@@ -197,18 +205,23 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
         await ctx.shutdown_task
+
+        # ensure auto launch is on the same page in regard to room activity.
+        with db_session:
+            room: Room = Room.get(id=ctx.room_id)
+            room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
+
         logging.info("Shutting down")
 
-    from .autolauncher import Locker
     with Locker(room_id):
         try:
             asyncio.run(main())
-        except KeyboardInterrupt:
+        except (KeyboardInterrupt, SystemExit):
             with db_session:
                 room = Room.get(id=room_id)
                 # ensure the Room does not spin up again on its own, minute of safety buffer
                 room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(minutes=1, seconds=room.timeout)
-        except:
+        except Exception:
             with db_session:
                 room = Room.get(id=room_id)
                 room.last_port = -1

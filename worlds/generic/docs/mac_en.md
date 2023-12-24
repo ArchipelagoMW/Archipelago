@@ -15,7 +15,7 @@ Here is a list of software to install and source code to download.
 3. Open terminal and navigate to your Archipelago directory.
 ## Setting up a Virtual Environment
 It is generally recommended that you use a virtual environment to run python based software to avoid contamination that can break some software. If Archipelago is the only piece of software you use that runs from python source code however, it is not necessary to use a virtual environment. 
-1. Open terminal and navigate to the Archipelago directory.
+1. Open terminal and navigate to the Archipelago directory. Alternatively, right click on the Archipelago folder in Finder and select 'New Terminal at Folder'.
 2. Run the command `python3 -m venv venv` to create a virtual environment. Running this command will create a new directory at the specified path, so make sure that path is clear for a new directory to be created.
 3. Run the command `source venv/bin/activate` to activate the virtual environment.
 4. If you want to exit the virtual environment, run the command `deactivate`.

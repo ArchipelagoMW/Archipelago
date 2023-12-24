@@ -3,17 +3,15 @@ import os
 import os.path
 import threading
 import typing
+
+import settings
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
 from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Utils import output_path
 
-try:
-    import pyevermizer  # from package
-except ImportError:
-    import traceback
-    traceback.print_exc()
-    from . import pyevermizer  # as part of the source tree
+import pyevermizer  # from package
+# from . import pyevermizer  # as part of the source tree
 
 from . import Logic  # load logic mixin
 from .Options import soe_options, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
@@ -145,6 +143,16 @@ class SoEWebWorld(WebWorld):
     )]
 
 
+class SoESettings(settings.Group):
+    class RomFile(settings.SNESRomPath):
+        """File name of the SoE US ROM"""
+        description = "Secret of Evermore (USA) ROM"
+        copy_to = "Secret of Evermore (USA).sfc"
+        md5s = [SoEDeltaPatch.hash]
+
+    rom_file: RomFile = RomFile(RomFile.copy_to)
+
+
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
@@ -152,6 +160,7 @@ class SoEWorld(World):
     """
     game: str = "Secret of Evermore"
     option_definitions = soe_options
+    settings: typing.ClassVar[SoESettings]
     topology_present = False
     data_version = 4
     web = SoEWebWorld()
@@ -166,6 +175,8 @@ class SoEWorld(World):
     evermizer_seed: int
     connect_name: str
     energy_core: int
+    sequence_breaks: int
+    out_of_bounds: int
     available_fragments: int
     required_fragments: int
 
@@ -178,6 +189,8 @@ class SoEWorld(World):
     def generate_early(self) -> None:
         # store option values that change logic
         self.energy_core = self.multiworld.energy_core[self.player].value
+        self.sequence_breaks = self.multiworld.sequence_breaks[self.player].value
+        self.out_of_bounds = self.multiworld.out_of_bounds[self.player].value
         self.required_fragments = self.multiworld.required_fragments[self.player].value
         if self.required_fragments > self.multiworld.available_fragments[self.player].value:
             self.multiworld.available_fragments[self.player].value = self.required_fragments
@@ -211,9 +224,8 @@ class SoEWorld(World):
         max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
-        r = Region('Menu', self.player, self.multiworld)
-        r.exits = [Entrance(self.player, 'New Game', r)]
-        self.multiworld.regions += [r]
+        menu = Region('Menu', self.player, self.multiworld)
+        self.multiworld.regions += [menu]
 
         def get_sphere_index(evermizer_loc):
             """Returns 0, 1 or 2 for locations in spheres 1, 2, 3+"""
@@ -221,11 +233,14 @@ class SoEWorld(World):
                 return 2
             return min(2, len(evermizer_loc.requires))
 
+        # create ingame region
+        ingame = Region('Ingame', self.player, self.multiworld)
+
         # group locations into spheres (1, 2, 3+ at index 0, 1, 2)
         spheres: typing.Dict[int, typing.Dict[int, typing.List[SoELocation]]] = {}
         for loc in _locations:
             spheres.setdefault(get_sphere_index(loc), {}).setdefault(loc.type, []).append(
-                SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], r,
+                SoELocation(self.player, loc.name, self.location_name_to_id[loc.name], ingame,
                             loc.difficulty > max_difficulty))
 
         # location balancing data
@@ -267,18 +282,16 @@ class SoEWorld(World):
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
 
         # add locations to the world
-        r = Region('Ingame', self.player, self.multiworld)
         for sphere in spheres.values():
             for locations in sphere.values():
                 for location in locations:
-                    r.locations.append(location)
+                    ingame.locations.append(location)
                     if location.name in late_locations:
                         location.progress_type = LocationProgressType.PRIORITY
 
-        r.locations.append(SoELocation(self.player, 'Done', None, r))
-        self.multiworld.regions += [r]
-
-        self.multiworld.get_entrance('New Game', self.player).connect(self.multiworld.get_region('Ingame', self.player))
+        ingame.locations.append(SoELocation(self.player, 'Done', None, ingame))
+        menu.connect(ingame, "New Game")
+        self.multiworld.regions += [ingame]
 
     def create_items(self):
         # add regular items to the pool
@@ -404,7 +417,7 @@ class SoEWorld(World):
                     flags += option.to_flag()
 
             with open(placement_file, "wb") as f:  # generate placement file
-                for location in filter(lambda l: l.player == self.player, self.multiworld.get_locations()):
+                for location in self.multiworld.get_locations(self.player):
                     item = location.item
                     assert item is not None, "Can't handle unfilled location"
                     if item.code is None or location.address is None:
