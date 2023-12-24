@@ -497,8 +497,9 @@ def chalice_rooms(state: CollectionState, player: int, number: int) -> bool:
 def rules(blasphemousworld):
     world = blasphemousworld.multiworld
     player = blasphemousworld.player
-    logic = world.difficulty[player].value
-    enemy = world.enemy_randomizer[player].value
+    options = blasphemousworld.options
+    logic = options.difficulty.value
+    enemy = options.enemy_randomizer.value
 
 
     # D01Z01S01 (The Holy Line)
@@ -2488,7 +2489,7 @@ def rules(blasphemousworld):
 
     # D04Z02S01 (Mother of Mothers)
     # Items
-    if world.purified_hand[player]:
+    if options.purified_hand:
         set_rule(world.get_location("MoM: Western room ledge", player),
             lambda state: (
                 state.has("D04Z02S01[N]", player)
@@ -4093,7 +4094,7 @@ def rules(blasphemousworld):
 
     # D17Z01S04 (Brotherhood of the Silent Sorrow)
     # Items
-    if world.boots_of_pleading[player]:
+    if options.boots_of_pleading:
         set_rule(world.get_location("BotSS: 2nd meeting with Redento", player),
             lambda state: redento(state, blasphemousworld, player, 2))
     # Doors
