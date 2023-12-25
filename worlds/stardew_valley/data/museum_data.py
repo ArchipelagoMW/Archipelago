@@ -238,8 +238,7 @@ class Mineral:
                              geodes=(Geode.geode, Geode.omni))
     orpiment = create_mineral("Orpiment",
                               geodes=(Geode.geode, Geode.omni))
-    petrified_slime = create_mineral("Petrified Slime",
-                                     geodes=(Geode.geode, Geode.omni))
+    petrified_slime = create_mineral(Mineral.petrified_slime, Region.slime_hutch)
     thunder_egg = create_mineral("Thunder Egg",
                                  geodes=(Geode.geode, Geode.omni))
     pyrite = create_mineral("Pyrite",

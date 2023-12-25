@@ -228,6 +228,9 @@ iridium_bar = BundleItem(MetalBar.iridium)
 refined_quartz = BundleItem(MetalBar.quartz)
 coal = BundleItem(Material.coal, 5)
 iridium_ore = BundleItem(Ore.iridium)
+gold_ore = BundleItem(Ore.gold)
+iron_ore = BundleItem(Ore.iron)
+copper_ore = BundleItem(Ore.copper)
 battery_pack = BundleItem(ArtisanGood.battery_pack)
 
 quartz = BundleItem(Mineral.quartz)
@@ -246,6 +249,13 @@ bug_meat = BundleItem(Loot.bug_meat, 10)
 bat_wing = BundleItem(Loot.bat_wing, 10)
 solar_essence = BundleItem(Loot.solar_essence)
 void_essence = BundleItem(Loot.void_essence)
+
+petrified_slime = BundleItem(Mineral.petrified_slime)
+blue_slime_egg = BundleItem(Loot.blue_slime_egg)
+red_slime_egg = BundleItem(Loot.red_slime_egg)
+purple_slime_egg = BundleItem(Loot.purple_slime_egg)
+green_slime_egg = BundleItem(Loot.green_slime_egg)
+tiger_slime_egg = IslandBundleItem(Loot.tiger_slime_egg)
 
 cherry_bomb = BundleItem(Bomb.cherry_bomb, 5)
 bomb = BundleItem(Bomb.bomb, 2)
@@ -470,12 +480,16 @@ agronomist_items = [basic_fertilizer, quality_fertilizer, deluxe_fertilizer,
                     speed_gro, deluxe_speed_gro, hyper_speed_gro, tree_fertilizer]
 agronomist_bundle = BundleTemplate(CCRoom.pantry, BundleName.agronomist, agronomist_items, 4, 3)
 
+slime_farmer_items = [slime.as_amount(99), petrified_slime.as_amount(10), blue_slime_egg, red_slime_egg,
+                      purple_slime_egg, green_slime_egg, tiger_slime_egg]
+slime_farmer_bundle = BundleTemplate(CCRoom.pantry, BundleName.slime_farmer, slime_farmer_items, 4, 3)
+
 pantry_bundles_vanilla = [spring_crops_bundle_vanilla, summer_crops_bundle_vanilla, fall_crops_bundle_vanilla,
                           quality_crops_bundle_vanilla, animal_bundle_vanilla, artisan_bundle_vanilla]
 pantry_bundles_thematic = [spring_crops_bundle_thematic, summer_crops_bundle_thematic, fall_crops_bundle_thematic,
                            quality_crops_bundle_thematic, animal_bundle_thematic, artisan_bundle_thematic]
 pantry_bundles_remixed = [*pantry_bundles_thematic, rare_crops_bundle, fish_farmer_bundle, garden_bundle,
-                          brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle]
+                          brewer_bundle, orchard_bundle, island_crops_bundle, agronomist_bundle, slime_farmer_bundle]
 pantry_vanilla = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_vanilla, 6)
 pantry_thematic = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_thematic, 6)
 pantry_remixed = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_remixed, 6)
@@ -507,7 +521,7 @@ crab_pot_trash_items = [trash, driftwood, soggy_newspaper, broken_cd, broken_gla
 crab_pot_items_thematic = [*crab_pot_items_vanilla, *crab_pot_trash_items]
 crab_pot_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.crab_pot, crab_pot_items_vanilla, 10, 5)
 crab_pot_bundle_thematic = BundleTemplate.extend_from(crab_pot_bundle_vanilla, crab_pot_items_thematic)
-recycling_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.recycling, crab_pot_trash_items, 4, 4)
+trash_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.trash, crab_pot_trash_items, 4, 4)
 
 specialty_fish_items_vanilla = [pufferfish, ghostfish, sandfish, woodskip]
 specialty_fish_items_thematic = [*specialty_fish_items_vanilla, scorpion_carp, eel, octopus, lava_eel, ice_pip,
@@ -555,8 +569,9 @@ fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
 fish_tank_bundles_thematic = [river_fish_bundle_thematic, lake_fish_bundle_thematic, ocean_fish_bundle_thematic,
                               night_fish_bundle_thematic, crab_pot_bundle_thematic, specialty_fish_bundle_thematic]
-fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, recycling_bundle,
+fish_tank_bundles_remixed = [*fish_tank_bundles_thematic, spring_fish_bundle, summer_fish_bundle, fall_fish_bundle, winter_fish_bundle, trash_bundle,
                              rain_fish_bundle, quality_fish_bundle, master_fisher_bundle, legendary_fish_bundle, tackle_bundle, bait_bundle]
+
 # In Remixed, the trash items are in the recycling bundle, so we don't use the thematic version of the crab pot bundle that added trash items to it
 fish_tank_bundles_remixed.remove(crab_pot_bundle_thematic)
 fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)
@@ -590,6 +605,8 @@ engineer_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.engineer, engine
 demolition_items = [cherry_bomb, bomb, mega_bomb, explosive_ammo]
 demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, demolition_items, 3, 3)
 
+recycling_items = [stone, coal, iron_ore, wood, cloth, refined_quartz]
+recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
 # archaeologist_items = [golden_mask, golden_relic, ancient_drum, dwarf_gadget, dwarvish_helm, prehistoric_handaxe, bone_flute, anchor, prehistoric_tool,
 #                        chicken_statue, rusty_cog, rusty_spur, rusty_spoon, ancient_sword, ornamental_fan, elvish_jewelry, ancient_doll, chipped_amphora]
 # archaeologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.archaeologist, archaeologist_items, 4, 2)
@@ -598,12 +615,10 @@ demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, de
 #                         nautilius_fossil, amphibian_fossil, palm_fossil, trilobite]
 # paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontologist, paleontologist_items, 4, 2)
 
-# recycling_items = [stone, coal, iron_ore, wood, torch, cloth, refined_quartz]
-# recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
-
 boiler_room_bundles_vanilla = [blacksmith_bundle_vanilla, geologist_bundle_vanilla, adventurer_bundle_vanilla]
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]
-boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle, demolition_bundle]
+boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle,
+                               demolition_bundle, recycling_bundle]
 boiler_room_vanilla = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_vanilla, 3)
 boiler_room_thematic = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_thematic, 3)
 boiler_room_remixed = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_remixed, 3)
