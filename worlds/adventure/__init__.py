@@ -15,7 +15,7 @@ from Options import AssembleOptions
 from worlds.AutoWorld import WebWorld, World
 from Fill import fill_restrictive
 from worlds.generic.Rules import add_rule, set_rule
-from .Options import adventure_option_definitions, DragonRandoType, DifficultySwitchA, DifficultySwitchB
+from .Options import AdventureOptions, DragonRandoType, DifficultySwitchA, DifficultySwitchB
 from .Rom import get_base_rom_bytes, get_base_rom_path, AdventureDeltaPatch, apply_basepatch, \
     AdventureAutoCollectLocation
 from .Items import item_table, ItemData, nothing_item_id, event_table, AdventureItem, standard_item_max
@@ -109,7 +109,8 @@ class AdventureWorld(World):
     game: ClassVar[str] = "Adventure"
     web: ClassVar[WebWorld] = AdventureWeb()
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = adventure_option_definitions
+    options = AdventureOptions
+    options_dataclass = AdventureOptions
     settings: ClassVar[AdventureSettings]
     item_name_to_id: ClassVar[Dict[str, int]] = {name: data.id for name, data in item_table.items()}
     location_name_to_id: ClassVar[Dict[str, int]] = {name: data.location_id for name, data in location_table.items()}
