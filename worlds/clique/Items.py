@@ -1,7 +1,7 @@
 from typing import Callable, Dict, NamedTuple, Optional
 
 from BaseClasses import Item, ItemClassification
-from Options import PerGameCommonOptions
+from .Options import CliqueOptions
 
 
 class CliqueItem(Item):
@@ -11,7 +11,7 @@ class CliqueItem(Item):
 class CliqueItemData(NamedTuple):
     code: Optional[int] = None
     type: ItemClassification = ItemClassification.filler
-    can_create: Callable[[PerGameCommonOptions], bool] = lambda options: True
+    can_create: Callable[[CliqueOptions], bool] = lambda options: True
 
 
 item_data_table: Dict[str, CliqueItemData] = {

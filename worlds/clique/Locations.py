@@ -1,7 +1,7 @@
 from typing import Callable, Dict, NamedTuple, Optional
 
 from BaseClasses import Location
-from Options import PerGameCommonOptions
+from .Options import CliqueOptions
 
 
 
@@ -12,7 +12,7 @@ class CliqueLocation(Location):
 class CliqueLocationData(NamedTuple):
     region: str
     address: Optional[int] = None
-    can_create: Callable[[PerGameCommonOptions], bool] = lambda options: True
+    can_create: Callable[[CliqueOptions], bool] = lambda options: True
     locked_item: Optional[str] = None
 
 

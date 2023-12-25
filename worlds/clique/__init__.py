@@ -4,7 +4,7 @@ from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import CliqueItem, item_data_table, item_table
 from .Locations import CliqueLocation, location_data_table, location_table, locked_locations
-from .Options import clique_options
+from .Options import CliqueOptions
 from .Regions import region_data_table
 from .Rules import get_button_rule
 
@@ -29,7 +29,8 @@ class CliqueWorld(World):
     game = "Clique"
     data_version = 3
     web = CliqueWebWorld()
-    option_definitions = clique_options
+    options = CliqueOptions
+    options_dataclass = CliqueOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
 
