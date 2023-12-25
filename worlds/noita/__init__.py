@@ -37,7 +37,7 @@ class NoitaWorld(World):
 
     def generate_early(self):
         if not self.multiworld.get_player_name(self.player).isascii():
-            raise Exception("Error: Noita yaml's slot name has invalid character(s).")
+            raise Exception("Noita yaml's slot name has invalid character(s).")
     
     # Returned items will be sent over to the client
     def fill_slot_data(self):
