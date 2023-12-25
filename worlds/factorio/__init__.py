@@ -11,7 +11,7 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
-from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution, TechCostMix
+from .Options import FactorioOptions, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution, TechCostMix
 from .Shapes import get_shapes
 from .Technologies import base_tech_table, recipe_sources, base_technology_table, \
     all_ingredient_names, all_product_sources, required_technologies, get_rocket_requirements, \
@@ -87,6 +87,9 @@ class Factorio(World):
     custom_recipes: typing.Dict[str, Recipe]
     location_pool: typing.List[FactorioScienceLocation]
     advancement_technologies: typing.Set[str]
+
+    options = FactorioOptions
+    options_dataclass = FactorioOptions
 
     web = FactorioWeb()
 
@@ -307,8 +310,6 @@ class Factorio(World):
                         return item_name
 
         return super(Factorio, self).collect_item(state, item, remove)
-
-    option_definitions = factorio_options
 
     @classmethod
     def stage_write_spoiler(cls, world, spoiler_handle):

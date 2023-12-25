@@ -6,6 +6,8 @@ import shutil
 import threading
 import zipfile
 from typing import Optional, TYPE_CHECKING, Any, List, Callable, Tuple, Union
+from dataclasses import fields
+import datetime
 
 import jinja2
 
@@ -148,10 +150,10 @@ def generate_mod(world: "Factorio", output_directory: str):
         "goal": options.goal.value,
         "energy_link": options.energy_link.value,
         "useless_technologies": useless_technologies,
-        "chunk_shuffle": options.chunk_shuffle.value if hasattr(options, "chunk_shuffle") else 0,
+        "chunk_shuffle": options.chunk_shuffle.value if datetime.datetime.today().month == 4 else 0,
     }
 
-    for factorio_option in Options.factorio_options:
+    for factorio_option in [field.name for field in fields(Options.FactorioOptions)]:
         if factorio_option in ["free_sample_blacklist", "free_sample_whitelist"]:
             continue
         template_data[factorio_option] = getattr(options, factorio_option).value
