@@ -16,8 +16,8 @@ modded SNES minis are currently not supported by SNI**
 
 1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
    file is located in the assets section at the bottom of the version information.**
-2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. This is 
-   your American Lufia II - Rise of the Sinistrals ROM file. This only needs to be done once.
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file. 
+   This is your American Lufia II - Rise of the Sinistrals ROM file. This only needs to be done once.
 
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
