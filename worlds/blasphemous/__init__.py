@@ -7,7 +7,7 @@ from .Locations import location_table
 from .Rooms import room_table, door_table
 from .Rules import rules
 from worlds.generic.Rules import set_rule, add_rule
-from .Options import blasphemous_options
+from .Options import BlasphemousOptions
 from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
 
 
@@ -39,7 +39,8 @@ class BlasphemousWorld(World):
     location_name_to_game_id = {loc["name"]: loc["game_id"] for loc in location_table}
 
     item_name_groups = group_table
-    option_definitions = blasphemous_options
+    options = BlasphemousOptions
+    options_dataclass = BlasphemousOptions
 
     required_client_version = (0, 4, 2)
 
