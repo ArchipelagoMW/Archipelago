@@ -9,7 +9,7 @@ from worlds.generic.Rules import set_rule, add_rule, add_item_rule
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names, item_descriptions
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary
-from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothricBanner, dark_souls_options
+from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothricBanner, DarkSouls3Options
 
 
 class DarkSouls3Web(WebWorld):
@@ -43,7 +43,8 @@ class DarkSouls3World(World):
     """
 
     game: str = "Dark Souls III"
-    option_definitions = dark_souls_options
+    options = DarkSouls3Options
+    options_dataclass = DarkSouls3Options
     topology_present: bool = True
     web = DarkSouls3Web()
     data_version = 8
