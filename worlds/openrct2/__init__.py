@@ -475,8 +475,9 @@ class OpenRCT2World(World):
         # and make them required for completion, if that's required.
         elligible_rides = [index for index, item in enumerate(logic_table) if
                            item in item_info["rides"] and item not in item_info["non_starters"]]
-        self.unique_rides = [logic_table[i] for i in
-                             elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
+        if self.multiworld.required_unique_rides[self.player].value:
+            self.unique_rides = [logic_table[i] for i in
+                                elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
         print("Here's the eligible rides:")
         print(elligible_rides)
         print("Here's what was chosen:")
