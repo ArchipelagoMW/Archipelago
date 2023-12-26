@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from .Options import *
+from .options import *
 
 witness_option_presets: Dict[str, Dict[str, Any]] = {
     # Great for short syncs & scratching that "speedrun with light routing elements" itch.
