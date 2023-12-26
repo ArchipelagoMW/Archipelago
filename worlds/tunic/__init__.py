@@ -180,8 +180,8 @@ class TunicWorld(World):
         if self.options.entrance_rando:
             set_er_location_rules(self, self.ability_unlocks)
         else:
-            set_region_rules(self, self.options, self.ability_unlocks)
-            set_location_rules(self, self.options, self.ability_unlocks)
+            set_region_rules(self, self.ability_unlocks)
+            set_location_rules(self, self.ability_unlocks)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_items)

@@ -89,9 +89,10 @@ def has_lantern(state: CollectionState, player: int, options: TunicOptions) -> b
         return state.has(lantern, player)
 
 
-def set_region_rules(world: "TunicWorld", options: TunicOptions, ability_unlocks: Dict[str, int]) -> None:
+def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
     multiworld = world.multiworld
     player = world.player
+    options = world.options
 
     multiworld.get_entrance("Overworld -> Overworld Holy Cross", player).access_rule = \
         lambda state: has_ability(state, player, holy_cross, options, ability_unlocks)
@@ -142,9 +143,11 @@ def set_region_rules(world: "TunicWorld", options: TunicOptions, ability_unlocks
         has_ability(state, player, prayer, options, ability_unlocks) and has_sword(state, player)
 
 
-def set_location_rules(world: "TunicWorld", options: TunicOptions, ability_unlocks: Dict[str, int]) -> None:
+def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
     multiworld = world.multiworld
     player = world.player
+    options = world.options
+
     forbid_item(multiworld.get_location("Secret Gathering Place - 20 Fairy Reward", player), fairies, player)
 
     # Ability Shuffle Exclusive Rules
