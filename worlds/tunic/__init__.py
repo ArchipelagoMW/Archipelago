@@ -86,6 +86,17 @@ class TunicWorld(World):
         else:
             items_to_create["Sword Upgrade"] = 0
 
+        if self.options.laurels_location:
+            laurels = self.create_item("Hero's Laurels")
+            if self.options.laurels_location == "6_coins":
+                self.multiworld.get_location("Coins in the Well - 6 Coins", self.player).place_locked_item(laurels)
+            elif self.options.laurels_location == "10_coins":
+                self.multiworld.get_location("Coins in the Well - 10 Coins", self.player).place_locked_item(laurels)
+            elif self.options.laurels_location == "10_fairies":
+                self.multiworld.get_location("Secret Gathering Place - 10 Fairy Reward", self.player).place_locked_item(laurels)
+            self.slot_data_items.append(laurels)
+            items_to_create["Hero's Laurels"] = 0
+
         if keys_behind_bosses:
             for rgb_hexagon, location in hexagon_locations.items():
                 hex_item = self.create_item(gold_hexagon if hexagon_quest else rgb_hexagon)
@@ -115,6 +126,16 @@ class TunicWorld(World):
                 items_to_create[fill] -= 1
                 if items_to_create[fill] == 0:
                     available_filler.remove(fill)
+
+        if self.options.maskless:
+            mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
+            tunic_items.append(mask_item)
+            items_to_create["Scavenger Mask"] = 0
+
+        if self.options.lanternless:
+            mask_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
+            tunic_items.append(mask_item)
+            items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
             for i in range(0, quantity):
@@ -186,7 +207,7 @@ class TunicWorld(World):
             "Entrance Rando": self.tunic_portal_pairs
         }
 
-        for tunic_item in filter(lambda item: item.location is not None, self.slot_data_items):
+        for tunic_item in filter(lambda item: item.location is not None and item.code is not None, self.slot_data_items):
             if tunic_item.name not in slot_data:
                 slot_data[tunic_item.name] = []
             if tunic_item.name == gold_hexagon and len(slot_data[gold_hexagon]) >= 6:

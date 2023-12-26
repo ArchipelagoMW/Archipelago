@@ -207,7 +207,8 @@ extra_groups: Dict[str, Set[str]] = {
     "ice rod": {"Pages 52-53 (Ice Rod)"},
     "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
     "progressive sword": {"Sword Upgrade"},
-    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"}
+    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"},
+    "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"}
 }
 
 item_name_groups.update(extra_groups)
