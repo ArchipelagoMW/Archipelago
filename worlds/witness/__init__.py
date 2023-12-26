@@ -88,10 +88,10 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
-        disabled_locations = self.multiworld.exclude_locations[self.player].value
+        disabled_locations = self.options.exclude_locations.value
 
         self.player_logic = WitnessPlayerLogic(
-            self, disabled_locations, self.multiworld.start_inventory[self.player].value
+            self, disabled_locations, self.options.start_inventory.value
         )
 
         self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
@@ -253,7 +253,7 @@ class WitnessWorld(World):
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
             if self.items.item_data[item_name].local_only:
-                self.multiworld.local_items[self.player].value.add(item_name)
+                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
         hint_amount = self.options.hint_amount.value
