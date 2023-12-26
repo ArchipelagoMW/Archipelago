@@ -17,23 +17,6 @@ def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor,
     return _lingo_can_open_door(state, effective_room, door.door, world, player_logic)
 
 
-def lingo_can_use_pilgrimage(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
-    fake_pilgrimage = [
-        ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
-        ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
-        ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
-        ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
-        ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
-        ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
-        ["Outside The Agreeable", "Tenacious Entrance"]
-    ]
-    for entrance in fake_pilgrimage:
-        if not _lingo_can_open_door(state, entrance[0], entrance[1], world, player_logic):
-            return False
-
-    return True
-
-
 def lingo_can_use_location(state: CollectionState, location: PlayerLocation, world: "LingoWorld",
                            player_logic: LingoPlayerLogic):
     return _lingo_can_satisfy_requirements(state, location.access, world, player_logic)
@@ -56,6 +39,12 @@ def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld", 
                 counted_panels += panel_count
         if counted_panels >= world.options.level_2_requirement.value - 1:
             return True
+    # THE MASTER has to be handled separately, because it has special access rules.
+    if state.can_reach("Orange Tower Seventh Floor", "Region", world.player)\
+            and lingo_can_use_mastery_location(state, world, player_logic):
+        counted_panels += 1
+    if counted_panels >= world.options.level_2_requirement.value - 1:
+        return True
     return False
 
 
