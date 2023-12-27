@@ -55,12 +55,12 @@ class MarioLand2Client(BizHawkClient):
         items_received = [list(items.keys())[item.item - START_IDS] for item in ctx.items_received]
 
         progressive_coins = {
-            "Progressive Space Zone": 3,
-            "Progressive Tree Zone": 4,
-            "Progressive Macro Zone": 4,
-            "Progressive Pumpkin Zone": 4,
-            "Progressive Mario Zone": 4,
-            "Progressive Turtle Zone": 3
+            "Space Zone Progression": 3,
+            "Tree Zone Progression": 4,
+            "Macro Zone Progression": 4,
+            "Pumpkin Zone Progression": 4,
+            "Mario Zone Progression": 4,
+            "Turtle Zone Progression": 3
         }
         for level_item, count in progressive_coins.items():
             if items_received.count(level_item) >= count:
@@ -83,7 +83,8 @@ class MarioLand2Client(BizHawkClient):
         else:
             total_stars = 5
 
-        invincibility_length = int((832.0 / total_stars) * items_received.count("Progressive Invincibility Star"))
+        invincibility_length = int((832.0 / (total_stars + 1))
+                                   * (items_received.count("Super Star Duration Increase") + 1))
 
         if "Easy Mode" in items_received:
             difficulty_mode = 1
@@ -108,16 +109,15 @@ class MarioLand2Client(BizHawkClient):
             (rom_addresses["Get_Fire_Flower_C"], [00] if "Fire Flower" in items_received else [0xc8], "ROM"),
             (rom_addresses["Invincibility_Star_A"], [(invincibility_length >> 8) + 1], "ROM"),
             (rom_addresses["Invincibility_Star_B"], [invincibility_length & 0xFF], "ROM"),
-            (rom_addresses["Invincibility_Star_C"], [4] if "Progressive Invincibility Star" in items_received else [0], "ROM"),
-            (rom_addresses["Enable_Bubble"], [0xcb, 0xd7] if "Progressive Space Zone" in items_received else [0, 0], "ROM"),
+            (rom_addresses["Enable_Bubble"], [0xcb, 0xd7] if "Hippo Bubble" in items_received else [0, 0], "ROM"),
+            (rom_addresses["Enable_Swim"], [0xcb, 0xcf] if "Swim" in items_received else [0, 0], "ROM"),
             (0x02E4, [difficulty_mode], "CartRAM"),
             (0x0848, modified_level_data, "CartRAM")
         ]
 
-        # TODO: Remove check that midway_bells is present, just here for temporary backwards compatibility
-        if midway_point == 0xFF and ctx.slot_data and "midway_bells" in ctx.slot_data and ctx.slot_data["midway_bells"]:
+        if midway_point == 0xFF and ctx.slot_data and ctx.slot_data["midway_bells"]:
             # after registering the check for the midway bell, clear the value just for safety.
-            data_writes.append((0x02A0, 0, "CartRAM"))
+            data_writes.append((0x02A0, [0], "CartRAM"))
 
         if "Auto Scroll" in items_received:
             if auto_scroll_enabled == 0xaf:  # auto scroll has not yet been enabled

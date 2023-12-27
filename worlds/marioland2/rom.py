@@ -207,7 +207,8 @@ def generate_output(self, output_directory: str):
                                       patched_path=rompath)
     patch.write()
     os.unlink(rompath)
-    
+
+
 
 class SuperMarioLand2DeltaPatch(APDeltaPatch):
     hash = "a8413347d5df8c9d14f97f0330d67bce"
@@ -218,7 +219,8 @@ class SuperMarioLand2DeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-    
+
+
 
 def get_base_rom_bytes():
     file_name = get_base_rom_path()

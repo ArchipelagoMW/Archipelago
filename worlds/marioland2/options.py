@@ -4,8 +4,8 @@ from Options import Toggle, Choice, NamedRange, Range
 class GoldenCoins(Choice):
     """Vanilla: The coins are found in their original locations.
     Shuffled: The coins are shuffled into the item pool.
-    Progressive: The coins are at the end of the Progressive Level item chains. For example, there will be a third
-    Progressive Space Zone item, and the final one received will grant the Space Coin.
+    Progressive: The coins are at the end of the Level Progression chains. For example, there will be a third
+    Space Zone Progression item, and the final one received will grant the Space Coin.
 
     You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin."""
     display_name = "Golden Coins"
@@ -39,12 +39,6 @@ class ShuffleMidwayBells(Toggle):
     Obtaining a Midway Bell will be permanent, and some levels will require backtracking from the midway point to reach
     secret exits."""
     display_name = "Shuffle Midway Bells"
-
-
-class ShuffleSpacePhysics(Toggle):
-    """Oh, no! There is Earth gravity on the moon and in space! Find the missing Space Physics item to restore
-    proper order to the universe."""
-    display_name = "Shuffle Space Physics"
 
 
 class RandomizeEnemies(Toggle):
@@ -81,8 +75,7 @@ sml2options = {
     "golden_coins": GoldenCoins,
     "required_golden_coins": GoldenCoinsRequired,
     "difficulty_mode": DifficultyMode,
-    "shuffle_midway_bells":ShuffleMidwayBells,
-    "shuffle_space_physics": ShuffleSpacePhysics,
+    "shuffle_midway_bells": ShuffleMidwayBells,
     "randomize_enemies": RandomizeEnemies,
     "randomize_platforms": RandomizePlatforms,
     "auto_scroll_levels": AutoScrollLevels,
