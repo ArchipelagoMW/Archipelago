@@ -8,7 +8,7 @@ use that version. These steps are for developers or platforms without compiled r
 
 What you'll need:
  * [Python 3.8.7 or newer](https://www.python.org/downloads/), not the Windows Store version
-   * **Python 3.11 does not work currently**
+   * **Python 3.12 is currently unsupported**
  * pip: included in downloads from python.org, separate in many Linux distributions
  * Matching C compiler
    * possibly optional, read operating system specific sections
@@ -30,7 +30,7 @@ After this, you should be able to run the programs.
 
 Recommended steps
  * Download and install a "Windows installer (64-bit)" from the [Python download page](https://www.python.org/downloads)
-   * **Python 3.11 does not work currently**
+   * **Python 3.12 is currently unsupported**
 
  * **Optional**: Download and install Visual Studio Build Tools from
    [Visual Studio Build Tools](https://visualstudio.microsoft.com/visual-cpp-build-tools/).
@@ -68,6 +68,19 @@ You can get the latest SNI release at [SNI Github releases](https://github.com/a
 It should be dropped as "SNI" into the root folder of the project. Alternatively, you can point the sni setting in
 host.yaml at your SNI folder.
 
+
+## Optional: Git
+
+[Git](https://git-scm.com) is required to install some of the packages that Archipelago depends on.
+It may be possible to run Archipelago from source without it, at your own risk.
+
+It is also generally recommended to have Git installed and understand how to use it, especially if you're thinking about contributing.
+
+You can download the latest release of Git at [The downloads page on the Git website](https://git-scm.com/downloads).
+
+Beyond that, there are also graphical interfaces for Git that make it more accessible.
+For repositories on Github (such as this one), [Github Desktop](https://desktop.github.com) is one such option.
+PyCharm has a built-in version control integration that supports Git.
 
 ## Running tests
 

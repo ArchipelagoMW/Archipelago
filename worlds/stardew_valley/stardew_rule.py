@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Iterable, Dict, List, Union, FrozenSet
+from typing import Iterable, Dict, List, Union, FrozenSet, Set
 
 from BaseClasses import CollectionState, ItemClassification
 from .items import item_table
@@ -14,13 +14,13 @@ class StardewRule:
         raise NotImplementedError
 
     def __or__(self, other) -> StardewRule:
-        if isinstance(other, Or):
+        if type(other) is Or:
             return Or(self, *other.rules)
 
         return Or(self, other)
 
     def __and__(self, other) -> StardewRule:
-        if isinstance(other, And):
+        if type(other) is And:
             return And(other.rules.union({self}))
 
         return And(self, other)
@@ -80,30 +80,40 @@ class False_(StardewRule):  # noqa
         return 999999999
 
 
+false_ = False_()
+true_ = True_()
+assert false_ is False_()
+assert true_ is True_()
+
+
 class Or(StardewRule):
     rules: FrozenSet[StardewRule]
+    _simplified: bool
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = set()
+        rules_list: Set[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.update(rule)
+            rules_list = {*rule}
         else:
-            rules_list.add(rule)
+            rules_list = {rule}
 
         if rules is not None:
             rules_list.update(rules)
 
         assert rules_list, "Can't create a Or conditions without rules"
 
-        new_rules = set()
-        for rule in rules_list:
-            if isinstance(rule, Or):
-                new_rules.update(rule.rules)
-            else:
-                new_rules.add(rule)
-        rules_list = new_rules
+        if any(type(rule) is Or for rule in rules_list):
+            new_rules: Set[StardewRule] = set()
+            for rule in rules_list:
+                if type(rule) is Or:
+                    new_rules.update(rule.rules)
+                else:
+                    new_rules.add(rule)
+            rules_list = new_rules
 
         self.rules = frozenset(rules_list)
+        self._simplified = False
 
     def __call__(self, state: CollectionState) -> bool:
         return any(rule(state) for rule in self.rules)
@@ -112,11 +122,11 @@ class Or(StardewRule):
         return f"({' | '.join(repr(rule) for rule in self.rules)})"
 
     def __or__(self, other):
-        if isinstance(other, True_):
+        if other is true_:
             return other
-        if isinstance(other, False_):
+        if other is false_:
             return self
-        if isinstance(other, Or):
+        if type(other) is Or:
             return Or(self.rules.union(other.rules))
 
         return Or(self.rules.union({other}))
@@ -131,45 +141,53 @@ class Or(StardewRule):
         return min(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any(isinstance(rule, True_) for rule in self.rules):
-            return True_()
+        if self._simplified:
+            return self
+        if true_ in self.rules:
+            return true_
 
-        simplified_rules = {rule.simplify() for rule in self.rules}
-        simplified_rules = {rule for rule in simplified_rules if rule is not False_()}
+        simplified_rules = [simplified for simplified in {rule.simplify() for rule in self.rules}
+                            if simplified is not false_]
 
         if not simplified_rules:
-            return False_()
+            return false_
 
         if len(simplified_rules) == 1:
-            return next(iter(simplified_rules))
+            return simplified_rules[0]
 
-        return Or(simplified_rules)
+        self.rules = frozenset(simplified_rules)
+        self._simplified = True
+        return self
 
 
 class And(StardewRule):
     rules: FrozenSet[StardewRule]
+    _simplified: bool
 
     def __init__(self, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = set()
+        rules_list: Set[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.update(rule)
+            rules_list = {*rule}
         else:
-            rules_list.add(rule)
+            rules_list = {rule}
 
         if rules is not None:
             rules_list.update(rules)
 
-        assert rules_list, "Can't create a And conditions without rules"
-
-        new_rules = set()
-        for rule in rules_list:
-            if isinstance(rule, And):
-                new_rules.update(rule.rules)
-            else:
-                new_rules.add(rule)
-        rules_list = new_rules
+        if not rules_list:
+            rules_list.add(true_)
+        elif any(type(rule) is And for rule in rules_list):
+            new_rules: Set[StardewRule] = set()
+            for rule in rules_list:
+                if type(rule) is And:
+                    new_rules.update(rule.rules)
+                else:
+                    new_rules.add(rule)
+            rules_list = new_rules
 
         self.rules = frozenset(rules_list)
+        self._simplified = False
 
     def __call__(self, state: CollectionState) -> bool:
         return all(rule(state) for rule in self.rules)
@@ -178,11 +196,11 @@ class And(StardewRule):
         return f"({' & '.join(repr(rule) for rule in self.rules)})"
 
     def __and__(self, other):
-        if isinstance(other, True_):
+        if other is true_:
             return self
-        if isinstance(other, False_):
+        if other is false_:
             return other
-        if isinstance(other, And):
+        if type(other) is And:
             return And(self.rules.union(other.rules))
 
         return And(self.rules.union({other}))
@@ -197,19 +215,23 @@ class And(StardewRule):
         return max(rule.get_difficulty() for rule in self.rules)
 
     def simplify(self) -> StardewRule:
-        if any(isinstance(rule, False_) for rule in self.rules):
-            return False_()
+        if self._simplified:
+            return self
+        if false_ in self.rules:
+            return false_
 
-        simplified_rules = {rule.simplify() for rule in self.rules}
-        simplified_rules = {rule for rule in simplified_rules if rule is not True_()}
+        simplified_rules = [simplified for simplified in {rule.simplify() for rule in self.rules}
+                            if simplified is not true_]
 
         if not simplified_rules:
-            return True_()
+            return true_
 
         if len(simplified_rules) == 1:
-            return next(iter(simplified_rules))
+            return simplified_rules[0]
 
-        return And(simplified_rules)
+        self.rules = frozenset(simplified_rules)
+        self._simplified = True
+        return self
 
 
 class Count(StardewRule):
@@ -217,11 +239,12 @@ class Count(StardewRule):
     rules: List[StardewRule]
 
     def __init__(self, count: int, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list = []
+        rules_list: List[StardewRule]
+
         if isinstance(rule, Iterable):
-            rules_list.extend(rule)
+            rules_list = [*rule]
         else:
-            rules_list.append(rule)
+            rules_list = [rule]
 
         if rules is not None:
             rules_list.extend(rules)
@@ -259,11 +282,12 @@ class TotalReceived(StardewRule):
     player: int
 
     def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
-        items_list = []
+        items_list: List[str]
+
         if isinstance(items, Iterable):
-            items_list.extend(items)
+            items_list = [*items]
         else:
-            items_list.append(items)
+            items_list = [items]
 
         assert items_list, "Can't create a Total Received conditions without items"
         for item in items_list:
@@ -297,7 +321,7 @@ class Received(StardewRule):
 
     def __post_init__(self):
         assert item_table[self.item].classification & ItemClassification.progression, \
-            "Item has to be progression to be used in logic"
+            f"Item [{item_table[self.item].name}] has to be progression to be used in logic"
 
     def __call__(self, state: CollectionState) -> bool:
         return state.has(self.item, self.player, self.count)

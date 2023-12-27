@@ -2,7 +2,7 @@ from typing import Dict, List, Any
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.generic.Rules import set_rule
 from . import Exits, Items, Locations, Options, Rules
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 
 
 class Hylics2Web(WebWorld):
@@ -36,7 +36,7 @@ class Hylics2World(World):
 
     topology_present: bool = True
 
-    data_version = 1
+    data_version = 3
 
     start_location = "Waynehouse"
 
@@ -130,11 +130,11 @@ class Hylics2World(World):
             tvs = list(Locations.tv_location_table.items())
 
             # if Extra Items in Logic is enabled place CHARGE UP first and make sure it doesn't get
-            # placed at Sage Airship: TV
+            # placed at Sage Airship: TV or Foglast: TV
             if self.multiworld.extra_items_in_logic[self.player]:
                 tv = self.multiworld.random.choice(tvs)
                 gest = gestures.index((200681, Items.gesture_item_table[200681]))
-                while tv[1]["name"] == "Sage Airship: TV":
+                while tv[1]["name"] == "Sage Airship: TV" or tv[1]["name"] == "Foglast: TV":
                     tv = self.multiworld.random.choice(tvs)
                 self.multiworld.get_location(tv[1]["name"], self.player)\
                     .place_locked_item(self.add_item(gestures[gest][1]["name"], gestures[gest][1]["classification"],
@@ -146,7 +146,7 @@ class Hylics2World(World):
                 gest = self.multiworld.random.choice(gestures)
                 tv = self.multiworld.random.choice(tvs)
                 self.multiworld.get_location(tv[1]["name"], self.player)\
-                    .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[1]))
+                    .place_locked_item(self.add_item(gest[1]["name"], gest[1]["classification"], gest[0]))
                 gestures.remove(gest)
                 tvs.remove(tv)
 
@@ -193,7 +193,7 @@ class Hylics2World(World):
                 if j == i:
                     for k in exits:
                         # create entrance and connect it to parent and destination regions
-                        ent = Entrance(self.player, k, reg)
+                        ent = Entrance(self.player, f"{reg.name} {k}", reg)
                         reg.exits.append(ent)
                         if k == "New Game" and self.multiworld.random_start[self.player]:
                             if self.start_location == "Waynehouse":
@@ -232,8 +232,10 @@ class Hylics2World(World):
         # create location for beating the game and place Victory event there
         loc = Location(self.player, "Defeat Gibby", None, self.multiworld.get_region("Hylemxylem", self.player))
         loc.place_locked_item(self.create_event("Victory"))
-        set_rule(loc, lambda state: state._hylics2_has_upper_chamber_key(self.player)
-            and state._hylics2_has_vessel_room_key(self.player))
+        set_rule(loc, lambda state: (
+                state.has("UPPER CHAMBER KEY", self.player)
+                and state.has("VESSEL ROOM KEY", self.player)
+            ))
         self.multiworld.get_region("Hylemxylem", self.player).locations.append(loc)
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 

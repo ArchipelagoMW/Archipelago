@@ -5,7 +5,6 @@ from .common_data import quality_dict
 from .game_item import GameItem
 from .museum_data import Mineral
 
-
 @dataclass(frozen=True)
 class BundleItem:
     item: GameItem
@@ -35,6 +34,9 @@ class BundleItem:
         if self.item.name in difficult_crops:
             amount = 1
         return self.as_gold_quality().as_amount(amount)
+
+    def is_gold_quality(self) -> bool:
+        return self.quality >= 2
 
     def __repr__(self):
         return f"{self.amount} {quality_dict[self.quality]} {self.item.name}"
@@ -301,8 +303,7 @@ artisan_goods_items = [truffle_oil, cloth, goat_cheese, cheese, honey, beer, jui
 
 river_fish_items = [chub, catfish, rainbow_trout, lingcod, walleye, perch, pike, bream,
                     salmon, sunfish, tiger_trout, shad, smallmouth_bass, dorado]
-lake_fish_items = [chub, rainbow_trout, lingcod, walleye, perch, carp, midnight_carp,
-                   largemouth_bass, sturgeon, bullhead, midnight_carp]
+lake_fish_items = [chub, rainbow_trout, lingcod, walleye, perch, carp, midnight_carp, largemouth_bass, sturgeon, bullhead]
 ocean_fish_items = [tilapia, pufferfish, tuna, super_cucumber, flounder, anchovy, sardine, red_mullet,
                     herring, eel, octopus, red_snapper, squid, sea_cucumber, albacore, halibut]
 night_fish_items = [walleye, bream, super_cucumber, eel, squid, midnight_carp]

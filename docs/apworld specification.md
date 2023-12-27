@@ -1,7 +1,7 @@
 # apworld Specification
 
 Archipelago depends on worlds to provide game-specific details like items, locations and output generation.
-Those are located in the `worlds/` folder (source) or  `<insall dir>/lib/worlds/` (when installed).
+Those are located in the `worlds/` folder (source) or `<install dir>/lib/worlds/` (when installed).
 See [world api.md](world%20api.md) for details.
 
 apworld provides a way to package and ship a world that is not part of the main distribution by placing a `*.apworld`
@@ -29,6 +29,7 @@ The zip can contain arbitrary files in addition what was specified above.
 
 ## Caveats
 
-Imports from other files inside the apworld have to use relative imports.
+Imports from other files inside the apworld have to use relative imports. e.g. `from .options import MyGameOptions`
 
-Imports from AP base have to use absolute imports, e.g. Options.py and worlds/AutoWorld.py.
+Imports from AP base have to use absolute imports, e.g. `from Options import Toggle` or
+`from worlds.AutoWorld import World`

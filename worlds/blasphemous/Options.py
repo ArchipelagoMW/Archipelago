@@ -1,4 +1,22 @@
-from Options import Choice, Toggle, DefaultOnToggle, DeathLink
+from Options import Choice, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool
+import random
+
+
+class ChoiceIsRandom(Choice):
+    randomized: bool = False
+
+    @classmethod
+    def from_text(cls, text: str) -> Choice:
+        text = text.lower()
+        if text == "random":
+            cls.randomized = True
+            return cls(random.choice(list(cls.name_lookup)))
+        for option_name, value in cls.options.items():
+            if option_name == text:
+                return cls(value)
+        raise KeyError(
+            f'Could not find option "{text}" for "{cls.__name__}", '
+            f'known options are {", ".join(f"{option}" for option in cls.name_lookup.values())}')
 
 
 class PrieDieuWarp(DefaultOnToggle):
@@ -17,13 +35,12 @@ class CorpseHints(DefaultOnToggle):
 
 
 class Difficulty(Choice):
-    """Adjusts the logic required to defeat bosses.
-    Impossible: Removes all logic requirements for bosses. Good luck."""
+    """Adjusts the overall difficulty of the randomizer, including upgrades required to defeat bosses 
+    and advanced movement tricks or glitches."""
     display_name = "Difficulty"
     option_easy = 0
     option_normal = 1
     option_hard = 2
-    option_impossible = 3
     default = 1
 
 
@@ -32,13 +49,25 @@ class Penitence(Toggle):
     display_name = "Penitence"
 
 
-class ExpertLogic(Toggle):
-    """Expands the logic used by the randomizer to allow for some difficult and/or lesser known tricks."""
-    display_name = "Expert Logic"
+class StartingLocation(ChoiceIsRandom):
+    """Choose where to start the randomizer. Note that some starting locations cannot be chosen with certain 
+    other options.
+    Specifically, Brotherhood and Mourning And Havoc cannot be chosen if Shuffle Dash is enabled, and Grievance Ascends 
+    cannot be chosen if Shuffle Wall Climb is enabled."""
+    display_name = "Starting Location"
+    option_brotherhood = 0
+    option_albero = 1
+    option_convent = 2
+    option_grievance = 3
+    option_knot_of_words = 4
+    option_rooftops = 5
+    option_mourning_havoc = 6
+    default = 0
 
 
 class Ending(Choice):
     """Choose which ending is required to complete the game.
+    Talking to Tirso in Albero will tell you the selected ending for the current game.
     Ending A: Collect all thorn upgrades.
     Ending C: Collect all thorn upgrades and the Holy Wound of Abnegation."""
     display_name = "Ending"
@@ -46,6 +75,13 @@ class Ending(Choice):
     option_ending_a = 1
     option_ending_c = 2
     default = 0
+
+
+class SkipLongQuests(Toggle):
+    """Ensures that the rewards for long quests will be filler items.
+    Affected locations: \"Albero: Donate 50000 Tears\", \"Ossuary: 11th reward\", \"AtTotS: Miriam's gift\", 
+    \"TSC: Jocinero's final reward\""""
+    display_name = "Skip Long Quests"
 
 
 class ThornShuffle(Choice):
@@ -57,124 +93,33 @@ class ThornShuffle(Choice):
     default = 0
 
 
+class DashShuffle(Toggle):
+    """Turns the ability to dash into an item that must be found in the multiworld."""
+    display_name = "Shuffle Dash"
+
+
+class WallClimbShuffle(Toggle):
+    """Turns the ability to climb walls with your sword into an item that must be found in the multiworld."""
+    display_name = "Shuffle Wall Climb"
+
+
 class ReliquaryShuffle(DefaultOnToggle):
     """Adds the True Torment exclusive Reliquary rosary beads into the item pool."""
     display_name = "Shuffle Penitence Rewards"
 
 
-class CherubShuffle(DefaultOnToggle):
-    """Shuffles Children of Moonlight into the item pool."""
-    display_name = "Shuffle Children of Moonlight"
+class CustomItem1(Toggle):
+    """Adds the custom relic Boots of Pleading into the item pool, which grants the ability to fall onto spikes 
+    and survive.
+    Must have the \"Blasphemous-Boots-of-Pleading\" mod installed to connect to a multiworld."""
+    display_name = "Boots of Pleading"
 
 
-class LifeShuffle(DefaultOnToggle):
-    """Shuffles life upgrades from the Lady of the Six Sorrows into the item pool."""
-    display_name = "Shuffle Life Upgrades"
-
-
-class FervourShuffle(DefaultOnToggle):
-    """Shuffles fervour upgrades from the Oil of the Pilgrims into the item pool."""
-    display_name = "Shuffle Fervour Upgrades"
-
-
-class SwordShuffle(DefaultOnToggle):
-    """Shuffles Mea Culpa upgrades from the Mea Culpa Altars into the item pool."""
-    display_name = "Shuffle Mea Culpa Upgrades"
-
-
-class BlessingShuffle(DefaultOnToggle):
-    """Shuffles blessings from the Lake of Silent Pilgrims into the item pool."""
-    display_name = "Shuffle Blessings"
-
-
-class DungeonShuffle(DefaultOnToggle):
-    """Shuffles rewards from completing Confessor Dungeons into the item pool."""
-    display_name = "Shuffle Dungeon Rewards"
-
-
-class TirsoShuffle(DefaultOnToggle):
-    """Shuffles rewards from delivering herbs to Tirso into the item pool."""
-    display_name = "Shuffle Tirso's Rewards"
-
-
-class MiriamShuffle(DefaultOnToggle):
-    """Shuffles the prayer given by Miriam into the item pool."""
-    display_name = "Shuffle Miriram's Reward"
-
-
-class RedentoShuffle(DefaultOnToggle):
-    """Shuffles rewards from assisting Redento into the item pool."""
-    display_name = "Shuffle Redento's Rewards"
-
-
-class JocineroShuffle(DefaultOnToggle):
-    """Shuffles rewards from rescuing 20 and 38 Children of Moonlight into the item pool."""
-    display_name = "Shuffle Jocinero's Rewards"
-
-
-class AltasgraciasShuffle(DefaultOnToggle):
-    """Shuffles the reward given by Altasgracias and the item left behind by them into the item pool."""
-    display_name = "Shuffle Altasgracias' Rewards"
-
-
-class TentudiaShuffle(DefaultOnToggle):
-    """Shuffles the rewards from delivering Tentudia's remains to Lvdovico into the item pool."""
-    display_name = "Shuffle Lvdovico's Rewards"
-
-
-class GeminoShuffle(DefaultOnToggle):
-    """Shuffles the rewards from Gemino's quest and the hidden tomb into the item pool."""
-    display_name = "Shuffle Gemino's Rewards"
-
-
-class GuiltShuffle(DefaultOnToggle):
-    """Shuffles the Weight of True Guilt into the item pool."""
-    display_name = "Shuffle Immaculate Bead"
-
-
-class OssuaryShuffle(DefaultOnToggle):
-    """Shuffles the rewards from delivering bones to the Ossuary into the item pool."""
-    display_name = "Shuffle Ossuary Rewards"
-
-
-class BossShuffle(DefaultOnToggle):
-    """Shuffles the Tears of Atonement from defeating bosses into the item pool."""
-    display_name = "Shuffle Boss Tears"
-
-
-class WoundShuffle(DefaultOnToggle):
-    """Shuffles the Holy Wounds required to pass the Bridge of the Three Cavalries into the item pool."""
-    display_name = "Shuffle Holy Wounds"
-
-
-class MaskShuffle(DefaultOnToggle):
-    """Shuffles the masks required to use the elevator in Archcathedral Rooftops into the item pool."""
-    display_name = "Shuffle Masks"
-
-
-class EyeShuffle(DefaultOnToggle):
-    """Shuffles the Eyes of the Traitor from defeating Isidora and Sierpes into the item pool."""
-    display_name = "Shuffle Traitor's Eyes"
-
-
-class HerbShuffle(DefaultOnToggle):
-    """Shuffles the herbs required for Tirso's quest into the item pool."""
-    display_name = "Shuffle Herbs"
-
-
-class ChurchShuffle(DefaultOnToggle):
-    """Shuffles the rewards from donating 5,000 and 50,000 Tears of Atonement to the Church in Albero into the item pool."""
-    display_name = "Shuffle Donation Rewards"
-
-
-class ShopShuffle(DefaultOnToggle):
-    """Shuffles the items sold in Candelaria's shops into the item pool."""
-    display_name = "Shuffle Shop Items"
-
-
-class CandleShuffle(DefaultOnToggle):
-    """Shuffles the Beads of Wax and their upgrades into the item pool."""
-    display_name = "Shuffle Candles"
+class CustomItem2(Toggle):
+    """Adds the custom relic Purified Hand of the Nun into the item pool, which grants the ability to jump 
+    a second time in mid-air.
+    Must have the \"Blasphemous-Double-Jump\" mod installed to connect to a multiworld."""
+    display_name = "Purified Hand of the Nun"
 
 
 class StartWheel(Toggle):
@@ -189,7 +134,8 @@ class SkillRando(Toggle):
 
 class EnemyRando(Choice):
     """Randomizes the enemies that appear in each room.
-    Shuffled: Enemies will be shuffled amongst each other, but can only appear as many times as they do in a standard game.
+    Shuffled: Enemies will be shuffled amongst each other, but can only appear as many times as they do in 
+    a standard game.
     Randomized: Every enemy is completely random, and can appear any number of times.
     Some enemies will never be randomized."""
     display_name = "Enemy Randomizer"
@@ -223,37 +169,20 @@ blasphemous_options = {
     "corpse_hints": CorpseHints,
     "difficulty": Difficulty,
     "penitence": Penitence,
-    "expert_logic": ExpertLogic,
+    "starting_location": StartingLocation,
     "ending": Ending,
+    "skip_long_quests": SkipLongQuests,
     "thorn_shuffle" : ThornShuffle,
+    "dash_shuffle": DashShuffle,
+    "wall_climb_shuffle": WallClimbShuffle,
     "reliquary_shuffle": ReliquaryShuffle,
-    "cherub_shuffle" : CherubShuffle,
-    "life_shuffle" : LifeShuffle,
-    "fervour_shuffle" : FervourShuffle,
-    "sword_shuffle" : SwordShuffle,
-    "blessing_shuffle" : BlessingShuffle,
-    "dungeon_shuffle" : DungeonShuffle,
-    "tirso_shuffle" : TirsoShuffle,
-    "miriam_shuffle" : MiriamShuffle,
-    "redento_shuffle" : RedentoShuffle,
-    "jocinero_shuffle" : JocineroShuffle,
-    "altasgracias_shuffle" : AltasgraciasShuffle,
-    "tentudia_shuffle" : TentudiaShuffle,
-    "gemino_shuffle" : GeminoShuffle,
-    "guilt_shuffle" : GuiltShuffle,
-    "ossuary_shuffle" : OssuaryShuffle,
-    "boss_shuffle" : BossShuffle,
-    "wound_shuffle" : WoundShuffle,
-    "mask_shuffle" : MaskShuffle,
-    "eye_shuffle": EyeShuffle,
-    "herb_shuffle" : HerbShuffle,
-    "church_shuffle" : ChurchShuffle,
-    "shop_shuffle" : ShopShuffle,
-    "candle_shuffle" : CandleShuffle,
+    "boots_of_pleading": CustomItem1,
+    "purified_hand": CustomItem2,
     "start_wheel": StartWheel,
     "skill_randomizer": SkillRando,
     "enemy_randomizer": EnemyRando,
     "enemy_groups": EnemyGroups,
     "enemy_scaling": EnemyScaling,
-    "death_link": BlasphemousDeathLink
+    "death_link": BlasphemousDeathLink,
+    "start_inventory": StartInventoryPool
 }

@@ -200,13 +200,13 @@ class SMZ3World(World):
 
         self.local_random = random.Random(self.multiworld.random.randint(0, 1000))
         self.smz3World = TotalSMZ3World(self.config, self.multiworld.get_player_name(self.player), self.player, self.multiworld.seed_name)
+        self.smz3World.Setup(WorldState.Generate(self.config, self.multiworld.random))
         self.smz3DungeonItems = []
         SMZ3World.location_names = frozenset(self.smz3World.locationLookup.keys())
 
         self.multiworld.state.smz3state[self.player] = TotalSMZ3Item.Progression([])
     
-    def generate_basic(self):
-        self.smz3World.Setup(WorldState.Generate(self.config, self.multiworld.random))
+    def create_items(self):
         self.dungeon = TotalSMZ3Item.Item.CreateDungeonPool(self.smz3World)
         self.dungeon.reverse()
         self.progression = TotalSMZ3Item.Item.CreateProgressionPool(self.smz3World)
@@ -221,7 +221,9 @@ class SMZ3World(World):
         if (self.smz3World.Config.Keysanity):
             progressionItems = self.progression + self.dungeon + self.keyCardsItems + self.SmMapsItems
         else:
-            progressionItems = self.progression 
+            progressionItems = self.progression
+            # Dungeons items here are not in the itempool and will be prefilled locally so they must stay local
+            self.multiworld.non_local_items[self.player].value -= frozenset(item_name for item_name in self.item_names if TotalSMZ3Item.Item.IsNameDungeonItem(item_name))
             for item in self.keyCardsItems:
                 self.multiworld.push_precollected(SMZ3Item(item.Type.name, ItemClassification.filler, item.Type, self.item_name_to_id[item.Type.name], self.player, item))
 
@@ -468,7 +470,7 @@ class SMZ3World(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smz3state[self.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
         if item.advancement:
-            state.prog_items[item.name, item.player] += 1
+            state.prog_items[item.player][item.name] += 1
             return True  # indicate that a logical state change has occured
         return False
 
@@ -476,9 +478,9 @@ class SMZ3World(World):
         name = self.collect_item(state, item, True)
         if name:
             state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
-            state.prog_items[name, item.player] -= 1
-            if state.prog_items[name, item.player] < 1:
-                del (state.prog_items[name, item.player])
+            state.prog_items[item.player][item.name] -= 1
+            if state.prog_items[item.player][item.name] < 1:
+                del (state.prog_items[item.player][item.name])
             return True
         return False
 
@@ -487,7 +489,7 @@ class SMZ3World(World):
                         ItemClassification.progression if SMZ3World.isProgression(TotalSMZ3Item.ItemType[name]) else ItemClassification.filler,
                         TotalSMZ3Item.ItemType[name], self.item_name_to_id[name],
                         self.player,
-                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], self))
+                        TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[name], getattr(self, "smz3World", None)))
 
     def pre_fill(self):
         from Fill import fill_restrictive
@@ -548,11 +550,8 @@ class SMZ3World(World):
 
     def JunkFillGT(self, factor):
         poolLength = len(self.multiworld.itempool)
-        playerGroups = self.multiworld.get_player_groups(self.player)
-        playerGroups.add(self.player)
         junkPoolIdx = [i for i in range(0, poolLength)
-                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap) and
-                    self.multiworld.itempool[i].player in playerGroups]
+                    if self.multiworld.itempool[i].classification in (ItemClassification.filler, ItemClassification.trap)]
         toRemove = []
         for loc in self.locations.values():
             # commenting this for now since doing a partial GT pre fill would allow for non SMZ3 progression in GT
@@ -563,6 +562,7 @@ class SMZ3World(World):
                 poolLength = len(junkPoolIdx)
                 # start looking at a random starting index and loop at start if no match found
                 start = self.multiworld.random.randint(0, poolLength)
+                itemFromPool = None
                 for off in range(0, poolLength):
                     i = (start + off) % poolLength
                     candidate = self.multiworld.itempool[junkPoolIdx[i]]
@@ -570,6 +570,7 @@ class SMZ3World(World):
                         itemFromPool = candidate
                         toRemove.append(junkPoolIdx[i])
                         break
+                assert itemFromPool is not None, "Can't find anymore item(s) to pre fill GT"
                 self.multiworld.push_item(loc, itemFromPool, False)
                 loc.event = False
         toRemove.sort(reverse = True)

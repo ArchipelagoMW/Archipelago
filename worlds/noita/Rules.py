@@ -44,11 +44,9 @@ wand_tiers: List[str] = [
     "Wand (Tier 6)",    # Temple of the Art
 ]
 
-
-items_hidden_from_shops: Set[str] = {"Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
-                                     "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
-                                     "Powder Pouch"}
-
+items_hidden_from_shops: List[str] = ["Gold (200)", "Gold (1000)", "Potion", "Random Potion", "Secret Potion",
+                                      "Chaos Die", "Greed Die", "Kammi", "Refreshing Gourd", "Sädekivi", "Broken Wand",
+                                      "Powder Pouch"]
 
 perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
@@ -59,11 +57,11 @@ perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
 
 def has_perk_count(state: CollectionState, player: int, amount: int) -> bool:
-    return sum(state.item_count(perk, player) for perk in perk_list) >= amount
+    return sum(state.count(perk, player) for perk in perk_list) >= amount
 
 
 def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
-    return state.item_count("Orb", player) >= amount
+    return state.count("Orb", player) >= amount
 
 
 def forbid_items_at_location(multiworld: MultiWorld, location_name: str, items: Set[str], player: int):
@@ -126,6 +124,19 @@ def holy_mountain_unlock_conditions(multiworld: MultiWorld, player: int) -> None
             )
 
 
+def biome_unlock_conditions(multiworld: MultiWorld, player: int):
+    lukki_entrances = multiworld.get_region("Lukki Lair", player).entrances
+    magical_entrances = multiworld.get_region("Magical Temple", player).entrances
+    wizard_entrances = multiworld.get_region("Wizards' Den", player).entrances
+    for entrance in lukki_entrances:
+        entrance.access_rule = lambda state: state.has("Melee Immunity Perk", player) and\
+                                             state.has("All-Seeing Eye Perk", player)
+    for entrance in magical_entrances:
+        entrance.access_rule = lambda state: state.has("All-Seeing Eye Perk", player)
+    for entrance in wizard_entrances:
+        entrance.access_rule = lambda state: state.has("All-Seeing Eye Perk", player)
+
+
 def victory_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
     victory_condition = multiworld.victory_condition[player].value
     victory_location = multiworld.get_location("Victory", player)
@@ -142,10 +153,12 @@ def victory_unlock_conditions(multiworld: MultiWorld, player: int) -> None:
 
 
 def create_all_rules(multiworld: MultiWorld, player: int) -> None:
-    ban_items_from_shops(multiworld, player)
-    ban_early_high_tier_wands(multiworld, player)
-    lock_holy_mountains_into_spheres(multiworld, player)
-    holy_mountain_unlock_conditions(multiworld, player)
+    if multiworld.players > 1:
+        ban_items_from_shops(multiworld, player)
+        ban_early_high_tier_wands(multiworld, player)
+        lock_holy_mountains_into_spheres(multiworld, player)
+        holy_mountain_unlock_conditions(multiworld, player)
+        biome_unlock_conditions(multiworld, player)
     victory_unlock_conditions(multiworld, player)
 
     # Prevent the Map perk (used to find Toveri) from being on Toveri (boss)

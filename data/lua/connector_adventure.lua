@@ -457,7 +457,7 @@ end
 
 function main()
     memory.usememorydomain("System Bus")
-    if not checkBizhawkVersion() then
+    if not checkBizHawkVersion() then
         return
     end
     local playerSlot = memory.read_u8(PlayerSlotAddress)

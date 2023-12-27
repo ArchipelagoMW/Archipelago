@@ -18,7 +18,7 @@ is strongly recommended in case they become corrupted.
 2. Open the `host.yaml` file in your favorite text editor (Notepad will work).
 3. Put your Wargroove root directory in the `root_directory:` under the `wargroove_options:` section.
    - The Wargroove root directory can be found by going to 
-   `Steam->Right Click Wargroove->Properties->Local Files->Browse Local Files` and copying the path in the address bar.
+   `Steam->Right Click Wargroove->Properties->Installed Files->Browse` and copying the path in the address bar.
    - Paste the path in between the quotes next to `root_directory:` in the `host.yaml`.
    - You may have to replace all single \\ with \\\\.
 4. Start the Wargroove client.

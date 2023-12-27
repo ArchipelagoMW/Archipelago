@@ -44,10 +44,10 @@ jobs:
       - name: Get a recent python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: '3.11'
       - name: Install build-time dependencies
         run: |
-          echo "PYTHON=python3.9" >> $GITHUB_ENV
+          echo "PYTHON=python3.11" >> $GITHUB_ENV
           wget -nv https://github.com/AppImage/AppImageKit/releases/download/$APPIMAGETOOL_VERSION/appimagetool-x86_64.AppImage
           chmod a+rx appimagetool-x86_64.AppImage
           ./appimagetool-x86_64.AppImage --appimage-extract

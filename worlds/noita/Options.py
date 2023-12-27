@@ -1,5 +1,5 @@
 from typing import Dict
-from Options import Choice, DeathLink, DefaultOnToggle, Option, Range
+from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool
 
 
 class PathOption(Choice):
@@ -66,9 +66,9 @@ class BossesAsChecks(Choice):
 # The sampo is required for every ending (having orbs and bringing the sampo to a different spot changes the ending).
 class VictoryCondition(Choice):
     """Greed is to get to the bottom, beat the boss, and win the game.
-    Pure is to get the 11 orbs in the main world, grab the sampo, and bring it to the mountain altar.
-    Peaceful is to get all 33 orbs in main + parallel, grab the sampo, and bring it to the mountain altar.
-    Orbs will be added to the randomizer pool according to what victory condition you chose.
+    Pure is to get 11 orbs, grab the sampo, and bring it to the mountain altar.
+    Peaceful is to get all 33 orbs, grab the sampo, and bring it to the mountain altar.
+    Orbs will be added to the randomizer pool based on which victory condition you chose.
     The base game orbs will not count towards these victory conditions."""
     display_name = "Victory Condition"
     option_greed_ending = 0
@@ -77,7 +77,30 @@ class VictoryCondition(Choice):
     default = 0
 
 
-noita_options: Dict[str, type(Option)] = {
+class ExtraOrbs(Range):
+    """Add extra orbs to your item pool, to prevent you from needing to wait as long
+    for the last orb you need for your victory condition.
+    Extra orbs received past your victory condition's amount will be received as hearts instead.
+    Can be turned on for the Greed Ending goal, but will only really make it harder."""
+    display_name = "Extra Orbs"
+    range_start = 0
+    range_end = 10
+    default = 0
+
+
+class ShopPrice(Choice):
+    """Reduce the costs of Archipelago items in shops.
+    By default, the price of Archipelago items matches the price of wands at that shop."""
+    display_name = "Shop Price Reduction"
+    option_full_price = 100
+    option_25_percent_off = 75
+    option_50_percent_off = 50
+    option_75_percent_off = 25
+    default = 100
+
+
+noita_options: Dict[str, AssembleOptions] = {
+    "start_inventory_from_pool": StartInventoryPool,
     "death_link": DeathLink,
     "bad_effects": Traps,
     "victory_condition": VictoryCondition,
@@ -86,4 +109,6 @@ noita_options: Dict[str, type(Option)] = {
     "pedestal_checks": PedestalChecks,
     "orbs_as_checks": OrbsAsChecks,
     "bosses_as_checks": BossesAsChecks,
+    "extra_orbs": ExtraOrbs,
+    "shop_price": ShopPrice,
 }

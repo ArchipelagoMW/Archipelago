@@ -40,7 +40,7 @@ your personal settings and export a config file from them.
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the
-[YAML Validator](/mysterycheck) page.
+[YAML Validator](/check) page.
 
 ## Generating a Single-Player Game
 
@@ -79,10 +79,12 @@ You only have to do these steps once. Note, RetroArch 1.9.x will not work as it 
 
 #### BizHawk 2.8 or newer (older versions untested)
 
-1. With the ROM loaded, click on "Tools" --> "Lua Console"
-2. In the new window, click on "Script" --> "Open Script..."
-3. Navigate to the folder Archipelago is installed in, and choose data/lua/connector_ladx_bizhawk.lua
-4. Keep the Lua Console open during gameplay (minimizing it is fine!)
+1. Load the ROM.
+2. Navigate to the folder Archipelago is installed in, then `data/lua`, and drag+drop `connector_ladx_bizhawk.lua` onto
+   the main EmuHawk window.
+    - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to
+      `connector_ladx_bizhawk.lua` with the file picker.
+3. Keep the Lua Console open during gameplay (minimizing it is fine!)
 
 ### Connect to the Archipelago Server
 

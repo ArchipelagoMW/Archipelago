@@ -172,6 +172,7 @@ def FillDisabledShopSlots(world):
         shop: Shop = location.parent_region.shop
         location.item = ItemFactory(shop.inventory[location.shop_slot]['item'], location.player)
         location.item_rule = lambda item: item.name == location.item.name and item.player == location.player
+        location.locked = True
 
 
 def ShopSlotFill(multiworld):
@@ -278,6 +279,8 @@ def ShopSlotFill(multiworld):
                     if 'P' in multiworld.shop_shuffle[location.player]:
                         price_to_funny_price(multiworld, shop.inventory[location.shop_slot], location.player)
 
+    FillDisabledShopSlots(multiworld)
+
 
 def create_shops(world, player: int):
     option = world.shop_shuffle[player]
@@ -345,7 +348,6 @@ def create_shops(world, player: int):
                     loc.item = ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player)
                     loc.shop_slot_disabled = True
                 shop.region.locations.append(loc)
-                world.clear_location_cache()
 
 
 class ShopData(NamedTuple):
@@ -616,6 +618,4 @@ def create_dynamic_shop_locations(world, player):
                     if shop.type == ShopType.TakeAny:
                         loc.shop_slot_disabled = True
                     shop.region.locations.append(loc)
-                    world.clear_location_cache()
-
                     loc.shop_slot = i

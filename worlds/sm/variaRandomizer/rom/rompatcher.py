@@ -25,7 +25,9 @@ class RomPatcher:
             # faster MB cutscene transitions
             'Mother_Brain_Cutscene_Edits',
             # "Balanced" suit mode
-            'Removes_Gravity_Suit_heat_protection'
+            'Removes_Gravity_Suit_heat_protection',
+            # new PLMs for indicating the color of the door on the other side
+            'door_indicators_plms.ips'
         ],
         # VARIA tweaks
         'VariaTweaks' : ['WS_Etank', 'LN_Chozo_SpaceJump_Check_Disable', 'ln_chozo_platform.ips', 'bomb_torizo.ips'],
@@ -236,10 +238,12 @@ class RomPatcher:
                 plms.append('WS_Save_Blinking_Door')
             if self.settings["boss"] == True:
                 stdPatches.append("Phantoon_Eye_Door")
-            if (self.settings["area"] == True
-                or self.settings["doorsColorsRando"] == True
-                or not GraphUtils.isStandardStart(self.settings["startLocation"])):
-                stdPatches.append("Enable_Backup_Saves")
+            # rolling saves is not required anymore since the addition of fast_save_reload
+            # also, both arent completely compatible as-is
+            #if (self.settings["area"] == True
+            #    or self.settings["doorsColorsRando"] == True
+            #    or not GraphUtils.isStandardStart(self.settings["startLocation"])):
+            #   stdPatches.append("Enable_Backup_Saves")
             if 'varia_hud.ips' in self.settings["optionalPatches"]:
                 # varia hud can make demos glitch out
                 self.applyIPSPatch("no_demo.ips")
@@ -1065,7 +1069,7 @@ class RomPatcher:
         objectives.writeIntroObjectives(self.romFile, tourian)
         self.writeItemsMasks(itemLocs)
         # hack bomb_torizo.ips to wake BT in all cases if necessary, ie chozo bots objective is on, and nothing at bombs
-        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(RomPatches.BombTorizoWake):
+        if objectives.isGoalActive("activate chozo robots") and RomPatches.has(self.player, RomPatches.BombTorizoWake):
             bomb = next((il for il in itemLocs if il.Location.Name == "Bomb"), None)
             if bomb is not None and bomb.Item.Category == "Nothing":
                 for addrName in ["BTtweaksHack1", "BTtweaksHack2"]:

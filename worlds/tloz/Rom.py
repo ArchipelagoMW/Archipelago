@@ -1,10 +1,11 @@
+import hashlib
 import zlib
 import os
 
 import Utils
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 
-NA10CHECKSUM = 'D7AE93DF'
+NA10CHECKSUM = '337bd6f1a1163df31bf2633665589ab0'
 ROM_PLAYER_LIMIT = 65535
 ROM_NAME = 0x10
 bit_positions = [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80]
@@ -44,7 +45,6 @@ rupees_to_add = 0x067D
 
 
 class TLoZDeltaPatch(APDeltaPatch):
-    checksum = NA10CHECKSUM
     hash = NA10CHECKSUM
     game = "The Legend of Zelda"
     patch_file_ending = ".aptloz"
@@ -61,9 +61,10 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         file_name = get_base_rom_path(file_name)
         base_rom_bytes = bytes(Utils.read_snes_rom(open(file_name, "rb")))
 
-        basechecksum = str(hex(zlib.crc32(base_rom_bytes))).upper()[2:]
-        if NA10CHECKSUM != basechecksum:
-            raise Exception('Supplied Base Rom does not match known CRC-32 for NA (1.0) release. '
+        basemd5 = hashlib.md5()
+        basemd5.update(base_rom_bytes)
+        if NA10CHECKSUM != basemd5.hexdigest():
+            raise Exception('Supplied Base Rom does not match known MD5 for NA (1.0) release. '
                             'Get the correct game and version, then dump it')
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes

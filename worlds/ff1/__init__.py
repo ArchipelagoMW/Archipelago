@@ -1,3 +1,6 @@
+import settings
+import typing
+
 from typing import Dict
 from BaseClasses import Item, Location, MultiWorld, Tutorial, ItemClassification
 from .Items import ItemData, FF1Items, FF1_STARTER_ITEMS, FF1_PROGRESSION_LIST, FF1_BRIDGE
@@ -6,8 +9,12 @@ from .Options import ff1_options
 from ..AutoWorld import World, WebWorld
 
 
+class FF1Settings(settings.Group):
+    display_msgs: bool = True
+
+
 class FF1Web(WebWorld):
-    settings_page = "https://finalfantasyrandomizer.com/"
+    options_page = "https://finalfantasyrandomizer.com/"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
@@ -28,6 +35,8 @@ class FF1World(World):
     """
 
     option_definitions = ff1_options
+    settings: typing.ClassVar[FF1Settings]
+    settings_key = "ffr_options"
     game = "Final Fantasy"
     topology_present = False
     data_version = 2
@@ -82,7 +91,7 @@ class FF1World(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(CHAOS_TERMINATED_EVENT, self.player)
 
-    def generate_basic(self):
+    def create_items(self):
         items = get_options(self.multiworld, 'items', self.player)
         if FF1_BRIDGE in items.keys():
             self._place_locked_item_in_sphere0(FF1_BRIDGE)

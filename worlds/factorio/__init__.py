@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import collections
 import logging
+import settings
 import typing
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components
+from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.generic import Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
@@ -18,7 +19,36 @@ from .Technologies import base_tech_table, recipe_sources, base_technology_table
     get_science_pack_pools, Recipe, recipes, technology_table, tech_table, factorio_base_id, useless_technologies, \
     fluids, stacking_items, valid_ingredients, progressive_rows
 
-components.append(Component("Factorio Client", "FactorioClient"))
+
+def launch_client():
+    from .Client import launch
+    launch_subprocess(launch, name="FactorioClient")
+
+
+components.append(Component("Factorio Client", "FactorioClient", func=launch_client, component_type=Type.CLIENT))
+
+
+class FactorioSettings(settings.Group):
+    class Executable(settings.UserFilePath):
+        is_exe = True
+
+    class ServerSettings(settings.OptionalUserFilePath):
+        """
+        by default, no settings are loaded if this file does not exist. \
+If this file does exist, then it will be used.
+        server_settings: "factorio\\\\data\\\\server-settings.json"
+        """
+
+    class FilterItemSends(settings.Bool):
+        """Whether to filter item send messages displayed in-game to only those that involve you."""
+
+    class BridgeChatOut(settings.Bool):
+        """Whether to send chat messages from players on the Factorio server to Archipelago."""
+
+    executable: Executable = Executable("factorio/bin/x64/factorio")
+    server_settings: typing.Optional[FactorioSettings.ServerSettings] = None
+    filter_item_sends: typing.Union[FilterItemSends, bool] = False
+    bridge_chat_out: typing.Union[BridgeChatOut, bool] = True
 
 
 class FactorioWeb(WebWorld):
@@ -66,13 +96,15 @@ class Factorio(World):
         "Progressive": set(progressive_tech_table.keys()),
     }
     data_version = 8
-    required_client_version = (0, 4, 0)
+    required_client_version = (0, 4, 2)
 
     ordered_science_packs: typing.List[str] = MaxSciencePack.get_ordered_science_packs()
     tech_tree_layout_prerequisites: typing.Dict[FactorioScienceLocation, typing.Set[FactorioScienceLocation]]
     tech_mix: int = 0
     skip_silo: bool = False
     science_locations: typing.List[FactorioScienceLocation]
+
+    settings: typing.ClassVar[FactorioSettings]
 
     def __init__(self, world, player: int):
         super(Factorio, self).__init__(world, player)
@@ -214,7 +246,8 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
                     (ingredient not in technology_table or state.has(ingredient, player)) and \
                     all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                        for technology in required_technologies[sub_ingredient])
+                        for technology in required_technologies[sub_ingredient]) and \
+                    all(state.has(technology.name, player) for technology in required_technologies[custom_recipe.crafting_machine])
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
@@ -509,7 +542,7 @@ class FactorioScienceLocation(FactorioLocation):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
         # "AP-{Complexity}-{Cost}"
         self.complexity = int(self.name[3]) - 1
-        self.rel_cost = int(self.name[5:], 16)
+        self.rel_cost = int(self.name[5:])
 
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):
