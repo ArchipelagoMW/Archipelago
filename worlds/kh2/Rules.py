@@ -85,8 +85,7 @@ class KH2Rules:
     def level_locking_unlock(self, state: CollectionState, amount):
         if self.world.options.Promise_Charm:
             return True
-        else:
-            return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
+        return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
     def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
         return amount <= sum([state.count(item_name, self.player) for item_name in summons])
