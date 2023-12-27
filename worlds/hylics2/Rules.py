@@ -328,6 +328,8 @@ def set_rules(hylics2world):
             lambda state: state._hylics2_has_paddle(player))
         add_rule(world.get_location("Arcade 1: Alcove Medallion", player),
             lambda state: state._hylics2_has_paddle(player))
+        add_rule(world.get_location("Arcade 1: Lava Medallion", player),
+            lambda state: state._hylics2_has_paddle(player))
         add_rule(world.get_location("Foglast: Under Lair Medallion", player),
             lambda state: state._hylics2_has_bridge_key(player))
         add_rule(world.get_location("Foglast: Mid-Air Medallion", player),
