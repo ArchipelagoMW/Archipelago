@@ -15,6 +15,15 @@ html{
     color: #eeffeb;
 }
 
+#weighted-settings h3{
+    cursor: unset;
+}
+
+#weighted-settings h3.option-group-header{
+    margin-top: 0.75rem;
+    font-weight: bold;
+}
+
 #weighted-settings #games-wrapper{
     width: 100%;
 }
