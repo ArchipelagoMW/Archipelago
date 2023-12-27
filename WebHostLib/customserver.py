@@ -11,6 +11,7 @@ import socket
 import threading
 import time
 import typing
+import sys
 
 import websockets
 from pony.orm import commit, db_session, select
@@ -26,8 +27,10 @@ from .models import Command, GameDataPackage, Room, db
 class CustomClientMessageProcessor(ClientMessageProcessor):
     ctx: WebHostContext
 
-    def _cmd_video(self, platform, user):
-        """Set a link for your name in the WebHostLib tracker pointing to a video stream"""
+    def _cmd_video(self, platform: str, user: str):
+        """Set a link for your name in the WebHostLib tracker pointing to a video stream.
+        Currently, only YouTube and Twitch platforms are supported.
+        """
         if platform.lower().startswith("t"):  # twitch
             self.ctx.video[self.client.team, self.client.slot] = "Twitch", user
             self.ctx.save()
@@ -164,8 +167,10 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
     db.generate_mapping(check_tables=False)
 
     async def main():
-        import gc
+        if "worlds" in sys.modules:
+            raise Exception("Worlds system should not be loaded in the custom server.")
 
+        import gc
         Utils.init_logging(str(room_id), write_mode="a")
         ctx = WebHostContext(static_server_data)
         ctx.load(room_id)
@@ -200,6 +205,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
         await ctx.shutdown_task
+
+        # ensure auto launch is on the same page in regard to room activity.
+        with db_session:
+            room: Room = Room.get(id=ctx.room_id)
+            room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
+
         logging.info("Shutting down")
 
     with Locker(room_id):

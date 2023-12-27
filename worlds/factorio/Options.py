@@ -2,7 +2,7 @@ from __future__ import annotations
 import typing
 import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool
 from schema import Schema, Optional, And, Or
 
@@ -207,10 +207,9 @@ class RecipeIngredientsOffset(Range):
     range_end = 5
 
 
-class FactorioStartItems(ItemDict):
+class FactorioStartItems(OptionDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
-    verify_item_name = False
     default = {"burner-mining-drill": 19, "stone-furnace": 19}
 
 
@@ -390,8 +389,8 @@ class FactorioWorldGen(OptionDict):
     def __init__(self, value: typing.Dict[str, typing.Any]):
         advanced = {"pollution", "enemy_evolution", "enemy_expansion"}
         self.value = {
-            "basic": {key: value[key] for key in value.keys() - advanced},
-            "advanced": {key: value[key] for key in value.keys() & advanced}
+            "basic": {k: v for k, v in value.items() if k not in advanced},
+            "advanced": {k: v for k, v in value.items() if k in advanced}
         }
 
         # verify min_values <= max_values
