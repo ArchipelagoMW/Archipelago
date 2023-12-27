@@ -2,13 +2,13 @@ from typing import Dict, Set
 
 tunic_regions: Dict[str, Set[str]] = {
     "Menu": {"Overworld"},
-    "Overworld": {"Overworld Holy Cross", "East Forest", "Dark Tomb", "Bottom of the Well", "West Garden",
+    "Overworld": {"Overworld Holy Cross", "East Forest", "Dark Tomb", "Beneath the Well", "West Garden",
                   "Ruined Atoll", "Eastern Vault Fortress", "Beneath the Vault", "Quarry Back", "Quarry", "Swamp",
                   "Spirit Arena"},
     "Overworld Holy Cross": set(),
     "East Forest": {"Eastern Vault Fortress"},
     "Dark Tomb": {"West Garden"},
-    "Bottom of the Well": {"Dark Tomb"},
+    "Beneath the Well": {"Dark Tomb"},
     "West Garden": {"Overworld", "Dark Tomb"},
     "Ruined Atoll": {"Frog's Domain", "Library"},
     "Frog's Domain": set(),

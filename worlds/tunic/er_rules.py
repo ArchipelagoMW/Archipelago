@@ -186,19 +186,19 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Forest Hero's Grave"].connect(
         connecting_region=regions["Forest Grave Path by Grave"])
 
-    # Bottom of the Well and Dark Tomb
-    regions["Bottom of the Well Front"].connect(
-        connecting_region=regions["Bottom of the Well Main"],
+    # Beneath the Well and Dark Tomb
+    regions["Beneath the Well Front"].connect(
+        connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
-    regions["Bottom of the Well Main"].connect(
-        connecting_region=regions["Bottom of the Well Front"],
+    regions["Beneath the Well Main"].connect(
+        connecting_region=regions["Beneath the Well Front"],
         rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
 
-    regions["Bottom of the Well Back"].connect(
-        connecting_region=regions["Bottom of the Well Main"],
+    regions["Beneath the Well Back"].connect(
+        connecting_region=regions["Beneath the Well Main"],
         rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
-    regions["Bottom of the Well Main"].connect(
-        connecting_region=regions["Bottom of the Well Back"],
+    regions["Beneath the Well Main"].connect(
+        connecting_region=regions["Beneath the Well Back"],
         rule=lambda state: has_stick(state, player) or state.has(fire_wand, player))
 
     regions["Well Boss"].connect(
@@ -794,7 +794,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Bottom of the Well - [Powered Secret Room] Chest", player),
+    set_rule(multiworld.get_location("Beneath the Well - [Powered Secret Room] Chest", player),
              lambda state: state.has("Activate Furnace Fuse", player))
     set_rule(multiworld.get_location("West Garden - [North] Behind Holy Cross Door", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))

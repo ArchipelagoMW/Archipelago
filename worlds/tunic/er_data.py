@@ -166,11 +166,11 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux_main"),
     
-    Portal(name="Well Ladder Exit", region="Bottom of the Well Front",
+    Portal(name="Well Ladder Exit", region="Beneath the Well Front",
            destination="Overworld Redux_entrance"),
-    Portal(name="Well to Well Boss", region="Bottom of the Well Back",
+    Portal(name="Well to Well Boss", region="Beneath the Well Back",
            destination="Sewer_Boss_"),
-    Portal(name="Well Exit towards Furnace", region="Bottom of the Well Back",
+    Portal(name="Well Exit towards Furnace", region="Beneath the Well Back",
            destination="Overworld Redux_west_aqueduct"),
     
     Portal(name="Well Boss to Well", region="Well Boss",
@@ -584,9 +584,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Dark Tomb Dark Exit": RegionInfo("Crypt Redux"),
     "Dark Tomb Checkpoint": RegionInfo("Sewer_Boss"),  # can laurels backwards
     "Well Boss": RegionInfo("Sewer_Boss"),  # can walk through (with bombs at least)
-    "Bottom of the Well Front": RegionInfo("Sewer"),
-    "Bottom of the Well Main": RegionInfo("Sewer"),
-    "Bottom of the Well Back": RegionInfo("Sewer"),
+    "Beneath the Well Front": RegionInfo("Sewer"),
+    "Beneath the Well Main": RegionInfo("Sewer"),
+    "Beneath the Well Back": RegionInfo("Sewer"),
     "West Garden": RegionInfo("Archipelagos Redux"),
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
@@ -749,8 +749,8 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"):
-        ["Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"],
+    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
+        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"],
     ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"):
         ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"],
     ("Well Boss",):
@@ -838,8 +838,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"):
-        ["Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"],
+    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
+        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"],
     ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"):
         ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"],
     ("Dark Tomb Checkpoint", "Well Boss"):
@@ -930,8 +930,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
     # can use laurels, ice grapple, or ladder storage to traverse
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
-    ("Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"):
-        ["Bottom of the Well Front", "Bottom of the Well Main", "Bottom of the Well Back"],
+    ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
+        ["Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"],
     ("Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"):
         ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"],
     ("Dark Tomb Checkpoint", "Well Boss"):

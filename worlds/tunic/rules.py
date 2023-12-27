@@ -96,14 +96,14 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
 
     multiworld.get_entrance("Overworld -> Overworld Holy Cross", player).access_rule = \
         lambda state: has_ability(state, player, holy_cross, options, ability_unlocks)
-    multiworld.get_entrance("Overworld -> Bottom of the Well", player).access_rule = \
+    multiworld.get_entrance("Overworld -> Beneath the Well", player).access_rule = \
         lambda state: has_stick(state, player) or state.has(fire_wand, player)
     multiworld.get_entrance("Overworld -> Dark Tomb", player).access_rule = \
         lambda state: has_lantern(state, player, options)
     multiworld.get_entrance("Overworld -> West Garden", player).access_rule = \
         lambda state: state.has(laurels, player) \
         or can_ladder_storage(state, player, options)
-    multiworld.get_entrance("Bottom of the Well -> Dark Tomb", player).access_rule = \
+    multiworld.get_entrance("Beneath the Well -> Dark Tomb", player).access_rule = \
         lambda state: has_lantern(state, player, options)
     multiworld.get_entrance("West Garden -> Dark Tomb", player).access_rule = \
         lambda state: has_lantern(state, player, options)
@@ -169,7 +169,7 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("East Forest - Golden Obelisk Holy Cross", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
-    set_rule(multiworld.get_location("Bottom of the Well - [Powered Secret Room] Chest", player),
+    set_rule(multiworld.get_location("Beneath the Well - [Powered Secret Room] Chest", player),
              lambda state: has_ability(state, player, prayer, options, ability_unlocks))
     set_rule(multiworld.get_location("West Garden - [North] Behind Holy Cross Door", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
