@@ -56,7 +56,7 @@ class AutoScrollLevels(NamedRange):
     Certain levels are excluded."""
     display_name = "Auto Scroll Levels"
     range_start = 0
-    range_end = 19
+    range_end = 18
     special_range_names = {"vanilla": -1}
     default = -1
 

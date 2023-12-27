@@ -261,7 +261,7 @@ class MarioLand2World(World):
             "Turtle Zone 2 - Turtle Zone": lambda state: state.has("Swim", self.player),
             "Turtle Zone 2 - Turtle Zone Midway Bell": lambda state: state.has_any(
                 ["Swim", "Turtle Zone 2 - Turtle Zone Midway Bell"], self.player),
-            "Turtle Zone - Secret Course": lambda state: state.has_any(["Mushroom", "Fire Flower", "Carrot"], self.player),
+            "Turtle Zone - Secret Course": lambda state: state.has_any(["Fire Flower", "Carrot"], self.player),
         }
 
         for entrance, rule in entrance_rules.items():
