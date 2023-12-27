@@ -54,29 +54,30 @@ def patch_kh2(self, output_directory):
     formName = None
     levelsetting = list()
 
-    if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
+    if self.options.Keyblade_Minimum.value > self.options.Keyblade_Maximum.value:
         logging.info(
                 f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
-        keyblademin = self.multiworld.Keyblade_Maximum[self.player].value
-        keyblademax = self.multiworld.Keyblade_Minimum[self.player].value
+        keyblademin = self.options.Keyblade_Maximum.value
+        keyblademax = self.options.Keyblade_Minimum.value
     else:
-        keyblademin = self.multiworld.Keyblade_Minimum[self.player].value
-        keyblademax = self.multiworld.Keyblade_Maximum[self.player].value
+        keyblademin = self.options.Keyblade_Minimum.value
+        keyblademax = self.options.Keyblade_Maximum.value
 
-    if self.multiworld.LevelDepth[self.player] == "level_50":
+    if self.options.LevelDepth == "level_50":
         levelsetting.extend(exclusion_table["Level50"])
 
-    elif self.multiworld.LevelDepth[self.player] == "level_99":
+    elif self.options.LevelDepth == "level_99":
         levelsetting.extend(exclusion_table["Level99"])
 
-    elif self.multiworld.LevelDepth[self.player] != "level_1":
+    elif self.options.LevelDepth != "level_1":
         levelsetting.extend(exclusion_table["Level50Sanity"])
 
-        if self.multiworld.LevelDepth[self.player] == "level_99_sanity":
+        if self.options.LevelDepth == "level_99_sanity":
             levelsetting.extend(exclusion_table["Level99Sanity"])
 
     mod_name = f"AP-{self.multiworld.seed_name}-P{self.player}-{self.multiworld.get_file_safe_player_name(self.player)}"
     all_valid_locations = {location for location, data in all_locations.items()}
+
     for location in self.multiworld.get_filled_locations(self.player):
         if location.name in all_valid_locations:
             data = all_locations[location.name]
@@ -142,11 +143,11 @@ def patch_kh2(self, output_directory):
             if data.locid == 2:
                 formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
                 formDictExp = {
-                    1: self.multiworld.Valor_Form_EXP[self.player].value,
-                    2: self.multiworld.Wisdom_Form_EXP[self.player].value,
-                    3: self.multiworld.Limit_Form_EXP[self.player].value,
-                    4: self.multiworld.Master_Form_EXP[self.player].value,
-                    5: self.multiworld.Final_Form_EXP[self.player].value
+                    1: self.options.Valor_Form_EXP.value,
+                    2: self.options.Wisdom_Form_EXP.value,
+                    3: self.options.Limit_Form_EXP.value,
+                    4: self.options.Master_Form_EXP.value,
+                    5: self.options.Final_Form_EXP.value
                 }
                 formexp = formDictExp[data.charName]
                 formName = formDict[data.charName]
@@ -172,7 +173,7 @@ def patch_kh2(self, output_directory):
     for x in range(1, 7):
         self.formattedFmlv["Summon"].append({
             "Ability":            123,
-            "Experience":         int(formExp[0][x] / self.multiworld.Summon_EXP[self.player].value),
+            "Experience":         int(formExp[0][x] / self.options.Summon_EXP.value),
             "FormId":             0,
             "FormLevel":          x,
             "GrowthAbilityLevel": 0,
@@ -192,7 +193,7 @@ def patch_kh2(self, output_directory):
             increaseStat(self.random.randint(0, 3))
             itemcode = 0
         self.formattedLvup["Sora"][self.i] = {
-            "Exp":           int(soraExp[self.i] / self.multiworld.Sora_Level_EXP[self.player].value),
+            "Exp":           int(soraExp[self.i] / self.options.Sora_Level_EXP.value),
             "Strength":      self.strength,
             "Magic":         self.magic,
             "Defense":       self.defense,
@@ -224,7 +225,7 @@ def patch_kh2(self, output_directory):
             "Unknown":             0
         })
     self.formattedLvup["Sora"][1] = {
-        "Exp":           int(soraExp[1] / self.multiworld.Sora_Level_EXP[self.player].value),
+        "Exp":           int(soraExp[1] / self.options.Sora_Level_EXP.value),
         "Strength":      2,
         "Magic":         6,
         "Defense":       2,
@@ -379,35 +380,35 @@ def patch_kh2(self, output_directory):
     }
     lucky_emblem_text = {
         0: "Your Goal is not Lucky Emblem. It is Hitlist or Three Proofs.",
-        1: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}",
+        1: f"Lucky Emblem Required: {self.options.LuckyEmblemsRequired} out of {self.options.LuckyEmblemsAmount}",
         2: "Your Goal is not Lucky Emblem. It is Hitlist or Three Proofs.",
-        3: f"Lucky Emblem Required: {self.multiworld.LuckyEmblemsRequired[self.player]} out of {self.multiworld.LuckyEmblemsAmount[self.player]}"
+        3: f"Lucky Emblem Required: {self.options.LuckyEmblemsRequired} out of {self.options.LuckyEmblemsAmount}"
     }
     hitlist_text = {
         0: "Your Goal is not Hitlist. It is Lucky Emblem or Three Proofs",
         1: "Your Goal is not Hitlist. It is Lucky Emblem or Three Proofs",
-        2: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
-        3: f"Bounties Required: {self.multiworld.BountyRequired[self.player]} out of {self.multiworld.BountyAmount[self.player]}",
+        2: f"Bounties Required: {self.options.BountyRequired} out of {self.options.BountyAmount}",
+        3: f"Bounties Required: {self.options.BountyRequired} out of {self.options.BountyAmount}",
     }
 
     self.pooh_text = [
         {
             'id': 18326,
-            'en': f"Your goal is {goal_to_text[self.multiworld.Goal[self.player].value]}"
+            'en': f"Your goal is {goal_to_text[self.options.Goal.value]}"
         },
         {
             'id': 18327,
-            'en': lucky_emblem_text[self.multiworld.Goal[self.player].value]
+            'en': lucky_emblem_text[self.options.Goal.value]
         },
         {
             'id': 18328,
-            'en': hitlist_text[self.multiworld.Goal[self.player].value]
+            'en': hitlist_text[self.options.Goal.value]
         }
     ]
     self.level_depth_text = [
         {
             'id': 0x3BF1,
-            'en': f"Your Level Depth is {self.multiworld.LevelDepth[self.player].current_option_name}"
+            'en': f"Your Level Depth is {self.options.LevelDepth.current_option_name}"
         }
     ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
