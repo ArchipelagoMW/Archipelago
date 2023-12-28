@@ -107,7 +107,7 @@ location_table_uw = {"Blind's Hideout - Top": (0x11d, 0x10),
                      "Hyrule Castle - Zelda's Chest": (0x80, 0x10),
                      'Hyrule Castle - Big Key Drop': (0x80, 0x400),
                      'Sewers - Dark Cross': (0x32, 0x10),
-                     'Hyrule Castle - Key Rat Key Drop': (0x21, 0x400),
+                     'Sewers - Key Rat Key Drop': (0x21, 0x400),
                      'Sewers - Secret Room - Left': (0x11, 0x10),
                      'Sewers - Secret Room - Middle': (0x11, 0x20),
                      'Sewers - Secret Room - Right': (0x11, 0x40),
@@ -520,7 +520,8 @@ class ALTTPSNIClient(SNIClient):
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
             currently_dead = gamemode[0] in DEATH_MODES
-            await ctx.handle_deathlink_state(currently_dead)
+            await ctx.handle_deathlink_state(currently_dead,
+                                             ctx.player_names[ctx.slot] + " ran out of hearts." if ctx.slot else "")
 
         gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
         game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)
