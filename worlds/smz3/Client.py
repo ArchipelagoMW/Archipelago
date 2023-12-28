@@ -69,7 +69,7 @@ class SMZ3SNIClient(SNIClient):
                 ctx.finished_game = True
             return
 
-        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, 4)
+        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD3C, 4)
         if data is None:
             return
 
@@ -77,14 +77,14 @@ class SMZ3SNIClient(SNIClient):
         recv_item = data[2] | (data[3] << 8)
 
         while (recv_index < recv_item):
-            item_address = recv_index * 8
-            message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x700 + item_address, 8)
-            is_z3_item = ((message[5] & 0x80) != 0)
-            masked_part = (message[5] & 0x7F) if is_z3_item else message[5]
-            item_index = ((message[4] | (masked_part << 8)) >> 3) + (256 if is_z3_item else 0)
+            item_address = recv_index * 2
+            message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xDA0 + item_address, 2)
+            is_z3_item = ((message[1] & 0x80) != 0)
+            masked_part = (message[1] & 0x7F) if is_z3_item else message[1]
+            item_index = ((message[0] | (masked_part << 8)) >> 3) + (256 if is_z3_item else 0)
 
             recv_index += 1
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x680, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
+            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD3C, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
             from .TotalSMZ3.Location import locations_start_id
             from . import convertLocSMZ3IDToAPID
@@ -95,7 +95,7 @@ class SMZ3SNIClient(SNIClient):
             snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
-        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x600, 4)
+        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD36, 4)
         if data is None:
             return
 
@@ -106,10 +106,10 @@ class SMZ3SNIClient(SNIClient):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id
 
-            player_id = item.player if item.player <= SMZ3_ROM_PLAYER_LIMIT else 0
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * 4, bytes([player_id & 0xFF, (player_id >> 8) & 0xFF, item_id & 0xFF, (item_id >> 8) & 0xFF]))
+            player_id = item.player if item.player < SMZ3_ROM_PLAYER_LIMIT else 0
+            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * 2, bytes([player_id, item_id]))
             item_out_ptr += 1
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0x602, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
+            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD38, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], item_out_ptr, len(ctx.items_received)))
