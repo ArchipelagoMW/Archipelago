@@ -594,6 +594,14 @@ engineer_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.engineer, engine
 demolition_items = [cherry_bomb, bomb, mega_bomb, explosive_ammo]
 demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, demolition_items, 3, 3)
 
+# archaeologist_items = [golden_mask, golden_relic, ancient_drum, dwarf_gadget, dwarvish_helm, prehistoric_handaxe, bone_flute, anchor, prehistoric_tool,
+#                        chicken_statue, rusty_cog, rusty_spur, rusty_spoon, ancient_sword, ornamental_fan, elvish_jewelry, ancient_doll, chipped_amphora]
+# archaeologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.archaeologist, archaeologist_items, 4, 2)
+#
+# paleontologist_items = [prehistoric_scapula, prehistoric_tibia, prehistoric_skull, skeletal_hand, prehistoric_rib, prehistoric_vertebra, skeletal_tail,
+#                         nautilius_fossil, amphibian_fossil, palm_fossil, trilobite]
+# paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontologist, paleontologist_items, 4, 2)
+
 # recycling_items = [stone, coal, iron_ore, wood, torch, cloth, refined_quartz]
 # recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
 
