@@ -60,7 +60,6 @@ def process_multidata(compressed_multidata, files={}):
         for game, game_data in decompressed_multidata["datapackage"].items():
             if game_data.get("checksum"):
                 original_checksum = game_data.pop("checksum")
-                data_package_checksum(game_data)
                 game_data = games_package_schema.validate(game_data)
                 game_data = {key: value for key, value in sorted(game_data.items())}
                 game_data["checksum"] = data_package_checksum(game_data)
