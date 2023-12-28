@@ -1,13 +1,11 @@
 {% extends 'pageWrapper.html' %}
+{% import 'weightedOptions/macros.html' as inputs %}
 
 {% block head %}
     <title>{{ game }} Options</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weighted-options.css") }}" />
-    <script type="application/ecmascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/md5.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/js-yaml.min.js") }}"></script>
-    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weighted-options.js") }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weightedOptions/weightedOptions.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weightedOptions.js") }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -36,13 +34,12 @@
 
         <!-- To be generated and populated per-game with weight > 0 -->
         <div id="games-wrapper">
-
+            {{ worlds }}
         </div>
 
         <div id="weighted-settings-button-row">
             <button id="export-options">Export Options</button>
             <button id="generate-game">Generate Game</button>
-            <button id="generate-race">Generate Race</button>
         </div>
     </div>
 {% endblock %}

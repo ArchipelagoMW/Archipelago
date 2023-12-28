@@ -52,7 +52,12 @@ def weighted_settings():
 @app.route("/weighted-options")
 @cache.cached()
 def weighted_options():
-    return render_template("weighted-options.html")
+    return render_template(
+        "weightedOptions/weightedOptions.html",
+        worlds=AutoWorldRegister.world_types,
+        issubclass=issubclass,
+        Options=Options,
+    )
 
 
 # TODO for back compat. remove around 0.4.5
