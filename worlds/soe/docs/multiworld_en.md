@@ -24,7 +24,7 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 ### Where do I get a config file?
 
 The Player Options page on the website allows you to configure your personal options and export a config file from
-them. Player options page: [Secret of Evermore Player Options PAge](/games/Secret%20of%20Evermore/player-options)
+them. Player options page: [Secret of Evermore Player Options Page](/games/Secret%20of%20Evermore/player-options)
 
 ### Verifying your config file
 
