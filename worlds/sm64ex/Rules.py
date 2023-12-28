@@ -21,7 +21,7 @@ def fix_reg(entrance_map: dict, entrance: SM64Levels, invalid_regions: set,
 def set_rules(world, player: int, area_connections: dict):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
     randomized_level_to_secrets = sm64_level_to_secrets.copy()
-    if world.AreaRandomizer[player].value == 1:  # Some randomization is happening, randomize Courses
+    if world.AreaRandomizer[player].value >= 1:  # Some randomization is happening, randomize Courses
         randomized_level_to_paintings = shuffle_dict_keys(world,sm64_level_to_paintings)
     if world.AreaRandomizer[player].value == 2:  # Randomize Secrets as well
         randomized_level_to_secrets = shuffle_dict_keys(world,sm64_level_to_secrets)
