@@ -66,10 +66,9 @@ def process_multidata(compressed_multidata, files={}):
                 game_data_package = GameDataPackage(checksum=game_data["checksum"],
                                                     data=pickle.dumps(game_data))
                 if original_checksum != game_data["checksum"]:
-                    import logging
-                    logging.warning(f"Original checksum {original_checksum} != "
+                    raise Exception(f"Original checksum {original_checksum} != "
                                     f"calculated checksum {game_data['checksum']} "
-                                    f"for game {game}")
+                                    f"for game {game}.")
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
                     "checksum": game_data["checksum"],
