@@ -2,8 +2,9 @@ import base64
 
 import Utils
 import settings
+
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Region, Location, Item, ItemClassification
+from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 
 from . import client
 from .rom import generate_output, SuperMarioLand2DeltaPatch
@@ -84,8 +85,8 @@ items = {
     "Mushroom": ItemClassification.progression,
     "Fire Flower": ItemClassification.progression,
     "Carrot": ItemClassification.progression,
-    "Space Physics": ItemClassification.progression,
-    "Hippo Bubble": ItemClassification.progression,
+    "Space Physics": ItemClassification.progression_skip_balancing,
+    "Hippo Bubble": ItemClassification.progression_skip_balancing,
     "Swim": ItemClassification.progression,
     "Easy Mode": ItemClassification.useful,
     "Super Star Duration Increase": ItemClassification.filler,
@@ -97,7 +98,7 @@ items = {
     "Tree Zone 4 - Honeybees Midway Bell": ItemClassification.filler,
     "Tree Zone 5 - The Big Bird Midway Bell": ItemClassification.filler,
     "Space Zone 1 - Moon Stage Midway Bell": ItemClassification.filler,
-    "Space Zone 2 - Star Stage Midway Bell": ItemClassification.progression,
+    "Space Zone 2 - Star Stage Midway Bell": ItemClassification.progression_skip_balancing,
     "Macro Zone 1 - The Ant Monsters Midway Bell": ItemClassification.filler,
     "Macro Zone 2 - In the Syrup Sea Midway Bell": ItemClassification.filler,
     "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": ItemClassification.filler,
@@ -106,12 +107,12 @@ items = {
     "Pumpkin Zone 2 - Cyclops Course Midway Bell": ItemClassification.filler,
     "Pumpkin Zone 3 - Ghost House Midway Bell": ItemClassification.filler,
     "Pumpkin Zone 4 - Witch's Mansion Midway Bell": ItemClassification.filler,
-    "Mario Zone 1 - Fiery Blocks Midway Bell": ItemClassification.progression,
+    "Mario Zone 1 - Fiery Blocks Midway Bell": ItemClassification.progression_skip_balancing,
     "Mario Zone 2 - Mario the Circus Star! Midway Bell": ItemClassification.filler,
     "Mario Zone 3 - Beware: Jagged Spikes Midway Bell": ItemClassification.filler,
     "Mario Zone 4 - Three Mean Pigs! Midway Bell": ItemClassification.filler,
     "Turtle Zone 1 - Cheep Cheep Course Midway Bell": ItemClassification.filler,
-    "Turtle Zone 2 - Turtle Zone Midway Bell": ItemClassification.progression,
+    "Turtle Zone 2 - Turtle Zone Midway Bell": ItemClassification.progression_skip_balancing,
     "Turtle Zone 3 - Whale Course Midway Bell": ItemClassification.filler,
 }
 
@@ -126,6 +127,19 @@ class MarioLand2Settings(settings.Group):
     rom_file: SML2RomFile = SML2RomFile(SML2RomFile.copy_to)
 
 
+class MarioLand2WebWorld(WebWorld):
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to playing Super Mario Land 2 with Archipelago.",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Alchav"]
+    )
+
+    tutorials = [setup_en]
+
+
 class MarioLand2World(World):
     game = "Super Mario Land 2"
 
@@ -135,7 +149,12 @@ class MarioLand2World(World):
     location_name_to_id = {location_name: ID for ID, location_name in enumerate(locations, START_IDS)}
     item_name_to_id = {item_name: ID for ID, item_name in enumerate(items, START_IDS)}
 
+    web = MarioLand2WebWorld()
+
     item_name_groups = {
+        "Level Progression": {item_name for item_name in items if item_name.endswith("Progression")
+                              or item_name.endswith("Secret")},
+        "Bells": {item_name for item_name in items if "Bell" in item_name},
         "Coins": {item_name for item_name in items if "Coin" in item_name},
         "Powerups": {"Mushroom", "Fire Flower", "Carrot"},
         "Difficulties": {"Easy Mode", "Normal Mode"}
@@ -202,7 +221,8 @@ class MarioLand2World(World):
     def set_rules(self):
         entrance_rules = {
             "Menu -> Space Zone 1": lambda state: state.has_any(["Hippo Bubble", "Carrot"], self.player),
-            "Space Zone 1 -> Space Zone - Secret Course": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
+            "Space Zone 1 -> Space Zone - Secret Course": lambda state: state.has_any(
+                ["Space Physics", "Carrot"], self.player),
             "Space Zone 1 -> Space Zone 2": lambda state: state.has("Space Zone Progression", self.player),
             "Tree Zone 1 -> Tree Zone 2": lambda state: state.has("Tree Zone Progression", self.player),
             "Tree Zone 2 -> Tree Zone - Secret Course": lambda state: state.has("Carrot", self.player),
@@ -249,15 +269,12 @@ class MarioLand2World(World):
             "Space Zone 2 - Star Stage Midway Bell": lambda state: state.has_any(
                 ["Space Physics", "Space Zone 2 - Star Stage Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),
-            "Space Zone - Secret Course": lambda state: state.has_any(["Space Physics", "Carrot"], self.player),
             "Macro Zone 2 - In the Syrup Sea": lambda state: state.has("Swim", self.player),
             "Macro Zone 2 - In the Syrup Sea Midway Bell": lambda state: state.has("Swim", self.player),
             "Pumpkin Zone 2 - Cyclops Course": lambda state: state.has("Swim", self.player),
             # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
-            "Mario Zone 1 - Fiery Blocks Midway Bell": lambda state: state.has_any(["Mushroom", "Fire Flower", "Carrot",
-                                                                                    "Mario Zone 1 - Fiery Blocks Midway Bell"],
-                                                                                   self.player),
-            "Turtle Zone 1 - Cheep Cheep Course": lambda state: state.has_any(["Swim", "Carrot"], self.player),
+            "Mario Zone 1 - Fiery Blocks Midway Bell": lambda state: state.has_any(
+                ["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 - Fiery Blocks Midway Bell"], self.player),
             "Turtle Zone 2 - Turtle Zone": lambda state: state.has("Swim", self.player),
             "Turtle Zone 2 - Turtle Zone Midway Bell": lambda state: state.has_any(
                 ["Swim", "Turtle Zone 2 - Turtle Zone Midway Bell"], self.player),
