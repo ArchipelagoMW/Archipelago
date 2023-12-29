@@ -92,7 +92,7 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def get_item_downgrades(self, world: "WitnessWorld") -> Set[str]:
+    def get_item_downgrades(self) -> Set[str]:
         # Adjust item classifications based on game settings.
         eps_shuffled = self._world.options.shuffle_EPs
         come_to_you = self._world.options.elevators_come_to_you
@@ -151,7 +151,7 @@ class WitnessPlayerItems:
             or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        item_downgrades = self.get_item_downgrades(world)
+        item_downgrades = self.get_item_downgrades()
 
         for item_name, item_data in self.item_data.items():
             if item_name in item_downgrades:
