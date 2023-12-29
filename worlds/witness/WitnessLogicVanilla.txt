@@ -209,12 +209,12 @@ Door - 0x0C316 (Elevator Room Entry) - 0x18076
 159034 - 0x337F8 (Flood Room EP) - 0x1C2DF - True
 
 Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x01317:
-158111 - 0x17C31 (Final Transparent) - True - True
-158113 - 0x012D7 (Final Hexagonal) - 0x17C31 & 0x0A015 - True
-158114 - 0x0A015 (Final Hexagonal Control) - 0x17C31 - True
-158115 - 0x0A15C (Final Bent 1) - True - True
-158116 - 0x09FFF (Final Bent 2) - 0x0A15C - True
-158117 - 0x0A15F (Final Bent 3) - 0x09FFF - True
+158111 - 0x17C31 (Elevator Room Transparent) - True - True
+158113 - 0x012D7 (Elevator Room Hexagonal) - 0x17C31 & 0x0A015 - True
+158114 - 0x0A015 (Elevator Room Hexagonal Control) - 0x17C31 - True
+158115 - 0x0A15C (Elevator Room Bent 1) - True - True
+158116 - 0x09FFF (Elevator Room Bent 2) - 0x0A15C - True
+158117 - 0x0A15F (Elevator Room Bent 3) - 0x09FFF - True
 159035 - 0x037BB (Elevator EP) - 0x01317 - True
 Door - 0x01317 (Elevator) - 0x03608
 
