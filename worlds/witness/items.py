@@ -93,7 +93,9 @@ class WitnessPlayerItems:
     """
 
     def get_item_downgrades(self) -> Set[str]:
-        # Adjust item classifications based on game settings.
+        """Figure out which major items are actually useless in this world's settings"""
+
+        # Gather quick references to relevant options
         eps_shuffled = self._world.options.shuffle_EPs
         come_to_you = self._world.options.elevators_come_to_you
         difficulty = self._world.options.puzzle_randomization
@@ -110,6 +112,7 @@ class WitnessPlayerItems:
             or goal == "mountain_box_long" and longbox_req <= shortbox_req
         )
 
+        # It is easier to think about when these items *are* required, so we make that dict first
         is_item_required_dict = {
             "Monastery Garden Entry (Door)": eps_shuffled,
             "Monastery Shortcuts": eps_shuffled,
@@ -129,6 +132,7 @@ class WitnessPlayerItems:
             "Jungle Popup Wall (Panel)": symbols_shuffled or not disable_non_randomized,
         }
 
+        # Now, return the keys of the dict entries where the result is False to get unrequired major items
         return {item_name for item_name, is_required in is_item_required_dict.items() if not is_required}
 
     def __init__(self, world: "WitnessWorld", logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
