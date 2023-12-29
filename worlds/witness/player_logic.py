@@ -509,11 +509,11 @@ class WitnessPlayerLogic:
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
-            "0x17CAA": doors,  # Jungle Monastery Garden Shortcut Panel
+            "0x17CAA": doors >= 2,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
-            "0x03713": doors,  # Monastery Laser Shortcut Panel
+            "0x03713": doors >= 2,  # Monastery Laser Shortcut Panel
             "0x03313": False,  # Orchard Second Gate
-            "0x337FA": doors,  # Jungle Bamboo Laser Shortcut Panel
+            "0x337FA": doors >= 2,  # Jungle Bamboo Laser Shortcut Panel
             "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
             "0x335AB": False,  # Caves Elevator Controls
             "0x335AC": False,  # Caves Elevator Controls
