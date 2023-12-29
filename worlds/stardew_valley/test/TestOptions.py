@@ -154,7 +154,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
             if not option.options or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.options:
-                seed =qg int(random() * pow(10, 18) - 1)
+                seed = int(random() * pow(10, 18) - 1)
                 with self.subTest(f"{option_name}: {value} [Seed: {seed}]"):
                     # print(seed)
                     multiworld = setup_solo_multiworld(
