@@ -9,11 +9,11 @@ export a config file.
 
 Unlocking Booster Packs, Campaign, Limited and Theme Duel Opponents has been changed.
 You only need to beat each Campaign Opponent once.
-Logic expects you to have access to the boosters necessary to get the locations at a reasonable pace and consistency. 
+Logic expects you to have access to the Booster Packs necessary to get the locations at a reasonable pace and consistency. 
 Logic remains, so the game is always able to be completed, but because of the shuffle, the player may need to defeat certain opponents before they
 would in the vanilla game.
 
-You can change of much money you receive and how much booster packs cost.
+You can change how much money you receive and how much booster packs cost.
 
 ## What is the goal of Yu-Gi-Oh! 2006 when randomized?
 
