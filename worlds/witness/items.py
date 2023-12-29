@@ -112,13 +112,13 @@ class WitnessPlayerItems:
             or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        # Downgrade door items 
+        # Downgrade door items
         for item_name, item_data in self.item_data.items():
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
             if all(self._logic.solvability_not_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
-                print(item_name + " became useful.")
+                item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
         self._mandatory_items: Dict[str, int] = {}
