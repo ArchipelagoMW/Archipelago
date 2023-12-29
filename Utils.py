@@ -5,6 +5,7 @@ import json
 import typing
 import builtins
 import os
+import itertools
 import subprocess
 import sys
 import pickle
@@ -13,6 +14,7 @@ import io
 import collections
 import importlib
 import logging
+import warnings
 
 from argparse import Namespace
 from settings import Settings, get_settings
@@ -29,6 +31,7 @@ except ImportError:
 if typing.TYPE_CHECKING:
     import tkinter
     import pathlib
+    from BaseClasses import Region
 
 
 def tuplize_version(version: str) -> Version:
@@ -44,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -71,6 +74,8 @@ def snes_to_pc(value: int) -> int:
 
 
 RetType = typing.TypeVar("RetType")
+S = typing.TypeVar("S")
+T = typing.TypeVar("T")
 
 
 def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[], RetType]:
@@ -86,6 +91,31 @@ def cache_argsless(function: typing.Callable[[], RetType]) -> typing.Callable[[]
         return typing.cast(RetType, result)
 
     return _wrap
+
+
+def cache_self1(function: typing.Callable[[S, T], RetType]) -> typing.Callable[[S, T], RetType]:
+    """Specialized cache for self + 1 arg. Does not keep global ref to self and skips building a dict key tuple."""
+
+    assert function.__code__.co_argcount == 2, "Can only cache 2 argument functions with this cache."
+
+    cache_name = f"__cache_{function.__name__}__"
+
+    @functools.wraps(function)
+    def wrap(self: S, arg: T) -> RetType:
+        cache: Optional[Dict[T, RetType]] = typing.cast(Optional[Dict[T, RetType]],
+                                                        getattr(self, cache_name, None))
+        if cache is None:
+            res = function(self, arg)
+            setattr(self, cache_name, {arg: res})
+            return res
+        try:
+            return cache[arg]
+        except KeyError:
+            res = function(self, arg)
+            cache[arg] = res
+            return res
+
+    return wrap
 
 
 def is_frozen() -> bool:
@@ -144,12 +174,16 @@ def user_path(*path: str) -> str:
         if user_path.cached_path != local_path():
             import filecmp
             if not os.path.exists(user_path("manifest.json")) or \
+                    not os.path.exists(local_path("manifest.json")) or \
                     not filecmp.cmp(local_path("manifest.json"), user_path("manifest.json"), shallow=True):
                 import shutil
-                for dn in ("Players", "data/sprites"):
+                for dn in ("Players", "data/sprites", "data/lua"):
                     shutil.copytree(local_path(dn), user_path(dn), dirs_exist_ok=True)
-                for fn in ("manifest.json",):
-                    shutil.copy2(local_path(fn), user_path(fn))
+                if not os.path.exists(local_path("manifest.json")):
+                    warnings.warn(f"Upgrading {user_path()} from something that is not a proper install")
+                else:
+                    shutil.copy2(local_path("manifest.json"), user_path("manifest.json"))
+            os.makedirs(user_path("worlds"), exist_ok=True)
 
     return os.path.join(user_path.cached_path, *path)
 
@@ -215,7 +249,13 @@ def get_cert_none_ssl_context():
 def get_public_ipv4() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to 127.0.0.1")
+        ip = "127.0.0.1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://checkip.amazonaws.com/", context=ctx, timeout=10).read().decode("utf8").strip()
@@ -233,7 +273,13 @@ def get_public_ipv4() -> str:
 def get_public_ipv6() -> str:
     import socket
     import urllib.request
-    ip = socket.gethostbyname(socket.gethostname())
+    try:
+        ip = socket.gethostbyname(socket.gethostname())
+    except socket.gaierror:
+        # if hostname or resolvconf is not set up properly, this may fail
+        warnings.warn("Could not resolve own hostname, falling back to ::1")
+        ip = "::1"
+
     ctx = get_cert_none_ssl_context()
     try:
         ip = urllib.request.urlopen("https://v6.ident.me", context=ctx, timeout=10).read().decode("utf8").strip()
@@ -243,15 +289,13 @@ def get_public_ipv6() -> str:
     return ip
 
 
-OptionsType = Settings  # TODO: remove ~2 versions after 0.4.1
+OptionsType = Settings  # TODO: remove when removing get_options
 
 
-@cache_argsless
-def get_default_options() -> Settings:  # TODO: remove ~2 versions after 0.4.1
-    return Settings(None)
-
-
-get_options = get_settings  # TODO: add a warning ~2 versions after 0.4.1 and remove once all games are ported
+def get_options() -> Settings:
+    # TODO: switch to Utils.deprecate after 0.4.4
+    warnings.warn("Utils.get_options() is deprecated. Use the settings API instead.", DeprecationWarning)
+    return get_settings()
 
 
 def persistent_store(category: str, key: typing.Any, value: typing.Any):
@@ -445,11 +489,21 @@ def init_logging(name: str, loglevel: typing.Union[str, int] = logging.INFO, wri
         write_mode,
         encoding="utf-8-sig")
     file_handler.setFormatter(logging.Formatter(log_format))
+
+    class Filter(logging.Filter):
+        def __init__(self, filter_name, condition):
+            super().__init__(filter_name)
+            self.condition = condition
+
+        def filter(self, record: logging.LogRecord) -> bool:
+            return self.condition(record)
+
+    file_handler.addFilter(Filter("NoStream", lambda record: not getattr(record,  "NoFile", False)))
     root_logger.addHandler(file_handler)
     if sys.stdout:
-        root_logger.addHandler(
-            logging.StreamHandler(sys.stdout)
-        )
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.addFilter(Filter("NoFile", lambda record: not getattr(record, "NoStream", False)))
+        root_logger.addHandler(stream_handler)
 
     # Relay unhandled exceptions to logger.
     if not getattr(sys.excepthook, "_wrapped", False):  # skip if already modified
@@ -656,6 +710,11 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         if zenity:
             return run(zenity, f"--title={title}", f"--text={text}", "--error" if error else "--info")
 
+    elif is_windows:
+        import ctypes
+        style = 0x10 if error else 0x0
+        return ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    
     # fall back to tk
     try:
         import tkinter
@@ -720,6 +779,25 @@ def deprecate(message: str):
     import warnings
     warnings.warn(message)
 
+
+class DeprecateDict(dict):
+    log_message: str
+    should_error: bool
+
+    def __init__(self, message, error: bool = False) -> None:
+        self.log_message = message
+        self.should_error = error
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        if self.should_error:
+            deprecate(self.log_message)
+        elif __debug__:
+            import warnings
+            warnings.warn(self.log_message)
+        return super().__getitem__(item)
+
+
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
     # upstream issue: https://github.com/python/cpython/issues/76327
@@ -766,3 +844,127 @@ def freeze_support() -> None:
     import multiprocessing
     _extend_freeze_support()
     multiprocessing.freeze_support()
+
+
+def visualize_regions(root_region: Region, file_name: str, *,
+                      show_entrance_names: bool = False, show_locations: bool = True, show_other_regions: bool = True,
+                      linetype_ortho: bool = True) -> None:
+    """Visualize the layout of a world as a PlantUML diagram.
+
+    :param root_region: The region from which to start the diagram from. (Usually the "Menu" region of your world.)
+    :param file_name: The name of the destination .puml file.
+    :param show_entrance_names: (default False) If enabled, the name of the entrance will be shown near each connection.
+    :param show_locations: (default True) If enabled, the locations will be listed inside each region.
+            Priority locations will be shown in bold.
+            Excluded locations will be stricken out.
+            Locations without ID will be shown in italics.
+            Locked locations will be shown with a padlock icon.
+            For filled locations, the item name will be shown after the location name.
+            Progression items will be shown in bold.
+            Items without ID will be shown in italics.
+    :param show_other_regions: (default True) If enabled, regions that can't be reached by traversing exits are shown.
+    :param linetype_ortho: (default True) If enabled, orthogonal straight line parts will be used; otherwise polylines.
+
+    Example usage in World code:
+    from Utils import visualize_regions
+    visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
+
+    Example usage in Main code:
+    from Utils import visualize_regions
+    for player in world.player_ids:
+        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    """
+    assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
+    from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
+    from collections import deque
+    import re
+
+    uml: typing.List[str] = list()
+    seen: typing.Set[Region] = set()
+    regions: typing.Deque[Region] = deque((root_region,))
+    multiworld: MultiWorld = root_region.multiworld
+
+    def fmt(obj: Union[Entrance, Item, Location, Region]) -> str:
+        name = obj.name
+        if isinstance(obj, Item):
+            name = multiworld.get_name_string_for_object(obj)
+            if obj.advancement:
+                name = f"**{name}**"
+            if obj.code is None:
+                name = f"//{name}//"
+        if isinstance(obj, Location):
+            if obj.progress_type == LocationProgressType.PRIORITY:
+                name = f"**{name}**"
+            elif obj.progress_type == LocationProgressType.EXCLUDED:
+                name = f"--{name}--"
+            if obj.address is None:
+                name = f"//{name}//"
+        return re.sub("[\".:]", "", name)
+
+    def visualize_exits(region: Region) -> None:
+        for exit_ in region.exits:
+            if exit_.connected_region:
+                if show_entrance_names:
+                    uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\" : \"{fmt(exit_)}\"")
+                else:
+                    try:
+                        uml.remove(f"\"{fmt(exit_.connected_region)}\" --> \"{fmt(region)}\"")
+                        uml.append(f"\"{fmt(exit_.connected_region)}\" <--> \"{fmt(region)}\"")
+                    except ValueError:
+                        uml.append(f"\"{fmt(region)}\" --> \"{fmt(exit_.connected_region)}\"")
+            else:
+                uml.append(f"circle \"unconnected exit:\\n{fmt(exit_)}\"")
+                uml.append(f"\"{fmt(region)}\" --> \"unconnected exit:\\n{fmt(exit_)}\"")
+
+    def visualize_locations(region: Region) -> None:
+        any_lock = any(location.locked for location in region.locations)
+        for location in region.locations:
+            lock = "<&lock-locked> " if location.locked else "<&lock-unlocked,color=transparent> " if any_lock else ""
+            if location.item:
+                uml.append(f"\"{fmt(region)}\" : {{method}} {lock}{fmt(location)}: {fmt(location.item)}")
+            else:
+                uml.append(f"\"{fmt(region)}\" : {{field}} {lock}{fmt(location)}")
+
+    def visualize_region(region: Region) -> None:
+        uml.append(f"class \"{fmt(region)}\"")
+        if show_locations:
+            visualize_locations(region)
+        visualize_exits(region)
+
+    def visualize_other_regions() -> None:
+        if other_regions := [region for region in multiworld.get_regions(root_region.player) if region not in seen]:
+            uml.append("package \"other regions\" <<Cloud>> {")
+            for region in other_regions:
+                uml.append(f"class \"{fmt(region)}\"")
+            uml.append("}")
+
+    uml.append("@startuml")
+    uml.append("hide circle")
+    uml.append("hide empty members")
+    if linetype_ortho:
+        uml.append("skinparam linetype ortho")
+    while regions:
+        if (current_region := regions.popleft()) not in seen:
+            seen.add(current_region)
+            visualize_region(current_region)
+            regions.extend(exit_.connected_region for exit_ in current_region.exits if exit_.connected_region)
+    if show_other_regions:
+        visualize_other_regions()
+    uml.append("@enduml")
+
+    with open(file_name, "wt", encoding="utf-8") as f:
+        f.write("\n".join(uml))
+
+
+class RepeatableChain:
+    def __init__(self, iterable: typing.Iterable):
+        self.iterable = iterable
+
+    def __iter__(self):
+        return itertools.chain.from_iterable(self.iterable)
+
+    def __bool__(self):
+        return any(sub_iterable for sub_iterable in self.iterable)
+
+    def __len__(self):
+        return sum(len(iterable) for iterable in self.iterable)
