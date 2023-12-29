@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from random import Random
 from typing import List
 
@@ -5,13 +6,10 @@ from .bundle import Bundle, BundleTemplate
 from ..options import BundlePrice
 
 
+@dataclass
 class BundleRoom:
     name: str
     bundles: List[Bundle]
-
-    def __init__(self, name: str, bundles: List[Bundle]):
-        self.name = name
-        self.bundles = bundles
 
 
 class BundleRoomTemplate:

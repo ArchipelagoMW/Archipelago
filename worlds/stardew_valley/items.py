@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Shipsanity, Chefsanity, Craftsanity, BundleRandomization, BundlePrice
+    Chefsanity, Craftsanity, BundleRandomization
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -84,6 +84,7 @@ class Group(enum.Enum):
     # Mods
     MAGIC_SPELL = enum.auto()
     MOD_WARP = enum.auto()
+
 
 @dataclass(frozen=True)
 class ItemData:
@@ -514,7 +515,7 @@ def create_special_order_board_rewards(item_factory: StardewItemFactory, options
     if options.special_order_locations == SpecialOrderLocations.option_disabled:
         return
 
-    special_order_board_items = {item for item in items_by_group[Group.SPECIAL_ORDER_BOARD]}
+    special_order_board_items = [item for item in items_by_group[Group.SPECIAL_ORDER_BOARD]]
 
     items.extend([item_factory(item) for item in special_order_board_items])
 

@@ -65,13 +65,15 @@ class StardewValleyWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
-    item_name_groups = {group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title()
-                                                                in item_table else ""):
-                        [item.name for item in items] for group, items in items_by_group.items()}
-    location_name_groups = {group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title()
-                                                                    in locations_by_tag else ""):
-                            [location.name for location in locations] for group, locations in locations_by_tag.items()}
-    
+    item_name_groups = {
+        group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title() in item_table else ""):
+            [item.name for item in items] for group, items in items_by_group.items()
+    }
+    location_name_groups = {
+        group.name.replace("_", " ").title() + (" Group" if group.name.replace("_", " ").title() in locations_by_tag else ""):
+            [location.name for location in locations] for group, locations in locations_by_tag.items()
+    }
+
     data_version = 3
     required_client_version = (0, 4, 0)
 

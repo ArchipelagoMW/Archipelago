@@ -347,7 +347,6 @@ wheat_flour = BundleItem(Ingredient.wheat_flour)
 sugar = BundleItem(Ingredient.sugar)
 vinegar = BundleItem(Ingredient.vinegar)
 
-
 # Crafts Room
 spring_foraging_items_vanilla = [wild_horseradish, daffodil, leek, dandelion]
 spring_foraging_items_thematic = [*spring_foraging_items_vanilla, spring_onion, salmonberry, morel]
@@ -398,10 +397,10 @@ sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_ite
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
 wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 4, 3)
 
-quality_foraging_items = list({item.as_quality(ForageQuality.gold).as_amount(1)
-                               for item in
-                               [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
-                                *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})
+quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(1)
+                                 for item in
+                                 [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
+                                  *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})
 quality_foraging_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.quality_foraging, quality_foraging_items, 4, 3)
 
 crafts_room_bundles_vanilla = [spring_foraging_bundle_vanilla, summer_foraging_bundle_vanilla, fall_foraging_bundle_vanilla,
@@ -413,7 +412,6 @@ crafts_room_bundles_remixed = [*crafts_room_bundles_thematic, beach_foraging_bun
 crafts_room_vanilla = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_vanilla, 6)
 crafts_room_thematic = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_thematic, 6)
 crafts_room_remixed = BundleRoomTemplate(CCRoom.crafts_room, crafts_room_bundles_remixed, 6)
-
 
 # Pantry
 spring_crops_items_vanilla = [parsnip, green_bean, cauliflower, potato]
@@ -431,7 +429,7 @@ fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, bee
 fall_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.fall_crops, fall_crops_items_vanilla, 4, 4)
 fall_crops_bundle_thematic = BundleTemplate.extend_from(fall_crops_bundle_vanilla, fall_crops_items_thematic)
 
-all_crops_items = list({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
+all_crops_items = sorted({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
 
 quality_crops_items_vanilla = [item.as_quality_crop() for item in [parsnip, melon, pumpkin, corn]]
 quality_crops_items_thematic = [item.as_quality_crop() for item in all_crops_items]
@@ -481,7 +479,6 @@ pantry_bundles_remixed = [*pantry_bundles_thematic, rare_crops_bundle, fish_farm
 pantry_vanilla = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_vanilla, 6)
 pantry_thematic = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_thematic, 6)
 pantry_remixed = BundleRoomTemplate(CCRoom.pantry, pantry_bundles_remixed, 6)
-
 
 # Fish Tank
 river_fish_items_vanilla = [sunfish, catfish, shad, tiger_trout]
@@ -536,7 +533,7 @@ winter_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.winter_fish, wi
 rain_fish_items = [red_snapper, shad, catfish, eel, walleye]
 rain_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.rain_fish, rain_fish_items, 3, 3)
 
-quality_fish_items = list({item.as_quality(FishQuality.gold) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
+quality_fish_items = sorted({item.as_quality(FishQuality.gold) for item in [*river_fish_items_thematic, *lake_fish_items_thematic, *ocean_fish_items_thematic]})
 quality_fish_bundle = BundleTemplate(CCRoom.fish_tank, BundleName.quality_fish, quality_fish_items, 4, 4)
 
 master_fisher_items = [lava_eel, scorpion_carp, octopus, blobfish, lingcod, ice_pip, super_cucumber, stingray, void_salmon, pufferfish]
@@ -566,7 +563,6 @@ fish_tank_bundles_remixed.append(crab_pot_bundle_vanilla)
 fish_tank_vanilla = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_vanilla, 6)
 fish_tank_thematic = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_thematic, 6)
 fish_tank_remixed = BundleRoomTemplate(CCRoom.fish_tank, fish_tank_bundles_remixed, 6)
-
 
 # Boiler Room
 blacksmith_items_vanilla = [copper_bar, iron_Bar, gold_bar]
@@ -675,10 +671,13 @@ bulletin_board_remixed = BundleRoomTemplate(CCRoom.bulletin_board, bulletin_boar
 
 missing_bundle_items_vanilla = [wine.as_quality(ArtisanQuality.silver), dinosaur_mayo, prismatic_shard, caviar,
                                 ancient_fruit.as_quality_crop(), void_salmon.as_quality(FishQuality.gold)]
-missing_bundle_items_thematic = [*missing_bundle_items_vanilla, pale_ale.as_quality(ArtisanQuality.silver), beer.as_quality(ArtisanQuality.silver), mead.as_quality(ArtisanQuality.silver),
-                                 cheese.as_quality(ArtisanQuality.silver), goat_cheese.as_quality(ArtisanQuality.silver), void_mayo, cloth, green_tea, truffle_oil, diamond,
+missing_bundle_items_thematic = [*missing_bundle_items_vanilla, pale_ale.as_quality(ArtisanQuality.silver), beer.as_quality(ArtisanQuality.silver),
+                                 mead.as_quality(ArtisanQuality.silver),
+                                 cheese.as_quality(ArtisanQuality.silver), goat_cheese.as_quality(ArtisanQuality.silver), void_mayo, cloth, green_tea,
+                                 truffle_oil, diamond,
                                  sweet_gem_berry.as_quality_crop(), starfruit.as_quality_crop(),
-                                 tea_leaves.as_amount(5), lava_eel.as_quality(FishQuality.gold), scorpion_carp.as_quality(FishQuality.gold), blobfish.as_quality(FishQuality.gold)]
+                                 tea_leaves.as_amount(5), lava_eel.as_quality(FishQuality.gold), scorpion_carp.as_quality(FishQuality.gold),
+                                 blobfish.as_quality(FishQuality.gold)]
 missing_bundle_vanilla = BundleTemplate(CCRoom.abandoned_joja_mart, BundleName.missing_bundle, missing_bundle_items_vanilla, 6, 5)
 missing_bundle_thematic = BundleTemplate.extend_from(missing_bundle_vanilla, missing_bundle_items_thematic)
 
@@ -717,7 +716,6 @@ vault_bundles_remixed = [*vault_bundles_vanilla, vault_gambler_bundle, vault_qi_
 vault_vanilla = BundleRoomTemplate(CCRoom.vault, vault_bundles_vanilla, 4)
 vault_thematic = BundleRoomTemplate(CCRoom.vault, vault_bundles_thematic, 4)
 vault_remixed = BundleRoomTemplate(CCRoom.vault, vault_bundles_remixed, 4)
-
 
 all_bundle_items_except_money = []
 all_remixed_bundles = [*crafts_room_bundles_remixed, *pantry_bundles_remixed, *fish_tank_bundles_remixed,

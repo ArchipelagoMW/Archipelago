@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from random import Random
 from typing import List
 
@@ -6,17 +7,12 @@ from ..options import BundlePrice
 from ..strings.currency_names import Currency
 
 
+@dataclass
 class Bundle:
     room: str
     name: str
     items: List[BundleItem]
     number_required: int
-
-    def __init__(self, room: str, name: str, items: List[BundleItem], number_required):
-        self.room = room
-        self.name = name
-        self.items = items
-        self.number_required = number_required
 
     def __repr__(self):
         return f"{self.name} -> {self.number_required} from {repr(self.items)}"
@@ -157,4 +153,3 @@ class DeepBundleTemplate(BundleTemplate):
             chosen_items.append(random.choice(filtered_items))
 
         return Bundle(self.room, self.name, chosen_items, number_required)
-
