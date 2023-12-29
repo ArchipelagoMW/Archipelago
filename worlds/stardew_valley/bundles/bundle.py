@@ -18,6 +18,7 @@ class Bundle:
         return f"{self.name} -> {self.number_required} from {repr(self.items)}"
 
 
+@dataclass
 class BundleTemplate:
     room: str
     name: str

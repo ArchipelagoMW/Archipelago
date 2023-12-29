@@ -22,7 +22,7 @@ def collect_all_then_assert_can_win(tester: unittest.TestCase, multiworld: Multi
         multiworld.state.collect(item)
     victory = multiworld.find_item("Victory", 1)
     can_win = victory.can_reach(multiworld.state)
-    tester.assertTrue(can_win)
+    tester.assertTrue(can_win, victory.access_rule.explain(multiworld.state))
 
 
 def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):

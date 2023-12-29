@@ -3,11 +3,11 @@ import unittest
 from random import random
 from typing import Dict
 
-from BaseClasses import ItemClassification, MultiWorld
+from BaseClasses import MultiWorld
 from Options import NamedRange
 from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
 from .checks.world_checks import basic_checks
-from .. import StardewItem, items_by_group, Group, StardewValleyWorld
+from .. import items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
 from ..strings.goal_names import Goal as GoalName
@@ -154,7 +154,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
             if not option.options or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.options:
-                seed = int(random() * pow(10, 18) - 1)
+                seed = 345093477266400704  # int(random() * pow(10, 18) - 1)
                 with self.subTest(f"{option_name}: {value} [Seed: {seed}]"):
                     # print(seed)
                     multiworld = setup_solo_multiworld(

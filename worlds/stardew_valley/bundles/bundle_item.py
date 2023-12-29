@@ -17,10 +17,10 @@ class BundleItem:
         return BundleItem(Currency.money, amount)
 
     def as_amount(self, amount: int):
-        return BundleItem(self.item_name, amount, self.quality)
+        return BundleItem(self.item_name, amount, self.quality, requires_island=self.requires_island)
 
     def as_quality(self, quality: str):
-        return BundleItem(self.item_name, self.amount, quality)
+        return BundleItem(self.item_name, self.amount, quality, requires_island=self.requires_island)
 
     def as_quality_crop(self):
         amount = 5

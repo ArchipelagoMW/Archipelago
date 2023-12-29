@@ -12,15 +12,11 @@ class BundleRoom:
     bundles: List[Bundle]
 
 
+@dataclass
 class BundleRoomTemplate:
     name: str
     bundles: List[BundleTemplate]
     number_bundles: int
-
-    def __init__(self, name: str, bundles: List[BundleTemplate], number_bundles: int):
-        self.name = name
-        self.bundles = bundles
-        self.number_bundles = number_bundles
 
     def create_bundle_room(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool):
         filtered_bundles = [bundle for bundle in self.bundles if allow_island_items or not bundle.requires_island]
