@@ -11,7 +11,6 @@ from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 from .static_logic import Room, RoomEntrance
-from .testing import LingoTestOptions
 
 
 class LingoWebWorld(WebWorld):
