@@ -223,6 +223,7 @@ class MuseDashWorld(World):
 
             item_count += trap_count
 
+        # At this point, if a player is using traps, it's possible that they have filled all locations
         items_left = self.location_count - item_count
         if items_left <= 0:
             return
@@ -235,10 +236,15 @@ class MuseDashWorld(World):
         for _ in range(0, filler_count):
             self.multiworld.itempool.append(self.create_item(self.get_filler_item_name()))
 
+        # All remaining spots are filled with duplicate songs. Duplicates are set to useful instead of progression
+        # to cut down on the number of progression items that Muse Dash puts into the pool.
+
         # This is for the extraordinary case of needing to fill a lot of items.
         while items_left > len(song_keys_in_pool):
             for key in song_keys_in_pool:
-                self.multiworld.itempool.append(self.create_item(key))
+                item = self.create_item(key)
+                item.classification = ItemClassification.useful
+                self.multiworld.itempool.append(item)
 
             items_left -= len(song_keys_in_pool)
             continue
@@ -246,7 +252,9 @@ class MuseDashWorld(World):
         # Otherwise add a random assortment of songs
         self.random.shuffle(song_keys_in_pool)
         for i in range(0, items_left):
-            self.multiworld.itempool.append(self.create_item(song_keys_in_pool[i]))
+            item = self.create_item(song_keys_in_pool[i])
+            item.classification = ItemClassification.useful
+            self.multiworld.itempool.append(item)
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
