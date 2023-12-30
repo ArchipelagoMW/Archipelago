@@ -5,7 +5,7 @@ html {
   scroll-padding-top: 90px;
 }
 
-#weighted-settings {
+#weighted-options {
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
@@ -14,27 +14,27 @@ html {
   padding: 1rem;
   color: #eeffeb;
 }
-#weighted-settings h3 {
+#weighted-options h3 {
   cursor: unset;
 }
-#weighted-settings h3.option-group-header {
+#weighted-options h3.option-group-header {
   margin-top: 0.75rem;
   font-weight: bold;
 }
-#weighted-settings #games-wrapper {
+#weighted-options #games-wrapper {
   width: 100%;
 }
-#weighted-settings .setting-wrapper {
+#weighted-options .option-wrapper {
   width: 100%;
   margin-bottom: 2rem;
 }
-#weighted-settings .setting-wrapper .add-option-div {
+#weighted-options .option-wrapper .add-option-div {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   margin-bottom: 1rem;
 }
-#weighted-settings .setting-wrapper .add-option-div button {
+#weighted-options .option-wrapper .add-option-div button {
   width: auto;
   height: auto;
   margin: 0 0 0 0.15rem;
@@ -42,66 +42,68 @@ html {
   border-radius: 4px;
   cursor: default;
 }
-#weighted-settings .setting-wrapper .add-option-div button:active {
+#weighted-options .option-wrapper .add-option-div button:active {
   margin-bottom: 1px;
 }
-#weighted-settings p.setting-description {
+#weighted-options p.option-description {
   margin: 0 0 1rem;
 }
-#weighted-settings p.hint-text {
+#weighted-options p.hint-text {
   margin: 0 0 1rem;
   font-style: italic;
 }
-#weighted-settings .jump-link {
+#weighted-options .jump-link {
   color: #ffef00;
   cursor: pointer;
   text-decoration: underline;
 }
-#weighted-settings table {
+#weighted-options table {
   width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1.5rem;
 }
-#weighted-settings table th, #weighted-settings table td {
+#weighted-options table th, #weighted-options table td {
   border: none;
 }
-#weighted-settings table td {
+#weighted-options table td {
   padding: 5px;
 }
-#weighted-settings table .td-left {
+#weighted-options table .td-left {
   font-family: LexendDeca-Regular, sans-serif;
   padding-right: 1rem;
   width: 200px;
 }
-#weighted-settings table .td-middle {
+#weighted-options table .td-middle {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   padding-right: 1rem;
 }
-#weighted-settings table .td-right {
+#weighted-options table .td-right {
   width: 4rem;
   text-align: right;
 }
-#weighted-settings table .td-delete {
+#weighted-options table .td-delete {
   width: 50px;
   text-align: right;
 }
-#weighted-settings table .range-option-delete {
+#weighted-options table .range-option-delete {
   cursor: pointer;
 }
-#weighted-settings #weighted-settings-button-row {
+#weighted-options #weighted-options-button-row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 15px;
 }
-#weighted-settings code {
+#weighted-options code {
   background-color: #d9cd8e;
   border-radius: 4px;
   padding-left: 0.25rem;
   padding-right: 0.25rem;
   color: #000000;
 }
-#weighted-settings #user-message {
+#weighted-options #user-message {
   display: none;
   width: calc(100% - 8px);
   background-color: #ffe86b;
@@ -110,11 +112,11 @@ html {
   padding: 4px;
   text-align: center;
 }
-#weighted-settings #user-message.visible {
+#weighted-options #user-message.visible {
   display: block;
   cursor: pointer;
 }
-#weighted-settings h1 {
+#weighted-options h1 {
   font-size: 2.5rem;
   font-weight: normal;
   border-bottom: 1px solid #ffffff;
@@ -123,7 +125,7 @@ html {
   color: #ffffff;
   text-shadow: 1px 1px 4px #000000;
 }
-#weighted-settings h2 {
+#weighted-options h2 {
   font-size: 2rem;
   font-weight: normal;
   border-bottom: 1px solid #ffffff;
@@ -133,37 +135,37 @@ html {
   text-transform: none;
   text-shadow: 1px 1px 2px #000000;
 }
-#weighted-settings h3, #weighted-settings h4, #weighted-settings h5, #weighted-settings h6 {
+#weighted-options h3, #weighted-options h4, #weighted-options h5, #weighted-options h6 {
   color: #ffffff;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
   text-transform: none;
 }
-#weighted-settings a {
+#weighted-options a {
   color: #ffef00;
   cursor: pointer;
 }
-#weighted-settings input:not([type]) {
+#weighted-options input:not([type]) {
   border: 1px solid #000000;
   padding: 3px;
   border-radius: 3px;
   min-width: 150px;
 }
-#weighted-settings input:not([type]):focus {
+#weighted-options input:not([type]):focus {
   border: 1px solid #ffffff;
 }
-#weighted-settings select {
+#weighted-options select {
   border: 1px solid #000000;
   padding: 3px;
   border-radius: 3px;
   min-width: 150px;
   background-color: #ffffff;
 }
-#weighted-settings .invisible {
+#weighted-options .invisible {
   display: none;
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait) {
-  #weighted-settings .game-options {
+  #weighted-options .game-options {
     justify-content: flex-start;
     flex-wrap: wrap;
   }

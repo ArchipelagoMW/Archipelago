@@ -52,9 +52,19 @@ def weighted_settings():
 @app.route("/weighted-options")
 @cache.cached()
 def weighted_options():
+    option_groups_by_world = {}
+    for world_name, world in AutoWorldRegister.world_types.items():
+        world_options = world.options_dataclass.type_hints
+        option_groups = {option: option_group.name
+                         for option_group in world.web.option_groups
+                         for option in option_group.options}
+        for option_name, option in world_options.items():
+            option_groups_by_world.setdefault(world_name, {}).setdefault(option_groups.get(option, "Game Options"), {})[option_name] = option
+
     return render_template(
         "weightedOptions/weightedOptions.html",
         worlds=AutoWorldRegister.world_types,
+        option_groups_by_world=option_groups_by_world,
         issubclass=issubclass,
         Options=Options,
     )

@@ -1,46 +1,134 @@
-{% macro Toggle(option_name, option) %}
-
+{% macro Toggle(world_name, option_name, option) %}
+    <table>
+        <tbody>
+            <tr>
+                <td class="td-left"><label for="{{ world_name }}||{{ option_name }}||false">No</label></td>
+                <td class="td-middle">
+                    <input
+                        id="{{ world_name }}||{{ option_name }}||false"
+                        name="{{ world_name }}||{{ option_name }}||false"
+                        type="range"
+                        min="0"
+                        max="50"
+                        {% if option.default == 0 %}
+                            value="25"
+                        {% else %}
+                            value="0"
+                        {% endif %}
+                    />
+                </td>
+                <td class="td-right">
+                    {% if option.default == 0 %}
+                        25
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td class="td-left"><label for="{{ world_name }}||{{ option_name }}||true">Yes</label></td>
+                <td class="td-middle">
+                    <input
+                        id="{{ world_name }}||{{ option_name }}||true"
+                        name="{{ world_name }}||{{ option_name }}||true"
+                        type="range"
+                        min="0"
+                        max="50"
+                        {% if option.default == 1 %}
+                            value="25"
+                        {% else %}
+                            value="0"
+                        {% endif %}
+                    />
+                </td>
+                <td class="td-right">
+                    {% if option.default == 1 %}
+                        25
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+            {{ RandomRow(world_name, option_name, option) }}
+        </tbody>
+    </table>
 {% endmacro %}
 
-{% macro DefaultOnToggle(option_name, option) %}
+{% macro DefaultOnToggle(world_name, option_name, option) %}
     <!-- Toggle handles defaults properly, so we just reuse that -->
-    {{ Toggle(option_name, option) }}
+    {{ Toggle(world_name, option_name, option) }}
 {% endmacro %}
 
-{% macro Choice(option_name, option) %}
+{% macro Choice(world_name, option_name, option) %}
+    <table>
+        <tbody>
+            {% for id, name in option.name_lookup.items() %}
+                {% if name != 'random' %}
+                    <tr>
+                        <td class="td-left">
+                            <label for="{{ world_name }}||{{ option_name }}||{{ name }}">
+                                {{ option.get_option_name(id) }}
+                            </label>
+                        </td>
+                        <td class="td-middle">
+                            <input
+                                type="range"
+                                id="{{ world_name }}||{{ option_name }}||{{ name }}"
+                                name="{{ world_name }}||{{ option_name }}||{{ name }}"
+                                min="0"
+                                max="50"
+                                {% if option.default == id %}
+                                    value="25"
+                                {% else %}
+                                    value="0"
+                                {% endif %}
+                            />
+                        </td>
+                        <td class="td-right">
+                            {% if option.default == id %}
+                                25
+                            {% else %}
+                                0
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {{ RandomRow(world_name, option_name, option) }}
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro Range(world_name, option_name, option) %}
 
 {% endmacro %}
 
-{% macro Range(option_name, option) %}
+{% macro NamedRange(world_name, option_name, option) %}
 
 {% endmacro %}
 
-{% macro NamedRange(option_name, option) %}
+{% macro FreeText(world_name, option_name, option) %}
 
 {% endmacro %}
 
-{% macro FreeText(option_name, option) %}
+{% macro TextChoice(world_name, option_name, option) %}
 
 {% endmacro %}
 
-{% macro TextChoice(option_name, option) %}
-
-{% endmacro %}
-
-{% macro PlandoBosses(option_name, option) %}
+{% macro PlandoBosses(world_name, option_name, option) %}
     <!-- PlandoBosses is handled by its parent, TextChoice -->
-    {{ TextChoice(option_name, option) }}
+    {{ TextChoice(world_name, option_name, option) }}
 {% endmacro %}
 
-{% macro ItemDict(option_name, option, world) %}
-
-{% endmacro %}
-
-{% macro OptionList(option_name, option) %}
+{% macro ItemDict(world_name, option_name, option, world) %}
 
 {% endmacro %}
 
-{% macro LocationSet(option_name, option, world) %}
+{% macro OptionList(world_name, option_name, option) %}
+
+{% endmacro %}
+
+{% macro LocationSet(world_name, option_name, option, world) %}
     <div class="option-container">
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
@@ -62,7 +150,7 @@
     </div>
 {% endmacro %}
 
-{% macro ItemSet(option_name, option, world) %}
+{% macro ItemSet(world_name, option_name, option, world) %}
     <div class="option-container">
         {% for group_name in world.item_name_groups.keys()|sort %}
             {% if group_name != "Everything" %}
@@ -84,7 +172,7 @@
     </div>
 {% endmacro %}
 
-{% macro OptionSet(option_name, option) %}
+{% macro OptionSet(world_name, option_name, option) %}
     <div class="option-container">
         {% for key in option.valid_keys %}
             <div class="option-entry">
@@ -93,4 +181,43 @@
             </div>
         {% endfor %}
     </div>
+{% endmacro %}
+
+{% macro OptionTitleTd(world_name, option_name, value) %}
+    <td class="td-left">
+        <label for="{{ world_name }}||{{ option_name }}||{{ value }}">
+            {{ option.display_name|default(option_name) }}
+        </label>
+    </td>
+{% endmacro %}
+
+{% macro RandomRow(world_name, option_name, option) %}
+    <tr>
+        <td class="td-left">
+            <label for="{{ world_name }}||{{ option_name }}||random">
+                Random
+            </label>
+        </td>
+        <td class="td-middle">
+            <input
+                type="range"
+                id="{{ world_name }}||{{ option_name }}||random"
+                name="{{ world_name }}||{{ option_name }}||random"
+                min="0"
+                max="50"
+                {% if option.default == 'random' %}
+                    value="25"
+                {% else %}
+                    value="0"
+                {% endif %}
+            />
+        </td>
+        <td class="td-right">
+            {% if option.default == 'random' %}
+                25
+            {% else %}
+                0
+            {% endif %}
+        </td>
+    </tr>
 {% endmacro %}
