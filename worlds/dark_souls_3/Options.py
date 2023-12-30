@@ -6,121 +6,165 @@ import typing
 from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
 
 
+class ExcludedLocationsOption(Choice):
+    """Which items can be placed in excluded locations in DS3.
+
+    * Unnecessary: Excluded locations can't have progression items, but they can
+      have useful items.
+    * Unimportant: Neither progression items nor useful items can be placed in
+      excluded locations.
+    * Unrandomized: Excluded locations always contain the same item as in
+      vanilla Dark Souls III.
+
+    A "progression item" is anything that's required to unlock another location
+    in some game. A "useful item" is something each game defines individually,
+    usually items that are quite desirable but not strictly necessary.
+    """
+    option_unnecessary = 1
+    option_unimportant = 2
+    option_unrandomized = 3
+    default = 2
+    
+
 class RandomizeWeaponLocations(DefaultOnToggle):
-    """Randomizes weapons (+101 checks)"""
+
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Weapons" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Weapon Locations"
 
 
 class RandomizeShieldLocations(DefaultOnToggle):
-    """Randomizes shields (+32 checks)"""
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Shields" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Shield Locations"
 
 
 class RandomizeArmorLocations(DefaultOnToggle):
-    """Randomizes armor pieces (+216 checks)"""
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Armor" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Armor Locations"
 
 
 class RandomizeRingLocations(DefaultOnToggle):
-    """Randomizes rings (+64 checks, +101 with NG+ locations)"""
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Rings" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Ring Locations"
 
 
 class RandomizeSpellLocations(DefaultOnToggle):
-    """Randomizes spells (+35 checks)"""
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Spells" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Spell Locations"
 
 
 class RandomizeKeyLocations(DefaultOnToggle):
-    """Randomizes items which unlock doors or bypass barriers.
+    """DEPRECATED (use "Excluded Locations" options instead)
 
-    If these aren't randomized, the route through the game will remain unchanged.
+    Setting this to false is now equivalent to adding "Progression" to the
+    "Exclude Locations" option. It does _not_ cause the locations not be
+    randomized unless "Excluded Locations" is also set to "Original Items".
+    """
+    display_name = "Randomize Key Locations"
+
+
+class RandomizeBossSoulLocations(DefaultOnToggle):
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Boss Souls" to the
+    "Exclude Locations" option. It does _not_ cause the locations not be
+    randomized unless "Excluded Locations" is also set to "Original Items".
     """
     display_name = "Randomize Key Locations"
 
 
 class RandomizeNPCLocations(DefaultOnToggle):
-    """Randomizes friendly NPC drops and rewards (+34 checks)
+    """DEPRECATED (use "Excluded Locations" options instead)
 
-    Although all NPC drops will be randomized, progression items will only
-    appear in drops that aren't possible to lock yourself out of. Progression
-    items may be available by killing NPCs, but you can always do their quest
-    instead if you want.
-
+    Setting this to false is now equivalent to adding "Friendly NPC Rewards" to
+    the "Exclude Locations" option. It does _not_ cause the locations not be
+    randomized unless "Excluded Locations" is also set to "Original Items".
     """
     display_name = "Randomize NPC Locations"
 
 
-class RandomizeUniqueLocations(DefaultOnToggle):
-    """Randomizes unique items (ashes, tomes, scrolls, etc.) (+36 checks)"""
-    display_name = "Randomize Unique Locations"
-
-
 class RandomizeMiscLocations(DefaultOnToggle):
-    """Randomizes miscellaneous items (arrows, firebombs, etc.) (222 checks, 288 with NG+)
+    """DEPRECATED (use "Excluded Locations" options instead)
 
-    By default, these locations will never include progression items, so they
-    aren't mandatory checks. You can override this by customizing the
-    "exclude_locations" field in your YAML config. (For example,
-    "exclude_locations: []" will allow progression items in every unmissable
-    location.)
+    Setting this to false is now equivalent to adding "Unique" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
     """
     display_name = "Randomize Miscellaneous Locations"
 
 
 class RandomizeHealthLocations(DefaultOnToggle):
-    """Whether to andomize health upgrade items (+21 checks)"""
+    """DEPRECATED (use "Excluded Locations" options instead)
+
+    Setting this to false is now equivalent to adding "Healing" to the "Exclude
+    Locations" option. It does _not_ cause the locations not be randomized
+    unless "Excluded Locations" is also set to "Original Items".
+    """
     display_name = "Randomize Health Locations"
 
 
-class SoulLocationsOption(Choice):
-    """Where to randomize soul items (140 checks, 103 with NG+)
+class RandomizeProgressiveLocationsOption(DefaultOnToggle):
+    """DEPRECATED (use "Excluded Locations" options instead)
 
-    * Not Randomized: All soul item locations contain the same items as in the base game.
-    * Anywhere: Soul items are distributed totally randomly throughout the multiworld.
-    * Smooth: Soul items appear in a similar order as in the base game.
-
-    By default, soul item locations will never include progression items, so they aren't mandatory
-    checks. You can override this by customizing the "exclude_locations" field in your YAML config.
-    (For example, "exclude_locations: []" will allow progression items in every unmissable
-    location.)
+    Setting this to false is now equivalent to adding "Miscellaneous" to the
+    "Exclude Locations" option. It does _not_ cause the locations not be
+    randomized unless "Excluded Locations" is also set to "Original Items".
     """
-    display_name = "Soul Locations"
-    option_not_randomized = 1
-    option_anywhere = 2
-    option_smooth = 3
-    default = 3
+    display_name = "Randomize Progressive Locations"
 
 
-class UpgradeLocationsOption(Choice):
-    """Where to randomize titanite and gems (220 checks)
+class SmoothSoulItemsOption(DefaultOnToggle):
+    """Whether to distribute soul items in a similar order as the base game.
 
-    * Not Randomized: All upgrade item locations contain the same items as in the base game.
-    * Anywhere: Upgrade items are distributed totally randomly throughout the multiworld.
-    * Smooth: Upgrade items appear in a similar order as in the base game.
-
-    By default, upgrade item locations will never include progression items, so they aren't
-    mandatory checks. You can override this by customizing the "exclude_locations" field in your
-    YAML config. (For example, "exclude_locations: []" will allow progression items in every
-    unmissable location.)
+    By default, soul items will be distributed totally randomly. If this is set,
+    less valuable soul items will generally appear in earlier spheres and more
+    valuable ones will generally appear later.
     """
-    display_name = "Upgrade Locations"
-    option_not_randomized = 1
-    option_anywhere = 2
-    option_smooth = 3
-    default = 3
+    display_name = "Smooth Soul Items"
 
 
-class UpgradedWeaponLocationsOption(Choice):
-    """Where to randomize upgraded weapons (if they're enabled)
+class SmoothUpgradeItemsOption(DefaultOnToggle):
+    """Whether to distribute upgrade items in a similar order as the base game.
 
-    * Anywhere: Upgraded weapons are distributed totally randomly throughout the multiworld.
-    * Smooth: More upgraded weapons appear deeper in the game.
+    By default, upgrade items will be distributed totally randomly. If this is
+    set, lower-level upgrade items will generally appear in earlier spheres and
+    higher-level ones will generally appear later.
     """
-    display_name = "Upgraded Weapon Locations"
-    option_anywhere = 2
-    option_smooth = 3
-    default = 3
+    display_name = "Smooth Upgrade Items"
+
+
+class SmoothUpgradedWeaponsOption(DefaultOnToggle):
+    """Whether to distribute upgraded weapons in a similar order as the base game.
+
+    By default, upgraded weapons will be distributed totally randomly. If this
+    is set, lower-level weapons will generally appear in earlier spheres and
+    higher-level ones will generally appear later.
+    """
+    display_name = "Smooth Upgraded Weapons"
 
 
 class RandomizeStartingLoadout(DefaultOnToggle):
@@ -383,19 +427,21 @@ class DS3ExcludeLocations(ExcludeLocations):
 
 @dataclass
 class DarkSouls3Options(PerGameCommonOptions):
+    excluded_locations: ExcludedLocationsOption
     enable_weapon_locations: RandomizeWeaponLocations
     enable_shield_locations: RandomizeShieldLocations
     enable_armor_locations: RandomizeArmorLocations
     enable_ring_locations: RandomizeRingLocations
     enable_spell_locations: RandomizeSpellLocations
     enable_key_locations: RandomizeKeyLocations
+    enable_boss_locations: RandomizeBossSoulLocations
     enable_npc_locations: RandomizeNPCLocations
-    enable_unique_locations: RandomizeUniqueLocations
     enable_misc_locations: RandomizeMiscLocations
-    enable_health_locations: RandomizeHealthLocations
-    soul_locations: SoulLocationsOption
-    upgrade_locations: UpgradeLocationsOption
-    upgraded_weapon_locations: UpgradedWeaponLocationsOption
+    enable_health_upgrade_locations: RandomizeHealthLocations
+    enable_progressive_locations: RandomizeProgressiveLocationsOption
+    smooth_soul_items: SmoothSoulItemsOption
+    smooth_upgrade_items: SmoothUpgradeItemsOption
+    smooth_upgraded_weapons: SmoothUpgradedWeaponsOption
     random_starting_loadout: RandomizeStartingLoadout
     require_one_handed_starting_weapons: RequireOneHandedStartingWeapons
     guaranteed_items: GuaranteedItemsOption
