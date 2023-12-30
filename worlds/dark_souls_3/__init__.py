@@ -154,7 +154,7 @@ class DarkSouls3World(World):
         return any(
             self.is_location_available(location)
             and location.name not in excluded
-            and location.name != "CA: Coiled Sword"
+            and location.name != "CA: Coiled Sword (boss drop)"
             for location in location_tables["Cemetery of Ash"]
         )
 
