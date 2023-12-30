@@ -1,5 +1,7 @@
 import typing
-from Options import Option, Choice, Range, Toggle
+from dataclasses import dataclass
+
+from Options import Option, Choice, Range, Toggle, PerGameCommonOptions
 
 
 class StructureDeck(Choice):
@@ -95,16 +97,16 @@ class AddEmptyBanList(Toggle):
     display_name = "Add Empty Ban List"
 
 
-ygo06_options: typing.Dict[str, type(Option)] = {
-    "StructureDeck": StructureDeck,
-    "Banlist": Banlist,
-    "FinalCampaignBossChallenges": FinalCampaignBossChallenges,
-    "FourthTier5CampaignBossChallenges": FourthTier5CampaignBossChallenges,
-    "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges,
-    "NumberOfChallenges": NumberOfChallenges,
-    "StartingMoney": StartingMoney,
-    "MoneyRewardMultiplier": MoneyRewardMultiplier,
-    "NormalizeBoostersPacks": NormalizeBoostersPacks,
-    "BoosterPackPrices": BoosterPackPrices,
-    "AddEmptyBanList": AddEmptyBanList
-}
+@dataclass
+class Yugioh06Options(PerGameCommonOptions):
+    structure_deck: StructureDeck
+    banlist: Banlist
+    final_campaign_boss_challenges: FinalCampaignBossChallenges
+    fourth_tier_5_campaign_boss_challenges: FourthTier5CampaignBossChallenges
+    third_tier_5_campaign_boss_challenges: ThirdTier5CampaignBossChallenges
+    number_of_challenges: NumberOfChallenges
+    starting_money: StartingMoney
+    money_reward_multiplier: MoneyRewardMultiplier
+    normalize_boosters_packs: NormalizeBoostersPacks
+    booster_pack_prices: BoosterPackPrices
+    add_empty_banList: AddEmptyBanList

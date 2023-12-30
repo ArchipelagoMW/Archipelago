@@ -17,7 +17,7 @@ from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_item
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special
 from .Opponents import get_opponents, get_opponent_locations
-from .Options import ygo06_options
+from .Options import Yugioh06Options
 from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
 from .Rules import set_rules
 from .logic import YuGiOh06Logic
@@ -67,7 +67,7 @@ class Yugioh06World(World):
     game = "Yu-Gi-Oh! 2006"
     data_version = 1
     web = Yugioh06Web()
-    option_definitions = ygo06_options
+    options_dataclass = Yugioh06Options
     settings_key = "yugioh06_settings"
     settings: ClassVar[Yugioh2006Setting]
 
@@ -115,10 +115,10 @@ class Yugioh06World(World):
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
 
     def create_items(self):
-        start_inventory = self.multiworld.start_inventory[self.player].value.copy()
+        start_inventory = self.options.start_inventory.value.copy()
         item_pool = []
         items = item_to_index.copy()
-        if not self.multiworld.AddEmptyBanList[self.player].value:
+        if not self.options.add_empty_banList.value:
             items.pop("No Banlist")
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
@@ -180,7 +180,7 @@ class Yugioh06World(World):
                 location.place_locked_item(item)
                 location.event = True
 
-        structure_deck = self.multiworld.StructureDeck[self.player].current_key
+        structure_deck = self.options.structure_deck.current_key
         for location_name, content in get_deck_content_locations(structure_deck).items():
             item = Yugioh2006Item(
                 content,
@@ -193,13 +193,13 @@ class Yugioh06World(World):
             location.event = True
 
     def create_regions(self):
-        structure_deck = self.multiworld.StructureDeck[self.player]
+        structure_deck = self.options.structure_deck.current_key
         self.multiworld.regions += [
             create_region(self, 'Menu', None, ['to Deck Edit', 'to Campaign', 'to Challenges', 'to Card Shop']),
             create_region(self, 'Campaign', Bonuses | Campaign_Opponents),
             create_region(self, 'Challenges'),
             create_region(self, 'Card Shop', Required_Cards),
-            create_region(self, 'Structure Deck', get_deck_content_locations(structure_deck.current_key))
+            create_region(self, 'Structure Deck', get_deck_content_locations(structure_deck))
         ]
 
         self.multiworld.get_entrance('to Campaign', self.player) \
@@ -219,8 +219,17 @@ class Yugioh06World(World):
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
+                challenge_unlock_amount = 0
+                match opponent.column:
+                    case 3:
+                        challenge_unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                    case 4:
+                        challenge_unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                    case 5:
+                        challenge_unlock_amount = self.options.final_campaign_boss_challenges.value
                 entrance.access_rule = \
-                    (lambda opp: lambda state: opp.rule(state))(opponent)
+                    (lambda opp: lambda state: state.has("Challenge Beaten", self.player, challenge_unlock_amount) and
+                                               opp.rule(state))(opponent)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
                 state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
@@ -257,17 +266,17 @@ class Yugioh06World(World):
         self.multiworld.push_precollected(self.create_item(starting_opponent))
         starting_pack = self.multiworld.random.choice(booster_packs)
         self.multiworld.push_precollected(self.create_item(starting_pack))
-        banlist = self.multiworld.Banlist[self.player]
+        banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
         challenge = list((Limited_Duels | Theme_Duels).keys())
-        noc = len(challenge) - max(self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value,
-                                   self.multiworld.FourthTier5CampaignBossChallenges[self.player].value,
-                                   self.multiworld.FinalCampaignBossChallenges[self.player].value,
-                                   self.multiworld.NumberOfChallenges[self.player].value)
+        noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value,
+                                   self.options.fourth_tier_5_campaign_boss_challenges.value,
+                                   self.options.final_campaign_boss_challenges.value,
+                                   self.options.number_of_challenges.value)
 
         self.random.shuffle(challenge)
-        excluded = self.multiworld.exclude_locations[self.player].value.intersection(challenge)
-        prio = self.multiworld.priority_locations[self.player].value.intersection(challenge)
+        excluded = self.options.exclude_locations.value.intersection(challenge)
+        prio = self.options.priority_locations.value.intersection(challenge)
         normal = [e for e in challenge if e not in excluded and e not in prio]
         total = list(excluded) + normal + list(prio)
         self.removed_challenges = total[:noc]
@@ -283,10 +292,10 @@ class Yugioh06World(World):
         with open(get_base_rom_path(), 'rb') as rom:
             rom_data = self.apply_base_path(rom)
 
-        structure_deck = self.multiworld.StructureDeck[self.player]
+        structure_deck = self.options.structure_deck
         structure_deck_data_location = 0x000fd0aa
         rom_data[structure_deck_data_location] = structure_deck_selection.get(structure_deck.value)
-        banlist = self.multiworld.Banlist[self.player]
+        banlist = self.options.banlist
         banlist_data_location = 0xf4496
         rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
         randomizer_data_start = 0x0000f310
@@ -301,7 +310,7 @@ class Yugioh06World(World):
             rom_data[randomizer_data_start + location_id] = item_id
         inventory_map = [0 for i in range(32)]
         starting_inventory = list(map(lambda i: i.name, self.multiworld.precollected_items[self.player]))
-        starting_inventory += self.multiworld.start_inventory[self.player].value
+        starting_inventory += self.options.start_inventory.value
         for start_inventory in starting_inventory:
             item_id = self.item_name_to_id[start_inventory] - 5730001
             index = math.floor(item_id / 8)
@@ -309,13 +318,13 @@ class Yugioh06World(World):
             inventory_map[index] = inventory_map[index] | (1 << bit)
 
         rom_data[0xe9dc:0xe9fc] = inventory_map
-        rom_data[0xeefa] = self.multiworld.ThirdTier5CampaignBossChallenges[self.player].value
-        rom_data[0xef10] = self.multiworld.FourthTier5CampaignBossChallenges[self.player].value
-        rom_data[0xef22] = self.multiworld.FinalCampaignBossChallenges[self.player].value
-        rom_data[0xf4734:0xf4738] = self.multiworld.StartingMoney[self.player].value.to_bytes(4, 'little')
-        rom_data[0xe70c] = self.multiworld.MoneyRewardMultiplier[self.player]
-        if self.multiworld.NormalizeBoostersPacks[self.player].value:
-            booster_pack_price = self.multiworld.BoosterPackPrices[self.player].value.to_bytes(2, 'little')
+        rom_data[0xeefa] = self.options.third_tier_5_campaign_boss_challenges.value
+        rom_data[0xef10] = self.options.fourth_tier_5_campaign_boss_challenges.value
+        rom_data[0xef22] = self.options.final_campaign_boss_challenges.value
+        rom_data[0xf4734:0xf4738] = self.options.starting_money.value.to_bytes(4, 'little')
+        rom_data[0xe70c] = self.options.money_reward_multiplier.value
+        if self.options.normalize_boosters_packs.value:
+            booster_pack_price = self.options.booster_pack_prices.value.to_bytes(2, 'little')
             for booster in range(51):
                 space = booster * 16
                 rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
@@ -365,6 +374,7 @@ def create_region(self, name: str, locations=None, exits=None):
         for _exit in exits:
             region.exits.append(Entrance(self.player, _exit, region))
     return region
+
 
 class Yugioh2006Item(Item):
     game = "Yu-Gi-Oh! 2006"
