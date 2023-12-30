@@ -742,22 +742,14 @@ class DarkSouls3World(World):
             "CKG: Drakeblood Armor (tomb, after killing AP mausoleum NPC)",
             "CKG: Drakeblood Gauntlets (tomb, after killing AP mausoleum NPC)",
             "CKG: Drakeblood Leggings (tomb, after killing AP mausoleum NPC)",
-        ], lambda state: state.can_reach(
-            "AP: Drakeblood Greatsword (mausoleum, NPC drop)",
-            "Location",
-            self.player
-        ))
+        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
             "FK: Havel's Helm (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Armor (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Gauntlets (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Leggings (upper keep, after killing AP belfry roof NPC)",
-        ], lambda state: state.can_reach(
-            "AP: Dragon Tooth (belfry roof, NPC drop)",
-            "Location",
-            self.player
-        ))
+        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
             "RC: Dragonhead Shield (streets monument, across bridge)",
