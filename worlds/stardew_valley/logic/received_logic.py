@@ -1,22 +1,28 @@
-from typing import Union, Optional, Tuple
+from typing import Optional
 
 from .base_logic import BaseLogic, BaseLogicMixin
-from ..stardew_rule import StardewRule, True_, Received, And, Or, TotalReceived
+from ..stardew_rule import StardewRule, Received, And, Or, TotalReceived
 
 
 class ReceivedLogicMixin(BaseLogic[None], BaseLogicMixin):
     # Should be cached
-    def received(self, items: Union[str, Tuple[str, ...]], count: Optional[int] = 1) -> StardewRule:
-        if count <= 0 or not items:
-            return True_()
+    def received(self, item: str, count: Optional[int] = 1) -> StardewRule:
+        assert count >= 0, "Can't receive a negative amount of item."
 
-        if isinstance(items, str):
-            return Received(items, self.player, count)
+        return Received(item, self.player, count)
 
-        if count is None:
-            return And(*(self.received(item) for item in items))
+    def received_all(self, *items: str):
+        assert items, "Can't receive all of no items."
 
-        if count == 1:
-            return Or(*(self.received(item) for item in items))
+        return And(*(self.received(item) for item in items))
+
+    def received_any(self, *items: str):
+        assert items, "Can't receive any of no items."
+
+        return Or(*(self.received(item) for item in items))
+
+    def received_n(self, *items: str, count: int):
+        assert items, "Can't receive n of no items."
+        assert count >= 0, "Can't receive a negative amount of item."
 
         return TotalReceived(count, items, self.player)

@@ -2,7 +2,6 @@ from functools import cached_property
 from typing import Union, Tuple
 
 from Utils import cache_self1
-from ..strings.craftable_names import Fishing
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
 from .crop_logic import CropLogicMixin
@@ -17,6 +16,7 @@ from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
 from ..stardew_rule import StardewRule, True_, Or, False_
+from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
@@ -34,7 +34,7 @@ class SkillLogicMixin(BaseLogicMixin):
 
 
 class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, ToolLogicMixin, SkillLogicMixin,
-                                 CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
+CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
     # Should be cached
     def can_earn_level(self, skill: str, level: int) -> StardewRule:
         if level <= 0:
@@ -89,7 +89,7 @@ class SkillLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicM
             skills_items = ("Farming Level", "Mining Level", "Foraging Level", "Fishing Level", "Combat Level")
             if allow_modded_skills:
                 skills_items += get_mod_skill_levels(self.options.mods)
-            return self.logic.received(skills_items, level)
+            return self.logic.received_n(*skills_items, count=level)
 
         months_with_4_skills = max(1, (level // 4) - 1)
         months_with_5_skills = max(1, (level // 5) - 1)

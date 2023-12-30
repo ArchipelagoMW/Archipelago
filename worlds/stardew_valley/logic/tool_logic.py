@@ -10,8 +10,8 @@ from .season_logic import SeasonLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..options import ToolProgression
 from ..stardew_rule import StardewRule, True_
+from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region
-from ..strings.skill_names import ModSkill
 from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool
 
@@ -69,5 +69,5 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
     @cache_self1
     def can_water(self, level: int) -> StardewRule:
         tool_rule = self.logic.tool.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
-        spell_rule = self.logic.received(MagicSpell.water) & self.logic.magic.can_use_altar() & self.logic.received(f"{ModSkill.magic} Level", level)
+        spell_rule = self.logic.received(MagicSpell.water) & self.logic.magic.can_use_altar() & self.logic.received(ModSkillLevel.magic_level, level)
         return tool_rule | spell_rule

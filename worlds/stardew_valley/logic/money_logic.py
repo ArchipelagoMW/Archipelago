@@ -9,10 +9,9 @@ from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, HasProgressionPercent, False_
-from ..strings.currency_names import Currency
-from ..strings.machine_names import Machine
-from ..strings.region_names import Region
 from ..strings.ap_names.event_names import Event
+from ..strings.currency_names import Currency
+from ..strings.region_names import Region
 
 qi_gem_rewards = ("100 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems", "25 Qi Gems",
                   "20 Qi Gems", "15 Qi Gems", "10 Qi Gems")
@@ -78,10 +77,10 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
         if currency == Currency.qi_gem:
             if self.options.special_order_locations == SpecialOrderLocations.option_board_qi:
                 number_rewards = min(len(qi_gem_rewards), max(1, (amount // 10)))
-                return self.logic.received(qi_gem_rewards, number_rewards)
+                return self.logic.received_n(*qi_gem_rewards, count=number_rewards)
             number_rewards = 2
-            return self.logic.received(qi_gem_rewards, number_rewards) & self.logic.region.can_reach(Region.qi_walnut_room) & \
-                   self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
+            return self.logic.received_n(*qi_gem_rewards, count=number_rewards) & self.logic.region.can_reach(Region.qi_walnut_room) & \
+                self.logic.region.can_reach(Region.saloon) & self.can_have_earned_total(5000)
         if currency == Currency.golden_walnut:
             return self.can_spend_walnut(amount)
 

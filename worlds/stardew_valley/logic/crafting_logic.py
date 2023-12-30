@@ -42,7 +42,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
     @cache_self1
     def knows_recipe(self, recipe: CraftingRecipe) -> StardewRule:
         if isinstance(recipe.source, ArchipelagoSource):
-            return self.logic.received(recipe.source.ap_item, len(recipe.source.ap_item))
+            return self.logic.received_all(*recipe.source.ap_item)
         if isinstance(recipe.source, FestivalShopSource):
             if self.options.festival_locations == options.FestivalLocations.option_disabled:
                 return self.logic.crafting.can_learn_recipe(recipe)
@@ -67,7 +67,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
         if isinstance(recipe.source, StarterSource):
             return True_()
         if isinstance(recipe.source, ArchipelagoSource):
-            return self.logic.received(recipe.source.ap_item, len(recipe.source.ap_item))
+            return self.logic.received_all(*recipe.source.ap_item)
         if isinstance(recipe.source, ShopTradeSource):
             return self.logic.money.can_trade_at(recipe.source.region, recipe.source.currency, recipe.source.price)
         if isinstance(recipe.source, ShopSource):

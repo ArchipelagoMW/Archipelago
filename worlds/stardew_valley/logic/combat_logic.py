@@ -38,7 +38,7 @@ class CombatLogic(BaseLogic[Union[CombatLogicMixin, RegionLogicMixin, ReceivedLo
 
     @cached_property
     def has_any_weapon(self) -> StardewRule:
-        return self.logic.received(valid_weapons, 1)
+        return self.logic.received_any(*valid_weapons)
 
     @cached_property
     def has_decent_weapon(self) -> StardewRule:

@@ -24,6 +24,13 @@ from ..strings.villager_names import NPC, ModNPC
 possible_kids = ("Cute Baby", "Ugly Baby")
 
 
+def heart_item_name(npc: Union[str, Villager]) -> str:
+    if isinstance(npc, Villager):
+        npc = npc.name
+
+    return f"{npc} <3"
+
+
 class RelationshipLogicMixin(BaseLogicMixin):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,7 +54,7 @@ class RelationshipLogic(BaseLogic[Union[
             return True_()
         if self.options.friendsanity == Friendsanity.option_none:
             return self.logic.relationship.can_reproduce(number_children)
-        return self.logic.received(possible_kids, number_children) & self.logic.building.has_house(2)
+        return self.logic.received_n(*possible_kids, count=number_children) & self.logic.building.has_house(2)
 
     def can_reproduce(self, number_children: int = 1) -> StardewRule:
         if number_children <= 0:
@@ -101,7 +108,7 @@ class RelationshipLogic(BaseLogic[Union[
 
     # Should be cached
     def received_hearts(self, npc: str, hearts: int) -> StardewRule:
-        heart_item = self.heart(npc)
+        heart_item = heart_item_name(npc)
         number_required = math.ceil(hearts / self.options.friendsanity_heart_size)
         return self.logic.received(heart_item, number_required)
 
@@ -168,8 +175,3 @@ class RelationshipLogic(BaseLogic[Union[
         npc = all_villagers_by_name[name]
         mod = npc.mod_name
         return mod is None or mod in self.options.mods
-
-    def heart(self, npc: Union[str, Villager]) -> str:
-        if isinstance(npc, str):
-            return f"{npc} <3"
-        return self.heart(npc.name)

@@ -14,7 +14,6 @@ from ..strings.building_names import Building
 from ..strings.fish_names import WaterItem
 from ..strings.material_names import Material
 from ..strings.metal_names import MetalBar
-from ..strings.region_names import Region
 
 
 class BuildingLogicMixin(BaseLogicMixin):
@@ -57,7 +56,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
         if building is Building.shipping_bin:
             if not self.options.building_progression & BuildingProgression.option_progressive:
                 return True_()
-            return self.logic.received(f"{building}")
+            return self.logic.received(building)
 
         carpenter_rule = self.logic.received(Event.can_construct_buildings)
         if not self.options.building_progression & BuildingProgression.option_progressive:
@@ -72,7 +71,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
         elif building.startswith("Deluxe"):
             count = 3
             building = " ".join(["Progressive", *building.split(" ")[1:]])
-        return self.logic.received(f"{building}", count) & carpenter_rule
+        return self.logic.received(building, count) & carpenter_rule
 
     @cache_self1
     def has_house(self, upgrade_level: int) -> StardewRule:
