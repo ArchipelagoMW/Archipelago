@@ -257,15 +257,12 @@ class DarkSouls3World(World):
 
         for location in location_table:
             if self.is_location_available(location):
-                new_location = DarkSouls3Location(
-                    self.player,
-                    location,
-                    new_region
-                )
-
-                # Mark Red Eye Orb as missable if key locations aren't being randomized, because the
-                # Lift Chamber Key is missable by default.
+                new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
+                    location.missable and self.options.missable_locations == "unimportant"
+                ) or (
+                    # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
+                    # the latter is missable by default.
                     not self.is_location_available("FS: Lift Chamber Key (Leonhard)")
                     and location.name == "HWL: Red Eye Orb (wall tower, miniboss)"
                 ):
@@ -789,12 +786,19 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
 
-        if self.options.excluded_locations == "unnecessary":
-            for location in self.options.exclude_locations:
+        unnecessary_locations = (
+            self.options.exclude_locations.value
+            if self.options.excluded_locations == "unnecessary"
+            else set()
+        ).union(
+            {location for location in self.multiworld.get_locations() if location.missable}
+            if self.options.missable_locations == "unnecessary"
+            else set()
+        )
+        for location in unnecessary_locations:
+            if self.is_location_available(location):
                 add_item_rule(self.multiworld.get_location(location, self.player),
                               lambda item: item.classification != ItemClassification.progression)
-            self.options.exclude_locations.value.clear()
-
 
         randomized_items = {
             item.name for item in self.multiworld.itempool
@@ -849,6 +853,10 @@ class DarkSouls3World(World):
             and not (
                 self.options.excluded_locations == "unrandomized"
                 and data.name in self.options.exclude_locations
+            )
+            and not (
+                self.options.missable_locations == "unrandomized"
+                and data.missable
             )
         )
 
@@ -1018,24 +1026,10 @@ class DarkSouls3World(World):
             smooth_items([item for item in all_item_order if item.base_name in base_names])
 
         if self.options.smooth_soul_items:
-            # TODO: don't smooth boss souls since they're now progression items :(
-
-            # Shuffle larger boss souls among themselves because they're all worth 10-20k souls in
-            # no particular order and that's a lot more interesting than getting them in the same
-            # order every single run.
-            shuffled_order = self._shuffle([
-                item.name for item in item_dictionary.values()
-                if item.category == DS3ItemCategory.BOSS and item.souls and item.souls >= 10000
+            smooth_items([
+                item for item in all_item_order
+                if item.souls and item.classification != ItemClassification.progression
             ])
-            shuffled = set(shuffled_order)
-            item_order: List[DS3ItemData] = []
-            for item in all_item_order:
-                if not item.souls: continue
-                if item.base_name in shuffled:
-                    item_order.append(item_dictionary[shuffled_order.pop(0)])
-                else:
-                    item_order.append(item)
-            smooth_items(item_order)
 
         if self.options.smooth_upgraded_weapons:
             upgraded_weapons = [

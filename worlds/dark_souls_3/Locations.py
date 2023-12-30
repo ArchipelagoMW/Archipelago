@@ -238,7 +238,6 @@ class DarkSouls3Location(Location):
             event: bool = False):
         super().__init__(player, data.name, None if event else data.ap_code, parent)
         self.data = data
-        if data.missable and not event: self.progress_type = LocationProgressType.EXCLUDED
 
 
 # Naming conventions:

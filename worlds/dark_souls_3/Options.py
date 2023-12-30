@@ -24,6 +24,26 @@ class ExcludedLocationsOption(Choice):
     option_unimportant = 2
     option_unrandomized = 3
     default = 2
+
+
+class MissableLocationsOption(Choice):
+    """Which items can be placed in locations that can be permanently missed.
+
+    * Unnecessary: Missable locations can't have progression items, but they can
+      have useful items.
+    * Unimportant: Neither progression items nor useful items can be placed in
+      missablek locations.
+    * Unrandomized: Missable locations always contain the same item as in
+      vanilla Dark Souls III.
+
+    A "progression item" is anything that's required to unlock another location
+    in some game. A "useful item" is something each game defines individually,
+    usually items that are quite desirable but not strictly necessary.
+    """
+    option_unnecessary = 1
+    option_unimportant = 2
+    option_unrandomized = 3
+    default = 2
     
 
 class RandomizeWeaponLocations(DefaultOnToggle):
@@ -428,6 +448,7 @@ class DS3ExcludeLocations(ExcludeLocations):
 @dataclass
 class DarkSouls3Options(PerGameCommonOptions):
     excluded_locations: ExcludedLocationsOption
+    missable_locations: MissableLocationsOption
     enable_weapon_locations: RandomizeWeaponLocations
     enable_shield_locations: RandomizeShieldLocations
     enable_armor_locations: RandomizeArmorLocations
