@@ -3,62 +3,20 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from collections import deque
-from dataclasses import dataclass, field
-from functools import cached_property
 from itertools import chain
 from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
 
-from BaseClasses import CollectionState, ItemClassification
-from .items import item_table
+from BaseClasses import CollectionState
+from .explanation import RuleExplanation
+from .literal import true_, false_, LiteralStardewRule
+from .protocol import StardewRule
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
 logger = logging.getLogger(__name__)
 
 
-@dataclass
-class StardewRuleExplanation:
-    rule: StardewRule
-    state: CollectionState
-    expected: bool
-    sub_rules: Iterable[StardewRule] = field(default_factory=set)
-
-    def summary(self, depth=0):
-        return "  " * depth + f"{str(self.rule)} -> {self.result}"
-
-    def __str__(self, depth=0):
-        if not self.sub_rules:
-            return self.summary(depth)
-
-        return self.summary(depth) + "\n" + "\n".join(StardewRuleExplanation.__str__(i, depth + 1)
-                                                      if i.result is not self.expected else i.summary(depth + 1)
-                                                      for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
-
-    def __repr__(self, depth=0):
-        if not self.sub_rules:
-            return self.summary(depth)
-
-        return self.summary(depth) + "\n" + "\n".join(StardewRuleExplanation.__repr__(i, depth + 1)
-                                                      for i in sorted(self.explained_sub_rules, key=lambda x: x.result))
-
-    @cached_property
-    def result(self):
-        return self.rule(self.state)
-
-    @cached_property
-    def explained_sub_rules(self):
-        return [i.explain(self.state) for i in self.sub_rules]
-
-
-class StardewRule(ABC):
-
-    @abstractmethod
-    def __call__(self, state: CollectionState) -> bool:
-        raise NotImplementedError
-
-    @abstractmethod
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        raise NotImplementedError
+class BaseStardewRule(StardewRule, ABC):
 
     def __or__(self, other) -> StardewRule:
         if other is true_ or other is false_ or type(other) is Or:
@@ -72,72 +30,8 @@ class StardewRule(ABC):
 
         return And(self, other)
 
-    @abstractmethod
-    def get_difficulty(self):
-        raise NotImplementedError
 
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected)
-
-
-class LiteralStardewRule(StardewRule, ABC):
-    value: bool
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self.value
-
-    def __call__(self, state: CollectionState) -> bool:
-        return self.value
-
-    def __repr__(self):
-        return str(self.value)
-
-
-class True_(LiteralStardewRule):  # noqa
-    value = True
-
-    def __new__(cls, _cache=[]):  # noqa
-        # Only one single instance will be ever created.
-        if not _cache:
-            _cache.append(super(True_, cls).__new__(cls))
-        return _cache[0]
-
-    def __or__(self, other) -> StardewRule:
-        return self
-
-    def __and__(self, other) -> StardewRule:
-        return other
-
-    def get_difficulty(self):
-        return 0
-
-
-class False_(LiteralStardewRule):  # noqa
-    value = False
-
-    def __new__(cls, _cache=[]):  # noqa
-        # Only one single instance will be ever created.
-        if not _cache:
-            _cache.append(super(False_, cls).__new__(cls))
-        return _cache[0]
-
-    def __or__(self, other) -> StardewRule:
-        return other
-
-    def __and__(self, other) -> StardewRule:
-        return self
-
-    def get_difficulty(self):
-        return 999999999
-
-
-false_ = False_()
-true_ = True_()
-assert false_ is False_()
-assert true_ is True_()
-
-
-class CombinableStardewRule(StardewRule, ABC):
+class CombinableStardewRule(BaseStardewRule, ABC):
 
     @property
     @abstractmethod
@@ -231,7 +125,7 @@ class _SimplificationState:
         self.locked = False
 
 
-class AggregatingStardewRule(StardewRule, ABC):
+class AggregatingStardewRule(BaseStardewRule, ABC):
     """
     Logic for both "And" and "Or" rules.
     """
@@ -405,8 +299,8 @@ class AggregatingStardewRule(StardewRule, ABC):
     def __hash__(self):
         return hash((id(self.combinable_rules), self.simplification_state.original_simplifiable_rules))
 
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected, self.original_rules)
+    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
+        return RuleExplanation(self, state, expected, self.original_rules)
 
 
 class Or(AggregatingStardewRule):
@@ -467,7 +361,7 @@ class And(AggregatingStardewRule):
         return max(rule.get_difficulty() for rule in self.original_rules)
 
 
-class Count(StardewRule):
+class Count(BaseStardewRule):
     count: int
     rules: List[StardewRule]
     rules_count: int
@@ -509,8 +403,8 @@ class Count(StardewRule):
     def __call__(self, state: CollectionState) -> bool:
         return self.evaluate_while_simplifying(state)[1]
 
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected, self.rules)
+    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
+        return RuleExplanation(self, state, expected, self.rules)
 
     def get_difficulty(self):
         self.rules = sorted(self.rules, key=lambda x: x.get_difficulty())
@@ -522,120 +416,7 @@ class Count(StardewRule):
         return f"Received {self.count} {repr(self.rules)}"
 
 
-class TotalReceived(StardewRule):
-    count: int
-    items: Iterable[str]
-    player: int
-
-    def __init__(self, count: int, items: Union[str, Iterable[str]], player: int):
-        items_list: List[str]
-
-        if isinstance(items, Iterable):
-            items_list = [*items]
-        else:
-            items_list = [items]
-
-        assert items_list, "Can't create a Total Received conditions without items"
-        for item in items_list:
-            assert item_table[item].classification & ItemClassification.progression, \
-                f"Item [{item_table[item].name}] has to be progression to be used in logic"
-
-        self.player = player
-        self.items = items_list
-        self.count = count
-
-    def __call__(self, state: CollectionState) -> bool:
-        c = 0
-        for item in self.items:
-            c += state.count(item, self.player)
-            if c >= self.count:
-                return True
-        return False
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
-
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected, [Received(i, self.player, 1) for i in self.items])
-
-    def get_difficulty(self):
-        return self.count
-
-    def __repr__(self):
-        return f"Received {self.count} {self.items}"
-
-
-@dataclass(frozen=True)
-class Received(CombinableStardewRule):
-    item: str
-    player: int
-    count: int
-
-    def __post_init__(self):
-        assert item_table[self.item].classification & ItemClassification.progression, \
-            f"Item [{item_table[self.item].name}] has to be progression to be used in logic"
-
-    @property
-    def combination_key(self) -> Hashable:
-        return self.item
-
-    @property
-    def value(self):
-        return self.count
-
-    def __call__(self, state: CollectionState) -> bool:
-        return state.has(self.item, self.player, self.count)
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
-
-    def __repr__(self):
-        if self.count == 1:
-            return f"Received {self.item}"
-        return f"Received {self.count} {self.item}"
-
-    def get_difficulty(self):
-        return self.count
-
-
-@dataclass(frozen=True)
-class Reach(StardewRule):
-    spot: str
-    resolution_hint: str
-    player: int
-
-    def __call__(self, state: CollectionState) -> bool:
-        return state.can_reach(self.spot, self.resolution_hint, self.player)
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
-
-    def __repr__(self):
-        return f"Reach {self.resolution_hint} {self.spot}"
-
-    def get_difficulty(self):
-        return 1
-
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        if self.resolution_hint == 'Location':
-            spot = state.multiworld.get_location(self.spot, self.player)
-            access_rule = spot.access_rule
-            if isinstance(access_rule, StardewRule):
-                access_rule = And(access_rule, Reach(spot.parent_region.name, "Region", self.player))
-        elif self.resolution_hint == 'Entrance':
-            spot = state.multiworld.get_entrance(self.spot, self.player)
-            access_rule = spot.access_rule
-        else:
-            spot = state.multiworld.get_region(self.spot, self.player)
-            access_rule = Or(*(Reach(e.name, "Entrance", self.player) for e in spot.entrances))
-
-        if not isinstance(access_rule, StardewRule):
-            return StardewRuleExplanation(self, state, expected)
-
-        return StardewRuleExplanation(self, state, expected, [access_rule])
-
-
-class Has(StardewRule):
+class Has(BaseStardewRule):
     item: str
     # For sure there is a better way than just passing all the rules everytime
     other_rules: Dict[str, StardewRule]
@@ -650,8 +431,8 @@ class Has(StardewRule):
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self.other_rules[self.item].evaluate_while_simplifying(state)
 
-    def explain(self, state: CollectionState, expected=True) -> StardewRuleExplanation:
-        return StardewRuleExplanation(self, state, expected, [self.other_rules[self.item]])
+    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
+        return RuleExplanation(self, state, expected, [self.other_rules[self.item]])
 
     def get_difficulty(self):
         return self.other_rules[self.item].get_difficulty() + 1
@@ -668,45 +449,6 @@ class Has(StardewRule):
 
     def __hash__(self):
         return hash(self.item)
-
-
-@dataclass(frozen=True)
-class HasProgressionPercent(CombinableStardewRule):
-    player: int
-    percent: int
-
-    def __post_init__(self):
-        assert self.percent > 0, "HasProgressionPercent rule must be above 0%"
-        assert self.percent <= 100, "HasProgressionPercent rule can't require more than 100% of items"
-
-    @property
-    def combination_key(self) -> Hashable:
-        return HasProgressionPercent.__name__
-
-    @property
-    def value(self):
-        return self.percent
-
-    def __call__(self, state: CollectionState) -> bool:
-        stardew_world = state.multiworld.worlds[self.player]
-        total_count = stardew_world.total_progression_items
-        needed_count = (total_count * self.percent) // 100
-        total_count = 0
-        for item in state.prog_items[self.player]:
-            item_count = state.prog_items[self.player][item]
-            total_count += item_count
-            if total_count >= needed_count:
-                return True
-        return False
-
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        return self, self(state)
-
-    def __repr__(self):
-        return f"HasProgressionPercent {self.percent}"
-
-    def get_difficulty(self):
-        return self.percent
 
 
 class RepeatableChain(Iterable, Sized):
