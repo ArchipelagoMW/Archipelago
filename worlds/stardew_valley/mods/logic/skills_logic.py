@@ -14,7 +14,7 @@ from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression
-from ...stardew_rule import Count, StardewRule, False_, True_
+from ...stardew_rule import StardewRule, False_, True_
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
 from ...strings.machine_names import Machine
@@ -70,14 +70,14 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
                        self.logic.received(MagicSpell.shockwave),
                        self.logic.received(MagicSpell.meteor),
                        self.logic.received(MagicSpell.spirit)]
-        return Count(level, spell_count)
+        return self.logic.count(level, *spell_count)
 
     def can_earn_socializing_skill_level(self, level: int) -> StardewRule:
         villager_count = []
         for villager in all_villagers:
             if villager.mod_name in self.options.mods or villager.mod_name is None:
                 villager_count.append(self.logic.relationship.can_earn_relationship(villager.name, level))
-        return Count(level * 2, villager_count)
+        return self.logic.count(level * 2, *villager_count)
 
     def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:
         if level >= 6:

@@ -1,10 +1,11 @@
 from typing import Union
 
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
+from ...logic.has_logic import HasLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...mods.mod_data import ModNames
-from ...stardew_rule import Count, StardewRule, False_
+from ...stardew_rule import StardewRule, False_
 from ...strings.ap_names.skill_level_names import ModSkillLevel
 from ...strings.region_names import MagicRegion
 from ...strings.spells import MagicSpell
@@ -17,7 +18,7 @@ class MagicLogicMixin(BaseLogicMixin):
 
 
 # TODO add logic.mods.magic for altar
-class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin]]):
+class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
     def can_use_clear_debris_instead_of_tool_level(self, level: int) -> StardewRule:
         if ModNames.magic not in self.options.mods:
             return False_()
@@ -36,13 +37,13 @@ class MagicLogic(BaseLogic[Union[RegionLogicMixin, ReceivedLogicMixin]]):
     def has_attack_spell_count(self, count: int) -> StardewRule:
         attack_spell_rule = [self.logic.received(MagicSpell.fireball), self.logic.received(MagicSpell.frostbite), self.logic.received(MagicSpell.shockwave),
                              self.logic.received(MagicSpell.spirit), self.logic.received(MagicSpell.meteor)]
-        return Count(count, attack_spell_rule)
+        return self.logic.count(count, *attack_spell_rule)
 
     def has_support_spell_count(self, count: int) -> StardewRule:
         support_spell_rule = [self.can_use_altar(), self.logic.received(ModSkillLevel.magic_level, 2),
                               self.logic.received(MagicSpell.descend), self.logic.received(MagicSpell.heal),
                               self.logic.received(MagicSpell.tendrils)]
-        return Count(count, support_spell_rule)
+        return self.logic.count(count, *support_spell_rule)
 
     def has_decent_spells(self) -> StardewRule:
         if ModNames.magic not in self.options.mods:

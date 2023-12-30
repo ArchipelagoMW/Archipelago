@@ -46,7 +46,7 @@ from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
-from ..stardew_rule import False_, Or, True_, Count, And, StardewRule
+from ..stardew_rule import False_, Or, True_, And, StardewRule
 from ..strings.animal_names import Animal, coop_animals, barn_animals
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_weapon_names import APWeapon
@@ -508,29 +508,30 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
     def can_finish_grandpa_evaluation(self) -> StardewRule:
         # https://stardewvalleywiki.com/Grandpa
-        rules_worth_a_point = [self.money.can_have_earned_total(50000),  # 50 000g
-                               self.money.can_have_earned_total(100000),  # 100 000g
-                               self.money.can_have_earned_total(200000),  # 200 000g
-                               self.money.can_have_earned_total(300000),  # 300 000g
-                               self.money.can_have_earned_total(500000),  # 500 000g
-                               self.money.can_have_earned_total(1000000),  # 1 000 000g first point
-                               self.money.can_have_earned_total(1000000),  # 1 000 000g second point
-                               self.skill.has_total_level(30),  # Total Skills: 30
-                               self.skill.has_total_level(50),  # Total Skills: 50
-                               self.museum.can_complete_museum(),  # Completing the museum for a point
-                               # Catching every fish not expected
-                               # Shipping every item not expected
-                               self.relationship.can_get_married() & self.building.has_house(2),
-                               self.relationship.has_hearts("5", 8),  # 5 Friends
-                               self.relationship.has_hearts("10", 8),  # 10 friends
-                               self.pet.has_hearts(5),  # Max Pet
-                               self.bundle.can_complete_community_center,  # Community Center Completion
-                               self.bundle.can_complete_community_center,  # CC Ceremony first point
-                               self.bundle.can_complete_community_center,  # CC Ceremony second point
-                               self.received(Wallet.skull_key),  # Skull Key obtained
-                               self.wallet.has_rusty_key(),  # Rusty key obtained
-                               ]
-        return Count(12, rules_worth_a_point)
+        rules_worth_a_point = [
+            self.money.can_have_earned_total(50000),  # 50 000g
+            self.money.can_have_earned_total(100000),  # 100 000g
+            self.money.can_have_earned_total(200000),  # 200 000g
+            self.money.can_have_earned_total(300000),  # 300 000g
+            self.money.can_have_earned_total(500000),  # 500 000g
+            self.money.can_have_earned_total(1000000),  # 1 000 000g first point
+            self.money.can_have_earned_total(1000000),  # 1 000 000g second point
+            self.skill.has_total_level(30),  # Total Skills: 30
+            self.skill.has_total_level(50),  # Total Skills: 50
+            self.museum.can_complete_museum(),  # Completing the museum for a point
+            # Catching every fish not expected
+            # Shipping every item not expected
+            self.relationship.can_get_married() & self.building.has_house(2),
+            self.relationship.has_hearts("5", 8),  # 5 Friends
+            self.relationship.has_hearts("10", 8),  # 10 friends
+            self.pet.has_hearts(5),  # Max Pet
+            self.bundle.can_complete_community_center,  # Community Center Completion
+            self.bundle.can_complete_community_center,  # CC Ceremony first point
+            self.bundle.can_complete_community_center,  # CC Ceremony second point
+            self.received(Wallet.skull_key),  # Skull Key obtained
+            self.wallet.has_rusty_key(),  # Rusty key obtained
+        ]
+        return self.count(12, *rules_worth_a_point)
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:
         rules = [self.time.has_lived_max_months]
@@ -672,9 +673,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         if number <= 5:
             return Or(reach_south, reach_north, reach_west, reach_volcano)
         if number <= 10:
-            return Count(2, reach_walnut_regions)
+            return self.count(2, *reach_walnut_regions)
         if number <= 15:
-            return Count(3, reach_walnut_regions)
+            return self.count(3, *reach_walnut_regions)
         if number <= 20:
             return And(*reach_walnut_regions)
         if number <= 50:

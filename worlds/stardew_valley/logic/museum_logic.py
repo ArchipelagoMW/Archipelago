@@ -8,7 +8,7 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
-from ..stardew_rule import StardewRule, And, False_, Count, true_
+from ..stardew_rule import StardewRule, And, False_
 from ..strings.region_names import Region
 
 
@@ -48,21 +48,21 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
         for artifact in all_museum_artifacts:
             rules.append(self.logic.museum.can_find_museum_item(artifact))
 
-        return Count(number, rules)
+        return self.logic.count(number, *rules)
 
     def can_find_museum_minerals(self, number: int) -> StardewRule:
         rules = []
         for mineral in all_museum_minerals:
             rules.append(self.logic.museum.can_find_museum_item(mineral))
 
-        return Count(number, rules)
+        return self.logic.count(number, *rules)
 
     def can_find_museum_items(self, number: int) -> StardewRule:
         rules = []
         for donation in all_museum_items:
             rules.append(self.logic.museum.can_find_museum_item(donation))
 
-        return Count(number, rules)
+        return self.logic.count(number, *rules)
 
     def can_complete_museum(self) -> StardewRule:
         rules = [self.logic.region.can_reach(Region.museum)]

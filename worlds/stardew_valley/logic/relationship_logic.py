@@ -12,7 +12,7 @@ from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from ..data.villagers_data import all_villagers_by_name, Villager
 from ..options import Friendsanity
-from ..stardew_rule import StardewRule, True_, And, Or, Count
+from ..stardew_rule import StardewRule, True_, And, Or
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
@@ -84,7 +84,7 @@ class RelationshipLogic(BaseLogic[Union[
                     if not self.npc_is_in_current_slot(name):
                         continue
                     possible_friends.append(self.logic.relationship.has_hearts(name, hearts))
-                return Count(int(npc), possible_friends)
+                return self.logic.count(int(npc), *possible_friends)
             return self.can_earn_relationship(npc, hearts)
 
         if not self.npc_is_in_current_slot(npc):

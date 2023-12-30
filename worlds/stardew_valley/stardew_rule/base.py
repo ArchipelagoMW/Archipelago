@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from collections import deque
+from functools import cached_property
 from itertools import chain
 from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
@@ -364,27 +365,10 @@ class And(AggregatingStardewRule):
 class Count(BaseStardewRule):
     count: int
     rules: List[StardewRule]
-    rules_count: int
-    _simplified: bool
 
-    def __init__(self, count: int, rule: Union[StardewRule, Iterable[StardewRule]], *rules: StardewRule):
-        rules_list: List[StardewRule]
-
-        if isinstance(rule, Iterable):
-            rules_list = [*rule]
-        else:
-            rules_list = [rule]
-
-        if rules is not None:
-            rules_list.extend(rules)
-
-        assert rules_list, "Can't create a Count conditions without rules"
-        assert len(rules_list) >= count, "Count need at least as many rules at the count"
-
-        self.rules = rules_list
+    def __init__(self, rules: List[StardewRule], count: int):
+        self.rules = rules
         self.count = count
-        self.rules_count = len(rules_list)
-        self._simplified = False
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         c = 0
@@ -402,6 +386,10 @@ class Count(BaseStardewRule):
 
     def __call__(self, state: CollectionState) -> bool:
         return self.evaluate_while_simplifying(state)[1]
+
+    @cached_property
+    def rules_count(self):
+        return len(self.rules)
 
     def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
         return RuleExplanation(self, state, expected, self.rules)
