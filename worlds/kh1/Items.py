@@ -252,7 +252,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Claw Marks":                        KH1ItemData("Key",              code = 264_1224, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Stench":                            KH1ItemData("Key",              code = 264_1225, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Antenna":                           KH1ItemData("Key",              code = 264_1226, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Forget-Me-Not":                     KH1ItemData("Key",              code = 264_1227, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+   #"Forget-Me-Not":                     KH1ItemData("Key",              code = 264_1227, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Jack-In-The-Box":                   KH1ItemData("Key",              code = 264_1228, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Entry Pass":                        KH1ItemData("Key",              code = 264_1229, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Hero License":                      KH1ItemData("Key",              code = 264_1230, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
