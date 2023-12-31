@@ -1,5 +1,5 @@
 from ..generic.Rules import add_rule
-from .Regions import connect_regions, sm64_level_to_paintings, sm64_paintings_to_level, sm64_level_to_secrets, sm64_entrances_to_level, sm64_level_to_entrances
+from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level, sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
 
 def shuffle_dict_keys(world, obj: dict) -> dict:
     keys = list(obj.keys())
@@ -7,12 +7,16 @@ def shuffle_dict_keys(world, obj: dict) -> dict:
     world.random.shuffle(keys)
     return dict(zip(keys,values))
 
-def fix_reg(entrance_ids, entrance, destination, swapdict, world):
-    if entrance_ids[entrance] == destination: # Unlucky :C
-        rand = world.random.choice(swapdict.keys())
-        entrance_ids[entrance], entrance_ids[swapdict[rand]] = rand, entrance_ids[entrance]
-        swapdict[rand] = entrance_ids[entrance]
-        swapdict.pop(entrance)
+def fix_reg(entrance_map: dict, entrance: SM64Levels, invalid_regions: set,
+            swapdict: dict, world):
+    if entrance_map[entrance] in invalid_regions: # Unlucky :C
+        replacement_regions = [(rand_region, rand_entrance) for rand_region, rand_entrance in swapdict.items()
+                               if rand_region not in invalid_regions]
+        rand_region, rand_entrance = world.random.choice(replacement_regions)
+        old_dest = entrance_map[entrance]
+        entrance_map[entrance], entrance_map[rand_entrance] = rand_region, old_dest
+        swapdict[rand_region] = entrance
+    swapdict.pop(entrance_map[entrance]) # Entrance now fixed to rand_region
 
 def set_rules(world, player: int, area_connections: dict):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
@@ -24,22 +28,20 @@ def set_rules(world, player: int, area_connections: dict):
     randomized_entrances = { **randomized_level_to_paintings, **randomized_level_to_secrets }
     if world.AreaRandomizer[player].value == 3:  # Randomize Courses and Secrets in one pool
         randomized_entrances = shuffle_dict_keys(world,randomized_entrances)
+        swapdict = { entrance: level for (level,entrance) in randomized_entrances.items() }
         # Guarantee first entrance is a course
-        swapdict = { entrance: level for (level,entrance) in randomized_entrances }
-        if randomized_entrances[91] not in sm64_paintings_to_level.keys(): # Unlucky :C (91 -> BoB Entrance)
-            rand = world.random.choice(sm64_paintings_to_level.values())
-            randomized_entrances[91], randomized_entrances[swapdict[rand]] = rand, randomized_entrances[91]
-            swapdict[rand] = randomized_entrances[91]
-        swapdict.pop("Bob-omb Battlefield")
-        # Guarantee COTMC is not mapped to HMC, cuz thats impossible
-        fix_reg(randomized_entrances, "Cavern of the Metal Cap", "Hazy Maze Cave", swapdict, world)
+        fix_reg(randomized_entrances, SM64Levels.BOB_OMB_BATTLEFIELD, sm64_secrets_to_level.keys(), swapdict, world)
         # Guarantee BITFS is not mapped to DDD
-        fix_reg(randomized_entrances, "Bowser in the Fire Sea", "Dire, Dire Docks", swapdict, world)
-        if randomized_entrances[191] == "Hazy Maze Cave": # If BITFS is mapped to HMC...
-            fix_reg(randomized_entrances, "Cavern of the Metal Cap", "Dire, Dire Docks", swapdict, world) # ... then dont allow COTMC to be mapped to DDD
+        fix_reg(randomized_entrances, SM64Levels.BOWSER_IN_THE_FIRE_SEA, {"Dire, Dire Docks"}, swapdict, world)
+        # Guarantee COTMC is not mapped to HMC, cuz thats impossible. If BitFS -> HMC, also no COTMC -> DDD.
+        if randomized_entrances[SM64Levels.BOWSER_IN_THE_FIRE_SEA] == "Hazy Maze Cave":
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave", "Dire, Dire Docks"}, swapdict, world)
+        else:
+            fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, world)
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
-    area_connections.update({entrance_lvl: sm64_entrances_to_level[destination] for (entrance_lvl,destination) in randomized_entrances.items()})
+    # Cast to int to not rely on availability of SM64Levels enum. Will cause crash in MultiServer otherwise
+    area_connections.update({int(entrance_lvl): int(sm64_entrances_to_level[destination]) for (entrance_lvl,destination) in randomized_entrances.items()})
     randomized_entrances_s = {sm64_level_to_entrances[entrance_lvl]: destination for (entrance_lvl,destination) in randomized_entrances.items()}
     
     connect_regions(world, player, "Menu", randomized_entrances_s["Bob-omb Battlefield"])

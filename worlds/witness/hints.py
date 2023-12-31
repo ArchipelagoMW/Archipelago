@@ -161,7 +161,7 @@ joke_hints = [
 ]
 
 
-def get_always_hint_items(world: "WitnessWorld"):
+def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     always = [
         "Boat",
         "Caves Shortcuts",
@@ -187,17 +187,17 @@ def get_always_hint_items(world: "WitnessWorld"):
     return always
 
 
-def get_always_hint_locations(_: "WitnessWorld"):
-    return {
+def get_always_hint_locations(_: "WitnessWorld") -> List[str]:
+    return [
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
         "Theater Eclipse EP",
         "Shipwreck Couch EP",
         "Mountainside Cloud Cycle EP",
-    }
+    ]
 
 
-def get_priority_hint_items(world: "WitnessWorld"):
+def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     priority = {
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
@@ -246,11 +246,11 @@ def get_priority_hint_items(world: "WitnessWorld"):
             lasers.append("Desert Laser")
             priority.update(world.random.sample(lasers, 6))
 
-    return priority
+    return sorted(priority)
 
 
-def get_priority_hint_locations(_: "WitnessWorld"):
-    return {
+def get_priority_hint_locations(_: "WitnessWorld") -> List[str]:
+    return [
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",
         "Town RGB Room Left",
@@ -264,7 +264,7 @@ def get_priority_hint_locations(_: "WitnessWorld"):
         "Tunnels Theater Flowers EP",
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
-    }
+    ]
 
 
 def make_hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]):
@@ -365,8 +365,8 @@ def make_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]
     remaining_hints = hint_amount - len(hints)
     priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
 
-    prog_items_in_this_world = sorted(list(prog_items_in_this_world))
-    locations_in_this_world = sorted(list(loc_in_this_world))
+    prog_items_in_this_world = sorted(prog_items_in_this_world)
+    locations_in_this_world = sorted(loc_in_this_world)
 
     world.random.shuffle(prog_items_in_this_world)
     world.random.shuffle(locations_in_this_world)
