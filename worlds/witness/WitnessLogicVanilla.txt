@@ -443,7 +443,7 @@ Door - 0x04F8F (Tower Shortcut) - 0x0361B
 158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Shapers & Black/White Squares & Rotated Shapers
 Laser - 0x014BB (Laser) - 0x0360E | 0x03317
 159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
-159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 - True
+159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 & 0x01BEA - True
 159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 & 0x01CD5 - True
 159243 - 0x033E5 (Pressure Plates 4 Left Exit EP) - 0x01D3F - True
 159244 - 0x018B6 (Pressure Plates 4 Right Exit EP) - 0x01D3F - True
@@ -467,7 +467,6 @@ Door - 0x17BB4 (Vault Door) - 0x00AFB
 Shipwreck Vault (Shipwreck):
 158655 - 0x03535 (Vault Box) - True - True
 
-<<<<<<< HEAD
 ==Monastery==
 
 Monastery Obelisk (Monastery) - Entry - True:
@@ -478,21 +477,6 @@ Monastery Obelisk (Monastery) - Entry - True:
 159714 - 0xFFE14 (Obelisk Side 5) - 0x03E01 - True
 159715 - 0xFFE15 (Obelisk Side 6) - 0x289F4 & 0x289F5 - True
 159719 - 0x00263 (Obelisk) - True - True
-=======
-Keep Tower (Keep) - Keep - 0x04F8F:
-158206 - 0x0361B (Tower Shortcut Panel) - True - True
-Door - 0x04F8F (Tower Shortcut) - 0x0361B
-158704 - 0x0360E (Laser Panel Hedges) - 0x01A0F & 0x019E7 & 0x019DC & 0x00139 - True
-158705 - 0x03317 (Laser Panel Pressure Plates) - 0x033EA & 0x01BE9 & 0x01CD3 & 0x01D3F - Dots & Shapers & Black/White Squares & Rotated Shapers
-Laser - 0x014BB (Laser) - 0x0360E | 0x03317
-159240 - 0x033BE (Pressure Plates 1 EP) - 0x033EA - True
-159241 - 0x033BF (Pressure Plates 2 EP) - 0x01BE9 & 0x01BEA - True
-159242 - 0x033DD (Pressure Plates 3 EP) - 0x01CD3 & 0x01CD5 - True
-159243 - 0x033E5 (Pressure Plates 4 Left Exit EP) - 0x01D3F - True
-159244 - 0x018B6 (Pressure Plates 4 Right Exit EP) - 0x01D3F - True
-159250 - 0x28AE9 (Path EP) - True - True
-159251 - 0x3348F (Hedges EP) - True - True
->>>>>>> upstream/main
 
 Outside Monastery (Monastery) - Main Island - True - Inside Monastery - 0x0C128 & 0x0C153 - Monastery Garden - 0x03750:
 158207 - 0x03713 (Laser Shortcut Panel) - True - True
