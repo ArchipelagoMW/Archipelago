@@ -439,7 +439,7 @@ sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_ite
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
 wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 4, 3)
 
-quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(1)
+quality_foraging_items = list({item.as_quality(ForageQuality.gold).as_amount(1)
                                  for item in
                                  [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
                                   *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})

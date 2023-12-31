@@ -16,11 +16,14 @@ class BundleItem:
     def money_bundle(amount: int):
         return BundleItem(Currency.money, amount)
 
+    def create(self, item_name: str, amount: int, quality: str):
+        return BundleItem(item_name, amount, quality)
+
     def as_amount(self, amount: int):
-        return BundleItem(self.item_name, amount, self.quality)
+        return self.create(self.item_name, amount, self.quality)
 
     def as_quality(self, quality: str):
-        return BundleItem(self.item_name, self.amount, quality)
+        return self.create(self.item_name, self.amount, quality)
 
     def as_quality_crop(self):
         amount = 5
@@ -44,10 +47,18 @@ class BundleItem:
 
 
 class IslandBundleItem(BundleItem):
+
+    def create(self, item_name: str, amount: int, quality: str):
+        return IslandBundleItem(item_name, amount, quality)
+
     def can_appear(self, options: StardewValleyOptions) -> bool:
         return options.exclude_ginger_island == ExcludeGingerIsland.option_false
 
 
 class FestivalBundleItem(BundleItem):
+
+    def create(self, item_name: str, amount: int, quality: str):
+        return FestivalBundleItem(item_name, amount, quality)
+
     def can_appear(self, options: StardewValleyOptions) -> bool:
         return options.festival_locations != FestivalLocations.option_disabled
