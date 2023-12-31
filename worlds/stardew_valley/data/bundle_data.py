@@ -1,5 +1,5 @@
-from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate
-from ..bundles.bundle_item import BundleItem, IslandBundleItem
+from ..bundles.bundle import BundleTemplate, IslandBundleTemplate, DeepBundleTemplate, CurrencyBundleTemplate, MoneyBundleTemplate, FestivalBundleTemplate
+from ..bundles.bundle_item import BundleItem, IslandBundleItem, FestivalBundleItem
 from ..bundles.bundle_room import BundleRoomTemplate
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.artisan_good_names import ArtisanGood
@@ -76,7 +76,7 @@ green_bean = BundleItem(Vegetable.green_bean)
 kale = BundleItem(Vegetable.kale)
 parsnip = BundleItem(Vegetable.parsnip)
 potato = BundleItem(Vegetable.potato)
-strawberry = BundleItem(Fruit.strawberry)
+strawberry = FestivalBundleItem(Fruit.strawberry)
 tulip = BundleItem(Flower.tulip)
 unmilled_rice = BundleItem(Vegetable.unmilled_rice)
 coffee_bean = BundleItem(Seed.coffee)
@@ -352,6 +352,7 @@ ancient_fruit = BundleItem(Fruit.ancient_fruit)
 void_salmon = BundleItem(Fish.void_salmon)
 tea_leaves = BundleItem(Vegetable.tea_leaves)
 blobfish = BundleItem(Fish.blobfish)
+spook_fish = BundleItem(Fish.spook_fish)
 lionfish = IslandBundleItem(Fish.lionfish)
 blue_discus = IslandBundleItem(Fish.blue_discus)
 stingray = IslandBundleItem(Fish.stingray)
@@ -377,6 +378,7 @@ bait = BundleItem(Fishing.bait, 100)
 magnet = BundleItem(Fishing.magnet)
 wild_bait = BundleItem(Fishing.wild_bait, 10)
 magic_bait = IslandBundleItem(Fishing.magic_bait, 5)
+pearl = BundleItem(Gift.pearl)
 
 ginger = IslandBundleItem(Forageable.ginger)
 magma_cap = IslandBundleItem(Forageable.magma_cap)
@@ -467,7 +469,7 @@ fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, bee
 fall_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.fall_crops, fall_crops_items_vanilla, 4, 4)
 fall_crops_bundle_thematic = BundleTemplate.extend_from(fall_crops_bundle_vanilla, fall_crops_items_thematic)
 
-all_crops_items = sorted({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
+all_crops_items = list({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
 
 quality_crops_items_vanilla = [item.as_quality_crop() for item in [parsnip, melon, pumpkin, corn]]
 quality_crops_items_thematic = [item.as_quality_crop() for item in all_crops_items]
@@ -540,7 +542,7 @@ ocean_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.ocean_fi
 ocean_fish_bundle_thematic = BundleTemplate.extend_from(ocean_fish_bundle_vanilla, ocean_fish_items_thematic)
 
 night_fish_items_vanilla = [walleye, bream, eel]
-night_fish_items_thematic = [*night_fish_items_vanilla, super_cucumber, squid, midnight_carp]
+night_fish_items_thematic = [*night_fish_items_vanilla, super_cucumber, squid, midnight_carp, midnight_squid]
 night_fish_bundle_vanilla = BundleTemplate(CCRoom.fish_tank, BundleName.night_fish, night_fish_items_vanilla, 3, 3)
 night_fish_bundle_thematic = BundleTemplate.extend_from(night_fish_bundle_vanilla, night_fish_items_thematic)
 
@@ -592,6 +594,9 @@ tackle_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.tackle, tackle
 
 bait_items = [bait, magnet, wild_bait, magic_bait]
 bait_bundle = IslandBundleTemplate(CCRoom.fish_tank, BundleName.bait, bait_items, 2, 2)
+
+deep_fishing_items = [blobfish, spook_fish, midnight_squid, sea_cucumber, super_cucumber, octopus, pearl, seaweed]
+deep_fishing_bundle = FestivalBundleTemplate(CCRoom.fish_tank, BundleName.deep_fishing, deep_fishing_items, 4, 3)
 
 fish_tank_bundles_vanilla = [river_fish_bundle_vanilla, lake_fish_bundle_vanilla, ocean_fish_bundle_vanilla,
                              night_fish_bundle_vanilla, crab_pot_bundle_vanilla, specialty_fish_bundle_vanilla]
@@ -745,7 +750,7 @@ vault_25000_bundle = MoneyBundleTemplate(CCRoom.vault, vault_25000_gold)
 vault_gambler_items = BundleItem(Currency.qi_coin, 10000)
 vault_gambler_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.gambler, vault_gambler_items)
 
-vault_carnival_items = BundleItem(Currency.star_token, 2500)
+vault_carnival_items = FestivalBundleItem(Currency.star_token, 2500)
 vault_carnival_bundle = CurrencyBundleTemplate(CCRoom.vault, BundleName.carnival, vault_carnival_items)
 
 vault_walnut_hunter_items = BundleItem(Currency.golden_walnut, 25)

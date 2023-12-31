@@ -36,6 +36,7 @@ id,region,name,tags,mod_name
 35,Boiler Room,Complete Boiler Room,"COMMUNITY_CENTER_ROOM,MANDATORY",
 36,Bulletin Board,Complete Bulletin Board,"COMMUNITY_CENTER_ROOM,MANDATORY",
 37,Vault,Complete Vault,"COMMUNITY_CENTER_ROOM,MANDATORY",
+39,Fish Tank,Deep Fishing Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,FISH_TANK_BUNDLE",
 40,Crafts Room,Beach Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
 41,Crafts Room,Mines Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",
 42,Crafts Room,Desert Foraging Bundle,"BUNDLE,COMMUNITY_CENTER_BUNDLE,CRAFTS_ROOM_BUNDLE",

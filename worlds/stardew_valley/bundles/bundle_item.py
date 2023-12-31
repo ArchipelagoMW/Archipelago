@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
 from ..strings.crop_names import Fruit
 from ..strings.currency_names import Currency
 from ..strings.quality_names import CropQuality, FishQuality, ForageQuality
@@ -10,17 +11,16 @@ class BundleItem:
     item_name: str
     amount: int = 1
     quality: str = CropQuality.basic
-    requires_island: bool = False
 
     @staticmethod
     def money_bundle(amount: int):
         return BundleItem(Currency.money, amount)
 
     def as_amount(self, amount: int):
-        return BundleItem(self.item_name, amount, self.quality, requires_island=self.requires_island)
+        return BundleItem(self.item_name, amount, self.quality)
 
     def as_quality(self, quality: str):
-        return BundleItem(self.item_name, self.amount, quality, requires_island=self.requires_island)
+        return BundleItem(self.item_name, self.amount, quality)
 
     def as_quality_crop(self):
         amount = 5
@@ -39,6 +39,15 @@ class BundleItem:
         quality = "" if self.quality == CropQuality.basic else self.quality
         return f"{self.amount} {quality} {self.item_name}"
 
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return True
 
-def IslandBundleItem(*args, **kwargs):
-    return BundleItem(*args, requires_island=True, **kwargs)
+
+class IslandBundleItem(BundleItem):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
+
+
+class FestivalBundleItem(BundleItem):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.festival_locations != FestivalLocations.option_disabled

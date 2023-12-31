@@ -24,44 +24,40 @@ def get_all_bundles(random: Random, logic: StardewLogic, options: StardewValleyO
 
 
 def get_vanilla_bundles(random: Random, options: StardewValleyOptions) -> List[BundleRoom]:
-    allow_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    pantry = pantry_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    crafts_room = crafts_room_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    fish_tank = fish_tank_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    boiler_room = boiler_room_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    bulletin_board = bulletin_board_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    vault = vault_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
-    abandoned_joja_mart = abandoned_joja_mart_vanilla.create_bundle_room(options.bundle_price, random, allow_island)
+    pantry = pantry_vanilla.create_bundle_room(options.bundle_price, random, options)
+    crafts_room = crafts_room_vanilla.create_bundle_room(options.bundle_price, random, options)
+    fish_tank = fish_tank_vanilla.create_bundle_room(options.bundle_price, random, options)
+    boiler_room = boiler_room_vanilla.create_bundle_room(options.bundle_price, random, options)
+    bulletin_board = bulletin_board_vanilla.create_bundle_room(options.bundle_price, random, options)
+    vault = vault_vanilla.create_bundle_room(options.bundle_price, random, options)
+    abandoned_joja_mart = abandoned_joja_mart_vanilla.create_bundle_room(options.bundle_price, random, options)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart]
 
 
 def get_thematic_bundles(random: Random, options: StardewValleyOptions) -> List[BundleRoom]:
-    allow_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    pantry = pantry_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    crafts_room = crafts_room_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    fish_tank = fish_tank_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    boiler_room = boiler_room_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    bulletin_board = bulletin_board_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    vault = vault_thematic.create_bundle_room(options.bundle_price, random, allow_island)
-    abandoned_joja_mart = abandoned_joja_mart_thematic.create_bundle_room(options.bundle_price, random, allow_island)
+    pantry = pantry_thematic.create_bundle_room(options.bundle_price, random, options)
+    crafts_room = crafts_room_thematic.create_bundle_room(options.bundle_price, random, options)
+    fish_tank = fish_tank_thematic.create_bundle_room(options.bundle_price, random, options)
+    boiler_room = boiler_room_thematic.create_bundle_room(options.bundle_price, random, options)
+    bulletin_board = bulletin_board_thematic.create_bundle_room(options.bundle_price, random, options)
+    vault = vault_thematic.create_bundle_room(options.bundle_price, random, options)
+    abandoned_joja_mart = abandoned_joja_mart_thematic.create_bundle_room(options.bundle_price, random, options)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart]
 
 
 def get_remixed_bundles(random: Random, options: StardewValleyOptions) -> List[BundleRoom]:
-    allow_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    pantry = pantry_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    crafts_room = crafts_room_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    fish_tank = fish_tank_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    boiler_room = boiler_room_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    bulletin_board = bulletin_board_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    vault = vault_remixed.create_bundle_room(options.bundle_price, random, allow_island)
-    abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(options.bundle_price, random, allow_island)
+    pantry = pantry_remixed.create_bundle_room(options.bundle_price, random, options)
+    crafts_room = crafts_room_remixed.create_bundle_room(options.bundle_price, random, options)
+    fish_tank = fish_tank_remixed.create_bundle_room(options.bundle_price, random, options)
+    boiler_room = boiler_room_remixed.create_bundle_room(options.bundle_price, random, options)
+    bulletin_board = bulletin_board_remixed.create_bundle_room(options.bundle_price, random, options)
+    vault = vault_remixed.create_bundle_room(options.bundle_price, random, options)
+    abandoned_joja_mart = abandoned_joja_mart_remixed.create_bundle_room(options.bundle_price, random, options)
     return [pantry, crafts_room, fish_tank, boiler_room, bulletin_board, vault, abandoned_joja_mart]
 
 
 def get_shuffled_bundles(random: Random, logic: StardewLogic, options: StardewValleyOptions) -> List[BundleRoom]:
-    allow_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    valid_bundle_items = [bundle_item for bundle_item in all_bundle_items_except_money if allow_island or not bundle_item.requires_island]
+    valid_bundle_items = [bundle_item for bundle_item in all_bundle_items_except_money if bundle_item.can_appear(options)]
 
     rooms = [room for room in get_remixed_bundles(random, options) if room.name != "Vault"]
     required_items = 0
@@ -79,6 +75,6 @@ def get_shuffled_bundles(random: Random, logic: StardewLogic, options: StardewVa
             bundle.items = sorted_bundle_items[:num_items]
             sorted_bundle_items = sorted_bundle_items[num_items:]
 
-    vault = vault_remixed.create_bundle_room(options.bundle_price, random, allow_island)
+    vault = vault_remixed.create_bundle_room(options.bundle_price, random, options)
     return [*rooms, vault]
 

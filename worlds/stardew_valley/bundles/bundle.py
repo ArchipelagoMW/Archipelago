@@ -3,7 +3,7 @@ from random import Random
 from typing import List
 
 from .bundle_item import BundleItem
-from ..options import BundlePrice
+from ..options import BundlePrice, StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
 from ..strings.currency_names import Currency
 
 
@@ -37,7 +37,7 @@ class BundleTemplate:
     def extend_from(template, items: List[BundleItem]):
         return BundleTemplate(template.room, template.name, items, template.number_possible_items, template.number_required_items)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
         if bundle_price_option == BundlePrice.option_minimum:
             number_required = 1
         elif bundle_price_option == BundlePrice.option_maximum:
@@ -45,7 +45,7 @@ class BundleTemplate:
         else:
             number_required = self.number_required_items + bundle_price_option.value
         number_required = max(1, number_required)
-        filtered_items = [item for item in self.items if allow_island_items or not item.requires_island]
+        filtered_items = [item for item in self.items if item.can_appear(options)]
         number_items = len(filtered_items)
         number_chosen_items = self.number_possible_items
         if number_chosen_items < number_required:
@@ -57,9 +57,8 @@ class BundleTemplate:
             chosen_items = random.sample(filtered_items, number_chosen_items)
         return Bundle(self.room, self.name, chosen_items, number_required)
 
-    @property
-    def requires_island(self) -> bool:
-        return False
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return True
 
 
 class CurrencyBundleTemplate(BundleTemplate):
@@ -69,7 +68,7 @@ class CurrencyBundleTemplate(BundleTemplate):
         super().__init__(room, name, [item], 1, 1)
         self.item = item
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
         currency_amount = self.get_currency_amount(bundle_price_option)
         return Bundle(self.room, self.name, [BundleItem(self.item.item_name, currency_amount)], 1)
 
@@ -84,9 +83,14 @@ class CurrencyBundleTemplate(BundleTemplate):
         currency_amount = int(self.item.amount * price_multiplier)
         return currency_amount
 
-    @property
-    def requires_island(self) -> bool:
-        return self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+            if self.item.item_name == Currency.qi_gem or self.item.item_name == Currency.golden_walnut or self.item.item_name == Currency.cinder_shard:
+                return False
+        if options.festival_locations == FestivalLocations.option_disabled:
+            if self.item.item_name == Currency.star_token:
+                return False
+        return True
 
 
 class MoneyBundleTemplate(CurrencyBundleTemplate):
@@ -94,7 +98,7 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
     def __init__(self, room: str, item: BundleItem):
         super().__init__(room, "", item)
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
         currency_amount = self.get_currency_amount(bundle_price_option)
         currency_name = "g"
         if currency_amount >= 1000:
@@ -118,10 +122,13 @@ class MoneyBundleTemplate(CurrencyBundleTemplate):
 
 
 class IslandBundleTemplate(BundleTemplate):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
 
-    @property
-    def requires_island(self) -> bool:
-        return True
+
+class FestivalBundleTemplate(BundleTemplate):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.festival_locations != FestivalLocations.option_disabled
 
 
 class DeepBundleTemplate(BundleTemplate):
@@ -131,7 +138,7 @@ class DeepBundleTemplate(BundleTemplate):
         super().__init__(room, name, [], number_possible_items, number_required_items)
         self.categories = categories
 
-    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, allow_island_items: bool) -> Bundle:
+    def create_bundle(self, bundle_price_option: BundlePrice, random: Random, options: StardewValleyOptions) -> Bundle:
         if bundle_price_option == BundlePrice.option_minimum:
             number_required = 1
         elif bundle_price_option == BundlePrice.option_maximum:
@@ -150,7 +157,7 @@ class DeepBundleTemplate(BundleTemplate):
 
         chosen_items = []
         for category in chosen_categories:
-            filtered_items = [item for item in category if allow_island_items or not item.requires_island]
+            filtered_items = [item for item in category if item.can_appear(options)]
             chosen_items.append(random.choice(filtered_items))
 
         return Bundle(self.room, self.name, chosen_items, number_required)
