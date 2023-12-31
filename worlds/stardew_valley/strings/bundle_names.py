@@ -61,6 +61,8 @@ class BundleName:
     treasure_hunter = "Treasure Hunter's Bundle"
     engineer = "Engineer's Bundle"
     demolition = "Demolition Bundle"
+    paleontologist = "Paleontologist's Bundle"
+    archaeologist = "Archaeologist's Bundle"
     chef = "Chef's Bundle"
     dye = "Dye Bundle"
     field_research = "Field Research Bundle"

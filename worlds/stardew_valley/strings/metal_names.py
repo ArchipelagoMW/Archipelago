@@ -47,6 +47,7 @@ class Mineral:
 
 
 class Artifact:
+    prehistoric_handaxe = "Prehistoric Handaxe"
     dwarf_gadget = artifact("Dwarf Gadget")
     ancient_seed = artifact("Ancient Seed")
     glass_shards = artifact("Glass Shards")
@@ -79,7 +80,10 @@ class Artifact:
 
 
 class Fossil:
+    amphibian_fossil = fossil("Amphibian Fossil")
     bone_fragment = "Bone Fragment"
+    dinosaur_egg = fossil("Dinosaur Egg")
+    dried_starfish = fossil("Dried Starfish")
     fossilized_leg = fossil("Fossilized Leg")
     fossilized_ribs = fossil("Fossilized Ribs")
     fossilized_skull = fossil("Fossilized Skull")
@@ -87,18 +91,16 @@ class Fossil:
     fossilized_tail = fossil("Fossilized Tail")
     mummified_bat = fossil("Mummified Bat")
     mummified_frog = fossil("Mummified Frog")
-    snake_skull = fossil("Snake Skull")
-    snake_vertebrae = fossil("Snake Vertebrae")
-    amphibian_fossil = fossil("Amphibian Fossil")
-    dinosaur_egg = fossil("Dinosaur Egg")
-    dried_starfish = fossil("Dried Starfish")
     nautilus_fossil = fossil("Nautilus Fossil")
     palm_fossil = fossil("Palm Fossil")
+    prehistoric_hand = fossil("Skeletal Hand")
     prehistoric_rib = fossil("Prehistoric Rib")
     prehistoric_scapula = fossil("Prehistoric Scapula")
     prehistoric_skull = fossil("Prehistoric Skull")
     prehistoric_tibia = fossil("Prehistoric Tibia")
-    prehistoric_hand = fossil("Skeletal Hand")
-    skeletal_tail = fossil("Skeletal Tail")
-    trilobite = fossil("Trilobite")
     prehistoric_vertebra = fossil("Prehistoric Vertebra")
+    skeletal_hand = "Skeletal Hand"
+    skeletal_tail = fossil("Skeletal Tail")
+    snake_skull = fossil("Snake Skull")
+    snake_vertebrae = fossil("Snake Vertebrae")
+    trilobite = fossil("Trilobite")

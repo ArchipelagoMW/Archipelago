@@ -6,7 +6,7 @@ from typing import List, Tuple, Union, Optional
 from ..strings.monster_names import Monster
 from ..strings.fish_names import WaterChest
 from ..strings.forageable_names import Forageable
-from ..strings.metal_names import Mineral
+from ..strings.metal_names import Mineral, Artifact, Fossil
 from ..strings.region_names import Region
 from ..strings.geode_names import Geode
 
@@ -131,7 +131,7 @@ class Artifact:
                                    geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
     bone_flute = create_artifact("Bone Flute", 6.3, (Region.mountain, Region.forest, Region.town),
                                  geodes=(Geode.artifact_trove, WaterChest.fishing_chest))
-    prehistoric_handaxe = create_artifact("Prehistoric Handaxe", 13.7,
+    prehistoric_handaxe = create_artifact(Artifact.prehistoric_handaxe, 13.7,
                                           (Region.mountain, Region.forest, Region.bus_stop),
                                           geodes=Geode.artifact_trove)
     dwarvish_helm = create_artifact("Dwarvish Helm", 8.7, Region.mines_floor_20,
@@ -153,7 +153,7 @@ class Artifact:
     prehistoric_tibia = create_artifact("Prehistoric Tibia", 16.6,
                                         (Region.dig_site, Region.forest, Region.railroad))
     prehistoric_skull = create_artifact("Prehistoric Skull", 3.9, (Region.dig_site, Region.mountain))
-    skeletal_hand = create_artifact("Skeletal Hand", 7.9, (Region.dig_site, Region.backwoods, Region.beach))
+    skeletal_hand = create_artifact(Fossil.skeletal_hand, 7.9, (Region.dig_site, Region.backwoods, Region.beach))
     prehistoric_rib = create_artifact("Prehistoric Rib", 15, (Region.dig_site, Region.farm, Region.town),
                                       monsters=Monster.pepper_rex)
     prehistoric_vertebra = create_artifact("Prehistoric Vertebra", 12.7, (Region.dig_site, Region.bus_stop),

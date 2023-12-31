@@ -316,6 +316,34 @@ ancient_drum = BundleItem(Artifact.ancient_drum)
 dried_starfish = BundleItem(Fossil.dried_starfish)
 bone_fragment = BundleItem(Fossil.bone_fragment)
 
+golden_mask = BundleItem(Artifact.golden_mask)
+golden_relic = BundleItem(Artifact.golden_relic)
+dwarf_gadget = BundleItem(Artifact.dwarf_gadget)
+dwarvish_helm = BundleItem(Artifact.dwarvish_helm)
+prehistoric_handaxe = BundleItem(Artifact.prehistoric_handaxe)
+bone_flute = BundleItem(Artifact.bone_flute)
+anchor = BundleItem(Artifact.anchor)
+prehistoric_tool = BundleItem(Artifact.prehistoric_tool)
+chicken_statue = BundleItem(Artifact.chicken_statue)
+rusty_cog = BundleItem(Artifact.rusty_cog)
+rusty_spur = BundleItem(Artifact.rusty_spur)
+rusty_spoon = BundleItem(Artifact.rusty_spoon)
+ancient_sword = BundleItem(Artifact.ancient_sword)
+ornamental_fan = BundleItem(Artifact.ornamental_fan)
+chipped_amphora = BundleItem(Artifact.chipped_amphora)
+
+prehistoric_scapula = BundleItem(Fossil.prehistoric_scapula)
+prehistoric_tibia = BundleItem(Fossil.prehistoric_tibia)
+prehistoric_skull = BundleItem(Fossil.prehistoric_skull)
+skeletal_hand = BundleItem(Fossil.skeletal_hand)
+prehistoric_rib = BundleItem(Fossil.prehistoric_rib)
+prehistoric_vertebra = BundleItem(Fossil.prehistoric_vertebra)
+skeletal_tail = BundleItem(Fossil.skeletal_tail)
+nautilus_fossil = BundleItem(Fossil.nautilus_fossil)
+amphibian_fossil = BundleItem(Fossil.amphibian_fossil)
+palm_fossil = BundleItem(Fossil.palm_fossil)
+trilobite = BundleItem(Fossil.trilobite)
+
 dinosaur_mayo = BundleItem(ArtisanGood.dinosaur_mayonnaise)
 void_mayo = BundleItem(ArtisanGood.void_mayonnaise)
 prismatic_shard = BundleItem(Mineral.prismatic_shard)
@@ -607,18 +635,19 @@ demolition_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.demolition, de
 
 recycling_items = [stone, coal, iron_ore, wood, cloth, refined_quartz]
 recycling_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.recycling, recycling_items, 4, 4)
-# archaeologist_items = [golden_mask, golden_relic, ancient_drum, dwarf_gadget, dwarvish_helm, prehistoric_handaxe, bone_flute, anchor, prehistoric_tool,
-#                        chicken_statue, rusty_cog, rusty_spur, rusty_spoon, ancient_sword, ornamental_fan, elvish_jewelry, ancient_doll, chipped_amphora]
-# archaeologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.archaeologist, archaeologist_items, 4, 2)
-#
-# paleontologist_items = [prehistoric_scapula, prehistoric_tibia, prehistoric_skull, skeletal_hand, prehistoric_rib, prehistoric_vertebra, skeletal_tail,
-#                         nautilius_fossil, amphibian_fossil, palm_fossil, trilobite]
-# paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontologist, paleontologist_items, 4, 2)
+
+archaeologist_items = [golden_mask, golden_relic, ancient_drum, dwarf_gadget, dwarvish_helm, prehistoric_handaxe, bone_flute, anchor, prehistoric_tool,
+                       chicken_statue, rusty_cog, rusty_spur, rusty_spoon, ancient_sword, ornamental_fan, elvish_jewelry, ancient_doll, chipped_amphora]
+archaeologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.archaeologist, archaeologist_items, 4, 2)
+
+paleontologist_items = [prehistoric_scapula, prehistoric_tibia, prehistoric_skull, skeletal_hand, prehistoric_rib, prehistoric_vertebra, skeletal_tail,
+                        nautilus_fossil, amphibian_fossil, palm_fossil, trilobite]
+paleontologist_bundle = BundleTemplate(CCRoom.boiler_room, BundleName.paleontologist, paleontologist_items, 4, 2)
 
 boiler_room_bundles_vanilla = [blacksmith_bundle_vanilla, geologist_bundle_vanilla, adventurer_bundle_vanilla]
 boiler_room_bundles_thematic = [blacksmith_bundle_thematic, geologist_bundle_thematic, adventurer_bundle_thematic]
 boiler_room_bundles_remixed = [*boiler_room_bundles_thematic, treasure_hunter_bundle, engineer_bundle,
-                               demolition_bundle, recycling_bundle]
+                               demolition_bundle, recycling_bundle, archaeologist_bundle, paleontologist_bundle]
 boiler_room_vanilla = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_vanilla, 3)
 boiler_room_thematic = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_thematic, 3)
 boiler_room_remixed = BundleRoomTemplate(CCRoom.boiler_room, boiler_room_bundles_remixed, 3)
