@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
+from .animal_logic import AnimalLogicMixin
 from .arcade_logic import ArcadeLogicMixin
 from .artisan_logic import ArtisanLogicMixin
 from .base_logic import LogicRegistry
@@ -47,7 +48,7 @@ from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
 from ..stardew_rule import False_, Or, True_, And, StardewRule
-from ..strings.animal_names import Animal, coop_animals, barn_animals
+from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.buff_names import Buff
@@ -90,7 +91,7 @@ fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Re
 @dataclass(frozen=False, repr=False)
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
                    SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin,
-                   BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin,
+                   BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin, AnimalLogicMixin,
                    CombatLogicMixin, MagicLogicMixin, MonsterLogicMixin, ToolLogicMixin, PetLogicMixin, CropLogicMixin,
                    SkillLogicMixin, FarmingLogicMixin, BundleLogicMixin, FishingLogicMixin, MineLogicMixin, CookingLogicMixin, AbilityLogicMixin,
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin):
@@ -176,37 +177,37 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             # self.received("Deluxe Fertilizer Recipe") & self.has(MetalBar.iridium) & self.has(SVItem.sap),
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.emily, 3) & self.has(Forageable.leek) & self.has(Forageable.dandelion) &
             # | (self.ability.can_cook() & self.relationship.has_hearts(NPC.jodi, 7) & self.has(AnimalProduct.cow_milk) & self.has(Ingredient.sugar)),
-            Animal.chicken: self.can_buy_animal(Animal.chicken),
-            Animal.cow: self.can_buy_animal(Animal.cow),
+            Animal.chicken: self.animal.can_buy_animal(Animal.chicken),
+            Animal.cow: self.animal.can_buy_animal(Animal.cow),
             Animal.dinosaur: self.building.has_building(Building.big_coop) & self.has(AnimalProduct.dinosaur_egg),
-            Animal.duck: self.can_buy_animal(Animal.duck),
-            Animal.goat: self.can_buy_animal(Animal.goat),
+            Animal.duck: self.animal.can_buy_animal(Animal.duck),
+            Animal.goat: self.animal.can_buy_animal(Animal.goat),
             Animal.ostrich: self.building.has_building(Building.barn) & self.has(AnimalProduct.ostrich_egg) & self.has(Machine.ostrich_incubator),
-            Animal.pig: self.can_buy_animal(Animal.pig),
-            Animal.rabbit: self.can_buy_animal(Animal.rabbit),
-            Animal.sheep: self.can_buy_animal(Animal.sheep),
+            Animal.pig: self.animal.can_buy_animal(Animal.pig),
+            Animal.rabbit: self.animal.can_buy_animal(Animal.rabbit),
+            Animal.sheep: self.animal.can_buy_animal(Animal.sheep),
             AnimalProduct.any_egg: self.has_any(AnimalProduct.chicken_egg, AnimalProduct.duck_egg),
-            AnimalProduct.brown_egg: self.has_animal(Animal.chicken),
+            AnimalProduct.brown_egg: self.animal.has_animal(Animal.chicken),
             AnimalProduct.chicken_egg: self.has_any(AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg),
             AnimalProduct.cow_milk: self.has_any(AnimalProduct.milk, AnimalProduct.large_milk),
-            AnimalProduct.duck_egg: self.has_animal(Animal.duck),
-            AnimalProduct.duck_feather: self.has_happy_animal(Animal.duck),
-            AnimalProduct.egg: self.has_animal(Animal.chicken),
+            AnimalProduct.duck_egg: self.animal.has_animal(Animal.duck),
+            AnimalProduct.duck_feather: self.animal.has_happy_animal(Animal.duck),
+            AnimalProduct.egg: self.animal.has_animal(Animal.chicken),
             AnimalProduct.goat_milk: self.has(Animal.goat),
             AnimalProduct.golden_egg: self.received(AnimalProduct.golden_egg) & (self.money.can_spend_at(Region.ranch, 100000) | self.money.can_trade_at(Region.qi_walnut_room, Currency.qi_gem, 100)),
-            AnimalProduct.large_brown_egg: self.has_happy_animal(Animal.chicken),
-            AnimalProduct.large_egg: self.has_happy_animal(Animal.chicken),
-            AnimalProduct.large_goat_milk: self.has_happy_animal(Animal.goat),
-            AnimalProduct.large_milk: self.has_happy_animal(Animal.cow),
-            AnimalProduct.milk: self.has_animal(Animal.cow),
+            AnimalProduct.large_brown_egg: self.animal.has_happy_animal(Animal.chicken),
+            AnimalProduct.large_egg: self.animal.has_happy_animal(Animal.chicken),
+            AnimalProduct.large_goat_milk: self.animal.has_happy_animal(Animal.goat),
+            AnimalProduct.large_milk: self.animal.has_happy_animal(Animal.cow),
+            AnimalProduct.milk: self.animal.has_animal(Animal.cow),
             AnimalProduct.ostrich_egg: self.tool.can_forage(Generic.any, Region.island_north, True),
-            AnimalProduct.rabbit_foot: self.has_happy_animal(Animal.rabbit),
+            AnimalProduct.rabbit_foot: self.animal.has_happy_animal(Animal.rabbit),
             AnimalProduct.roe: self.skill.can_fish() & self.building.has_building(Building.fish_pond),
             AnimalProduct.squid_ink: self.mine.can_mine_in_the_mines_floor_81_120() | (self.building.has_building(Building.fish_pond) & self.has(Fish.squid)),
             AnimalProduct.sturgeon_roe: self.has(Fish.sturgeon) & self.building.has_building(Building.fish_pond),
-            AnimalProduct.truffle: self.has_animal(Animal.pig) & self.season.has_any_not_winter(),
+            AnimalProduct.truffle: self.animal.has_animal(Animal.pig) & self.season.has_any_not_winter(),
             AnimalProduct.void_egg: self.money.can_spend_at(Region.sewer, 5000) | (self.building.has_building(Building.fish_pond) & self.has(Fish.void_salmon)),
-            AnimalProduct.wool: self.has_animal(Animal.rabbit) | self.has_animal(Animal.sheep),
+            AnimalProduct.wool: self.animal.has_animal(Animal.rabbit) | self.animal.has_animal(Animal.sheep),
             AnimalProduct.slime_egg_green: self.has(Machine.slime_egg_press) & self.has(Loot.slime),
             AnimalProduct.slime_egg_blue: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(3),
             AnimalProduct.slime_egg_red: self.has(Machine.slime_egg_press) & self.has(Loot.slime) & self.time.has_lived_months(6),
@@ -545,7 +546,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
             return True_()
-        animal_rule = self.has_animal(Generic.any)
+        animal_rule = self.animal.has_animal(Generic.any)
         artisan_rule = self.artisan.can_keg(Generic.any) | self.artisan.can_preserves_jar(Generic.any)
         cooking_rule = self.money.can_spend_at(Region.saloon, 220)  # Salads at the bar are good enough
         fish_rule = self.skill.can_fish(difficulty=50)
@@ -563,57 +564,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
     def can_win_fishing_competition(self) -> StardewRule:
         return self.skill.can_fish(difficulty=60)
-
-    def can_buy_animal(self, animal: str) -> StardewRule:
-        price = 0
-        building = ""
-        if animal == Animal.chicken:
-            price = 800
-            building = Building.coop
-        elif animal == Animal.cow:
-            price = 1500
-            building = Building.barn
-        elif animal == Animal.goat:
-            price = 4000
-            building = Building.big_barn
-        elif animal == Animal.duck:
-            price = 1200
-            building = Building.big_coop
-        elif animal == Animal.sheep:
-            price = 8000
-            building = Building.deluxe_barn
-        elif animal == Animal.rabbit:
-            price = 8000
-            building = Building.deluxe_coop
-        elif animal == Animal.pig:
-            price = 16000
-            building = Building.deluxe_barn
-        else:
-            return True_()
-        return self.money.can_spend_at(Region.ranch, price) & self.building.has_building(building)
-
-    def has_animal(self, animal: str) -> StardewRule:
-        if animal == Generic.any:
-            return self.has_any_animal()
-        elif animal == Building.coop:
-            return self.has_any_coop_animal()
-        elif animal == Building.barn:
-            return self.has_any_barn_animal()
-        return self.has(animal)
-
-    def has_happy_animal(self, animal: str) -> StardewRule:
-        return self.has_animal(animal) & self.has(Forageable.hay)
-
-    def has_any_animal(self) -> StardewRule:
-        return self.has_any_coop_animal() | self.has_any_barn_animal()
-
-    def has_any_coop_animal(self) -> StardewRule:
-        coop_rule = Or(*(self.has_animal(coop_animal) for coop_animal in coop_animals))
-        return coop_rule
-
-    def has_any_barn_animal(self) -> StardewRule:
-        barn_rule = Or(*(self.has_animal(barn_animal) for barn_animal in barn_animals))
-        return barn_rule
 
     def has_island_trader(self) -> StardewRule:
         if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
