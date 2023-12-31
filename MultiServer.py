@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import copy
 import collections
+import copy
 import datetime
 import functools
 import hashlib
@@ -417,6 +417,8 @@ class Context:
             self.player_name_lookup[slot_info.name] = 0, slot_id
             self.read_data[f"hints_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
                 list(self.get_rechecked_hints(local_team, local_player))
+            self.read_data[f"client_status_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
+                self.client_game_state[local_team, local_player]
 
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
@@ -711,6 +713,12 @@ class Context:
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_client_status_change(self, team: int, slot: int):
+        key: str = f"_read_client_status_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1819,6 +1827,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+        ctx.on_client_status_change(client.team, client.slot)
         ctx.save()
 
 
