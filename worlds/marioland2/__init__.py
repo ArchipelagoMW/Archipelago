@@ -410,7 +410,8 @@ class MarioLand2World(World):
             "mode": self.multiworld.difficulty_mode[self.player].value,
             "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
                               and loc.item.name == "Super Star Duration Increase"]), 1),
-            "midway_bells": self.multiworld.shuffle_midway_bells[self.player].value
+            "midway_bells": self.multiworld.shuffle_midway_bells[self.player].value,
+            "energy_link": self.multiworld.energy_link[self.player].value
         }
 
     def create_item(self, name: str) -> Item:

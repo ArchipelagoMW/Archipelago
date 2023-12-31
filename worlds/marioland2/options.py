@@ -77,6 +77,13 @@ class RandomizeMusic(Toggle):
     display_name = "Randomize Music"
 
 
+class EnergyLink(Toggle):
+    """All extra lives beyond 1 are transferred into the server's shared EnergyLink storage. If you drop to 0,
+    1 will be replenished if there is sufficient energy stored."""
+    display_name = "Energy Link"
+    default = 1
+
+
 sml2options = {
     "golden_coins": GoldenCoins,
     "required_golden_coins": GoldenCoinsRequired,
@@ -87,5 +94,6 @@ sml2options = {
     "randomize_platforms": RandomizePlatforms,
     "auto_scroll_levels": AutoScrollLevels,
     "auto_scroll_trap": AutoScrollTrap,
-    "randomize_music": RandomizeMusic
+    "randomize_music": RandomizeMusic,
+    "energy_link": EnergyLink
 }

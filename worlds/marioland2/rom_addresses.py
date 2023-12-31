@@ -11,6 +11,7 @@ rom_addresses = {
     "Pipe_Traversal_SFX_D": 0x125b,
     "Enable_Swim": 0x1d17,
     "Auto_Scroll_Levels": 0x1f71,
+    "Starting_Lives": 0x2920,
     "Get_Hurt_To_Big_Mario": 0x31c7,
     "Get_Mushroom_A": 0x345c,
     "Get_Fire_Flower_A": 0x346d,

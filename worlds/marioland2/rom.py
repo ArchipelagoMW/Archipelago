@@ -191,6 +191,10 @@ def generate_output(self, output_directory: str):
 
     data[rom_addresses["Required_Golden_Coins"]] = self.multiworld.required_golden_coins[self.player].value
 
+    if self.multiworld.energy_link[self.player]:
+        # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.
+        data[rom_addresses["Starting_Lives"]] = 1
+
     rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
                          'utf8')[:21]
     rom_name.extend([0] * (21 - len(rom_name)))

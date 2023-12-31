@@ -9,6 +9,8 @@ from .rom_addresses import rom_addresses
 
 logger = logging.getLogger("Client")
 
+BANK_EXCHANGE_RATE = 20000000000
+
 
 class MarioLand2Client(BizHawkClient):
     system = ("GB", "SGB")
@@ -35,22 +37,25 @@ class MarioLand2Client(BizHawkClient):
 
     async def game_watcher(self, ctx: BizHawkClientContext):
         from . import locations, items, START_IDS
-        game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point = \
+        (game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point,
+         bcd_lives) = \
             await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
                                          (rom_addresses["Auto_Scroll_Disable"], 1, "ROM"),
                                          (rom_addresses["Auto_Scroll_Levels"], 32, "ROM"),
                                          (0x0269, 1, "CartRAM"),
-                                         (0x02A0, 1, "CartRAM")])
-
-        if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff':
-            return
+                                         (0x02A0, 1, "CartRAM"),
+                                         (0x022C, 1, "CartRAM")])
 
         current_level = int.from_bytes(current_level)
         midway_point = int.from_bytes(midway_point)
         music = int.from_bytes(music)
         auto_scroll_enabled = int.from_bytes(auto_scroll_enabled)
-
         level_data = list(level_data)
+        lives = bcd_lives.hex()
+
+        # there is no music in the title screen demos, this is how we guard against anything in the demos registering.
+        if game_loaded_check != b'\x124Vx\xff\xff\xff\xff\xff\xff' or music == 0:
+            return
 
         items_received = [list(items.keys())[item.item - START_IDS] for item in ctx.items_received]
 
@@ -95,6 +100,21 @@ class MarioLand2Client(BizHawkClient):
         else:
             difficulty_mode = 0
 
+        new_lives = int(lives)
+        energy_link_add = None
+        # TODO: temporary check to ensure energy_link key for backwards compatibility
+        if ctx.slot_data and "energy_link" in ctx.slot_data and ctx.slot_data["energy_link"]:
+            if new_lives == 0:
+                if (f"EnergyLink{ctx.team}" in ctx.stored_data
+                        and ctx.stored_data[f"EnergyLink{ctx.team}"] > BANK_EXCHANGE_RATE):
+                    new_lives = 1
+                    energy_link_add = -BANK_EXCHANGE_RATE
+            elif new_lives > 1:
+                energy_link_add = BANK_EXCHANGE_RATE * (new_lives - 1)
+                new_lives = 1
+        # convert back to binary-coded-decimal
+        new_lives = int(str(new_lives), 16)
+
         data_writes = [
             (rom_addresses["Space_Physics"], [0x7e] if "Space Physics" in items_received else [0xaf], "ROM"),
             (rom_addresses["Get_Hurt_To_Big_Mario"], [1] if "Mushroom" in items_received else [0], "ROM"),
@@ -119,6 +139,7 @@ class MarioLand2Client(BizHawkClient):
             (rom_addresses["Pipe_Traversal_SFX_B"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
             (rom_addresses["Pipe_Traversal_SFX_C"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
             (rom_addresses["Pipe_Traversal_SFX_D"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (0x022c, [new_lives], "CartRAM"),
             (0x02E4, [difficulty_mode], "CartRAM"),
             (0x0848, modified_level_data, "CartRAM")
         ]
@@ -134,7 +155,15 @@ class MarioLand2Client(BizHawkClient):
                 if auto_scroll_levels[current_level] == 1:
                     data_writes.append((0x02C8, [0x01], "CartRAM"))
 
-        await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM")])
+        success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM"),
+                                                                     (0x022C, [int.from_bytes(bcd_lives)], "CartRAM")])
+
+        if success and energy_link_add is not None:
+            await ctx.send_msgs([{
+                "cmd": "Set", "key": f"EnergyLink{ctx.team}", "operations":
+                    [{"operation": "add", "value": energy_link_add},
+                     {"operation": "max", "value": 0}],
+            }])
 
         if not ctx.server or not ctx.server.socket.open or ctx.server.socket.closed:
             return
@@ -146,3 +175,17 @@ class MarioLand2Client(BizHawkClient):
         if music == 0x18:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
+
+    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict):
+        super().on_package(ctx, cmd, args)
+        if cmd == 'Connected':
+            ctx.set_notify(f"EnergyLink{ctx.team}")
+            ctx.ui.enable_energy_link()
+            ctx.ui.energy_link_label.text = "Lives: Standby"
+        elif cmd == "SetReply" and args["key"].startswith("EnergyLink"):
+            if ctx.ui:
+                ctx.ui.energy_link_label.text = f"Lives: {int(args['value'] / BANK_EXCHANGE_RATE)}"
+        elif cmd == "Retrieved":
+            if f"EnergyLink{ctx.team}" in args["keys"]:
+                if ctx.ui:
+                    ctx.ui.energy_link_label.text = f"Lives: {int(args['keys'][f'EnergyLink{ctx.team}'] / BANK_EXCHANGE_RATE)}"

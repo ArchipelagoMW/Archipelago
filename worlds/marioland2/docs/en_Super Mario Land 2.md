@@ -23,8 +23,6 @@ Mushroom, you will drop straight down to Small Mario.
 - Swim: Mario will fall through water as though it is air until this is obtained.
 - Hippo Bubble: required to use the bubbles in Hippo Zone to fly.
 - Space Physics: the Space Zone levels will have normal gravity until this is obtained.
-- Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
-increase it.
 
 Additionally, the following items can be shuffled depending on your YAML settings:
 - The 6 Golden Coins: note that the game will still show you the coin being sent to the castle when defeating a boss
@@ -34,6 +32,10 @@ Note that you may have to backtrack from the midway point to reach some secret e
 - Normal Mode/Easy Mode: you can start the game in Normal Mode with an Easy Mode "upgrade" in the item pool, or start in
 Easy Mode with a Normal Mode "trap" item, swapping the difficulty.
 - Auto Scroll: auto-scrolling levels can be set to not auto scroll until this trap item is received.
+- Pipe Traversal: required to enter pipes.
+- Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
+increase it. This is the main filler item generated to fill out the item pool. One or more will appear unless all other
+options to add items are on.
 
 ## When the player receives an item, what happens?
 
