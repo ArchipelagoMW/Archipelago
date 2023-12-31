@@ -5,8 +5,10 @@ from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin, MAX_MONTHS
-from ..data.monster_data import StardewMonster, all_monsters_by_name
+from .. import options
+from ..data import monster_data
 from ..stardew_rule import StardewRule, Or, And
+from ..strings.region_names import Region
 
 
 class MonsterLogicMixin(BaseLogicMixin):
@@ -16,9 +18,9 @@ class MonsterLogicMixin(BaseLogicMixin):
 
 
 class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLogicMixin, TimeLogicMixin]]):
-    def can_kill(self, monster: Union[str, StardewMonster], amount_tier: int = 0) -> StardewRule:
+    def can_kill(self, monster: Union[str, monster_data.StardewMonster], amount_tier: int = 0) -> StardewRule:
         if isinstance(monster, str):
-            monster = all_monsters_by_name[monster]
+            monster = monster_data.all_monsters_by_name[monster]
         region_rule = self.logic.region.can_reach_any(monster.locations)
         combat_rule = self.logic.combat.can_fight_at_level(monster.difficulty)
         if amount_tier <= 0:
@@ -27,19 +29,31 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
         return region_rule & combat_rule & time_rule
 
     @cache_self1
-    def can_kill_many(self, monster: StardewMonster) -> StardewRule:
+    def can_kill_many(self, monster: monster_data.StardewMonster) -> StardewRule:
         return self.logic.monster.can_kill(monster, MAX_MONTHS / 3)
 
     @cache_self1
-    def can_kill_max(self, monster: StardewMonster) -> StardewRule:
+    def can_kill_max(self, monster: monster_data.StardewMonster) -> StardewRule:
         return self.logic.monster.can_kill(monster, MAX_MONTHS)
 
     # Should be cached
-    def can_kill_any(self, monsters: (Iterable[StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
+    def can_kill_any(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
         rules = [self.logic.monster.can_kill(monster, amount_tier) for monster in monsters]
         return Or(*rules)
 
     # Should be cached
-    def can_kill_all(self, monsters: (Iterable[StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
+    def can_kill_all(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
         rules = [self.logic.monster.can_kill(monster, amount_tier) for monster in monsters]
+        return And(*rules)
+
+    def can_complete_all_monster_slaying_goals(self) -> StardewRule:
+        rules = [self.logic.time.has_lived_max_months]
+        exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
+        island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
+        for category in monster_data.all_monsters_by_category:
+            if exclude_island and all(all(location in island_regions for location in monster.locations)
+                                      for monster in monster_data.all_monsters_by_category[category]):
+                continue
+            rules.append(self.logic.monster.can_kill_any(monster_data.all_monsters_by_category[category]))
+
         return And(*rules)

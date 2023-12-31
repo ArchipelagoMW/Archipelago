@@ -38,8 +38,8 @@ from .wallet_logic import WalletLogicMixin
 from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
-from ..data.fish_data import island_fish, extended_family, get_fish_for_mods
-from ..data.monster_data import all_monsters_by_category, all_monsters_by_name
+from ..data.fish_data import get_fish_for_mods
+from ..data.monster_data import all_monsters_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
@@ -478,18 +478,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
 
         return allowed_buy_sapling & can_buy_sapling
 
-    def can_catch_every_fish(self) -> StardewRule:
-        rules = [self.skill.has_level(Skill.fishing, 10), self.tool.has_fishing_rod(4)]
-        exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        exclude_extended_family = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
-        for fish in get_fish_for_mods(self.options.mods.value):
-            if exclude_island and fish in island_fish:
-                continue
-            if exclude_extended_family and fish in extended_family:
-                continue
-            rules.append(self.fishing.can_catch_fish(fish))
-        return And(*rules)
-
     def can_smelt(self, item: str) -> StardewRule:
         return self.has(Machine.furnace) & self.has(item)
 
@@ -532,17 +520,6 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             self.wallet.has_rusty_key(),  # Rusty key obtained
         ]
         return self.count(12, *rules_worth_a_point)
-
-    def can_complete_all_monster_slaying_goals(self) -> StardewRule:
-        rules = [self.time.has_lived_max_months]
-        exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
-        island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
-        for category in all_monsters_by_category:
-            if exclude_island and all(all(location in island_regions for location in monster.locations) for monster in all_monsters_by_category[category]):
-                continue
-            rules.append(self.monster.can_kill_any(all_monsters_by_category[category]))
-
-        return And(*rules)
 
     def can_win_egg_hunt(self) -> StardewRule:
         number_of_movement_buffs = self.options.movement_buff_number
@@ -694,7 +671,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         number_of_stardrops_to_receive += 1  # Krobus Stardrop
 
         if self.options.fishsanity == Fishsanity.option_none:  # Master Angler Stardrop
-            other_rules.append(self.can_catch_every_fish())
+            other_rules.append(self.fishing.can_catch_every_fish())
         else:
             number_of_stardrops_to_receive += 1
 

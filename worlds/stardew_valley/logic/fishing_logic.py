@@ -7,8 +7,7 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
-from ..data import FishItem
-from ..data.fish_data import legendary_fish
+from ..data import FishItem, fish_data
 from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
@@ -61,7 +60,7 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             return False_()
         if self.options.special_order_locations != SpecialOrderLocations.option_board_qi:
             return False_()
-        return self.logic.region.can_reach(Region.qi_walnut_room) & And(*(self.logic.fishing.can_catch_fish(fish) for fish in legendary_fish))
+        return self.logic.region.can_reach(Region.qi_walnut_room) & And(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.legendary_fish))
 
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
@@ -74,3 +73,15 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
         if fish_quality == FishQuality.iridium:
             return rod_rule & self.logic.skill.has_level(Skill.fishing, 10)
         return False_()
+
+    def can_catch_every_fish(self) -> StardewRule:
+        rules = [self.logic.skill.has_level(Skill.fishing, 10), self.logic.tool.has_fishing_rod(4)]
+        exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+        exclude_extended_family = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
+        for fish in fish_data.get_fish_for_mods(self.options.mods.value):
+            if exclude_island and fish in fish_data.island_fish:
+                continue
+            if exclude_extended_family and fish in fish_data.extended_family:
+                continue
+            rules.append(self.logic.fishing.can_catch_fish(fish))
+        return And(*rules)
