@@ -560,13 +560,13 @@ class WitnessPlayerLogic:
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.STARTING_INVENTORY = set()
 
-        self.DIFFICULTY = world.options.puzzle_randomization.value
+        self.DIFFICULTY = world.options.puzzle_randomization
 
-        if self.DIFFICULTY == 0:
+        if self.DIFFICULTY == "sigma_normal":
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
-        elif self.DIFFICULTY == 1:
+        elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
-        elif self.DIFFICULTY == 2:
+        elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
