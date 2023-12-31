@@ -62,7 +62,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Traverse Town Mystical House Yellow Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "Yellow Trinity")
    #multiworld.get_location("Traverse Town Accessory Shop Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Traverse Town Secret Waterway White Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "White Trinity") and has_item(state, player, "Progressive Fire")
-   #multiworld.get_location("Traverse Town Geppetto's House Chest"                                         , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Traverse Town Geppetto's House Chest"                                         , player).access_rule = lambda state: has_item(state, player, "Monstro") and has_item(state, player, "High Jump")
     multiworld.get_location("Traverse Town Item Workshop Right Chest"                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Traverse Town 1st District Blue Trinity Balcony Chest"                        , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
     multiworld.get_location("Traverse Town Mystical House Glide Chest"                                     , player).access_rule = lambda state: has_item(state, player, "Glide")

@@ -135,7 +135,7 @@ class KH1Context(CommonContext):
 
 
 async def game_watcher(ctx: KH1Context):
-    from worlds.khrecom.Locations import lookup_id_to_name
+    from worlds.kh1.Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
             sync_msg = [{'cmd': 'Sync'}]
