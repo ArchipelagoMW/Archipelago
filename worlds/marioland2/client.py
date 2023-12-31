@@ -111,6 +111,14 @@ class MarioLand2Client(BizHawkClient):
             (rom_addresses["Invincibility_Star_B"], [invincibility_length & 0xFF], "ROM"),
             (rom_addresses["Enable_Bubble"], [0xcb, 0xd7] if "Hippo Bubble" in items_received else [0, 0], "ROM"),
             (rom_addresses["Enable_Swim"], [0xcb, 0xcf] if "Swim" in items_received else [0, 0], "ROM"),
+            (rom_addresses["Pipe_Traversal_A"], [16] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_B"], [32] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_C"], [48] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_D"], [64] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_A"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_B"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_C"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_D"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
             (0x02E4, [difficulty_mode], "CartRAM"),
             (0x0848, modified_level_data, "CartRAM")
         ]

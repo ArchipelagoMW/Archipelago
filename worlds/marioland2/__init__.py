@@ -88,22 +88,23 @@ items = {
     "Space Physics": ItemClassification.progression_skip_balancing,
     "Hippo Bubble": ItemClassification.progression_skip_balancing,
     "Swim": ItemClassification.progression,
-    "Easy Mode": ItemClassification.useful,
+    "Pipe Traversal":  ItemClassification.progression,
     "Super Star Duration Increase": ItemClassification.filler,
+    "Easy Mode": ItemClassification.useful,
     "Normal Mode": ItemClassification.trap,
     "Auto Scroll": ItemClassification.trap,
     "Mushroom Zone Midway Bell": ItemClassification.filler,
     "Tree Zone 1 - Invincibility! Midway Bell": ItemClassification.filler,
-    "Tree Zone 3 - The Exit Midway Bell": ItemClassification.filler,
-    "Tree Zone 4 - Honeybees Midway Bell": ItemClassification.filler,
+    "Tree Zone 2 - In the Trees Midway Bell": ItemClassification.progression_skip_balancing,
+    "Tree Zone 4 - Honeybees Midway Bell": ItemClassification.progression_skip_balancing,
     "Tree Zone 5 - The Big Bird Midway Bell": ItemClassification.filler,
     "Space Zone 1 - Moon Stage Midway Bell": ItemClassification.filler,
     "Space Zone 2 - Star Stage Midway Bell": ItemClassification.progression_skip_balancing,
-    "Macro Zone 1 - The Ant Monsters Midway Bell": ItemClassification.filler,
-    "Macro Zone 2 - In the Syrup Sea Midway Bell": ItemClassification.filler,
-    "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": ItemClassification.filler,
+    "Macro Zone 1 - The Ant Monsters Midway Bell": ItemClassification.progression_skip_balancing,
+    "Macro Zone 2 - In the Syrup Sea Midway Bell": ItemClassification.progression_skip_balancing,
+    "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": ItemClassification.progression_skip_balancing,
     "Macro Zone 4 - One Mighty Mouse Midway Bell": ItemClassification.filler,
-    "Pumpkin Zone 1 - Bat Course Midway Bell": ItemClassification.filler,
+    "Pumpkin Zone 1 - Bat Course Midway Bell": ItemClassification.progression_skip_balancing,
     "Pumpkin Zone 2 - Cyclops Course Midway Bell": ItemClassification.filler,
     "Pumpkin Zone 3 - Ghost House Midway Bell": ItemClassification.filler,
     "Pumpkin Zone 4 - Witch's Mansion Midway Bell": ItemClassification.filler,
@@ -225,10 +226,12 @@ class MarioLand2World(World):
                 ["Space Physics", "Carrot"], self.player),
             "Space Zone 1 -> Space Zone 2": lambda state: state.has("Space Zone Progression", self.player),
             "Tree Zone 1 -> Tree Zone 2": lambda state: state.has("Tree Zone Progression", self.player),
-            "Tree Zone 2 -> Tree Zone - Secret Course": lambda state: state.has("Carrot", self.player),
+            "Tree Zone 2 -> Tree Zone - Secret Course": lambda state: state.has_all(["Carrot", "Pipe Traversal"],
+                                                                                    self.player),
             "Tree Zone 2 -> Tree Zone 3": lambda state: state.has("Tree Zone Progression", self.player, 2),
             "Tree Zone 4 -> Tree Zone 5": lambda state: state.has("Tree Zone Progression", self.player, 3),
-            "Macro Zone 1 -> Macro Zone - Secret Course": lambda state: state.has("Fire Flower", self.player),
+            "Macro Zone 1 -> Macro Zone - Secret Course": lambda state: state.has_all(["Fire Flower", "Pipe Traversal"],
+                                                                                      self.player),
             "Macro Zone - Secret Course -> Macro Zone 4": lambda state: state.has("Macro Zone Secret", self.player),
             "Macro Zone 1 -> Macro Zone 2": lambda state: state.has("Macro Zone Progression", self.player),
             "Macro Zone 2 -> Macro Zone 3": lambda state: state.has("Macro Zone Progression", self.player, 2),
@@ -236,8 +239,8 @@ class MarioLand2World(World):
             "Macro Zone 4 -> Macro Zone - Secret Course": lambda state: state.has("Macro Zone Secret", self.player),
             "Pumpkin Zone 1 -> Pumpkin Zone 2": lambda state: state.has("Pumpkin Zone Progression", self.player),
             # You can only spin jump as Big Mario or Fire Mario
-            "Pumpkin Zone 2 -> Pumpkin Zone - Secret Course 1": lambda state: state.has("Swim", self.player)
-                and state.has_any(["Mushroom", "Fire Flower"], self.player),
+            "Pumpkin Zone 2 -> Pumpkin Zone - Secret Course 1": lambda state: state.has_all(
+                ["Swim", "Pipe Traversal"], self.player) and state.has_any(["Mushroom", "Fire Flower"], self.player),
             "Pumpkin Zone 2 -> Pumpkin Zone 3": lambda state: state.has("Pumpkin Zone Progression", self.player, 2),
             "Pumpkin Zone 3 -> Pumpkin Zone - Secret Course 2": lambda state: state.has("Carrot", self.player),
             "Pumpkin Zone 3 -> Pumpkin Zone 4": lambda state: state.has("Pumpkin Zone Progression", self.player, 3),
@@ -245,7 +248,8 @@ class MarioLand2World(World):
             "Mario Zone 2 -> Mario Zone 3": lambda state: state.has("Mario Zone Progression", self.player, 2),
             "Mario Zone 3 -> Mario Zone 4": lambda state: state.has("Mario Zone Progression", self.player, 3),
             "Turtle Zone 1 -> Turtle Zone 2": lambda state: state.has("Turtle Zone Progression", self.player),
-            "Turtle Zone 2 -> Turtle Zone - Secret Course": lambda state: state.has("Swim", self.player),
+            "Turtle Zone 2 -> Turtle Zone - Secret Course": lambda state: state.has_all(["Swim", "Pipe Traversal"],
+                                                                                        self.player),
             "Turtle Zone 2 -> Turtle Zone 3": lambda state: state.has("Turtle Zone Progression", self.player, 2),
         }
         rules = {
@@ -269,16 +273,44 @@ class MarioLand2World(World):
             "Space Zone 2 - Star Stage Midway Bell": lambda state: state.has_any(
                 ["Space Physics", "Space Zone 2 - Star Stage Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),
-            "Macro Zone 2 - In the Syrup Sea": lambda state: state.has("Swim", self.player),
-            "Macro Zone 2 - In the Syrup Sea Midway Bell": lambda state: state.has("Swim", self.player),
-            "Pumpkin Zone 2 - Cyclops Course": lambda state: state.has("Swim", self.player),
+            "Tree Zone 2 - In the Trees": lambda state: state.has_any(["Pipe Traversal",
+                "Tree Zone 2 - In the Trees Midway Bell"], self.player),
+            "Tree Zone 2 - In the Trees Midway Bell": lambda state: state.has_any(["Pipe Traversal",
+                "Tree Zone 2 - In the Trees Midway Bell"], self.player),
+            "Tree Zone 4 - Honeybees": lambda state: state.has("Pipe Traversal", self.player),
+            "Tree Zone 4 - Honeybees Midway Bell": lambda state: state.has_any(["Pipe Traversal",
+                "Tree Zone 4 - Honeybees Midway Bell"], self.player),
+            "Tree Zone 5 - The Big Bird": lambda state: state.has("Pipe Traversal", self.player),
+            "Macro Zone 1 - The Ant Monsters": lambda state: state.has_any(
+                ["Pipe Traversal", "Macro Zone 1 - The Ant Monsters Midway Bell"], self.player),
+            "Macro Zone 1 - The Ant Monsters Midway Bell": lambda state: state.has_any(
+                ["Pipe Traversal", "Macro Zone 1 - The Ant Monsters Midway Bell"], self.player),
+            "Macro Zone 2 - In the Syrup Sea": lambda state: state.has_all(["Swim", "Pipe Traversal"], self.player),
+            "Macro Zone 2 - In the Syrup Sea Midway Bell": lambda state: state.has_all(
+                ["Swim", "Pipe Traversal"], self.player) or state.has("Macro Zone 2 - In the Syrup Sea Midway Bell",
+                                                                      self.player),
+            "Macro Zone 3 - Fiery Mario-Special Agent": lambda state: state.has_any(
+                ["Macro Zone 3 - Fiery Mario-Special Agent Midway Bell", "Pipe Traversal"], self.player),
+            "Macro Zone 3 - Fiery Mario-Special Agent Midway Bell": lambda state: state.has_any(
+                ["Macro Zone 3 - Fiery Mario-Special Agent Midway Bell", "Pipe Traversal"], self.player),
+            "Macro Zone 4 - One Mighty Mouse": lambda state: state.has("Pipe Traversal", self.player),
+            "Pumpkin Zone 1 - Bat Course": lambda state: state.has_any(
+                ["Pipe Traversal", "Pumpkin Zone 1 - Bat Course Midway Bell"], self.player),
+            "Pumpkin Zone 1 - Bat Course Midway Bell": lambda state: state.has_any(
+                ["Pipe Traversal", "Pumpkin Zone 1 - Bat Course Midway Bell"], self.player),
+            "Pumpkin Zone 2 - Cyclops Course": lambda state: state.has_all(["Swim", "Pipe Traversal"], self.player),
+            "Pumpkin Zone 4 - Witch's Mansion": lambda state: state.has("Pipe Traversal", self.player),
+            "Mario Zone 1 - Fiery Blocks": lambda state: state.has("Pipe Traversal", self.player),
             # It is possible to get as small mario, but it is a very precise jump and you will die afterward.
-            "Mario Zone 1 - Fiery Blocks Midway Bell": lambda state: state.has_any(
-                ["Mushroom", "Fire Flower", "Carrot", "Mario Zone 1 - Fiery Blocks Midway Bell"], self.player),
-            "Turtle Zone 2 - Turtle Zone": lambda state: state.has("Swim", self.player),
+            "Mario Zone 1 - Fiery Blocks Midway Bell": lambda state: (state.has_any(
+                ["Mushroom", "Fire Flower", "Carrot"], self.player) and state.has("Pipe Traversal", self.player))
+                or state.has("Mario Zone 1 - Fiery Blocks Midway Bell", self.player),
+            "Mario Zone 4 - Three Mean Pigs!": lambda state: state.has("Pipe Traversal", self.player),
+            "Turtle Zone 2 - Turtle Zone": lambda state: state.has_all(["Swim", "Pipe Traversal"], self.player),
             "Turtle Zone 2 - Turtle Zone Midway Bell": lambda state: state.has_any(
                 ["Swim", "Turtle Zone 2 - Turtle Zone Midway Bell"], self.player),
             "Turtle Zone - Secret Course": lambda state: state.has_any(["Fire Flower", "Carrot"], self.player),
+            "Turtle Zone 3 - Whale Course": lambda state: state.has("Pipe Traversal", self.player),
         }
 
         for entrance, rule in entrance_rules.items():
@@ -289,7 +321,7 @@ class MarioLand2World(World):
                 self.multiworld.get_location(level, self.player).access_rule = rule
 
         if self.multiworld.golden_coins[self.player] == "progressive":
-            self.multiworld.completion_condition[self.player] = lambda state: [
+            self.multiworld.completion_condition[self.player] = lambda state: ([
                 state.has("Space Zone Progression", self.player, 3),
                 state.has("Tree Zone Progression", self.player, 4),
                 state.has("Macro Zone Progression", self.player, 4),
@@ -297,12 +329,14 @@ class MarioLand2World(World):
                 state.has("Mario Zone Progression", self.player, 4),
                 state.has("Turtle Zone Progression", self.player, 3)
                 ].count(True) >= self.multiworld.required_golden_coins[self.player]
+                and state.has("Pipe Traversal", self.player))
         else:
-            self.multiworld.completion_condition[self.player] = lambda state: [
+            self.multiworld.completion_condition[self.player] = lambda state: ([
                 state.has("Tree Coin", self.player), state.has("Space Coin", self.player),
                 state.has("Macro Coin", self.player), state.has("Pumpkin Coin", self.player),
                 state.has("Mario Coin", self.player), state.has("Turtle Coin", self.player)
                 ].count(True) >= self.multiworld.required_golden_coins[self.player]
+                and state.has("Pipe Traversal", self.player))
 
     def create_items(self):
         item_counts = {
@@ -353,9 +387,20 @@ class MarioLand2World(World):
         else:
             item_counts["Super Star Duration Increase"] += 1
 
+        if self.multiworld.shuffle_pipe_traversal[self.player]:
+            item_counts["Super Star Duration Increase"] -= 1
+            item_counts["Pipe Traversal"] = 1
+        else:
+            self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
+
         if self.multiworld.auto_scroll_trap[self.player]:
             item_counts["Super Star Duration Increase"] -= 1
             item_counts["Auto Scroll"] = 1
+
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name in item_counts and item_counts[item.name] > 0:
+                item_counts[item.name] -= 1
+                item_counts["Super Star Duration Increase"] += 1
 
         for item_name, count in item_counts.items():
             self.multiworld.itempool += [self.create_item(item_name) for _ in range(count)]

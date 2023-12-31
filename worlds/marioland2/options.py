@@ -41,6 +41,12 @@ class ShuffleMidwayBells(Toggle):
     display_name = "Shuffle Midway Bells"
 
 
+class ShufflePipeTraversal(Toggle):
+    """Shuffle a Pipe Traversal item into the item pool, which is required to enter pipes.
+    Note that being unable to enter pipes is very limiting and affects nearly half of all levels."""
+    display_name = "Shuffle Pipe Traversal"
+
+
 class RandomizeEnemies(Toggle):
     """Randomize enemies throughout levels."""
     display_name = "Randomize Enemies"
@@ -76,6 +82,7 @@ sml2options = {
     "required_golden_coins": GoldenCoinsRequired,
     "difficulty_mode": DifficultyMode,
     "shuffle_midway_bells": ShuffleMidwayBells,
+    "shuffle_pipe_traversal": ShufflePipeTraversal,
     "randomize_enemies": RandomizeEnemies,
     "randomize_platforms": RandomizePlatforms,
     "auto_scroll_levels": AutoScrollLevels,
