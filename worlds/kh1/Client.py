@@ -12,7 +12,7 @@ import Utils
 check_num = 0
 
 if __name__ == "__main__":
-    Utils.init_logging("KHRECOMClient", exception_logger="Client")
+    Utils.init_logging("KH1Client", exception_logger="Client")
 
 from NetUtils import NetworkItem, ClientStatus
 from CommonClient import gui_enabled, logger, get_base_parser, ClientCommandProcessor, \
@@ -23,27 +23,27 @@ def check_stdin() -> None:
     if Utils.is_windows and sys.stdin:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
-class KHRECOMClientCommandProcessor(ClientCommandProcessor):
+class KH1ClientCommandProcessor(ClientCommandProcessor):
     def _cmd_test(self):
         """Test"""
         self.output(f"Test")
 
 
-class KHRECOMContext(CommonContext):
-    command_processor: int = KHRECOMClientCommandProcessor
-    game = "Kingdom Hearts RE Chain of Memories"
+class KH1Context(CommonContext):
+    command_processor: int = KH1ClientCommandProcessor
+    game = "Kingdom Hearts"
     items_handling = 0b111  # full remote
 
     def __init__(self, server_address, password):
-        super(KHRECOMContext, self).__init__(server_address, password)
+        super(KH1Context, self).__init__(server_address, password)
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
-            self.game_communication_path = os.path.expandvars(r"%localappdata%/KHRECOM")
+            self.game_communication_path = os.path.expandvars(r"%localappdata%/KH1FM")
         else:
-            self.game_communication_path = os.path.expandvars(r"$HOME/KHRECOM")
+            self.game_communication_path = os.path.expandvars(r"$HOME/KH1FM")
         if not os.path.exists(self.game_communication_path):
             os.makedirs(self.game_communication_path)
         for root, dirs, files in os.walk(self.game_communication_path):
@@ -53,12 +53,12 @@ class KHRECOMContext(CommonContext):
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
-            await super(KHRECOMContext, self).server_auth(password_requested)
+            await super(KH1Context, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
 
     async def connection_closed(self):
-        await super(KHRECOMContext, self).connection_closed()
+        await super(KH1Context, self).connection_closed()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
                 if file.find("obtain") <= -1:
@@ -72,7 +72,7 @@ class KHRECOMContext(CommonContext):
             return []
 
     async def shutdown(self):
-        await super(KHRECOMContext, self).shutdown()
+        await super(KH1Context, self).shutdown()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
                 if file.find("obtain") <= -1:
@@ -124,17 +124,17 @@ class KHRECOMContext(CommonContext):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
 
-        class KHRECOMManager(GameManager):
+        class KH1Manager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
-            base_title = "Archipelago KHRECOM Client"
+            base_title = "Archipelago KH1 Client"
 
-        self.ui = KHRECOMManager(self)
+        self.ui = KH1Manager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
 
-async def game_watcher(ctx: KHRECOMContext):
+async def game_watcher(ctx: KH1Context):
     from worlds.khrecom.Locations import lookup_id_to_name
     while not ctx.exit_event.is_set():
         if ctx.syncing == True:
@@ -164,13 +164,13 @@ async def game_watcher(ctx: KHRECOMContext):
 
 def launch():
     async def main(args):
-        ctx = KHRECOMContext(args.connect, args.password)
+        ctx = KH1Context(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
         if gui_enabled:
             ctx.run_gui()
         ctx.run_cli()
         progression_watcher = asyncio.create_task(
-            game_watcher(ctx), name="KHRECOMProgressionWatcher")
+            game_watcher(ctx), name="KH1ProgressionWatcher")
 
         await ctx.exit_event.wait()
         ctx.server_address = None
@@ -181,7 +181,7 @@ def launch():
 
     import colorama
 
-    parser = get_base_parser(description="KHRECOM Client, for text interfacing.")
+    parser = get_base_parser(description="KH1 Client, for text interfacing.")
 
     args, rest = parser.parse_known_args()
     colorama.init()

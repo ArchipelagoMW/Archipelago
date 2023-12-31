@@ -9,9 +9,9 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, days: bool):
+def create_regions(multiworld: MultiWorld, player: int):
     regions: Dict[str, KH1RegionData] = {
-        "Menu":             KH1RegionData(None, ["Awakening"]),
+        "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
         "Destiny Islands":  KH1RegionData([],   ["Traverse Town"]),
         "Traverse Town":    KH1RegionData([],   ["World Map"]),
@@ -25,6 +25,7 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
         "Neverland":        KH1RegionData([],   []),
         "Hollow Bastion":   KH1RegionData([],   []),
         "End of the World": KH1RegionData([],   []),
+        "Levels":           KH1RegionData([],   []),
         "World Map":        KH1RegionData([],   ["Wonderland", "Olympus Coliseum", "Deep Jungle",
                                          "Agrabah", "Monstro", "Atlantica",
                                          "Halloween Town", "Neverland", "Hollow Bastion",
@@ -257,8 +258,138 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     regions["End of the World"].locations.append("End of the World Final Rest Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest"),
    #regions["Awakening"].locations.append("Awakening Chest"), missable
-
+   
+    regions["End of the World"].locations.append("Chronicles Sora's Story")
+    regions["Wonderland"].locations.append("Chronicles Wonderland")
+    regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
+    regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
+    regions["Agrabah"].locations.append("Chronicles Agrabah")
+    regions["Monstro"].locations.append("Chronicles Monstro")
+   #regions["100 Acre Wood"].locations.append("Chronicles 100 Acre Wood")
+    regions["Atlantica"].locations.append("Chronicles Atlantica")
+    regions["Halloween Town"].locations.append("Chronicles Halloween Town")
+    regions["Neverland"].locations.append("Chronicles Neverland")
     
+    regions["Agrabah"].locations.append("Ansem's Secret Report 1")
+    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
+    regions["Atlantica"].locations.append("Ansem's Secret Report 3")
+    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 4")
+    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 5")
+    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 6")
+    regions["Halloween Town"].locations.append("Ansem's Secret Report 7")
+    regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 8")
+    regions["Neverland"].locations.append("Ansem's Secret Report 9")
+    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 10")
+   #regions["Agrabah"].locations.append("Ansem's Secret Report 11")
+   #regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 12")
+   #regions["Hollow Bastion"].locations.append("Ansem's Secret Report 13")
+   
+    regions["Levels"].locations.append("Level 1")
+    regions["Levels"].locations.append("Level 2")
+    regions["Levels"].locations.append("Level 3")
+    regions["Levels"].locations.append("Level 4")
+    regions["Levels"].locations.append("Level 5")
+    regions["Levels"].locations.append("Level 6")
+    regions["Levels"].locations.append("Level 7")
+    regions["Levels"].locations.append("Level 8")
+    regions["Levels"].locations.append("Level 9")
+    regions["Levels"].locations.append("Level 10")
+    regions["Levels"].locations.append("Level 11")
+    regions["Levels"].locations.append("Level 12")
+    regions["Levels"].locations.append("Level 13")
+    regions["Levels"].locations.append("Level 14")
+    regions["Levels"].locations.append("Level 15")
+    regions["Levels"].locations.append("Level 16")
+    regions["Levels"].locations.append("Level 17")
+    regions["Levels"].locations.append("Level 18")
+    regions["Levels"].locations.append("Level 19")
+    regions["Levels"].locations.append("Level 20")
+    regions["Levels"].locations.append("Level 21")
+    regions["Levels"].locations.append("Level 22")
+    regions["Levels"].locations.append("Level 23")
+    regions["Levels"].locations.append("Level 24")
+    regions["Levels"].locations.append("Level 25")
+    regions["Levels"].locations.append("Level 26")
+    regions["Levels"].locations.append("Level 27")
+    regions["Levels"].locations.append("Level 28")
+    regions["Levels"].locations.append("Level 29")
+    regions["Levels"].locations.append("Level 30")
+    regions["Levels"].locations.append("Level 31")
+    regions["Levels"].locations.append("Level 32")
+    regions["Levels"].locations.append("Level 33")
+    regions["Levels"].locations.append("Level 34")
+    regions["Levels"].locations.append("Level 35")
+    regions["Levels"].locations.append("Level 36")
+    regions["Levels"].locations.append("Level 37")
+    regions["Levels"].locations.append("Level 38")
+    regions["Levels"].locations.append("Level 39")
+    regions["Levels"].locations.append("Level 40")
+    regions["Levels"].locations.append("Level 41")
+    regions["Levels"].locations.append("Level 42")
+    regions["Levels"].locations.append("Level 43")
+    regions["Levels"].locations.append("Level 44")
+    regions["Levels"].locations.append("Level 45")
+    regions["Levels"].locations.append("Level 46")
+    regions["Levels"].locations.append("Level 47")
+    regions["Levels"].locations.append("Level 48")
+    regions["Levels"].locations.append("Level 49")
+    regions["Levels"].locations.append("Level 50")
+    regions["Levels"].locations.append("Level 51")
+    regions["Levels"].locations.append("Level 52")
+    regions["Levels"].locations.append("Level 53")
+    regions["Levels"].locations.append("Level 54")
+    regions["Levels"].locations.append("Level 55")
+    regions["Levels"].locations.append("Level 56")
+    regions["Levels"].locations.append("Level 57")
+    regions["Levels"].locations.append("Level 58")
+    regions["Levels"].locations.append("Level 59")
+    regions["Levels"].locations.append("Level 60")
+    regions["Levels"].locations.append("Level 61")
+    regions["Levels"].locations.append("Level 62")
+    regions["Levels"].locations.append("Level 63")
+    regions["Levels"].locations.append("Level 64")
+    regions["Levels"].locations.append("Level 65")
+    regions["Levels"].locations.append("Level 66")
+    regions["Levels"].locations.append("Level 67")
+    regions["Levels"].locations.append("Level 68")
+    regions["Levels"].locations.append("Level 69")
+    regions["Levels"].locations.append("Level 70")
+    regions["Levels"].locations.append("Level 71")
+    regions["Levels"].locations.append("Level 72")
+    regions["Levels"].locations.append("Level 73")
+    regions["Levels"].locations.append("Level 74")
+    regions["Levels"].locations.append("Level 75")
+    regions["Levels"].locations.append("Level 76")
+    regions["Levels"].locations.append("Level 77")
+    regions["Levels"].locations.append("Level 78")
+    regions["Levels"].locations.append("Level 79")
+    regions["Levels"].locations.append("Level 80")
+    regions["Levels"].locations.append("Level 81")
+    regions["Levels"].locations.append("Level 82")
+    regions["Levels"].locations.append("Level 83")
+    regions["Levels"].locations.append("Level 84")
+    regions["Levels"].locations.append("Level 85")
+    regions["Levels"].locations.append("Level 86")
+    regions["Levels"].locations.append("Level 87")
+    regions["Levels"].locations.append("Level 88")
+    regions["Levels"].locations.append("Level 89")
+    regions["Levels"].locations.append("Level 90")
+    regions["Levels"].locations.append("Level 91")
+    regions["Levels"].locations.append("Level 92")
+    regions["Levels"].locations.append("Level 93")
+    regions["Levels"].locations.append("Level 94")
+    regions["Levels"].locations.append("Level 95")
+    regions["Levels"].locations.append("Level 96")
+    regions["Levels"].locations.append("Level 97")
+    regions["Levels"].locations.append("Level 98")
+    regions["Levels"].locations.append("Level 99")
+    regions["Levels"].locations.append("Level 100")
+   
+    regions["Olympus Coliseum"].locations.append("Complete Phil Cup")
+    regions["Olympus Coliseum"].locations.append("Complete Pegasus Cup")
+    regions["Olympus Coliseum"].locations.append("Complete Hercules Cup")
+    regions["Olympus Coliseum"].locations.append("Complete Hades Cup")
+
     # Set up the regions correctly.
     for name, data in regions.items():
         multiworld.regions.append(create_region(multiworld, player, name, data))
@@ -277,6 +408,7 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     multiworld.get_entrance("Hollow Bastion", player).connect(multiworld.get_region("Hollow Bastion", player))
     multiworld.get_entrance("End of the World", player).connect(multiworld.get_region("End of the World", player))
     multiworld.get_entrance("World Map", player).connect(multiworld.get_region("World Map", player))
+    multiworld.get_entrance("Levels", player).connect(multiworld.get_region("Levels", player))
 
 def create_region(multiworld: MultiWorld, player: int, name: str, data: KH1RegionData):
     region = Region(name, player, multiworld)

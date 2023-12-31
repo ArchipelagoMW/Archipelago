@@ -2,9 +2,9 @@ from typing import List
 
 from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import KHRECOMItem, KHRECOMItemData, event_item_table, get_items_by_category, item_table
-from .Locations import KHRECOMLocation, location_table, get_locations_by_category
-from .Options import khrecom_options
+from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table
+from .Locations import KH1Location, location_table, get_locations_by_category
+from .Options import kh1_options
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -14,34 +14,34 @@ import random
 
 def launch_client():
     from .Client import launch
-    launch_subprocess(launch, name="KHRECOM Client")
+    launch_subprocess(launch, name="KH1 Client")
 
 
-components.append(Component("KHRECOM Client", "KHRECOMClient", func=launch_client, component_type=Type.CLIENT))
+components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
 
-class KHRECOMWeb(WebWorld):
+class KH1Web(WebWorld):
     theme = "ocean"
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Kingdom Hearts RE Chain of Memories Randomizer software on your computer. This guide covers single-player, "
+        "A guide to setting up the Kingdom Hearts Randomizer software on your computer. This guide covers single-player, "
         "multiworld, and related software.",
         "English",
-        "khrecom_en.md",
-        "khrecom/en",
+        "kh1_en.md",
+        "kh1/en",
         ["Gicu"]
     )]
 
-class KHRECOMWorld(World):
+class KH1World(World):
     """
-    Kingdom Hearts RE Chain of Memories is an action card RPG following
-    Sora on his journey through Castle Oblivion to find Riku and Kairi.
+    Kingdom Hearts is an action RPG following Sora on his journey 
+    through many worlds to find Riku and Kairi.
     """
-    game = "Kingdom Hearts RE Chain of Memories"
-    option_definitions = khrecom_options
+    game = "Kingdom Hearts"
+    option_definitions = kh1_options
     topology_present = True
     data_version = 4
     required_client_version = (0, 3, 5)
-    web = KHRECOMWeb()
+    web = KH1Web()
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
@@ -51,37 +51,31 @@ class KHRECOMWorld(World):
         return getattr(self.multiworld, name)[self.player]
 
     def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in khrecom_options}
+        return {option_name: self.get_setting(option_name).value for option_name in kh1_options}
 
     def create_items(self):
-        item_pool: List[KHRECOMItem] = []
-        starting_locations = get_locations_by_category("Starting")
-        starting_locations = random.sample(list(starting_locations.keys()),4)
-        starting_worlds = get_items_by_category("World Unlocks", [])
-        starting_worlds = random.sample(list(starting_worlds.keys()),3)
+        item_pool: List[KH1Item] = []
+        level_up_locations = list(get_locations_by_category("Levels").keys())
+        level_up_rewards = list(get_items_by_category("Level Up", []).keys())
         i = 0
-        while i < 4:
-            if i < 3:
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
-            elif i == 3 and self.get_setting("early_cure"):
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure 4-6"))
+        while i < 100:
+            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(random.choice(level_up_rewards)))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
             
             # Ignore filler, it will be added in a later stage.
-            if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards"]:
+            if data.category not in ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]:
                 continue
-            if name not in starting_worlds:
-                item_pool += [self.create_item(name) for _ in range(0, quantity)]
+            item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
         item_names = []
         attempts = 0 #If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
         while len(item_pool) < total_locations:
             item_name = self.get_filler_item_name()
-            if item_name not in item_names or "Pack" in item_name:
+            if item_name not in item_names:
                 item_names.append(item_name)
                 item_pool.append(self.create_item(item_name))
                 attempts = 0
@@ -96,31 +90,24 @@ class KHRECOMWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = {}
         disclude = []
-        if not self.get_setting("zeroes"):
-            disclude.append("0")
-        if not self.get_setting("cure"):
-            disclude.append("Cure")
-        if self.get_setting("early_cure"):
-            disclude.append("Cure 4-6")
-        if self.get_setting("enemy_cards"):
-            fillers.update(get_items_by_category("Enemy Cards", disclude))
-        if self.get_setting("days_items"):
-            fillers.update(get_items_by_category("Days Sets", disclude))
-            fillers.update(get_items_by_category("Days Enemy Cards", disclude))
-        fillers.update(get_items_by_category("Sets", disclude))
+        fillers.update(get_items_by_category("Item", disclude))
+        fillers.update(get_items_by_category("Accessory", disclude))
+        fillers.update(get_items_by_category("Weapons", disclude))
+        fillers.update(get_items_by_category("Camping", disclude))
+        fillers.update(get_items_by_category("Stat Ups", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
         
-    def create_item(self, name: str) -> KHRECOMItem:
+    def create_item(self, name: str) -> KH1Item:
         data = item_table[name]
-        return KHRECOMItem(name, data.classification, data.code, self.player)
+        return KH1Item(name, data.classification, data.code, self.player)
 
-    def create_event(self, name: str) -> KHRECOMItem:
+    def create_event(self, name: str) -> KH1Item:
         data = event_item_table[name]
-        return KHRECOMItem(name, data.classification, data.code, self.player)
+        return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.get_setting("days_locations"))
+        set_rules(self.multiworld, self.player)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.get_setting("days_locations"))
+        create_regions(self.multiworld, self.player)
