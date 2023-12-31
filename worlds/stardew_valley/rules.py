@@ -19,9 +19,9 @@ from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, 
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And
 from .strings.ap_names.event_names import Event
+from .strings.ap_names.mods.mod_items import SVELocation
 from .strings.ap_names.mods.mod_items import SVEQuestItem
 from .strings.ap_names.transport_names import Transportation
-from .strings.ap_names.mods.mod_items import SVELocation
 from .strings.artisan_good_names import ArtisanGood
 from .strings.building_names import Building
 from .strings.bundle_names import CCRoom
@@ -853,8 +853,7 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Heal", player),
                              logic.has("Life Elixir"))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze All Life School Locations", player),
-                             (logic.has("Coffee") & logic.has("Life Elixir")
-                              & logic.ability.can_mine_perfectly()))
+                             logic.has_all("Coffee", "Life Elixir") & logic.ability.can_mine_perfectly())
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Descend", player),
                              logic.region.can_reach(Region.mines))
     MultiWorldRules.add_rule(multiworld.get_location("Analyze: Fireball", player),
@@ -883,9 +882,8 @@ def set_magic_spell_rules(logic: StardewLogic, multiworld: MultiWorld, player: i
     MultiWorldRules.add_rule(multiworld.get_location("Analyze Every Magic School Location", player),
                              (logic.tool.has_tool("Watering Can", "Basic") & logic.tool.has_tool("Hoe", "Basic")
                               & (logic.tool.has_tool("Axe", "Basic") | logic.tool.has_tool("Pickaxe", "Basic")) &
-                              logic.has("Coffee") & logic.has("Life Elixir")
-                              & logic.ability.can_mine_perfectly() & logic.has("Earth Crystal") &
-                              logic.has("Fire Quartz") & logic.skill.can_fish(difficulty=85) &
+                              logic.has_all("Coffee", "Life Elixir", "Earth Crystal", "Fire Quartz") &
+                              logic.ability.can_mine_perfectly() & logic.skill.can_fish(difficulty=85) &
                               logic.region.can_reach(Region.witch_hut) &
                               logic.region.can_reach(Region.mines_floor_100) &
                               logic.region.can_reach(Region.farm) & logic.time.has_lived_months(12)))

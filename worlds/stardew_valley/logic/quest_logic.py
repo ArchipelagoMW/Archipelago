@@ -73,20 +73,19 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.knee_therapy: self.logic.season.has(Season.summer) & self.logic.has(Fruit.hot_pepper) & self.logic.relationship.can_meet(NPC.george),
             Quest.robins_request: self.logic.season.has(Season.winter) & self.logic.has(Material.hardwood) & self.logic.relationship.can_meet(NPC.robin),
             Quest.qis_challenge: True_(),  # The skull cavern floor 25 already has rules
-            Quest.the_mysterious_qi: self.logic.region.can_reach_all((Region.bus_tunnel, Region.railroad, Region.mayor_house)) &
-                                     self.logic.has(ArtisanGood.battery_pack) & self.logic.has(Forageable.rainbow_shell) &
-                                     self.logic.has(Vegetable.beet) & self.logic.has(Loot.solar_essence),
+            Quest.the_mysterious_qi: (self.logic.region.can_reach_all((Region.bus_tunnel, Region.railroad, Region.mayor_house)) &
+                                      self.logic.has_all(ArtisanGood.battery_pack, Forageable.rainbow_shell, Vegetable.beet, Loot.solar_essence)),
             Quest.carving_pumpkins: self.logic.season.has(Season.fall) & self.logic.has(Vegetable.pumpkin) & self.logic.relationship.can_meet(NPC.caroline),
             Quest.a_winter_mystery: self.logic.season.has(Season.winter),
             Quest.strange_note: self.logic.has(Forageable.secret_note) & self.logic.has(ArtisanGood.maple_syrup),
             Quest.cryptic_note: self.logic.has(Forageable.secret_note),
             Quest.fresh_fruit: self.logic.season.has(Season.spring) & self.logic.has(Fruit.apricot) & self.logic.relationship.can_meet(NPC.emily),
             Quest.aquatic_research: self.logic.season.has(Season.summer) & self.logic.has(Fish.pufferfish) & self.logic.relationship.can_meet(NPC.demetrius),
-            Quest.a_soldiers_star: self.logic.season.has(Season.summer) & self.logic.time.has_year_two & self.logic.has(Fruit.starfruit) &
-                                   self.logic.relationship.can_meet(NPC.kent),
+            Quest.a_soldiers_star: (self.logic.season.has(Season.summer) & self.logic.time.has_year_two & self.logic.has(Fruit.starfruit) &
+                                    self.logic.relationship.can_meet(NPC.kent)),
             Quest.mayors_need: self.logic.season.has(Season.summer) & self.logic.has(ArtisanGood.truffle_oil) & self.logic.relationship.can_meet(NPC.lewis),
-            Quest.wanted_lobster: self.logic.season.has(Season.fall) & self.logic.season.has(Season.fall) & self.logic.has(Fish.lobster) &
-                                  self.logic.relationship.can_meet(NPC.gus),
+            Quest.wanted_lobster: (self.logic.season.has(Season.fall) & self.logic.season.has(Season.fall) & self.logic.has(Fish.lobster) &
+                                   self.logic.relationship.can_meet(NPC.gus)),
             Quest.pam_needs_juice: self.logic.season.has(Season.fall) & self.logic.has(ArtisanGood.battery_pack) & self.logic.relationship.can_meet(NPC.pam),
             Quest.fish_casserole: self.logic.relationship.has_hearts(NPC.jodi, 4) & self.logic.has(Fish.largemouth_bass),
             Quest.catch_a_squid: self.logic.season.has(Season.winter) & self.logic.has(Fish.squid) & self.logic.relationship.can_meet(NPC.willy),
@@ -98,7 +97,8 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
             Quest.grannys_gift: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek) & self.logic.relationship.can_meet(NPC.evelyn),
             Quest.exotic_spirits: self.logic.season.has(Season.winter) & self.logic.has(Forageable.coconut) & self.logic.relationship.can_meet(NPC.gus),
             Quest.catch_a_lingcod: self.logic.season.has(Season.winter) & self.logic.has(Fish.lingcod) & self.logic.relationship.can_meet(NPC.willy),
-            Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(NPC.krobus),
+            Quest.dark_talisman: self.logic.region.can_reach(Region.railroad) & self.logic.wallet.has_rusty_key() & self.logic.relationship.can_meet(
+                NPC.krobus),
             Quest.goblin_problem: self.logic.region.can_reach(Region.witch_swamp),
             Quest.magic_ink: self.logic.relationship.can_meet(NPC.wizard),
             Quest.the_pirates_wife: self.logic.relationship.can_meet(NPC.kent) & self.logic.relationship.can_meet(NPC.gus) &

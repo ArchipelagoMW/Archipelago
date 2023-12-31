@@ -185,10 +185,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Animal.pig: self.can_buy_animal(Animal.pig),
             Animal.rabbit: self.can_buy_animal(Animal.rabbit),
             Animal.sheep: self.can_buy_animal(Animal.sheep),
-            AnimalProduct.any_egg: self.has(AnimalProduct.chicken_egg) | self.has(AnimalProduct.duck_egg),
+            AnimalProduct.any_egg: self.has_any(AnimalProduct.chicken_egg, AnimalProduct.duck_egg),
             AnimalProduct.brown_egg: self.has_animal(Animal.chicken),
-            AnimalProduct.chicken_egg: self.has((AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg), 1),
-            AnimalProduct.cow_milk: self.has(AnimalProduct.milk) | self.has(AnimalProduct.large_milk),
+            AnimalProduct.chicken_egg: self.has_any(AnimalProduct.egg, AnimalProduct.brown_egg, AnimalProduct.large_egg, AnimalProduct.large_brown_egg),
+            AnimalProduct.cow_milk: self.has_any(AnimalProduct.milk, AnimalProduct.large_milk),
             AnimalProduct.duck_egg: self.has_animal(Animal.duck),
             AnimalProduct.duck_feather: self.has_happy_animal(Animal.duck),
             AnimalProduct.egg: self.has_animal(Animal.chicken),
@@ -497,8 +497,8 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         field_office = self.region.can_reach(Region.field_office)
         professor_snail = self.received("Open Professor Snail Cave")
         tools = self.tool.has_tool(Tool.pickaxe) & self.tool.has_tool(Tool.hoe) & self.tool.has_tool(Tool.scythe)
-        leg_and_snake_skull = self.has(Fossil.fossilized_leg) & self.has(Fossil.snake_skull)
-        ribs_and_spine = self.has(Fossil.fossilized_ribs) & self.has(Fossil.fossilized_spine)
+        leg_and_snake_skull = self.has_all(Fossil.fossilized_leg, Fossil.snake_skull)
+        ribs_and_spine = self.has_all(Fossil.fossilized_ribs, Fossil.fossilized_spine)
         skull = self.has(Fossil.fossilized_skull)
         tail = self.has(Fossil.fossilized_tail)
         frog = self.has(Fossil.mummified_frog)
@@ -555,15 +555,15 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             return True_()
         eligible_fish = [Fish.blobfish, Fish.crimsonfish, "Ice Pip", Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish, Fish.mutant_carp,
                          Fish.spookfish, Fish.stingray, Fish.sturgeon, "Super Cucumber"]
-        fish_rule = [self.has(fish) for fish in eligible_fish]
+        fish_rule = self.has_any(*eligible_fish)
         eligible_kegables = [Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
                              Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,
                              Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
                              Vegetable.hops, Vegetable.wheat]
         keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables]
         aged_rule = self.has(Machine.cask) & Or(*keg_rules)
-        # There are a few other valid items but I don't feel like coding them all
-        return Or(*fish_rule) | aged_rule
+        # There are a few other valid items, but I don't feel like coding them all
+        return fish_rule | aged_rule
 
     def can_succeed_grange_display(self) -> StardewRule:
         if self.options.festival_locations != FestivalLocations.option_hard:
@@ -576,10 +576,10 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         mineral_rule = self.action.can_open_geode(Generic.any)  # More than half the minerals are good enough
         good_fruits = [Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.orange, Fruit.peach, Fruit.pomegranate,
                        Fruit.strawberry, Fruit.melon, Fruit.rhubarb, Fruit.pineapple, Fruit.ancient_fruit, Fruit.starfruit, ]
-        fruit_rule = Or(*(self.has(fruit) for fruit in good_fruits))
+        fruit_rule = self.has_any(*good_fruits)
         good_vegetables = [Vegetable.amaranth, Vegetable.artichoke, Vegetable.beet, Vegetable.cauliflower, Forageable.fiddlehead_fern, Vegetable.kale,
                            Vegetable.radish, Vegetable.taro_root, Vegetable.yam, Vegetable.red_cabbage, Vegetable.pumpkin]
-        vegetable_rule = Or(*(self.has(vegetable) for vegetable in good_vegetables))
+        vegetable_rule = self.has_any(*good_vegetables)
 
         return animal_rule & artisan_rule & cooking_rule & fish_rule & \
             forage_rule & fruit_rule & mineral_rule & vegetable_rule
@@ -681,7 +681,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         if number <= 50:
             return reach_entire_island
         gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
-        return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.ability.can_mine_perfectly() & \
+        return reach_entire_island & self.has(Fruit.banana) & self.has_all(*gems) & self.ability.can_mine_perfectly() & \
             self.ability.can_fish_perfectly() & self.has(Furniture.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic) & \
             self.can_complete_field_office()
 

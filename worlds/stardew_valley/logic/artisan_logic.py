@@ -28,9 +28,9 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
         if item == Generic.any:
             return machine_rule
         if item == Fruit.any:
-            return machine_rule & self.logic.has(all_fruits, 1)
+            return machine_rule & self.logic.has_any(*all_fruits)
         if item == Vegetable.any:
-            return machine_rule & self.logic.has(all_vegetables, 1)
+            return machine_rule & self.logic.has_any(*all_vegetables)
         return machine_rule & self.logic.has(item)
 
     def has_wine(self) -> StardewRule:
@@ -44,9 +44,9 @@ class ArtisanLogic(BaseLogic[Union[ArtisanLogicMixin, TimeLogicMixin, HasLogicMi
         if item == Generic.any:
             return machine_rule
         if item == Fruit.any:
-            return machine_rule & self.logic.has(all_fruits, 1)
+            return machine_rule & self.logic.has_any(*all_fruits)
         if item == Vegetable.any:
-            return machine_rule & self.logic.has(all_vegetables, 1)
+            return machine_rule & self.logic.has_any(*all_vegetables)
         return machine_rule & self.logic.has(item)
 
     def can_mayonnaise(self, item: str) -> StardewRule:

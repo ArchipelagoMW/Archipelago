@@ -22,7 +22,7 @@ class ModBuildingLogic(BaseLogic[Union[MoneyLogicMixin, HasLogicMixin]]):
     def get_modded_building_rules(self) -> Dict[str, StardewRule]:
         buildings = dict()
         if ModNames.tractor in self.options.mods:
-            tractor_rule = (self.logic.money.can_spend_at(Region.carpenter, 150000) & self.logic.has(MetalBar.iron) &
-                            self.logic.has(MetalBar.iridium) & self.logic.has(ArtisanGood.battery_pack))
+            tractor_rule = (self.logic.money.can_spend_at(Region.carpenter, 150000) &
+                            self.logic.has_all(MetalBar.iron, MetalBar.iridium, ArtisanGood.battery_pack))
             buildings.update({ModBuilding.tractor_garage: tractor_rule})
         return buildings

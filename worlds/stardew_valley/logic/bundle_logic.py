@@ -35,7 +35,7 @@ class BundleLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, MoneyLogicMix
             item_rules.append(bundle_item.item_name)
             qualities.append(bundle_item.quality)
         quality_rules = self.get_quality_rules(qualities)
-        item_rules = self.logic.has(tuple(item_rules), bundle.number_required)
+        item_rules = self.logic.has_n(*item_rules, count=bundle.number_required)
         return can_speak_junimo & item_rules & quality_rules
 
     def get_quality_rules(self, qualities: List[str]) -> StardewRule:

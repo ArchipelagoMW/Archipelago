@@ -20,8 +20,8 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..stardew_rule import StardewRule, Has
 from ..strings.animal_product_names import AnimalProduct
-from ..strings.ap_names.transport_names import Transportation
 from ..strings.ap_names.event_names import Event
+from ..strings.ap_names.transport_names import Transportation
 from ..strings.artisan_good_names import ArtisanGood
 from ..strings.crop_names import Vegetable, Fruit
 from ..strings.fertilizer_names import Fertilizer
@@ -46,9 +46,9 @@ class SpecialOrderLogicMixin(BaseLogicMixin):
 
 
 class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, TimeLogicMixin, MoneyLogicMixin,
-                                        ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
-                                        MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
-                                        AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
+ShippingLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, RelationshipLogicMixin, ToolLogicMixin, SkillLogicMixin,
+MineLogicMixin, CookingLogicMixin, BuffLogicMixin,
+AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
 
     def initialize_rules(self):
         self.update_rules({
@@ -58,9 +58,9 @@ class SpecialOrderLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, Regio
             SpecialOrder.cave_patrol: self.logic.relationship.can_meet(NPC.clint),
             SpecialOrder.aquatic_overpopulation: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
             SpecialOrder.biome_balance: self.logic.relationship.can_meet(NPC.demetrius) & self.logic.ability.can_fish_perfectly(),
-            SpecialOrder.rock_rejuivenation: self.logic.relationship.has_hearts(NPC.emily, 4) & self.logic.has(Mineral.ruby) & self.logic.has(Mineral.topaz) &
-                                             self.logic.has(Mineral.emerald) & self.logic.has(Mineral.jade) & self.logic.has(Mineral.amethyst) &
-                                             self.logic.has(ArtisanGood.cloth),
+            SpecialOrder.rock_rejuivenation: (self.logic.relationship.has_hearts(NPC.emily, 4) &
+                                              self.logic.has_all(Mineral.ruby, Mineral.topaz, Mineral.emerald, Mineral.jade, Mineral.amethyst,
+                                                                 ArtisanGood.cloth)),
             SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
             SpecialOrder.fragments_of_the_past: self.logic.region.can_reach(Region.dig_site) & self.logic.tool.has_tool(Tool.pickaxe) &
                                                 self.logic.monster.can_kill(Monster.skeleton),

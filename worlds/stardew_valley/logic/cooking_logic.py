@@ -44,7 +44,7 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
             return cook_rule
 
         recipe_rule = self.logic.cooking.knows_recipe(recipe.source, recipe.meal)
-        ingredients_rule = And(*(self.logic.has(ingredient) for ingredient in recipe.ingredients))
+        ingredients_rule = self.logic.has_all(*recipe.ingredients)
         return cook_rule & recipe_rule & ingredients_rule
 
     # Should be cached

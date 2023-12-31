@@ -36,7 +36,7 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
             return True_()
 
         learn_rule = self.logic.crafting.knows_recipe(recipe)
-        ingredients_rule = And(*(self.logic.has(ingredient) for ingredient in recipe.ingredients))
+        ingredients_rule = self.logic.has_all(*recipe.ingredients)
         return learn_rule & ingredients_rule
 
     @cache_self1

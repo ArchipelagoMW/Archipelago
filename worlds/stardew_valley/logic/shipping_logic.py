@@ -10,9 +10,9 @@ from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland
 from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, And
-from ..strings.building_names import Building
+from ..stardew_rule import StardewRule
 from ..strings.ap_names.event_names import Event
+from ..strings.building_names import Building
 
 
 class ShippingLogicMixin(BaseLogicMixin):
@@ -45,4 +45,4 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
             if location.mod_name and location.mod_name not in mod_list:
                 continue
             all_items_to_ship.append(location.name[len(shipsanity_prefix):])
-        return self.logic.building.has_building(Building.shipping_bin) & And(*(self.logic.has(item) for item in all_items_to_ship))
+        return self.logic.building.has_building(Building.shipping_bin) & self.logic.has_all(*all_items_to_ship)

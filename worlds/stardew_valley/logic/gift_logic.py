@@ -17,4 +17,4 @@ class GiftLogic(BaseLogic[HasLogicMixin]):
 
     @cached_property
     def has_any_universal_love(self) -> StardewRule:
-        return self.logic.has(Gift.golden_pumpkin) | self.logic.has(Gift.pearl) | self.logic.has("Prismatic Shard") | self.logic.has(AnimalProduct.rabbit_foot)
+        return self.logic.has_any(Gift.golden_pumpkin, Gift.pearl, "Prismatic Shard", AnimalProduct.rabbit_foot)
