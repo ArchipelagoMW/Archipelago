@@ -33,6 +33,7 @@ class ZillionSettings(settings.Group):
         """File name of the Zillion US rom"""
         description = "Zillion US ROM File"
         copy_to = "Zillion (UE) [!].sms"
+        assert ZillionDeltaPatch.hash
         md5s = [ZillionDeltaPatch.hash]
 
     class RomStart(str):
@@ -70,9 +71,11 @@ class ZillionWorld(World):
     web = ZillionWebWorld()
 
     options_dataclass = ZillionOptions
-    options: ZillionOptions
+    options: ZillionOptions  # type: ignore
 
-    settings: typing.ClassVar[ZillionSettings]
+    settings: typing.ClassVar[ZillionSettings]  # type: ignore
+    # these type: ignore are because of this issue: https://github.com/python/typing/discussions/1486
+
     topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
@@ -329,23 +332,22 @@ class ZillionWorld(World):
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
         multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
-        for loc in self.multiworld.get_locations():
-            if loc.player == self.player:
-                z_loc = cast(ZillionLocation, loc)
-                # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
-                if z_loc.item is None:
-                    self.logger.warn("generate_output location has no item - is that ok?")
-                    z_loc.zz_loc.item = empty
-                elif z_loc.item.player == self.player:
-                    z_item = cast(ZillionItem, z_loc.item)
-                    z_loc.zz_loc.item = z_item.zz_item
-                else:  # another player's item
-                    # print(f"put multi item in {z_loc.zz_loc.name}")
-                    z_loc.zz_loc.item = multi_item
-                    multi_items[z_loc.zz_loc.name] = (
-                        z_loc.item.name,
-                        self.multiworld.get_player_name(z_loc.item.player)
-                    )
+        for loc in self.multiworld.get_locations(self.player):
+            z_loc = cast(ZillionLocation, loc)
+            # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
+            if z_loc.item is None:
+                self.logger.warn("generate_output location has no item - is that ok?")
+                z_loc.zz_loc.item = empty
+            elif z_loc.item.player == self.player:
+                z_item = cast(ZillionItem, z_loc.item)
+                z_loc.zz_loc.item = z_item.zz_item
+            else:  # another player's item
+                # print(f"put multi item in {z_loc.zz_loc.name}")
+                z_loc.zz_loc.item = multi_item
+                multi_items[z_loc.zz_loc.name] = (
+                    z_loc.item.name,
+                    self.multiworld.get_player_name(z_loc.item.player)
+                )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():
         #     print(id_)
