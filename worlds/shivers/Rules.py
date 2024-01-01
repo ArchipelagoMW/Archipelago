@@ -157,7 +157,7 @@ def get_rules_lookup(player: int):
             "Puzzle Solved Underground Elevator": lambda state: ((state.can_reach("Underground Lake", "Region", player) or state.can_reach("Office", "Region", player)
                                                                   and state.has("Key for Office Elevator", player))),
             "Puzzle Solved Bedroom Elevator": lambda state: (state.can_reach("Office", "Region", player) and state.has_all({"Key for Bedroom Elevator","Crawling"}, player)),
-            "Puzzle Solved Three Floor Elevator": lambda state: ((state.can_reach("Maintenance Tunnels", "Region", player) or state.can_reach("Blue Maze", "Region", player)
+            "Puzzle Solved Three Floor Elevator": lambda state: (((state.can_reach("Maintenance Tunnels", "Region", player) or state.can_reach("Blue Maze", "Region", player))
                                                                   and state.has("Key for Three Floor Elevator", player)))
             },
         "lightning": {
