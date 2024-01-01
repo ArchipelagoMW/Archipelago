@@ -106,7 +106,8 @@ class MarioLand2Client(BizHawkClient):
         if ctx.slot_data and "energy_link" in ctx.slot_data and ctx.slot_data["energy_link"]:
             if new_lives == 0:
                 if (f"EnergyLink{ctx.team}" in ctx.stored_data
-                        and ctx.stored_data[f"EnergyLink{ctx.team}"] > BANK_EXCHANGE_RATE):
+                        and ctx.stored_data[f"EnergyLink{ctx.team}"]
+                        and ctx.stored_data[f"EnergyLink{ctx.team}"] >= BANK_EXCHANGE_RATE):
                     new_lives = 1
                     energy_link_add = -BANK_EXCHANGE_RATE
             elif new_lives > 1:
@@ -180,12 +181,12 @@ class MarioLand2Client(BizHawkClient):
         super().on_package(ctx, cmd, args)
         if cmd == 'Connected':
             ctx.set_notify(f"EnergyLink{ctx.team}")
-            ctx.ui.enable_energy_link()
-            ctx.ui.energy_link_label.text = "Lives: Standby"
+            if ctx.slot_data and "energy_link" in ctx.slot_data and ctx.slot_data["energy_link"] and ctx.ui:
+                ctx.ui.enable_energy_link()
+                ctx.ui.energy_link_label.text = "Lives: Standby"
         elif cmd == "SetReply" and args["key"].startswith("EnergyLink"):
             if ctx.ui:
                 ctx.ui.energy_link_label.text = f"Lives: {int(args['value'] / BANK_EXCHANGE_RATE)}"
         elif cmd == "Retrieved":
-            if f"EnergyLink{ctx.team}" in args["keys"]:
-                if ctx.ui:
-                    ctx.ui.energy_link_label.text = f"Lives: {int(args['keys'][f'EnergyLink{ctx.team}'] / BANK_EXCHANGE_RATE)}"
+            if f"EnergyLink{ctx.team}" in args["keys"] and args['keys'][f'EnergyLink{ctx.team}'] and ctx.ui:
+                ctx.ui.energy_link_label.text = f"Lives: {int(args['keys'][f'EnergyLink{ctx.team}'] / BANK_EXCHANGE_RATE)}"
