@@ -11,7 +11,7 @@ from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
-    make_random_hints
+    make_extra_location_hints, create_all_hints
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
@@ -273,46 +273,8 @@ class WitnessWorld(World):
 
             hint_type_amounts = build_weighted_int_list([area_weight / 100, location_weight / 100], hint_amount)
             area_hints = hint_type_amounts[0]
-            location_hints = hint_type_amounts[1]
 
-            generated_hints: List[Tuple[str, Optional[Location]]] = []
-
-            state = CollectionState(self.multiworld)
-
-            # Keep track of already hinted locations. Consider early Tutorial as "already hinted"
-
-            already_hinted_locations = {
-                loc for loc in self.multiworld.get_reachable_locations(state, self.player)
-                if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
-            }
-
-            # First, make always and priority hints.
-
-            always_and_priority, unused_always_hints = make_always_and_priority_hints(
-                self, location_hints, self.own_itempool, already_hinted_locations
-            )
-
-            generated_hints += always_and_priority
-
-            unhinted_locations_per_area: Dict[str, Set[Location]] = dict()
-
-            # Then, make area hints.
-            if area_hints:
-                area_hints, unhinted_locations_per_area = make_area_hints(self, area_hints, already_hinted_locations)
-                generated_hints += area_hints
-
-            # If we don't have enough hints yet, make random location/item hints, or use remaining always hints.
-            if len(generated_hints) < hint_amount:
-                generated_hints += make_random_hints(
-                    self, hint_amount - len(generated_hints), self.own_itempool, already_hinted_locations,
-                    unused_always_hints, unhinted_locations_per_area
-                )
-
-            # If we still don't have enough for whatever reason, throw a warning, proceed with the lower amount
-            if len(generated_hints) != hint_amount:
-                player_name = self.multiworld.get_player_name(self.player)
-                warning(f"Couldn't generate {hint_amount} hints for player {player_name}. "
-                        f"Generated {len(generated_hints)} instead.")
+            generated_hints = create_all_hints(self, hint_amount, area_hints)
 
             hint_amount = len(generated_hints)
 
@@ -324,10 +286,12 @@ class WitnessWorld(World):
                 for _ in range(0, len(generated_hints)):
                     hint = generated_hints.pop(0)
 
+                    location = hint.location
+                    location_id = location.address if location and location.item.player == self.player else -1
+
                     for _ in range(0, duplicates):
                         audio_log = audio_logs.pop()
-                        location_id = hint[1].address if hint[1] and hint[1].item.player == self.player else -1
-                        self.log_ids_to_hints[int(audio_log, 16)] = (hint[0], location_id)
+                        self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, location_id)
 
         if audio_logs:
             audio_log = audio_logs.pop()
