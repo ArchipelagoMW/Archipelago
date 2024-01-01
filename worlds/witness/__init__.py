@@ -276,9 +276,9 @@ class WitnessWorld(World):
 
             generated_hints = create_all_hints(self, hint_amount, area_hints)
 
-            hint_amount = len(generated_hints)
+            generated_hint_amount = len(generated_hints)
 
-            if hint_amount:
+            if generated_hint_amount:
                 self.random.shuffle(audio_logs)
 
                 duplicates = min(3, len(audio_logs) // hint_amount)
