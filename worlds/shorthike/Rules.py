@@ -42,9 +42,7 @@ def create_rules(self, location_table):
     add_rule(multiworld.get_location("Sue the Rabbit Shoes Reward", player),
         lambda state: state.has("Headband", player))
     add_rule(multiworld.get_location("Return to Shell Kid", player),
-        lambda state: state.has("Shell Necklace", player))
-    add_rule(multiworld.get_location("Return to Shell Kid", player),
-        lambda state: state.has("Seashell", player, 15))
+        lambda state: state.has("Shell Necklace", player) and state.has("Seashell", player, 15))
     add_rule(multiworld.get_location("Ranger May Shell Necklace Golden Feather", player),
         lambda state: state.has("Shell Necklace", player))
     add_rule(multiworld.get_location("Beachstickball (10 Hits)", player),
