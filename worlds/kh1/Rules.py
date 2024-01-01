@@ -313,7 +313,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
     multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5) and has_item(state, player, "High Jump")
-    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_item(state, player,"End of the World") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide")
+    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player)
     
     # Win condition.
-    multiworld.completion_condition[player] = lambda state: state.has_all({"End of the World", "High Jump", "Glide"}, player) and has_x_worlds(state, player, 7)
+    multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
