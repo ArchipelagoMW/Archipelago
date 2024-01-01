@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import copy
 import os
@@ -85,7 +87,7 @@ class SMZ3World(World):
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        self.locations: Dict[str, Location] = {}
+        self.locations: Dict[str, SMZ3Location] = {}
         self.unreachable = []
         super().__init__(world, player)
 
