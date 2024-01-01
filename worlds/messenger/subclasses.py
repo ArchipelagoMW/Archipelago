@@ -1,7 +1,7 @@
 from functools import cached_property
 from typing import Optional, TYPE_CHECKING, cast
 
-from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from BaseClasses import CollectionState, Item, ItemClassification, AlwaysAllowLocation, Region
 from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .regions import MEGA_SHARDS, REGIONS, SEALS
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
@@ -33,7 +33,7 @@ class MessengerRegion(Region):
         world.multiworld.regions.append(self)
 
 
-class MessengerLocation(Location):
+class MessengerLocation(AlwaysAllowLocation):
     game = "The Messenger"
 
     def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:

@@ -1,5 +1,5 @@
 
-from BaseClasses import Location
+from BaseClasses import AlwaysAllowLocation
 from .rom_addresses import rom_addresses
 from . import poke_data
 loc_id_start = 172000000
@@ -2767,7 +2767,7 @@ for mon in poke_data.evolves_from:
     location_data.append(LocationData("Evolution", mon, mon, event=True))
 
 
-class PokemonRBLocation(Location):
+class PokemonRBLocation(AlwaysAllowLocation):
     game = "Pokemon Red and Blue"
 
     def __init__(self, player, name, address, rom_address, type, level, level_address):

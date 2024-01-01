@@ -5,7 +5,7 @@ import random
 import threading
 from typing import Dict, Set, TextIO
 
-from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
+from BaseClasses import Region, Entrance, AlwaysAllowLocation, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
 from worlds.generic.Rules import set_rule
 from .TotalSMZ3.Item import ItemType
@@ -652,7 +652,7 @@ class SMZ3World(World):
         return ret
 
 
-class SMZ3Location(Location):
+class SMZ3Location(AlwaysAllowLocation):
     game: str = "SMZ3"
 
     def __init__(self, player: int, name: str, address=None, parent=None):
