@@ -1,15 +1,6 @@
-from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions, Range
+from Options import Choice, DefaultOnToggle, Toggle, PerGameCommonOptions
 from dataclasses import dataclass
 
-
-class IxupiCapturesNeeded(Range):
-    """
-    Number of Ixupi Captures needed for goal condition.
-    """
-    display_name = "Number of Ixupi Captures Needed"
-    range_start = 1
-    range_end = 10
-    default = 10
 
 class LobbyAccess(Choice):
     """Chooses how keys needed to reach the lobby are placed.
@@ -47,20 +38,9 @@ class EarlyLightning(Toggle):
     """Allows lightning to be captured at any point in the game. You will still need to capture all ten Ixupi for victory."""
     display_name = "Early Lightning"
 
-class LocationPotPieces(Choice):
-    """Chooses where pot pieces will be located within the multiworld.
-    - Own World: Pot pieces will be located within your own world
-    - Different World: Pot pieces will be located in another world
-    - Any World: Pot pieces will be located in any world"""
-    display_name = "Location of Pot Pieces"
-    option_own_world = 0
-    option_different_world = 1
-    option_any_world = 2
-
 
 @dataclass
 class ShiversOptions(PerGameCommonOptions):
-    ixupi_captures_needed: IxupiCapturesNeeded
     lobby_access: LobbyAccess
     puzzle_hints_required: PuzzleHintsRequired
     include_information_plaques: InformationPlaques
@@ -68,4 +48,3 @@ class ShiversOptions(PerGameCommonOptions):
     elevators_stay_solved: ElevatorsStaySolved
     early_beth: EarlyBeth
     early_lightning: EarlyLightning
-    location_pot_pieces: LocationPotPieces
