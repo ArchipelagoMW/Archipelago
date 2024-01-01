@@ -115,7 +115,7 @@ def set_rules(multiworld: MultiWorld, player: int):
    #multiworld.get_location("Agrabah Bazaar High Corner Chest"                                             , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Agrabah Main Street Right Palace Entrance Chest"                              , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Agrabah Main Street High Above Alley Entrance Chest"                          , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Agrabah Main Street High Above Palace Gates Entrance Chest"                   , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Agrabah Main Street High Above Palace Gates Entrance Chest"                   , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
    #multiworld.get_location("Agrabah Palace Gates Low Chest"                                               , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Agrabah Palace Gates High Opposite Palace Chest"                              , player).access_rule = lambda state: has_item(state, player, "High Jump")
     multiworld.get_location("Agrabah Palace Gates High Close to Palace Chest"                              , player).access_rule = lambda state: can_glide(state, player)

@@ -61,6 +61,7 @@ class KH1World(World):
         while i < 100:
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(random.choice(level_up_rewards)))
             i = i + 1
+        self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
