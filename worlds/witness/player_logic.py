@@ -554,7 +554,7 @@ class WitnessPlayerLogic:
             "0x0C2B2": "+1 Laser (Bunker Laser)",
             "0x00BF6": "+1 Laser (Swamp Laser)",
             "0x028A4": "+1 Laser (Treehouse Laser)",
-            "0x09F7F": "Mountain Entry",
+            "0x17C34": "Mountain Entry",
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
