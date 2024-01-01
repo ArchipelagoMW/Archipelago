@@ -117,7 +117,7 @@ class WitnessPlayerItems:
             if not isinstance(item_data.definition, DoorItemDefinition):
                 continue
 
-            if all(self._logic.solvability_not_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
+            if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.

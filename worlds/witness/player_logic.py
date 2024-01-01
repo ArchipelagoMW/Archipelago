@@ -473,8 +473,8 @@ class WitnessPlayerLogic:
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
-    def solvability_not_guaranteed(self, entity_hex: str):
-        return (
+    def solvability_guaranteed(self, entity_hex: str):
+        return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
             or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
@@ -550,9 +550,7 @@ class WitnessPlayerLogic:
 
         self.USED_EVENT_NAMES_BY_HEX = {
             event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
-            if event_hex not in self.COMPLETELY_DISABLED_ENTITIES
-            and event_hex not in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
-            and event_hex not in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
+            if self.solvability_guaranteed(event_hex)
         }
 
         for panel in self.USED_EVENT_NAMES_BY_HEX:
