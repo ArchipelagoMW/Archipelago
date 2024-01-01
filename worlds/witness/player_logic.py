@@ -101,8 +101,11 @@ class WitnessPlayerLogic:
             for option_entity in option:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
-                if option_entity in self.EVENT_NAMES_BY_HEX:
+                if option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                     new_items = frozenset({frozenset([option_entity])})
+                elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
+                    new_items = frozenset({frozenset([option_entity])})
+                    self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
                 elif option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
                 else:
@@ -169,14 +172,11 @@ class WitnessPlayerLogic:
         if adj_type == "Event Items":
             line_split = line.split(" - ")
             new_event_name = line_split[0]
-            hex_set = line_split[1].split(",")
+            entity_hex = line_split[1]
+            dependent_hex_set = line_split[2].split(",")
 
-            for entity, event_name in self.EVENT_NAMES_BY_HEX.items():
-                if event_name == new_event_name:
-                    self.DONT_MAKE_EVENTS.add(entity)
-
-            for hex_code in hex_set:
-                self.EVENT_NAMES_BY_HEX[hex_code] = new_event_name
+            for dependent_hex in dependent_hex_set:
+                self.CONDITIONAL_EVENTS[(entity_hex, dependent_hex)] = new_event_name
 
             return
 
@@ -383,7 +383,7 @@ class WitnessPlayerLogic:
                 obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
                 obelisk_name = obelisk["checkName"]
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
-                self.EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
+                self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
@@ -455,7 +455,8 @@ class WitnessPlayerLogic:
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
-                        if entity in self.EVENT_NAMES_BY_HEX or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX:
+                        if (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
+                                or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
                             entity_req = self.reduce_req_within_region(entity)
@@ -479,21 +480,24 @@ class WitnessPlayerLogic:
         action = " Opened" if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
 
         name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
-        if panel not in self.EVENT_NAMES_BY_HEX:
+        if panel not in self.USED_EVENT_NAMES_BY_HEX:
             warning("Panel \"" + name + "\" does not have an associated event name.")
-            self.EVENT_NAMES_BY_HEX[panel] = name + " Event"
-        pair = (name, self.EVENT_NAMES_BY_HEX[panel])
+            self.USED_EVENT_NAMES_BY_HEX[panel] = name + " Event"
+        pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair
 
     def make_event_panel_lists(self):
-        self.EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
+        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
-        for event_hex, event_name in self.EVENT_NAMES_BY_HEX.items():
-            if event_hex in self.COMPLETELY_DISABLED_ENTITIES or event_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
-                continue
-            self.EVENT_PANELS.add(event_hex)
+        self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
 
-        for panel in self.EVENT_PANELS:
+        self.USED_EVENT_NAMES_BY_HEX = {
+            event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
+            if event_hex not in self.COMPLETELY_DISABLED_ENTITIES
+            and event_hex not in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
+        }
+
+        for panel in self.USED_EVENT_NAMES_BY_HEX:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
@@ -530,16 +534,14 @@ class WitnessPlayerLogic:
 
         # Determining which panels need to be events is a difficult process.
         # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
-        self.EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
-        self.DONT_MAKE_EVENTS = set()
         self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
 
-        self.EVENT_NAMES_BY_HEX = {
+        self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
             "0x09F98": "Desert Laser Redirection",
@@ -555,6 +557,9 @@ class WitnessPlayerLogic:
             "0x09F7F": "Mountain Entry",
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
+
+        self.USED_EVENT_NAMES_BY_HEX = {}
+        self.CONDITIONAL_EVENTS = {}
 
         self.make_options_adjustments(world)
         self.make_dependency_reduced_checklist()
