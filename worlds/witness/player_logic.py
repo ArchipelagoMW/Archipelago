@@ -473,6 +473,63 @@ class WitnessPlayerLogic:
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
+    def solvability_not_guaranteed(self, entity_hex: str):
+        return (
+            entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
+            or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
+            or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
+        )
+
+    def determine_unrequired_entities(self, world: "WitnessWorld"):
+        """Figure out which major items are actually useless in this world's settings"""
+
+        # Gather quick references to relevant options
+        eps_shuffled = world.options.shuffle_EPs
+        come_to_you = world.options.elevators_come_to_you
+        difficulty = world.options.puzzle_randomization
+        discards_shuffled = world.options.shuffle_discarded_panels
+        vaults_shuffled = world.options.shuffle_vault_boxes
+        symbols_shuffled = world.options.shuffle_symbols
+        disable_non_randomized = world.options.disable_non_randomized_puzzles
+        postgame = world.options.shuffle_postgame
+        goal = world.options.victory_condition
+        doors = world.options.shuffle_doors
+        shortbox_req = world.options.mountain_lasers
+        longbox_req = world.options.challenge_lasers
+        mountain_upper_included = postgame or not (
+            goal == "mountain_box_short"
+            or goal == "mountain_box_long" and longbox_req <= shortbox_req
+        )
+
+        # It is easier to think about when these items *are* required, so we make that dict first
+        # If the entity is disabled anyway, we don't need to consider that case
+        is_item_required_dict = {
+            "0x03750": eps_shuffled,  # Monastery Garden Entry Door
+            "0x275FA": eps_shuffled,  # Boathouse Hook Control
+            "0x17D02": eps_shuffled,  # Windmill Turn Control
+            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": come_to_you or eps_shuffled,  # Swamp Long Bridge
+            "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
+            "0x17CAA": doors >= 2,  # Jungle Monastery Garden Shortcut Panel
+            "0x0364E": False,  # Monastery Laser Shortcut Door
+            "0x03713": doors >= 2,  # Monastery Laser Shortcut Panel
+            "0x03313": False,  # Orchard Second Gate
+            "0x337FA": doors >= 2,  # Jungle Bamboo Laser Shortcut Panel
+            "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
+            "0x335AB": False,  # Caves Elevator Controls
+            "0x335AC": False,  # Caves Elevator Controls
+            "0x3369D": False,  # Caves Elevator Controls
+            "0x01BEA": difficulty == "none" and eps_shuffled,  # Keep PP2
+            "0x0A0C9": eps_shuffled or discards_shuffled or disable_non_randomized,  # Cargo Box Entry Door
+            "0x09EEB": discards_shuffled or mountain_upper_included,  # Mountain Floor 2 Elevator Control Panel
+            "0x17CAB": symbols_shuffled or not disable_non_randomized,  # Jungle Popup Wall Panel
+        }
+
+        # Now, return the keys of the dict entries where the result is False to get unrequired major items
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY |= {
+            item_name for item_name, is_required in is_item_required_dict.items() if not is_required
+        }
+
     def make_event_item_pair(self, panel: str):
         """
         Makes a pair of an event panel and its event item
@@ -495,6 +552,7 @@ class WitnessPlayerLogic:
             event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
             if event_hex not in self.COMPLETELY_DISABLED_ENTITIES
             and event_hex not in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
+            and event_hex not in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
         }
 
         for panel in self.USED_EVENT_NAMES_BY_HEX:
@@ -509,6 +567,8 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_REGIONS = set()
 
         self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES = set()
+
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY = set()
 
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
@@ -562,5 +622,6 @@ class WitnessPlayerLogic:
         self.CONDITIONAL_EVENTS = {}
 
         self.make_options_adjustments(world)
+        self.determine_unrequired_entities(world)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()
