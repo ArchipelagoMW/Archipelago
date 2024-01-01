@@ -2637,7 +2637,7 @@ id,region,name,tags,mod_name
 7907,Farm,Harvest Void Mint Leaves,CROPSANITY,Distant Lands - Witch Swamp Overhaul
 7908,Farm,Harvest Vile Ancient Fruit,CROPSANITY,Distant Lands - Witch Swamp Overhaul
 8001,Shipping,Shipsanity: Magic Elixir,SHIPSANITY,Magic
-8002,Shipping,Shipsanity: Travel Core,SHIPSANITY,Magic
+8002,Shipping,Shipsanity: Travel Core,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Magic
 8003,Shipping,Shipsanity: Aegis Elixir,SHIPSANITY,Stardew Valley Expanded
 8004,Shipping,Shipsanity: Aged Blue Moon Wine,SHIPSANITY,Stardew Valley Expanded
 8005,Shipping,Shipsanity: Ancient Ferns Seed,SHIPSANITY,Stardew Valley Expanded
@@ -2829,7 +2829,7 @@ id,region,name,tags,mod_name
 8200,Shipping,Shipsanity: Wooden Display,SHIPSANITY,Archaeology
 8201,Shipping,Shipsanity: Dwarf Gadget: Infinite Volcano Simulation,"SHIPSANITY,GINGER_ISLAND",Archaeology
 8202,Shipping,Shipsanity: Water Shifter,SHIPSANITY,Archaeology
-8203,Shipping,Shipsanity: Brown Amanita,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
+8203,Shipping,Shipsanity: Brown Amanita,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8204,Shipping,Shipsanity: Swamp Herb,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Distant Lands - Witch Swamp Overhaul
 8205,Shipping,Shipsanity: Void Mint Seeds,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
 8206,Shipping,Shipsanity: Vile Ancient Fruit Seeds,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
