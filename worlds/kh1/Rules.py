@@ -184,7 +184,7 @@ def set_rules(multiworld: MultiWorld, player: int):
    #multiworld.get_location("Monstro Mouth Boat Deck Chest"                                                , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Mouth High Platform Boat Side Chest"                                  , player).access_rule = lambda state: has_item(state, player, "High Jump")
     multiworld.get_location("Monstro Mouth High Platform Across from Boat Chest"                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
-    multiworld.get_location("Monstro Mouth Near Ship Chest"                                                , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Monstro Mouth Near Ship Chest"                                                , player).access_rule = lambda state: has_item(state, player, "High Jump")
     multiworld.get_location("Monstro Mouth Green Trinity Top of Boat Chest"                                , player).access_rule = lambda state: has_item(state, player, "High Jump") and has_item(state, player, "Green Trinity")
    #multiworld.get_location("Monstro Chamber 2 Ground Chest"                                               , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Monstro Chamber 2 Platform Chest"                                             , player).access_rule = lambda state: has_item(state, player, "")
