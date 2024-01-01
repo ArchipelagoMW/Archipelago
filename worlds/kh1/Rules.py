@@ -275,7 +275,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     
    #multiworld.get_location("Chronicles Sora's Story"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Wonderland"                                                        , player).access_rule = lambda state: has_evidence(state, player)
-    multiworld.get_location("Chronicles Olympus Coliseum"                                                  , player).access_rule = lambda state: has_item(state, player, "Hades Cup") and has_x_worlds(state, player, 7)
+   #multiworld.get_location("Chronicles Olympus Coliseum"                                                  , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Deep Jungle"                                                       , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Chronicles Agrabah"                                                           , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Monstro"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
@@ -312,8 +312,8 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Atlantica"                                                                    , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
-    multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5) and has_item(state, player, "High Jump")
-    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player)
+    multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5) and has_item(state, player, "High Jump") and has_item(state, player, "Green Trinity")
+    multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player) and has_item(state, player, "Green Trinity")
     
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
