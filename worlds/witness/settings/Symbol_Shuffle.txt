@@ -1,7 +1,6 @@
 Items:
 Arrows
 Progressive Dots
-Colored Dots
 Sound Dots
 Progressive Symmetry
 Triangles
