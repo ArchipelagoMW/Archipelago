@@ -289,7 +289,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Treasure Magnet":                   KH1ItemData("Abilities",        code = 264_3005, classification = ItemClassification.useful,      max_quantity = 2,  weight = 10),
     "Combo Plus":                        KH1ItemData("Abilities",        code = 264_3006, classification = ItemClassification.useful,      max_quantity = 4,  weight = 10),
     "Air Combo Plus":                    KH1ItemData("Abilities",        code = 264_3007, classification = ItemClassification.useful,      max_quantity = 2,  weight = 10),
-    "Critical Plus":                     KH1ItemData("Abilities",        code = 264_3008, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
+    "Critical Plus":                     KH1ItemData("Abilities",        code = 264_3008, classification = ItemClassification.useful,      max_quantity = 3,  weight = 10),
    #"Second Wind":                       KH1ItemData("Abilities",        code = 264_3009, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Scan":                              KH1ItemData("Abilities",        code = 264_3010, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Sonic Blade":                       KH1ItemData("Abilities",        code = 264_3011, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
