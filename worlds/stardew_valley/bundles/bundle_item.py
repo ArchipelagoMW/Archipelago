@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from ..options import StardewValleyOptions, ExcludeGingerIsland, FestivalLocations
@@ -6,24 +7,49 @@ from ..strings.currency_names import Currency
 from ..strings.quality_names import CropQuality, FishQuality, ForageQuality
 
 
+class BundleItemSource(ABC):
+    @abstractmethod
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        ...
+
+
+class VanillaItemSource(BundleItemSource):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return True
+
+
+class IslandItemSource(BundleItemSource):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
+
+
+class FestivalItemSource(BundleItemSource):
+    def can_appear(self, options: StardewValleyOptions) -> bool:
+        return options.festival_locations != FestivalLocations.option_disabled
+
+
+class BundleItemSources:
+    vanilla = VanillaItemSource()
+    island = IslandItemSource()
+    festival = FestivalItemSource()
+
+
 @dataclass(frozen=True, order=True)
 class BundleItem:
     item_name: str
     amount: int = 1
     quality: str = CropQuality.basic
+    source: BundleItemSource = BundleItemSources.vanilla
 
     @staticmethod
     def money_bundle(amount: int):
         return BundleItem(Currency.money, amount)
 
-    def create(self, item_name: str, amount: int, quality: str):
-        return BundleItem(item_name, amount, quality)
-
     def as_amount(self, amount: int):
-        return self.create(self.item_name, amount, self.quality)
+        return BundleItem(self.item_name, amount, self.quality, self.source)
 
     def as_quality(self, quality: str):
-        return self.create(self.item_name, self.amount, quality)
+        return BundleItem(self.item_name, self.amount, quality, self.source)
 
     def as_quality_crop(self):
         amount = 5
@@ -43,22 +69,12 @@ class BundleItem:
         return f"{self.amount} {quality} {self.item_name}"
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
-        return True
+        return self.source.can_appear(options)
 
 
-class IslandBundleItem(BundleItem):
-
-    def create(self, item_name: str, amount: int, quality: str):
-        return IslandBundleItem(item_name, amount, quality)
-
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        return options.exclude_ginger_island == ExcludeGingerIsland.option_false
+def IslandBundleItem(*args, **kwargs):
+    return BundleItem(*args, source=BundleItemSources.island, **kwargs)
 
 
-class FestivalBundleItem(BundleItem):
-
-    def create(self, item_name: str, amount: int, quality: str):
-        return FestivalBundleItem(item_name, amount, quality)
-
-    def can_appear(self, options: StardewValleyOptions) -> bool:
-        return options.festival_locations != FestivalLocations.option_disabled
+def FestivalBundleItem(*args, **kwargs):
+    return BundleItem(*args, source=BundleItemSources.festival, **kwargs)

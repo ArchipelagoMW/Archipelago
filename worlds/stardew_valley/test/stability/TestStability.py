@@ -17,7 +17,7 @@ class TestGenerationIsStable(unittest.TestCase):
     """
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
-        seed = get_seed()
+        seed = get_seed(33778671150797368040)
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])

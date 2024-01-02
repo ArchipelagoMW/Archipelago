@@ -439,7 +439,7 @@ sticky_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.sticky, sticky_ite
 wild_medicine_items = [item.as_amount(5) for item in [purple_mushroom, fiddlehead_fern, white_algae, hops, blackberry, dandelion]]
 wild_medicine_bundle = BundleTemplate(CCRoom.crafts_room, BundleName.wild_medicine, wild_medicine_items, 4, 3)
 
-quality_foraging_items = list({item.as_quality(ForageQuality.gold).as_amount(1)
+quality_foraging_items = sorted({item.as_quality(ForageQuality.gold).as_amount(1)
                                  for item in
                                  [*spring_foraging_items_thematic, *summer_foraging_items_thematic, *fall_foraging_items_thematic,
                                   *winter_foraging_items_thematic, *beach_foraging_items, *desert_foraging_items, magma_cap]})
@@ -471,7 +471,7 @@ fall_crops_items_thematic = [*fall_crops_items_vanilla, amaranth, artichoke, bee
 fall_crops_bundle_vanilla = BundleTemplate(CCRoom.pantry, BundleName.fall_crops, fall_crops_items_vanilla, 4, 4)
 fall_crops_bundle_thematic = BundleTemplate.extend_from(fall_crops_bundle_vanilla, fall_crops_items_thematic)
 
-all_crops_items = list({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
+all_crops_items = sorted({*spring_crops_items_thematic, *summer_crops_items_thematic, *fall_crops_items_thematic})
 
 quality_crops_items_vanilla = [item.as_quality_crop() for item in [parsnip, melon, pumpkin, corn]]
 quality_crops_items_thematic = [item.as_quality_crop() for item in all_crops_items]
