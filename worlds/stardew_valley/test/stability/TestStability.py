@@ -4,9 +4,11 @@ import subprocess
 import unittest
 
 from BaseClasses import get_seed
+from Utils import Version
 
 # <function Location.<lambda> at 0x102ca98a0>
-lambda_regex = re.compile(r"<function Location\.<lambda> at (.*)>")
+lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
+python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
 class TestGenerationIsStable(unittest.TestCase):
@@ -16,8 +18,18 @@ class TestGenerationIsStable(unittest.TestCase):
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
         seed = get_seed()
 
-        output_a = subprocess.check_output(['python3', '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
-        output_b = subprocess.check_output(['python3', '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
+        try:
+            python_version = subprocess.check_output(['python', '--version'])
+        except subprocess.CalledProcessError:
+            return self.skipTest("It seems that python is not available in you classpath. Skipping.")
+
+        match = python_version_regex.match(python_version.decode("UTF-8"))
+        version = Version(*(int(m) for m in match.groups()))
+        if version.major < 3:
+            return self.skipTest("It seems that the python available in your classpath is python2 instead of python3. Skipping.")
+
+        output_a = subprocess.check_output(['python', '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
+        output_b = subprocess.check_output(['python', '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
 
         result_a = json.loads(output_a)
         result_b = json.loads(output_b)
