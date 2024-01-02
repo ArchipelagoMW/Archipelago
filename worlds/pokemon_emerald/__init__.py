@@ -856,7 +856,7 @@ class PokemonEmeraldWorld(World):
                     target_type = self.random.choice(original_species.types) if should_match_type else None
 
                     blacklist = set()
-                    if self.options.allow_trainer_legendaries:
+                    if not self.options.allow_trainer_legendaries:
                         blacklist |= LEGENDARY_POKEMON
                     if self.options.force_fully_evolved >= pokemon.level:
                         blacklist |= UNEVOLVED_POKEMON
