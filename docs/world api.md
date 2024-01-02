@@ -79,9 +79,9 @@ the options and the values are the values to be set for that option. These prese
 
 Note: The values must be a non-aliased value for the option type and can only include the following option types:
 
-  - If you have a `Range`/`SpecialRange` option, the value should be an `int` between the `range_start` and `range_end`
+  - If you have a `Range`/`NamedRange` option, the value should be an `int` between the `range_start` and `range_end`
     values.
-    - If you have a `SpecialRange` option, the value can alternatively be a `str` that is one of the 
+    - If you have a `NamedRange` option, the value can alternatively be a `str` that is one of the 
       `special_range_names` keys.
   - If you have a `Choice` option, the value should be a `str` that is one of the `option_<name>` values. 
   - If you have a `Toggle`/`DefaultOnToggle` option, the value should be a `bool`.
@@ -691,7 +691,7 @@ def generate_basic(self) -> None:
 ### Setting Rules
 
 ```python
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
+from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
 from .items import get_item_type
 
 
@@ -718,7 +718,7 @@ def set_rules(self) -> None:
     # require one item from an item group
     add_rule(self.multiworld.get_location("Chest3", self.player),
              lambda state: state.has_group("weapons", self.player))
-    # state also has .item_count() for items, .has_any() and .has_all() for sets
+    # state also has .count() for items, .has_any() and .has_all() for multiple
     # and .count_group() for groups
     # set_rule is likely to be a bit faster than add_rule
 
@@ -870,7 +870,7 @@ TestBase, and can then define options to test in the class body, and run tests i
 Example `__init__.py`
 
 ```python
-from test.test_base import WorldTestBase
+from test.bases import WorldTestBase
 
 
 class MyGameTestBase(WorldTestBase):
@@ -879,7 +879,7 @@ class MyGameTestBase(WorldTestBase):
 
 Next using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
 
-Example `testChestAccess.py`
+Example `test_chest_access.py`
 ```python
 from . import MyGameTestBase
 
@@ -899,3 +899,5 @@ class TestChestAccess(MyGameTestBase):
         # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
         self.assertAccessDependency(locations, items)
 ```
+
+For more information on tests check the [tests doc](tests.md).
