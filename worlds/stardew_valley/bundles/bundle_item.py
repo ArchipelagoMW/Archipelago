@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
@@ -28,45 +30,39 @@ class FestivalItemSource(BundleItemSource):
         return options.festival_locations != FestivalLocations.option_disabled
 
 
-class BundleItemSources:
-    vanilla = VanillaItemSource()
-    island = IslandItemSource()
-    festival = FestivalItemSource()
-
-
 @dataclass(frozen=True, order=True)
 class BundleItem:
-    item_name: str
-    amount: int = 1
-    quality: str = CropQuality.basic
-    source: BundleItemSource = BundleItemSources.vanilla
-
     class Sources:
         vanilla = VanillaItemSource()
         island = IslandItemSource()
         festival = FestivalItemSource()
 
+    item_name: str
+    amount: int = 1
+    quality: str = CropQuality.basic
+    source: BundleItemSource = Sources.vanilla
+
     @staticmethod
-    def money_bundle(amount: int):
+    def money_bundle(amount: int) -> BundleItem:
         return BundleItem(Currency.money, amount)
 
-    def as_amount(self, amount: int):
+    def as_amount(self, amount: int) -> BundleItem:
         return BundleItem(self.item_name, amount, self.quality, self.source)
 
-    def as_quality(self, quality: str):
+    def as_quality(self, quality: str) -> BundleItem:
         return BundleItem(self.item_name, self.amount, quality, self.source)
 
-    def as_quality_crop(self):
+    def as_quality_crop(self) -> BundleItem:
         amount = 5
         difficult_crops = [Fruit.sweet_gem_berry, Fruit.ancient_fruit]
         if self.item_name in difficult_crops:
             amount = 1
         return self.as_quality(CropQuality.gold).as_amount(amount)
 
-    def as_quality_fish(self):
+    def as_quality_fish(self) -> BundleItem:
         return self.as_quality(FishQuality.gold)
 
-    def as_quality_forage(self):
+    def as_quality_forage(self) -> BundleItem:
         return self.as_quality(ForageQuality.gold)
 
     def __repr__(self):
