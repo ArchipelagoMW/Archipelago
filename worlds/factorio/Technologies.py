@@ -410,8 +410,15 @@ for root in base_starts:
     progressive = [root]
     while seeking in progressive_incs:
         progressive.append(seeking)
+        progressive_incs.remove(seeking)
         seeking = seeking[:-1] + str(int(seeking[-1]) + 1)
     progressive_rows["progressive-" + root] = tuple(progressive)
+
+# some modded techs add a -0 tech
+for remnant in progressive_incs:
+    if remnant[-1] == "0":
+        prog_name = "progressive-" + remnant[:-2]
+        progressive_rows[prog_name] = tuple([remnant] + list(progressive_rows[prog_name]))
 
 # science packs
 progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
