@@ -491,15 +491,18 @@ class WitnessPlayerLogic:
         boat_shuffled = world.options.shuffle_boat
         symbols_shuffled = world.options.shuffle_symbols
         disable_non_randomized = world.options.disable_non_randomized_puzzles
-        postgame = world.options.shuffle_postgame
+        postgame_included = world.options.shuffle_postgame
         goal = world.options.victory_condition
         doors = world.options.shuffle_doors
         shortbox_req = world.options.mountain_lasers
         longbox_req = world.options.challenge_lasers
-        mountain_upper_included = postgame or not (
-            goal == "mountain_box_short"
-            or goal == "mountain_box_long" and longbox_req <= shortbox_req
+
+        # Make some helper booleans so it is easier to follow what's going on
+        mountain_upper_is_in_postgame = (
+                goal == "mountain_box_short"
+                or goal == "mountain_box_long" and longbox_req <= shortbox_req
         )
+        mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
 
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
