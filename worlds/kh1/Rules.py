@@ -44,6 +44,9 @@ def has_emblems(state: CollectionState, player: int) -> bool:
 def has_item(state: CollectionState, player: int, item) -> bool:
     return state.has(item, player)
 
+def has_at_least(state: CollectionState, player: int, item, x) -> bool:
+    return state.count(item, player) >= x
+
 def set_rules(multiworld: MultiWorld, player: int):
     #Location rules.
     #Keys
@@ -154,7 +157,7 @@ def set_rules(multiworld: MultiWorld, player: int):
    #multiworld.get_location("Atlantica Ariel's Grotto High Chest"                                          , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Atlantica Ariel's Grotto Middle Chest"                                        , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Atlantica Ariel's Grotto Low Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                             , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_item(state, player, "Crystal Trident") and has_item(state, player, "Mermaid Kick")
+    multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                             , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_item(state, player, "Mermaid Kick")
    #multiworld.get_location("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Atlantica Triton's Palace White Trinity Chest"                                , player).access_rule = lambda state: has_item(state, player, "White Trinity")
     multiworld.get_location("Halloween Town Moonlight Hill White Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "White Trinity")
@@ -180,7 +183,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Olympus Coliseum Coliseum Gates Right Blue Trinity Chest"                     , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
     multiworld.get_location("Olympus Coliseum Coliseum Gates Left Blue Trinity Chest"                      , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
     multiworld.get_location("Olympus Coliseum Coliseum Gates White Trinity Chest"                          , player).access_rule = lambda state: has_item(state, player, "White Trinity")
-    multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzara Chest"                               , player).access_rule = lambda state: has_item(state, player, "Progressive Blizzard")
+    multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzara Chest"                               , player).access_rule = lambda state: has_at_least(state, player, "Progressive Blizzard", 2)
    #multiworld.get_location("Monstro Mouth Boat Deck Chest"                                                , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Mouth High Platform Boat Side Chest"                                  , player).access_rule = lambda state: has_item(state, player, "High Jump")
     multiworld.get_location("Monstro Mouth High Platform Across from Boat Chest"                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
@@ -217,21 +220,21 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Hollow Bastion Castle Gates Gravity Chest"                                    , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity")
    #multiworld.get_location("Hollow Bastion Castle Gates Freestanding Pillar Chest"                        , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Castle Gates High Pillar Chest"                                , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Hollow Bastion Great Crest Lower Chest"                                       , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Hollow Bastion Great Crest After Battle Platform Chest"                       , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Hollow Bastion High Tower 2nd Gravity Chest"                                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity")
-    multiworld.get_location("Hollow Bastion High Tower 1st Gravity Chest"                                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity")
-   #multiworld.get_location("Hollow Bastion High Tower Above Sliding Gates Chest"                          , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Hollow Bastion Great Crest Lower Chest"                                       , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion Great Crest After Battle Platform Chest"                       , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion High Tower 2nd Gravity Chest"                                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion High Tower 1st Gravity Chest"                                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion High Tower Above Sliding Gates Chest"                          , player).access_rule = lambda state: has_emblems(state, player)
    #multiworld.get_location("Hollow Bastion Library Top of Bookshelf Chest"                                , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Library 1st Floor Turn the Carousel Chest"                     , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Library Top of Bookshelf Turn the Carousel Chest"              , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 1st Chest"                 , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Library 2nd Floor Turn the Carousel 2nd Chest"                 , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest"  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_item(state, player, "Green Trinity")
+    multiworld.get_location("Hollow Bastion Lift Stop Library Node After High Tower Switch Gravity Chest"  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_item(state, player, "Green Trinity") and has_emblems(state, player)
     multiworld.get_location("Hollow Bastion Lift Stop Library Node Gravity Chest"                          , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_item(state, player, "Green Trinity")
-   #multiworld.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"               , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Hollow Bastion Lift Stop Under High Tower Sliding Blocks Chest"               , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Hollow Bastion Lift Stop Outside Library Gravity Chest"                       , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_item(state, player, "Green Trinity")
-    multiworld.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity")
+    multiworld.get_location("Hollow Bastion Lift Stop Heartless Sigil Door Gravity Chest"                  , player).access_rule = lambda state: has_item(state, player, "Progressive Gravity") and has_emblems(state, player)
    #multiworld.get_location("Hollow Bastion Base Level Bubble Under the Wall Platform Chest"               , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Base Level Platform Near Entrance Chest"                       , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Hollow Bastion Base Level Near Crystal Switch Chest"                          , player).access_rule = lambda state: has_item(state, player, "")
@@ -280,13 +283,13 @@ def set_rules(multiworld: MultiWorld, player: int):
    #multiworld.get_location("Chronicles Agrabah"                                                           , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Monstro"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
    #multiworld.get_location("Chronicles 100 Acre Wood"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Chronicles Atlantica"                                                         , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_item(state, player, "Crystal Trident")
+    multiworld.get_location("Chronicles Atlantica"                                                         , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Chronicles Halloween Town"                                                    , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
    #multiworld.get_location("Chronicles Neverland"                                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
-    multiworld.get_location("Ansem's Secret Report 3"                                                      , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_item(state, player, "Crystal Trident")
+    multiworld.get_location("Ansem's Secret Report 3"                                                      , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Ansem's Secret Report 4"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 5"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 6"                                                      , player).access_rule = lambda state: has_emblems(state, player)

@@ -236,7 +236,7 @@ item_table: Dict[str, KH1ItemData] = {
    #"Naturespark":                       KH1ItemData("Key",              code = 264_1207, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Fireglow":                          KH1ItemData("Key",              code = 264_1208, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Earthshine":                        KH1ItemData("Key",              code = 264_1209, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Crystal Trident":                   KH1ItemData("Key",              code = 264_1210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+   #"Crystal Trident":                   KH1ItemData("Key",              code = 264_1210, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Postcard":                          KH1ItemData("Key",              code = 264_1211, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Torn Page 1":                       KH1ItemData("Key",              code = 264_1212, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Torn Page 2":                       KH1ItemData("Key",              code = 264_1213, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
