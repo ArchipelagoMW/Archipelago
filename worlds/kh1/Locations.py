@@ -258,7 +258,7 @@ location_table: Dict[str, KH1LocationData] = {
    #"Chronicles 100 Acre Wood":                                                         KH1LocationData("Chronicles", 265_6258),
     "Chronicles Atlantica":                                                             KH1LocationData("Chronicles", 265_6297),
     "Chronicles Halloween Town":                                                        KH1LocationData("Chronicles", 265_6336),
-    "Chronicles Neverland":                                                             KH1LocationData("Chronicles", 265_6376),
+   #"Chronicles Neverland":                                                             KH1LocationData("Chronicles", 265_6376),
     "Ansem's Secret Report 1":                                                          KH1LocationData("Reports",    265_7018),
     "Ansem's Secret Report 2":                                                          KH1LocationData("Reports",    265_7017),
     "Ansem's Secret Report 3":                                                          KH1LocationData("Reports",    265_7016),
