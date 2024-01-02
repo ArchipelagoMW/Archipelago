@@ -1,4 +1,5 @@
 import collections
+import logging
 import typing
 
 from BaseClasses import LocationProgressType, MultiWorld, Location, Region, Entrance
@@ -81,15 +82,16 @@ def locality_rules(world: MultiWorld):
                     i.name not in sending_blockers[i.player] and old_rule(i)
 
 
-def exclusion_rules(world: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
+def exclusion_rules(multiworld: MultiWorld, player: int, exclude_locations: typing.Set[str]) -> None:
     for loc_name in exclude_locations:
         try:
-            location = world.get_location(loc_name, player)
+            location = multiworld.get_location(loc_name, player)
         except KeyError as e:  # failed to find the given location. Check if it's a legitimate location
-            if loc_name not in world.worlds[player].location_name_to_id:
+            if loc_name not in multiworld.worlds[player].location_name_to_id:
                 raise Exception(f"Unable to exclude location {loc_name} in player {player}'s world.") from e
         else:
             if not location.event:
+                logging.warning(f"Unable to exclude location {loc_name} in player {player}'s world.")
                 location.progress_type = LocationProgressType.EXCLUDED
 
 
