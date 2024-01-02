@@ -62,7 +62,7 @@ class ModQuest:
     MarlonsBoat = "Marlon's Boat"
     AuroraVineyard = "Aurora Vineyard"
     MonsterCrops = "Monster Crops"
-    VoidSoul = "Void Soul"
+    VoidSoul = "Void Soul Retrieval"
     WizardInvite = "Wizard's Invite"
     CorruptedCropsTask = "Corrupted Crops Task"
     ANewPot = "A New Pot"
