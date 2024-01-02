@@ -5,7 +5,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .time_logic import TimeLogicMixin
 from ..options import SeasonRandomization
-from ..stardew_rule import StardewRule, True_, Or
+from ..stardew_rule import StardewRule, True_, Or, And
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 
@@ -38,3 +38,7 @@ class SeasonLogic(BaseLogic[Union[SeasonLogicMixin, TimeLogicMixin, ReceivedLogi
 
     def has_any_not_winter(self):
         return self.logic.season.has_any([Season.spring, Season.summer, Season.fall])
+
+    def has_all(self):
+        seasons = [Season.spring, Season.summer, Season.fall, Season.winter]
+        return And(*(self.logic.season.has(season) for season in seasons))

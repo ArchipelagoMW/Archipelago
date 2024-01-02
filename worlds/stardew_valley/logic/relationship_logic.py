@@ -165,6 +165,8 @@ class RelationshipLogic(BaseLogic[Union[
         villager = all_villagers_by_name[npc]
         if hearts > 2 or hearts > self.options.friendsanity_heart_size:
             rules.append(self.logic.season.has(villager.birthday))
+        if villager.birthday == Generic.any:
+            rules.append(self.logic.season.has_all() | self.logic.time.has_year_three)  # push logic back for any birthday-less villager
         if villager.bachelor:
             if hearts > 8:
                 rules.append(self.logic.relationship.can_date(npc))
