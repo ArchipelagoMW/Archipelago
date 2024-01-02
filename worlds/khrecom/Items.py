@@ -26,6 +26,8 @@ def get_items_by_category(category: str, disclude: list) -> Dict[str, KHRECOMIte
 
 
 item_table: Dict[str, KHRECOMItemData] = {
+    #Victory
+    "Victory":                           KHRECOMItemData("Victory",          code = 268_0000, classification = ItemClassification.progression, max_quantity = 1, weight = 10),
     #Battle Cards
     "Card Set Kingdom Key 1-3":          KHRECOMItemData("Sets",             code = 268_1011, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
    #"Card Set Kingdom Key 4-6":          KHRECOMItemData("Sets",             code = 268_1012, classification = ItemClassification.filler,      max_quantity = 1, weight = 10), Starting Deck
@@ -280,7 +282,7 @@ item_table: Dict[str, KHRECOMItemData] = {
     "World Card 100 Acre Wood":          KHRECOMItemData("World Unlocks",    code = 268_3010, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "World Card Twilight Town":          KHRECOMItemData("World Unlocks",    code = 268_3011, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "World Card Destiny Islands":        KHRECOMItemData("World Unlocks",    code = 268_3012, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
-    "World Card Castle Oblivion":        KHRECOMItemData("World Unlocks",    code = 268_3013, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
+   #"World Card Castle Oblivion":        KHRECOMItemData("World Unlocks",    code = 268_3013, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Traverse Town":      KHRECOMItemData("Gold Map Cards",   code = 268_3301, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Wonderland":         KHRECOMItemData("Gold Map Cards",   code = 268_3302, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Olympus Coliseum":   KHRECOMItemData("Gold Map Cards",   code = 268_3303, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
