@@ -20,7 +20,7 @@ from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_m
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
                         create_locations_with_tags)
-from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
+from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, PokemonEmeraldOptions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
@@ -104,6 +104,41 @@ class PokemonEmeraldWorld(World):
         return "Great Ball"
 
     def generate_early(self) -> None:
+        # Exclude locations which are always locked behind the player's goal
+        if self.options.goal == Goal.option_champion:
+            # Always required to beat champion before receiving this
+            self.options.exclude_locations.value.update([
+                "Littleroot Town - S.S. Ticket from Norman"
+            ])
+
+            # S.S. Ticket requires beating champion, so ferry is not accessible until after goal
+            if not self.options.enable_ferry:
+                self.options.exclude_locations.value.update([
+                    "SS Tidal - Hidden Item in Lower Deck Trash Can",
+                    "SS Tidal - TM49 from Thief"
+                ])
+
+            # Construction workers don't move until champion is defeated
+            if "Safari Zone Construction Workers" not in self.options.remove_roadblocks.value:
+                self.options.exclude_locations.value.update([
+                    "Safari Zone NE - Hidden Item North",
+                    "Safari Zone NE - Hidden Item East",
+                    "Safari Zone NE - Item on Ledge",
+                    "Safari Zone SE - Hidden Item in South Grass 1",
+                    "Safari Zone SE - Hidden Item in South Grass 2",
+                    "Safari Zone SE - Item in Grass"
+                ])
+        elif self.options.goal == Goal.option_norman:
+            # Locations which are directly unlocked by defeating Norman
+            self.options.exclude_locations.value.update([
+                "Petalburg Gym - Balance Badge",
+                "Petalburg Gym - TM42 from Norman",
+                "Petalburg City - HM03 from Wally's Uncle",
+                "Dewford Town - TM36 from Sludge Bomb Man",
+                "Mauville City - Basement Key from Wattson",
+                "Mauville City - TM24 from Wattson"
+            ])
+
         # If badges or HMs are vanilla, Norman locks you from using Surf, which means you're not guaranteed to be
         # able to reach Fortree Gym, Mossdeep Gym, or Sootopolis Gym. So we can't require reaching those gyms to
         # challenge Norman or it creates a circular dependency.
