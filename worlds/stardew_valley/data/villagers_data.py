@@ -4,6 +4,7 @@ from typing import List, Tuple, Optional, Dict, Callable, Set
 from ..strings.food_names import Beverage
 from ..strings.region_names import Region, SVERegion, AlectoRegion
 from ..mods.mod_data import ModNames, mods_with_multiple_villager_sources
+from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
@@ -422,7 +423,7 @@ wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_love
 yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves + yoba_loves, False, ModNames.yoba)
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
 zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
-alecto = villager(ModNPC.alecto, False, witch_attic, Season.fall, universal_loves, False, ModNames.alecto)
+alecto = villager(ModNPC.alecto, False, witch_attic, Generic.any, universal_loves, False, ModNames.alecto)
 
 # SVE Villagers
 claire = villager(ModNPC.claire, True, town + jojamart, Season.fall, universal_loves + claire_loves, True, ModNames.sve)
@@ -431,7 +432,7 @@ mommy = villager(ModNPC.olivia, True, town, Season.spring, universal_loves_no_ra
 sophia = villager(ModNPC.sophia, True, bluemoon, Season.winter, universal_loves_no_rabbit_foot + sophia_loves, True, ModNames.sve)
 victor = villager(ModNPC.victor, True, town, Season.summer, universal_loves + victor_loves, True, ModNames.sve)
 andy = villager(ModNPC.andy, False, forest, Season.spring, universal_loves + andy_loves, True, ModNames.sve)
-apples = villager(ModNPC.apples, False, aurora + junimo, Season.spring, starfruit, False, ModNames.sve)
+apples = villager(ModNPC.apples, False, aurora + junimo, Generic.any, starfruit, False, ModNames.sve)
 gunther = villager(ModNPC.gunther, False, museum, Season.winter, universal_loves + gunther_loves, True, ModNames.jasper_sve)
 martin = villager(ModNPC.martin, False, town + jojamart, Season.summer, universal_loves + martin_loves, True, ModNames.sve)
 marlon = villager(ModNPC.marlon, False, adventurer, Season.winter, universal_loves + marlon_loves, False, ModNames.jasper_sve)
