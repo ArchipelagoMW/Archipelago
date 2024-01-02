@@ -41,6 +41,11 @@ class BundleItem:
     quality: str = CropQuality.basic
     source: BundleItemSource = BundleItemSources.vanilla
 
+    class Sources:
+        vanilla = VanillaItemSource()
+        island = IslandItemSource()
+        festival = FestivalItemSource()
+
     @staticmethod
     def money_bundle(amount: int):
         return BundleItem(Currency.money, amount)
@@ -70,11 +75,3 @@ class BundleItem:
 
     def can_appear(self, options: StardewValleyOptions) -> bool:
         return self.source.can_appear(options)
-
-
-def IslandBundleItem(*args, **kwargs):
-    return BundleItem(*args, source=BundleItemSources.island, **kwargs)
-
-
-def FestivalBundleItem(*args, **kwargs):
-    return BundleItem(*args, source=BundleItemSources.festival, **kwargs)
