@@ -4,6 +4,7 @@ from ..mod_data import ModNames
 from ...logic.base_logic import BaseLogic, BaseLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.quest_logic import QuestLogicMixin
+from ...logic.monster_logic import MonsterLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
@@ -19,10 +20,11 @@ from ...strings.forageable_names import SVEForage
 from ...strings.material_names import Material
 from ...strings.metal_names import Ore, MetalBar
 from ...strings.monster_drop_names import Loot
+from ...strings.monster_names import Monster
 from ...strings.quest_names import Quest, ModQuest
 from ...strings.region_names import Region, SVERegion, BoardingHouseRegion
 from ...strings.season_names import Season
-from ...strings.villager_names import ModNPC
+from ...strings.villager_names import ModNPC, NPC
 from ...strings.wallet_item_names import Wallet
 
 
@@ -32,7 +34,7 @@ class ModQuestLogicMixin(BaseLogicMixin):
         self.quest = ModQuestLogic(*args, **kwargs)
 
 
-class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin]]):
+class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
         quests = dict()
         quests.update(self._get_juna_quest_rules())
@@ -81,7 +83,10 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),
             ModQuest.MonsterCrops: self.logic.has((SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
-            ModQuest.VoidSoul: self.logic.region.can_reach(Region.sewer) & self.logic.has(SVEForage.void_soul),
+            ModQuest.VoidSoul: self.logic.region.can_reach(Region.sewer) & self.logic.has(SVEForage.void_soul) & self.logic.region.can_reach(Region.farm) &
+                               self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &
+                               self.logic.relationship.has_hearts(NPC.krobus, 10) & self.logic.quest.can_complete_quest(ModQuest.MonsterCrops) &
+                               self.logic.monster.can_kill_any([Monster.shadow_brute, Monster.shadow_shaman, Monster.shadow_sniper]),
         }
 
     def _get_distant_lands_quest_rules(self):
