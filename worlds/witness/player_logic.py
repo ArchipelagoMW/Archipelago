@@ -503,6 +503,7 @@ class WitnessPlayerLogic:
                 or goal == "mountain_box_long" and longbox_req <= shortbox_req
         )
         mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
+        remote_doors = doors >= 2
 
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
@@ -513,11 +514,11 @@ class WitnessPlayerLogic:
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you and not boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
-            "0x17CAA": doors >= 2,  # Jungle Monastery Garden Shortcut Panel
+            "0x17CAA": remote_doors,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
-            "0x03713": doors >= 2,  # Monastery Laser Shortcut Panel
+            "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
             "0x03313": False,  # Orchard Second Gate
-            "0x337FA": doors >= 2,  # Jungle Bamboo Laser Shortcut Panel
+            "0x337FA": remote_doors,  # Jungle Bamboo Laser Shortcut Panel
             "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
             "0x335AB": False,  # Caves Elevator Controls
             "0x335AC": False,  # Caves Elevator Controls
