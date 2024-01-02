@@ -88,7 +88,7 @@ def set_rules(multiworld: MultiWorld, player: int):
         set_rule(multiworld.get_location(name, player),
                  lambda state, v=item.material_expectations: has_piece_material(state, player, v))
     for name, item in checksmate.Locations.location_table.items():
-        set_rule(multiworld.get_location(name, player),
+        add_rule(multiworld.get_location(name, player),
                  lambda state, v=item.chessmen_expectations: has_chessmen(state, player, v))
 
     ###
