@@ -115,7 +115,10 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         hardwood_preservation_chamber_rule = self.logic.has(ModMachine.hardwood_preservation_chamber)
         for item in display_items:
             for display_type in display_types:
-                location_name = f"{display_type}: {item}"
+                if item == "Trilobite":
+                    location_name = f"{display_type}: Trilobite Fossil"
+                else:
+                    location_name = f"{display_type}: {item}"
                 display_item_rule = self.logic.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.logic.has(item)
                 if "Wooden" in display_type:
                     archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
