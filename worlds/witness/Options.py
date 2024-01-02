@@ -188,7 +188,7 @@ class DeathLink(Toggle):
 
 class DeathLinkAmnesty(Range):
     """Number of panel fails to allow before sending a death through Death Link.
-    0 means every panel fail with send a death, 1 means every other panel fail with send a death, etc."""
+    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc."""
     display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 5
