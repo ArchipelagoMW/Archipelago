@@ -488,7 +488,7 @@ class WitnessPlayerLogic:
         come_to_you = world.options.elevators_come_to_you
         difficulty = world.options.puzzle_randomization
         discards_shuffled = world.options.shuffle_discarded_panels
-        vaults_shuffled = world.options.shuffle_vault_boxes
+        boat_shuffled = world.options.shuffle_boat
         symbols_shuffled = world.options.shuffle_symbols
         disable_non_randomized = world.options.disable_non_randomized_puzzles
         postgame = world.options.shuffle_postgame
@@ -508,7 +508,7 @@ class WitnessPlayerLogic:
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": come_to_you or eps_shuffled,  # Swamp Long Bridge
+            "0x17E2B": come_to_you and not boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
             "0x17CAA": doors >= 2,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
