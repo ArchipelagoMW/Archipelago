@@ -82,7 +82,7 @@ class MultiWorld():
     game: Dict[int, str]
 
     random: random.Random
-    per_slot_randoms: Utils.DeprecationDict[int, random.Random]
+    per_slot_randoms: Utils.DeprecateDict[int, random.Random]
     """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
@@ -210,9 +210,8 @@ class MultiWorld():
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
-        self.per_slot_randoms = Utils.DeprecationDict("Using per_slot_randoms is now deprecated. Please use the "
-                                                      "world's random object instead (usually self.random)",
-                                                      Utils.Version(0, 5, 0))
+        self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
+                                                      "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import random
 import re
 import sys
 import time
@@ -14,7 +15,6 @@ from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
-    import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
@@ -298,9 +298,8 @@ class World(metaclass=AutoWorldRegister):
     def __init__(self, multiworld: "MultiWorld", player: int):
         self.multiworld = multiworld
         self.player = player
-        if multiworld:
-            self.random = random.Random(multiworld.random.getrandbits(64))
-            multiworld.per_slot_randoms[player] = self.random
+        self.random = random.Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
