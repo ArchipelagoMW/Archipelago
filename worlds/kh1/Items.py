@@ -386,7 +386,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Phil Cup":                          KH1ItemData("Cups",             code = 264_9001, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Pegasus Cup":                       KH1ItemData("Cups",             code = 264_9002, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Hercules Cup":                      KH1ItemData("Cups",             code = 264_9003, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Hades Cup":                         KH1ItemData("Cups",             code = 264_9004, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+   #"Hades Cup":                         KH1ItemData("Cups",             code = 264_9004, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
 }
 
 event_item_table: Dict[str, KH1ItemData] = {

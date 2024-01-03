@@ -301,10 +301,10 @@ def set_rules(multiworld: MultiWorld, player: int):
    #multiworld.get_location("Ansem's Secret Report 12"                                                     , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Ansem's Secret Report 13"                                                     , player).access_rule = lambda state: has_item(state, player, "")
     
-    multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Entry Pass")
-    multiworld.get_location("Complete Pegasus Cup"                                                         , player).access_rule = lambda state: has_item(state, player, "Pegasus Cup") and has_item(state, player, "Entry Pass")
-    multiworld.get_location("Complete Hercules Cup"                                                        , player).access_rule = lambda state: has_item(state, player, "Hercules Cup") and has_item(state, player, "Entry Pass")
-    multiworld.get_location("Complete Hades Cup"                                                           , player).access_rule = lambda state: has_item(state, player, "Hades Cup") and has_item(state, player, "Entry Pass")
+    multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup")
+    multiworld.get_location("Complete Pegasus Cup"                                                         , player).access_rule = lambda state: has_item(state, player, "Pegasus Cup")
+    multiworld.get_location("Complete Hercules Cup"                                                        , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
+    multiworld.get_location("Complete Hades Cup"                                                           , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
     
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")
