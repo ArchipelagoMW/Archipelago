@@ -47,7 +47,7 @@ def has_item(state: CollectionState, player: int, item) -> bool:
 def has_at_least(state: CollectionState, player: int, item, x) -> bool:
     return state.count(item, player) >= x
 
-def set_rules(multiworld: MultiWorld, player: int):
+def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool):
     #Location rules.
     #Keys
    #multiworld.get_location("Destiny Islands Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "")
@@ -298,7 +298,8 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_location("Ansem's Secret Report 9"                                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Ansem's Secret Report 10"                                                     , player).access_rule = lambda state: has_emblems(state, player)
    #multiworld.get_location("Ansem's Secret Report 11"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Ansem's Secret Report 12"                                                     , player).access_rule = lambda state: has_item(state, player, "")
+    if sephiroth:
+        multiworld.get_location("Ansem's Secret Report 12"                                                     , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
    #multiworld.get_location("Ansem's Secret Report 13"                                                     , player).access_rule = lambda state: has_item(state, player, "")
     
     multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup")

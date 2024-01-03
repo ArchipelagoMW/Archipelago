@@ -270,7 +270,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Ansem's Secret Report 9":                                                          KH1LocationData("Reports",    265_7028),
     "Ansem's Secret Report 10":                                                         KH1LocationData("Reports",    265_7027),
    #"Ansem's Secret Report 11":                                                         KH1LocationData("Reports",    265_7026),
-   #"Ansem's Secret Report 12":                                                         KH1LocationData("Reports",    265_7025),
+    "Ansem's Secret Report 12":                                                         KH1LocationData("Reports",    265_7025),
    #"Ansem's Secret Report 13":                                                         KH1LocationData("Reports",    265_7024),
     "Level 1":                                                                          KH1LocationData("Levels",     265_8001),
     "Level 2":                                                                          KH1LocationData("Levels",     265_8002),
