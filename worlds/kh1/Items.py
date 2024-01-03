@@ -256,7 +256,7 @@ item_table: Dict[str, KH1ItemData] = {
    #"Forget-Me-Not":                     KH1ItemData("Key",              code = 264_1227, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
     "Jack-In-The-Box":                   KH1ItemData("Key",              code = 264_1228, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Entry Pass":                        KH1ItemData("Key",              code = 264_1229, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
-    "Hero License":                      KH1ItemData("Key",              code = 264_1230, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
+   #"Hero License":                      KH1ItemData("Key",              code = 264_1230, classification = ItemClassification.progression, max_quantity = 1,  weight = 10),
    #"Pretty Stone":                      KH1ItemData("Synthesis",        code = 264_1231, classification = ItemClassification.filler,      max_quantity = 1,  weight = 10),
    #"N41":                               KH1ItemData("Synthesis",        code = 264_1232, classification = ItemClassification.filler,      max_quantity = 1,  weight = 10),
    #"Lucid Shard":                       KH1ItemData("Synthesis",        code = 264_1233, classification = ItemClassification.filler,      max_quantity = 1,  weight = 10),
