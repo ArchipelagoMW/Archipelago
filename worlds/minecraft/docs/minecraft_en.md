@@ -28,7 +28,7 @@ When you join a multiworld game, you will be asked to provide your YAML file to 
 the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
 files. Your data file should have a `.apmc` extension.
 
-Double-click on your `.apmc` file to have the Minecraft Archipelago client (not the Minecraft Game Client) auto-launch the installed forge server. Make sure to
+Double-click on your `.apmc` file to have the Minecraft **Archipelago** client (not the Minecraft **Game** Client) auto-launch the installed forge server. Make sure to
 leave this window open as this is your Minecraft server console in addition to being the Minecraft Archipelago client.
 
 ### Connect to the MultiServer
