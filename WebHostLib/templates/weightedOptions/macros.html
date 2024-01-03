@@ -129,20 +129,20 @@
 {% endmacro %}
 
 {% macro LocationSet(world_name, option_name, option, world) %}
-    <div class="option-container">
+    <div class="set-container">
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
-                <div class="option-entry">
+                <div class="set-entry">
                     <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if grop_name in option.default }} />
                     <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                 </div>
             {% endif %}
         {% endfor %}
         {% if world.location_name_groups.keys()|length > 1 %}
-            <div class="option-divider">&nbsp;</div>
+            <div class="set-divider">&nbsp;</div>
         {% endif %}
         {% for location_name in world.location_names|sort %}
-            <div class="option-entry">
+            <div class="set-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}" value="{{ location_name }}" {{ "checked" if location_name in option.default }} />
                 <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
             </div>
@@ -151,20 +151,20 @@
 {% endmacro %}
 
 {% macro ItemSet(world_name, option_name, option, world) %}
-    <div class="option-container">
+    <div class="set-container">
         {% for group_name in world.item_name_groups.keys()|sort %}
             {% if group_name != "Everything" %}
-                <div class="option-entry">
+                <div class="set-entry">
                     <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if group_name in option.default }} />
                     <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                 </div>
             {% endif %}
         {% endfor %}
         {% if world.item_name_groups.keys()|length > 1 %}
-            <div class="option-divider">&nbsp;</div>
+            <div class="set-divider">&nbsp;</div>
         {% endif %}
         {% for item_name in world.item_names|sort %}
-            <div class="option-entry">
+            <div class="set-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}" value="{{ item_name }}" {{ "checked" if item_name in option.default }} />
                 <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
             </div>
@@ -173,9 +173,9 @@
 {% endmacro %}
 
 {% macro OptionSet(world_name, option_name, option) %}
-    <div class="option-container">
+    <div class="set-container">
         {% for key in option.valid_keys %}
-            <div class="option-entry">
+            <div class="set-entry">
                 <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
                 <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
             </div>

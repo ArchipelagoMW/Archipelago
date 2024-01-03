@@ -193,6 +193,59 @@ html {
 #weighted-options .options-container:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked) span.group-collapse-arrow {
   transform: rotate(90deg);
 }
+#weighted-options .set-container {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(20, 20, 20, 0.25);
+  border-radius: 3px;
+  color: #ffffff;
+  max-height: 15rem;
+  min-width: 14.5rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  padding-left: 0.25rem;
+}
+#weighted-options .set-container .set-divider {
+  width: 100%;
+  height: 2px;
+  background-color: rgba(20, 20, 20, 0.25);
+  margin-top: 0.125rem;
+  margin-bottom: 0.125rem;
+}
+#weighted-options .set-container .set-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-bottom: 0.25rem;
+  padding-top: 0.25rem;
+  user-select: none;
+  line-height: 1rem;
+}
+#weighted-options .set-container .set-entry:hover {
+  background-color: rgba(20, 20, 20, 0.25);
+}
+#weighted-options .set-container .set-entry input[type=checkbox] {
+  margin-right: 0.25rem;
+}
+#weighted-options .set-container .set-entry input[type=number] {
+  max-width: 1.5rem;
+  max-height: 1rem;
+  margin-left: 0.125rem;
+  text-align: center;
+  /* Hide arrows on input[type=number] fields */
+  -moz-appearance: textfield;
+}
+#weighted-options .set-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .set-entry input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+#weighted-options .set-container .set-entry label {
+  flex-grow: 1;
+  margin-right: 0;
+  min-width: unset;
+  display: unset;
+}
 
 @media all and (max-width: 1000px), all and (orientation: portrait) {
   #weighted-options .game-options {
