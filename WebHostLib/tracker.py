@@ -1,4 +1,5 @@
 import datetime
+import collections
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from uuid import UUID
@@ -115,10 +116,10 @@ class TrackerData:
         return self._multisave.get("received_items", {}).get((team, player, True), [])
 
     @_cache_results
-    def get_player_inventory_counts(self, team: int, player: int) -> Dict[int, int]:
+    def get_player_inventory_counts(self, team: int, player: int) -> collections.Counter:
         """Retrieves a dictionary of all items received by their id and their received count."""
         items = self.get_player_received_items(team, player)
-        inventory = {item: 0 for item in self.item_id_to_name[self.get_player_game(team, player)]}
+        inventory = collections.Counter()
         for item in items:
             inventory[item.item] += 1
 
@@ -389,7 +390,6 @@ def render_generic_multiworld_tracker(tracker_data: TrackerData, enabled_tracker
 
 # TODO: This is a temporary solution until a proper Tracker API can be implemented for tracker templates and data to
 #       live in their respective world folders.
-import collections
 
 from worlds import network_data_package
 

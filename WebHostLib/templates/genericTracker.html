@@ -48,7 +48,13 @@
 
                     {% for id, count in inventory.items() if count > 0 %}
                         <tr>
-                            <td>{{ item_id_to_name[game][id] }}</td>
+                            <td>
+                                {% if item_id_to_name[game][id] %}
+                                {{ item_id_to_name[game][id] }}
+                                {% else %}
+                                Unknown Item #{{ id }}
+                                {% endif %}
+                            </td>
                             <td>{{ count }}</td>
                             <td>{{ received_items[id] }}</td>
                         </tr>
@@ -69,7 +75,13 @@
 
                     {%- for location in locations -%}
                         <tr>
-                            <td>{{ location_id_to_name[game][location] }}</td>
+                            <td>
+                                {% if location_id_to_name[game][location] %}
+                                {{ location_id_to_name[game][location] }}
+                                {% else %}
+                                Unknown Location #{{ id }}
+                                {% endif %}
+                            </td>
                             <td class="center-column">
                                 {% if location in checked_locations %}✔{% endif %}
                             </td>
@@ -109,8 +121,20 @@
                                     {{ player_names_with_alias[(team, hint.receiving_player)] }}
                                 {% endif %}
                             </td>
-                            <td>{{ item_id_to_name[games[(team, hint.receiving_player)]][hint.item] }}</td>
-                            <td>{{ location_id_to_name[games[(team, hint.finding_player)]][hint.location] }}</td>
+                            <td>
+                                {% if item_id_to_name[games[(team, hint.receiving_player)]][hint.item] %}
+                                {{ item_id_to_name[games[(team, hint.receiving_player)]][hint.item] }}
+                                {% else %}
+                                Unknown Item #{{ id }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if location_id_to_name[games[(team, hint.finding_player)]][hint.location] %}
+                                {{ location_id_to_name[games[(team, hint.finding_player)]][hint.location] }}
+                                {% else %}
+                                Unknown Location #{{ id }}
+                                {% endif %}
+                            </td>
                             <td>{{ games[(team, hint.finding_player)] }}</td>
                             <td>{% if hint.entrance %}{{ hint.entrance }}{% else %}Vanilla{% endif %}</td>
                             <td class="center-column">{% if hint.found %}✔{% endif %}</td>
