@@ -1,7 +1,10 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, \
+    StartInventoryPool, PlandoBosses, PlandoConnections
+from .EntranceShuffle import default_connections, default_dungeon_connections, \
+    inverted_default_connections, inverted_default_dungeon_connections
 
 
 class Logic(Choice):
@@ -47,8 +50,8 @@ class OpenPyramid(Choice):
             return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
         elif self.value == self.option_auto:
             return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
-            and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
-                 world.shuffle_ganon)
+                and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+                world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
         else:
@@ -432,7 +435,17 @@ class AllowCollect(Toggle):
     display_name = "Allow Collection of checks for other players"
 
 
+class ALttPPlandoConnections(PlandoConnections):
+    entrances = set([connection[0] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+    exits = set([connection[1] for connection in (
+        *default_connections, *default_dungeon_connections, *inverted_default_connections,
+        *inverted_default_dungeon_connections)])
+
+
 alttp_options: typing.Dict[str, type(Option)] = {
+    "plando_connections": ALttPPlandoConnections,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,
