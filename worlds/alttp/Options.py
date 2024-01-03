@@ -442,6 +442,7 @@ class ALttPPlandoConnections(PlandoConnections):
     exits = set([connection[1] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
+    shared_connections = False
 
 
 alttp_options: typing.Dict[str, type(Option)] = {

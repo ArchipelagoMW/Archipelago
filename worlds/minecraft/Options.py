@@ -101,6 +101,13 @@ class StartingItems(OptionList):
 class MCPlandoConnections(PlandoConnections):
     entrances = set(connection[0] for connection in region_info["default_connections"])
     exits = set(connection[1] for connection in region_info["default_connections"])
+    shared_connections = False
+
+    @classmethod
+    def can_connect(cls, entrance, exit):
+        if exit in region_info["illegal_connections"] and exit in region_info["illegal_connections"][exit]:
+            return False
+        return True
 
 
 minecraft_options: typing.Dict[str, type(Option)] = {

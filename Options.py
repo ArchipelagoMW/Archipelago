@@ -965,7 +965,9 @@ class PlandoConnections(Option[typing.List["PlandoConnection"]], metaclass=Conne
 
     @classmethod
     def can_connect(cls, entrance, exit):
-        raise NotImplementedError
+        """Checks that a given entrance can connect to a given exit.
+        By default, this will always return true unless overridden."""
+        return True
 
     @classmethod
     def validate_plando_connections(cls, connections):
