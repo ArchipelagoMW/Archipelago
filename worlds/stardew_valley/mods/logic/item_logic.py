@@ -27,7 +27,7 @@ from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.forageable_names import SVEForage, DistantLandsForageable
 from ...strings.gift_names import SVEGift
 from ...strings.metal_names import all_fossils, all_artifacts
-from ...strings.monster_drop_names import ModLoot
+from ...strings.monster_drop_names import ModLoot, Loot
 from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed, DistantLandsSeed
@@ -58,11 +58,16 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             items.update(self.get_distant_lands_item_rules())
         return items
 
+    def append_vanilla_item_rules(self, item_rule: Dict[str, StardewRule]):
+        if ModNames.sve in self.options.mods:
+            self.append_vanilla_rules_for_sve(item_rule)
+
     def get_sve_item_rules(self):
         return {SVEGift.aged_blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 28000),
                 SVEGift.blue_moon_wine: self.logic.money.can_spend_at(SVERegion.sophias_house, 3000),
                 SVESeed.fungus_seed: self.logic.region.can_reach(SVERegion.highlands_cavern) & self.logic.combat.has_good_weapon,
-                ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron),
+                ModLoot.green_mushroom: self.logic.region.can_reach(SVERegion.highlands_outside) &
+                                        self.logic.tool.has_tool(Tool.axe, ToolMaterial.iron) & self.logic.season.has_any_not_winter(),
                 SVEFruit.monster_fruit: self.logic.season.has(Season.summer) & self.logic.has(SVESeed.stalk_seed),
                 SVEVegetable.monster_mushroom: self.logic.season.has(Season.fall) & self.logic.has(SVESeed.fungus_seed),
                 SVEForage.ornate_treasure_chest: self.logic.region.can_reach(SVERegion.highlands_outside) & self.logic.combat.has_galaxy_weapon &
@@ -112,6 +117,12 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                                     self.logic.skill.has_level(Skill.combat, 10) & self.logic.region.can_reach(Region.saloon) & self.logic.time.has_year_three
                 }
         # @formatter:on
+
+    def append_vanilla_rules_for_sve(self, items: Dict[str, StardewRule]):
+        items.update({
+            Loot.void_essence: items[Loot.void_essence] | self.logic.region.can_reach(SVERegion.highlands_cavern) | self.logic.region.can_reach(SVERegion.crimson_badlands),
+            Loot.solar_essence: items[Loot.solar_essence] | self.logic.region.can_reach(SVERegion.crimson_badlands)
+        })
 
     def get_archaeology_item_rules(self):
         archaeology_item_rules = {}
