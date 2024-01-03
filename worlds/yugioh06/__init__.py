@@ -15,7 +15,7 @@ from ..AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster, \
     challenges, useful
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
-    get_beat_challenge_events, special
+    get_beat_challenge_events, special, collection_events
 from .Opponents import get_opponents, get_opponent_locations
 from .Options import Yugioh06Options
 from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
@@ -191,6 +191,16 @@ class Yugioh06World(World):
             location = self.multiworld.get_location(location_name, self.player)
             location.place_locked_item(item)
             location.event = True
+        for event in collection_events:
+            item = Yugioh2006Item(
+                event,
+                ItemClassification.progression,
+                None,
+                self.player
+            )
+            location = self.multiworld.get_location(event, self.player)
+            location.place_locked_item(item)
+            location.event = True
 
     def create_regions(self):
         structure_deck = self.options.structure_deck.current_key
@@ -198,7 +208,7 @@ class Yugioh06World(World):
             create_region(self, 'Menu', None, ['to Deck Edit', 'to Campaign', 'to Challenges', 'to Card Shop']),
             create_region(self, 'Campaign', Bonuses | Campaign_Opponents),
             create_region(self, 'Challenges'),
-            create_region(self, 'Card Shop', Required_Cards),
+            create_region(self, 'Card Shop', Required_Cards | collection_events),
             create_region(self, 'Structure Deck', get_deck_content_locations(structure_deck))
         ]
 

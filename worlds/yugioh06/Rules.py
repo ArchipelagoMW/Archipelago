@@ -43,12 +43,14 @@ def set_rules(world):
                           state.yugioh06_difficulty(player, 2),
         "Exactly 0 LP Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player),
-        "Exodia Finish Bonus": lambda state: state.yugioh06_can_exodia_win(player),
-        "Last Turn Finish Bonus": lambda state: state.yugioh06_can_last_turn_win(player),
-        "Yata-Garasu Finish Bonus": lambda state: state.yugioh06_can_yata_lock(player),
+        "Exodia Finish Bonus": lambda state: state.has("Can Exodia Win", player),
+        "Last Turn Finish Bonus": lambda state: state.has("Can Last Turn Win", player),
+        "Yata-Garasu Finish Bonus": lambda state: state.has("Can Yata Lock", player),
         "Skull Servant Finish Bonus": lambda state: state.has("Skull Servant", player) and
                                                     state.yugioh06_difficulty(player, 3),
-        "Konami Bonus": lambda state: state.yugioh06_can_get_konami_bonus(player),
+        "Konami Bonus": lambda state: state.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"],
+                                    player) or state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
+                                        "Poison of the Old Man"], player) and state.yugioh06_difficulty(player, 8),
         # placeholder
         # TODO: Add more ways to do over 4000 at once
         "Max Damage Bonus": lambda state: state.has_any(["Wave-Motion Cannon", "Megamorph", "United We Stand"], player),
@@ -57,7 +59,7 @@ def set_rules(world):
         # TODO: Probably missing some from side sets
         "Ritual Summon Bonus": lambda state: state.has("Ritual", player),
         "Over 20000 LP Bonus": lambda state: can_gain_lp_every_turn(state, player)
-                                             and state.yugioh06_can_stall_with_st(player),
+                                             and state.has("Can Stall with ST", player),
         "Low LP Bonus": lambda state: state.has("Wall of Revealing Light", player) and state.yugioh06_difficulty(player,
                                                                                                                  2),
         "Extremely Low LP Bonus": lambda state: state.has_all(["Wall of Revealing Light", "Messenger of Peace"], player)
@@ -66,16 +68,16 @@ def set_rules(world):
                                                   or state.has("Wave-Motion Cannon", player)
                                                   or state.can_reach("Final Countdown Finish Bonus", 'Location', player)
                                                   or state.can_reach("Destiny Board Finish Bonus", 'Location', player)
-                                                  or state.can_reach("Exodia Finish Bonus", 'Location', player)
-                                                  or state.can_reach("Last Turn Finish Bonus", 'Location', player),
+                                                  or state.has("Can Exodia Win", player)
+                                                  or state.has("Can Last Turn Win", player),
         "No More Cards Bonus": lambda state: state.has_any(["Cyber Jar", "Morphing Jar",
                                                             "Morphing Jar #2", "Needle Worm"], player)
                                              and state.has_any(["The Shallow Grave", "Spear Cretin"],
                                                                player) and state.yugioh06_difficulty(player, 5),
         "Final Countdown Finish Bonus": lambda state: state.has("Final Countdown", player)
-                                                      and state.yugioh06_can_stall_with_st(player),
-        "Destiny Board Finish Bonus": lambda state: state.yugioh06_can_stall_with_monsters(player) and
-                                                    state.yugioh06_has_destiny_board(player) and
+                                                      and state.has("Can Stall with ST", player),
+        "Destiny Board Finish Bonus": lambda state: state.has("Can Stall with Monsters", player) and
+                                                    state.has("Destiny Board and its letters", player) and
                                                     state.has("A Cat of Ill Omen", player),
 
         # Cards
@@ -83,19 +85,19 @@ def set_rules(world):
         "Obtain Final Countdown": lambda state: state.has("Final Countdown", player),
         "Obtain Victory Dragon": lambda state: state.has("Victory D.", player),
         "Obtain Ojama Delta Hurricane and its required cards":
-            lambda state: state.yugioh06_has_ojama_delta_hurricane(player),
+            lambda state: state.has("Ojama Delta Hurricane and required cards", player),
         "Obtain Huge Revolution and its required cards":
-            lambda state: state.yugioh06_has_huge_revolution(player),
+            lambda state: state.has("Huge Revolution and its required cards", player),
         "Obtain Perfectly Ultimate Great Moth and its required cards":
-            lambda state: state.yugioh06_has_perfectly_ultimate_great_moth(player),
+            lambda state: state.has("Perfectly Ultimate Great Moth and its required cards", player),
         "Obtain Valkyrion the Magna Warrior and its pieces":
-            lambda state: state.yugioh06_has_valkyrion_the_magna_warrior(player),
-        "Dark Sage and its required cards": lambda state: state.yugioh06_has_dark_sage(player),
-        "Obtain Destiny Board and its letters": lambda state: state.yugioh06_has_destiny_board(player),
+            lambda state: state.has("Valkyrion the Magna Warrior and its pieces", player),
+        "Obtain Dark Sage and its required cards": lambda state: state.has("Dark Sage and its required cards", player),
+        "Obtain Destiny Board and its letters": lambda state: state.has("Destiny Board and its letters", player),
         "Obtain all XYZ-Dragon Cannon fusions and their materials":
-            lambda state: state.yugioh06_has_all_xyz_dragon_cannon_fusions(player),
+            lambda state: state.has("XYZ-Dragon Cannon fusions and their materials", player),
         "Obtain VWXYZ-Dragon Catapult Cannon and the fusion materials":
-            lambda state: state.yugioh06_has_vwxyz_dragon_catapult_cannon(player),
+            lambda state: state.has("VWXYZ-Dragon Catapult Cannon and the fusion materials", player),
         "Obtain Hamon, Lord of Striking Thunder":
             lambda state: state.has("Hamon, Lord of Striking Thunder", player),
         "Obtain Raviel, Lord of Phantasms":
@@ -103,9 +105,55 @@ def set_rules(world):
         "Obtain Uria, Lord of Searing Flames":
             lambda state: state.has("Uria, Lord of Searing Flames", player),
         "Obtain Gate Guardian and its pieces":
-            lambda state: state.yugioh06_has_gate_guardian(player),
+            lambda state: state.has("Gate Guardian and its pieces", player),
+        "Obtain Dark Scorpion Combination and its required cards":
+            lambda state: state.has("Dark Scorpion Combination and its required cards", player),
+        # Collection Events
+        "Ojama Delta Hurricane and required cards":
+            lambda state: state.has_all(["Ojama Delta Hurricane", "Ojama Green", "Ojama Yellow", "Ojama Black"], player),
+        "Huge Revolution and its required cards":
+            lambda state: state.has_all(["Huge Revolution", "Oppressed People", "United Resistance",
+                             "People Running About"], player),
+        "Perfectly Ultimate Great Moth and its required cards":
+            lambda state: state.has_all(["Perfectly Ultimate Great Moth", "Petit Moth", "Cocoon of Evolution"], player),
+        "Valkyrion the Magna Warrior and its pieces":
+            lambda state: state.has_all(["Valkyrion the Magna Warrior", "Alpha the Magnet Warrior",
+                            "Beta the Magnet Warrior", "Gamma the Magnet Warrior"], player),
+        "Dark Sage and its required cards":
+            lambda state: state.has_all(["Dark Sage", "Dark Magician", "Time Wizard"], player),
+        "Destiny Board and its letters":
+            lambda state: state.has_all(["Destiny Board", "Spirit Message 'I'", "Spirit Message 'N'",
+                            "Spirit Message 'A'", "Spirit Message 'L'"], player),
+        "XYZ-Dragon Cannon fusions and their materials":
+            lambda state: state.has_all(["X-Head Cannon", "Y-Dragon Head", "Z-Metal Tank",
+                            "XY-Dragon Cannon", "XZ-Tank Cannon", "YZ-Tank Dragon", "XYZ-Dragon Cannon"], player),
+        "VWXYZ-Dragon Catapult Cannon and the fusion materials":
+            lambda state: state.has_all(["X-Head Cannon", "Y-Dragon Head", "Z-Metal Tank", "XYZ-Dragon Cannon",
+                             "V-Tiger Jet", "W-Wing Catapult", "VW-Tiger Catapult", "VWXYZ-Dragon Catapult Cannon"],
+                            player),
+        "Gate Guardian and its pieces":
+            lambda state: state.has_all(["Gate Guardian", "Kazejin", "Suijin", "Sanga of the Thunder"], player),
         "Dark Scorpion Combination and its required cards":
-            lambda state: state.yugioh06_has_dark_scorpion_combination(player)
+            lambda state: state.has_all(["Dark Scorpion Combination", "Don Zaloog", "Dark Scorpion - Chick the Yellow",
+                             "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Gorg the Strong",
+                             "Cliff the Trap Remover"], player),
+        "Can Exodia Win":
+            # TODO: more ways to win with Exodia
+            lambda state: state.has_all(["Exodia", "Heart of the Underdog"], player),
+        "Can Last Turn Win":
+            # TODO: add more ways to set it up
+            lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and \
+                (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"], player)
+                or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
+        "Can Yata Lock":
+            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)\
+                and state.has_any(["No Banlist", "Banlist September 2003"], player),
+        "Can Stall with Monsters":
+            lambda state: state.yugioh06_has_individual(["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
+        "Can Stall with ST":
+            lambda state: state.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], player) >= 2
+
+
     }
     access_rules = {
         # Limited
@@ -268,9 +316,9 @@ def set_rules(world):
             lambda state: quick_plays(state, player) and
                           state.yugioh06_difficulty(player, 3),
         "TD18 The Forbidden":
-            lambda state: state.yugioh06_can_exodia_win(player),
+            lambda state: state.has("Can Exodia Win", player),
         "TD19 20 Turns":
-            lambda state: state.has("Final Countdown", player) and state.yugioh06_can_stall_with_st(player) and
+            lambda state: state.has("Final Countdown", player) and state.has("Can Stall with ST", player) and
                           state.yugioh06_difficulty(player, 3),
         "TD20 Deck Destruction":
             lambda state: state.has_any(["Cyber Jar", "Morphing Jar", "Morphing Jar #2", "Needle Worm"], player)
@@ -280,24 +328,24 @@ def set_rules(world):
             lambda state: state.has("Victory D.", player) and only_dragon(state, player)
                           and state.yugioh06_difficulty(player, 3),
         "TD22 The Preventers Fight Back":
-            lambda state: state.yugioh06_has_ojama_delta_hurricane(player) and
+            lambda state: state.has("Ojama Delta Hurricane and required cards", player) and
                           state.has_all(["Rescue Cat", "Enchanting Fitting Room", "Jerry Beans Man"], player) and
                           state.yugioh06_difficulty(player, 3),
         "TD23 Huge Revolution":
-            lambda state: state.yugioh06_has_huge_revolution(player) and
+            lambda state: state.has("Huge Revolution and its required cards", player) and
                           state.has_all(["Enchanting Fitting Room", "Jerry Beans Man"], player) and
                           state.yugioh06_difficulty(player, 3),
         "TD24 Victory in 5 Turns":
             lambda state: state.yugioh06_difficulty(player, 3),
         "TD25 Moth Grows Up":
-            lambda state: state.yugioh06_has_perfectly_ultimate_great_moth(player) and
+            lambda state: state.has("Perfectly Ultimate Great Moth and its required cards") and
                           state.has_all(["Gokipon", "Howling Insect"], player) and
                           state.yugioh06_difficulty(player, 3),
         "TD26 Magnetic Power":
-            lambda state: state.yugioh06_has_valkyrion_the_magna_warrior(player) and
+            lambda state: state.has("Valkyrion the Magna Warrior and its pieces", player) and
                           state.yugioh06_difficulty(player, 2),
         "TD27 Dark Sage":
-            lambda state: state.yugioh06_has_dark_sage(player) and
+            lambda state: state.has("Dark Sage and its required cards", player) and
                           state.has_any(["Skilled Dark Magician", "Dark Magic Curtain"], player) and
                           state.yugioh06_difficulty(player, 2),
         "TD28 Direct Damage":
@@ -316,8 +364,8 @@ def set_rules(world):
         "TD33 10x Counter":
             lambda state: counter_traps(state, player) and state.yugioh06_difficulty(player, 2),
         "TD34 Destiny Board":
-            lambda state: state.yugioh06_has_destiny_board(player)
-                          and state.yugioh06_can_stall_with_monsters(player)
+            lambda state: state.has("Destiny Board and its letters", player)
+                          and state.has("Can Stall with Monsters", player)
                           and state.has("A Cat of Ill Omen", player)
                           and state.yugioh06_difficulty(player, 2),
         # TODO: Add more OTKs
@@ -325,7 +373,7 @@ def set_rules(world):
             lambda state: state.has_all(["Cyber-Stein", "Cyber Twin Dragon", "Megamorph"], player)
                           and state.yugioh06_difficulty(player, 3),
         "TD36 V-Z In the House":
-            lambda state: state.yugioh06_has_vwxyz_dragon_catapult_cannon(player)
+            lambda state: state.has("VWXYZ-Dragon Catapult Cannon and the fusion materials", player)
                           and state.yugioh06_difficulty(player, 3),
         "TD37 Uria, Lord of Searing Flames":
             lambda state: state.has_all(["Uria, Lord of Searing Flames",
@@ -348,7 +396,7 @@ def set_rules(world):
             lambda state: state.has("Ultimate Offering", player)
                           and state.yugioh06_difficulty(player, 4),
         "TD41 The Gatekeeper Stands Tall":
-            lambda state: state.yugioh06_has_gate_guardian(player) and
+            lambda state: state.has("Gate Guardian and its pieces", player) and
                           state.has_all(["Treeborn Frog", "Tribute Doll"], player)
                           and state.yugioh06_difficulty(player, 4),
         "TD42 Serious Damage":
@@ -370,18 +418,18 @@ def set_rules(world):
             lambda state: state.has("Wave-Motion Cannon", player)
                           and state.yugioh06_difficulty(player, 3),
         "TD46 XYZ In the House":
-            lambda state: state.yugioh06_has_all_xyz_dragon_cannon_fusions(player)
+            lambda state: state.has("XYZ-Dragon Cannon fusions and their materials", player)
                           and state.has("Dimension Fusion", player),
         "TD47 Spell Counter":
             lambda state: spell_counter(state, player) and state.yugioh06_difficulty(player, 3),
         "TD48 Destroy Monsters with Effects":
             lambda state: state.has_all(["Blade Rabbit", "Dream Clown"], player) and
-                          state.yugioh06_can_stall_with_st(player) and
+                          state.has("Can Stall with ST", player) and
                           state.yugioh06_difficulty(player, 3),
         "TD49 Plunder":
             lambda state: take_control(state, player) and state.yugioh06_difficulty(player, 5),
         "TD50 Dark Scorpion Combination":
-            lambda state: state.yugioh06_has_dark_scorpion_combination(player) and
+            lambda state: state.has("Dark Scorpion Combination and its required cards", player) and
                           state.has_all(["Reinforcement of the Army", "Mystic Tomato"], player) and
                           state.yugioh06_difficulty(player, 3)
     }
