@@ -57,7 +57,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Traverse Town"].locations.append("Traverse Town Secret Waterway Near Stairs Chest"),
     regions["Wonderland"].locations.append("Wonderland Rabbit Hole Green Trinity Chest"),
    #regions["Wonderland"].locations.append("Wonderland Rabbit Hole Defeat Heartless After Trial Chest"),
-    regions["Wonderland"].locations.append("Wonderland Rabbit Hole Defeat Heartless After Hollow Bastion Chest"),
+   #regions["Wonderland"].locations.append("Wonderland Rabbit Hole Defeat Heartless After Hollow Bastion Chest"),
     regions["Wonderland"].locations.append("Wonderland Bizarre Room Green Trinity Chest"),
     regions["Wonderland"].locations.append("Wonderland Queen's Castle Hedge Left Red Chest"),
     regions["Wonderland"].locations.append("Wonderland Queen's Castle Hedge Right Blue Chest"),
@@ -229,37 +229,37 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Hollow Bastion"].locations.append("Hollow Bastion Grand Hall Steps Right Side Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Grand Hall Oblivion Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Grand Hall Left of Gate Chest"),
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Push the Statue Chest"),
+   #regions["Hollow Bastion"].locations.append("Hollow Bastion Entrance Hall Push the Statue Chest"),
     regions["Hollow Bastion"].locations.append("Hollow Bastion Rising Falls White Trinity Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 1st Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 2nd Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 3rd Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 4th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 5th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 6th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 10th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 9th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 8th Chest"),
-    regions["End of the World"].locations.append("End of the World Final Dimension 7th Chest"),
-    regions["End of the World"].locations.append("End of the World Giant Crevasse 3rd Chest"),
-    regions["End of the World"].locations.append("End of the World Giant Crevasse 1st Chest"),
-    regions["End of the World"].locations.append("End of the World Giant Crevasse 4th Chest"),
-    regions["End of the World"].locations.append("End of the World Giant Crevasse 2nd Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Traverse Town Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Wonderland Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Olympus Coliseum Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Deep Jungle Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Agrabah Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Atlantica Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Halloween Town Chest"),
-    regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 1st Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 2nd Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 3rd Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 4th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 5th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 6th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 10th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 9th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 8th Chest"),
+   #regions["End of the World"].locations.append("End of the World Final Dimension 7th Chest"),
+   #regions["End of the World"].locations.append("End of the World Giant Crevasse 3rd Chest"),
+   #regions["End of the World"].locations.append("End of the World Giant Crevasse 1st Chest"),
+   #regions["End of the World"].locations.append("End of the World Giant Crevasse 4th Chest"),
+   #regions["End of the World"].locations.append("End of the World Giant Crevasse 2nd Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Traverse Town Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Wonderland Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Olympus Coliseum Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Deep Jungle Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Agrabah Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Atlantica Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Halloween Town Chest"),
+   #regions["End of the World"].locations.append("End of the World World Terminus Neverland Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus 100 Acre Wood Chest"),
     regions["End of the World"].locations.append("End of the World World Terminus Hollow Bastion Chest"),
     regions["End of the World"].locations.append("End of the World Final Rest Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest"),
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
-    regions["End of the World"].locations.append("Chronicles Sora's Story")
+   #regions["End of the World"].locations.append("Chronicles Sora's Story")
     regions["Wonderland"].locations.append("Chronicles Wonderland")
     regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
     regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
@@ -268,7 +268,7 @@ def create_regions(multiworld: MultiWorld, player: int):
    #regions["100 Acre Wood"].locations.append("Chronicles 100 Acre Wood")
     regions["Atlantica"].locations.append("Chronicles Atlantica")
     regions["Halloween Town"].locations.append("Chronicles Halloween Town")
-    regions["Neverland"].locations.append("Chronicles Neverland")
+   #regions["Neverland"].locations.append("Chronicles Neverland")
     
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
