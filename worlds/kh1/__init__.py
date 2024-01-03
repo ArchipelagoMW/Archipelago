@@ -57,9 +57,20 @@ class KH1World(World):
         item_pool: List[KH1Item] = []
         level_up_locations = list(get_locations_by_category("Levels").keys())
         level_up_rewards = list(get_items_by_category("Level Up", []).keys())
+        level_up_item_pool = []
         i = 0
         while i < 100:
-            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(random.choice(level_up_rewards)))
+            if i < 8:
+                level_up_item_pool.append("Accessory Slot Increase")
+            elif i < 15:
+                level_up_item_pool.append("Item Slot Increase")
+            else:
+                level_up_item_pool.append(random.choice(level_up_rewards))
+            i = i + 1
+        random.shuffle(level_up_item_pool)
+        i = 0
+        while i < 100:
+            self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
         self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
