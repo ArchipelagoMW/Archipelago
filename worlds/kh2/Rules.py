@@ -224,7 +224,7 @@ class KH2WorldRules(KH2Rules):
             RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
 
             RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement,ItemName.BlizzardElement,ItemName.ThunderElement],state),
 
             RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
             RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
@@ -268,7 +268,6 @@ class KH2WorldRules(KH2Rules):
                 add_item_rule(location, lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
 
     def set_kh2_goal(self):
-
         final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
         if self.multiworld.Goal[self.player] == "three_proofs":
             final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
@@ -291,8 +290,8 @@ class KH2WorldRules(KH2Rules):
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value)
         else:
-            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and\
-                                  state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
+            final_xemnas_location.access_rule = lambda state: state.has(ItemName.Bounty, self.player, self.multiworld.BountyRequired[self.player].value) and \
+                                                              state.has(ItemName.LuckyEmblem, self.player, self.multiworld.LuckyEmblemsRequired[self.player].value)
             if self.multiworld.FinalXemnas[self.player]:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:

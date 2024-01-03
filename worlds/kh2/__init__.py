@@ -465,7 +465,7 @@ class KH2World(World):
             if location in self.random_super_boss_list:
                 self.random_super_boss_list.remove(location)
 
-        if not self.options.SummonLevelLocationToggle:
+        if not self.options.SummonLevelLocationToggle and LocationName.Summonlvl7 in self.random_super_boss_list:
             self.random_super_boss_list.remove(LocationName.Summonlvl7)
 
         #  Testing if the player has the right amount of Bounties for Completion.
