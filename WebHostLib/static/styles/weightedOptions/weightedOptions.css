@@ -163,6 +163,36 @@ html {
 #weighted-options .invisible {
   display: none;
 }
+#weighted-options .world-container h2 label, #weighted-options .options-container h3 label {
+  user-select: none;
+  cursor: pointer;
+}
+#weighted-options .world-container h2 label span.world-collapse-arrow, #weighted-options .world-container h2 label span.group-collapse-arrow, #weighted-options .options-container h3 label span.world-collapse-arrow, #weighted-options .options-container h3 label span.group-collapse-arrow {
+  user-select: none;
+  display: inline-block;
+  font-size: 1.3rem;
+}
+#weighted-options .world-container .options-container {
+  display: none;
+  flex-direction: column;
+}
+#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) .options-container {
+  display: flex;
+}
+#weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) span.world-collapse-arrow {
+  transform: rotate(90deg);
+}
+#weighted-options .options-container .options-wrapper {
+  margin-left: 0.5rem;
+  display: none;
+  flex-direction: column;
+}
+#weighted-options .options-container:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked) .options-wrapper {
+  display: flex;
+}
+#weighted-options .options-container:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked) span.group-collapse-arrow {
+  transform: rotate(90deg);
+}
 
 @media all and (max-width: 1000px), all and (orientation: portrait) {
   #weighted-options .game-options {

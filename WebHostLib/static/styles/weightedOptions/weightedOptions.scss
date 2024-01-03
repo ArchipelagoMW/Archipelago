@@ -194,6 +194,54 @@ html{
     .invisible{
         display: none;
     }
+
+    .world-container h2, .options-container h3{
+        label{
+            user-select: none;
+            cursor: pointer;
+
+            span.world-collapse-arrow, span.group-collapse-arrow{
+                user-select: none;
+                display: inline-block;
+                font-size: 1.3rem;
+            }
+        }
+    }
+
+    .world-container{
+        .options-container{
+            display: none;
+            flex-direction: column;
+        }
+
+        &:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked){
+            .options-container{
+                display: flex;
+            }
+
+            span.world-collapse-arrow{
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .options-container{
+        .options-wrapper{
+            margin-left: 0.5rem;
+            display: none;
+            flex-direction: column;
+        }
+
+        &:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked){
+            .options-wrapper{
+                display: flex;
+            }
+
+            span.group-collapse-arrow{
+                transform: rotate(90deg);
+            }
+        }
+    }
 }
 
 @media all and (max-width: 1000px), all and (orientation: portrait){

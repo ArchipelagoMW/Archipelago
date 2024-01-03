@@ -52,60 +52,84 @@
         <div id="games-wrapper">
             {% for world_name, world in worlds|dictsort %}
                 {% if not world.hidden and world.web.options_page == True %}
-                    <h2>{{ world_name }}</h2>
-                    {% for group_name, option_group in option_groups_by_world[world_name].items() %}
-                        <h3>{{ group_name }}</h3>
-                        <div class="settings-wrapper">
-                            {% for option_name, option in option_group.items() %}
-                                <div class="setting-wrapper">
-                                    <h4>{{ option.display_name|default(option_name) }}</h4>
-                                    <div class="option-description">
-                                        {{ option.__doc__ }}
-                                    </div>
-                                    {% if issubclass(option, Options.Toggle) %}
-                                        {{ inputs.Toggle(world_name, option_name, option) }}
+                    <div class="world-container">
+                        <h2 class="world-name">
+                            <label for="{{ world_name }}-world">
+                                <span class="world-collapse-arrow">▶</span>
+                                {{ world_name }}
+                            </label>
+                            <input
+                                type="checkbox"
+                                id="{{ world_name }}-world"
+                                class="collapse-toggle invisible"
+                            />
+                        </h2>
+                        {% for group_name, option_group in option_groups_by_world[world_name].items() %}
+                            <div class="options-container">
+                                <h3 class="group-name">
+                                    <label for="{{ world_name }}-{{ group_name }}">
+                                        <span class="group-collapse-arrow">▶</span>
+                                        {{ group_name }}
+                                    </label>
+                                    <input
+                                        type="checkbox"
+                                        id="{{ world_name }}-{{ group_name }}"
+                                        class="collapse-toggle invisible"
+                                    />
+                                </h3>
+                                <div class="options-wrapper">
+                                    {% for option_name, option in option_group.items() %}
+                                        <div class="option-wrapper">
+                                            <h4>{{ option.display_name|default(option_name) }}</h4>
+                                            <div class="option-description">
+                                                {{ option.__doc__ }}
+                                            </div>
+                                            {% if issubclass(option, Options.Toggle) %}
+                                                {{ inputs.Toggle(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                        {{ inputs.DefaultOnToggle(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                                {{ inputs.DefaultOnToggle(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.PlandoBosses) %}
-                                        {{ inputs.PlandoBosses(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.PlandoBosses) %}
+                                                {{ inputs.PlandoBosses(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.TextChoice) %}
-                                        {{ inputs.TextChoice(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.TextChoice) %}
+                                                {{ inputs.TextChoice(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.Choice) %}
-                                        {{ inputs.Choice(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.Choice) %}
+                                                {{ inputs.Choice(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.NamedRange) %}
-                                        {{ inputs.NamedRange(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.NamedRange) %}
+                                                {{ inputs.NamedRange(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.Range) %}
-                                        {{ inputs.Range(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.Range) %}
+                                                {{ inputs.Range(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.FreeText) %}
-                                        {{ inputs.FreeText(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.FreeText) %}
+                                                {{ inputs.FreeText(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                        {{ inputs.ItemDict(world_name, option_name, option, world) }}
+                                            {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                                {{ inputs.ItemDict(world_name, option_name, option, world) }}
 
-                                    {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                        {{ inputs.OptionList(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                                {{ inputs.OptionList(world_name, option_name, option) }}
 
-                                    {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                        {{ inputs.LocationSet(world_name, option_name, option, world) }}
+                                            {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                                {{ inputs.LocationSet(world_name, option_name, option, world) }}
 
-                                    {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                        {{ inputs.ItemSet(world_name, option_name, option, world) }}
+                                            {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                                {{ inputs.ItemSet(world_name, option_name, option, world) }}
 
-                                    {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                        {{ inputs.OptionSet(world_name, option_name, option) }}
+                                            {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                                {{ inputs.OptionSet(world_name, option_name, option) }}
 
-                                    {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
