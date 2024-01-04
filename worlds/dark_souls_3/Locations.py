@@ -1833,12 +1833,14 @@ location_tables = {
         DS3LocationData("AL: Ember (spiral staircase, bottom)", "Ember"),
         DS3LocationData("AL: Large Titanite Shard (bottom of the furthest buttress)",
                         "Large Titanite Shard"),
+        DS3LocationData("AL: Large Titanite Shard (right after light cathedral)",
+                        "Large Titanite Shard"),
         DS3LocationData("AL: Large Titanite Shard (walkway, side path by cathedral)",
                         "Large Titanite Shard"),
         DS3LocationData("AL: Soul of a Weary Warrior (plaza, nearer)", "Soul of a Weary Warrior"),
         DS3LocationData("AL: Ember (plaza, right side)", "Ember"),
         DS3LocationData("AL: Ember (plaza, further)", "Ember"),
-        DS3LocationData("AL: Large Titanite Shard (right after light cathedral)",
+        DS3LocationData("AL: Large Titanite Shard (after light cathedral)",
                         "Large Titanite Shard"),
         DS3LocationData("AL: Dark Stoneplate Ring (by dark stairs up from plaza)",
                         "Dark Stoneplate Ring"),
@@ -1896,11 +1898,6 @@ location_tables = {
                         miniboss = True), # Deep Accursed drop
         DS3LocationData("AL: Aldrich Faithful (water reserves, talk to McDonnel)", "Aldrich Faithful",
                         hidden = True), # Behind illusory wall
-        DS3LocationData("AL: Large Titanite Shard ?? (right after light cathedral)",
-                        "Large Titanite Shard",
-                        # TODO: Mark this as Area: irithyll_anorlondo in the offline rando and order
-                        # it properly
-                        offline = '06,0:53700480::'),
 
         DS3LocationData("FS: Budding Green Blossom (shop after Sirris kills Aldrich)",
                         "Budding Green Blossom",
@@ -2633,6 +2630,7 @@ location_tables = {
         DS3LocationData("PW2: Vilhelm's Armor (B2, along wall)", "Vilhelm's Armor"),
         DS3LocationData("PW2: Vilhelm's Gauntlets (B2, along wall)", "Vilhelm's Gauntlets"),
         DS3LocationData("PW2: Vilhelm's Leggings (B2, along wall)", "Vilhelm's Leggings"),
+        DS3LocationData("PW2: Blood Gem (B2, center)", "Blood Gem"),
         DS3LocationData("PW2: Pyromancer's Parting Flame (rotunda)",
                         "Pyromancer's Parting Flame", hidden = True), # Behind illusory wall
         DS3LocationData("PW2: Homeward Bone (rotunda)", "Homeward Bone x2",
@@ -2641,9 +2639,6 @@ location_tables = {
                         lizard = True),
         DS3LocationData("PW2: Twinkling Titanite (B3, lizard #2)", "Twinkling Titanite",
                         lizard = True),
-        DS3LocationData("PW2: Blood Gem (B2, center)", "Blood Gem",
-                        # TODO: Mark this as Area: ariandel_vilhelm in the offline rando and reorder
-                        offline = '11,0:54500480::'),
         DS3LocationData("PW2 -> DH", None),
 
         # Corvian Settler after killing Friede
