@@ -4,6 +4,7 @@ from Options import Option, DeathLink, Range, Toggle, PerGameCommonOptions
 
 class DoorCost(Range):
     """Amount of Trinkets required to enter Areas. Set to 0 to disable artificial locks."""
+    display_name = "Door Cost"
     range_start = 0
     range_end = 3
     default = 3
@@ -14,6 +15,7 @@ class AreaCostRandomizer(Toggle):
 
 class DeathLinkAmnesty(Range):
     """Amount of Deaths to take before sending a DeathLink signal, for balancing difficulty"""
+    display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 30
     default = 15
