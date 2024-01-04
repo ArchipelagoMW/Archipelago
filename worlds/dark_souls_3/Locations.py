@@ -1084,7 +1084,7 @@ location_tables = {
                         "Large Soul of an Unknown Traveler"),
         DS3LocationData("CD: Large Soul of an Unknown Traveler (by white tree #2)",
                         "Large Soul of an Unknown Traveler"),
-        DS3LocationData("CD: Undead Hunter Charm (lower roofs, up stairs between buttresses",
+        DS3LocationData("CD: Undead Hunter Charm (lower roofs, up stairs between buttresses)",
                         "Undead Hunter Charm x3"),
         DS3LocationData("CD: Red Bug Pellet (lower roofs, up stairs between buttresses)",
                         "Red Bug Pellet x3"),
@@ -1729,7 +1729,7 @@ location_tables = {
         DS3LocationData("ID: Titanite Scale (B2 far, lizard)", "Titanite Scale", lizard = True),
         DS3LocationData("ID: Dung Pie (pit, miniboss drop)", "Dung Pie x4",
                         miniboss = True), # Giant slave drop
-        DS3LocationData("ID: Titanite Chunk (pit, miniboss drop", "Titanite Chunk",
+        DS3LocationData("ID: Titanite Chunk (pit, miniboss drop)", "Titanite Chunk",
                         miniboss = True), # Giant Slave Drop
 
         # Alva (requires ember)

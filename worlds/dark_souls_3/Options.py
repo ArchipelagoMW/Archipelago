@@ -20,6 +20,7 @@ class ExcludedLocationsOption(Choice):
     in some game. A "useful item" is something each game defines individually,
     usually items that are quite desirable but not strictly necessary.
     """
+    display_name = "Excluded Locations"
     option_unnecessary = 1
     option_unimportant = 2
     option_unrandomized = 3
@@ -40,6 +41,7 @@ class MissableLocationsOption(Choice):
     in some game. A "useful item" is something each game defines individually,
     usually items that are quite desirable but not strictly necessary.
     """
+    display_name = "Missable Locations"
     option_unnecessary = 1
     option_unimportant = 2
     option_unrandomized = 3
