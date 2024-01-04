@@ -60,9 +60,9 @@ class KH1World(World):
         level_up_item_pool = []
         i = 0
         while i < 100:
-            if i < 8:
+            if i < 6:
                 level_up_item_pool.append("Accessory Slot Increase")
-            elif i < 15:
+            elif i < 10:
                 level_up_item_pool.append("Item Slot Increase")
             else:
                 level_up_item_pool.append(random.choice(level_up_rewards))
