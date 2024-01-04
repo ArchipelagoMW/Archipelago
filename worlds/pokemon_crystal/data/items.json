@@ -1,0 +1,468 @@
+{
+	"NO_ITEM": { "name": "No Item", "classification": "FILLER", "tags": ["INVALID"] },
+	"MASTER_BALL": { "name": "Master Ball", "classification": "USEFUL", "tags": ["Ball"] },
+	"ULTRA_BALL": { "name": "Ultra Ball", "classification": "FILLER", "tags": ["Ball"] },
+	"BRIGHTPOWDER": { "name": "Brightpowder", "classification": "FILLER", "tags": [] },
+	"GREAT_BALL": { "name": "Great Ball", "classification": "FILLER", "tags": ["Ball"] },
+	"POKE_BALL": { "name": "Poke Ball", "classification": "FILLER", "tags": ["Ball"] },
+	"TOWN_MAP": { "name": "Town Map", "classification": "FILLER", "tags": ["INVALID"] },
+	"BICYCLE": {
+		"name": "Bicycle",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"MOON_STONE": { "name": "Moon Stone", "classification": "USEFUL", "tags": [] },
+	"ANTIDOTE": { "name": "Antidote", "classification": "FILLER", "tags": [] },
+	"BURN_HEAL": { "name": "Burn Heal", "classification": "FILLER", "tags": [] },
+	"ICE_HEAL": { "name": "Ice Heal", "classification": "FILLER", "tags": [] },
+	"AWAKENING": { "name": "Awakening", "classification": "FILLER", "tags": [] },
+	"PARLYZ_HEAL": { "name": "Parlyz Heal", "classification": "FILLER", "tags": [] },
+	"FULL_RESTORE": { "name": "Full Restore", "classification": "FILLER", "tags": [] },
+	"MAX_POTION": { "name": "Max Potion", "classification": "FILLER", "tags": [] },
+	"HYPER_POTION": { "name": "Hyper Potion", "classification": "FILLER", "tags": [] },
+	"SUPER_POTION": { "name": "Super Potion", "classification": "FILLER", "tags": [] },
+	"POTION": { "name": "Potion", "classification": "FILLER", "tags": [] },
+	"ESCAPE_ROPE": { "name": "Escape Rope", "classification": "FILLER", "tags": [] },
+	"REPEL": { "name": "Repel", "classification": "FILLER", "tags": [] },
+	"MAX_ELIXER": { "name": "Max Elixer", "classification": "FILLER", "tags": [] },
+	"FIRE_STONE": { "name": "Fire Stone", "classification": "USEFUL", "tags": [] },
+	"THUNDERSTONE": { "name": "Thunderstone", "classification": "USEFUL", "tags": [] },
+	"WATER_STONE": { "name": "Water Stone", "classification": "USEFUL", "tags": [] },
+	"HP_UP": { "name": "HP Up", "classification": "FILLER", "tags": [] },
+	"PROTEIN": { "name": "Protein", "classification": "FILLER", "tags": [] },
+	"IRON": { "name": "Iron", "classification": "FILLER", "tags": [] },
+	"CARBOS": { "name": "Carbos", "classification": "FILLER", "tags": [] },
+	"LUCKY_PUNCH": { "name": "Lucky Punch", "classification": "FILLER", "tags": [] },
+	"CALCIUM": { "name": "Calcium", "classification": "FILLER", "tags": [] },
+	"RARE_CANDY": { "name": "Rare Candy", "classification": "FILLER", "tags": [] },
+	"X_ACCURACY": { "name": "X Accuracy", "classification": "FILLER", "tags": [] },
+	"LEAF_STONE": { "name": "Leaf Stone", "classification": "USEFUL", "tags": [] },
+	"METAL_POWDER": { "name": "Metal Powder", "classification": "FILLER", "tags": [] },
+	"NUGGET": { "name": "Nugget", "classification": "FILLER", "tags": [] },
+	"POKE_DOLL": { "name": "Poke Doll", "classification": "FILLER", "tags": [] },
+	"FULL_HEAL": { "name": "Full Heal", "classification": "FILLER", "tags": [] },
+	"REVIVE": { "name": "Revive", "classification": "FILLER", "tags": [] },
+	"MAX_REVIVE": { "name": "Max Revive", "classification": "FILLER", "tags": [] },
+	"GUARD_SPEC": { "name": "Guard Spec", "classification": "FILLER", "tags": [] },
+	"SUPER_REPEL": { "name": "Super Repel", "classification": "FILLER", "tags": [] },
+	"MAX_REPEL": { "name": "Max Repel", "classification": "FILLER", "tags": [] },
+	"DIRE_HIT": { "name": "Dire Hit", "classification": "FILLER", "tags": [] },
+	"FRESH_WATER": { "name": "Fresh Water", "classification": "FILLER", "tags": [] },
+	"SODA_POP": { "name": "Soda Pop", "classification": "FILLER", "tags": [] },
+	"LEMONADE": { "name": "Lemonade", "classification": "FILLER", "tags": [] },
+	"X_ATTACK": { "name": "X Attack", "classification": "FILLER", "tags": [] },
+	"X_DEFEND": { "name": "X Defend", "classification": "FILLER", "tags": [] },
+	"X_SPEED": { "name": "X Speed", "classification": "FILLER", "tags": [] },
+	"X_SPECIAL": { "name": "X Special", "classification": "FILLER", "tags": [] },
+	"COIN_CASE": { "name": "Coin Case", "classification": "FILLER", "tags": ["Unique"] },
+	"ITEMFINDER": {
+		"name": "Itemfinder",
+		"classification": "PROGRESSION",
+		"tags": ["Unique"]
+	},
+	"POKE_FLUTE": { "name": "Poke Flute", "classification": "FILLER", "tags": ["INVALID"] },
+	"EXP_SHARE": { "name": "Exp Share", "classification": "FILLER", "tags": [] },
+	"OLD_ROD": {
+		"name": "Old Rod",
+		"classification": "USEFUL",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"GOOD_ROD": {
+		"name": "Good Rod",
+		"classification": "USEFUL",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"SILVER_LEAF": {
+		"name": "Silver Leaf",
+		"classification": "FILLER",
+		"tags": []
+	},
+	"SUPER_ROD": {
+		"name": "Super Rod",
+		"classification": "USEFUL",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"PP_UP": { "name": "PP Up", "classification": "FILLER", "tags": [] },
+	"ETHER": { "name": "Ether", "classification": "FILLER", "tags": [] },
+	"MAX_ETHER": { "name": "Max Ether", "classification": "FILLER", "tags": [] },
+	"ELIXER": { "name": "Elixer", "classification": "FILLER", "tags": [] },
+	"RED_SCALE": {
+		"name": "Red Scale",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"SECRETPOTION": {
+		"name": "Secretpotion",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"S_S_TICKET": {
+		"name": "S.S. Ticket",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"MYSTERY_EGG": {
+		"name": "Mystery Egg",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"CLEAR_BELL": {
+		"name": "Clear Bell",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"SILVER_WING": {
+		"name": "Silver Wing",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"MOOMOO_MILK": { "name": "Moomoo Milk", "classification": "FILLER", "tags": [] },
+	"QUICK_CLAW": { "name": "Quick Claw", "classification": "FILLER", "tags": [] },
+	"PSNCUREBERRY": { "name": "Psncureberry", "classification": "FILLER", "tags": [] },
+	"GOLD_LEAF": { "name": "Gold Leaf", "classification": "FILLER", "tags": [] },
+	"SOFT_SAND": { "name": "Soft Sand", "classification": "FILLER", "tags": [] },
+	"SHARP_BEAK": { "name": "Sharp Beak", "classification": "FILLER", "tags": [] },
+	"PRZCUREBERRY": { "name": "Przcureberry", "classification": "FILLER", "tags": [] },
+	"BURNT_BERRY": { "name": "Burnt Berry", "classification": "FILLER", "tags": [] },
+	"ICE_BERRY": { "name": "Ice Berry", "classification": "FILLER", "tags": [] },
+	"POISON_BARB": { "name": "Poison Barb", "classification": "FILLER", "tags": [] },
+	"KINGS_ROCK": { "name": "Kings Rock", "classification": "FILLER", "tags": [] },
+	"BITTER_BERRY": { "name": "Bitter Berry", "classification": "FILLER", "tags": [] },
+	"MINT_BERRY": { "name": "Mint Berry", "classification": "FILLER", "tags": [] },
+	"RED_APRICORN": { "name": "Red Apricorn", "classification": "FILLER", "tags": [] },
+	"TINYMUSHROOM": { "name": "Tinymushroom", "classification": "FILLER", "tags": [] },
+	"BIG_MUSHROOM": { "name": "Big Mushroom", "classification": "FILLER", "tags": [] },
+	"SILVERPOWDER": { "name": "Silverpowder", "classification": "FILLER", "tags": [] },
+	"BLU_APRICORN": { "name": "Blu Apricorn", "classification": "FILLER", "tags": [] },
+	"AMULET_COIN": { "name": "Amulet Coin", "classification": "FILLER", "tags": [] },
+	"YLW_APRICORN": { "name": "Ylw Apricorn", "classification": "FILLER", "tags": [] },
+	"GRN_APRICORN": { "name": "Grn Apricorn", "classification": "FILLER", "tags": [] },
+	"CLEANSE_TAG": { "name": "Cleanse Tag", "classification": "FILLER", "tags": [] },
+	"MYSTIC_WATER": { "name": "Mystic Water", "classification": "FILLER", "tags": [] },
+	"TWISTEDSPOON": { "name": "Twistedspoon", "classification": "FILLER", "tags": [] },
+	"WHT_APRICORN": { "name": "Wht Apricorn", "classification": "FILLER", "tags": [] },
+	"BLACKBELT_I": { "name": "Blackbelt", "classification": "FILLER", "tags": [] },
+	"BLK_APRICORN": { "name": "Blk Apricorn", "classification": "FILLER", "tags": [] },
+	"PNK_APRICORN": { "name": "Pnk Apricorn", "classification": "FILLER", "tags": [] },
+	"BLACKGLASSES": { "name": "Blackglasses", "classification": "FILLER", "tags": [] },
+	"SLOWPOKETAIL": { "name": "Slowpoketail", "classification": "FILLER", "tags": [] },
+	"PINK_BOW": { "name": "Pink Bow", "classification": "FILLER", "tags": [] },
+	"STICK": { "name": "Stick", "classification": "FILLER", "tags": [] },
+	"SMOKE_BALL": { "name": "Smoke Ball", "classification": "FILLER", "tags": [] },
+	"NEVERMELTICE": { "name": "Nevermeltice", "classification": "FILLER", "tags": [] },
+	"MAGNET": { "name": "Magnet", "classification": "FILLER", "tags": [] },
+	"MIRACLEBERRY": { "name": "Miracleberry", "classification": "FILLER", "tags": [] },
+	"PEARL": { "name": "Pearl", "classification": "FILLER", "tags": [] },
+	"BIG_PEARL": { "name": "Big Pearl", "classification": "FILLER", "tags": [] },
+	"EVERSTONE": { "name": "Everstone", "classification": "FILLER", "tags": [] },
+	"SPELL_TAG": { "name": "Spell Tag", "classification": "FILLER", "tags": [] },
+	"RAGECANDYBAR": { "name": "Ragecandybar", "classification": "FILLER", "tags": [] },
+	"GS_BALL": { "name": "Gs Ball", "classification": "FILLER", "tags": ["INVALID"] },
+	"BLUE_CARD": {
+		"name": "Blue Card",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"MIRACLE_SEED": { "name": "Miracle Seed", "classification": "FILLER", "tags": [] },
+	"THICK_CLUB": { "name": "Thick Club", "classification": "FILLER", "tags": [] },
+	"FOCUS_BAND": { "name": "Focus Band", "classification": "FILLER", "tags": [] },
+	"ENERGYPOWDER": { "name": "Energypowder", "classification": "FILLER", "tags": [] },
+	"ENERGY_ROOT": { "name": "Energy Root", "classification": "FILLER", "tags": [] },
+	"HEAL_POWDER": { "name": "Heal Powder", "classification": "FILLER", "tags": [] },
+	"REVIVAL_HERB": { "name": "Revival Herb", "classification": "FILLER", "tags": [] },
+	"HARD_STONE": { "name": "Hard Stone", "classification": "FILLER", "tags": [] },
+	"LUCKY_EGG": { "name": "Lucky Egg", "classification": "FILLER", "tags": [] },
+	"CARD_KEY": {
+		"name": "Card Key",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"MACHINE_PART": {
+		"name": "Machine Part",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"EGG_TICKET": {
+		"name": "Egg Ticket",
+		"classification": "FILLER",
+		"tags": ["INVALID"]
+	},
+	"LOST_ITEM": {
+		"name": "Lost Item",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"STARDUST": { "name": "Stardust", "classification": "FILLER", "tags": [] },
+	"STAR_PIECE": { "name": "Star Piece", "classification": "FILLER", "tags": [] },
+	"BASEMENT_KEY": {
+		"name": "Basement Key",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"PASS": { "name": "Pass", "classification": "PROGRESSION", "tags": ["KeyItem", "Unique"] },
+	"CHARCOAL": { "name": "Charcoal", "classification": "FILLER", "tags": [] },
+	"BERRY_JUICE": { "name": "Berry Juice", "classification": "FILLER", "tags": [] },
+	"SCOPE_LENS": { "name": "Scope Lens", "classification": "FILLER", "tags": [] },
+	"METAL_COAT": { "name": "Metal Coat", "classification": "FILLER", "tags": [] },
+	"DRAGON_FANG": { "name": "Dragon Fang", "classification": "FILLER", "tags": [] },
+	"LEFTOVERS": { "name": "Leftovers", "classification": "USEFUL", "tags": [] },
+	"MYSTERYBERRY": { "name": "Mysteryberry", "classification": "FILLER", "tags": [] },
+	"DRAGON_SCALE": { "name": "Dragon Scale", "classification": "FILLER", "tags": [] },
+	"BERSERK_GENE": { "name": "Berserk Gene", "classification": "FILLER", "tags": [] },
+	"SACRED_ASH": { "name": "Sacred Ash", "classification": "FILLER", "tags": [] },
+	"HEAVY_BALL": { "name": "Heavy Ball", "classification": "FILLER", "tags": [] },
+	"FLOWER_MAIL": { "name": "Flower Mail", "classification": "FILLER", "tags": [] },
+	"LEVEL_BALL": { "name": "Level Ball", "classification": "FILLER", "tags": [] },
+	"LURE_BALL": { "name": "Lure Ball", "classification": "FILLER", "tags": [] },
+	"FAST_BALL": { "name": "Fast Ball", "classification": "FILLER", "tags": [] },
+	"LIGHT_BALL": { "name": "Light Ball", "classification": "FILLER", "tags": [] },
+	"FRIEND_BALL": { "name": "Friend Ball", "classification": "FILLER", "tags": [] },
+	"MOON_BALL": { "name": "Moon Ball", "classification": "FILLER", "tags": [] },
+	"LOVE_BALL": { "name": "Love Ball", "classification": "FILLER", "tags": [] },
+	"NORMAL_BOX": { "name": "Normal Box", "classification": "FILLER", "tags": [] },
+	"GORGEOUS_BOX": { "name": "Gorgeous Box", "classification": "FILLER", "tags": [] },
+	"SUN_STONE": { "name": "Sun Stone", "classification": "USEFUL", "tags": [] },
+	"POLKADOT_BOW": { "name": "Polkadot Bow", "classification": "FILLER", "tags": [] },
+	"UP_GRADE": { "name": "Up-Grade", "classification": "FILLER", "tags": [] },
+	"BERRY": { "name": "Berry", "classification": "FILLER", "tags": [] },
+	"GOLD_BERRY": { "name": "Gold Berry", "classification": "FILLER", "tags": [] },
+	"SQUIRTBOTTLE": {
+		"name": "Squirtbottle",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"PARK_BALL": { "name": "Park Ball", "classification": "FILLER", "tags": [] },
+	"RAINBOW_WING": {
+		"name": "Rainbow Wing",
+		"classification": "PROGRESSION",
+		"tags": ["KeyItem", "Unique"]
+	},
+	"BRICK_PIECE": { "name": "Brick Piece", "classification": "FILLER", "tags": [] },
+	"SURF_MAIL": { "name": "Surf Mail", "classification": "FILLER", "tags": [] },
+	"LITEBLUEMAIL": { "name": "Litebluemail", "classification": "FILLER", "tags": [] },
+	"PORTRAITMAIL": { "name": "Portraitmail", "classification": "FILLER", "tags": [] },
+	"LOVELY_MAIL": { "name": "Lovely Mail", "classification": "FILLER", "tags": [] },
+	"EON_MAIL": { "name": "Eon Mail", "classification": "FILLER", "tags": [] },
+	"MORPH_MAIL": { "name": "Morph Mail", "classification": "FILLER", "tags": [] },
+	"BLUESKY_MAIL": { "name": "Bluesky Mail", "classification": "FILLER", "tags": [] },
+	"MUSIC_MAIL": { "name": "Music Mail", "classification": "FILLER", "tags": [] },
+	"MIRAGE_MAIL": { "name": "Mirage Mail", "classification": "FILLER", "tags": [] },
+	"ZEPHYR_BADGE": {
+		"name": "Zephyr Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"HIVE_BADGE": {
+		"name": "Hive Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"PLAIN_BADGE": {
+		"name": "Plain Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"FOG_BADGE": {
+		"name": "Fog Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"MINERAL_BADGE": {
+		"name": "Mineral Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"STORM_BADGE": {
+		"name": "Storm Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"GLACIER_BADGE": {
+		"name": "Glacier Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"RISING_BADGE": {
+		"name": "Rising Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"BOULDER_BADGE": {
+		"name": "Boulder Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"CASCADE_BADGE": {
+		"name": "Cascade Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"THUNDER_BADGE": {
+		"name": "Thunder Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"RAINBOW_BADGE": {
+		"name": "Rainbow Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"SOUL_BADGE": {
+		"name": "Soul Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"MARSH_BADGE": {
+		"name": "Marsh Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"VOLCANO_BADGE": {
+		"name": "Volcano Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"EARTH_BADGE": {
+		"name": "Earth Badge",
+		"classification": "PROGRESSION",
+		"tags": ["Badge", "Unique"]
+	},
+	"AP_ITEM": { "name": "AP Item", "classification": "FILLER", "tags": ["INVALID"] },
+	"TM_DYNAMICPUNCH": {
+		"name": "TM01 Dynamicpunch",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_HEADBUTT": { "name": "TM02 Headbutt", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_CURSE": { "name": "TM03 Curse", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ROLLOUT": { "name": "TM04 Rollout", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ROAR": { "name": "TM05 Roar", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_TOXIC": { "name": "TM06 Toxic", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ZAP_CANNON": { "name": "TM07 Zap Cannon", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ROCK_SMASH": {
+		"name": "TM08 Rock Smash",
+		"classification": "PROGRESSION",
+		"tags": ["TM"]
+	},
+	"TM_PSYCH_UP": { "name": "TM09 Psych Up", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_HIDDEN_POWER": {
+		"name": "TM10 Hidden Power",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_SUNNY_DAY": { "name": "TM11 Sunny Day", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SWEET_SCENT": {
+		"name": "TM12 Sweet Scent",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_SNORE": { "name": "TM13 Snore", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_BLIZZARD": { "name": "TM14 Blizzard", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_HYPER_BEAM": { "name": "TM15 Hyper Beam", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ICY_WIND": { "name": "TM16 Icy Wind", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_PROTECT": { "name": "TM17 Protect", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_RAIN_DANCE": { "name": "TM18 Rain Dance", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_GIGA_DRAIN": { "name": "TM19 Giga Drain", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ENDURE": { "name": "TM20 Endure", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_FRUSTRATION": {
+		"name": "TM21 Frustration",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_SOLARBEAM": { "name": "TM22 Solarbeam", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_IRON_TAIL": { "name": "TM23 Iron Tail", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_DRAGONBREATH": {
+		"name": "TM24 Dragonbreath",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_THUNDER": { "name": "TM25 Thunder", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_EARTHQUAKE": { "name": "TM26 Earthquake", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_RETURN": { "name": "TM27 Return", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_DIG": { "name": "TM28 Dig", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_PSYCHIC_M": { "name": "TM29 Psychic", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SHADOW_BALL": {
+		"name": "TM30 Shadow Ball",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_MUD_SLAP": { "name": "TM31 Mud Slap", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_DOUBLE_TEAM": {
+		"name": "TM32 Double Team",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_ICE_PUNCH": { "name": "TM33 Ice Punch", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SWAGGER": { "name": "TM34 Swagger", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SLEEP_TALK": { "name": "TM35 Sleep Talk", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SLUDGE_BOMB": {
+		"name": "TM36 Sludge Bomb",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_SANDSTORM": { "name": "TM37 Sandstorm", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_FIRE_BLAST": { "name": "TM38 Fire Blast", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_SWIFT": { "name": "TM39 Swift", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_DEFENSE_CURL": {
+		"name": "TM40 Defense Curl",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_THUNDERPUNCH": {
+		"name": "TM41 Thunderpunch",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_DREAM_EATER": {
+		"name": "TM42 Dream Eater",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_DETECT": { "name": "TM43 Detect", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_REST": { "name": "TM44 Rest", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_ATTRACT": { "name": "TM45 Attract", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_THIEF": { "name": "TM46 Thief", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_STEEL_WING": { "name": "TM47 Steel Wing", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_FIRE_PUNCH": { "name": "TM48 Fire Punch", "classification": "USEFUL", "tags": ["TM"] },
+	"TM_FURY_CUTTER": {
+		"name": "TM49 Fury Cutter",
+		"classification": "USEFUL",
+		"tags": ["TM"]
+	},
+	"TM_NIGHTMARE": { "name": "TM50 Nightmare", "classification": "USEFUL", "tags": ["TM"] },
+	"HM_CUT": {
+		"name": "HM01 Cut",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_FLY": {
+		"name": "HM02 Fly",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_SURF": {
+		"name": "HM03 Surf",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_STRENGTH": {
+		"name": "HM04 Strength",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_FLASH": {
+		"name": "HM05 Flash",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_WHIRLPOOL": {
+		"name": "HM06 Whirlpool",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	},
+	"HM_WATERFALL": {
+		"name": "HM07 Waterfall",
+		"classification": "PROGRESSION",
+		"tags": ["HM", "Unique"]
+	}
+}

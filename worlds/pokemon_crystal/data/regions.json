@@ -1,0 +1,4364 @@
+{
+	"REGION_AZALEA_GYM": {
+		"exits": [
+			"REGION_AZALEA_TOWN"
+		],
+		"locations": [
+			"TM49_FURY_CUTTER",
+			"HIVE_BADGE_FROM_BUGSY"
+		],
+		"events": [
+			"EVENT_BEAT_BUGSY",
+			"EVENT_BEAT_TWINS_AMY_AND_MAY",
+			"EVENT_BEAT_BUG_CATCHER_BENNY",
+			"EVENT_BEAT_BUG_CATCHER_AL",
+			"EVENT_BEAT_BUG_CATCHER_JOSH"
+		]
+	},
+	"REGION_AZALEA_MART": {
+		"exits": [
+			"REGION_AZALEA_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_AZALEA_POKECENTER_1F": {
+		"exits": [
+			"REGION_AZALEA_TOWN",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_AZALEA_TOWN": {
+		"exits": [
+			"REGION_AZALEA_POKECENTER_1F",
+			"REGION_CHARCOAL_KILN",
+			"REGION_AZALEA_MART",
+			"REGION_KURTS_HOUSE",
+			"REGION_AZALEA_GYM",
+			"REGION_SLOWPOKE_WELL_B1F",
+			"REGION_ILEX_FOREST_AZALEA_GATE",
+			"REGION_ROUTE_33"
+		],
+		"locations": [
+			"AZALEA_TOWN_HIDDEN_FULL_HEAL"
+		],
+		"events": [
+			"EVENT_RIVAL_AZALEA_TOWN"
+		]
+	},
+	"REGION_BATTLE_TOWER_1F": {
+		"exits": [
+			"REGION_BATTLE_TOWER_OUTSIDE",
+			"REGION_BATTLE_TOWER_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BATTLE_TOWER_BATTLE_ROOM": {
+		"exits": [
+			"REGION_BATTLE_TOWER_HALLWAY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BATTLE_TOWER_ELEVATOR": {
+		"exits": [
+			"REGION_BATTLE_TOWER_HALLWAY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BATTLE_TOWER_HALLWAY": {
+		"exits": [
+			"REGION_BATTLE_TOWER_ELEVATOR",
+			"REGION_BATTLE_TOWER_BATTLE_ROOM"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BATTLE_TOWER_OUTSIDE": {
+		"exits": [
+			"REGION_ROUTE_40_BATTLE_TOWER_GATE",
+			"REGION_BATTLE_TOWER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BILLS_BROTHERS_HOUSE": {
+		"exits": [
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BILLS_FAMILYS_HOUSE": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOT_EEVEE"
+		]
+	},
+	"REGION_BILLS_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_25"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_MET_BILLS_GRANDPA",
+			"EVENT_SHOWED_LICKITUNG_TO_BILLS_GRANDPA",
+			"EVENT_SHOWED_ODDISH_TO_BILLS_GRANDPA",
+			"EVENT_SHOWED_STARYU_TO_BILLS_GRANDPA",
+			"EVENT_SHOWED_GROWLITHE_VULPIX_TO_BILLS_GRANDPA",
+			"EVENT_SHOWED_PICHU_TO_BILLS_GRANDPA",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1"
+		]
+	},
+	"REGION_BLACKTHORN_CITY": {
+		"exits": [
+			"REGION_BLACKTHORN_GYM_1F",
+			"REGION_BLACKTHORN_DRAGON_SPEECH_HOUSE",
+			"REGION_BLACKTHORN_EMYS_HOUSE",
+			"REGION_BLACKTHORN_MART",
+			"REGION_BLACKTHORN_POKECENTER_1F",
+			"REGION_MOVE_DELETERS_HOUSE",
+			"REGION_ICE_PATH_1F:EAST",
+			"REGION_DRAGONS_DEN_1F",
+			"REGION_ROUTE_45"
+		],
+		"locations": [
+			"SPELL_TAG_FROM_SANTOS"
+		],
+		"events": [
+			"EVENT_MET_SANTOS_OF_SATURDAY"
+		]
+	},
+	"REGION_BLACKTHORN_DRAGON_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BLACKTHORN_EMYS_HOUSE": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BLACKTHORN_GYM_1F": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY",
+			"REGION_BLACKTHORN_GYM_2F"
+		],
+		"locations": [
+			"TM24_DRAGONBREATH",
+			"RISING_BADGE_FROM_CLAIR"
+		],
+		"events": [
+			"EVENT_BEAT_CLAIR",
+			"EVENT_BEAT_COOLTRAINERM_PAUL",
+			"EVENT_BEAT_COOLTRAINERM_CODY",
+			"EVENT_BEAT_COOLTRAINERM_MIKE",
+			"EVENT_BEAT_COOLTRAINERF_FRAN",
+			"EVENT_BEAT_COOLTRAINERF_LOLA",
+			"EVENT_BLACKTHORN_CITY_GRAMPS_BLOCKS_DRAGONS_DEN",
+			"EVENT_GOT_TM24_DRAGONBREATH"
+		]
+	},
+	"REGION_BLACKTHORN_GYM_2F": {
+		"exits": [
+			"REGION_BLACKTHORN_GYM_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BLACKTHORN_MART": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BLACKTHORN_POKECENTER_1F": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BLUES_HOUSE": {
+		"exits": [
+			"REGION_PALLET_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_BRUNOS_ROOM": {
+		"exits": [
+			"REGION_KOGAS_ROOM",
+			"REGION_KARENS_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_BRUNOS_ROOM_ENTRANCE_CLOSED",
+			"EVENT_BEAT_ELITE_4_BRUNO",
+			"EVENT_BRUNOS_ROOM_EXIT_OPEN"
+		]
+	},
+	"REGION_BURNED_TOWER_1F": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_BURNED_TOWER_B1F"
+		],
+		"locations": [
+			"BURNED_TOWER_1F_HIDDEN_ETHER",
+			"BURNED_TOWER_1F_HIDDEN_ULTRA_BALL",
+			"BURNED_TOWER_1F_HP_UP"
+		],
+		"events": [
+			"EVENT_RIVAL_BURNED_TOWER",
+			"EVENT_HOLE_IN_BURNED_TOWER"
+		]
+	},
+	"REGION_BURNED_TOWER_B1F": {
+		"exits": [
+			"REGION_BURNED_TOWER_1F"
+		],
+		"locations": [
+			"BURNED_TOWER_B1F_TM_ENDURE"
+		],
+		"events": [
+			"EVENT_RELEASED_THE_BEASTS",
+			"EVENT_ECRUTEAK_GYM_GRAMPS",
+			"EVENT_BURNED_TOWER_MORTY",
+			"EVENT_BURNED_TOWER_1F_EUSINE"
+		]
+	},
+	"REGION_CELADON_CAFE": {
+		"exits": [
+			"REGION_CELADON_CITY"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_FOUND_LEFTOVERS_IN_CELADON_CAFE"
+		]
+	},
+	"REGION_CELADON_CITY": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_1F",
+			"REGION_CELADON_MANSION_1F",
+			"REGION_CELADON_POKECENTER_1F",
+			"REGION_CELADON_GAME_CORNER",
+			"REGION_CELADON_GAME_CORNER_PRIZE_ROOM",
+			"REGION_CELADON_GYM",
+			"REGION_CELADON_CAFE",
+			"REGION_ROUTE_16",
+			"REGION_ROUTE_7"
+		],
+		"locations": [
+			"CELADON_CITY_HIDDEN_PP_UP"
+		],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_1F": {
+		"exits": [
+			"REGION_CELADON_CITY",
+			"REGION_CELADON_DEPT_STORE_2F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_2F": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_3F",
+			"REGION_CELADON_DEPT_STORE_1F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_3F": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_2F",
+			"REGION_CELADON_DEPT_STORE_4F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_4F": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_5F",
+			"REGION_CELADON_DEPT_STORE_3F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_5F": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_4F",
+			"REGION_CELADON_DEPT_STORE_6F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_6F": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_5F",
+			"REGION_CELADON_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_DEPT_STORE_ELEVATOR": {
+		"exits": [
+			"REGION_CELADON_DEPT_STORE_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_GAME_CORNER": {
+		"exits": [
+			"REGION_CELADON_CITY"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOT_COINS_FROM_GAMBLER_AT_CELADON"
+		]
+	},
+	"REGION_CELADON_GAME_CORNER_PRIZE_ROOM": {
+		"exits": [
+			"REGION_CELADON_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_GYM": {
+		"exits": [
+			"REGION_CELADON_CITY"
+		],
+		"locations": [
+			"TM19_GIGA_DRAIN",
+			"RAINBOW_BADGE_FROM_ERIKA"
+		],
+		"events": [
+			"EVENT_BEAT_ERIKA",
+			"EVENT_BEAT_LASS_MICHELLE",
+			"EVENT_BEAT_PICNICKER_TANYA",
+			"EVENT_BEAT_BEAUTY_JULIA",
+			"EVENT_BEAT_TWINS_JO_AND_ZOE"
+		]
+	},
+	"REGION_CELADON_MANSION_1F": {
+		"exits": [
+			"REGION_CELADON_CITY",
+			"REGION_CELADON_MANSION_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_MANSION_2F": {
+		"exits": [
+			"REGION_CELADON_MANSION_1F",
+			"REGION_CELADON_MANSION_3F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_MANSION_3F": {
+		"exits": [
+			"REGION_CELADON_MANSION_ROOF",
+			"REGION_CELADON_MANSION_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_ENABLE_DIPLOMA_PRINTING"
+		]
+	},
+	"REGION_CELADON_MANSION_ROOF": {
+		"exits": [
+			"REGION_CELADON_MANSION_3F",
+			"REGION_CELADON_MANSION_ROOF_HOUSE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_MANSION_ROOF_HOUSE": {
+		"exits": [
+			"REGION_CELADON_MANSION_ROOF"
+		],
+		"locations": [
+			"TM03_CURSE"
+		],
+		"events": []
+	},
+	"REGION_CELADON_POKECENTER_1F": {
+		"exits": [
+			"REGION_CELADON_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CELADON_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_CELADON_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_CITY": {
+		"exits": [
+			"REGION_CERULEAN_GYM_BADGE_SPEECH_HOUSE",
+			"REGION_CERULEAN_POLICE_STATION",
+			"REGION_CERULEAN_TRADE_SPEECH_HOUSE",
+			"REGION_CERULEAN_POKECENTER_1F",
+			"REGION_CERULEAN_GYM",
+			"REGION_CERULEAN_MART",
+			"REGION_ROUTE_24",
+			"REGION_ROUTE_5",
+			"REGION_ROUTE_4",
+			"REGION_ROUTE_9"
+		],
+		"locations": [
+			"CERULEAN_CITY_BERSERK_GENE"
+		],
+		"events": []
+	},
+	"REGION_CERULEAN_GYM": {
+		"exits": [
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [
+			"CERULEAN_GYM_MACHINE_PART",
+			"CASCADE_BADGE_FROM_MISTY"
+		],
+		"events": [
+			"EVENT_MET_ROCKET_GRUNT_AT_CERULEAN_GYM",
+			"EVENT_BEAT_MISTY",
+			"EVENT_BEAT_SWIMMERF_DIANA",
+			"EVENT_BEAT_SWIMMERF_BRIANA",
+			"EVENT_BEAT_SWIMMERM_PARKER"
+		]
+	},
+	"REGION_CERULEAN_GYM_BADGE_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_MART": {
+		"exits": [
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_POKECENTER_1F": {
+		"exits": [
+			"REGION_CERULEAN_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_CERULEAN_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_POLICE_STATION": {
+		"exits": [
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CERULEAN_TRADE_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CHARCOAL_KILN": {
+		"exits": [
+			"REGION_AZALEA_TOWN"
+		],
+		"locations": [
+			"CHARCOAL_IN_CHARCOAL_KILN"
+		],
+		"events": []
+	},
+	"REGION_CHERRYGROVE_CITY": {
+		"exits": [
+			"REGION_CHERRYGROVE_MART",
+			"REGION_CHERRYGROVE_POKECENTER_1F",
+			"REGION_CHERRYGROVE_GYM_SPEECH_HOUSE",
+			"REGION_GUIDE_GENTS_HOUSE",
+			"REGION_CHERRYGROVE_EVOLUTION_SPEECH_HOUSE",
+			"REGION_ROUTE_30",
+			"REGION_ROUTE_29"
+		],
+		"locations": [
+			"MYSTIC_WATER_IN_CHERRYGROVE"
+		],
+		"events": []
+	},
+	"REGION_CHERRYGROVE_EVOLUTION_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CHERRYGROVE_GYM_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CHERRYGROVE_MART": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CHERRYGROVE_POKECENTER_1F": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CIANWOOD_CITY": {
+		"exits": [
+			"REGION_MANIAS_HOUSE",
+			"REGION_CIANWOOD_GYM",
+			"REGION_CIANWOOD_POKECENTER_1F",
+			"REGION_CIANWOOD_PHARMACY",
+			"REGION_CIANWOOD_PHOTO_STUDIO",
+			"REGION_CIANWOOD_LUGIA_SPEECH_HOUSE",
+			"REGION_POKE_SEERS_HOUSE",
+			"REGION_ROUTE_41"
+		],
+		"locations": [
+			"CIANWOOD_CITY_HIDDEN_MAX_ETHER",
+			"CIANWOOD_CITY_HIDDEN_REVIVE",
+			"HM02_FLY"
+		],
+		"events": [
+			"EVENT_EUSINE_IN_BURNED_TOWER",
+			"EVENT_FOUGHT_EUSINE"
+		]
+	},
+	"REGION_CIANWOOD_GYM": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [
+			"TM01_DYNAMICPUNCH",
+			"STORM_BADGE_FROM_CHUCK"
+		],
+		"events": [
+			"EVENT_BEAT_CHUCK",
+			"EVENT_BEAT_BLACKBELT_YOSHI",
+			"EVENT_BEAT_BLACKBELT_LAO",
+			"EVENT_BEAT_BLACKBELT_NOB",
+			"EVENT_BEAT_BLACKBELT_LUNG"
+		]
+	},
+	"REGION_CIANWOOD_LUGIA_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CIANWOOD_PHARMACY": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [
+			"SECRETPOTION_FROM_PHARMACY"
+		],
+		"events": []
+	},
+	"REGION_CIANWOOD_PHOTO_STUDIO": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CIANWOOD_POKECENTER_1F": {
+		"exits": [
+			"REGION_CIANWOOD_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CINNABAR_ISLAND": {
+		"exits": [
+			"REGION_CINNABAR_POKECENTER_1F",
+			"REGION_ROUTE_21",
+			"REGION_ROUTE_20"
+		],
+		"locations": [
+			"CINNABAR_ISLAND_HIDDEN_RARE_CANDY"
+		],
+		"events": [
+			"EVENT_VIRIDIAN_GYM_BLUE"
+		]
+	},
+	"REGION_CINNABAR_POKECENTER_1F": {
+		"exits": [
+			"REGION_CINNABAR_ISLAND",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_CINNABAR_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_CINNABAR_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_COLOSSEUM": {
+		"exits": [
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_COPYCATS_HOUSE_1F": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_COPYCATS_HOUSE_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_COPYCATS_HOUSE_2F": {
+		"exits": [
+			"REGION_COPYCATS_HOUSE_1F"
+		],
+		"locations": [
+			"PASS_FROM_COPYCAT"
+		],
+		"events": [
+			"EVENT_MET_COPYCAT_FOUND_OUT_ABOUT_LOST_ITEM",
+			"EVENT_RETURNED_LOST_ITEM_TO_COPYCAT"
+		]
+	},
+	"REGION_DANCE_THEATER": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY"
+		],
+		"locations": [
+			"HM03_SURF"
+		],
+		"events": []
+	},
+	"REGION_DARK_CAVE_BLACKTHORN_ENTRANCE": {
+		"exits": [
+			"REGION_ROUTE_45",
+			"REGION_DARK_CAVE_VIOLET_ENTRANCE"
+		],
+		"locations": [
+			"DARK_CAVE_BLACKTHORN_ENTRANCE_REVIVE",
+			"DARK_CAVE_BLACKTHORN_ENTRANCE_TM_SNORE",
+			"BLACKGLASSES_IN_DARK_CAVE"
+		],
+		"events": []
+	},
+	"REGION_DARK_CAVE_VIOLET_ENTRANCE": {
+		"exits": [
+			"REGION_ROUTE_31",
+			"REGION_ROUTE_46"
+		],
+		"locations": [
+			"DARK_CAVE_VIOLET_ENTRANCE_DIRE_HIT",
+			"DARK_CAVE_VIOLET_ENTRANCE_FULL_HEAL",
+			"DARK_CAVE_VIOLET_ENTRANCE_HIDDEN_ELIXER",
+			"DARK_CAVE_VIOLET_ENTRANCE_HYPER_POTION",
+			"DARK_CAVE_VIOLET_ENTRANCE_POTION"
+		],
+		"events": []
+	},
+	"REGION_DAY_CARE": {
+		"exits": [
+			"REGION_ROUTE_34"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_DAY_CARE_MAN_ON_ROUTE_34",
+			"EVENT_DAY_CARE_MAN_IN_DAY_CARE",
+			"EVENT_GOT_ODD_EGG"
+		]
+	},
+	"REGION_DAY_OF_WEEK_SIBLINGS_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_26"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_DIGLETTS_CAVE": {
+		"exits": [
+			"REGION_VERMILION_CITY",
+			"REGION_DIGLETTS_CAVE",
+			"REGION_ROUTE_2:NORTHEAST"
+		],
+		"locations": [
+			"DIGLETTS_CAVE_HIDDEN_MAX_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_DRAGON_SHRINE": {
+		"exits": [
+			"REGION_DRAGONS_DEN_B1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_4",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_5",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_6",
+			"EVENT_ANSWERED_DRAGON_MASTER_QUIZ_WRONG",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_GOT_DRATINI",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_7"
+		]
+	},
+	"REGION_DRAGONS_DEN_1F": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY",
+			"REGION_DRAGONS_DEN_1F",
+			"REGION_DRAGONS_DEN_B1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_DRAGONS_DEN_B1F": {
+		"exits": [
+			"REGION_DRAGONS_DEN_1F",
+			"REGION_DRAGON_SHRINE"
+		],
+		"locations": [
+			"DRAGONS_DEN_B1F_CALCIUM",
+			"DRAGONS_DEN_B1F_DRAGON_FANG",
+			"DRAGONS_DEN_B1F_HIDDEN_MAX_ELIXER",
+			"DRAGONS_DEN_B1F_HIDDEN_MAX_POTION",
+			"DRAGONS_DEN_B1F_HIDDEN_REVIVE",
+			"DRAGONS_DEN_B1F_MAX_ELIXER"
+		],
+		"events": [
+			"EVENT_GOT_TM24_DRAGONBREATH",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1"
+		]
+	},
+	"REGION_EARLS_POKEMON_ACADEMY": {
+		"exits": [
+			"REGION_VIOLET_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ECRUTEAK_CITY": {
+		"exits": [
+			"REGION_ROUTE_37",
+			"REGION_ROUTE_42_ECRUTEAK_GATE",
+			"REGION_ECRUTEAK_TIN_TOWER_ENTRANCE",
+			"REGION_WISE_TRIOS_ROOM",
+			"REGION_ECRUTEAK_POKECENTER_1F",
+			"REGION_ECRUTEAK_LUGIA_SPEECH_HOUSE",
+			"REGION_DANCE_THEATER",
+			"REGION_ECRUTEAK_MART",
+			"REGION_ECRUTEAK_GYM",
+			"REGION_ECRUTEAK_ITEMFINDER_HOUSE",
+			"REGION_TIN_TOWER_1F",
+			"REGION_BURNED_TOWER_1F",
+			"REGION_ROUTE_38_ECRUTEAK_GATE"
+		],
+		"locations": [
+			"ECRUTEAK_CITY_HIDDEN_HYPER_POTION"
+		],
+		"events": []
+	},
+	"REGION_ECRUTEAK_GYM": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_ECRUTEAK_GYM"
+		],
+		"locations": [
+			"TM30_SHADOW_BALL",
+			"FOG_BADGE_FROM_MORTY"
+		],
+		"events": [
+			"EVENT_BEAT_MORTY",
+			"EVENT_RANG_CLEAR_BELL_1",
+			"EVENT_RANG_CLEAR_BELL_2",
+			"EVENT_BEAT_SAGE_JEFFREY",
+			"EVENT_BEAT_SAGE_PING",
+			"EVENT_BEAT_MEDIUM_MARTHA",
+			"EVENT_BEAT_MEDIUM_GRACE"
+		]
+	},
+	"REGION_ECRUTEAK_ITEMFINDER_HOUSE": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY"
+		],
+		"locations": [
+			"ITEMFINDER"
+		],
+		"events": []
+	},
+	"REGION_ECRUTEAK_LUGIA_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ECRUTEAK_MART": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ECRUTEAK_POKECENTER_1F": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ECRUTEAK_TIN_TOWER_ENTRANCE": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_ECRUTEAK_TIN_TOWER_ENTRANCE",
+			"REGION_WISE_TRIOS_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_RANG_CLEAR_BELL_2",
+			"EVENT_ECRUTEAK_TIN_TOWER_ENTRANCE_WANDERING_SAGE",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1"
+		]
+	},
+	"REGION_ELMS_HOUSE": {
+		"exits": [
+			"REGION_NEW_BARK_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ELMS_LAB": {
+		"exits": [
+			"REGION_NEW_BARK_TOWN"
+		],
+		"locations": [
+			"EVERSTONE_FROM_ELM",
+			"MASTER_BALL_FROM_ELM",
+			"SS_TICKET_FROM_ELM",
+			"POTION_FROM_ELMS_AIDE"
+		],
+		"events": [
+			"EVENT_GOT_CYNDAQUIL_FROM_ELM",
+			"EVENT_GOT_TOTODILE_FROM_ELM",
+			"EVENT_GOT_CHIKORITA_FROM_ELM",
+			"EVENT_GOT_A_POKEMON_FROM_ELM",
+			"EVENT_RIVAL_CHERRYGROVE_CITY",
+			"EVENT_GAVE_MYSTERY_EGG_TO_ELM",
+			"EVENT_ROUTE_30_BATTLE",
+			"EVENT_SHOWED_TOGEPI_TO_ELM"
+		]
+	},
+	"REGION_FAST_SHIP_1F": {
+		"exits": [
+			"REGION_FAST_SHIP_1F",
+			"REGION_FAST_SHIP_CABINS_NNW_NNE_NE",
+			"REGION_FAST_SHIP_CABINS_SW_SSW_NW",
+			"REGION_FAST_SHIP_CABINS_SE_SSE_CAPTAINS_CABIN",
+			"REGION_FAST_SHIP_B1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_VERMILION_PORT_SAILOR_AT_GANGWAY",
+			"EVENT_OLIVINE_PORT_SAILOR_AT_GANGWAY"
+		]
+	},
+	"REGION_FAST_SHIP_B1F": {
+		"exits": [
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_FAST_SHIP_INFORMED_ABOUT_LAZY_SAILOR"
+		]
+	},
+	"REGION_FAST_SHIP_CABINS_NNW_NNE_NE": {
+		"exits": [
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_BEAT_SAILOR_STANLY",
+			"EVENT_FAST_SHIP_LAZY_SAILOR"
+		]
+	},
+	"REGION_FAST_SHIP_CABINS_SE_SSE_CAPTAINS_CABIN": {
+		"exits": [
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [
+			"METAL_COAT_FROM_GRANDPA_ON_SS_AQUA"
+		],
+		"events": [
+			"EVENT_VERMILION_PORT_SAILOR_AT_GANGWAY",
+			"EVENT_FAST_SHIP_HAS_ARRIVED",
+			"EVENT_FAST_SHIP_FOUND_GIRL"
+		]
+	},
+	"REGION_FAST_SHIP_CABINS_SW_SSW_NW": {
+		"exits": [
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_FAST_SHIP_HAS_ARRIVED"
+		]
+	},
+	"REGION_FIGHTING_DOJO": {
+		"exits": [
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [
+			"PICKED_UP_FOCUS_BAND"
+		],
+		"events": []
+	},
+	"REGION_FUCHSIA_CITY": {
+		"exits": [
+			"REGION_ROUTE_18",
+			"REGION_FUCHSIA_MART",
+			"REGION_SAFARI_ZONE_MAIN_OFFICE",
+			"REGION_FUCHSIA_GYM",
+			"REGION_BILLS_BROTHERS_HOUSE",
+			"REGION_FUCHSIA_POKECENTER_1F",
+			"REGION_SAFARI_ZONE_WARDENS_HOME",
+			"REGION_SAFARI_ZONE_FUCHSIA_GATE_BETA",
+			"REGION_ROUTE_15_FUCHSIA_GATE",
+			"REGION_ROUTE_19_FUCHSIA_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_FUCHSIA_GYM": {
+		"exits": [
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [
+			"TM06_TOXIC",
+			"SOUL_BADGE_FROM_JANINE"
+		],
+		"events": [
+			"EVENT_BEAT_JANINE",
+			"EVENT_BEAT_LASS_ALICE",
+			"EVENT_BEAT_LASS_LINDA",
+			"EVENT_BEAT_PICNICKER_CINDY",
+			"EVENT_BEAT_CAMPER_BARRY"
+		]
+	},
+	"REGION_FUCHSIA_MART": {
+		"exits": [
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_FUCHSIA_POKECENTER_1F": {
+		"exits": [
+			"REGION_FUCHSIA_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_FUCHSIA_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_FUCHSIA_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_BIKE_SHOP": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [
+			"BICYCLE"
+		],
+		"events": []
+	},
+	"REGION_GOLDENROD_CITY": {
+		"exits": [
+			"REGION_ROUTE_34",
+			"REGION_GOLDENROD_GYM",
+			"REGION_GOLDENROD_BIKE_SHOP",
+			"REGION_GOLDENROD_HAPPINESS_RATER",
+			"REGION_BILLS_FAMILYS_HOUSE",
+			"REGION_GOLDENROD_MAGNET_TRAIN_STATION",
+			"REGION_GOLDENROD_FLOWER_SHOP",
+			"REGION_GOLDENROD_PP_SPEECH_HOUSE",
+			"REGION_GOLDENROD_NAME_RATER",
+			"REGION_GOLDENROD_DEPT_STORE_1F",
+			"REGION_GOLDENROD_GAME_CORNER",
+			"REGION_RADIO_TOWER_1F",
+			"REGION_ROUTE_35_GOLDENROD_GATE",
+			"REGION_GOLDENROD_UNDERGROUND",
+			"REGION_GOLDENROD_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_1F": {
+		"exits": [
+			"REGION_GOLDENROD_CITY",
+			"REGION_GOLDENROD_DEPT_STORE_2F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_2F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_3F",
+			"REGION_GOLDENROD_DEPT_STORE_1F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_3F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_2F",
+			"REGION_GOLDENROD_DEPT_STORE_4F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_4F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_5F",
+			"REGION_GOLDENROD_DEPT_STORE_3F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_5F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_4F",
+			"REGION_GOLDENROD_DEPT_STORE_6F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_6F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_5F",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR",
+			"REGION_GOLDENROD_DEPT_STORE_ROOF"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_B1F": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_B1F:WAREHOUSE",
+			"REGION_GOLDENROD_DEPT_STORE_ELEVATOR"
+		],
+		"locations": [
+			"GOLDENROD_DEPT_STORE_B1F_BURN_HEAL",
+			"GOLDENROD_DEPT_STORE_B1F_ETHER",
+			"GOLDENROD_DEPT_STORE_B1F_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_B1F:WAREHOUSE": {
+		"exits": [
+			"REGION_GOLDENROD_UNDERGROUND_WAREHOUSE",
+			"REGION_GOLDENROD_DEPT_STORE_B1F"
+		],
+		"locations": [
+			"GOLDENROD_DEPT_STORE_B1F_AMULET_COIN"
+		],
+		"events": []
+	},
+	"REGION_GOLDENROD_DEPT_STORE_ELEVATOR": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_1F",
+			"REGION_GOLDENROD_DEPT_STORE_B1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOLDENROD_DEPT_STORE_B1F_LAYOUT_1",
+			"EVENT_GOLDENROD_DEPT_STORE_B1F_LAYOUT_2",
+			"EVENT_GOLDENROD_DEPT_STORE_B1F_LAYOUT_3"
+		]
+	},
+	"REGION_GOLDENROD_DEPT_STORE_ROOF": {
+		"exits": [
+			"REGION_GOLDENROD_DEPT_STORE_6F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOLDENROD_SALE_OFF",
+			"EVENT_GOLDENROD_SALE_ON"
+		]
+	},
+	"REGION_GOLDENROD_FLOWER_SHOP": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [
+			"SQUIRTBOTTLE"
+		],
+		"events": [
+			"EVENT_FLORIA_AT_SUDOWOODO",
+			"EVENT_TALKED_TO_FLORIA_AT_FLOWER_SHOP",
+			"EVENT_FLORIA_AT_FLOWER_SHOP"
+		]
+	},
+	"REGION_GOLDENROD_GAME_CORNER": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_GYM": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [
+			"TM45_ATTRACT",
+			"PLAIN_BADGE_FROM_WHITNEY"
+		],
+		"events": [
+			"EVENT_BEAT_WHITNEY",
+			"EVENT_MADE_WHITNEY_CRY",
+			"EVENT_BEAT_BEAUTY_VICTORIA",
+			"EVENT_BEAT_BEAUTY_SAMANTHA",
+			"EVENT_BEAT_LASS_CARRIE",
+			"EVENT_BEAT_LASS_BRIDGET"
+		]
+	},
+	"REGION_GOLDENROD_HAPPINESS_RATER": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_MAGNET_TRAIN_STATION": {
+		"exits": [
+			"REGION_GOLDENROD_CITY",
+			"REGION_SAFFRON_MAGNET_TRAIN_STATION"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_NAME_RATER": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_POKECENTER_1F": {
+		"exits": [
+			"REGION_GOLDENROD_CITY",
+			"REGION_POKECOM_CENTER_ADMIN_OFFICE_MOBILE",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_CAN_GIVE_GS_BALL_TO_KURT"
+		]
+	},
+	"REGION_GOLDENROD_PP_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_GOLDENROD_UNDERGROUND": {
+		"exits": [
+			"REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES",
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [
+			"GOLDENROD_UNDERGROUND_COIN_CASE",
+			"GOLDENROD_UNDERGROUND_HIDDEN_ANTIDOTE",
+			"GOLDENROD_UNDERGROUND_HIDDEN_PARLYZ_HEAL",
+			"GOLDENROD_UNDERGROUND_HIDDEN_SUPER_POTION"
+		],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3",
+			"EVENT_USED_BASEMENT_KEY"
+		]
+	},
+	"REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES": {
+		"exits": [
+			"REGION_GOLDENROD_UNDERGROUND",
+			"REGION_GOLDENROD_UNDERGROUND_WAREHOUSE"
+		],
+		"locations": [
+			"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_FULL_HEAL",
+			"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_MAX_POTION",
+			"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_HIDDEN_REVIVE",
+			"GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES_SMOKE_BALL"
+		],
+		"events": [
+			"EVENT_RIVAL_BURNED_TOWER",
+			"EVENT_RIVAL_GOLDENROD_UNDERGROUND",
+			"EVENT_SWITCH_1",
+			"EVENT_SWITCH_2",
+			"EVENT_SWITCH_3",
+			"EVENT_EMERGENCY_SWITCH",
+			"EVENT_SWITCH_4",
+			"EVENT_SWITCH_5",
+			"EVENT_SWITCH_6",
+			"EVENT_SWITCH_7",
+			"EVENT_SWITCH_8",
+			"EVENT_SWITCH_9",
+			"EVENT_SWITCH_10",
+			"EVENT_SWITCH_11",
+			"EVENT_SWITCH_12",
+			"EVENT_SWITCH_13",
+			"EVENT_SWITCH_14"
+		]
+	},
+	"REGION_GOLDENROD_UNDERGROUND_WAREHOUSE": {
+		"exits": [
+			"REGION_GOLDENROD_UNDERGROUND_SWITCH_ROOM_ENTRANCES",
+			"REGION_GOLDENROD_DEPT_STORE_B1F"
+		],
+		"locations": [
+			"GOLDENROD_UNDERGROUND_WAREHOUSE_MAX_ETHER",
+			"GOLDENROD_UNDERGROUND_WAREHOUSE_TM_SLEEP_TALK",
+			"GOLDENROD_UNDERGROUND_WAREHOUSE_ULTRA_BALL",
+			"RECEIVED_CARD_KEY"
+		],
+		"events": [
+			"EVENT_GOLDENROD_DEPT_STORE_B1F_LAYOUT_1"
+		]
+	},
+	"REGION_GUIDE_GENTS_HOUSE": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_HALL_OF_FAME": {
+		"exits": [
+			"REGION_LANCES_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_BEAT_ELITE_FOUR",
+			"EVENT_TELEPORT_GUY",
+			"EVENT_RIVAL_SPROUT_TOWER",
+			"EVENT_OLIVINE_PORT_SPRITES_BEFORE_HALL_OF_FAME"
+		]
+	},
+	"REGION_ICE_PATH_1F:WEST": {
+		"exits": [
+			"REGION_ROUTE_44",
+			"REGION_ICE_PATH_B1F:NORTH"
+		],
+		"locations": [
+			"HM07_WATERFALL"
+		],
+		"events": []
+	},
+	"REGION_ICE_PATH_1F:EAST": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY",
+			"REGION_ICE_PATH_B1F:SOUTH"
+		],
+		"locations": [
+			"ICE_PATH_1F_PP_UP",
+			"ICE_PATH_1F_PROTEIN"
+		],
+		"events": []
+	},
+	"REGION_ICE_PATH_B1F:NORTH": {
+		"exits": [
+			"REGION_ICE_PATH_1F:WEST",
+			"REGION_ICE_PATH_B2F_MAHOGANY_SIDE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ICE_PATH_B1F:SOUTH": {
+		"exits": [
+			"REGION_ICE_PATH_1F:EAST",
+			"REGION_ICE_PATH_B2F_BLACKTHORN_SIDE"
+		],
+		"locations": [
+			"ICE_PATH_B1F_HIDDEN_MAX_POTION",
+			"ICE_PATH_B1F_IRON"
+		],
+		"events": []
+	},
+	"REGION_ICE_PATH_B2F_BLACKTHORN_SIDE": {
+		"exits": [
+			"REGION_ICE_PATH_B1F:SOUTH",
+			"REGION_ICE_PATH_B3F"
+		],
+		"locations": [
+			"ICE_PATH_B2F_BLACKTHORN_SIDE_HIDDEN_ICE_HEAL",
+			"ICE_PATH_B2F_BLACKTHORN_SIDE_TM_REST"
+		],
+		"events": []
+	},
+	"REGION_ICE_PATH_B2F_MAHOGANY_SIDE": {
+		"exits": [
+			"REGION_ICE_PATH_B1F:NORTH",
+			"REGION_ICE_PATH_B3F"
+		],
+		"locations": [
+			"ICE_PATH_B2F_MAHOGANY_SIDE_FULL_HEAL",
+			"ICE_PATH_B2F_MAHOGANY_SIDE_HIDDEN_CARBOS",
+			"ICE_PATH_B2F_MAHOGANY_SIDE_MAX_POTION"
+		],
+		"events": []
+	},
+	"REGION_ICE_PATH_B3F": {
+		"exits": [
+			"REGION_ICE_PATH_B2F_MAHOGANY_SIDE",
+			"REGION_ICE_PATH_B2F_BLACKTHORN_SIDE"
+		],
+		"locations": [
+			"ICE_PATH_B3F_NEVERMELTICE"
+		],
+		"events": []
+	},
+	"REGION_ILEX_FOREST": {
+		"exits": [
+			"REGION_ROUTE_34_ILEX_FOREST_GATE",
+			"REGION_ILEX_FOREST_AZALEA_GATE"
+		],
+		"locations": [
+			"ILEX_FOREST_ANTIDOTE",
+			"ILEX_FOREST_ETHER",
+			"ILEX_FOREST_HIDDEN_ETHER",
+			"ILEX_FOREST_HIDDEN_FULL_HEAL",
+			"ILEX_FOREST_HIDDEN_SUPER_POTION",
+			"ILEX_FOREST_REVIVE",
+			"ILEX_FOREST_X_ATTACK",
+			"HM01_CUT",
+			"TM02_HEADBUTT"
+		],
+		"events": [
+			"EVENT_CHARCOAL_KILN_BOSS",
+			"EVENT_HERDED_FARFETCHD",
+			"EVENT_ILEX_FOREST_FARFETCHD",
+			"EVENT_ILEX_FOREST_APPRENTICE",
+			"EVENT_ILEX_FOREST_CHARCOAL_MASTER",
+			"EVENT_AZALEA_TOWN_KURT"
+		]
+	},
+	"REGION_ILEX_FOREST_AZALEA_GATE": {
+		"exits": [
+			"REGION_ILEX_FOREST",
+			"REGION_AZALEA_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_INDIGO_PLATEAU_POKECENTER_1F": {
+		"exits": [
+			"REGION_ROUTE_23",
+			"REGION_POKECENTER_2F",
+			"REGION_WILLS_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LANCES_ROOM_OAK_AND_MARY",
+			"EVENT_INDIGO_PLATEAU_POKECENTER_RIVAL"
+		]
+	},
+	"REGION_KARENS_ROOM": {
+		"exits": [
+			"REGION_BRUNOS_ROOM",
+			"REGION_LANCES_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_KARENS_ROOM_ENTRANCE_CLOSED",
+			"EVENT_BEAT_ELITE_4_KAREN",
+			"EVENT_KARENS_ROOM_EXIT_OPEN"
+		]
+	},
+	"REGION_KOGAS_ROOM": {
+		"exits": [
+			"REGION_WILLS_ROOM",
+			"REGION_BRUNOS_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_KOGAS_ROOM_ENTRANCE_CLOSED",
+			"EVENT_BEAT_ELITE_4_KOGA",
+			"EVENT_KOGAS_ROOM_EXIT_OPEN"
+		]
+	},
+	"REGION_KURTS_HOUSE": {
+		"exits": [
+			"REGION_AZALEA_TOWN"
+		],
+		"locations": [
+			"KURT_GAVE_YOU_LURE_BALL"
+		],
+		"events": [
+			"EVENT_AZALEA_TOWN_SLOWPOKETAIL_ROCKET",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_3",
+			"EVENT_GAVE_KURT_RED_APRICORN",
+			"EVENT_GAVE_KURT_BLU_APRICORN",
+			"EVENT_GAVE_KURT_YLW_APRICORN",
+			"EVENT_GAVE_KURT_GRN_APRICORN",
+			"EVENT_GAVE_KURT_WHT_APRICORN",
+			"EVENT_GAVE_KURT_BLK_APRICORN",
+			"EVENT_GAVE_KURT_PNK_APRICORN",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2",
+			"EVENT_GAVE_GS_BALL_TO_KURT",
+			"EVENT_FOREST_IS_RESTLESS",
+			"EVENT_BUGGING_KURT_TOO_MUCH"
+		]
+	},
+	"REGION_LAKE_OF_RAGE": {
+		"exits": [
+			"REGION_ROUTE_43",
+			"REGION_LAKE_OF_RAGE_HIDDEN_POWER_HOUSE",
+			"REGION_LAKE_OF_RAGE_MAGIKARP_HOUSE"
+		],
+		"locations": [
+			"LAKE_OF_RAGE_ELIXER",
+			"LAKE_OF_RAGE_HIDDEN_FULL_RESTORE",
+			"LAKE_OF_RAGE_HIDDEN_MAX_POTION",
+			"LAKE_OF_RAGE_HIDDEN_RARE_CANDY",
+			"LAKE_OF_RAGE_TM_DETECT",
+			"BLACKBELT_FROM_WESLEY",
+			"RED_SCALE"
+		],
+		"events": [
+			"EVENT_DECIDED_TO_HELP_LANCE",
+			"EVENT_REFUSED_TO_HELP_LANCE_AT_LAKE_OF_RAGE",
+			"EVENT_MET_WESLEY_OF_WEDNESDAY"
+		]
+	},
+	"REGION_LAKE_OF_RAGE_HIDDEN_POWER_HOUSE": {
+		"exits": [
+			"REGION_LAKE_OF_RAGE"
+		],
+		"locations": [
+			"TM10_HIDDEN_POWER"
+		],
+		"events": []
+	},
+	"REGION_LAKE_OF_RAGE_MAGIKARP_HOUSE": {
+		"exits": [
+			"REGION_LAKE_OF_RAGE"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LAKE_OF_RAGE_EXPLAINED_WEIRD_MAGIKARP",
+			"EVENT_LAKE_OF_RAGE_ASKED_FOR_MAGIKARP",
+			"EVENT_LAKE_OF_RAGE_ELIXIR_ON_STANDBY"
+		]
+	},
+	"REGION_LANCES_ROOM": {
+		"exits": [
+			"REGION_KARENS_ROOM",
+			"REGION_HALL_OF_FAME"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LANCES_ROOM_ENTRANCE_CLOSED",
+			"EVENT_BEAT_CHAMPION_LANCE"
+		]
+	},
+	"REGION_LAV_RADIO_TOWER_1F": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOT_EXPN_CARD"
+		]
+	},
+	"REGION_LAVENDER_MART": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_LAVENDER_NAME_RATER": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_LAVENDER_POKECENTER_1F": {
+		"exits": [
+			"REGION_LAVENDER_TOWN",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_LAVENDER_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_LAVENDER_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_LAVENDER_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_LAVENDER_TOWN": {
+		"exits": [
+			"REGION_ROUTE_10_SOUTH",
+			"REGION_ROUTE_12",
+			"REGION_ROUTE_8",
+			"REGION_LAVENDER_POKECENTER_1F",
+			"REGION_MR_FUJIS_HOUSE",
+			"REGION_LAVENDER_SPEECH_HOUSE",
+			"REGION_LAVENDER_NAME_RATER",
+			"REGION_LAVENDER_MART",
+			"REGION_SOUL_HOUSE",
+			"REGION_LAV_RADIO_TOWER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MAHOGANY_GYM": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN"
+		],
+		"locations": [
+			"TM16_ICY_WIND",
+			"GLACIER_BADGE_FROM_PRYCE"
+		],
+		"events": [
+			"EVENT_BEAT_PRYCE",
+			"EVENT_BEAT_SKIER_ROXANNE",
+			"EVENT_BEAT_SKIER_CLARISSA",
+			"EVENT_BEAT_BOARDER_RONALD",
+			"EVENT_BEAT_BOARDER_BRAD",
+			"EVENT_BEAT_BOARDER_DOUGLAS"
+		]
+	},
+	"REGION_MAHOGANY_MART_1F": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN",
+			"REGION_TEAM_ROCKET_BASE_B1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_UNCOVERED_STAIRCASE_IN_MAHOGANY_MART"
+		]
+	},
+	"REGION_MAHOGANY_POKECENTER_1F": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MAHOGANY_RED_GYARADOS_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MAHOGANY_TOWN": {
+		"exits": [
+			"REGION_ROUTE_42:EAST",
+			"REGION_ROUTE_44",
+			"REGION_MAHOGANY_MART_1F",
+			"REGION_MAHOGANY_RED_GYARADOS_SPEECH_HOUSE",
+			"REGION_MAHOGANY_GYM",
+			"REGION_MAHOGANY_POKECENTER_1F",
+			"REGION_ROUTE_43_MAHOGANY_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MANIAS_HOUSE": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOT_SHUCKIE",
+			"EVENT_MANIA_TOOK_SHUCKIE_OR_LET_YOU_KEEP_HIM"
+		]
+	},
+	"REGION_MOBILE_BATTLE_ROOM": {
+		"exits": [
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOBILE_TRADE_ROOM": {
+		"exits": [
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MOON": {
+		"exits": [
+			"REGION_ROUTE_3",
+			"REGION_ROUTE_4",
+			"REGION_MOUNT_MOON",
+			"REGION_MOUNT_MOON_SQUARE"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_BEAT_RIVAL_IN_MT_MOON"
+		]
+	},
+	"REGION_MOUNT_MOON_GIFT_SHOP": {
+		"exits": [
+			"REGION_MOUNT_MOON_SQUARE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MOON_SQUARE": {
+		"exits": [
+			"REGION_MOUNT_MOON",
+			"REGION_MOUNT_MOON_GIFT_SHOP"
+		],
+		"locations": [
+			"MOUNT_MOON_SQUARE_HIDDEN_MOON_STONE"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_1F_INSIDE:FRONT": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:WEST",
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:EAST",
+			"REGION_MOUNT_MORTAR_3F_OUTSIDE:WEST",
+			"REGION_MOUNT_MORTAR_3F_OUTSIDE:EAST"
+		],
+		"locations": [
+			"MOUNT_MORTAR_1F_INSIDE_ESCAPE_ROPE",
+			"MOUNT_MORTAR_1F_INSIDE_HYPER_POTION",
+			"MOUNT_MORTAR_1F_INSIDE_NUGGET",
+			"MOUNT_MORTAR_1F_INSIDE_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_1F_INSIDE:BACK": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_B1F:BACK",
+			"REGION_MOUNT_MORTAR_2F_INSIDE"
+		],
+		"locations": [
+			"MOUNT_MORTAR_1F_INSIDE_IRON",
+			"MOUNT_MORTAR_1F_INSIDE_MAX_POTION",
+			"MOUNT_MORTAR_1F_INSIDE_MAX_REVIVE",
+			"MOUNT_MORTAR_1F_INSIDE_HIDDEN_MAX_REPEL"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_1F_OUTSIDE:WEST": {
+		"exits": [
+			"REGION_ROUTE_42:WEST",
+			"REGION_MOUNT_MORTAR_1F_INSIDE:FRONT"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER": {
+		"exits": [
+			"REGION_ROUTE_42:CENTER",
+			"REGION_MOUNT_MORTAR_B1F",
+			"REGION_MOUNT_MORTAR_2F_OUTSIDE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_1F_OUTSIDE:EAST": {
+		"exits": [
+			"REGION_ROUTE_42:EAST",
+			"REGION_MOUNT_MORTAR_1F_INSIDE:FRONT"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_2F_OUTSIDE": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_2F_INSIDE",
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_3F_OUTSIDE:WEST": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_1F_INSIDE:FRONT"
+		],
+		"locations": [
+			"MOUNT_MORTAR_1F_OUTSIDE_ETHER"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_3F_OUTSIDE:EAST": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_1F_INSIDE:FRONT"
+		],
+		"locations": [
+			"MOUNT_MORTAR_1F_OUTSIDE_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_2F_INSIDE": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_2F_OUTSIDE",
+			"REGION_MOUNT_MORTAR_1F_INSIDE:BACK"
+		],
+		"locations": [
+			"MOUNT_MORTAR_2F_INSIDE_DRAGON_SCALE",
+			"MOUNT_MORTAR_2F_INSIDE_ELIXER",
+			"MOUNT_MORTAR_2F_INSIDE_ESCAPE_ROPE",
+			"MOUNT_MORTAR_2F_INSIDE_MAX_POTION",
+			"MOUNT_MORTAR_2F_INSIDE_RARE_CANDY",
+			"MOUNT_MORTAR_2F_INSIDE_TM_DEFENSE_CURL"
+		],
+		"events": []
+	},
+	"REGION_MOUNT_MORTAR_B1F": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER"
+		],
+		"locations": [
+			"MOUNT_MORTAR_B1F_CARBOS",
+			"MOUNT_MORTAR_B1F_FULL_RESTORE",
+			"MOUNT_MORTAR_B1F_HYPER_POTION",
+			"MOUNT_MORTAR_B1F_MAX_ETHER",
+			"MOUNT_MORTAR_B1F_PP_UP"
+		],
+		"events": [
+			"EVENT_BEAT_BLACKBELT_KIYO",
+			"EVENT_GOT_TYROGUE_FROM_KIYO"
+		]
+	},
+	"REGION_MOUNT_MORTAR_B1F:BACK": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_B1F",
+			"REGION_MOUNT_MORTAR_1F_INSIDE:BACK"
+		],
+		"locations": [
+			"MOUNT_MORTAR_B1F_HIDDEN_MAX_REVIVE"
+		],
+		"events": [
+			"EVENT_BEAT_BLACKBELT_KIYO",
+			"EVENT_GOT_TYROGUE_FROM_KIYO"
+		]
+	},
+	"REGION_MOVE_DELETERS_HOUSE": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MR_FUJIS_HOUSE": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_MR_POKEMONS_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_30"
+		],
+		"locations": [
+			"MYSTERY_EGG",
+			"EXP_SHARE"
+		],
+		"events": [
+			"EVENT_GOT_MYSTERY_EGG_FROM_MR_POKEMON",
+			"EVENT_ROUTE_30_BATTLE",
+			"EVENT_RIVAL_NEW_BARK_TOWN",
+			"EVENT_PLAYERS_HOUSE_1F_NEIGHBOR"
+		]
+	},
+	"REGION_MR_PSYCHICS_HOUSE": {
+		"exits": [
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [
+			"TM29_PSYCHIC"
+		],
+		"events": []
+	},
+	"REGION_NATIONAL_PARK": {
+		"exits": [
+			"REGION_ROUTE_36_NATIONAL_PARK_GATE",
+			"REGION_ROUTE_35_NATIONAL_PARK_GATE"
+		],
+		"locations": [
+			"NATIONAL_PARK_HIDDEN_FULL_HEAL",
+			"NATIONAL_PARK_PARLYZ_HEAL",
+			"NATIONAL_PARK_TM_DIG",
+			"QUICK_CLAW"
+		],
+		"events": [
+			"EVENT_JACK_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BEVERLY_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_NEW_BARK_TOWN": {
+		"exits": [
+			"REGION_ROUTE_29",
+			"REGION_ROUTE_27:WEST",
+			"REGION_ELMS_LAB",
+			"REGION_PLAYERS_HOUSE_1F",
+			"REGION_PLAYERS_NEIGHBORS_HOUSE",
+			"REGION_ELMS_HOUSE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OAKS_LAB": {
+		"exits": [
+			"REGION_PALLET_TOWN"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TALKED_TO_OAK_IN_KANTO",
+			"EVENT_OPENED_MT_SILVER"
+		]
+	},
+	"REGION_OLIVINE_CAFE": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [
+			"HM04_STRENGTH"
+		],
+		"events": []
+	},
+	"REGION_OLIVINE_CITY": {
+		"exits": [
+			"REGION_ROUTE_39",
+			"REGION_ROUTE_40",
+			"REGION_OLIVINE_POKECENTER_1F",
+			"REGION_OLIVINE_GYM",
+			"REGION_OLIVINE_TIMS_HOUSE",
+			"REGION_OLIVINE_HOUSE_BETA",
+			"REGION_OLIVINE_PUNISHMENT_SPEECH_HOUSE",
+			"REGION_OLIVINE_GOOD_ROD_HOUSE",
+			"REGION_OLIVINE_CAFE",
+			"REGION_OLIVINE_MART",
+			"REGION_OLIVINE_LIGHTHOUSE_1F",
+			"REGION_OLIVINE_PORT_PASSAGE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_GOOD_ROD_HOUSE": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [
+			"GOOD_ROD"
+		],
+		"events": []
+	},
+	"REGION_OLIVINE_GYM": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [
+			"TM23_IRON_TAIL",
+			"MINERAL_BADGE_FROM_JASMINE"
+		],
+		"events": [
+			"EVENT_BEAT_JASMINE"
+		]
+	},
+	"REGION_OLIVINE_HOUSE_BETA": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_1F": {
+		"exits": [
+			"REGION_OLIVINE_CITY",
+			"REGION_OLIVINE_LIGHTHOUSE_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_2F": {
+		"exits": [
+			"REGION_OLIVINE_LIGHTHOUSE_1F",
+			"REGION_OLIVINE_LIGHTHOUSE_3F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_HUEY_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_HUEY_PROTEIN"
+		]
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_3F": {
+		"exits": [
+			"REGION_OLIVINE_LIGHTHOUSE_4F",
+			"REGION_OLIVINE_LIGHTHOUSE_2F"
+		],
+		"locations": [
+			"OLIVINE_LIGHTHOUSE_3F_ETHER"
+		],
+		"events": []
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_4F": {
+		"exits": [
+			"REGION_OLIVINE_LIGHTHOUSE_3F",
+			"REGION_OLIVINE_LIGHTHOUSE_5F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_5F": {
+		"exits": [
+			"REGION_OLIVINE_LIGHTHOUSE_6F",
+			"REGION_OLIVINE_LIGHTHOUSE_4F"
+		],
+		"locations": [
+			"OLIVINE_LIGHTHOUSE_5F_RARE_CANDY",
+			"OLIVINE_LIGHTHOUSE_5F_SUPER_REPEL",
+			"OLIVINE_LIGHTHOUSE_5F_TM_SWAGGER"
+		],
+		"events": []
+	},
+	"REGION_OLIVINE_LIGHTHOUSE_6F": {
+		"exits": [
+			"REGION_OLIVINE_LIGHTHOUSE_5F"
+		],
+		"locations": [
+			"OLIVINE_LIGHTHOUSE_6F_SUPER_POTION"
+		],
+		"events": [
+			"EVENT_JASMINE_EXPLAINED_AMPHYS_SICKNESS",
+			"EVENT_JASMINE_RETURNED_TO_GYM"
+		]
+	},
+	"REGION_OLIVINE_MART": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_POKECENTER_1F": {
+		"exits": [
+			"REGION_OLIVINE_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_PORT": {
+		"exits": [
+			"REGION_OLIVINE_PORT_PASSAGE",
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [
+			"OLIVINE_PORT_HIDDEN_PROTEIN"
+		],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_FAST_SHIP_PASSENGERS_WESTBOUND",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2"
+		]
+	},
+	"REGION_OLIVINE_PORT_PASSAGE": {
+		"exits": [
+			"REGION_OLIVINE_CITY",
+			"REGION_OLIVINE_PORT_PASSAGE",
+			"REGION_OLIVINE_PORT"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_PUNISHMENT_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_OLIVINE_TIMS_HOUSE": {
+		"exits": [
+			"REGION_OLIVINE_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PALLET_TOWN": {
+		"exits": [
+			"REGION_ROUTE_1",
+			"REGION_ROUTE_21",
+			"REGION_REDS_HOUSE_1F",
+			"REGION_BLUES_HOUSE",
+			"REGION_OAKS_LAB"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PEWTER_CITY": {
+		"exits": [
+			"REGION_ROUTE_2:WEST",
+			"REGION_ROUTE_3",
+			"REGION_PEWTER_NIDORAN_SPEECH_HOUSE",
+			"REGION_PEWTER_GYM",
+			"REGION_PEWTER_MART",
+			"REGION_PEWTER_POKECENTER_1F",
+			"REGION_PEWTER_SNOOZE_SPEECH_HOUSE"
+		],
+		"locations": [
+			"SILVER_WING"
+		],
+		"events": []
+	},
+	"REGION_PEWTER_GYM": {
+		"exits": [
+			"REGION_PEWTER_CITY"
+		],
+		"locations": [
+			"BOULDER_BADGE_FROM_BROCK"
+		],
+		"events": [
+			"EVENT_BEAT_BROCK",
+			"EVENT_BEAT_CAMPER_JERRY"
+		]
+	},
+	"REGION_PEWTER_MART": {
+		"exits": [
+			"REGION_PEWTER_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PEWTER_NIDORAN_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_PEWTER_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PEWTER_POKECENTER_1F": {
+		"exits": [
+			"REGION_PEWTER_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PEWTER_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_PEWTER_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PEWTER_SNOOZE_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_PEWTER_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_PLAYERS_HOUSE_1F": {
+		"exits": [
+			"REGION_NEW_BARK_TOWN",
+			"REGION_PLAYERS_HOUSE_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_PLAYERS_HOUSE_MOM_1",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2",
+			"EVENT_FIRST_TIME_BANKING_WITH_MOM",
+			"EVENT_TALKED_TO_MOM_AFTER_MYSTERY_EGG_QUEST"
+		]
+	},
+	"REGION_PLAYERS_HOUSE_2F": {
+		"exits": [
+			"REGION_PLAYERS_HOUSE_1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_8",
+			"EVENT_LISTENED_TO_INITIAL_RADIO"
+		]
+	},
+	"REGION_PLAYERS_NEIGHBORS_HOUSE": {
+		"exits": [
+			"REGION_NEW_BARK_TOWN"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LISTENED_TO_INITIAL_RADIO"
+		]
+	},
+	"REGION_POKE_SEERS_HOUSE": {
+		"exits": [
+			"REGION_CIANWOOD_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_POKECENTER_2F": {
+		"exits": [
+			"REGION_POKECENTER_2F",
+			"REGION_TRADE_CENTER",
+			"REGION_COLOSSEUM",
+			"REGION_TIME_CAPSULE",
+			"REGION_MOBILE_TRADE_ROOM",
+			"REGION_MOBILE_BATTLE_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2",
+			"EVENT_MYSTERY_GIFT_DELIVERY_GUY"
+		]
+	},
+	"REGION_POKECOM_CENTER_ADMIN_OFFICE_MOBILE": {
+		"exits": [
+			"REGION_GOLDENROD_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_POKEMON_FAN_CLUB": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [
+			"LISTENED_TO_FAN_CLUB_PRESIDENT",
+			"LOST_ITEM_FROM_FAN_CLUB"
+		],
+		"events": [
+			"EVENT_GOT_LOST_ITEM_FROM_FAN_CLUB"
+		]
+	},
+	"REGION_POWER_PLANT": {
+		"exits": [
+			"REGION_ROUTE_10_NORTH"
+		],
+		"locations": [
+			"TM07_ZAP_CANNON"
+		],
+		"events": [
+			"EVENT_MET_MANAGER_AT_POWER_PLANT",
+			"EVENT_RETURNED_MACHINE_PART",
+			"EVENT_ROUTE_5_6_POKEFAN_M_BLOCKS_UNDERGROUND_PATH",
+			"EVENT_ROUTE_24_ROCKET",
+			"EVENT_RESTORED_POWER_TO_KANTO"
+		]
+	},
+	"REGION_RADIO_TOWER_1F": {
+		"exits": [
+			"REGION_GOLDENROD_CITY",
+			"REGION_RADIO_TOWER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RADIO_TOWER_2F": {
+		"exits": [
+			"REGION_RADIO_TOWER_3F",
+			"REGION_RADIO_TOWER_1F"
+		],
+		"locations": [
+			"BUENA_BLUE_CARD"
+		],
+		"events": [
+			"EVENT_MET_BUENA",
+			"EVENT_BUENA_OFFERED_HER_PHONE_NUMBER_NO_BLUE_CARD",
+			"EVENT_BUENA_OFFERED_HER_PHONE_NUMBER"
+		]
+	},
+	"REGION_RADIO_TOWER_3F": {
+		"exits": [
+			"REGION_RADIO_TOWER_2F",
+			"REGION_RADIO_TOWER_4F:NOCARDKEY",
+			"REGION_RADIO_TOWER_4F:CARDKEY"
+		],
+		"locations": [
+			"SUNNY_DAY_FROM_RADIO_TOWER"
+		],
+		"events": [
+			"EVENT_USED_THE_CARD_KEY_IN_THE_RADIO_TOWER"
+		]
+	},
+	"REGION_RADIO_TOWER_4F:NOCARDKEY": {
+		"exits": [
+			"REGION_RADIO_TOWER_5F:CARDKEY",
+			"REGION_RADIO_TOWER_3F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RADIO_TOWER_4F:CARDKEY": {
+		"exits": [
+			"REGION_RADIO_TOWER_5F:NOCARDKEY",
+			"REGION_RADIO_TOWER_3F"
+		],
+		"locations": [
+			"PINK_BOW_FROM_MARY"
+		],
+		"events": []
+	},
+	"REGION_RADIO_TOWER_5F:NOCARDKEY": {
+		"exits": [
+			"REGION_RADIO_TOWER_4F:NOCARDKEY"
+		],
+		"locations": [
+			"BEAT_ROCKET_EXECUTIVEM_3"
+		],
+		"events": []
+	},
+	"REGION_RADIO_TOWER_5F:CARDKEY": {
+		"exits": [
+			"REGION_RADIO_TOWER_4F:CARDKEY"
+		],
+		"locations": [
+			"RADIO_TOWER_5F_ULTRA_BALL",
+			"CLEAR_BELL"
+		],
+		"events": [
+			"EVENT_BEAT_ROCKET_EXECUTIVEM_1",
+			"EVENT_CLEARED_RADIO_TOWER",
+			"EVENT_GOLDENROD_CITY_ROCKET_SCOUT",
+			"EVENT_GOLDENROD_CITY_ROCKET_TAKEOVER",
+			"EVENT_BLACKTHORN_CITY_SUPER_NERD_BLOCKS_GYM",
+			"EVENT_TEAM_ROCKET_DISBANDED"
+		]
+	},
+	"REGION_REDS_HOUSE_1F": {
+		"exits": [
+			"REGION_PALLET_TOWN",
+			"REGION_REDS_HOUSE_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_MET_REDS_MOM"
+		]
+	},
+	"REGION_REDS_HOUSE_2F": {
+		"exits": [
+			"REGION_REDS_HOUSE_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROCK_TUNNEL_1F": {
+		"exits": [
+			"REGION_ROUTE_9",
+			"REGION_ROUTE_10_SOUTH",
+			"REGION_ROCK_TUNNEL_B1F"
+		],
+		"locations": [
+			"ROCK_TUNNEL_1F_ELIXER",
+			"ROCK_TUNNEL_1F_HIDDEN_X_ACCURACY",
+			"ROCK_TUNNEL_1F_HIDDEN_X_DEFEND",
+			"ROCK_TUNNEL_1F_TM_STEEL_WING"
+		],
+		"events": []
+	},
+	"REGION_ROCK_TUNNEL_B1F": {
+		"exits": [
+			"REGION_ROCK_TUNNEL_1F"
+		],
+		"locations": [
+			"ROCK_TUNNEL_B1F_HIDDEN_MAX_POTION",
+			"ROCK_TUNNEL_B1F_IRON",
+			"ROCK_TUNNEL_B1F_PP_UP",
+			"ROCK_TUNNEL_B1F_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_1": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY",
+			"REGION_PALLET_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_10_NORTH": {
+		"exits": [
+			"REGION_ROUTE_9",
+			"REGION_ROUTE_10_POKECENTER_1F",
+			"REGION_POWER_PLANT"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_10_POKECENTER_1F": {
+		"exits": [
+			"REGION_ROUTE_10_NORTH",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_10_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_ROUTE_10_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_10_SOUTH": {
+		"exits": [
+			"REGION_LAVENDER_TOWN",
+			"REGION_ROCK_TUNNEL_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_11": {
+		"exits": [
+			"REGION_VERMILION_CITY",
+			"REGION_ROUTE_12"
+		],
+		"locations": [
+			"ROUTE_11_HIDDEN_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_12": {
+		"exits": [
+			"REGION_LAVENDER_TOWN",
+			"REGION_ROUTE_13",
+			"REGION_ROUTE_11",
+			"REGION_ROUTE_12_SUPER_ROD_HOUSE"
+		],
+		"locations": [
+			"ROUTE_12_CALCIUM",
+			"ROUTE_12_HIDDEN_ELIXER",
+			"ROUTE_12_NUGGET"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_12_SUPER_ROD_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_12"
+		],
+		"locations": [
+			"SUPER_ROD"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_13": {
+		"exits": [
+			"REGION_ROUTE_12",
+			"REGION_ROUTE_14"
+		],
+		"locations": [
+			"ROUTE_13_HIDDEN_CALCIUM"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_14": {
+		"exits": [
+			"REGION_ROUTE_13",
+			"REGION_ROUTE_15"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_15": {
+		"exits": [
+			"REGION_ROUTE_14",
+			"REGION_ROUTE_15_FUCHSIA_GATE"
+		],
+		"locations": [
+			"ROUTE_15_PP_UP"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_15_FUCHSIA_GATE": {
+		"exits": [
+			"REGION_FUCHSIA_CITY",
+			"REGION_ROUTE_15"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_16": {
+		"exits": [
+			"REGION_ROUTE_17",
+			"REGION_CELADON_CITY",
+			"REGION_ROUTE_16_FUCHSIA_SPEECH_HOUSE",
+			"REGION_ROUTE_16_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_16_FUCHSIA_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_16"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_16_GATE": {
+		"exits": [
+			"REGION_ROUTE_16"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_17": {
+		"exits": [
+			"REGION_ROUTE_16",
+			"REGION_ROUTE_17_ROUTE_18_GATE"
+		],
+		"locations": [
+			"ROUTE_17_HIDDEN_MAX_ELIXER",
+			"ROUTE_17_HIDDEN_MAX_ETHER"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_17_ROUTE_18_GATE": {
+		"exits": [
+			"REGION_ROUTE_17",
+			"REGION_ROUTE_18"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_18": {
+		"exits": [
+			"REGION_FUCHSIA_CITY",
+			"REGION_ROUTE_17_ROUTE_18_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_19": {
+		"exits": [
+			"REGION_ROUTE_20",
+			"REGION_ROUTE_19_FUCHSIA_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_19_FUCHSIA_GATE": {
+		"exits": [
+			"REGION_FUCHSIA_CITY",
+			"REGION_ROUTE_19"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_2:WEST": {
+		"exits": [
+			"REGION_PEWTER_CITY",
+			"REGION_VIRIDIAN_CITY",
+			"REGION_ROUTE_2:NORTHEAST",
+			"REGION_ROUTE_2:SOUTHEAST"
+		],
+		"locations": [
+			"ROUTE_2_DIRE_HIT",
+			"ROUTE_2_HIDDEN_FULL_HEAL",
+			"ROUTE_2_HIDDEN_FULL_RESTORE",
+			"ROUTE_2_HIDDEN_MAX_ETHER",
+			"ROUTE_2_HIDDEN_REVIVE",
+			"ROUTE_2_MAX_POTION"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_2:NORTHEAST": {
+		"exits": [
+			"REGION_ROUTE_2_NUGGET_HOUSE",
+			"REGION_DIGLETTS_CAVE",
+			"REGION_ROUTE_2:SOUTHEAST",
+			"REGION_ROUTE_2:WEST"
+		],
+		"locations": [
+			"ROUTE_2_CARBOS"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_2:SOUTHEAST": {
+		"exits": [
+			"REGION_ROUTE_2_GATE",
+			"REGION_ROUTE_2:NORTHEAST",
+			"REGION_ROUTE_2:WEST"
+		],
+		"locations": [
+			"ROUTE_2_ELIXER"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_2_GATE": {
+		"exits": [
+			"REGION_ROUTE_2:SOUTHEAST"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_2_NUGGET_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_2:NORTHEAST"
+		],
+		"locations": [
+			"NUGGET_FROM_GUY"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_20": {
+		"exits": [
+			"REGION_CINNABAR_ISLAND",
+			"REGION_ROUTE_19",
+			"REGION_SEAFOAM_GYM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_CINNABAR_ROCKS_CLEARED"
+		]
+	},
+	"REGION_ROUTE_21": {
+		"exits": [
+			"REGION_PALLET_TOWN",
+			"REGION_CINNABAR_ISLAND"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_22": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY",
+			"REGION_VICTORY_ROAD_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_23": {
+		"exits": [
+			"REGION_INDIGO_PLATEAU_POKECENTER_1F",
+			"REGION_VICTORY_ROAD"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_24": {
+		"exits": [
+			"REGION_ROUTE_25",
+			"REGION_CERULEAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_25": {
+		"exits": [
+			"REGION_ROUTE_24",
+			"REGION_BILLS_HOUSE"
+		],
+		"locations": [
+			"ROUTE_25_HIDDEN_POTION",
+			"ROUTE_25_PROTEIN",
+			"CLEARED_NUGGET_BRIDGE"
+		],
+		"events": [
+			"EVENT_BEAT_COOLTRAINERM_KEVIN"
+		]
+	},
+	"REGION_ROUTE_26": {
+		"exits": [
+			"REGION_ROUTE_27:EAST",
+			"REGION_VICTORY_ROAD_GATE",
+			"REGION_ROUTE_26_HEAL_HOUSE",
+			"REGION_DAY_OF_WEEK_SIBLINGS_HOUSE"
+		],
+		"locations": [
+			"ROUTE_26_MAX_ELIXER"
+		],
+		"events": [
+			"EVENT_GAVEN_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BETH_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_26_HEAL_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_26"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_27:WEST": {
+		"exits": [
+			"REGION_NEW_BARK_TOWN",
+			"REGION_TOHJO_FALLS:WEST"
+		],
+		"locations": [
+			"ROUTE_27_RARE_CANDY"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_27:CENTER": {
+		"exits": [
+			"REGION_ROUTE_27_SANDSTORM_HOUSE",
+			"REGION_TOHJO_FALLS:EAST",
+			"REGION_ROUTE_27:WEST",
+			"REGION_ROUTE_27:EAST"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_27:EAST": {
+		"exits": [
+			"REGION_ROUTE_26",
+			"REGION_ROUTE_27:CENTER"
+		],
+		"locations": [
+			"ROUTE_27_TM_SOLARBEAM"
+		],
+		"events": [
+			"EVENT_JOSE_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_REENA_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_27_SANDSTORM_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_27:CENTER"
+		],
+		"locations": [
+			"TM37_SANDSTORM"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_28": {
+		"exits": [
+			"REGION_SILVER_CAVE_OUTSIDE",
+			"REGION_ROUTE_28_STEEL_WING_HOUSE",
+			"REGION_VICTORY_ROAD_GATE"
+		],
+		"locations": [
+			"ROUTE_28_HIDDEN_RARE_CANDY"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_28_STEEL_WING_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_28"
+		],
+		"locations": [
+			"TM47_STEEL_WING"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_29": {
+		"exits": [
+			"REGION_CHERRYGROVE_CITY",
+			"REGION_NEW_BARK_TOWN",
+			"REGION_ROUTE_29_ROUTE_46_GATE"
+		],
+		"locations": [
+			"ROUTE_29_POTION",
+			"PINK_BOW_FROM_TUSCANY"
+		],
+		"events": [
+			"EVENT_DUDE_TALKED_TO_YOU",
+			"EVENT_LEARNED_TO_CATCH_POKEMON",
+			"EVENT_MET_TUSCANY_OF_TUESDAY"
+		]
+	},
+	"REGION_ROUTE_29_ROUTE_46_GATE": {
+		"exits": [
+			"REGION_ROUTE_29"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_3": {
+		"exits": [
+			"REGION_PEWTER_CITY",
+			"REGION_ROUTE_4",
+			"REGION_MOUNT_MOON"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_30": {
+		"exits": [
+			"REGION_ROUTE_31",
+			"REGION_CHERRYGROVE_CITY",
+			"REGION_ROUTE_30_BERRY_HOUSE",
+			"REGION_MR_POKEMONS_HOUSE"
+		],
+		"locations": [
+			"ROUTE_30_ANTIDOTE",
+			"ROUTE_30_HIDDEN_POTION"
+		],
+		"events": [
+			"EVENT_JOEY_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_JOEY_HP_UP"
+		]
+	},
+	"REGION_ROUTE_30_BERRY_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_30"
+		],
+		"locations": [
+			"BERRY_FROM_ROUTE_30_HOUSE"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_31": {
+		"exits": [
+			"REGION_ROUTE_30",
+			"REGION_ROUTE_31_VIOLET_GATE",
+			"REGION_DARK_CAVE_VIOLET_ENTRANCE"
+		],
+		"locations": [
+			"ROUTE_31_POKE_BALL",
+			"ROUTE_31_POTION",
+			"TM50_NIGHTMARE"
+		],
+		"events": [
+			"EVENT_WADE_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_GAVE_KENYA"
+		]
+	},
+	"REGION_ROUTE_31_VIOLET_GATE": {
+		"exits": [
+			"REGION_VIOLET_CITY",
+			"REGION_ROUTE_31"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_32": {
+		"exits": [
+			"REGION_VIOLET_CITY",
+			"REGION_ROUTE_33",
+			"REGION_ROUTE_32_POKECENTER_1F",
+			"REGION_ROUTE_32_RUINS_OF_ALPH_GATE",
+			"REGION_UNION_CAVE_1F"
+		],
+		"locations": [
+			"ROUTE_32_GREAT_BALL",
+			"ROUTE_32_HIDDEN_GREAT_BALL",
+			"ROUTE_32_HIDDEN_SUPER_POTION",
+			"ROUTE_32_REPEL",
+			"MIRACLE_SEED_IN_ROUTE_32",
+			"TM05_ROAR",
+			"POISON_BARB_FROM_FRIEDA"
+		],
+		"events": [
+			"EVENT_RALPH_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_LIZ_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_MET_FRIEDA_OF_FRIDAY"
+		]
+	},
+	"REGION_ROUTE_32_POKECENTER_1F": {
+		"exits": [
+			"REGION_ROUTE_32",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [
+			"OLD_ROD"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_32_RUINS_OF_ALPH_GATE": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_ROUTE_32"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_33": {
+		"exits": [
+			"REGION_ROUTE_32",
+			"REGION_AZALEA_TOWN",
+			"REGION_UNION_CAVE_1F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_ANTHONY_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_34": {
+		"exits": [
+			"REGION_GOLDENROD_CITY",
+			"REGION_ROUTE_34_ILEX_FOREST_GATE",
+			"REGION_DAY_CARE"
+		],
+		"locations": [
+			"ROUTE_34_HIDDEN_RARE_CANDY",
+			"ROUTE_34_HIDDEN_SUPER_POTION",
+			"ROUTE_34_NUGGET",
+			"SOFT_SAND_FROM_KATE"
+		],
+		"events": [
+			"EVENT_DAY_CARE_MAN_ON_ROUTE_34",
+			"EVENT_DAY_CARE_MAN_IN_DAY_CARE",
+			"EVENT_DAY_CARE_MON_1",
+			"EVENT_DAY_CARE_MON_2",
+			"EVENT_TODD_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_GINA_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BEAT_OFFICER_KEITH"
+		]
+	},
+	"REGION_ROUTE_34_ILEX_FOREST_GATE": {
+		"exits": [
+			"REGION_ROUTE_34",
+			"REGION_ILEX_FOREST"
+		],
+		"locations": [
+			"TM12_SWEET_SCENT"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_35": {
+		"exits": [
+			"REGION_ROUTE_35_GOLDENROD_GATE",
+			"REGION_ROUTE_35_NATIONAL_PARK_GATE"
+		],
+		"locations": [
+			"ROUTE_35_TM_ROLLOUT"
+		],
+		"events": [
+			"EVENT_IRWIN_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_ARNIE_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BEAT_OFFICER_DIRK"
+		]
+	},
+	"REGION_ROUTE_35_GOLDENROD_GATE": {
+		"exits": [
+			"REGION_ROUTE_35",
+			"REGION_GOLDENROD_CITY"
+		],
+		"locations": [
+			"HP_UP_FROM_RANDY"
+		],
+		"events": [
+			"EVENT_GOT_KENYA"
+		]
+	},
+	"REGION_ROUTE_35_NATIONAL_PARK_GATE": {
+		"exits": [
+			"REGION_NATIONAL_PARK",
+			"REGION_ROUTE_35"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LEFT_MONS_WITH_CONTEST_OFFICER"
+		]
+	},
+	"REGION_ROUTE_36": {
+		"exits": [
+			"REGION_ROUTE_37",
+			"REGION_VIOLET_CITY",
+			"REGION_ROUTE_36_NATIONAL_PARK_GATE",
+			"REGION_ROUTE_36_RUINS_OF_ALPH_GATE"
+		],
+		"locations": [
+			"TM08_ROCK_SMASH",
+			"HARD_STONE_FROM_ARTHUR"
+		],
+		"events": [
+			"EVENT_FOUGHT_SUDOWOODO",
+			"EVENT_MET_FLORIA",
+			"EVENT_ALAN_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_MET_ARTHUR_OF_THURSDAY"
+		]
+	},
+	"REGION_ROUTE_36_NATIONAL_PARK_GATE": {
+		"exits": [
+			"REGION_NATIONAL_PARK",
+			"REGION_ROUTE_36"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_LEFT_MONS_WITH_CONTEST_OFFICER"
+		]
+	},
+	"REGION_ROUTE_36_RUINS_OF_ALPH_GATE": {
+		"exits": [
+			"REGION_ROUTE_36",
+			"REGION_RUINS_OF_ALPH_OUTSIDE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_37": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_ROUTE_36"
+		],
+		"locations": [
+			"ROUTE_37_HIDDEN_ETHER",
+			"MAGNET_FROM_SUNNY"
+		],
+		"events": [
+			"EVENT_MET_SUNNY_OF_SUNDAY"
+		]
+	},
+	"REGION_ROUTE_38": {
+		"exits": [
+			"REGION_ROUTE_39",
+			"REGION_ROUTE_38_ECRUTEAK_GATE"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_DANA_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_CHAD_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_38_ECRUTEAK_GATE": {
+		"exits": [
+			"REGION_ROUTE_38",
+			"REGION_ECRUTEAK_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_39": {
+		"exits": [
+			"REGION_OLIVINE_CITY",
+			"REGION_ROUTE_38",
+			"REGION_ROUTE_39_BARN",
+			"REGION_ROUTE_39_FARMHOUSE"
+		],
+		"locations": [
+			"ROUTE_39_HIDDEN_NUGGET"
+		],
+		"events": [
+			"EVENT_DEREK_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BEAT_POKEFANF_JAIME"
+		]
+	},
+	"REGION_ROUTE_39_BARN": {
+		"exits": [
+			"REGION_ROUTE_39"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_HEALED_MOOMOO"
+		]
+	},
+	"REGION_ROUTE_39_FARMHOUSE": {
+		"exits": [
+			"REGION_ROUTE_39"
+		],
+		"locations": [
+			"TM13_SNORE_FROM_MOOMOO_FARM"
+		],
+		"events": [
+			"EVENT_TALKED_TO_FARMER_ABOUT_MOOMOO"
+		]
+	},
+	"REGION_ROUTE_4": {
+		"exits": [
+			"REGION_ROUTE_3",
+			"REGION_CERULEAN_CITY",
+			"REGION_MOUNT_MOON"
+		],
+		"locations": [
+			"ROUTE_4_HIDDEN_ULTRA_BALL",
+			"ROUTE_4_HP_UP"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_40": {
+		"exits": [
+			"REGION_ROUTE_41",
+			"REGION_OLIVINE_CITY",
+			"REGION_ROUTE_40_BATTLE_TOWER_GATE"
+		],
+		"locations": [
+			"ROUTE_40_HIDDEN_HYPER_POTION",
+			"SHARP_BEAK_FROM_MONICA"
+		],
+		"events": [
+			"EVENT_MET_MONICA_OF_MONDAY"
+		]
+	},
+	"REGION_ROUTE_40_BATTLE_TOWER_GATE": {
+		"exits": [
+			"REGION_ROUTE_40",
+			"REGION_BATTLE_TOWER_OUTSIDE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_41": {
+		"exits": [
+			"REGION_ROUTE_40",
+			"REGION_CIANWOOD_CITY",
+			"REGION_WHIRL_ISLAND_NW",
+			"REGION_WHIRL_ISLAND_NE",
+			"REGION_WHIRL_ISLAND_SW",
+			"REGION_WHIRL_ISLAND_SE"
+		],
+		"locations": [
+			"ROUTE_41_HIDDEN_MAX_ETHER"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_42:WEST": {
+		"exits": [
+			"REGION_ROUTE_42_ECRUTEAK_GATE",
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:WEST",
+			"REGION_ROUTE_42:CENTER"
+		],
+		"locations": [
+			"ROUTE_42_HIDDEN_MAX_POTION",
+			"ROUTE_42_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_42:CENTER": {
+		"exits": [
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:CENTER",
+			"REGION_ROUTE_42:WEST",
+			"REGION_ROUTE_42:EAST"
+		],
+		"locations": [
+			"ROUTE_42_SUPER_POTION"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_42:EAST": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN",
+			"REGION_MOUNT_MORTAR_1F_OUTSIDE:EAST",
+			"REGION_ROUTE_42:CENTER"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TULLY_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_42_ECRUTEAK_GATE": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_ROUTE_42:WEST"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_43": {
+		"exits": [
+			"REGION_LAKE_OF_RAGE",
+			"REGION_ROUTE_43_MAHOGANY_GATE",
+			"REGION_ROUTE_43_GATE"
+		],
+		"locations": [
+			"ROUTE_43_MAX_ETHER"
+		],
+		"events": [
+			"EVENT_BRENT_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_TIFFANY_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_43_GATE": {
+		"exits": [
+			"REGION_ROUTE_43"
+		],
+		"locations": [
+			"TM36_SLUDGE_BOMB"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_43_MAHOGANY_GATE": {
+		"exits": [
+			"REGION_ROUTE_43",
+			"REGION_MAHOGANY_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_44": {
+		"exits": [
+			"REGION_MAHOGANY_TOWN",
+			"REGION_ICE_PATH_1F:WEST"
+		],
+		"locations": [
+			"ROUTE_44_HIDDEN_ELIXER",
+			"ROUTE_44_MAX_REPEL",
+			"ROUTE_44_MAX_REVIVE",
+			"ROUTE_44_ULTRA_BALL"
+		],
+		"events": [
+			"EVENT_VANCE_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_VANCE_CARBOS",
+			"EVENT_WILTON_ASKED_FOR_PHONE_NUMBER"
+		]
+	},
+	"REGION_ROUTE_45": {
+		"exits": [
+			"REGION_BLACKTHORN_CITY",
+			"REGION_ROUTE_46",
+			"REGION_DARK_CAVE_BLACKTHORN_ENTRANCE"
+		],
+		"locations": [
+			"ROUTE_45_ELIXER",
+			"ROUTE_45_HIDDEN_PP_UP",
+			"ROUTE_45_MAX_POTION",
+			"ROUTE_45_NUGGET",
+			"ROUTE_45_REVIVE"
+		],
+		"events": [
+			"EVENT_KENJI_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_PARRY_IRON",
+			"EVENT_PARRY_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_BEAT_CAMPER_QUENTIN"
+		]
+	},
+	"REGION_ROUTE_46": {
+		"exits": [
+			"REGION_ROUTE_29_ROUTE_46_GATE",
+			"REGION_DARK_CAVE_VIOLET_ENTRANCE"
+		],
+		"locations": [
+			"ROUTE_46_X_SPEED"
+		],
+		"events": [
+			"EVENT_ERIN_ASKED_FOR_PHONE_NUMBER",
+			"EVENT_ERIN_CALCIUM"
+		]
+	},
+	"REGION_ROUTE_5": {
+		"exits": [
+			"REGION_CERULEAN_CITY",
+			"REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE",
+			"REGION_ROUTE_5_SAFFRON_GATE",
+			"REGION_ROUTE_5_CLEANSE_TAG_HOUSE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_5_CLEANSE_TAG_HOUSE": {
+		"exits": [
+			"REGION_ROUTE_5"
+		],
+		"locations": [
+			"CLEANSE_TAG"
+		],
+		"events": []
+	},
+	"REGION_ROUTE_5_SAFFRON_GATE": {
+		"exits": [
+			"REGION_ROUTE_5",
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE": {
+		"exits": [
+			"REGION_ROUTE_5",
+			"REGION_UNDERGROUND_PATH"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_6": {
+		"exits": [
+			"REGION_VERMILION_CITY",
+			"REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE",
+			"REGION_ROUTE_6_SAFFRON_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_6_SAFFRON_GATE": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_ROUTE_6"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE": {
+		"exits": [
+			"REGION_ROUTE_6",
+			"REGION_UNDERGROUND_PATH"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_7": {
+		"exits": [
+			"REGION_CELADON_CITY",
+			"REGION_ROUTE_7_SAFFRON_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_7_SAFFRON_GATE": {
+		"exits": [
+			"REGION_ROUTE_7",
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_8": {
+		"exits": [
+			"REGION_LAVENDER_TOWN",
+			"REGION_ROUTE_8_SAFFRON_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_8_SAFFRON_GATE": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_ROUTE_8"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_ROUTE_9": {
+		"exits": [
+			"REGION_ROUTE_10_NORTH",
+			"REGION_CERULEAN_CITY",
+			"REGION_ROCK_TUNNEL_1F"
+		],
+		"locations": [
+			"ROUTE_9_HIDDEN_ETHER"
+		],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER",
+			"REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_RUINS_OF_ALPH_INNER_CHAMBER_TOURISTS",
+			"EVENT_SOLVED_AERODACTYL_PUZZLE"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER",
+			"REGION_RUINS_OF_ALPH_AERODACTYL_WORD_ROOM"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_AERODACTYL_WORD_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_AERODACTYL_ITEM_ROOM",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_HO_OH_CHAMBER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER",
+			"REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_RUINS_OF_ALPH_INNER_CHAMBER_TOURISTS",
+			"EVENT_SOLVED_HO_OH_PUZZLE"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_HO_OH_CHAMBER",
+			"REGION_RUINS_OF_ALPH_HO_OH_WORD_ROOM"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_HO_OH_WORD_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_HO_OH_ITEM_ROOM",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_INNER_CHAMBER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_RUINS_OF_ALPH_HO_OH_CHAMBER",
+			"REGION_RUINS_OF_ALPH_KABUTO_CHAMBER",
+			"REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER",
+			"REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_MADE_UNOWN_APPEAR_IN_RUINS"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_KABUTO_CHAMBER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER",
+			"REGION_RUINS_OF_ALPH_KABUTO_ITEM_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_RUINS_OF_ALPH_INNER_CHAMBER_TOURISTS",
+			"EVENT_SOLVED_KABUTO_PUZZLE",
+			"EVENT_RUINS_OF_ALPH_KABUTO_CHAMBER_RECEPTIONIST"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_KABUTO_ITEM_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_KABUTO_CHAMBER",
+			"REGION_RUINS_OF_ALPH_KABUTO_WORD_ROOM"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_KABUTO_WORD_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_KABUTO_ITEM_ROOM",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER",
+			"REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_RUINS_OF_ALPH_INNER_CHAMBER_TOURISTS",
+			"EVENT_SOLVED_OMANYTE_PUZZLE"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER",
+			"REGION_RUINS_OF_ALPH_OMANYTE_WORD_ROOM"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_OMANYTE_WORD_ROOM": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OMANYTE_ITEM_ROOM",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_RUINS_OF_ALPH_OUTSIDE": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_HO_OH_CHAMBER",
+			"REGION_RUINS_OF_ALPH_KABUTO_CHAMBER",
+			"REGION_RUINS_OF_ALPH_OMANYTE_CHAMBER",
+			"REGION_RUINS_OF_ALPH_AERODACTYL_CHAMBER",
+			"REGION_RUINS_OF_ALPH_INNER_CHAMBER",
+			"REGION_RUINS_OF_ALPH_RESEARCH_CENTER",
+			"REGION_UNION_CAVE_B1F",
+			"REGION_ROUTE_36_RUINS_OF_ALPH_GATE",
+			"REGION_ROUTE_32_RUINS_OF_ALPH_GATE"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TALKED_TO_RUINS_COWARD"
+		]
+	},
+	"REGION_RUINS_OF_ALPH_RESEARCH_CENTER": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFARI_ZONE_BETA": {
+		"exits": [
+			"REGION_SAFARI_ZONE_FUCHSIA_GATE_BETA"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFARI_ZONE_FUCHSIA_GATE_BETA": {
+		"exits": [
+			"REGION_SAFARI_ZONE_BETA",
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFARI_ZONE_MAIN_OFFICE": {
+		"exits": [
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFARI_ZONE_WARDENS_HOME": {
+		"exits": [
+			"REGION_FUCHSIA_CITY"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TALKED_TO_WARDENS_GRANDDAUGHTER"
+		]
+	},
+	"REGION_SAFFRON_CITY": {
+		"exits": [
+			"REGION_FIGHTING_DOJO",
+			"REGION_SAFFRON_GYM",
+			"REGION_SAFFRON_MART",
+			"REGION_SAFFRON_POKECENTER_1F",
+			"REGION_MR_PSYCHICS_HOUSE",
+			"REGION_SAFFRON_MAGNET_TRAIN_STATION",
+			"REGION_SILPH_CO_1F",
+			"REGION_COPYCATS_HOUSE_1F",
+			"REGION_ROUTE_5_SAFFRON_GATE",
+			"REGION_ROUTE_7_SAFFRON_GATE",
+			"REGION_ROUTE_6_SAFFRON_GATE",
+			"REGION_ROUTE_8_SAFFRON_GATE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFFRON_GYM": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_SAFFRON_GYM"
+		],
+		"locations": [
+			"MARSH_BADGE_FROM_SABRINA"
+		],
+		"events": [
+			"EVENT_BEAT_SABRINA",
+			"EVENT_BEAT_MEDIUM_REBECCA",
+			"EVENT_BEAT_MEDIUM_DORIS",
+			"EVENT_BEAT_PSYCHIC_FRANKLIN",
+			"EVENT_BEAT_PSYCHIC_JARED"
+		]
+	},
+	"REGION_SAFFRON_MAGNET_TRAIN_STATION": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_GOLDENROD_MAGNET_TRAIN_STATION"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFFRON_MART": {
+		"exits": [
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFFRON_POKECENTER_1F": {
+		"exits": [
+			"REGION_SAFFRON_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SAFFRON_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_SAFFRON_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SEAFOAM_GYM": {
+		"exits": [
+			"REGION_ROUTE_20"
+		],
+		"locations": [
+			"VOLCANO_BADGE_FROM_BLAINE"
+		],
+		"events": [
+			"EVENT_BEAT_BLAINE",
+			"EVENT_TALKED_TO_SEAFOAM_GYM_GUIDE_ONCE"
+		]
+	},
+	"REGION_SILPH_CO_1F": {
+		"exits": [
+			"REGION_SAFFRON_CITY"
+		],
+		"locations": [
+			"UP_GRADE"
+		],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_ITEM_ROOMS": {
+		"exits": [
+			"REGION_SILVER_CAVE_ROOM_2"
+		],
+		"locations": [
+			"SILVER_CAVE_ITEM_ROOMS_FULL_RESTORE",
+			"SILVER_CAVE_ITEM_ROOMS_MAX_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_OUTSIDE": {
+		"exits": [
+			"REGION_ROUTE_28",
+			"REGION_SILVER_CAVE_POKECENTER_1F",
+			"REGION_SILVER_CAVE_ROOM_1"
+		],
+		"locations": [
+			"SILVER_CAVE_OUTSIDE_HIDDEN_FULL_RESTORE"
+		],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_POKECENTER_1F": {
+		"exits": [
+			"REGION_SILVER_CAVE_OUTSIDE",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_ROOM_1": {
+		"exits": [
+			"REGION_SILVER_CAVE_OUTSIDE",
+			"REGION_SILVER_CAVE_ROOM_2"
+		],
+		"locations": [
+			"SILVER_CAVE_ROOM_1_ESCAPE_ROPE",
+			"SILVER_CAVE_ROOM_1_HIDDEN_DIRE_HIT",
+			"SILVER_CAVE_ROOM_1_HIDDEN_ULTRA_BALL",
+			"SILVER_CAVE_ROOM_1_MAX_ELIXER",
+			"SILVER_CAVE_ROOM_1_PROTEIN",
+			"SILVER_CAVE_ROOM_1_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_ROOM_2": {
+		"exits": [
+			"REGION_SILVER_CAVE_ROOM_1",
+			"REGION_SILVER_CAVE_ROOM_3",
+			"REGION_SILVER_CAVE_ITEM_ROOMS"
+		],
+		"locations": [
+			"SILVER_CAVE_ROOM_2_CALCIUM",
+			"SILVER_CAVE_ROOM_2_HIDDEN_MAX_POTION",
+			"SILVER_CAVE_ROOM_2_PP_UP",
+			"SILVER_CAVE_ROOM_2_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_SILVER_CAVE_ROOM_3": {
+		"exits": [
+			"REGION_SILVER_CAVE_ROOM_2"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_BEAT_RED"
+		]
+	},
+	"REGION_SLOWPOKE_WELL_B1F": {
+		"exits": [
+			"REGION_AZALEA_TOWN",
+			"REGION_SLOWPOKE_WELL_B2F"
+		],
+		"locations": [
+			"SLOWPOKE_WELL_B1F_SUPER_POTION"
+		],
+		"events": [
+			"EVENT_CLEARED_SLOWPOKE_WELL",
+			"EVENT_CHARCOAL_KILN_FARFETCH_D",
+			"EVENT_CHARCOAL_KILN_APPRENTICE",
+			"EVENT_SLOWPOKE_WELL_SLOWPOKES",
+			"EVENT_SLOWPOKE_WELL_KURT"
+		]
+	},
+	"REGION_SLOWPOKE_WELL_B2F": {
+		"exits": [
+			"REGION_SLOWPOKE_WELL_B1F"
+		],
+		"locations": [
+			"SLOWPOKE_WELL_B2F_TM_RAIN_DANCE",
+			"KINGS_ROCK_IN_SLOWPOKE_WELL"
+		],
+		"events": []
+	},
+	"REGION_SOUL_HOUSE": {
+		"exits": [
+			"REGION_LAVENDER_TOWN"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_SPROUT_TOWER_1F": {
+		"exits": [
+			"REGION_VIOLET_CITY",
+			"REGION_SPROUT_TOWER_2F"
+		],
+		"locations": [
+			"SPROUT_TOWER_1F_PARLYZ_HEAL"
+		],
+		"events": []
+	},
+	"REGION_SPROUT_TOWER_2F": {
+		"exits": [
+			"REGION_SPROUT_TOWER_1F",
+			"REGION_SPROUT_TOWER_3F"
+		],
+		"locations": [
+			"SPROUT_TOWER_2F_X_ACCURACY"
+		],
+		"events": []
+	},
+	"REGION_SPROUT_TOWER_3F": {
+		"exits": [
+			"REGION_SPROUT_TOWER_2F"
+		],
+		"locations": [
+			"SPROUT_TOWER_3F_ESCAPE_ROPE",
+			"SPROUT_TOWER_3F_POTION",
+			"HM05_FLASH"
+		],
+		"events": [
+			"EVENT_BEAT_SAGE_LI"
+		]
+	},
+	"REGION_TEAM_ROCKET_BASE_B1F": {
+		"exits": [
+			"REGION_MAHOGANY_MART_1F",
+			"REGION_TEAM_ROCKET_BASE_B2F",
+			"REGION_TEAM_ROCKET_BASE_B1F"
+		],
+		"locations": [
+			"TEAM_ROCKET_BASE_B1F_GUARD_SPEC",
+			"TEAM_ROCKET_BASE_B1F_HIDDEN_REVIVE",
+			"TEAM_ROCKET_BASE_B1F_HYPER_POTION",
+			"TEAM_ROCKET_BASE_B1F_NUGGET"
+		],
+		"events": [
+			"EVENT_SECURITY_CAMERA_1",
+			"EVENT_SECURITY_CAMERA_2",
+			"EVENT_SECURITY_CAMERA_3",
+			"EVENT_SECURITY_CAMERA_4",
+			"EVENT_SECURITY_CAMERA_5",
+			"EVENT_EXPLODING_TRAP_1",
+			"EVENT_EXPLODING_TRAP_2",
+			"EVENT_EXPLODING_TRAP_3",
+			"EVENT_EXPLODING_TRAP_4",
+			"EVENT_EXPLODING_TRAP_5",
+			"EVENT_EXPLODING_TRAP_6",
+			"EVENT_EXPLODING_TRAP_7",
+			"EVENT_EXPLODING_TRAP_8",
+			"EVENT_EXPLODING_TRAP_9",
+			"EVENT_EXPLODING_TRAP_10",
+			"EVENT_EXPLODING_TRAP_11",
+			"EVENT_EXPLODING_TRAP_12",
+			"EVENT_EXPLODING_TRAP_13",
+			"EVENT_EXPLODING_TRAP_14",
+			"EVENT_EXPLODING_TRAP_15",
+			"EVENT_EXPLODING_TRAP_16",
+			"EVENT_EXPLODING_TRAP_17",
+			"EVENT_EXPLODING_TRAP_18",
+			"EVENT_EXPLODING_TRAP_19",
+			"EVENT_EXPLODING_TRAP_20",
+			"EVENT_EXPLODING_TRAP_21",
+			"EVENT_EXPLODING_TRAP_22",
+			"EVENT_TURNED_OFF_SECURITY_CAMERAS"
+		]
+	},
+	"REGION_TEAM_ROCKET_BASE_B2F": {
+		"exits": [
+			"REGION_TEAM_ROCKET_BASE_B1F",
+			"REGION_TEAM_ROCKET_BASE_B3F"
+		],
+		"locations": [
+			"TEAM_ROCKET_BASE_B2F_HIDDEN_FULL_HEAL",
+			"TEAM_ROCKET_BASE_B2F_TM_THIEF",
+			"HM06_WHIRLPOOL"
+		],
+		"events": [
+			"EVENT_TEAM_ROCKET_BASE_B2F_EXECUTIVE",
+			"EVENT_TEAM_ROCKET_BASE_B2F_GRUNT_WITH_EXECUTIVE",
+			"EVENT_TEAM_ROCKET_BASE_B2F_LANCE",
+			"EVENT_BEAT_ROCKET_EXECUTIVEF_2",
+			"EVENT_LANCE_HEALED_YOU_IN_TEAM_ROCKET_BASE",
+			"EVENT_CLEARED_ROCKET_HIDEOUT",
+			"EVENT_ROUTE_43_GATE_ROCKETS",
+			"EVENT_MAHOGANY_TOWN_POKEFAN_M_BLOCKS_GYM",
+			"EVENT_TURNED_OFF_SECURITY_CAMERAS",
+			"EVENT_SECURITY_CAMERA_1",
+			"EVENT_SECURITY_CAMERA_2",
+			"EVENT_SECURITY_CAMERA_3",
+			"EVENT_SECURITY_CAMERA_4",
+			"EVENT_SECURITY_CAMERA_5",
+			"EVENT_OPENED_DOOR_TO_ROCKET_HIDEOUT_TRANSMITTER"
+		]
+	},
+	"REGION_TEAM_ROCKET_BASE_B3F": {
+		"exits": [
+			"REGION_TEAM_ROCKET_BASE_B2F"
+		],
+		"locations": [
+			"TEAM_ROCKET_BASE_B3F_FULL_HEAL",
+			"TEAM_ROCKET_BASE_B3F_ICE_HEAL",
+			"TEAM_ROCKET_BASE_B3F_PROTEIN",
+			"TEAM_ROCKET_BASE_B3F_ULTRA_BALL",
+			"TEAM_ROCKET_BASE_B3F_X_SPECIAL"
+		],
+		"events": [
+			"EVENT_BEAT_ROCKET_EXECUTIVEM_4",
+			"EVENT_LEARNED_HAIL_GIOVANNI",
+			"EVENT_LEARNED_SLOWPOKETAIL",
+			"EVENT_LEARNED_RATICATE_TAIL",
+			"EVENT_OPENED_DOOR_TO_GIOVANNIS_OFFICE"
+		]
+	},
+	"REGION_TIME_CAPSULE": {
+		"exits": [
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_TIN_TOWER_1F": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_TIN_TOWER_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_TIN_TOWER_1F_WISE_TRIO_1",
+			"EVENT_TIN_TOWER_1F_WISE_TRIO_2",
+			"EVENT_FOUGHT_SUICUNE",
+			"EVENT_SAW_SUICUNE_ON_ROUTE_42",
+			"EVENT_SAW_SUICUNE_ON_ROUTE_36",
+			"EVENT_SAW_SUICUNE_AT_CIANWOOD_CITY",
+			"EVENT_GOT_RAINBOW_WING"
+		]
+	},
+	"REGION_TIN_TOWER_2F": {
+		"exits": [
+			"REGION_TIN_TOWER_3F",
+			"REGION_TIN_TOWER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_TIN_TOWER_3F": {
+		"exits": [
+			"REGION_TIN_TOWER_2F",
+			"REGION_TIN_TOWER_4F"
+		],
+		"locations": [
+			"TIN_TOWER_3F_FULL_HEAL"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_4F": {
+		"exits": [
+			"REGION_TIN_TOWER_5F",
+			"REGION_TIN_TOWER_3F"
+		],
+		"locations": [
+			"TIN_TOWER_4F_ESCAPE_ROPE",
+			"TIN_TOWER_4F_HIDDEN_MAX_POTION",
+			"TIN_TOWER_4F_PP_UP",
+			"TIN_TOWER_4F_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_5F": {
+		"exits": [
+			"REGION_TIN_TOWER_6F",
+			"REGION_TIN_TOWER_4F"
+		],
+		"locations": [
+			"TIN_TOWER_5F_HIDDEN_CARBOS",
+			"TIN_TOWER_5F_HIDDEN_FULL_RESTORE",
+			"TIN_TOWER_5F_RARE_CANDY"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_6F": {
+		"exits": [
+			"REGION_TIN_TOWER_7F",
+			"REGION_TIN_TOWER_5F"
+		],
+		"locations": [
+			"TIN_TOWER_6F_MAX_POTION"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_7F": {
+		"exits": [
+			"REGION_TIN_TOWER_6F",
+			"REGION_TIN_TOWER_8F",
+			"REGION_TIN_TOWER_7F",
+			"REGION_TIN_TOWER_9F"
+		],
+		"locations": [
+			"TIN_TOWER_7F_MAX_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_8F": {
+		"exits": [
+			"REGION_TIN_TOWER_7F",
+			"REGION_TIN_TOWER_9F"
+		],
+		"locations": [
+			"TIN_TOWER_8F_FULL_RESTORE",
+			"TIN_TOWER_8F_MAX_ELIXER",
+			"TIN_TOWER_8F_NUGGET"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_9F": {
+		"exits": [
+			"REGION_TIN_TOWER_8F",
+			"REGION_TIN_TOWER_ROOF",
+			"REGION_TIN_TOWER_7F"
+		],
+		"locations": [
+			"TIN_TOWER_9F_HP_UP"
+		],
+		"events": []
+	},
+	"REGION_TIN_TOWER_ROOF": {
+		"exits": [
+			"REGION_TIN_TOWER_9F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_FOUGHT_HO_OH",
+			"EVENT_SET_WHEN_FOUGHT_HO_OH"
+		]
+	},
+	"REGION_TOHJO_FALLS:WEST": {
+		"exits": [
+			"REGION_ROUTE_27:WEST",
+			"REGION_TOHJO_FALLS:EAST"
+		],
+		"locations": [
+			"TOHJO_FALLS_MOON_STONE"
+		],
+		"events": []
+	},
+	"REGION_TOHJO_FALLS:EAST": {
+		"exits": [
+			"REGION_ROUTE_27:CENTER",
+			"REGION_TOHJO_FALLS:WEST"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_TRADE_CENTER": {
+		"exits": [
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_TRAINER_HOUSE_1F": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY",
+			"REGION_TRAINER_HOUSE_B1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_TRAINER_HOUSE_B1F": {
+		"exits": [
+			"REGION_TRAINER_HOUSE_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_UNDERGROUND_PATH": {
+		"exits": [
+			"REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE",
+			"REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE"
+		],
+		"locations": [
+			"UNDERGROUND_PATH_HIDDEN_FULL_RESTORE",
+			"UNDERGROUND_PATH_HIDDEN_X_SPECIAL"
+		],
+		"events": []
+	},
+	"REGION_UNION_CAVE_1F": {
+		"exits": [
+			"REGION_UNION_CAVE_B1F",
+			"REGION_ROUTE_33",
+			"REGION_ROUTE_32"
+		],
+		"locations": [
+			"UNION_CAVE_1F_AWAKENING",
+			"UNION_CAVE_1F_GREAT_BALL",
+			"UNION_CAVE_1F_POTION",
+			"UNION_CAVE_1F_X_ATTACK"
+		],
+		"events": []
+	},
+	"REGION_UNION_CAVE_B1F": {
+		"exits": [
+			"REGION_RUINS_OF_ALPH_OUTSIDE",
+			"REGION_UNION_CAVE_1F",
+			"REGION_UNION_CAVE_B2F"
+		],
+		"locations": [
+			"UNION_CAVE_B1F_TM_SWIFT",
+			"UNION_CAVE_B1F_X_DEFEND"
+		],
+		"events": []
+	},
+	"REGION_UNION_CAVE_B2F": {
+		"exits": [
+			"REGION_UNION_CAVE_B1F"
+		],
+		"locations": [
+			"UNION_CAVE_B2F_ELIXER",
+			"UNION_CAVE_B2F_HYPER_POTION"
+		],
+		"events": []
+	},
+	"REGION_VERMILION_CITY": {
+		"exits": [
+			"REGION_ROUTE_6",
+			"REGION_ROUTE_11",
+			"REGION_VERMILION_FISHING_SPEECH_HOUSE",
+			"REGION_VERMILION_POKECENTER_1F",
+			"REGION_POKEMON_FAN_CLUB",
+			"REGION_VERMILION_MAGNET_TRAIN_SPEECH_HOUSE",
+			"REGION_VERMILION_MART",
+			"REGION_VERMILION_DIGLETTS_CAVE_SPEECH_HOUSE",
+			"REGION_VERMILION_GYM",
+			"REGION_VERMILION_PORT_PASSAGE",
+			"REGION_DIGLETTS_CAVE"
+		],
+		"locations": [
+			"VERMILION_CITY_HIDDEN_FULL_HEAL",
+			"HP_UP_FROM_VERMILION_GUY"
+		],
+		"events": [
+			"EVENT_FOUGHT_SNORLAX"
+		]
+	},
+	"REGION_VERMILION_DIGLETTS_CAVE_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_FISHING_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_GYM": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [
+			"THUNDER_BADGE_FROM_LTSURGE"
+		],
+		"events": [
+			"EVENT_BEAT_LTSURGE",
+			"EVENT_BEAT_GENTLEMAN_GREGORY",
+			"EVENT_BEAT_GUITARIST_VINCENT",
+			"EVENT_BEAT_JUGGLER_HORTON"
+		]
+	},
+	"REGION_VERMILION_MAGNET_TRAIN_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_MART": {
+		"exits": [
+			"REGION_VERMILION_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_POKECENTER_1F": {
+		"exits": [
+			"REGION_VERMILION_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_VERMILION_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VERMILION_PORT": {
+		"exits": [
+			"REGION_VERMILION_PORT_PASSAGE",
+			"REGION_FAST_SHIP_1F"
+		],
+		"locations": [
+			"VERMILION_PORT_HIDDEN_IRON"
+		],
+		"events": [
+			"EVENT_FAST_SHIP_CABINS_SE_SSE_CAPTAINS_CABIN_TWIN_1",
+			"EVENT_FAST_SHIP_CABINS_SE_SSE_GENTLEMAN",
+			"EVENT_FAST_SHIP_PASSENGERS_FIRST_TRIP",
+			"EVENT_FAST_SHIP_FIRST_TIME",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
+			"EVENT_FAST_SHIP_PASSENGERS_EASTBOUND",
+			"EVENT_FAST_SHIP_DESTINATION_OLIVINE",
+			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_2"
+		]
+	},
+	"REGION_VERMILION_PORT_PASSAGE": {
+		"exits": [
+			"REGION_VERMILION_CITY",
+			"REGION_VERMILION_PORT_PASSAGE",
+			"REGION_VERMILION_PORT"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VICTORY_ROAD": {
+		"exits": [
+			"REGION_VICTORY_ROAD_GATE",
+			"REGION_ROUTE_23"
+		],
+		"locations": [
+			"VICTORY_ROAD_FULL_HEAL",
+			"VICTORY_ROAD_FULL_RESTORE",
+			"VICTORY_ROAD_HIDDEN_FULL_HEAL",
+			"VICTORY_ROAD_HIDDEN_MAX_POTION",
+			"VICTORY_ROAD_HP_UP",
+			"VICTORY_ROAD_MAX_REVIVE",
+			"VICTORY_ROAD_TM_EARTHQUAKE"
+		],
+		"events": [
+			"EVENT_RIVAL_VICTORY_ROAD"
+		]
+	},
+	"REGION_VICTORY_ROAD_GATE": {
+		"exits": [
+			"REGION_ROUTE_22",
+			"REGION_ROUTE_26",
+			"REGION_VICTORY_ROAD",
+			"REGION_ROUTE_28"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIOLET_CITY": {
+		"exits": [
+			"REGION_ROUTE_32",
+			"REGION_ROUTE_36",
+			"REGION_VIOLET_MART",
+			"REGION_VIOLET_GYM",
+			"REGION_EARLS_POKEMON_ACADEMY",
+			"REGION_VIOLET_NICKNAME_SPEECH_HOUSE",
+			"REGION_VIOLET_POKECENTER_1F",
+			"REGION_VIOLET_KYLES_HOUSE",
+			"REGION_SPROUT_TOWER_1F",
+			"REGION_ROUTE_31_VIOLET_GATE"
+		],
+		"locations": [
+			"VIOLET_CITY_HIDDEN_HYPER_POTION",
+			"VIOLET_CITY_PP_UP",
+			"VIOLET_CITY_RARE_CANDY"
+		],
+		"events": []
+	},
+	"REGION_VIOLET_GYM": {
+		"exits": [
+			"REGION_VIOLET_CITY"
+		],
+		"locations": [
+			"TM31_MUD_SLAP",
+			"ZEPHYR_BADGE_FROM_FALKNER"
+		],
+		"events": [
+			"EVENT_BEAT_FALKNER",
+			"EVENT_BEAT_BIRD_KEEPER_ROD",
+			"EVENT_BEAT_BIRD_KEEPER_ABE"
+		]
+	},
+	"REGION_VIOLET_KYLES_HOUSE": {
+		"exits": [
+			"REGION_VIOLET_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIOLET_MART": {
+		"exits": [
+			"REGION_VIOLET_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIOLET_NICKNAME_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_VIOLET_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIOLET_POKECENTER_1F": {
+		"exits": [
+			"REGION_VIOLET_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE",
+			"EVENT_REFUSED_TO_TAKE_EGG_FROM_ELMS_AIDE"
+		]
+	},
+	"REGION_VIRIDIAN_CITY": {
+		"exits": [
+			"REGION_ROUTE_2:WEST",
+			"REGION_ROUTE_1",
+			"REGION_ROUTE_22",
+			"REGION_VIRIDIAN_GYM",
+			"REGION_VIRIDIAN_NICKNAME_SPEECH_HOUSE",
+			"REGION_TRAINER_HOUSE_1F",
+			"REGION_VIRIDIAN_MART",
+			"REGION_VIRIDIAN_POKECENTER_1F"
+		],
+		"locations": [
+			"TM42_DREAM_EATER"
+		],
+		"events": []
+	},
+	"REGION_VIRIDIAN_GYM": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY"
+		],
+		"locations": [
+			"EARTH_BADGE_FROM_BLUE"
+		],
+		"events": [
+			"EVENT_BEAT_BLUE"
+		]
+	},
+	"REGION_VIRIDIAN_MART": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIRIDIAN_NICKNAME_SPEECH_HOUSE": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIRIDIAN_POKECENTER_1F": {
+		"exits": [
+			"REGION_VIRIDIAN_CITY",
+			"REGION_POKECENTER_2F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_VIRIDIAN_POKECENTER_2F_BETA": {
+		"exits": [
+			"REGION_VIRIDIAN_POKECENTER_1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_B1F": {
+		"exits": [
+			"REGION_WHIRL_ISLAND_NW",
+			"REGION_WHIRL_ISLAND_NE",
+			"REGION_WHIRL_ISLAND_SW",
+			"REGION_WHIRL_ISLAND_SE",
+			"REGION_WHIRL_ISLAND_B2F",
+			"REGION_WHIRL_ISLAND_CAVE"
+		],
+		"locations": [
+			"WHIRL_ISLAND_B1F_CALCIUM",
+			"WHIRL_ISLAND_B1F_CARBOS",
+			"WHIRL_ISLAND_B1F_ESCAPE_ROPE",
+			"WHIRL_ISLAND_B1F_FULL_RESTORE",
+			"WHIRL_ISLAND_B1F_HIDDEN_FULL_RESTORE",
+			"WHIRL_ISLAND_B1F_HIDDEN_RARE_CANDY",
+			"WHIRL_ISLAND_B1F_HIDDEN_ULTRA_BALL",
+			"WHIRL_ISLAND_B1F_NUGGET"
+		],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_B2F": {
+		"exits": [
+			"REGION_WHIRL_ISLAND_B1F",
+			"REGION_WHIRL_ISLAND_LUGIA_CHAMBER",
+			"REGION_WHIRL_ISLAND_SW"
+		],
+		"locations": [
+			"WHIRL_ISLAND_B2F_FULL_RESTORE",
+			"WHIRL_ISLAND_B2F_MAX_ELIXER",
+			"WHIRL_ISLAND_B2F_MAX_REVIVE"
+		],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_CAVE": {
+		"exits": [
+			"REGION_WHIRL_ISLAND_B1F",
+			"REGION_WHIRL_ISLAND_NW"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_LUGIA_CHAMBER": {
+		"exits": [
+			"REGION_WHIRL_ISLAND_B2F"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_FOUGHT_LUGIA"
+		]
+	},
+	"REGION_WHIRL_ISLAND_NE": {
+		"exits": [
+			"REGION_ROUTE_41",
+			"REGION_WHIRL_ISLAND_B1F"
+		],
+		"locations": [
+			"WHIRL_ISLAND_NE_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_NW": {
+		"exits": [
+			"REGION_ROUTE_41",
+			"REGION_WHIRL_ISLAND_B1F",
+			"REGION_WHIRL_ISLAND_SW",
+			"REGION_WHIRL_ISLAND_CAVE"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_SE": {
+		"exits": [
+			"REGION_ROUTE_41",
+			"REGION_WHIRL_ISLAND_B1F"
+		],
+		"locations": [],
+		"events": []
+	},
+	"REGION_WHIRL_ISLAND_SW": {
+		"exits": [
+			"REGION_ROUTE_41",
+			"REGION_WHIRL_ISLAND_B1F",
+			"REGION_WHIRL_ISLAND_NW",
+			"REGION_WHIRL_ISLAND_B2F"
+		],
+		"locations": [
+			"WHIRL_ISLAND_SW_ULTRA_BALL"
+		],
+		"events": []
+	},
+	"REGION_WILLS_ROOM": {
+		"exits": [
+			"REGION_INDIGO_PLATEAU_POKECENTER_1F",
+			"REGION_KOGAS_ROOM"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_WILLS_ROOM_ENTRANCE_CLOSED",
+			"EVENT_BEAT_ELITE_4_WILL",
+			"EVENT_WILLS_ROOM_EXIT_OPEN"
+		]
+	},
+	"REGION_WISE_TRIOS_ROOM": {
+		"exits": [
+			"REGION_ECRUTEAK_CITY",
+			"REGION_ECRUTEAK_TIN_TOWER_ENTRANCE"
+		],
+		"locations": [],
+		"events": [
+			"EVENT_WISE_TRIOS_ROOM_WISE_TRIO_2",
+			"EVENT_WISE_TRIOS_ROOM_WISE_TRIO_1",
+			"EVENT_KOJI_ALLOWS_YOU_PASSAGE_TO_TIN_TOWER"
+		]
+	}
+}
