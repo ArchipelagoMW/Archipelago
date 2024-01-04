@@ -689,11 +689,11 @@ offline _Dark Souls III_ randomizer].
 <tr><td>AL: Havel&#x27;s Ring+2 (prison tower, rafters)</td><td>On the rafters dropping down from Yorshka&#x27;s Prison Tower to the Church of Yorshka</td></tr>
 <tr><td>AL: Human Dregs (water reserves)</td><td>In the open in the Water Reserves</td></tr>
 <tr><td>AL: Large Soul of a Weary Warrior (left of dark cathedral entrance)</td><td>In front of the Anor Londo cathedral, slightly to the left</td></tr>
+<tr><td>AL: Large Titanite Shard (after light cathedral)</td><td>After the Pontiff fight, on the balcony to the right of the area with the Giant Slaves</td></tr>
 <tr><td>AL: Large Titanite Shard (bottom of the furthest buttress)</td><td>At the base of the rightmost flying buttress leading up to Anor Londo</td></tr>
 <tr><td>AL: Large Titanite Shard (bottom of the nearest buttress)</td><td>On the tower leading back from Anor Londo to the shortcut to Irithyll, down the flying buttress closest to the Darkmoon Tomb entrance.</td></tr>
-<tr><td>AL: Large Titanite Shard (right after light cathedral)</td><td>After the Pontiff fight, on the balcony to the right of the area with the Giant Slaves</td></tr>
+<tr><td>AL: Large Titanite Shard (right after light cathedral)</td><td>After Pontiff&#x27;s cathedral, hugging the wall to the right</td></tr>
 <tr><td>AL: Large Titanite Shard (walkway, side path by cathedral)</td><td>After the Pontiff fight, going back from the Deacons area to the original cathedral, before a dropdown</td></tr>
-<tr><td>AL: Large Titanite Shard ?? (right after light cathedral)</td><td>After Pontiff&#x27;s cathedral, hugging the wall to the right</td></tr>
 <tr><td>AL: Moonlight Arrow (dark cathedral, up right stairs)</td><td>In the Anor Londo cathedral, up the stairs on the right side</td></tr>
 <tr><td>AL: Painting Guardian Gloves (prison tower, rafters)</td><td>On the rafters dropping down from Yorshka&#x27;s Prison Tower to the Church of Yorshka</td></tr>
 <tr><td>AL: Painting Guardian Gown (prison tower, rafters)</td><td>On the rafters dropping down from Yorshka&#x27;s Prison Tower to the Church of Yorshka</td></tr>
@@ -904,7 +904,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>CD: Twinkling Titanite (path, lizard #1)</td><td>Dropped by the first Crystal Lizard after the Crystal Sage fight</td></tr>
 <tr><td>CD: Twinkling Titanite (path, lizard #2)</td><td>Dropped by the second Crystal Lizard after the Crystal Sage fight</td></tr>
 <tr><td>CD: Undead Bone Shard (gravestone by white tree)</td><td>In the graveyard with the Infested Corpses, on a coffin partly hanging off of the ledge</td></tr>
-<tr><td>CD: Undead Hunter Charm (lower roofs, up stairs between buttresses</td><td>In the area after the cathedral roof guarded by a Cathedral Evangelist. Can be jumped to from a flying buttress or by going around and back</td></tr>
+<tr><td>CD: Undead Hunter Charm (lower roofs, up stairs between buttresses)</td><td>In the area after the cathedral roof guarded by a Cathedral Evangelist. Can be jumped to from a flying buttress or by going around and back</td></tr>
 <tr><td>CD: Winged Spear (kill Patches)</td><td>Dropped by Patches when killed in his own armor.</td></tr>
 <tr><td>CD: Xanthous Crown (Heysel Corpse-Grub in Rosaria&#x27;s Bed Chamber)</td><td>Dropped by the Heysel Corpse-grub in Rosaria&#x27;s Bed Chamber</td></tr>
 <tr><td>CD: Young White Branch (by white tree #1)</td><td>By the White Birch tree in the Infested Corpse graveyard</td></tr>
@@ -974,7 +974,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>DH: Ring of Steel Protection+3 (ledge before church)</td><td>After the dropdown where an angel first targets you, on an exposed edge to the left. Difficult to get without killing the angel.</td></tr>
 <tr><td>DH: Rusted Coin (behind fountain after church)</td><td>After exiting the building with the Lothric Knights where the front crumbles, behind the fountain on the right side.</td></tr>
 <tr><td>DH: Rusted Gold Coin (shop)</td><td>Sold by Stone-humped Hag, or in her ashes</td></tr>
-<tr><td>DH: Siegbr√§u (Lapp)</td><td>Given by Lapp after collecting the Titanite Slab in Earthen Peak Ruins, or left after Demon Princes fight, or dropped upon death if not given.</td></tr>
+<tr><td>DH: Siegbr‰u (Lapp)</td><td>Given by Lapp after collecting the Titanite Slab in Earthen Peak Ruins, or left after Demon Princes fight, or dropped upon death if not given.</td></tr>
 <tr><td>DH: Small Envoy Banner (boss drop)</td><td>Found in the small room after beating Demon Prince.</td></tr>
 <tr><td>DH: Soul of a Crestfallen Knight (church, altar)</td><td>In the building where the front crumbles, guarded by the two Lothric Knights at the front of the chapel.</td></tr>
 <tr><td>DH: Soul of a Weary Warrior (castle overhang)</td><td>The bait item at the start of the area which falls down with you into the ruined building below.</td></tr>
@@ -1067,7 +1067,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FK: Titanite Shard (keep ruins bonfire island, under ramp)</td><td>Under the ramp leading down from the Keep Ruins bonfire</td></tr>
 <tr><td>FK: Titanite Shard (swamp by right island)</td><td>Behind a tree patrolled by an Elder Ghru close to the ritual fire stairs</td></tr>
 <tr><td>FK: Twinkling Dragon Head Stone (Hawkwood drop)</td><td>Dropped by Hawkwood after killing him in the Abyss Watchers arena, after running up to the altar in Archdragon Peak. Twinkling Dragon Torso Stone needs to be acquired first.</td></tr>
-<tr><td>FK: Twinkling Titanite (keep proper, lizardl)</td><td>Dropped by the Crystal Lizard on the balcony behind the Old Wolf of Farron bonfire</td></tr>
+<tr><td>FK: Twinkling Titanite (keep proper, lizard)</td><td>Dropped by the Crystal Lizard on the balcony behind the Old Wolf of Farron bonfire</td></tr>
 <tr><td>FK: Undead Bone Shard (pavilion by keep ruins bonfire island)</td><td>In a standalone pavillion down the ramp from Keep Ruins bonfire and to the right</td></tr>
 <tr><td>FK: Watchdogs of Farron (Old Wolf)</td><td>Given by Old Wolf of Farron.</td></tr>
 <tr><td>FK: Wolf Ring+1 (keep ruins bonfire island, outside building)</td><td>To the right of the building with the Keep Ruins bonfire, when approached from the ritual fire</td></tr>
@@ -1342,7 +1342,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>FS: Yhorm&#x27;s Great Machete (Ludleth for Yhorm)</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Yhorm&#x27;s Greatshield (Ludleth for Yhorm)</td><td>Boss weapon for Yhorm the Giant</td></tr>
 <tr><td>FS: Young Dragon Ring (Orbeck for one scroll and buying three spells)</td><td>Given by Orbeck after purchasing four sorceries from him, and giving him one scroll, as a non-sorcerer.</td></tr>
-<tr><td>FSBT: Armor of the Sun (crow for Siegbr√§u)</td><td>Trade Siegbrau with crow</td></tr>
+<tr><td>FSBT: Armor of the Sun (crow for Siegbr‰u)</td><td>Trade Siegbrau with crow</td></tr>
 <tr><td>FSBT: Blessed Gem (crow for Moaning Shield)</td><td>Trade Moaning Shield with crow</td></tr>
 <tr><td>FSBT: Covetous Silver Serpent Ring (illusory wall past rafters)</td><td>From the Firelink Shrine roof, past the rafters and an illusory wall</td></tr>
 <tr><td>FSBT: Estus Ring (rafters)</td><td>Dropping down from the Bell Tower to where Irina eventually resides</td></tr>
@@ -1535,7 +1535,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>IBV: Large Titanite Shard (ascent, down ladder in last building)</td><td>Outside the final building before Pontiff&#x27;s cathedral, coming from the sewer, dropping down to the left before the entrance</td></tr>
 <tr><td>IBV: Large Titanite Shard (central, balcony just before plaza)</td><td>From the Central Irithyll bonfire, on the balcony with the second Fire Witch.</td></tr>
 <tr><td>IBV: Large Titanite Shard (central, side path after first fountain)</td><td>Up the stairs from the Central Irithyll bonfire, on a railing to the right</td></tr>
-<tr><td>IBV: Large Titanite Shard (great hall, mob)</td><td>After Pontiff&#x27;s cathedral, hugging the wall to the right</td></tr>
+<tr><td>IBV: Large Titanite Shard (great hall, mob)</td><td>One-time drop from the Silver Knight staring at the painting in Irithyll</td></tr>
 <tr><td>IBV: Large Titanite Shard (path to Dorhys)</td><td>Before the area with Cathedral Evangelist Dorhys, past an illusory railing past the Central Irithyll Fire Witches</td></tr>
 <tr><td>IBV: Large Titanite Shard (plaza, balcony overlooking ascent)</td><td>On the path from Central Irithyll bonfire, instead of going left toward the Church of Yorshka, going right, on the balcony</td></tr>
 <tr><td>IBV: Large Titanite Shard (plaza, by stairs to church)</td><td>To the left of the stairs leading up to the Church of Yorshka from Central Irithyll</td></tr>
@@ -1555,7 +1555,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>IBV: Rusted Gold Coin (Distant Manor, down stairs)</td><td>Dropping down after the first set of stairs leading from Distant Manor bonfire</td></tr>
 <tr><td>IBV: Rusted Gold Coin (descent, side path)</td><td>Down the stairs from the graveyard after Church of Yorshka, guarded by the group of dogs in the left path</td></tr>
 <tr><td>IBV: Shriving Stone (descent, dark room rafters)</td><td>On the rafters in the dark area with the Irithyllian slaves</td></tr>
-<tr><td>IBV: Siegbr√§u (Siegward)</td><td>Given by Siegward meeting him in the Irithyll kitchen after the Sewer Centipedes.</td></tr>
+<tr><td>IBV: Siegbr‰u (Siegward)</td><td>Given by Siegward meeting him in the Irithyll kitchen after the Sewer Centipedes.</td></tr>
 <tr><td>IBV: Smough&#x27;s Great Hammer (great hall, chest)</td><td>In a chest up the stairs in the room with the Silver Knight staring at the painting</td></tr>
 <tr><td>IBV: Soul of Pontiff Sulyvahn</td><td>Dropped by Pontiff Sulyvahn</td></tr>
 <tr><td>IBV: Soul of a Weary Warrior (ascent, by final staircase)</td><td>Toward the end of the path from the sewer leading up to Pontiff&#x27;s cathedral, to the left of the final staircase</td></tr>
@@ -1617,7 +1617,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>ID: Soul of a Weary Warrior (by drop to pit)</td><td>At the end of the room with many peasant hollows after the Estus Shard minic</td></tr>
 <tr><td>ID: Soul of a Weary Warrior (stairs between pit and B3)</td><td>Going past the Giant Slave to the sewer with the rats and the basilisks, up the first flight of stairs</td></tr>
 <tr><td>ID: Titanite Chunk (balcony above pit, lizard)</td><td>Dropped by the Crystal Lizard where the Giant Slave is resting his head</td></tr>
-<tr><td>ID: Titanite Chunk (pit, miniboss drop</td><td>Drop from the Giant Slave</td></tr>
+<tr><td>ID: Titanite Chunk (pit, miniboss drop)</td><td>Drop from the Giant Slave</td></tr>
 <tr><td>ID: Titanite Scale (B2 far, lizard)</td><td>Dropped by the Crystal Lizard on the bottom corridor opposite from the bonfire in Irithyll Dungeon where a Wretch attacks you</td></tr>
 <tr><td>ID: Titanite Scale (B3 far, mimic in hall)</td><td>Dropped by the mimic in the main Jailer cell block</td></tr>
 <tr><td>ID: Titanite Slab (Siegward)</td><td>Given by Siegward after unlocking Old Cell or on quest completion</td></tr>
@@ -1722,7 +1722,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>PC: Rusted Gold Coin (halls above swamp)</td><td>In the corridors leading to the Profaned Capital toxic pool</td></tr>
 <tr><td>PC: Rusted Gold Coin (palace, mimic in far room)</td><td>Dropped by the right mimic surrounded by the Jailers to the right of the Profaned Flame</td></tr>
 <tr><td>PC: Shriving Stone (swamp, by chapel door)</td><td>At the far end of the Profaned Capital toxic pool, to the left of the door leading to the Monstrosities of Sin</td></tr>
-<tr><td>PC: Siegbr√§u (Siegward after killing boss)</td><td>Given by Siegward after helping him defeat Yhorm the Giant. You must talk to him before Emma teleports you.</td></tr>
+<tr><td>PC: Siegbr‰u (Siegward after killing boss)</td><td>Given by Siegward after helping him defeat Yhorm the Giant. You must talk to him before Emma teleports you.</td></tr>
 <tr><td>PC: Soul of Yhorm the Giant</td><td>Dropped by Yhorm the Giant</td></tr>
 <tr><td>PC: Storm Ruler (Siegward)</td><td>Dropped by Siegward upon death or quest completion.</td></tr>
 <tr><td>PC: Storm Ruler (boss room)</td><td>To the right of Yhorm&#x27;s throne</td></tr>
@@ -1888,7 +1888,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Shira&#x27;s Gloves (Shira&#x27;s room after killing ashes NPC)</td><td>Found in Shira&#x27;s room in Ringed City after killing her in post-Filianore Ringed City.</td></tr>
 <tr><td>RC: Shira&#x27;s Trousers (Shira&#x27;s room after killing ashes NPC)</td><td>Found in Shira&#x27;s room in Ringed City after killing her in post-Filianore Ringed City.</td></tr>
 <tr><td>RC: Shriving Stone (wall tower, bottom floor center)</td><td>In the cylindrical building before the long stairs with many Harald Legion Knights, in the center structure on the first floor.</td></tr>
-<tr><td>RC: Siegbr√§u (Lapp)</td><td>Given by Lapp within the Ringed Inner Wall.</td></tr>
+<tr><td>RC: Siegbr‰u (Lapp)</td><td>Given by Lapp within the Ringed Inner Wall.</td></tr>
 <tr><td>RC: Simple Gem (grave, up stairs after first drop)</td><td>In Shared Grave, following the path after falling down from the crumbling stairs and continuing upward.</td></tr>
 <tr><td>RC: Soul of Darkeater Midir</td><td>Dropped by Darkeater Midir</td></tr>
 <tr><td>RC: Soul of Slave Knight Gael</td><td>Dropped by Slave Knight Gael</td></tr>
@@ -2042,7 +2042,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>UG: Ember (shop)</td><td>Sold by Untended Graves Handmaid</td></tr>
 <tr><td>UG: Eyes of a Fire Keeper (shrine, Irina&#x27;s room)</td><td>Behind an illusory wall, in the same location Irina sits in Firelink Shrine</td></tr>
 <tr><td>UG: Hidden Blessing (cemetery, behind coffin)</td><td>Behind the coffin that had a Titanite Shard in Cemetary of Ash</td></tr>
-<tr><td>UG: Hornet Ring (environs, right of main path)</td><td>On a cliffside to the right of the main path leading up to dark Firelink Shrine, after Abyss Watchers is defeated.</td></tr>
+<tr><td>UG: Hornet Ring (environs, right of main path after killing FK boss)</td><td>On a cliffside to the right of the main path leading up to dark Firelink Shrine, after Abyss Watchers is defeated.</td></tr>
 <tr><td>UG: Life Ring+3 (shrine, behind big throne)</td><td>Behind Prince Lothric&#x27;s throne</td></tr>
 <tr><td>UG: Priestess Ring (shop)</td><td>Sold or dropped by Untended Graves Handmaid. Killing her is not recommended</td></tr>
 <tr><td>UG: Ring of Steel Protection+1 (environs, behind bell tower)</td><td>Behind Bell Tower to the right</td></tr>
@@ -2135,7 +2135,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>US: Rusted Coin (wooden ledge above Dilapidated Bridge)</td><td>On a wooden ledge near the Dilapidated Bridge bonfire. Must be jumped to from near Cathedral Evangelist enemy</td></tr>
 <tr><td>US: Saint&#x27;s Talisman (chasm, by ladder)</td><td>From the ravine accessible via Grave Key or dropping near Eygon, before ladder leading up to Irina of Carim</td></tr>
 <tr><td>US: Sharp Gem (lizard by Dilapidated Bridge)</td><td>Drop by Crystal Lizard near Dilapidated Bridge bonfire.</td></tr>
-<tr><td>US: Siegbr√§u (Siegward)</td><td>Given by Siegward after helping him defeat the Fire Demon.</td></tr>
+<tr><td>US: Siegbr‰u (Siegward)</td><td>Given by Siegward after helping him defeat the Fire Demon.</td></tr>
 <tr><td>US: Small Leather Shield (first building, hanging corpse by entrance)</td><td>Hanging corpse in the first building, to the right of the entrance</td></tr>
 <tr><td>US: Soul of a Nameless Soldier (top of tower)</td><td>At the top of the tower where Giant shoots arrows</td></tr>
 <tr><td>US: Soul of an Unknown Traveler (chasm crypt)</td><td>In the skeleton area accessible Grave Key or dropping down from near Eygon</td></tr>

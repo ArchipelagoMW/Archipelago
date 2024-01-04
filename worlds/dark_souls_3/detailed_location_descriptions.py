@@ -43,7 +43,9 @@ if __name__ == '__main__':
             name = item.split(" - ")[0]
             descriptions_by_location[(region, name)].append(slot['Text'])
             descriptions_by_item[name].append(slot['Text'])
-    original_descriptions_by_location = dict(descriptions_by_location)
+    counts_by_location = {
+        location: len(descriptions) for (location, descriptions) in descriptions_by_location.items()
+    }
 
 
     location_names_to_descriptions = {}
@@ -69,9 +71,8 @@ if __name__ == '__main__':
         candidates = descriptions_by_location[key]
         if len(candidates) == 0:
             raise Exception(
-                f'There are only {len(original_descriptions_by_location[key])} locations in the ' +
-                f'offline randomizer matching "{match[1]}: {match[2]}", but there are more in ' +
-                'Archipelago.'
+                f'There are only {counts_by_location[key]} locations in the offline randomizer ' +
+                f'matching "{match[1]}: {match[2]}", but there are more in Archipelago.'
             )
 
         location_names_to_descriptions[location.name] = candidates.pop(0)
