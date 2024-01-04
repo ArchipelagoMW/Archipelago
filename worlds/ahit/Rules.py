@@ -245,7 +245,7 @@ def set_rules(world: World):
     if world.options.ActRandomizer.value == 0:
         set_default_rift_rules(world)
 
-    table = location_table | event_locs
+    table = {**location_table, **event_locs}
     location: Location
     for (key, data) in table.items():
         if not is_location_valid(world, key):
@@ -560,6 +560,10 @@ def set_expert_rules(world: World):
         set_rule(loc, lambda state: True)
 
     set_rule(world.multiworld.get_location("Act Completion (Dead Bird Studio)", world.player), lambda state: True)
+
+    # Expert: Clear Dead Bird Studio Basement without Hookshot
+    for loc in world.multiworld.get_region("Dead Bird Studio Basement", world.player).locations:
+        set_rule(loc, lambda state: True)
 
     # Expert: get to and clear Twilight Bell without Dweller Mask.
     # Dweller Mask OR Sprint Hat OR Brewing Hat OR Time Stop + Umbrella required to complete act.
