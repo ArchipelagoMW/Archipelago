@@ -2189,7 +2189,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             def shutdown():
                 response_queue.put(None)
-                logging.getLogger().removeHandler(self)
+                logging.getLogger().removeHandler(handler)
 
             logging.getLogger().addHandler(handler)
             self.output("Discord Link established.")
