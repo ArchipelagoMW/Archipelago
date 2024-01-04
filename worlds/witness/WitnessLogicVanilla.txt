@@ -474,7 +474,7 @@ Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x2
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Black/White Squares & Shapers
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
-158707 - 0x09F98 (Desert Laser Redirect) - True - True
+158707 - 0x09F98 (Desert Laser Redirect Control) - True - True
 158220 - 0x18590 (Transparent) - True - Symmetry
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
