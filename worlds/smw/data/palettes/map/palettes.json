@@ -11,8 +11,7 @@
         "original.mw3",
         "original_special.mw3",
         "sepia.mw3",
-        "snow_day.mw3",
-        "virtual_boy.mw3"
+        "snow_day.mw3"
     ],
     "yoshi": [
         "atardecer.mw3",
@@ -25,7 +24,6 @@
         "snow_day.mw3",
         "sunset.mw3",
         "tritanopia.mw3",
-        "virtual_boy.mw3",
         "yochis_ailand.mw3"
     ],
     "vanilla": [
@@ -40,7 +38,6 @@
         "original_special.mw3",
         "purple.mw3",
         "sepia.mw3",
-        "virtual_boy.mw3",
         "witches_cauldron.mw3"
     ],
     "forest": [
@@ -54,8 +51,7 @@
         "original.mw3",
         "original_special.mw3",
         "sepia.mw3",
-        "snow_day.mw3",
-        "virtual_boy.mw3"
+        "snow_day.mw3"
     ],
     "valley": [
         "bowser.mw3",
@@ -71,8 +67,7 @@
         "purple_blue.mw3",
         "sepia.mw3",
         "snow.mw3",
-        "Tamaulipas.mw3",
-        "virtual_boy.mw3"
+        "Tamaulipas.mw3"
     ],
     "special": [
         "black_out.mw3",
@@ -82,7 +77,6 @@
         "light_pollution_map.mw3",
         "original.mw3",
         "purple.mw3",
-        "virtual_boy.mw3",
         "white_special.mw3"
     ],
     "star": [
@@ -93,7 +87,6 @@
         "original_special.mw3",
         "pink_star.mw3",
         "sepia.mw3",
-        "virtual_boy.mw3",
         "yellow_star.mw3"
     ]
 }

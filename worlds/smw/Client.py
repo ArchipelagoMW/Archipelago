@@ -27,6 +27,7 @@ SMW_HIDDEN_1UP_DATA     = WRAM_START + 0x1F3C
 SMW_BONUS_BLOCK_DATA    = WRAM_START + 0x1A000
 SMW_BLOCKSANITY_DATA    = WRAM_START + 0x1A400
 SMW_BLOCKSANITY_FLAGS   = WRAM_START + 0x1A010
+SMW_LEVEL_CLEAR_FLAGS   = WRAM_START + 0x1A200
 SMW_SPECIAL_WORLD_CLEAR = WRAM_START + 0x1FFF
 
 
@@ -60,7 +61,7 @@ SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1A00E
 
-SMW_BLOCKSANITY_BLOCK_COUNT = 658
+SMW_BLOCKSANITY_BLOCK_COUNT = 582
 
 SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
 SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
@@ -255,7 +256,6 @@ class SMWSNIClient(SNIClient):
 
     async def game_watcher(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-
         
         boss_state = await snes_read(ctx, SMW_BOSS_STATE_ADDR, 0x1)
         game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
@@ -328,8 +328,9 @@ class SMWSNIClient(SNIClient):
         blocksanity_data = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_DATA, SMW_BLOCKSANITY_BLOCK_COUNT))
         blocksanity_flags = bytearray(await snes_read(ctx, SMW_BLOCKSANITY_FLAGS, 0xC))
         blocksanity_active = await snes_read(ctx, SMW_BLOCKSANITY_ACTIVE_ADDR, 0x1)
+        level_clear_flags = bytearray(await snes_read(ctx, SMW_LEVEL_CLEAR_FLAGS, 0x60))
         from worlds.smw.Rom import item_rom_data, ability_rom_data, trap_rom_data, icon_rom_data
-        from worlds.smw.Levels import location_id_to_level_id, level_info_dict
+        from worlds.smw.Levels import location_id_to_level_id, level_info_dict, level_blocks_data
         from worlds import AutoWorldRegister
         for loc_name, level_data in location_id_to_level_id.items():
             loc_id = AutoWorldRegister.world_types[ctx.game].location_name_to_id[loc_name]
@@ -537,6 +538,7 @@ class SMWSNIClient(SNIClient):
         new_hidden_1up = False
         new_bonus_block = False
         new_blocksanity = False
+        new_blocksanity_flags = False
         i = 0
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
@@ -595,12 +597,30 @@ class SMWSNIClient(SNIClient):
 
                     new_bonus_block = True
                 elif level_data[1] >= 100:
+                    # Blocksanity flag Check
                     block_index = level_data[1] - 100
                     blocksanity_data[block_index] = 1
                     new_blocksanity = True
+
+                    # All blocksanity blocks flag
+                    new_blocksanity_flags = True
+                    for block_id in level_blocks_data[level_data[0]]:
+                        if blocksanity_data[block_id] != 1:
+                            new_blocksanity_flags = False
+                            continue
+                    if new_blocksanity_flags is True:
+                        progress_byte = (level_data[0] // 8)
+                        progress_bit  = 7 - (level_data[0] % 8)
+                        data = blocksanity_flags[progress_byte]
+                        new_data = data | (1 << progress_bit)
+                        blocksanity_flags[progress_byte] = new_data
                 else:
                     if level_data[0] in SMW_UNCOLLECTABLE_LEVELS:
                         continue
+
+                    # Handle map indicators
+                    flag = 1 if level_data[1] == 0 else 2
+                    level_clear_flags[level_data[0]] |= flag 
 
                     event_id = event_data[level_data[0]]
                     event_id_value = event_id + level_data[1]
@@ -650,7 +670,10 @@ class SMWSNIClient(SNIClient):
             snes_buffered_write(ctx, SMW_BONUS_BLOCK_DATA, bytes(bonus_block_data))
         if new_blocksanity:
             snes_buffered_write(ctx, SMW_BLOCKSANITY_DATA, bytes(blocksanity_data))
+        if new_blocksanity_flags:
+            snes_buffered_write(ctx, SMW_BLOCKSANITY_FLAGS, bytes(blocksanity_flags))
         if new_events > 0:
+            snes_buffered_write(ctx, SMW_LEVEL_CLEAR_FLAGS, bytes(level_clear_flags))
             snes_buffered_write(ctx, SMW_PROGRESS_DATA, bytes(progress_data))
             snes_buffered_write(ctx, SMW_PATH_DATA, bytes(path_data))
             old_events = await snes_read(ctx, SMW_NUM_EVENTS_ADDR, 0x1)

@@ -845,6 +845,12 @@ def generate_curated_level_palette_data(rom, world: World):
     rom.write_byte(EATEN_BERRY_ADDR + 0x05, 0x04)
     rom.write_byte(EATEN_BERRY_ADDR + 0x07, 0x04)
 
+    # Fix title screen changing background colors
+    rom.write_bytes(0x1D30, bytearray([0xEA, 0xEA, 0xEA]))
+
+    # Skips level intros automatically
+    rom.write_byte(0x4896, 0x80)
+
 def generate_curated_map_palette_data(rom, world: World):
     PALETTE_MAP_CODE_ADDR = 0x88200
     PALETTE_UPLOADER_EDIT = 0x88400
@@ -984,6 +990,9 @@ def generate_curated_map_palette_data(rom, world: World):
             rom.write_bytes(PALETTE_MAP_PTR_ADDR + ((map_num*3)<<8) + (palette*3), bytearray([data_ptr & 0xFF, (data_ptr>>8)&0xFF, (data_ptr>>16)&0xFF]))
             # Write data
             rom.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset, read_palette_file(current_map, maps[current_map][palette], "map"))
+            # Update map mario palette
+            chosen_palette = world.options.mario_palette.value
+            rom.write_bytes(PALETTE_MAP_DATA_ADDR + pal_offset + 206, bytes(ow_mario_palettes[chosen_palette]))
             pal_offset += 0x11C
             bank_palette_count += 1
         map_num += 1

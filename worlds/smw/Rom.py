@@ -967,7 +967,7 @@ def handle_ram(rom):
     rom.write_bytes(INIT_SRAM_ADDR + 0x003D, bytearray([0xCA]))                               #                             dex 
     rom.write_bytes(INIT_SRAM_ADDR + 0x003E, bytearray([0x10, 0xD8]))                         #                             bpl -
     rom.write_bytes(INIT_SRAM_ADDR + 0x0040, bytearray([0xC2, 0x10]))                         #                             rep #$10
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0042, bytearray([0xA2, 0x91, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
+    rom.write_bytes(INIT_SRAM_ADDR + 0x0042, bytearray([0xA2, 0x45, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
     rom.write_bytes(INIT_SRAM_ADDR + 0x0045, bytearray([0xBF, 0x00, 0x0A, 0x70]))             # -                           lda !blocksanity_data_sram,x
     rom.write_bytes(INIT_SRAM_ADDR + 0x0049, bytearray([0x9F, 0x00, 0xA4, 0x7F]))             #                             sta !blocksanity_data_flags,x
     rom.write_bytes(INIT_SRAM_ADDR + 0x004D, bytearray([0xCA]))                               #                             dex 
@@ -995,7 +995,7 @@ def handle_ram(rom):
     rom.write_bytes(INIT_SRAM_ADDR + 0x008E, bytearray([0x9F, 0x20, 0x09, 0x70]))             #                             sta !checkpoints_sram,x
     rom.write_bytes(INIT_SRAM_ADDR + 0x0092, bytearray([0xCA]))                               #                             dex 
     rom.write_bytes(INIT_SRAM_ADDR + 0x0093, bytearray([0x10, 0xE9]))                         #                             bpl -
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0095, bytearray([0xA2, 0x91, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
+    rom.write_bytes(INIT_SRAM_ADDR + 0x0095, bytearray([0xA2, 0x45, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
     rom.write_bytes(INIT_SRAM_ADDR + 0x0098, bytearray([0x9F, 0x00, 0x0A, 0x70]))             # -                           sta !blocksanity_data_sram,x
     rom.write_bytes(INIT_SRAM_ADDR + 0x009C, bytearray([0xCA]))                               #                             dex 
     rom.write_bytes(INIT_SRAM_ADDR + 0x009D, bytearray([0x10, 0xF9]))                         #                             bpl -
@@ -1027,7 +1027,7 @@ def handle_ram(rom):
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0037, bytearray([0xCA]))                               #                             dex 
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0038, bytearray([0x10, 0xD8]))                         #                             bpl -
     rom.write_bytes(SAVE_SRAM_ADDR + 0x003A, bytearray([0xC2, 0x10]))                         #                             rep #$10
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x003C, bytearray([0xA2, 0x91, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
+    rom.write_bytes(SAVE_SRAM_ADDR + 0x003C, bytearray([0xA2, 0x45, 0x02]))                   #                             ldx.w #!blocksanity_locs-1
     rom.write_bytes(SAVE_SRAM_ADDR + 0x003F, bytearray([0xBF, 0x00, 0xA4, 0x7F]))             # -                           lda !blocksanity_data_flags,x
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0043, bytearray([0x9F, 0x00, 0x0A, 0x70]))             #                             sta !blocksanity_data_sram,x
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0047, bytearray([0xCA]))                               #                             dex 
@@ -1058,7 +1058,7 @@ def handle_ram(rom):
     rom.write_bytes(INIT_RAM_ADDR + 0x0023, bytearray([0x9D, 0x3C, 0x1F]))                    #                             sta !checkpoints_flags,x
     rom.write_bytes(INIT_RAM_ADDR + 0x0026, bytearray([0xCA]))                                #                             dex 
     rom.write_bytes(INIT_RAM_ADDR + 0x0027, bytearray([0x10, 0xEC]))                          #                             bpl -
-    rom.write_bytes(INIT_RAM_ADDR + 0x0029, bytearray([0xA2, 0x91, 0x02]))                    #                             ldx.w #!blocksanity_locs-1
+    rom.write_bytes(INIT_RAM_ADDR + 0x0029, bytearray([0xA2, 0x45, 0x02]))                    #                             ldx.w #!blocksanity_locs-1
     rom.write_bytes(INIT_RAM_ADDR + 0x002C, bytearray([0x9F, 0x00, 0xA4, 0x7F]))              # -                           sta !blocksanity_data_flags,x
     rom.write_bytes(INIT_RAM_ADDR + 0x0030, bytearray([0xCA]))                                #                             dex 
     rom.write_bytes(INIT_RAM_ADDR + 0x0031, bytearray([0x10, 0xF9]))                          #                             bpl -
