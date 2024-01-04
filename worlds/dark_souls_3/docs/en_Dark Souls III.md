@@ -29,4 +29,4 @@ Location names have to pack a lot of information into very little space. To bett
 check out the [location guide], which explains all the names used in locations and provides more
 detailed descriptions for each individual location.
 
-[location guide]: /tutorial/Dark Souls III/locations/en
+[location guide]: /tutorial/Dark%20Souls%20III/locations/en
