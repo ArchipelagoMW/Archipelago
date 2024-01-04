@@ -141,7 +141,6 @@ def set_rules(world):
             # TODO: more ways to win with Exodia
             lambda state: state.has_all(["Exodia", "Heart of the Underdog"], player),
         "Can Last Turn Win":
-            # TODO: add more ways to set it up
             lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and \
                 (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"], player)
                 or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
@@ -338,7 +337,7 @@ def set_rules(world):
         "TD24 Victory in 5 Turns":
             lambda state: state.yugioh06_difficulty(player, 3),
         "TD25 Moth Grows Up":
-            lambda state: state.has("Perfectly Ultimate Great Moth and its required cards") and
+            lambda state: state.has("Perfectly Ultimate Great Moth and its required cards", player) and
                           state.has_all(["Gokipon", "Howling Insect"], player) and
                           state.yugioh06_difficulty(player, 3),
         "TD26 Magnetic Power":

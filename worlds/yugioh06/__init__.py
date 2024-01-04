@@ -23,7 +23,7 @@ from .Rules import set_rules
 from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
-from .RomValues import structure_deck_selection, banlist_ids
+from .RomValues import structure_deck_selection, banlist_ids, function_addresses
 
 if "worlds._bizhawk" not in sys.modules:
     bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
@@ -104,7 +104,8 @@ class Yugioh06World(World):
     set_rules = set_rules
 
     item_name_groups = {
-        "Core Booster": core_booster
+        "Core Booster": core_booster,
+        "Campaign Boss Beaten": ["Tier 1 Beaten", "Tier 2 Beaten", "Tier 3 Beaten", "Tier 4 Beaten", "Tier 5 Beaten"]
     }
 
     def __init__(self, world: MultiWorld, player: int):
@@ -229,20 +230,47 @@ class Yugioh06World(World):
                                    opponent.name, get_opponent_locations(opponent))
             entrance = Entrance(self.player, unlock_item, campaign)
             if opponent.tier == 5 and opponent.column > 2:
-                challenge_unlock_amount = 0
+                unlock_amount = 0
+                is_challenge = True
                 match opponent.column:
                     case 3:
-                        challenge_unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                        if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1:
+                            unlock_item = "Challenge Beaten"
+                            unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                            is_challenge = True
+                        else:
+                            unlock_item = "Campaign Boss Beaten"
+                            unlock_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
+                            is_challenge = False
                     case 4:
-                        challenge_unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                        if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1:
+                            unlock_item = "Challenge Beaten"
+                            unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                            is_challenge = True
+                        else:
+                            unlock_item = "Campaign Boss Beaten"
+                            unlock_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
+                            is_challenge = False
                     case 5:
-                        challenge_unlock_amount = self.options.final_campaign_boss_challenges.value
-                entrance.access_rule = \
-                    (lambda opp: lambda state: state.has("Challenge Beaten", self.player, challenge_unlock_amount) and
-                                               opp.rule(state))(opponent)
+                        if self.options.final_campaign_boss_unlock_condition.value == 1:
+                            unlock_item = "Challenge Beaten"
+                            unlock_amount = self.options.final_campaign_boss_challenges.value
+                            is_challenge = True
+                        else:
+                            unlock_item = "Campaign Boss Beaten"
+                            unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
+                            is_challenge = False
+                if is_challenge:
+                    entrance.access_rule = \
+                    (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
+                        opp.rule(state))(opponent, unlock_item, unlock_amount)
+                else:
+                    entrance.access_rule = \
+                        (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
+                                                                 opp.rule(state))(opponent, unlock_item, unlock_amount)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
-                state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+                    state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -279,9 +307,12 @@ class Yugioh06World(World):
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
         challenge = list((Limited_Duels | Theme_Duels).keys())
-        noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value,
-                                   self.options.fourth_tier_5_campaign_boss_challenges.value,
-                                   self.options.final_campaign_boss_challenges.value,
+        noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value
+                                   if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
+                                   self.options.fourth_tier_5_campaign_boss_challenges.value
+                                   if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
+                                   self.options.final_campaign_boss_challenges.value
+                                   if self.options.final_campaign_boss_unlock_condition.value == 1 else 0,
                                    self.options.number_of_challenges.value)
 
         self.random.shuffle(challenge)
@@ -328,9 +359,21 @@ class Yugioh06World(World):
             inventory_map[index] = inventory_map[index] | (1 << bit)
 
         rom_data[0xe9dc:0xe9fc] = inventory_map
-        rom_data[0xeefa] = self.options.third_tier_5_campaign_boss_challenges.value
-        rom_data[0xef10] = self.options.fourth_tier_5_campaign_boss_challenges.value
-        rom_data[0xef22] = self.options.final_campaign_boss_challenges.value
+        rom_data[0xeefa] = self.options.third_tier_5_campaign_boss_challenges.value \
+            if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1 \
+            else self.options.third_tier_5_campaign_boss_campaign_opponents.value
+        rom_data[0xef10] = self.options.fourth_tier_5_campaign_boss_challenges.value \
+            if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 \
+            else self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
+        rom_data[0xef22] = self.options.final_campaign_boss_challenges.value \
+            if self.options.final_campaign_boss_unlock_condition.value == 1 \
+            else self.options.final_campaign_boss_campaign_opponents.value
+        rom_data[0xeef8] = \
+            int((function_addresses.get(self.options.third_tier_5_campaign_boss_unlock_condition.value) - 0xeefa) / 2)
+        rom_data[0xef0e] = \
+            int((function_addresses.get(self.options.fourth_tier_5_campaign_boss_unlock_condition.value) - 0xef10) / 2)
+        rom_data[0xef20] = \
+            int((function_addresses.get(self.options.final_campaign_boss_unlock_condition.value) - 0xef22) / 2)
         rom_data[0xf4734:0xf4738] = self.options.starting_money.value.to_bytes(4, 'little')
         rom_data[0xe70c] = self.options.money_reward_multiplier.value
         if self.options.normalize_boosters_packs.value:
