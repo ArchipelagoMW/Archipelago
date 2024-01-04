@@ -12,8 +12,8 @@ from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_ru
 
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_dictionary
-from .Locations import DarkSouls3Location, DS3LocationCategory, DS3LocationData, location_tables, location_dictionary, location_name_groups, region_order
-from .Options import DarkSouls3Options, EarlySmallLothricBanner, RandomizeWeaponLevelOption, SoulLocationsOption, UpgradeLocationsOption, UpgradedWeaponLocationsOption
+from .Locations import DarkSouls3Location, DS3LocationData, location_tables, location_descriptions, location_dictionary, location_name_groups, region_order
+from .Options import DarkSouls3Options, EarlySmallLothricBanner
 
 
 class DarkSouls3Web(WebWorld):
@@ -53,7 +53,6 @@ class DarkSouls3World(World):
     web = DarkSouls3Web()
     data_version = 9
     base_id = 100000
-    enabled_location_categories: Set[DS3LocationCategory]
     required_client_version = (0, 4, 2)
     item_name_to_id = {data.name: data.ap_code for data in item_dictionary.values()}
     location_name_to_id = {
@@ -70,6 +69,7 @@ class DarkSouls3World(World):
             "Cinders of a Lord - Lothric Prince"
         }
     }
+    location_descriptions = location_descriptions
 
     yhorm_location: Optional[DS3BossInfo]
     """If enemy randomization is enabled, this is the boss who Yhorm the Giant should replace.
@@ -87,34 +87,22 @@ class DarkSouls3World(World):
 
 
     def generate_early(self):
-        if self.options.enable_weapon_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.WEAPON)
-            # Always make this available early because so many items are useless without it.
-            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 1
-        if self.options.enable_shield_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.SHIELD)
-        if self.options.enable_armor_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.ARMOR)
-        if self.options.enable_ring_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.RING)
-        if self.options.enable_spell_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.SPELL)
-        if self.options.enable_unique_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.UNIQUE)
-        if self.options.enable_key_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.KEY)
-            if self.options.early_banner == "early_global":
-                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
-            elif self.options.early_banner == "early_local":
-                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
-        if self.options.enable_misc_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.MISC)
-        if self.options.enable_health_locations:
-            self.enabled_location_categories.add(DS3LocationCategory.HEALTH)
-        if self.options.upgrade_locations != "not_randomized":
-            self.enabled_location_categories.add(DS3LocationCategory.UPGRADE)
-        if self.options.soul_locations != "not_randomized":
-            self.enabled_location_categories.add(DS3LocationCategory.SOUL)
+        if not self.options.enable_weapon_locations:
+            self._exclude_location_group("Weapons")
+        if not self.options.enable_shield_locations:
+            self._exclude_location_group("Shields")
+        if not self.options.enable_armor_locations:
+            self._exclude_location_group("Armor")
+        if not self.options.enable_ring_locations:
+            self._exclude_location_group("Rings")
+        if not self.options.enable_spell_locations:
+            self._exclude_location_group("Spells")
+        if not self.options.enable_key_locations:
+            self._exclude_location_group("Progression")
+        if not self.options.enable_misc_locations:
+            self._exclude_location_group("Unique")
+        if not self.options.enable_health_upgrade_locations:
+            self._exclude_location_group("Healing")
 
         # Randomize Yhorm manually so that we know where to place the Storm Ruler.
         if self.options.randomize_enemies:
@@ -135,20 +123,25 @@ class DarkSouls3World(World):
             self.yhorm_location = default_yhorm_location
 
 
+    def _exclude_location_group(self, name: str):
+        """Adds all the locations in the given location group to the set of excluded locations."""
+        self.options.exclude_locations.value.update(location_name_groups[name])
+
+
     def _allow_boss_for_yhorm(self, boss: DS3BossInfo) -> bool:
         """Returns whether boss is a valid location for Yhorm in this seed."""
 
         if not self.options.enable_dlc and boss.dlc: return False
 
-        if not self.options.enable_weapon_locations:
-            # If weapons aren't randomized, make sure the player can get to the normal Storm Ruler
-            # location before they need to get through Yhorm.
+        if not self.is_location_available("PC: Storm Ruler (boss room)"):
+            # If the Storm Ruler isn't randomized, make sure the player can get to the normal Storm
+            # Ruler location before they need to get through Yhorm.
             if boss.before_storm_ruler: return False
 
-            # If keys also aren't randomized, make sure Yhorm isn't blocking access to the Small
-            # Doll or it won't be possible to get into Profaned Capital before beating him.
+            # If the Small Doll also wasn't randomized, make sure Yhorm isn't blocking access to it
+            # or it won't be possible to get into Profaned Capital before beating him.
             if (
-                not self.options.enable_key_locations
+                not self.is_location_available("CD: Small Doll (boss drop)")
                 and boss.name in {"Crystal Sage", "Deacons of the Deep"}
             ):
                 return False
@@ -157,11 +150,11 @@ class DarkSouls3World(World):
 
         # Cemetery of Ash has very few locations and all of them are excluded by default, so only
         # allow Yhorm as Iudex Gundyr if there's at least one available location.
-        excluded = self.multiworld.exclude_locations[self.player].value
+        excluded = self.options.exclude_locations.value
         return any(
             self.is_location_available(location)
             and location.name not in excluded
-            and location.name != "CA: Coiled Sword"
+            and location.name != "CA: Coiled Sword (boss drop)"
             for location in location_tables["Cemetery of Ash"]
         )
 
@@ -260,20 +253,17 @@ class DarkSouls3World(World):
 
         # Use this to un-exclude event locations so the fill doesn't complain about items behind
         # them being unreachable.
-        excluded = self.multiworld.exclude_locations[self.player].value
+        excluded = self.options.exclude_locations.value
 
         for location in location_table:
             if self.is_location_available(location):
-                new_location = DarkSouls3Location(
-                    self.player,
-                    location,
-                    new_region
-                )
-
-                # Mark Red Eye Orb as missable if key locations aren't being randomized, because the
-                # Lift Chamber Key is missable by default.
+                new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
-                    not self.options.enable_key_locations
+                    location.missable and self.options.missable_locations == "unimportant"
+                ) or (
+                    # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
+                    # the latter is missable by default.
+                    not self.is_location_available("FS: Lift Chamber Key (Leonhard)")
                     and location.name == "HWL: Red Eye Orb (wall tower, miniboss)"
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
@@ -319,7 +309,7 @@ class DarkSouls3World(World):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
             item = item_dictionary[location.data.default_item_name]
-            if item.category == DS3ItemCategory.SKIP:
+            if item.skip:
                 num_required_extra_items += 1
             elif not item.unique:
                 itempool.append(self.create_item(location.data.default_item_name))
@@ -336,7 +326,7 @@ class DarkSouls3World(World):
         removable_items = [item for item in itempool if item.classification == ItemClassification.filler]
 
         guaranteed_items = {"Path of the Dragon": 1}
-        guaranteed_items.update(self.multiworld.guaranteed_items[self.player].value)
+        guaranteed_items.update(self.options.guaranteed_items)
         if len(removable_items) == 0 and num_required_extra_items == 0:
             raise Exception("Can't add Path of the Dragon to the item pool")
 
@@ -385,11 +375,12 @@ class DarkSouls3World(World):
             num_required_extra_items -= 1
             itempool.append(self.create_item(item.name))
 
-        # Extra filler items for locations containing SKIP items
+        # Extra filler items for locations containing skip items
         itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
 
         # Add items to itempool
         self.multiworld.itempool += itempool
+
 
 
     def create_item(self, item: Union[str, DS3ItemData]) -> Item:
@@ -414,10 +405,10 @@ class DarkSouls3World(World):
             and not data.name == "Pyromancy FLame"
         ):
             # if the user made an error and set a min higher than the max we default to the max
-            max_5 = self.multiworld.max_levels_in_5[self.player]
-            min_5 = min(self.multiworld.min_levels_in_5[self.player], max_5)
-            max_10 = self.multiworld.max_levels_in_10[self.player]
-            min_10 = min(self.multiworld.min_levels_in_10[self.player], max_10)
+            max_5 = self.options.max_levels_in_5
+            min_5 = min(self.options.min_levels_in_5, max_5)
+            max_10 = self.options.max_levels_in_10
+            min_10 = min(self.options.min_levels_in_10, max_10)
             weapon_level_percentage = self.options.randomize_weapon_level_percentage
 
             if self.multiworld.random.randint(0, 99) < weapon_level_percentage:
@@ -474,14 +465,16 @@ class DarkSouls3World(World):
                 self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        if self.options.enable_key_locations:
+        if self.is_location_available("FS: Lift Chamber Key (Leonhard)"):
             self._add_location_rule("HWL: Red Eye Orb (wall tower, miniboss)",
                                     "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring (drop from B1 towards pit)",
                                 "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring (Siegward's cell)", "Old Cell Key")
-        self._add_location_rule("UG: Hornet Ring (environs, right of main path)",
-                                "Small Lothric Banner")
+        self._add_location_rule(
+            "UG: Hornet Ring (environs, right of main path after killing FK boss)",
+            "Small Lothric Banner"
+        )
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
 
         # Ashes
@@ -742,22 +735,14 @@ class DarkSouls3World(World):
             "CKG: Drakeblood Armor (tomb, after killing AP mausoleum NPC)",
             "CKG: Drakeblood Gauntlets (tomb, after killing AP mausoleum NPC)",
             "CKG: Drakeblood Leggings (tomb, after killing AP mausoleum NPC)",
-        ], lambda state: state.can_reach(
-            "AP: Drakeblood Greatsword (mausoleum, NPC drop)",
-            "Location",
-            self.player
-        ))
+        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
             "FK: Havel's Helm (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Armor (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Gauntlets (upper keep, after killing AP belfry roof NPC)",
             "FK: Havel's Leggings (upper keep, after killing AP belfry roof NPC)",
-        ], lambda state: state.can_reach(
-            "AP: Dragon Tooth (belfry roof, NPC drop)",
-            "Location",
-            self.player
-        ))
+        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
             "RC: Dragonhead Shield (streets monument, across bridge)",
@@ -775,10 +760,10 @@ class DarkSouls3World(World):
             if self.is_location_available(location):
                 if location.shop:
                     add_item_rule(self.multiworld.get_location(location.name, self.player),
-                                    lambda item: (
-                                        item.player != self.player or
-                                        (item.data.count == 1 and not item.data.souls)
-                                    ))
+                                  lambda item: (
+                                      item.player != self.player or
+                                      (item.data.count == 1 and not item.data.souls)
+                                  ))
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
@@ -800,6 +785,33 @@ class DarkSouls3World(World):
             state.has("Cinders of a Lord - Yhorm the Giant", self.player) and \
             state.has("Cinders of a Lord - Aldrich", self.player) and \
             state.has("Cinders of a Lord - Lothric Prince", self.player)
+
+        unnecessary_locations = (
+            self.options.exclude_locations.value
+            if self.options.excluded_locations == "unnecessary"
+            else set()
+        ).union(
+            {location for location in self.multiworld.get_locations() if location.missable}
+            if self.options.missable_locations == "unnecessary"
+            else set()
+        )
+        for location in unnecessary_locations:
+            if self.is_location_available(location):
+                add_item_rule(self.multiworld.get_location(location, self.player),
+                              lambda item: item.classification != ItemClassification.progression)
+
+        randomized_items = {
+            item.name for item in self.multiworld.itempool
+            if item.player == self.player
+        }
+        # Always make this available early because so many items are useless without it.
+        if 'Pyromancy Flame' in randomized_items:
+            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 1
+        if 'Small Lothric Banner' in randomized_items:
+            if self.options.early_banner == "early_global":
+                self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
+            elif self.options.early_banner == "early_local":
+                self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
 
 
     def _add_location_rule(self, location: Union[str, List[str]], rule: Union[CollectionRule, str]) -> None:
@@ -835,10 +847,17 @@ class DarkSouls3World(World):
             data = location_dictionary[location]
 
         return (
-            data.category in self.enabled_location_categories and
-            (not data.npc or self.options.enable_npc_locations) and
-            (not data.dlc or self.options.enable_dlc) and
-            (not data.ngp or self.options.enable_ngp)
+            not data.is_event
+            and (not data.dlc or self.options.enable_dlc)
+            and (not data.ngp or self.options.enable_ngp)
+            and not (
+                self.options.excluded_locations == "unrandomized"
+                and data.name in self.options.exclude_locations
+            )
+            and not (
+                self.options.missable_locations == "unrandomized"
+                and data.missable
+            )
         )
 
 
@@ -863,7 +882,7 @@ class DarkSouls3World(World):
         self._fill_local_item("Coiled Sword", ["Cemetery of Ash", "Firelink Shrine"])
 
         # If upgrade smoothing is enabled, make sure one raw gem is available early for SL1 players
-        if self.options.upgrade_locations == "smooth":
+        if self.options.smooth_upgrade_items:
             self._fill_local_item("Raw Gem", [
                 "Cemetery of Ash",
                 "Firelink Shrine",
@@ -998,7 +1017,7 @@ class DarkSouls3World(World):
                     location.item = new_item
                     new_item.location = location
 
-        if self.options.upgrade_locations == "smooth":
+        if self.options.smooth_upgrade_items:
             base_names = {
                 "Titanite Shard", "Large Titanite Shard", "Titanite Chunk", "Titanite Slab",
                 "Titanite Scale", "Twinkling Titanite", "Farron Coal", "Sage's Coal", "Giant's Coal",
@@ -1006,25 +1025,13 @@ class DarkSouls3World(World):
             }
             smooth_items([item for item in all_item_order if item.base_name in base_names])
 
-        if self.options.soul_locations == "smooth":
-            # Shuffle larger boss souls among themselves because they're all worth 10-20k souls in
-            # no particular order and that's a lot more interesting than getting them in the same
-            # order every single run.
-            shuffled_order = self._shuffle([
-                item.name for item in item_dictionary.values()
-                if item.category == DS3ItemCategory.BOSS and item.souls and item.souls >= 10000
+        if self.options.smooth_soul_items:
+            smooth_items([
+                item for item in all_item_order
+                if item.souls and item.classification != ItemClassification.progression
             ])
-            shuffled = set(shuffled_order)
-            item_order: List[DS3ItemData] = []
-            for item in all_item_order:
-                if not item.souls: continue
-                if item.base_name in shuffled:
-                    item_order.append(item_dictionary[shuffled_order.pop(0)])
-                else:
-                    item_order.append(item)
-            smooth_items(item_order)
 
-        if self.options.upgraded_weapon_locations == "smooth":
+        if self.options.smooth_upgraded_weapons:
             upgraded_weapons = [
                 location.item
                 for location in self.multiworld.get_filled_locations()
@@ -1099,8 +1106,8 @@ class DarkSouls3World(World):
                 "no_equip_load": self.options.no_equip_load.value,
                 "enable_dlc": self.options.enable_dlc.value,
                 "enable_ngp": self.options.enable_ngp.value,
-                "smooth_soul_locations": self.options.soul_locations == "smooth",
-                "smooth_upgrade_locations": self.options.upgrade_locations == "smooth",
+                "smooth_soul_locations": self.options.smooth_soul_items,
+                "smooth_upgrade_locations": self.options.smooth_upgrade_items,
                 "randomize_enemies": self.options.randomize_enemies.value,
                 "randomize_mimics_with_enemies": self.options.randomize_mimics_with_enemies.value,
                 "randomize_small_crystal_lizards_with_enemies": self.options.randomize_small_crystal_lizards_with_enemies.value,

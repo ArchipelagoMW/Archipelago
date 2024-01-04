@@ -59,7 +59,7 @@ all_bosses = [
             region = "Catacombs of Carthus", locations = {
         "FK: Soul of the Blood of the Wolf",
         "FK: Cinders of a Lord - Abyss Watcher",
-        "UG: Hornet Ring (environs, right of main path)",
+        "UG: Hornet Ring (environs, right of main path after killing FK boss)",
         "FS: Undead Legion Helm (shop after killing FK boss)",
         "FS: Undead Legion Armor (shop after killing FK boss)",
         "FS: Undead Legion Gauntlet (shop after killing FK boss)",
@@ -126,7 +126,7 @@ all_bosses = [
         "FS: Gundyr's Armor (shop after killing UG boss)",
         "FS: Gundyr's Gauntlets (shop after killing UG boss)",
         "FS: Gundyr's Leggings (shop after killing UG boss)",
-        "UG: Hornet Ring (environs, right of main path)",
+        "UG: Hornet Ring (environs, right of main path after killing FK boss)",
         "UG: Chaos Blade (environs, left of shrine)",
         "UG: Blacksmith Hammer (shrine, Andre's room)",
         "UG: Eyes of a Fire Keeper (shrine, Irina's room)",
