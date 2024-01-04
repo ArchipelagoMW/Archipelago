@@ -7,14 +7,14 @@
 <h2 style="text-transform:none";>Required Software:</h2>
  `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts)
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)<br>
-    1. `3.0.0 OpenKH Mod Manager with Panacea`<br>
-    2. `Install mod from KH2FM-Mods-Num/GoA-ROM-Edition`<br>
-    3. `Setup Lua Backend From the 3.0.0 KH2Randomizer.exe per the setup guide linked above`<br>
+    1. `3.2.0 OpenKH Mod Manager with Panacea`<br>
+    2. `Lua Backend from the OpenKH Mod Manager`
+    3. `Install the mod KH2FM-Mods-Num/GoA-ROM-Edition using OpenKH Mod Manager`<br>
 
 - Needed for Archipelago 
     1. [`ArchipelagoKH2Client.exe`](https://github.com/ArchipelagoMW/Archipelago/releases)<br>
-    2. `Install mod from JaredWeakStrike/APCompanion`<br>
-    3. `Install mod from KH2FM-Mods-equations19/auto-save`<br>
+    2. `Install the mod from JaredWeakStrike/APCompanion using OpenKH Mod Manager`<br>
+    3. `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`<br>
     4. `AP Randomizer Seed`
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
