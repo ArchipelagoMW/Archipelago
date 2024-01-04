@@ -11,8 +11,7 @@ Al usar BizHawk, esta guía solo es aplicable en los sistemas de Windows y Linux
   - Instrucciones de instalación detalladas para BizHawk se pueden encontrar en el enlace de arriba.
   - Los usuarios de Windows deben ejecutar el instalador de prerrequisitos (prereq installer) primero, que también se 
     encuentra en el enlace de arriba.
-- El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (selecciona `Pokemon Client` durante la instalación).
+- El cliente incorporado de Archipelago, que se puede encontrar [aquí](https://github.com/ArchipelagoMW/Archipelago/releases).
 - Los ROMs originales de Pokémon Red y/o Blue. La comunidad de Archipelago no puede proveerlos.
 
 ## Software Opcional
