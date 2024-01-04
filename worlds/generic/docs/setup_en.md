@@ -30,7 +30,7 @@ server and some clients.
 you are hosting on. The default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of
 other guides on the internet that will be more suited to your hardware.
 
-- The `Clients` are what are used to connect your game to the multiworld. Some games use a client that is automatically
+- The clients are what are used to connect your game to the multiworld. Some games use a client that is automatically
 installed with an Archipelago installation. You can access those clients via the launcher or by navigating
 to your Archipelago installation. 
 
