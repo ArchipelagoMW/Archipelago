@@ -9,7 +9,7 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool):
+def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, atlantica: bool):
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
@@ -134,15 +134,16 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool):
     regions["Monstro"].locations.append("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Low Chest"),
-    regions["Atlantica"].locations.append("Atlantica Sunken Ship In Flipped Boat Chest"),
-    regions["Atlantica"].locations.append("Atlantica Sunken Ship Seabed Chest"),
-    regions["Atlantica"].locations.append("Atlantica Sunken Ship Inside Ship Chest"),
-    regions["Atlantica"].locations.append("Atlantica Ariel's Grotto High Chest"),
-    regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Middle Chest"),
-    regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Low Chest"),
-    regions["Atlantica"].locations.append("Atlantica Ursula's Lair Use Fire on Urchin Chest"),
-    regions["Atlantica"].locations.append("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"),
-    regions["Atlantica"].locations.append("Atlantica Triton's Palace White Trinity Chest"),
+    if atlantica:
+        regions["Atlantica"].locations.append("Atlantica Sunken Ship In Flipped Boat Chest"),
+        regions["Atlantica"].locations.append("Atlantica Sunken Ship Seabed Chest"),
+        regions["Atlantica"].locations.append("Atlantica Sunken Ship Inside Ship Chest"),
+        regions["Atlantica"].locations.append("Atlantica Ariel's Grotto High Chest"),
+        regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Middle Chest"),
+        regions["Atlantica"].locations.append("Atlantica Ariel's Grotto Low Chest"),
+        regions["Atlantica"].locations.append("Atlantica Ursula's Lair Use Fire on Urchin Chest"),
+        regions["Atlantica"].locations.append("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"),
+        regions["Atlantica"].locations.append("Atlantica Triton's Palace White Trinity Chest"),
     regions["Halloween Town"].locations.append("Halloween Town Moonlight Hill White Trinity Chest"),
     regions["Halloween Town"].locations.append("Halloween Town Bridge Under Bridge"),
     regions["Halloween Town"].locations.append("Halloween Town Boneyard Tombstone Puzzle Chest"),
@@ -266,13 +267,15 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool):
     regions["Agrabah"].locations.append("Chronicles Agrabah")
     regions["Monstro"].locations.append("Chronicles Monstro")
    #regions["100 Acre Wood"].locations.append("Chronicles 100 Acre Wood")
-    regions["Atlantica"].locations.append("Chronicles Atlantica")
+    if atlantica:
+        regions["Atlantica"].locations.append("Chronicles Atlantica")
     regions["Halloween Town"].locations.append("Chronicles Halloween Town")
    #regions["Neverland"].locations.append("Chronicles Neverland")
     
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
-    regions["Atlantica"].locations.append("Ansem's Secret Report 3")
+    if atlantica:
+        regions["Atlantica"].locations.append("Ansem's Secret Report 3")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 4")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 5")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 6")

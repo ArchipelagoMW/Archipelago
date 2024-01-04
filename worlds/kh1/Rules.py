@@ -30,10 +30,10 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
     return False
 
 def has_slides(state: CollectionState, player: int) -> bool:
-    return state.has("Slide 1", player) and state.has("Slide 2", player) and state.has("Slide 3", player) and state.has("Slide 4", player) and state.has("Slide 5", player) and state.has("Slide 6", player)
+    return state.has("Slide 1", player) #and state.has("Slide 2", player) and state.has("Slide 3", player) and state.has("Slide 4", player) and state.has("Slide 5", player) and state.has("Slide 6", player)
 
 def has_evidence(state: CollectionState, player: int) -> bool:
-    return state.has("Footprints", player) or state.has("Stench", player) or state.has("Claw Marks", player) or state.has("Antenna", player)
+    return state.has("Footprints", player) #or state.has("Stench", player) or state.has("Claw Marks", player) or state.has("Antenna", player)
 
 def can_glide(state: CollectionState, player: int) -> bool:
     return state.has("Glide", player) or state.has("Super Glide", player)
@@ -47,7 +47,7 @@ def has_item(state: CollectionState, player: int, item) -> bool:
 def has_at_least(state: CollectionState, player: int, item, x) -> bool:
     return state.count(item, player) >= x
 
-def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool):
+def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, atlantica: bool):
     #Location rules.
     #Keys
    #multiworld.get_location("Destiny Islands Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "")
@@ -151,15 +151,16 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool):
    #multiworld.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"                     , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"                  , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
    #multiworld.get_location("Monstro Chamber 6 Low Chest"                                                  , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Sunken Ship In Flipped Boat Chest"                                  , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Sunken Ship Seabed Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Sunken Ship Inside Ship Chest"                                      , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Ariel's Grotto High Chest"                                          , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Ariel's Grotto Middle Chest"                                        , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Atlantica Ariel's Grotto Low Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                             , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_item(state, player, "Mermaid Kick")
-   #multiworld.get_location("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"                      , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Atlantica Triton's Palace White Trinity Chest"                                , player).access_rule = lambda state: has_item(state, player, "White Trinity")
+    if atlantica:
+       #multiworld.get_location("Atlantica Sunken Ship In Flipped Boat Chest"                                  , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Sunken Ship Seabed Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Sunken Ship Inside Ship Chest"                                      , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Ariel's Grotto High Chest"                                          , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Ariel's Grotto Middle Chest"                                        , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Ariel's Grotto Low Chest"                                           , player).access_rule = lambda state: has_item(state, player, "")
+        multiworld.get_location("Atlantica Ursula's Lair Use Fire on Urchin Chest"                             , player).access_rule = lambda state: has_item(state, player, "Progressive Fire") and has_item(state, player, "Mermaid Kick")
+       #multiworld.get_location("Atlantica Undersea Gorge Jammed by Ariel's Grotto Chest"                      , player).access_rule = lambda state: has_item(state, player, "")
+        multiworld.get_location("Atlantica Triton's Palace White Trinity Chest"                                , player).access_rule = lambda state: has_item(state, player, "White Trinity")
     multiworld.get_location("Halloween Town Moonlight Hill White Trinity Chest"                            , player).access_rule = lambda state: has_item(state, player, "White Trinity")
     multiworld.get_location("Halloween Town Bridge Under Bridge"                                           , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box")
    #multiworld.get_location("Halloween Town Boneyard Tombstone Puzzle Chest"                               , player).access_rule = lambda state: has_item(state, player, "")
@@ -283,13 +284,14 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool):
    #multiworld.get_location("Chronicles Agrabah"                                                           , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Monstro"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
    #multiworld.get_location("Chronicles 100 Acre Wood"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Chronicles Atlantica"                                                         , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+    if atlantica:
+        multiworld.get_location("Chronicles Atlantica"                                                         , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Chronicles Halloween Town"                                                    , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
    #multiworld.get_location("Chronicles Neverland"                                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
-    
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
-    multiworld.get_location("Ansem's Secret Report 3"                                                      , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+    if atlantica:
+        multiworld.get_location("Ansem's Secret Report 3"                                                      , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Ansem's Secret Report 4"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 5"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 6"                                                      , player).access_rule = lambda state: has_emblems(state, player)
@@ -313,7 +315,8 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool):
     multiworld.get_entrance("Deep Jungle"                                                                  , player).access_rule = lambda state: has_item(state, player,"Deep Jungle")
     multiworld.get_entrance("Agrabah"                                                                      , player).access_rule = lambda state: has_item(state, player,"Agrabah")
     multiworld.get_entrance("Monstro"                                                                      , player).access_rule = lambda state: has_item(state, player,"Monstro")
-    multiworld.get_entrance("Atlantica"                                                                    , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2)
+    if atlantica:
+        multiworld.get_entrance("Atlantica"                                                                    , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
     multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5)

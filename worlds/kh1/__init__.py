@@ -77,11 +77,14 @@ class KH1World(World):
         else:
             self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]
+        if self.get_setting("atlantica"):
+            non_filler_item_categories.append("Atlantica")
         for name, data in item_table.items():
             quantity = data.max_quantity
             
             # Ignore filler, it will be added in a later stage.
-            if data.category not in ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]:
+            if data.category not in non_filler_item_categories:
                 continue
             item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
@@ -122,7 +125,7 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.get_setting("sephiroth"))
+        set_rules(self.multiworld, self.player, self.get_setting("sephiroth"), self.get_setting("atlantica"))
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.get_setting("sephiroth"))
+        create_regions(self.multiworld, self.player, self.get_setting("sephiroth"), self.get_setting("atlantica"))
