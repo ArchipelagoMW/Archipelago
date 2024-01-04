@@ -171,7 +171,7 @@ Required_Cards = {
     "Obtain Huge Revolution and its required cards": 158,
     "Obtain Perfectly Ultimate Great Moth and its required cards": 159,
     "Obtain Valkyrion the Magna Warrior and its pieces": 160,
-    "Dark Sage and its required cards": 161,
+    "Obtain Dark Sage and its required cards": 161,
     "Obtain Destiny Board and its letters": 162,
     "Obtain all XYZ-Dragon Cannon fusions and their materials": 163,
     "Obtain VWXYZ-Dragon Catapult Cannon and the fusion materials": 164,
@@ -179,9 +179,25 @@ Required_Cards = {
     "Obtain Raviel, Lord of Phantasms": 166,
     "Obtain Uria, Lord of Searing Flames": 167,
     "Obtain Gate Guardian and its pieces": 168,
-    "Dark Scorpion Combination and its required cards": 169
+    "Obtain Dark Scorpion Combination and its required cards": 169
 }
 
+collection_events = {
+    "Ojama Delta Hurricane and required cards": None,
+    "Huge Revolution and its required cards": None,
+    "Perfectly Ultimate Great Moth and its required cards": None,
+    "Valkyrion the Magna Warrior and its pieces": None,
+    "Dark Sage and its required cards": None,
+    "Destiny Board and its letters": None,
+    "XYZ-Dragon Cannon fusions and their materials": None,
+    "VWXYZ-Dragon Catapult Cannon and the fusion materials": None,
+    "Gate Guardian and its pieces": None,
+    "Dark Scorpion Combination and its required cards": None,
+    "Can Exodia Win": None,
+    "Can Yata Lock": None,
+    "Can Stall with Monsters": None,
+    "Can Stall with ST": None
+}
 
 def get_beat_challenge_events(self):
     beat_events = {}

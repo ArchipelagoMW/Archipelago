@@ -27,3 +27,10 @@ banlist_ids = {
     #September 2005
     5: 0x9
 }
+
+function_addresses = {
+    #Count Campaign Opponents
+    0: 0xf0c8,
+    #Count Challenges
+    1: 0xef3a
+}

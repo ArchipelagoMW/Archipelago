@@ -1,5 +1,7 @@
 import typing
-from Options import Option, Choice, Range, Toggle
+from dataclasses import dataclass
+
+from Options import Option, Choice, Range, Toggle, PerGameCommonOptions
 
 
 class StructureDeck(Choice):
@@ -26,9 +28,30 @@ class Banlist(Choice):
     default = option_September_2005
 
 
+class FinalCampaignBossUnlockCondition(Choice):
+    """How to unlock the final campaign boss (Who is the goal)"""
+    display_name = "Final Campaign Boss unlock Condition"
+    option_campaign_opponents = 0
+    option_challenges = 1
+
+
+class FourthTier5UnlockCondition(Choice):
+    """How to unlock the forth campaign boss"""
+    display_name = "Fourth Tier 5 Campaign Boss unlock Condition"
+    option_campaign_opponents = 0
+    option_challenges = 1
+
+
+class ThirdTier5UnlockCondition(Choice):
+    """How to unlock the third campaign boss (Which is the goal)"""
+    display_name = "Third Tier 5 Campaign Boss unlock Condition"
+    option_campaign_opponents = 0
+    option_challenges = 1
+
+
 class FinalCampaignBossChallenges(Range):
     """Number of Limited/Theme Duels completed for the Final Campaign Boss to appear"""
-    display_name = "Final Campaign Boss unlock amount"
+    display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
     default = 15
@@ -47,6 +70,30 @@ class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
+    default = 5
+
+
+class FinalCampaignBossCampaignOpponents(Range):
+    """Number of Campaign Opponents Duels defeated for the Final Campaign Boss to appear"""
+    display_name = "Final Campaign Boss campaign opponent unlock amount"
+    range_start = 0
+    range_end = 24
+    default = 15
+
+
+class FourthTier5CampaignBossCampaignOpponents(Range):
+    """Number of Campaign Opponents Duels defeated for the Forth Level 5 Campaign Opponent to appear"""
+    display_name = "Fourth Tier 5 Campaign Boss campaign opponent  unlock amount"
+    range_start = 0
+    range_end = 23
+    default = 10
+
+
+class ThirdTier5CampaignBossCampaignOpponents(Range):
+    """Number of Campaign Opponents Duels defeated for the Third Level 5 Campaign Opponent to appear"""
+    display_name = "Third Tier 5 Campaign Boss campaign opponent unlock amount"
+    range_start = 0
+    range_end = 22
     default = 5
 
 
@@ -95,16 +142,22 @@ class AddEmptyBanList(Toggle):
     display_name = "Add Empty Ban List"
 
 
-ygo06_options: typing.Dict[str, type(Option)] = {
-    "StructureDeck": StructureDeck,
-    "Banlist": Banlist,
-    "FinalCampaignBossChallenges": FinalCampaignBossChallenges,
-    "FourthTier5CampaignBossChallenges": FourthTier5CampaignBossChallenges,
-    "ThirdTier5CampaignBossChallenges": ThirdTier5CampaignBossChallenges,
-    "NumberOfChallenges": NumberOfChallenges,
-    "StartingMoney": StartingMoney,
-    "MoneyRewardMultiplier": MoneyRewardMultiplier,
-    "NormalizeBoostersPacks": NormalizeBoostersPacks,
-    "BoosterPackPrices": BoosterPackPrices,
-    "AddEmptyBanList": AddEmptyBanList
-}
+@dataclass
+class Yugioh06Options(PerGameCommonOptions):
+    structure_deck: StructureDeck
+    banlist: Banlist
+    final_campaign_boss_unlock_condition: FinalCampaignBossUnlockCondition
+    fourth_tier_5_campaign_boss_unlock_condition: FourthTier5UnlockCondition
+    third_tier_5_campaign_boss_unlock_condition: ThirdTier5UnlockCondition
+    final_campaign_boss_challenges: FinalCampaignBossChallenges
+    fourth_tier_5_campaign_boss_challenges: FourthTier5CampaignBossChallenges
+    third_tier_5_campaign_boss_challenges: ThirdTier5CampaignBossChallenges
+    final_campaign_boss_campaign_opponents: FinalCampaignBossCampaignOpponents
+    fourth_tier_5_campaign_boss_campaign_opponents: FourthTier5CampaignBossCampaignOpponents
+    third_tier_5_campaign_boss_campaign_opponents: ThirdTier5CampaignBossCampaignOpponents
+    number_of_challenges: NumberOfChallenges
+    starting_money: StartingMoney
+    money_reward_multiplier: MoneyRewardMultiplier
+    normalize_boosters_packs: NormalizeBoostersPacks
+    booster_pack_prices: BoosterPackPrices
+    add_empty_banList: AddEmptyBanList
