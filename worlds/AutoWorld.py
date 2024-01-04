@@ -3,18 +3,23 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import re
 import sys
-from typing import Any, Callable, ClassVar, Dict, FrozenSet, List, Optional, Set, TYPE_CHECKING, TextIO, Tuple, Type, \
+import time
+from dataclasses import make_dataclass
+from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
     Union
 
+from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
-from Options import AssembleOptions
 
 if TYPE_CHECKING:
     import random
     from BaseClasses import MultiWorld, Item, Location, Tutorial
     from . import GamesPackage
     from settings import Group
+
+perf_logger = logging.getLogger("performance")
 
 
 class AutoWorldRegister(type):
@@ -47,11 +52,17 @@ class AutoWorldRegister(type):
         dct["item_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                    in dct.get("item_name_groups", {}).items()}
         dct["item_name_groups"]["Everything"] = dct["item_names"]
+        dct["item_descriptions"] = {name: _normalize_description(description) for name, description
+                                    in dct.get("item_descriptions", {}).items()}
+        dct["item_descriptions"]["Everything"] = "All items in the entire game."
         dct["location_names"] = frozenset(dct["location_name_to_id"])
         dct["location_name_groups"] = {group_name: frozenset(group_set) for group_name, group_set
                                        in dct.get("location_name_groups", {}).items()}
         dct["location_name_groups"]["Everywhere"] = dct["location_names"]
         dct["all_item_and_group_names"] = frozenset(dct["item_names"] | set(dct.get("item_name_groups", {})))
+        dct["location_descriptions"] = {name: _normalize_description(description) for name, description
+                                    in dct.get("location_descriptions", {}).items()}
+        dct["location_descriptions"]["Everywhere"] = "All locations in the entire game."
 
         # move away from get_required_client_version function
         if "game" in dct:
@@ -62,6 +73,16 @@ class AutoWorldRegister(type):
                 if "required_client_version" in base.__dict__:
                     dct["required_client_version"] = max(dct["required_client_version"],
                                                          base.__dict__["required_client_version"])
+
+        # create missing options_dataclass from legacy option_definitions
+        # TODO - remove this once all worlds use options dataclasses
+        if "options_dataclass" not in dct and "option_definitions" in dct:
+            # TODO - switch to deprecate after a version
+            if __debug__:
+                from warnings import warn
+                warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
+            dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
+                                                      bases=(PerGameCommonOptions,))
 
         # construct class
         new_class = super().__new__(mcs, name, bases, dct)
@@ -96,10 +117,24 @@ class AutoLogicRegister(type):
         return new_class
 
 
+def _timed_call(method: Callable[..., Any], *args: Any,
+                multiworld: Optional["MultiWorld"] = None, player: Optional[int] = None) -> Any:
+    start = time.perf_counter()
+    ret = method(*args)
+    taken = time.perf_counter() - start
+    if taken > 1.0:
+        if player and multiworld:
+            perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__} for player {player}, "
+                             f"named {multiworld.player_name[player]}.")
+        else:
+            perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__}.")
+    return ret
+
+
 def call_single(multiworld: "MultiWorld", method_name: str, player: int, *args: Any) -> Any:
     method = getattr(multiworld.worlds[player], method_name)
     try:
-        ret = method(*args)
+        ret = _timed_call(method, *args, multiworld=multiworld, player=player)
     except Exception as e:
         message = f"Exception in {method} for player {player}, named {multiworld.player_name[player]}."
         if sys.version_info >= (3, 11, 0):
@@ -125,24 +160,21 @@ def call_all(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
                         f"Duplicate item reference of \"{item.name}\" in \"{multiworld.worlds[player].game}\" "
                         f"of player \"{multiworld.player_name[player]}\". Please make a copy instead.")
 
-    for world_type in sorted(world_types, key=lambda world: world.__name__):
-        stage_callable = getattr(world_type, f"stage_{method_name}", None)
-        if stage_callable:
-            stage_callable(multiworld, *args)
+    call_stage(multiworld, method_name, *args)
 
 
 def call_stage(multiworld: "MultiWorld", method_name: str, *args: Any) -> None:
     world_types = {multiworld.worlds[player].__class__ for player in multiworld.player_ids}
-    for world_type in world_types:
+    for world_type in sorted(world_types, key=lambda world: world.__name__):
         stage_callable = getattr(world_type, f"stage_{method_name}", None)
         if stage_callable:
-            stage_callable(multiworld, *args)
+            _timed_call(stage_callable, multiworld, *args)
 
 
 class WebWorld:
     """Webhost integration"""
 
-    settings_page: Union[bool, str] = True
+    options_page: Union[bool, str] = True
     """display a settings page. Can be a link to a specific page or external tool."""
 
     game_info_languages: List[str] = ['en']
@@ -158,13 +190,19 @@ class WebWorld:
     bug_report_page: Optional[str]
     """display a link to a bug report page, most likely a link to a GitHub issue page."""
 
+    options_presets: Dict[str, Dict[str, Any]] = {}
+    """A dictionary containing a collection of developer-defined game option presets."""
+
 
 class World(metaclass=AutoWorldRegister):
     """A World object encompasses a game's Items, Locations, Rules and additional data or functionality required.
     A Game should have its own subclass of World in which it defines the required data structures."""
 
-    option_definitions: ClassVar[Dict[str, AssembleOptions]] = {}
+    options_dataclass: ClassVar[Type[PerGameCommonOptions]] = PerGameCommonOptions
     """link your Options mapping"""
+    options: PerGameCommonOptions
+    """resulting options for the player of this world"""
+
     game: ClassVar[str]
     """name the game"""
     topology_present: ClassVar[bool] = False
@@ -181,8 +219,22 @@ class World(metaclass=AutoWorldRegister):
     item_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps item group names to sets of items. Example: {"Weapons": {"Sword", "Bow"}}"""
 
+    item_descriptions: ClassVar[Dict[str, str]] = {}
+    """An optional map from item names (or item group names) to brief descriptions for users.
+
+    Individual newlines and indentation will be collapsed into spaces before these descriptions are
+    displayed. This may cover only a subset of items.
+    """
+
     location_name_groups: ClassVar[Dict[str, Set[str]]] = {}
     """maps location group names to sets of locations. Example: {"Sewer": {"Sewer Key Drop 1", "Sewer Key Drop 2"}}"""
+
+    location_descriptions: ClassVar[Dict[str, str]] = {}
+    """An optional map from location names (or location group names) to brief descriptions for users.
+
+    Individual newlines and indentation will be collapsed into spaces before these descriptions are
+    displayed. This may cover only a subset of locations.
+    """
 
     data_version: ClassVar[int] = 0
     """
@@ -358,6 +410,19 @@ class World(metaclass=AutoWorldRegister):
         logging.warning(f"World {self} is generating a filler item without custom filler pool.")
         return self.multiworld.random.choice(tuple(self.item_name_to_id.keys()))
 
+    @classmethod
+    def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
+        """Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these."""
+        # TODO remove loop when worlds use options dataclass
+        for option_key, option in cls.options_dataclass.type_hints.items():
+            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+        group = cls(multiworld, new_player_id)
+        group.options = cls.options_dataclass(**{option_key: option(option.default)
+                                                 for option_key, option in cls.options_dataclass.type_hints.items()})
+
+        return group
+
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
         """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
@@ -377,16 +442,16 @@ class World(metaclass=AutoWorldRegister):
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
-            state.prog_items[name, self.player] += 1
+            state.prog_items[self.player][name] += 1
             return True
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item, True)
         if name:
-            state.prog_items[name, self.player] -= 1
-            if state.prog_items[name, self.player] < 1:
-                del (state.prog_items[name, self.player])
+            state.prog_items[self.player][name] -= 1
+            if state.prog_items[self.player][name] < 1:
+                del (state.prog_items[self.player][name])
             return True
         return False
 
@@ -425,3 +490,17 @@ def data_package_checksum(data: "GamesPackage") -> str:
     assert sorted(data) == list(data), "Data not ordered"
     from NetUtils import encode
     return hashlib.sha1(encode(data).encode()).hexdigest()
+
+
+def _normalize_description(description):
+    """Normalizes a description in item_descriptions or location_descriptions.
+
+    This allows authors to write descritions with nice indentation and line lengths in their world
+    definitions without having it affect the rendered format.
+    """
+    # First, collapse the whitespace around newlines and the ends of the description.
+    description = re.sub(r' *\n *', '\n', description.strip())
+    # Next, condense individual newlines into spaces.
+    description = re.sub(r'(?<!\n)\n(?!\n)', ' ', description)
+    return description
+
