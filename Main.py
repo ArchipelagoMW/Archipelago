@@ -114,7 +114,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
+        for item_name, count in getattr(world.worlds[player].options,
+                                        "start_inventory_from_pool",
+                                        StartInventoryPool({})).value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
             # remove from_pool items also from early items handling, as starting is plenty early.
