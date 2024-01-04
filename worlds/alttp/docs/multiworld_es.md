@@ -2,9 +2,9 @@
 
 ## Software requerido
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Asegurate de marcar la casilla de 
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Asegúrate de marcar la casilla de 
 `SNI Client - A Link to the Past Patch Setup`
-- [SNI](https://github.com/alttpo/sni/releases). Esto esta incluido automáticamente en la instalación de Archipelago.
+- [SNI](https://github.com/alttpo/sni/releases). Esto está incluido automáticamente en la instalación de Archipelago.
 - SNI no es compatible con (Q)Usb2Snes.
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
     - Un emulador capaz de conectarse a SNI
@@ -18,8 +18,8 @@ pero no tiene soporte.**
 
 ## Procedimiento de instalación
 
-1. Descarga e instala SNIClient desde el link de arriba, asegurandote de instalar la version mas reciente.
-   **El archivo del instalador se encuentra en la seccion de assets al final de la informacion de version**.
+1. Descarga e instala SNIClient desde el link de arriba, asegurándote de instalar la version más reciente.
+   **El archivo del instalador se encuentra en la sección de assets al final de la información de version**.
     - Durante la instalación se te preguntará por la localización de tu archivo ROM base. Este es tu archivo ROM de Link to the Past japonés.
 
 2. Si estás usando un emulador, deberías de asignar tu emulador con compatibilidad con Lua como el programa por defecto para abrir archivos 
@@ -33,12 +33,12 @@ pero no tiene soporte.**
 
 ### Obtener el fichero de parche y crea tu ROM
 
-Cuando te unes a una partida multiworld, se te pedirá enviarle tu archivo de configuración a quien quiera que esté creando. Una vez eso
+Cuando te unas a una partida multiworld, se te pedirá enviarle tu archivo de configuración a quien quiera que esté creando. Una vez eso
 este hecho, el creador te devolverá un enlace para descargar el parche o un fichero zip conteniendo todos los ficheros
-de parche de la partida Tu fichero de parche debe tener la extensión `.aplttp`.
+de parche de la partida. Tu fichero de parche debe de tener la extensión `.aplttp`.
 
-Pon tu fichero de parche en el escritorio o en algún sitio conveniente, y haz doble click. Esto debería ejecutar
-automáticamente el cliente, y ademas creara la rom en el mismo directorio donde este el fichero de parche.
+Pon tu fichero de parche en el escritorio o en algún sitio conveniente, y hazle doble click. Esto debería ejecutar
+automáticamente el cliente, y además creará la rom en el mismo directorio donde este el fichero de parche.
 
 ### Conectar al cliente
 
@@ -56,15 +56,15 @@ primera vez que se ejecuta, tal vez se te pida permitir que se comunique a trav�
 5. Selecciona el archivo lua conector incluido con tu cliente
       - Busca en la carpeta de Archipelago `/SNI/lua/`.
 6. Si ves un error mientras carga el script que dice `socket.dll missing` o algo similar, ve a la carpeta de
-el lua que estas usando en tu gestor de archivos y copia el `socket.dll` a la raiz de tu instalación de snes9x.
+el lua que estas usando en tu gestor de archivos y copia el `socket.dll` a la raíz de tu instalación de snes9x.
 
 ##### BizHawk
 
-1. Asegurate que se ha cargado el nucleo BSNES. Se hace en la barra de menú principal, bajo:
+1. Asegurate que se ha cargado el núcleo BSNES. Se hace en la barra de menú principal, bajo:
     - (≤ 2.8) `Config` 〉 `Cores` 〉 `SNES` 〉 `BSNES`
     - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`
 2. Carga tu fichero de ROM, si no lo has hecho ya.
-   Si has cambiado tu preferencia de nucleo tras haber cargado la ROM, no te olvides de volverlo a cargar (atajo por defecto: Ctrl+R).
+   Si has cambiado tu preferencia de núcleo tras haber cargado la ROM, no te olvides de volverlo a cargar (atajo por defecto: Ctrl+R).
 3. Arrastra el archivo `Connector.lua` que has descargado a la ventana principal de EmuHawk.
    - Busca en la carpeta de Archipelago `/SNI/lua/`.
    - También podrías abrir la consola de Lua manualmente, hacer click en `Script` 〉 `Open Script`, e ir a `Connector.lua`
@@ -101,7 +101,7 @@ usuarios de SD2SNES y FXPak Pro pueden descargar el firmware apropiado
 El fichero de parche que ha lanzado el cliente debería de haberte conectado automaticamente al MultiServer. Sin embargo hay algunas
 razones por las que puede que esto no suceda, como que la partida este hospedada en la página web pero generada en otra parte. Si la
 ventana del cliente muestra "Server Status: Not Connected", simplemente preguntale al creador de la partida la dirección
-del servidor, copiala en el campo "Server" y presiona Enter.
+del servidor, cópiala en el campo "Server" y presiona Enter.
 
 El cliente intentará conectarse a esta nueva dirección, y debería mostrar "Server Status: Connected" momentáneamente.
 
