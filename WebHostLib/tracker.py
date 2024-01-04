@@ -7,6 +7,7 @@ from uuid import UUID
 from flask import render_template
 from werkzeug.exceptions import abort
 
+import Utils
 from MultiServer import Context, get_saving_second
 from NetUtils import ClientStatus, Hint, NetworkItem, NetworkSlot, SlotType
 from Utils import restricted_loads
@@ -63,12 +64,18 @@ class TrackerData:
         self.location_name_to_id: Dict[str, Dict[str, int]] = {}
 
         # Generate inverse lookup tables from data package, useful for trackers.
-        self.item_id_to_name: Dict[str, Dict[int, str]] = {}
-        self.location_id_to_name: Dict[str, Dict[int, str]] = {}
+        self.item_id_to_name: Dict[str, Dict[int, str]] = Utils.KeyedDefaultDict(lambda game_name: {
+            game_name: Utils.KeyedDefaultDict(lambda code: f"Unknown Game {game_name} - Item (ID: {code})")
+        })
+        self.location_id_to_name: Dict[str, Dict[int, str]] = Utils.KeyedDefaultDict(lambda game_name: {
+            game_name: Utils.KeyedDefaultDict(lambda code: f"Unknown Game {game_name} - Location (ID: {code})")
+        })
         for game, game_package in self._multidata["datapackage"].items():
             game_package = restricted_loads(GameDataPackage.get(checksum=game_package["checksum"]).data)
-            self.item_id_to_name[game] = {id: name for name, id in game_package["item_name_to_id"].items()}
-            self.location_id_to_name[game] = {id: name for name, id in game_package["location_name_to_id"].items()}
+            self.item_id_to_name[game] = Utils.KeyedDefaultDict(lambda code: f"Unknown Item (ID: {code})", {
+                id: name for name, id in game_package["item_name_to_id"].items()})
+            self.location_id_to_name[game] = Utils.KeyedDefaultDict(lambda code: f"Unknown Location (ID: {code})", {
+                id: name for name, id in game_package["location_name_to_id"].items()})
 
             # Normal lookup tables as well.
             self.item_name_to_id[game] = game_package["item_name_to_id"]
