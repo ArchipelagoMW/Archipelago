@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Iterable
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
@@ -9,9 +9,10 @@ from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..options import ToolProgression
-from ..stardew_rule import StardewRule, True_
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.ap_names.skill_level_names import ModSkillLevel
 from ..strings.region_names import Region
+from ..strings.skill_names import ModSkill
 from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool
 
@@ -47,6 +48,9 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
 
         return self.logic.has(f"{material} Bar") & self.logic.money.can_spend(tool_upgrade_prices[material])
 
+    def can_use_tool_at(self, tool: str, material: str, region: str) -> StardewRule:
+        return self.has_tool(tool, material) & self.logic.region.can_reach(region)
+
     @cache_self1
     def has_fishing_rod(self, level: int) -> StardewRule:
         if self.options.tool_progression & ToolProgression.option_progressive:
@@ -59,8 +63,12 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         return self.logic.money.can_spend_at(Region.fish_shop, prices[level])
 
     # Should be cached
-    def can_forage(self, season: str, region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
-        season_rule = self.logic.season.has(season)
+    def can_forage(self, season: str | Iterable[str], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
+        season_rule = False_()
+        if type(season) is str:
+            season_rule = self.logic.season.has(season)
+        if type(season) is Iterable[str]:
+            season_rule = self.logic.season.has_any(season)
         region_rule = self.logic.region.can_reach(region)
         if need_hoe:
             return season_rule & region_rule & self.logic.tool.has_tool(Tool.hoe)
