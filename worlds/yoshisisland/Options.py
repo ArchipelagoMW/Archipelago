@@ -57,14 +57,14 @@ class ItemLogic(Toggle):
     Logic will expect you to have access to an Overworld bonus game, or a bandit game to get the necessary items.
     Logic will NOT expect grinding end-of-level bonus games, or any inventory consumables received from checks.
     Casual logic will only expect consumables from Overworld games; Loose and Expert may expect them from bandit games."""
-    display_name = "Items in Logic"
+    display_name = "Consumable Logic"
 
 class MinigameChecks(Choice):
     """This will set minigame victories to give Archipelago checks.
     This will not randomize minigames amongst themselves, and is compatible with item logic.
     Bonus games will be expected to be cleared from the Overworld, not the end of levels.
     Additionally, 1-Up bonus games will accept any profit as a victory."""
-    display_name = "Minigame Rewards in Pool"
+    display_name = "Minigame Reward Checks"
     option_none = 0
     option_bandit_games = 1
     option_bonus_games = 2
@@ -104,21 +104,25 @@ class LuigiPiecesReq(Range):
     default = 25
 
 class LuigiPiecesAmt(Range):
-    """This well set how many Luigi Pieces are in the item pool. If the number in the pool is lower than the number required, the amount in the pool will be randomized, with the minimum being the amount required."""
+    """This will set how many Luigi Pieces are in the item pool. 
+       If the number in the pool is lower than the number required,
+       the amount in the pool will be randomized, with the minimum being the amount required."""
     display_name = "Amount of Luigi Pieces"
     range_start = 1
     range_end = 100
     default = 50
 
 class FinalLevelBosses(Range):
-    """This sets how many bosses need to be defeated to access 6-8. You can check this in-game by pressing SELECT while in any level."""
+    """This sets how many bosses need to be defeated to access 6-8.
+       You can check this in-game by pressing SELECT while in any level."""
     display_name = "Bosses Required for 6-8 Unlock"
     range_start = 0
     range_end = 11
     default = 5
 
 class FinalBossBosses(Range):
-    """This sets how many bosses need to be defeated to access the boss of 6-8. You can check this in-game by pressing SELECT while in any level."""
+    """This sets how many bosses need to be defeated to access the boss of 6-8.
+       You can check this in-game by pressing SELECT while in any level."""
     display_name = "Bosses Required for 6-8 Clear"
     range_start = 0
     range_end = 11
@@ -188,7 +192,8 @@ class BabySound(Choice):
     default = 0
 
 class TrapsEnabled(Toggle):
-    """Will place traps into the item pool. Traps have a variety of negative effects, and will only replace filler items."""
+    """Will place traps into the item pool. 
+       Traps have a variety of negative effects, and will only replace filler items."""
     display_name = "Traps Enabled"
 
 class TrapPercent(Range):

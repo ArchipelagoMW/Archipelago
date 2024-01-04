@@ -1,8 +1,8 @@
 from typing import List, Dict, Tuple
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
-from .LevelLogic import YoshiLogic
-from .SetupBosses import BossReqs
+from .level_logic import YoshiLogic
+from .setup_bosses import BossReqs
 
 class YILocation(Location):
     game: str = "Yoshi's Island"

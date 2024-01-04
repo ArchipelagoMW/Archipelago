@@ -399,10 +399,10 @@ class LocalRom(object):
 
         with open(file, 'rb') as stream:
             self.buffer = Utils.read_snes_rom(stream)
-        
+
     def read_bit(self, address: int, bit_number: int) -> bool:
-        bitflag = (1 << bit_number)
-        return ((self.buffer[address] & bitflag) != 0)
+        bitflag = 1 << bit_number
+        return (self.buffer[address] & bitflag) != 0
 
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
@@ -1050,7 +1050,8 @@ def patch_rom(world, rom, player: int, multiworld):
     rom.write_bytes(0x06FC99, bytearray([world.options.luigi_pieces_required.value]))
     rom.write_bytes(0x06FC9A, bytearray([world.options.goal.value]))
 
-    rom.write_bytes(0x113A33, bytearray(world.bowser_text))
+    if world.options.yoshi_colors !=0:
+        rom.write_bytes(0x113A33, bytearray(world.bowser_text))
 
     rom.write_bytes(0x0A060C, bytearray(world.boss_burt_data))
     rom.write_bytes(0x0A8666, bytearray(world.boss_slime_data))
@@ -1180,7 +1181,7 @@ def patch_rom(world, rom, player: int, multiworld):
     if world.options.goal == 1:
         rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85])) #Luigi piece clear text
         rom.write_bytes(0x06FC86, bytearray([0xFF])) #Boss clear goal = 255, renders bowser inaccessible
-    
+
     from Main import __version__
     rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:15]
     rom.name.extend([0] * (15 - len(rom.name)))

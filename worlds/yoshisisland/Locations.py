@@ -1,6 +1,6 @@
 from typing import List, Tuple, Optional, Callable, NamedTuple
 from BaseClasses import MultiWorld
-from .LevelLogic import YoshiLogic
+from .level_logic import YoshiLogic
 
 
 class LocationData(NamedTuple):

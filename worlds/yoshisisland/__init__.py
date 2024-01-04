@@ -13,7 +13,7 @@ from .Items import get_item_names_per_category, item_table, filler_items, trap_i
 from .Locations import get_locations
 from .Regions import create_regions
 from .Options import YoshisIslandOptions
-from .SetupGame import setup_gamevars
+from .setup_game import setup_gamevars
 from .Client import YISNIClient
 from .Rules import set_easy_rules, set_normal_rules, set_hard_rules
 from .Rom import LocalRom, patch_rom, get_base_rom_path, YIDeltaPatch, USHASH
@@ -52,7 +52,8 @@ class YIWorld(World):
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None, None, None, None)}
+    location_name_to_id = {location.name: location.code for
+                           location in get_locations(None, None, None, None, None)}
     item_name_groups = get_item_names_per_category()
 
     web = YIWeb()
@@ -97,15 +98,6 @@ class YIWorld(World):
             "world_5": self.world_5_stages,
             "world_6": self.world_6_stages
         }
-
-    #def fill_slot_data(self) -> dict:
-     #   slot_data = self._get_slot_data()
-      #  for option_name in (attr.name for attr in dataclasses.fields(YoshisIslandOptions)
-       #                     if attr not in dataclasses.fields(PerGameCommonOptions)):
-        #    option = getattr(self.options, option_name)
-         #   slot_data[option_name] = bool(option.value) if isinstance(option, Toggle) else option.value
-#
- #       return slot_data
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         spoiler_handle.write(f"Burt The Bashful's Boss Door:      {self.boss_order[0]}\n")
@@ -190,8 +182,10 @@ class YIWorld(World):
         return item
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations(self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces, self),
-                        self.location_cache, self, self.boss_ap_loc, self.level_location_list, self.luigi_pieces)
+        create_regions(self.multiworld, self.player, get_locations
+                    (self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces, self),
+                    self.location_cache, self, self.boss_ap_loc, 
+                    self.level_location_list, self.luigi_pieces)
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.options.trap_percent.value
@@ -245,7 +239,8 @@ class YIWorld(World):
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
 
-        starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate", "World 4 Gate", "World 5 Gate", "World 6 Gate"]
+        starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate"
+                         "World 4 Gate", "World 5 Gate", "World 6 Gate"]
 
         excluded_items.add(starting_gate[self.options.starting_world.value])
 
@@ -344,12 +339,10 @@ class YIWorld(World):
 
         return pool
 
-        
 
 
     def create_items(self):
         self.luigi_count = 0
-        
 
         if self.options.minigame_checks.value >= 2:
             self.multiworld.get_location("Flip Cards", self.player).place_locked_item(self.create_item("Bonus Consumables"))
@@ -374,15 +367,17 @@ class YIWorld(World):
             rom = LocalRom(get_base_rom_path())
             patch_rom(self, rom, self.player, self.multiworld)
 
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
+            rompath = os.path.join(output_directory,
+                                   f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rompath)
             self.rom_name = rom.name
 
-            patch = YIDeltaPatch(os.path.splitext(rompath)[0]+YIDeltaPatch.patch_file_ending, player=player,
-                                  player_name=world.player_name[player], patched_path=rompath)
+            patch = YIDeltaPatch(os.path.splitext(rompath)[0]+YIDeltaPatch.patch_file_ending,
+                                  player=player, player_name=world.player_name[player],
+                                  patched_path=rompath)
             patch.write()
         finally:
-            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
+            self.rom_name_available_event.set()
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
@@ -391,7 +386,6 @@ class YIWorld(World):
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
         rom_name = getattr(self, "rom_name", None)
-        # we skip in case of error, so that the original error in the output thread is the one that gets raised
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]

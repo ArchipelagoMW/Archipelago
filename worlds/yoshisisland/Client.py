@@ -1,9 +1,8 @@
 import logging
 import struct
-import asyncio
 import typing
 import time
-from struct import unpack, pack
+from struct import pack
 
 from NetUtils import ClientStatus, color
 from worlds.AutoSNIClient import SNIClient
@@ -86,7 +85,8 @@ class YISNIClient(SNIClient):
         goal_flag = await snes_read(ctx, GOALFLAG, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
-            currently_dead = (game_music[0] == 0x07 or game_mode[0] == 0x12 or (death_flag [0] == 0x00 and game_mode[0] == 0x11)) and deathlink_death[0] == 0x00
+            currently_dead = (game_music[0] == 0x07 or game_mode[0] == 0x12 or
+                              (death_flag [0] == 0x00 and game_mode[0] == 0x11)) and deathlink_death[0] == 0x00
             await ctx.handle_deathlink_state(currently_dead)
 
         if game_mode is None:
@@ -106,14 +106,14 @@ class YISNIClient(SNIClient):
             return
 
         new_checks = []
-        from .Rom import location_table, item_values
+        from .Rom import location_table
 
         location_ram_data = await snes_read(ctx, WRAM_START + 0x1440, 0x80)
         for loc_id, loc_data in location_table.items():
             if loc_id not in ctx.locations_checked:
                 data = location_ram_data[loc_data[0] - 0x1440]
                 masked_data = data & (1 << loc_data[1])
-                bit_set = (masked_data != 0)
+                bit_set = masked_data != 0
                 invert_bit = ((len(loc_data) >= 3) and loc_data[2])
                 if bit_set != invert_bit:
                     new_checks.append(loc_id)
