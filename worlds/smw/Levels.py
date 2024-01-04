@@ -1,4 +1,5 @@
 
+from worlds.AutoWorld import World
 from .Names import LocationName
 
 
@@ -1206,17 +1207,17 @@ location_id_to_level_id = {
     LocationName.star_road_5_green_block_20: [0x5A, 681]
 }
 
-def generate_level_list(world, player):
+def generate_level_list(world: World):
 
-    if not world.level_shuffle[player]:
+    if not world.options.level_shuffle:
         out_level_list = full_level_list.copy()
         out_level_list[0x00] = 0x03
         out_level_list[0x11] = 0x28
 
-        if world.bowser_castle_doors[player] == "fast":
+        if world.options.bowser_castle_doors == "fast":
             out_level_list[0x41] = 0x82
             out_level_list[0x42] = 0x32
-        elif world.bowser_castle_doors[player] == "slow":
+        elif world.options.bowser_castle_doors == "slow":
             out_level_list[0x41] = 0x31
             out_level_list[0x42] = 0x81
 
@@ -1263,7 +1264,7 @@ def generate_level_list(world, player):
     shuffled_level_list.append(0x16)
 
     single_levels_copy = (easy_single_levels_copy.copy() + hard_single_levels_copy.copy())
-    if not world.exclude_special_zone[player]:
+    if not world.options.exclude_special_zone:
         single_levels_copy.extend(special_zone_levels_copy)
     world.random.shuffle(single_levels_copy)
 
@@ -1330,10 +1331,10 @@ def generate_level_list(world, player):
     shuffled_level_list.append(castle_fortress_levels_copy.pop(0))
 
     # Front/Back Door
-    if world.bowser_castle_doors[player] == "fast":
+    if world.options.bowser_castle_doors == "fast":
         shuffled_level_list.append(0x82)
         shuffled_level_list.append(0x32)
-    elif world.bowser_castle_doors[player] == "slow":
+    elif world.options.bowser_castle_doors == "slow":
         shuffled_level_list.append(0x31)
         shuffled_level_list.append(0x81)
     else:
@@ -1357,7 +1358,7 @@ def generate_level_list(world, player):
 
     # Special Zone
     shuffled_level_list.append(0x4D)
-    if not world.exclude_special_zone[player]:
+    if not world.options.exclude_special_zone:
         shuffled_level_list.append(single_levels_copy.pop(0))
         shuffled_level_list.append(single_levels_copy.pop(0))
         shuffled_level_list.append(single_levels_copy.pop(0))

@@ -1,3 +1,4 @@
+import dataclasses
 import os
 import typing
 import math
@@ -5,9 +6,10 @@ import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
+from Options import PerGameCommonOptions
 from .Items import SMWItem, ItemData, item_table, junk_table
 from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
-from .Options import smw_options
+from .Options import SMWOptions
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
@@ -50,11 +52,14 @@ class SMWWorld(World):
     lost all of his abilities. Can he get them back in time to save the Princess?
     """
     game: str = "Super Mario World"
-    option_definitions = smw_options
+
     settings: typing.ClassVar[SMWSettings]
+
+    options_dataclass = SMWOptions
+    options: SMWOptions
+
     topology_present = False
-    data_version = 3
-    required_client_version = (0, 3, 5)
+    required_client_version = (0, 4, 4)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
@@ -74,14 +79,14 @@ class SMWWorld(World):
 
     def _get_slot_data(self):
         return {
-            #"death_link": self.multiworld.death_link[self.player].value,
             "active_levels": self.active_level_dict,
         }
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        for option_name in smw_options:
-            option = getattr(self.multiworld, option_name)[self.player]
+        for option_name in (attr.name for attr in dataclasses.fields(SMWOptions)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)):
+            option = getattr(self.options, option_name)
             slot_data[option_name] = option.value
 
         return slot_data
@@ -92,15 +97,15 @@ class SMWWorld(World):
 
     def create_regions(self):
         location_table = setup_locations(self)
-        create_regions(self.multiworld, self.player, location_table)
+        create_regions(self.multiworld, self.player, self, location_table)
 
         # Not generate basic
         itempool: typing.List[SMWItem] = []
 
-        self.active_level_dict = dict(zip(generate_level_list(self.multiworld, self.player), full_level_list))
-        self.topology_present = self.multiworld.level_shuffle[self.player]
+        self.active_level_dict = dict(zip(generate_level_list(self), full_level_list))
+        self.topology_present = self.options.level_shuffle
 
-        connect_regions(self.multiworld, self.player, self.active_level_dict)
+        connect_regions(self.multiworld, self.player, self, self.active_level_dict)
         
         # Add Boss Token amount requirements for Worlds
         add_rule(self.multiworld.get_region(LocationName.donut_plains_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 1))
@@ -118,20 +123,20 @@ class SMWWorld(World):
                 exclusion_pool.update(special_zone_hidden_1up_names)
             if self.options.blocksanity:
                 exclusion_pool.update(special_zone_blocksanity_names)
-            elif self.multiworld.number_of_yoshi_eggs[self.player].value <= 72:
+            elif self.options.number_of_yoshi_eggs.value <= 72:
                 exclusion_pool.update(special_zone_level_names)
             exclusion_rules(self.multiworld, self.player, exclusion_pool)
 
         total_required_locations = 96
-        if self.multiworld.dragon_coin_checks[self.player]:
+        if self.options.dragon_coin_checks:
             total_required_locations += 49
-        if self.multiworld.moon_checks[self.player]:
+        if self.options.moon_checks:
             total_required_locations += 7
-        if self.multiworld.hidden_1up_checks[self.player]:
+        if self.options.hidden_1up_checks:
             total_required_locations += 14
-        if self.multiworld.bonus_block_checks[self.player]:
+        if self.options.bonus_block_checks:
             total_required_locations += 4
-        if self.multiworld.blocksanity[self.player]:
+        if self.options.blocksanity:
             total_required_locations += 582
 
         itempool += [self.create_item(ItemName.mario_run)]
@@ -152,18 +157,18 @@ class SMWWorld(World):
         
         if self.options.goal == "yoshi_egg_hunt":
             itempool += [self.create_item(ItemName.yoshi_egg)
-                         for _ in range(self.multiworld.number_of_yoshi_eggs[self.player])]
+                         for _ in range(self.options.number_of_yoshi_eggs)]
             self.multiworld.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
         else:
             self.multiworld.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
 
         junk_count = total_required_locations - len(itempool)
         trap_weights = []
-        trap_weights += ([ItemName.ice_trap] * self.multiworld.ice_trap_weight[self.player].value)
-        trap_weights += ([ItemName.stun_trap] * self.multiworld.stun_trap_weight[self.player].value)
-        trap_weights += ([ItemName.literature_trap] * self.multiworld.literature_trap_weight[self.player].value)
-        trap_weights += ([ItemName.timer_trap] * self.multiworld.timer_trap_weight[self.player].value)
-        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.multiworld.trap_fill_percentage[self.player].value / 100.0))
+        trap_weights += ([ItemName.ice_trap] * self.options.ice_trap_weight.value)
+        trap_weights += ([ItemName.stun_trap] * self.options.stun_trap_weight.value)
+        trap_weights += ([ItemName.literature_trap] * self.options.literature_trap_weight.value)
+        trap_weights += ([ItemName.timer_trap] * self.options.timer_trap_weight.value)
+        trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))
         junk_count -= trap_count
 
         trap_pool = []

@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -343,38 +344,37 @@ class StartingLifeCount(Range):
     default = 5
 
 
-
-smw_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
-    "goal": Goal,
-    "bosses_required": BossesRequired,
-    "number_of_yoshi_eggs": NumberOfYoshiEggs,
-    "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
-    "dragon_coin_checks": DragonCoinChecks,
-    "moon_checks": MoonChecks,
-    "hidden_1up_checks": Hidden1UpChecks,
-    "bonus_block_checks": BonusBlockChecks,
-    "blocksanity": Blocksanity,
-    "bowser_castle_doors": BowserCastleDoors,
-    "bowser_castle_rooms": BowserCastleRooms,
-    "level_shuffle": LevelShuffle,
-    "exclude_special_zone": ExcludeSpecialZone,
-    "boss_shuffle": BossShuffle,
-    "swap_donut_gh_exits": SwapDonutGhostHouseExits,
-    #"display_sent_item_popups": DisplaySentItemPopups,
-    "display_received_item_popups": DisplayReceivedItemPopups,
-    "trap_fill_percentage": TrapFillPercentage,
-    "ice_trap_weight": IceTrapWeight,
-    "stun_trap_weight": StunTrapWeight,
-    "literature_trap_weight": LiteratureTrapWeight,
-    "timer_trap_weight": TimerTrapWeight,
-    "autosave": Autosave,
-    "early_climb": EarlyClimb,
-    "overworld_speed": OverworldSpeed,
-    "music_shuffle": MusicShuffle,
-    "sfx_shuffle": SFXShuffle,
-    "mario_palette": MarioPalette,
-    "level_palette_shuffle": LevelPaletteShuffle,
-    "overworld_palette_shuffle": OverworldPaletteShuffle,
-    "starting_life_count": StartingLifeCount,
-}
+@dataclass
+class SMWOptions(PerGameCommonOptions):
+    death_link: DeathLink
+    goal: Goal
+    bosses_required: BossesRequired
+    number_of_yoshi_eggs: NumberOfYoshiEggs
+    percentage_of_yoshi_eggs: PercentageOfYoshiEggs
+    dragon_coin_checks: DragonCoinChecks
+    moon_checks: MoonChecks
+    hidden_1up_checks: Hidden1UpChecks
+    bonus_block_checks: BonusBlockChecks
+    blocksanity: Blocksanity
+    bowser_castle_doors: BowserCastleDoors
+    bowser_castle_rooms: BowserCastleRooms
+    level_shuffle: LevelShuffle
+    exclude_special_zone: ExcludeSpecialZone
+    boss_shuffle: BossShuffle
+    swap_donut_gh_exits: SwapDonutGhostHouseExits
+    #display_sent_item_popups: DisplaySentItemPopups
+    display_received_item_popups: DisplayReceivedItemPopups
+    trap_fill_percentage: TrapFillPercentage
+    ice_trap_weight: IceTrapWeight
+    stun_trap_weight: StunTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    timer_trap_weight: TimerTrapWeight
+    autosave: Autosave
+    early_climb: EarlyClimb
+    overworld_speed: OverworldSpeed
+    music_shuffle: MusicShuffle
+    sfx_shuffle: SFXShuffle
+    mario_palette: MarioPalette
+    level_palette_shuffle: LevelPaletteShuffle
+    overworld_palette_shuffle: OverworldPaletteShuffle
+    starting_life_count: StartingLifeCount

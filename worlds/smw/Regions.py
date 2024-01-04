@@ -5,9 +5,10 @@ from .Locations import SMWLocation
 from .Levels import level_info_dict
 from .Names import LocationName, ItemName
 from worlds.generic.Rules import add_rule, set_rule
+from worlds.AutoWorld import World
 
 
-def create_regions(multiworld: MultiWorld, player: int, active_locations):
+def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
     menu_region = create_region(multiworld, player, active_locations, 'Menu', None)
 
     yoshis_island_region = create_region(multiworld, player, active_locations, LocationName.yoshis_island_region, None)
@@ -15,7 +16,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
     yoshis_house_tile = create_region(multiworld, player, active_locations, LocationName.yoshis_house_tile, None)
 
     yoshis_house_region_locations = []
-    if multiworld.goal[player] == "yoshi_egg_hunt":
+    if world.options.goal == "yoshi_egg_hunt":
         yoshis_house_region_locations.append(LocationName.yoshis_house)
     yoshis_house_region = create_region(multiworld, player, active_locations, LocationName.yoshis_house,
                                         yoshis_house_region_locations)
@@ -363,7 +364,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
     back_door_tile = create_region(multiworld, player, active_locations, LocationName.back_door_tile, None)
     back_door_region = create_region(multiworld, player, active_locations, LocationName.back_door, None)
     bowser_region_locations = []
-    if multiworld.goal[player] == "bowser":
+    if world.options.goal == "bowser":
         bowser_region_locations += [LocationName.bowser]
     bowser_region = create_region(multiworld, player, active_locations, LocationName.bowser_region, bowser_region_locations)
 
@@ -724,7 +725,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
     ]
 
 
-    if multiworld.dragon_coin_checks[player]:
+    if world.options.dragon_coin_checks:
         add_location_to_region(multiworld, player, active_locations, LocationName.yoshis_island_1_region, LocationName.yoshis_island_1_dragon,
                                lambda state: (state.has(ItemName.mario_spin_jump, player) and
                                               state.has(ItemName.progressive_powerup, player, 1)))
@@ -846,7 +847,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                                state.has(ItemName.yoshi_activate, player) or
                                                state.has(ItemName.mario_carry, player)))
 
-    if multiworld.moon_checks[player]:
+    if world.options.moon_checks:
         add_location_to_region(multiworld, player, active_locations, LocationName.yoshis_island_1_region, LocationName.yoshis_island_1_moon,
                                lambda state: (state.has(ItemName.mario_run, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
@@ -867,7 +868,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_moon)
 
-    if multiworld.hidden_1up_checks[player]:
+    if world.options.hidden_1up_checks:
         add_location_to_region(multiworld, player, active_locations, LocationName.yoshis_island_4_region, LocationName.yoshis_island_4_hidden_1up,
                                lambda state: (state.has(ItemName.yoshi_activate, player) or
                                              (state.has(ItemName.mario_run, player, player) and
@@ -894,13 +895,13 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
         add_location_to_region(multiworld, player, active_locations, LocationName.special_zone_1_region, LocationName.special_zone_1_hidden_1up,
                                lambda state: state.has(ItemName.mario_climb, player))
         
-    if multiworld.bonus_block_checks[player]:
+    if world.options.bonus_block_checks:
         add_location_to_region(multiworld, player, active_locations, LocationName.yoshis_island_3_region, LocationName.yoshis_island_3_bonus_block)
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_3_region, LocationName.donut_plains_3_bonus_block)
         add_location_to_region(multiworld, player, active_locations, LocationName.butter_bridge_1_region, LocationName.butter_bridge_1_bonus_block)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_bonus_block)
 
-    if multiworld.blocksanity[player]:
+    if world.options.blocksanity:
         add_location_to_region(multiworld, player, active_locations, LocationName.vanilla_secret_2_region, LocationName.vanilla_secret_2_yoshi_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.vanilla_secret_2_region, LocationName.vanilla_secret_2_green_block_1,
                         lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))))
@@ -1840,7 +1841,7 @@ def create_regions(multiworld: MultiWorld, player: int, active_locations):
                         lambda state: (state.has(ItemName.green_switch_palace, player)  and state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and state.has(ItemName.special_world_clear, player)))
 
 
-def connect_regions(multiworld: MultiWorld, player: int, level_to_tile_dict):
+def connect_regions(multiworld: MultiWorld, player: int, world: World, level_to_tile_dict):
     names: typing.Dict[str, int] = {}
 
     connect(multiworld, player, names, "Menu", LocationName.yoshis_island_region)
@@ -2011,9 +2012,9 @@ def connect_regions(multiworld: MultiWorld, player: int, level_to_tile_dict):
                            state.has(ItemName.mario_run, player) and
                            state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.progressive_powerup, player, 1) and
-                           state.has(ItemName.koopaling, player, multiworld.bosses_required[player].value)))
+                           state.has(ItemName.koopaling, player, world.options.bosses_required.value)))
     connect(multiworld, player, names, LocationName.back_door, LocationName.bowser_region,
-            lambda state: state.has(ItemName.koopaling, player, multiworld.bosses_required[player].value))
+            lambda state: state.has(ItemName.koopaling, player, world.options.bosses_required.value))
 
     connect(multiworld, player, names, LocationName.star_road_1_region, LocationName.star_road_1_exit_1,
             lambda state: (state.has(ItemName.mario_spin_jump, player) and
@@ -2088,7 +2089,7 @@ def connect_regions(multiworld: MultiWorld, player: int, level_to_tile_dict):
         # Connect Exit regions to next tile regions
         if current_tile_data.exit1Path:
             next_tile_id = current_tile_data.exit1Path.otherLevelID
-            if multiworld.swap_donut_gh_exits[player] and current_tile_id == 0x04:
+            if world.options.swap_donut_gh_exits and current_tile_id == 0x04:
                 next_tile_id = current_tile_data.exit2Path.otherLevelID
             next_tile_name = level_info_dict[next_tile_id].levelName
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
@@ -2097,7 +2098,7 @@ def connect_regions(multiworld: MultiWorld, player: int, level_to_tile_dict):
             connect(multiworld, player, names, current_exit_name, next_tile_name)
         if current_tile_data.exit2Path:
             next_tile_id = current_tile_data.exit2Path.otherLevelID
-            if multiworld.swap_donut_gh_exits[player] and current_tile_id == 0x04:
+            if world.options.swap_donut_gh_exits and current_tile_id == 0x04:
                 next_tile_id = current_tile_data.exit1Path.otherLevelID
             next_tile_name = level_info_dict[next_tile_id].levelName
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
