@@ -1,7 +1,7 @@
 id,name,classification,groups,mod_name
 0,Joja Cola,filler,TRASH,
-15,Rusty Key,progression,MUSEUM,
-16,Dwarvish Translation Guide,progression,MUSEUM,
+15,Rusty Key,progression,,
+16,Dwarvish Translation Guide,progression,,
 17,Bridge Repair,progression,COMMUNITY_REWARD,
 18,Greenhouse,progression,COMMUNITY_REWARD,
 19,Glittering Boulder Removed,progression,COMMUNITY_REWARD,

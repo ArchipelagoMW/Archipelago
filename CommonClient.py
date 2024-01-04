@@ -1,4 +1,6 @@
 from __future__ import annotations
+
+import copy
 import logging
 import asyncio
 import urllib.parse
@@ -242,6 +244,7 @@ class CommonContext:
         self.watcher_event = asyncio.Event()
 
         self.jsontotextparser = JSONtoTextParser(self)
+        self.rawjsontotextparser = RawJSONtoTextParser(self)
         self.update_data_package(network_data_package)
 
         # execution
@@ -377,10 +380,13 @@ class CommonContext:
 
     def on_print_json(self, args: dict):
         if self.ui:
-            self.ui.print_json(args["data"])
-        else:
-            text = self.jsontotextparser(args["data"])
-            logger.info(text)
+            # send copy to UI
+            self.ui.print_json(copy.deepcopy(args["data"]))
+
+        logging.getLogger("FileLog").info(self.rawjsontotextparser(copy.deepcopy(args["data"])),
+                                          extra={"NoStream": True})
+        logging.getLogger("StreamLog").info(self.jsontotextparser(copy.deepcopy(args["data"])),
+                                            extra={"NoFile": True})
 
     def on_package(self, cmd: str, args: dict):
         """For custom package handling in subclasses."""
@@ -731,7 +737,8 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         elif 'InvalidGame' in errors:
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
-            raise Exception('Server reported your client version as incompatible')
+            raise Exception('Server reported your client version as incompatible. '
+                            'This probably means you have to update.')
         elif 'InvalidItemsHandling' in errors:
             raise Exception('The item handling flags requested by the client are not supported')
         # last to check, recoverable problem
@@ -752,6 +759,7 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
         ctx.slot_info = {int(pid): data for pid, data in args["slot_info"].items()}
         ctx.hint_points = args.get("hint_points", 0)
         ctx.consume_players_package(args["players"])
+        ctx.stored_data_notification_keys.add(f"_read_hints_{ctx.team}_{ctx.slot}")
         msgs = []
         if ctx.locations_checked:
             msgs.append({"cmd": "LocationChecks",
@@ -830,10 +838,14 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
 
     elif cmd == "Retrieved":
         ctx.stored_data.update(args["keys"])
+        if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" in args["keys"]:
+            ctx.ui.update_hints()
 
     elif cmd == "SetReply":
         ctx.stored_data[args["key"]] = args["value"]
-        if args["key"].startswith("EnergyLink"):
+        if ctx.ui and f"_read_hints_{ctx.team}_{ctx.slot}" == args["key"]:
+            ctx.ui.update_hints()
+        elif args["key"].startswith("EnergyLink"):
             ctx.current_energy_link_value = args["value"]
             if ctx.ui:
                 ctx.ui.set_new_energy_link_value()
@@ -876,7 +888,7 @@ def get_base_parser(description: typing.Optional[str] = None):
 def run_as_textclient():
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
-        tags = {"AP", "TextOnly"}
+        tags = CommonContext.tags | {"TextOnly"}
         game = ""  # empty matches any game since 0.3.2
         items_handling = 0b111  # receive all items for /received
         want_slot_data = False  # Can't use game specific slot_data
