@@ -492,6 +492,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_SAFFRON_MAGNET_TRAIN_STATION -> REGION_GOLDENROD_MAGNET_TRAIN_STATION"),
              lambda state: state.has("Pass", world.player))
 
+    # Underground Path
+    set_rule(get_entrance("REGION_ROUTE_5 -> REGION_ROUTE_5_UNDERGROUND_PATH_ENTRANCE"),
+             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
+
+    set_rule(get_entrance("REGION_ROUTE_6 -> REGION_ROUTE_6_UNDERGROUND_PATH_ENTRANCE"),
+             lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player))
+
     # Celadon
 
     set_rule(get_entrance("REGION_CELADON_CITY -> REGION_CELADON_GYM"), can_cut)
