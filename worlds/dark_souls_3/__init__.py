@@ -653,7 +653,8 @@ class DarkSouls3World(World):
             "Coiled Sword Fragment": "Titanite Slab",
             "Seed of a Giant Tree": "Iron Leggings",
             "Siegbräu": "Armor of the Sun",
-            "Vertebra Shackle": "Lucatiel's Mask",
+            # Offline randomizer can't randomize Hodrick's drop yet
+            # "Vertebra Shackle": "Lucatiel's Mask",
             "Xanthous Crown": "Lightning Gem",
             "Mendicant's Staff": "Sunlight Shield",
             "Blacksmith Hammer": "Titanite Scale",
@@ -791,7 +792,11 @@ class DarkSouls3World(World):
             if self.options.excluded_locations == "unnecessary"
             else set()
         ).union(
-            {location for location in self.multiworld.get_locations() if location.missable}
+            {
+                location.name
+                for location in self.multiworld.get_locations()
+                if location.player == self.player and location.data.missable
+            }
             if self.options.missable_locations == "unnecessary"
             else set()
         )

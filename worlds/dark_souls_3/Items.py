@@ -418,7 +418,8 @@ _vanilla_items = flatten([
     DS3ItemData("Sorcerer's Staff",                    0x00C747A0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Storyteller's Staff",                 0x00C76EB0, DS3ItemCategory.WEAPON_UPGRADE_10),
     DS3ItemData("Mendicant's Staff",                   0x00C795C0, DS3ItemCategory.WEAPON_UPGRADE_10,
-                classification = ItemClassification.progression), # Crow trade
+                classification = ItemClassification.progression, # Crow trade
+                inject = True), # This is just a random drop normally but we need it in-logic
     DS3ItemData("Man-grub's Staff",                    0x00C7E3E0, DS3ItemCategory.WEAPON_UPGRADE_5,
                 inject = True), # Covenant reward
     DS3ItemData("Archdeacon's Great Staff",            0x00C80AF0, DS3ItemCategory.WEAPON_UPGRADE_5,

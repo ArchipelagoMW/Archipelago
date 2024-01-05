@@ -49,7 +49,6 @@ class MissableLocationsOption(Choice):
     
 
 class RandomizeWeaponLocations(DefaultOnToggle):
-
     """DEPRECATED (use "Excluded Locations" options instead)
 
     Setting this to false is now equivalent to adding "Weapons" to the "Exclude
