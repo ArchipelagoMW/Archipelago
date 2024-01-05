@@ -164,7 +164,7 @@
 		"flag": "EVENT_DRAGONS_DEN_B1F_DRAGON_FANG",
 		"type": "itemball",
 		"tags": ["Overworld"],
-		"script": "DragonsDenB1FDragonFangScript",
+		"script": "DragonsDenB1FDragonFang",
 		"default_item": "DRAGON_FANG"
 	},
 	"DRAGONS_DEN_B1F_HIDDEN_MAX_ELIXER": {
