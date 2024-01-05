@@ -52,7 +52,7 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
         island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
         for category in monster_data.all_monsters_by_category(self.options.mods.value):
             if exclude_island and all(all(location in island_regions for location in monster.locations)
-                                      for monster in monster_data.all_monsters_by_category[category]):
+                                      for monster in monster_data.all_monsters_by_category(self.options.mods.value)[category]):
                 continue
             rules.append(self.logic.monster.can_kill_any(monster_data.all_monsters_by_category(self.options.mods.value)[category]))
 

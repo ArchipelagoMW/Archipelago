@@ -75,18 +75,18 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
             return {}
 
         return {
-            ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has((Ore.iridium, Material.coal)) &
+            ModQuest.RailroadBoulder: self.logic.received(Wallet.skull_key) & self.logic.has_all(*(Ore.iridium, Material.coal)) &
                                       self.logic.region.can_reach(Region.blacksmith) & self.logic.region.can_reach(Region.railroad),
-            ModQuest.GrandpasShed: self.logic.has((Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
+            ModQuest.GrandpasShed: self.logic.has_all(*(Material.hardwood, MetalBar.iron, ArtisanGood.battery_pack, Material.stone)) &
                                    self.logic.region.can_reach(SVERegion.grandpas_shed),
-            ModQuest.MarlonsBoat: self.logic.has((Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
+            ModQuest.MarlonsBoat: self.logic.has_all(*(Loot.void_essence, Loot.solar_essence, Loot.slime, Loot.bat_wing, Loot.bug_meat)) &
                                   self.logic.relationship.can_meet(ModNPC.lance) & self.logic.region.can_reach(SVERegion.guild_summit),
             ModQuest.AuroraVineyard: self.logic.has(Fruit.starfruit) & self.logic.region.can_reach(SVERegion.aurora_vineyard),
-            ModQuest.MonsterCrops: self.logic.has((SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
+            ModQuest.MonsterCrops: self.logic.has_all(*(SVEVegetable.monster_mushroom, SVEFruit.slime_berry, SVEFruit.monster_fruit, SVEVegetable.void_root)),
             ModQuest.VoidSoul: self.logic.has(SVEForage.void_soul) & self.logic.region.can_reach(Region.farm) &
                                self.logic.season.has_any_not_winter() & self.logic.region.can_reach(SVERegion.badlands_entrance) &
                                self.logic.relationship.has_hearts(NPC.krobus, 10) & self.logic.quest.can_complete_quest(ModQuest.MonsterCrops) &
-                               self.logic.monster.can_kill_any([Monster.shadow_brute, Monster.shadow_shaman, Monster.shadow_sniper]),
+                               self.logic.monster.can_kill_any((Monster.shadow_brute, Monster.shadow_shaman, Monster.shadow_sniper)),
         }
 
     def _get_distant_lands_quest_rules(self):
