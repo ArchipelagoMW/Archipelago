@@ -1426,7 +1426,7 @@ class ClientMessageProcessor(CommonCommandProcessor):
         cost = self.ctx.get_hint_cost(self.client.slot)
 
         if self.ctx.hint_cost > 100:
-            self.output(f"Sorry, hints are disabled.")
+            self.output("Sorry, hints are disabled.")
             hints = []
             return True
         elif not input_text:
