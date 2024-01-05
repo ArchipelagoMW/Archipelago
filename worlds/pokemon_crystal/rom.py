@@ -92,8 +92,11 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         for address_name, address in data.rom_addresses.items():
             if (address_name.startswith("AP_WildGrass")):
                 cur_address = address + 4
-                for i in range(21):
-                    write_bytes(patched_rom, [get_random_poke(random)], cur_address)
+                for i in range(7):
+                    random_poke = get_random_poke(random)
+                    write_bytes(patched_rom, [random_poke], cur_address)  # morn
+                    write_bytes(patched_rom, [random_poke], cur_address + 14)  # day
+                    write_bytes(patched_rom, [random_poke], cur_address + 28)  # nite
                     cur_address += 2
             if (address_name.startswith("AP_WildWater")):
                 cur_address = address + 2
@@ -178,7 +181,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     with open(output_path, "wb") as out_file:
         out_file.write(patched_rom)
     patch = PokemonCrystalDeltaPatch(os.path.splitext(output_path)[0] + ".apcrystal",
-                                     player=world.player, player_name=world.multiworld.player_name[world.player], patched_path=output_path)
+                                     player=world.player, player_name=world.multiworld.player_name[world.player],
+                                     patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
