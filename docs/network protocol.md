@@ -326,7 +326,7 @@ Sent to server to inform it of locations that the client has checked. Used to in
 
 ### LocationScouts
 Sent to the server to retrieve the items that are on a specified list of locations. The server will respond with a [LocationInfo](#LocationInfo) packet with the items located in the scouted locations.
-Fully remote clients without a patch file may use this to "place" items on the in-game locations, such as displaying their names, items classification etc. before/upon pickup.
+Fully remote clients without a patch file may use this to "place" items onto the in-game locations, such as displaying their names, items classification etc. before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked, to create a hint as if the player had run `!hint_location` on this location, but without deducing hint points.
 This is useful in cases in which the item may appear in the game world, such as 'ledge items' in A Link to the Past. To do this, set the "create_as_hint" parameter to a non-zero value.
