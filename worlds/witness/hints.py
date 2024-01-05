@@ -594,7 +594,6 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
-        print(items_per_area)
         hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
         hints.append(WitnessWordedHint(hint_string, None))
