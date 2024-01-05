@@ -7,14 +7,14 @@
 <h2 style="text-transform:none";>Required Software:</h2>
  `Kingdom Hearts II Final Mix` from the [Epic Games Store](https://store.epicgames.com/en-US/discover/kingdom-hearts)
 - Follow this Guide to set up these requirements [KH2Rando.com](https://tommadness.github.io/KH2Randomizer/setup/Panacea-ModLoader/)<br>
-    1. `3.0.0 OpenKH Mod Manager with Panacea`<br>
-    2. `Install mod from KH2FM-Mods-Num/GoA-ROM-Edition`<br>
-    3. `Setup Lua Backend From the 3.0.0 KH2Randomizer.exe per the setup guide linked above`<br>
+    1. `3.2.0 OpenKH Mod Manager with Panacea`<br>
+    2. `Lua Backend from the OpenKH Mod Manager`
+    3. `Install the mod KH2FM-Mods-Num/GoA-ROM-Edition using OpenKH Mod Manager`<br>
 
 - Needed for Archipelago 
     1. [`ArchipelagoKH2Client.exe`](https://github.com/ArchipelagoMW/Archipelago/releases)<br>
-    2. `Install mod from JaredWeakStrike/APCompanion`<br>
-    3. `Install mod from KH2FM-Mods-equations19/auto-save`<br>
+    2. `Install the mod from JaredWeakStrike/APCompanion using OpenKH Mod Manager`<br>
+    3. `Install the mod from KH2FM-Mods-equations19/auto-save using OpenKH Mod Manager`<br>
     4. `AP Randomizer Seed`
 <h3 style="text-transform:none";>Required: Archipelago Companion Mod</h3>
 
@@ -68,8 +68,8 @@ Enter `The room's port number` into the top box <b> where the x's are</b> and pr
 - Run the game in windows/borderless windowed mode. Fullscreen is stable but the game can crash if you alt-tab out.
 - Make sure to save in a different save slot when playing in an async or disconnecting from the server to play a different seed
 
-<h2 style="text-transform:none";>Requirement/logic sheet</h2>
-Have any questions on what's in logic? This spreadsheet has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1Embae0t7pIrbzvX-NRywk7bTHHEvuFzzQBUUpSUL7Ak/edit?usp=sharing)
+<h2 style="text-transform:none";>Logic Sheet</h2>
+Have any questions on what's in logic? This spreadsheet made by Bulcon has the answer [Requirements/logic sheet](https://docs.google.com/spreadsheets/d/1nNi8ohEs1fv-sDQQRaP45o6NoRcMlLJsGckBonweDMY/edit?usp=sharing)
 <h2 style="text-transform:none";>F.A.Q.</h2>
 
 - Why is my HP/MP continuously increasing without stopping?
