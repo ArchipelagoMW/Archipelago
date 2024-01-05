@@ -254,7 +254,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fish.periwinkle: self.skill.can_crab_pot_at(Region.town),
             Fish.shrimp: self.skill.can_crab_pot_at(Region.beach),
             Fish.snail: self.skill.can_crab_pot_at(Region.town),
-            Fishing.curiosity_lure: self.monster.can_kill(all_monsters_by_name[Monster.mummy]),
+            Fishing.curiosity_lure: self.monster.can_kill(all_monsters_by_name(self.options.mods)[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Forageable.blackberry: self.tool.can_forage(Season.fall) | self.has_fruit_bats(),
             Forageable.cactus_fruit: self.tool.can_forage(Generic.any, Region.desert),

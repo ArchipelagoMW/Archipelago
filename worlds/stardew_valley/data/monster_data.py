@@ -1,9 +1,11 @@
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Set, Callable
+from Utils import cache_self1
 
+from ..mods.mod_data import ModNames
 from ..strings.monster_names import Monster, MonsterCategory
 from ..strings.performance_names import Performance
-from ..strings.region_names import Region
+from ..strings.region_names import Region, SVERegion, DeepWoodsRegion, BoardingHouseRegion
 
 
 @dataclass(frozen=True)
@@ -35,12 +37,24 @@ volcano = (Region.volcano_floor_5,)
 volcano_high = (Region.volcano_floor_10,)
 
 all_monsters: List[StardewMonster] = []
+monster_modifications_by_mod: Dict[str, Dict[str, Callable[[str, StardewMonster], StardewMonster]]] = {}
 
 
 def create_monster(name: str, category: str, locations: Tuple[str, ...], difficulty: str) -> StardewMonster:
     monster = StardewMonster(name, category, locations, difficulty)
     all_monsters.append(monster)
     return monster
+
+
+def update_monster_locations(monster: StardewMonster, locations: Tuple[str, ...]):
+    new_locations = monster.locations + locations
+    return StardewMonster(monster.name, monster.category, new_locations, monster.difficulty)
+
+
+def register_monster_modification(mod_name: str, monster: StardewMonster, modification_function):
+    if mod_name not in monster_modifications_by_mod:
+        monster_modifications_by_mod[mod_name] = {}
+    monster_modifications_by_mod[mod_name][monster.name] = modification_function
 
 
 green_slime = create_monster(Monster.green_slime, MonsterCategory.slime, mines_floor_20, Performance.basic)
@@ -107,9 +121,47 @@ royal_serpent = create_monster(Monster.royal_serpent, MonsterCategory.serpents, 
 magma_sprite = create_monster(Monster.magma_sprite, MonsterCategory.magma_sprites, volcano, Performance.galaxy)
 magma_sparker = create_monster(Monster.magma_sparker, MonsterCategory.magma_sprites, volcano_high, Performance.galaxy)
 
-all_monsters_by_name = {monster.name: monster for monster in all_monsters}
-all_monsters_by_category = {}
-for monster in all_monsters:
-    if monster.category not in all_monsters_by_category:
-        all_monsters_by_category[monster.category] = ()
-    all_monsters_by_category[monster.category] = all_monsters_by_category[monster.category] + (monster,)
+register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations(shadow_brute_dangerous, (SVERegion.highlands_cavern,) ))
+register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations(shadow_sniper, (SVERegion.highlands_cavern,) ))
+register_monster_modification(ModNames.sve, shadow_shaman_dangerous, update_monster_locations(shadow_shaman_dangerous, (SVERegion.highlands_cavern,) ))
+register_monster_modification(ModNames.sve, mummy_dangerous, update_monster_locations(mummy_dangerous, (SVERegion.crimson_badlands,) ))
+register_monster_modification(ModNames.sve, royal_serpent, update_monster_locations(royal_serpent, (SVERegion.crimson_badlands,) ))
+register_monster_modification(ModNames.sve, skeleton_dangerous, update_monster_locations(skeleton_dangerous, (SVERegion.crimson_badlands,) ))
+register_monster_modification(ModNames.sve, skeleton_mage, update_monster_locations(skeleton_mage, (SVERegion.crimson_badlands,) ))
+register_monster_modification(ModNames.sve, dust_sprite_dangerous, update_monster_locations(dust_sprite_dangerous, (SVERegion.highlands_outside,) ))
+
+register_monster_modification(ModNames.deepwoods, shadow_brute, update_monster_locations(shadow_brute, (DeepWoodsRegion.floor_10,) ))
+register_monster_modification(ModNames.deepwoods, cave_fly, update_monster_locations(cave_fly, (DeepWoodsRegion.floor_10,) ))
+register_monster_modification(ModNames.deepwoods, green_slime, update_monster_locations(green_slime, (DeepWoodsRegion.floor_10,) ))
+
+register_monster_modification(ModNames.boarding_house, shadow_brute,
+                              update_monster_locations(shadow_brute, (BoardingHouseRegion.lost_valley_house_1, BoardingHouseRegion.lost_valley_house_2,) ))
+register_monster_modification(ModNames.boarding_house, pepper_rex,
+                              update_monster_locations(pepper_rex, (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
+                                                                    BoardingHouseRegion.lost_valley_house_2,) ))
+
+
+def all_monsters_by_name(mods: Set[str]) -> Dict[str, StardewMonster]:
+    monsters_by_name = {}
+    for monster in all_monsters:
+        current_monster = monster
+        for mod in monster_modifications_by_mod:
+            if mod not in mods or monster.name not in monster_modifications_by_mod[mod]:
+                continue
+            current_monster = monster_modifications_by_mod[mod][monster.name]
+        monsters_by_name[monster.name] = current_monster
+    return monsters_by_name
+
+
+def all_monsters_by_category(mods: Set[str]) -> Dict[str, Tuple[StardewMonster,...]]:
+    monsters_by_category = {}
+    for monster in all_monsters:
+        current_monster = monster
+        for mod in monster_modifications_by_mod:
+            if mod not in mods or monster.name not in monster_modifications_by_mod[mod]:
+                continue
+            current_monster = monster_modifications_by_mod[mod][monster.name]
+        if current_monster.category not in monsters_by_category:
+            monsters_by_category[monster.category] = ()
+        monsters_by_category[current_monster.category] = monsters_by_category[current_monster.category] + (current_monster,)
+    return monsters_by_category
