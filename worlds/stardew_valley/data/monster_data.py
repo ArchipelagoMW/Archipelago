@@ -5,7 +5,7 @@ from Utils import cache_self1
 from ..mods.mod_data import ModNames
 from ..strings.monster_names import Monster, MonsterCategory
 from ..strings.performance_names import Performance
-from ..strings.region_names import Region, SVERegion, DeepWoodsRegion, BoardingHouseRegion
+from ..strings.region_names import Region, SVERegion, DeepWoodsRegion
 
 
 @dataclass(frozen=True)
@@ -133,13 +133,6 @@ register_monster_modification(ModNames.sve, dust_sprite_dangerous, update_monste
 register_monster_modification(ModNames.deepwoods, shadow_brute, update_monster_locations(shadow_brute, (DeepWoodsRegion.floor_10,) ))
 register_monster_modification(ModNames.deepwoods, cave_fly, update_monster_locations(cave_fly, (DeepWoodsRegion.floor_10,) ))
 register_monster_modification(ModNames.deepwoods, green_slime, update_monster_locations(green_slime, (DeepWoodsRegion.floor_10,) ))
-
-register_monster_modification(ModNames.boarding_house, shadow_brute,
-                              update_monster_locations(shadow_brute, (BoardingHouseRegion.lost_valley_house_1, BoardingHouseRegion.lost_valley_house_2,) ))
-register_monster_modification(ModNames.boarding_house, pepper_rex,
-                              update_monster_locations(pepper_rex, (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                    BoardingHouseRegion.lost_valley_house_2,) ))
-
 
 def all_monsters_by_name(mods: Set[str]) -> Dict[str, StardewMonster]:
     monsters_by_name = {}

@@ -22,7 +22,7 @@ from ...strings.metal_names import Ore, MetalBar
 from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
 from ...strings.quest_names import Quest, ModQuest
-from ...strings.region_names import Region, SVERegion, BoardingHouseRegion
+from ...strings.region_names import Region, SVERegion
 from ...strings.season_names import Season
 from ...strings.villager_names import ModNPC, NPC
 from ...strings.wallet_item_names import Wallet
