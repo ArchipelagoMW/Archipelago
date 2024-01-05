@@ -474,7 +474,8 @@ _vanilla_items = flatten([
     DS3ItemData("Small Leather Shield",                0x01315410, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Round Shield",                        0x0131A230, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Large Leather Shield",                0x0131C940, DS3ItemCategory.SHIELD_INFUSIBLE,
-                classification = ItemClassification.progression), # Crow trade
+                classification = ItemClassification.progression, # Crow trade
+                inject = True), # This is a shop/infinite drop item but we need it in logic
     DS3ItemData("Hawkwood's Shield",                   0x01323E70, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Iron Round Shield",                   0x01326580, DS3ItemCategory.SHIELD_INFUSIBLE),
     DS3ItemData("Wooden Shield",                       0x0132DAB0, DS3ItemCategory.SHIELD_INFUSIBLE),
