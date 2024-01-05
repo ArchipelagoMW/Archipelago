@@ -426,7 +426,6 @@
 			"REGION_CERULEAN_MART",
 			"REGION_ROUTE_24",
 			"REGION_ROUTE_5",
-			"REGION_ROUTE_4",
 			"REGION_ROUTE_9"
 		],
 		"locations": [
@@ -2256,7 +2255,7 @@
 	},
 	"REGION_RADIO_TOWER_4F:NOCARDKEY": {
 		"exits": [
-			"REGION_RADIO_TOWER_5F:CARDKEY",
+			"REGION_RADIO_TOWER_5F:NOCARDKEY",
 			"REGION_RADIO_TOWER_3F"
 		],
 		"locations": [],
@@ -2264,7 +2263,7 @@
 	},
 	"REGION_RADIO_TOWER_4F:CARDKEY": {
 		"exits": [
-			"REGION_RADIO_TOWER_5F:NOCARDKEY",
+			"REGION_RADIO_TOWER_5F:CARDKEY",
 			"REGION_RADIO_TOWER_3F"
 		],
 		"locations": [
