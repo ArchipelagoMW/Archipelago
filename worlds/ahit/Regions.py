@@ -445,14 +445,14 @@ def create_tasksanity_locations(world: World):
 
 
 def is_valid_plando(world: World, region: str) -> bool:
-    if region in blacklisted_acts.values():
+    if region in blacklisted_acts.values() or region not in act_entrances.keys():
         return False
 
     if region not in world.options.ActPlando.keys():
         return False
 
     act = world.options.ActPlando.get(region)
-    if act in blacklisted_acts.values():
+    if act in blacklisted_acts.values() or act not in act_entrances.keys():
         return False
 
     # Don't allow plando-ing things onto the first act that aren't completable with nothing
@@ -515,9 +515,10 @@ def randomize_act_entrances(world: World):
                 region_list.remove(region)
                 region_list.append(region)
             else:
-                print("Disallowing act plando for",
-                      world.multiworld.player_name[world.player],
-                      "-", region.name, ":", world.options.ActPlando.get(region.name))
+                print(f"[WARNING] ActPlando "
+                        f"({world.multiworld.get_player_name(world.player)}) - "
+                        f"{region.name}: {world.options.ActPlando.get(region.name)} "
+                        f"is an invalid or disallowed act plando combination!")
 
     # Reverse the list, so we can do what we want to do first
     region_list.reverse()

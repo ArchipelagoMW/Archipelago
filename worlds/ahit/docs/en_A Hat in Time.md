@@ -13,7 +13,7 @@ To unlock and access a chapter's Time Rift in act shuffle, the levels in place o
 
 ## What items and locations get shuffled?
 
-Time Pieces, Relics, Yarn, Badges, and most other items are shuffled. Unlike in the vanilla game, yarn is typeless, and will be automatically crafted in a set order once you gather enough yarn for each hat. Hats can also optionally be shuffled as individual items instead. Any items in the world, shops, act completions, and optionally storybook pages or Death Wish contracts are locations.
+Time Pieces, Relics, Yarn, Badges, and most other items are shuffled. Unlike in the vanilla game, yarn is typeless, and hats will be automatically stitched in a set order once you gather enough yarn for each hat. Hats can also optionally be shuffled as individual items instead. Any items in the world, shops, act completions, and optionally storybook pages or Death Wish contracts are locations.
 
 Any freestanding items that are considered to be progression or useful will have a rainbow streak particle attached to them. Filler items will have a white glow attached to them instead.
 
