@@ -224,7 +224,7 @@ class KH2WorldRules(KH2Rules):
             RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
 
             RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement,ItemName.BlizzardElement,ItemName.ThunderElement],state),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement, ItemName.BlizzardElement, ItemName.ThunderElement], state),
 
             RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
             RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
@@ -417,7 +417,7 @@ class KH2FightRules(KH2Rules):
             RegionName.DataLexaeus:       lambda state: self.get_data_lexaeus_rules(state),
             RegionName.OldPete:           lambda state: self.get_old_pete_rules(),
             RegionName.FuturePete:        lambda state: self.get_future_pete_rules(state),
-            RegionName.Terra:             lambda state: self.get_terra_rules(state),
+            RegionName.Terra:             lambda state: self.get_terra_rules(state) and state.has(ItemName.ProofofConnection, self.player),
             RegionName.DataMarluxia:      lambda state: self.get_data_marluxia_rules(state),
             RegionName.Barbosa:           lambda state: self.get_barbosa_rules(state),
             RegionName.GrimReaper1:       lambda state: self.get_grim_reaper1_rules(),
