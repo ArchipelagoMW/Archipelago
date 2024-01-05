@@ -429,7 +429,7 @@ def handle_option(ret: argparse.Namespace, game_weights: dict, option_key: str, 
             else:
                 player_option = option.from_any(get_choice(option_key, game_weights))
         else:
-            player_option = option.from_any(option.default) # call the from_any here to support default "random"
+            player_option = option.from_any(option.default)  # call the from_any here to support default "random"
         setattr(ret, option_key, player_option)
     except Exception as e:
         raise Exception(f"Error generating option {option_key} in {ret.game}") from e
