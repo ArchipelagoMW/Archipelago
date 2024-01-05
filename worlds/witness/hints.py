@@ -513,8 +513,11 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
         for item in corresponding_items
     )
 
+    laser_names = {"Symmetry Laser", "Desert Laser", "Quarry Laser", "Shadows Laser", "Town Laser", "Monastery Laser",
+                   "Jungle Laser", "Bunker Laser", "Swamp Laser", "Treehouse Laser", "Keep Laser"}
+
     local_lasers = sum(
-        item.player == world.player and "Laser" in item.name
+        item.player == world.player and item.name in laser_names
         for item in corresponding_items
     )
 
@@ -591,6 +594,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
+        print(items_per_area)
         hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
         hints.append(WitnessWordedHint(hint_string, None))
