@@ -57,7 +57,8 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         "RocketHQTrap_3": 0,
         "RocketHQElectrode_1": 2,
         "RocketHQElectrode_2": 2,
-        "RocketHQElectrode_3": 2
+        "RocketHQElectrode_3": 2,
+        "Togepi": 0
     }
 
     if world.options.randomize_static_pokemon:
