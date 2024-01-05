@@ -2,8 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for
-`SNI Client - A Link to the Past Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
 - SNI is not compatible with (Q)Usb2Snes.
 - Hardware or software capable of loading and playing SNES ROM files
@@ -18,11 +17,12 @@ but it is not supported.**
 
 ## Installation Procedures
 
-1. Download and install SNIClient from the link above, making sure to install the most recent version.
-   **The installer file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your Japanese Link to the Past ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is your Japanese Link to the Past ROM file. This only needs to be done once.
 
-2. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
+3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
     2. Right-click on a ROM file and select **Open with...**

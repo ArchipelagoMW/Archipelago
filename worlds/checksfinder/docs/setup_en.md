@@ -5,7 +5,6 @@
 - ChecksFinder from
   the [Github releases Page for the game](https://github.com/jonloveslegos/ChecksFinder/releases) (latest version)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `ChecksFinder Client` during installation.)
 
 ## Configuring your YAML file
 

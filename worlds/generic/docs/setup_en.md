@@ -17,19 +17,22 @@ The most recent public release of Archipelago can be found on the GitHub Release
 Run the exe file, and after accepting the license agreement you will be asked which components you would like to
 install.
 
-The generator allows you to generate multiworld games on your computer. The ROM setups are required if anyone in the
-game that you generate wants to play any of those games as they are needed to generate the relevant patch files. If you
-do not own the game, uncheck the relevant box. If you gain the game later, the installer can be run again to install and
-set up new components.
+Archipelago installations are automatically bundled with some programs. These include a launcher, a generator, a
+server and some clients.
 
-The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port
+- The launcher lets you quickly access Archipelago's different components and programs. It is found under the name 
+  `ArchipelagoLauncher` and can be found in the main directory of your Archipelago installation.
+
+- The generator allows you to generate multiworld games on your computer. Please refer to the 'Generating a game'
+  section of this guide for more information about it.
+
+- The server will allow you to host the multiworld on your machine. Hosting on your machine requires forwarding the port
 you are hosting on. The default port for Archipelago is `38281`. If you are unsure how to do this there are plenty of
 other guides on the internet that will be more suited to your hardware.
 
-The `Clients` are what are used to connect your game to the multiworld. If the game you plan to play is available
-here, go ahead and install its client as well. If the game you choose to play is supported by Archipelago but not listed
-in the installation, check the setup guide for that game. Installing a client for a ROM based game requires you to have
-a legally obtained ROM for that game as well.
+- The clients are what are used to connect your game to the multiworld. Some games use a client that is automatically
+installed with an Archipelago installation. You can access those clients via the launcher or by navigating
+to your Archipelago installation. 
 
 ## Generating a game
 
@@ -72,14 +75,18 @@ If you have downloaded the settings, or have created a settings file manually, t
 
 #### On your local installation
 
-To generate a game on your local machine, make sure to install the Archipelago software, and ensure to select the
-`Generator` component, as well as the `ROM setup` for any games you will want to play. Navigate to your Archipelago
+To generate a game on your local machine, make sure to install the Archipelago software. Navigate to your Archipelago
 installation (usually C:\ProgramData\Archipelago), and place the settings file you have either created or downloaded
 from the website in the `Players` folder.
 
-Run `ArchipelagoGenerate.exe`, and it will inform you whether the generation was successful or not. If successful, there
-will be an output zip in the `output` folder (usually named something like `AP_XXXXX.zip`). This will contain all
-relevant information to the session, including the spoiler log, if one was generated.
+Run `ArchipelagoGenerate.exe`, or click on `Generate` in the launcher, and it will inform you whether the generation
+was successful or not. If successful, there will be an output zip in the `output` folder 
+(usually named something like `AP_XXXXX.zip`). This will contain all relevant information to the session, including the
+spoiler log, if one was generated.
+
+Please note that some games require you to own their ROM files to generate with them as they are needed to generate the
+relevant patch files. When you generate with a ROM game for the first time, you will be asked to locate its base ROM file.
+This step only needs to be done once.
 
 ### Generating a multiplayer game
 
@@ -97,12 +104,9 @@ player name.
 
 #### On the website
 
-Gather all player YAML files into a single place, and compress them into a zip file. This can be done by pressing
-ctrl/cmd + clicking on each file until all are selected, right-clicking one of the files, and clicking
-`compress to ZIP file` or `send to > compressed folder`.
-
-Navigate to the [Generate Page](/generate), select the host settings you would like, click on `Upload File`, and
-select the newly created zip from the opened window.
+Gather all player YAML files into a single place, then navigate to the [Generate Page](/generate). Select the host settings
+you would like, click on `Upload File(s)`, and select all player YAML files. The site also accepts `zip` archives containing YAML
+files.
 
 After some time, you will be redirected to a seed info page that will display the generated seed, the time it was
 created, the number of players, the spoiler (if one was created) and all rooms created from this seed.
@@ -114,8 +118,11 @@ It is possible to generate the multiworld locally, using a local Archipelago ins
 Archipelago installation folder (usually C:\ProgramData\Archipelago) and placing each YAML file in the `Players` folder.
 If the folder does not exist then it must be created manually. The files here should not be compressed.
 
-After filling the `Players` folder, the `ArchipelagoGenerate.exe` program should be run in order to generate a
-multiworld. The output of this process is placed in the `output` folder (usually named something like `AP_XXXXX.zip`).
+After filling the `Players` folder, run`ArchipelagoGenerate.exe` or click `Generate` in the launcher. The output of 
+the generation is placed in the `output` folder (usually named something like `AP_XXXXX.zip`).
+
+Please note that if any player in the game you want to generate plays a game that needs a ROM file to generate, you will
+need the corresponding ROM files.
 
 ##### Changing local host settings for generation
 
@@ -123,10 +130,12 @@ Sometimes there are various settings that you may want to change before rolling 
 auto-release, plando support, or setting a password.
 
 All of these settings, plus other options, may be changed by modifying the `host.yaml` file in the Archipelago
-installation folder. The settings chosen here are baked into the `.archipelago` file that gets output with the other
-files after generation, so if you are rolling locally, ensure this file is edited to your liking **before** rolling the
-seed. This file is overwritten when running the Archipelago Installation software. If you have changed settings in this
-file, and would like to retain them, you may rename the file to `options.yaml`.
+installation folder. You can quickly access this file by clicking on `Open host.yaml` in the launcher. The settings
+chosen here are baked into the `.archipelago` file that gets output with the other files after generation, so if you 
+are rolling locally, ensure this file is edited to your liking **before** rolling the seed. This file is overwritten 
+when running the Archipelago Installation software. If you have changed settings in this file, and would like to retain 
+them, you may rename the file to `options.yaml`. 
+
 
 ## Hosting an Archipelago Server
 

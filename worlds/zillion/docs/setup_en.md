@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `Zillion Client - Zillion Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 - RetroArch 1.10.3 or newer from: [RetroArch Website](https://retroarch.com?page=platforms).
 
@@ -30,9 +30,10 @@ Put your Zillion ROM file in the Archipelago directory in your home directory.
 
 ### Windows Setup
 
-1. During the installation of Archipelago, install the Zillion Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the Zillion Client.
-2. During setup, you will be asked to locate your base ROM file. This is the Zillion ROM file mentioned above in Required Software.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is the Zillion ROM file mentioned above in Required Software. This only needs to be done once.
 
 ---
 # Play
