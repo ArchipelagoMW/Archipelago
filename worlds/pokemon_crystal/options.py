@@ -34,6 +34,12 @@ class RandomizeWilds(Toggle):
     default = 0
 
 
+class NormalizeEncounterRates(Toggle):
+    """Normalizes chance of encountering each wild Pokemon slot"""
+    display_name = "Normalize Encounter Rates"
+    default = 0
+
+
 class RandomizeStaticPokemon(Toggle):
     """Randomizes species of static Pokemon encounters"""
     display_name = "Randomize Static Pokemon"
@@ -99,6 +105,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     require_itemfinder: RequireItemfinder
     randomize_starters: RandomizeStarters
     randomize_wilds: RandomizeWilds
+    normalize_encounter_rates: NormalizeEncounterRates
     randomize_static_pokemon: RandomizeStaticPokemon
     randomize_trainer_parties: RandomizeTrainerParties
     randomize_learnsets: RandomizeLearnsets

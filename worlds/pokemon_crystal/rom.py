@@ -106,6 +106,12 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             if address_name == "AP_Misc_Intro_Wooper":
                 write_bytes(patched_rom, [get_random_poke(random)], address + 1)
 
+    if world.options.normalize_encounter_rates:
+        write_bytes(patched_rom, [14, 0, 28, 1, 42, 2, 57, 3, 71, 4, 86, 5, 100, 6],
+                    data.rom_addresses["AP_Prob_GrassMon"])
+        write_bytes(patched_rom, [33, 0, 66, 1, 100, 2],
+                    data.rom_addresses["AP_Prob_WaterMon"])
+
     if world.options.full_tmhm_compatibility:
         address = data.rom_addresses["BaseData"]
         for i in range(251):
