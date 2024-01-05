@@ -1,9 +1,11 @@
 import typing
 
 from BaseClasses import MultiWorld, Region
+from . import Locations
 
-from .Locations import KH2Location, event_location_to_item
-from . import LocationName, RegionName, Events_Table
+from .Subclasses import KH2Location
+from .Names import LocationName, RegionName
+from .Items import Events_Table
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                        [],
@@ -1020,7 +1022,8 @@ def create_regions(self):
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]
     # fill the event locations with events
-    for location, item in event_location_to_item.items():
+
+    for location, item in Locations.event_location_to_item.items():
         multiworld.get_location(location, player).place_locked_item(
                 multiworld.worlds[player].create_event_item(item))
 

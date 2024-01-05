@@ -12,6 +12,7 @@ from .OpenKH import patch_kh2
 from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
+from .Subclasses import KH2Item
 
 
 def launch_client():
@@ -50,6 +51,7 @@ class KH2World(World):
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
     item_name_groups = item_groups
+    location_name_groups = location_groups
 
     visitlocking_dict: Dict[str, int]
     plando_locations: Dict[str, str]

@@ -2,23 +2,7 @@ import typing
 
 from BaseClasses import Item
 from .Names import ItemName
-
-
-class KH2Item(Item):
-    game: str = "Kingdom Hearts 2"
-
-
-class ItemData(typing.NamedTuple):
-    quantity: int = 0
-    kh2id: int = 0
-    # Save+ mem addr
-    memaddr: int = 0
-    # some items have bitmasks. if bitmask>0 bitor to give item else
-    bitmask: int = 0
-    # if ability then
-    ability: bool = False
-
-
+from .Subclasses import ItemData
 # 0x130000
 Reports_Table = {
     ItemName.SecretAnsemsReport1:  ItemData(1, 226, 0x36C4, 6),
