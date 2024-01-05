@@ -72,8 +72,20 @@ class KH1World(World):
         while i < 100:
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
-        if self.get_setting("sephiroth"):
-            self.multiworld.get_location("Ansem's Secret Report 12", self.player).place_locked_item(self.create_item("Victory"))
+        if self.get_setting("sephiroth") or self.get_setting("chronicles"):
+            possible_win_locations = []
+            if self.get_setting("sephiroth"):
+                possible_win_locations.append("Ansem's Secret Report 12")
+            if self.get_setting("chronicles"):
+                possible_win_locations.append("Chronicles Wonderland")
+                possible_win_locations.append("Chronicles Olympus Coliseum")
+                possible_win_locations.append("Chronicles Deep Jungle")
+                possible_win_locations.append("Chronicles Agrabah")
+                possible_win_locations.append("Chronicles Monstro")
+                if self.get_setting("atlantica"):
+                    possible_win_locations.append("Chronicles Atlantica")
+                possible_win_locations.append("Chronicles Halloween Town")
+            self.multiworld.get_location(random.choice(possible_win_locations), self.player).place_locked_item(self.create_item("Victory"))
         else:
             self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))

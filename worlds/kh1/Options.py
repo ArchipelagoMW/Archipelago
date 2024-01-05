@@ -14,7 +14,14 @@ class Atlantica(Toggle):
     """
     display_name = "Atlantica"
 
+class Chronicles(Toggle):
+    """
+    Toggle whether the win condition should be placed behind a random chronicle.  Better for fast games.
+    """
+    display_name = "Chronicles"
+
 kh1_options: Dict[str, type(Option)] = {
     "sephiroth": Sephiroth,
     "atlantica": Atlantica,
+    "chronicles": Chronicles,
 }
