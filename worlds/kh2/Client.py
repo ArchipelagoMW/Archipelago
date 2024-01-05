@@ -80,11 +80,6 @@ class KH2Context(CommonContext):
                 },
             },
         }
-        self.front_of_inventory = {
-            "Sora":   0x2546,
-            "Donald": 0x2658,
-            "Goofy":  0x276C,
-        }
         self.kh2seedname = None
         self.kh2slotdata = None
         self.itemamount = {}
@@ -169,6 +164,14 @@ class KH2Context(CommonContext):
         self.ability_code_list = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
 
+        self.base_hp = 20
+        self.base_mp = 100
+        self.base_drive = 5
+        self.base_accessory_slots = 1
+        self.base_armor_slots = 1
+        self.base_item_slots = 3
+        self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E, 0x2770, 0x2772]
+
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
@@ -218,6 +221,12 @@ class KH2Context(CommonContext):
 
     def kh2_read_byte(self, address):
         return int.from_bytes(self.kh2.read_bytes(self.kh2.base_address + address, 1), "big")
+
+    def kh2_read_int(self, address):
+        return self.kh2.read_int(self.kh2.base_address + address)
+
+    def kh2_write_int(self, address, value):
+        self.kh2.write_int(self.kh2.base_address + address, value)
 
     def on_package(self, cmd: str, args: dict):
         if cmd in {"RoomInfo"}:
@@ -476,7 +485,7 @@ class KH2Context(CommonContext):
 
     async def give_item(self, item, location):
         try:
-            # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites 
+            # todo: ripout all the itemtype stuff and just have one dictionary. the only thing that needs to be tracked from the server/local is abilites
             itemname = self.lookup_id_to_item[item]
             itemdata = self.item_name_to_data[itemname]
             # itemcode = self.kh2_item_name_to_id[itemname]
@@ -507,6 +516,8 @@ class KH2Context(CommonContext):
                             ability_slot = self.kh2_seed_save_cache["GoofyInvo"][1]
                             self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
                             self.kh2_seed_save_cache["GoofyInvo"][1] -= 2
+                        if ability_slot in self.front_ability_slots:
+                            self.front_ability_slots.remove(ability_slot)
 
                 elif len(self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname]) < \
                         self.AbilityQuantityDict[itemname]:
@@ -518,10 +529,13 @@ class KH2Context(CommonContext):
                         ability_slot = self.kh2_seed_save_cache["DonaldInvo"][0]
                         self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
                         self.kh2_seed_save_cache["DonaldInvo"][0] -= 2
-                    elif itemname in self.goofy_ability_set:
+                    else:
                         ability_slot = self.kh2_seed_save_cache["GoofyInvo"][0]
                         self.kh2_seed_save_cache["AmountInvo"]["Ability"][itemname].append(ability_slot)
                         self.kh2_seed_save_cache["GoofyInvo"][0] -= 2
+
+                    if ability_slot in self.front_ability_slots:
+                        self.front_ability_slots.remove(ability_slot)
 
             elif itemdata.memaddr in {0x36C4, 0x36C5, 0x36C6, 0x36C0, 0x36CA}:
                 # if memaddr is in a bitmask location in memory
@@ -615,7 +629,7 @@ class KH2Context(CommonContext):
             master_sell = master_equipment | master_staff | master_shield
 
             await asyncio.create_task(self.IsInShop(master_sell))
-
+            # print(self.kh2_seed_save_cache["AmountInvo"]["Ability"])
             for item_name in master_amount:
                 item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
@@ -673,10 +687,10 @@ class KH2Context(CommonContext):
                             self.kh2_write_short(self.Save + slot, item_data.memaddr)
             # removes the duped ability if client gave faster than the game.
 
-            for charInvo in {"Sora", "Donald", "Goofy"}:
-                if self.kh2_read_short(self.Save + self.front_of_inventory[charInvo]) != 0:
-                    print(f"removed {self.Save + self.front_of_inventory[charInvo]} from {charInvo}")
-                    self.kh2_write_short(self.Save + self.front_of_inventory[charInvo], 0)
+            for ability in self.front_ability_slots:
+                if self.kh2_read_short(self.Save + ability) != 0:
+                    print(f"removed {self.Save + ability} from {ability}")
+                    self.kh2_write_short(self.Save + ability, 0)
 
             # remove the dummy level 1 growths if they are in these invo slots.
             for inventorySlot in {0x25CE, 0x25D0, 0x25D2, 0x25D4, 0x25D6, 0x25D8}:
@@ -740,15 +754,60 @@ class KH2Context(CommonContext):
                     self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             for item_name in master_stat:
-                item_data = self.item_name_to_data[item_name]
                 amount_of_items = 0
                 amount_of_items += self.kh2_seed_save_cache["AmountInvo"]["StatIncrease"][item_name]
+                if self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5:
+                    if item_name == ItemName.MaxHPUp:
+                        if self.kh2_read_byte(self.Save + 0x2498) < 3:  # Non-Critical
+                            Bonus = 5
+                        else:  # Critical
+                            Bonus = 2
+                        if self.kh2_read_int(self.Slot1 + 0x004) != self.base_hp + (Bonus * amount_of_items):
+                            self.kh2_write_int(self.Slot1 + 0x004, self.base_hp + (Bonus * amount_of_items))
 
-                # if slot1 has 5 drive gauge and goa lost illusion is checked and they are not in a cutscene
-                if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
-                        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
-                        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
-                    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+                    elif item_name == ItemName.MaxMPUp:
+                        if self.kh2_read_byte(self.Save + 0x2498) < 3:  # Non-Critical
+                            Bonus = 10
+                        else:  # Critical
+                            Bonus = 5
+                        if self.kh2_read_int(self.Slot1 + 0x184) != self.base_mp + (Bonus * amount_of_items):
+                            self.kh2_write_int(self.Slot1 + 0x184, self.base_mp + (Bonus * amount_of_items))
+
+                    elif item_name == ItemName.DriveGaugeUp:
+                        current_max_drive = self.kh2_read_byte(self.Slot1 + 0x1B2)
+                        # change when max drive is changed from 6 to 4
+                        if current_max_drive < 9 and current_max_drive != self.base_drive + amount_of_items:
+                            self.kh2_write_byte(self.Slot1 + 0x1B2, self.base_drive + amount_of_items)
+
+                    elif item_name == ItemName.AccessorySlotUp:
+                        current_accessory = self.kh2_read_byte(self.Save + 0x2501)
+                        if current_accessory != self.base_accessory_slots + amount_of_items:
+                            if 4 > current_accessory < self.base_accessory_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2501, current_accessory + 1)
+                            elif self.base_accessory_slots + amount_of_items < 4:
+                                self.kh2_write_byte(self.Save + 0x2501, self.base_accessory_slots + amount_of_items)
+
+                    elif item_name == ItemName.ArmorSlotUp:
+                        current_armor_slots = self.kh2_read_byte(self.Save + 0x2500)
+                        if current_armor_slots != self.base_armor_slots + amount_of_items:
+                            if 4 > current_armor_slots < self.base_armor_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2500, current_armor_slots + 1)
+                            elif self.base_armor_slots + amount_of_items < 4:
+                                self.kh2_write_byte(self.Save + 0x2500, self.base_armor_slots + amount_of_items)
+
+                    elif item_name == ItemName.ItemSlotUp:
+                        current_item_slots = self.kh2_read_byte(self.Save + 0x2502)
+                        if current_item_slots != self.base_item_slots + amount_of_items:
+                            if 8 > current_item_slots < self.base_item_slots + amount_of_items:
+                                self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
+                            elif self.base_item_slots + amount_of_items < 8:
+                                self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
+                                
+                # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
+                #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
+                #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
+                #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
+
             if "PoptrackerVersionCheck" in self.kh2slotdata:
                 if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
                     self.kh2_write_byte(self.Save + 0x3607, 1)
