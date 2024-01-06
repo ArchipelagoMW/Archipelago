@@ -37,7 +37,7 @@ item_table = (
     'Burning Phone',
     'Foreign Coin',
     'USB containing Government Secrets',
-    'Monkey's Paw',
+    'Monkey\'s Paw',
     'Smelly Vintage T-Shirt',
     'Fancy Rat-sized Tophat',
     'McRib',
