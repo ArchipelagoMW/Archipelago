@@ -166,6 +166,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     rom.write_int32(0xBF3C4, 0x10000003)  # B 0x8013C1E4
 
     # Give PowerUps their Legacy of Darkness behavior when attempting to pick up more than two
+    rom.write_int16(0xA9624, 0x1000)
     rom.write_int32(0xA9730, 0x24090000)  # ADDIU	T1, R0, 0x0000
     rom.write_int32(0xBF2FC, 0x080FF16D)  # J	0x803FC5B4
     rom.write_int32(0xBF300, 0x00000000)  # NOP
