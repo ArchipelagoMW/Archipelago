@@ -1,8 +1,10 @@
 from __future__ import annotations
 import os
+import json
 import sys
 import asyncio
 import shutil
+import logging
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -10,6 +12,8 @@ ModuleUpdate.update()
 import Utils
 
 check_num = 0
+
+logger = logging.getLogger("Client")
 
 if __name__ == "__main__":
     Utils.init_logging("KH1Client", exception_logger="Client")
@@ -119,6 +123,22 @@ class KH1Context(CommonContext):
                     filename = f"send{ss}"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
+
+        if cmd in {"PrintJSON"}:
+            data = args["data"]
+            if data[0]:
+                msg = str(data[0]["text"]);
+                #player send a location
+                if msg.startswith(self.auth + " sent "):
+                    with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
+                        f.write(msg.replace(msg.replace(self.auth + " sent ", ""), "\n"))
+                        f.close()
+
+
+
+
+
+
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
