@@ -225,7 +225,7 @@ class ZillionWorld(World):
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
                         loc.progress_type = LocationProgressType.EXCLUDED
-                        self.multiworld.exclude_locations[p].value.add(loc.name)
+                        self.options.exclude_locations.value.add(loc.name)
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
