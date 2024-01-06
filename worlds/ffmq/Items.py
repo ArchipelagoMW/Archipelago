@@ -187,6 +187,7 @@ item_table = {
     "Pazuzu 5F": ItemData(None, ItemClassification.progression),
     "Pazuzu 6F": ItemData(None, ItemClassification.progression),
     "Dark King": ItemData(None, ItemClassification.progression),
+    "Tristam Bone Item Given": ItemData(None, ItemClassification.progression),
     #"Barred": ItemData(None, ItemClassification.progression),
 
 }
