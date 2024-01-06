@@ -44,7 +44,7 @@ your personal settings and export a config file from them.
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the
-[YAML Validator](/mysterycheck) page.
+[YAML Validator](/check) page.
 
 ## Generating a Single-Player Game
 
