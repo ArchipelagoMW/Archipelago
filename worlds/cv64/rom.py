@@ -716,7 +716,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     # Everything related to dropping the previous sub-weapon
     if options.drop_previous_sub_weapon.value:
         rom.write_int32(0xBFD034, 0x080FF3FF)  # J 0x803FCFFC
-        rom.write_int32(0xBFC18C, 0x080FF3F2)  # J 0x803FCFC8
+        rom.write_int32(0xBFC190, 0x080FF3F2)  # J 0x803FCFC8
         rom.write_int32s(0xBFCFC4, patches.prev_subweapon_spawn_checker)
         rom.write_int32s(0xBFCFFC, patches.prev_subweapon_fall_checker)
         rom.write_int32s(0xBFD060, patches.prev_subweapon_dropper)
