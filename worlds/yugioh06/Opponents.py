@@ -47,11 +47,11 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         OpponentData("Horus the Black Flame Dragon LV8", [], 5, 2,
                      lambda state: state.yugioh06_difficulty(player, 4)),
         OpponentData("Stronghold", [], 5, 3,
-                     lambda state: state.has("Challenge Beaten", player, state.yugioh06_difficulty(player, 5))),
+                     lambda state: state.yugioh06_difficulty(player, 5)),
         OpponentData("Sacred Phoenix of Nephthys", [], 5, 4,
-                     lambda state: state.has("Challenge Beaten", player, state.yugioh06_difficulty(player, 6))),
+                     lambda state: state.yugioh06_difficulty(player, 6)),
         OpponentData("Cyber End Dragon", ["Goal"], 5, 5,
-                     lambda state: state.has("Challenge Beaten", player, state.yugioh06_difficulty(player, 7))),
+                     lambda state: state.yugioh06_difficulty(player, 7)),
     ]
     return tuple(opponents_table)
 
