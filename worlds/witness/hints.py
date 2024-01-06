@@ -514,7 +514,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     )
 
     laser_names = {"Symmetry Laser", "Desert Laser", "Quarry Laser", "Shadows Laser", "Town Laser", "Monastery Laser",
-                   "Jungle Laser", "Bunker Laser", "Swamp Laser", "Treehouse Laser", "Keep Laser"}
+                   "Jungle Laser", "Bunker Laser", "Swamp Laser", "Treehouse Laser", "Keep Laser", }
 
     local_lasers = sum(
         item.player == world.player and item.name in laser_names
