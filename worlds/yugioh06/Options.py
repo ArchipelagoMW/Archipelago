@@ -54,7 +54,7 @@ class FinalCampaignBossChallenges(Range):
     display_name = "Final Campaign Boss challenges unlock amount"
     range_start = 0
     range_end = 91
-    default = 15
+    default = 10
 
 
 class FourthTier5CampaignBossChallenges(Range):
@@ -62,7 +62,7 @@ class FourthTier5CampaignBossChallenges(Range):
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 10
+    default = 5
 
 
 class ThirdTier5CampaignBossChallenges(Range):
@@ -70,7 +70,7 @@ class ThirdTier5CampaignBossChallenges(Range):
     display_name = "Third Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
-    default = 5
+    default = 2
 
 
 class FinalCampaignBossCampaignOpponents(Range):
@@ -78,7 +78,7 @@ class FinalCampaignBossCampaignOpponents(Range):
     display_name = "Final Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 24
-    default = 15
+    default = 12
 
 
 class FourthTier5CampaignBossCampaignOpponents(Range):
@@ -86,7 +86,7 @@ class FourthTier5CampaignBossCampaignOpponents(Range):
     display_name = "Fourth Tier 5 Campaign Boss campaign opponent  unlock amount"
     range_start = 0
     range_end = 23
-    default = 10
+    default = 7
 
 
 class ThirdTier5CampaignBossCampaignOpponents(Range):
@@ -94,7 +94,7 @@ class ThirdTier5CampaignBossCampaignOpponents(Range):
     display_name = "Third Tier 5 Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 22
-    default = 5
+    default = 3
 
 
 class NumberOfChallenges(Range):
@@ -102,7 +102,7 @@ class NumberOfChallenges(Range):
     display_name = "Number of Challenges"
     range_start = 0
     range_end = 91
-    default = 20
+    default = 10
 
 
 class StartingMoney(Range):
@@ -118,7 +118,7 @@ class MoneyRewardMultiplier(Range):
     display_name = "Money Reward Multiplier"
     range_start = 1
     range_end = 255
-    default = 10
+    default = 20
 
 
 class NormalizeBoostersPacks(Toggle):
@@ -134,7 +134,7 @@ class BoosterPackPrices(Range):
     display_name = "Booster Pack Prices"
     range_start = 1
     range_end = 3000
-    default = 300
+    default = 100
 
 
 class AddEmptyBanList(Toggle):
