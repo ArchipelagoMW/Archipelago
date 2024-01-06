@@ -143,7 +143,7 @@ class WitnessWorld(World):
         # Pick an early item to place on the tutorial gate.
         early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
         if early_items:
-            random_early_item = self.multiworld.random.choice(early_items)
+            random_early_item = self.random.choice(early_items)
             if self.options.puzzle_randomization == 1:
                 # In Expert, only tag the item as early, rather than forcing it onto the gate.
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
