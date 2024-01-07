@@ -1508,7 +1508,7 @@ item_table = {
     ItemNames.SCOUT_APIAL_SENSORS: ItemData(313 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 13, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
     ItemNames.SCOUT_GRAVITIC_THRUSTERS: ItemData(314 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 14, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
     ItemNames.SCOUT_ADVANCED_PHOTON_BLASTERS: ItemData(315 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.SCOUT),
-    ItemNames.TEMPEST_TECTONIC_DESTABIlIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 16, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
+    ItemNames.TEMPEST_TECTONIC_DESTABILIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 16, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.TEMPEST_QUANTIC_REACTOR: ItemData(317 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 17, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.TEMPEST_GRAVITY_SLING: ItemData(318 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX: ItemData(319 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 19, SC2Race.PROTOSS, origin={"ext"}),
@@ -1530,7 +1530,8 @@ item_table = {
     ItemNames.VOID_RAY_DESTROYER_FLUX_VANES: ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
     ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DESTROYER),
     ItemNames.WARP_PRISM_GRAVITIC_DRIVE: ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 7, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
-    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
+    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
+        description="Equips Warp Prisms with an auto-attack that can hit ground and air targets."),
     ItemNames.WARP_PRISM_WAR_CONFIGURATION: ItemData(339 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 9, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
     ItemNames.OBSERVER_GRAVITIC_BOOSTERS: ItemData(340 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 10, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
     ItemNames.OBSERVER_SENSOR_ARRAY: ItemData(341 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
@@ -1711,7 +1712,27 @@ for item, data in get_full_item_list().items():
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
 item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
                                    ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
-
+item_name_groups["Aiur"] = [
+    ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
+    ItemNames.IMMORTAL, ItemNames.REAVER,
+    ItemNames.PHOENIX, ItemNames.SCOUT, ItemNames.ARBITER, ItemNames.CARRIER,
+]
+item_name_groups["Nerazim"] = [
+    ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
+    ItemNames.ANNIHILATOR,
+    ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
+]
+item_name_groups["Tal'Darim"] = [
+    ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
+    ItemNames.VANGUARD, ItemNames.WRATHWALKER,
+    ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
+    ItemNames.WARP_PRISM_PHASE_BLASTER,
+]
+item_name_groups["Purifier"] = [
+    ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
+    ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
+    ItemNames.MIRAGE, ItemNames.TEMPEST,
+]
 
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
