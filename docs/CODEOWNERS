@@ -46,11 +46,20 @@
 # DOOM 1993
 /worlds/doom_1993/ @Daivuk
 
+# DOOM II
+/worlds/doom_ii/ @Daivuk
+
 # Factorio
 /worlds/factorio/ @Berserker66
 
 # Final Fantasy
 /worlds/ff1/ @jtoyoda
+
+# Final Fantasy Mystic Quest
+/worlds/ffmq/ @Alchav @wildham0
+
+# Heretic
+/worlds/heretic/ @Daivuk
 
 # Hollow Knight
 /worlds/hk/ @BadMagic100 @ThePhar
@@ -60,6 +69,9 @@
 
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
+
+# Landstalker: The Treasures of King Nole
+/worlds/landstalker/ @Dinopony
 
 # Lingo
 /worlds/lingo/ @hatkirby
@@ -109,6 +121,9 @@
 
 # Risk of Rain 2
 /worlds/ror2/ @kindasneaki
+
+# Shivers
+/worlds/shivers/ @GodlFire
 
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace

@@ -216,13 +216,13 @@ const buildOptionsTable = (options, romOpts = false) => {
         element.appendChild(randomButton);
         break;
 
-      case 'special_range':
+      case 'named_range':
         element = document.createElement('div');
-        element.classList.add('special-range-container');
+        element.classList.add('named-range-container');
 
         // Build the select element
-        let specialRangeSelect = document.createElement('select');
-        specialRangeSelect.setAttribute('data-key', option);
+        let namedRangeSelect = document.createElement('select');
+        namedRangeSelect.setAttribute('data-key', option);
         Object.keys(options[option].value_names).forEach((presetName) => {
           let presetOption = document.createElement('option');
           presetOption.innerText = presetName;
@@ -232,58 +232,58 @@ const buildOptionsTable = (options, romOpts = false) => {
             words[i] = words[i][0].toUpperCase() + words[i].substring(1);
           }
           presetOption.innerText = words.join(' ');
-          specialRangeSelect.appendChild(presetOption);
+          namedRangeSelect.appendChild(presetOption);
         });
         let customOption = document.createElement('option');
         customOption.innerText = 'Custom';
         customOption.value = 'custom';
         customOption.selected = true;
-        specialRangeSelect.appendChild(customOption);
+        namedRangeSelect.appendChild(customOption);
         if (Object.values(options[option].value_names).includes(Number(currentOptions[gameName][option]))) {
-          specialRangeSelect.value = Number(currentOptions[gameName][option]);
+          namedRangeSelect.value = Number(currentOptions[gameName][option]);
         }
 
         // Build range element
-        let specialRangeWrapper = document.createElement('div');
-        specialRangeWrapper.classList.add('special-range-wrapper');
-        let specialRange = document.createElement('input');
-        specialRange.setAttribute('type', 'range');
-        specialRange.setAttribute('data-key', option);
-        specialRange.setAttribute('min', options[option].min);
-        specialRange.setAttribute('max', options[option].max);
-        specialRange.value = currentOptions[gameName][option];
+        let namedRangeWrapper = document.createElement('div');
+        namedRangeWrapper.classList.add('named-range-wrapper');
+        let namedRange = document.createElement('input');
+        namedRange.setAttribute('type', 'range');
+        namedRange.setAttribute('data-key', option);
+        namedRange.setAttribute('min', options[option].min);
+        namedRange.setAttribute('max', options[option].max);
+        namedRange.value = currentOptions[gameName][option];
 
         // Build rage value element
-        let specialRangeVal = document.createElement('span');
-        specialRangeVal.classList.add('range-value');
-        specialRangeVal.setAttribute('id', `${option}-value`);
-        specialRangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
+        let namedRangeVal = document.createElement('span');
+        namedRangeVal.classList.add('range-value');
+        namedRangeVal.setAttribute('id', `${option}-value`);
+        namedRangeVal.innerText = currentOptions[gameName][option] !== 'random' ?
           currentOptions[gameName][option] : options[option].defaultValue;
 
         // Configure select event listener
-        specialRangeSelect.addEventListener('change', (event) => {
+        namedRangeSelect.addEventListener('change', (event) => {
           if (event.target.value === 'custom') { return; }
 
           // Update range slider
-          specialRange.value = event.target.value;
+          namedRange.value = event.target.value;
           document.getElementById(`${option}-value`).innerText = event.target.value;
           updateGameOption(event.target);
         });
 
         // Configure range event handler
-        specialRange.addEventListener('change', (event) => {
+        namedRange.addEventListener('change', (event) => {
           // Update select element
-          specialRangeSelect.value =
+          namedRangeSelect.value =
             (Object.values(options[option].value_names).includes(parseInt(event.target.value))) ?
             parseInt(event.target.value) : 'custom';
           document.getElementById(`${option}-value`).innerText = event.target.value;
           updateGameOption(event.target);
         });
 
-        element.appendChild(specialRangeSelect);
-        specialRangeWrapper.appendChild(specialRange);
-        specialRangeWrapper.appendChild(specialRangeVal);
-        element.appendChild(specialRangeWrapper);
+        element.appendChild(namedRangeSelect);
+        namedRangeWrapper.appendChild(namedRange);
+        namedRangeWrapper.appendChild(namedRangeVal);
+        element.appendChild(namedRangeWrapper);
 
         // Randomize button
         randomButton.innerText = '🎲';
@@ -291,15 +291,15 @@ const buildOptionsTable = (options, romOpts = false) => {
         randomButton.setAttribute('data-key', option);
         randomButton.setAttribute('data-tooltip', 'Toggle randomization for this option!');
         randomButton.addEventListener('click', (event) => toggleRandomize(
-            event, specialRange, specialRangeSelect)
+            event, namedRange, namedRangeSelect)
         );
         if (currentOptions[gameName][option] === 'random') {
           randomButton.classList.add('active');
-          specialRange.disabled = true;
-          specialRangeSelect.disabled = true;
+          namedRange.disabled = true;
+          namedRangeSelect.disabled = true;
         }
 
-        specialRangeWrapper.appendChild(randomButton);
+        namedRangeWrapper.appendChild(randomButton);
         break;
 
       default:
@@ -369,7 +369,7 @@ const setPresets = (optionsData, presetName) => {
         break;
       }
 
-      case 'special_range': {
+      case 'named_range': {
         const selectElement = document.querySelector(`select[data-key='${option}']`);
         const rangeElement = document.querySelector(`input[data-key='${option}']`);
         const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
@@ -463,7 +463,7 @@ const exportOptions = () => {
       options['description'] = `Generated by https://archipelago.gg with the ${preset} preset.`;
   }
 
-  if (!options.name || options.name.trim().length === 0) {
+  if (!options.name || options.name.toString().trim().length === 0) {
     return showUserMessage('You must enter a player name!');
   }
   const yamlText = jsyaml.safeDump(options, { noCompatMode: true }).replaceAll(/'(\d+)':/g, (x, y) => `${y}:`);

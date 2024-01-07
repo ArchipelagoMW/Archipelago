@@ -57,11 +57,11 @@ perk_list: List[str] = list(filter(Items.item_is_perk, Items.item_table.keys()))
 
 
 def has_perk_count(state: CollectionState, player: int, amount: int) -> bool:
-    return sum(state.item_count(perk, player) for perk in perk_list) >= amount
+    return sum(state.count(perk, player) for perk in perk_list) >= amount
 
 
 def has_orb_count(state: CollectionState, player: int, amount: int) -> bool:
-    return state.item_count("Orb", player) >= amount
+    return state.count("Orb", player) >= amount
 
 
 def forbid_items_at_location(multiworld: MultiWorld, location_name: str, items: Set[str], player: int):

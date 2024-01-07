@@ -47,7 +47,7 @@ class Version(typing.NamedTuple):
         return ".".join(str(item) for item in self)
 
 
-__version__ = "0.4.3"
+__version__ = "0.4.4"
 version_tuple = tuplize_version(__version__)
 
 is_linux = sys.platform.startswith("linux")
@@ -778,6 +778,25 @@ def deprecate(message: str):
         raise Exception(message)
     import warnings
     warnings.warn(message)
+
+
+class DeprecateDict(dict):
+    log_message: str
+    should_error: bool
+
+    def __init__(self, message, error: bool = False) -> None:
+        self.log_message = message
+        self.should_error = error
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        if self.should_error:
+            deprecate(self.log_message)
+        elif __debug__:
+            import warnings
+            warnings.warn(self.log_message)
+        return super().__getitem__(item)
+
 
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""

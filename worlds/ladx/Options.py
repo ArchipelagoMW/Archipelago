@@ -43,6 +43,12 @@ class TradeQuest(DefaultOffToggle, LADXROption):
     display_name = "Trade Quest"
     ladxr_name = "tradequest"
 
+class TextShuffle(DefaultOffToggle):
+    """
+    [On] Shuffles all the text in the game
+    [Off] (default) doesn't shuffle them.
+    """
+
 class Rooster(DefaultOnToggle, LADXROption):
     """
     [On] Adds the rooster to the item pool. 
@@ -343,18 +349,19 @@ class GfxMod(FreeText, LADXROption):
     normal = ''
     default = 'Link'
 
+    __spriteDir: str = Utils.local_path(os.path.join('data', 'sprites','ladx'))
     __spriteFiles: typing.DefaultDict[str, typing.List[str]] = defaultdict(list)
-    __spriteDir: str = None
 
     extensions = [".bin", ".bdiff", ".png", ".bmp"]
+
+    for file in os.listdir(__spriteDir):
+        name, extension = os.path.splitext(file)
+        if extension in extensions:
+            __spriteFiles[name].append(file)
+            
     def __init__(self, value: str):
         super().__init__(value)
-        if not GfxMod.__spriteDir:
-            GfxMod.__spriteDir = Utils.local_path(os.path.join('data', 'sprites','ladx'))
-            for file in os.listdir(GfxMod.__spriteDir):
-                name, extension = os.path.splitext(file)
-                if extension in self.extensions:
-                    GfxMod.__spriteFiles[name].append(file)
+
                     
     def verify(self, world, player_name: str, plando_options) -> None:
         if self.value == "Link" or self.value in GfxMod.__spriteFiles:
@@ -431,6 +438,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'trendy_game': TrendyGame,
     'gfxmod': GfxMod,
     'palette': Palette,
+    'text_shuffle': TextShuffle,
     'shuffle_nightmare_keys': ShuffleNightmareKeys,
     'shuffle_small_keys': ShuffleSmallKeys,
     'shuffle_maps': ShuffleMaps,
@@ -439,4 +447,5 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
+    
 }
