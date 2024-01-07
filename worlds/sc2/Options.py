@@ -1,6 +1,7 @@
+from dataclasses import dataclass, fields, Field
 from typing import Dict, FrozenSet, Union, Set
 from BaseClasses import MultiWorld
-from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range
+from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
 from .MissionTables import SC2Campaign, SC2Mission
 
 
@@ -665,71 +666,71 @@ class StartingSupplyPerItem(Range):
     default = 5
 
 
-# noinspection PyTypeChecker
-sc2_options: Dict[str, Option] = {
-    "game_difficulty": GameDifficulty,
-    "game_speed": GameSpeed,
-    "disable_forced_camera": DisableForcedCamera,
-    "skip_cutscenes": SkipCutscenes,
-    "all_in_map": AllInMap,
-    "mission_order": MissionOrder,
-    "maximum_campaign_size": MaximumCampaignSize,
-    "grid_two_start_positions": GridTwoStartPositions,
-    "player_color_terran_raynor": PlayerColorTerranRaynor,
-    "player_color_protoss": PlayerColorProtoss,
-    "player_color_zerg": PlayerColorZerg,
-    "player_color_zerg_primal": PlayerColorZergPrimal,
-    "enable_wol_missions": EnableWolMissions,
-    "enable_prophecy_missions": EnableProphecyMissions,
-    "enable_hots_missions": EnableHotsMissions,
-    "enable_lotv_prologue_missions": EnableLotVPrologueMissions,
-    "enable_lotv_missions": EnableLotVMissions,
-    "enable_epilogue_missions": EnableEpilogueMissions,
-    "enable_nco_missions": EnableNCOMissions,
-    "shuffle_campaigns": ShuffleCampaigns,
-    "shuffle_no_build": ShuffleNoBuild,
-    "starter_unit": StarterUnit,
-    "required_tactics": RequiredTactics,
-    "ensure_generic_items": EnsureGenericItems,
-    "min_number_of_upgrades": MinNumberOfUpgrades,
-    "max_number_of_upgrades": MaxNumberOfUpgrades,
-    "generic_upgrade_missions": GenericUpgradeMissions,
-    "generic_upgrade_research": GenericUpgradeResearch,
-    "generic_upgrade_items": GenericUpgradeItems,
-    "kerrigan_presence": KerriganPresence,
-    "kerrigan_checks_per_level_pack": KerriganChecksPerLevelPack,
-    "kerrigan_check_level_pack_size": KerriganCheckLevelPackSize,
-    "kerrigan_level_item_sum": KerriganLevelItemSum,
-    "kerrigan_level_item_distribution": KerriganLevelItemDistribution,
-    "start_primary_abilities": StartPrimaryAbilities,
-    "kerrigan_primal_status": KerriganPrimalStatus,
-    "spear_of_adun_presence": SpearOfAdunPresence,
-    "spear_of_adun_present_in_no_build": SpearOfAdunPresentInNoBuild,
-    "spear_of_adun_autonomously_cast_ability_presence": SpearOfAdunAutonomouslyCastAbilityPresence,
-    "spear_of_adun_autonomously_cast_present_in_no_build": SpearOfAdunAutonomouslyCastPresentInNoBuild,
-    "grant_story_tech": GrantStoryTech,
-    "take_over_ai_allies": TakeOverAIAllies,
-    "locked_items": LockedItems,
-    "excluded_items": ExcludedItems,
-    "excluded_missions": ExcludedMissions,
-    "nco_items": NovaCovertOpsItems,
-    "bw_items": BroodWarItems,
-    "ext_items": ExtendedItems,
-    "vanilla_locations": VanillaLocations,
-    "extra_locations": ExtraLocations,
-    "challenge_locations": ChallengeLocations,
-    "mastery_locations": MasteryLocations,
-    "minerals_per_item": MineralsPerItem,
-    "vespene_per_item": VespenePerItem,
-    "starting_supply_per_item": StartingSupplyPerItem
-}
+@dataclass
+class Starcraft2Options(PerGameCommonOptions):
+    game_difficulty: GameDifficulty
+    game_speed: GameSpeed
+    disable_forced_camera: DisableForcedCamera
+    skip_cutscenes: SkipCutscenes
+    all_in_map: AllInMap
+    mission_order: MissionOrder
+    maximum_campaign_size: MaximumCampaignSize
+    grid_two_start_positions: GridTwoStartPositions
+    player_color_terran_raynor: PlayerColorTerranRaynor
+    player_color_protoss: PlayerColorProtoss
+    player_color_zerg: PlayerColorZerg
+    player_color_zerg_primal: PlayerColorZergPrimal
+    enable_wol_missions: EnableWolMissions
+    enable_prophecy_missions: EnableProphecyMissions
+    enable_hots_missions: EnableHotsMissions
+    enable_lotv_prologue_missions: EnableLotVPrologueMissions
+    enable_lotv_missions: EnableLotVMissions
+    enable_epilogue_missions: EnableEpilogueMissions
+    enable_nco_missions: EnableNCOMissions
+    shuffle_campaigns: ShuffleCampaigns
+    shuffle_no_build: ShuffleNoBuild
+    starter_unit: StarterUnit
+    required_tactics: RequiredTactics
+    ensure_generic_items: EnsureGenericItems
+    min_number_of_upgrades: MinNumberOfUpgrades
+    max_number_of_upgrades: MaxNumberOfUpgrades
+    generic_upgrade_missions: GenericUpgradeMissions
+    generic_upgrade_research: GenericUpgradeResearch
+    generic_upgrade_items: GenericUpgradeItems
+    kerrigan_presence: KerriganPresence
+    kerrigan_checks_per_level_pack: KerriganChecksPerLevelPack
+    kerrigan_check_level_pack_size: KerriganCheckLevelPackSize
+    kerrigan_level_item_sum: KerriganLevelItemSum
+    kerrigan_level_item_distribution: KerriganLevelItemDistribution
+    start_primary_abilities: StartPrimaryAbilities
+    kerrigan_primal_status: KerriganPrimalStatus
+    spear_of_adun_presence: SpearOfAdunPresence
+    spear_of_adun_present_in_no_build: SpearOfAdunPresentInNoBuild
+    spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence
+    spear_of_adun_autonomously_cast_present_in_no_build: SpearOfAdunAutonomouslyCastPresentInNoBuild
+    grant_story_tech: GrantStoryTech
+    take_over_ai_allies: TakeOverAIAllies
+    locked_items: LockedItems
+    excluded_items: ExcludedItems
+    excluded_missions: ExcludedMissions
+    nco_items: NovaCovertOpsItems
+    bw_items: BroodWarItems
+    ext_items: ExtendedItems
+    vanilla_locations: VanillaLocations
+    extra_locations: ExtraLocations
+    challenge_locations: ChallengeLocations
+    mastery_locations: MasteryLocations
+    minerals_per_item: MineralsPerItem
+    vespene_per_item: VespenePerItem
+    starting_supply_per_item: StartingSupplyPerItem
 
 
 def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
     if multiworld is None:
-        return sc2_options[name].default
+        field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
+        return field.type.default
 
-    player_option = getattr(multiworld, name)[player]
+    player_option = getattr(multiworld.worlds[player].options, name)
 
     return player_option.value
 

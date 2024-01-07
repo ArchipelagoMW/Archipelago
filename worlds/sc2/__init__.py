@@ -1,4 +1,5 @@
 import typing
+from dataclasses import fields
 
 from typing import List, Set, Iterable, Sequence, Dict, Callable, Union
 from math import floor, ceil
@@ -11,9 +12,9 @@ from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table
     spear_of_adun_castable_passives, nova_equimpent
 from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
 from .Regions import create_regions
-from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
+from .Options import get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
     KerriganPresence, KerriganPrimalStatus, RequiredTactics, kerrigan_unit_available, StarterUnit, SpearOfAdunPresence, \
-    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence
+    get_enabled_campaigns, SpearOfAdunAutonomouslyCastAbilityPresence, Starcraft2Options
 from .PoolFilter import filter_items, get_item_upgrades, UPGRADABLE_ITEMS, missions_in_mission_table, get_used_races
 from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2Mission, \
     SC2Race
@@ -46,7 +47,8 @@ class SC2World(World):
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
     location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
-    option_definitions = sc2_options
+    options_dataclass = Starcraft2Options
+    options: Starcraft2Options
 
     item_name_groups = item_name_groups
     locked_locations: typing.List[str]
@@ -93,10 +95,10 @@ class SC2World(World):
 
     def fill_slot_data(self):
         slot_data = {}
-        for option_name in sc2_options:
-            option = getattr(self.multiworld, option_name)[self.player]
-            if type(option.value) in {str, int}:
-                slot_data[option_name] = int(option.value)
+        for option_name in [field.name for field in fields(Starcraft2Options)]:
+            option = get_option_value(self.multiworld, self.player, option_name)
+            if type(option) in {str, int}:
+                slot_data[option_name] = int(option)
         slot_req_table = {}
 
         # Serialize data
@@ -199,7 +201,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], location_cache: typing.List[Location]) -> List[Item]:
     starter_items: List[Item] = []
-    non_local_items = multiworld.non_local_items[player].value
+    non_local_items = get_option_value(multiworld, player, "non_local_items")
     starter_unit = get_option_value(multiworld, player, "starter_unit")
     first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
     # Ensuring that first mission is completable
