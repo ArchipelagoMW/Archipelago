@@ -12,6 +12,7 @@ ModuleUpdate.update()
 import Utils
 
 check_num = 0
+sent_counter = 0
 
 logger = logging.getLogger("Client")
 
@@ -90,6 +91,7 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
@@ -124,17 +126,41 @@ class KH1Context(CommonContext):
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
 
-        if cmd in {"PrintJSON"}:
-            data = args["data"]
-            if data[0]:
-                msg = str(data[0]["text"]);
-                #player send a location
-                if msg.startswith(self.auth + " sent "):
-                    with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
-                        f.write(msg.replace(msg.replace(self.auth + " sent ", ""), "\n"))
-                        f.close()
+        if cmd in {"PrintJSON"} and args["type"] == "ItemSend":
+            print("ItemSend")
+            item = args["item"]
+            networkItem = NetworkItem(*item)
+            senderID = networkItem.player
+
+            if senderID == self.slot:
+                itemName = self.item_names[networkItem.item]
+                recieverID = args["receiving"]
+                recieverName = self.player_names[recieverID]
+
+                sent_counter += 1
+                filename = f"sent" + str(sent_counter)
+                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    f.write(itemName + "\n" + recieverName)
+                    f.close()
+
+#f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
 
 
+
+        #last resort we can probably do better
+        #input: Krujo sent Magic Upgrade to Tim ((TT3) LocationName)
+        # if cmd in {"PrintJSON"}:
+        #     data = args["data"]
+        #     if data[0]:
+        #         msg = str(data[0]["text"]);
+        #         #player send a location
+        #         # if msg.startswith(self.auth + " sent "): #debug
+        #         with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
+        #             msg = msg.replace(self.auth + " sent ", "")
+        #             #Magic Upgrade to Tim ((TT3) LocationName)
+        #             splitTo = msg.split(" to ")
+        #             targetPlayer = splitTo[1].split(" ")[0]
+        #             f.close()
 
 
 
