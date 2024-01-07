@@ -47,7 +47,6 @@ class MessengerShopLocation(MessengerLocation):
     def cost(self) -> int:
         name = self.name.replace("The Shop - ", "")  # TODO use `remove_prefix` when 3.8 finally gets dropped
         world = self.parent_region.multiworld.worlds[self.player]
-        assert isinstance(world, MessengerWorld)
         shop_data = SHOP_ITEMS[name]
         if shop_data.prerequisite:
             prereq_cost = 0
@@ -65,7 +64,6 @@ class MessengerShopLocation(MessengerLocation):
 
     def access_rule(self, state: CollectionState) -> bool:
         world = state.multiworld.worlds[self.player]
-        assert isinstance(world, MessengerWorld)
         can_afford = state.has("Shards", self.player, min(self.cost, world.total_shards))
         return can_afford
 

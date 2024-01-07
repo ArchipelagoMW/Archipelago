@@ -4,13 +4,12 @@ from BaseClasses import CollectionState
 from Fill import distribute_items_restrictive
 from . import MessengerTestBase
 from .. import MessengerWorld
-from ..options import Logic, PowerSeals
+from ..options import Logic
 
 
 class LimitedMovementTest(MessengerTestBase):
     options = {
         "limited_movement": "true",
-        "shuffle_seals": "false",
         "shuffle_shards": "true",
     }
 
@@ -21,9 +20,8 @@ class LimitedMovementTest(MessengerTestBase):
 
     def test_options(self) -> None:
         """Tests that options were correctly changed."""
-        world = cast(MessengerWorld, self.multiworld.worlds[self.player])
-        self.assertEqual(PowerSeals.option_true, world.options.shuffle_seals)
-        self.assertEqual(Logic.option_hard, world.options.logic_level)
+        assert isinstance(self.multiworld.worlds[self.player], MessengerWorld)
+        self.assertEqual(Logic.option_hard, self.world.options.logic_level)
 
 
 class EarlyMeditationTest(MessengerTestBase):
