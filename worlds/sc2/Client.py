@@ -18,7 +18,7 @@ from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
-from Utils import init_logging, is_windows
+from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
     GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
@@ -61,6 +61,10 @@ DATA_API_VERSION = "API3"
 # Bot controller
 CONTROLLER_HEALTH: int = 38281
 CONTROLLER2_HEALTH: int = 38282
+
+# Games
+STARCRAFT2 = "Starcraft 2"
+STARCRAFT2_WOL = "Starcraft 2 Wings of Liberty"
 
 
 # Data version file path.
@@ -285,7 +289,7 @@ class SC2JSONtoTextParser(JSONtoTextParser):
 
 class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
-    game = "Starcraft 2"
+    game = STARCRAFT2
     items_handling = 0b111
     difficulty = -1
     game_speed = -1
@@ -334,12 +338,24 @@ class SC2Context(CommonContext):
         self.raw_text_parser = SC2JSONtoTextParser(self)
 
     async def server_auth(self, password_requested: bool = False) -> None:
+        self.game = STARCRAFT2
         if password_requested and not self.password:
             await super(SC2Context, self).server_auth(password_requested)
         await self.get_username()
         await self.send_connect()
         if self.ui:
             self.ui.first_check = True
+
+    def is_legacy_game(self):
+        return self.game == STARCRAFT2_WOL
+
+    def event_invalid_game(self):
+        if self.is_legacy_game():
+            self.game = STARCRAFT2
+            super().event_invalid_game()
+        else:
+            self.game = STARCRAFT2_WOL
+            async_start(self.send_connect())
 
     def on_package(self, cmd: str, args: dict) -> None:
         if cmd == "Connected":
@@ -355,6 +371,7 @@ class SC2Context(CommonContext):
             # Maintaining backwards compatibility with older slot data
             if first_item in [str(campaign.id) for campaign in SC2Campaign]:
                 # Multi-campaign
+                self.mission_req_table = {}
                 for campaign_id in slot_req_table:
                     campaign = lookup_id_to_campaign[int(campaign_id)]
                     self.mission_req_table[campaign] = {
