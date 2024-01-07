@@ -2210,25 +2210,24 @@ def parse_args() -> argparse.Namespace:
 
 async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
+
+    def inactivity_shutdown():
+        ctx.server.ws_server.close()
+        ctx.exit_event.set()
+        if to_cancel:
+            for task in to_cancel:
+                task.cancel()
+        logging.info("Shutting down due to inactivity.")
+
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            ctx.server.ws_server.close()
-            ctx.exit_event.set()
-            if to_cancel:
-                for task in to_cancel:
-                    task.cancel()
-            logging.info("Shutting down due to inactivity.")
+            inactivity_shutdown()
         else:
             newest_activity = max(ctx.client_activity_timers.values())
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                ctx.server.ws_server.close()
-                ctx.exit_event.set()
-                if to_cancel:
-                    for task in to_cancel:
-                        task.cancel()
-                logging.info("Shutting down due to inactivity.")
+                inactivity_shutdown()
             else:
                 await asyncio.sleep(seconds)
 
