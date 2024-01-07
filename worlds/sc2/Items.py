@@ -1721,7 +1721,6 @@ item_name_groups["Nerazim"] = [
     ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
     ItemNames.ANNIHILATOR,
     ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
-    ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD,
 ]
 item_name_groups["Tal'Darim"] = [
     ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
