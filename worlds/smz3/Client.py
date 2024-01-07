@@ -40,6 +40,7 @@ class SMZ3SNIClient(SNIClient):
         if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:3] != b"ZSM":
             return False
 
+        ctx.smz3_new_message_queue = rom_name[7] in b"1234567890"
         ctx.game = self.game
         ctx.items_handling = 0b101  # local items and remote start inventory
 
@@ -53,6 +54,22 @@ class SMZ3SNIClient(SNIClient):
         if ctx.server is None or ctx.slot is None:
             # not successfully connected to a multiworld server, cannot process the game sending items
             return
+        
+        send_progress_addr_ptr_offset = 0x680
+        send_progress_size = 8
+        send_progress_message_byte_offset = 4
+        send_progress_addr_table_offset = 0x700
+        recv_progress_addr_ptr_offset = 0x600
+        recv_progress_size = 4
+        recv_progress_addr_table_offset = 0x602
+        if ctx.smz3_new_message_queue:
+            send_progress_addr_ptr_offset = 0xD3C
+            send_progress_size = 2
+            send_progress_message_byte_offset = 0
+            send_progress_addr_table_offset =  0xDA0
+            recv_progress_addr_ptr_offset = 0xD36
+            recv_progress_size = 2
+            recv_progress_addr_table_offset = 0xD38
 
         currentGame = await snes_read(ctx, SRAM_START + 0x33FE, 2)
         if (currentGame is not None):
@@ -69,7 +86,7 @@ class SMZ3SNIClient(SNIClient):
                 ctx.finished_game = True
             return
 
-        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD3C, 4)
+        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + send_progress_addr_ptr_offset, 4)
         if data is None:
             return
 
@@ -77,14 +94,14 @@ class SMZ3SNIClient(SNIClient):
         recv_item = data[2] | (data[3] << 8)
 
         while (recv_index < recv_item):
-            item_address = recv_index * 2
-            message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xDA0 + item_address, 2)
-            is_z3_item = ((message[1] & 0x80) != 0)
-            masked_part = (message[1] & 0x7F) if is_z3_item else message[1]
-            item_index = ((message[0] | (masked_part << 8)) >> 3) + (256 if is_z3_item else 0)
+            item_address = recv_index * send_progress_size
+            message = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + send_progress_addr_table_offset + item_address, send_progress_size)
+            is_z3_item = ((message[send_progress_message_byte_offset+1] & 0x80) != 0)
+            masked_part = (message[send_progress_message_byte_offset+1] & 0x7F) if is_z3_item else message[send_progress_message_byte_offset+1]
+            item_index = ((message[send_progress_message_byte_offset] | (masked_part << 8)) >> 3) + (256 if is_z3_item else 0)
 
             recv_index += 1
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD3C, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
+            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + send_progress_addr_ptr_offset, bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
             from .TotalSMZ3.Location import locations_start_id
             from . import convertLocSMZ3IDToAPID
@@ -95,7 +112,7 @@ class SMZ3SNIClient(SNIClient):
             snes_logger.info(f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [location_id]}])
 
-        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD36, 4)
+        data = await snes_read(ctx, SMZ3_RECV_PROGRESS_ADDR + recv_progress_addr_ptr_offset, 4)
         if data is None:
             return
 
@@ -107,9 +124,12 @@ class SMZ3SNIClient(SNIClient):
             item_id = item.item - items_start_id
 
             player_id = item.player if item.player < SMZ3_ROM_PLAYER_LIMIT else 0
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * 2, bytes([player_id, item_id]))
+            snes_buffered_write(ctx, 
+                                SMZ3_RECV_PROGRESS_ADDR + item_out_ptr * recv_progress_size, 
+                                bytes([player_id, item_id]) if ctx.smz3_new_message_queue else 
+                                bytes([player_id & 0xFF, (player_id >> 8) & 0xFF, item_id & 0xFF, (item_id >> 8) & 0xFF]))
             item_out_ptr += 1
-            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + 0xD38, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
+            snes_buffered_write(ctx, SMZ3_RECV_PROGRESS_ADDR + recv_progress_addr_table_offset, bytes([item_out_ptr & 0xFF, (item_out_ptr >> 8) & 0xFF]))
             logging.info('Received %s from %s (%s) (%d/%d in list)' % (
                 color(ctx.item_names[item.item], 'red', 'bold'), color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], item_out_ptr, len(ctx.items_received)))
