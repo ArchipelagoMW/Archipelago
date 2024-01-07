@@ -803,7 +803,10 @@ class DarkSouls3World(World):
         for location in unnecessary_locations:
             if self.is_location_available(location):
                 add_item_rule(self.multiworld.get_location(location, self.player),
-                              lambda item: item.classification != ItemClassification.progression)
+                              lambda item: item.classification not in {
+                                  ItemClassification.progression,
+                                  ItemClassification.progression_skip_balancing
+                              })
 
         randomized_items = {
             item.name for item in self.multiworld.itempool
