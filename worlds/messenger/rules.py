@@ -211,8 +211,6 @@ class MessengerHardRules(MessengerRules):
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
         for loc, rule in self.extra_rules.items():
-            if not self.world.options.shuffle_seals and "Seal" in loc:
-                continue
             if not self.world.options.shuffle_shards and "Shard" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
@@ -253,16 +251,8 @@ class MessengerOOBRules(MessengerRules):
 def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     multiworld = world.multiworld
 
-    # do the ones for seal shuffle on and off first
+    # locations where these placements are always valid
     allow_self_locking_items(multiworld.get_location("Searing Crags - Key of Strength", player), "Power Thistle")
     allow_self_locking_items(multiworld.get_location("Sunken Shrine - Key of Love", player), "Sun Crest", "Moon Crest")
     allow_self_locking_items(multiworld.get_location("Corrupted Future - Key of Courage", player), "Demon King Crown")
-
-    # add these locations when seals are shuffled
-    if world.options.shuffle_seals:
-        allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")
-    # add these locations when seals and shards aren't shuffled
-    elif not world.options.shuffle_shards:
-        for entrance in multiworld.get_region("Cloud Ruins", player).entrances:
-            entrance.access_rule = lambda state: state.has("Wingsuit", player) or state.has("Rope Dart", player)
-        allow_self_locking_items(multiworld.get_region("Forlorn Temple", player), *PHOBEKINS)
+    allow_self_locking_items(multiworld.get_location("Elemental Skylands Seal - Water", player), "Currents Master")

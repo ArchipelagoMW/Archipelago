@@ -8,7 +8,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
-from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
+from .options import Goal, Logic, MessengerOptions, NotesNeeded
 from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
@@ -91,13 +91,12 @@ class MessengerWorld(World):
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
-            self.options.shuffle_seals.value = PowerSeals.option_true
             self.total_seals = self.options.total_seals.value
 
         if self.options.limited_movement:
-            self.options.shuffle_seals.value = PowerSeals.option_true
-            self.options.logic_level.value = Logic.option_hard
             self.options.accessibility.value = Accessibility.option_minimal
+            if self.options.logic_level < Logic.option_hard:
+                self.options.logic_level.value = Logic.option_hard
 
         self.multiworld.early_items[self.player]["Meditation"] = self.options.early_meditation.value
 

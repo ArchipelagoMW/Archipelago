@@ -28,18 +28,15 @@ class Logic(Choice):
     alias_challenging = 1
 
 
-class PowerSeals(DefaultOnToggle):
-    """Whether power seal locations should be randomized."""
-    display_name = "Shuffle Seals"
-
-
 class MegaShards(Toggle):
     """Whether mega shards should be item locations."""
     display_name = "Shuffle Mega Time Shards"
 
 
 class LimitedMovement(Toggle):
-    """Removes either rope dart or wingsuit from the itempool. Forces seals to be shuffled, and logic to hard."""
+    """
+    Removes either rope dart or wingsuit from the itempool. Forces logic to at least hard and accessibility to minimal.
+    """
     display_name = "Limited Movement"
 
 
@@ -49,7 +46,7 @@ class EarlyMed(Toggle):
 
 
 class Goal(Choice):
-    """Requirement to finish the game. Power Seal Hunt will force power seal locations to be shuffled."""
+    """Requirement to finish the game."""
     display_name = "Goal"
     option_open_music_box = 0
     option_power_seal_hunt = 1
@@ -147,7 +144,6 @@ class MessengerOptions(PerGameCommonOptions):
     accessibility: MessengerAccessibility
     start_inventory: StartInventoryPool
     logic_level: Logic
-    shuffle_seals: PowerSeals
     shuffle_shards: MegaShards
     limited_movement: LimitedMovement
     early_meditation: EarlyMed
@@ -159,4 +155,3 @@ class MessengerOptions(PerGameCommonOptions):
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
     death_link: DeathLink
-

@@ -1,8 +1,5 @@
-from typing import cast
-
 from BaseClasses import ItemClassification
 from . import MessengerTestBase
-from .. import Logic, MessengerWorld, PowerSeals
 
 
 class HardLogicTest(MessengerTestBase):
