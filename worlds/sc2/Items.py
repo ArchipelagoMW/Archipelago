@@ -1508,7 +1508,7 @@ item_table = {
     ItemNames.SCOUT_APIAL_SENSORS: ItemData(313 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 13, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
     ItemNames.SCOUT_GRAVITIC_THRUSTERS: ItemData(314 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 14, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.SCOUT),
     ItemNames.SCOUT_ADVANCED_PHOTON_BLASTERS: ItemData(315 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 15, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.SCOUT),
-    ItemNames.TEMPEST_TECTONIC_DESTABIlIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 16, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
+    ItemNames.TEMPEST_TECTONIC_DESTABILIZERS: ItemData(316 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 16, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.TEMPEST_QUANTIC_REACTOR: ItemData(317 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 17, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.TEMPEST_GRAVITY_SLING: ItemData(318 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 18, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.TEMPEST),
     ItemNames.PHOENIX_MIRAGE_IONIC_WAVELENGTH_FLUX: ItemData(319 + SC2LOTV_ITEM_ID_OFFSET, "Forge 1", 19, SC2Race.PROTOSS, origin={"ext"}),
