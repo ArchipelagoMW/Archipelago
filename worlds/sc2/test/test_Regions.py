@@ -31,7 +31,8 @@ class TestGridGeneration(Sc2TestBase):
         "enable_prophecy_missions": True,
         "enable_lotv_prologue_missions": False,
         "enable_lotv_missions": False,
-        "enable_epilogue_missions": False
+        "enable_epilogue_missions": False,
+        "enable_nco_missions": False
     }
 
     def test_size_matches_exclusions(self):
