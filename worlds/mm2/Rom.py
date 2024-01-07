@@ -1,12 +1,16 @@
 import pkgutil
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 import hashlib
 import Utils
 import os
 from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from . import Names
-from .Text import MM2TextEntry, get_colors_for_item
+from .Text import MM2TextEntry
+from .Color import get_colors_for_item
+
+if TYPE_CHECKING:
+    from . import MM2World
 
 MM2LCHASH = "19de63834393b5988d41441f83a36df5"
 PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
@@ -36,7 +40,7 @@ class RomData:
             outfile.write(self.file)
 
 
-def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
+def patch_rom(world: "MM2World", player: int, rom: RomData):
     rom.write_byte(0x3403C, 0x8A)  # Read for setting robot master face tiles
     rom.write_byte(0x34083, 0x8A)  # Read for setting robot master face sprites
     rom.write_bytes(0x340DD, [0x9B, 0xC9, 0x07])  # Dr. Wily checking for Items
@@ -150,7 +154,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
         Names.item_2_get,
         Names.item_3_get
     ]):
-        item = multiworld.get_location(location, player).item
+        item = world.multiworld.get_location(location, player).item
         if len(item.name) <= 14:
             # we want to just place it in the center
             first_str = ""
@@ -168,7 +172,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
             third_str = item.name[28:]
             if len(third_str) > 16:
                 third_str = third_str[:16]
-        player_str = multiworld.get_player_name(item.player)
+        player_str = world.multiworld.get_player_name(item.player)
         if len(player_str) > 14:
             player_str = player_str[:14]
         rom.write_bytes(base_address + (64 * i), MM2TextEntry(first_str, 0x4B).resolve())
@@ -185,7 +189,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
 
 
 
-    if multiworld.quickswap[player]:
+    if world.options.quickswap:
         rom.write_bytes(0x3F533, [0x4C, 0xAC, 0xF3, ])  # add jump to check for holding select
         rom.write_bytes(0x3F3BC, [0xA5, 0x27,
                                   0x29, 0x04,
@@ -394,7 +398,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
                                   0x60,
                                   ])
 
-    if multiworld.consumables[player]:
+    if world.options.consumables:
         rom.write_bytes(0x3E5F8, [0x20, 0x00, 0xF3])  # jump to our handler for consumable checks
         rom.write_bytes(0x3F310, [0x99, 0x40, 0x01,
                                   0x8A,
@@ -432,7 +436,7 @@ def patch_rom(multiworld: MultiWorld, player: int, rom: RomData):
     # 0xD304 palettes start
 
     from Utils import __version__
-    rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3FFC0, rom.name)
 

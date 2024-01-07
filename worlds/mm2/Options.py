@@ -1,5 +1,6 @@
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle
+from dataclasses import dataclass
 
+from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, PerGameCommonOptions
 
 class StartingRobotMaster(Choice):
     """
@@ -43,11 +44,52 @@ class Quickswap(DefaultOnToggle):
     """
 
 
-mm2_options = {
-    "death_link": DeathLink,
-    "starting_robot_master": StartingRobotMaster,
-    "consumables": Consumables,
-    "yoku_jumps": YokuJumps,
-    "enable_lasers": EnableLasers,
-    "quickswap": Quickswap,
-}
+class PaletteShuffle(TextChoice):
+    """
+    Change the color of Mega Man and the Robot Masters.
+    None: The palettes are unchanged.
+    Shuffled: Palette colors are shuffled amongst the robot masters.
+    Randomized: Random (usually good) palettes are generated for each robot master.
+    Singularity: one palette is generated and used for all robot masters.
+    Supports custom palettes using HTML named colors in the
+    following format: Mega Man-Lavender|Violet;random
+    The first value is the character whose palette you'd like to define, then separated by - is a set of 2 colors for
+    that character. Separate every character as well as the remaining shuffle with a semicolon.
+    """
+    display_name = "Palette Shuffle"
+    option_none = 0
+    option_shuffled = 1
+    option_randomized = 2
+    option_singularity = 3
+
+    """
+    Valid Targets:
+    Mega Buster
+    Atomic Fire
+    Air Shooter
+    Leaf Shield
+    Bubble Lead
+    Quick Boomerang
+    Metal Blade
+    Crash Bomber
+    Time Stopper
+    Heat Man
+    Air Man
+    Wood Man
+    Bubble Man
+    Metal Man
+    Quick Man
+    Flash Man
+    Crash Man
+    """
+
+
+@dataclass
+class MM2Options(PerGameCommonOptions):
+    death_link: DeathLink
+    starting_robot_master: StartingRobotMaster
+    consumables: Consumables
+    yoku_jumps: YokuJumps
+    enable_lasers: EnableLasers
+    quickswap: Quickswap
+    palette_shuffle: PaletteShuffle

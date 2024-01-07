@@ -11,7 +11,7 @@ from .Items import item_table, item_names, MM2Item, filler_item_table, filler_it
 from .Locations import location_table, MM2Location, mm2_regions
 from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extract_mm2, MM2DeltaPatch, \
     MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
-from .Options import mm2_options
+from .Options import MM2Options
 from .Client import MegaMan2Client
 from .Rules import set_rules
 import os
@@ -85,7 +85,8 @@ class MM2World(World):
 
     game = "Mega Man 2"
     settings: typing.ClassVar[MM2Settings]
-    option_definitions = mm2_options
+    options_dataclass = MM2Options
+    options: MM2Options
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = location_table
     item_name_groups = item_names
@@ -122,7 +123,7 @@ class MM2World(World):
             for item in required_items:
                 add_rule(entrance, lambda state, required_item=item: state.has(required_item, self.player))
             stage.add_locations(locations)
-            if self.multiworld.consumables[self.player]:
+            if self.options.consumables:
                 if region in Locations.consumables:
                     stage.add_locations(Locations.consumables[region], MM2Location)
             self.multiworld.regions.append(stage)
@@ -142,13 +143,13 @@ class MM2World(World):
     def create_items(self) -> None:
         itempool = []
         # grab first robot master
-        robot_master = self.item_id_to_name[0x880101 + self.multiworld.starting_robot_master[self.player].value]
+        robot_master = self.item_id_to_name[0x880101 + self.options.starting_robot_master.value]
         self.multiworld.push_precollected(self.create_item(robot_master))
         itempool.extend([self.create_item(name) for name in stage_access_table.keys()
                          if name != robot_master])
         itempool.extend([self.create_item(name) for name in robot_master_weapon_table.keys()])
         itempool.extend([self.create_item(name) for name in item_item_table.keys()])
-        remaining = 24 + (38 if self.multiworld.consumables[self.player] else 0) - len(itempool)
+        remaining = 24 + (38 if self.options.consumables else 0) - len(itempool)
         itempool.extend([self.create_item(self.get_filler_item_name())
                          for _ in range(remaining)])
         self.multiworld.itempool += itempool
@@ -156,18 +157,18 @@ class MM2World(World):
     set_rules = set_rules
 
     def generate_early(self) -> None:
-        if (not self.multiworld.yoku_jumps[self.player]
-            and self.multiworld.starting_robot_master[self.player].current_key == "heat_man") or \
-                (not self.multiworld.enable_lasers[self.player]
-                 and self.multiworld.starting_robot_master[self.player].current_key == "quick_man"):
+        if (not self.options.yoku_jumps
+            and self.options.starting_robot_master.current_key == "heat_man") or \
+                (not self.options.enable_lasers
+                 and self.options.starting_robot_master.current_key == "quick_man"):
             robot_master_pool = [1, 2, 3, 5, 6, 7, ]
-            if self.multiworld.yoku_jumps[self.player]:
+            if self.options.yoku_jumps:
                 robot_master_pool.append(0)
-            if self.multiworld.enable_lasers[self.player]:
+            if self.options.enable_lasers:
                 robot_master_pool.append(4)
-            self.multiworld.starting_robot_master[self.player].value = self.random.choice(robot_master_pool)
+            self.options.starting_robot_master.value = self.random.choice(robot_master_pool)
             logger.warning(
-                f"Incompatible starting Robot Master, changing to {self.multiworld.starting_robot_master[self.player].current_key.replace('_', ' ').title()}")
+                f"Incompatible starting Robot Master, changing to {self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
     def generate_basic(self) -> None:
         goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
@@ -181,7 +182,7 @@ class MM2World(World):
             player = self.player
 
             rom = RomData(get_base_rom_bytes())
-            patch_rom(self.multiworld, self.player, rom)
+            patch_rom(self, self.player, rom)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.nes")
             rom.write_to_file(rompath)
@@ -199,7 +200,7 @@ class MM2World(World):
 
     def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
         return {
-            "death_link": self.multiworld.death_link[self.player].value
+            "death_link": self.options.death_link.value
         }
 
     def modify_multidata(self, multidata: dict):
