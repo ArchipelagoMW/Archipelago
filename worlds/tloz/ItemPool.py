@@ -93,7 +93,11 @@ def get_pool_core(world):
 
     # Starting Weapon
     start_weapon_locations = starting_weapon_locations.copy()
-    starting_weapon = random.choice(starting_weapons)
+    final_starting_weapons = [weapon for weapon in starting_weapons
+                              if weapon not in world.multiworld.non_local_items[world.player]]
+    if not final_starting_weapons:
+        final_starting_weapons = starting_weapons
+    starting_weapon = random.choice(final_starting_weapons)
     if world.multiworld.StartingPosition[world.player] == StartingPosition.option_safe:
         placed_items[start_weapon_locations[0]] = starting_weapon
     elif world.multiworld.StartingPosition[world.player] in \
@@ -117,6 +121,9 @@ def get_pool_core(world):
     else:
         possible_level_locations = [location for location in standard_level_locations
                                     if location not in level_locations[8]]
+    for location in placed_items.keys():
+        if location in possible_level_locations:
+            possible_level_locations.remove(location)
     for level in range(1, 9):
         if world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_vanilla:
             placed_items[f"Level {level} Triforce"] = fragment

@@ -419,17 +419,16 @@ class HKWorld(World):
     def set_rules(self):
         world = self.multiworld
         player = self.player
-        if world.logic[player] != 'nologic':
-            goal = world.Goal[player]
-            if goal == Goal.option_hollowknight:
-                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
-            elif goal == Goal.option_siblings:
-                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
-            elif goal == Goal.option_radiance:
-                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
-            else:
-                # Any goal
-                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
+        goal = world.Goal[player]
+        if goal == Goal.option_hollowknight:
+            world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+        elif goal == Goal.option_siblings:
+            world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
+        elif goal == Goal.option_radiance:
+            world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
+        else:
+            # Any goal
+            world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
 
         set_rules(self)
 

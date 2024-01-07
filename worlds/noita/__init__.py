@@ -35,6 +35,10 @@ class NoitaWorld(World):
 
     web = NoitaWeb()
 
+    def generate_early(self):
+        if not self.multiworld.get_player_name(self.player).isascii():
+            raise Exception("Noita yaml's slot name has invalid character(s).")
+    
     # Returned items will be sent over to the client
     def fill_slot_data(self):
         return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}

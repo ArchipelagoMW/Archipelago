@@ -66,8 +66,8 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
 
 
 def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions) -> bool:
-    entrance_forward = regio.created_entrances[(source, target)]
-    entrance_backward = regio.created_entrances[(source, target)]
+    entrance_forward = regio.created_entrances[source, target]
+    entrance_backward = regio.created_entrances[target, source]
 
     return (
         any(entrance.can_reach(state) for entrance in entrance_forward)
