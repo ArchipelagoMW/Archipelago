@@ -1711,7 +1711,27 @@ for item, data in get_full_item_list().items():
 item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
 item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
                                    ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
-
+item_name_groups["Aiur"] = [
+    ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
+    ItemNames.IMMORTAL, ItemNames.REAVER,
+    ItemNames.PHOENIX, ItemNames.SCOUT, ItemNames.ARBITER, ItemNames.CARRIER,
+]
+item_name_groups["Nerazim"] = [
+    ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
+    ItemNames.ANNIHILATOR,
+    ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
+    ItemNames.DARK_TEMPLAR_DARK_ARCHON_MELD,
+]
+item_name_groups["Tal'Darim"] = [
+    ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
+    ItemNames.VANGUARD, ItemNames.WRATHWALKER,
+    ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
+]
+item_name_groups["Purifier"] = [
+    ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
+    ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
+    ItemNames.MIRAGE, ItemNames.TEMPEST,
+]
 
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
