@@ -171,7 +171,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
     # Nova gear exclusion if NCO not in campaigns
     if SC2Campaign.NCO not in enabled_campaigns:
-        excluded_items.union(nova_equimpent)
+        excluded_items = excluded_items.union(nova_equimpent)
 
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
     # no Kerrigan & remove all passives => remove all abilities
