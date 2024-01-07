@@ -1,6 +1,6 @@
 import typing
 
-from typing import List, Set, Iterable, Sequence, Dict, Callable
+from typing import List, Set, Iterable, Sequence, Dict, Callable, Union
 from math import floor, ceil
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
@@ -250,7 +250,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
             # NCO-only specific rules
             if first_mission == SC2Mission.SUDDEN_STRIKE.mission_name:
-                support_item: str | None = None
+                support_item: Union[str, None] = None
                 if local_basic_unit == ItemNames.REAPER:
                     support_item = ItemNames.REAPER_SPIDER_MINES
                 elif local_basic_unit == ItemNames.GOLIATH:
