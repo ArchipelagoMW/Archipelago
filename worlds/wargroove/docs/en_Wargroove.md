@@ -26,9 +26,16 @@ Any of the above items can be in another player's world.
 
 ## When the player receives an item, what happens?
 
-When the player receives an item, a message will appear in Wargroove with the item name and sender name, once an action 
+When the player receives an item, a message will appear in Wargroove with the item name and sender name, once an action
 is taken in game.
 
 ## What is the goal of this game when randomized?
 
 The goal is to beat the level titled `The End` by finding the `Final Bridges`, `Final Walls`, and `Final Sickle`.
+
+## Unique Local Commands
+
+The following commands are only available when using the WargrooveClient to play with Archipelago.
+
+- `/resync` Manually trigger a resync.
+- `/commander` Set the current commander to the given commander.

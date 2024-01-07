@@ -246,7 +246,8 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
                     (ingredient not in technology_table or state.has(ingredient, player)) and \
                     all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                        for technology in required_technologies[sub_ingredient])
+                        for technology in required_technologies[sub_ingredient]) and \
+                    all(state.has(technology.name, player) for technology in required_technologies[custom_recipe.crafting_machine])
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
@@ -541,7 +542,7 @@ class FactorioScienceLocation(FactorioLocation):
         super(FactorioScienceLocation, self).__init__(player, name, address, parent)
         # "AP-{Complexity}-{Cost}"
         self.complexity = int(self.name[3]) - 1
-        self.rel_cost = int(self.name[5:], 16)
+        self.rel_cost = int(self.name[5:])
 
         self.ingredients = {Factorio.ordered_science_packs[self.complexity]: 1}
         for complexity in range(self.complexity):
