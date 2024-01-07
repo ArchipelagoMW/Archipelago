@@ -50,6 +50,7 @@ class SC2Campaign(Enum):
     PROLOGUE = 4, "Whispers of Oblivion (Legacy of the Void: Prologue)", SC2CampaignGoalPriority.MINI_CAMPAIGN, SC2Race.PROTOSS
     LOTV = 5, "Legacy of the Void", SC2CampaignGoalPriority.VERY_HARD, SC2Race.PROTOSS
     EPILOGUE = 6, "Into the Void (Legacy of the Void: Epilogue)", SC2CampaignGoalPriority.EPILOGUE, SC2Race.ANY
+    NCO = 7, "Nova Covert Ops", SC2CampaignGoalPriority.HARD, SC2Race.TERRAN
 
 
 class SC2Mission(Enum):
@@ -124,10 +125,12 @@ class SC2Mission(Enum):
     PLANETFALL = 47, "Planetfall", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_planetfall"
     DEATH_FROM_ABOVE = 48, "Death From Above", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_death_from_above"
     THE_RECKONING = 49, "The Reckoning", SC2Campaign.HOTS, "Korhal", SC2Race.ZERG, MissionPools.HARD, "ap_the_reckoning"
+
     # Prologue
     DARK_WHISPERS = 50, "Dark Whispers", SC2Campaign.PROLOGUE, "_1", SC2Race.PROTOSS, MissionPools.EASY, "ap_dark_whispers"
     GHOSTS_IN_THE_FOG = 51, "Ghosts in the Fog", SC2Campaign.PROLOGUE, "_2", SC2Race.PROTOSS, MissionPools.MEDIUM, "ap_ghosts_in_the_fog"
     EVIL_AWOKEN = 52, "Evil Awoken", SC2Campaign.PROLOGUE, "_3", SC2Race.PROTOSS, MissionPools.STARTER, "ap_evil_awoken", False
+
     # LotV
     FOR_AIUR = 53, "For Aiur!", SC2Campaign.LOTV, "Aiur", SC2Race.ANY, MissionPools.STARTER, "ap_for_aiur", False
     THE_GROWING_SHADOW = 54, "The Growing Shadow", SC2Campaign.LOTV, "Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_the_growing_shadow"
@@ -148,10 +151,22 @@ class SC2Mission(Enum):
     TEMPLAR_S_RETURN = 69, "Templar's Return", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.EASY, "ap_templar_s_return", False
     THE_HOST = 70, "The Host", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.HARD, "ap_the_host",
     SALVATION = 71, "Salvation", SC2Campaign.LOTV, "Return to Aiur", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_salvation"
+
     # Epilogue
     INTO_THE_VOID = 72, "Into the Void", SC2Campaign.EPILOGUE, "_1", SC2Race.PROTOSS, MissionPools.VERY_HARD, "ap_into_the_void"
     THE_ESSENCE_OF_ETERNITY = 73, "The Essence of Eternity", SC2Campaign.EPILOGUE, "_2", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_the_essence_of_eternity"
     AMON_S_FALL = 74, "Amon's Fall", SC2Campaign.EPILOGUE, "_3", SC2Race.ZERG, MissionPools.VERY_HARD, "ap_amon_s_fall"
+
+    # Nova Covert Ops
+    THE_ESCAPE = 75, "The Escape", SC2Campaign.NCO, "_1", SC2Race.ANY, MissionPools.MEDIUM, "ap_the_escape", False
+    SUDDEN_STRIKE = 76, "Sudden Strike", SC2Campaign.NCO, "_1", SC2Race.TERRAN, MissionPools.EASY, "ap_sudden_strike"
+    ENEMY_INTELLIGENCE = 77, "Enemy Intelligence", SC2Campaign.NCO, "_1", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_enemy_intelligence"
+    TROUBLE_IN_PARADISE = 78, "Trouble In Paradise", SC2Campaign.NCO, "_2", SC2Race.TERRAN, MissionPools.HARD, "ap_trouble_in_paradise"
+    NIGHT_TERRORS = 79, "Night Terrors", SC2Campaign.NCO, "_2", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_night_terrors"
+    FLASHPOINT = 80, "Flashpoint", SC2Campaign.NCO, "_2", SC2Race.TERRAN, MissionPools.HARD, "ap_flashpoint"
+    IN_THE_ENEMY_S_SHADOW = 81, "In the Enemy's Shadow", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_in_the_enemy_s_shadow", False
+    DARK_SKIES = 82, "Dark Skies", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.HARD, "ap_dark_skies"
+    END_GAME = 83, "End Game", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.HARD, "ap_end_game"
 
 
 class MissionConnection:
@@ -167,6 +182,7 @@ class MissionConnection:
             "campaign": self.campaign.id,
             "connect_to": self.connect_to
         }
+
 
 class MissionInfo(NamedTuple):
     mission: SC2Mission
@@ -275,6 +291,17 @@ vanilla_shuffle_order: Dict[SC2Campaign, List[FillMission]] = {
         FillMission(MissionPools.VERY_HARD, [MissionConnection(24, SC2Campaign.WOL), MissionConnection(19, SC2Campaign.HOTS), MissionConnection(18, SC2Campaign.LOTV)], "_1", completion_critical=True),
         FillMission(MissionPools.VERY_HARD, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True, removal_priority=1),
         FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.EPILOGUE)], "_3", completion_critical=True),
+    ],
+    SC2Campaign.NCO: [
+        FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.NCO)], "_1", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.NCO)], "_1", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.NCO)], "_1", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(2, SC2Campaign.NCO)], "_2", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(3, SC2Campaign.NCO)], "_2", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.NCO)], "_2", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.NCO)], "_3", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.NCO)], "_3", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(7, SC2Campaign.NCO)], "_3", completion_critical=True),
     ]
 }
 mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
@@ -331,6 +358,13 @@ mini_campaign_order: Dict[SC2Campaign, List[FillMission]] = {
     SC2Campaign.EPILOGUE: [
         FillMission(MissionPools.VERY_HARD, [MissionConnection(12, SC2Campaign.WOL), MissionConnection(12, SC2Campaign.HOTS), MissionConnection(9, SC2Campaign.LOTV)], "_1", completion_critical=True),
         FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.EPILOGUE)], "_2", completion_critical=True),
+    ],
+    SC2Campaign.NCO: [
+        FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.NCO)], "_1", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.NCO)], "_1", completion_critical=True),
+        FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.NCO)], "_2", completion_critical=True),
+        FillMission(MissionPools.HARD, [MissionConnection(2, SC2Campaign.NCO)], "_3", completion_critical=True),
+        FillMission(MissionPools.FINAL, [MissionConnection(3, SC2Campaign.NCO)], "_3", completion_critical=True),
     ]
 }
 
@@ -516,6 +550,17 @@ vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
         SC2Mission.INTO_THE_VOID.mission_name: MissionInfo(SC2Mission.INTO_THE_VOID, [MissionConnection(25, SC2Campaign.WOL), MissionConnection(20, SC2Campaign.HOTS), MissionConnection(19, SC2Campaign.LOTV)], SC2Mission.INTO_THE_VOID.area, completion_critical=True),
         SC2Mission.THE_ESSENCE_OF_ETERNITY.mission_name: MissionInfo(SC2Mission.THE_ESSENCE_OF_ETERNITY, [MissionConnection(1, SC2Campaign.EPILOGUE)], SC2Mission.THE_ESSENCE_OF_ETERNITY.area, completion_critical=True),
         SC2Mission.AMON_S_FALL.mission_name: MissionInfo(SC2Mission.AMON_S_FALL, [MissionConnection(2, SC2Campaign.EPILOGUE)], SC2Mission.AMON_S_FALL.area, completion_critical=True),
+    },
+    SC2Campaign.NCO: {
+        SC2Mission.THE_ESCAPE.mission_name: MissionInfo(SC2Mission.THE_ESCAPE, [], SC2Mission.THE_ESCAPE.area, completion_critical=True),
+        SC2Mission.SUDDEN_STRIKE.mission_name: MissionInfo(SC2Mission.SUDDEN_STRIKE, [MissionConnection(1, SC2Campaign.NCO)], SC2Mission.SUDDEN_STRIKE.area, completion_critical=True),
+        SC2Mission.ENEMY_INTELLIGENCE.mission_name: MissionInfo(SC2Mission.ENEMY_INTELLIGENCE, [MissionConnection(2, SC2Campaign.NCO)], SC2Mission.ENEMY_INTELLIGENCE.area, completion_critical=True),
+        SC2Mission.TROUBLE_IN_PARADISE.mission_name: MissionInfo(SC2Mission.TROUBLE_IN_PARADISE, [MissionConnection(3, SC2Campaign.NCO)], SC2Mission.TROUBLE_IN_PARADISE.area, completion_critical=True),
+        SC2Mission.NIGHT_TERRORS.mission_name: MissionInfo(SC2Mission.NIGHT_TERRORS, [MissionConnection(4, SC2Campaign.NCO)], SC2Mission.NIGHT_TERRORS.area, completion_critical=True),
+        SC2Mission.FLASHPOINT.mission_name: MissionInfo(SC2Mission.FLASHPOINT, [MissionConnection(5, SC2Campaign.NCO)], SC2Mission.FLASHPOINT.area, completion_critical=True),
+        SC2Mission.IN_THE_ENEMY_S_SHADOW.mission_name: MissionInfo(SC2Mission.IN_THE_ENEMY_S_SHADOW, [MissionConnection(6, SC2Campaign.NCO)], SC2Mission.IN_THE_ENEMY_S_SHADOW.area, completion_critical=True),
+        SC2Mission.DARK_SKIES.mission_name: MissionInfo(SC2Mission.DARK_SKIES, [MissionConnection(7, SC2Campaign.NCO)], SC2Mission.DARK_SKIES.area, completion_critical=True),
+        SC2Mission.END_GAME.mission_name: MissionInfo(SC2Mission.END_GAME, [MissionConnection(8, SC2Campaign.NCO)], SC2Mission.END_GAME.area, completion_critical=True),
     }
 }
 
@@ -592,6 +637,7 @@ campaign_final_mission_locations: Dict[SC2Campaign, SC2CampaignGoal] = {
     SC2Campaign.PROLOGUE: SC2CampaignGoal(SC2Mission.EVIL_AWOKEN, "Evil Awoken: Victory"),
     SC2Campaign.LOTV: SC2CampaignGoal(SC2Mission.SALVATION, "Salvation: Victory"),
     SC2Campaign.EPILOGUE: None,
+    SC2Campaign.NCO: None,
 }
 
 campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] = {
@@ -622,6 +668,13 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
         SC2Mission.INTO_THE_VOID: "Into the Void: Victory",
         SC2Mission.THE_ESSENCE_OF_ETERNITY: "The Essence of Eternity: Victory",
         SC2Mission.AMON_S_FALL: "Amon's Fall: Victory"
+    },
+    SC2Campaign.NCO: {
+        SC2Mission.END_GAME: "End Game: Victory",
+        SC2Mission.FLASHPOINT: "Flashpoint: Victory",
+        SC2Mission.DARK_SKIES: "Dark Skies: Victory",
+        SC2Mission.NIGHT_TERRORS: "Night Terrors: Victory",
+        SC2Mission.TROUBLE_IN_PARADISE: "Trouble In Paradise: Victory"
     }
 }
 

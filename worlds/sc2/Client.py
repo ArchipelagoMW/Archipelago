@@ -50,13 +50,17 @@ from MultiServer import mark_raw
 
 loop = asyncio.get_event_loop_policy().new_event_loop()
 nest_asyncio.apply(loop)
-max_bonus: int = 13
-victory_modulo: int = 100
+MAX_BONUS: int = 28
+VICTORY_MODULO: int = 100
 
 # GitHub repo where the Map/mod data is hosted for /download_data command
 DATA_REPO_OWNER = "Ziktofel"
 DATA_REPO_NAME = "Archipelago-SC2-data"
 DATA_API_VERSION = "API3"
+
+# Bot controller
+CONTROLLER_HEALTH: int = 38281
+CONTROLLER2_HEALTH: int = 38282
 
 
 # Data version file path.
@@ -323,6 +327,7 @@ class SC2Context(CommonContext):
     minerals_per_item = 15
     vespene_per_item = 15
     starting_supply_per_item = 2
+    nova_covert_ops_only = False
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
@@ -386,6 +391,7 @@ class SC2Context(CommonContext):
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
+            self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
                 # Locking Grant Story Tech if no logic
@@ -488,8 +494,8 @@ class SC2Context(CommonContext):
 
         for loc in self.server_locations:
             offset = SC2WOL_LOC_ID_OFFSET if loc < SC2HOTS_LOC_ID_OFFSET \
-                else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * victory_modulo)
-            mission_id, objective = divmod(loc - offset, victory_modulo)
+                else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
+            mission_id, objective = divmod(loc - offset, VICTORY_MODULO)
             mission_id_to_location_ids[mission_id].add(objective)
         self.mission_id_to_location_ids = {mission_id: sorted(objectives) for mission_id, objectives in
                                            mission_id_to_location_ids.items()}
@@ -499,7 +505,7 @@ class SC2Context(CommonContext):
         mission_id: int = mission.id
         objectives = self.mission_id_to_location_ids[mission_id]
         for objective in objectives:
-            yield get_location_offset(mission_id) + mission_id * victory_modulo + objective
+            yield get_location_offset(mission_id) + mission_id * VICTORY_MODULO + objective
 
 
 class CompatItemHolder(typing.NamedTuple):
@@ -625,7 +631,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
                 3 * num_missions // 100
             ]
             upgrade_count = 0
-            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + victory_modulo * id in ctx.checked_locations])
+            completed = len([id for id in ctx.mission_id_to_location_ids if get_location_offset(id) + VICTORY_MODULO * id in ctx.checked_locations])
             for amount in amounts:
                 if completed >= amount:
                     upgrade_count += 1
@@ -719,7 +725,7 @@ def kerrigan_primal(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int
             return items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]] >= 35
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_half_completion:
         total_missions = len(ctx.mission_id_to_location_ids)
-        completed = len([(mission_id * victory_modulo + get_location_offset(mission_id)) in ctx.checked_locations
+        completed = len([(mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations
                          for mission_id in ctx.mission_id_to_location_ids])
         return completed >= (total_missions / 2)
     elif ctx.kerrigan_primal_status == KerriganPrimalStatus.option_item:
@@ -752,7 +758,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.ctx = ctx
         self.ctx.last_bot = self
         self.mission_id = mission_id
-        self.boni = [False for _ in range(max_bonus)]
+        self.boni = [False for _ in range(MAX_BONUS)]
 
         super(ArchipelagoBot, self).__init__()
 
@@ -776,7 +782,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -786,7 +792,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 kerrigan_options,
                 self.ctx.grant_story_tech,
                 self.ctx.take_over_ai_allies,
-                soa_options
+                soa_options,
+                self.ctx.mission_order,
+                1 if self.ctx.nova_covert_ops_only else 0
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
@@ -809,10 +817,16 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.announcements.task_done()
 
             # Archipelago reads the health
+            controller1_state = 0
+            controller2_state = 0
             for unit in self.all_own_units():
-                if unit.health_max == 38281:
-                    game_state = int(38281 - unit.health)
+                if unit.health_max == CONTROLLER_HEALTH:
+                    controller1_state = int(CONTROLLER_HEALTH - unit.health)
                     self.can_read_game = True
+                elif unit.health_max == CONTROLLER2_HEALTH:
+                    controller2_state = int(CONTROLLER2_HEALTH - unit.health)
+                    self.can_read_game = True
+            game_state = controller1_state + (controller2_state << 15)
 
             if iteration == 160 and not game_state & 1:
                 await self.chat_send("?SendMessage Warning: Archipelago unable to connect or has lost connection to " +
@@ -836,7 +850,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             print("Mission Completed")
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                  "locations": [get_location_offset(self.mission_id) + victory_modulo * self.mission_id]}])
+                                  "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id]}])
                             self.mission_completed = True
                         else:
                             print("Game Complete")
@@ -849,7 +863,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             checks = len(self.ctx.checked_locations)
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
-                                  "locations": [get_location_offset(self.mission_id) + victory_modulo * self.mission_id + x + 1]}])
+                                  "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id + x + 1]}])
                             self.boni[x] = True
                             # Kerrigan level needs manual updating if the check's receiver isn't the local player
                             if self.ctx.levels_per_check > 0 and self.last_received_update == len(self.ctx.items_received):
@@ -865,10 +879,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
     async def updateTerranTech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
-        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
+        await self.chat_send("?GiveTerranTech {} {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
             terran_items[0], terran_items[1], terran_items[2], terran_items[3], terran_items[4],
             terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
-            terran_items[11]))
+            terran_items[11], terran_items[12], terran_items[13]))
 
     async def updateZergTech(self, current_items):
         zerg_items = current_items[SC2Race.ZERG]
@@ -1013,7 +1027,7 @@ def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = No
 
     # Get number of missions completed
     for loc in ctx.checked_locations:
-        if loc % victory_modulo == 0:
+        if loc % VICTORY_MODULO == 0:
             missions_complete += 1
 
     for campaign in ctx.mission_req_table:
@@ -1068,7 +1082,7 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
             # Check if required mission has been completed
             mission_id = ctx.mission_req_table[parsed_req_mission.campaign][
                 list(ctx.mission_req_table[parsed_req_mission.campaign])[parsed_req_mission.connect_to - 1]].mission.id
-            if not (mission_id * victory_modulo + get_location_offset(mission_id)) in ctx.checked_locations:
+            if not (mission_id * VICTORY_MODULO + get_location_offset(mission_id)) in ctx.checked_locations:
                 if not ctx.mission_req_table[campaign][mission_name].or_requirements:
                     return False
                 else:
@@ -1331,7 +1345,7 @@ def is_mod_update_available(owner: str, repo: str, api_version: str, metadata: s
 
 def get_location_offset(mission_id):
     return SC2WOL_LOC_ID_OFFSET if mission_id <= SC2Mission.ALL_IN.id \
-        else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * victory_modulo)
+        else (SC2HOTS_LOC_ID_OFFSET - SC2Mission.ALL_IN.id * VICTORY_MODULO)
 
 
 def launch():

@@ -247,6 +247,25 @@ def create_vanilla_regions(
         connect(multiworld, player, names, "The Essence of Eternity", "Amon's Fall",
                 lambda state: state.has("Beat The Essence of Eternity", player)),
 
+    if SC2Campaign.NCO in enabled_campaigns:
+        connect(multiworld, player, names, "Menu", "The Escape")
+        connect(multiworld, player, names, "The Escape", "Sudden Strike",
+                lambda state: state.has("Beat The Escape", player))
+        connect(multiworld, player, names, "Sudden Strike", "Enemy Intelligence",
+                lambda state: state.has("Beat Sudden Strike", player))
+        connect(multiworld, player, names, "Enemy Intelligence", "Trouble In Paradise",
+                lambda state: state.has("Beat Enemy Intelligence", player))
+        connect(multiworld, player, names, "Trouble In Paradise", "Night Terrors",
+                lambda state: state.has("Beat Evacuation", player))
+        connect(multiworld, player, names, "Night Terrors", "Flashpoint",
+                lambda state: state.has("Beat Night Terrors", player))
+        connect(multiworld, player, names, "Flashpoint", "In the Enemy's Shadow",
+                lambda state: state.has("Beat Flashpoint", player))
+        connect(multiworld, player, names, "In the Enemy's Shadow", "Dark Skies",
+                lambda state: state.has("Beat In the Enemy's Shadow", player))
+        connect(multiworld, player, names, "Dark Skies", "End Game",
+                lambda state: state.has("Beat Dark Skies", player))
+
     goal_location = get_goal_location(final_mission)
     assert goal_location, f"Unable to find a goal location for mission {final_mission}"
     setup_final_location(goal_location, location_cache)

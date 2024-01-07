@@ -192,7 +192,7 @@ item_table = {
                  )),
     ItemNames.HERC:
         ItemData(22 + SC2WOL_ITEM_ID_OFFSET, "Unit", 26, SC2Race.TERRAN,
-                 classification=ItemClassification.useful, origin={"ext"},
+                 classification=ItemClassification.progression, origin={"ext"},
                  description=inspect.cleandoc(
                      """
                      Front-line infantry. Can use Grapple.
@@ -512,7 +512,7 @@ item_table = {
                  description="Reapers regenerate life while out of combat."),
     ItemNames.HELLION_HELLBAT_ASPECT:
         ItemData(255 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 21, SC2Race.TERRAN,
-                 parent_item=ItemNames.HELLION, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.HELLION, origin={"nco"},
                  description="Allows Hellions to transform into Hellbats."),
     ItemNames.HELLION_SMART_SERVOS:
         ItemData(256 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 22, SC2Race.TERRAN,
@@ -549,7 +549,7 @@ item_table = {
                  description="Increases Spider mine damage."),
     ItemNames.GOLIATH_JUMP_JETS:
         ItemData(263 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 28, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=ItemNames.GOLIATH, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.GOLIATH, origin={"nco"},
                  description="Allows Goliaths to jump up and down cliffs."),
     ItemNames.GOLIATH_OPTIMIZED_LOGISTICS:
         ItemData(264 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 29, SC2Race.TERRAN,
@@ -574,7 +574,7 @@ item_table = {
                  description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("Diamondback")),
     ItemNames.SIEGE_TANK_JUMP_JETS:
         ItemData(268 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 3, SC2Race.TERRAN,
-                 parent_item=ItemNames.SIEGE_TANK, origin={"nco"},
+                 classification=ItemClassification.progression, parent_item=ItemNames.SIEGE_TANK, origin={"nco"},
                  description=inspect.cleandoc(
                      """
                      Repositions Siege Tank to a target location. 
@@ -1085,6 +1085,14 @@ item_table = {
         ItemData(392 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 10, SC2Race.TERRAN,
                  parent_item=ItemNames.PREDATOR, origin={"ext"},
                  description="Predators can use an attack that jumps between targets."),
+    ItemNames.BATTLECRUISER_BEHEMOTH_PLATING:
+        ItemData(393 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 11, SC2Race.TERRAN,
+                 parent_item=ItemNames.BATTLECRUISER, origin={"ext"},
+                 description="Increases Battlecruiser armor by 2."),
+    ItemNames.BATTLECRUISER_COVERT_OPS_ENGINES:
+        ItemData(394 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 12, SC2Race.TERRAN,
+                 parent_item=ItemNames.BATTLECRUISER, origin={"nco"},
+                 description="Increases Battlecruiser movement speed."),
 
     #Buildings
     ItemNames.BUNKER:
@@ -1264,7 +1272,26 @@ item_table = {
     # This item is used to "remove" location from the game. Never placed unless plando'd
     ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0, classification=ItemClassification.trap),
 
-    # ItemNames.KEYSTONE_PIECE: ItemData(850 + SC2WOL_ITEM_ID_OFFSET, "Goal", 0, quantity=0, classification=ItemClassification.progression_skip_balancing)
+    # Nova gear
+    ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}),
+    ItemNames.NOVA_RANGEFINDER_OCULUS: ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"}),
+    ItemNames.NOVA_DOMINATION: ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_BLINK: ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_ENERGY_SUIT_MODULE: ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"}),
+    ItemNames.NOVA_ARMORED_SUIT_MODULE: ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_JUMP_SUIT_MODULE: ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_C20A_CANISTER_RIFLE: ItemData(908 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 7, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_HELLFIRE_SHOTGUN: ItemData(909 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 8, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_PLASMA_RIFLE: ItemData(910 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 9, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_MONOMOLECULAR_BLADE: ItemData(911 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 10, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_BLAZEFIRE_GUNBLADE: ItemData(912 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 11, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_STIM_INFUSION: ItemData(913 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 12, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_PULSE_GRENADES: ItemData(914 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 13, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_FLASHBANG_GRENADES: ItemData(915 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 14, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_IONIC_FORCE_FIELD: ItemData(916 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 15, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_HOLO_DECOY: ItemData(917 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 16, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_NUKE: ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
 
     # HotS
     ItemNames.ZERGLING: ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
@@ -1756,9 +1783,10 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     # Mercenaries (All races)
     *[item_name for item_name, item_data in get_full_item_list().items()
       if item_data.type == "Mercenary"],
-    # Kerrigan levels, abilities and generally useful stuff
+    # Kerrigan and Nova levels, abilities and generally useful stuff
     *[item_name for item_name, item_data in get_full_item_list().items()
-      if item_data.type in ("Level", "Ability", "Evolution Pit")],
+      if item_data.type in ("Level", "Ability", "Evolution Pit", "Nova Gear")],
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE,
     # Zerg static defenses
     ItemNames.SPORE_CRAWLER,
     ItemNames.SPINE_CRAWLER,
@@ -1800,6 +1828,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
 filler_items: typing.Tuple[str, ...] = (
     ItemNames.STARTING_MINERALS,
     ItemNames.STARTING_VESPENE,
+    ItemNames.STARTING_SUPPLY,
 )
 
 # Defense rating table
@@ -1826,7 +1855,6 @@ zerg_defense_ratings = {
 }
 air_defense_ratings = {
     ItemNames.MISSILE_TURRET: 2,
-    ItemNames.VALKYRIE: 2
 }
 
 spider_mine_sources = {
@@ -1894,6 +1922,12 @@ spear_of_adun_calldowns = {
 spear_of_adun_castable_passives = {
     ItemNames.RECONSTRUCTION_BEAM,
     ItemNames.OVERWATCH,
+}
+
+nova_equimpent = {
+    *[item_name for item_name, item_data in get_full_item_list().items()
+      if item_data.type == "Nova Gear"],
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE
 }
 
 # 'number' values of upgrades for upgrade bundle items
@@ -1994,6 +2028,8 @@ type_flaggroups: typing.Dict[SC2Race, typing.Dict[str, int]] = {
         "Unit": 9,
         "Building": 10,
         "Mercenary": 11,
+        "Nova Gear": 12,
+        "Progressive Upgrade 2": 13,
     },
     SC2Race.ZERG: {
         "Ability": 0,

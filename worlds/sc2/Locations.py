@@ -9,8 +9,9 @@ from .Rules import SC2Logic
 from BaseClasses import Location
 
 SC2WOL_LOC_ID_OFFSET = 1000
-SC2HOTS_LOC_ID_OFFSET = 20000000 # Avoid clashes with The Legend of Zelda
+SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
 SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
+SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
 
 
 class SC2Location(Location):
@@ -226,14 +227,23 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    (adv_tactics and logic.terran_basic_anti_air(state)
                                     or logic.terran_competent_anti_air(state))),
         LocationData("The Dig", "The Dig: Victory", SC2WOL_LOC_ID_OFFSET + 900, LocationType.VICTORY,
-                     lambda state: logic.terran_basic_anti_air(state) and
-                                   logic.terran_defense_rating(state, False) >= 7),
+                     lambda state: logic.terran_basic_anti_air(state)
+                                   and logic.terran_defense_rating(state, False, True) >= 8
+                                   and logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Dig", "The Dig: Left Relic", SC2WOL_LOC_ID_OFFSET + 901, LocationType.VANILLA,
-                     lambda state: logic.terran_defense_rating(state, False) >= 5),
+                     lambda state: logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Dig", "The Dig: Right Ground Relic", SC2WOL_LOC_ID_OFFSET + 902, LocationType.VANILLA,
-                     lambda state: logic.terran_defense_rating(state, False) >= 5),
+                     lambda state: logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Dig", "The Dig: Right Cliff Relic", SC2WOL_LOC_ID_OFFSET + 903, LocationType.VANILLA,
-                     lambda state: logic.terran_defense_rating(state, False) >= 5),
+                     lambda state: logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Dig", "The Dig: Moebius Base", SC2WOL_LOC_ID_OFFSET + 904, LocationType.EXTRA,
                      lambda state: logic.marine_medic_upgrade(state) or adv_tactics),
         LocationData("The Moebius Factor", "The Moebius Factor: Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
@@ -1160,6 +1170,182 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Essence of Eternity", "The Essence of Eternity: Void Trashers", SC2LOTV_LOC_ID_OFFSET + 2401, LocationType.EXTRA),
         LocationData("Amon's Fall", "Amon's Fall: Victory", SC2LOTV_LOC_ID_OFFSET + 2500, LocationType.VICTORY,
                      lambda state: logic.amons_fall_requirement(state)),
+
+        # Nova Covert Ops
+        LocationData("The Escape", "The Escape: Victory", SC2NCO_LOC_ID_OFFSET + 100, LocationType.VICTORY,
+                     lambda state: logic.the_escape_requirement(state)),
+        LocationData("The Escape", "The Escape: Rifle", SC2NCO_LOC_ID_OFFSET + 101, LocationType.VANILLA,
+                     lambda state: logic.the_escape_first_stage_requirement(state)),
+        LocationData("The Escape", "The Escape: Grenades", SC2NCO_LOC_ID_OFFSET + 102, LocationType.VANILLA,
+                     lambda state: logic.the_escape_first_stage_requirement(state)),
+        LocationData("The Escape", "The Escape: Agent Delta", SC2NCO_LOC_ID_OFFSET + 103, LocationType.VANILLA,
+                     lambda state: logic.the_escape_requirement(state)),
+        LocationData("The Escape", "The Escape: Agent Pierce", SC2NCO_LOC_ID_OFFSET + 104, LocationType.VANILLA,
+                     lambda state: logic.the_escape_requirement(state)),
+        LocationData("The Escape", "The Escape: Agent Stone", SC2NCO_LOC_ID_OFFSET + 105, LocationType.VANILLA,
+                     lambda state: logic.the_escape_requirement(state)),
+        LocationData("Sudden Strike", "Sudden Strike: Victory", SC2NCO_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+                     lambda state: logic.sudden_strike_can_reach_objectives(state)),
+        LocationData("Sudden Strike", "Sudden Strike: Research Center", SC2NCO_LOC_ID_OFFSET + 201, LocationType.VANILLA,
+                     lambda state: logic.sudden_strike_can_reach_objectives(state)),
+        LocationData("Sudden Strike", "Sudden Strike: Weaponry Labs", SC2NCO_LOC_ID_OFFSET + 202, LocationType.VANILLA,
+                     lambda state: logic.sudden_strike_requirement(state)),
+        LocationData("Sudden Strike", "Sudden Strike: Brutalisk", SC2NCO_LOC_ID_OFFSET + 203, LocationType.EXTRA,
+                     lambda state: logic.sudden_strike_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Victory", SC2NCO_LOC_ID_OFFSET + 300, LocationType.VICTORY,
+                     lambda state: logic.enemy_intelligence_third_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: West Garrison", SC2NCO_LOC_ID_OFFSET + 301, LocationType.EXTRA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Close Garrison", SC2NCO_LOC_ID_OFFSET + 302, LocationType.EXTRA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Northeast Garrison", SC2NCO_LOC_ID_OFFSET + 303, LocationType.EXTRA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Southeast Garrison", SC2NCO_LOC_ID_OFFSET + 304, LocationType.EXTRA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)
+                                   and logic.enemy_intelligence_cliff_garrison(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: South Garrison", SC2NCO_LOC_ID_OFFSET + 305, LocationType.EXTRA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: All Garrisons", SC2NCO_LOC_ID_OFFSET + 306, LocationType.VANILLA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)
+                                   and logic.enemy_intelligence_cliff_garrison(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Forces Rescued", SC2NCO_LOC_ID_OFFSET + 307, LocationType.VANILLA,
+                     lambda state: logic.enemy_intelligence_first_stage_requirement(state)),
+        LocationData("Enemy Intelligence", "Enemy Intelligence: Communications Hub", SC2NCO_LOC_ID_OFFSET + 308, LocationType.VANILLA,
+                     lambda state: logic.enemy_intelligence_second_stage_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: Victory", SC2NCO_LOC_ID_OFFSET + 400, LocationType.VICTORY,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: North Base: West Hatchery", SC2NCO_LOC_ID_OFFSET + 401, LocationType.VANILLA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: North Base: North Hatchery", SC2NCO_LOC_ID_OFFSET + 402, LocationType.VANILLA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: North Base: East Hatchery", SC2NCO_LOC_ID_OFFSET + 403, LocationType.VANILLA),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: South Base: Northwest Hatchery", SC2NCO_LOC_ID_OFFSET + 404, LocationType.VANILLA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: South Base: Southwest Hatchery", SC2NCO_LOC_ID_OFFSET + 405, LocationType.VANILLA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: South Base: East Hatchery", SC2NCO_LOC_ID_OFFSET + 406, LocationType.VANILLA),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: North Shield Projector", SC2NCO_LOC_ID_OFFSET + 407, LocationType.EXTRA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: East Shield Projector", SC2NCO_LOC_ID_OFFSET + 408, LocationType.EXTRA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: South Shield Projector", SC2NCO_LOC_ID_OFFSET + 409, LocationType.EXTRA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: West Shield Projector", SC2NCO_LOC_ID_OFFSET + 410, LocationType.EXTRA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Trouble In Paradise", "Trouble In Paradise: Fleet Beacon", SC2NCO_LOC_ID_OFFSET + 411, LocationType.VANILLA,
+                     lambda state: logic.trouble_in_paradise_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: Victory", SC2NCO_LOC_ID_OFFSET + 500, LocationType.VICTORY,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: 1 Terrazine Node Collected", SC2NCO_LOC_ID_OFFSET + 501, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: 2 Terrazine Nodes Collected", SC2NCO_LOC_ID_OFFSET + 502, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: 3 Terrazine Nodes Collected", SC2NCO_LOC_ID_OFFSET + 503, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: 4 Terrazine Nodes Collected", SC2NCO_LOC_ID_OFFSET + 504, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: 5 Terrazine Nodes Collected", SC2NCO_LOC_ID_OFFSET + 505, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: HERC Outpost", SC2NCO_LOC_ID_OFFSET + 506, LocationType.VANILLA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: Umojan Mine", SC2NCO_LOC_ID_OFFSET + 507, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: Blightbringer", SC2NCO_LOC_ID_OFFSET + 508, LocationType.VANILLA,
+                     lambda state: logic.night_terrors_requirement(state)
+                                   and logic.nova_ranged_weapon(state)
+                                   and state.has_any(
+                         {ItemNames.NOVA_HELLFIRE_SHOTGUN, ItemNames.NOVA_PULSE_GRENADES, ItemNames.NOVA_STIM_INFUSION,
+                          ItemNames.NOVA_HOLO_DECOY}, player)),
+        LocationData("Night Terrors", "Night Terrors: Science Facility", SC2NCO_LOC_ID_OFFSET + 509, LocationType.EXTRA,
+                     lambda state: logic.night_terrors_requirement(state)),
+        LocationData("Night Terrors", "Night Terrors: Eradicators", SC2NCO_LOC_ID_OFFSET + 510, LocationType.VANILLA,
+                     lambda state: logic.night_terrors_requirement(state)
+                                   and logic.nova_any_weapon(state)),
+        LocationData("Flashpoint", "Flashpoint: Victory", SC2NCO_LOC_ID_OFFSET + 600, LocationType.VICTORY,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Close North Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 601, LocationType.EXTRA,
+                     lambda state: state.has_any(
+                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                                   or logic.terran_common_unit(state)),
+        LocationData("Flashpoint", "Flashpoint: Close East Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 602, LocationType.EXTRA,
+                     lambda state: state.has_any(
+                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                                   or logic.terran_common_unit(state)),
+        LocationData("Flashpoint", "Flashpoint: Far North Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 603, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Far East Evidence Coordinates", SC2NCO_LOC_ID_OFFSET + 604, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Experimental Weapon", SC2NCO_LOC_ID_OFFSET + 605, LocationType.VANILLA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Northwest Subway Entrance", SC2NCO_LOC_ID_OFFSET + 606, LocationType.VANILLA,
+                     lambda state: state.has_any(
+                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                                   and logic.terran_common_unit(state)
+                                   or logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Southeast Subway Entrance", SC2NCO_LOC_ID_OFFSET + 607, LocationType.VANILLA,
+                     lambda state: state.has_any(
+                         {ItemNames.LIBERATOR_RAID_ARTILLERY, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, player)
+                                   and logic.terran_common_unit(state)
+                                   or logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Northeast Subway Entrance", SC2NCO_LOC_ID_OFFSET + 608, LocationType.VANILLA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Expansion Hatchery", SC2NCO_LOC_ID_OFFSET + 609, LocationType.EXTRA,
+                     lambda state: state.has(ItemNames.LIBERATOR_RAID_ARTILLERY, player) and logic.terran_common_unit(state)
+                                   or logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Baneling Spawns", SC2NCO_LOC_ID_OFFSET + 610, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Mutalisk Spawns", SC2NCO_LOC_ID_OFFSET + 611, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Nydus Worm Spawns", SC2NCO_LOC_ID_OFFSET + 612, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Lurker Spawns", SC2NCO_LOC_ID_OFFSET + 613, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Brood Lord Spawns", SC2NCO_LOC_ID_OFFSET + 614, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("Flashpoint", "Flashpoint: Ultralisk Spawns", SC2NCO_LOC_ID_OFFSET + 615, LocationType.EXTRA,
+                     lambda state: logic.flashpoint_far_requirement(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Victory", SC2NCO_LOC_ID_OFFSET + 700, LocationType.VICTORY,
+                     lambda state: logic.enemy_shadow_victory(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Sewers: Domination Visor", SC2NCO_LOC_ID_OFFSET + 701, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_domination(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Sewers: Resupply Crate", SC2NCO_LOC_ID_OFFSET + 702, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_first_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Sewers: Facility Access", SC2NCO_LOC_ID_OFFSET + 703, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_first_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Northwest Door Lock", SC2NCO_LOC_ID_OFFSET + 704, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_door_controls(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Southeast Door Lock", SC2NCO_LOC_ID_OFFSET + 705, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_door_controls(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Plasma Rifle", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Blink Suit", SC2NCO_LOC_ID_OFFSET + 707, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Advanced Weaponry", SC2NCO_LOC_ID_OFFSET + 708, LocationType.VANILLA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Entrance Resupply Crate", SC2NCO_LOC_ID_OFFSET + 709, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_first_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: West Resupply Crate", SC2NCO_LOC_ID_OFFSET + 710, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: North Resupply Crate", SC2NCO_LOC_ID_OFFSET + 711, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: East Resupply Crate", SC2NCO_LOC_ID_OFFSET + 712, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: South Resupply Crate", SC2NCO_LOC_ID_OFFSET + 713, LocationType.EXTRA,
+                     lambda state: logic.enemy_shadow_second_stage(state)),
+        LocationData("Dark Skies", "Dark Skies: Victory", SC2NCO_LOC_ID_OFFSET + 800, LocationType.VICTORY,
+                     lambda state: logic.dark_skies_requirement(state)),
+        LocationData("Dark Skies", "Dark Skies: First Squadron of Dominion Fleet", SC2NCO_LOC_ID_OFFSET + 801, LocationType.EXTRA,
+                     lambda state: logic.dark_skies_requirement(state)),
+        LocationData("Dark Skies", "Dark Skies: Remainder of Dominion Fleet", SC2NCO_LOC_ID_OFFSET + 802, LocationType.EXTRA,
+                     lambda state: logic.dark_skies_requirement(state)),
+        LocationData("Dark Skies", "Dark Skies: Ji'nara", SC2NCO_LOC_ID_OFFSET + 803, LocationType.EXTRA,
+                     lambda state: logic.dark_skies_requirement(state)),
+        LocationData("Dark Skies", "Dark Skies: Science Facility", SC2NCO_LOC_ID_OFFSET + 804, LocationType.VANILLA,
+                     lambda state: logic.dark_skies_requirement(state)),
+        LocationData("End Game", "End Game: Victory", SC2NCO_LOC_ID_OFFSET + 900, LocationType.VICTORY,
+                     lambda state: logic.end_game_requirement(state) and logic.nova_any_weapon(state)),
+        LocationData("End Game", "End Game: Xanthos", SC2NCO_LOC_ID_OFFSET + 901, LocationType.VANILLA,
+                     lambda state: logic.end_game_requirement(state)),
     ]
 
     beat_events = []

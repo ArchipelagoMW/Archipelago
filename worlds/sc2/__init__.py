@@ -8,7 +8,7 @@ from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
     kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives
+    spear_of_adun_castable_passives, nova_equimpent
 from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
 from .Regions import create_regions
 from .Options import sc2_options, get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
@@ -114,6 +114,7 @@ class SC2World(World):
                         slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
         slot_data["plando_locations"] = get_plando_locations(self.multiworld, self.player)
+        slot_data["nova_covert_ops_only"] = (get_enabled_campaigns(self.multiworld, self.player) == {SC2Campaign.NCO})
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
         slot_data["version"] = 3
@@ -167,6 +168,10 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
         exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices) + len(starter_choices), len(candidates))
         if exclude_amount > 0:
             excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
+
+    # Nova gear exclusion if NCO not in campaigns
+    if SC2Campaign.NCO not in enabled_campaigns:
+        excluded_items.union(nova_equimpent)
 
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
     # no Kerrigan & remove all passives => remove all abilities
@@ -226,11 +231,14 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
             basic_units = get_basic_units(multiworld, player, first_race)
             if starter_unit == StarterUnit.option_balanced:
                 basic_units = basic_units.difference(not_balanced_starting_units)
-            if first_mission == SC2Mission.DARK_WHISPERS:
+            if first_mission == SC2Mission.DARK_WHISPERS.mission_name:
                 # Special case - you don't have a logicless location but need an AA
                 basic_units = basic_units.difference(
                     {ItemNames.ZEALOT, ItemNames.CENTURION, ItemNames.SENTINEL, ItemNames.BLOOD_HUNTER,
                      ItemNames.AVENGER, ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD})
+            if first_mission == SC2Mission.SUDDEN_STRIKE.mission_name:
+                # Special case - cliffjumpers
+                basic_units = {ItemNames.REAPER, ItemNames.GOLIATH, ItemNames.SIEGE_TANK}
             local_basic_unit = sorted(item for item in basic_units if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
                 # Drop non_local_items constraint
@@ -239,6 +247,20 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                     raise Exception("Early Unit: At least one basic unit must be included")
 
             starter_items.append(add_starter_item(multiworld, player, excluded_items, local_basic_unit))
+
+            # NCO-only specific rules
+            if first_mission == SC2Mission.SUDDEN_STRIKE.mission_name:
+                support_item: str | None = None
+                if local_basic_unit == ItemNames.REAPER:
+                    support_item = ItemNames.REAPER_SPIDER_MINES
+                elif local_basic_unit == ItemNames.GOLIATH:
+                    support_item = ItemNames.GOLIATH_JUMP_JETS
+                elif local_basic_unit == ItemNames.SIEGE_TANK:
+                    support_item = ItemNames.SIEGE_TANK_JUMP_JETS
+                if support_item is not None:
+                    starter_items.append(add_starter_item(multiworld, player, excluded_items, support_item))
+            if lookup_name_to_mission[first_mission].campaign == SC2Campaign.NCO:
+                starter_items.append(add_starter_item(multiworld, player, excluded_items, ItemNames.LIBERATOR_RAID_ARTILLERY))
     
     starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
     assert isinstance(starter_abilities, int)
@@ -254,7 +276,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 abilities = kerrigan_actives[tier].union(kerrigan_passives[tier]).difference(excluded_items)
             if abilities:
                 ability_count -= 1
-                starter_items.append(add_starter_item(multiworld, player, excluded_items, abilities))
+                starter_items.append(add_starter_item(multiworld, player, excluded_items, list(abilities)))
                 if ability_count == 0:
                     break
 
@@ -301,7 +323,8 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
 
     # Include items from outside main campaigns
     item_sets = {'wol', 'hots', 'lotv'}
-    if get_option_value(multiworld, player, 'nco_items'):
+    if get_option_value(multiworld, player, 'nco_items') \
+            or SC2Campaign.NCO in get_enabled_campaigns(multiworld, player):
         item_sets.add('nco')
     if get_option_value(multiworld, player, 'bw_items'):
         item_sets.add('bw')
@@ -394,7 +417,7 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
                 item_name = multiworld.random.choice(filler_items)
                 item = create_item_with_correct_settings(player, item_name)
                 location.place_locked_item(item)
-                locked_locations.append(item)
+                locked_locations.append(location.name)
 
 
 def place_exclusion_item(item_name, location, locked_locations, player):

@@ -141,6 +141,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         # Additional starter mission if player is granted story tech
         move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.THE_ESCAPE, MissionPools.MEDIUM, MissionPools.STARTER)
     if grant_story_tech or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
@@ -153,6 +154,9 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.DOMINATION, MissionPools.EASY, MissionPools.STARTER)
     if len(mission_pools[MissionPools.STARTER]) < 2:
         move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
+    if len(mission_pools[MissionPools.STARTER]) + len(mission_pools[MissionPools.EASY]) < 2:
+        # Flashpoint needs just a few items at start but competent comp at the end
+        move_mission(SC2Mission.FLASHPOINT, MissionPools.HARD, MissionPools.EASY)
 
     remove_final_mission_from_other_pools(mission_pools)
     return mission_pools
@@ -178,6 +182,7 @@ def get_item_upgrades(inventory: List[Item], parent_item: Union[Item, str]) -> L
 
 def get_item_quantity(item: Item, multiworld: MultiWorld, player: int):
     if (not get_option_value(multiworld, player, "nco_items")) \
+            and SC2Campaign.NCO in get_disabled_campaigns(multiworld, player) \
             and item.name in progressive_if_nco:
         return 1
     if (not get_option_value(multiworld, player, "ext_items")) \

@@ -83,8 +83,8 @@ class MaximumCampaignSize(Range):
     """
     display_name = "Maximum Campaign Size"
     range_start = 1
-    range_end = 74
-    default = 74
+    range_end = 83
+    default = 83
 
 
 class GridTwoStartPositions(Toggle):
@@ -178,6 +178,15 @@ class EnableEpilogueMissions(DefaultOnToggle):
     Enables missions from Epilogue campaign.
     """
     display_name = "Enable Epilogue missions"
+
+
+class EnableNCOMissions(DefaultOnToggle):
+    """
+    Enables missions from Nova Covert Ops campaign.
+
+    Note: For best gameplay experience it's recommended to also enable Wings of Liberty campaign.
+    """
+    display_name = "Enable Nova Covert Ops missions"
 
 
 class ShuffleCampaigns(DefaultOnToggle):
@@ -278,7 +287,11 @@ class GenericUpgradeItems(Choice):
 
 
 class NovaCovertOpsItems(Toggle):
-    """If turned on, the equipment upgrades from Nova Covert Ops may be present in the world."""
+    """
+    If turned on, the equipment upgrades from Nova Covert Ops may be present in the world.
+
+    If Nova Covert Ops campaign is enabled, this option is locked to be turned on.
+    """
     display_name = "Nova Covert Ops Items"
     default = Toggle.option_true
 
@@ -672,6 +685,7 @@ sc2_options: Dict[str, Option] = {
     "enable_lotv_prologue_missions": EnableLotVPrologueMissions,
     "enable_lotv_missions": EnableLotVMissions,
     "enable_epilogue_missions": EnableEpilogueMissions,
+    "enable_nco_missions": EnableNCOMissions,
     "shuffle_campaigns": ShuffleCampaigns,
     "shuffle_no_build": ShuffleNoBuild,
     "starter_unit": StarterUnit,
@@ -734,6 +748,8 @@ def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaig
         enabled_campaigns.add(SC2Campaign.LOTV)
     if get_option_value(multiworld, player, "enable_epilogue_missions"):
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
+    if get_option_value(multiworld, player, "enable_nco_missions"):
+        enabled_campaigns.add(SC2Campaign.NCO)
     return enabled_campaigns
 
 
