@@ -184,7 +184,7 @@ def generate_output(self, output_directory: str):
 
     if self.multiworld.auto_scroll_trap[self.player]:
         data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
-    if self.multiworld.golden_coins[self.player] != "vanilla":
+    if self.multiworld.coinsanity[self.player]:
         data[rom_addresses["Coin_Shuffle"]] = 0x40
     if self.multiworld.shuffle_midway_bells[self.player]:
         data[rom_addresses["Disable_Midway_Bell"]] = 0xC9
@@ -213,7 +213,6 @@ def generate_output(self, output_directory: str):
     os.unlink(rompath)
 
 
-
 class SuperMarioLand2DeltaPatch(APDeltaPatch):
     hash = "a8413347d5df8c9d14f97f0330d67bce"
     patch_file_ending = ".apsml2"
@@ -223,7 +222,6 @@ class SuperMarioLand2DeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-
 
 
 def get_base_rom_bytes():

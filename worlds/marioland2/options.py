@@ -1,17 +1,10 @@
 from Options import Toggle, Choice, NamedRange, Range
 
 
-class GoldenCoins(Choice):
-    """Vanilla: The coins are found in their original locations.
-    Shuffled: The coins are shuffled into the item pool.
-    Progressive: The coins are at the end of the Level Progression chains. For example, there will be a third
-    Space Zone Progression item, and the final one received will grant the Space Coin.
-
+class GoldenCoins(Toggle):
+    """Shuffle the Golden Coins into the item pool.
     You will see a Golden Coin being received when defeating bosses regardless of whether you are actually getting a coin."""
-    display_name = "Golden Coins"
-    option_vanilla = 0
-    option_shuffled = 1
-    option_progressive = 2
+    display_name = "Coinsanity"
     default = 0
 
 
@@ -41,10 +34,15 @@ class ShuffleMidwayBells(Toggle):
     display_name = "Shuffle Midway Bells"
 
 
-class ShufflePipeTraversal(Toggle):
-    """Shuffle a Pipe Traversal item into the item pool, which is required to enter pipes.
+class ShufflePipeTraversal(Choice):
+    """Single: Shuffle a Pipe Traversal item into the item pool, which is required to enter any pipes.
+    Split: Shuffle 4 Pipe Traversal items, one required for entering pipes from each direction.
     Note that being unable to enter pipes is very limiting and affects nearly half of all levels."""
     display_name = "Shuffle Pipe Traversal"
+    option_off = 0
+    option_single = 1
+    option_split = 2
+    default = 0
 
 
 class RandomizeEnemies(Toggle):
@@ -63,7 +61,7 @@ class AutoScrollLevels(NamedRange):
     display_name = "Auto Scroll Levels"
     range_start = 0
     range_end = 18
-    special_range_names = {"vanilla": -1}
+    special_range_names = {"vanilla": -1, "none": 0, "all": 18}
     default = -1
 
 
@@ -85,7 +83,7 @@ class EnergyLink(Toggle):
 
 
 sml2options = {
-    "golden_coins": GoldenCoins,
+    "coinsanity": GoldenCoins,
     "required_golden_coins": GoldenCoinsRequired,
     "difficulty_mode": DifficultyMode,
     "shuffle_midway_bells": ShuffleMidwayBells,

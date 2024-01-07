@@ -59,26 +59,33 @@ class MarioLand2Client(BizHawkClient):
 
         items_received = [list(items.keys())[item.item - START_IDS] for item in ctx.items_received]
 
-        progressive_coins = {
-            "Space Zone Progression": 3,
-            "Tree Zone Progression": 4,
-            "Macro Zone Progression": 4,
-            "Pumpkin Zone Progression": 4,
-            "Mario Zone Progression": 4,
-            "Turtle Zone Progression": 3
+        level_progression = {
+            "Space Zone Progression",
+            "Tree Zone Progression",
+            "Macro Zone Progression",
+            "Pumpkin Zone Progression",
+            "Mario Zone Progression",
+            "Turtle Zone Progression",
         }
-        for level_item, count in progressive_coins.items():
-            if items_received.count(level_item) >= count:
-                items_received.append(level_item.split(" ")[1] + " Coin")
+        for level_item in level_progression:
+            for _ in range(items_received.count(level_item + " x2")):
+                items_received += ([level_item] * 2)
+
+        if "Pipe Traversal" in items_received:
+            items_received += ["Pipe Traversal - Left", "Pipe Traversal - Right",
+                               "Pipe Traversal - Up", "Pipe Traversal - Down"]
 
         locations_checked = []
         modified_level_data = level_data.copy()
         for ID, (location, data) in enumerate(locations.items(), START_IDS):
             if "clear_condition" in data:
                 if items_received.count(data["clear_condition"][0]) >= data["clear_condition"][1]:
-                    modified_level_data[data["ram_index"]] |= 0x08 if data["type"] == "bell" else 0x80
+                    modified_level_data[data["ram_index"]] |= (0x08 if data["type"] == "bell"
+                                                               else 0x01 if data["type"] == "secret" else 0x80)
 
-            if data["type"] == "level" and level_data[data["ram_index"]] & 0x41:
+            if data["type"] == "level" and level_data[data["ram_index"]] & 0x40:
+                locations_checked.append(ID)
+            if data["type"] == "secret" and level_data[data["ram_index"]] & 0x02:
                 locations_checked.append(ID)
             elif data["type"] == "bell" and data["id"] == current_level and midway_point == 0xFF:
                 locations_checked.append(ID)
@@ -132,14 +139,14 @@ class MarioLand2Client(BizHawkClient):
             (rom_addresses["Invincibility_Star_B"], [invincibility_length & 0xFF], "ROM"),
             (rom_addresses["Enable_Bubble"], [0xcb, 0xd7] if "Hippo Bubble" in items_received else [0, 0], "ROM"),
             (rom_addresses["Enable_Swim"], [0xcb, 0xcf] if "Swim" in items_received else [0, 0], "ROM"),
-            (rom_addresses["Pipe_Traversal_A"], [16] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_B"], [32] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_C"], [48] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_D"], [64] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_SFX_A"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_SFX_B"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_SFX_C"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
-            (rom_addresses["Pipe_Traversal_SFX_D"], [5] if "Pipe Traversal" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_A"], [16] if "Pipe Traversal - Down" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_B"], [32] if "Pipe Traversal - Up" in items_received else [10], "ROM"),
+            (rom_addresses["Pipe_Traversal_C"], [48] if "Pipe Traversal - Right" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_D"], [64] if "Pipe Traversal - Left" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_A"], [5] if "Pipe Traversal - Down" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_B"], [5] if "Pipe Traversal - Up" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_C"], [5] if "Pipe Traversal - Right" in items_received else [0], "ROM"),
+            (rom_addresses["Pipe_Traversal_SFX_D"], [5] if "Pipe Traversal - Left" in items_received else [0], "ROM"),
             (0x022c, [new_lives], "CartRAM"),
             (0x02E4, [difficulty_mode], "CartRAM"),
             (0x0848, modified_level_data, "CartRAM")
