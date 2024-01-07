@@ -142,6 +142,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.ENEMY_WITHIN, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.THE_ESCAPE, MissionPools.MEDIUM, MissionPools.STARTER)
+        move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, MissionPools.MEDIUM, MissionPools.STARTER)
     if grant_story_tech or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
