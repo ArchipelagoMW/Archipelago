@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import KHRECOMItem, KHRECOMItemData, event_item_table, get_items_by_category, item_table
 from .Locations import KHRECOMLocation, location_table, get_locations_by_category
-from .Options import khrecom_options
+from .Options import KHRECOMOptions
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -37,7 +37,8 @@ class KHRECOMWorld(World):
     Sora on his journey through Castle Oblivion to find Riku and Kairi.
     """
     game = "Kingdom Hearts RE Chain of Memories"
-    option_definitions = khrecom_options
+    options_dataclass = KHRECOMOptions
+    options: KHRECOMOptions
     topology_present = True
     data_version = 4
     required_client_version = (0, 3, 5)
@@ -45,13 +46,6 @@ class KHRECOMWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
-
-    # TODO: Replace calls to this function with "options-dict", once that PR is completed and merged.
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
-
-    def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in khrecom_options}
 
     def create_items(self):
         item_pool: List[KHRECOMItem] = []
@@ -64,7 +58,7 @@ class KHRECOMWorld(World):
         while i < 4:
             if i < 3:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
-            elif i == 3 and self.get_setting("early_cure"):
+            elif i == 3 and self.options.early_cure:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure 4-6"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
@@ -97,15 +91,15 @@ class KHRECOMWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = {}
         disclude = []
-        if not self.get_setting("zeroes"):
+        if not self.options.zeroes:
             disclude.append("0")
-        if not self.get_setting("cure"):
+        if not self.options.cure:
             disclude.append("Cure")
-        if self.get_setting("early_cure"):
+        if self.options.early_cure:
             disclude.append("Cure 4-6")
-        if self.get_setting("enemy_cards"):
+        if self.options.enemy_cards:
             fillers.update(get_items_by_category("Enemy Cards", disclude))
-        if self.get_setting("days_items"):
+        if self.options.days_items:
             fillers.update(get_items_by_category("Days Sets", disclude))
             fillers.update(get_items_by_category("Days Enemy Cards", disclude))
         fillers.update(get_items_by_category("Sets", disclude))
@@ -121,7 +115,7 @@ class KHRECOMWorld(World):
         return KHRECOMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.get_setting("days_locations"))
+        set_rules(self.multiworld, self.player, self.options.days_locations)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.get_setting("days_locations"))
+        create_regions(self.multiworld, self.player, self.options.days_locations)

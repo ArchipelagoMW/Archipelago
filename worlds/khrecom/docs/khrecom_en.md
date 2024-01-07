@@ -46,6 +46,12 @@ an experience customized for their taste, and different players in the same mult
 
 you can customize your settings by visiting the [Kingdom Hearts RE Chain of Memories Settings Page](/games/Kingdom%20Hearts%20RE%20Chain%20of%20Memories/player-settings).
 
+## LUA Backend and Script Running Confirmation
+
+On the title screen, confirm that the LUA backend is working and that your LUA script is running by pressing F2.
+
+This should open the LUA console.  If you see a message stating `KHRECOM AP Running...` the lua script is running properly.
+
 ## Connect to the MultiServer
 
-On the title screen, open your KHRECOM Client and connect to your MultiServer.
+On the title screen, Open your KHRECOM Client and connect to your MultiServer.

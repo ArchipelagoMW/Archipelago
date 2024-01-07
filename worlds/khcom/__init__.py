@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import KHCOMItem, KHCOMItemData, event_item_table, get_items_by_category, item_table
 from .Locations import KHCOMLocation, location_table, get_locations_by_category
-from .Options import khcom_options
+from .Options import KHCOMOptions
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -37,7 +37,8 @@ class KHCOMWorld(World):
     Sora on his journey through Castle Oblivion to find Riku and Kairi.
     """
     game = "Kingdom Hearts Chain of Memories"
-    option_definitions = khcom_options
+    options_dataclass = KHCOMOptions
+    options: KHCOMOptions
     topology_present = True
     data_version = 4
     required_client_version = (0, 3, 5)
@@ -45,13 +46,6 @@ class KHCOMWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
-
-    # TODO: Replace calls to this function with "options-dict", once that PR is completed and merged.
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
-
-    def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in khcom_options}
 
     def create_items(self):
         item_pool: List[KHCOMItem] = []
@@ -64,9 +58,9 @@ class KHCOMWorld(World):
             if i < 3:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
             elif i < 7:
-                if self.get_setting("packs_or_sets") == "packs":
+                if self.options.packs_or_sets == "packs":
                     self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Bronze Card Pack"))
-            elif self.get_setting("early_cure"):
+            elif self.options.early_cure:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure 4-6"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
@@ -99,17 +93,17 @@ class KHCOMWorld(World):
     def get_filler_item_name(self) -> str:
         fillers = {}
         disclude = []
-        if not self.get_setting("zeroes"):
+        if not self.options.zeroes:
             disclude.append("0")
-        if not self.get_setting("cure"):
+        if not self.options.cure:
             disclude.append("Cure")
-        if self.get_setting("early_cure"):
+        if self.options.early_cure:
             disclude.append("Cure 4-6")
-        if self.get_setting("enemy_cards"):
+        if self.options.enemy_cards:
             fillers.update(get_items_by_category("Enemy Cards", disclude))
-        if self.get_setting("packs_or_sets") == "packs":
+        if self.options.packs_or_sets == "packs":
             fillers.update(get_items_by_category("Packs", disclude))
-        elif self.get_setting("packs_or_sets") == "sets":
+        elif self.options.packs_or_sets == "sets":
             fillers.update(get_items_by_category("Sets", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]

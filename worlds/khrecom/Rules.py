@@ -10,6 +10,9 @@ from .Locations import get_locations_by_category
 #def has_room_of_truth(state: CollectionState, player: int, floor_num) -> bool:
 #    return state.has_all({"Key of Beginnings F" + floor_num, "Key of Guidance F" + floor_num, "Key to Truth F" + floor_num}, player)
 
+def has_castle_oblivion(state: CollectionState, player: int) -> bool:
+    return state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel", "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan", "World Card Halloween Town", "World Card Atlantica", "World Card Destiny Islands"}, player) and has_x_worlds(state, player, 8)
+
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
     locations = 0
     if has_item(state, player,"World Card Wonderland"):
@@ -33,8 +36,6 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
     if has_item(state, player,"World Card Twilight Town"):
         locations = locations + 1
     if has_item(state, player,"World Card Destiny Islands"):
-        locations = locations + 1
-    if has_item(state, player,"World Card Castle Oblivion"):
         locations = locations + 1
     if locations > num_of_worlds:
         return True
@@ -81,13 +82,13 @@ def set_rules(multiworld: MultiWorld, player: int, days: bool):
     multiworld.get_location("Heartless Bouncywild"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Olympus Coliseum")
     multiworld.get_location("Heartless Creeper Plant"                                            , player).access_rule = lambda state: has_item(state, player,"World Card Wonderland") or has_item(state, player,"World Card Halloween Town") or has_item(state, player,"World Card Destiny Islands")
     multiworld.get_location("Heartless Crescendo"                                                , player).access_rule = lambda state: has_item(state, player,"World Card Wonderland") or has_item(state, player,"World Card Neverland") or has_item(state, player,"World Card Destiny Islands")
-    multiworld.get_location("Heartless Darkball"                                                 , player).access_rule = lambda state: has_item(state, player,"World Card Atlantica") or has_item(state, player,"World Card Neverland") or has_item(state, player,"World Card Destiny Islands") or has_item(state, player,"World Card Castle Oblivion")
-    multiworld.get_location("Heartless Defender"                                                 , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_item(state, player,"World Card Castle Oblivion")
+    multiworld.get_location("Heartless Darkball"                                                 , player).access_rule = lambda state: has_item(state, player,"World Card Atlantica") or has_item(state, player,"World Card Neverland") or has_item(state, player,"World Card Destiny Islands") or has_castle_oblivion(state, player)
+    multiworld.get_location("Heartless Defender"                                                 , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_castle_oblivion(state, player)
     multiworld.get_location("Heartless Fat Bandit"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Agrabah")
     multiworld.get_location("Heartless Gargoyle"                                                 , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town")
-    multiworld.get_location("Heartless Green Requiem"                                            , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_item(state, player,"World Card Castle Oblivion")
+    multiworld.get_location("Heartless Green Requiem"                                            , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_castle_oblivion(state, player)
     multiworld.get_location("Heartless Large Body"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Wonderland") or has_item(state, player,"World Card Olympus Coliseum")
-    multiworld.get_location("Heartless Neoshadow"                                                , player).access_rule = lambda state: has_item(state, player,"World Card Castle Oblivion")
+    multiworld.get_location("Heartless Neoshadow"                                                , player).access_rule = lambda state: has_castle_oblivion(state, player)
     multiworld.get_location("Heartless Pirate"                                                   , player).access_rule = lambda state: has_item(state, player,"World Card Neverland")
     multiworld.get_location("Heartless Powerwild"                                                , player).access_rule = lambda state: has_item(state, player,"World Card Olympus Coliseum")
     multiworld.get_location("Heartless Screwdiver"                                               , player).access_rule = lambda state: has_item(state, player,"World Card Atlantica")
@@ -95,9 +96,9 @@ def set_rules(multiworld: MultiWorld, player: int, days: bool):
     multiworld.get_location("Heartless Search Ghost"                                             , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Atlantica")
     multiworld.get_location("Heartless Tornado Step"                                             , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Hollow Bastion") or has_item(state, player,"World Card Destiny Islands")
     multiworld.get_location("Heartless Wight Knight"                                             , player).access_rule = lambda state: has_item(state, player,"World Card Halloween Town")
-    multiworld.get_location("Heartless Wizard"                                                   , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_item(state, player,"World Card Castle Oblivion")
-    multiworld.get_location("Heartless Wyvern"                                                   , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_item(state, player,"World Card Castle Oblivion")
-    multiworld.get_location("Heartless Yellow Opera"                                             , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_item(state, player,"World Card Neverland") or has_item(state, player,"World Card Castle Oblivion")
+    multiworld.get_location("Heartless Wizard"                                                   , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_castle_oblivion(state, player)
+    multiworld.get_location("Heartless Wyvern"                                                   , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion") or has_castle_oblivion(state, player)
+    multiworld.get_location("Heartless Yellow Opera"                                             , player).access_rule = lambda state: has_item(state, player,"World Card Monstro") or has_item(state, player,"World Card Agrabah") or has_item(state, player,"World Card Neverland") or has_castle_oblivion(state, player)
     
     # Region rules.
     multiworld.get_entrance("Floor 2"                                                            , player).access_rule = lambda state: has_item(state, player,"World Card Wonderland")
@@ -109,9 +110,9 @@ def set_rules(multiworld: MultiWorld, player: int, days: bool):
     multiworld.get_entrance("Floor 8"                                                            , player).access_rule = lambda state: has_item(state, player,"World Card Neverland")
     multiworld.get_entrance("Floor 9"                                                            , player).access_rule = lambda state: has_item(state, player,"World Card Hollow Bastion")
     multiworld.get_entrance("Floor 10"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card 100 Acre Wood")
-    multiworld.get_entrance("Floor 11"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Twilight Town") and has_x_worlds(state, player, 5)
-    multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands") and has_x_worlds(state, player, 7)
-    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel", "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan", "World Card Halloween Town", "World Card Atlantica", "World Card Destiny Islands"}, player) and has_x_worlds(state, player, 9)
+    multiworld.get_entrance("Floor 11"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Twilight Town") and has_x_worlds(state, player, 4)
+    multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands") and has_x_worlds(state, player, 6)
+    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: has_castle_oblivion(state, player)
     
     
     

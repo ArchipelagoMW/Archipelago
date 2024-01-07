@@ -1,12 +1,6 @@
-from typing import Dict
+from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
-
-class PrioritizeBosses(DefaultOnToggle):
-    """
-    Toggles whether boss locations should prioritize holding progression items.
-    """
-    display_name = "Progression Items Prioritized to Bosses"
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
 class PacksOrSets(Choice):
     """
@@ -42,11 +36,10 @@ class EnemyCards(DefaultOnToggle):
     """
     display_name = "Enemy Cards"
 
-khcom_options: Dict[str, type(Option)] = {
-    "prioritize_bosses": PrioritizeBosses,
-    "packs_or_sets": PacksOrSets,
-    "zeroes": Zeroes,
-    "cure": Cure,
-    "early_cure": EarlyCure,
-    "enemy_cards": EnemyCards,
-}
+@dataclass
+class KHCOMOptions(PerGameCommonOptions):
+    packs_or_sets: PacksOrSets
+    zeroes: Zeroes
+    cure: Cure
+    early_cure: EarlyCure
+    enemy_cards: EnemyCards

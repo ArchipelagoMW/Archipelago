@@ -1,6 +1,6 @@
-from typing import Dict
+from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
 class Zeroes(DefaultOnToggle):
     """
@@ -38,11 +38,11 @@ class DaysLocations(Toggle):
     """
     display_name = "Days Locations"
 
-khrecom_options: Dict[str, type(Option)] = {
-    "zeroes": Zeroes,
-    "cure": Cure,
-    "early_cure": EarlyCure,
-    "enemy_cards": EnemyCards,
-    "days_items": DaysItems,
-    "days_locations": DaysLocations,
-}
+@dataclass
+class KHRECOMOptions(PerGameCommonOptions):
+    zeroes: Zeroes
+    cure: Cure
+    early_cure: EarlyCure
+    enemy_cards: EnemyCards
+    days_items: DaysItems
+    days_locations: DaysLocations

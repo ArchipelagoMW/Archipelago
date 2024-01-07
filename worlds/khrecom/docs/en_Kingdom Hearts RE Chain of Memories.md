@@ -17,9 +17,9 @@ Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack
 
 ###Items
 
-World Unlocks, Key of Rewards for each floor, Enemy Cards, and card sets are shuffled into the item pool.
+World Unlocks, Key to Rewards for each floor, Enemy Cards, and Card Sets are shuffled into the item pool.
 
-Card sets are comprised of a card type and a value range.  For example, you might receive Blizzard 4-6, which means you receive Blizzard 4, Blizzard 5, and Blizzard 6.
+Card Sets are comprised of a card type and a value range.  For example, you might receive Blizzard 4-6, which means you receive Blizzard 4, Blizzard 5, and Blizzard 6.
 
 ###Locations
 
