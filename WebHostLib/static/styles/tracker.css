@@ -7,138 +7,55 @@
     width: calc(100% - 1rem);
 }
 
-#tracker-wrapper a{
+#tracker-wrapper a {
     color: #234ae4;
     text-decoration: none;
     cursor: pointer;
 }
 
-.table-wrapper{
-    overflow-y: auto;
-    overflow-x: auto;
-    margin-bottom: 1rem;
-}
-
-#tracker-header-bar{
+#tracker-header-bar {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    align-content: center;
     line-height: 20px;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
-#tracker-header-bar .info{
+#tracker-header-bar .info {
     color: #ffffff;
-}
-
-#search{
-    border: 1px solid #000000;
-    border-radius: 3px;
-    padding: 3px;
-    width: 200px;
-    margin-bottom: 0.5rem;
-    margin-right: 1rem;
-}
-
-#multi-stream-link{
-    margin-right: 1rem;
-}
-
-div.dataTables_wrapper.no-footer .dataTables_scrollBody{
-    border: none;
-}
-
-table.dataTable{
-    color: #000000;
-}
-
-table.dataTable thead{
-    font-family: LexendDeca-Regular, sans-serif;
-}
-
-table.dataTable tbody, table.dataTable tfoot{
-    background-color: #dce2bd;
-    font-family: LexendDeca-Light, sans-serif;
-}
-
-table.dataTable tbody tr:hover, table.dataTable tfoot tr:hover{
-    background-color: #e2eabb;
-}
-
-table.dataTable tbody td, table.dataTable tfoot td{
-    padding: 4px 6px;
-}
-
-table.dataTable, table.dataTable.no-footer{
-    border-left: 1px solid #bba967;
-    width: calc(100% - 2px) !important;
-    font-size: 1rem;
-}
-
-table.dataTable thead th{
-    position: -webkit-sticky;
-    position: sticky;
-    background-color: #b0a77d;
-    top: 0;
-}
-
-table.dataTable thead th.upper-row{
-    position: -webkit-sticky;
-    position: sticky;
-    background-color: #b0a77d;
-    height: 36px;
-    top: 0;
-}
-
-table.dataTable thead th.lower-row{
-    position: -webkit-sticky;
-    position: sticky;
-    background-color: #b0a77d;
-    height: 22px;
-    top: 46px;
-}
-
-table.dataTable tbody td, table.dataTable tfoot td{
-    border: 1px solid #bba967;
-}
-
-table.dataTable tfoot td{
-    font-weight: bold;
-}
-
-div.dataTables_scrollBody{
-    background-color: inherit !important;
-}
-
-table.dataTable .center-column{
-    text-align: center;
-}
-
-img.alttp-sprite {
-    height: auto;
-    max-height: 32px;
-    min-height: 14px;
-}
-
-.item-acquired{
-    background-color: #d3c97d;
+    padding: 2px;
+    flex-grow: 1;
+    align-self: center;
+    text-align: justify;
 }
 
 #tracker-navigation {
-    display: inline-flex;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    user-select: none;
+    height: 2rem;
+}
+
+.tracker-navigation-bar {
+    display: flex;
     background-color: #b0a77d;
-    margin: 0.5rem;
     border-radius: 4px;
 }
 
 .tracker-navigation-button {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 4px;
     padding-left: 12px;
     padding-right: 12px;
     border-radius: 4px;
     text-align: center;
     font-size: 14px;
-    color: #000;
+    color: black !important;
     font-weight: lighter;
 }
 
@@ -150,6 +67,100 @@ img.alttp-sprite {
     background-color: rgb(220, 226, 189);
 }
 
+.table-wrapper {
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    resize: vertical;
+}
+
+#search {
+    border: 1px solid #000000;
+    border-radius: 3px;
+    padding: 3px;
+    width: 200px;
+}
+
+div.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border: none;
+}
+
+table.dataTable {
+    color: #000000;
+}
+
+table.dataTable thead {
+    font-family: LexendDeca-Regular, sans-serif;
+}
+
+table.dataTable tbody, table.dataTable tfoot {
+    background-color: #dce2bd;
+    font-family: LexendDeca-Light, sans-serif;
+}
+
+table.dataTable tbody tr:hover, table.dataTable tfoot tr:hover {
+    background-color: #e2eabb;
+}
+
+table.dataTable tbody td, table.dataTable tfoot td {
+    padding: 4px 6px;
+}
+
+table.dataTable, table.dataTable.no-footer {
+    border-left: 1px solid #bba967;
+    width: calc(100% - 2px) !important;
+    font-size: 1rem;
+}
+
+table.dataTable thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #b0a77d;
+    top: 0;
+}
+
+table.dataTable thead th.upper-row {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #b0a77d;
+    height: 36px;
+    top: 0;
+}
+
+table.dataTable thead th.lower-row {
+    position: -webkit-sticky;
+    position: sticky;
+    background-color: #b0a77d;
+    height: 22px;
+    top: 46px;
+}
+
+table.dataTable tbody td, table.dataTable tfoot td {
+    border: 1px solid #bba967;
+}
+
+table.dataTable tfoot td {
+    font-weight: bold;
+}
+
+div.dataTables_scrollBody {
+    background-color: inherit !important;
+}
+
+table.dataTable .center-column {
+    text-align: center;
+}
+
+img.icon-sprite {
+    height: auto;
+    max-height: 32px;
+    min-height: 14px;
+}
+
+.item-acquired {
+    background-color: #d3c97d;
+}
+
 @media all and (max-width: 1700px) {
     table.dataTable thead th.upper-row{
         position: -webkit-sticky;
@@ -159,7 +170,7 @@ img.alttp-sprite {
         top: 0;
     }
 
-    table.dataTable thead th.lower-row{
+    table.dataTable thead th.lower-row {
         position: -webkit-sticky;
         position: sticky;
         background-color: #b0a77d;
@@ -167,11 +178,11 @@ img.alttp-sprite {
         top: 37px;
     }
 
-    table.dataTable, table.dataTable.no-footer{
+    table.dataTable, table.dataTable.no-footer {
         font-size: 0.8rem;
     }
 
-    img.alttp-sprite {
+    img.icon-sprite {
         height: auto;
         max-height: 24px;
         min-height: 10px;
@@ -187,7 +198,7 @@ img.alttp-sprite {
         top: 0;
     }
 
-    table.dataTable thead th.lower-row{
+    table.dataTable thead th.lower-row {
         position: -webkit-sticky;
         position: sticky;
         background-color: #b0a77d;
@@ -195,11 +206,11 @@ img.alttp-sprite {
         top: 32px;
     }
 
-    table.dataTable, table.dataTable.no-footer{
+    table.dataTable, table.dataTable.no-footer {
         font-size: 0.6rem;
     }
 
-    img.alttp-sprite {
+    img.icon-sprite {
         height: auto;
         max-height: 20px;
         min-height: 10px;

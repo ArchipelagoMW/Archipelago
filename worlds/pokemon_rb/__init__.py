@@ -2,9 +2,11 @@ import os
 import settings
 import typing
 import threading
+import base64
 from copy import deepcopy
 from typing import TextIO
 
+from Utils import __version__
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, LocationProgressType
 from Fill import fill_restrictive, FillError, sweep_from_pool
 from worlds.AutoWorld import World, WebWorld
@@ -22,6 +24,7 @@ from .rules import set_rules
 from .level_scaling import level_scaling
 from . import logic
 from . import poke_data
+from . import client
 
 
 class PokemonSettings(settings.Group):
@@ -36,16 +39,8 @@ class PokemonSettings(settings.Group):
         copy_to = "Pokemon Blue (UE) [S][!].gb"
         md5s = [BlueDeltaPatch.hash]
 
-    class RomStart(str):
-        """
-        Set this to false to never autostart a rom (such as after patching)
-        True for operating system default program
-        Alternatively, a path to a program to open the .gb file with
-        """
-
     red_rom_file: RedRomFile = RedRomFile(RedRomFile.copy_to)
     blue_rom_file: BlueRomFile = BlueRomFile(BlueRomFile.copy_to)
-    rom_start: typing.Union[RomStart, bool] = True
 
 
 class PokemonWebWorld(WebWorld):
@@ -140,9 +135,6 @@ class PokemonRedBlueWorld(World):
             self.rival_name = "choose_in_game"
         else:
             self.rival_name = encode_name(self.multiworld.rival_name[self.player].value, "Rival")
-
-        if len(self.multiworld.player_name[self.player].encode()) > 16:
-            raise Exception(f"Player name too long for {self.multiworld.get_player_name(self.player)}. Player name cannot exceed 16 bytes for Pokémon Red and Blue.")
 
         if not self.multiworld.badgesanity[self.player]:
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
@@ -289,18 +281,20 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.itempool.remove(badge)
                     progitempool.remove(badge)
                 for _ in range(5):
-                    badgelocs = [self.multiworld.get_location(loc, self.player) for loc in [
-                        "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
-                        "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
-                        "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
-                        "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]]
+                    badgelocs = [
+                        self.multiworld.get_location(loc, self.player) for loc in [
+                            "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
+                            "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
+                            "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                            "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
+                        ] if self.multiworld.get_location(loc, self.player).item is None]
                     state = self.multiworld.get_all_state(False)
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
                     badgelocs_copy = badgelocs.copy()
                     # allow_partial so that unplaced badges aren't lost, for debugging purposes
                     fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
-                    if badges:
+                    if len(badges) > 8 - len(badgelocs):
                         for location in badgelocs:
                             if location.item:
                                 badges.append(location.item)
@@ -310,6 +304,7 @@ class PokemonRedBlueWorld(World):
                         for location in badgelocs:
                             if location.item:
                                 fill_locations.remove(location)
+                        progitempool += badges
                         break
                 else:
                     raise FillError(f"Failed to place badges for player {self.player}")
@@ -422,7 +417,7 @@ class PokemonRedBlueWorld(World):
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
                 intervene_move = "Cut"
             elif ((not logic.can_learn_hm(test_state, "Flash", self.player)) and self.multiworld.dark_rock_tunnel_logic[self.player]
-                    and (((self.multiworld.accessibility[self.player] != "minimal" and
+                    and (((self.multiworld.accessibility[self.player] != "minimal" or
                     (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])) or
                     self.multiworld.door_shuffle[self.player]))):
                 intervene_move = "Flash"
@@ -445,13 +440,9 @@ class PokemonRedBlueWorld(World):
         # Delete evolution events for Pokémon that are not in logic in an all_state so that accessibility check does not
         # fail. Re-use test_state from previous final loop.
         evolutions_region = self.multiworld.get_region("Evolution", self.player)
-        clear_cache = False
         for location in evolutions_region.locations.copy():
             if not test_state.can_reach(location, player=self.player):
                 evolutions_region.locations.remove(location)
-                clear_cache = True
-        if clear_cache:
-            self.multiworld.clear_location_cache()
 
         if self.multiworld.old_man[self.player] == "early_parcel":
             self.multiworld.local_early_items[self.player]["Oak's Parcel"] = 1
@@ -467,13 +458,17 @@ class PokemonRedBlueWorld(World):
         locs = {self.multiworld.get_location("Fossil - Choice A", self.player),
                 self.multiworld.get_location("Fossil - Choice B", self.player)}
 
-        for loc in locs:
+        if not self.multiworld.key_items_only[self.player]:
+            rule = None
             if self.multiworld.fossil_check_item_types[self.player] == "key_items":
-                add_item_rule(loc, lambda i: i.advancement)
+                rule = lambda i: i.advancement
             elif self.multiworld.fossil_check_item_types[self.player] == "unique_items":
-                add_item_rule(loc, lambda i: i.name in item_groups["Unique"])
+                rule = lambda i: i.name in item_groups["Unique"]
             elif self.multiworld.fossil_check_item_types[self.player] == "no_key_items":
-                add_item_rule(loc, lambda i: not i.advancement)
+                rule = lambda i: not i.advancement
+            if rule:
+                for loc in locs:
+                    add_item_rule(loc, rule)
 
         for mon in ([" ".join(self.multiworld.get_location(
                 f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
@@ -559,7 +554,6 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-            self.multiworld._recache()
 
         if self.multiworld.door_shuffle[self.player] == "decoupled":
             swept_state = self.multiworld.state.copy()
@@ -621,6 +615,13 @@ class PokemonRedBlueWorld(World):
 
     def generate_output(self, output_directory: str):
         generate_output(self, output_directory)
+
+    def modify_multidata(self, multidata: dict):
+        rom_name = bytearray(f'AP{__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
+                             'utf8')[:21]
+        rom_name.extend([0] * (21 - len(rom_name)))
+        new_name = base64.b64encode(bytes(rom_name)).decode()
+        multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def write_spoiler_header(self, spoiler_handle: TextIO):
         spoiler_handle.write(f"Cerulean Cave Total Key Items:   {self.multiworld.cerulean_cave_key_items_condition[self.player].total}\n")

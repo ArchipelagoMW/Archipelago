@@ -18,12 +18,27 @@ class TestDesertPalace(TestDungeon):
 
             ["Desert Palace - Compass Chest", False, []],
             ["Desert Palace - Compass Chest", False, [], ['Small Key (Desert Palace)']],
-            ["Desert Palace - Compass Chest", True, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Compass Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Compass Chest", False, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Compass Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)']],
 
-            #@todo: Require a real weapon for enemizer?
             ["Desert Palace - Big Key Chest", False, []],
             ["Desert Palace - Big Key Chest", False, [], ['Small Key (Desert Palace)']],
-            ["Desert Palace - Big Key Chest", True, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Big Key Chest", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Big Key Chest", False, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Big Key Chest", True, ['Progressive Sword', 'Small Key (Desert Palace)']],
+
+            ["Desert Palace - Desert Tiles 1 Pot Key", True, []],
+
+            ["Desert Palace - Beamos Hall Pot Key", False, []],
+            ["Desert Palace - Beamos Hall Pot Key", False, [], ['Small Key (Desert Palace)']],
+            ["Desert Palace - Beamos Hall Pot Key", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Beamos Hall Pot Key", True, ['Small Key (Desert Palace)', 'Progressive Sword']],
+
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, []],
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, ['Small Key (Desert Palace)']],
+            ["Desert Palace - Desert Tiles 2 Pot Key", False, ['Progressive Sword', 'Hammer', 'Fire Rod', 'Ice Rod', 'Progressive Bow', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Desert Palace - Desert Tiles 2 Pot Key", True, ['Small Key (Desert Palace)', 'Progressive Sword']],
 
             ["Desert Palace - Boss", False, []],
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
@@ -33,7 +48,6 @@ class TestDesertPalace(TestDungeon):
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Fire Rod']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Progressive Sword']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Hammer']],
-            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Ice Rod']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Somaria']],
             ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Lamp', 'Cane of Byrna']],
         ])
