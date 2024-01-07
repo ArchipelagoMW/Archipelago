@@ -12,7 +12,6 @@ ModuleUpdate.update()
 import Utils
 
 check_num = 0
-sent_counter = 0
 
 logger = logging.getLogger("Client")
 
@@ -38,6 +37,7 @@ class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
     items_handling = 0b111  # full remote
+    sent_counter = 0
 
     def __init__(self, server_address, password):
         super(KH1Context, self).__init__(server_address, password)
@@ -134,13 +134,17 @@ class KH1Context(CommonContext):
 
             if senderID == self.slot:
                 itemName = self.item_names[networkItem.item]
+                itemCategory = networkItem.flags
                 recieverID = args["receiving"]
                 recieverName = self.player_names[recieverID]
-
-                sent_counter += 1
-                filename = f"sent" + str(sent_counter)
+                filename = "sent" + str(self.sent_counter % 5)
+                self.sent_counter += 1
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.write(itemName + "\n" + recieverName)
+                    f.write(
+                      str(itemName) + "\n"
+                    + str(recieverName) + "\n"
+                    + str(itemCategory) + "\n"
+                    + str(self.sent_counter))
                     f.close()
 
 #f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
