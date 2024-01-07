@@ -1,7 +1,5 @@
-from collections import ChainMap
-from itertools import zip_longest
-from BaseClasses import Item, MultiWorld, Region, Location, Entrance, Tutorial, ItemClassification
-from .ArbitraryGameDefs import BASE_ID, AutopelagoRegion, AutopelagoLocationIds, connected_regions, get_autopelago_entrance_name, num_locations_in
+from BaseClasses import Item, Region, Location, Entrance, Tutorial, ItemClassification
+from .ArbitraryGameDefs import BASE_ID, AutopelagoRegion, connected_regions, get_autopelago_entrance_name, location_base_ids, num_locations_in
 from .Items import item_table
 from ..generic.Rules import set_rule
 from ..AutoWorld import World, WebWorld
@@ -39,32 +37,72 @@ class AutopelagoWorld(World):
     #options_dataclass = ArchipelagoOptions
     #options: ArchipelagoOptions
 
-    item_name_to_id = {}
-    start_id = BASE_ID
-    for item in item_table:
-        item_name_to_id[item] = start_id
-        start_id += 1
+    location_name_to_id = {
+        r.get_location_name(i): location_base_ids[r] + i
+        for r in AutopelagoRegion
+        for i in range(num_locations_in[r])
+    }
 
-    location_name_to_id = dict(ChainMap([
-        { "goal": AutopelagoRegion.TryingForGoal },
-        { r.name.lower(): r for r in AutopelagoRegion.singles() },
-        { f"b8r_{i}": i for i in AutopelagoLocationIds.before_8_rats },
-        { f"a8rba_{i}": i for i in AutopelagoLocationIds.after_8_rats_before_a },
-        { f"a8rbb_{i}": i for i in AutopelagoLocationIds.after_8_rats_before_b },
-        { f"aabc_{i}": i for i in AutopelagoLocationIds.after_a_before_c },
-        { f"abbd_{i}": i for i in AutopelagoLocationIds.after_b_before_d },
-        { f"acb20r_{i}": i for i in AutopelagoLocationIds.after_c_before_20_rats },
-        { f"adb20r_{i}": i for i in AutopelagoLocationIds.after_d_before_20_rats },
-        { f"a20rbe_{i}": i for i in AutopelagoLocationIds.after_20_rats_before_e },
-        { f"a20rbf_{i}": i for i in AutopelagoLocationIds.after_20_rats_before_f },
-    ]))
+    item_name_to_id = {
+        item_table[i]: BASE_ID + i
+        for i in range(len(location_name_to_id))
+    }
+
+    @staticmethod
+    def _build_item_defs(item_name_by_location_name: dict[str, str], item_name_to_id: dict[str, int]):
+        item_pool: list[tuple[str, ItemClassification, int]] = []
+
+        def _appendOne(location: AutopelagoRegion, c: ItemClassification, item_id_offset: int = 0):
+            item_name = item_name_by_location_name[location.get_location_name(item_id_offset)]
+            item_pool.append((item_name, c, item_name_to_id[item_name]))
+
+        def _appendMany(reg: AutopelagoRegion, prog_count = 0):
+            num = num_locations_in[reg]
+            midpoint = (num - prog_count + 1) // 2
+            for item_id_offset in range(num):
+                _appendOne(reg, \
+                    ItemClassification.progression_skip_balancing if item_id_offset < prog_count else \
+                    ItemClassification.useful if item_id_offset < midpoint else \
+                    ItemClassification.filler,
+                    item_id_offset)
+
+        _appendOne(AutopelagoRegion.A, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.B, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.C, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.D, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.E, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.F, ItemClassification.progression)
+        _appendOne(AutopelagoRegion.TryingForGoal, ItemClassification.progression)
+
+        _appendMany(AutopelagoRegion.Before8Rats, 8)
+        _appendMany(AutopelagoRegion.After8RatsBeforeA)
+        _appendMany(AutopelagoRegion.After8RatsBeforeB)
+        _appendMany(AutopelagoRegion.AfterABeforeC)
+        _appendMany(AutopelagoRegion.AfterBBeforeD)
+        _appendMany(AutopelagoRegion.AfterCBefore20Rats, 4)
+        _appendMany(AutopelagoRegion.AfterDBefore20Rats, 4)
+        _appendMany(AutopelagoRegion.After20RatsBeforeE)
+        _appendMany(AutopelagoRegion.After20RatsBeforeF)
+
+        return item_pool
+
+    _item_name_by_location_name: dict[str, str] = { }
+    _next_item_index = 0
+    for location_name, location_id in location_name_to_id.items():
+        _item_name_by_location_name[location_name] = item_table[_next_item_index]
+        _next_item_index += 1
+
+    _item_defs = _build_item_defs(_item_name_by_location_name, item_name_to_id)
+    _item_defs_by_name = { i[0]: i for i in _item_defs }
 
     def set_rules(self):
         def _gate_by_specific_item(r_from: AutopelagoRegion, r_to: AutopelagoRegion):
-            set_rule(_get_entrance(r_from, r_to), lambda state: state.has(r_from.get_location_name(0), self.player))
+            set_rule(_get_entrance(r_from, r_to), lambda state: state.has(self._item_name_by_location_name[r_from.name.lower()], self.player))
+            print(f"To get from {r_from.name} to {r_to.name}, you will need to receive {self._item_name_by_location_name[r_from.name.lower()]}")
 
         def _gate_by_num_rats(r_from: AutopelagoRegion, r_to: AutopelagoRegion, num_rats: int):
             set_rule(_get_entrance(r_from, r_to), lambda state: state.prog_items[self.player].total() >= num_rats)
+            print(f"To get from {r_from.name} to {r_to.name}, you will need {num_rats} rat(s)")
 
         def _get_entrance(r_from: AutopelagoRegion, r_to: AutopelagoRegion):
             return self.multiworld.get_entrance(get_autopelago_entrance_name(r_from, r_to), self.player)
@@ -82,68 +120,46 @@ class AutopelagoWorld(World):
         _gate_by_specific_item(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal)
         _gate_by_specific_item(AutopelagoRegion.F, AutopelagoRegion.TryingForGoal)
 
-        location_goal = self.multiworld.get_location(AutopelagoRegion.TryingForGoal.get_location_name(0), self.player)
-        self.multiworld.completion_condition[self.player] = lambda state: location_goal in state.locations_checked
+        self.multiworld.get_location("goal", self.player).place_locked_item(next(
+            i for i in self.multiworld.itempool
+            if i.player == self.player
+                and i.name == self._item_name_by_location_name["goal"]
+        ))
+
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self._item_name_by_location_name["goal"], self.player);
 
     def create_item(self, name: str) -> Item:
-        return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
+        (_, classification, code) = self._item_defs_by_name[name]
+        return AutopelagoItem(name, classification, code, self.player)
 
     def create_items(self):
-        item_pool = []
-
-        def _appendOne(c: ItemClassification):
-            item_pool.append(AutopelagoItem(
-                item_table[len(item_pool)],
-                c,
-                self.item_id_to_name[item_table[len(item_pool)]],
-                self.player
-            ))
-
-        def _appendMany(r: list[int], prog_count = 0):
-            midpoint = (len(r) - prog_count) // 2
-            for item_id_offset in range(len(r)):
-                _appendOne(\
-                    ItemClassification.progression if item_id_offset < prog_count else \
-                    ItemClassification.useful if item_id_offset < midpoint else \
-                    ItemClassification.filler)
-
-        for _ in AutopelagoRegion.singles():
-            _appendOne(ItemClassification.progression)
-
-        _appendMany(AutopelagoLocationIds.before_8_rats, 8)
-        _appendMany(AutopelagoLocationIds.after_8_rats_before_a)
-        _appendMany(AutopelagoLocationIds.after_8_rats_before_b)
-        _appendMany(AutopelagoLocationIds.after_a_before_c)
-        _appendMany(AutopelagoLocationIds.after_b_before_d)
-        _appendMany(AutopelagoLocationIds.after_c_before_20_rats, 4)
-        _appendMany(AutopelagoLocationIds.after_d_before_20_rats, 4)
-        _appendMany(AutopelagoLocationIds.after_20_rats_before_e)
-        _appendMany(AutopelagoLocationIds.after_20_rats_before_f)
-
-        self.multiworld.itempool += item_pool
+        self.multiworld.itempool += [self.create_item(name) for name, _, _ in self._item_defs]
 
     def create_regions(self):
-        regions = { r: create_region(self.multiworld, self.player, r) for r in AutopelagoRegion }
-        link(self.player, regions)
+        regions = { r: self.create_region(r) for r in AutopelagoRegion }
+        for r, base_r in regions.items():
+            for connected_r in connected_regions.get(r):
+                entrance = Entrance(self.player, get_autopelago_entrance_name(r, connected_r), base_r)
+                base_r.exits.append(entrance)
+                entrance.connect(base_r)
+
+        # Archipelago hardcoded behavior we need a "Menu" region that connects to one of ours.
+        menu = Region('Menu', self.player, self.multiworld)
+        menu_to_start_entrance = Entrance(self.player, 'Start of Game', menu)
+        menu.exits.append(menu_to_start_entrance)
+        menu_to_start_entrance.connect(regions[AutopelagoRegion.Before8Rats])
+        regions[None] = menu
         self.multiworld.regions += regions.values()
 
     def get_filler_item_name(self) -> str:
         return self.multiworld.random.choice(item_table)
 
-
-def create_region(world: MultiWorld, player: int, r: AutopelagoRegion):
-    region = Region(r.name, player, world)
-    for i, location_id in zip_longest(range(num_locations_in[r]), AutopelagoLocationIds.of(r)):
-        location = AutopelagoLocation(player, r.get_location_name(i), location_id, region)
-        region.locations.append(location)
-    return region
-
-def link(player: int, regions: dict[AutopelagoRegion, Region]):
-    for r, base_r in regions.items():
-        for connected_r in connected_regions.get(r):
-            entrance = Entrance(player, get_autopelago_entrance_name(r, connected_r), base_r)
-            base_r.exits.append(entrance)
-            entrance.connect(base_r)
+    def create_region(self, r: AutopelagoRegion):
+        region = Region(r.name, self.player, self.multiworld)
+        for i in range(num_locations_in[r]):
+            location = AutopelagoLocation(self.player, r.get_location_name(i), self.location_name_to_id[r.get_location_name(i)], region)
+            region.locations.append(location)
+        return region
 
 
 class AutopelagoItem(Item):

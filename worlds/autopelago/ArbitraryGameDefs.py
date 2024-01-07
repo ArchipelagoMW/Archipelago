@@ -1,4 +1,3 @@
-from collections import ChainMap
 from enum import Enum, auto
 
 
@@ -22,10 +21,6 @@ class AutopelagoRegion(Enum):
     F = auto()
     TryingForGoal = auto()
     # CompletedGoal = auto() # only used by the game
-
-    @classmethod
-    def singles():
-        return (r.name for r in AutopelagoRegion if len(r.name) == 1)
 
     def is_connected(self, to: "AutopelagoRegion"):
         conn = connected_regions[self]
@@ -58,21 +53,24 @@ class AutopelagoRegion(Enum):
 
 
 # keep in sync with s_numLocationsIn in the game code
-num_locations_in = dict(ChainMap([
-    { r: 1 for r in AutopelagoRegion.singles() },
-    {
-        AutopelagoRegion.Before8Rats: 40,
-        AutopelagoRegion.After8RatsBeforeA: 10,
-        AutopelagoRegion.After8RatsBeforeB: 10,
-        AutopelagoRegion.AfterABeforeC: 10,
-        AutopelagoRegion.AfterBBeforeD: 10,
-        AutopelagoRegion.AfterCBefore20Rats: 10,
-        AutopelagoRegion.AfterDBefore20Rats: 10,
-        AutopelagoRegion.After20RatsBeforeE: 20,
-        AutopelagoRegion.After20RatsBeforeF: 20,
-        AutopelagoRegion.TryingForGoal: 1,
-    },
-]))
+num_locations_in = {
+    AutopelagoRegion.A: 1,
+    AutopelagoRegion.B: 1,
+    AutopelagoRegion.C: 1,
+    AutopelagoRegion.D: 1,
+    AutopelagoRegion.E: 1,
+    AutopelagoRegion.F: 1,
+    AutopelagoRegion.Before8Rats: 40,
+    AutopelagoRegion.After8RatsBeforeA: 10,
+    AutopelagoRegion.After8RatsBeforeB: 10,
+    AutopelagoRegion.AfterABeforeC: 10,
+    AutopelagoRegion.AfterBBeforeD: 10,
+    AutopelagoRegion.AfterCBefore20Rats: 10,
+    AutopelagoRegion.AfterDBefore20Rats: 10,
+    AutopelagoRegion.After20RatsBeforeE: 20,
+    AutopelagoRegion.After20RatsBeforeF: 20,
+    AutopelagoRegion.TryingForGoal: 1,
+}
 
 # keep in sync with s_regionDistances in the game code
 # as over there, only list forward for the sake of brevity and DRY
@@ -104,77 +102,15 @@ def get_autopelago_entrance_name(r_from: AutopelagoRegion, r_to: AutopelagoRegio
 
 # keep remainder in sync with everything derived from BASE_ID in the game code
 BASE_ID = 300000
-_nxt_id: int
-_nxt_id = BASE_ID
+__nxt_id: int
+__nxt_id = BASE_ID
 
-class AutopelagoLocationIds:
+def __next(region: AutopelagoRegion):
+    global __nxt_id
+    res = __nxt_id
+    __nxt_id += num_locations_in[region]
+    return res
 
-    @staticmethod
-    def _next_one():
-        global _nxt_id
-        res = _nxt_id
-        _nxt_id = _nxt_id + 1
-        return res
-
-    @staticmethod
-    def _next_list(region: AutopelagoRegion):
-        global _nxt_id
-        res = [x for x in range(_nxt_id, _nxt_id + num_locations_in[region])]
-        _nxt_id = res[-1] + 1
-        return res
-
-    goal = _next_one()
-    a = _next_one()
-    b = _next_one()
-    c = _next_one()
-    d = _next_one()
-    e = _next_one()
-    f = _next_one()
-    before_8_rats = _next_list(AutopelagoRegion.Before8Rats)
-    after_8_rats_before_a = _next_list(AutopelagoRegion.After8RatsBeforeA)
-    after_8_rats_before_b = _next_list(AutopelagoRegion.After8RatsBeforeB)
-    after_a_before_c = _next_list(AutopelagoRegion.AfterABeforeC)
-    after_b_before_d = _next_list(AutopelagoRegion.AfterBBeforeD)
-    after_c_before_20_rats = _next_list(AutopelagoRegion.AfterCBefore20Rats)
-    after_d_before_20_rats = _next_list(AutopelagoRegion.AfterDBefore20Rats)
-    after_20_rats_before_e = _next_list(AutopelagoRegion.After20RatsBeforeE)
-    after_20_rats_before_f = _next_list(AutopelagoRegion.After20RatsBeforeF)
-
-    @staticmethod
-    def of(region: AutopelagoRegion):
-        x = AutopelagoLocationIds
-        match region:
-            case AutopelagoRegion.TryingForGoal:
-                return [x.goal]
-            case AutopelagoRegion.A:
-                return [x.a]
-            case AutopelagoRegion.B:
-                return [x.b]
-            case AutopelagoRegion.C:
-                return [x.c]
-            case AutopelagoRegion.D:
-                return [x.d]
-            case AutopelagoRegion.E:
-                return [x.e]
-            case AutopelagoRegion.F:
-                return [x.f]
-            case AutopelagoRegion.Before8Rats:
-                return x.before_8_rats
-            case AutopelagoRegion.After8RatsBeforeA:
-                return x.after_8_rats_before_a
-            case AutopelagoRegion.After8RatsBeforeB:
-                return x.after_8_rats_before_b
-            case AutopelagoRegion.AfterABeforeC:
-                return x.after_a_before_c
-            case AutopelagoRegion.AfterBBeforeD:
-                return x.after_b_before_d
-            case AutopelagoRegion.AfterCBefore20Rats:
-                return x.after_c_before_20_rats
-            case AutopelagoRegion.AfterDBefore20Rats:
-                return x.after_d_before_20_rats
-            case AutopelagoRegion.After20RatsBeforeE:
-                return x.after_20_rats_before_e
-            case AutopelagoRegion.After20RatsBeforeF:
-                return x.after_20_rats_before_f
-            case _:
-                raise KeyError
+location_base_ids = {
+    r: __next(r) for r in AutopelagoRegion
+}
