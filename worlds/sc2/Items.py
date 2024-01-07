@@ -1530,7 +1530,8 @@ item_table = {
     ItemNames.VOID_RAY_DESTROYER_FLUX_VANES: ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}),
     ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DESTROYER),
     ItemNames.WARP_PRISM_GRAVITIC_DRIVE: ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 7, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
-    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
+    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
+        description="Equips Warp Prisms with an auto-attack that can hit ground and air targets."),
     ItemNames.WARP_PRISM_WAR_CONFIGURATION: ItemData(339 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 9, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
     ItemNames.OBSERVER_GRAVITIC_BOOSTERS: ItemData(340 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 10, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
     ItemNames.OBSERVER_SENSOR_ARRAY: ItemData(341 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
@@ -1726,6 +1727,7 @@ item_name_groups["Tal'Darim"] = [
     ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
     ItemNames.VANGUARD, ItemNames.WRATHWALKER,
     ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
+    ItemNames.WARP_PRISM_PHASE_BLASTER,
 ]
 item_name_groups["Purifier"] = [
     ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
