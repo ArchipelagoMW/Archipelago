@@ -684,7 +684,7 @@ campaign_race_exceptions: Dict[SC2Mission, SC2Race] = {
 }
 
 
-def get_goal_location(mission: SC2Mission) -> str | None:
+def get_goal_location(mission: SC2Mission) -> Union[str, None]:
     """
 
     :param mission:

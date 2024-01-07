@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple, Optional, Callable, NamedTuple
+from typing import List, Dict, Tuple, Optional, Callable, NamedTuple, Union
 import math
 
 from BaseClasses import MultiWorld, Region, Entrance, Location, CollectionState
@@ -12,7 +12,7 @@ from .PoolFilter import filter_missions
 
 class SC2MissionSlot(NamedTuple):
     campaign: SC2Campaign
-    slot: MissionPools | SC2Mission | None
+    slot: Union[MissionPools, SC2Mission, None]
 
 
 def create_regions(
