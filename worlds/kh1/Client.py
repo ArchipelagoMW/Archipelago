@@ -127,18 +127,15 @@ class KH1Context(CommonContext):
                         f.close()
 
         if cmd in {"PrintJSON"} and args["type"] == "ItemSend":
-            print("ItemSend")
             item = args["item"]
             networkItem = NetworkItem(*item)
             senderID = networkItem.player
-
             if senderID == self.slot:
                 itemName = self.item_names[networkItem.item]
                 itemCategory = networkItem.flags
                 recieverID = args["receiving"]
                 recieverName = self.player_names[recieverID]
                 filename = "sent" + str(self.sent_counter % 5)
-                self.sent_counter += 1
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(
                       str(itemName) + "\n"
@@ -146,6 +143,8 @@ class KH1Context(CommonContext):
                     + str(itemCategory) + "\n"
                     + str(self.sent_counter))
                     f.close()
+
+                self.sent_counter += 1
 
 #f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
 
