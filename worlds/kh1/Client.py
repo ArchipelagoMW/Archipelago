@@ -37,7 +37,6 @@ class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
     items_handling = 0b111  # full remote
-    sent_counter = 0
 
     def __init__(self, server_address, password):
         super(KH1Context, self).__init__(server_address, password)
@@ -131,20 +130,19 @@ class KH1Context(CommonContext):
             networkItem = NetworkItem(*item)
             recieverID = args["receiving"]
             senderID = networkItem.player
+            locationID = networkItem.location
             if recieverID != self.slot and senderID == self.slot:
                 itemName = self.item_names[networkItem.item]
                 itemCategory = networkItem.flags
                 recieverName = self.player_names[recieverID]
-                filename = "sent" + str(self.sent_counter % 5)
+                filename = "sent"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(
                       str(itemName) + "\n"
                     + str(recieverName) + "\n"
                     + str(itemCategory) + "\n"
-                    + str(self.sent_counter))
+                    + str(locationID))
                     f.close()
-
-                self.sent_counter += 1
 
 #f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
 
