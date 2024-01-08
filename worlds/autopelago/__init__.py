@@ -69,7 +69,7 @@ class AutopelagoWorld(World):
     _goal_item_name = _location_name_to_item_name["goal"]
 
     def set_rules(self):
-        def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None, is_reversed = False):
+        def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None):
             r_from_real = self.multiworld.get_region(r_from.get_archipelago_region_name(), self.player)
             r_to_real = self.multiworld.get_region(r_to.get_archipelago_region_name(), self.player)
             connection = Entrance(self.player, '', r_from_real)
@@ -77,8 +77,6 @@ class AutopelagoWorld(World):
                 connection.access_rule = access_rule
             r_from_real.exits.append(connection)
             connection.connect(r_to_real)
-            if not is_reversed:
-                _connect(r_to, r_from, is_reversed=True)
 
         _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeA, lambda state: state.prog_items[self.player].total() >= 8)
         _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeB, lambda state: state.prog_items[self.player].total() >= 8)
