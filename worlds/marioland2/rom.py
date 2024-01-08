@@ -120,7 +120,7 @@ def randomize_enemies(data, random):
     while i < 0xEBB5:
         if i < 0xE30C or 0xE384 < i < 0xE3D4 or 0xE431 < i < 0xE8F7 or i > 0xE954:
             sprite = sprite_extract(data[i], data[i + 1])
-            if sprite == 0xFF:
+            if data[i] == 0xFF:
                 i -= 2
             elif sprite in (0x0C, 0x0D):
                 copy_sprite(data, sprite_insert(data[i], data[i+1], random.choice([0x0C, 0x0D])), i)
