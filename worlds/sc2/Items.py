@@ -733,9 +733,9 @@ item_table = {
         ItemData(317 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 0, SC2Race.TERRAN,
                  classification=ItemClassification.progression, parent_item=ItemNames.BANSHEE,
                  description="Banshees do area damage in a straight line."),
-    ItemNames.BATTLECRUISER_MISSILE_PODS:
-        ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 1, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=ItemNames.BATTLECRUISER,
+    ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS:
+        ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 2, SC2Race.TERRAN,
+                 classification=ItemClassification.useful, parent_item=ItemNames.BATTLECRUISER,
                  description="Spell. Missile Pods do damage to air targets in a target area."),
     ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX:
         ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 20, SC2Race.TERRAN,
@@ -1896,6 +1896,7 @@ progressive_if_ext = {
     ItemNames.VULTURE_PROGRESSIVE_REPLENISHABLE_MAGAZINE,
     ItemNames.WRAITH_PROGRESSIVE_TOMAHAWK_POWER_CELLS,
     ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX,
+    ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS,
     ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL,
     ItemNames.PROGRESSIVE_FIRE_SUPPRESSION_SYSTEM
 }
