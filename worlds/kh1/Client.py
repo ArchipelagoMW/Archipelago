@@ -1,8 +1,10 @@
 from __future__ import annotations
 import os
+import json
 import sys
 import asyncio
 import shutil
+import logging
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -10,6 +12,8 @@ ModuleUpdate.update()
 import Utils
 
 check_num = 0
+
+logger = logging.getLogger("Client")
 
 if __name__ == "__main__":
     Utils.init_logging("KH1Client", exception_logger="Client")
@@ -33,6 +37,7 @@ class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
     items_handling = 0b111  # full remote
+    sent_counter = 0
 
     def __init__(self, server_address, password):
         super(KH1Context, self).__init__(server_address, password)
@@ -86,6 +91,7 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):
@@ -119,6 +125,49 @@ class KH1Context(CommonContext):
                     filename = f"send{ss}"
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
+
+        if cmd in {"PrintJSON"} and args["type"] == "ItemSend":
+            item = args["item"]
+            networkItem = NetworkItem(*item)
+            recieverID = args["receiving"]
+            senderID = networkItem.player
+            if recieverID != self.slot and senderID == self.slot:
+                itemName = self.item_names[networkItem.item]
+                itemCategory = networkItem.flags
+                recieverName = self.player_names[recieverID]
+                filename = "sent" + str(self.sent_counter % 5)
+                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                    f.write(
+                      str(itemName) + "\n"
+                    + str(recieverName) + "\n"
+                    + str(itemCategory) + "\n"
+                    + str(self.sent_counter))
+                    f.close()
+
+                self.sent_counter += 1
+
+#f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
+
+
+
+        #last resort we can probably do better
+        #input: Krujo sent Magic Upgrade to Tim ((TT3) LocationName)
+        # if cmd in {"PrintJSON"}:
+        #     data = args["data"]
+        #     if data[0]:
+        #         msg = str(data[0]["text"]);
+        #         #player send a location
+        #         # if msg.startswith(self.auth + " sent "): #debug
+        #         with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
+        #             msg = msg.replace(self.auth + " sent ", "")
+        #             #Magic Upgrade to Tim ((TT3) LocationName)
+        #             splitTo = msg.split(" to ")
+        #             targetPlayer = splitTo[1].split(" ")[0]
+        #             f.close()
+
+
+
+
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
