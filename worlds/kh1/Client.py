@@ -5,6 +5,7 @@ import sys
 import asyncio
 import shutil
 import logging
+import re
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -138,8 +139,8 @@ class KH1Context(CommonContext):
                 filename = "sent"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(
-                      str(itemName) + "\n"
-                    + str(recieverName) + "\n"
+                      re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
+                    + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
                     + str(itemCategory) + "\n"
                     + str(locationID))
                     f.close()
