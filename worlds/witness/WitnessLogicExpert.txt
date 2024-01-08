@@ -158,7 +158,7 @@ Desert Obelisk (Desert) - Entry - True:
 159704 - 0xFFE04 (Obelisk Side 5) - 0x334B9 & 0x334BC & 0x22106 & 0x0A14C & 0x0A14D - True
 159709 - 0x00359 (Obelisk) - True - True
 
-Desert Outside (Desert) - Main Island - True - Desert Floodlight Room - 0x09FEE - Desert Vault - 0x03444:
+Desert Outside (Desert) - Main Island - True - Desert Light Room - 0x09FEE - Desert Vault - 0x03444:
 158652 - 0x0CC7B (Vault Panel) - True - Dots & Full Dots & Stars & Stars + Same Colored Symbol & Eraser & Triangles & Shapers & Negative Shapers & Colored Squares
 Door - 0x03444 (Vault Door) - 0x0CC7B
 158602 - 0x17CE7 (Discard) - True - Arrows
@@ -189,14 +189,14 @@ Laser - 0x012FB (Laser) - 0x03608
 Desert Vault (Desert):
 158653 - 0x0339E (Vault Box) - True - True
 
-Desert Floodlight Room (Desert) - Desert Pond Room - 0x0C2C3:
+Desert Light Room (Desert) - Desert Pond Room - 0x0C2C3:
 158087 - 0x09FAA (Light Control) - True - True
 158088 - 0x00422 (Light Room 1) - 0x09FAA - True
 158089 - 0x006E3 (Light Room 2) - 0x09FAA - True
 158090 - 0x0A02D (Light Room 3) - 0x09FAA & 0x00422 & 0x006E3 - True
 Door - 0x0C2C3 (Pond Room Entry) - 0x0A02D
 
-Desert Pond Room (Desert) - Desert Water Levels Room - 0x0A24B:
+Desert Pond Room (Desert) - Desert Flood Room - 0x0A24B:
 158091 - 0x00C72 (Pond Room 1) - True - True
 158092 - 0x0129D (Pond Room 2) - 0x00C72 - True
 158093 - 0x008BB (Pond Room 3) - 0x0129D - True
@@ -207,7 +207,7 @@ Door - 0x0A24B (Flood Room Entry) - 0x0A249
 159043 - 0x0A14C (Pond Room Near Reflection EP) - True - True
 159044 - 0x0A14D (Pond Room Far Reflection EP) - True - True
 
-Desert Water Levels Room (Desert) - Desert Elevator Room - 0x0C316:
+Desert Flood Room (Desert) - Desert Elevator Room - 0x0C316:
 158097 - 0x1C2DF (Reduce Water Level Far Left) - True - True
 158098 - 0x1831E (Reduce Water Level Far Right) - True - True
 158099 - 0x1C260 (Reduce Water Level Near Left) - True - True
@@ -225,7 +225,7 @@ Desert Water Levels Room (Desert) - Desert Elevator Room - 0x0C316:
 Door - 0x0C316 (Elevator Room Entry) - 0x18076
 159034 - 0x337F8 (Flood Room EP) - 0x1C2DF - True
 
-Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x01317:
+Desert Elevator Room (Desert) - Desert Behind Elevator - 0x01317:
 158111 - 0x17C31 (Final Transparent) - True - True
 158113 - 0x012D7 (Final Hexagonal) - 0x17C31 & 0x0A015 - True
 158114 - 0x0A015 (Final Hexagonal Control) - 0x17C31 - True
@@ -235,7 +235,7 @@ Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x0131
 159035 - 0x037BB (Elevator EP) - 0x01317 - True
 Door - 0x01317 (Elevator) - 0x03608
 
-Desert Lowest Level Inbetween Shortcuts (Desert):
+Desert Behind Elevator (Desert):
 
 ==Quarry==
 
@@ -247,7 +247,7 @@ Quarry Obelisk (Quarry) - Entry - True:
 159744 - 0xFFE44 (Obelisk Side 5) - 0x03E77 & 0x03E7C - True
 159749 - 0x22073 (Obelisk) - True - True
 
-Outside Quarry (Quarry) - Main Island - True - Quarry Between Entrys - 0x09D6F - Quarry Elevator - 0xFFD00 & 0xFFD01:
+Outside Quarry (Quarry) - Main Island - True - Quarry Between Entry Doors - 0x09D6F - Quarry Elevator - 0xFFD00 & 0xFFD01:
 158118 - 0x09E57 (Entry 1 Panel) - True - Squares & Black/White Squares & Triangles
 158603 - 0x17CF0 (Discard) - True - Arrows
 158702 - 0x03612 (Laser Panel) - 0x0A3D0 & 0x0367C - Eraser & Triangles & Stars & Stars + Same Colored Symbol
@@ -263,7 +263,7 @@ Quarry Elevator (Quarry) - Outside Quarry - 0x17CC4 - Quarry - 0x17CC4:
 158120 - 0x17CC4 (Elevator Control) - 0x0367C - Dots & Eraser
 159403 - 0x17CB9 (Railroad EP) - 0x17CC4 - True
 
-Quarry Between Entrys (Quarry) - Quarry - 0x17C07:
+Quarry Between Entry Doors (Quarry) - Quarry - 0x17C07:
 158119 - 0x17C09 (Entry 2 Panel) - True - Shapers & Triangles
 Door - 0x17C07 (Entry 2) - 0x17C09
 
@@ -1191,7 +1191,7 @@ Challenge Vault (Challenge):
 
 ==Tunnels==
 
-Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Lowest Level Inbetween Shortcuts - 0x27263 - Town - 0x09E87:
+Tunnels (Tunnels) - Windmill Interior - 0x27739 - Desert Behind Elevator - 0x27263 - Town - 0x09E87:
 158668 - 0x2FAF6 (Vault Box) - True - True
 158519 - 0x27732 (Theater Shortcut Panel) - True - True
 Door - 0x27739 (Theater Shortcut) - 0x27732
