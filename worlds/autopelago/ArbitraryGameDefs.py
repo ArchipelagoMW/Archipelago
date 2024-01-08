@@ -22,9 +22,8 @@ class AutopelagoRegion(Enum):
     TryingForGoal = auto()
     # CompletedGoal = auto() # only used by the game
 
-    def is_connected(self, to: "AutopelagoRegion"):
-        conn = connected_regions[self]
-        return to in conn if conn else False
+    def get_archipelago_region_name(self):
+        return "Menu" if self == AutopelagoRegion.Before8Rats else self.name
 
     def get_location_name(self, i: int):
         match self:
@@ -71,34 +70,6 @@ num_locations_in = {
     AutopelagoRegion.After20RatsBeforeF: 20,
     AutopelagoRegion.TryingForGoal: 1,
 }
-
-# keep in sync with s_regionDistances in the game code
-# as over there, only list forward for the sake of brevity and DRY
-connected_regions: dict[AutopelagoRegion, set[AutopelagoRegion]] = {
-    AutopelagoRegion.Before8Rats: { AutopelagoRegion.After8RatsBeforeA, AutopelagoRegion.After8RatsBeforeB },
-    AutopelagoRegion.After8RatsBeforeA: { AutopelagoRegion.A },
-    AutopelagoRegion.After8RatsBeforeB: { AutopelagoRegion.B },
-    AutopelagoRegion.A: { AutopelagoRegion.AfterABeforeC },
-    AutopelagoRegion.B: { AutopelagoRegion.AfterBBeforeD },
-    AutopelagoRegion.AfterABeforeC: { AutopelagoRegion.C },
-    AutopelagoRegion.AfterBBeforeD: { AutopelagoRegion.D },
-    AutopelagoRegion.C: { AutopelagoRegion.AfterCBefore20Rats },
-    AutopelagoRegion.D: { AutopelagoRegion.AfterDBefore20Rats },
-    AutopelagoRegion.AfterCBefore20Rats: { AutopelagoRegion.After20RatsBeforeE, AutopelagoRegion.After20RatsBeforeF },
-    AutopelagoRegion.AfterDBefore20Rats: { AutopelagoRegion.After20RatsBeforeE, AutopelagoRegion.After20RatsBeforeF },
-    AutopelagoRegion.After20RatsBeforeE: { AutopelagoRegion.E },
-    AutopelagoRegion.After20RatsBeforeF: { AutopelagoRegion.F },
-    AutopelagoRegion.E: { AutopelagoRegion.TryingForGoal },
-    AutopelagoRegion.F: { AutopelagoRegion.TryingForGoal },
-    AutopelagoRegion.TryingForGoal: set(),
-}
-# complete the connected regions by including reverse-direction connections
-for s, ts in connected_regions.items():
-    for t in ts:
-        connected_regions[t].add(s)
-
-def get_autopelago_entrance_name(r_from: AutopelagoRegion, r_to: AutopelagoRegion):
-    return f"from {r_from.name} to {r_to.name}"
 
 # keep remainder in sync with everything derived from BASE_ID in the game code
 BASE_ID = 300000
