@@ -29,7 +29,7 @@ class AutopelagoWorld(World):
     An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
     """
     game = game_name
-    topology_present = True
+    topology_present = False # it's static, so setting this to True isn't actually helpful
     data_version = 1
     web = AutopelagoWebWorld()
 
@@ -63,8 +63,10 @@ class AutopelagoWorld(World):
                 ItemClassification.progression_skip_balancing if i < prog_count else \
                 ItemClassification.useful if i < midpoint else \
                 ItemClassification.filler
-            
+
             _next_offset += 1
+
+    _goal_item_name = _location_name_to_item_name["goal"]
 
     def set_rules(self):
         def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None, is_reversed = False):
@@ -97,9 +99,8 @@ class AutopelagoWorld(World):
         _connect(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal, lambda state: state.has(self._location_name_to_item_name["e"], self.player))
         _connect(AutopelagoRegion.F, AutopelagoRegion.TryingForGoal, lambda state: state.has(self._location_name_to_item_name["f"], self.player))
 
-        goal_item_name = self._location_name_to_item_name["goal"]
-        self.multiworld.get_location("goal", self.player).place_locked_item(self.create_item(goal_item_name))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item_name, self.player)
+        self.multiworld.get_location("goal", self.player).place_locked_item(self.create_item(self._goal_item_name))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(self._goal_item_name, self.player)
 
     def create_item(self, name: str) -> Item:
         id = self.item_name_to_id[name]
@@ -108,8 +109,7 @@ class AutopelagoWorld(World):
         return item
 
     def create_items(self):
-        goal_item_name = self._location_name_to_item_name["goal"]
-        self.multiworld.itempool += (self.create_item(name) for name in self.item_name_to_id if name != goal_item_name)
+        self.multiworld.itempool += (self.create_item(name) for name in self.item_name_to_id if name != self._goal_item_name)
 
     def create_regions(self):
         self.multiworld.regions += (self.create_region(r) for r in AutopelagoRegion)
@@ -133,3 +133,4 @@ class AutopelagoItem(Item):
 
 class AutopelagoLocation(Location):
     game = game_name
+
