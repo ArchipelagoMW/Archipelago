@@ -261,7 +261,8 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, atlanti
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
    #regions["End of the World"].locations.append("Chronicles Sora's Story")
-    regions["Wonderland"].locations.append("Chronicles Wonderland")
+    if not sephiroth: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
+        regions["Wonderland"].locations.append("Chronicles Wonderland")
     regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
     regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
     regions["Agrabah"].locations.append("Chronicles Agrabah")
