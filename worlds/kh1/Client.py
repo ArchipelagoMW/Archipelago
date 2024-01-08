@@ -129,11 +129,11 @@ class KH1Context(CommonContext):
         if cmd in {"PrintJSON"} and args["type"] == "ItemSend":
             item = args["item"]
             networkItem = NetworkItem(*item)
+            recieverID = args["receiving"]
             senderID = networkItem.player
-            if senderID == self.slot:
+            if recieverID != self.slot:
                 itemName = self.item_names[networkItem.item]
                 itemCategory = networkItem.flags
-                recieverID = args["receiving"]
                 recieverName = self.player_names[recieverID]
                 filename = "sent" + str(self.sent_counter % 5)
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
