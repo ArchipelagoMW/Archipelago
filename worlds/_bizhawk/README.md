@@ -8,9 +8,16 @@ It's similar to `SNIClient`, but where `SNIClient` is designed to work for speci
 emulators/hardware, `BizHawkClient` is designed to work for specifically BizHawk across the different systems BizHawk
 supports.
 
+The idea is that `BizHawkClient` connects to and communicates with a lua script running in BizHawk. It provides an api
+that will call BizHawk functions for you to do thing like read and write memory. And on an interval, control will be
+handed to a function you write for your game (`game_watcher`) which should interact with the game's memory to check what
+locations have been checked, give the player items, detect and send deathlinks, etc...
+
+Table of Contents:
 - [Connector Requests](#connector-requests)
     - [Requests that depend on other requests](#requests-that-depend-on-other-requests)
 - [Implementing a Client](#implementing-a-client)
+    - [Example](#example)
 - [Tips](#tips)
 
 ## Connector Requests
@@ -18,17 +25,17 @@ supports.
 Communication with BizHawk is done through `connector_bizhawk_generic.lua`. The client sends requests to the lua script
 via sockets, the lua script processes the request and sends the corresponding responses.
 
-The lua script includes its own documentation, but most implementations probably don't need to be overly concerned with
-it. Instead, you'll be using the functions in `worlds/_bizhawk/__init__.py`. If for some reason you do need more control
-over the specific requests being sent or their order, you can still use `send_requests`.
+The lua script includes its own documentation, but you probably don't need to care about the specifics. Instead, you'll
+be using the functions in `worlds/_bizhawk/__init__.py`. If for some reason you do need more control over the specific
+requests being sent or their order, you can still use `send_requests` to directly communicate with the connector script.
 
 It's not necessary to use the UI or client context if you only want to interact with the connector script. You can
 import and use just `worlds/_bizhawk/__init__.py`, which only depends on default modules.
 
-Here's a list of the included classes functions. I would highly recommend looking at the actual function signatures and
-docstrings to learn more about each function.
+Here's a list of the included classes and functions. I would highly recommend looking at the actual function signatures
+and docstrings to learn more about each function.
 
-```py
+```
 class ConnectionStatus
 class BizHawkContext
 
@@ -60,7 +67,7 @@ async def get_script_version(ctx) -> int
 async def send_requests(ctx, req_list) -> list[dict[str, Any]]
 ```
 
-`send_requests` is what actually communicates with the connector, and functions like `guarded_read` will build the
+`send_requests` is what actually communicates with the connector, and any functions like `guarded_read` will build the
 requests and then call `send_requests` for you. You can call `send_requests` yourself for more direct control, but make
 sure to read the docs in `connector_bizhawk_generic.lua`.
 
@@ -110,10 +117,10 @@ else:
     ...
 ```
 
-2. Use `lock` and `unlock`. When you call `lock`, you tell the emulator to stop advancing frames and just process
-requests until it receives an unlock request. This means you can lock, read the address, write the data, and then unlock
-on a single frame. **However**, this is _slow_. If you can't get in and get out quickly enough, players will notice a
-stutter in the emulation.
+2. Use `lock` and `unlock` (discouraged if not necessary). When you call `lock`, you tell the emulator to stop advancing
+frames and just process requests until it receives an unlock request. This means you can lock, read the address, write
+the data, and then unlock on a single frame. **However**, this is _slow_. If you can't get in and get out quickly
+enough, players will notice a stutter in the emulation.
 
 ```py
 # Pause emulation
@@ -174,8 +181,78 @@ subclass of `CommonContext`. It additionally includes `slot_data` (if you are co
 `bizhawk_ctx` (the instance of `BizHawkContext` that you should be giving to functions like `guarded_read`), and
 `watcher_timeout` (the amount of time in seconds between iterations of the game watcher loop).
 
+### Example
+
+A very simple client might look like this. All addresses here are made up, you should obviously be using addresses that
+make sense for your specific ROM. The `validate_rom` here tries to read the name of the ROM. If it gets the value it
+wanted, it sets a couple values on `ctx` and returns `True`. The `game_watcher` reads some data from memory and acts on
+it by sending messages to AP. You should be smarter than this example, which will send `LocationChecks` messages even if
+there's nothing new since the last loop.
+
+```py
+from typing import TYPE_CHECKING
+
+from NetUtils import ClientStatus
+
+import worlds._bizhawk as bizhawk
+from worlds._bizhawk.client import BizHawkClient
+
+if TYPE_CHECKING:
+    from worlds._bizhawk.context import BizHawkClientContext
+
+
+class MyGameClient(BizHawkClient):
+    game = "My Game"
+    system = "GBA"
+    patch_suffix = ".apextension"
+
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
+        try:
+            # Check ROM name/patch version
+            rom_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x100, 6, "ROM")]))[0]).decode("ascii")
+            if rom_name != "MYGAME":
+                return False  # Not a MYGAME ROM
+        except bizhawk.RequestFailedError:
+            return False  # Not able to get a response, say no for now
+
+        # This is a MYGAME ROM
+        ctx.game = self.game
+        ctx.items_handling = 0b001
+        ctx.want_slot_data = True
+
+        return True
+
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        try:
+            # Read save data
+            save_data = await bizhawk.read(
+                ctx.bizhawk_ctx,
+                [(0x3000100, 20, "System Bus")]
+            )[0]
+
+            # Check locations
+            if save_data[2] & 0x04:
+                await ctx.send_msgs([{
+                    "cmd": "LocationChecks",
+                    "locations": [23]
+                }])
+
+            # Send game clear
+            if not ctx.finished_game and (save_data[5] & 0x01):
+                await ctx.send_msgs([{
+                    "cmd": "StatusUpdate",
+                    "status": ClientStatus.CLIENT_GOAL
+                }])
+
+        except bizhawk.RequestFailedError:
+            # The connector didn't respond. Exit handler and return to main loop to reconnect
+            pass
+```
+
 ### Tips
 
+- Make sure your client gets imported when your world is imported. You probably don't need to actually use anything in
+your `client.py` elsewhere, but you still have to import the file for your client to register itself.
 - When it comes to performance, there are two directions to optimize:  
   1. When you have to do something all on the same frame, do as little as possible. Only read and write necessary data,
   and if you have to use locks, unlock as soon as it's okay to advance frames. This is probably the obvious one.
