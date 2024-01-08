@@ -52,7 +52,7 @@ class BundleName:
     quality_fish = "Quality Fish Bundle"
     master_fisher = "Master Fisher's Bundle"
     legendary_fish = "Legendary Fish Bundle"
-    island_fish = "Island Bundle"
+    island_fish = "Island Fish Bundle"
     deep_fishing = "Deep Fishing Bundle"
     tackle = "Tackle Bundle"
     bait = "Master Baiter Bundle"
