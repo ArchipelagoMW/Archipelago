@@ -735,7 +735,7 @@ item_table = {
                  description="Banshees do area damage in a straight line."),
     ItemNames.BATTLECRUISER_PROGRESSIVE_MISSILE_PODS:
         ItemData(318 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 2, SC2Race.TERRAN,
-                 classification=ItemClassification.useful, parent_item=ItemNames.BATTLECRUISER,
+                 parent_item=ItemNames.BATTLECRUISER, quantity=2,
                  description="Spell. Missile Pods do damage to air targets in a target area."),
     ItemNames.BATTLECRUISER_PROGRESSIVE_DEFENSIVE_MATRIX:
         ItemData(319 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 20, SC2Race.TERRAN,
