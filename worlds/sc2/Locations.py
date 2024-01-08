@@ -91,6 +91,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Liberation Day", "Liberation Day: Fifth Statue", SC2WOL_LOC_ID_OFFSET + 105, LocationType.VANILLA),
         LocationData("Liberation Day", "Liberation Day: Sixth Statue", SC2WOL_LOC_ID_OFFSET + 106, LocationType.VANILLA),
         LocationData("Liberation Day", "Liberation Day: Special Delivery", SC2WOL_LOC_ID_OFFSET + 107, LocationType.EXTRA),
+        LocationData("Liberation Day", "Liberation Day: Transport", SC2WOL_LOC_ID_OFFSET + 108, LocationType.EXTRA),
         LocationData("The Outlaws", "The Outlaws: Victory", SC2WOL_LOC_ID_OFFSET + 200, LocationType.VICTORY,
                      lambda state: logic.terran_early_tech(state)),
         LocationData("The Outlaws", "The Outlaws: Rebel Base", SC2WOL_LOC_ID_OFFSET + 201, LocationType.VANILLA,
@@ -99,6 +100,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_early_tech(state)),
         LocationData("The Outlaws", "The Outlaws: Bunker", SC2WOL_LOC_ID_OFFSET + 203, LocationType.VANILLA,
                      lambda state: logic.terran_early_tech(state)),
+        LocationData("The Outlaws", "The Outlaws: Close Resource Cache Area", SC2WOL_LOC_ID_OFFSET + 204, LocationType.EXTRA),
         LocationData("Zero Hour", "Zero Hour: Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2 and
@@ -117,6 +119,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_competent_comp(state)),
         LocationData("Zero Hour", "Zero Hour: Fourth Hatchery", SC2WOL_LOC_ID_OFFSET + 307, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
+        LocationData("Zero Hour", "Zero Hour: Ride's on its Way", SC2WOL_LOC_ID_OFFSET + 308, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state)),
+        LocationData("Zero Hour", "Zero Hour: Hold Just a Little Longer", SC2WOL_LOC_ID_OFFSET + 309, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state) and
+                                   logic.terran_defense_rating(state, True) >= 2),
+        LocationData("Zero Hour", "Zero Hour: Cavarly's on the Way", SC2WOL_LOC_ID_OFFSET + 310, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state) and
+                                   logic.terran_defense_rating(state, True) >= 2),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
                      lambda state: logic.terran_early_tech(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
@@ -204,6 +214,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_respond_to_colony_infestations(state)),
         LocationData("Haven's Fall", "Haven's Fall: Southwest Colony Base", SC2WOL_LOC_ID_OFFSET + 708, LocationType.CHALLENGE,
                      lambda state: logic.terran_respond_to_colony_infestations(state)),
+        LocationData("Haven's Fall", "Haven's Fall: Southwest Gas Pickups", SC2WOL_LOC_ID_OFFSET + 709, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state) and
+                                   logic.terran_competent_anti_air(state) and
+                                   logic.terran_defense_rating(state, True) >= 3),
+        LocationData("Haven's Fall", "Haven's Fall: East Gas Pickups", SC2WOL_LOC_ID_OFFSET + 710, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state) and
+                                   logic.terran_competent_anti_air(state) and
+                                   logic.terran_defense_rating(state, True) >= 3),
+        LocationData("Haven's Fall", "Haven's Fall: Southeast Gas Pickups", SC2WOL_LOC_ID_OFFSET + 711, LocationType.EXTRA,
+                     lambda state: logic.terran_common_unit(state) and
+                                   logic.terran_competent_anti_air(state) and
+                                   logic.terran_defense_rating(state, True) >= 3),
         LocationData("Smash and Grab", "Smash and Grab: Victory", SC2WOL_LOC_ID_OFFSET + 800, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    (adv_tactics and logic.terran_basic_anti_air(state)
@@ -246,6 +268,28 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Dig", "The Dig: Moebius Base", SC2WOL_LOC_ID_OFFSET + 904, LocationType.EXTRA,
                      lambda state: logic.marine_medic_upgrade(state) or adv_tactics),
+        LocationData("The Dig", "The Dig: Door Outer Layer", SC2WOL_LOC_ID_OFFSET + 905, LocationType.EXTRA,
+                     lambda state: logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
+        LocationData("The Dig", "The Dig: Door Thermal Barrier", SC2WOL_LOC_ID_OFFSET + 906, LocationType.EXTRA,
+                     lambda state: logic.terran_basic_anti_air(state)
+                                   and logic.terran_defense_rating(state, False, True) >= 8
+                                   and logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
+        LocationData("The Dig", "The Dig: Cutting Trough the Core", SC2WOL_LOC_ID_OFFSET + 907, LocationType.EXTRA,
+                     lambda state: logic.terran_basic_anti_air(state)
+                                   and logic.terran_defense_rating(state, False, True) >= 8
+                                   and logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
+        LocationData("The Dig", "The Dig: Structure Access Imminent", SC2WOL_LOC_ID_OFFSET + 908, LocationType.EXTRA,
+                     lambda state: logic.terran_basic_anti_air(state)
+                                   and logic.terran_defense_rating(state, False, True) >= 8
+                                   and logic.terran_defense_rating(state, False, False) >= 6
+                                   and logic.terran_common_unit(state)
+                                   and (logic.marine_medic_upgrade(state) or adv_tactics)),
         LocationData("The Moebius Factor", "The Moebius Factor: Victory", SC2WOL_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
                      lambda state: logic.terran_basic_anti_air(state) and
                                    (logic.terran_air(state)
@@ -336,6 +380,9 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_basic_anti_air(state) and
                                     (adv_tactics or
                                            logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
+        LocationData("Devil's Playground", "Devil's Playground: Zerg Cleaned", SC2WOL_LOC_ID_OFFSET + 1308, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_anti_air(state) and (
+                                           logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: logic.welcome_to_the_jungle_requirement(state)),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Close Relic", SC2WOL_LOC_ID_OFFSET + 1401, LocationType.VANILLA),
@@ -380,7 +427,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Ghost of a Chance", "Ghost of a Chance: Second Island Spectres", SC2WOL_LOC_ID_OFFSET + 1604, LocationType.VANILLA),
         LocationData("Ghost of a Chance", "Ghost of a Chance: Third Island Spectres", SC2WOL_LOC_ID_OFFSET + 1605, LocationType.VANILLA),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Victory", SC2WOL_LOC_ID_OFFSET + 1700, LocationType.VICTORY,
-                     lambda state: logic.great_train_robbery_requirement(state) and
+                     lambda state: logic.great_train_robbery_train_stopper(state) and
                                    logic.terran_basic_anti_air(state)),
         LocationData("The Great Train Robbery", "The Great Train Robbery: North Defiler", SC2WOL_LOC_ID_OFFSET + 1701, LocationType.VANILLA),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Mid Defiler", SC2WOL_LOC_ID_OFFSET + 1702, LocationType.VANILLA),
@@ -393,7 +440,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Great Train Robbery", "The Great Train Robbery: Southeast Diamondback", SC2WOL_LOC_ID_OFFSET + 1709, LocationType.EXTRA),
         LocationData("The Great Train Robbery", "The Great Train Robbery: Kill Team", SC2WOL_LOC_ID_OFFSET + 1710, LocationType.CHALLENGE,
                      lambda state: (adv_tactics or logic.terran_common_unit(state)) and
-                                   logic.great_train_robbery_requirement(state) and
+                                   logic.great_train_robbery_train_stopper(state) and
+                                   logic.terran_basic_anti_air(state)),
+        LocationData("The Great Train Robbery", "The Great Train Robbery: Flawless", SC2WOL_LOC_ID_OFFSET + 1711, LocationType.CHALLENGE,
+                     lambda state: logic.great_train_robbery_train_stopper(state) and
+                                   logic.terran_basic_anti_air(state)),
+        LocationData("The Great Train Robbery", "The Great Train Robbery: 2 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1712, LocationType.EXTRA,
+                     lambda state: logic.great_train_robbery_train_stopper(state)),
+        LocationData("The Great Train Robbery", "The Great Train Robbery: 4 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1713, LocationType.EXTRA,
+                     lambda state: logic.great_train_robbery_train_stopper(state) and
+                                   logic.terran_basic_anti_air(state)),
+        LocationData("The Great Train Robbery", "The Great Train Robbery: 6 Trains Destroyed", SC2WOL_LOC_ID_OFFSET + 1714, LocationType.EXTRA,
+                     lambda state: logic.great_train_robbery_train_stopper(state) and
                                    logic.terran_basic_anti_air(state)),
         LocationData("Cutthroat", "Cutthroat: Victory", SC2WOL_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
@@ -465,6 +523,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: adv_tactics or logic.terran_competent_comp(state)),
         LocationData("Media Blitz", "Media Blitz: Odin Not Trashed", SC2WOL_LOC_ID_OFFSET + 2008, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state)),
+        LocationData("Media Blitz", "Media Blitz: Surprise Attack Ends", SC2WOL_LOC_ID_OFFSET + 2009, LocationType.EXTRA),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Victory", SC2WOL_LOC_ID_OFFSET + 2100, LocationType.VICTORY,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Holding Cell Relic", SC2WOL_LOC_ID_OFFSET + 2101, LocationType.VANILLA),
@@ -477,6 +536,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Piercing the Shroud", "Piercing the Shroud: Brutalisk", SC2WOL_LOC_ID_OFFSET + 2105, LocationType.VANILLA,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Piercing the Shroud", "Piercing the Shroud: Fusion Reactor", SC2WOL_LOC_ID_OFFSET + 2106, LocationType.EXTRA,
+                     lambda state: logic.marine_medic_upgrade(state)),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Entrance Holding Pen", SC2WOL_LOC_ID_OFFSET + 2107, LocationType.EXTRA),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Cargo Bay Warbot", SC2WOL_LOC_ID_OFFSET + 2108, LocationType.EXTRA),
+        LocationData("Piercing the Shroud", "Piercing the Shroud: Escape Warbot", SC2WOL_LOC_ID_OFFSET + 2109, LocationType.EXTRA,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Whispers of Doom", "Whispers of Doom: Victory", SC2WOL_LOC_ID_OFFSET + 2200, LocationType.VICTORY),
         LocationData("Whispers of Doom", "Whispers of Doom: First Hatchery", SC2WOL_LOC_ID_OFFSET + 2201, LocationType.VANILLA),
@@ -548,6 +611,24 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Gates of Hell", "Gates of Hell: 8 Drop Pods", SC2WOL_LOC_ID_OFFSET + 2605, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_comp(state) and
                                    logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: Southwest Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2606, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: Northwest Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2607, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: Northeast Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2608, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: East Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2609, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: Southeast Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2610, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
+        LocationData("Gates of Hell", "Gates of Hell: Expansion Spore Cannon", SC2WOL_LOC_ID_OFFSET + 2611, LocationType.EXTRA,
+                     lambda state: logic.terran_competent_comp(state) and
+                                   logic.terran_defense_rating(state, True) > 6),
         LocationData("Belly of the Beast", "Belly of the Beast: Victory", SC2WOL_LOC_ID_OFFSET + 2700, LocationType.VICTORY),
         LocationData("Belly of the Beast", "Belly of the Beast: First Charge", SC2WOL_LOC_ID_OFFSET + 2701, LocationType.EXTRA),
         LocationData("Belly of the Beast", "Belly of the Beast: Second Charge", SC2WOL_LOC_ID_OFFSET + 2702, LocationType.EXTRA),
@@ -574,6 +655,16 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Shatter the Sky", "Shatter the Sky: Mid Hatchery", SC2WOL_LOC_ID_OFFSET + 2808, LocationType.EXTRA,
                      lambda state: logic.terran_competent_comp(state)),
         LocationData("All-In", "All-In: Victory", SC2WOL_LOC_ID_OFFSET + 2900, LocationType.VICTORY,
+                     lambda state: logic.all_in_requirement(state)),
+        LocationData("All-In", "All-In: First Kerrigan Attack", SC2WOL_LOC_ID_OFFSET + 2901, LocationType.EXTRA,
+                     lambda state: logic.all_in_requirement(state)),
+        LocationData("All-In", "All-In: Second Kerrigan Attack", SC2WOL_LOC_ID_OFFSET + 2902, LocationType.EXTRA,
+                     lambda state: logic.all_in_requirement(state)),
+        LocationData("All-In", "All-In: Third Kerrigan Attack", SC2WOL_LOC_ID_OFFSET + 2903, LocationType.EXTRA,
+                     lambda state: logic.all_in_requirement(state)),
+        LocationData("All-In", "All-In: Fourth Kerrigan Attack", SC2WOL_LOC_ID_OFFSET + 2904, LocationType.EXTRA,
+                     lambda state: logic.all_in_requirement(state)),
+        LocationData("All-In", "All-In: Fifth Kerrigan Attack", SC2WOL_LOC_ID_OFFSET + 2905, LocationType.EXTRA,
                      lambda state: logic.all_in_requirement(state)),
 
         # HotS

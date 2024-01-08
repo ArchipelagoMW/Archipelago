@@ -160,7 +160,7 @@ class SC2Logic:
             state.has(ItemNames.BATTLECRUISER, self.player) and self.terran_common_unit(state)
         )
 
-    def great_train_robbery_requirement(self, state: CollectionState) -> bool:
+    def great_train_robbery_train_stopper(self, state: CollectionState) -> bool:
         """
         Ability to deal with trains (moving target with a lot of HP)
         :param state:
