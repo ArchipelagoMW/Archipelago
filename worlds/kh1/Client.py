@@ -131,7 +131,7 @@ class KH1Context(CommonContext):
             networkItem = NetworkItem(*item)
             recieverID = args["receiving"]
             senderID = networkItem.player
-            if recieverID != self.slot:
+            if recieverID != self.slot and senderID == self.slot:
                 itemName = self.item_names[networkItem.item]
                 itemCategory = networkItem.flags
                 recieverName = self.player_names[recieverID]
