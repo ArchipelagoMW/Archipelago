@@ -51,6 +51,9 @@ class AutopelagoRegion(Enum):
                 return self.name.lower()
 
 
+# keep in sync with BASE_ID in the game code
+BASE_ID = 300000
+
 # keep in sync with s_numLocationsIn in the game code
 num_locations_in = {
     AutopelagoRegion.A: 1,
@@ -69,19 +72,4 @@ num_locations_in = {
     AutopelagoRegion.After20RatsBeforeE: 20,
     AutopelagoRegion.After20RatsBeforeF: 20,
     AutopelagoRegion.TryingForGoal: 1,
-}
-
-# keep remainder in sync with everything derived from BASE_ID in the game code
-BASE_ID = 300000
-__nxt_id: int
-__nxt_id = BASE_ID
-
-def __next(region: AutopelagoRegion):
-    global __nxt_id
-    res = __nxt_id
-    __nxt_id += num_locations_in[region]
-    return res
-
-location_base_ids = {
-    r: __next(r) for r in AutopelagoRegion
 }
