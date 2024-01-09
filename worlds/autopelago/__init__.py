@@ -1,9 +1,11 @@
 import logging
 from typing import Callable
+
 from BaseClasses import CollectionState, Item, Region, Location, Entrance, Tutorial, ItemClassification
+from worlds.AutoWorld import World, WebWorld
+
 from .ArbitraryGameDefs import BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in
 from .Items import item_table
-from ..AutoWorld import World, WebWorld
 
 
 class AutopelagoWebWorld(WebWorld):
