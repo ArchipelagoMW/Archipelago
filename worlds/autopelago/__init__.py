@@ -1,3 +1,4 @@
+import logging
 from typing import Callable
 from BaseClasses import CollectionState, Item, Region, Location, Entrance, Tutorial, ItemClassification
 from .ArbitraryGameDefs import BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in
@@ -35,9 +36,9 @@ class AutopelagoWorld(World):
     _next_offset = 0
     for r in AutopelagoRegion:
         prog_count = 1 if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] \
-            else 16 if r == AutopelagoRegion.Before8Rats \
-            else 9 if r == AutopelagoRegion.AfterCBefore20Rats \
-            else 9 if r == AutopelagoRegion.AfterDBefore20Rats \
+            else 8 if r == AutopelagoRegion.Before8Rats \
+            else 3 if r == AutopelagoRegion.AfterCBefore20Rats \
+            else 3 if r == AutopelagoRegion.AfterDBefore20Rats \
             else 0
 
         midpoint = (num_locations_in[r] - prog_count + 1) // 2
@@ -54,6 +55,9 @@ class AutopelagoWorld(World):
                 ItemClassification.progression_skip_balancing if i < prog_count else \
                 ItemClassification.useful if i < midpoint else \
                 ItemClassification.filler
+
+            if ItemClassification.progression in _item_name_to_classification[item_name]:
+                logging.info("%s is a logical advancement from %s", item_name, location_name)
 
             _next_offset += 1
 
