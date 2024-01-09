@@ -42,7 +42,7 @@ class AutopelagoWorld(World):
             9, 6 if r == AutopelagoRegion.AfterDBefore20Rats else \
             0, 0
 
-        midpoint = (num_locations_in[r] - prog_count + 1) // 2
+        midpoint = prog_count + ((num_locations_in[r] - prog_count + 1) // 2)
 
         for i in range(num_locations_in[r]):
             location_name = r.get_location_name(i)
