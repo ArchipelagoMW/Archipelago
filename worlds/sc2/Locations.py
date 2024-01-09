@@ -677,12 +677,18 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: adv_tactics or logic.zerg_common_unit(state)),
         LocationData("Lab Rat", "Lab Rat: West Zergling Group", SC2HOTS_LOC_ID_OFFSET + 104, LocationType.VANILLA,
                      lambda state: adv_tactics or logic.zerg_common_unit(state)),
+        LocationData("Lab Rat", "Lab Rat: Hatchery", SC2HOTS_LOC_ID_OFFSET + 105, LocationType.EXTRA),
+        LocationData("Lab Rat", "Lab Rat: Overlord", SC2HOTS_LOC_ID_OFFSET + 106, LocationType.EXTRA),
+        LocationData("Lab Rat", "Lab Rat: Gas Turrets", SC2HOTS_LOC_ID_OFFSET + 107, LocationType.EXTRA,
+                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
         LocationData("Back in the Saddle", "Back in the Saddle: Victory", SC2HOTS_LOC_ID_OFFSET + 200, LocationType.VICTORY,
+                     lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
+        LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.EXTRA,
                      lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
         LocationData("Back in the Saddle", "Back in the Saddle: Kinetic Blast", SC2HOTS_LOC_ID_OFFSET + 202, LocationType.VANILLA),
         LocationData("Back in the Saddle", "Back in the Saddle: Crushing Grip", SC2HOTS_LOC_ID_OFFSET + 203, LocationType.VANILLA),
         LocationData("Back in the Saddle", "Back in the Saddle: Reach the Sublevel", SC2HOTS_LOC_ID_OFFSET + 204, LocationType.EXTRA),
-        LocationData("Back in the Saddle", "Back in the Saddle: Defend the Tram", SC2HOTS_LOC_ID_OFFSET + 201, LocationType.EXTRA,
+        LocationData("Back in the Saddle", "Back in the Saddle: Door Section Cleared", SC2HOTS_LOC_ID_OFFSET + 205, LocationType.EXTRA,
                      lambda state: logic.basic_kerrigan(state) or kerriganless or logic.story_tech_granted),
         LocationData("Rendezvous", "Rendezvous: Victory", SC2HOTS_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
@@ -696,14 +702,29 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Rendezvous", "Rendezvous: Left Queen", SC2HOTS_LOC_ID_OFFSET + 303, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_basic_anti_air(state)),
-        LocationData("Harvest of Screams", "Harvest of Screams: Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
+        LocationData("Rendezvous", "Rendezvous: Hold Out Finished", SC2HOTS_LOC_ID_OFFSET + 304, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_basic_anti_air(state)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Victory", SC2HOTS_LOC_ID_OFFSET + 400, LocationType.VICTORY,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)),
         LocationData("Harvest of Screams", "Harvest of Screams: First Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 401, LocationType.VANILLA),
         LocationData("Harvest of Screams", "Harvest of Screams: North Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 402, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state)),
         LocationData("Harvest of Screams", "Harvest of Screams: West Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 403, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Lost Brood", SC2HOTS_LOC_ID_OFFSET + 404, LocationType.EXTRA),
+        LocationData("Harvest of Screams", "Harvest of Screams: Northeast Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 405, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Northwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 406, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Southwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 407, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)),
+        LocationData("Harvest of Screams", "Harvest of Screams: Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -715,26 +736,50 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Destroy 4 Shuttles", SC2HOTS_LOC_ID_OFFSET + 504, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Frozen Expansion", SC2HOTS_LOC_ID_OFFSET + 505, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Southwest Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 506, LocationType.EXTRA),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: Southeast Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 507, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) or adv_tactics),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: West Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 508, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+        LocationData("Shoot the Messenger", "Shoot the Messenger: East Frozen Zerg", SC2HOTS_LOC_ID_OFFSET + 509, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_competent_anti_air(state)),
         LocationData("Enemy Within", "Enemy Within: Victory", SC2HOTS_LOC_ID_OFFSET + 600, LocationType.VICTORY,
                      lambda state: logic.zerg_pass_vents(state)
                                    and (logic.story_tech_granted
                                         or state.has_any({ItemNames.ZERGLING_RAPTOR_STRAIN, ItemNames.ROACH,
                                                          ItemNames.HYDRALISK, ItemNames.INFESTOR}, player))
                      ),
+        LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.VANILLA,
+                     lambda state: logic.zerg_pass_vents(state)),
         LocationData("Enemy Within", "Enemy Within: First Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 602, LocationType.VANILLA,
                      lambda state: logic.zerg_pass_vents(state)),
         LocationData("Enemy Within", "Enemy Within: Second Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 603, LocationType.VANILLA,
                      lambda state: logic.zerg_pass_vents(state)),
         LocationData("Enemy Within", "Enemy Within: Third Niadra Evolution", SC2HOTS_LOC_ID_OFFSET + 604, LocationType.VANILLA,
                      lambda state: logic.zerg_pass_vents(state)),
-        LocationData("Enemy Within", "Enemy Within: Infest Giant Ursadon", SC2HOTS_LOC_ID_OFFSET + 601, LocationType.VANILLA,
+        LocationData("Enemy Within", "Enemy Within: Warp Drive", SC2HOTS_LOC_ID_OFFSET + 605, LocationType.EXTRA,
+                     lambda state: logic.zerg_pass_vents(state)),
+        LocationData("Enemy Within", "Enemy Within: Stasis Quadrant", SC2HOTS_LOC_ID_OFFSET + 606, LocationType.EXTRA,
                      lambda state: logic.zerg_pass_vents(state)),
         LocationData("Domination", "Domination: Victory", SC2HOTS_LOC_ID_OFFSET + 700, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
-        LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703, LocationType.EXTRA),
         LocationData("Domination", "Domination: Center Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 701, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state)),
         LocationData("Domination", "Domination: North Infested Command Center", SC2HOTS_LOC_ID_OFFSET + 702, LocationType.VANILLA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Domination", "Domination: Repel Zagara", SC2HOTS_LOC_ID_OFFSET + 703, LocationType.EXTRA),
+        LocationData("Domination", "Domination: Close Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 704, LocationType.EXTRA),
+        LocationData("Domination", "Domination: South Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 705, LocationType.EXTRA,
+                     lambda state: adv_tactics or logic.zerg_common_unit(state)),
+        LocationData("Domination", "Domination: Southwest Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 706, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Domination", "Domination: Southeast Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 707, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state) and logic.zerg_basic_anti_air(state)),
+        LocationData("Domination", "Domination: North Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 708, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Domination", "Domination: Northeast Baneling Nest", SC2HOTS_LOC_ID_OFFSET + 709, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)),
         LocationData("Fire in the Sky", "Fire in the Sky: Victory", SC2HOTS_LOC_ID_OFFSET + 800, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
@@ -753,6 +798,21 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state) and
                                    logic.spread_creep(state)),
+        LocationData("Fire in the Sky", "Fire in the Sky: Close Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 805, LocationType.EXTRA),
+        LocationData("Fire in the Sky", "Fire in the Sky: South Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 806, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)),
+        LocationData("Fire in the Sky", "Fire in the Sky: North Zerg Rescue", SC2HOTS_LOC_ID_OFFSET + 807, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state) and
+                                   logic.spread_creep(state)),
+        LocationData("Fire in the Sky", "Fire in the Sky: West Queen Rescue", SC2HOTS_LOC_ID_OFFSET + 808, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state) and
+                                   logic.spread_creep(state)),
+        LocationData("Fire in the Sky", "Fire in the Sky: East Queen Rescue", SC2HOTS_LOC_ID_OFFSET + 809, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state) and
+                                   logic.spread_creep(state)),
         LocationData("Old Soldiers", "Old Soldiers: Victory", SC2HOTS_LOC_ID_OFFSET + 900, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
@@ -763,6 +823,14 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
         LocationData("Old Soldiers", "Old Soldiers: Get Nuked", SC2HOTS_LOC_ID_OFFSET + 903, LocationType.EXTRA),
+        LocationData("Old Soldiers", "Old Soldiers: Entrance Gate", SC2HOTS_LOC_ID_OFFSET + 904, LocationType.EXTRA),
+        LocationData("Old Soldiers", "Old Soldiers: Citadel Gate", SC2HOTS_LOC_ID_OFFSET + 905, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Old Soldiers", "Old Soldiers: South Expansion", SC2HOTS_LOC_ID_OFFSET + 906, LocationType.EXTRA),
+        LocationData("Old Soldiers", "Old Soldiers: Rich Mineral Expansion", SC2HOTS_LOC_ID_OFFSET + 907, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
         LocationData("Waking the Ancient", "Waking the Ancient: Victory", SC2HOTS_LOC_ID_OFFSET + 1000, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -778,7 +846,22 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Waking the Ancient", "Waking the Ancient: Finish Feeding", SC2HOTS_LOC_ID_OFFSET + 1004, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_competent_anti_air(state)),
+        LocationData("Waking the Ancient", "Waking the Ancient: South Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1005, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Waking the Ancient", "Waking the Ancient: East Proxy Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1006, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Waking the Ancient", "Waking the Ancient: South Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1007, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Waking the Ancient", "Waking the Ancient: East Main Primal Hive", SC2HOTS_LOC_ID_OFFSET + 1008, LocationType.CHALLENGE,
+                     lambda state: logic.zerg_common_unit(state) and
+                                   logic.zerg_competent_anti_air(state)),
         LocationData("The Crucible", "The Crucible: Victory", SC2HOTS_LOC_ID_OFFSET + 1100, LocationType.VICTORY,
+                     lambda state: logic.zerg_competent_defense(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("The Crucible", "The Crucible: Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101, LocationType.VANILLA,
                      lambda state: logic.zerg_competent_defense(state) and
                                    logic.zerg_competent_anti_air(state)),
         LocationData("The Crucible", "The Crucible: Reach the Pool", SC2HOTS_LOC_ID_OFFSET + 1102, LocationType.VANILLA),
@@ -788,7 +871,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Crucible", "The Crucible: 5 Minutes Remaining", SC2HOTS_LOC_ID_OFFSET + 1104, LocationType.EXTRA,
                      lambda state: logic.zerg_competent_defense(state) and
                                    logic.zerg_competent_anti_air(state)),
-        LocationData("The Crucible", "The Crucible: Tyrannozor", SC2HOTS_LOC_ID_OFFSET + 1101, LocationType.VANILLA,
+        LocationData("The Crucible", "The Crucible: Pincer Attack", SC2HOTS_LOC_ID_OFFSET + 1105, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_defense(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("The Crucible", "The Crucible: Yagdra Claims Brakk's Pack", SC2HOTS_LOC_ID_OFFSET + 1106, LocationType.EXTRA,
                      lambda state: logic.zerg_competent_defense(state) and
                                    logic.zerg_competent_anti_air(state)),
         LocationData("Supreme", "Supreme: Victory", SC2HOTS_LOC_ID_OFFSET + 1200, LocationType.VICTORY,
@@ -800,6 +886,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Supreme", "Supreme: Third Relic", SC2HOTS_LOC_ID_OFFSET + 1203, LocationType.VANILLA,
                      lambda state: logic.supreme_requirement(state)),
         LocationData("Supreme", "Supreme: Fourth Relic", SC2HOTS_LOC_ID_OFFSET + 1204, LocationType.VANILLA,
+                     lambda state: logic.supreme_requirement(state)),
+        LocationData("Supreme", "Supreme: Yagdra", SC2HOTS_LOC_ID_OFFSET + 1205, LocationType.EXTRA,
+                     lambda state: logic.supreme_requirement(state)),
+        LocationData("Supreme", "Supreme: Kraith", SC2HOTS_LOC_ID_OFFSET + 1206, LocationType.EXTRA,
+                     lambda state: logic.supreme_requirement(state)),
+        LocationData("Supreme", "Supreme: Slivan", SC2HOTS_LOC_ID_OFFSET + 1207, LocationType.EXTRA,
                      lambda state: logic.supreme_requirement(state)),
         LocationData("Infested", "Infested: Victory", SC2HOTS_LOC_ID_OFFSET + 1300, LocationType.VICTORY,
                      lambda state: logic.zerg_common_unit(state) and
@@ -817,6 +909,29 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.zerg_common_unit(state) and
                                    logic.zerg_basic_anti_air(state) and
                                    logic.spread_creep(state)),
+        LocationData("Infested", "Infested: First Intro Garrison", SC2HOTS_LOC_ID_OFFSET + 1304, LocationType.EXTRA),
+        LocationData("Infested", "Infested: Second Intro Garrison", SC2HOTS_LOC_ID_OFFSET + 1305, LocationType.EXTRA),
+        LocationData("Infested", "Infested: Base Garrison", SC2HOTS_LOC_ID_OFFSET + 1306, LocationType.EXTRA),
+        LocationData("Infested", "Infested: East Garrison", SC2HOTS_LOC_ID_OFFSET + 1307, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)
+                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+        LocationData("Infested", "Infested: Mid Garrison", SC2HOTS_LOC_ID_OFFSET + 1308, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)
+                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+        LocationData("Infested", "Infested: North Garrison", SC2HOTS_LOC_ID_OFFSET + 1309, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)
+                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+        LocationData("Infested", "Infested: Close Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1310, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)
+                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
+        LocationData("Infested", "Infested: Far Southwest Garrison", SC2HOTS_LOC_ID_OFFSET + 1311, LocationType.EXTRA,
+                     lambda state: logic.zerg_common_unit(state)
+                                   and logic.zerg_basic_anti_air(state)
+                                   and (adv_tactics or state.has(ItemNames.INFESTOR, player))),
         LocationData("Hand of Darkness", "Hand of Darkness: Victory", SC2HOTS_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
@@ -826,7 +941,25 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Hand of Darkness", "Hand of Darkness: South Brutalisk", SC2HOTS_LOC_ID_OFFSET + 1402, LocationType.VANILLA,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
-        LocationData("Hand of Darkness", "Hand of Darkness: Kill 4 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1403, LocationType.EXTRA,
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 1 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1403, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 2 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1404, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 3 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1405, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 4 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1406, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 5 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1407, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 6 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1408, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_basic_anti_air(state)),
+        LocationData("Hand of Darkness", "Hand of Darkness: Kill 7 Hybrid", SC2HOTS_LOC_ID_OFFSET + 1409, LocationType.EXTRA,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_basic_anti_air(state)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: Victory", SC2HOTS_LOC_ID_OFFSET + 1500, LocationType.VICTORY,
@@ -839,6 +972,22 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.zerg_competent_comp(state) and
                                    (logic.zerg_competent_anti_air(state) or adv_tactics)),
         LocationData("Phantoms of the Void", "Phantoms of the Void: South Crystal", SC2HOTS_LOC_ID_OFFSET + 1503, LocationType.VANILLA),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Base Established", SC2HOTS_LOC_ID_OFFSET + 1504, LocationType.EXTRA),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Close Temple", SC2HOTS_LOC_ID_OFFSET + 1505, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Mid Temple", SC2HOTS_LOC_ID_OFFSET + 1506, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Southeast Temple", SC2HOTS_LOC_ID_OFFSET + 1507, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Northeast Temple", SC2HOTS_LOC_ID_OFFSET + 1508, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
+        LocationData("Phantoms of the Void", "Phantoms of the Void: Northwest Temple", SC2HOTS_LOC_ID_OFFSET + 1509, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   (logic.zerg_competent_anti_air(state) or adv_tactics)),
         LocationData("With Friends Like These", "With Friends Like These: Victory", SC2HOTS_LOC_ID_OFFSET + 1600, LocationType.VICTORY),
         LocationData("With Friends Like These", "With Friends Like These: Pirate Capital Ship", SC2HOTS_LOC_ID_OFFSET + 1601, LocationType.VANILLA),
         LocationData("With Friends Like These", "With Friends Like These: First Mineral Patch", SC2HOTS_LOC_ID_OFFSET + 1602, LocationType.VANILLA),
@@ -849,11 +998,13 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    (logic.basic_kerrigan(state) or logic.story_tech_granted) or kerriganless),
         LocationData("Conviction", "Conviction: First Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1701, LocationType.VANILLA,
                      lambda state: logic.two_kerrigan_actives(state) or kerriganless),
-        LocationData("Conviction", "Conviction: Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703, LocationType.EXTRA,
-                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
         LocationData("Conviction", "Conviction: Second Secret Documents", SC2HOTS_LOC_ID_OFFSET + 1702, LocationType.VANILLA,
                      lambda state: logic.two_kerrigan_actives(state) and
                                    (logic.basic_kerrigan(state) or logic.story_tech_granted) or kerriganless),
+        LocationData("Conviction", "Conviction: Power Coupling", SC2HOTS_LOC_ID_OFFSET + 1703, LocationType.EXTRA,
+                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
+        LocationData("Conviction", "Conviction: Door Blasted", SC2HOTS_LOC_ID_OFFSET + 1704, LocationType.EXTRA,
+                     lambda state: logic.two_kerrigan_actives(state) or kerriganless),
         LocationData("Planetfall", "Planetfall: Victory", SC2HOTS_LOC_ID_OFFSET + 1800, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -866,6 +1017,33 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Planetfall", "Planetfall: North Gate", SC2HOTS_LOC_ID_OFFSET + 1803, LocationType.VANILLA,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: 1 Bile Launcher Deployed", SC2HOTS_LOC_ID_OFFSET + 1804, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: 2 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1805, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: 3 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1806, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: 4 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1807, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: 5 Bile Launchers Deployed", SC2HOTS_LOC_ID_OFFSET + 1808, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: Sons of Korhal", SC2HOTS_LOC_ID_OFFSET + 1809, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: Night Wolves", SC2HOTS_LOC_ID_OFFSET + 1810, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: West Expansion", SC2HOTS_LOC_ID_OFFSET + 1811, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Planetfall", "Planetfall: Mid Expansion", SC2HOTS_LOC_ID_OFFSET + 1812, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
         LocationData("Death From Above", "Death From Above: Victory", SC2HOTS_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_competent_anti_air(state)),
@@ -876,6 +1054,12 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Death From Above", "Death From Above: Third Power Link", SC2HOTS_LOC_ID_OFFSET + 1903, LocationType.VANILLA,
                      lambda state: logic.zerg_competent_comp(state) and
                                    logic.zerg_competent_anti_air(state)),
+        LocationData("Death From Above", "Death From Above: Expansion Command Center", SC2HOTS_LOC_ID_OFFSET + 1904, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
+        LocationData("Death From Above", "Death From Above: Main Path Command Center", SC2HOTS_LOC_ID_OFFSET + 1905, LocationType.EXTRA,
+                     lambda state: logic.zerg_competent_comp(state) and
+                                   logic.zerg_competent_anti_air(state)),
         LocationData("The Reckoning", "The Reckoning: Victory", SC2HOTS_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: logic.the_reckoning_requirement(state)),
         LocationData("The Reckoning", "The Reckoning: South Lane", SC2HOTS_LOC_ID_OFFSET + 2001, LocationType.VANILLA,
@@ -883,6 +1067,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Reckoning", "The Reckoning: North Lane", SC2HOTS_LOC_ID_OFFSET + 2002, LocationType.VANILLA,
                      lambda state: logic.the_reckoning_requirement(state)),
         LocationData("The Reckoning", "The Reckoning: East Lane", SC2HOTS_LOC_ID_OFFSET + 2003, LocationType.VANILLA,
+                     lambda state: logic.the_reckoning_requirement(state)),
+        LocationData("The Reckoning", "The Reckoning: Odin", SC2HOTS_LOC_ID_OFFSET + 2004, LocationType.EXTRA,
                      lambda state: logic.the_reckoning_requirement(state)),
 
         # LotV Prologue
