@@ -425,6 +425,9 @@ class PokemonEmeraldWorld(World):
                                     for evolution in evolution.evolutions
                                     if evolution.species_id not in already_modified
                                 ]
+                                
+                        if self.options.shedinja_wonder_guard == Toggle.option_true and species.name == "SPECIES_SHEDINJA":
+                            species.abilities = (25, 0) # Ability 25 is Wonder Guard
 
                     if had_clean_pass:
                         break
@@ -432,14 +435,17 @@ class PokemonEmeraldWorld(World):
                 for species in self.modified_species:
                     if species is None:
                         continue
+                
+                    if self.options.shedinja_wonder_guard == Toggle.option_true and species.name == "SPECIES_SHEDINJA":
+                        species.abilities = (25, 0) # Ability 25 is Wonder Guard
+                    else:
+                        old_abilities = species.abilities
+                        new_abilities = (
+                            0 if old_abilities[0] == 0 else self.random.choice(ability_whitelist),
+                            0 if old_abilities[1] == 0 else self.random.choice(ability_whitelist)
+                        )
 
-                    old_abilities = species.abilities
-                    new_abilities = (
-                        0 if old_abilities[0] == 0 else self.random.choice(ability_whitelist),
-                        0 if old_abilities[1] == 0 else self.random.choice(ability_whitelist)
-                    )
-
-                    species.abilities = new_abilities
+                        species.abilities = new_abilities
 
         def randomize_types() -> None:
             if self.options.types == RandomizeTypes.option_shuffle:
@@ -715,8 +721,9 @@ class PokemonEmeraldWorld(World):
             )
 
             new_starters = (
-                get_random_species(self.random, self.modified_species,
-                                   starter_bsts[0], starter_types[0], allow_legendaries),
+                next(species for species in self.modified_species if species and species.name == "SPECIES_SHEDINJA"),
+                #get_random_species(self.random, self.modified_species,
+                #                   starter_bsts[0], starter_types[0], allow_legendaries),
                 get_random_species(self.random, self.modified_species,
                                    starter_bsts[1], starter_types[1], allow_legendaries),
                 get_random_species(self.random, self.modified_species,

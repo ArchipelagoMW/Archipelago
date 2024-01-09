@@ -320,7 +320,14 @@ class AbilityBlacklist(OptionSet):
     """
     display_name = "Ability Blacklist"
     valid_keys = frozenset([ability.label for ability in data.abilities])
-
+    
+class ShedinjaWonderGuard(Toggle):
+    """
+    Shedinja will always have the wonder guard ability.
+    This will bypass randomize abilities and wonder guard as a blacklisted ability.
+    """
+    display_name = "Shedinja Always Wonder Guard"
+    default = 0
 
 class LevelUpMoves(Choice):
     """
@@ -577,6 +584,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     static_encounters: RandomizeStaticEncounters
     types: RandomizeTypes
     abilities: RandomizeAbilities
+    shedinja_wonder_guard: ShedinjaWonderGuard
     ability_blacklist: AbilityBlacklist
 
     level_up_moves: LevelUpMoves
