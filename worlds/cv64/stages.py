@@ -68,7 +68,7 @@ stage_info = {
     },
 
     "Castle Center": {
-        "start region": rname.cc_main, "start map id": 0x09, "start spawn id": 0x00,
+        "start region": rname.cc_main, "start map id": 0x19, "start spawn id": 0x00,
         "mid region": rname.cc_main, "mid map id": 0x0E, "mid spawn id": 0x03,
         "end region": rname.cc_elev_top, "end map id": 0x0F, "end spawn id": 0x02,
         "endzone map offset": 0x109CB7, "endzone spawn offset": 0x109CB9,

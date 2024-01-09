@@ -166,7 +166,7 @@ remote_item_giver = [
     0x91640002,  # LBU   A0, 0x0002 (T3)
     0x14800002,  # BNEZ  A0,     [forward 0x02]
     0x916900A7,  # LBU   T1, 0x00A7 (T3)
-    0x080FF076,  # J     0x803FC1D8
+    0x080FF9C0,  # J     0x803FE700
     0x312A0080,  # ANDI  T2, T1, 0x0080
     0x11400002,  # BEQZ  T2,     [forward 0x02]
     0x00000000,  # NOP
@@ -183,7 +183,7 @@ deathlink_nitro_edition = [
     # Alternative to the end of the above DeathLink-specific checks that kills the player with the Nitro explosion
     # instead of the normal death.
     0x91690043,  # LBU   T1, 0x0043 (T3)
-    0x080FF076,  # J     0x803FC1D8
+    0x080FF9C0,  # J     0x803FE700
     0x3C088034,  # LUI   T0, 0x8034
     0x91082BFE,  # LBU   T0, 0x2BFE (T0)
     0x11000002,  # BEQZ  T0,     [forward 0x02]
@@ -657,7 +657,7 @@ map_data_modifiers = [
     0xA44A004A,  # SH    T2, 0x004A (V0)
     0xA44B005A,  # SH    T3, 0x005A (V0)
     0x24090002,  # ADDIU T1, R0, 0x0002
-    0x1139FF7C,  # BEQ   T0, T1, [backward 0x74]
+    0x1139FF7B,  # BEQ   T0, T1, [backward 0x74]
     0x00000000,  # NOP
     0x03E00008,  # JR    RA
     # Castle Wall main area (sets a flag for the freestanding Holy Water if applicable and the "beginning of stage"
@@ -2657,25 +2657,31 @@ ice_trap_initializer = [
 the_deep_freezer = [
     # Writes 000C0000 into the player state to freeze the player on the spot if Ice Traps have been received, writes the
     # Ice Trap code into the pointer value (0x20B8, which is also Camilla's boss code),and decrements the Ice Traps
-    # remaining counter.
+    # remaining counter. All after verifying the player is in a "safe" state to be frozen in.
     0x3C0B8039,  # LUI   T3, 0x8039
     0x91699BE2,  # LBU   T3, 0x9BE2 (T0)
-    0x1120000F,  # BEQZ  T1,     [forward 0x0F]
+    0x11200015,  # BEQZ  T1,     [forward 0x15]
     0x3C088034,  # LUI   T0, 0x8034
     0x910827A9,  # LBU   T0, 0x27A9 (T0)
+    0x240A0005,  # ADDIU T2, R0, 0x0005
+    0x110A0011,  # BEQ   T0, T2, [forward 0x11]
     0x240A000C,  # ADDIU T2, R0, 0x000C
-    0x110A000B,  # BEQ   T0, T2, [forward 0x0B]
+    0x110A000F,  # BEQ   T0, T2, [forward 0x0F]
     0x240A0002,  # ADDIU T2, R0, 0x0002
-    0x110A0009,  # BEQ   T0, T2, [forward 0x09]
+    0x110A000D,  # BEQ   T0, T2, [forward 0x0D]
     0x240A0008,  # ADDIU T2, R0, 0x0008
-    0x110A0007,  # BEQ   T0, T2, [forward 0x07]
+    0x110A000B,  # BEQ   T0, T2, [forward 0x0B]
     0x2529FFFF,  # ADDIU T1, T1, 0xFFFF
     0xA1699BE2,  # SB    T1, 0x9BE2 (T3)
     0x3C088034,  # LUI   T0, 0x8034
     0x3C09000C,  # LUI   T1, 0x000C
     0xAD0927A8,  # SW    T1, 0x27A8 (T0)
-    0x240820B8,  # ADDIU T0, R0, 0x20B8
-    0xA5689E6E,  # SH    T0, 0x9E6E (T3)
+    0x240C20B8,  # ADDIU T4, R0, 0x20B8
+    0xA56C9E6E,  # SH    T4, 0x9E6E (T3)
+    0x8D0927C8,  # LW    T1, 0x27C8 (T0)
+    0x912A0048,  # LBU   T2, 0x0068 (T1)
+    0x314A007F,  # ANDI  T2, T2, 0x007F
+    0xA12A0048,  # SB    T2, 0x0068 (T1)
     0x03E00008   # JR    RA
 ]
 

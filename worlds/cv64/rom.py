@@ -752,7 +752,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     rom.write_int32(0x697C60, 0x080FF06B)  # J 0x803FC18C
     rom.write_int32(0x6A5160, 0x080FF06B)  # J 0x803FC18C
     rom.write_int32s(0xBFC1AC, patches.ice_trap_initializer)
-    rom.write_int32s(0xBFC1D8, patches.the_deep_freezer)
+    rom.write_int32s(0xBFE700, patches.the_deep_freezer)
     rom.write_int32s(0xB2F354, [0x3739E4C0,  # ORI T9, T9, 0xE4C0
                                 0x03200008,  # JR  T9
                                 0x00000000])  # NOP
