@@ -151,7 +151,10 @@ class DS3ItemData():
     @property
     def unique(self):
         """Whether this item should be unique, appearing only once in the randomizer."""
-        return self.category != DS3ItemCategory.MISC or self.force_unique
+        return self.force_unique or self.category not in {
+            DS3ItemCategory.MISC, DS3ItemCategory.SOUL, DS3ItemCategory.UPGRADE,
+            DS3ItemCategory.HEALING,
+        }
 
     def __post_init__(self):
         self.ap_code = self.ap_code or DS3ItemData.__item_id
