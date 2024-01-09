@@ -11,7 +11,7 @@ from .Rules import get_button_rule
 
 class CliqueWebWorld(WebWorld):
     theme = "partyTime"
-    tutorials = [
+    setup_en = 
         Tutorial(
             tutorial_name="Start Guide",
             description="A guide to playing Clique.",
@@ -20,7 +20,18 @@ class CliqueWebWorld(WebWorld):
             link="guide/en",
             authors=["Phar"]
         )
-    ]
+
+    setup_es = 
+        Tutorial(
+            setup_en.tutorial_name,
+            setup_en.description,
+            language="Español",
+            file_name="guide_es.md",
+            link="guide/es",
+            authors=["Shiny"]
+        )
+    
+    tutorials = [setup_en, setup_es]
 
 
 class CliqueWorld(World):
