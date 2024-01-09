@@ -1065,37 +1065,37 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_yoshi_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_vine_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_1,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_2,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_3,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_4,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_5,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_6,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_7,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_8,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_9,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_10,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_11,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_12,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_13,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_14,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_15,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_green_block_16,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.mario_carry, player)))))
+                        lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_yellow_block_1,
                         lambda state: state.has(ItemName.yellow_switch_palace, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_1_region, LocationName.donut_plains_1_yellow_block_2,
