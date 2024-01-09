@@ -639,15 +639,16 @@ location_tables = {
         DS3LocationData("US: Alluring Skull (foot, behind carriage)", "Alluring Skull x2"),
         DS3LocationData("US: Mortician's Ashes (graveyard by white tree)", "Mortician's Ashes",
                         progression = True),
-        DS3LocationData("US: Homeward Bone (???)", "Homeward Bone x2"), # Hidden fall
+        DS3LocationData("US: Homeward Bone (tower village, jump from roof)", "Homeward Bone x2",
+                        offline = '02,0:53100040::', hidden = True), # Hidden fall
         DS3LocationData("US: Caduceus Round Shield (right after stable exit)",
                         "Caduceus Round Shield"),
         DS3LocationData("US: Ember (tower basement, miniboss)", "Ember"),
         DS3LocationData("US: Soul of an Unknown Traveler (chasm crypt)",
                         "Soul of an Unknown Traveler"),
         DS3LocationData("US: Repair Powder (first building, balcony)", "Repair Powder x2"),
-        DS3LocationData("US: Homeward Bone (tower village, jump from roof)", "Homeward Bone x2",
-                        hidden = True), # Hidden fall
+        DS3LocationData("US: Homeward Bone (stable roof)", "Homeward Bone x2",
+                        offline = '02,0:53100090::'),
         DS3LocationData("US: Titanite Shard (back alley, side path)", "Titanite Shard"),
         DS3LocationData("US: Wargod Wooden Shield (Pit of Hollows)", "Wargod Wooden Shield"),
         DS3LocationData("US: Large Soul of a Deserted Corpse (on the way to tower, by well)",
@@ -707,7 +708,8 @@ location_tables = {
         # In enemy rando, the enemy may not burst through the wall and make this room obvious
         DS3LocationData("US: Whip (back alley, behind wooden wall)", "Whip", hidden = True),
         DS3LocationData("US: Great Scythe (building by white tree, balcony)", "Great Scythe"),
-        DS3LocationData("US: Homeward Bone (stable roof)", "Homeward Bone x2"),
+        DS3LocationData("US: Homeward Bone (foot, drop overloop)", "Homeward Bone",
+                        offline = '02,0:53100540::'),
         DS3LocationData("US: Large Soul of a Deserted Corpse (around corner by Cliff Underside)",
                         "Large Soul of a Deserted Corpse", hidden = True), # Hidden corner
         DS3LocationData("US: Ember (behind burning tree)", "Ember"),
@@ -749,7 +751,8 @@ location_tables = {
                         "Covetous Silver Serpent Ring+2", ngp = True, hidden = True), # Hidden fall
         DS3LocationData("US: Human Pine Resin (tower village building, chest upstairs)",
                         "Human Pine Resin x4"),
-        DS3LocationData("US: Homeward Bone (foot, drop overloop)", "Homeward Bone"),
+        DS3LocationData("US: Homeward Bone (tower village, right at start)", "Homeward Bone",
+                        offline = '02,0:53100540::'),
         DS3LocationData("US: Irithyll Straight Sword (miniboss drop, by Road of Sacrifices)",
                         "Irithyll Straight Sword", miniboss = True),
         DS3LocationData("US: Fire Gem (tower village, miniboss drop)", "Fire Gem", miniboss = True),
@@ -1591,16 +1594,16 @@ location_tables = {
         DS3LocationData("IBV: Leo Ring (great hall, chest)", "Leo Ring"),
         DS3LocationData("IBV: Dorhys' Gnawing (Dorhys drop)", "Dorhys' Gnawing",
                         hidden = True), # Behind illusory wall
-        DS3LocationData("IBV: Divine Blessing (great hall, mob)",
+        DS3LocationData("IBV: Divine Blessing (great hall, mob drop)",
                         "Divine Blessing", drop = True,
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
-        DS3LocationData("IBV: Large Titanite Shard (great hall, mob)",
+        DS3LocationData("IBV: Large Titanite Shard (great hall, main floor mob drop)",
                         "Large Titanite Shard", drop = True,
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
-        DS3LocationData("IBV: Large Titanite Shard (great hall, mob)",
+        DS3LocationData("IBV: Large Titanite Shard (great hall, upstairs mob drop #1)",
                         "Large Titanite Shard x2", drop = True,
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
-        DS3LocationData("IBV: Large Titanite Shard (great hall, mob)",
+        DS3LocationData("IBV: Large Titanite Shard (great hall, upstairs mob drop #2)",
                         "Large Titanite Shard x2", drop = True,
                         hidden = True), # Guaranteed drop from normal-looking Silver Knight
         DS3LocationData("IBV: Roster of Knights (descent, first landing)", "Roster of Knights"),
@@ -1651,7 +1654,7 @@ location_tables = {
                         npc = True),
         DS3LocationData("ID: Murakumo (Alva drop)", "Murakumo", missable = True,
                         hostile_npc = True),
-        DS3LocationData("ID: Large Titanite Shard (B1 near, second cell on right)",
+        DS3LocationData("ID: Large Titanite Shard (after bonfire, second cell on right)",
                         "Large Titanite Shard"),
         DS3LocationData("ID: Fading Soul (B1 near, main hall)", "Fading Soul"),
         DS3LocationData("ID: Large Soul of a Nameless Soldier (B2, hall by stairs)",
@@ -1691,7 +1694,7 @@ location_tables = {
         DS3LocationData("ID: Covetous Gold Serpent Ring (Siegward's cell)",
                         "Covetous Gold Serpent Ring", conditional = True),
         DS3LocationData("ID: Lightning Blade (B3 lift, middle platform)", "Lightning Blade"),
-        DS3LocationData("ID: Rusted Coin (B1 near, first cell on left)", "Rusted Coin"),
+        DS3LocationData("ID: Rusted Coin (after bonfire, first cell on left)", "Rusted Coin"),
         DS3LocationData("ID: Dusk Crown Ring (B3 far, right cell)", "Dusk Crown Ring"),
         DS3LocationData("ID: Pickaxe (path from pit to B3)", "Pickaxe"),
         DS3LocationData("ID: Xanthous Ashes (B3 far, right cell)", "Xanthous Ashes",
@@ -1787,7 +1790,7 @@ location_tables = {
                         "Greatshield of Glory", mimic = True),
         DS3LocationData("PC: Twinkling Titanite (halls above swamp, lizard #1)",
                         "Twinkling Titanite", lizard = True),
-        DS3LocationData("PC: Twinkling Titanite (halls above swamp, lizard #1)",
+        DS3LocationData("PC: Twinkling Titanite (halls above swamp, lizard #2)",
                         "Twinkling Titanite", lizard = True),
         DS3LocationData("PC: Siegbräu (Siegward after killing boss)", "Siegbräu",
                         missable = True, npc = True),
@@ -1886,7 +1889,7 @@ location_tables = {
                         lizard = True),
         DS3LocationData("AL: Twinkling Titanite (lizard after light cathedral #1)",
                         "Twinkling Titanite", lizard = True),
-        DS3LocationData("AL: Twinkling Titanite (lizard after light cathedral #1)",
+        DS3LocationData("AL: Twinkling Titanite (lizard after light cathedral #2)",
                         "Twinkling Titanite", lizard = True),
         DS3LocationData("AL: Aldrich's Ruby (dark cathedral, miniboss)", "Aldrich's Ruby",
                         miniboss = True), # Deep Accursed drop
@@ -2567,7 +2570,7 @@ location_tables = {
         DS3LocationData("PW1: Ember (settlement, building near bonfire)", "Ember"),
         DS3LocationData("PW1: Frozen Weapon (snowfield lower, egg zone)", "Frozen Weapon"),
         DS3LocationData("PW1: Titanite Slab (depths, up secret ladder)", "Titanite Slab",
-                        offline = '11,0:50004700::',
+                        offline = '11,0:54500640::',
                         hidden = True), # Must kill normal-looking Tree Woman
         DS3LocationData("PW1: Homeward Bone (depths, up hill)", "Homeward Bone x2"),
         DS3LocationData("PW1: Large Soul of an Unknown Traveler (below snowfield village overhang)",
@@ -2593,8 +2596,6 @@ location_tables = {
                         "Twinkling Titanite", lizard = True),
         DS3LocationData("PW1: Large Titanite Shard (settlement loop, lizard)",
                         "Large Titanite Shard x2", lizard = True),
-        DS3LocationData("PW1: Champion's Bones (boss drop)", "Champion's Bones",
-                        offline = '11,0:50002310::', boss = True),
     ],
     "Painted World of Ariandel (After Contraption)": [
         DS3LocationData("PW2: Soul of Sister Friede", "Soul of Sister Friede", prominent = True,
