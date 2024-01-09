@@ -451,36 +451,3 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # false means you're good to place the portal
     return False
-
-
-# todo: get this to work after 2170 is merged
-# def plando_connect(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Set[str]]:
-#     player = world.player
-#     plando_pairs = {}
-#     plando_names = set()
-#     for plando_cxn in world.plando_connections[player]:
-#         print(type(plando_cxn))
-#         print(type(plando_cxn.entrance))
-#         print(plando_cxn.entrance)
-#         print(plando_cxn.exit)
-#         portal1_name = plando_cxn.entrance
-#         portal2_name = plando_cxn.exit
-#         plando_names.add(plando_cxn.entrance)
-#         plando_names.add(plando_cxn.exit)
-#         portal1 = None
-#         portal2 = None
-#         for portal in portal_mapping:
-#             if portal1_name == portal.name:
-#                 portal1 = portal
-#             if portal2_name == portal.name:
-#                 portal2 = portal
-#         if portal1 is None and portal2 is None:
-#             raise Exception(f"Could not find entrances named {portal1_name} and {portal2_name},
-#                             "please double-check their names.")
-#         if portal1 is None:
-#             raise Exception(f"Could not find entrance named {portal1_name}, please double-check its name.")
-#         if portal2 is None:
-#             raise Exception(f"Could not find entrance named {portal2_name}, please double-check its name.")
-#         plando_pairs[portal1] = portal2
-#     plando_info = (plando_pairs, plando_names)
-#     return plando_info

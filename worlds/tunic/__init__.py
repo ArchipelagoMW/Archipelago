@@ -237,6 +237,17 @@ class TunicWorld(World):
 
     # for the universal tracker, doesn't get called in standard gen
     def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
+        # bypassing random yaml settings
+        self.options.start_with_sword.value = slot_data["start_with_sword"]
+        self.options.keys_behind_bosses.value = slot_data["keys_behind_bosses"]
+        self.options.sword_progression.value = slot_data["sword_progression"]
+        self.options.ability_shuffling.value = slot_data["ability_shuffling"]
+        self.options.hexagon_quest.value = slot_data["hexagon_quest"]
+        self.ability_unlocks["Pages 24-25 (Prayer)"] = slot_data["Hexagon Quest Prayer"]
+        self.ability_unlocks["Pages 42-43 (Holy Cross)"] = slot_data["Hexagon Quest Holy Cross"]
+        self.ability_unlocks["Pages 52-53 (Ice Rod)"] = slot_data["Hexagon Quest Ice Rod"]
+
+        # swapping entrances around so the mapping matches what was generated
         if slot_data["entrance_rando"]:
             from BaseClasses import Entrance
             from .er_data import portal_mapping
