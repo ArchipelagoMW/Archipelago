@@ -35,11 +35,12 @@ class AutopelagoWorld(World):
     _item_name_to_classification: dict[str, ItemClassification] = { }
     _next_offset = 0
     for r in AutopelagoRegion:
-        prog_count = 1 if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] \
-            else 16 if r == AutopelagoRegion.Before8Rats \
-            else 9 if r == AutopelagoRegion.AfterCBefore20Rats \
-            else 9 if r == AutopelagoRegion.AfterDBefore20Rats \
-            else 0
+        prog_count, skip_balancing_count = \
+            1, 0 if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] else \
+            16, 8 if r == AutopelagoRegion.Before8Rats else \
+            9, 6 if r == AutopelagoRegion.AfterCBefore20Rats else \
+            9, 6 if r == AutopelagoRegion.AfterDBefore20Rats else \
+            0, 0
 
         midpoint = (num_locations_in[r] - prog_count + 1) // 2
 
@@ -51,12 +52,16 @@ class AutopelagoWorld(World):
 
             _location_name_to_item_name[location_name] = item_name
             _item_name_to_classification[item_name] = \
+                ItemClassification.progression_skip_balancing if i < prog_count and i < skip_balancing_count else \
                 ItemClassification.progression if i < prog_count else \
                 ItemClassification.useful if i < midpoint else \
                 ItemClassification.filler
 
-            if ItemClassification.progression in _item_name_to_classification[item_name]:
-                logging.info("%s is a logical advancement from %s", item_name, location_name)
+            match _item_name_to_classification[item_name]:
+                case ItemClassification.progression:
+                    logging.info("%s is a logical advancement from %s", item_name, location_name)
+                case ItemClassification.progression_skip_balancing:
+                    logging.info("%s is an extra rat from %s", item_name, location_name)
 
             _next_offset += 1
 
