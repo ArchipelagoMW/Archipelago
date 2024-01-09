@@ -11,25 +11,24 @@ from .Rules import get_button_rule
 
 class CliqueWebWorld(WebWorld):
     theme = "partyTime"
-    setup_en = 
-        Tutorial(
-            tutorial_name="Start Guide",
-            description="A guide to playing Clique.",
-            language="English",
-            file_name="guide_en.md",
-            link="guide/en",
-            authors=["Phar"]
-        )
 
-    setup_es = 
-        Tutorial(
-            setup_en.tutorial_name,
-            setup_en.description,
-            language="Español",
-            file_name="guide_es.md",
-            link="guide/es",
-            authors=["Shiny"]
-        )
+    setup_en = Tutorial(
+        tutorial_name="Start Guide",
+        description="A guide to playing Clique.",
+        language="English",
+        file_name="guide_en.md",
+        link="guide/en",
+        authors=["Phar"]
+    )
+
+    setup_es = Tutorial(
+        setup_en.tutorial_name,
+        setup_en.description,
+        language="Español",
+        file_name="guide_es.md",
+        link="guide/es",
+        authors=["Shiny"]
+    )
     
     tutorials = [setup_en, setup_es]
 
