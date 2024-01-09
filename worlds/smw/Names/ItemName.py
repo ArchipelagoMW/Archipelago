@@ -26,8 +26,8 @@ green_switch_palace  = "Green Switch Palace"
 red_switch_palace    = "Red Switch Palace"
 blue_switch_palace   = "Blue Switch Palace"
 
-# Special world clear flag definition
-special_world_clear = "Special World Clear"
+# Special Zone clear flag definition
+special_world_clear = "Special Zone Clear"
 
 # Trap Definitions
 ice_trap        = "Ice Trap"

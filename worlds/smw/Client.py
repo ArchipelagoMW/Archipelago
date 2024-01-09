@@ -45,19 +45,20 @@ SMW_BONUS_BLOCK_ACTIVE_ADDR  = ROM_START + 0x01BFAA
 SMW_BLOCKSANITY_ACTIVE_ADDR  = ROM_START + 0x01BFAB
 
 
-SMW_GAME_STATE_ADDR    = WRAM_START + 0x100
-SMW_MARIO_STATE_ADDR   = WRAM_START + 0x71
-SMW_BOSS_STATE_ADDR    = WRAM_START + 0xD9B
-SMW_ACTIVE_BOSS_ADDR   = WRAM_START + 0x13FC
-SMW_CURRENT_LEVEL_ADDR = WRAM_START + 0x13BF
-SMW_MESSAGE_BOX_ADDR   = WRAM_START + 0x1426
-SMW_BONUS_STAR_ADDR    = WRAM_START + 0xF48
-SMW_EGG_COUNT_ADDR     = WRAM_START + 0x1F24
-SMW_BOSS_COUNT_ADDR    = WRAM_START + 0x1F26
-SMW_NUM_EVENTS_ADDR    = WRAM_START + 0x1F2E
-SMW_SFX_ADDR           = WRAM_START + 0x1DFC
-SMW_PAUSE_ADDR         = WRAM_START + 0x13D4
-SMW_MESSAGE_QUEUE_ADDR = WRAM_START + 0xC391
+SMW_GAME_STATE_ADDR       = WRAM_START + 0x100
+SMW_MARIO_STATE_ADDR      = WRAM_START + 0x71
+SMW_BOSS_STATE_ADDR       = WRAM_START + 0xD9B
+SMW_ACTIVE_BOSS_ADDR      = WRAM_START + 0x13FC
+SMW_CURRENT_LEVEL_ADDR    = WRAM_START + 0x13BF
+SMW_CURRENT_SUBLEVEL_ADDR = WRAM_START + 0x10B
+SMW_MESSAGE_BOX_ADDR      = WRAM_START + 0x1426
+SMW_BONUS_STAR_ADDR       = WRAM_START + 0xF48
+SMW_EGG_COUNT_ADDR        = WRAM_START + 0x1F24
+SMW_BOSS_COUNT_ADDR       = WRAM_START + 0x1F26
+SMW_NUM_EVENTS_ADDR       = WRAM_START + 0x1F2E
+SMW_SFX_ADDR              = WRAM_START + 0x1DFC
+SMW_PAUSE_ADDR            = WRAM_START + 0x13D4
+SMW_MESSAGE_QUEUE_ADDR    = WRAM_START + 0xC391
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1A00E
 
@@ -128,6 +129,9 @@ class SMWSNIClient(SNIClient):
         death_link = await snes_read(ctx, SMW_DEATH_LINK_ACTIVE_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
+
+        if ctx.rom != rom_name:
+            ctx.current_sublevel_value = 0
 
         ctx.rom = rom_name
 
@@ -274,6 +278,7 @@ class SMWSNIClient(SNIClient):
         elif game_state[0] < 0x0B:
             # We haven't loaded a save file
             ctx.message_queue = []
+            ctx.current_sublevel_value = 0
             return
         elif mario_state[0] in SMW_INVALID_MARIO_STATES:
             # Mario can't come to the phone right now
@@ -433,8 +438,38 @@ class SMWSNIClient(SNIClient):
                 f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
 
+        # Send Current Room for Tracker
+        current_sublevel_data = await snes_read(ctx, SMW_CURRENT_SUBLEVEL_ADDR, 2)
+        current_sublevel_value = current_sublevel_data[0]+(current_sublevel_data[1]<<8)
+
+        if game_state[0] != 0x14:
+            current_sublevel_value = 0
+
+        if ctx.current_sublevel_value != current_sublevel_value:
+            ctx.current_sublevel_value = current_sublevel_value
+
+            # Send level id data to tracker
+            print("Sending Msg ", f"smw_curlevelid_{ctx.team}_{ctx.slot}")
+            await ctx.send_msgs(
+                [
+                    {
+                        "cmd": "Set",
+                        "key": f"smw_curlevelid_{ctx.team}_{ctx.slot}",
+                        "default": 0,
+                        "want_reply": False,
+                        "operations": [
+                            {
+                                "operation": "replace",
+                                "value": ctx.current_sublevel_value,
+                            }
+                        ],
+                    }
+                ]
+            )
+
         if game_state[0] != 0x14:
             # Don't receive items or collect locations outside of in-level mode
+            ctx.current_sublevel_value = 0
             return
         
         if boss_state[0] in SMW_BOSS_STATES:

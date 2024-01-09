@@ -44,7 +44,7 @@ item_rom_data = {
     0xBC000F: [0x1F27, 0x1,  0x1C], # Green Switch Palace
     0xBC0010: [0x1F2A, 0x1,  0x1C], # Red Switch Palace
     0xBC0011: [0x1F29, 0x1,  0x1C], # Blue Switch Palace
-    0xBC001B: [0x1FFF, 0x80, 0x39]  # Special World Clear
+    0xBC001B: [0x1FFF, 0x80, 0x39]  # Special Zone Clear
 }
 
 trap_rom_data = {
@@ -2793,7 +2793,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     handle_uncompressed_player_gfx(rom)
     
-    # Handle special world clear flag
+    # Handle Special Zone Clear flag
     rom.write_bytes(0x02A74, bytearray([0xFF, 0x1F]))
     rom.write_bytes(0x09826, bytearray([0xFF, 0x1F]))
     rom.write_bytes(0x0B9CD, bytearray([0xFF, 0x1F]))
