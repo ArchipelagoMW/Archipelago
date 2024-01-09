@@ -29,9 +29,10 @@ def check_stdin() -> None:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
 class KH1ClientCommandProcessor(ClientCommandProcessor):
-    def _cmd_test(self):
-        """Test"""
-        self.output(f"Test")
+    pass
+    #def _cmd_test(self):
+    #    """Test"""
+    #    self.output(f"Test")
 
 
 class KH1Context(CommonContext):
