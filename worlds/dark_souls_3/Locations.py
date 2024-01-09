@@ -470,7 +470,7 @@ location_tables = {
     "Firelink Shrine Bell Tower": [
         # Guarded by Tower Key
         DS3LocationData("FSBT: Homeward Bone (roof)", "Homeward Bone x3"),
-        DS3LocationData("FSBT: Estus Ring (rafters)", "Estus Ring"),
+        DS3LocationData("FSBT: Estus Ring (tower base)", "Estus Ring"),
         DS3LocationData("FSBT: Estus Shard (rafters)", "Estus Shard"),
         DS3LocationData("FSBT: Fire Keeper Soul (tower top)", "Fire Keeper Soul"),
         DS3LocationData("FSBT: Fire Keeper Robe (partway down tower)", "Fire Keeper Robe"),
@@ -636,21 +636,19 @@ location_tables = {
         DS3LocationData("US: Tower Key (kill Irina)", "Tower Key", missable = True, npc = True),
         DS3LocationData("US: Flynn's Ring (tower village, rooftop)", "Flynn's Ring"),
         DS3LocationData("US: Undead Bone Shard (by white tree)", "Undead Bone Shard"),
-        DS3LocationData("US: Alluring Skull (Foot of the High Wall, behind carriage)",
-                        "Alluring Skull x2"),
+        DS3LocationData("US: Alluring Skull (foot, behind carriage)", "Alluring Skull x2"),
         DS3LocationData("US: Mortician's Ashes (graveyard by white tree)", "Mortician's Ashes",
                         progression = True),
-        DS3LocationData("US: Homeward Bone (tower village, jump from roof)", "Homeward Bone x2",
-                        hidden = True), # Hidden fall
+        DS3LocationData("US: Homeward Bone (???)", "Homeward Bone x2"), # Hidden fall
         DS3LocationData("US: Caduceus Round Shield (right after stable exit)",
                         "Caduceus Round Shield"),
-        DS3LocationData("US: Ember (by miniboss before Road of Sacrifices)", "Ember"),
+        DS3LocationData("US: Ember (tower basement, miniboss)", "Ember"),
         DS3LocationData("US: Soul of an Unknown Traveler (chasm crypt)",
                         "Soul of an Unknown Traveler"),
         DS3LocationData("US: Repair Powder (first building, balcony)", "Repair Powder x2"),
-        DS3LocationData("US: Homeward Bone (stable roof)", "Homeward Bone x2"),
-        DS3LocationData("US: Titanite Shard (side path on the way to Dilapidated Bridge)",
-                        "Titanite Shard"),
+        DS3LocationData("US: Homeward Bone (tower village, jump from roof)", "Homeward Bone x2",
+                        hidden = True), # Hidden fall
+        DS3LocationData("US: Titanite Shard (back alley, side path)", "Titanite Shard"),
         DS3LocationData("US: Wargod Wooden Shield (Pit of Hollows)", "Wargod Wooden Shield"),
         DS3LocationData("US: Large Soul of a Deserted Corpse (on the way to tower, by well)",
                         "Large Soul of a Deserted Corpse"),
@@ -673,13 +671,11 @@ location_tables = {
         DS3LocationData("US: Bloodbite Ring (miniboss in sewer)", "Bloodbite Ring",
                         miniboss = True), # Giant Rat drop
         DS3LocationData("US: Charcoal Pine Bundle (first building)", "Charcoal Pine Bundle x2"),
-        DS3LocationData("US: Soul of an Unknown Traveler (on the way to Dilapidated Bridge, in crates)",
+        DS3LocationData("US: Soul of an Unknown Traveler (back alley, past crates)",
                         "Soul of an Unknown Traveler", hidden = True),
-        DS3LocationData("US: Titanite Shard (on the way to Dilapidated Bridge, up ladder)",
-                        "Titanite Shard"),
+        DS3LocationData("US: Titanite Shard (back alley, up ladder)", "Titanite Shard"),
         DS3LocationData("US: Red Hilted Halberd (chasm crypt)", "Red Hilted Halberd"),
-        DS3LocationData("US: Rusted Coin (wooden ledge above Dilapidated Bridge)",
-                        "Rusted Coin x2"),
+        DS3LocationData("US: Rusted Coin (awning above Dilapidated Bridge)", "Rusted Coin x2"),
         DS3LocationData("US: Caestus (sewer)", "Caestus"),
         DS3LocationData("US: Saint's Talisman (chasm, by ladder)", "Saint's Talisman"),
         DS3LocationData("US: Alluring Skull (on the way to tower, behind building)",
@@ -709,10 +705,9 @@ location_tables = {
         DS3LocationData("US: Estus Shard (under burning tree)", "Estus Shard"),
         DS3LocationData("US: Firebomb (stable roof)", "Firebomb x6"),
         # In enemy rando, the enemy may not burst through the wall and make this room obvious
-        DS3LocationData("US: Whip (on the way to Dilapidated Bridge, behind wooden wall)",
-                        "Whip", hidden = True),
+        DS3LocationData("US: Whip (back alley, behind wooden wall)", "Whip", hidden = True),
         DS3LocationData("US: Great Scythe (building by white tree, balcony)", "Great Scythe"),
-        DS3LocationData("US: Homeward Bone (by Yoel)", "Homeward Bone x2"),
+        DS3LocationData("US: Homeward Bone (stable roof)", "Homeward Bone x2"),
         DS3LocationData("US: Large Soul of a Deserted Corpse (around corner by Cliff Underside)",
                         "Large Soul of a Deserted Corpse", hidden = True), # Hidden corner
         DS3LocationData("US: Ember (behind burning tree)", "Ember"),
@@ -754,7 +749,7 @@ location_tables = {
                         "Covetous Silver Serpent Ring+2", ngp = True, hidden = True), # Hidden fall
         DS3LocationData("US: Human Pine Resin (tower village building, chest upstairs)",
                         "Human Pine Resin x4"),
-        DS3LocationData("US: Homeward Bone (tower village, right of first drop)", "Homeward Bone"),
+        DS3LocationData("US: Homeward Bone (foot, drop overloop)", "Homeward Bone"),
         DS3LocationData("US: Irithyll Straight Sword (miniboss drop, by Road of Sacrifices)",
                         "Irithyll Straight Sword", miniboss = True),
         DS3LocationData("US: Fire Gem (tower village, miniboss drop)", "Fire Gem", miniboss = True),
@@ -882,8 +877,7 @@ location_tables = {
         DS3LocationData("RS: Conjurator Boots (deep water)", "Conjurator Boots"),
         DS3LocationData("RS: Soul of an Unknown Traveler (right of door to stronghold left)",
                         "Soul of an Unknown Traveler"),
-        DS3LocationData("RS: Green Blossom (water by Crucifixion Woods bonfire)",
-                        "Green Blossom x2"),
+        DS3LocationData("RS: Green Blossom (water beneath stronghold)", "Green Blossom x2"),
         DS3LocationData("RS: Great Swamp Pyromancy Tome (deep water)",
                         "Great Swamp Pyromancy Tome"),
         DS3LocationData("RS: Homeward Bone (balcony by Farron Keep)", "Homeward Bone x2"),
@@ -1142,10 +1136,6 @@ location_tables = {
                         "Red Sign Soapstone", drop = True, hidden = True),
         DS3LocationData("CD: Aldrich's Sapphire (side chapel, miniboss drop)", "Aldrich's Sapphire",
                         miniboss = True), # Deep Accursed Drop
-        DS3LocationData("CD: Dung Pie (main hall, miniboss drop)", "Dung Pie x4",
-                        miniboss = True), # drop from either Giant Slave
-        DS3LocationData("CD: Large Titanite Shard (main hall, miniboss drop)",
-                        "Large Titanite Shard", miniboss = True), # drop from either Giant Slave
         DS3LocationData("CD: Titanite Scale (moat, miniboss drop)", "Titanite Scale",
                         miniboss = True), # Ravenous Crystal Lizard drop
         DS3LocationData("CD: Twinkling Titanite (moat, lizard #1)", "Twinkling Titanite",
@@ -1218,13 +1208,13 @@ location_tables = {
         DS3LocationData("FK: Titanite Shard (between left island and keep ruins)", "Titanite Shard"),
         DS3LocationData("FK: Rusted Gold Coin (right island, behind wall)", "Rusted Gold Coin",
                         hidden = True),
-        DS3LocationData("FK: Nameless Knight Helm (next to pillar by right island)",
+        DS3LocationData("FK: Nameless Knight Helm (corner of keep and right island)",
                         "Nameless Knight Helm"),
-        DS3LocationData("FK: Nameless Knight Armor (next to pillar by right island)",
+        DS3LocationData("FK: Nameless Knight Armor (corner of keep and right island)",
                         "Nameless Knight Armor"),
-        DS3LocationData("FK: Nameless Knight Gauntlets (next to pillar by right island)",
+        DS3LocationData("FK: Nameless Knight Gauntlets (corner of keep and right island)",
                         "Nameless Knight Gauntlets"),
-        DS3LocationData("FK: Nameless Knight Leggings (next to pillar by right island)",
+        DS3LocationData("FK: Nameless Knight Leggings (corner of keep and right island)",
                         "Nameless Knight Leggings"),
         DS3LocationData("FK: Shriving Stone (perimeter, just past stone doors)", "Shriving Stone"),
         DS3LocationData("FK: Repair Powder (outside hidden cave)", "Repair Powder x4",
@@ -1255,7 +1245,7 @@ location_tables = {
         DS3LocationData("FK: Homeward Bone (right island, behind fire)", "Homeward Bone x2"),
         DS3LocationData("FK: Titanite Shard (Farron Keep bonfire, left after exit)",
                         "Titanite Shard"),
-        DS3LocationData("FK: Large Soul of a Nameless Soldier (between right island and pillar)",
+        DS3LocationData("FK: Large Soul of a Nameless Soldier (corner of keep and right island)",
                         "Large Soul of a Nameless Soldier", hidden = True), # Tricky corner to spot
         DS3LocationData("FK: Prism Stone (by left island stairs)", "Prism Stone x10"),
         DS3LocationData("FK: Large Soul of a Nameless Soldier (near wall by right island)",
@@ -1285,17 +1275,17 @@ location_tables = {
         DS3LocationData("FK: Crown of Dusk (by white tree)", "Crown of Dusk"),
         DS3LocationData("FK: Lingering Dragoncrest Ring (by white tree, miniboss drop)",
                         "Lingering Dragoncrest Ring", miniboss = True), # Great Crab drop
-        DS3LocationData("FK: Pharis's Hat (mob drop, around item in corner by keep ruins)",
-                        "Pharis's Hat", drop = True, hidden = True),
-        DS3LocationData("FK: Black Bow of Pharis (mob drop, around item in corner by keep ruins)",
-                        "Black Bow of Pharis", drop = True, hidden = True),
+        DS3LocationData("FK: Pharis's Hat (miniboss drop, by keep ruins near wall)",
+                        "Pharis's Hat", miniboss = True), # Elder Ghru drop
+        DS3LocationData("FK: Black Bow of Pharis (miniboss drop, by keep ruins near wall)",
+                        "Black Bow of Pharis", miniboss = True), # Elder Ghru drop
         DS3LocationData("FK: Titanite Scale (perimeter, miniboss drop)", "Titanite Scale x2",
                         miniboss = True), # Ravenous Crystal Lizard drop
-        DS3LocationData("FK: Large Titanite Shard (upper keep, lizard #1)", "Large Titanite Shard",
-                        lizard = True),
-        DS3LocationData("FK: Large Titanite Shard (upper keep, lizard #2)", "Large Titanite Shard",
-                        lizard = True),
-        DS3LocationData("FK: Heavy Gem (uper keep, lizard on stairs)", "Heavy Gem", lizard = True),
+        DS3LocationData("FK: Large Titanite Shard (upper keep, lizard in open)",
+                        "Large Titanite Shard", lizard = True),
+        DS3LocationData("FK: Large Titanite Shard (upper keep, lizard by wyvern)",
+                        "Large Titanite Shard", lizard = True),
+        DS3LocationData("FK: Heavy Gem (upper keep, lizard on stairs)", "Heavy Gem", lizard = True),
         DS3LocationData("FK: Twinkling Titanite (keep proper, lizard)", "Twinkling Titanite",
                         lizard = True),
         DS3LocationData("FK: Soul of a Stray Demon (upper keep, miniboss drop)",
@@ -1390,8 +1380,8 @@ location_tables = {
         DS3LocationData("CC: Twinkling Titanite (atrium lower, lizard down more stairs)",
                         "Twinkling Titanite", lizard = True),
         DS3LocationData("CC: Fire Gem (cavern, lizard)", "Fire Gem", lizard = True),
-        DS3LocationData("CC: Homeward Bone (Irithyll bridge)", "Homeward Bone"),
-        DS3LocationData("CC: Pontiff's Right Eye (Irithyll bridge, miniboss drop)",
+        DS3LocationData("CC: Homeward Bone (bridge)", "Homeward Bone"),
+        DS3LocationData("CC: Pontiff's Right Eye (bridge, miniboss drop)",
                         "Pontiff's Right Eye", miniboss = True), # Sulyvahn's Beast drop
 
         # Shrine Handmaid after killing High Lord Wolnir
@@ -1544,7 +1534,7 @@ location_tables = {
                         "Large Titanite Shard"),
         DS3LocationData("IBV: Large Titanite Shard (plaza, by stairs to church)",
                         "Large Titanite Shard"),
-        DS3LocationData("IBV: Soul of a Weary Warrior (plaza, side room #1)",
+        DS3LocationData("IBV: Soul of a Weary Warrior (plaza, side room lower)",
                         "Soul of a Weary Warrior"),
         DS3LocationData("IBV: Magic Clutch Ring (plaza, illusory wall)", "Magic Clutch Ring",
                         hidden = True), # Behind illusory wall
@@ -1582,7 +1572,7 @@ location_tables = {
         DS3LocationData("IBV: Lightning Gem (plaza center)", "Lightning Gem"),
         DS3LocationData("IBV: Large Soul of a Nameless Soldier (central, by second fountain)",
                         "Large Soul of a Nameless Soldier"),
-        DS3LocationData("IBV: Soul of a Weary Warrior (plaza, side room #2)",
+        DS3LocationData("IBV: Soul of a Weary Warrior (plaza, side room upper)",
                         "Soul of a Weary Warrior"),
         DS3LocationData("IBV: Proof of a Concord Kept (Church of Yorshka altar)",
                         "Proof of a Concord Kept"),
@@ -1685,7 +1675,7 @@ location_tables = {
                         "Soul of a Weary Warrior"),
         DS3LocationData("ID: Dung Pie (B3, by path from pit)", "Dung Pie x4"),
         DS3LocationData("ID: Ember (B3 center)", "Ember"),
-        DS3LocationData("ID: Ember (B3 near, by exit)", "Ember"),
+        DS3LocationData("ID: Ember (B3 far right)", "Ember"),
         DS3LocationData("ID: Profaned Coal (B3 far, left cell)", "Profaned Coal"),
         DS3LocationData("ID: Large Titanite Shard (B3 near, right corner)", "Large Titanite Shard"),
         DS3LocationData("ID: Old Sorcerer Hat (B2 near, middle cell)", "Old Sorcerer Hat"),
@@ -1898,10 +1888,11 @@ location_tables = {
         DS3LocationData("AL: Aldrich Faithful (water reserves, talk to McDonnel)", "Aldrich Faithful",
                         hidden = True), # Behind illusory wall
 
-        DS3LocationData("FS: Budding Green Blossom (shop after Sirris kills Aldrich)",
+        DS3LocationData("FS: Budding Green Blossom (shop killing Creighton and AL boss)",
                         "Budding Green Blossom",
                         offline = '99,0:-1:110000,70000118:', missable = True, npc = True,
-                        shop = True), # sold by Shrine Maiden after helping Sirris defeat Aldrich
+                        shop = True), # sold by Shrine Maiden after killing Aldrich and helping
+                                      # Sirris defeat Creighton
 
         # Sirris (quest completion)
         DS3LocationData("FS: Sunset Shield (by grave after killing Hodrick w/Sirris)",
@@ -2156,7 +2147,9 @@ location_tables = {
                         offline = "09,0:50002040::", prominent = True, progression = True,
                         boss = True),
         DS3LocationData("GA: Onikiri and Ubadachi (outside 5F, NPC drop)", "Onikiri and Ubadachi",
-                        hostile_npc = True), # Black Hand Kamui drop
+                        hostile_npc = True, # Black Hand Kamui drop
+                        missable = True), # This is placed at the location the NPC gets randomized
+                                          # to, which makes it hard to include in logic.
         DS3LocationData("GA: Golden Wing Crest Shield (outside 5F, NPC drop)",
                         "Golden Wing Crest Shield",
                         hostile_npc = True), # Lion Knight Albert drop
@@ -2512,7 +2505,7 @@ location_tables = {
                         hidden = True), # Hidden behind a tower
         DS3LocationData("PW1: Captain's Ashes (snowfield tower, 6F)", "Captain's Ashes",
                         progression = True),
-        DS3LocationData("PW1: Black Firebomb (snowfield lower, path to bridge)",
+        DS3LocationData("PW1: Black Firebomb (snowfield lower, path to bonfire)",
                         "Black Firebomb x2"),
         DS3LocationData("PW1: Shriving Stone (below bridge near)", "Shriving Stone"),
         DS3LocationData("PW1: Millwood Greatarrow (snowfield village, loop back to lower)",
@@ -2567,7 +2560,7 @@ location_tables = {
         DS3LocationData("PW1: Large Soul of an Unknown Traveler (snowfield lower, by cliff)",
                         "Large Soul of an Unknown Traveler"),
         DS3LocationData("PW1: Ember (settlement, building near bonfire)", "Ember"),
-        DS3LocationData("PW1: Frozen Weapon (snowfield lower, path to bonfire)", "Frozen Weapon"),
+        DS3LocationData("PW1: Frozen Weapon (snowfield lower, egg zone)", "Frozen Weapon"),
         DS3LocationData("PW1: Titanite Slab (depths, up secret ladder)", "Titanite Slab",
                         offline = '11,0:50004700::',
                         hidden = True), # Must kill normal-looking Tree Woman
@@ -2841,7 +2834,7 @@ location_tables = {
                         "White Preacher Head"),
         DS3LocationData("RC: Titanite Scale (swamp far, by miniboss)", "Titanite Scale"),
         DS3LocationData("RC: Titanite Scale (upper cliff, path under bridge)", "Titanite Scale"),
-        DS3LocationData("RC: Dragonhead Greatshield (upper cluff, under bridge)",
+        DS3LocationData("RC: Dragonhead Greatshield (upper cliff, under bridge)",
                         "Dragonhead Greatshield"),
         DS3LocationData("RC: Titanite Scale (upper cliff, first alcove)", "Titanite Scale x2"),
         DS3LocationData("RC: Rubbish (upper cliff, middle)", "Rubbish"),

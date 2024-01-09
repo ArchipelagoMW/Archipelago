@@ -44,6 +44,16 @@ all_bosses = [
         "US: Transposing Kiln (boss drop)",
         "US: Wargod Wooden Shield (Pit of Hollows)",
         "FS: Hawkwood's Shield (Hawkwood)",
+        "FS: Sunset Shield (by grave after killing Hodrick w/Sirris)",
+        "US: Sunset Helm (Pit of Hollows after killing Hodrick w/Sirris)",
+        "US: Sunset Armor (pit of hollows after killing Hodrick w/Sirris)",
+        "US: Sunset Gauntlets (pit of hollows after killing Hodrick w/Sirris)",
+        "US: Sunset Leggings (pit of hollows after killing Hodrick w/Sirris)",
+        "FS: Sunless Talisman (Sirris, kill GA boss)",
+        "FS: Sunless Veil (shop, Sirris quest, kill GA boss)",
+        "FS: Sunless Armor (shop, Sirris quest, kill GA boss)",
+        "FS: Sunless Gauntlets (shop, Sirris quest, kill GA boss)",
+        "FS: Sunless Leggings (shop, Sirris quest, kill GA boss)",
     }),
     DS3BossInfo("Crystal Sage", 3300850, region = "Cathedral of the Deep", locations = {
         "RS: Soul of a Crystal Sage",
@@ -171,11 +181,11 @@ all_bosses = [
         "AP: Dragonslayer Gauntlets (plaza)",
         "AP: Dragonslayer Leggings (plaza)",
     }),
-    DS3BossInfo("Lorian, Elder Prince", 3410830, locations = {
+    DS3BossInfo("Lothric, Younger Prince", 3410830, locations = {
         "GA: Soul of the Twin Princes",
         "GA: Cinders of a Lord - Lothric Prince",
     }),
-    DS3BossInfo("Lothric, Younger Prince", 3410832, locations = {
+    DS3BossInfo("Lorian, Elder Prince", 3410832, locations = {
         "GA: Soul of the Twin Princes",
         "GA: Cinders of a Lord - Lothric Prince",
         "FS: Lorian's Helm (shop after killing GA boss)",
