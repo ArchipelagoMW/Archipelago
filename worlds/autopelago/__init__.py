@@ -70,8 +70,8 @@ class AutopelagoWorld(World):
 
     def set_rules(self):
         def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None):
-            r_from_real = self.multiworld.get_region(r_from.get_archipelago_region_name(), self.player)
-            r_to_real = self.multiworld.get_region(r_to.get_archipelago_region_name(), self.player)
+            r_from_real = self.multiworld.get_region(r_from.name, self.player)
+            r_to_real = self.multiworld.get_region(r_to.name, self.player)
             connection = Entrance(self.player, '', r_from_real)
             if access_rule:
                 connection.access_rule = access_rule
@@ -112,8 +112,15 @@ class AutopelagoWorld(World):
     def create_regions(self):
         self.multiworld.regions += (self.create_region(r) for r in AutopelagoRegion)
 
+        # logic assumes that the player starts in a special hardcoded "Menu" region
+        menu = Region("Menu", self.player, self.multiworld)
+        self.multiworld.regions.append(menu)
+        entrance = Entrance(self.player, '', menu)
+        menu.exits.append(entrance)
+        entrance.connect(self.multiworld.get_region(AutopelagoRegion.Before8Rats.name, self.player))
+
     def create_region(self, r: AutopelagoRegion):
-        region = Region(r.get_archipelago_region_name(), self.player, self.multiworld)
+        region = Region(r.name, self.player, self.multiworld)
         for i in range(num_locations_in[r]):
             location_name = r.get_location_name(i)
             location_id = self.location_name_to_id[location_name]

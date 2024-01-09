@@ -22,9 +22,6 @@ class AutopelagoRegion(Enum):
     TryingForGoal = auto()
     # CompletedGoal = auto() # only used by the game
 
-    def get_archipelago_region_name(self):
-        return "Menu" if self == AutopelagoRegion.Before8Rats else self.name
-
     def get_location_name(self, i: int):
         match self:
             case AutopelagoRegion.Before8Rats:
