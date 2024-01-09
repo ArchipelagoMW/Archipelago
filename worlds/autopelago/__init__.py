@@ -1,13 +1,8 @@
 from typing import Callable
 from BaseClasses import CollectionState, Item, Region, Location, Entrance, Tutorial, ItemClassification
-from .ArbitraryGameDefs import BASE_ID, AutopelagoRegion, num_locations_in
+from .ArbitraryGameDefs import BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in
 from .Items import item_table
 from ..AutoWorld import World, WebWorld
-
-# options aren't ready yet
-# from .Options import ArchipelagoOptions
-
-game_name = "Autopelago"
 
 
 class AutopelagoWebWorld(WebWorld):
@@ -28,14 +23,10 @@ class AutopelagoWorld(World):
     """
     An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
     """
-    game = game_name
+    game = GAME_NAME
     topology_present = False # it's static, so setting this to True isn't actually helpful
     data_version = 1
     web = AutopelagoWebWorld()
-
-    # options aren't ready yet
-    #options_dataclass = ArchipelagoOptions
-    #options: ArchipelagoOptions
 
     location_name_to_id = { }
     item_name_to_id = { }
@@ -133,9 +124,9 @@ class AutopelagoWorld(World):
 
 
 class AutopelagoItem(Item):
-    game = game_name
+    game = GAME_NAME
 
 
 class AutopelagoLocation(Location):
-    game = game_name
+    game = GAME_NAME
 

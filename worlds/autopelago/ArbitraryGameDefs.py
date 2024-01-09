@@ -47,6 +47,7 @@ class AutopelagoRegion(Enum):
             case _:
                 return self.name.lower()
 
+GAME_NAME = "Autopelago"
 
 # keep in sync with BASE_ID in the game code
 BASE_ID = 300000
