@@ -223,11 +223,6 @@ for item, data in item_table.items():
 def create_items(self) -> None:
     items = []
     starting_weapon = self.multiworld.starting_weapon[self.player].current_key.title().replace("_", " ")
-    if self.multiworld.progressive_gear[self.player]:
-        for item_group in prog_map:
-            if starting_weapon in self.item_name_groups[item_group]:
-                starting_weapon = prog_map[item_group]
-                break
     self.multiworld.push_precollected(self.create_item(starting_weapon))
     self.multiworld.push_precollected(self.create_item("Steel Armor"))
     if self.multiworld.sky_coin_mode[self.player] == "start_with":
