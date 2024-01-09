@@ -14,7 +14,7 @@ import yaml
 from .Locations import location_dictionary
 
 
-location_re = re.compile(r'^([A-Z0-9]+): (.*?)(?:$| \()')
+location_re = re.compile(r'^([A-Z0-9]+): (.*?)(?:$| - )')
 
 if __name__ == '__main__':
     # TODO: update this to the main branch of the main randomizer once Archipelago support is merged

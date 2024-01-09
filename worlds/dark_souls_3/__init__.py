@@ -133,7 +133,7 @@ class DarkSouls3World(World):
 
         if not self.options.enable_dlc and boss.dlc: return False
 
-        if not self.is_location_available("PC: Storm Ruler (boss room)"):
+        if not self.is_location_available("PC: Storm Ruler - boss room"):
             # If the Storm Ruler isn't randomized, make sure the player can get to the normal Storm
             # Ruler location before they need to get through Yhorm.
             if boss.before_storm_ruler: return False
@@ -141,7 +141,7 @@ class DarkSouls3World(World):
             # If the Small Doll also wasn't randomized, make sure Yhorm isn't blocking access to it
             # or it won't be possible to get into Profaned Capital before beating him.
             if (
-                not self.is_location_available("CD: Small Doll (boss drop)")
+                not self.is_location_available("CD: Small Doll - boss drop")
                 and boss.name in {"Crystal Sage", "Deacons of the Deep"}
             ):
                 return False
@@ -154,7 +154,7 @@ class DarkSouls3World(World):
         return any(
             self.is_location_available(location)
             and location.name not in excluded
-            and location.name != "CA: Coiled Sword (boss drop)"
+            and location.name != "CA: Coiled Sword - boss drop"
             for location in location_tables["Cemetery of Ash"]
         )
 
@@ -263,13 +263,13 @@ class DarkSouls3World(World):
                 ) or (
                     # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
                     # the latter is missable by default.
-                    not self.is_location_available("FS: Lift Chamber Key (Leonhard)")
-                    and location.name == "HWL: Red Eye Orb (wall tower, miniboss)"
+                    not self.is_location_available("FS: Lift Chamber Key - Leonhard")
+                    and location.name == "HWL: Red Eye Orb - wall tower, miniboss"
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
             else:
                 # Don't allow Siegward's Storm Ruler to mark Yhorm as defeatable.
-                if location.name == "PC: Storm Ruler (Siegward)": continue
+                if location.name == "PC: Storm Ruler - Siegward": continue
 
                 # Replace non-randomized progression items with events
                 event_item = (
@@ -465,14 +465,14 @@ class DarkSouls3World(World):
                 self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
 
         # Define the access rules to some specific locations
-        if self.is_location_available("FS: Lift Chamber Key (Leonhard)"):
-            self._add_location_rule("HWL: Red Eye Orb (wall tower, miniboss)",
+        if self.is_location_available("FS: Lift Chamber Key - Leonhard"):
+            self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss",
                                     "Lift Chamber Key")
-        self._add_location_rule("ID: Bellowing Dragoncrest Ring (drop from B1 towards pit)",
+        self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
                                 "Jailbreaker's Key")
-        self._add_location_rule("ID: Covetous Gold Serpent Ring (Siegward's cell)", "Old Cell Key")
+        self._add_location_rule("ID: Covetous Gold Serpent Ring - Siegward's cell", "Old Cell Key")
         self._add_location_rule(
-            "UG: Hornet Ring (environs, right of main path after killing FK boss)",
+            "UG: Hornet Ring - environs, right of main path after killing FK boss",
             "Small Lothric Banner"
         )
         self._add_entrance_rule("Karla's Shop", "Jailer's Key Ring")
@@ -498,7 +498,7 @@ class DarkSouls3World(World):
             ]
         }
         for (ash, items) in ashes.items():
-            self._add_location_rule([f"FS: {item} ({ash})" for item in items], ash)
+            self._add_location_rule([f"FS: {item} - {ash}" for item in items], ash)
 
         # Soul transposition
         transpositions = [
@@ -556,7 +556,7 @@ class DarkSouls3World(World):
         ]
         for (soul, soul_name, items) in transpositions:
             self._add_location_rule([
-                f"FS: {item} (Ludleth for {soul_name})" for item in items
+                f"FS: {item} - Ludleth for {soul_name}" for item in items
             ], soul)
 
         # List missable locations even though they never contain progression items so that the game
@@ -564,10 +564,10 @@ class DarkSouls3World(World):
         # rules for boss transposition items as well, but then we couldn't freely reorder boss soul
         # locations for smoothing.
 
-        self._add_location_rule("FS: Lift Chamber Key (Leonhard)", "Pale Tongue")
+        self._add_location_rule("FS: Lift Chamber Key - Leonhard", "Pale Tongue")
         self._add_location_rule([
-            "FK: Twinkling Dragon Head Stone (Hawkwood drop)",
-            "FS: Hawkwood's Swordgrass (Andre after gesture in AP summit)"
+            "FK: Twinkling Dragon Head Stone - Hawkwood drop",
+            "FS: Hawkwood's Swordgrass - Andre after gesture in AP summit"
         ], "Twinkling Dragon Torso Stone")
 
         # Shop unlocks
@@ -624,25 +624,25 @@ class DarkSouls3World(World):
         for (shop, unlocks) in shop_unlocks.items():
             for (key, key_name, items) in unlocks:
                 self._add_location_rule(
-                    [f"FS: {item} ({shop} for {key_name})" for item in items], key)
+                    [f"FS: {item} - {shop} for {key_name}" for item in items], key)
 
         self._add_location_rule([
-            "FS: Divine Blessing (Greirat from US)",
-            "FS: Ember (Greirat from US)",
+            "FS: Divine Blessing - Greirat from US",
+            "FS: Ember - Greirat from US",
         ], lambda state: state.can_reach("Go To Undead Settlement", "Entrance", self.player))
         self._add_location_rule([
-            "FS: Divine Blessing (Greirat from IBV)",
-            "FS: Hidden Blessing (Greirat from IBV)",
-            "FS: Titanite Scale (Greirat from IBV)",
-            "FS: Twinkling Titanite (Greirat from IBV)",
-            "FS: Ember (shop for Greirat's Ashes)"
+            "FS: Divine Blessing - Greirat from IBV",
+            "FS: Hidden Blessing - Greirat from IBV",
+            "FS: Titanite Scale - Greirat from IBV",
+            "FS: Twinkling Titanite - Greirat from IBV",
+            "FS: Ember - shop for Greirat's Ashes"
         ], lambda state: state.can_reach(
             "Go To Irithyll of the Boreal Valley",
             "Entrance",
             self.player
         ))
         self._add_location_rule(
-            "FS: Ember (shop for Greirat's Ashes)",
+            "FS: Ember - shop for Greirat's Ashes",
             lambda state: state.can_reach("Go To Grand Archives", "Entrance", self.player)
         )
 
@@ -663,27 +663,27 @@ class DarkSouls3World(World):
             "Eleonora": "Hollow Gem",
         }
         for (given, received) in crow.items():
-            self._add_location_rule(f"FSBT: {received} (crow for {given})", given)
+            self._add_location_rule(f"FSBT: {received} - crow for {given}", given)
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
         self._add_entrance_rule("Greirat's Shop", "Cell Key")
 
         self._add_location_rule([
-            f"FS: {item} (shop after killing Leonhard)"
+            f"FS: {item} - shop after killing Leonhard"
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
         ], "Black Eye Orb")
 
         # You could just kill NPCs for these, but it's more fun to ensure the player can do
         # their quests.
-        self._add_location_rule("HWL: Basin of Vows (Emma)", "Small Doll")
+        self._add_location_rule("HWL: Basin of Vows - Emma", "Small Doll")
         self._add_location_rule(
-            "ID: Prisoner Chief's Ashes (B2 near, locked cell by stairs)",
+            "ID: Prisoner Chief's Ashes - B2 near, locked cell by stairs",
             "Jailer's Key Ring"
         )
         self._add_location_rule([
-            "US: Old Sage's Blindfold (kill Cornyx)", "US: Cornyx's Garb (kill Cornyx)",
-            "US: Cornyx's Wrap (kill Cornyx)", "US: Cornyx's Skirt (kill Cornyx)"
+            "US: Old Sage's Blindfold - kill Cornyx", "US: Cornyx's Garb - kill Cornyx",
+            "US: Cornyx's Wrap - kill Cornyx", "US: Cornyx's Skirt - kill Cornyx"
         ], lambda state: (
             state.has("Great Swamp Pyromancy Tome", self.player)
             and state.has("Carthus Pyromancy Tome", self.player)
@@ -716,43 +716,43 @@ class DarkSouls3World(World):
             self._add_location_rule("HWL: Soul of the Dancer", has_any_scroll)
 
         self._add_location_rule([
-            "LC: Grand Archives Key (by Grand Archives door, after PC and AL bosses)",
-            "LC: Gotthard Twinswords (by Grand Archives door, after PC and AL bosses)"
+            "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
+            "LC: Gotthard Twinswords - by Grand Archives door, after PC and AL bosses"
         ], lambda state: (
             state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
             state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player)
         ))
 
         self._add_location_rule([
-            "FS: Morne's Great Hammer (Eygon)",
-            "FS: Moaning Shield (Eygon)"
+            "FS: Morne's Great Hammer - Eygon",
+            "FS: Moaning Shield - Eygon"
         ], lambda state: (
             state.can_reach("LC: Soul of Dragonslayer Armour", "Location", self.player) and
             state.can_reach("FK: Soul of the Blood of the Wolf", "Location", self.player)
         ))
 
         self._add_location_rule([
-            "CKG: Drakeblood Helm (tomb, after killing AP mausoleum NPC)",
-            "CKG: Drakeblood Armor (tomb, after killing AP mausoleum NPC)",
-            "CKG: Drakeblood Gauntlets (tomb, after killing AP mausoleum NPC)",
-            "CKG: Drakeblood Leggings (tomb, after killing AP mausoleum NPC)",
+            "CKG: Drakeblood Helm - tomb, after killing AP mausoleum NPC",
+            "CKG: Drakeblood Armor - tomb, after killing AP mausoleum NPC",
+            "CKG: Drakeblood Gauntlets - tomb, after killing AP mausoleum NPC",
+            "CKG: Drakeblood Leggings - tomb, after killing AP mausoleum NPC",
         ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
-            "FK: Havel's Helm (upper keep, after killing AP belfry roof NPC)",
-            "FK: Havel's Armor (upper keep, after killing AP belfry roof NPC)",
-            "FK: Havel's Gauntlets (upper keep, after killing AP belfry roof NPC)",
-            "FK: Havel's Leggings (upper keep, after killing AP belfry roof NPC)",
+            "FK: Havel's Helm - upper keep, after killing AP belfry roof NPC",
+            "FK: Havel's Armor - upper keep, after killing AP belfry roof NPC",
+            "FK: Havel's Gauntlets - upper keep, after killing AP belfry roof NPC",
+            "FK: Havel's Leggings - upper keep, after killing AP belfry roof NPC",
         ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
 
         self._add_location_rule([
-            "RC: Dragonhead Shield (streets monument, across bridge)",
-            "RC: Large Soul of a Crestfallen Knight (streets monument, across bridge)",
-            "RC: Divine Blessing (streets monument, mob drop)",
-            "RC: Lapp's Helm (Lapp)",
-            "RC: Lapp's Armor (Lapp)",
-            "RC: Lapp's Gauntlets (Lapp)",
-            "RC: Lapp's Leggings (Lapp)",
+            "RC: Dragonhead Shield - streets monument, across bridge",
+            "RC: Large Soul of a Crestfallen Knight - streets monument, across bridge",
+            "RC: Divine Blessing - streets monument, mob drop",
+            "RC: Lapp's Helm - Lapp",
+            "RC: Lapp's Armor - Lapp",
+            "RC: Lapp's Gauntlets - Lapp",
+            "RC: Lapp's Leggings - Lapp",
         ], "Chameleon")
 
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
@@ -768,9 +768,9 @@ class DarkSouls3World(World):
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
-        if self.is_location_available("US: Young White Branch (by white tree #2)"):
+        if self.is_location_available("US: Young White Branch - by white tree #2"):
             loc = self.multiworld.get_location(
-                "US: Young White Branch (by white tree #2)",
+                "US: Young White Branch - by white tree #2",
                 self.player
             )
             add_item_rule(loc, lambda item: item.player == self.player and not item.data.unique)
@@ -881,7 +881,7 @@ class DarkSouls3World(World):
         # doesn't get locked out by bad rolls on the next two fills.
         if self.yhorm_location.name == 'Iudex Gundyr':
             self._fill_local_item("Storm Ruler", {"Cemetery of Ash"},
-                                  lambda location: location.name != "CA: Coiled Sword (boss drop)",
+                                  lambda location: location.name != "CA: Coiled Sword - boss drop",
                                   mandatory = True)
 
         # Don't place this in the multiworld because it's necessary almost immediately, and don't
