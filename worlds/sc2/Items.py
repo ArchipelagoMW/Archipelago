@@ -829,7 +829,7 @@ item_table = {
                  description="Increases Banshee attack damage by 25% while cloaked."),
     ItemNames.BANSHEE_ROCKET_BARRAGE:
         ItemData(339 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 20, SC2Race.TERRAN,
-                 classification=ItemClassification.progression, parent_item=ItemNames.BANSHEE, origin={"ext"},
+                 parent_item=ItemNames.BANSHEE, origin={"ext"},
                  description="Deals 75 damage to enemy ground units in the target area."),
     ItemNames.GHOST_RESOURCE_EFFICIENCY:
         ItemData(340 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 21, SC2Race.TERRAN,

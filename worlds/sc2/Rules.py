@@ -126,9 +126,6 @@ class SC2Logic:
         # Viking with splash
         if state.has_all({ItemNames.VIKING, ItemNames.VIKING_SHREDDER_ROUNDS}, self.player):
             defense_score += 2
-        # Banshee upgrade
-        if state.has_all({ItemNames.BANSHEE, ItemNames.BANSHEE_ROCKET_BARRAGE}, self.player):
-            defense_score += 3
 
         # General enemy-based rules
         if zerg_enemy:
@@ -252,13 +249,6 @@ class SC2Logic:
         return state.has(ItemNames.SIEGE_TANK, self.player) \
             or state.has_all({ItemNames.BATTLECRUISER, ItemNames.BATTLECRUISER_ATX_LASER_BATTERY}, self.player) \
             or state.has_all({ItemNames.LIBERATOR, ItemNames.LIBERATOR_RAID_ARTILLERY}, self.player) \
-            or (
-                    state.has_all({ItemNames.BANSHEE, ItemNames.BANSHEE_ROCKET_BARRAGE}, self.player)
-                    and (
-                            self.advanced_tactics
-                            or state.has(ItemNames.BANSHEE_ADVANCED_TARGETING_OPTICS, self.player)
-                    )
-            ) \
             or (self.advanced_tactics
                 and ((state.has_all({ItemNames.RAVEN, ItemNames.RAVEN_HUNTER_SEEKER_WEAPON}, self.player)
                       or self.can_nuke(state))
