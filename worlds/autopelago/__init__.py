@@ -35,9 +35,9 @@ class AutopelagoWorld(World):
     _next_offset = 0
     for r in AutopelagoRegion:
         prog_count = 1 if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] \
-            else 8 if r == AutopelagoRegion.Before8Rats \
-            else 3 if r == AutopelagoRegion.AfterCBefore20Rats \
-            else 3 if r == AutopelagoRegion.AfterDBefore20Rats \
+            else 16 if r == AutopelagoRegion.Before8Rats \
+            else 9 if r == AutopelagoRegion.AfterCBefore20Rats \
+            else 9 if r == AutopelagoRegion.AfterDBefore20Rats \
             else 0
 
         midpoint = (num_locations_in[r] - prog_count + 1) // 2
