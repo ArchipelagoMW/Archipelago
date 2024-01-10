@@ -456,6 +456,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             FestivalCheck.lupini_land_of_clay: self.time.has_year_three & self.money.can_spend(1200),
             FestivalCheck.secret_santa: self.gifts.has_any_universal_love,
             FestivalCheck.legend_of_the_winter_star: True_(),
+            FestivalCheck.rarecrow_3: True_(),
             FestivalCheck.all_rarecrows: self.region.can_reach(Region.farm) & self.has_all_rarecrows(),
         })
 

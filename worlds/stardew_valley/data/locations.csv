@@ -1020,6 +1020,7 @@ id,region,name,tags,mod_name
 2033,Spirit's Eve,Jack-O-Lantern Recipe,FESTIVAL,
 2034,Dance of the Moonlight Jellies,Moonlight Jellies Banner,FESTIVAL,
 2035,Dance of the Moonlight Jellies,Starport Decal,FESTIVAL,
+2036,Casino,Rarecrow #3 (Alien),FESTIVAL,
 2101,Town,Island Ingredients,"GINGER_ISLAND,SPECIAL_ORDER_BOARD",
 2102,The Mines - Floor 75,Cave Patrol,SPECIAL_ORDER_BOARD,
 2103,Fishing,Aquatic Overpopulation,SPECIAL_ORDER_BOARD,
@@ -2086,6 +2087,7 @@ id,region,name,tags,mod_name
 3573,Carpenter Shop,Iron Lamp-post Recipe,CRAFTSANITY,
 3574,Sewer,Wicked Statue Recipe,CRAFTSANITY,
 3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY",
+3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY",
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill

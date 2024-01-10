@@ -20,6 +20,7 @@ class FestivalCheck:
     moonlight_jellies = "Dance of the Moonlight Jellies"
     rarecrow_1 = "Rarecrow #1 (Turnip Head)"
     rarecrow_2 = "Rarecrow #2 (Witch)"
+    rarecrow_3 = "Rarecrow #3 (Alien)"
     rarecrow_4 = "Rarecrow #4 (Snowman)"
     rarecrow_5 = "Rarecrow #5 (Woman)"
     rarecrow_7 = "Rarecrow #7 (Tanuki)"
