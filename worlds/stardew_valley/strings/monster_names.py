@@ -1,8 +1,8 @@
 class Monster:
     green_slime = "Green Slime"
-    blue_slime = "Blue Slime"
-    red_slime = "Red Slime"
-    purple_slime = "Purple Slime"
+    blue_slime = "Frost Jelly"
+    red_slime = "Sludge"  # Yeah I know this is weird that these two are the same name
+    purple_slime = "Sludge"  # Blame CA
     yellow_slime = "Yellow Slime"
     black_slime = "Black Slime"
     copper_slime = "Copper Slime"
@@ -24,7 +24,7 @@ class Monster:
     skeleton_mage = "Skeleton Mage"
     bug = "Bug"
     bug_dangerous = "Dangerous Bug"
-    cave_fly = "Cave Fly"
+    cave_fly = "Fly"
     cave_fly_dangerous = "Dangerous Cave Fly"
     grub = "Grub"
     grub_dangerous = "Dangerous Grub"
