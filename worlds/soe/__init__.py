@@ -17,6 +17,9 @@ from . import logic  # load logic mixin
 from .options import SoEOptions, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
 from .patch import SoEDeltaPatch, get_base_rom_path
 
+if typing.TYPE_CHECKING:
+    from BaseClasses import MultiWorld, CollectionState
+
 """
 In evermizer:
 
@@ -84,8 +87,8 @@ _other_items = (
 )
 
 
-def _match_item_name(item, substr: str) -> bool:
-    sub = item.name.split(' ', 1)[1] if item.name[0].isdigit() else item.name
+def _match_item_name(item: pyevermizer.Item, substr: str) -> bool:
+    sub: str = item.name.split(' ', 1)[1] if item.name[0].isdigit() else item.name
     return sub == substr or sub == substr+'s'
 
 
@@ -158,7 +161,7 @@ class SoEWorld(World):
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
     space station where the final boss must be defeated. 
     """
-    game: str = "Secret of Evermore"
+    game: typing.ClassVar[str] = "Secret of Evermore"
     options_dataclass = SoEOptions
     options: SoEOptions
     settings: typing.ClassVar[SoESettings]
@@ -183,9 +186,9 @@ class SoEWorld(World):
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, multiworld: "MultiWorld", player: int):
         self.connect_name_available_event = threading.Event()
-        super(SoEWorld, self).__init__(*args, **kwargs)
+        super(SoEWorld, self).__init__(multiworld, player)
 
     def generate_early(self) -> None:
         # store option values that change logic
@@ -215,12 +218,12 @@ class SoEWorld(World):
         return SoEItem(item.name, classification, self.item_name_to_id[item.name], self.player)
 
     @classmethod
-    def stage_assert_generate(cls, multiworld):
+    def stage_assert_generate(cls, _: "MultiWorld") -> None:
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         # exclude 'hidden' on easy
         max_difficulty = 1 if self.options.difficulty == Difficulty.option_easy else 256
 
@@ -228,7 +231,7 @@ class SoEWorld(World):
         menu = Region('Menu', self.player, self.multiworld)
         self.multiworld.regions += [menu]
 
-        def get_sphere_index(evermizer_loc):
+        def get_sphere_index(evermizer_loc: pyevermizer.Location) -> int:
             """Returns 0, 1 or 2 for locations in spheres 1, 2, 3+"""
             if len(evermizer_loc.requires) == 1 and evermizer_loc.requires[0][1] != pyevermizer.P_WEAPON:
                 return 2
@@ -258,7 +261,7 @@ class SoEWorld(World):
                     assert location.name != "Energy Core #285", "Error in sphere generation"
                     location.progress_type = LocationProgressType.EXCLUDED
 
-        def sphere1_blocked_items_rule(item):
+        def sphere1_blocked_items_rule(item: pyevermizer.Item) -> bool:
             if isinstance(item, SoEItem):
                 # disable certain items in sphere 1
                 if item.name in {"Gauge", "Wheel"}:
@@ -294,7 +297,7 @@ class SoEWorld(World):
         menu.connect(ingame, "New Game")
         self.multiworld.regions += [ingame]
 
-    def create_items(self):
+    def create_items(self) -> None:
         # add regular items to the pool
         exclusions: typing.List[str] = []
         if self.energy_core != EnergyCore.option_shuffle:
@@ -304,7 +307,7 @@ class SoEWorld(World):
         # remove one pair of wings that will be placed in generate_basic
         items.remove(self.create_item("Wings"))
 
-        def is_ingredient(item):
+        def is_ingredient(item: pyevermizer.Item) -> bool:
             for ingredient in _ingredients:
                 if _match_item_name(item, ingredient):
                     return True
@@ -353,7 +356,7 @@ class SoEWorld(World):
 
         self.multiworld.itempool += items
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
         # set Done from goal option once we have multiple goals
         set_rule(self.multiworld.get_location('Done', self.player),
@@ -364,7 +367,7 @@ class SoEWorld(World):
             set_rule(location, self.make_rule(loc.requires))
 
     def make_rule(self, requires: typing.List[typing.Tuple[int, int]]) -> typing.Callable[[typing.Any], bool]:
-        def rule(state) -> bool:
+        def rule(state: "CollectionState") -> bool:
             for count, progress in requires:
                 if not state.soe_has(progress, self.multiworld, self.player, count):
                     return False
@@ -372,10 +375,7 @@ class SoEWorld(World):
 
         return rule
 
-    def make_item_type_limit_rule(self, item_type: int):
-        return lambda item: item.player != self.player or self.item_id_to_raw[item.code].type == item_type
-
-    def generate_basic(self):
+    def generate_basic(self) -> None:
         # place Victory event
         self.multiworld.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
         # place wings in halls NE to avoid softlock
@@ -389,7 +389,7 @@ class SoEWorld(World):
         # generate stuff for later
         self.evermizer_seed = self.multiworld.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
         from dataclasses import asdict
 
         player_name = self.multiworld.get_player_name(self.player)
@@ -450,7 +450,7 @@ class SoEWorld(World):
             except FileNotFoundError:
                 pass
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]) -> None:
         # wait for self.connect_name to be available.
         self.connect_name_available_event.wait()
         # we skip in case of error, so that the original error in the output thread is the one that gets raised
