@@ -304,7 +304,7 @@ class WitnessPlayerLogic:
 
         # In a case where long box can be activated before short box, short box is postgame.
         if reverse_longbox_goal:
-            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Long)"])
+            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Short)"])
 
         # "Fun" considerations
         # These are cases in which it was deemed "unfun" to have an "oops, all lasers" situation, especially when
@@ -319,7 +319,7 @@ class WitnessPlayerLogic:
         )
 
         if mbfd_extra_exclusions:
-            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Long)"])
+            postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
 
         # "Post-or-equal-game" cases
         # These are cases in which something comes into logic *at the same time* as your goal and thus also can't
@@ -518,8 +518,10 @@ class WitnessPlayerLogic:
                                        for req in option):
                                 break
                         else:
-                            if target in reachable_regions or not valid_option:
-                                continue
+                            continue
+
+                        if target in reachable_regions:
+                            continue
 
                         regions_dirty = True
                         regions_to_check.add(target)
