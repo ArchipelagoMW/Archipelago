@@ -56,22 +56,23 @@ class LinksAwakeningSettings(settings.Group):
     rom_start: typing.Union[RomStart, bool] = True
 
 class LinksAwakeningWebWorld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Links Awakening DX for MultiWorld.",
         "English",
         "setup_en.md",
         "setup/en",
         ["zig"]
-    ),
-    Tutorial(
+    )
+    setup_fr = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up Links Awakening DX for MultiWorld.",
         "Français",
         "setup_fr.md",
         "setup/fr",
         ["Deoxis"]
-    )]
+    )
+    tutorials=  [setup_en,setup_fr]
     theme = "dirt"
     option_groups = ladx_option_groups
 
