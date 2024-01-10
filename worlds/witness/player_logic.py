@@ -266,7 +266,8 @@ class WitnessPlayerLogic:
     @staticmethod
     def handle_postgame(world: "WitnessWorld"):
         # In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
-        # This has a lot of complicated considerations, which I'll try my best to explain.
+        # This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
+        # These will then hava a cascading effect on other entities that are locked "behind" them.
         postgame_adjustments = []
 
         # Make some quick references to some options
@@ -285,36 +286,47 @@ class WitnessPlayerLogic:
         # Goal is "long box", but short box requires at least as many lasers than long box.
         reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers >= chal_lasers
 
-        # When your victory is Challenge, but you have to get to it the vanilla way, there are no required items
-        # that can show up in the Caves that aren't also needed on the descent through Mountain.
-        # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
-        # TODO: I will probably need to rework this one somehow.
-        if not (early_caves or doors) and victory == "challenge":
-            postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
+        # Proper postgame cases
+        # When something only comes into logic after the goal, e.g. "longbox is postgame if the goal is shortbox".
 
         # Challenge can only have something if the goal is not challenge or longbox itself.
         # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
-        # In that case, it'd also have to be a doors mode, but that's already covered by the previous block.
-        if not (victory == "elevator" or reverse_shortbox_goal):
-            if not victory == "challenge":
-                postgame_adjustments.append(["Disabled Locations:", "0x0A332"])
-
-        # These are cases in which it was deemed "unfun" to have Mountain Bottom Floor Discard be able to lock things.
-        mbfd_extra_exclusions = (
-            # Progressive Dots 2 on 11 lasers in base settings = :(
-            victory == "elevator" and not doors
-
-            # Progressive Stars 2 on Bottom Floor Discard in a Challenge seed with vanilla doors = :(
-            or victory == "challenge" and early_caves and not doors
-        )
+        if not (victory == "elevator" or reverse_shortbox_goal or victory == "challenge"):
+            # Disable the timer start panel
+            postgame_adjustments.append(["Disabled Locations:", "0x0A332"])
 
         # If we have a proper short box goal, long box will never be activated first.
-        if proper_shortbox_goal or mbfd_extra_exclusions:
+        if proper_shortbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
 
         # In a case where long box can be activated before short box, short box is postgame.
         if reverse_longbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Long)"])
+
+        # "Fun" considerations
+        # These are cases in which it was deemed "unfun" to have an "oops, all lasers" situation, especially when
+        # it's for a single possible item.
+
+        mbfd_extra_exclusions = (
+            # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
+            victory == "elevator" and not doors
+
+            # Progressive Stars 2 behind 11 lasers in a Challenge seed with vanilla doors = :(
+            or victory == "challenge" and early_caves and not doors
+        )
+
+        if mbfd_extra_exclusions:
+            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Long)"])
+
+        # "Post-or-equal-game" cases
+        # These are cases in which something comes into logic *at the same time* as your goal and thus also can't
+        # possibly have a required item. These can be a bit awkward.
+
+        # When your victory is Challenge, but you have to get to it the vanilla way, there are no required items
+        # that can show up in the Caves that aren't also needed on the descent through Mountain.
+        # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
+        if not (early_caves or doors) and victory == "challenge":
+            postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
 
         return postgame_adjustments
 
