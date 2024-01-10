@@ -257,7 +257,7 @@ class SoEWorld(World):
         for trash_sphere, fills in trash_fills.items():
             for typ, counts in fills.items():
                 count = counts[self.options.difficulty.value]
-                for location in self.multiworld.random.sample(spheres[trash_sphere][typ], count):
+                for location in self.random.sample(spheres[trash_sphere][typ], count):
                     assert location.name != "Energy Core #285", "Error in sphere generation"
                     location.progress_type = LocationProgressType.EXCLUDED
 
@@ -278,12 +278,12 @@ class SoEWorld(World):
 
         # make some logically late(r) bosses priority locations to increase complexity
         if self.options.difficulty == Difficulty.option_mystery:
-            late_count = self.multiworld.random.randint(0, 2)
+            late_count = self.random.randint(0, 2)
         else:
             late_count = self.options.difficulty.value
         late_bosses = ("Tiny", "Aquagoth", "Megataur", "Rimsala",
                        "Mungola", "Lightning Storm", "Magmar", "Volcano Viper")
-        late_locations = self.multiworld.random.sample(late_bosses, late_count)
+        late_locations = self.random.sample(late_bosses, late_count)
 
         # add locations to the world
         for sphere in spheres.values():
@@ -320,7 +320,7 @@ class SoEWorld(World):
             for _ in range(self.available_fragments - 1):
                 if len(ingredients) < 1:
                     break  # out of ingredients to replace
-                r = self.multiworld.random.choice(ingredients)
+                r = self.random.choice(ingredients)
                 ingredients.remove(r)
                 items[r] = self.create_item("Energy Core Fragment")
 
@@ -340,7 +340,7 @@ class SoEWorld(World):
                 trap_chances_total = len(trap_chances)
 
         def create_trap() -> Item:
-            v = self.multiworld.random.randrange(trap_chances_total)
+            v = self.random.randrange(trap_chances_total)
             for t, c in trap_chances.items():
                 if v < c:
                     return self.create_item(trap_names[t])
@@ -350,7 +350,7 @@ class SoEWorld(World):
         for _ in range(trap_count):
             if len(ingredients) < 1:
                 break  # out of ingredients to replace
-            r = self.multiworld.random.choice(ingredients)
+            r = self.random.choice(ingredients)
             ingredients.remove(r)
             items[r] = create_trap()
 
@@ -379,7 +379,7 @@ class SoEWorld(World):
         # place Victory event
         self.multiworld.get_location('Done', self.player).place_locked_item(self.create_event('Victory'))
         # place wings in halls NE to avoid softlock
-        wings_location = self.multiworld.random.choice(self._halls_ne_chest_names)
+        wings_location = self.random.choice(self._halls_ne_chest_names)
         wings_item = self.create_item('Wings')
         self.multiworld.get_location(wings_location, self.player).place_locked_item(wings_item)
         # place energy core at vanilla location for vanilla mode
@@ -387,7 +387,7 @@ class SoEWorld(World):
             energy_core = self.create_item('Energy Core')
             self.multiworld.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
         # generate stuff for later
-        self.evermizer_seed = self.multiworld.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
+        self.evermizer_seed = self.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str) -> None:
         from dataclasses import asdict
@@ -459,7 +459,7 @@ class SoEWorld(World):
             multidata["connect_names"][self.connect_name] = payload
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(list(self.item_name_groups["Ingredients"]))
+        return self.random.choice(list(self.item_name_groups["Ingredients"]))
 
 
 class SoEItem(Item):
