@@ -22,9 +22,9 @@ class DLCqwebworld(WebWorld):
         ["axe_y"]
     )
     setup_fr=Tutorial(
-        "Multiworld Setup Tutorial",
-        "A guide to setting up the Archipelago DLCQuest game on your computer.",
-        "English",
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer DLCQuest sur votre PC.",
+        "Français",
         "setup_fr.md",
         "setup/fr",
         ["Deoxis"]
