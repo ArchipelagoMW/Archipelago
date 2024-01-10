@@ -1,6 +1,6 @@
 # Links Awakening DX Multiworld Setup Guide
 
-## Required Software
+## Logiciels requis
 
 - [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). 
 - Logiciel capable de charger et de lire les fichiers ROM de la GBC
@@ -32,21 +32,18 @@ de profiter d'une expérience personnalisée selon ses goûts, et les différent
 
 ### Où puis-je obtenir un fichier de configuration ?
 
-La page [Player Settings](/games/Links%20Awakening%20DX/player-settings) du site web vous permet de configurer vos paramètres personnels et d'exporter le fichier.
+La page [Paramètres du joueur](/games/Links%20Awakening%20DX/player-settings) du site web vous permet de configurer vos paramètres personnels et d'exporter le fichier.
 
-### Verifying your config file
-
-Vérification du fichier de configuration
+### Vérification du fichier de configuration
 
 Si vous souhaitez valider votre fichier de configuration pour vous assurer qu'il fonctionne, vous pouvez le faire sur la page[YAML Validateur](/check).
 
 ## Génération d'un jeu à un seul joueur
 
 1. Accédez à la page [Paramètres du joueur] (/games/Links%20Awakening%20DX/player-settings), configurez vos paramètres, et cliquez sur le bouton "Generate Game".
-2. Une page "Seed Info" s'affiche.
+2. Une page "Seed Info" s'affichera.
 3. Cliquez sur le lien "Create New Room".
-4. Une page serveur s'affiche, à partir de laquelle vous pouvez télécharger votre fichier patch.
-5. Double-cliquez sur votre fichier patch, et Links Awakening DX se lancera automatiquement, et créera votre ROM à partir du fichier patch.
+4. Une page serveur s'affichera, à partir de laquelle vous pourrez télécharger votre fichier patch.5. Double-cliquez sur votre fichier patch, et Links Awakening DX se lancera automatiquement, et créera votre ROM à partir du fichier patch.
 6. Comme il s'agit d'un jeu solo, vous n'aurez plus besoin du client, alors n'hésitez pas à le fermer.
 
 ## Rejoindre une partie multi-monde
@@ -64,11 +61,12 @@ Placez votre fichier patch sur votre bureau ou dans un endroit pratique, et doub
 Vous ne devez effectuer ces étapes qu'une seule fois. Note : RetroArch 1.9.x ne fonctionnera pas car il est plus ancien que 1.10.3.
 
 1. Entrez dans le menu principal de RetroArch.
-2. Allez dans Réglages --> Interface utilisateur. Mettez "Afficher les réglages avancés" sur Activé.
-3. Allez dans Réglages --> Réseau. Réglez "Commandes réseau" sur Activé. (Il se trouve sous Request Device 16.) 
-Laissez le port de commande réseau par défaut à 55355.
+2. Allez dans Settings (Réglages) --> User Interface (Interface utilisateur). Mettez "Show Advanced Settings (Afficher les réglages avancés)" sur ON (Activé).
+3. Allez dans Settings (Réglages) --> Network (Réseau). Réglez "Network Commands (Commandes réseau)" sur ON (Activé). (Il se trouve sous Request Device 16 (Demander le périphérique 16).) 
+   Laissez le port de commande réseau par défaut à 55355.
+
 ![Capture d'écran du réglage des commandes réseau](/static/generated/docs/A%20Link%20to%20the%20Past/retroarch-network-commands-en.png)
-4. Allez dans le menu principal --> Mise à jour en ligne --> Téléchargement des coeurs. Faites défiler vers le bas et sélectionnez "Nintendo - Gameboy / Color (SameBoy)".
+4. Allez dans le Main Menu (menu principal) --> Online Updater (Mise à jour en ligne) --> Core Downloader (Téléchargement des coeurs). Faites défiler vers le bas et sélectionnez "Nintendo - Gameboy / Color (SameBoy)".
 
 #### BizHawk 2.8 ou plus récent (les versions plus anciennes ne sont pas testées)
 
