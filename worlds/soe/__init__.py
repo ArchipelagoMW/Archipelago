@@ -14,7 +14,7 @@ import pyevermizer  # from package
 # from . import pyevermizer  # as part of the source tree
 
 from . import logic  # load logic mixin
-from .options import soe_options, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
+from .options import SoEOptions, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 """
@@ -159,7 +159,8 @@ class SoEWorld(World):
     space station where the final boss must be defeated. 
     """
     game: str = "Secret of Evermore"
-    option_definitions = soe_options
+    options_dataclass = SoEOptions
+    options: SoEOptions
     settings: typing.ClassVar[SoESettings]
     topology_present = False
     data_version = 4
@@ -170,7 +171,7 @@ class SoEWorld(World):
     location_name_to_id, location_id_to_raw = _get_location_mapping()
     item_name_groups = _get_item_grouping()
 
-    trap_types = [name[12:] for name in option_definitions if name.startswith('trap_chance_')]
+    trap_types = [name[12:] for name in options_dataclass.__dataclass_fields__ if name.startswith('trap_chance_')]
 
     evermizer_seed: int
     connect_name: str
@@ -188,13 +189,13 @@ class SoEWorld(World):
 
     def generate_early(self) -> None:
         # store option values that change logic
-        self.energy_core = self.multiworld.energy_core[self.player].value
-        self.sequence_breaks = self.multiworld.sequence_breaks[self.player].value
-        self.out_of_bounds = self.multiworld.out_of_bounds[self.player].value
-        self.required_fragments = self.multiworld.required_fragments[self.player].value
-        if self.required_fragments > self.multiworld.available_fragments[self.player].value:
-            self.multiworld.available_fragments[self.player].value = self.required_fragments
-        self.available_fragments = self.multiworld.available_fragments[self.player].value
+        self.energy_core = self.options.energy_core.value
+        self.sequence_breaks = self.options.sequence_breaks.value
+        self.out_of_bounds = self.options.out_of_bounds.value
+        self.required_fragments = self.options.required_fragments.value
+        if self.required_fragments > self.options.available_fragments.value:
+            self.options.available_fragments.value = self.required_fragments
+        self.available_fragments = self.options.available_fragments.value
 
     def create_event(self, event: str) -> Item:
         return SoEItem(event, ItemClassification.progression, None, self.player)
@@ -221,7 +222,7 @@ class SoEWorld(World):
 
     def create_regions(self):
         # exclude 'hidden' on easy
-        max_difficulty = 1 if self.multiworld.difficulty[self.player] == Difficulty.option_easy else 256
+        max_difficulty = 1 if self.options.difficulty == Difficulty.option_easy else 256
 
         # TODO: generate *some* regions from locations' requirements?
         menu = Region('Menu', self.player, self.multiworld)
@@ -252,7 +253,7 @@ class SoEWorld(World):
         # mark some as excluded based on numbers above
         for trash_sphere, fills in trash_fills.items():
             for typ, counts in fills.items():
-                count = counts[self.multiworld.difficulty[self.player].value]
+                count = counts[self.options.difficulty.value]
                 for location in self.multiworld.random.sample(spheres[trash_sphere][typ], count):
                     assert location.name != "Energy Core #285", "Error in sphere generation"
                     location.progress_type = LocationProgressType.EXCLUDED
@@ -263,7 +264,7 @@ class SoEWorld(World):
                 if item.name in {"Gauge", "Wheel"}:
                     return False
                 # and some more for non-easy, non-mystery
-                if self.multiworld.difficulty[item.player] not in (Difficulty.option_easy, Difficulty.option_mystery):
+                if self.options.difficulty not in (Difficulty.option_easy, Difficulty.option_mystery):
                     if item.name in {"Laser Lance", "Atom Smasher", "Diamond Eye"}:
                         return False
             return True
@@ -273,10 +274,10 @@ class SoEWorld(World):
                 add_item_rule(location, sphere1_blocked_items_rule)
 
         # make some logically late(r) bosses priority locations to increase complexity
-        if self.multiworld.difficulty[self.player] == Difficulty.option_mystery:
+        if self.options.difficulty == Difficulty.option_mystery:
             late_count = self.multiworld.random.randint(0, 2)
         else:
-            late_count = self.multiworld.difficulty[self.player].value
+            late_count = self.options.difficulty.value
         late_bosses = ("Tiny", "Aquagoth", "Megataur", "Rimsala",
                        "Mungola", "Lightning Storm", "Magmar", "Volcano Viper")
         late_locations = self.multiworld.random.sample(late_bosses, late_count)
@@ -321,7 +322,7 @@ class SoEWorld(World):
                 items[r] = self.create_item("Energy Core Fragment")
 
         # add traps to the pool
-        trap_count = self.multiworld.trap_count[self.player].value
+        trap_count = self.options.trap_count.value
         trap_chances = {}
         trap_names = {}
         if trap_count > 0:
@@ -389,6 +390,8 @@ class SoEWorld(World):
         self.evermizer_seed = self.multiworld.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str):
+        from dataclasses import asdict
+
         player_name = self.multiworld.get_player_name(self.player)
         self.connect_name = player_name[:32]
         while len(self.connect_name.encode('utf-8')) > 32:
@@ -397,10 +400,10 @@ class SoEWorld(World):
         placement_file = ""
         out_file = ""
         try:
-            money = self.multiworld.money_modifier[self.player].value
-            exp = self.multiworld.exp_modifier[self.player].value
+            money = self.options.money_modifier.value
+            exp = self.options.exp_modifier.value
             switches: typing.List[str] = []
-            if self.multiworld.death_link[self.player].value:
+            if self.options.death_link.value:
                 switches.append("--death-link")
             if self.energy_core == EnergyCore.option_fragments:
                 switches.extend(('--available-fragments', str(self.available_fragments),
@@ -411,9 +414,8 @@ class SoEWorld(World):
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
             flags = 'l'  # spoiler log
-            for option_name in self.option_definitions:
-                option = getattr(self.multiworld, option_name)[self.player]
-                if hasattr(option, 'to_flag'):
+            for option in asdict(self.options).values():
+                if hasattr(option, "to_flag"):
                     flags += option.to_flag()
 
             with open(placement_file, "wb") as f:  # generate placement file

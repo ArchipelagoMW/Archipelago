@@ -1,6 +1,8 @@
 import typing
+from dataclasses import dataclass
 
-from Options import Range, Choice, Toggle, DefaultOnToggle, AssembleOptions, DeathLink, ProgressionBalancing
+from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
+    Range, Toggle
 
 
 # typing boilerplate
@@ -247,33 +249,34 @@ class SoEProgressionBalancing(ProgressionBalancing):
     special_range_names = {**ProgressionBalancing.special_range_names, "normal": default}
 
 
-soe_options: typing.Dict[str, AssembleOptions] = {
-    "difficulty":            Difficulty,
-    "energy_core":           EnergyCore,
-    "required_fragments":    RequiredFragments,
-    "available_fragments":   AvailableFragments,
-    "money_modifier":        MoneyModifier,
-    "exp_modifier":          ExpModifier,
-    "sequence_breaks":       SequenceBreaks,
-    "out_of_bounds":         OutOfBounds,
-    "fix_cheats":            FixCheats,
-    "fix_infinite_ammo":     FixInfiniteAmmo,
-    "fix_atlas_glitch":      FixAtlasGlitch,
-    "fix_wings_glitch":      FixWingsGlitch,
-    "shorter_dialogs":       ShorterDialogs,
-    "short_boss_rush":       ShortBossRush,
-    "ingredienizer":         Ingredienizer,
-    "sniffamizer":           Sniffamizer,
-    "callbeadamizer":        Callbeadamizer,
-    "musicmizer":            Musicmizer,
-    "doggomizer":            Doggomizer,
-    "turdo_mode":            TurdoMode,
-    "death_link":            DeathLink,
-    "trap_count":            TrapCount,
-    "trap_chance_quake":     TrapChanceQuake,
-    "trap_chance_poison":    TrapChancePoison,
-    "trap_chance_confound":  TrapChanceConfound,
-    "trap_chance_hud":       TrapChanceHUD,
-    "trap_chance_ohko":      TrapChanceOHKO,
-    "progression_balancing": SoEProgressionBalancing,
-}
+# noinspection SpellCheckingInspection
+@dataclass
+class SoEOptions(PerGameCommonOptions):
+    difficulty:            Difficulty
+    energy_core:           EnergyCore
+    required_fragments:    RequiredFragments
+    available_fragments:   AvailableFragments
+    money_modifier:        MoneyModifier
+    exp_modifier:          ExpModifier
+    sequence_breaks:       SequenceBreaks
+    out_of_bounds:         OutOfBounds
+    fix_cheats:            FixCheats
+    fix_infinite_ammo:     FixInfiniteAmmo
+    fix_atlas_glitch:      FixAtlasGlitch
+    fix_wings_glitch:      FixWingsGlitch
+    shorter_dialogs:       ShorterDialogs
+    short_boss_rush:       ShortBossRush
+    ingredienizer:         Ingredienizer
+    sniffamizer:           Sniffamizer
+    callbeadamizer:        Callbeadamizer
+    musicmizer:            Musicmizer
+    doggomizer:            Doggomizer
+    turdo_mode:            TurdoMode
+    death_link:            DeathLink
+    trap_count:            TrapCount
+    trap_chance_quake:     TrapChanceQuake
+    trap_chance_poison:    TrapChancePoison
+    trap_chance_confound:  TrapChanceConfound
+    trap_chance_hud:       TrapChanceHUD
+    trap_chance_ohko:      TrapChanceOHKO
+    progression_balancing: SoEProgressionBalancing
