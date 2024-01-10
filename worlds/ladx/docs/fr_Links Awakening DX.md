@@ -55,12 +55,12 @@ Graphisme de l'écran de titre par toomanyteeth✨ (https://instagram.com/tooman
 
 <h3>Emplacements</h3>
 <p>Les coffres et les clés de donjons sont toujours randomisés. De même, les 3 chansons (Marin, Mambo et Manu) vous donnent un objet si vous leur présentez l'Ocarina. La récompense de 20 seashell du manoir est également aléatoire, mais pas les récompenses de 5 et 10 seashell car elles peuvent être manquées.</p>
-<p>La moblin cave avec Bowwow contient un coffre à la place. Le Palais de la couleur donne 2 objets à la fin au lieu d'un choix de tunique. Les autres emplacements d'objets sont : Le toadstool, la récompense pour avoir livré le toadstool, hidden seashells, heart pieces, heart containers, golden leaves, les 3 Mad Batters (améliorations de capacité), la shovel/bow dans la boutique, la tombe du rooster's, et tous les emplacements des clés (tail,slime,angler,face,bird) .</p>
+<p>La moblin cave avec Bowwow contient un coffre à la place. Le Color Dungeon donne 2 objets à la fin au lieu d'un choix de tunique. Les autres emplacements d'objets sont : Le toadstool, la récompense pour avoir livré le toadstool, hidden seashells, heart pieces, heart containers, golden leaves, les 3 Mad Batters (améliorations de capacité), la shovel/bow dans la boutique, la tombe du rooster's, et tous les emplacements des clés (tail,slime,angler,face,bird) .</p>
 <p>Enfin, les nouveaux joueurs oublient souvent les endroits suivants : le heart piece caché dans l'eau du  chateau, le heart piece caché dans la bomb cave (écran avant le trade honey), les bonk seashells (courir avec les bottes de pégase contre l'arbre devant Tail Cave, et l'arbre à droite de Mabe Village, à côté de la cabine téléphonique), et l'item du Maître Stalfos dans D5.</p>
 
-<h3>Palais de la couleur</h3>
-<p>Le Palais de la couleur fait partie du mélange d'objets, et les tuniques rouges/bleues sont mélangées dans le pool d'objets. Cela signifie que la fée à la fin du donjon de couleur donne deux objets aléatoires.</p>
-<p>Pour accéder au Palais de la couleur, vous avez besoin du power bracelet, et vous devez pousser les pierres tombales dans le bon ordre : "en bas, à gauche, en haut, à droite, en haut", en allant de la pierre tombale en bas à droite, à celle qui se trouve à sa gauche, au-dessus, puis à droite.</p>
+<h3>Color Dungeon</h3>
+<p>Le Color Dungeon fait partie du mélange d'objets, et les tuniques rouges/bleues sont mélangées dans le pool d'objets. Cela signifie que la fée à la fin du Color Dungeon donne deux objets aléatoires.</p>
+<p>Pour accéder au Color Dungeon, vous avez besoin du power bracelet, et vous devez pousser les pierres tombales dans le bon ordre : "en bas, à gauche, en haut, à droite, en haut", en allant de la pierre tombale en bas à droite, à celle qui se trouve à sa gauche, au-dessus, puis à droite.</p>
 
 <h3>Bowwow</h3>
 <p>Bowwow est dans un coffre, à un endroit quelconque. Après l'avoir trouvé, il sera toujours avec vous dans le marais , mais nulle part ailleurs.</p>
