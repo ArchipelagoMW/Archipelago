@@ -124,7 +124,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Zero Hour", "Zero Hour: Hold Just a Little Longer", SC2WOL_LOC_ID_OFFSET + 309, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2),
-        LocationData("Zero Hour", "Zero Hour: Cavarly's on the Way", SC2WOL_LOC_ID_OFFSET + 310, LocationType.EXTRA,
+        LocationData("Zero Hour", "Zero Hour: Cavalry's on the Way", SC2WOL_LOC_ID_OFFSET + 310, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2),
         LocationData("Evacuation", "Evacuation: Victory", SC2WOL_LOC_ID_OFFSET + 400, LocationType.VICTORY,
