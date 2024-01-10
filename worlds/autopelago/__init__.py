@@ -67,11 +67,6 @@ class AutopelagoWorld(World):
 
             _next_offset += 1
 
-    # I DON'T KNOW WHY I NEED TO CREATE ONE EXTRA ITEM.
-    item_name_to_id[item_table[_next_offset]] = BASE_ID + _next_offset
-    _item_name_to_classification[item_table[_next_offset]] = ItemClassification.filler
-    _next_offset += 1
-
     _goal_item_name = _location_name_to_item_name["goal"]
 
     def set_rules(self):
