@@ -14,7 +14,7 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
 from . import logic  # load logic mixin
 from .logic import SoEPlayerLogic
-from .options import AvailableFragments, Difficulty, EnergyCore, RequiredFragments, SoEOptions
+from .options import AvailableFragments, Difficulty, EnergyCore, RequiredFragments, SoEOptions, TrapChance
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 if typing.TYPE_CHECKING:
@@ -322,7 +322,7 @@ class SoEWorld(World):
         trap_names = {}
         if trap_count > 0:
             for trap_type in self.trap_types:
-                trap_option = getattr(self.multiworld, f'trap_chance_{trap_type}')[self.player]
+                trap_option: TrapChance = getattr(self.options, f'trap_chance_{trap_type}')
                 trap_chances[trap_type] = trap_option.value
                 trap_names[trap_type] = trap_option.item_name
             trap_chances_total = sum(trap_chances.values())
