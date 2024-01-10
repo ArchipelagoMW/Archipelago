@@ -171,6 +171,13 @@ class TestMonstersanityGoals(SVTestBase):
         item_pool = [item.name for item in self.multiworld.itempool]
         self.assertEqual(item_pool.count("Progressive Footwear"), 4)
 
+    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
+        for location in get_real_locations(self, self.multiworld):
+            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
+                continue
+            with self.subTest(location.name):
+                self.assertFalse(location.can_reach(self.multiworld.state))
+
 
 class TestMonstersanityOnePerCategory(SVTestBase):
     options = {options.Monstersanity.internal_name: options.Monstersanity.option_one_per_category}
@@ -192,6 +199,13 @@ class TestMonstersanityOnePerCategory(SVTestBase):
     def test_when_generate_world_then_4_shoes_in_the_pool(self):
         item_pool = [item.name for item in self.multiworld.itempool]
         self.assertEqual(item_pool.count("Progressive Footwear"), 4)
+
+    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
+        for location in get_real_locations(self, self.multiworld):
+            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
+                continue
+            with self.subTest(location.name):
+                self.assertFalse(location.can_reach(self.multiworld.state))
 
 
 class TestMonstersanityProgressive(SVTestBase):
@@ -215,11 +229,53 @@ class TestMonstersanityProgressive(SVTestBase):
         item_pool = [item.name for item in self.multiworld.itempool]
         self.assertEqual(item_pool.count("Progressive Footwear"), 4)
 
-    def test_when_generate_world_then_many_rings_shoes_in_the_pool(self):
+    def test_when_generate_world_then_many_rings_in_the_pool(self):
         item_pool = [item.name for item in self.multiworld.itempool]
         self.assertIn("Hot Java Ring", item_pool)
         self.assertIn("Wedding Ring", item_pool)
         self.assertIn("Slime Charmer Ring", item_pool)
+
+    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
+        for location in get_real_locations(self, self.multiworld):
+            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
+                continue
+            with self.subTest(location.name):
+                self.assertFalse(location.can_reach(self.multiworld.state))
+
+
+class TestMonstersanitySplit(SVTestBase):
+    options = {options.Monstersanity.internal_name: options.Monstersanity.option_split_goals}
+
+    def test_when_generate_world_then_no_generic_weapons_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Weapon"), 0)
+
+    def test_when_generate_world_then_5_specific_weapons_of_each_type_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Sword"), 5)
+        self.assertEqual(item_pool.count("Progressive Club"), 5)
+        self.assertEqual(item_pool.count("Progressive Dagger"), 5)
+
+    def test_when_generate_world_then_2_slingshots_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Slingshot"), 2)
+
+    def test_when_generate_world_then_4_shoes_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertEqual(item_pool.count("Progressive Footwear"), 4)
+
+    def test_when_generate_world_then_many_rings_in_the_pool(self):
+        item_pool = [item.name for item in self.multiworld.itempool]
+        self.assertIn("Hot Java Ring", item_pool)
+        self.assertIn("Wedding Ring", item_pool)
+        self.assertIn("Slime Charmer Ring", item_pool)
+
+    def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
+        for location in get_real_locations(self, self.multiworld):
+            if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
+                continue
+            with self.subTest(location.name):
+                self.assertFalse(location.can_reach(self.multiworld.state))
 
 
 class TestProgressiveElevator(SVTestBase):
