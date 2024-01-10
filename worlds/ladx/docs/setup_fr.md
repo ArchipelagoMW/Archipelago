@@ -1,4 +1,4 @@
-# Links Awakening DX Multiworld Setup Guide
+# Guide de configuration MultiWorld de Links Awakening DX
 
 ## Logiciels requis
 
