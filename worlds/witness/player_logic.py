@@ -265,9 +265,12 @@ class WitnessPlayerLogic:
 
     @staticmethod
     def handle_postgame(world: "WitnessWorld"):
-        # In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
-        # This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
-        # These will then hava a cascading effect on other entities that are locked "behind" them.
+        """
+            In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
+            This mostly involves the disabling of key panels (e.g. long box when the goal is short box).
+            These will then hava a cascading effect on other entities that are locked "behind" them.
+        """
+
         postgame_adjustments = []
 
         # Make some quick references to some options
@@ -470,20 +473,34 @@ class WitnessPlayerLogic:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
     def find_unsolvable_entities(self, world: "WitnessWorld"):
+        """
+        Settings like "shuffle_postgame: False" may disable certain panels.
+        This may make panels or regions logically locked by those panels unreachable.
+        We will determine these automatically and disable them as well.
+        """
+
+        # if "shuffle_postgame", consider the victory location "disabled".
         postgame_included = bool(world.options.shuffle_postgame)
 
         dirty = True
-
         while dirty:
             dirty = False
-            # find regions that are completely disconnected from the start node and remove them
-            reachable_regions = {"Entry"}
 
+            # Re-make the dependency reduced entity requirements dict, based on the current set of disabled entities.
+            self.make_dependency_reduced_checklist(postgame_included)
+
+            # First step: Find unreachable regions
+            reachable_regions = {"Entry"}
             regions_dirty = True
+
+            # This for loop "floods" the region graph until no more new regions are discovered.
+            # Note that connections that rely on disabled entities are considered invalid.
+            # This fact may lead to unreachable regions being discovered.
             while regions_dirty:
                 regions_dirty = False
                 regions_to_check = reachable_regions.copy()
 
+                # Find new regions through connections from currently reachable regions
                 while regions_to_check:
                     next_region = regions_to_check.pop()
 
@@ -492,40 +509,46 @@ class WitnessPlayerLogic:
 
                         valid_option = False
 
+                        # There may be multiple conncetions between two regions. We should check all of them to see if
+                        # any of them are valid.
                         for option in exit[1]:
+                            # If a connection requires having access to a not-yet-reached region, do not consider it.
+                            # Otherwise, this connection is valid, and the target region is reachable -> break for loop
                             if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions
                                        for req in option):
-                                valid_option = True
                                 break
-
-                        if target in reachable_regions or not valid_option:
-                            continue
+                        else:
+                            if target in reachable_regions or not valid_option:
+                                continue
 
                         regions_dirty = True
                         regions_to_check.add(target)
                         reachable_regions.add(target)
 
+            # Any regions not reached by this graph search are unreachable.
             new_unreachable_regions = set(
                 self.CONNECTIONS_BY_REGION_NAME) - reachable_regions - self.UNREACHABLE_REGIONS
             if new_unreachable_regions:
                 dirty = True
                 self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
 
+            # Now, we get to unreachable entities
             newly_discovered_disabled_entities = set()
 
+            # First, entities in unreachable regions are obviously themselves unreachable.
             for region in new_unreachable_regions:
                 for entity in StaticWitnessLogic.ALL_REGIONS_BY_NAME[region]["panels"]:
                     if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
                         newly_discovered_disabled_entities.add(entity)
                         dirty = True
 
-            self.make_dependency_reduced_checklist(postgame_included)
-
+            # Secondly, any entities that depend on disabled entities are unreachable as well.
             for entity, req in self.REQUIREMENTS_BY_HEX.items():
                 if not req and self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
                     newly_discovered_disabled_entities.add(entity)
                     dirty = True
 
+            # Disable the newly determined unreachable entities.
             self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
 
             e_str = '"' + ', '.join(
@@ -539,20 +562,33 @@ class WitnessPlayerLogic:
 
     def make_dependency_reduced_checklist(self, allow_victory: bool):
         """
-        Turns dependent check set into semi-independent check set
+        Every entity has a requirement. This requirement may involve other entities.
+        Example: Solving a panel powers a cable, and that cable turns on the next panel.
+        These dependencies are specified in the logic files (e.g. "WitnessLogic.txt") and may be modified by settings.
+
+        Recursively having to check the requirements of every dependent entity would be very slow, so we go through this
+        recursion once and make a single, independent requirement for each entity.
+
+        This requirement may include symbol items, door items, regions, or events.
+        A requirement is saved as a two-dimensional set that represents a disjuntive normal form.
         """
+
+        # Requirements are cached per entity. However, we might redo the whole reduction process multiple times.
+        # So, we first clear this cache.
         self.reduce_req_within_region.cache_clear()
 
+        # We also clear any data structures that we might have filled in a previous dependency reduction
         self.REQUIREMENTS_BY_HEX = dict()
         self.USED_EVENT_NAMES_BY_HEX = dict()
+        self.CONNECTIONS_BY_REGION_NAME = dict()
 
+        # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
             indep_requirement = self.reduce_req_within_region(entity_hex, allow_victory)
 
             self.REQUIREMENTS_BY_HEX[entity_hex] = indep_requirement
 
-        self.CONNECTIONS_BY_REGION_NAME = dict()
-
+        # Make independent region connection requirements based on the entities they require
         for region, connections in self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME.items():
             self.CONNECTIONS_BY_REGION_NAME[region] = []
 
@@ -564,11 +600,14 @@ class WitnessPlayerLogic:
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
+                        # If a connection requires solving a disabled entity, it is not valid.
                         if not self.solvability_guaranteed(entity):
                             individual_entity_requirements.append(frozenset())
+                        # If a connection requires acquiring an event, add that event to its requirements.
                         elif (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
                                 or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
+                        # If a connection requires entities, use their newly calculated independent requirements.
                         else:
                             entity_req = self.reduce_req_within_region(entity, allow_victory)
 
@@ -578,15 +617,21 @@ class WitnessPlayerLogic:
 
                             individual_entity_requirements.append(entity_req)
 
+                    # Merge all possible requirements into one DNF condition.
                     overall_requirement |= dnf_and(individual_entity_requirements)
 
+                # If there is a way to use this connection, add it.
                 if overall_requirement:
                     new_connections.append((connection[0], overall_requirement))
 
+            # If there are any connections between these two regions, add them.
             if new_connections:
                 self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
     def solvability_guaranteed(self, entity_hex: str):
+        """
+        Helper function for whether an entity should be considered solvable.
+        """
         return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
@@ -594,7 +639,9 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld"):
-        """Figure out which major items are actually useless in this world's settings"""
+        """
+        Figure out which major items are actually useless in this world's settings.
+        """
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
@@ -648,6 +695,9 @@ class WitnessPlayerLogic:
         }
 
     def finalize_items(self):
+        """
+        Finalise which items are used in the world, and handle their progressive versions.
+        """
         for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
             if item not in self.THEORETICAL_ITEMS:
                 progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
@@ -675,6 +725,9 @@ class WitnessPlayerLogic:
         return pair
 
     def make_event_panel_lists(self):
+        """
+        Makes event-item pairs for entities with associated events, unless these entities are disabled.
+        """
         self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
