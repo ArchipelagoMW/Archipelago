@@ -28,11 +28,13 @@ class BossesRequired(Range):
 
 class NumberOfYoshiEggs(Range):
     """
-    How many Yoshi Eggs are in the pool for Yoshi Egg Hunt
+    Maximum possible number of Yoshi Eggs that will be in the item pool
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
+    Required Percentage of Yoshi Eggs will be calculated based off of that number.
     """
-    display_name = "Total Number of Yoshi Eggs"
+    display_name = "Max Number of Yoshi Eggs"
     range_start = 1
-    range_end = 80
+    range_end = 255
     default = 50
 
 
@@ -181,6 +183,16 @@ class DisplayReceivedItemPopups(Choice):
     option_all = 1
     option_progression = 2
     default = 2
+
+
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required Yoshi Eggs in the item pool with random junk items (only applicable on Yoshi Egg Hunt goal)
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
 
 
 class TrapFillPercentage(Range):
@@ -349,7 +361,7 @@ class SMWOptions(PerGameCommonOptions):
     death_link: DeathLink
     goal: Goal
     bosses_required: BossesRequired
-    number_of_yoshi_eggs: NumberOfYoshiEggs
+    max_yoshi_egg_cap: NumberOfYoshiEggs
     percentage_of_yoshi_eggs: PercentageOfYoshiEggs
     dragon_coin_checks: DragonCoinChecks
     moon_checks: MoonChecks
@@ -364,6 +376,7 @@ class SMWOptions(PerGameCommonOptions):
     swap_donut_gh_exits: SwapDonutGhostHouseExits
     #display_sent_item_popups: DisplaySentItemPopups
     display_received_item_popups: DisplayReceivedItemPopups
+    junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage
     ice_trap_weight: IceTrapWeight
     stun_trap_weight: StunTrapWeight

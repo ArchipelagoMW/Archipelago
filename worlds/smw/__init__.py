@@ -114,8 +114,8 @@ class SMWWorld(World):
         add_rule(self.multiworld.get_region(LocationName.chocolate_island_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 5))
         add_rule(self.multiworld.get_region(LocationName.valley_of_bowser_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 6))
 
+        exclusion_pool = set()
         if self.options.exclude_special_zone:
-            exclusion_pool = set()
             exclusion_pool.update(special_zone_level_names)
             if self.options.dragon_coin_checks:
                 exclusion_pool.update(special_zone_dragon_coin_names)
@@ -123,8 +123,7 @@ class SMWWorld(World):
                 exclusion_pool.update(special_zone_hidden_1up_names)
             if self.options.blocksanity:
                 exclusion_pool.update(special_zone_blocksanity_names)
-            elif self.options.number_of_yoshi_eggs.value <= 72:
-                exclusion_pool.update(special_zone_level_names)
+
             exclusion_rules(self.multiworld, self.player, exclusion_pool)
 
         total_required_locations = 96
@@ -156,10 +155,21 @@ class SMWWorld(World):
         itempool += [self.create_item(ItemName.special_world_clear)]
         
         if self.options.goal == "yoshi_egg_hunt":
-            itempool += [self.create_item(ItemName.yoshi_egg)
-                         for _ in range(self.options.number_of_yoshi_eggs)]
+            raw_egg_count = total_required_locations - len(itempool) - len(exclusion_pool)
+            total_egg_count = min(raw_egg_count, self.options.max_yoshi_egg_cap.value)
+            self.required_egg_count = max(math.floor(total_egg_count * (self.options.percentage_of_yoshi_eggs.value / 100.0)), 1)
+            extra_egg_count = total_egg_count - self.required_egg_count
+            removed_egg_count = math.floor(extra_egg_count * (self.options.junk_fill_percentage.value / 100.0))
+            self.actual_egg_count = total_egg_count - removed_egg_count
+            print(self.required_egg_count, " / ", self.actual_egg_count)
+
+            itempool += [self.create_item(ItemName.yoshi_egg) for _ in range(self.actual_egg_count)]
+
             self.multiworld.get_location(LocationName.yoshis_house, self.player).place_locked_item(self.create_item(ItemName.victory))
         else:
+            self.actual_egg_count = 0
+            self.required_egg_count = 0
+
             self.multiworld.get_location(LocationName.bowser, self.player).place_locked_item(self.create_item(ItemName.victory))
 
         junk_count = total_required_locations - len(itempool)

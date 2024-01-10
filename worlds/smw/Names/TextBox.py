@@ -67,16 +67,18 @@ def generate_text_box(input_string):
 def generate_goal_text(world: World):
     out_array = bytearray()
     if world.options.goal == "yoshi_egg_hunt":
-        required_yoshi_eggs = max(math.floor(
-                world.options.number_of_yoshi_eggs.value * (world.options.percentage_of_yoshi_eggs.value / 100.0)), 1)
+        required_yoshi_eggs = world.required_egg_count
+        actual_yoshi_eggs = world.actual_egg_count
         out_array += bytearray([0x9F, 0x9F])
         out_array += string_to_bytes(" You must acquire")
         out_array[-1] += 0x80
-        out_array += string_to_bytes(f'  {required_yoshi_eggs:02} Yoshi Eggs,')
+        out_array += string_to_bytes(f'    {required_yoshi_eggs:03} of {actual_yoshi_eggs:03}')
+        out_array[-1] += 0x80
+        out_array += string_to_bytes(f'    Yoshi Eggs,')
         out_array[-1] += 0x80
         out_array += string_to_bytes("then return here.")
         out_array[-1] += 0x80
-        out_array += bytearray([0x9F, 0x9F, 0x9F])
+        out_array += bytearray([0x9F, 0x9F])
     else:
         bosses_required = world.options.bosses_required.value
         out_array += bytearray([0x9F, 0x9F])

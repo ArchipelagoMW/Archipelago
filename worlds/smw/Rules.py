@@ -9,8 +9,7 @@ from worlds.generic.Rules import add_rule, set_rule
 def set_rules(world: World):
 
     if world.options.goal == "yoshi_egg_hunt":
-        required_yoshi_eggs = max(math.floor(
-                world.options.number_of_yoshi_eggs.value * (world.options.percentage_of_yoshi_eggs.value / 100.0)), 1)
+        required_yoshi_eggs = world.required_egg_count
 
         add_rule(world.multiworld.get_location(LocationName.yoshis_house, world.player),
                  lambda state: state.has(ItemName.yoshi_egg, world.player, required_yoshi_eggs))

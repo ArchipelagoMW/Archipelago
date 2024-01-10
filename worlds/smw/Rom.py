@@ -2834,8 +2834,7 @@ def patch_rom(world: World, rom, player, active_level_dict):
         rom.write_byte(0x01BFA1, world.options.bosses_required.value)
     else:
         rom.write_byte(0x01BFA1, 0x7F)
-    required_yoshi_eggs = max(math.floor(
-        world.options.number_of_yoshi_eggs.value * (world.options.percentage_of_yoshi_eggs.value / 100.0)), 1)
+    required_yoshi_eggs = world.required_egg_count
     rom.write_byte(0x01BFA2, required_yoshi_eggs)
     #rom.write_byte(0x01BFA3, world.options.display_sent_item_popups.value)
     rom.write_byte(0x01BFA4, world.options.display_received_item_popups.value)
