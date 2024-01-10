@@ -26,6 +26,7 @@ from .utils import *
 if TYPE_CHECKING:
     from . import WitnessWorld
 
+debug = False
 
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
@@ -552,14 +553,15 @@ class WitnessPlayerLogic:
             # Disable the newly determined unreachable entities.
             self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
 
-            e_str = '"' + ', '.join(
-                StaticWitnessLogic.ENTITIES_BY_HEX[e_hex]["checkName"] for e_hex in newly_discovered_disabled_entities
-            ) + '"'
-            reg_str = '"' + ', '.join(new_unreachable_regions) + '"'
-            if newly_discovered_disabled_entities:
-                print(f"Locations {e_str} have been determined to be unreachable.")
-            if new_unreachable_regions:
-                print(f"Regions {reg_str} have been determined to be unreachable.")
+            if debug:
+                e_str = '"' + ', '.join(
+                    StaticWitnessLogic.ENTITIES_BY_HEX[e_hex]["checkName"] for e_hex in newly_discovered_disabled_entities
+                ) + '"'
+                reg_str = '"' + ', '.join(new_unreachable_regions) + '"'
+                if newly_discovered_disabled_entities:
+                    print(f"Locations {e_str} have been determined to be unreachable.")
+                if new_unreachable_regions:
+                    print(f"Regions {reg_str} have been determined to be unreachable.")
 
     def make_dependency_reduced_checklist(self, allow_victory: bool):
         """
