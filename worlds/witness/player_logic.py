@@ -231,10 +231,9 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Region Changes":
-            # TODO: THIS DOESN'T WORK RIGHT NOW! make_dependency_reduced_checklist overrides CONNECTIONS_BY_REGION_NAME
             new_region_and_options = define_new_region(line + ":")
 
-            self.CONNECTIONS_BY_REGION_NAME[new_region_and_options[0]["name"]] = new_region_and_options[1]
+            self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[new_region_and_options[0]["name"]] = new_region_and_options[1]
 
             return
 
@@ -244,21 +243,21 @@ class WitnessPlayerLogic:
             target_region = line_split[1]
             panel_set_string = line_split[2]
 
-            for connection in self.CONNECTIONS_BY_REGION_NAME[source_region]:
+            for connection in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region]:
                 if connection[0] == target_region:
-                    self.CONNECTIONS_BY_REGION_NAME[source_region].remove(connection)
+                    self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].remove(connection)
 
                     if panel_set_string == "TrueOneWay":
-                        self.CONNECTIONS_BY_REGION_NAME[source_region].add(
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(
                             (target_region, frozenset({frozenset(["TrueOneWay"])}))
                         )
                     else:
                         new_lambda = connection[1] | parse_lambda(panel_set_string)
-                        self.CONNECTIONS_BY_REGION_NAME[source_region].add((target_region, new_lambda))
+                        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add((target_region, new_lambda))
                     break
-            else:  # Execute if loop did not break. TIL this is a thing you can do!
+            else:
                 new_conn = (target_region, parse_lambda(panel_set_string))
-                self.CONNECTIONS_BY_REGION_NAME[source_region].add(new_conn)
+                self.CONNECTIONS_BY_REGION_NAME_THEORETICAL[source_region].add(new_conn)
 
         if adj_type == "Added Locations":
             if "0x" in line:
@@ -593,7 +592,7 @@ class WitnessPlayerLogic:
             self.REQUIREMENTS_BY_HEX[entity_hex] = indep_requirement
 
         # Make independent region connection requirements based on the entities they require
-        for region, connections in self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME.items():
+        for region, connections in self.CONNECTIONS_BY_REGION_NAME_THEORETICAL.items():
             self.CONNECTIONS_BY_REGION_NAME[region] = []
 
             new_connections = []
@@ -776,7 +775,8 @@ class WitnessPlayerLogic:
         elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
 
-        self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.CONNECTIONS_BY_REGION_NAME_THEORETICAL = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)
+        self.CONNECTIONS_BY_REGION_NAME = dict()
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX = dict()
 
