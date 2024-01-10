@@ -4,17 +4,17 @@ import os.path
 import threading
 import typing
 
+# from . import pyevermizer  # as part of the source tree
+import pyevermizer  # from package
+
 import settings
+from BaseClasses import Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
+from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
-from BaseClasses import Entrance, Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
-from Utils import output_path
-
-import pyevermizer  # from package
-# from . import pyevermizer  # as part of the source tree
-
 from . import logic  # load logic mixin
-from .options import SoEOptions, Difficulty, EnergyCore, RequiredFragments, AvailableFragments
+from .logic import SoEPlayerLogic
+from .options import AvailableFragments, Difficulty, EnergyCore, RequiredFragments, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 if typing.TYPE_CHECKING:
@@ -176,13 +176,9 @@ class SoEWorld(World):
 
     trap_types = [name[12:] for name in options_dataclass.__dataclass_fields__ if name.startswith('trap_chance_')]
 
+    logic: SoEPlayerLogic
     evermizer_seed: int
     connect_name: str
-    energy_core: int
-    sequence_breaks: int
-    out_of_bounds: int
-    available_fragments: int
-    required_fragments: int
 
     _halls_ne_chest_names: typing.List[str] = [loc.name for loc in _locations if 'Halls NE' in loc.name]
 
@@ -191,14 +187,10 @@ class SoEWorld(World):
         super(SoEWorld, self).__init__(multiworld, player)
 
     def generate_early(self) -> None:
-        # store option values that change logic
-        self.energy_core = self.options.energy_core.value
-        self.sequence_breaks = self.options.sequence_breaks.value
-        self.out_of_bounds = self.options.out_of_bounds.value
-        self.required_fragments = self.options.required_fragments.value
-        if self.required_fragments > self.options.available_fragments.value:
-            self.options.available_fragments.value = self.required_fragments
-        self.available_fragments = self.options.available_fragments.value
+        # create logic from options
+        if self.options.required_fragments.value > self.options.available_fragments.value:
+            self.options.available_fragments.value = self.options.required_fragments.value
+        self.logic = SoEPlayerLogic(self.player, self.options)
 
     def create_event(self, event: str) -> Item:
         return SoEItem(event, ItemClassification.progression, None, self.player)
@@ -300,7 +292,7 @@ class SoEWorld(World):
     def create_items(self) -> None:
         # add regular items to the pool
         exclusions: typing.List[str] = []
-        if self.energy_core != EnergyCore.option_shuffle:
+        if self.options.energy_core != EnergyCore.option_shuffle:
             exclusions.append("Energy Core")  # will be placed in generate_basic or replaced by a fragment below
         items = list(map(lambda item: self.create_item(item), (item for item in _items if item.name not in exclusions)))
 
@@ -315,9 +307,9 @@ class SoEWorld(World):
 
         # add energy core fragments to the pool
         ingredients = [n for n, item in enumerate(items) if is_ingredient(item)]
-        if self.energy_core == EnergyCore.option_fragments:
+        if self.options.energy_core == EnergyCore.option_fragments:
             items.append(self.create_item("Energy Core Fragment"))  # replaces the vanilla energy core
-            for _ in range(self.available_fragments - 1):
+            for _ in range(self.options.available_fragments - 1):
                 if len(ingredients) < 1:
                     break  # out of ingredients to replace
                 r = self.random.choice(ingredients)
@@ -360,7 +352,7 @@ class SoEWorld(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
         # set Done from goal option once we have multiple goals
         set_rule(self.multiworld.get_location('Done', self.player),
-                 lambda state: state.soe_has(pyevermizer.P_FINAL_BOSS, self.multiworld, self.player))
+                 lambda state: self.logic.has(state, pyevermizer.P_FINAL_BOSS))
         set_rule(self.multiworld.get_entrance('New Game', self.player), lambda state: True)
         for loc in _locations:
             location = self.multiworld.get_location(loc.name, self.player)
@@ -369,7 +361,7 @@ class SoEWorld(World):
     def make_rule(self, requires: typing.List[typing.Tuple[int, int]]) -> typing.Callable[[typing.Any], bool]:
         def rule(state: "CollectionState") -> bool:
             for count, progress in requires:
-                if not state.soe_has(progress, self.multiworld, self.player, count):
+                if not self.logic.has(state, progress, count):
                     return False
             return True
 
@@ -383,7 +375,7 @@ class SoEWorld(World):
         wings_item = self.create_item('Wings')
         self.multiworld.get_location(wings_location, self.player).place_locked_item(wings_item)
         # place energy core at vanilla location for vanilla mode
-        if self.energy_core == EnergyCore.option_vanilla:
+        if self.options.energy_core == EnergyCore.option_vanilla:
             energy_core = self.create_item('Energy Core')
             self.multiworld.get_location('Energy Core #285', self.player).place_locked_item(energy_core)
         # generate stuff for later
@@ -405,9 +397,9 @@ class SoEWorld(World):
             switches: typing.List[str] = []
             if self.options.death_link.value:
                 switches.append("--death-link")
-            if self.energy_core == EnergyCore.option_fragments:
-                switches.extend(('--available-fragments', str(self.available_fragments),
-                                 '--required-fragments', str(self.required_fragments)))
+            if self.options.energy_core == EnergyCore.option_fragments:
+                switches.extend(('--available-fragments', str(self.options.available_fragments.value),
+                                 '--required-fragments', str(self.options.required_fragments.value)))
             rom_file = get_base_rom_path()
             out_base = output_path(output_directory, self.multiworld.get_out_file_name_base(self.player))
             out_file = out_base + '.sfc'
