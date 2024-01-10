@@ -20,6 +20,13 @@ class DLCqwebworld(WebWorld):
         "setup_en.md",
         "setup/en",
         ["axe_y"]
+    ),Tutorial(
+        "Multiworld Setup Tutorial",
+        "A guide to setting up the Archipelago DLCQuest game on your computer.",
+        "English",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
     )]
 
 
