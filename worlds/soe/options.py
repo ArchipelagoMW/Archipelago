@@ -1,18 +1,18 @@
-import typing
 from dataclasses import dataclass
+from typing import Any, cast, Dict, List, Tuple, Protocol
 
 from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
     Range, Toggle
 
 
 # typing boilerplate
-class FlagsProtocol(typing.Protocol):
+class FlagsProtocol(Protocol):
     value: int
     default: int
-    flags: typing.List[str]
+    flags: List[str]
 
 
-class FlagProtocol(typing.Protocol):
+class FlagProtocol(Protocol):
     value: int
     default: int
     flag: str
@@ -20,7 +20,7 @@ class FlagProtocol(typing.Protocol):
 
 # meta options
 class EvermizerFlags:
-    flags: typing.List[str]
+    flags: List[str]
 
     def to_flag(self: FlagsProtocol) -> str:
         return self.flags[self.value]
@@ -202,13 +202,13 @@ class TrapCount(Range):
 
 # more meta options
 class ItemChanceMeta(AssembleOptions):
-    def __new__(mcs, name, bases, attrs):
+    def __new__(mcs, name: str, bases: Tuple[type], attrs: Dict[Any, Any]) -> "ItemChanceMeta":
         if 'item_name' in attrs:
             attrs["display_name"] = f"{attrs['item_name']} Chance"
         attrs["range_start"] = 0
         attrs["range_end"] = 100
-
-        return super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)
+        cls = super(ItemChanceMeta, mcs).__new__(mcs, name, bases, attrs)
+        return cast(ItemChanceMeta, cls)
 
 
 class TrapChance(Range, metaclass=ItemChanceMeta):
