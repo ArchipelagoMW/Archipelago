@@ -809,10 +809,18 @@ class WitnessPlayerLogic:
         self.USED_EVENT_NAMES_BY_HEX = {}
         self.CONDITIONAL_EVENTS = {}
 
+        # The basic requirements to solve each entity come from StaticWitnessLogic.
+        # However, for any given world, the options (e.g. which item shuffles are enabled) affect the requirements.
         self.make_options_adjustments(world)
         self.determine_unrequired_entities(world)
         self.find_unsolvable_entities(world)
 
+        # After we have adjusted the raw requirements, we perform a dependency reduction for the entity requirements.
+        # This will make the access conditions way faster, instead of recursively checking dependent entities each time.
         self.make_dependency_reduced_checklist(True)
+
+        # Finalize which items actually exist in the MultiWorld and which get grouped into progressive items.
         self.finalize_items()
+
+        # Create event-item pairs for specific panels in the game.
         self.make_event_panel_lists()
