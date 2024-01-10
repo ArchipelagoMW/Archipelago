@@ -7,7 +7,7 @@ La [page des paramètres du joueur pour ce jeu](../player-settings) contient tou
 
 ## Quel est l'effet de la randomisation sur ce jeu ?
 
-Les DLC seront obtenus en tant que check pour le multiworld. Il existe également d'autres chèques optionnels dans DLC Quest
+Les DLC seront obtenus en tant que check pour le multiworld. Il existe également d'autres checks optionnels dans DLC Quest.
 
 ## Quel est le but de DLC Quest ?
 
