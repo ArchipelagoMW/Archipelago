@@ -138,36 +138,16 @@ class KH1Context(CommonContext):
                 itemCategory = networkItem.flags
                 recieverName = self.player_names[recieverID]
                 filename = "sent"
+                sanitizedItemName = re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15];
+                sanitizedRecieverName = re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6]
+
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(
-                      re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
-                    + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
+                      sanitizedItemName + "\n"
+                    + sanitizedRecieverName + "\n"
                     + str(itemCategory) + "\n"
                     + str(locationID))
                     f.close()
-
-#f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
-
-
-
-        #last resort we can probably do better
-        #input: Krujo sent Magic Upgrade to Tim ((TT3) LocationName)
-        # if cmd in {"PrintJSON"}:
-        #     data = args["data"]
-        #     if data[0]:
-        #         msg = str(data[0]["text"]);
-        #         #player send a location
-        #         # if msg.startswith(self.auth + " sent "): #debug
-        #         with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
-        #             msg = msg.replace(self.auth + " sent ", "")
-        #             #Magic Upgrade to Tim ((TT3) LocationName)
-        #             splitTo = msg.split(" to ")
-        #             targetPlayer = splitTo[1].split(" ")[0]
-        #             f.close()
-
-
-
-
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
