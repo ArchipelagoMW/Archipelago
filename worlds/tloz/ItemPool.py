@@ -93,7 +93,11 @@ def get_pool_core(world):
 
     # Starting Weapon
     start_weapon_locations = starting_weapon_locations.copy()
-    starting_weapon = random.choice(starting_weapons)
+    final_starting_weapons = [weapon for weapon in starting_weapons
+                              if weapon not in world.multiworld.non_local_items[world.player]]
+    if not final_starting_weapons:
+        final_starting_weapons = starting_weapons
+    starting_weapon = random.choice(final_starting_weapons)
     if world.multiworld.StartingPosition[world.player] == StartingPosition.option_safe:
         placed_items[start_weapon_locations[0]] = starting_weapon
     elif world.multiworld.StartingPosition[world.player] in \
