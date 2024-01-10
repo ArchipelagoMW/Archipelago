@@ -1,4 +1,4 @@
-# Guía de Configuración de Pokémon Emerald
+# Guía de Configuración para Pokémon Emerald
 
 ## Software Requerido
 
@@ -8,7 +8,7 @@
 
 ### Configuración de BizHawk
 
-Una vez que hayas instalado BizHawk, abre `EmuHawk.exe` y haz cambio en las siguientes configuraciones:
+Una vez que hayas instalado BizHawk, abre `EmuHawk.exe` y cambia las siguientes configuraciones:
 
 - Si estás usando BizHawk 2.7 o 2.8, ve a `Config > Customize`. En la pestaña Advanced, cambia el Lua Core de
 `NLua+KopiLua` a `Lua+LuaInterface`, luego reinicia EmuHawk. (Si estás usando BizHawk 2.9, puedes saltar este paso.)
