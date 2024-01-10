@@ -231,6 +231,7 @@ class WitnessPlayerLogic:
             return
 
         if adj_type == "Region Changes":
+            # TODO: THIS DOESN'T WORK RIGHT NOW! make_dependency_reduced_checklist overrides CONNECTIONS_BY_REGION_NAME
             new_region_and_options = define_new_region(line + ":")
 
             self.CONNECTIONS_BY_REGION_NAME[new_region_and_options[0]["name"]] = new_region_and_options[1]
