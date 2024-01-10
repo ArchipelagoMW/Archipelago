@@ -790,7 +790,7 @@ KH2REGIONS: typing.Dict[str, typing.List[str]] = {
         LocationName.ArmoredXemnas2EventLocation
     ],
     RegionName.FinalXemnas:        [
-        LocationName.FinalXemnas
+        LocationName.FinalXemnasEventLocation
     ],
     RegionName.DataXemnas:         [
         LocationName.XemnasDataPowerBoost,

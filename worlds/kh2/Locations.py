@@ -531,7 +531,7 @@ TWTNW_Checks = {
     LocationName.Xemnas1:                               LocationData(26, "Double Get Bonus"),
     LocationName.Xemnas1GetBonus:                       LocationData(26, "Second Get Bonus"),
     LocationName.Xemnas1SecretAnsemReport13:            LocationData(537, "Chest"),
-    LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
+    # LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
     LocationName.XemnasDataPowerBoost:                  LocationData(554, "Chest"),
 }
 
@@ -864,6 +864,7 @@ event_location_to_item = {
     LocationName.Axel1EventLocation:             ItemName.Axel1Event,
     LocationName.Axel2EventLocation:             ItemName.Axel2Event,
     LocationName.DataRoxasEventLocation:         ItemName.DataRoxasEvent,
+    LocationName.FinalXemnasEventLocation:       ItemName.Victory,
 }
 all_weapon_slot = {
     LocationName.FAKESlot,
@@ -1352,8 +1353,8 @@ exclusion_table = {
     }
 }
 
-
 location_groups: typing.Dict[str, list]
 location_groups = {
-    Region_Name: Region_Locs for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs
+    Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
+    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs
 }
