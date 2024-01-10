@@ -587,7 +587,7 @@ item_table = {
                  important_for_filtering=True,
                  description=inspect.cleandoc(
                      """
-                     Allows Sige Tanks to lay Spider Mines. 
+                     Allows Siege Tanks to lay Spider Mines. 
                      Lays 3 Spider Mines at once. 3 charges
                      """
                  )),
