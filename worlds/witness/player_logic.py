@@ -780,8 +780,6 @@ class WitnessPlayerLogic:
         self.DEPENDENT_REQUIREMENTS_BY_HEX = copy.copy(self.REFERENCE_LOGIC.STATIC_DEPENDENT_REQUIREMENTS_BY_HEX)
         self.REQUIREMENTS_BY_HEX = dict()
 
-        # Determining which panels need to be events is a difficult process.
-        # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
         self.EVENT_ITEM_PAIRS = dict()
         self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
