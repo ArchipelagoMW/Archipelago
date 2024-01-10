@@ -38,11 +38,11 @@ class AutopelagoWorld(World):
     _next_offset = 0
     for r in AutopelagoRegion:
         prog_count, skip_balancing_count = \
-            1, 0 if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] else \
-            16, 8 if r == AutopelagoRegion.Before8Rats else \
-            9, 6 if r == AutopelagoRegion.AfterCBefore20Rats else \
-            9, 6 if r == AutopelagoRegion.AfterDBefore20Rats else \
-            0, 0
+            (1, 0) if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] else \
+            (16, 8) if r == AutopelagoRegion.Before8Rats else \
+            (9, 6) if r == AutopelagoRegion.AfterCBefore20Rats else \
+            (9, 6) if r == AutopelagoRegion.AfterDBefore20Rats else \
+            (0, 0)
 
         midpoint = prog_count + ((num_locations_in[r] - prog_count + 1) // 2)
 

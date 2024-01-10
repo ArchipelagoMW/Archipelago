@@ -58,7 +58,7 @@ item_table = (
     'One-way Ticket to Ohio',
     'Enchanted Guitar Pick',
     'MacGuffin', #Possible important
-    'McRib',
+    'McRib 2',
     'Taco Salad that is Only Tacos',
     'Blue Turtle Shell', #possible important
     'Copy of E.T. the Extraterrestrial for Atari 2600',
