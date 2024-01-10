@@ -2087,7 +2087,7 @@ id,region,name,tags,mod_name
 3573,Carpenter Shop,Iron Lamp-post Recipe,CRAFTSANITY,
 3574,Sewer,Wicked Statue Recipe,CRAFTSANITY,
 3575,Desert,Warp Totem: Desert Recipe,"CRAFTSANITY",
-3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY",
+3576,Island Trader,Deluxe Retaining Soil Recipe,"CRAFTSANITY,GINGER_ISLAND",
 5001,Stardew Valley,Level 1 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5002,Stardew Valley,Level 2 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
 5003,Stardew Valley,Level 3 Luck,"LUCK_LEVEL,SKILL_LEVEL",Luck Skill
