@@ -290,7 +290,7 @@ class WitnessPlayerLogic:
         # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
         # TODO: I will probably need to rework this one somehow.
         if not (early_caves or doors) and victory == "challenge":
-            postgame_adjustments.append(get_caves_exclusion_list())
+            postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
 
         # Challenge can only have something if the goal is not challenge or longbox itself.
         # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
@@ -342,12 +342,12 @@ class WitnessPlayerLogic:
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
             if doors:
-                adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
+                adjustment_linesets_in_order.append(["Disabled Locations:", "0x17FA2"])
 
         if not world.options.shuffle_vault_boxes:
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
             if not victory == "challenge":
-                adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
+                adjustment_linesets_in_order.append(["Disabled Locations:", "0x0A332"])
 
         # Victory Condition
 
@@ -464,16 +464,6 @@ class WitnessPlayerLogic:
 
         while dirty:
             dirty = False
-            newly_discovered_disabled_entities = set()
-            self.make_dependency_reduced_checklist(postgame_included)
-
-            for entity, req in self.REQUIREMENTS_BY_HEX.items():
-                if not req and self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
-                    newly_discovered_disabled_entities.add(entity)
-                    dirty = True
-
-            self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
-
             # find regions that are completely disconnected from the start node and remove them
             reachable_regions = {"Entry"}
 
@@ -491,7 +481,8 @@ class WitnessPlayerLogic:
                         valid_option = False
 
                         for option in exit[1]:
-                            if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions for req in option):
+                            if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions
+                                       for req in option):
                                 valid_option = True
                                 break
 
@@ -502,11 +493,28 @@ class WitnessPlayerLogic:
                         regions_to_check.add(target)
                         reachable_regions.add(target)
 
-            new_unreachable_regions = set(self.CONNECTIONS_BY_REGION_NAME) - reachable_regions - self.UNREACHABLE_REGIONS
+            new_unreachable_regions = set(
+                self.CONNECTIONS_BY_REGION_NAME) - reachable_regions - self.UNREACHABLE_REGIONS
             if new_unreachable_regions:
                 dirty = True
+                self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
 
-            self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
+            newly_discovered_disabled_entities = set()
+
+            for region in new_unreachable_regions:
+                for entity in StaticWitnessLogic.ALL_REGIONS_BY_NAME[region]["panels"]:
+                    if self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
+                        newly_discovered_disabled_entities.add(entity)
+                        dirty = True
+
+            self.make_dependency_reduced_checklist(postgame_included)
+
+            for entity, req in self.REQUIREMENTS_BY_HEX.items():
+                if not req and self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
+                    newly_discovered_disabled_entities.add(entity)
+                    dirty = True
+
+            self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
 
             e_str = '"' + ', '.join(
                 StaticWitnessLogic.ENTITIES_BY_HEX[e_hex]["checkName"] for e_hex in newly_discovered_disabled_entities
@@ -544,7 +552,9 @@ class WitnessPlayerLogic:
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
-                        if (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
+                        if not self.solvability_guaranteed(entity):
+                            individual_entity_requirements.append(frozenset())
+                        elif (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
                                 or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
