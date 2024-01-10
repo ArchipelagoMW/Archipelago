@@ -65,8 +65,8 @@ class LinksAwakeningWebWorld(WebWorld):
         ["zig"]
     )
     setup_fr = Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up Links Awakening DX for MultiWorld.",
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer Links Awakening DX pour le MultiWorld",
         "Français",
         "setup_fr.md",
         "setup/fr",
