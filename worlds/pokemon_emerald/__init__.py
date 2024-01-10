@@ -47,8 +47,8 @@ class PokemonEmeraldWebWorld(WebWorld):
     )
 
     setup_es = Tutorial(
-        "translated text",
-        "translated text",
+        "Guía de configuración para Multiworld",
+        "Una guía para jugar Pokémon Emerald en Archipelago",
         "Español",
         "setup_es.md",
         "setup/es",
