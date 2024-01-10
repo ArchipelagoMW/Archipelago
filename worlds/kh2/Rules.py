@@ -1,7 +1,7 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
+from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table, SupportAbility_Table
 from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
 from .Names import LocationName, ItemName, RegionName
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
@@ -266,6 +266,8 @@ class KH2WorldRules(KH2Rules):
                 add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
             elif location.name in Donald_Checks:
                 add_item_rule(location, lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
+            else:
+                add_item_rule(location, lambda item: item.player == self.player and item.name in SupportAbility_Table.keys())
 
     def set_kh2_goal(self):
         final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
