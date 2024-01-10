@@ -63,6 +63,14 @@ class LinksAwakeningWebWorld(WebWorld):
         "setup_en.md",
         "setup/en",
         ["zig"]
+    ),
+    Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Links Awakening DX for MultiWorld.",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
     )]
     theme = "dirt"
     option_groups = ladx_option_groups
