@@ -193,10 +193,8 @@ all_bosses = [
         "FS: Lorian's Gauntlets - shop after killing GA boss",
         "FS: Lorian's Leggings - shop after killing GA boss",
     }),
-    DS3BossInfo("Champion's Gravetender and Gravetender Greatwolf", 4500860, dlc = True, locations = {
-        "PW1: Valorheart - boss drop",
-        "PW1: Champion's Bones - boss drop",
-    }),
+    DS3BossInfo("Champion's Gravetender and Gravetender Greatwolf", 4500860, dlc = True,
+                locations = {"PW1: Valorheart - boss drop"}),
     DS3BossInfo("Sister Friede", 4500801, dlc = True, region = "Dreg Heap", locations = {
         "PW2: Soul of Sister Friede",
         "PW2: Titanite Slab - boss drop",

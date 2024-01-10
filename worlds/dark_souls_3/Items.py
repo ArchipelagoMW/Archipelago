@@ -142,16 +142,10 @@ class DS3ItemData():
     skip: bool = False
     """Whether to omit this item from randomization and replace it with filler or unique items."""
 
-    force_unique: bool = False
-    """Whether to ensure only one copy of this item appears in the run.
-
-    This is automatically done for non-MISC items, but may be useful for MISC items in some cases.
-    """
-
     @property
     def unique(self):
         """Whether this item should be unique, appearing only once in the randomizer."""
-        return self.force_unique or self.category not in {
+        return self.category not in {
             DS3ItemCategory.MISC, DS3ItemCategory.SOUL, DS3ItemCategory.UPGRADE,
             DS3ItemCategory.HEALING,
         }
@@ -1040,7 +1034,7 @@ _vanilla_items = flatten([
     DS3ItemData("Pale Tongue",                         0x40000175, DS3ItemCategory.MISC,
                 classification = ItemClassification.progression),
     DS3ItemData("Vertebra Shackle",                    0x40000176, DS3ItemCategory.MISC,
-                classification = ItemClassification.progression, force_unique = True), # Crow trade
+                classification = ItemClassification.progression), # Crow trade
     DS3ItemData("Sunlight Medal",                      0x40000177, DS3ItemCategory.MISC, skip = True),
     DS3ItemData("Dragon Head Stone",                   0x40000179, DS3ItemCategory.UNIQUE),
     DS3ItemData("Dragon Torso Stone",                  0x4000017A, DS3ItemCategory.UNIQUE),

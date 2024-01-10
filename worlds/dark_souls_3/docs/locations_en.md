@@ -645,13 +645,13 @@ of Halflight, Gael, and Midir, respectively.
   to heading out from the Ringed City Streets bonfire, and "near" and "far" are
   relative to that bonfire as well.
 
-* **Upper cliff:** The cliffside path leading from the swamp into the shared
+* **Lower cliff:** The cliffside path leading from the swamp into the shared
   grave, where Midir breathes fire.
 
 * **Grave:** The cylindrical chamber with spiral stairs around the edges,
   connecting the two cliffs, containing the Shared Grave bonfire.
 
-* **Lower cliff:** The cliffside path leading out of the grave to the lower
+* **Upper cliff:** The cliffside path leading out of the grave to the lower
   wall.
 
 * **Church path:** The sunlit path from the lower cliff up to the Church of
@@ -736,9 +736,10 @@ offline _Dark Souls III_ randomizer].
 <tr><td>AP: Dragonslayer Spear - gate after mausoleum</td><td>In the gate connecting the Dragon-Kin Mausoleum area to the bridge where the Nameless King fight takes place</td></tr>
 <tr><td>AP: Drakeblood Greatsword - mausoleum, NPC drop</td><td>Dropped by the Drakeblood Knight summoned by the Serpent-Man Summoner</td></tr>
 <tr><td>AP: Dung Pie - fort, landing after second room</td><td>On a landing going up the stairs from the Ancient Wyvern to the chainaxe Man-Serpent area</td></tr>
-<tr><td>AP: Ember - belfry, below bell</td><td>From the right of where Ancient Wyvern first lands</td></tr>
+<tr><td>AP: Ember - belfry, below bell</td><td>In the area below the bell lever, either dropping down near the lever or going down the stairs from the open fountain area after the Belfry bonfire</td></tr>
+<tr><td>AP: Ember - fort overlook #1</td><td>From the right of where Ancient Wyvern first lands</td></tr>
 <tr><td>AP: Ember - fort overlook #2</td><td>From the right of where Ancient Wyvern first lands</td></tr>
-<tr><td>AP: Ember - intro, by bonfire</td><td>In the area below the bell lever, either dropping down near the lever or going down the stairs from the open fountain area after the Belfry bonfire</td></tr>
+<tr><td>AP: Ember - intro, by bonfire</td><td>Next to the Archdragon Peak bonfire</td></tr>
 <tr><td>AP: Great Magic Barrier - drop off belfry roof</td><td>Dropping down to the left from the area with the Havel Knight and the dead Wyvern</td></tr>
 <tr><td>AP: Havel&#x27;s Greatshield - belfry roof, NPC drop</td><td>Dropped from any of the Havel Knights</td></tr>
 <tr><td>AP: Havel&#x27;s Ring+1 - summit, after building</td><td>Just past the building with all of the Man-Serpents on the way to the Dragon Altar, on the left side</td></tr>
@@ -800,7 +801,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>CC: Fire Gem - cavern, lizard</td><td>Dropped by a Crystal Lizard found between the Catacombs main halls and the ledge overlooking the bridge you can cut down</td></tr>
 <tr><td>CC: Grave Warden Pyromancy Tome - boss arena</td><td>In Wolnir&#x27;s arena, or in the back left of the room containing his bonfire if not picked up in the arena</td></tr>
 <tr><td>CC: Grave Warden&#x27;s Ashes - crypt across, corner</td><td>From the Catacombs bonfire, down the stairs into the main hall and up the stairs to the other side, on the far left side. Stairwell past the illusory wall is most direct.</td></tr>
-<tr><td>CC: Homeward Bone - bridge</td><td>Found right before the wall blocking access to Irithyll</td></tr>
+<tr><td>CC: Homeward Bone - Irithyll bridge</td><td>Found right before the wall blocking access to Irithyll</td></tr>
 <tr><td>CC: Large Soul of a Nameless Soldier - cavern, before bridge</td><td>In the area where many many skeletons are before the bridge you can cut</td></tr>
 <tr><td>CC: Large Soul of a Nameless Soldier - tomb lower</td><td>Down the ramp from the Fire Demon, where all the skeletons are</td></tr>
 <tr><td>CC: Large Soul of an Unknown Traveler - crypt upper, hall middle</td><td>Going right from the Catacombs bonfire, then down the long hallway after the hallway to the left</td></tr>
@@ -808,7 +809,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>CC: Large Titanite Shard - crypt upper, skeleton ball hall</td><td>Going right from the Catacombs bonfire, to the end of the hallway where second Skeleton Ball rolls</td></tr>
 <tr><td>CC: Large Titanite Shard - tomb lower</td><td>Down the ramp from the Fire Demon, where all the skeletons are</td></tr>
 <tr><td>CC: Old Sage&#x27;s Blindfold - tomb, hall before bonfire</td><td>Down the ramp from the Fire Demon, straight down the hallway past the room with the Abandoned Tomb bonfire</td></tr>
-<tr><td>CC: Pontiff&#x27;s Right Eye - bridge, miniboss drop</td><td>Dropped by killing Sulyvahn&#x27;s Beast on the bridge to Irithyll or in the lake below</td></tr>
+<tr><td>CC: Pontiff&#x27;s Right Eye - Irithyll bridge, miniboss drop</td><td>Dropped by killing Sulyvahn&#x27;s Beast on the bridge to Irithyll or in the lake below</td></tr>
 <tr><td>CC: Ring of Steel Protection+2 - atrium upper, drop onto pillar</td><td>From the first bridge in Catacombs where the first skeletons are encountered, parallel to the long stairwell, walk off onto a pillar on the left side.</td></tr>
 <tr><td>CC: Sharp Gem - atrium lower, right before exit</td><td>Down the hallway to the right before going down the main stairwell in the Catacombs</td></tr>
 <tr><td>CC: Soul of High Lord Wolnir</td><td>Dropped by High Lord Wolnir</td></tr>
@@ -1538,6 +1539,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>IBV: Large Soul of a Nameless Soldier - central, by second fountain</td><td>Next to the fountain up the stairs from the Central Irithyll bonfire</td></tr>
 <tr><td>IBV: Large Soul of a Nameless Soldier - lake island</td><td>On an island in the lake leading to the Distant Manor bonfire</td></tr>
 <tr><td>IBV: Large Soul of a Nameless Soldier - stairs to plaza</td><td>On the path from Central Irithyll bonfire, before making the left toward Church of Yorshka</td></tr>
+<tr><td>IBV: Large Titanite Shard - Distant Manor, under overhang</td><td>Under overhang next to second set of stairs leading from Distant Manor bonfire</td></tr>
 <tr><td>IBV: Large Titanite Shard - ascent, by elevator door</td><td>On the path from the sewer leading up to Pontiff&#x27;s cathedral, to the right of the statue surrounded by dogs</td></tr>
 <tr><td>IBV: Large Titanite Shard - ascent, down ladder in last building</td><td>Outside the final building before Pontiff&#x27;s cathedral, coming from the sewer, dropping down to the left before the entrance</td></tr>
 <tr><td>IBV: Large Titanite Shard - central, balcony just before plaza</td><td>From the Central Irithyll bonfire, on the balcony with the second Fire Witch.</td></tr>
@@ -1602,11 +1604,11 @@ offline _Dark Souls III_ randomizer].
 <tr><td>ID: Large Soul of a Nameless Soldier - B2, hall by stairs</td><td>At the end of the bottom corridor on the bonfire side in Irithyll Dungeon</td></tr>
 <tr><td>ID: Large Soul of a Weary Warrior - just before Profaned Capital</td><td>In the open area before the bridge leading into Profaned Capital from Irithyll Dungeon</td></tr>
 <tr><td>ID: Large Titanite Shard - B1 far, rightmost cell</td><td>In a cell on the far end of the top corridor opposite to the bonfire in Irithyll Dungeon, nearby the Jailer</td></tr>
-<tr><td>ID: Large Titanite Shard - B1 near, by door</td><td>In the main Jailer cell block, to the left of the hallway leading to the Path of the Dragon area</td></tr>
-<tr><td>ID: Large Titanite Shard - B3 near, right corner</td><td>On the floor where the Giant Slave is standing</td></tr>
+<tr><td>ID: Large Titanite Shard - B1 near, by door</td><td>At the end of the top corridor on the bonfire side in Irithyll Dungeon, before the Jailbreaker&#x27;s Key door</td></tr>
+<tr><td>ID: Large Titanite Shard - B3 near, right corner</td><td>In the main Jailer cell block, to the left of the hallway leading to the Path of the Dragon area</td></tr>
 <tr><td>ID: Large Titanite Shard - after bonfire, second cell on right</td><td>In the second cell on the right after Irithyll Dungeon bonfire</td></tr>
-<tr><td>ID: Large Titanite Shard - pit</td><td>On the floor where the Giant Slave is standing</td></tr>
-<tr><td>ID: Large Titanite Shard - stairs between pit and B3</td><td>Seemingly unused treasure</td></tr>
+<tr><td>ID: Large Titanite Shard - pit #1</td><td>On the floor where the Giant Slave is standing</td></tr>
+<tr><td>ID: Large Titanite Shard - pit #2</td><td>On the floor where the Giant Slave is standing</td></tr>
 <tr><td>ID: Lightning Blade - B3 lift, middle platform</td><td>On the middle platform riding the elevator up from the Path of the Dragon area</td></tr>
 <tr><td>ID: Lightning Bolt - awning over pit</td><td>On the wooden overhangs above the Giant Slave. Can be reached by dropping down after climbing the long ladder around the area where the Giant stands.</td></tr>
 <tr><td>ID: Murakumo - Alva drop</td><td>Dropped by Alva, Seeker of the Spurned when he invades in the cliffside path to Irithyll Dungeon</td></tr>
@@ -1833,7 +1835,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Black Witch Garb - streets garden</td><td>Guarded by Alva (invades whether embered or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
 <tr><td>RC: Black Witch Hat - streets garden</td><td>Guarded by Alva (invades whether embered or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
 <tr><td>RC: Black Witch Trousers - streets garden</td><td>Guarded by Alva (invades whether embered or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
-<tr><td>RC: Black Witch Veil - swamp near right, by sinking church</td><td>To the left of the submerged building with 4 Ringed Knights, near a spear-wielding knight.</td></tr>
+<tr><td>RC: Black Witch Veil - swamp near right, by sunken church</td><td>To the left of the submerged building with 4 Ringed Knights, near a spear-wielding knight.</td></tr>
 <tr><td>RC: Black Witch Wrappings - streets garden</td><td>Guarded by Alva (invades whether embered or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
 <tr><td>RC: Blessed Gem - grave, down lowest stairs</td><td>In Shared Grave, after dropping down near Gael&#x27;s flag and dropping down again, behind you. Or from the bonfire, go back through the side tunnel with the skeletons and down the stairs after that.</td></tr>
 <tr><td>RC: Blindfold Mask - grave, NPC drop</td><td>Dropped by Moaning Knight (invades whether embered or not, or boss defeated or not) in Shared Grave.</td></tr>
@@ -1848,7 +1850,7 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Dark Gem - swamp near, by stairs</td><td>In the middle of the muck pit, close to the long stairs.</td></tr>
 <tr><td>RC: Divine Blessing - streets monument, mob drop</td><td>Dropped by the Judicator near the Purging Monument area. Requires solving &quot;Show Your Humanity&quot; puzzle.</td></tr>
 <tr><td>RC: Divine Blessing - wall top, mob drop</td><td>Dropped by the Judicator after the Mausoleum Lookup bonfire.</td></tr>
-<tr><td>RC: Dragonhead Greatshield - upper cliff, under bridge</td><td>Down a slope to the right of the bridge where Midir first assaults you, past a sword-wielding Ringed Knight, under the bridge.</td></tr>
+<tr><td>RC: Dragonhead Greatshield - lower cliff, under bridge</td><td>Down a slope to the right of the bridge where Midir first assaults you, past a sword-wielding Ringed Knight, under the bridge.</td></tr>
 <tr><td>RC: Dragonhead Shield - streets monument, across bridge</td><td>Found in Purging Monument area, across the bridge from the monument. Requires solving &quot;Show Your Humanity&quot; puzzle.</td></tr>
 <tr><td>RC: Ember - wall hidden, statue room</td><td>From the mid level of the Ringed Inner Wall elevator that leads to the Midir fight, in the room with the illusory statue.</td></tr>
 <tr><td>RC: Ember - wall top, by statue</td><td>Along the left wall of the courtyard after Mausoleum Lookout, in front of a tall monument.</td></tr>
@@ -1869,8 +1871,8 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Lapp&#x27;s Leggings - Lapp</td><td>Left at Lapp&#x27;s final location in Shared Grave after his quest is complete, or sold by Shrine Handmaid upon killing Lapp.</td></tr>
 <tr><td>RC: Large Soul of a Crestfallen Knight - streets monument, across bridge</td><td>Found in Purging Monument area, on the other side of the bridge leading to the monument. Requires solving &quot;Show Your Humanity&quot; puzzle.</td></tr>
 <tr><td>RC: Large Soul of a Crestfallen Knight - streets, far stairs</td><td>Toward the bottom of the stairs leading down to the muck pit.</td></tr>
-<tr><td>RC: Large Soul of a Weary Warrior - swamp center</td><td>In the muck pit approaching where the Judicator patrols from the stairs.</td></tr>
-<tr><td>RC: Large Soul of a Weary Warrior - upper cliff, end</td><td>Toward the end of the upper path attacked Midir&#x27;s fire-breathing.</td></tr>
+<tr><td>RC: Large Soul of a Weary Warrior - lower cliff, end</td><td>Toward the end of the upper path attacked Midir&#x27;s fire-breathing.</td></tr>
+<tr><td>RC: Large Soul of a Weary Warrior - swamp center, by peninsula</td><td>In the muck pit approaching where the Judicator patrols from the stairs.</td></tr>
 <tr><td>RC: Large Soul of a Weary Warrior - wall lower, past two illusory walls</td><td>In the Ringed Inner Wall building coming from Shared Grave, past two illusory walls on the right side of the ascending stairs.</td></tr>
 <tr><td>RC: Large Soul of a Weary Warrior - wall top, right of small tomb</td><td>In the open toward the end of the courtyard after the Mausoleum Lookout bonfire, on the right side of the small tomb.</td></tr>
 <tr><td>RC: Ledo&#x27;s Great Hammer - streets high, opposite building, NPC drop</td><td>Dropped by Silver Knight Ledo (invades whether embered or not, or boss defeated or not) in the building down the path to the right after climbing the very long ladder from the muck area.</td></tr>
@@ -1878,16 +1880,16 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Lightning Gem - grave, room after first drop</td><td>In Shared Grave, in the first room encountered after falling down from the crumbling stairs and continuing upward.</td></tr>
 <tr><td>RC: Mossfruit - streets near left, path to garden</td><td>Partway down the stairs from Shira, across the bridge.</td></tr>
 <tr><td>RC: Mossfruit - streets, far left alcove</td><td>Near the bottom of the stairs before the muck pit, in an alcove to the left.</td></tr>
-<tr><td>RC: Preacher&#x27;s Right Arm - swamp near right, by crystal</td><td>In the muck pit behind a crystal-covered structure, close to the Ringed City Streets shortcut entrance.</td></tr>
-<tr><td>RC: Prism Stone - swamp near, path to bonfire</td><td>On the balcony of the path leading up to Ringed City Streets bonfire from the muck pit.</td></tr>
+<tr><td>RC: Preacher&#x27;s Right Arm - swamp near right, by tower</td><td>In the muck pit behind a crystal-covered structure, close to the Ringed City Streets shortcut entrance.</td></tr>
+<tr><td>RC: Prism Stone - swamp near, railing by bonfire</td><td>On the balcony of the path leading up to Ringed City Streets bonfire from the muck pit.</td></tr>
 <tr><td>RC: Purging Stone - wall top, by door to upper</td><td>At the end of the path from Mausoleum Lookup to Ringed Inner Wall, just outside the door.</td></tr>
 <tr><td>RC: Ring of the Evil Eye+3 - grave, mimic</td><td>Dropped by mimic in Shared Grave. In one of the rooms after dropping down near Gael&#x27;s flag and then dropping down again.</td></tr>
 <tr><td>RC: Ringed Knight Paired Greatswords - church path, mob drop</td><td>Dropped by Ringed Knight with paired greatswords before Filianore building.</td></tr>
 <tr><td>RC: Ringed Knight Spear - streets, down far right hall</td><td>In a courtyard guarded by a spear-wielding Ringed Knight. Can be accessed from a hallway filled with cursed clerics on the right side going down the long stairs, or by climbing up the long ladder from the muck pit and dropping down past the Locust Preacher.</td></tr>
-<tr><td>RC: Ringed Knight Straight Sword - swamp near, pillar by bonfire</td><td>On a monument next to the Ringed City Streets building. Can be easily accessed after unlocking the shortcut by following the left wall inside and then outside the building.</td></tr>
+<tr><td>RC: Ringed Knight Straight Sword - swamp near, tower on peninsula</td><td>On a monument next to the Ringed City Streets building. Can be easily accessed after unlocking the shortcut by following the left wall inside and then outside the building.</td></tr>
 <tr><td>RC: Ritual Spear Fragment - church path</td><td>To the right of the Paired Greatswords Ringed Knight on the way to Halflight.</td></tr>
+<tr><td>RC: Rubbish - lower cliff, middle</td><td>In the middle of the upper path attacked Midir&#x27;s fire-breathing, after the first alcove.</td></tr>
 <tr><td>RC: Rubbish - swamp far, by crystal</td><td>In the remote end of the muck pit, next to a massive crystal structure between a giant tree and the building with praying Hollow Clerics, guarded by several Locust Preachers.</td></tr>
-<tr><td>RC: Rubbish - upper cliff, middle</td><td>In the middle of the upper path attacked Midir&#x27;s fire-breathing, after the first alcove.</td></tr>
 <tr><td>RC: Ruin Armor - wall top, under stairs to bonfire</td><td>Underneath the stairs leading down from Mausoleum Lookout.</td></tr>
 <tr><td>RC: Ruin Gauntlets - wall top, under stairs to bonfire</td><td>Underneath the stairs leading down from Mausoleum Lookout.</td></tr>
 <tr><td>RC: Ruin Helm - wall top, under stairs to bonfire</td><td>Underneath the stairs leading down from Mausoleum Lookout.</td></tr>
@@ -1903,44 +1905,46 @@ offline _Dark Souls III_ randomizer].
 <tr><td>RC: Soul of Darkeater Midir</td><td>Dropped by Darkeater Midir</td></tr>
 <tr><td>RC: Soul of Slave Knight Gael</td><td>Dropped by Slave Knight Gael</td></tr>
 <tr><td>RC: Soul of a Crestfallen Knight - swamp far, behind crystal</td><td>Behind a crystal structure at the far end of the muck pit, close to the building with the praying Hollow Clerics before Dragonslayer Armour.</td></tr>
-<tr><td>RC: Soul of a Crestfallen Knight - swamp near left, by ladder</td><td>In the muck pit behind all of the Hollow Clerics near the very long ladder.</td></tr>
+<tr><td>RC: Soul of a Crestfallen Knight - swamp near left, nook</td><td>In the muck pit behind all of the Hollow Clerics near the very long ladder.</td></tr>
 <tr><td>RC: Soul of a Crestfallen Knight - wall top, under drop</td><td>After dropping down onto the side path on the right side of the Mausoleum Lookout courtyard to where the Crystal Lizard is, behind you.</td></tr>
+<tr><td>RC: Soul of a Weary Warrior - lower cliff, by first alcove</td><td>In front of the first alcove providing shelter from Midir&#x27;s fire-breathing on the way to Shared Grave.</td></tr>
 <tr><td>RC: Soul of a Weary Warrior - swamp center</td><td>In the middle of the muck pit where the Judicator is patrolling.</td></tr>
 <tr><td>RC: Soul of a Weary Warrior - swamp right, by sunken church</td><td>In between where the Judicator patrols in the muck pit and the submerged building with the 4 Ringed Knights. Provides some shelter from his arrows.</td></tr>
-<tr><td>RC: Soul of a Weary Warrior - upper cliff, by first alcove</td><td>In front of the first alcove providing shelter from Midir&#x27;s fire-breathing on the way to Shared Grave.</td></tr>
 <tr><td>RC: Spears of the Church - hidden boss drop</td><td>Dropped by Darkeater Midir</td></tr>
 <tr><td>RC: Titanite Chunk - streets high, building opposite</td><td>Down a path past the room where Silver Knight Ledo invades. The building is up the very long ladder from the muck pit, down the path all the way to the right.</td></tr>
 <tr><td>RC: Titanite Chunk - streets, near left drop</td><td>Near the top of the stairs by Shira, dropping down in an alcove to the left.</td></tr>
-<tr><td>RC: Titanite Chunk - swamp center, along edge</td><td>Along the edge of the muck pit close to where the Judicator patrols.</td></tr>
+<tr><td>RC: Titanite Chunk - swamp center, peninsula edge</td><td>Along the edge of the muck pit close to where the Judicator patrols.</td></tr>
 <tr><td>RC: Titanite Chunk - swamp far left, up hill</td><td>Up a hill at the edge of the muck pit with the Hollow Clerics.</td></tr>
-<tr><td>RC: Titanite Chunk - swamp near left, opposite ladder</td><td>At the edge of the muck pit, on the opposite side of the wall from the very long ladder.</td></tr>
-<tr><td>RC: Titanite Chunk - swamp near right, by sinking church</td><td>At the very edge of the muck pit, to the left of the submerged building with 4 Ringed Knights.</td></tr>
+<tr><td>RC: Titanite Chunk - swamp near left, by spire top</td><td>At the edge of the muck pit, on the opposite side of the wall from the very long ladder.</td></tr>
+<tr><td>RC: Titanite Chunk - swamp near right, behind rock</td><td>At the very edge of the muck pit, to the left of the submerged building with 4 Ringed Knights.</td></tr>
 <tr><td>RC: Titanite Chunk - wall top, among graves</td><td>Along the right edge of the courtyard after Mausoleum Lookout in a cluster of graves.</td></tr>
 <tr><td>RC: Titanite Chunk - wall upper, courtyard alcove</td><td>In the courtyard where the first Ringed Knight is seen, along the right wall into an alcove.</td></tr>
-<tr><td>RC: Titanite Scale - grave, lizard after first drop</td><td>In the area at the far end of the muck pit with the Dragonslayer Armour.</td></tr>
-<tr><td>RC: Titanite Scale - lower cliff, bridge</td><td>On the final bridge where Midir attacks before you knock him off.</td></tr>
+<tr><td>RC: Titanite Scale - grave, lizard past first drop</td><td>Dropped by the Crystal Lizard right after the crumbling stairs in Shared Grave.</td></tr>
+<tr><td>RC: Titanite Scale - lower cliff, first alcove</td><td>In the first alcove providing shelter from Midir&#x27;s fire-breathing on the way to Shared Grave.</td></tr>
+<tr><td>RC: Titanite Scale - lower cliff, lower path</td><td>After dropping down from the upper path attacked by Midir&#x27;s fire-breathing to the lower path.</td></tr>
+<tr><td>RC: Titanite Scale - lower cliff, path under bridge</td><td>Partway down a slope to the right of the bridge where Midir first assaults you.</td></tr>
 <tr><td>RC: Titanite Scale - swamp far, by miniboss</td><td>In the area at the far end of the muck pit with the Dragonslayer Armour.</td></tr>
-<tr><td>RC: Titanite Scale - upper cliff, first alcove</td><td>In the first alcove providing shelter from Midir&#x27;s fire-breathing on the way to Shared Grave.</td></tr>
-<tr><td>RC: Titanite Scale - upper cliff, lower path</td><td>After dropping down from the upper path attacked by Midir&#x27;s fire-breathing to the lower path.</td></tr>
-<tr><td>RC: Titanite Scale - upper cliff, path under bridge</td><td>Partway down a slope to the right of the bridge where Midir first assaults you.</td></tr>
-<tr><td>RC: Titanite Scale - wall lower, lizard</td><td>Dropped by the Crystal Lizard right after the crumbling stairs in Shared Grave.</td></tr>
+<tr><td>RC: Titanite Scale - swamp far, lagoon entrance</td><td>In the area at the far end of the muck pit with the Dragonslayer Armour.</td></tr>
+<tr><td>RC: Titanite Scale - upper cliff, bridge</td><td>On the final bridge where Midir attacks before you knock him off.</td></tr>
+<tr><td>RC: Titanite Scale - wall lower, lizard</td><td>Dropped by the Crystal Lizard on the stairs going up from Shared Grave to Ringed Inner Wall elevator.</td></tr>
 <tr><td>RC: Titanite Scale - wall top, behind spawn</td><td>Behind you at the very start of the level.</td></tr>
-<tr><td>RC: Titanite Scale - wall top, lizard on side path</td><td>Dropped by the Crystal Lizard on the stairs going up from Shared Grave to Ringed Inner Wall elevator.</td></tr>
 <tr><td>RC: Titanite Slab - ashes, NPC drop</td><td>Given by Shira after defeating Midir, or dropped by her in post-Filianore Ringed City.</td></tr>
 <tr><td>RC: Titanite Slab - ashes, mob drop</td><td>Dropped by the Ringed Knight wandering around near Gael&#x27;s arena</td></tr>
 <tr><td>RC: Titanite Slab - mid boss drop</td><td>Dropped by Halflight, Spear of the Church</td></tr>
 <tr><td>RC: Twinkling Titanite - church path, left of boss door</td><td>Dropping down to the left of the door leading to Halflight.</td></tr>
-<tr><td>RC: Twinkling Titanite - grave, lizard after first drop</td><td>Dropped by the Crystal Lizard right after the crumbling stairs in Shared Grave.</td></tr>
+<tr><td>RC: Twinkling Titanite - grave, lizard past first drop</td><td>Dropped by the Crystal Lizard right after the crumbling stairs in Shared Grave.</td></tr>
 <tr><td>RC: Twinkling Titanite - streets high, lizard</td><td>Dropped by the Crystal Lizard which runs across the bridge after climbing the very long ladder up from the muck pit.</td></tr>
 <tr><td>RC: Twinkling Titanite - swamp near left</td><td>At the left edge of the muck pit coming from the stairs, guarded by a Preacher Locust.</td></tr>
-<tr><td>RC: Twinkling Titanite - swamp near right, on sinking church</td><td>Following the sloped roof of the submerged building with the 4 Ringed Knights, along the back wall</td></tr>
+<tr><td>RC: Twinkling Titanite - swamp near right, on sunken church</td><td>Following the sloped roof of the submerged building with the 4 Ringed Knights, along the back wall</td></tr>
 <tr><td>RC: Twinkling Titanite - wall top, lizard on side path</td><td>Dropped by the first Crystal Lizard on the side path on the right side of the Mausoleum Lookout courtyard</td></tr>
 <tr><td>RC: Twinkling Titanite - wall tower, jump from chandelier</td><td>In the cylindrical building before the long stairs with many Harald Legion Knights. Carefully drop down to the chandelier in the center, then jump to the second floor. The item is on a ledge.</td></tr>
 <tr><td>RC: Violet Wrappings - wall hidden, before boss</td><td>In the chapel before the Midir fight in the Ringed Inner Wall building.</td></tr>
 <tr><td>RC: White Birch Bow - swamp far left, up hill</td><td>Up a hill at the edge of the muck pit with the Hollow Clerics.</td></tr>
 <tr><td>RC: White Preacher Head - swamp near, ground near bonfire exit</td><td>Past the balcony to the right of the Ringed City Streets bonfire room entrance. Can be accessed by dropping down straight after from the bonfire, then around to the left.</td></tr>
 <tr><td>RC: Wolf Ring+3 - street gardens, NPC drop</td><td>Dropped by Alva (invades whether embered or not, or boss defeated or not), partway down the stairs from Shira, across the bridge, and past the Ringed Knight.</td></tr>
-<tr><td>RC: Young White Branch - swamp far left, by white tree</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>
+<tr><td>RC: Young White Branch - swamp far left, by white tree #1</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>
+<tr><td>RC: Young White Branch - swamp far left, by white tree #2</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>
+<tr><td>RC: Young White Branch - swamp far left, by white tree #3</td><td>Next to a small birch tree at the edge of the muck pit, between the hill with the aggressive Hollow Clerics and the building with the praying Hollow Clerics outside.</td></tr>
 <tr><td>RS: Blue Bug Pellet - broken stairs by Orbeck</td><td>On the broken stairs leading down from Orbeck&#x27;s area, on the opposite side from Orbeck</td></tr>
 <tr><td>RS: Blue Sentinels - Horace</td><td>Given by Horace the Hushed by first &quot;talking&quot; to him, or upon death.</td></tr>
 <tr><td>RS: Braille Divine Tome of Carim - drop from bridge to Halfway Fortress</td><td>Dropping down before the bridge leading up to Halfway Fortress from Road of Sacrifices, guarded by the maggot belly dog</td></tr>
@@ -2073,7 +2077,8 @@ offline _Dark Souls III_ randomizer].
 <tr><td>US: Blue Wooden Shield - graveyard by white tree</td><td>After Dilapidated Bridge bonfire, in the back of the Giant&#x27;s arrow area. Guarded by a flamberge-wielding thrall.</td></tr>
 <tr><td>US: Caduceus Round Shield - right after stable exit</td><td>After exiting the building across the bridge to the right of the first Undead Settlement building, to the left</td></tr>
 <tr><td>US: Caestus - sewer</td><td>In the tunnel with the Giant Hound Rat and Grave Key door, from the ravine bridge toward Dilapidated Bridge bonfire</td></tr>
-<tr><td>US: Charcoal Pine Bundle - first building</td><td>On the bottom floor of the first building</td></tr>
+<tr><td>US: Charcoal Pine Bundle - first building, bottom floor</td><td>Down the stairs in the first building</td></tr>
+<tr><td>US: Charcoal Pine Bundle - first building, middle floor</td><td>On the bottom floor of the first building</td></tr>
 <tr><td>US: Charcoal Pine Resin - hanging corpse room</td><td>In the building after the burning tree and Cathedral Evangelist, in the room with the many hanging corpses</td></tr>
 <tr><td>US: Chloranthy Ring - tower village, jump from roof</td><td>At the end of the Fire Demon loop, in the tower where you have to drop down after the roof</td></tr>
 <tr><td>US: Cleric Blue Robe - graveyard by white tree</td><td>After Dilapidated Bridge bonfire, in the back of the Giant&#x27;s arrow area. Guarded by a flamberge-wielding thrall.</td></tr>

@@ -10,7 +10,15 @@ class DarkSouls3Test(WorldTestBase):
     def testLocationDefaultItems(self):
         for locations in location_tables.values():
             for location in locations:
-                self.assertIn(location.default_item_name, item_dictionary)
+                if location.default_item_name:
+                    self.assertIn(location.default_item_name, item_dictionary)
+
+    def testLocationsUnique(self):
+        names = set()
+        for locations in location_tables.values():
+            for location in locations:
+                self.assertNotIn(location.name, names)
+                names.add(location.name)
 
     def testBossRegions(self):
         all_regions = set(location_tables)
@@ -23,7 +31,3 @@ class DarkSouls3Test(WorldTestBase):
         for boss in all_bosses:
             for location in boss.locations:
                 self.assertIn(location, all_locations)
-
-    def testForceUnique(self):
-        tongues = self.get_items_by_name("Pale Tongue")
-        self.assertEqual(len(tongues), 1, "There should only be one Pale Tongue in the item pool.")
