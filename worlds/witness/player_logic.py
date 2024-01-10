@@ -507,7 +507,8 @@ class WitnessPlayerLogic:
                     for exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
                         target = exit[0]
 
-                        valid_option = False
+                        if target in reachable_regions:
+                            continue
 
                         # There may be multiple conncetions between two regions. We should check all of them to see if
                         # any of them are valid.
@@ -517,10 +518,8 @@ class WitnessPlayerLogic:
                             if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions
                                        for req in option):
                                 break
+                        # If none of the connections were valid, this region is not reachable this way, for now.
                         else:
-                            continue
-
-                        if target in reachable_regions:
                             continue
 
                         regions_dirty = True
