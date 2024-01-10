@@ -31,7 +31,7 @@ class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
 
     @lru_cache(maxsize=None)
-    def reduce_req_within_region(self, panel_hex: str) -> FrozenSet[FrozenSet[str]]:
+    def reduce_req_within_region(self, panel_hex: str, allow_victory: bool) -> FrozenSet[FrozenSet[str]]:
         """
         Panels in this game often only turn on when other panels are solved.
         Those other panels may have different item requirements.
@@ -43,7 +43,13 @@ class WitnessPlayerLogic:
         if panel_hex in self.COMPLETELY_DISABLED_ENTITIES or panel_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
             return frozenset()
 
+        if panel_hex == self.VICTORY_LOCATION and not allow_victory:
+            return frozenset()
+
         entity_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel_hex]
+
+        if entity_obj["region"] is not None and entity_obj["region"]["name"] in self.UNREACHABLE_REGIONS:
+            return frozenset()
 
         these_items = frozenset({frozenset()})
 
@@ -101,20 +107,25 @@ class WitnessPlayerLogic:
             for option_entity in option:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
-                if option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
-                    new_items = frozenset({frozenset([option_entity])})
-                elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
-                    new_items = frozenset({frozenset([option_entity])})
-                    self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
-                elif option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
+                if option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
                 else:
-                    new_items = self.reduce_req_within_region(option_entity)
-                    if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
-                        new_items = frozenset(
-                            frozenset(possibility | {dep_obj["region"]["name"]})
-                            for possibility in new_items
-                        )
+                    theoretical_new_items = self.reduce_req_within_region(option_entity, allow_victory)
+
+                    if not theoretical_new_items:
+                        new_items = frozenset()
+                    elif option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
+                        new_items = frozenset({frozenset([option_entity])})
+                    elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
+                        new_items = frozenset({frozenset([option_entity])})
+                        self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
+                    else:
+                        new_items = theoretical_new_items
+                        if dep_obj["region"] and entity_obj["region"] != dep_obj["region"]:
+                            new_items = frozenset(
+                                frozenset(possibility | {dep_obj["region"]["name"]})
+                                for possibility in new_items
+                            )
 
                 dependent_items_for_option = dnf_and([dependent_items_for_option, new_items])
 
@@ -274,59 +285,36 @@ class WitnessPlayerLogic:
         # Goal is "long box", but short box requires at least as many lasers than long box.
         reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers >= chal_lasers
 
-        # If goal is shortbox or "reverse longbox", you will never enter the mountain from the top before winning.
-        mountain_enterable_from_top = not (victory == "mountain_box_short" or reverse_longbox_goal)
-
-        # Caves & Challenge should never have anything if doors are vanilla - definitionally "post-game"
-        # This is technically imprecise, but it matches player expectations better.
-        if not (early_caves or doors):
+        # When your victory is Challenge, but you have to get to it the vanilla way, there are no required items
+        # that can show up in the Caves that aren't also needed on the descent through Mountain.
+        # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
+        # TODO: I will probably need to rework this one somehow.
+        if not (early_caves or doors) and victory == "challenge":
             postgame_adjustments.append(get_caves_exclusion_list())
-            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
-
-            # If Challenge is the goal, some panels on the way need to be left on, as well as Challenge Vault box itself
-            if not victory == "challenge":
-                postgame_adjustments.append(get_path_to_challenge_exclusion_list())
-                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
 
         # Challenge can only have something if the goal is not challenge or longbox itself.
         # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
         # In that case, it'd also have to be a doors mode, but that's already covered by the previous block.
         if not (victory == "elevator" or reverse_shortbox_goal):
-            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
             if not victory == "challenge":
-                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
+                postgame_adjustments.append(["Disabled Locations:", "0x0A332"])
 
-        # Mountain can't be reached if the goal is shortbox (or "reverse long box")
-        if not mountain_enterable_from_top:
-            postgame_adjustments.append(get_mountain_upper_exclusion_list())
+        # These are cases in which it was deemed "unfun" to have Mountain Bottom Floor Discard be able to lock things.
+        mbfd_extra_exclusions = (
+            # Progressive Dots 2 on 11 lasers in base settings = :(
+            victory == "elevator" and not doors
 
-            # Same goes for lower mountain, but that one *can* be reached in remote doors modes.
-            if not doors:
-                postgame_adjustments.append(get_mountain_lower_exclusion_list())
-
-        # The Mountain Bottom Floor Discard is a bit complicated, so we handle it separately. ("it" == the Discard)
-        # In Elevator Goal, it is definitionally in the post-game, unless remote doors is played.
-        # In Challenge Goal, it is before the Challenge, so it is not post-game.
-        # In Short Box Goal, you can win before turning it on, UNLESS Short Box requires MORE lasers than long box.
-        # In Long Box Goal, it is always in the post-game because solving long box is what turns it on.
-        if not ((victory == "elevator" and doors) or victory == "challenge" or (reverse_shortbox_goal and doors)):
-            # We now know Bottom Floor Discard is in the post-game.
-            # This has different consequences depending on whether remote doors is being played.
-            # If doors are vanilla, Bottom Floor Discard locks a door to an area, which has to be disabled as well.
-            if doors:
-                postgame_adjustments.append(get_bottom_floor_discard_exclusion_list())
-            else:
-                postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
-
-        # In Challenge goal + early_caves + vanilla doors, you could find something important on Bottom Floor Discard,
-        # including the Caves Shortcuts themselves if playing "early_caves: start_inventory".
-        # This is another thing that was deemed "unfun" more than fitting the actual definition of post-game.
-        if victory == "challenge" and early_caves and not doors:
-            postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+            # Progressive Stars 2 on Bottom Floor Discard in a Challenge seed with vanilla doors = :(
+            or victory == "challenge" and early_caves and not doors
+        )
 
         # If we have a proper short box goal, long box will never be activated first.
-        if proper_shortbox_goal:
+        if proper_shortbox_goal or mbfd_extra_exclusions:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
+
+        # In a case where long box can be activated before short box, short box is postgame.
+        if reverse_longbox_goal:
+            postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Long)"])
 
         return postgame_adjustments
 
@@ -469,30 +457,85 @@ class WitnessPlayerLogic:
             if entity_id in self.DOOR_ITEMS_BY_ID:
                 del self.DOOR_ITEMS_BY_ID[entity_id]
 
-    def make_dependency_reduced_checklist(self):
+    def find_unsolvable_entities(self, world: "WitnessWorld"):
+        postgame_included = bool(world.options.shuffle_postgame)
+
+        dirty = True
+
+        while dirty:
+            dirty = False
+            newly_discovered_disabled_entities = set()
+            self.make_dependency_reduced_checklist(postgame_included)
+
+            for entity, req in self.REQUIREMENTS_BY_HEX.items():
+                if not req and self.solvability_guaranteed(entity) and not entity == self.VICTORY_LOCATION:
+                    newly_discovered_disabled_entities.add(entity)
+                    dirty = True
+
+            self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
+
+            # find regions that are completely disconnected from the start node and remove them
+            reachable_regions = {"Entry"}
+
+            regions_dirty = True
+            while regions_dirty:
+                regions_dirty = False
+                regions_to_check = reachable_regions.copy()
+
+                while regions_to_check:
+                    next_region = regions_to_check.pop()
+
+                    for exit in self.CONNECTIONS_BY_REGION_NAME[next_region]:
+                        target = exit[0]
+
+                        valid_option = False
+
+                        for option in exit[1]:
+                            if not any(req in self.CONNECTIONS_BY_REGION_NAME and req not in reachable_regions for req in option):
+                                valid_option = True
+                                break
+
+                        if target in reachable_regions or not valid_option:
+                            continue
+
+                        regions_dirty = True
+                        regions_to_check.add(target)
+                        reachable_regions.add(target)
+
+            new_unreachable_regions = set(self.CONNECTIONS_BY_REGION_NAME) - reachable_regions - self.UNREACHABLE_REGIONS
+            if new_unreachable_regions:
+                dirty = True
+
+            self.UNREACHABLE_REGIONS.update(new_unreachable_regions)
+
+            e_str = '"' + ', '.join(
+                StaticWitnessLogic.ENTITIES_BY_HEX[e_hex]["checkName"] for e_hex in newly_discovered_disabled_entities
+            ) + '"'
+            reg_str = '"' + ', '.join(new_unreachable_regions) + '"'
+            if newly_discovered_disabled_entities:
+                print(f"Locations {e_str} have been determined to be unreachable.")
+            if new_unreachable_regions:
+                print(f"Regions {reg_str} have been determined to be unreachable.")
+
+    def make_dependency_reduced_checklist(self, allow_victory: bool):
         """
         Turns dependent check set into semi-independent check set
         """
+        self.reduce_req_within_region.cache_clear()
+
+        self.REQUIREMENTS_BY_HEX = dict()
+        self.USED_EVENT_NAMES_BY_HEX = dict()
 
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
-            indep_requirement = self.reduce_req_within_region(entity_hex)
+            indep_requirement = self.reduce_req_within_region(entity_hex, allow_victory)
 
             self.REQUIREMENTS_BY_HEX[entity_hex] = indep_requirement
 
-        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
-            if item not in self.THEORETICAL_ITEMS:
-                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
-                child_items = cast(ProgressiveItemDefinition,
-                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
-                multi_list = [child_item for child_item in child_items
-                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
-                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_LISTS[progressive_item_name] = multi_list
-            else:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+        self.CONNECTIONS_BY_REGION_NAME = dict()
 
-        for region, connections in self.CONNECTIONS_BY_REGION_NAME.items():
+        for region, connections in self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME.items():
+            self.CONNECTIONS_BY_REGION_NAME[region] = []
+
             new_connections = []
 
             for connection in connections:
@@ -505,7 +548,7 @@ class WitnessPlayerLogic:
                                 or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
-                            entity_req = self.reduce_req_within_region(entity)
+                            entity_req = self.reduce_req_within_region(entity, allow_victory)
 
                             if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]:
                                 region_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[entity]["region"]["name"]
@@ -515,9 +558,11 @@ class WitnessPlayerLogic:
 
                     overall_requirement |= dnf_and(individual_entity_requirements)
 
-                new_connections.append((connection[0], overall_requirement))
+                if overall_requirement:
+                    new_connections.append((connection[0], overall_requirement))
 
-            self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
+            if new_connections:
+                self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
     def solvability_guaranteed(self, entity_hex: str):
         return not (
@@ -580,6 +625,20 @@ class WitnessPlayerLogic:
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
         }
 
+    def finalize_items(self):
+        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
+            if item not in self.THEORETICAL_ITEMS:
+                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
+                child_items = cast(ProgressiveItemDefinition,
+                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
+                multi_list = [child_item for child_item in child_items
+                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
+                self.MULTI_LISTS[progressive_item_name] = multi_list
+            else:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+
     def make_event_item_pair(self, panel: str):
         """
         Makes a pair of an event panel and its event item
@@ -617,6 +676,8 @@ class WitnessPlayerLogic:
         self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES = set()
 
         self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY = set()
+
+        self.UNREACHABLE_REGIONS = set()
 
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
@@ -671,5 +732,8 @@ class WitnessPlayerLogic:
 
         self.make_options_adjustments(world)
         self.determine_unrequired_entities(world)
-        self.make_dependency_reduced_checklist()
+        self.find_unsolvable_entities(world)
+
+        self.make_dependency_reduced_checklist(True)
+        self.finalize_items()
         self.make_event_panel_lists()

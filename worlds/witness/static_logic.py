@@ -162,6 +162,18 @@ class StaticWitnessLogicObj:
 
             current_region["panels"].append(entity_hex)
 
+    def reverse_connections(self):
+        for region_name, connections in self.STATIC_CONNECTIONS_BY_REGION_NAME.items():
+            for connection in connections:
+                target = connection[0]
+                remaining_options = set()
+                for option in connection[1]:
+                    if not any(req == "TrueOneWay" for req in option):
+                        remaining_options.add(option)
+
+                if remaining_options:
+                    self.STATIC_CONNECTIONS_BY_REGION_NAME[target].add((region_name, frozenset(remaining_options)))
+
     def __init__(self, lines=None):
         if lines is None:
             lines = get_sigma_normal_logic()
@@ -181,6 +193,7 @@ class StaticWitnessLogicObj:
         self.ENTITY_ID_TO_NAME = dict()
 
         self.read_logic_file(lines)
+        self.reverse_connections()
 
 
 class StaticWitnessLogic:

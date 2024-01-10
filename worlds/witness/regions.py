@@ -91,7 +91,12 @@ class WitnessRegions:
         all_locations = set()
         regions_by_name = dict()
 
-        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
+        regions_to_create = {
+            k: v for k, v in self.reference_logic.ALL_REGIONS_BY_NAME.items()
+            if k not in player_logic.UNREACHABLE_REGIONS
+        }
+
+        for region_name, region in regions_to_create.items():
             locations_for_this_region = [
                 self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
                 if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
@@ -107,10 +112,9 @@ class WitnessRegions:
 
             regions_by_name[region_name] = new_region
 
-        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in regions_to_create.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
-                self.connect_if_possible(world, connection[0], region_name, connection[1], regions_by_name, True)
 
         # find regions that are completely disconnected from the start node and remove them
         regions_to_check = {"Menu"}
