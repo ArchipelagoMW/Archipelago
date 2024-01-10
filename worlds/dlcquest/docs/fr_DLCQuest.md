@@ -15,9 +15,9 @@ DLC Quest a deux campagnes, et le joueur peut choisir celle qu'il veut jouer pou
 Il peut également choisir de faire les deux campagnes.
 
 
-## Qu'est-ce qu'un contrôle d'emplacement dans DLC Quest ?
+## Quels sont les emplacements dans DLC quest ?
 
-Les contrôles de localisation dans DLC Quest comprennent toujours
+Les emplacements dans DLC Quest comprennent toujours
 - les achats de DLC auprès du commerçant
 - Les objectifs liés aux récompenses
     - Tuer des moutons dans DLC Quest

@@ -14,8 +14,7 @@
 
 ### Qu'est-ce qu'un fichier YAML et pourquoi en ai-je besoin ?
 
-Voir le guide sur la mise en place d'un YAML de base sur le site Archipelago setup
-de l'Archipel : [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
+Voir le guide d'Archipelago sur la mise en place d'un YAML de base : [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Où puis-je obtenir un fichier YAML ?
 
