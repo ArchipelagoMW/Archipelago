@@ -3,7 +3,7 @@ from typing import Protocol, Set
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
 from . import pyevermizer
-from .Options import EnergyCore, OutOfBounds, SequenceBreaks
+from .options import EnergyCore, OutOfBounds, SequenceBreaks
 
 # TODO: Options may preset certain progress steps (i.e. P_ROCK_SKIP), set in generate_early?
 

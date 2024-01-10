@@ -40,5 +40,5 @@ def read_rom(stream, strip_header=True) -> bytes:
 
 if __name__ == '__main__':
     import sys
-    print('Please use ../../Patch.py', file=sys.stderr)
+    print('Please use ../../patch.py', file=sys.stderr)
     sys.exit(1)
