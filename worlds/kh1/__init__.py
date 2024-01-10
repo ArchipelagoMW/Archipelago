@@ -4,7 +4,7 @@ from BaseClasses import Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import KH1Item, KH1ItemData, event_item_table, get_items_by_category, item_table
 from .Locations import KH1Location, location_table, get_locations_by_category
-from .Options import kh1_options
+from .Options import KH1Options
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
@@ -37,7 +37,8 @@ class KH1World(World):
     through many worlds to find Riku and Kairi.
     """
     game = "Kingdom Hearts"
-    option_definitions = kh1_options
+    options_dataclass = KH1Options
+    options: KH1Options
     topology_present = True
     data_version = 4
     required_client_version = (0, 3, 5)
@@ -46,43 +47,50 @@ class KH1World(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
-    # TODO: Replace calls to this function with "options-dict", once that PR is completed and merged.
-    def get_setting(self, name: str):
-        return getattr(self.multiworld, name)[self.player]
-
-    def fill_slot_data(self) -> dict:
-        return {option_name: self.get_setting(option_name).value for option_name in kh1_options}
-
     def create_items(self):
         item_pool: List[KH1Item] = []
-        level_up_locations = list(get_locations_by_category("Levels").keys())
-        level_up_rewards = list(get_items_by_category("Level Up", []).keys())
+        possible_level_up_item_pool = []
         level_up_item_pool = []
-        i = 0
-        while i < 100:
-            if i < 6:
-                level_up_item_pool.append("Accessory Slot Increase")
-            elif i < 10:
-                level_up_item_pool.append("Item Slot Increase")
-            else:
-                level_up_item_pool.append(random.choice(level_up_rewards))
-            i = i + 1
+        
+        #Fill pool with mandatory items
+        for i in range(self.options.item_slot_increase):
+            level_up_item_pool.append("Item Slot Increase")
+        for i in range(self.options.accessory_slot_increase):
+            level_up_item_pool.append("Accessory Slot Increase")
+        
+        #Create other pool
+        for i in range(self.options.strength_increase):
+            possible_level_up_item_pool.append("Strength Increase")
+        for i in range(self.options.defense_increase):
+            possible_level_up_item_pool.append("Defense Increase")
+        for i in range(self.options.hp_increase):
+            possible_level_up_item_pool.append("Max HP Increase")
+        for i in range(self.options.mp_increase):
+            possible_level_up_item_pool.append("Max MP Increase")
+        for i in range(self.options.ap_increase):
+            possible_level_up_item_pool.append("Max AP Increase")
+        
+        #Fill remaining pool with items from other pool
+        while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
+            level_up_item_pool.append(possible_level_up_item_pool.pop(random.randrange(len(possible_level_up_item_pool))))
+        
+        level_up_locations = list(get_locations_by_category("Levels").keys())
         random.shuffle(level_up_item_pool)
         i = 0
-        while i < 100:
+        while i < len(level_up_item_pool):
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
-        if self.get_setting("sephiroth") or self.get_setting("chronicles"):
+        if self.options.sephiroth or self.options.chronicles:
             possible_win_locations = []
-            if self.get_setting("sephiroth"):
+            if self.options.sephiroth:
                 possible_win_locations.append("Ansem's Secret Report 12")
-            if self.get_setting("chronicles"):
+            if self.options.chronicles:
                 possible_win_locations.append("Chronicles Wonderland")
                 possible_win_locations.append("Chronicles Olympus Coliseum")
                 possible_win_locations.append("Chronicles Deep Jungle")
                 possible_win_locations.append("Chronicles Agrabah")
                 possible_win_locations.append("Chronicles Monstro")
-                if self.get_setting("atlantica"):
+                if self.options.atlantica:
                     possible_win_locations.append("Chronicles Atlantica")
                 possible_win_locations.append("Chronicles Halloween Town")
             self.multiworld.get_location(random.choice(possible_win_locations), self.player).place_locked_item(self.create_item("Victory"))
@@ -90,7 +98,7 @@ class KH1World(World):
             self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]
-        if self.get_setting("atlantica"):
+        if self.options.atlantica:
             non_filler_item_categories.append("Atlantica")
         for name, data in item_table.items():
             quantity = data.max_quantity
@@ -137,7 +145,9 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.get_setting("sephiroth"), self.get_setting("atlantica"))
+        set_rules(self.multiworld, self.player, self.options.sephiroth, self.options.atlantica)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.get_setting("sephiroth"), self.get_setting("atlantica"))
+        create_regions(self.multiworld, self.player, self.options.sephiroth, self.options.atlantica\
+            , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase\
+            + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
