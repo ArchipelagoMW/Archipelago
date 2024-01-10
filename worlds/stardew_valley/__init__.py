@@ -1,16 +1,17 @@
 import logging
 from typing import Dict, Any, Iterable, Optional, Union, Set, List
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, CollectionState, ItemClassification, MultiWorld, Group as ItemLinkGroup
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles import get_all_bundles, Bundle
-from .items import item_table, create_items, ItemData, Group, items_by_group
+from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData
 from .logic import StardewLogic, StardewRule, True_, MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems
+from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
 from worlds.generic.Rules import set_rule
@@ -34,6 +35,7 @@ class StardewItem(Item):
 class StardewWebWorld(WebWorld):
     theme = "dirt"
     bug_report_page = "https://github.com/agilbert1412/StardewArchipelago/issues/new?labels=bug&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
+    options_presets = sv_options_presets
 
     tutorials = [
         Tutorial(
@@ -72,6 +74,7 @@ class StardewValleyWorld(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.all_progression_items = set()
+        self.filler_item_pool_names = []
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
@@ -268,7 +271,33 @@ class StardewValleyWorld(World):
         pass
 
     def get_filler_item_name(self) -> str:
-        return "Joja Cola"
+        if not self.filler_item_pool_names:
+            self.generate_filler_item_pool_names()
+        return self.random.choice(self.filler_item_pool_names)
+
+    def generate_filler_item_pool_names(self):
+        include_traps, exclude_island = self.get_filler_item_rules()
+        available_filler = get_all_filler_items(include_traps, exclude_island)
+        available_filler = remove_limited_amount_packs(available_filler)
+        self.filler_item_pool_names = [item.name for item in available_filler]
+
+    def get_filler_item_rules(self):
+        if self.player in self.multiworld.groups:
+            link_group: ItemLinkGroup = self.multiworld.groups[self.player]
+            include_traps = True
+            exclude_island = False
+            for player in link_group["players"]:
+                player_options = self.multiworld.worlds[player].options
+                if self.multiworld.game[player] != self.game:
+
+                    continue
+                if player_options.trap_items == TrapItems.option_no_traps:
+                    include_traps = False
+                if player_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+                    exclude_island = True
+            return include_traps, exclude_island
+        else:
+            return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
     def fill_slot_data(self) -> Dict[str, Any]:
 

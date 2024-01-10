@@ -170,7 +170,6 @@ class HKWorld(World):
         charm_costs = world.RandomCharmCosts[self.player].get_costs(world.random)
         self.charm_costs = world.PlandoCharmCosts[self.player].get_costs(charm_costs)
         # world.exclude_locations[self.player].value.update(white_palace_locations)
-        world.local_items[self.player].value.add("Mimic_Grub")
         for term, data in cost_terms.items():
             mini = getattr(world, f"Minimum{data.option}Price")[self.player]
             maxi = getattr(world, f"Maximum{data.option}Price")[self.player]
@@ -420,17 +419,16 @@ class HKWorld(World):
     def set_rules(self):
         world = self.multiworld
         player = self.player
-        if world.logic[player] != 'nologic':
-            goal = world.Goal[player]
-            if goal == Goal.option_hollowknight:
-                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
-            elif goal == Goal.option_siblings:
-                world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
-            elif goal == Goal.option_radiance:
-                world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
-            else:
-                # Any goal
-                world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
+        goal = world.Goal[player]
+        if goal == Goal.option_hollowknight:
+            world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player)
+        elif goal == Goal.option_siblings:
+            world.completion_condition[player] = lambda state: state._hk_siblings_ending(player)
+        elif goal == Goal.option_radiance:
+            world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
+        else:
+            # Any goal
+            world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)
 
         set_rules(self)
 
