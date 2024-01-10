@@ -1,4 +1,4 @@
-#Guide pour exécuter Archipelago à partir du code source sur macOS
+# Guide pour exécuter Archipelago à partir du code source sur macOS
 Archipelago n'a pas de version compilée sur macOS. Cependant, il est possible de l'exécuter à partir du code source sur macOS. Ce guide suppose que vous avez une certaine expérience de l'exécution de logiciels à partir du terminal.
 ## Les logiciels prérequis
 Voici une liste des logiciels à installer et du code source à télécharger.
