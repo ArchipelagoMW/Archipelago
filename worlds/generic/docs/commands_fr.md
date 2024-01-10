@@ -24,7 +24,7 @@ including the exclamation point.
 
 ### Utilitaires
 - `!countdown <nombre de secondes>` Démarre un compte à rebours en utilisant la valeur de secondes donnée. Utile pour synchroniser les démarrages.
-  Defaults to 10 seconds if no argument is provided.
+  Le compte à rebours durera 10 secondes si vous tapez simplement `!countdown` sans argument.
 - `!alias <alias>` Définit votre alias, ce qui vous permet d'utiliser des commandes avec l'alias plutôt qu'avec le nom que vous avez fourni.
 - `!admin <commande>` Exécute une commande comme si vous l'aviez tapée dans la console du serveur. L'administration à distance doit être activée.
 
