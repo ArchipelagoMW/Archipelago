@@ -58,7 +58,7 @@ including the exclamation point.
 
 ### Utilitaires
 - `/countdown <nombre de secondes>` Démarre un compte à rebours en utilisant la valeur de secondes donnée. Utile pour synchroniser les démarrages.
-  Defaults to 10 seconds if no argument is provided.
+  Le compte à rebours durera 10 secondes si vous tapez simplement `/countdown` sans argument.
 - `/option <nom de l'option> <valeur de l'option>` Définir une option du serveur. Pour obtenir une liste d'options, utilisez la commande `/options`.
 - `/alias <nom du joueur> <nom d'alias>` Attribuez un alias à un joueur, ce qui vous permet de faire référence au joueur par l'alias dans les commandes. 
 
