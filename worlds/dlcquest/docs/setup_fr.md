@@ -40,7 +40,7 @@ Vous pouvez personnaliser vos paramètres en visitant la [page des paramètres d
 
 ### Se connecter au MultiServer
 
-- Localisez le fichier "ArchipelagoConnectionInfo.json", à la racine de votre installation moddée. Vous pouvez éditer ce fichier avec n'importe quel éditeur de texte, et vous devez entrer l'adresse IP du serveur, le port et votre nom de joueur dans les champs appropriés.
+- Localisez le fichier "ArchipelagoConnectionInfo.json", qui se situe dans le même emplacement que votre installation moddée. Vous pouvez éditer ce fichier avec n'importe quel éditeur de texte, et vous devez entrer l'adresse IP du serveur, le port et votre nom de joueur dans les champs appropriés.
 
 - Exécutez BepInEx.NET.Framework.Launcher.exe. Si vous avez opté pour un raccourci sur le bureau, vous le trouverez avec une icône et un nom plus reconnaissable.
 ![image](https://i.imgur.com/ZUiFrhf.png)
