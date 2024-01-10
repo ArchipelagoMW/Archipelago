@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from Options import Choice, Range, Toggle, ItemDict, PerGameCommonOptions, StartInventoryPool
 
-from worlds.kh2 import default_itempool_option
+from . import default_itempool_option
 
 
 class SoraEXP(Range):
