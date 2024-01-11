@@ -12,7 +12,6 @@ from BaseClasses import Item, ItemClassification, Location, LocationProgressType
 from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
-from . import logic  # load logic mixin
 from .logic import SoEPlayerLogic
 from .options import AvailableFragments, Difficulty, EnergyCore, RequiredFragments, SoEOptions, TrapChance
 from .patch import SoEDeltaPatch, get_base_rom_path
