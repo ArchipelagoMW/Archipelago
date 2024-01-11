@@ -470,42 +470,26 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Cutthroat", "Cutthroat: West Command Center", SC2WOL_LOC_ID_OFFSET + 1807, LocationType.EXTRA,
                      lambda state: logic.terran_common_unit(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Victory", SC2WOL_LOC_ID_OFFSET + 1900, LocationType.VICTORY,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Odin", SC2WOL_LOC_ID_OFFSET + 1901, LocationType.EXTRA,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Loki", SC2WOL_LOC_ID_OFFSET + 1902,
                      LocationType.CHALLENGE,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Lab Devourer", SC2WOL_LOC_ID_OFFSET + 1903, LocationType.VANILLA,
                      lambda state: logic.marine_medic_upgrade(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: North Devourer", SC2WOL_LOC_ID_OFFSET + 1904, LocationType.VANILLA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Southeast Devourer", SC2WOL_LOC_ID_OFFSET + 1905, LocationType.VANILLA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: West Base", SC2WOL_LOC_ID_OFFSET + 1906, LocationType.EXTRA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Northwest Base", SC2WOL_LOC_ID_OFFSET + 1907, LocationType.EXTRA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Northeast Base", SC2WOL_LOC_ID_OFFSET + 1908, LocationType.EXTRA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Engine of Destruction", "Engine of Destruction: Southeast Base", SC2WOL_LOC_ID_OFFSET + 1909, LocationType.EXTRA,
-                     lambda state: logic.marine_medic_upgrade(state) and
-                                   logic.terran_competent_anti_air(state) and
-                                   logic.terran_common_unit(state) or state.has(ItemNames.WRAITH, player)),
+                     lambda state: logic.engine_of_destruction_requirement(state)),
         LocationData("Media Blitz", "Media Blitz: Victory", SC2WOL_LOC_ID_OFFSET + 2000, LocationType.VICTORY,
                      lambda state: logic.terran_competent_comp(state)),
         LocationData("Media Blitz", "Media Blitz: Tower 1", SC2WOL_LOC_ID_OFFSET + 2001, LocationType.VANILLA,

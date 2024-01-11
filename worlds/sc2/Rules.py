@@ -284,6 +284,13 @@ class SC2Logic:
             and self.terran_defense_rating(state, True) >= 3
         )
 
+    def engine_of_destruction_requirement(self, state: CollectionState):
+        self.marine_medic_upgrade(state) \
+        and (
+                self.terran_competent_anti_air(state)
+                and self.terran_common_unit(state) or state.has(ItemNames.WRAITH, self.player)
+        )
+
     def all_in_requirement(self, state: CollectionState):
         """
         All-in
