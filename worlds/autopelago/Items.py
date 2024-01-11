@@ -310,3 +310,15 @@ item_table = (
     'DVD Collection of Billy Mays Infomercials',
     'Old CD Key',
 )
+
+game_specific_items = {
+    'Pokemon Red and Blue': (
+        'First Item',
+        'Second Item',
+    ),
+
+    "Stardew Valley": (
+        'First Item',
+        'Second Item',
+    ),
+}
