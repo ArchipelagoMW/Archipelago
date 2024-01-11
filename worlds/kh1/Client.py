@@ -6,6 +6,7 @@ import asyncio
 import shutil
 import logging
 import re
+from .MessageHandler import KH1_message_type, KH1_UniversalMessage, KH1_MessageHandler
 
 import ModuleUpdate
 ModuleUpdate.update()
@@ -15,6 +16,8 @@ import Utils
 check_num = 0
 
 logger = logging.getLogger("Client")
+
+
 
 if __name__ == "__main__":
     Utils.init_logging("KH1Client", exception_logger="Client")
@@ -34,7 +37,6 @@ class KH1ClientCommandProcessor(ClientCommandProcessor):
     #    """Test"""
     #    self.output(f"Test")
 
-
 class KH1Context(CommonContext):
     command_processor: int = KH1ClientCommandProcessor
     game = "Kingdom Hearts"
@@ -45,6 +47,7 @@ class KH1Context(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
+
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KH1FM")
@@ -56,6 +59,19 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
+
+        self.message_handler = KH1_MessageHandler(2, self.game_communication_path)
+        #
+        # self.message_handler.receive_message(KH1_message_type.test, [
+        #     "I'm a test message",
+        #     "with multiple values",
+        #     "isn't that cool?"
+        # ]);
+        #
+        # self.message_handler.receive_message(KH1_message_type.test, [
+        #     "Thats a second test message",
+        #     "with only two values",
+        # ]);
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -78,6 +94,7 @@ class KH1Context(CommonContext):
             return []
 
     async def shutdown(self):
+        self.message_handler.stop_sending();
         await super(KH1Context, self).shutdown()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
@@ -92,6 +109,11 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            self.message_handler.receive_message(KH1_message_type.test, [
+                "Connected to the Multiworld!"
+            ]);
+
+
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
