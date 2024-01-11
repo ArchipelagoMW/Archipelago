@@ -9,7 +9,7 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, atlantica: bool, levels: int):
+def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, world_complete: bool, unknown:bool, atlantica: bool, levels: int):
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
@@ -261,7 +261,7 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, atlanti
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
    #regions["End of the World"].locations.append("Chronicles Sora's Story")
-    if not sephiroth: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
+    if not sephiroth and not world_complete: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
         regions["Wonderland"].locations.append("Chronicles Wonderland")
     regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
     regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
@@ -287,10 +287,11 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, atlanti
    #regions["Agrabah"].locations.append("Ansem's Secret Report 11")
     if sephiroth:
         regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 12")
-   #regions["Hollow Bastion"].locations.append("Ansem's Secret Report 13")
+    if unknown:
+        regions["Hollow Bastion"].locations.append("Ansem's Secret Report 13")
    
     for i in range(levels):
-        regions["Levels"].locations.append("Level " + str(i+1))
+        regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
 
    
     regions["Olympus Coliseum"].locations.append("Complete Phil Cup")
