@@ -340,7 +340,7 @@ class WitnessPlayerLogic:
 
         # Make condensed references to some options
 
-        doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region accessibility implications.
+        remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region accessibility implications.
         lasers = world.options.shuffle_lasers
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
@@ -354,10 +354,10 @@ class WitnessPlayerLogic:
         if not world.options.shuffle_discarded_panels:
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
-            if not world.options.disable_non_randomized_puzzles or (doors and lasers):
+            if not world.options.disable_non_randomized_puzzles or (remote_doors and lasers):
                 adjustment_linesets_in_order.append(get_discard_exclusion_list())
 
-            if doors:
+            if remote_doors:
                 adjustment_linesets_in_order.append(["Disabled Locations:", "0x17FA2"])
 
         if not world.options.shuffle_vault_boxes:
@@ -417,7 +417,7 @@ class WitnessPlayerLogic:
         if world.options.early_caves == "starting_inventory":
             adjustment_linesets_in_order.append(get_early_caves_start_list())
 
-        if world.options.early_caves == "add_to_pool" and not doors:
+        if world.options.early_caves == "add_to_pool" and not remote_doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
         if world.options.elevators_come_to_you:
