@@ -191,7 +191,7 @@ il s'agit de `archipelago.gg:<port>`. La plupart des clients acceptent que cette
 Si l'information doit être saisie séparément, le port est la séquence de chiffres après le `:`, et le `:` n'a pas besoin d'être saisi.
 Si un jeu est hébergé à partir de `ArchipelagoServer.exe`, le port sera par défaut `38281`, mais il peut être modifié dans le fichier `host.exe`. 
 * `Slot Name` est le nom du joueur auquel vous vous connectez. C'est le même nom que celui qui a été défini
-lors de la création de votre [fichier YAML](#Création-d-un-YAML).Si le jeu est hébergé sur le site web, ce nom est également affiché sur la
+lors de la création de votre [fichier YAML](#création-dun-yaml).Si le jeu est hébergé sur le site web, ce nom est également affiché sur la
 page de la salle.Le nom est sensible à la casse.
 * `Password` est le mot de passe défini par l'hôte pour rejoindre le multiworld. Par défaut, ce champ est vide et n'est presque 
 jamais requis, mais un mot de passe peut être défini lors de la génération du jeu. En général, laissez ce champ vide lorsqu'il 
