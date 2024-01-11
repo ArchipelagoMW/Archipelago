@@ -285,7 +285,7 @@ class SC2Logic:
         )
 
     def engine_of_destruction_requirement(self, state: CollectionState):
-        self.marine_medic_upgrade(state) \
+        return self.marine_medic_upgrade(state) \
         and (
                 self.terran_competent_anti_air(state)
                 and self.terran_common_unit(state) or state.has(ItemNames.WRAITH, self.player)
