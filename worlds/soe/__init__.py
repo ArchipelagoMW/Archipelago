@@ -173,8 +173,6 @@ class SoEWorld(World):
     location_name_to_id, location_id_to_raw = _get_location_mapping()
     item_name_groups = _get_item_grouping()
 
-    trap_types = [name[12:] for name in options_dataclass.__dataclass_fields__ if name.startswith('trap_chance_')]
-
     logic: SoEPlayerLogic
     evermizer_seed: int
     connect_name: str
@@ -317,26 +315,17 @@ class SoEWorld(World):
 
         # add traps to the pool
         trap_count = self.options.trap_count.value
-        trap_chances = {}
-        trap_names = {}
+        trap_names: typing.List[str] = []
+        trap_weights: typing.List[int] = []
         if trap_count > 0:
-            for trap_type in self.trap_types:
-                trap_option: TrapChance = getattr(self.options, f'trap_chance_{trap_type}')
-                trap_chances[trap_type] = trap_option.value
-                trap_names[trap_type] = trap_option.item_name
-            trap_chances_total = sum(trap_chances.values())
-            if trap_chances_total == 0:
-                for trap_type in trap_chances:
-                    trap_chances[trap_type] = 1
-                trap_chances_total = len(trap_chances)
+            for trap_option in self.options.trap_chances:
+                trap_names.append(trap_option.item_name)
+                trap_weights.append(trap_option.value)
+            if sum(trap_weights) == 0:
+                trap_weights = [1 for _ in trap_weights]
 
         def create_trap() -> Item:
-            v = self.random.randrange(trap_chances_total)
-            for t, c in trap_chances.items():
-                if v < c:
-                    return self.create_item(trap_names[t])
-                v -= c
-            assert False, "Bug in create_trap"
+            return self.create_item(self.random.choices(trap_names, trap_weights)[0])
 
         for _ in range(trap_count):
             if len(ingredients) < 1:
@@ -405,9 +394,7 @@ class SoEWorld(World):
             placement_file = out_base + '.txt'
             patch_file = out_base + '.apsoe'
             flags = 'l'  # spoiler log
-            for option in asdict(self.options).values():
-                if hasattr(option, "to_flag"):
-                    flags += option.to_flag()
+            flags += self.options.flags
 
             with open(placement_file, "wb") as f:  # generate placement file
                 for location in self.multiworld.get_locations(self.player):

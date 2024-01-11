@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Any, cast, Dict, List, Tuple, Protocol
+from dataclasses import dataclass, fields
+from typing import Any, cast, Dict, Iterator, List, Tuple, Protocol
 
 from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
     Range, Toggle
@@ -280,3 +280,19 @@ class SoEOptions(PerGameCommonOptions):
     trap_chance_hud:       TrapChanceHUD
     trap_chance_ohko:      TrapChanceOHKO
     progression_balancing: SoEProgressionBalancing
+
+    @property
+    def trap_chances(self) -> Iterator[TrapChance]:
+        for field in fields(self):
+            option = getattr(self, field.name)
+            if isinstance(option, TrapChance):
+                yield option
+
+    @property
+    def flags(self) -> str:
+        flags = ''
+        for field in fields(self):
+            option = getattr(self, field.name)
+            if isinstance(option, (EvermizerFlag, EvermizerFlags)):
+                flags += getattr(self, field.name).to_flag()
+        return flags
