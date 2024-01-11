@@ -315,7 +315,7 @@ class WitnessPlayerLogic:
             # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
             victory == "elevator" and not doors
 
-            # Caves Shortcuts / Challenge Entry (Panel) behind 11 lasers in a Challenge seed with vanilla doors = :(
+            # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
             or victory == "challenge" and early_caves and not doors
         )
 
