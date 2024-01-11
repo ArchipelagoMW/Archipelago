@@ -192,6 +192,28 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         lambda state: state.has("EVENT_VISITED_EVER_GRANDE_CITY", world.player)
     )
 
+    # Littleroot Town
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_SS_TICKET"),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+    )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_AURORA_TICKET"),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+    )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_EON_TICKET"),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+    )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_MYSTIC_TICKET"),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+    )
+    set_rule(
+        get_location("NPC_GIFT_RECEIVED_OLD_SEA_MAP"),
+        lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
+    )
+
     # Route 102
     set_rule(
         get_entrance("REGION_ROUTE102/MAIN -> REGION_ROUTE102/POND"),
@@ -1543,26 +1565,6 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         set_rule(
             get_location("NPC_GIFT_RECEIVED_AMULET_COIN"),
             lambda state: state.has("EVENT_TALK_TO_MR_STONE", world.player) and state.has("Balance Badge", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_SS_TICKET"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_AURORA_TICKET"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_EON_TICKET"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_MYSTIC_TICKET"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
-        )
-        set_rule(
-            get_location("NPC_GIFT_RECEIVED_OLD_SEA_MAP"),
-            lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player)
         )
 
         # Route 104
