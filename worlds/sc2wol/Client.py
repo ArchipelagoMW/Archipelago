@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import copy
 import ctypes
-import json
 import logging
 import multiprocessing
 import os.path
@@ -15,6 +14,7 @@ import queue
 import zipfile
 import io
 import random
+import concurrent.futures
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -42,6 +42,7 @@ import colorama
 from NetUtils import ClientStatus, NetworkItem, RawJSONtoTextParser, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
+pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()
 nest_asyncio.apply(loop)
 max_bonus: int = 13
@@ -210,6 +211,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
         Archipelago. Will overwrite existing files."""
+        pool.submit(self._download_data)
+        return True
+
+    @staticmethod
+    def _download_data() -> bool:
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -220,7 +226,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             metadata = None
 
         tempzip, metadata = download_latest_release_zip(DATA_REPO_OWNER, DATA_REPO_NAME, DATA_API_VERSION,
-                                                       metadata=metadata, force_download=True)
+                                                        metadata=metadata, force_download=True)
 
         if tempzip != '':
             try:
