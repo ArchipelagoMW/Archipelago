@@ -275,7 +275,7 @@ class WitnessPlayerLogic:
         postgame_adjustments = []
 
         # Make some quick references to some options
-        doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region accessibility implications.
+        remote_doors = world.options.shuffle_doors >= 2  # "Panels" mode has no region accessibility implications.
         early_caves = world.options.early_caves
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
@@ -313,10 +313,10 @@ class WitnessPlayerLogic:
 
         mbfd_extra_exclusions = (
             # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
-            victory == "elevator" and not doors
+            victory == "elevator" and not remote_doors
 
             # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
-            or victory == "challenge" and early_caves and not doors
+            or victory == "challenge" and early_caves and not remote_doors
         )
 
         if mbfd_extra_exclusions:
@@ -329,7 +329,7 @@ class WitnessPlayerLogic:
         # When your victory is Challenge, but you have to get to it the vanilla way, there are no required items
         # that can show up in the Caves that aren't also needed on the descent through Mountain.
         # So, we should disable all entities in the Caves and Tunnels *except* for those that are required to enter.
-        if not (early_caves or doors) and victory == "challenge":
+        if not (early_caves or remote_doors) and victory == "challenge":
             postgame_adjustments.append(get_caves_except_path_to_challenge_exclusion_list())
 
         return postgame_adjustments
