@@ -345,7 +345,7 @@ item_table: Dict[str, KH1ItemData] = {
     "Encounter Plus":                    KH1ItemData("Abilities",        code = 264_3061, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Leaf Bracer":                       KH1ItemData("Abilities",        code = 264_3062, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
    #"Evolution":                         KH1ItemData("Abilities",        code = 264_3063, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
-   #"EXP Zero":                          KH1ItemData("Abilities",        code = 264_3064, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
+    "EXP Zero":                          KH1ItemData("EXP Zero",         code = 264_3064, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Combo Master":                      KH1ItemData("Abilities",        code = 264_3065, classification = ItemClassification.useful,      max_quantity = 1,  weight = 10),
     "Max HP Increase":                   KH1ItemData("Level Up",         code = 264_4001, classification = ItemClassification.useful,      max_quantity = 15, weight = 10),
     "Max MP Increase":                   KH1ItemData("Level Up",         code = 264_4002, classification = ItemClassification.useful,      max_quantity = 15, weight = 10),
