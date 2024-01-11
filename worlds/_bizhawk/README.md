@@ -1,8 +1,10 @@
 # BizHawk Client
 
-`BizHawkClient` lets you to write a client for an emulated game using only python code in your world folder. It can also
-be shared between multiple different worlds, which removes the need to add more and more custom clients, creates a more
-unified experience for users, etc...
+`BizHawkClient` is an abstract base class for a client that can access the memory of a ROM running in BizHawk. It does
+the legwork of connecting python to a lua connector script, letting you focus on the loop of checking locations and
+making on-the-fly modifications based on updates from the server. It also provides the same experience to users across
+multiple games that use it, and was built in response to a growing number of similar but separate bespoke game clients
+which are/were largely exclusive to BizHawk anyway.
 
 It's similar to `SNIClient`, but where `SNIClient` is designed to work for specifically SNES games across different
 emulators/hardware, `BizHawkClient` is designed to work for specifically BizHawk across the different systems BizHawk
