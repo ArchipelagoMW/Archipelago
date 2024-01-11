@@ -14,6 +14,7 @@ import queue
 import zipfile
 import io
 import random
+import concurrent.futures
 from pathlib import Path
 
 # CommonClient import first to trigger ModuleUpdater
@@ -48,6 +49,7 @@ import colorama
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
 from MultiServer import mark_raw
 
+pool = concurrent.futures.ThreadPoolExecutor(1)
 loop = asyncio.get_event_loop_policy().new_event_loop()
 nest_asyncio.apply(loop)
 MAX_BONUS: int = 28
@@ -242,6 +244,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_download_data(self) -> bool:
         """Download the most recent release of the necessary files for playing SC2 with
         Archipelago. Will overwrite existing files."""
+        pool.submit(self._download_data)
+        return True
+
+    @staticmethod
+    def _download_data() -> bool:
         if "SC2PATH" not in os.environ:
             check_game_install_path()
 
@@ -477,7 +484,7 @@ class SC2Context(CommonContext):
     def run_gui(self) -> None:
         from .ClientGui import start_gui
         start_gui(self)
-        
+
 
     async def shutdown(self) -> None:
         await super(SC2Context, self).shutdown()
@@ -684,12 +691,12 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
     # Kerrigan unit available
     if ctx.kerrigan_presence in kerrigan_unit_available:
         options |= 1 << 0
-    
+
     # Bit 2
     # Kerrigan primal status by map
     if ctx.kerrigan_primal_status == KerriganPrimalStatus.option_vanilla:
         options |= 1 << 2
-    
+
     return options
 
 def caclulate_soa_options(ctx: SC2Context) -> int:
@@ -1180,7 +1187,7 @@ def check_game_install_path() -> bool:
                                     "then try again.")
                 return False
             base = search_result.group(1)
-                
+
             if os.path.exists(base):
                 executable = bot.paths.latest_executeble(Path(base).expanduser() / "Versions")
 
