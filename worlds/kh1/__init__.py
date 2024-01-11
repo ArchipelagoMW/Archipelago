@@ -80,19 +80,22 @@ class KH1World(World):
         while i < len(level_up_item_pool):
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
-        if self.options.sephiroth or self.options.chronicles:
+        if self.options.sephiroth or self.options.world_complete or self.options.unknown:
             possible_win_locations = []
             if self.options.sephiroth:
                 possible_win_locations.append("Ansem's Secret Report 12")
-            if self.options.chronicles:
-                possible_win_locations.append("Chronicles Wonderland")
-                possible_win_locations.append("Chronicles Olympus Coliseum")
+            if self.options.unknown:
+                possible_win_locations.append("Ansem's Secret Report 13")
+            if self.options.world_complete:
+               #possible_win_locations.append("Chronicles Wonderland") If completing HB1, becomes inaccessible
+               #possible_win_locations.append("Chronicles Olympus Coliseum") Removing, the world is just too short
                 possible_win_locations.append("Chronicles Deep Jungle")
                 possible_win_locations.append("Chronicles Agrabah")
                 possible_win_locations.append("Chronicles Monstro")
                 if self.options.atlantica:
-                    possible_win_locations.append("Chronicles Atlantica")
+                    possible_win_locations.append("Ansem's Secret Report 3")  #Replaces Chronicles Atlantica as it requires world completion
                 possible_win_locations.append("Chronicles Halloween Town")
+                possible_win_locations.append("Ansem's Secret Report 9") #Complete Neverland, Chronicles Neverland is not a location
             self.multiworld.get_location(random.choice(possible_win_locations), self.player).place_locked_item(self.create_item("Victory"))
         else:
             self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
@@ -145,9 +148,9 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options.sephiroth, self.options.atlantica)
+        set_rules(self.multiworld, self.player, self.options.sephiroth, self.options.world_complete, self.options.unknown, self.options.atlantica)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options.sephiroth, self.options.atlantica\
+        create_regions(self.multiworld, self.player, self.options.sephiroth, self.options.world_complete, self.options.unknown, self.options.atlantica\
             , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase\
             + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
