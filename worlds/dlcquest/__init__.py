@@ -29,7 +29,7 @@ class DLCqwebworld(WebWorld):
         "setup/fr",
         ["Deoxis"]
     )
-    tutorials=[setup_en,setup_fr]
+    tutorials = [setup_en, setup_fr]
 
 
 class DLCqworld(World):
