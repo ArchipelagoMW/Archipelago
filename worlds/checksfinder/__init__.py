@@ -9,7 +9,7 @@ client_version = 7
 
 
 class ChecksFinderWeb(WebWorld):
-    setup_en = Tutorial(
+    tutorials = [Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago ChecksFinder software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
@@ -17,9 +17,7 @@ class ChecksFinderWeb(WebWorld):
         "setup_en.md",
         "setup/en",
         ["Mewlif"]
-    )
-    
-    tutorials = [setup_en]
+    )]
 
 
 class ChecksFinderWorld(World):
