@@ -6,6 +6,7 @@ import asyncio
 import shutil
 import logging
 import re
+from .MessageHandler import KH1_message_type, KH1_UniversalMessage, KH1_MessageHandler
 import time
 from calendar import timegm
 
@@ -16,6 +17,8 @@ import Utils
 death_link = False
 
 logger = logging.getLogger("Client")
+
+
 
 if __name__ == "__main__":
     Utils.init_logging("KH1Client", exception_logger="Client")
@@ -30,6 +33,7 @@ def check_stdin() -> None:
         print("WARNING: Console input is not routed reliably on Windows, use the GUI instead.")
 
 class KH1ClientCommandProcessor(ClientCommandProcessor):
+
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
         global death_link
@@ -50,6 +54,7 @@ class KH1Context(CommonContext):
         self.send_index: int = 0
         self.syncing = False
         self.awaiting_bridge = False
+
         # self.game_communication_path: files go in this path to pass data between us and the actual game
         if "localappdata" in os.environ:
             self.game_communication_path = os.path.expandvars(r"%localappdata%/KH1FM")
@@ -61,6 +66,19 @@ class KH1Context(CommonContext):
             for file in files:
                 if file.find("obtain") <= -1:
                     os.remove(root+"/"+file)
+
+        self.message_handler = KH1_MessageHandler(2, self.game_communication_path)
+        #
+        # self.message_handler.receive_message(KH1_message_type.test, [
+        #     "I'm a test message",
+        #     "with multiple values",
+        #     "isn't that cool?"
+        # ]);
+        #
+        # self.message_handler.receive_message(KH1_message_type.test, [
+        #     "Thats a second test message",
+        #     "with only two values",
+        # ]);
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -83,6 +101,7 @@ class KH1Context(CommonContext):
             return []
 
     async def shutdown(self):
+        self.message_handler.stop_sending();
         await super(KH1Context, self).shutdown()
         for root, dirs, files in os.walk(self.game_communication_path):
             for file in files:
@@ -97,6 +116,11 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            self.message_handler.receive_message(KH1_message_type.test, [
+                "Connected to the Multiworld!"
+            ]);
+
+
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
@@ -143,10 +167,13 @@ class KH1Context(CommonContext):
                 itemCategory = networkItem.flags
                 recieverName = self.player_names[recieverID]
                 filename = "sent"
+                sanitizedItemName = re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15];
+                sanitizedRecieverName = re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6]
+
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.write(
-                      re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
-                    + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
+                      sanitizedItemName + "\n"
+                    + sanitizedRecieverName + "\n"
                     + str(itemCategory) + "\n"
                     + str(locationID))
                     f.close()
@@ -155,29 +182,6 @@ class KH1Context(CommonContext):
         with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w') as f:
             f.write(str(int(data["time"])))
             f.close()
-
-#f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
-
-
-
-        #last resort we can probably do better
-        #input: Krujo sent Magic Upgrade to Tim ((TT3) LocationName)
-        # if cmd in {"PrintJSON"}:
-        #     data = args["data"]
-        #     if data[0]:
-        #         msg = str(data[0]["text"]);
-        #         #player send a location
-        #         # if msg.startswith(self.auth + " sent "): #debug
-        #         with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
-        #             msg = msg.replace(self.auth + " sent ", "")
-        #             #Magic Upgrade to Tim ((TT3) LocationName)
-        #             splitTo = msg.split(" to ")
-        #             targetPlayer = splitTo[1].split(" ")[0]
-        #             f.close()
-
-
-
-
 
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
