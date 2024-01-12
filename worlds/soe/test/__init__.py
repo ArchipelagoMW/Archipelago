@@ -1,4 +1,4 @@
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 from typing import Iterable
 
 
@@ -18,3 +18,14 @@ class SoETestBase(WorldTestBase):
         for location in unreachable:
             self.assertFalse(self.can_reach_location(location),
                              f"{location} is reachable but shouldn't be")
+
+    def testRocketPartsExist(self):
+        """Tests that rocket parts exist and are unique"""
+        self.assertEqual(len(self.get_items_by_name("Gauge")), 1)
+        self.assertEqual(len(self.get_items_by_name("Wheel")), 1)
+        diamond_eyes = self.get_items_by_name("Diamond Eye")
+        self.assertEqual(len(diamond_eyes), 3)
+        # verify diamond eyes are individual items
+        self.assertFalse(diamond_eyes[0] is diamond_eyes[1])
+        self.assertFalse(diamond_eyes[0] is diamond_eyes[2])
+        self.assertFalse(diamond_eyes[1] is diamond_eyes[2])
