@@ -21,7 +21,7 @@ class DLCqwebworld(WebWorld):
         "setup/en",
         ["axe_y"]
     )
-    setup_fr=Tutorial(
+    setup_fr = Tutorial(
         "Guide de configuration MultiWorld",
         "Un guide pour configurer DLCQuest sur votre PC.",
         "Français",
