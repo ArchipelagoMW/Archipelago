@@ -1,7 +1,7 @@
 from typing import Callable, Dict, List, Set, Union
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
-    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives
+    progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
 from .MissionTables import mission_orders, MissionInfo, MissionPools, \
     get_campaign_goal_priority, campaign_final_mission_locations, campaign_alt_final_mission_locations, \
     get_no_build_missions, SC2Campaign, SC2Race, SC2CampaignGoalPriority, SC2Mission, lookup_name_to_mission, \
@@ -473,7 +473,7 @@ class ValidInventory:
 
     def __init__(self, multiworld: MultiWorld, player: int,
                  item_pool: List[Item], existing_items: List[Item], locked_items: List[Item],
-                 used_races: Set[SC2Race]):
+                 used_races: Set[SC2Race], nova_equipment_used: bool):
         self.multiworld = multiworld
         self.player = player
         self.logical_inventory = list()
@@ -499,6 +499,9 @@ class ValidInventory:
                         and item.name in spear_of_adun_castable_passives:
                     self.item_pool.append(item)
                 # Drop any item belonging to a race not used in the campaign
+                continue
+            if item.name in nova_equipment and not nova_equipment_used:
+                # Drop Nova equipment if there's no NCO mission generated
                 continue
             if item_info.type == "Upgrade":
                 # Locking upgrades based on mission duration
@@ -528,8 +531,9 @@ def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC
     open_locations = [location for location in location_cache if location.item is None]
     inventory_size = len(open_locations)
     used_races = get_used_races(mission_req_table, multiworld, player)
+    nova_equipment_used = is_nova_equipment_used(mission_req_table)
     mission_requirements = [location.access_rule for location in location_cache]
-    valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, used_races)
+    valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, used_races, nova_equipment_used)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
     return valid_items
@@ -561,6 +565,10 @@ def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
         races.add(SC2Race.TERRAN)
 
     return races
+
+def is_nova_equipment_used(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> bool:
+    missions = missions_in_mission_table(mission_req_table)
+    return any([mission.campaign == SC2Campaign.NCO for mission in missions])
 
 
 def missions_in_mission_table(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]]) -> Set[SC2Mission]:

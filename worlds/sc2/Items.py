@@ -1946,7 +1946,7 @@ spear_of_adun_castable_passives = {
     ItemNames.OVERWATCH,
 }
 
-nova_equimpent = {
+nova_equipment = {
     *[item_name for item_name, item_data in get_full_item_list().items()
       if item_data.type == "Nova Gear"],
     ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE

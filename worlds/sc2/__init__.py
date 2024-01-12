@@ -9,7 +9,7 @@ from . import ItemNames
 from .Items import StarcraftItem, filler_items, item_name_groups, get_item_table, get_full_item_list, \
     get_basic_units, ItemData, upgrade_included_names, progressive_if_nco, kerrigan_actives, kerrigan_passives, \
     kerrigan_only_passives, progressive_if_ext, not_balanced_starting_units, spear_of_adun_calldowns, \
-    spear_of_adun_castable_passives, nova_equimpent
+    spear_of_adun_castable_passives, nova_equipment
 from .Locations import get_locations, LocationType, get_location_types, get_plando_locations
 from .Regions import create_regions
 from .Options import get_option_value, LocationInclusion, KerriganLevelItemDistribution, \
@@ -173,7 +173,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
     # Nova gear exclusion if NCO not in campaigns
     if SC2Campaign.NCO not in enabled_campaigns:
-        excluded_items = excluded_items.union(nova_equimpent)
+        excluded_items = excluded_items.union(nova_equipment)
 
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
     # no Kerrigan & remove all passives => remove all abilities
