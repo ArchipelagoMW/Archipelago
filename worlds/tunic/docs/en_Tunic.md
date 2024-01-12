@@ -6,7 +6,7 @@ The [player options page for this game](../player-options) contains all the opti
 
 ## I haven't played TUNIC before.
 
-**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game, moreso than most other games in Archipelago.
+**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
 It is recommended that you achieve both endings in the vanilla game before playing the randomizer.
 
 ## What does randomization do to this game?
