@@ -14,7 +14,7 @@ It is recommended that you achieve both endings in the vanilla game before playi
 In the TUNIC Randomizer, every item in the game is randomized. All chests, key item pickups, instruction manual pages, hero relics,
 and other unique items are shuffled.<br>
 
-Ability shuffling is an option available from the settings page to shuffle certain abilities (prayer, holy cross, and the ice rod combo),
+Ability shuffling is an option available from the options page to shuffle certain abilities (prayer, holy cross, and the ice rod combo),
 preventing them from being used until they are unlocked.<br>
 
 Enemy randomization and other options are also available and can be turned on in the client mod.
