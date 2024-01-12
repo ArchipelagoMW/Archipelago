@@ -489,6 +489,37 @@ def generate_early(self) -> None:
     self.final_boss_hp = self.options.final_boss_hp.value
 ```
 
+#### create_regions
+
+```python
+def create_regions(self) -> None:
+    # Add regions to the multiworld. "Menu" is the required starting point.
+    # Arguments to Region() are name, player, multiworld, and optionally hint_text
+    menu_region = Region("Menu", self.player, self.multiworld)
+    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
+
+    main_region = Region("Main Area", self.player, self.multiworld)
+    # Add main area's locations to main area (all but final boss)
+    main_region.add_locations(main_region_locations, MyGameLocation)
+    # or 
+    # main_region.locations = \
+    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
+    self.multiworld.regions.append(main_region)
+
+    boss_region = Region("Boss Room", self.player, self.multiworld)
+    # Add event to Boss Room
+    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
+
+    # If entrances are not randomized, they should be connected here, otherwise they can also be connected at a later stage.
+    # Create Entrances and connect the Regions
+    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
+    # or
+    main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
+    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
+
+    # If setting location access rules from data is easier here, set_rules can possibly be omitted.
+```
+
 #### create_item
 
 ```python
@@ -538,37 +569,6 @@ def create_items(self) -> None:
     self.multiworld.itempool += [self.create_item("nothing") for _ in range(junk)]
 ```
 
-#### create_regions
-
-```python
-def create_regions(self) -> None:
-    # Add regions to the multiworld. "Menu" is the required starting point.
-    # Arguments to Region() are name, player, multiworld, and optionally hint_text
-    menu_region = Region("Menu", self.player, self.multiworld)
-    self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
-
-    main_region = Region("Main Area", self.player, self.multiworld)
-    # Add main area's locations to main area (all but final boss)
-    main_region.add_locations(main_region_locations, MyGameLocation)
-    # or 
-    # main_region.locations = \
-    #   [MyGameLocation(self.player, location_name, self.location_name_to_id[location_name], main_region]
-    self.multiworld.regions.append(main_region)
-
-    boss_region = Region("Boss Room", self.player, self.multiworld)
-    # Add event to Boss Room
-    boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
-
-    # If entrances are not randomized, they should be connected here, otherwise they can also be connected at a later stage.
-    # Create Entrances and connect the Regions
-    menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
-    # or
-    main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
-    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
-
-    # If setting location access rules from data is easier here, set_rules can possibly be omitted.
-```
-
 ### Setting Rules
 
 ```python
@@ -584,6 +584,7 @@ def set_rules(self) -> None:
     # set a simple rule for an region
     set_rule(self.multiworld.get_entrance("Boss Door", self.player),
              lambda state: state.has("Boss Key", self.player))
+    # location.access_rule = ... is likely to be a bit faster
     # combine rules to require two items
     add_rule(self.multiworld.get_location("Chest2", self.player),
              lambda state: state.has("Sword", self.player))
