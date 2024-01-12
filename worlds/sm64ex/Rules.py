@@ -21,7 +21,7 @@ def fix_reg(entrance_map: dict, entrance: SM64Levels, invalid_regions: set,
 def set_rules(world, player: int, area_connections: dict):
     randomized_level_to_paintings = sm64_level_to_paintings.copy()
     randomized_level_to_secrets = sm64_level_to_secrets.copy()
-    if world.AreaRandomizer[player].value == 1:  # Some randomization is happening, randomize Courses
+    if world.AreaRandomizer[player].value >= 1:  # Some randomization is happening, randomize Courses
         randomized_level_to_paintings = shuffle_dict_keys(world,sm64_level_to_paintings)
     if world.AreaRandomizer[player].value == 2:  # Randomize Secrets as well
         randomized_level_to_secrets = shuffle_dict_keys(world,sm64_level_to_secrets)
@@ -40,7 +40,8 @@ def set_rules(world, player: int, area_connections: dict):
             fix_reg(randomized_entrances, SM64Levels.CAVERN_OF_THE_METAL_CAP, {"Hazy Maze Cave"}, swapdict, world)
 
     # Destination Format: LVL | AREA with LVL = LEVEL_x, AREA = Area as used in sm64 code
-    area_connections.update({entrance_lvl: sm64_entrances_to_level[destination] for (entrance_lvl,destination) in randomized_entrances.items()})
+    # Cast to int to not rely on availability of SM64Levels enum. Will cause crash in MultiServer otherwise
+    area_connections.update({int(entrance_lvl): int(sm64_entrances_to_level[destination]) for (entrance_lvl,destination) in randomized_entrances.items()})
     randomized_entrances_s = {sm64_level_to_entrances[entrance_lvl]: destination for (entrance_lvl,destination) in randomized_entrances.items()}
     
     connect_regions(world, player, "Menu", randomized_entrances_s["Bob-omb Battlefield"])
