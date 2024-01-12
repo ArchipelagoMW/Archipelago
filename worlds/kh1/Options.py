@@ -58,25 +58,6 @@ class ItemSlotIncrease(Range):
     range_end = 5
     default = 3
 
-class Sephiroth(Toggle):
-    """
-    Toggle whether the win condition should be changed to defeating Sephiroth.
-    """
-    display_name = "Sephiroth"
-
-class WorldComplete(Toggle):
-    """
-    Toggle whether the win condition should be placed behind a random world completion.
-    This could be that works Chronicles or Secret Report location.  Better for fast games.
-    """
-    display_name = "World Complete"
-
-class Unknown(Toggle):
-    """
-    Toggle whether the win condition should be changed to defeating Unknown.
-    """
-    display_name = "Unknown"
-
 class Atlantica(Toggle):
     """
     Toggle whether Atlantica locations/items should be included.
