@@ -38,8 +38,7 @@ base_info = {
     "dependencies": [
         "base >= 1.1.0",
         "? science-not-invited",
-        "? factory-levels",
-        "SeaBlock", # Temporary hack for generation, we need a better way to do this.
+        "? factory-levels"
     ]
 }
 
