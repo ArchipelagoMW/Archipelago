@@ -16,5 +16,3 @@ of the disabled worlds, additional issues may need to be handled that were not p
   * World fails tests if world was not `hidden`
   * No client exists for world
   * No maintainer for world
-  * Not listed in README.md
-  * Removes special rule in `testDefaultAllStateCanReachEverything`
