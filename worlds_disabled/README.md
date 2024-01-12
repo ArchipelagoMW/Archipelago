@@ -12,7 +12,7 @@ of the disabled worlds, additional issues may need to be handled that were not p
 
 
 ### Ori and the Blind Forest (./oribf) 
-
+Disabled Jun 29, 2023
   * World fails tests if world was not `hidden`
   * No client exists for world
   * No maintainer for world
