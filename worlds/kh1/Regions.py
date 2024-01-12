@@ -9,7 +9,7 @@ class KH1RegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, world_complete: bool, unknown:bool, atlantica: bool, levels: int):
+def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, levels: int):
     regions: Dict[str, KH1RegionData] = {
         "Menu":             KH1RegionData(None, ["Awakening", "Levels"]),
         "Awakening":        KH1RegionData([],   ["Destiny Islands"]),
@@ -134,7 +134,7 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, world_c
     regions["Monstro"].locations.append("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"),
     regions["Monstro"].locations.append("Monstro Chamber 6 Low Chest"),
-    if atlantica:
+    if atlantica or goal == "atlantica":
         regions["Atlantica"].locations.append("Atlantica Sunken Ship In Flipped Boat Chest"),
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Seabed Chest"),
         regions["Atlantica"].locations.append("Atlantica Sunken Ship Inside Ship Chest"),
@@ -261,21 +261,21 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, world_c
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
    #regions["End of the World"].locations.append("Chronicles Sora's Story")
-    if not sephiroth and not world_complete: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
+    if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
         regions["Wonderland"].locations.append("Chronicles Wonderland")
     regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
     regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
     regions["Agrabah"].locations.append("Chronicles Agrabah")
     regions["Monstro"].locations.append("Chronicles Monstro")
    #regions["100 Acre Wood"].locations.append("Chronicles 100 Acre Wood")
-    if atlantica:
+    if atlantica or goal == "atlantica":
         regions["Atlantica"].locations.append("Chronicles Atlantica")
     regions["Halloween Town"].locations.append("Chronicles Halloween Town")
    #regions["Neverland"].locations.append("Chronicles Neverland")
     
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
-    if atlantica:
+    if atlantica or goal == "atlantica":
         regions["Atlantica"].locations.append("Ansem's Secret Report 3")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 4")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 5")
@@ -285,9 +285,9 @@ def create_regions(multiworld: MultiWorld, player: int, sephiroth: bool, world_c
     regions["Neverland"].locations.append("Ansem's Secret Report 9")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 10")
    #regions["Agrabah"].locations.append("Ansem's Secret Report 11")
-    if sephiroth:
+    if goal == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 12")
-    if unknown:
+    if goal == "unknown":
         regions["Hollow Bastion"].locations.append("Ansem's Secret Report 13")
    
     for i in range(levels):

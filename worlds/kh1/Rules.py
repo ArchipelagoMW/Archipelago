@@ -47,7 +47,7 @@ def has_item(state: CollectionState, player: int, item) -> bool:
 def has_at_least(state: CollectionState, player: int, item, x) -> bool:
     return state.count(item, player) >= x
 
-def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, world_complete: bool, unknown: bool, atlantica: bool):
+def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     #Location rules.
     #Keys
    #multiworld.get_location("Destiny Islands Chest"                                                        , player).access_rule = lambda state: has_item(state, player, "")
@@ -151,7 +151,7 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, world_comple
    #multiworld.get_location("Monstro Chamber 6 Platform Near Chamber 5 Entrance Chest"                     , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Chamber 6 Raised Area Near Chamber 1 Entrance Chest"                  , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
    #multiworld.get_location("Monstro Chamber 6 Low Chest"                                                  , player).access_rule = lambda state: has_item(state, player, "")
-    if atlantica:
+    if atlantica or goal == "atlantica":
        #multiworld.get_location("Atlantica Sunken Ship In Flipped Boat Chest"                              , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Sunken Ship Seabed Chest"                                       , player).access_rule = lambda state: has_item(state, player, "")
        #multiworld.get_location("Atlantica Sunken Ship Inside Ship Chest"                                  , player).access_rule = lambda state: has_item(state, player, "")
@@ -278,20 +278,20 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, world_comple
    #multiworld.get_location("Awakening Chest"                                                              , player).access_rule = lambda state: has_item(state, player, "")
     
    #multiworld.get_location("Chronicles Sora's Story"                                                      , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player)
-    if not sephiroth and not world_complete: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
+    if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
         multiworld.get_location("Chronicles Wonderland"                                                    , player).access_rule = lambda state: has_evidence(state, player)
    #multiworld.get_location("Chronicles Olympus Coliseum"                                                  , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Deep Jungle"                                                       , player).access_rule = lambda state: has_slides(state, player)
    #multiworld.get_location("Chronicles Agrabah"                                                           , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Chronicles Monstro"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
    #multiworld.get_location("Chronicles 100 Acre Wood"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-    if atlantica:
+    if atlantica or goal == "atlantica":
         multiworld.get_location("Chronicles Atlantica"                                                     , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Chronicles Halloween Town"                                                    , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
    #multiworld.get_location("Chronicles Neverland"                                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
-    if atlantica:
+    if atlantica or goal == "atlantica":
         multiworld.get_location("Ansem's Secret Report 3"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
     multiworld.get_location("Ansem's Secret Report 4"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 5"                                                      , player).access_rule = lambda state: has_emblems(state, player)
@@ -301,9 +301,9 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, world_comple
     multiworld.get_location("Ansem's Secret Report 9"                                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Ansem's Secret Report 10"                                                     , player).access_rule = lambda state: has_emblems(state, player)
    #multiworld.get_location("Ansem's Secret Report 11"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-    if sephiroth:
+    if goal == "sephiroth":
         multiworld.get_location("Ansem's Secret Report 12"                                                 , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
-    if unknown:
+    if goal == "unknown":
         multiworld.get_location("Ansem's Secret Report 13"                                                 , player).access_rule = lambda state: has_emblems(state, player)
     
     multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup")
@@ -317,7 +317,7 @@ def set_rules(multiworld: MultiWorld, player: int, sephiroth: bool, world_comple
     multiworld.get_entrance("Deep Jungle"                                                                  , player).access_rule = lambda state: has_item(state, player,"Deep Jungle")
     multiworld.get_entrance("Agrabah"                                                                      , player).access_rule = lambda state: has_item(state, player,"Agrabah")
     multiworld.get_entrance("Monstro"                                                                      , player).access_rule = lambda state: has_item(state, player,"Monstro")
-    if atlantica:
+    if atlantica or goal == "atlantica":
         multiworld.get_entrance("Atlantica"                                                                , player).access_rule = lambda state: has_item(state, player,"Atlantica") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Halloween Town"                                                               , player).access_rule = lambda state: has_item(state, player,"Halloween Town") and has_x_worlds(state, player, 2)
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
