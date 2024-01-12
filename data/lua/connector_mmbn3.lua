@@ -353,6 +353,10 @@ local getChipCodeIndex = function(chip_id, chip_code)
 end
 
 local getProgramColorIndex = function(program_id, program_color)
+    -- For whatever reason, OilBody (ID 24) does not follow the rules and should be color index 3
+    if program_id == 24 then
+        return 3
+    end
     -- The general case, most programs use white pink or yellow. This is the values the enums already have
     if program_id >= 20 and program_id <= 47 then
         return program_color-1
