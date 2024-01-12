@@ -36,8 +36,8 @@ a question mark symbol on it. Additionally, non-TUNIC items are color-coded by c
 
 ## I haven't played TUNIC before.
 
-**It is heavily discouraged to play this randomizer before playing the vanilla game, moreso than most other games in Archipelago.**
-**It is recommended that you achieve both endings in the vanilla game before playing the randomizer.**
+**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game, moreso than most other games in Archipelago.
+It is recommended that you achieve both endings in the vanilla game before playing the randomizer.
 
 ## Is there a tracker pack?
 There is a [tracker pack](https://github.com/SapphireSapphic/TunicTracker/releases/latest). It is compatible with both Poptracker and Emotracker. Using Poptracker, it will automatically track checked locations and important items received. It can also automatically tab between maps as you traverse the world. This tracker was originally created by SapphireSapphic and ScoutJD, and has been extensively updated by Br00ty.
