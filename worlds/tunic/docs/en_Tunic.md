@@ -1,8 +1,8 @@
 # TUNIC
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
 
 ## What does randomization do to this game?
 
@@ -33,6 +33,11 @@ chest with the original chest texture for that item.
 
 Items belonging to non-TUNIC players will either appear as a question-mark block (if in a freestanding location) or in a chest with
 a question mark symbol on it. Additionally, non-TUNIC items are color-coded by classification, with green for filler, blue for useful, and gold for progression.
+
+## I haven't played TUNIC before.
+
+**It is heavily discouraged to play this randomizer before playing the vanilla game, moreso than most other games in Archipelago.**
+**It is recommended that you achieve both endings in the vanilla game before playing the randomizer.**
 
 ## Is there a tracker pack?
 There is a [tracker pack](https://github.com/SapphireSapphic/TunicTracker/releases/latest). It is compatible with both Poptracker and Emotracker. Using Poptracker, it will automatically track checked locations and important items received. It can also automatically tab between maps as you traverse the world. This tracker was originally created by SapphireSapphic and ScoutJD, and has been extensively updated by Br00ty.
