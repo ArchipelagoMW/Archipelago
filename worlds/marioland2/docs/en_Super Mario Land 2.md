@@ -7,13 +7,19 @@ config file.
 
 ## What items and locations get shuffled?
 
-Completing a level's normal exit OR secret exit results in a location check for that level. Completing a normal exit
-does not automatically unlock the next level, but completing a secret exit does always bring you to the secret course.
-This means that if you can complete the secret exit, you do not need to return to complete the normal exit, as the check
-for the level will have been registered already.
+Completing a level's exits results in a location check instead of automatically bringing you to the next level.
+Where there are secret exits, the secret exit will be a separate location check. There is one exception, Hippo Zone,
+that does not have a separate check for its secret exit. The Hippo Zone secret exit will still bring you to the Space
+Zone.
 
-Unlocking "normal exit" paths requires shuffled zone progression items. So, for example, finding or receiving a "Tree
-Zone Progression" will unlock the path from Tree Zone 1 to Tree Zone 2.
+Unlocking paths to new levels requires finding or receiving Zone Progression items. For example, receiving the first
+"Turtle Zone Progression" will unlock the path from Turtle Zone 1 to Turtle Zone 2. Paths to secret levels are separate
+items, so Turtle Zone Secret will open the path from Turtle Zone 2 to the Turtle Zone Secret Course.
+
+Mario Zone, Pumpkin Zone, Tree Zone, and Macro Zone each have one "Zone Progression x2" item that opens two paths at
+once.
+
+The path from Tree Zone 2 to the branch to Tree Zone 3 and 4 is one unlock, so both levels will open at this point.
 
 Besides the zone progression unlocks, the following items are always shuffled:
 - Mushroom: required to become Big Mario. If you are Fire or Bunny Mario and take damage, and have not obtained the
@@ -23,6 +29,8 @@ Mushroom, you will drop straight down to Small Mario.
 - Swim: Mario will fall through water as though it is air until this is obtained.
 - Hippo Bubble: required to use the bubbles in Hippo Zone to fly.
 - Space Physics: the Space Zone levels will have normal gravity until this is obtained.
+- Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
+increase it. This is the main filler item and the number of them appearing in the item pool depends on your settings.
 
 Additionally, the following items can be shuffled depending on your YAML settings:
 - The 6 Golden Coins: note that the game will still show you the coin being sent to the castle when defeating a boss
@@ -32,10 +40,9 @@ Note that you may have to backtrack from the midway point to reach some secret e
 - Normal Mode/Easy Mode: you can start the game in Normal Mode with an Easy Mode "upgrade" in the item pool, or start in
 Easy Mode with a Normal Mode "trap" item, swapping the difficulty.
 - Auto Scroll: auto-scrolling levels can be set to not auto scroll until this trap item is received.
-- Pipe Traversal: required to enter pipes.
-- Super Star Duration Increase: you begin with a drastically lowered invincibility star duration, and these items will
-increase it. This is the main filler item generated to fill out the item pool. One or more will appear unless all other
-options to add items are on.
+- Pipe Traversal: required to enter pipes. Can also be split into 4 items, each enabling pipe entry from a different
+direction.
+
 
 ## When the player receives an item, what happens?
 
