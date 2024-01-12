@@ -256,7 +256,7 @@ class MyGameClient(BizHawkClient):
 - Make sure your client gets imported when your world is imported. You probably don't need to actually use anything in
 your `client.py` elsewhere, but you still have to import the file for your client to register itself.
 - When it comes to performance, there are two directions to optimize:  
-  1. When you have to do something all on the same frame, do as little as possible. Only read and write necessary data,
+  1. If you need to execute multiple commands on the same frame, do as little work as possible. Only read and write necessary data,
   and if you have to use locks, unlock as soon as it's okay to advance frames. This is probably the obvious one.
   2. Multiple things that don't have to happen on the same frame should be split up if they're likely to be slow.
   Remember, the game watcher runs fewer times per second than you can count on your hands. Extra function calls on the
