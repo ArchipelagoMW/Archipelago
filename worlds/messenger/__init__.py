@@ -8,7 +8,8 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
-from .options import Goal, Logic, MessengerOptions, NotesNeeded
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
+from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
 from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
@@ -88,6 +89,8 @@ class MessengerWorld(World):
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
     _filler_items: List[str]
+    starting_portals: List[str]
+    portal_mapping: List[int]
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -101,6 +104,11 @@ class MessengerWorld(World):
         self.multiworld.early_items[self.player]["Meditation"] = self.options.early_meditation.value
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
+
+        if self.options.available_portals > AvailablePortals.range_start:
+            # there's 3 specific portals that the game forces open
+            self.starting_portals = self.random.choices(SHUFFLEABLE_PORTAL_ENTRANCES,
+                                                        k=self.options.available_portals - 3)
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -174,6 +182,11 @@ class MessengerWorld(World):
             MessengerHardRules(self).set_messenger_rules()
         else:
             MessengerOOBRules(self).set_messenger_rules()
+        add_closed_portal_reqs(self)
+        # i need ER to happen after rules exist so i can validate it
+        if self.options.shuffle_portals:
+            disconnect_portals(self)
+            shuffle_portals(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
@@ -181,6 +194,7 @@ class MessengerWorld(World):
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
+            "starting_portals": self.starting_portals,
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
 

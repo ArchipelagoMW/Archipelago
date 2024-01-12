@@ -4,7 +4,7 @@ from typing import Dict
 from schema import And, Optional, Or, Schema
 
 from Options import Accessibility, Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+    StartInventoryPool, TextChoice, Toggle
 
 
 class MessengerAccessibility(Accessibility):
@@ -43,6 +43,33 @@ class LimitedMovement(Toggle):
 class EarlyMed(Toggle):
     """Guarantees meditation will be found early"""
     display_name = "Early Meditation"
+
+
+class AvailablePortals(Range):
+    """Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are currently always available. If portal outputs are not randomized, Searing Crags will also be available."""
+    display_name = "Number of Available Starting Portals"
+    range_start = 3
+    range_end = 6
+    default = 4
+
+
+class ShufflePortals(TextChoice):
+    """
+    Whether the portals lead to random places.
+    Entering a portal from its vanilla area will always lead to HQ, and will unlock it if relevant.
+    Supports plando.
+    
+    None: Portals will take you where they're supposed to.
+    Shops: Portals can lead to any area except Music Box and Elemental Skylands, with each portal output guaranteed to not overlap with another portal's. Will only put you at a portal or a shop.
+    Checkpoints: Like Shops except checkpoints without shops are also valid drop points.
+    Anywhere: Like Shuffle except it's possible for multiple portals to output to the same map.
+    """
+    display_name = "Shuffle Portal Outputs"
+    option_none = 0
+    alias_off = 0
+    option_shops = 1
+    option_checkpoints = 2
+    option_anywhere = 3
 
 
 class Goal(Choice):
@@ -147,6 +174,8 @@ class MessengerOptions(PerGameCommonOptions):
     shuffle_shards: MegaShards
     limited_movement: LimitedMovement
     early_meditation: EarlyMed
+    available_portals: AvailablePortals
+    shuffle_portals: ShufflePortals
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded
