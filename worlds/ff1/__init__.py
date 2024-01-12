@@ -15,17 +15,14 @@ class FF1Settings(settings.Group):
 
 class FF1Web(WebWorld):
     options_page = "https://finalfantasyrandomizer.com/"
-    
-    setup_en = Tutorial(
+    tutorials = [Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Final Fantasy multiworld. This guide only covers playing multiworld.",
         "English",
         "multiworld_en.md",
         "multiworld/en",
         ["jat2980"]
-    )
-    
-    tutorials = [setup_en]
+    )]
 
 
 class FF1World(World):
