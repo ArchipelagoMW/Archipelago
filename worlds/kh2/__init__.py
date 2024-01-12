@@ -23,16 +23,14 @@ components.append(Component("KH2 Client", "KH2Client", func=launch_client, compo
 
 
 class KingdomHearts2Web(WebWorld):
-    setup_en = Tutorial(
+    tutorials = [Tutorial(
             "Multiworld Setup Guide",
             "A guide to playing Kingdom Hearts 2 Final Mix with Archipelago.",
             "English",
             "setup_en.md",
             "setup/en",
             ["JaredWeakStrike"]
-    )
-    
-    tutorials = [setup_en]
+    )]
 
 
 class KH2World(World):
