@@ -51,7 +51,8 @@ class MMBN3World(World):
     threat the Internet has ever faced!
     """
     game = "MegaMan Battle Network 3"
-    option_definitions = MMBN3Options
+    options_dataclass = MMBN3Options
+    options: MMBN3Options
     settings: typing.ClassVar[MMBN3Settings]
     topology_present = False
 
@@ -71,10 +72,10 @@ class MMBN3World(World):
         Already has access to player options and RNG.
         """
         self.item_frequencies = item_frequencies.copy()
-        if self.multiworld.extra_ranks[self.player] > 0:
-            self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.multiworld.extra_ranks[self.player]
+        if self.options.extra_ranks > 0:
+            self.item_frequencies[ItemName.Progressive_Undernet_Rank] = 8 + self.options.extra_ranks
 
-        if not self.multiworld.include_jobs[self.player]:
+        if not self.options.include_jobs:
             self.excluded_locations = always_excluded_locations + [job.name for job in jobs]
         else:
             self.excluded_locations = always_excluded_locations
@@ -414,10 +415,10 @@ class MMBN3World(World):
                         long_item_text = ""
 
                         # No item hinting
-                        if self.multiworld.trade_quest_hinting[self.player] == 0:
+                        if self.options.trade_quest_hinting == 0:
                             item_name_text = "Check"
                         # Partial item hinting
-                        elif self.multiworld.trade_quest_hinting[self.player] == 1:
+                        elif self.options.trade_quest_hinting == 1:
                             if item.progression == ItemClassification.progression \
                                     or item.progression == ItemClassification.progression_skip_balancing:
                                 item_name_text = "Progress"
@@ -469,7 +470,11 @@ class MMBN3World(World):
         return MMBN3Item(event, ItemClassification.progression, None, self.player)
 
     def fill_slot_data(self):
-        return {name: getattr(self.multiworld, name)[self.player].value for name in self.option_definitions}
+        return {
+            "extra_ranks": self.options.extra_ranks.value,
+            "include_jobs": self.options.include_jobs.value,
+            "trade_quest_hinting": self.options.trade_quest_hinting.value
+        }
 
 
     def explore_score(self, state):
