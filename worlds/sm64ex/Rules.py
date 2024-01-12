@@ -89,7 +89,8 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     connect_regions(world, player, "Basement", randomized_entrances_s["Dire, Dire Docks"],
                     lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]))
     connect_regions(world, player, "Hazy Maze Cave", randomized_entrances_s["Cavern of the Metal Cap"])
-    connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"])
+    connect_regions(world, player, "Basement", randomized_entrances_s["Vanish Cap under the Moat"],
+                    rf.build_rule("GP"))
     connect_regions(world, player, "Basement", randomized_entrances_s["Bowser in the Fire Sea"],
                     lambda state: state.has("Power Star", player, star_costs["BasementDoorCost"]) and
                                   state.can_reach("DDD: Board Bowser's Sub", 'Location', player))
