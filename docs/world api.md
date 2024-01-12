@@ -1,11 +1,9 @@
 # Archipelago API
 
 This document tries to explain some internals required to implement a game for Archipelago's generation and server.
-Once a seed is generated, a client or mod is required to send and receive items between the game and server.
 
 Client implementation is out of scope of this document. Please refer to an existing game that provides a similar API to
-yours.
-Refer to the following documents as well:
+yours, and the following documents:
 
 * [network protocol.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/network%20protocol.md)
 * [adding games.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/adding%20games.md)
@@ -135,26 +133,25 @@ Options are provided by the user as part of the generation process, intended to 
 should play out. These can control aspects such as what locations should be shuffled, what items are in the itempool,
 etc. Players provide the customized options for their World in the form of yamls.
 
-A `dataclass`, which must be a subclass of `PerGameCommonOptions`, of valid options definitions has to be provided in
-`self.options_dataclass`. Option results are then automatically added to the `World` object for easy access, between
-`World` creation and `generate_early`. These are accessible through `self.options.<option_name>`, and you can get a
-dictionary with option values via `self.options.as_dict(<option_names>)`, passing the desired option names as strings.
+By convention, options are defined in `options.py` and will be used when parsing the players' yaml files. Each option
+has its own class, which inherits from a base option type, has a docstring to describe it, and a `display_name` property
+for display on the website and in spoiler logs.
 
-By convention, options are defined in `options.py` and will be used when parsing the players' yaml files.
-
-Each option has its own class, which inherits from a base option type, has a docstring to describe it, and a
-`display_name` property for display on the website and in spoiler logs.
-
-The actual name as used in the yaml is defined via the field names of a `dataclass` that is assigned to the world under
-`self.options_dataclass`. By convention, the strings that define your option names should be in `snake_case`.
+The available options are defined by creating a `dataclass`, which must be a subclass of `PerGameCommonOptions`, and has
+defined fields for the option names to be used in the player yamls and for options access, with their types matching the
+appropriate Option class. By convention, the strings that define your option names should be in `snake_case`. The
+`dataclass` is then assigned to your `World` by defining its `options_dataclass`. Option results are then automatically
+added to the `World` object for easy access, between `World` creation and `generate_early`. These are accessible through
+`self.options.<option_name>`, and you can get a dictionary with option values via `self.options.as_dict(<option_names>)`,
+passing the desired option names as strings.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, and `Range`.
 For more information, see the [options api doc](options%20api.md).
 
 ### World Settings
 
-Settings are set by the user for the particular world, and can be used for those settings that may affect generation or
-client behavior, but should be static between generations, such as the path to a ROM file.
+Settings are set by the user sans the generation process, and can be used for those settings that may affect generation
+or client behavior, but should be static between generations, such as the path to a ROM file.
 These settings are accessible through `self.settings.<setting_name>` or `cls.settings.<setting_name>`.
 
 Users can set these in their `host.yaml` file. Some settings may automatically open a file browser if a file is missing.
@@ -264,11 +261,13 @@ class MyGameWorld(World):
 
 An Event is a special combination of a Location and an Item, with both having an `id` of `None`. These can be used to
 track certain logic interactions, with the Event Item being required for access in other locations or regions, but not
-being "real". They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
+being "real". Since the item and location have no id, they get dropped at the end of generation and so the server is
+never made aware of them and these locations can never be checked, nor the items received during play.
+They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
 is required to finish the game, it will be very clear where the player finishes, rather than only seeing their last
 relevant found Item. Events function just like any other Location, and can still have their own access rules, etc.
 By convention, the Event "pair" of Location and Item typically have the same name, though this is not a requirement.
-They do not need to exist in the `name_to_id` lookups, as they will be stripped at the end of generation.
+They must not exist in the `name_to_id` lookups, as they have no id.
 
 The most common way to create an Event pair is to create and place the Item on the Location as soon as it's created:
 
