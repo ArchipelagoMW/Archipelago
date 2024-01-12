@@ -156,29 +156,6 @@ class KH1Context(CommonContext):
             f.write(str(int(data["time"])))
             f.close()
 
-#f.write(self.item_names[NetworkItem(*item).item] + "\n" + self.location_names[NetworkItem(*item).location] + "\n" + self.player_names[NetworkItem(*item).player])
-
-
-
-        #last resort we can probably do better
-        #input: Krujo sent Magic Upgrade to Tim ((TT3) LocationName)
-        # if cmd in {"PrintJSON"}:
-        #     data = args["data"]
-        #     if data[0]:
-        #         msg = str(data[0]["text"]);
-        #         #player send a location
-        #         # if msg.startswith(self.auth + " sent "): #debug
-        #         with open(os.path.join(self.game_communication_path, "sent"), 'w') as f:
-        #             msg = msg.replace(self.auth + " sent ", "")
-        #             #Magic Upgrade to Tim ((TT3) LocationName)
-        #             splitTo = msg.split(" to ")
-        #             targetPlayer = splitTo[1].split(" ")[0]
-        #             f.close()
-
-
-
-
-
     def run_gui(self):
         """Import kivy UI system and start running it as self.ui_task."""
         from kvui import GameManager
