@@ -6,6 +6,13 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/markdown.css") }}" />
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/weightedOptions/weightedOptions.css") }}" />
     <script type="application/ecmascript" src="{{ url_for('static', filename="assets/weightedOptions.js") }}"></script>
+    <noscript>
+        <style>
+            .js-required{
+                display: none;
+            }
+        </style>
+    </noscript>
 {% endblock %}
 
 {% block body %}

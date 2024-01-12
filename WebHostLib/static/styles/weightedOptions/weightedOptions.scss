@@ -212,32 +212,30 @@ html{
         .options-container{
             display: none;
             flex-direction: column;
+
+            .options-wrapper{
+                margin-left: 0.5rem;
+                display: none;
+                flex-direction: column;
+            }
         }
 
         &:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked){
             .options-container{
                 display: flex;
+
+                &:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked){
+                    .options-wrapper{
+                        display: flex;
+                    }
+
+                    span.group-collapse-arrow{
+                        transform: rotate(90deg);
+                    }
+                }
             }
 
             span.world-collapse-arrow{
-                transform: rotate(90deg);
-            }
-        }
-    }
-
-    .options-container{
-        .options-wrapper{
-            margin-left: 0.5rem;
-            display: none;
-            flex-direction: column;
-        }
-
-        &:has(h3.group-name):has(input[type=checkbox].collapse-toggle:checked){
-            .options-wrapper{
-                display: flex;
-            }
-
-            span.group-collapse-arrow{
                 transform: rotate(90deg);
             }
         }
