@@ -169,7 +169,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if any(hasattr(world.worlds[player].options, "start_inventory_from_pool") for player in world.player_ids):
+    if any(getattr(world.worlds[player].options, "start_inventory_from_pool", None) for player in world.player_ids):
         new_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
             player: getattr(world.worlds[player], "start_inventory_from_pool", StartInventoryPool({})).value.copy()
