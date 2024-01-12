@@ -48,3 +48,11 @@ direction.
 
 There is no in-game indication that an item has been received. You will need to watch the client to be sure you're aware
 of the items you've received.
+
+## Special Thanks to:
+
+- [froggestspirit](https://github.com/froggestspirit) for his Super Mario Land 2 disassembly. While very incomplete, it
+had enough memory values mapped out to make my work significantly easier.
+- [slashinfty](https://github.com/slashinfty), the author of the
+[Super Mario Land 2 Randomizer](https://sml2r.download/) for permitting me to port features such as Randomize Enemies
+and Randomize Platforms directly from it.
