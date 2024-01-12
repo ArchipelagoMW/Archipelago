@@ -415,10 +415,13 @@ for root in base_starts:
     progressive_rows["progressive-" + root] = tuple(progressive)
 
 # some modded techs add a -0 tech
-for remnant in progressive_incs:
+for remnant in list(progressive_incs):
     if remnant[-1] == "0":
         prog_name = "progressive-" + remnant[:-2]
         progressive_rows[prog_name] = tuple([remnant] + list(progressive_rows[prog_name]))
+        progressive_incs.remove(remnant)
+
+assert not progressive_incs, "some numbered techs were not included in progressive techs"
 
 # science packs
 progressive_rows["progressive-science-pack"] = tuple(Options.MaxSciencePack.get_ordered_science_packs())[1:]
@@ -443,7 +446,8 @@ progressive_rows["progressive-turret"] = ("gun-turret", "laser-turret")
 progressive_rows["progressive-flamethrower"] = ("flamethrower",)  # leaving out flammables, as they do nothing
 progressive_rows["progressive-personal-roboport-equipment"] = ("personal-roboport-equipment",
                                                                "personal-roboport-mk2-equipment")
-
+# modded progressives
+progressive_rows["progressive-ore-crushing"] = ("ore-crushing", "ore-advanced-crushing", "ore-floatation",)
 sorted_rows = sorted(progressive_rows)
 
 # integrate into
