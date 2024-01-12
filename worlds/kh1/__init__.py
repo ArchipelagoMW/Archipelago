@@ -87,7 +87,7 @@ class KH1World(World):
                 self.multiworld.get_location("Chronicles Deep Jungle", self.player).place_locked_item(self.create_item("Victory"))
             case "agrabah":
                 self.multiworld.get_location("Chronicles Agrabah", self.player).place_locked_item(self.create_item("Victory"))
-            case "agrabah":
+            case "monstro":
                 self.multiworld.get_location("Chronicles Monstro", self.player).place_locked_item(self.create_item("Victory"))
             case "atlantica":
                 self.multiworld.get_location("Ansem's Secret Report 3", self.player).place_locked_item(self.create_item("Victory"))
