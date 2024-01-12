@@ -7,7 +7,8 @@ documentation.
 ## Rationale for Disabled Worlds
 
 Listed below is the reason for each world being disabled. For a world to be considered for reactivation, all concerns
-should be addressed, however this requirement does not guarantee reactivation in and of itself.
+should be addressed, however this requirement does not guarantee reactivation in and of itself. Depending on the age 
+of the disabled worlds, additional issues may need to be handled that were not present previously.
 
 
 ### Ori and the Blind Forest (./oribf) 
