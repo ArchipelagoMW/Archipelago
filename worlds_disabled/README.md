@@ -12,8 +12,8 @@ should be addressed, however this requirement does not guarantee reactivation in
 
 ### Ori and the Blind Forest (./oribf) 
 
-  * World fails tests if world was not `hidden`.
-  * No client exists for world.
-  * No maintainer for world.
-  * Not listed in README.md.
-  * Removes special rule in `testDefaultAllStateCanReachEverything`.
+  * World fails tests if world was not `hidden`
+  * No client exists for world
+  * No maintainer for world
+  * Not listed in README.md
+  * Removes special rule in `testDefaultAllStateCanReachEverything`
