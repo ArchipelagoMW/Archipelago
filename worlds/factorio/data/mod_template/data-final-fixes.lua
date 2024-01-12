@@ -210,8 +210,3 @@ set_energy("{{ recipe_name }}", {{ flop_random(*recipe_time_range) }})
 technologies["rocket-silo"].enabled = false
 technologies["rocket-silo"].visible_when_disabled = false
 {%- endif %}
-
-if data.raw["map-gen-presets"].default["archipelago"] ~= nil then
-    -- Somebody - probably Seablock - didn't like our map settings
-    data.raw["map-gen-presets"].default["archipelago"] = data.raw["map-gen-presets"].default["default"]
-end
