@@ -76,7 +76,6 @@ non_apworlds: set = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Secret of Evermore",
     "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
