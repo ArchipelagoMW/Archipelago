@@ -317,6 +317,11 @@ game_specific_items = {
         'Second Item',
     ),
 
+    'Ocarina of Time': (
+        'First Item',
+        'Second Item',
+    ),
+
     "Stardew Valley": (
         'First Item',
         'Second Item',
