@@ -403,6 +403,15 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 425")
 
+    async def chestPuzzleLocations(self):
+        for puzzle_dict in [Awakening_Checks, Heart_Checks, Duality_Checks, Frontier_Checks, Daylight_Checks]:
+            for location, data in puzzle_dict.items():
+                if location in self.kh2_loc_name_to_id.keys():
+                    locationId = self.kh2_loc_name_to_id[location]
+                    if locationId not in self.locations_checked \
+                            and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
+                        self.sending = self.sending + [(int(locationId))]
+
     async def checkLevels(self):
         try:
             for location, data in SoraLevels.items():
@@ -802,7 +811,7 @@ class KH2Context(CommonContext):
                                 self.kh2_write_byte(self.Save + 0x2502, current_item_slots + 1)
                             elif self.base_item_slots + amount_of_items < 8:
                                 self.kh2_write_byte(self.Save + 0x2502, self.base_item_slots + amount_of_items)
-                                
+
                 # if self.kh2_read_byte(self.Save + item_data.memaddr) != amount_of_items \
                 #        and self.kh2_read_byte(self.Slot1 + 0x1B2) >= 5 and \
                 #        self.kh2_read_byte(self.Save + 0x23DF) & 0x1 << 3 > 0 and self.kh2_read_byte(0x741320) in {10, 8}:
@@ -892,6 +901,7 @@ async def kh2_watcher(ctx: KH2Context):
                 await asyncio.create_task(ctx.verifyChests())
                 await asyncio.create_task(ctx.verifyItems())
                 await asyncio.create_task(ctx.verifyLevel())
+                await asyncio.create_task(ctx.chestPuzzleLocations())
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

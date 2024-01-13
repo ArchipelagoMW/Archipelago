@@ -154,3 +154,5 @@ LevelsVS18 = "Levels Region (18 Visit Locking Items)"
 LevelsVS21 = "Levels Region (21 Visit Locking Items)"
 LevelsVS24 = "Levels Region (24 Visit Locking Items)"
 LevelsVS26 = "Levels Region (26 Visit Locking Items)"
+
+PuzzlePieces="Puzzle Pieces"

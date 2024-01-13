@@ -7,6 +7,7 @@ import zipfile
 
 from .Items import item_dictionary_table
 from .Locations import all_locations, SoraLevels, exclusion_table
+from .Names import ItemName, LocationName
 from .XPValues import lvlStats, formExp, soraExp
 from worlds.Files import APContainer
 
@@ -53,7 +54,24 @@ def patch_kh2(self, output_directory):
     formexp = None
     formName = None
     levelsetting = list()
-
+    #formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
+    formDictExp = {
+        "Valor": self.multiworld.Valor_Form_EXP[self.player].value,
+        "Wisdom": self.multiworld.Wisdom_Form_EXP[self.player].value,
+        "Limit": self.multiworld.Limit_Form_EXP[self.player].value,
+        "Master": self.multiworld.Master_Form_EXP[self.player].value,
+        "Final": self.multiworld.Final_Form_EXP[self.player].value
+    }
+    for form_name, form_exp in formDictExp.items():
+        data = all_locations[LocationName.Valorlvl2]
+        self.formattedFmlv[form_name] = []
+        self.formattedFmlv[form_name].append({
+            "Ability":            1,
+            "Experience":         int(formExp[form_name][1] / form_exp),
+            "FormId":             data.charName,
+            "FormLevel":          1,
+            "GrowthAbilityLevel": 0,
+        })
     if self.multiworld.Keyblade_Minimum[self.player].value > self.multiworld.Keyblade_Maximum[self.player].value:
         logging.info(
                 f"{self.multiworld.get_file_safe_player_name(self.player)} has Keyblade Minimum greater than Keyblade Maximum")
@@ -139,29 +157,10 @@ def patch_kh2(self, output_directory):
         elif data.yml == "Forms":
             # loc id is form lvl
             # char name is the form name number :)
-            if data.locid == 2:
-                formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
-                formDictExp = {
-                    1: self.multiworld.Valor_Form_EXP[self.player].value,
-                    2: self.multiworld.Wisdom_Form_EXP[self.player].value,
-                    3: self.multiworld.Limit_Form_EXP[self.player].value,
-                    4: self.multiworld.Master_Form_EXP[self.player].value,
-                    5: self.multiworld.Final_Form_EXP[self.player].value
-                }
-                formexp = formDictExp[data.charName]
-                formName = formDict[data.charName]
-                self.formattedFmlv[formName] = []
-                self.formattedFmlv[formName].append({
-                    "Ability":            1,
-                    "Experience":         int(formExp[data.charName][data.locid] / formexp),
-                    "FormId":             data.charName,
-                    "FormLevel":          1,
-                    "GrowthAbilityLevel": 0,
-                })
             # row is form column is lvl
-            self.formattedFmlv[formName].append({
+            self.formattedFmlv[data.charName].append({
                 "Ability":            itemcode,
-                "Experience":         int(formExp[data.charName][data.locid] / formexp),
+                "Experience":         int(formExp[data.charName][data.locid] / formDictExp[data.charName]),
                 "FormId":             data.charName,
                 "FormLevel":          data.locid,
                 "GrowthAbilityLevel": 0,
@@ -172,7 +171,7 @@ def patch_kh2(self, output_directory):
     for x in range(1, 7):
         self.formattedFmlv["Summon"].append({
             "Ability":            123,
-            "Experience":         int(formExp[0][x] / self.multiworld.Summon_EXP[self.player].value),
+            "Experience":         int(formExp["Summon"][x] / self.multiworld.Summon_EXP[self.player].value),
             "FormId":             0,
             "FormLevel":          x,
             "GrowthAbilityLevel": 0,

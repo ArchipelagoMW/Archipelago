@@ -2,7 +2,7 @@ import typing
 
 from BaseClasses import MultiWorld, Region
 
-from .Locations import KH2Location, event_location_to_item
+from .Locations import KH2Location, event_location_to_item, Heart_Checks, Duality_Checks, Frontier_Checks, Sunset_Checks, Daylight_Checks
 from . import LocationName, RegionName, Events_Table
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
@@ -1017,6 +1017,12 @@ def create_regions(self):
                                          LocationName.Summonlvl5,
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
+
+    KH2REGIONS[RegionName.PuzzlePieces] = []
+    for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
+        for location in region_name:
+            KH2REGIONS[RegionName.PuzzlePieces].append(location)
+
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]
     # fill the event locations with events
@@ -1030,7 +1036,7 @@ def connect_regions(self):
     player = self.player
     # connecting every first visit to the GoA
     KH2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                        {RegionName.GoA},
+        "Menu":                        {RegionName.GoA, RegionName.PuzzlePieces},
         RegionName.GoA:                {RegionName.Sp, RegionName.Pr, RegionName.Tt, RegionName.Oc, RegionName.Ht,
                                         RegionName.LoD,
                                         RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
