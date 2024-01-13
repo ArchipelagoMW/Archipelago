@@ -89,7 +89,7 @@ class YIWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def _get_slot_data(self):
+    def fill_slot_data(self):
         return {
             "world_1": self.world_1_stages,
             "world_2": self.world_2_stages,
@@ -239,10 +239,11 @@ class YIWorld(World):
     def get_excluded_items(self) -> Set[str]:
         excluded_items: Set[str] = set()
 
-        starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate"
+        starting_gate = ["World 1 Gate", "World 2 Gate", "World 3 Gate",
                          "World 4 Gate", "World 5 Gate", "World 6 Gate"]
 
-        excluded_items.add(starting_gate[self.options.starting_world.value])
+
+        excluded_items.add(starting_gate[self.options.starting_world])
 
         if self.options.shuffle_midrings.value == 0:
             excluded_items.add('Middle Ring')
