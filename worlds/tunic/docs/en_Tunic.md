@@ -1,15 +1,20 @@
 # TUNIC
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a config file.
+The [player options page for this game](../player-options) contains all the options you need to configure and export a config file.
+
+## I haven't played TUNIC before.
+
+**Play vanilla first.** It is **_heavily discouraged_** to play this randomizer before playing the vanilla game.
+It is recommended that you achieve both endings in the vanilla game before playing the randomizer.
 
 ## What does randomization do to this game?
 
 In the TUNIC Randomizer, every item in the game is randomized. All chests, key item pickups, instruction manual pages, hero relics,
 and other unique items are shuffled.<br>
 
-Ability shuffling is an option available from the settings page to shuffle certain abilities (prayer, holy cross, and the ice rod combo),
+Ability shuffling is an option available from the options page to shuffle certain abilities (prayer, holy cross, and the ice rod combo),
 preventing them from being used until they are unlocked.<br>
 
 Enemy randomization and other options are also available and can be turned on in the client mod.
