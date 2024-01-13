@@ -47,8 +47,9 @@ location_table: Dict[str, KH1LocationData] = {
     "Traverse Town Item Workshop Left Chest":                                           KH1LocationData("Chests",     265_0893),
     "Traverse Town Secret Waterway Near Stairs Chest":                                  KH1LocationData("Chests",     265_0894),
     "Wonderland Rabbit Hole Green Trinity Chest":                                       KH1LocationData("Chests",     265_0931),
-   #"Wonderland Rabbit Hole Defeat Heartless After Trial Chest":                        KH1LocationData("Chests",     265_0933), missable
-   #"Wonderland Rabbit Hole Defeat Heartless After Hollow Bastion Chest":               KH1LocationData("Chests",     265_0934), Go mode, just remove
+    "Wonderland Rabbit Hole Defeat Heartless 1 Chest":                                  KH1LocationData("Chests",     265_0932),
+    "Wonderland Rabbit Hole Defeat Heartless 2 Chest":                                  KH1LocationData("Chests",     265_0933),
+    "Wonderland Rabbit Hole Defeat Heartless 3 Chest":                                  KH1LocationData("Chests",     265_0934),
     "Wonderland Bizarre Room Green Trinity Chest":                                      KH1LocationData("Chests",     265_0971),
     "Wonderland Queen's Castle Hedge Left Red Chest":                                   KH1LocationData("Chests",     265_1011),
     "Wonderland Queen's Castle Hedge Right Blue Chest":                                 KH1LocationData("Chests",     265_1012),
@@ -221,6 +222,7 @@ location_table: Dict[str, KH1LocationData] = {
     "Hollow Bastion Grand Hall Oblivion Chest":                                         KH1LocationData("Chests",     265_4491),
     "Hollow Bastion Grand Hall Left of Gate Chest":                                     KH1LocationData("Chests",     265_4492),
    #"Hollow Bastion Entrance Hall Push the Statue Chest":                               KH1LocationData("Chests",     265_4493),
+    "Hollow Bastion Entrance Hall Left of Emblem Door Chest":                           KH1LocationData("Chests",     265_4212),
     "Hollow Bastion Rising Falls White Trinity Chest":                                  KH1LocationData("Chests",     265_4494),
    #"End of the World Final Dimension 1st Chest":                                       KH1LocationData("Chests",     265_4531),
    #"End of the World Final Dimension 2nd Chest":                                       KH1LocationData("Chests",     265_4532),
