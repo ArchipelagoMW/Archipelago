@@ -9,15 +9,15 @@ Da wir BizHawk benutzen, gilt diese Anleitung nur für Windows und Linux.
 - BizHawk: [BizHawk Veröffentlichungen von TASVideos](https://tasvideos.org/BizHawk/ReleaseHistory)
   - Version 2.3.1 und später werden unterstützt. Version 2.9 ist empfohlen.
   - Detailierte Installtionsanweisungen für BizHawk können über den obrigen Link gefunden werden.
-  - Windows-Benutzer müssen die Prerequisiten (Darunter `Visual Studio 2019`) installiert haben. Diese können ebenfalls über
+  - Windows-Benutzer müssen die Prerequisiten installiert haben. Diese können ebenfalls über
     den obrigen Link gefunden werden.
 - Der integrierte Archipelago-Client, welcher [hier](https://github.com/ArchipelagoMW/Archipelago/releases) installiert
-  werden kann. (wähle `Ocarina of Time Client` bei der Installation).
+  werden kann.
 - Eine `Ocarina of Time v1.0 US(?) ROM`. (Nicht aus Europa und keine Master-Quest oder Debug-Rom!)
 
 ## Konfigurieren von BizHawk
 
-Sobald Bizhawk einmal Installiert wurde, öffne **EmuHawk** und ändere die folgenen Einsteluungen:
+Sobald Bizhawk einmal installiert wurde, öffne **EmuHawk** und ändere die folgenen Einsteluungen:
 
 - (≤ 2.8) Gehe zu `Config > Customize`. Wechlse zu dem `Advanced`-Reiter, wechsle dann den `Lua Core` von "NLua+KopiLua" zu
   `"Lua+LuaInterface"`. Starte danach EmuHawk neu. Dies ist zwingend notwendig, damit die Lua-Skripts (mit denen man sich mit dem Client verbindet) ordnungsgemäß funktionieren.
@@ -27,18 +27,18 @@ Sobald Bizhawk einmal Installiert wurde, öffne **EmuHawk** und ändere die folg
 - Unter `Config > Customize > Advanced`, gehe sicher dass der Haken bei `AutoSaveRAM` ausgeählt ist, und klicke dann
   den 5s-Knopf. Dies verringert die Wahrscheinlichkeit den Speicherfrotschritt zu verlieren, sollte der Emulator mal
   abstürzen.
-- **(Optional)** Unter `Config > Customize`, kannst du die Haken in den "Run in background"
+- **(Optional)** Unter `Config > Customize` kannst du die Haken in den "Run in background"
   (Laufe weiter im Hintergrund) und "Accept background input" (akzeptiere Tastendruck im Hintergrund) Kästchen setzen.
   Dies erlaubt dir das Spiel im Hintergrund weiter zu spielen, selbst wenn ein anderes Fenster aktiv ist. (Nützlich bei
   mehreren oder eher großen Bildschrimen/Monitoren.)
-- Unter `Config > Hotkeys`, sind viele Hotkeys, die mit oft genuten Tasten belegt worden sind. Es wird empfohlen die
-  meisten (oder alle) Hotkeys zu deaktivieren. Dies kann schnell getan werden mit `Esc`.
+- Unter `Config > Hotkeys` sind viele Hotkeys, die mit oft genuten Tasten belegt worden sind. Es wird empfohlen die
+  meisten (oder alle) Hotkeys zu deaktivieren. Dies kann schnell mit `Esc` erledigt werden.
 - Wird mit einem Kontroller gespielt, bei der Tastenbelegung (bei einem Laufendem Spiel, unter
   `Config > Controllers...`), deaktiviere "P1 A Up", "P1 A Down", "P1 A Left", and "P1 A Right" und gehe stattdessen in
-  den Reiter `Analog Controls` um den Stick zu belegen, da sonst Probleme auftreten bei dem Zielen (mit dem Bogen oder
+  den Reiter `Analog Controls` um den Stick zu belegen, da sonst Probleme beim Zielen auftreten (mit dem Bogen oder
   ähnliches). Y-Axis ist für Oben und Unten, und die X-Axis ist für Links und Rechts.
 - Unter `N64` setze einen Haken bei "Use Expansion Slot" (Benutze Erweiterungs-Slot). Dies wird benötigt damit
-  savestates/schnellspeichern funktioniert. (Das N64-Menü taucht nur auf **nach** dem laden einer N64-ROM.)
+  savestates/schnellspeichern funktioniert. (Das N64-Menü taucht nur **nach** dem laden einer N64-ROM auf.)
 
 Es wird sehr empfohlen N64 Rom-Erweiterungen (\*.n64, \*.z64) mit dem Emuhawk - welcher zuvor installiert wurde - zu
 verknüpfen.
@@ -53,26 +53,26 @@ Eine Alternative BizHawk Setup Anleitung (auf Englisch), sowie weitere Hilfe bei
 
 ### Was ist eine YAML-Datei und Warum brauch ich eine?
 
-Eine YAML-Datie enthält einen Satz an einstellbaren Optionen, welche Informationen den Zufallsgenerator liefert wie
+Eine YAML-Datie enthält einen Satz an einstellbaren Optionen, die dem Generator mitteilen, wie
 dein Spiel generiert werden soll. In einer Multiworld stellt jeder Spieler eine eigene YAML-Datei zur Verfügung. Dies
 erlaubt jeden Spieler eine personalisierte Erfahrung nach derem Geschmack. Damit kann auch jeder Spieler in einer
 Multiworld (des gleichen Spiels) völlig unterschiedliche Einstellungen haben.
 
-Für weitere Informationen besuche die Anleitung zum erstellen einer gewöhnlichen
-YAML-Datei: [Gewhönliche Multiworld Setup Antelitung](/tutorial/Archipelago/setup/de)
+Für weitere Informationen, besuche die allgemeine Anleitung zum Erstellen einer
+YAML-Datei: [Archipelago Setup Anleitung](/tutorial/Archipelago/setup/en)
 
 ### Woher bekomme ich eine YAML-Datei?
 
-Die Seite für die Spielereinstellungen auf dieser Website erlaubte es dir deine persönlichen Einstellungen nach
+Die Seite für die Spielereinstellungen auf dieser Website erlaubt es dir deine persönlichen Einstellungen nach
 vorlieben zu konfigurieren und eine YAML-Datei zu exportieren.
 Seite für die Spielereinstellungen:
-[Seite für die Spielereinstellungen von Ocarina of Time](/games/Ocarina%20of%20Time/player-settings)
+[Seite für die Spielereinstellungen von Ocarina of Time](/games/Ocarina%20of%20Time/player-options)
 
 ### Überprüfen deiner YAML-Datei
 
-Wenn du deine YAML-Datei überprüfen möchtest, um sicher zu gehen dass sie funktioniert, kannst du dies auf der
+Wenn du deine YAML-Datei überprüfen möchtest, um sicher zu gehen, dass sie funktioniert, kannst du dies auf der
 YAML-Überprüfungsseite tun.
-YAML-Überprüfungsseite: [YAML-Überprüfungsseite](/mysterycheck)
+YAML-Überprüfungsseite: [YAML-Überprüfungsseite](/check)
 
 ## Beitreten einer Multiworld
 
@@ -92,13 +92,13 @@ deiner ROM. Ist dieser Prozess fertig (kann etwas dauern), startet sich der Clie
 
 ### Verbinde zum Multiserver
 
-Sind einmal der Client und der Emulator gestartet, müssen sie nur noch mit einander Verbunden werden. Gehe dazu in
+Sind einmal der Client und der Emulator gestartet, müssen sie nur noch miteinander verbunden werden. Gehe dazu in
 deinen Archipelago-Ordner, dann zu `data/lua`, und füge das `connector_oot.lua` Script per Drag&Drop (ziehen und
 fallen lassen) auf das EmuHawk-Fenster. (Alternativ kannst du die Lua-Konsole manuell öffnen, gehe dazu auf
 `Script > Open Script` und durchsuche die Ordner nach `data/lua/connector_oot.lua`.)
 
-Um den Client mit dem Multiserver zu verbinden, füge einfach `<Adresse>:<Port>` ein auf das Textfeld ganz oben im
-Client und drücke Enter oder "Connect" (verbinden). Wird Ein Passwort benötigt musst du es danach unten in das
+Um den Client mit dem Multiserver zu verbinden, füge einfach `<Adresse>:<Port>` in das Textfeld ganz oben im
+Client ein und drücke Enter oder "Connect" (verbinden). Wird ein Passwort benötigt, musst du es danach unten in das
 Textfeld (für den Chat und Befehle) eingeben.
 Alternativ kannst du auch in dem unterem Textfeld den folgenden Befehl schreiben:
 `/connect <Adresse>:<Port> [Passwort]` (wie die Adresse und der Port lautet steht in dem Raum, oder wird von deinem

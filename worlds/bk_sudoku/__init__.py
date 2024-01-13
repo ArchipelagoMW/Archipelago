@@ -15,7 +15,7 @@ class Bk_SudokuWebWorld(WebWorld):
             file_name='setup_en.md',
             link='setup/en',
             authors=['Jarno']
-        )
+    )
     setup_de = Tutorial(
             tutorial_name='Setup Anleitung',
             description='Eine Anleitung um BK-Sudoku zu spielen',
@@ -23,7 +23,7 @@ class Bk_SudokuWebWorld(WebWorld):
             file_name='setup_de.md',
             link='setup/de',
             authors=['Held_der_Zeit']
-        )
+    )
     
     tutorials = [setup_en, setup_de]
 

@@ -1,12 +1,12 @@
 # Clique Anleitung
 
-Nachdem dein Seed generiert wurde, gehe auf die Website von [Clique dem Spiel](http://clique.pharware.com/) und gebe
-Server Details, deinen Slot Namen und ein Raum Passwort (falls vorhanden) ein. Klicke dann auf "Connect" (Verbinden).
+Nachdem dein Seed generiert wurde, gehe auf die Website von [Clique dem Spiel](http://clique.pharware.com/) und gib
+Server-Daten, deinen Slot-Namen und ein Passwort (falls vorhanden) ein. Klicke dann auf "Connect" (Verbinden).
 
 Wenn du auf "Einfach" spielst, kannst du unbedenklich den Knopf drücken und deine "Befriedigung" erhalten.
 
 Wenn du auf "Schwer" spielst, ist es sehr wahrscheinlich, dass du warten musst bevor du dein Ziel erreichen kannst.
-Glücklicherweise, läuft Click auf den meißten großen Browsern die HTML5 unterstützen. Das heißt du kannst Clique auf
+Glücklicherweise läuft Click auf den meißten großen Browsern, die HTML5 unterstützen. Das heißt du kannst Clique auf
 deinem Handy starten und produktiv sein während du wartest!
 
 Falls du einige Ideen brauchst was du tun kannst, während du wartest bis der Knopf aktiviert wurde, versuche

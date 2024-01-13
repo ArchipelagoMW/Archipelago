@@ -2,7 +2,7 @@
 
 ## Was ist das für ein Spiel?
 
-~~Clique ist ein psychologisches Überlebens-Horror Spiel, indem der Spieler die Versuchung wiederstehen muss, große~~
+~~Clique ist ein psychologisches Überlebens-Horror Spiel, in dem der Spieler der Versuchung wiederstehen muss große~~
 ~~(rote) Knöpfe zu drücken.~~
 
 Clique ist ein scherzhaftes Spiel welches für den Archipelago im März 2023 entwickelt wurde, um zu zeigen, wie einfach
@@ -14,5 +14,5 @@ Clique kann auf den meisten modernen, HTML5-fähigen Browsern gespielt werden.
 
 ## Wo ist die Seite für die Einstellungen?
 
-Die [Seite für die Spielereinstellungen dieses Spiels](../player-settings) enthält alle Optionen die man benötigt um
+Die [Seite für die Spielereinstellungen dieses Spiels](../player-options) enthält alle Optionen die man benötigt um
 eine YAML-Datei zu konfigurieren und zu exportieren.

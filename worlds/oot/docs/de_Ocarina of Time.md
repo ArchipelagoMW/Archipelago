@@ -2,12 +2,12 @@
 
 ## Wo ist die Seite für die Einstellungen?
 
-Die [Seite für die Spielereinstellungen dieses Spiels](../player-settings) enthält alle Optionen die man benötigt um
+Die [Seite für die Spielereinstellungen dieses Spiels](../player-options) enthält alle Optionen die man benötigt um
 eine YAML-Datei zu konfigurieren und zu exportieren.
 
 ## Was macht der Randomizer in diesem Spiel?
 
-Items welche der Spieler für gewöhnlich im Verlauf des Spiels erhalten würde, wurden umhergemischt. Die Logik bleit
+Items, welche der Spieler für gewöhnlich im Verlauf des Spiels erhalten würde, wurden umhergemischt. Die Logik bleit
 bestehen, damit ist das Spiel immer durchspielbar. Doch weil die Items durch das ganze Spiel gemischt wurden, müssen
  manche Bereiche früher bescuht werden, als man es in Vanilla tun würde.
 Eine Liste von implementierter Logik, die unoffensichtlich erscheinen kann, kann
@@ -16,17 +16,17 @@ Eine Liste von implementierter Logik, die unoffensichtlich erscheinen kann, kann
 ## Welche Items und Bereiche werden gemischt?
 
 Alle ausrüstbare und sammelbare Gegenstände, sowie Munition können gemischt werden. Und alle Bereiche, die einen
-dieser Items enthalten könnten, haben (sehr wahrscheinlich) ihren Inhalt verändert. Goldene Skulltullas können ebenfalls
+dieser Items enthalten könnten, haben (sehr wahrscheinlich) ihren Inhalt verändert. Goldene Skulltulas können ebenfalls
 dazugezählt werden, je nach Wunsch des Spielers.
 
 ## Welche Items können in sich in der Welt eines anderen Spielers befinden?
 
-Jedes dieser Items, die gemicht werden können, können in einer Multiworld auch in der Welt eines anderen Spieler's
+Jedes dieser Items, die gemicht werden können, können in einer Multiworld auch in der Welt eines anderen Spielers
 fallen. Es ist jedoch möglich ausgewählte Items auf deine eigene Welt zu beschränken.
 
 ## Wie sieht ein Item einer anderen Welt in OoT aus?
 
-Items die zu einer anderen Welt gehören, werden repräsentiert durch Zelda's Brief.
+Items, die zu einer anderen Welt gehören, werden repräsentiert durch Zelda's Brief.
 
 ## Was passiert, wenn der Spieler ein Item erhält?
 
@@ -35,7 +35,7 @@ Gut für's Geschäft!
 
 ## Einzigartige Lokale Befehle
 
-Die folgenden Befehle stehen nur im OoTClient, um mit Archipelago zu spielen, zur verfügung:
+Die folgenden Befehle stehen nur im OoTClient, um mit Archipelago zu spielen, zur Verfügung:
 
 - `/n64` Überprüffe den Verbindungsstatus deiner N64
 - `/deathlink` Schalte den "Deathlink" des Clients um. Überschreibt die zuvor konfigurierten Einstellungen.

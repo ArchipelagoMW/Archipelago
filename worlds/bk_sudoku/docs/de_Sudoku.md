@@ -5,8 +5,8 @@
 BK-Sudoku ist kein typisches Archipelago-Spiel; stattdessen ist es ein gewöhnlicher Sudoku-Client der sich zu jeder
 beliebigen Multiworld verbinden kann. Einmal verbunden kannst du ein 9x9 Sudoku spielen um einen zufälligen Hinweis
 für dein Spiel zu erhalten. Es ist zwar langsam, aber es gibt dir etwas zu tun, solltest du mal nicht in der Lage sein
-weitere Check zu erreichen.
-(Wer mag kann auch einfach so Sudoku spielen, man muss nicht mit einer Multiworld verbunden sein, um ein Sudoku zu
+weitere „Checks” zu erreichen.
+(Wer mag kann auch einfach so Sudoku spielen. Man muss nicht mit einer Multiworld verbunden sein, um ein Sudoku zu
 spielen/generieren.)
 
 ## Wie werden Hinweise freigeschalten?
