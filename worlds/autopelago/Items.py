@@ -332,7 +332,7 @@ game_specific_items = {
         'Jabu Jabu\'s Missing Kidney',
         'Lighest Brightest Arrow',
         'Song of Thyme',
-        'Ganondorf's Letter',
+        'Ganondorf\'s Letter',
     ),
 
     "Stardew Valley": (
@@ -342,7 +342,7 @@ game_specific_items = {
         'Cheese Seeds',
         'Pickled Dust Sprite',
         'Rotten Walnut',
-        'Abigail's Birth Certificate',
+        'Abigail\'s Birth Certificate',
         'Pam\'s Secret Stash',
         'Mayor\'s Tax Returns',
     ),
