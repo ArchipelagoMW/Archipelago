@@ -117,7 +117,7 @@ class KH1Context(CommonContext):
                                 item_id = str(f.readline()).replace("\n", "")
                                 location_id = str(f.readline()).replace("\n", "")
                                 player = str(f.readline()).replace("\n", "")
-                                if str(item_id) == str(NetworkItem(*item).item) and str(location_id) == str(NetworkItem(*item).location) and str(player) == str(NetworkItem(*item).player):
+                                if str(item_id) == str(NetworkItem(*item).item) and str(location_id) == str(NetworkItem(*item).location) and str(player) == str(NetworkItem(*item).player) and int(location_id) > 0:
                                     found = True
                     if not found:
                         filename = f"AP_{str(check_num+1)}.item"
@@ -132,24 +132,25 @@ class KH1Context(CommonContext):
                     with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                         f.close()
 
-        if cmd in {"PrintJSON"} and args["type"] == "ItemSend":
-            item = args["item"]
-            networkItem = NetworkItem(*item)
-            recieverID = args["receiving"]
-            senderID = networkItem.player
-            locationID = networkItem.location
-            if recieverID != self.slot and senderID == self.slot:
-                itemName = self.item_names[networkItem.item]
-                itemCategory = networkItem.flags
-                recieverName = self.player_names[recieverID]
-                filename = "sent"
-                with open(os.path.join(self.game_communication_path, filename), 'w') as f:
-                    f.write(
-                      re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
-                    + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
-                    + str(itemCategory) + "\n"
-                    + str(locationID))
-                    f.close()
+        if cmd in {"PrintJSON"} and "type" in args:
+            if args["type"] == "ItemSend":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                senderID = networkItem.player
+                locationID = networkItem.location
+                if recieverID != self.slot and senderID == self.slot:
+                    itemName = self.item_names[networkItem.item]
+                    itemCategory = networkItem.flags
+                    recieverName = self.player_names[recieverID]
+                    filename = "sent"
+                    with open(os.path.join(self.game_communication_path, filename), 'w') as f:
+                        f.write(
+                          re.sub('[^A-Za-z0-9 ]+', '',str(itemName))[:15] + "\n"
+                        + re.sub('[^A-Za-z0-9 ]+', '',str(recieverName))[:6] + "\n"
+                        + str(itemCategory) + "\n"
+                        + str(locationID))
+                        f.close()
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]):
         with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w') as f:
