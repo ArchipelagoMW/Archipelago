@@ -21,5 +21,5 @@ Falls du einige Ideen brauchst was du tun kannst, während du wartest bis der Kn
 - Deine Post abholen.
 
 
-~~Solltest du auf irgendwelche Probleme in diesem Spiel stoßen, solltest du aufkeinenfall nicht **thephar** auf~~
+~~Solltest du auf irgendwelche Probleme in diesem Spiel stoßen, solltest du keinesfalls nicht **thephar** auf~~
 ~~Discord kontaktieren. *zwinker* *zwinker*~~
