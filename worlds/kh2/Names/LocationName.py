@@ -950,8 +950,8 @@ DaylightPuzzleBlackPearlFlags = "Daylight Puzzle Piece: (PR1) Black Pearl - Flag
 DaylightPuzzleBlackPearlInside = "Daylight Puzzle Piece: (PR1) Black Pearl - Inside"
 SunsetPuzzleInterceptor = "Sunset Puzzle Piece: (PR2) The Interceptor's Hold"
 SunsetPuzzleSeaDriftRowOne = "Sunset Puzzle Piece 1: (PR2) Sea Drift Row"
-DaylightPuzzleSeaDriftKeep = "Sunset Puzzle Piece: (PR2) Sea Drift Keep - Window"
-SunsetPuzzleSeaDriftKeep = "Daylight Puzzle Piece: (PR2) Sea Drift Keep - Anchor"
+SunsetPuzzleSeaDriftKeepWindow = "Sunset Puzzle Piece: (PR2) Sea Drift Keep - Window"
+SunsetPuzzleSeaDriftKeepAnchor = "Daylight Puzzle Piece: (PR2) Sea Drift Keep - Anchor"
 
 FrontierPuzzleAgrabah = "Frontier Puzzle Piece: (AG1) Agrabah - Inside Stand"  # magic
 DualityPuzzleAgrabah = "Duality Puzzle Piece: (AG1) Agrabah - Above Stand"
