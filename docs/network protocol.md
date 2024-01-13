@@ -675,8 +675,8 @@ Tags are represented as a list of strings, the common Client tags follow:
 ### DeathLink
 A special kind of Bounce packet that can be supported by any AP game. It targets the tag "DeathLink" and carries the following data:
 
-| Name | Type | Notes |
-| ---- | ---- | ---- |
-| time | float | Unix Time Stamp of time of death. |
-| cause | str | Optional. Text to explain the cause of death, ex. "Berserker was run over by a train." |
-| source | str | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game. |
+| Name   | Type  | Notes                                                                                                                                                  |
+|--------|-------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| time   | float | Unix Time Stamp of time of death.                                                                                                                      |
+| cause  | str   | Optional. Text to explain the cause of death. When provided, or checked, this should contain the player name, ex. "Berserker was run over by a train." |
+| source | str   | Name of the player who first died. Can be a slot name, but can also be a name from within a multiplayer game.                                          |
