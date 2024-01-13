@@ -4,7 +4,7 @@ from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import CliqueItem, item_data_table, item_table
 from .Locations import CliqueLocation, location_data_table, location_table, locked_locations
-from .Options import clique_options
+from .Options import CliqueOptions
 from .Regions import region_data_table
 from .Rules import get_button_rule
 
@@ -29,7 +29,8 @@ class CliqueWorld(World):
     game = "Clique"
     data_version = 3
     web = CliqueWebWorld()
-    option_definitions = clique_options
+    options = CliqueOptions
+    options_dataclass = CliqueOptions
     location_name_to_id = location_table
     item_name_to_id = item_table
 
@@ -39,7 +40,7 @@ class CliqueWorld(World):
     def create_items(self) -> None:
         item_pool: List[CliqueItem] = []
         for name, item in item_data_table.items():
-            if item.code and item.can_create(self.multiworld, self.player):
+            if item.code and item.can_create(self.options):
                 item_pool.append(self.create_item(name))
 
         self.multiworld.itempool += item_pool
@@ -55,27 +56,27 @@ class CliqueWorld(World):
             region = self.multiworld.get_region(region_name, self.player)
             region.add_locations({
                 location_name: location_data.address for location_name, location_data in location_data_table.items()
-                if location_data.region == region_name and location_data.can_create(self.multiworld, self.player)
+                if location_data.region == region_name and location_data.can_create(self.options)
             }, CliqueLocation)
             region.add_exits(region_data_table[region_name].connecting_regions)
 
         # Place locked locations.
         for location_name, location_data in locked_locations.items():
             # Ignore locations we never created.
-            if not location_data.can_create(self.multiworld, self.player):
+            if not location_data.can_create(self.options):
                 continue
 
             locked_item = self.create_item(location_data_table[location_name].locked_item)
             self.multiworld.get_location(location_name, self.player).place_locked_item(locked_item)
 
         # Set priority location for the Big Red Button!
-        self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
+        self.options.priority_locations.value.add("The Big Red Button")
 
     def get_filler_item_name(self) -> str:
         return "A Cool Filler Item (No Satisfaction Guaranteed)"
 
     def set_rules(self) -> None:
-        button_rule = get_button_rule(self.multiworld, self.player)
+        button_rule = get_button_rule(self.options, self.player)
         self.multiworld.get_location("The Big Red Button", self.player).access_rule = button_rule
         self.multiworld.get_location("In the Player's Mind", self.player).access_rule = button_rule
 
@@ -88,5 +89,5 @@ class CliqueWorld(World):
 
     def fill_slot_data(self):
         return {
-            "color": getattr(self.multiworld, "color")[self.player].current_key
+            "color": getattr(self.options, "color").current_key
         }

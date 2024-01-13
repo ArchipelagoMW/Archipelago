@@ -1,6 +1,7 @@
 import typing
-from Options import Option
+from Options import Option, PerGameCommonOptions
+from dataclasses import dataclass
 
-
-checksfinder_options: typing.Dict[str, type(Option)] = {
-}
+@dataclass
+class ChecksFinderOptions(PerGameCommonOptions):
+    pass

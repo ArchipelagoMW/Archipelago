@@ -4,7 +4,8 @@
 # https://opensource.org/licenses/MIT
 
 import typing
-from Options import Option, Range
+from Options import Option, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class TaskAdvances(Range):
@@ -69,12 +70,12 @@ class KillerTrapWeight(Range):
     default = 0
 
 
-bumpstik_options: typing.Dict[str, type(Option)] = {
-    "task_advances": TaskAdvances,
-    "turners": Turners,
-    "paint_cans": PaintCans,
-    "trap_count": Traps,
-    "rainbow_trap_weight": RainbowTrapWeight,
-    "spinner_trap_weight": SpinnerTrapWeight,
-    "killer_trap_weight": KillerTrapWeight
-}
+@dataclass
+class BumpStikOptions(PerGameCommonOptions):
+    task_advances: TaskAdvances
+    turners: Turners
+    paint_cans: PaintCans
+    trap_count: Traps
+    rainbow_trap_weight: RainbowTrapWeight
+    spinner_trap_weight: SpinnerTrapWeight
+    killer_trap_weight: KillerTrapWeight

@@ -1,9 +1,10 @@
 from BaseClasses import Region, Entrance, Item, Tutorial, ItemClassification
 from .Items import ChecksFinderItem, item_table, required_items
 from .Locations import ChecksFinderAdvancement, advancement_table, exclusion_table
-from .Options import checksfinder_options
+from .Options import ChecksFinderOptions
 from .Rules import set_rules, set_completion_rules
 from ..AutoWorld import World, WebWorld
+from dataclasses import fields
 
 client_version = 7
 
@@ -26,7 +27,8 @@ class ChecksFinderWorld(World):
     with the mines! You win when you get all your items and beat the board!
     """
     game: str = "ChecksFinder"
-    option_definitions = checksfinder_options
+    options = ChecksFinderOptions
+    options_dataclass = ChecksFinderOptions
     topology_present = True
     web = ChecksFinderWeb()
 
@@ -79,8 +81,8 @@ class ChecksFinderWorld(World):
 
     def fill_slot_data(self):
         slot_data = self._get_checksfinder_data()
-        for option_name in checksfinder_options:
-            option = getattr(self.multiworld, option_name)[self.player]
+        for option_name in [field.name for field in fields(ChecksFinderOptions)]:
+            option = getattr(self.options, option_name)
             if slot_data.get(option_name, None) is None and type(option.value) in {str, int}:
                 slot_data[option_name] = int(option.value)
         return slot_data

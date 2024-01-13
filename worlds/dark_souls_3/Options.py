@@ -1,6 +1,7 @@
 import typing
 
-from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink
+from Options import Toggle, DefaultOnToggle, Option, Range, Choice, ItemDict, DeathLink, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class RandomizeWeaponLocations(DefaultOnToggle):
@@ -200,36 +201,36 @@ class EnableDLCOption(Toggle):
     display_name = "Enable DLC"
 
 
-dark_souls_options: typing.Dict[str, Option] = {
-    "enable_weapon_locations": RandomizeWeaponLocations,
-    "enable_shield_locations": RandomizeShieldLocations,
-    "enable_armor_locations": RandomizeArmorLocations,
-    "enable_ring_locations": RandomizeRingLocations,
-    "enable_spell_locations": RandomizeSpellLocations,
-    "enable_key_locations": RandomizeKeyLocations,
-    "enable_boss_locations": RandomizeBossSoulLocations,
-    "enable_npc_locations": RandomizeNPCLocations,
-    "enable_misc_locations": RandomizeMiscLocations,
-    "enable_health_upgrade_locations": RandomizeHealthLocations,
-    "enable_progressive_locations": RandomizeProgressiveLocationsOption,
-    "pool_type": PoolTypeOption,
-    "guaranteed_items": GuaranteedItemsOption,
-    "auto_equip": AutoEquipOption,
-    "lock_equip": LockEquipOption,
-    "no_weapon_requirements": NoWeaponRequirementsOption,
-    "randomize_infusion": RandomizeInfusionOption,
-    "randomize_infusion_percentage": RandomizeInfusionPercentageOption,
-    "randomize_weapon_level": RandomizeWeaponLevelOption,
-    "randomize_weapon_level_percentage": RandomizeWeaponLevelPercentageOption,
-    "min_levels_in_5": MinLevelsIn5WeaponPoolOption,
-    "max_levels_in_5": MaxLevelsIn5WeaponPoolOption,
-    "min_levels_in_10": MinLevelsIn10WeaponPoolOption,
-    "max_levels_in_10": MaxLevelsIn10WeaponPoolOption,
-    "early_banner": EarlySmallLothricBanner,
-    "late_basin_of_vows": LateBasinOfVowsOption,
-    "late_dlc": LateDLCOption,
-    "no_spell_requirements": NoSpellRequirementsOption,
-    "no_equip_load": NoEquipLoadOption,
-    "death_link": DeathLink,
-    "enable_dlc": EnableDLCOption,
-}
+@dataclass
+class DarkSouls3Options(PerGameCommonOptions):
+    enable_weapon_locations: RandomizeWeaponLocations
+    enable_shield_locations: RandomizeShieldLocations
+    enable_armor_locations: RandomizeArmorLocations
+    enable_ring_locations: RandomizeRingLocations
+    enable_spell_locations: RandomizeSpellLocations
+    enable_key_locations: RandomizeKeyLocations
+    enable_boss_locations: RandomizeBossSoulLocations
+    enable_npc_locations: RandomizeNPCLocations
+    enable_misc_locations: RandomizeMiscLocations
+    enable_health_upgrade_locations: RandomizeHealthLocations
+    enable_progressive_locations: RandomizeProgressiveLocationsOption
+    pool_type: PoolTypeOption
+    guaranteed_items: GuaranteedItemsOption
+    auto_equip: AutoEquipOption
+    lock_equip: LockEquipOption
+    no_weapon_requirements: NoWeaponRequirementsOption
+    randomize_infusion: RandomizeInfusionOption
+    randomize_infusion_percentage: RandomizeInfusionPercentageOption
+    randomize_weapon_level: RandomizeWeaponLevelOption
+    randomize_weapon_level_percentage: RandomizeWeaponLevelPercentageOption
+    min_levels_in_5: MinLevelsIn5WeaponPoolOption
+    max_levels_in_5: MaxLevelsIn5WeaponPoolOption
+    min_levels_in_10: MinLevelsIn10WeaponPoolOption
+    max_levels_in_10: MaxLevelsIn10WeaponPoolOption
+    early_banner: EarlySmallLothricBanner
+    late_basin_of_vows: LateBasinOfVowsOption
+    late_dlc: LateDLCOption
+    no_spell_requirements: NoSpellRequirementsOption
+    no_equip_load: NoEquipLoadOption
+    death_link: DeathLink
+    enable_dlc: EnableDLCOption
