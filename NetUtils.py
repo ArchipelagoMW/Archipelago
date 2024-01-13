@@ -290,8 +290,8 @@ def add_json_item(parts: list, item_id: int, player: int = 0, item_flags: int = 
     parts.append({"text": str(item_id), "player": player, "flags": item_flags, "type": JSONTypes.item_id, **kwargs})
 
 
-def add_json_location(parts: list, item_id: int, player: int = 0, **kwargs) -> None:
-    parts.append({"text": str(item_id), "player": player, "type": JSONTypes.location_id, **kwargs})
+def add_json_location(parts: list, location_id: int, player: int = 0, **kwargs) -> None:
+    parts.append({"text": str(location_id), "player": player, "type": JSONTypes.location_id, **kwargs})
 
 
 class Hint(typing.NamedTuple):
