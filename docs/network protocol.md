@@ -380,12 +380,13 @@ Additional arguments sent in this package will also be added to the [Retrieved](
 
 Some special keys exist with specific return data, all of them have the prefix `_read_`, so `hints_{team}_{slot}` is `_read_hints_{team}_{slot}`.
 
-| Name                         | Type                          | Notes                                             |
-|------------------------------|-------------------------------|---------------------------------------------------|
-| hints_{team}_{slot}          | list\[[Hint](#Hint)\]         | All Hints belonging to the requested Player.      |
-| slot_data_{slot}             | dict\[str, any\]              | slot_data belonging to the requested slot.        |
-| item_name_groups_{game_name} | dict\[str, list\[str\]\]      | item_name_groups belonging to the requested game. |
-| client_status_{team}_{slot}  | [ClientStatus](#ClientStatus) | The current game status of the requested player.  |
+| Name                             | Type                          | Notes                                                 |
+|----------------------------------|-------------------------------|-------------------------------------------------------|
+| hints_{team}_{slot}              | list\[[Hint](#Hint)\]         | All Hints belonging to the requested Player.          |
+| slot_data_{slot}                 | dict\[str, any\]              | slot_data belonging to the requested slot.            |
+| item_name_groups_{game_name}     | dict\[str, list\[str\]\]      | item_name_groups belonging to the requested game.     |
+| location_name_groups_{game_name} | dict\[str, list\[str\]\]      | location_name_groups belonging to the requested game. |
+| client_status_{team}_{slot}      | [ClientStatus](#ClientStatus) | The current game status of the requested player.      |
 
 ### Set
 Used to write data to the server's data storage, that data can then be shared across worlds or just saved for later. Values for keys in the data storage can be retrieved with a [Get](#Get) package, or monitored with a [SetNotify](#SetNotify) package.
