@@ -1,6 +1,6 @@
-### Ori and the Blind Forest (./oribf)
+### Ori and the Blind Forest
 
-This game was disabled for the following reasons:
+This world was disabled for the following reasons:
 
 * Missing client
 * Unmaintained
