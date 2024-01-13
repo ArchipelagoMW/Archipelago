@@ -308,7 +308,7 @@ item_table = {
                  description=inspect.cleandoc(
                      """
                      Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
-                     Level 2: Orbital Command abilities do work even in Planetary Fortress mode.
+                     Level 2: Orbital Command abilities work even in Planetary Fortress mode.
                      """
                  )),
     ItemNames.MARINE_PROGRESSIVE_STIMPACK:
