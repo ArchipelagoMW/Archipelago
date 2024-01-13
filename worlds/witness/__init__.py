@@ -127,7 +127,7 @@ class WitnessWorld(World):
                             f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
 
         if self.options.shuffle_lasers == "local":
-            self.multiworld.local_items[self.player].value |= self.item_name_groups["Lasers"]
+            self.options.local_items.value |= self.item_name_groups["Lasers"]
 
     def create_regions(self):
         self.regio.create_regions(self, self.player_logic)
