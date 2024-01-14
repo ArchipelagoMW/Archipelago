@@ -11,8 +11,8 @@ spielen/generieren.)
 
 ## Wie werden Hinweise freigeschalten?
 
-Nach dem Lösen eines Sudokus wird das Spiel einen zufällig ausgewählten Hinweis freigeben für einen noch nicht
-gefundenen Check in dem Slot mit dem du verbunden bist.
+Nach dem Lösen eines Sudokus wird für den verbundenen Slot ein zufällig ausgewählter Hinweis freigegeben, für einen
+Gegenstand der noch nicht gefunden wurde.
 
 ## Wo ist die Seite für die Einstellungen?
 
