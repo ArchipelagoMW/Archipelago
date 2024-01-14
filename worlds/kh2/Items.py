@@ -209,7 +209,7 @@ Armor_Table = {
     ItemName.GrandRibbon:      ItemData(1, 157, 0x35D4),
 }
 Usefull_Table = {
-    ItemName.MickeyMunnyPouch:  ItemData(1, 535, 0x3695),  # 5000 munny per
+    ItemName.MickeyMunnyPouch: ItemData(1, 535, 0x3695),  # 5000 munny per
     ItemName.OletteMunnyPouch: ItemData(2, 362, 0x363C),  # 2500 munny per
     ItemName.HadesCupTrophy:   ItemData(1, 537, 0x3696),
     ItemName.UnknownDisk:      ItemData(1, 462, 0x365F),
@@ -363,6 +363,14 @@ Consumable_Table = {
     ItemName.Tent:              ItemData(1, 512, 0x36BD),  # 131,0x35E1, savannah map
     ItemName.DriveRecovery:     ItemData(1, 252, 0x36BE),  # 274,0x3664, pride rock map
     ItemName.HighDriveRecovery: ItemData(1, 511, 0x36BF),  # 275,0x3665, oasis map
+}
+Puzzle_Table = {
+    ItemName.AwakeningPuzzlePiece:  ItemData(12, 90),  # Castle Map
+    ItemName.HeartPuzzlePiece:      ItemData(12, 90),  # Castle Map
+    ItemName.FrontierPuzzlePiece:   ItemData(12, 90),  # Castle Map
+    ItemName.DualityPuzzlePiece:    ItemData(12, 90),  # Castle Map
+    ItemName.DaylightPuzzlePiece:   ItemData(48, 90),  # Castle Map
+    ItemName.SunsetPuzzlePiece:     ItemData(48, 90),  # Castle Map
 }
 
 Events_Table = {

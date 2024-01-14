@@ -1019,7 +1019,6 @@ Sunset_Checks = {
     LocationName.SunsetPuzzleHB2Corridors:             WorldLocationData(0x24CD, 6),
     LocationName.SunsetPuzzleHB2BaileyDancers:         WorldLocationData(0x24C9, 3),
     LocationName.SunsetPuzzlePostHB2Ansems:            WorldLocationData(0x24CD, 7),
-
     LocationName.SunsetPuzzleCoRDepths1:               WorldLocationData(0x24C8, 5),
     LocationName.SunsetPuzzleCoRDepths2:               WorldLocationData(0x24C9, 0),
     LocationName.SunsetPuzzleCoRMineshaftLower:        WorldLocationData(0x24C8, 0),
@@ -1038,7 +1037,6 @@ Sunset_Checks = {
     LocationName.SunsetPuzzleInterceptor:              WorldLocationData(0x24C8, 4),
     LocationName.SunsetPuzzleSeaDriftRowOne:           WorldLocationData(0x24CC, 6),
     LocationName.SunsetPuzzleSeaDriftKeepAnchor:       WorldLocationData(0x24CC, 0),
-
     LocationName.SunsetPuzzleBazaar:                   WorldLocationData(0x24CD, 0),
     LocationName.SunsetPuzzleTreasureRooms:            WorldLocationData(0x24CA, 6),
     LocationName.SunsetPuzzleSandSwept:                WorldLocationData(0x24CA, 1),

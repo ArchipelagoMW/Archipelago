@@ -921,6 +921,41 @@ level_region_list = [
     RegionName.LevelsVS24,
     RegionName.LevelsVS26,
 ]
+puzzle_region_list = [
+    RegionName.Tt1PuzzlePieces,
+    RegionName.Tt2PuzzlePieces,
+    RegionName.Tt3PuzzlePieces,
+    RegionName.Hb1PuzzlePieces,
+    RegionName.Hb2PuzzlePieces,
+    RegionName.CoRFirstFightPuzzlePieces,
+    RegionName.CorSecondFightPuzzlePieces,
+    RegionName.LoD1PuzzlePieces,
+    RegionName.LoD2PuzzlePieces,
+    RegionName.Bc1PuzzlePieces,
+    RegionName.Bc2PuzzlePieces,
+    RegionName.Oc1PuzzlePieces,
+    RegionName.DcPuzzlePieces,
+    RegionName.TrPuzzlePieces,
+    RegionName.Pr1PuzzlePieces,
+    RegionName.Pr2PuzzlePieces,
+    RegionName.Ag1PuzzlePieces,
+    RegionName.Ag2PuzzlePieces,
+    RegionName.Ht1PuzzlePieces,
+    RegionName.PrisonKeeperPuzzlePieces,
+    RegionName.Ht2PuzzlePieces,
+    RegionName.Pl1PuzzlePieces,
+    RegionName.Sp1PuzzlePieces,
+    RegionName.Sp2PuzzlePieces,
+    RegionName.Twtnw2PuzzlePieces,
+    RegionName.Twtnw3PuzzlePieces,
+    RegionName.PoohsPuzzlePieces,
+    RegionName.PigletsPuzzlePieces,
+    RegionName.RabbitsPuzzlePieces,
+    RegionName.KangasPuzzlePieces,
+    RegionName.SpookyCavePuzzlePieces,
+    RegionName.StarryHillPuzzlePieces,
+    RegionName.At1PuzzlePieces
+]
 
 
 def create_regions(self):
@@ -933,6 +968,10 @@ def create_regions(self):
 
     for level_region_name in level_region_list:
         KH2REGIONS[level_region_name] = []
+
+    for puzzle_region_name in puzzle_region_list:
+        KH2REGIONS[puzzle_region_name] = []
+
     if multiworld.LevelDepth[player] == "level_50":
         KH2REGIONS[RegionName.LevelsVS1] = [LocationName.Lvl2, LocationName.Lvl4, LocationName.Lvl7, LocationName.Lvl9,
                                             LocationName.Lvl10]
@@ -1018,10 +1057,220 @@ def create_regions(self):
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
 
-    KH2REGIONS[RegionName.PuzzlePieces] = []
-    for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
-        for location in region_name:
-            KH2REGIONS[RegionName.PuzzlePieces].append(location)
+    KH2REGIONS[RegionName.Tt1PuzzlePieces] = [
+        LocationName.AwakeningPuzzleTT1Tower
+    ]
+    KH2REGIONS[RegionName.Tt2PuzzlePieces] = [
+        LocationName.FrontierPuzzleTT2TramCommon,
+        LocationName.DaylightPuzzleTT2TramCommon,
+        LocationName.DaylightPuzzleTT2MarketStreet,
+        LocationName.FrontierPuzzleTT2StationPlaza,
+    ]
+    KH2REGIONS[RegionName.Tt3PuzzlePieces] = [
+        LocationName.SunsetPuzzleTT3UndergroundConcourse1,
+        LocationName.SunsetPuzzleTT3UndergroundConcourse2,
+        LocationName.SunsetPuzzleTT3Tunnelway,
+        LocationName.SunsetPuzzleTT3TSunsetTerrace1,
+        LocationName.SunsetPuzzleTT3TSunsetTerrace2,
+        LocationName.SunsetPuzzleTT3TSunsetHill1,
+        LocationName.SunsetPuzzleTT3TSunsetHill2,
+        LocationName.SunsetPuzzleTT3OldMansion,
+        LocationName.DaylightPuzzleTT3MansionFoyer1,
+        LocationName.DaylightPuzzleTT3MansionFoyer2,
+        LocationName.SunsetPuzzleTT3TheWhiteRoom,
+        LocationName.DaylightPuzzleTT3PodRoom,
+        LocationName.DaylightPuzzleTT3SttComputerRoom,
+        LocationName.SunsetPuzzlePostTT3Tower,
+        LocationName.SunsetPuzzlePostTT3TowerWardrobe,
+    ]
+    KH2REGIONS[RegionName.Hb1PuzzlePieces] = [
+        LocationName.AwakeningPuzzleHB1MarketplaceArmor,
+        LocationName.HeartPuzzleHB1MarketplaceItem,
+        LocationName.AwakeningPuzzleHB1Borough,
+        LocationName.SunsetPuzzleHB1Borough,
+        LocationName.AwakeningPuzzleHB1MerlinHouse,
+        LocationName.DualityPuzzleHB1Bailey,
+    ]
+    KH2REGIONS[RegionName.Hb2PuzzlePieces] = [
+        LocationName.DaylightPuzzleHB2PosternAerith,
+        LocationName.FrontierPuzzleHB2PosternDoorway,
+        LocationName.SunsetPuzzleHB2Corridors,
+        LocationName.SunsetPuzzleHB2BaileyDancers,
+        LocationName.SunsetPuzzlePostHB2Ansems,
+        LocationName.DaylightPuzzlePostHB2Heartless,
+        LocationName.SunsetPuzzleCoRDepths1,
+        LocationName.SunsetPuzzleCoRDepths2,
+    ]
+    KH2REGIONS[RegionName.CoRFirstFightPuzzlePieces] = [
+        LocationName.SunsetPuzzleCoRMineshaftLower,
+        LocationName.SunsetPuzzleCoRMiningArea1,
+        LocationName.SunsetPuzzleCoRMiningArea2,
+        LocationName.SunsetPuzzleCoRMiningArea3,
+        LocationName.SunsetPuzzleCoRMiningArea4,
+        LocationName.SunsetPuzzleCoRMineshaftMiddle,
+    ]
+    KH2REGIONS[RegionName.CoRFirstFightPuzzlePieces] = [
+        LocationName.SunsetPuzzleCoRMineshaftUpper1,
+        LocationName.SunsetPuzzleCoRMineshaftUpper2,
+        LocationName.SunsetPuzzleCoRMineshaftUpper3,
+    ]
+    KH2REGIONS[RegionName.LoD1PuzzlePieces] = [
+        LocationName.HeartPuzzleEncampmentNearStand,
+        LocationName.SunsetPuzzleEncampmentAwayFromStand,
+        LocationName.FrontierPuzzleMountainTrail,
+        LocationName.AwakeningPuzzleVillageHayPile,
+        LocationName.HeartPuzzleVillageHome,
+        LocationName.DaylightPuzzleVillageBell,
+        LocationName.AwakeningPuzzleRidgeOne,
+        LocationName.AwakeningPuzzleRidgeTwo,
+    ]
+    KH2REGIONS[RegionName.LoD2PuzzlePieces] = [
+        LocationName.DaylightPuzzleThroneRoomClose,
+        LocationName.DaylightPuzzleRoomFar,
+    ]
+    KH2REGIONS[RegionName.Bc1PuzzlePieces] = [
+        LocationName.SunsetPuzzleEntranceHall,
+        LocationName.DaylightPuzzleWestHall,
+        LocationName.AwakeningPuzzleUnderCroftOne,
+        LocationName.AwakeningPuzzleUnderCroftTwo,
+        LocationName.AwakeningPuzzleSecretPassageOne,
+        LocationName.AwakeningPuzzleSecretPassageTwo,
+        LocationName.HeartPuzzleWestWing,
+        LocationName.AwakeningPuzzleBeastRoom,
+
+    ]
+    KH2REGIONS[RegionName.Bc2PuzzlePieces] = [
+        LocationName.SunsetPuzzlePostXaldin,
+    ]
+    KH2REGIONS[RegionName.Oc1PuzzlePieces] = [
+        LocationName.HeartPuzzleCaveDeadEntrance,
+        LocationName.DaylightPuzzleCaveDeadPassage,
+        LocationName.HeartPuzzleUnderworldEntrance,
+        LocationName.DaylightPuzzleUnderworldEntrance,
+        LocationName.DaylightPuzzleLostRoadOne,
+        LocationName.DaylightPuzzleLostRoadTwo,
+        LocationName.DualityPuzzleLostRoadThree,
+        LocationName.HeartPuzzleAtrium,
+        LocationName.DualityPuzzleTheLock,
+    ]
+    KH2REGIONS[RegionName.DcPuzzlePieces] = [
+        LocationName.DualityPuzzleGummiHangar,
+        LocationName.HeartPuzzleCourtyardOne,
+        LocationName.HeartPuzzleCourtyardTwo,
+        LocationName.DualityPuzzleCourtyard,
+        LocationName.DaylightPuzzleCollannade,
+    ]
+    KH2REGIONS[RegionName.TrPuzzlePieces] = [
+        LocationName.DualityPuzzlePierTree,
+        LocationName.FrontierPuzzlePierBoat,
+        LocationName.HeartPuzzleWaterway,
+    ]
+    KH2REGIONS[RegionName.Pr1PuzzlePieces] = [
+        LocationName.HeartPuzzleRampart,
+        LocationName.SunsetPuzzleHarbor,
+        LocationName.DualityPuzzleTown,
+        LocationName.FrontierPuzzleTown,
+        LocationName.HeartPuzzlePowderStore,
+        LocationName.DualityPuzzlePowderStore,
+        LocationName.DaylightPuzzleBlackPearlBack,
+        LocationName.DaylightPuzzleBlackPearlFlags,
+        LocationName.DaylightPuzzleBlackPearlInside,
+    ]
+    KH2REGIONS[RegionName.Pr2PuzzlePieces] = [
+        LocationName.SunsetPuzzleInterceptor,
+        LocationName.SunsetPuzzleSeaDriftRowOne,
+        LocationName.SunsetPuzzleSeaDriftKeepWindow,
+        LocationName.SunsetPuzzleSeaDriftKeepAnchor,
+    ]
+    KH2REGIONS[RegionName.Ag1PuzzlePieces] = [
+        LocationName.FrontierPuzzleAgrabah,
+        LocationName.DualityPuzzleAgrabah,
+        LocationName.FrontierPuzzleBazaar,
+        LocationName.SunsetPuzzleBazaar,
+        LocationName.DaylightPuzzleCaveOfWonders,
+        LocationName.FrontierPuzzleValleyOfStone,
+        LocationName.DaylightPuzzleTreasureRooms,
+        LocationName.SunsetPuzzleTreasureRooms,
+        LocationName.DaylightPuzzleChasmOfChallengesOne,
+        LocationName.DaylightPuzzleChasmOfChallengesTwo,
+        LocationName.DaylightPuzzleChasmOfChallengesThree,
+    ]
+    KH2REGIONS[RegionName.Ag2PuzzlePieces] = [
+        LocationName.SunsetPuzzleSandSwept,
+        LocationName.DaylightPuzzleSandSweptOne,
+        LocationName.DaylightPuzzleSandSweptTwo,
+    ]
+    KH2REGIONS[RegionName.Ht1PuzzlePieces] = [
+        LocationName.DualityPuzzleHalloweenTownSquare,
+        LocationName.DualityPuzzleHinterlands,
+        LocationName.DaylightPuzzleYuletide,
+        LocationName.DaylightPuzzleSantaHouse,
+        LocationName.FrontierPuzzleSantaHouse,
+    ]
+    KH2REGIONS[RegionName.PrisonKeeperPuzzlePieces] = [
+        LocationName.SunsetPuzzleCurlyHill
+    ]
+    KH2REGIONS[RegionName.Ht2PuzzlePieces] = [
+        LocationName.DaylightPuzzleToyFactory,
+        LocationName.SunsetPuzzleToyFactory,
+    ]
+    KH2REGIONS[RegionName.Pl1PuzzlePieces] = [
+        LocationName.DaylightPuzzleElephantOne,
+        LocationName.DaylightPuzzleElephantTwo,
+        LocationName.SunsetPuzzlePrideRock,
+        LocationName.DaylightPuzzleWildebeestOne,
+        LocationName.DaylightPuzzleWildebeestTwo,
+        LocationName.DaylightPuzzleWastelandsOne,
+        LocationName.DaylightPuzzleWastelandsTwo,
+        LocationName.DaylightPuzzleJungle,
+        LocationName.DaylightPuzzleOasis,
+        LocationName.DaylightPuzzleKingsDen,
+    ]
+    KH2REGIONS[RegionName.Sp1PuzzlePieces] = [
+        LocationName.DaylightPuzzleCanyon,
+        LocationName.SunsetPuzzleCanyon,
+    ]
+    KH2REGIONS[RegionName.Sp2PuzzlePieces] = [
+        LocationName.SunsetPuzzleSolarSailor,
+        LocationName.SunsetPuzzleMCP,
+    ]
+    KH2REGIONS[RegionName.Twtnw2PuzzlePieces] = [
+        LocationName.SunsetPuzzleMemorysSkyscraper,
+        LocationName.SunsetPuzzleCrooked,
+        LocationName.SunsetPuzzleTwilightView,
+        LocationName.DaylightPuzzleNaughts,
+        LocationName.SunsetPuzzleProofExistence,
+    ]
+    KH2REGIONS[RegionName.Twtnw3PuzzlePieces] = [
+        LocationName.SunsetPuzzleRuinPassageOne,
+        LocationName.SunsetPuzzleRuinPassageTwo,
+    ]
+    KH2REGIONS[RegionName.PoohsPuzzlePieces] = [
+        LocationName.DaylightPuzzlePooh
+    ]
+    KH2REGIONS[RegionName.PigletsPuzzlePieces] = [
+        LocationName.DaylightPuzzlePiglet
+    ]
+    KH2REGIONS[RegionName.RabbitsPuzzlePieces] = [
+        LocationName.DaylightPuzzleRabbit
+    ]
+    KH2REGIONS[RegionName.KangasPuzzlePieces] = [
+        LocationName.DaylightPuzzleKanga
+    ]
+    KH2REGIONS[RegionName.SpookyCavePuzzlePieces] = [
+        LocationName.DaylightPuzzleSpookyCave
+    ]
+    KH2REGIONS[RegionName.StarryHillPuzzlePieces] = [
+        LocationName.DaylightPuzzleStarryHill
+    ]
+    KH2REGIONS[RegionName.At1PuzzlePieces] = [
+        LocationName.DualityPuzzleUndersea,
+        LocationName.FrontierPuzzleTritonOne,
+        LocationName.FrontierPuzzleTritonTwo,
+    ]
+    #for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
+    #    for location in region_name:
+    #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
                            KH2REGIONS.items()]
@@ -1036,7 +1285,7 @@ def connect_regions(self):
     player = self.player
     # connecting every first visit to the GoA
     KH2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                        {RegionName.GoA, RegionName.PuzzlePieces},
+        "Menu":                        {RegionName.GoA,},
         RegionName.GoA:                {RegionName.Sp, RegionName.Pr, RegionName.Tt, RegionName.Oc, RegionName.Ht,
                                         RegionName.LoD,
                                         RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
@@ -1044,59 +1293,60 @@ def connect_regions(self):
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
                                         RegionName.Final, RegionName.Summon, RegionName.AtlanticaSongOne},
-        RegionName.LoD:                {RegionName.ShanYu},
+        RegionName.LoD:                {RegionName.LoD1PuzzlePieces, RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},
-        RegionName.AnsemRiku:          {RegionName.StormRider},
+        RegionName.AnsemRiku:          {RegionName.LoD2PuzzlePieces, RegionName.StormRider},
         RegionName.StormRider:         {RegionName.DataXigbar},
-        RegionName.Ag:                 {RegionName.TwinLords},
+        RegionName.Ag:                 {RegionName.Ag1PuzzlePieces, RegionName.TwinLords},
         RegionName.TwinLords:          {RegionName.Ag2},
-        RegionName.Ag2:                {RegionName.GenieJafar},
+        RegionName.Ag2:                {RegionName.Ag2PuzzlePieces, RegionName.GenieJafar},
         RegionName.GenieJafar:         {RegionName.DataLexaeus},
-        RegionName.Dc:                 {RegionName.Tr},
-        RegionName.Tr:                 {RegionName.OldPete},
+        RegionName.Dc:                 {RegionName.DcPuzzlePieces, RegionName.Tr},
+        RegionName.Tr:                 {RegionName.TrPuzzlePieces, RegionName.OldPete},
         RegionName.OldPete:            {RegionName.FuturePete},
         RegionName.FuturePete:         {RegionName.Terra, RegionName.DataMarluxia},
-        RegionName.Ha1:                {RegionName.Ha2},
-        RegionName.Ha2:                {RegionName.Ha3},
-        RegionName.Ha3:                {RegionName.Ha4},
-        RegionName.Ha4:                {RegionName.Ha5},
-        RegionName.Ha5:                {RegionName.Ha6},
-        RegionName.Pr:                 {RegionName.Barbosa},
+        RegionName.Ha1:                {RegionName.PoohsPuzzlePieces,RegionName.Ha2},
+        RegionName.Ha2:                {RegionName.PigletsPuzzlePieces,RegionName.Ha3},
+        RegionName.Ha3:                {RegionName.RabbitsPuzzlePieces,RegionName.Ha4},
+        RegionName.Ha4:                {RegionName.KangasPuzzlePieces,RegionName.Ha5},
+        RegionName.Ha5:                {RegionName.SpookyCavePuzzlePieces,RegionName.Ha6},
+        RegionName.Ha6:                {RegionName.StarryHillPuzzlePieces},
+        RegionName.Pr:                 {RegionName.Pr1PuzzlePieces, RegionName.Barbosa},
         RegionName.Barbosa:            {RegionName.Pr2},
-        RegionName.Pr2:                {RegionName.GrimReaper1},
+        RegionName.Pr2:                {RegionName.Pr2PuzzlePieces, RegionName.GrimReaper1},
         RegionName.GrimReaper1:        {RegionName.GrimReaper2},
         RegionName.GrimReaper2:        {RegionName.DataLuxord},
         RegionName.Oc:                 {RegionName.Cerberus},
-        RegionName.Cerberus:           {RegionName.OlympusPete},
+        RegionName.Cerberus:           {RegionName.Oc1PuzzlePieces, RegionName.OlympusPete},
         RegionName.OlympusPete:        {RegionName.Hydra},
         RegionName.Hydra:              {RegionName.OcPainAndPanicCup, RegionName.OcCerberusCup, RegionName.Oc2},
         RegionName.Oc2:                {RegionName.Hades},
         RegionName.Hades:              {RegionName.Oc2TitanCup, RegionName.Oc2GofCup, RegionName.DataZexion},
         RegionName.Oc2GofCup:          {RegionName.HadesCups},
         RegionName.Bc:                 {RegionName.Thresholder},
-        RegionName.Thresholder:        {RegionName.Beast},
+        RegionName.Thresholder:        {RegionName.Bc1PuzzlePieces, RegionName.Beast},
         RegionName.Beast:              {RegionName.DarkThorn},
         RegionName.DarkThorn:          {RegionName.Bc2},
         RegionName.Bc2:                {RegionName.Xaldin},
-        RegionName.Xaldin:             {RegionName.DataXaldin},
-        RegionName.Sp:                 {RegionName.HostileProgram},
+        RegionName.Xaldin:             {RegionName.Bc2PuzzlePieces, RegionName.DataXaldin},
+        RegionName.Sp:                 {RegionName.Sp1PuzzlePieces, RegionName.HostileProgram},
         RegionName.HostileProgram:     {RegionName.Sp2},
-        RegionName.Sp2:                {RegionName.Mcp},
+        RegionName.Sp2:                {RegionName.Sp2PuzzlePieces, RegionName.Mcp},
         RegionName.Mcp:                {RegionName.DataLarxene},
-        RegionName.Ht:                 {RegionName.PrisonKeeper},
-        RegionName.PrisonKeeper:       {RegionName.OogieBoogie},
+        RegionName.Ht:                 {RegionName.Ht1PuzzlePieces, RegionName.PrisonKeeper},
+        RegionName.PrisonKeeper:       {RegionName.PrisonKeeperPuzzlePieces, RegionName.OogieBoogie},
         RegionName.OogieBoogie:        {RegionName.Ht2},
-        RegionName.Ht2:                {RegionName.Experiment},
+        RegionName.Ht2:                {RegionName.Ht2PuzzlePieces, RegionName.Experiment},
         RegionName.Experiment:         {RegionName.DataVexen},
-        RegionName.Hb:                 {RegionName.Hb2},
-        RegionName.Hb2:                {RegionName.CoR, RegionName.HBDemyx},
+        RegionName.Hb:                 {RegionName.Hb1PuzzlePieces, RegionName.Hb2},
+        RegionName.Hb2:                {RegionName.Hb2PuzzlePieces, RegionName.CoR, RegionName.HBDemyx},
         RegionName.HBDemyx:            {RegionName.ThousandHeartless},
         RegionName.ThousandHeartless:  {RegionName.Mushroom13, RegionName.DataDemyx, RegionName.Sephi},
         RegionName.CoR:                {RegionName.CorFirstFight},
-        RegionName.CorFirstFight:      {RegionName.CorSecondFight},
-        RegionName.CorSecondFight:     {RegionName.Transport},
-        RegionName.Pl:                 {RegionName.Scar},
+        RegionName.CorFirstFight:      {RegionName.CoRFirstFightPuzzlePieces, RegionName.CorSecondFight},
+        RegionName.CorSecondFight:     {RegionName.CorSecondFightPuzzlePieces, RegionName.Transport},
+        RegionName.Pl:                 {RegionName.Pl1PuzzlePieces, RegionName.Scar},
         RegionName.Scar:               {RegionName.Pl2},
         RegionName.Pl2:                {RegionName.GroundShaker},
         RegionName.GroundShaker:       {RegionName.DataSaix},
@@ -1104,15 +1354,15 @@ def connect_regions(self):
         RegionName.TwilightThorn:      {RegionName.Axel1},
         RegionName.Axel1:              {RegionName.Axel2},
         RegionName.Axel2:              {RegionName.DataRoxas},
-        RegionName.Tt:                 {RegionName.Tt2},
-        RegionName.Tt2:                {RegionName.Tt3},
-        RegionName.Tt3:                {RegionName.DataAxel},
+        RegionName.Tt:                 {RegionName.Tt1PuzzlePieces, RegionName.Tt2},
+        RegionName.Tt2:                {RegionName.Tt2PuzzlePieces, RegionName.Tt3},
+        RegionName.Tt3:                {RegionName.Tt3PuzzlePieces, RegionName.DataAxel},
         RegionName.Twtnw:              {RegionName.Roxas},
         RegionName.Roxas:              {RegionName.Xigbar},
         RegionName.Xigbar:             {RegionName.Luxord},
         RegionName.Luxord:             {RegionName.Saix},
-        RegionName.Saix:               {RegionName.Twtnw2},
-        RegionName.Twtnw2:             {RegionName.Xemnas},
+        RegionName.Saix:               {RegionName.Twtnw2PuzzlePieces, RegionName.Twtnw2},
+        RegionName.Twtnw2:             {RegionName.Twtnw3PuzzlePieces, RegionName.Xemnas},
         RegionName.Xemnas:             {RegionName.ArmoredXemnas, RegionName.DataXemnas},
         RegionName.ArmoredXemnas:      {RegionName.ArmoredXemnas2},
         RegionName.ArmoredXemnas2:     {RegionName.FinalXemnas},
@@ -1125,7 +1375,7 @@ def connect_regions(self):
         RegionName.LevelsVS18:         {RegionName.LevelsVS21},
         RegionName.LevelsVS21:         {RegionName.LevelsVS24},
         RegionName.LevelsVS24:         {RegionName.LevelsVS26},
-        RegionName.AtlanticaSongOne:   {RegionName.AtlanticaSongTwo},
+        RegionName.AtlanticaSongOne:   {RegionName.At1PuzzlePieces,RegionName.AtlanticaSongTwo},
         RegionName.AtlanticaSongTwo:   {RegionName.AtlanticaSongThree},
         RegionName.AtlanticaSongThree: {RegionName.AtlanticaSongFour},
     }
