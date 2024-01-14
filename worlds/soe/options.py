@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields
-from typing import Any, cast, Dict, Iterator, List, Literal, Tuple, Protocol
+from typing import Any, cast, Dict, Iterator, List, Literal, Tuple, Protocol, Union
 
 from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
     Range, Toggle
@@ -13,7 +13,7 @@ class FlagsProtocol(Protocol):
 
 class FlagProtocol(Protocol):
     value: int
-    default: int | Literal["random"]
+    default: Union[int, Literal["random"]]
     flag: str
 
 
