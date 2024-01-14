@@ -99,6 +99,12 @@ first time launching, you may be prompted to allow it to communicate through the
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
+#### BSNES-Plus
+
+1. Load your ROM file if it hasn't already been loaded.
+2. The emulator should automatically connect while SNI is running.
+
+
 ##### BizHawk
 
 1. Ensure you have the BSNES core loaded. This is done with the main menubar, under:
