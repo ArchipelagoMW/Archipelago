@@ -161,7 +161,7 @@ class SoESettings(settings.Group):
 class SoEWorld(World):
     """
     Secret of Evermore is a SNES action RPG. You learn alchemy spells, fight bosses and gather rocket parts to visit a
-    space station where the final boss must be defeated. 
+    space station where the final boss must be defeated.
     """
     game: typing.ClassVar[str] = "Secret of Evermore"
     options_dataclass = SoEOptions
