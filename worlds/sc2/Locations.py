@@ -278,7 +278,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    and logic.terran_defense_rating(state, False, False) >= 6
                                    and logic.terran_common_unit(state)
                                    and (logic.marine_medic_upgrade(state) or adv_tactics)),
-        LocationData("The Dig", "The Dig: Cutting Trough the Core", SC2WOL_LOC_ID_OFFSET + 907, LocationType.EXTRA,
+        LocationData("The Dig", "The Dig: Cutting Through the Core", SC2WOL_LOC_ID_OFFSET + 907, LocationType.EXTRA,
                      lambda state: logic.terran_basic_anti_air(state)
                                    and logic.terran_defense_rating(state, False, True) >= 8
                                    and logic.terran_defense_rating(state, False, False) >= 6
