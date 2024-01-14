@@ -53,9 +53,14 @@ if __name__ == "__main__":
             "generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
         rule_iterations: int = 100_000
 
-        @staticmethod
-        def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
-            return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
+        if sys.version_info >= (3, 9):
+            @staticmethod
+            def format_times_from_counter(counter: collections.Counter[str], top: int = 5) -> str:
+                return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
+        else:
+            @staticmethod
+            def format_times_from_counter(counter: collections.Counter, top: int = 5) -> str:
+                return "\n".join(f"  {time:.4f} in {name}" for name, time in counter.most_common(top))
 
         def location_test(self, test_location: Location, state: CollectionState, state_name: str) -> float:
             with TimeIt(f"{test_location.game} {self.rule_iterations} "
