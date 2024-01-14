@@ -80,7 +80,8 @@ class SMZ3World(World):
     locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
-    required_client_version = (0, 2, 6)
+    # optimized message queues for 0.4.4
+    required_client_version = (0, 4, 4)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
@@ -470,7 +471,7 @@ class SMZ3World(World):
     def collect(self, state: CollectionState, item: Item) -> bool:
         state.smz3state[self.player].Add([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
         if item.advancement:
-            state.prog_items[item.name, item.player] += 1
+            state.prog_items[item.player][item.name] += 1
             return True  # indicate that a logical state change has occured
         return False
 
@@ -478,9 +479,9 @@ class SMZ3World(World):
         name = self.collect_item(state, item, True)
         if name:
             state.smz3state[item.player].Remove([TotalSMZ3Item.Item(TotalSMZ3Item.ItemType[item.name], self.smz3World if hasattr(self, "smz3World") else None)])
-            state.prog_items[name, item.player] -= 1
-            if state.prog_items[name, item.player] < 1:
-                del (state.prog_items[name, item.player])
+            state.prog_items[item.player][item.name] -= 1
+            if state.prog_items[item.player][item.name] < 1:
+                del (state.prog_items[item.player][item.name])
             return True
         return False
 

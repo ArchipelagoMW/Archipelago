@@ -4,6 +4,7 @@ from . import MuseDashTestBase
 class DifficultyRanges(MuseDashTestBase):
     def test_all_difficulty_ranges(self) -> None:
         muse_dash_world = self.multiworld.worlds[1]
+        dlc_set = {x for x in muse_dash_world.md_collection.DLC}
         difficulty_choice = self.multiworld.song_difficulty_mode[1]
         difficulty_min = self.multiworld.song_difficulty_min[1]
         difficulty_max = self.multiworld.song_difficulty_max[1]
@@ -12,7 +13,7 @@ class DifficultyRanges(MuseDashTestBase):
             self.assertEqual(inputRange[0], lower)
             self.assertEqual(inputRange[1], upper)
 
-            songs = muse_dash_world.md_collection.get_songs_with_settings(True, False, inputRange[0], inputRange[1])
+            songs = muse_dash_world.md_collection.get_songs_with_settings(dlc_set, False, inputRange[0], inputRange[1])
             for songKey in songs:
                 song = muse_dash_world.md_collection.song_items[songKey]
                 if (song.easy is not None and inputRange[0] <= song.easy <= inputRange[1]):
@@ -65,5 +66,11 @@ class DifficultyRanges(MuseDashTestBase):
         for song_name in muse_dash_world.md_collection.DIFF_OVERRIDES:
             song = muse_dash_world.md_collection.song_items[song_name]
 
-            self.assertTrue(song.easy is not None and song.hard is not None and song.master is not None,
+            # umpopoff is a one time weird song. Its currently the only song in the game
+            # with non-standard difficulties and also doesn't have 3 or more difficulties.
+            if song_name == 'umpopoff':
+                self.assertTrue(song.easy is None and song.hard is not None and song.master is None,
+                                f"Song '{song_name}' difficulty not set when it should be.")
+            else:
+                self.assertTrue(song.easy is not None and song.hard is not None and song.master is not None,
                 f"Song '{song_name}' difficulty not set when it should be.")

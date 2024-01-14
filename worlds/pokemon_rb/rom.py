@@ -539,6 +539,10 @@ def generate_output(self, output_directory: str):
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
     data[0xFF00] = 2  # client compatibility version
+    rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
+                         'utf8')[:21]
+    rom_name.extend([0] * (21 - len(rom_name)))
+    write_bytes(data, rom_name, 0xFFC6)
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
@@ -546,10 +550,8 @@ def generate_output(self, output_directory: str):
 
     write_quizzes(self, data, random)
 
-    for location in self.multiworld.get_locations():
-        if location.player != self.player:
-            continue
-        elif location.party_data:
+    for location in self.multiworld.get_locations(self.player):
+        if location.party_data:
             for party in location.party_data:
                 if not isinstance(party["party_address"], list):
                     addresses = [rom_addresses[party["party_address"]]]
