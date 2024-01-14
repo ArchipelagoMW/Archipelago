@@ -13,7 +13,7 @@ from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
 from worlds.generic.Rules import add_item_rule, set_rule
 from .logic import SoEPlayerLogic
-from .options import AvailableFragments, Difficulty, EnergyCore, RequiredFragments, SoEOptions, TrapChance
+from .options import Difficulty, EnergyCore, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
 
 if typing.TYPE_CHECKING:
@@ -373,8 +373,6 @@ class SoEWorld(World):
         self.evermizer_seed = self.random.randint(0, 2 ** 16 - 1)  # TODO: make this an option for "full" plando?
 
     def generate_output(self, output_directory: str) -> None:
-        from dataclasses import asdict
-
         player_name = self.multiworld.get_player_name(self.player)
         self.connect_name = player_name[:32]
         while len(self.connect_name.encode('utf-8')) > 32:
