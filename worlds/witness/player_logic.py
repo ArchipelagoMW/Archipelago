@@ -323,7 +323,7 @@ class WitnessPlayerLogic:
         # Another big postgame case that is missed is "Desert Laser Redirect (Panel)".
         # An 11 lasers longbox seed could technically have this item on Challenge Vault Box.
         # This case is not considered and we will act like Desert Laser Redirect (Panel) is always accessible.
-        # (Which means we do no additional work, this is comment just exists to document that case)
+        # (Which means we do no additional work, this comment just exists to document that case)
 
         # ||| Section 3: "Post-or-equal-game" cases |||
         # These are cases in which something comes into logic *at the same time* as your goal and thus also can't
