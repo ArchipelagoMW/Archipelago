@@ -6,7 +6,7 @@ class SoETestBase(WorldTestBase):
     game = "Secret of Evermore"
 
     def assertLocationReachability(self, reachable: Iterable[str] = (), unreachable: Iterable[str] = (),
-                                   satisfied=True) -> None:
+                                   satisfied: bool = True) -> None:
         """
         Tests that unreachable can't be reached. Tests that reachable can be reached if satisfied=True.
         Usage: test with satisfied=False, collect requirements into state, test again with satisfied=True
@@ -19,7 +19,7 @@ class SoETestBase(WorldTestBase):
             self.assertFalse(self.can_reach_location(location),
                              f"{location} is reachable but shouldn't be")
 
-    def testRocketPartsExist(self):
+    def testRocketPartsExist(self) -> None:
         """Tests that rocket parts exist and are unique"""
         self.assertEqual(len(self.get_items_by_name("Gauge")), 1)
         self.assertEqual(len(self.get_items_by_name("Wheel")), 1)
