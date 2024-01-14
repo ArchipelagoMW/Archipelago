@@ -69,8 +69,8 @@
                                     </td>
                                     <td>
                                         <select name="collect_mode" id="collect_mode">
-                                            <option value="goal">Allow !collect after goal completion</option>
                                             <option value="auto">Automatic on goal completion</option>
+                                            <option value="goal">Allow !collect after goal completion</option>
                                             <option value="auto-enabled">
                                                 Automatic on goal completion and manual !collect
                                             </option>
@@ -93,9 +93,9 @@
                                             {% if race -%}
                                                 <option value="disabled">Disabled in Race mode</option>
                                             {%- else -%}
-                                                <option value="disabled">Disabled</option>
                                                 <option value="goal">Allow !remaining after goal completion</option>
                                                 <option value="enabled">Manual !remaining</option>
+                                                <option value="disabled">Disabled</option>
                                             {%- endif -%}
                                         </select>
                                     </td>
@@ -185,11 +185,11 @@ Warning: playthrough can take a significant amount of time for larger multiworld
                                             </span>
                                         </td>
                                         <td>
+                                            <input type="checkbox" id="plando_items" name="plando_items" value="items">
+                                            <label for="plando_items">Items</label><br>
+
                                             <input type="checkbox" id="plando_bosses" name="plando_bosses" value="bosses" checked>
                                             <label for="plando_bosses">Bosses</label><br>
-
-                                            <input type="checkbox" id="plando_items" name="plando_items" value="items" checked>
-                                            <label for="plando_items">Items</label><br>
 
                                             <input type="checkbox" id="plando_connections" name="plando_connections" value="connections" checked>
                                             <label for="plando_connections">Connections</label><br>
