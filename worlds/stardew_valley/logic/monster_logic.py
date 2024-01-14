@@ -1,3 +1,4 @@
+from functools import cached_property
 from typing import Iterable, Union, Hashable
 
 from Utils import cache_self1
@@ -18,9 +19,18 @@ class MonsterLogicMixin(BaseLogicMixin):
 
 
 class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLogicMixin, TimeLogicMixin]]):
+
+    @cached_property
+    def all_monsters_by_name(self):
+        return monster_data.all_monsters_by_name_given_mods(self.options.mods.value)
+
+    @cached_property
+    def all_monsters_by_category(self):
+        return monster_data.all_monsters_by_category_given_mods(self.options.mods.value)
+
     def can_kill(self, monster: Union[str, monster_data.StardewMonster], amount_tier: int = 0) -> StardewRule:
         if isinstance(monster, str):
-            monster = monster_data.all_monsters_by_name(self.options.mods.value)[monster]
+            monster = self.all_monsters_by_name[monster]
         region_rule = self.logic.region.can_reach_any(monster.locations)
         combat_rule = self.logic.combat.can_fight_at_level(monster.difficulty)
         if amount_tier <= 0:
@@ -50,10 +60,10 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
         rules = [self.logic.time.has_lived_max_months]
         exclude_island = self.options.exclude_ginger_island == options.ExcludeGingerIsland.option_true
         island_regions = [Region.volcano_floor_5, Region.volcano_floor_10, Region.island_west, Region.dangerous_skull_cavern]
-        for category in monster_data.all_monsters_by_category(self.options.mods.value):
+        for category in self.all_monsters_by_category:
             if exclude_island and all(all(location in island_regions for location in monster.locations)
-                                      for monster in monster_data.all_monsters_by_category(self.options.mods.value)[category]):
+                                      for monster in self.all_monsters_by_category[category]):
                 continue
-            rules.append(self.logic.monster.can_kill_any(monster_data.all_monsters_by_category(self.options.mods.value)[category]))
+            rules.append(self.logic.monster.can_kill_any(self.all_monsters_by_category[category]))
 
         return And(*rules)

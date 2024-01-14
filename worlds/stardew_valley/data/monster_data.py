@@ -5,7 +5,9 @@ from Utils import cache_self1
 from ..mods.mod_data import ModNames
 from ..strings.monster_names import Monster, MonsterCategory
 from ..strings.performance_names import Performance
-from ..strings.region_names import Region, SVERegion, DeepWoodsRegion
+from ..strings.region_names import Region
+
+from ..mods.mod_monster_locations import modded_monsters_locations
 
 
 @dataclass(frozen=True)
@@ -46,9 +48,10 @@ def create_monster(name: str, category: str, locations: Tuple[str, ...], difficu
     return monster
 
 
-def update_monster_locations(monster: StardewMonster, locations: Tuple[str, ...]):
-    new_locations = monster.locations + locations
-    return StardewMonster(monster.name, monster.category, new_locations, monster.difficulty)
+def update_monster_locations(mod_name: str, monster: StardewMonster):
+    new_locations = modded_monsters_locations[mod_name][monster.name]
+    total_locations = monster.locations + new_locations
+    return StardewMonster(monster.name, monster.category, total_locations, monster.difficulty)
 
 
 def register_monster_modification(mod_name: str, monster: StardewMonster, modification_function):
@@ -121,40 +124,42 @@ royal_serpent = create_monster(Monster.royal_serpent, MonsterCategory.serpents, 
 magma_sprite = create_monster(Monster.magma_sprite, MonsterCategory.magma_sprites, volcano, Performance.galaxy)
 magma_sparker = create_monster(Monster.magma_sparker, MonsterCategory.magma_sprites, volcano_high, Performance.galaxy)
 
-register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations(shadow_brute_dangerous, (SVERegion.highlands_cavern,) ))
-register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations(shadow_sniper, (SVERegion.highlands_cavern,) ))
-register_monster_modification(ModNames.sve, shadow_shaman_dangerous, update_monster_locations(shadow_shaman_dangerous, (SVERegion.highlands_cavern,) ))
-register_monster_modification(ModNames.sve, mummy_dangerous, update_monster_locations(mummy_dangerous, (SVERegion.crimson_badlands,) ))
-register_monster_modification(ModNames.sve, royal_serpent, update_monster_locations(royal_serpent, (SVERegion.crimson_badlands,) ))
-register_monster_modification(ModNames.sve, skeleton_dangerous, update_monster_locations(skeleton_dangerous, (SVERegion.crimson_badlands,) ))
-register_monster_modification(ModNames.sve, skeleton_mage, update_monster_locations(skeleton_mage, (SVERegion.crimson_badlands,) ))
-register_monster_modification(ModNames.sve, dust_sprite_dangerous, update_monster_locations(dust_sprite_dangerous, (SVERegion.highlands_outside,) ))
+register_monster_modification(ModNames.sve, shadow_brute_dangerous, update_monster_locations)
+register_monster_modification(ModNames.sve, shadow_sniper, update_monster_locations)
+register_monster_modification(ModNames.sve, shadow_shaman_dangerous, update_monster_locations)
+register_monster_modification(ModNames.sve, mummy_dangerous, update_monster_locations)
+register_monster_modification(ModNames.sve, royal_serpent, update_monster_locations)
+register_monster_modification(ModNames.sve, skeleton_dangerous, update_monster_locations)
+register_monster_modification(ModNames.sve, skeleton_mage, update_monster_locations)
+register_monster_modification(ModNames.sve, dust_sprite_dangerous, update_monster_locations)
 
-register_monster_modification(ModNames.deepwoods, shadow_brute, update_monster_locations(shadow_brute, (DeepWoodsRegion.floor_10,) ))
-register_monster_modification(ModNames.deepwoods, cave_fly, update_monster_locations(cave_fly, (DeepWoodsRegion.floor_10,) ))
-register_monster_modification(ModNames.deepwoods, green_slime, update_monster_locations(green_slime, (DeepWoodsRegion.floor_10,) ))
+register_monster_modification(ModNames.deepwoods, shadow_brute, update_monster_locations)
+register_monster_modification(ModNames.deepwoods, cave_fly, update_monster_locations)
+register_monster_modification(ModNames.deepwoods, green_slime, update_monster_locations)
 
 
-def all_monsters_by_name(mods: Set[str]) -> Dict[str, StardewMonster]:
+def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]:
     monsters_by_name = {}
     for monster in all_monsters:
         current_monster = monster
         for mod in monster_modifications_by_mod:
             if mod not in mods or monster.name not in monster_modifications_by_mod[mod]:
                 continue
-            current_monster = monster_modifications_by_mod[mod][monster.name]
+            modification_function = monster_modifications_by_mod[mod][monster.name]
+            current_monster = modification_function(mod, current_monster)
         monsters_by_name[monster.name] = current_monster
     return monsters_by_name
 
 
-def all_monsters_by_category(mods: Set[str]) -> Dict[str, Tuple[StardewMonster,...]]:
+def all_monsters_by_category_given_mods(mods: Set[str]) -> Dict[str, Tuple[StardewMonster,...]]:
     monsters_by_category = {}
     for monster in all_monsters:
         current_monster = monster
         for mod in monster_modifications_by_mod:
             if mod not in mods or monster.name not in monster_modifications_by_mod[mod]:
                 continue
-            current_monster = monster_modifications_by_mod[mod][monster.name]
+            modification_function = monster_modifications_by_mod[mod][monster.name]
+            current_monster = modification_function(mod, current_monster)
         if current_monster.category not in monsters_by_category:
             monsters_by_category[monster.category] = ()
         monsters_by_category[current_monster.category] = monsters_by_category[current_monster.category] + (current_monster,)

@@ -41,7 +41,6 @@ from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
 from ..data.fish_data import get_fish_for_mods
-from ..data.monster_data import all_monsters_by_name
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
@@ -254,7 +253,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fish.periwinkle: self.skill.can_crab_pot_at(Region.town),
             Fish.shrimp: self.skill.can_crab_pot_at(Region.beach),
             Fish.snail: self.skill.can_crab_pot_at(Region.town),
-            Fishing.curiosity_lure: self.monster.can_kill(all_monsters_by_name(self.options.mods)[Monster.mummy]),
+            Fishing.curiosity_lure: self.monster.can_kill(self.monster.all_monsters_by_name[Monster.mummy]),
             Fishing.lead_bobber: self.skill.has_level(Skill.fishing, 6) & self.money.can_spend_at(Region.fish_shop, 200),
             Forageable.blackberry: self.tool.can_forage(Season.fall) | self.has_fruit_bats(),
             Forageable.cactus_fruit: self.tool.can_forage(Generic.any, Region.desert),
