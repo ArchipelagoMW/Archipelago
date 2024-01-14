@@ -297,7 +297,7 @@ class KH2WorldRules(KH2Rules):
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Victory, self.player, 1)
             else:
                 self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.Bounty, self.player, self.world.options.BountyRequired.value) and \
-                                                                                  state.has(ItemName.LuckyEmblem, self.player,  self.world.options.LuckyEmblemsRequired.value)
+                                                                                  state.has(ItemName.LuckyEmblem, self.player, self.world.options.LuckyEmblemsRequired.value)
 
 
 class KH2FormRules(KH2Rules):
