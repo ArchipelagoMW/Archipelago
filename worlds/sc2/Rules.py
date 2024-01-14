@@ -678,8 +678,7 @@ class SC2Logic:
 
     def the_escape_first_stage_requirement(self, state: CollectionState) -> bool:
         return self.the_escape_stuff_granted() \
-            or (self.nova_ranged_weapon(state)
-                and self.nova_full_stealth(state) or self.nova_heal(state))
+            or ((self.nova_ranged_weapon(state) and self.nova_full_stealth(state)) or self.nova_heal(state))
 
     def the_escape_requirement(self, state: CollectionState) -> bool:
         return self.the_escape_first_stage_requirement(state) \
