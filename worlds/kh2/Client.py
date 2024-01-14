@@ -404,7 +404,7 @@ class KH2Context(CommonContext):
             logger.info("line 425")
 
     async def chestPuzzleLocations(self):
-        for puzzle_dict in [Awakening_Checks, Heart_Checks, Duality_Checks, Frontier_Checks, Daylight_Checks]:
+        for puzzle_dict in [Awakening_Checks, Heart_Checks, Duality_Checks, Frontier_Checks, Daylight_Checks, Sunset_Checks]:
             for location, data in puzzle_dict.items():
                 if location in self.kh2_loc_name_to_id.keys():
                     locationId = self.kh2_loc_name_to_id[location]

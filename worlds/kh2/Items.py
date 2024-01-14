@@ -658,7 +658,8 @@ item_dictionary_table = {
     **Boosts_Table,
     **DonaldAbility_Table,
     **GoofyAbility_Table,
-    **Consumable_Table
+    **Consumable_Table,
+    **Puzzle_Table,
 }
 filler_items = [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost,
                 ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.Megalixir,

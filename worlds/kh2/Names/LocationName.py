@@ -918,17 +918,17 @@ AwakeningPuzzleSecretPassageOne = "Awakening Puzzle Piece 1: (BC1) Secret Passag
 AwakeningPuzzleSecretPassageTwo = "Awakening Puzzle Piece 2: (BC1) Secret Passage"
 HeartPuzzleWestWing             = "Heart Puzzle Piece: (BC1) West Wing"
 AwakeningPuzzleBeastRoom        = "Awakening Puzzle Piece: (BC1) The Beast's Room"
-SunsetPuzzlePostXaldin          = "Sunset Puzzle Piece: (BC2) Bride (Post-Xaldin)"
+SunsetPuzzlePostXaldin          = "Sunset Puzzle Piece: (BC2) Bridge (Post-Xaldin)"
 
-HeartPuzzleCaveDeadEntrance         = "Heart Puzzle Piece: (OC1) Cave of the Dead Entrance"
-DaylightPuzzleCaveDeadPassage       = "Daylight Puzzle Piece: (OC1) Cave of the Dead Passage"
-HeartPuzzleUnderworldEntrance       = "Heart Puzzle Piece: (OC1) Underworld Caverns - Entrance:Near Entrance"
-DaylightPuzzleUnderworldEntrance    = "Daylight Puzzle Piece: (OC1) Underworld Caverns - Entrance:Behind Pillar"
-DaylightPuzzleLostRoadOne           = "Daylight Puzzle Piece 1: (OC1) Lost Road"  # v 2
-DaylightPuzzleLostRoadTwo           = "Daylight Puzzle Piece 2: (OC1) Lost Road"  # v 2
-DualityPuzzleLostRoadThree          = "Duality Puzzle Piece: (OC1) Lost Road"
-HeartPuzzleAtrium                   = "Heart Puzzle Piece: (OC1) Atrium"
-DualityPuzzleTheLock                = "Duality Puzzle Piece: (OC1) The Lock"
+HeartPuzzleCaveDeadEntrance         = "Heart Puzzle Piece: (OC) Cave of the Dead Entrance"
+DaylightPuzzleCaveDeadPassage       = "Daylight Puzzle Piece: (OC) Cave of the Dead Passage"
+HeartPuzzleUnderworldEntrance       = "Heart Puzzle Piece: (OC) Underworld Caverns - Entrance:Near Entrance"
+DaylightPuzzleUnderworldEntrance    = "Daylight Puzzle Piece: (OC) Underworld Caverns - Entrance:Behind Pillar"
+DaylightPuzzleLostRoadOne           = "Daylight Puzzle Piece 1: (OC) Lost Road"  # v 2
+DaylightPuzzleLostRoadTwo           = "Daylight Puzzle Piece 2: (OC) Lost Road"  # v 2
+DualityPuzzleLostRoadThree          = "Duality Puzzle Piece: (OC) Lost Road"
+HeartPuzzleAtrium                   = "Heart Puzzle Piece: (OC) Atrium"
+DualityPuzzleTheLock                = "Duality Puzzle Piece: (OC) The Lock"
 
 DualityPuzzleGummiHangar    = "Duality Puzzle Piece: (DC) Gummi Hangar"  # v or g and magic
 HeartPuzzleCourtyardOne     = "Heart Puzzle Piece: (DC) Courtyard - Pig Hedge"  # vertical or magic buffer
@@ -1001,12 +1001,12 @@ SunsetPuzzleProofExistence      = "Sunset Puzzle Piece: (TWTNW2) Proof of Existe
 SunsetPuzzleRuinPassageOne      = "Sunset Puzzle Piece 1: (TWTNW3) Ruin  and Creation's Passage"
 SunsetPuzzleRuinPassageTwo      = "Sunset Puzzle Piece 2: (TWTNW3) Ruin  and Creation's Passage"
 
-DaylightPuzzlePooh          = "Daylight Puzzle Piece: (100AW 0) Pooh's House"
-DaylightPuzzlePiglet        = "Daylight Puzzle Piece: (100AW 1) Piglet's House"
-DaylightPuzzleRabbit        = "Daylight Puzzle Piece: (100AW 2) Rabbit's House"
-DaylightPuzzleKanga         = "Daylight Puzzle Piece: (100AW 3) Kanga's House"
-DaylightPuzzleSpookyCave    = "Daylight Puzzle Piece: (100AW 4) Spooky Cave"
-DaylightPuzzleStarryHill    = "Daylight Puzzle Piece: (100AW 5) Starry Hill"
+DaylightPuzzlePooh          = "Daylight Puzzle Piece: (100Acre 0 Torn Page) Pooh's House"
+DaylightPuzzlePiglet        = "Daylight Puzzle Piece: (100Acre 1 Torn Page) Piglet's House"
+DaylightPuzzleRabbit        = "Daylight Puzzle Piece: (100Acre 2 Torn Page) Rabbit's House"
+DaylightPuzzleKanga         = "Daylight Puzzle Piece: (100Acre 3 Torn Page) Kanga's House"
+DaylightPuzzleSpookyCave    = "Daylight Puzzle Piece: (100Acre 4 Torn Page) Spooky Cave"
+DaylightPuzzleStarryHill    = "Daylight Puzzle Piece: (100Acre 5 Torn Page) Starry Hill"
 
 DualityPuzzleUndersea    = "Duality Puzzle Piece: (AT) Undersea Courtyard"
 FrontierPuzzleTritonOne  = "Frontier Puzzle Piece 1: (AT) Triton's Throne"

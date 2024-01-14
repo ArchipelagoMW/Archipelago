@@ -982,7 +982,7 @@ Daylight_Checks = {
     LocationName.DaylightPuzzleChasmOfChallengesThree: WorldLocationData(0x24C4, 4),
     LocationName.DaylightPuzzleSandSweptOne:           WorldLocationData(0x24C4, 2),
     LocationName.DaylightPuzzleSandSweptTwo:           WorldLocationData(0x24C5, 0),
-    LocationName.DaylightPuzzleSantaHouse:             WorldLocationData(0x24C2, 5),
+    LocationName.DaylightPuzzleSantaHouse:             WorldLocationData(0x24C2, 4),# this one is wrong
     LocationName.DaylightPuzzleYuletide:               WorldLocationData(0x24C1, 3),
     LocationName.DaylightPuzzleToyFactory:             WorldLocationData(0x24C5, 3),
     LocationName.DaylightPuzzleElephantOne:            WorldLocationData(0x24C3, 5),
