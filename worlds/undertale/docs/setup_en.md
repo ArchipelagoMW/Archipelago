@@ -4,7 +4,6 @@
 
 - Undertale from the [Steam page](https://store.steampowered.com/app/391540)
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (select `Undertale Client` during installation.)
 
 ### First time setup
 
