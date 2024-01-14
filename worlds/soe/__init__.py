@@ -19,6 +19,9 @@ from .patch import SoEDeltaPatch, get_base_rom_path
 if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
 
+__all__ = ["pyevermizer", "SoEWorld"]
+
+
 """
 In evermizer:
 
