@@ -281,33 +281,31 @@ class WitnessPlayerLogic:
         mnt_lasers = world.options.mountain_lasers
         chal_lasers = world.options.challenge_lasers
 
-        # Goal is "short box" but short box requires more lasers than long box
-        reverse_shortbox_goal = victory == "mountain_box_short" and mnt_lasers > chal_lasers
-
         # Goal is "short box", and long box requires at least as many lasers as short box (as god intended)
         proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
 
         # Goal is "long box", but short box requires at least as many lasers than long box.
         reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers >= chal_lasers
 
-        # Proper postgame cases
+        # ||| Section 1: Proper postgame cases |||
         # When something only comes into logic after the goal, e.g. "longbox is postgame if the goal is shortbox".
 
-        # Challenge can only have something if the goal is not challenge or longbox itself.
-        # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
-        if not (victory == "elevator" or reverse_shortbox_goal or victory == "challenge"):
-            # Disable the timer start panel
-            postgame_adjustments.append(["Disabled Locations:", "0x0A332"])
+        # If we have a long box goal, Challenge is behind the amount of lasers required to just win.
+        # This is technically slightly incorrect as the Challenge Vault Box could contain a *symbol* that is required
+        # to open Mountain Entry (Stars 2). However, since there is a very easy sphere 1 snipe, this is not considered.
+        if victory == "mountain_box_long":
+            postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
 
-        # If we have a proper short box goal, long box will never be activated first.
+        # If we have a proper short box goal, anything based on challenge lasers will never have something required.
         if proper_shortbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
+            postgame_adjustments.append(["Disabled Locations:", "0x0A332 (Challenge Timer Start)"])
 
         # In a case where long box can be activated before short box, short box is postgame.
         if reverse_longbox_goal:
             postgame_adjustments.append(["Disabled Locations:", "0x09F7F (Mountain Box Short)"])
 
-        # "Fun" considerations
+        # ||| Section 2: "Fun" considerations |||
         # These are cases in which it was deemed "unfun" to have an "oops, all lasers" situation, especially when
         # it's for a single possible item.
 
@@ -322,7 +320,12 @@ class WitnessPlayerLogic:
         if mbfd_extra_exclusions:
             postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
 
-        # "Post-or-equal-game" cases
+        # Another big postgame case that is missed is "Desert Laser Redirect (Panel)".
+        # An 11 lasers longbox seed could technically have this item on Challenge Vault Box.
+        # This case is not considered and we will act like Desert Laser Redirect (Panel) is always accessible.
+        # (Which means we do no additional work, this is comment just exists to document that case)
+
+        # ||| Section 3: "Post-or-equal-game" cases |||
         # These are cases in which something comes into logic *at the same time* as your goal and thus also can't
         # possibly have a required item. These can be a bit awkward.
 
