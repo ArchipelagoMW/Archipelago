@@ -54,7 +54,6 @@ if __name__ == "__main__":
     # TODO: move stuff to not require this
     import ModuleUpdate
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
-    ModuleUpdate.update_ran = False  # restore for later
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
@@ -304,7 +303,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
-        ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
         # auto-build cython modules
