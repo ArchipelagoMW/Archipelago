@@ -81,11 +81,13 @@ class AutopelagoWorld(World):
     def generate_early(self):
         # finalize the list of possible items, based on which games are present in this multiworld.
         full_item_table = { c: [item_name for item_name in items] for c, items in generic_item_table.items() }
+        dlc_games = { game for game in game_specific_items }
         for category, items in full_item_table.items():
             replacements_made = 0
             for game_name in self.multiworld.game.values():
-                if not (game_name in game_specific_items and category in game_specific_items[game_name]):
+                if game_name not in dlc_games:
                     continue
+                dlc_games.remove(game_name)
                 for item in game_specific_items[game_name][category]:
                     items[replacements_made] = item
                     replacements_made += 1
