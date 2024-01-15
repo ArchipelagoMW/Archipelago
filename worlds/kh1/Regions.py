@@ -168,7 +168,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Right Blue Trinity Chest"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Left Blue Trinity Chest"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates White Trinity Chest"),
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Blizzara Chest"),
+   #regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Blizzara Chest"),
     regions["Monstro"].locations.append("Monstro Mouth Boat Deck Chest"),
     regions["Monstro"].locations.append("Monstro Mouth High Platform Boat Side Chest"),
     regions["Monstro"].locations.append("Monstro Mouth High Platform Across from Boat Chest"),
