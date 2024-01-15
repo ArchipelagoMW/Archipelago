@@ -36,7 +36,6 @@ def has_postcards(state: CollectionState, player: int, postcards_required: int) 
         postcards_available = postcards_available + 1 #Gepetto's House Pot on Shelf
     postcards_available = postcards_available + state.count("Postcard", player) #3 can be found in chests/events
     return postcards_available >= postcards_required
-end
 
 def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     #Location rules.
