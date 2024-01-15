@@ -303,6 +303,9 @@ class KH2World(World):
         fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
+        if self.options.PuzzlePiecesLocationToggle:
+            puzzle_logic = Rules.KH2PuzzleRules(self)
+            puzzle_logic.set_kh2_puzzle_rules()
 
     def generate_output(self, output_directory: str):
         """

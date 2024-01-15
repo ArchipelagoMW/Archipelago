@@ -942,11 +942,12 @@ puzzle_region_list = [
     RegionName.Ag2PuzzlePieces,
     RegionName.Ht1PuzzlePieces,
     RegionName.PrisonKeeperPuzzlePieces,
-    RegionName.Ht2PuzzlePieces,
+    RegionName.OogieBoogiePuzzlePieces,
     RegionName.Pl1PuzzlePieces,
     RegionName.Sp1PuzzlePieces,
     RegionName.Sp2PuzzlePieces,
-    RegionName.Twtnw2PuzzlePieces,
+    RegionName.TwtnwPuzzlePostRoxas,
+    RegionName.TwtnwPuzzlePostXigbar,
     RegionName.Twtnw3PuzzlePieces,
     RegionName.PoohsPuzzlePieces,
     RegionName.PigletsPuzzlePieces,
@@ -1239,12 +1240,12 @@ def create_regions(self):
             LocationName.SunsetPuzzleSolarSailor,
             LocationName.SunsetPuzzleMCP,
         ]
-        KH2REGIONS[RegionName.TwtnwPostRoxas] = [
+        KH2REGIONS[RegionName.TwtnwPuzzlePostRoxas] = [
             LocationName.SunsetPuzzleMemorysSkyscraper,
             LocationName.SunsetPuzzleCrooked,
             LocationName.SunsetPuzzleTwilightView,
         ]
-        KH2REGIONS[RegionName.TwtnwPostXigbar] = [
+        KH2REGIONS[RegionName.TwtnwPuzzlePostXigbar] = [
             LocationName.DaylightPuzzleNaughts,
             LocationName.SunsetPuzzleProofExistence,
         ]
@@ -1304,7 +1305,7 @@ def connect_regions(self):
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},
         RegionName.AnsemRiku:          {RegionName.LoD2PuzzlePieces, RegionName.StormRider},
-        RegionName.StormRider:         {RegionName.DataXigbar},
+        RegionName.StormRider:         {RegionName.PostStormRiderPuzzlePieces,RegionName.DataXigbar},
         RegionName.Ag:                 {RegionName.Ag1PuzzlePieces, RegionName.TwinLords},
         RegionName.TwinLords:          {RegionName.Ag2},
         RegionName.Ag2:                {RegionName.Ag2PuzzlePieces, RegionName.GenieJafar},
@@ -1349,7 +1350,7 @@ def connect_regions(self):
         RegionName.Hb:                 {RegionName.Hb1PuzzlePieces, RegionName.Hb2},
         RegionName.Hb2:                {RegionName.Hb2PuzzlePieces, RegionName.CoR, RegionName.HBDemyx},
         RegionName.HBDemyx:            {RegionName.ThousandHeartless},
-        RegionName.ThousandHeartless:  {RegionName.Mushroom13, RegionName.DataDemyx, RegionName.Sephi},
+        RegionName.ThousandHeartless:  {RegionName.PostThousandHeartless, RegionName.Mushroom13, RegionName.DataDemyx, RegionName.Sephi},
         RegionName.CoR:                {RegionName.CorFirstFight},
         RegionName.CorFirstFight:      {RegionName.CoRFirstFightPuzzlePieces, RegionName.CorSecondFight},
         RegionName.CorSecondFight:     {RegionName.CorSecondFightPuzzlePieces, RegionName.Transport},
