@@ -974,7 +974,7 @@ Daylight_Checks = {
     LocationName.DaylightPuzzleBlackPearlBack:         WorldLocationData(0x24C5, 4),
     LocationName.DaylightPuzzleBlackPearlFlags:        WorldLocationData(0x24C4, 6),
     LocationName.DaylightPuzzleBlackPearlInside:       WorldLocationData(0x24C4, 3),
-    LocationName.SunsetPuzzleSeaDriftKeepWindow:       WorldLocationData(0x24C4, 0),
+    LocationName.DaylightPuzzleSeaDriftKeepAnchor:     WorldLocationData(0x24CC, 0),
     LocationName.DaylightPuzzleCaveOfWonders:          WorldLocationData(0x24C3, 4),
     LocationName.DaylightPuzzleTreasureRooms:          WorldLocationData(0x24C0, 5),
     LocationName.DaylightPuzzleChasmOfChallengesOne:   WorldLocationData(0x24C1, 2),
@@ -1036,7 +1036,7 @@ Sunset_Checks = {
     LocationName.SunsetPuzzleHarbor:                   WorldLocationData(0x24CD, 1),
     LocationName.SunsetPuzzleInterceptor:              WorldLocationData(0x24C8, 4),
     LocationName.SunsetPuzzleSeaDriftRowOne:           WorldLocationData(0x24CC, 6),
-    LocationName.SunsetPuzzleSeaDriftKeepAnchor:       WorldLocationData(0x24CC, 0),
+    LocationName.SunsetPuzzleSeaDriftKeepWindow:       WorldLocationData(0x24C4, 0),
     LocationName.SunsetPuzzleBazaar:                   WorldLocationData(0x24CD, 0),
     LocationName.SunsetPuzzleTreasureRooms:            WorldLocationData(0x24CA, 6),
     LocationName.SunsetPuzzleSandSwept:                WorldLocationData(0x24CA, 1),
@@ -1051,8 +1051,9 @@ Sunset_Checks = {
     LocationName.SunsetPuzzleTwilightView:             WorldLocationData(0x24CA, 3),
     LocationName.SunsetPuzzleProofExistence:           WorldLocationData(0x24CC, 1),
     LocationName.SunsetPuzzleRuinPassageOne:           WorldLocationData(0x24C9, 2),
-    LocationName.SunsetPuzzleRuinPassageTwo:           WorldLocationData(0x24CA, 0)
+    LocationName.SunsetPuzzleRuinPassageTwo:           WorldLocationData(0x24CA, 0),
 }
+
 all_world_locations = {
     **TWTNW_Checks,
     **TT_Checks,
@@ -1069,6 +1070,12 @@ all_world_locations = {
     **PR_Checks,
     **SP_Checks,
     **Atlantica_Checks,
+    **Awakening_Checks,
+    **Heart_Checks,
+    **Frontier_Checks,
+    **Duality_Checks,
+    **Daylight_Checks,
+    **Sunset_Checks,
 }
 
 levels_locations = {

@@ -364,14 +364,14 @@ Consumable_Table = {
     ItemName.DriveRecovery:     ItemData(1, 252, 0x36BE),  # 274,0x3664, pride rock map
     ItemName.HighDriveRecovery: ItemData(1, 511, 0x36BF),  # 275,0x3665, oasis map
 }
-Puzzle_Table = {
-    ItemName.AwakeningPuzzlePiece:  ItemData(12, 90),  # Castle Map
-    ItemName.HeartPuzzlePiece:      ItemData(12, 90),  # Castle Map
-    ItemName.FrontierPuzzlePiece:   ItemData(12, 90),  # Castle Map
-    ItemName.DualityPuzzlePiece:    ItemData(12, 90),  # Castle Map
-    ItemName.DaylightPuzzlePiece:   ItemData(48, 90),  # Castle Map
-    ItemName.SunsetPuzzlePiece:     ItemData(48, 90),  # Castle Map
-}
+# Puzzle_Table = {
+#    ItemName.AwakeningPuzzlePiece:  ItemData(12, 90),  # Castle Map
+#    ItemName.HeartPuzzlePiece:      ItemData(12, 90),  # Castle Map
+#    ItemName.FrontierPuzzlePiece:   ItemData(12, 90),  # Castle Map
+#    ItemName.DualityPuzzlePiece:    ItemData(12, 90),  # Castle Map
+#    ItemName.DaylightPuzzlePiece:   ItemData(48, 90),  # Castle Map
+#    ItemName.SunsetPuzzlePiece:     ItemData(48, 90),  # Castle Map
+# }
 
 Events_Table = {
     ItemName.HostileProgramEvent,
@@ -552,7 +552,7 @@ progression_set = {
             ItemName.Teamwork,
             ItemName.TornadoFusion,
             ItemName.HadesCupTrophy],
-            Puzzle_Table.keys(),
+        # Puzzle_Table.keys(),
         Events_Table]
     for item_name in keys
 }
@@ -660,7 +660,6 @@ item_dictionary_table = {
     **DonaldAbility_Table,
     **GoofyAbility_Table,
     **Consumable_Table,
-    **Puzzle_Table,
 }
 filler_items = [ItemName.PowerBoost, ItemName.MagicBoost, ItemName.DefenseBoost, ItemName.APBoost,
                 ItemName.Potion, ItemName.HiPotion, ItemName.Ether, ItemName.Elixir, ItemName.Megalixir,

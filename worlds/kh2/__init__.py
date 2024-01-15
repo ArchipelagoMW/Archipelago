@@ -224,8 +224,6 @@ class KH2World(World):
 
         if not self.options.PuzzlePiecesLocationToggle:
             self.total_locations -= 144
-            for type_of_piece in Puzzle_Table.keys():
-                del self.item_quantity_dict[type_of_piece]
 
         self.set_excluded_locations()
 

@@ -331,18 +331,11 @@ class SummonLevelLocationToggle(Toggle):
     default = False
 
 
-# todo: make these default false
+# todo: make THIS default false
 class PuzzlePiecesLocationToggle(Toggle):
     """Toggle Puzzle Pieces as Locations"""
     display_name = "Puzzle Pieces Locations"
     default = True
-
-
-class PuzzleLocationToggle(Toggle):
-    """Toggles The Puzzles in Jiminy's journal as Locations"""
-    display_name = "Puzzle Location"
-    default = True
-
 
 # shamelessly stolen from the messanger
 @dataclass
@@ -384,4 +377,3 @@ class KingdomHearts2Options(PerGameCommonOptions):
     CorSkipToggle: CorSkipToggle
     CustomItemPoolQuantity: CustomItemPoolQuantity
     PuzzlePiecesLocationToggle: PuzzlePiecesLocationToggle
-    PuzzleLocationToggle: PuzzleLocationToggle

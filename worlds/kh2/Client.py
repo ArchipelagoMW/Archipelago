@@ -53,7 +53,6 @@ class KH2Context(CommonContext):
             "AmountInvo": {
                 "Ability":      {},
                 "Amount":       {
-                    "Bounty": 0,
                 },
                 "Growth":       {
                     "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
@@ -607,10 +606,12 @@ class KH2Context(CommonContext):
                 itemdata = self.item_name_to_data[itemName]
                 amount = self.kh2_read_byte(self.Save + itemdata.memaddr)
                 sellable_dict[itemName] = amount
+
             while (journal == -1 and shop == 5) or (journal != -1 and shop == 10):
                 journal = self.kh2_read_short(0x741230)
                 shop = self.kh2_read_short(0x741320)
                 await asyncio.sleep(0.5)
+
             for item, amount in sellable_dict.items():
                 itemdata = self.item_name_to_data[item]
                 afterShop = self.kh2_read_byte(self.Save + itemdata.memaddr)
@@ -895,13 +896,13 @@ async def kh2_watcher(ctx: KH2Context):
         try:
             if ctx.kh2connected and ctx.serverconneced:
                 ctx.sending = []
-                await asyncio.create_task(ctx.checkWorldLocations())
-                await asyncio.create_task(ctx.checkLevels())
-                await asyncio.create_task(ctx.checkSlots())
-                await asyncio.create_task(ctx.verifyChests())
-                await asyncio.create_task(ctx.verifyItems())
-                await asyncio.create_task(ctx.verifyLevel())
-                await asyncio.create_task(ctx.chestPuzzleLocations())
+                await ctx.checkWorldLocations()
+                await ctx.checkLevels()
+                await ctx.checkSlots()
+                await ctx.verifyChests()
+                await ctx.verifyItems()
+                await ctx.verifyLevel()
+                await ctx.checkPuzzleLocations()
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])

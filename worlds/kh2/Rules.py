@@ -475,28 +475,6 @@ class KH2PuzzlePiecesRules(KH2Rules):
             location.access_rule = rule
 
 
-class KH2PuzzleRules(KH2Rules):
-    player: int
-    world: KH2World
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
-
-    def __init__(self, world: KH2World) -> None:
-        super().__init__(world)
-        self.puzzle_location_rules = {
-            LocationName.AwakeningPuzzle: lambda state: state.has(ItemName.AwakeningPuzzlePiece, self.player, 12),
-            LocationName.HeartPuzzle:     lambda state: state.has(ItemName.HeartPuzzlePiece, self.player, 12),
-            LocationName.FrontierPuzzle:  lambda state: state.has(ItemName.FrontierPuzzlePiece, self.player, 12),
-            LocationName.DualityPuzzle:   lambda state: state.has(ItemName.DualityPuzzlePiece, self.player, 12),
-            LocationName.DaylightPuzzle:  lambda state: state.has(ItemName.DaylightPuzzlePiece, self.player, 48),
-            LocationName.SunsetPuzzle:    lambda state: state.has(ItemName.SunsetPuzzlePiece, self.player, 48),
-        }
-
-    def set_kh2_puzzle_rules(self) -> None:
-        for loc_name, rule in self.puzzle_location_rules.items():
-            location = self.multiworld.get_location(loc_name, self.player)
-            location.access_rule = rule
-
-
 class KH2FightRules(KH2Rules):
     player: int
     world: KH2World
