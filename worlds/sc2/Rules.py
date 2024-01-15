@@ -258,6 +258,9 @@ class SC2Logic:
                      )
                 )
 
+    def terran_mobile_detector(self, state: CollectionState) -> bool:
+        return state.has_any({ItemNames.RAVEN, ItemNames.SCIENCE_VESSEL, ItemNames.PROGRESSIVE_ORBITAL_COMMAND}, self.player)
+
     def can_nuke(self, state: CollectionState) -> bool:
         """
         Ability to launch nukes
@@ -799,6 +802,7 @@ class SC2Logic:
 
     def flashpoint_far_requirement(self, state: CollectionState) -> bool:
         return self.terran_competent_comp(state) \
+            and self.terran_mobile_detector(state) \
             and self.terran_defense_rating(state, True, False) >= 6
 
     def enemy_shadow_tripwires_tool(self, state: CollectionState) -> bool:
@@ -849,6 +853,7 @@ class SC2Logic:
 
     def end_game_requirement(self, state: CollectionState) -> bool:
         return self.terran_competent_comp(state) \
+            and self.terran_mobile_detector(state) \
             and (
                     state.has_any({ItemNames.BATTLECRUISER, ItemNames.LIBERATOR, ItemNames.BANSHEE}, self.player)
                     or state.has_all({ItemNames.WRAITH, ItemNames.WRAITH_ADVANCED_LASER_TECHNOLOGY}, self.player)

@@ -304,7 +304,7 @@ item_table = {
                  )),
     ItemNames.PROGRESSIVE_ORBITAL_COMMAND:
         ItemData(207 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 26, SC2Race.TERRAN,
-                 quantity=2,
+                 quantity=2, classification=ItemClassification.progression,
                  description=inspect.cleandoc(
                      """
                      Level 1: Allows Command Centers to use Scanner Sweep and Calldown: MULE abilities.
