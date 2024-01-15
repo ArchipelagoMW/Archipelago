@@ -1,6 +1,6 @@
 from typing import Callable, Literal
 
-from BaseClasses import CollectionState, Item, Region, Location, Entrance, Tutorial, ItemClassification
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
 
 from .ArbitraryGameDefs import \
@@ -71,19 +71,23 @@ class AutopelagoWorld(World):
     # - hint_blacklist (should it include the goal item?)
 
     # other variables we use are INSTANCE variables that depend on the specific multiworld.
-    _item_name_to_classification = { item_name: classification for item_name, classification in item_name_to_defined_classification.items() if classification is not None }
-    _all_live_items_excluding_goal: list[str] = [a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name]
+    _item_name_to_classification: dict[str, ItemClassification]
+    _all_live_items_excluding_goal: list[str]
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
+        self._item_name_to_classification = { item_name: classification for item_name, classification in item_name_to_defined_classification.items() if classification is not None }
+        self._all_live_items_excluding_goal: list[str] = [a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name]
 
     def generate_early(self):
         # finalize the list of possible items, based on which games are present in this multiworld.
         full_item_table = { c: [item_name for item_name in items] for c, items in generic_item_table.items() }
-        for category in full_item_table:
+        for category, items in full_item_table.items():
             replacements_made = 0
             for game_name in self.multiworld.game.values():
                 if not (game_name in game_specific_items and category in game_specific_items[game_name]):
                     continue
                 for item in game_specific_items[game_name][category]:
-                    full_item_table[category][replacements_made] = item
+                    items[replacements_made] = item
                     replacements_made += 1
 
         category_to_next_offset = { category: 0 for category in full_item_table }
