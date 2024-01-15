@@ -1,5 +1,5 @@
 from dataclasses import dataclass, fields
-from typing import Any, cast, Dict, Iterator, List, Tuple, Protocol
+from typing import Any, cast, Dict, Iterator, List, Literal, Tuple, Protocol, Union
 
 from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
     Range, Toggle
@@ -8,13 +8,12 @@ from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGame
 # typing boilerplate
 class FlagsProtocol(Protocol):
     value: int
-    default: int
     flags: List[str]
 
 
 class FlagProtocol(Protocol):
     value: int
-    default: int
+    default: Union[int, Literal["random"]]
     flag: str
 
 
