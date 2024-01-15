@@ -1,11 +1,29 @@
-import logging
-from typing import Callable
+from typing import Callable, Literal
 
 from BaseClasses import CollectionState, Item, Region, Location, Entrance, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 
-from .ArbitraryGameDefs import BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in
-from .Items import item_table
+from .ArbitraryGameDefs import \
+    BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in, \
+    prog_count_balancing_excluding_goal, prog_count_skip_balancing, useful_count, filler_count, trap_count
+
+from .Items import \
+    a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name, goal_item_name, \
+    all_item_names, generic_item_table, game_specific_items, item_name_to_defined_classification
+
+def _gen_ids():
+    next_id = BASE_ID
+    while True:
+        yield next_id
+        next_id += 1
+
+
+class AutopelagoItem(Item):
+    game = GAME_NAME
+
+
+class AutopelagoLocation(Location):
+    game = GAME_NAME
 
 
 class AutopelagoWebWorld(WebWorld):
@@ -23,51 +41,79 @@ class AutopelagoWebWorld(WebWorld):
 
 
 class AutopelagoWorld(World):
-    """
+    '''
     An idle game, in the same vein as ArchipIDLE but intended to be more sophisticated.
-    """
+    '''
     game = GAME_NAME
     topology_present = False # it's static, so setting this to True isn't actually helpful
-    data_version = 1
+    data_version = 0
     web = AutopelagoWebWorld()
 
+    # location_name_to_id and item_name_to_id must be filled VERY early, but seemingly only because
+    # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
+    # been able to get away with populating these just based on what we actually need.
     location_name_to_id = { }
-    item_name_to_id = { }
-    _location_name_to_item_name: dict[str, str] = { }
-    _item_name_to_classification: dict[str, ItemClassification] = { }
-    _next_offset = 0
+    _id_gen = _gen_ids()
     for r in AutopelagoRegion:
-        prog_count, skip_balancing_count = \
-            (1, 0) if r.get_location_name(0) in ["a", "b", "c", "d", "e", "f", "goal"] else \
-            (16, 8) if r == AutopelagoRegion.Before8Rats else \
-            (9, 6) if r == AutopelagoRegion.AfterCBefore20Rats else \
-            (9, 6) if r == AutopelagoRegion.AfterDBefore20Rats else \
-            (0, 0)
-
-        midpoint = prog_count + ((num_locations_in[r] - prog_count + 1) // 2)
-
         for i in range(num_locations_in[r]):
-            location_name = r.get_location_name(i)
-            location_name_to_id[location_name] = BASE_ID + _next_offset
-            item_name = item_table[_next_offset]
-            item_name_to_id[item_name] = BASE_ID + _next_offset
+            location_name_to_id[r.get_location_name(i)] = next(_id_gen)
+    item_name_to_id = { }
+    _id_gen = _gen_ids()
+    for item_name in all_item_names:
+        item_name_to_id[item_name] = next(_id_gen)
+    del _id_gen
 
-            _location_name_to_item_name[location_name] = item_name
-            _item_name_to_classification[item_name] = \
-                ItemClassification.progression_skip_balancing if i < prog_count and i < skip_balancing_count else \
-                ItemClassification.progression if i < prog_count else \
-                ItemClassification.useful if i < midpoint else \
-                ItemClassification.filler
+    # insert other ClassVar values... suggestions include:
+    # - item_name_groups
+    # - item_descriptions
+    # - location_name_groups
+    # - location_descriptions
+    # - hint_blacklist (should it include the goal item?)
 
-            match _item_name_to_classification[item_name]:
-                case ItemClassification.progression:
-                    logging.info("%s is a logical advancement from %s", item_name, location_name)
-                case ItemClassification.progression_skip_balancing:
-                    logging.info("%s is an extra rat from %s", item_name, location_name)
+    # other variables we use are INSTANCE variables that depend on the specific multiworld.
+    _item_name_to_classification = { item_name: classification for item_name, classification in item_name_to_defined_classification.items() if classification is not None }
+    _all_live_items_excluding_goal: list[str] = [a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name]
 
-            _next_offset += 1
+    def generate_early(self):
+        # finalize the list of possible items, based on which games are present in this multiworld.
+        full_item_table = { c: [item_name for item_name in items] for c, items in generic_item_table.items() }
+        for category in full_item_table:
+            replacements_made = 0
+            for game_name in self.multiworld.game.values():
+                if not (game_name in game_specific_items and category in game_specific_items[game_name]):
+                    continue
+                for item in game_specific_items[game_name][category]:
+                    full_item_table[category][replacements_made] = item
+                    replacements_made += 1
 
-    _goal_item_name = _location_name_to_item_name["goal"]
+        category_to_next_offset = { category: 0 for category in full_item_table }
+        def append_next_n_item_names(category: Literal['other_progression', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], n: int, classification: ItemClassification):
+            def next_up_to_n_item_names(category: Literal['other_progression', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], n: int):
+                items = full_item_table[category]
+                offset = category_to_next_offset[category]
+                avail = len(items) - offset
+                if avail < n:
+                    n = avail
+                yield from (items[offset + i] for i in range(n))
+                category_to_next_offset[category] += n
+
+            for item_name in next_up_to_n_item_names(category, n):
+                self._all_live_items_excluding_goal.append(item_name)
+                self._item_name_to_classification[item_name] = classification
+                n -= 1
+
+            if n > 0:
+                for item_name in next_up_to_n_item_names('uncategorized', n):
+                    self._all_live_items_excluding_goal.append(item_name)
+                    self._item_name_to_classification[item_name] = classification
+                    n -= 1
+
+        num_key_items = len(self._all_live_items_excluding_goal)
+        append_next_n_item_names('other_progression', prog_count_balancing_excluding_goal - num_key_items, ItemClassification.progression)
+        append_next_n_item_names('other_progression', prog_count_skip_balancing, ItemClassification.progression_skip_balancing)
+        append_next_n_item_names('useful_nonprogression', useful_count, ItemClassification.useful)
+        append_next_n_item_names('filler', filler_count, ItemClassification.filler)
+        append_next_n_item_names('trap', trap_count, ItemClassification.trap)
 
     def set_rules(self):
         def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None):
@@ -83,32 +129,32 @@ class AutopelagoWorld(World):
         _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeB, lambda state: state.prog_items[self.player].total() >= 8)
         _connect(AutopelagoRegion.After8RatsBeforeA, AutopelagoRegion.A)
         _connect(AutopelagoRegion.After8RatsBeforeB, AutopelagoRegion.B)
-        _connect(AutopelagoRegion.A, AutopelagoRegion.AfterABeforeC, lambda state: state.has(self._location_name_to_item_name["a"], self.player))
-        _connect(AutopelagoRegion.B, AutopelagoRegion.AfterBBeforeD, lambda state: state.has(self._location_name_to_item_name["b"], self.player))
+        _connect(AutopelagoRegion.A, AutopelagoRegion.AfterABeforeC, lambda state: state.has(a_item_name, self.player))
+        _connect(AutopelagoRegion.B, AutopelagoRegion.AfterBBeforeD, lambda state: state.has(b_item_name, self.player))
         _connect(AutopelagoRegion.AfterABeforeC, AutopelagoRegion.C)
         _connect(AutopelagoRegion.AfterBBeforeD, AutopelagoRegion.D)
-        _connect(AutopelagoRegion.C, AutopelagoRegion.AfterCBefore20Rats, lambda state: state.has(self._location_name_to_item_name["c"], self.player))
-        _connect(AutopelagoRegion.D, AutopelagoRegion.AfterDBefore20Rats, lambda state: state.has(self._location_name_to_item_name["d"], self.player))
+        _connect(AutopelagoRegion.C, AutopelagoRegion.AfterCBefore20Rats, lambda state: state.has(c_item_name, self.player))
+        _connect(AutopelagoRegion.D, AutopelagoRegion.AfterDBefore20Rats, lambda state: state.has(d_item_name, self.player))
         _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: state.prog_items[self.player].total() >= 20)
         _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: state.prog_items[self.player].total() >= 20)
         _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: state.prog_items[self.player].total() >= 20)
         _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: state.prog_items[self.player].total() >= 20)
         _connect(AutopelagoRegion.After20RatsBeforeE, AutopelagoRegion.E)
         _connect(AutopelagoRegion.After20RatsBeforeF, AutopelagoRegion.F)
-        _connect(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal, lambda state: state.has(self._location_name_to_item_name["e"], self.player))
-        _connect(AutopelagoRegion.F, AutopelagoRegion.TryingForGoal, lambda state: state.has(self._location_name_to_item_name["f"], self.player))
+        _connect(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal, lambda state: state.has(e_item_name, self.player))
+        _connect(AutopelagoRegion.F, AutopelagoRegion.TryingForGoal, lambda state: state.has(f_item_name, self.player))
 
-        self.multiworld.get_location("goal", self.player).place_locked_item(self.create_item(self._goal_item_name))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(self._goal_item_name, self.player)
+        self.multiworld.get_location("goal", self.player).place_locked_item(self.create_item(goal_item_name))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item_name, self.player)
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str):
         id = self.item_name_to_id[name]
         classification = self._item_name_to_classification[name]
         item = AutopelagoItem(name, classification, id, self.player)
         return item
 
     def create_items(self):
-        self.multiworld.itempool += (self.create_item(name) for name in self.item_name_to_id if name != self._goal_item_name)
+        self.multiworld.itempool += (self.create_item(name) for name in self._all_live_items_excluding_goal)
 
     def create_regions(self):
         self.multiworld.regions += (self.create_region(r) for r in AutopelagoRegion)
@@ -131,12 +177,3 @@ class AutopelagoWorld(World):
 
     def get_filler_item_name(self) -> str:
         return "Monkey's Paw"
-
-
-class AutopelagoItem(Item):
-    game = GAME_NAME
-
-
-class AutopelagoLocation(Location):
-    game = GAME_NAME
-

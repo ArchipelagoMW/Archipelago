@@ -1,4 +1,11 @@
-item_table = {
+from typing import Literal
+
+from BaseClasses import ItemClassification
+
+generic_item_table: dict[Literal['goal', 'key', 'other_progression', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], tuple[str, ...]] = {
+    'goal': (
+        'Lockheed SR-71 Blackbird',
+    ),
     'key': (
         'A Cookie',
         'Fresh Banana Peel',
@@ -11,11 +18,8 @@ item_table = {
         'Legally Binding Contract',
         'Priceless Antique',
         'Premium Can of Prawn Food',
-        
-
     ),
     'other_progression': (
-
     ),
     'useful_nonprogression': (
         'Refreshing Glass of Lemonade',
@@ -65,10 +69,8 @@ item_table = {
         'Dungeon Bread',
         'Gallon of Diet Soda',
         'Backwards Cap',
-       
     ),
     'filler': (
-
     ),
     'trap': (
         'Half of a Worm',
@@ -111,7 +113,6 @@ item_table = {
         'Gas Station Sushi',
         'Carbon Monoxide',
         'Mail-in Rebate for 11 cents',
-        
     ),
     'uncategorized': (
         'Set of Three Seashells',
@@ -208,7 +209,6 @@ item_table = {
         'Half-eaten Pencil',
         'Rave Reviews',
         'Aggressive Post-it Notes',
-        'Lockheed SR-71 Blackbird',
         'Chaotic Emerald',
         'Mushroom Princess',
         'Pinball Wizard\'s Spellbook',
@@ -330,16 +330,13 @@ item_table = {
     )
 }
 
-game_specific_items = {
+game_specific_items: dict[str, dict[Literal['useful_nonprogression', 'filler', 'trap', 'uncategorized'], tuple[str, ...]]] = {
     'Pokemon Red and Blue': {
         'useful_nonprogression': (
-
         ),
         'filler': (
-
         ),
         'trap': (
-
         ),
         'uncategorized': (
             'Oak\'s Other Parcel',
@@ -358,13 +355,10 @@ game_specific_items = {
 
     'Ocarina of Time': {
         'useful_nonprogression': (
-
         ),
         'filler': (
-
         ),
         'trap': (
-
         ),
         'uncategorized': (
             'Silver Skulltula Token',
@@ -378,13 +372,10 @@ game_specific_items = {
 
     'Stardew Valley': {
         'useful_nonprogression': (
-
         ),
         'filler': (
-
         ),
         'trap': (
-
         ),
         'uncategorized': (
             'Rotten Parsnip',
@@ -398,4 +389,35 @@ game_specific_items = {
             'Mayor\'s Tax Returns',
         )
     },
+}
+
+all_item_names = [ \
+    item for comp in ( \
+        (item for items in generic_item_table.values() for item in items), \
+        (item for game_items in game_specific_items.values() for items in game_items.values() for item in items)) \
+    for item in comp \
+]
+
+a_item_name = generic_item_table['key'][0]
+b_item_name = generic_item_table['key'][1]
+c_item_name = generic_item_table['key'][2]
+d_item_name = generic_item_table['key'][3]
+e_item_name = generic_item_table['key'][4]
+f_item_name = generic_item_table['key'][5]
+goal_item_name = generic_item_table['key'][6]
+
+item_name_to_defined_classification = {
+    item_name: classification for comp in ( \
+        ( (item_name, ItemClassification.progression) for item_name in generic_item_table['goal'] ), \
+        ( (item_name, ItemClassification.progression) for item_name in generic_item_table['key'] ), \
+        ( (item_name, ItemClassification.progression_skip_balancing) for item_name in generic_item_table['other_progression'] ), \
+        ( (item_name, ItemClassification.useful) for item_name in generic_item_table['useful_nonprogression'] ), \
+        ( (item_name, ItemClassification.useful) for game_items in game_specific_items.values() for item_name in game_items['useful_nonprogression'] ), \
+        ( (item_name, ItemClassification.filler) for item_name in generic_item_table['filler'] ), \
+        ( (item_name, ItemClassification.filler) for game_items in game_specific_items.values() for item_name in game_items['filler'] ), \
+        ( (item_name, ItemClassification.trap) for item_name in generic_item_table['trap'] ), \
+        ( (item_name, ItemClassification.trap) for game_items in game_specific_items.values() for item_name in game_items['trap'] ), \
+        ( (item_name, None) for item_name in generic_item_table['uncategorized'] ), \
+        ( (item_name, None) for game_items in game_specific_items.values() for item_name in game_items['uncategorized'] ), \
+    ) for item_name, classification in comp
 }

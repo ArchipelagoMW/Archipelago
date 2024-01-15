@@ -47,6 +47,7 @@ class AutopelagoRegion(Enum):
             case _:
                 return self.name.lower()
 
+
 GAME_NAME = "Autopelago"
 
 # keep in sync with BASE_ID in the game code
@@ -71,3 +72,18 @@ num_locations_in = {
     AutopelagoRegion.After20RatsBeforeF: 20,
     AutopelagoRegion.TryingForGoal: 1,
 }
+
+prog_count_balancing_excluding_goal = 20
+prog_count_skip_balancing = 20
+
+total_count = sum(location_count for location_count in num_locations_in.values())
+
+prog_count = 1 + prog_count_balancing_excluding_goal + prog_count_skip_balancing
+even_split_count = (total_count - prog_count) // 3
+
+useful_count = even_split_count
+filler_count = even_split_count
+del even_split_count
+
+trap_count = total_count - prog_count - useful_count - filler_count
+del prog_count
