@@ -151,7 +151,7 @@ def get_rules_lookup(player: int):
             "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
             "Puzzle Solved Theater Door": lambda state: state.can_reach("Underground Lake", "Region", player),
             "Puzzle Solved Columns of RA": lambda state: state.can_reach("Underground Lake", "Region", player),
-            "Final Riddle: Guillotine Dropped": lambda state: state.can_reach("Underground Lake", "Region", player)
+            "Final Riddle: Guillotine Dropped": lambda state: (beths_body_available(state, player) and state.can_reach("Underground Lake", "Region", player))
             },
         "elevators": {
             "Puzzle Solved Office Elevator": lambda state: ((state.can_reach("Underground Lake", "Region", player) or state.can_reach("Office", "Region", player))
