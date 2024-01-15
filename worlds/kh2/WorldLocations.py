@@ -581,6 +581,12 @@ TT_Checks = {
     LocationName.AwakeningPuzzleTT1Tower:            WorldLocationData(0x24A0, 4),
     LocationName.FrontierPuzzleTT2TramCommon:     WorldLocationData(0x24B8, 4),
     LocationName.FrontierPuzzleTT2StationPlaza:   WorldLocationData(0x24B8, 0),
+    LocationName.DaylightPuzzleTT2TramCommon:          WorldLocationData(0x24C3, 2),
+    LocationName.DaylightPuzzleTT2MarketStreet:        WorldLocationData(0x24C3, 3),
+    LocationName.DaylightPuzzleTT3MansionFoyer1:       WorldLocationData(0x24C2, 5),
+    LocationName.DaylightPuzzleTT3MansionFoyer2:       WorldLocationData(0x24C3, 7),
+    LocationName.DaylightPuzzleTT3PodRoom:             WorldLocationData(0x24C3, 6),
+    LocationName.DaylightPuzzleTT3SttComputerRoom:     WorldLocationData(0x24C2, 6),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:             WorldLocationData(0x23CB, 4),
@@ -957,12 +963,7 @@ Frontier_Checks = {
     LocationName.FrontierPuzzleTritonTwo:         WorldLocationData(0x24B9, 3),
 }
 Daylight_Checks = {
-    LocationName.DaylightPuzzleTT2TramCommon:          WorldLocationData(0x24C3, 2),
-    LocationName.DaylightPuzzleTT2MarketStreet:        WorldLocationData(0x24C3, 3),
-    LocationName.DaylightPuzzleTT3MansionFoyer1:       WorldLocationData(0x24C2, 5),
-    LocationName.DaylightPuzzleTT3MansionFoyer2:       WorldLocationData(0x24C3, 7),
-    LocationName.DaylightPuzzleTT3PodRoom:             WorldLocationData(0x24C3, 6),
-    LocationName.DaylightPuzzleTT3SttComputerRoom:     WorldLocationData(0x24C2, 6),
+
     LocationName.DaylightPuzzleHB2PosternAerith:       WorldLocationData(0x24C0, 4),
     LocationName.DaylightPuzzlePostHB2Heartless:       WorldLocationData(0x24C2, 7),
     LocationName.DaylightPuzzleVillageBell:            WorldLocationData(0x24C0, 7),
