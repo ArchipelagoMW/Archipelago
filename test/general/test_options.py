@@ -15,4 +15,5 @@ class TestOptions(unittest.TestCase):
         """Test that options attribute is not already set"""
         for gamename, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game=gamename):
-                self.assertFalse(hasattr(world_type, "options"))
+                self.assertFalse(hasattr(world_type, "options"),
+                                 f"Unexpected assignment to {world_type.__name__}.options!")
