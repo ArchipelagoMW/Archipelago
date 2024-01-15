@@ -283,74 +283,43 @@ item_table = {
         'Corpse-pokin\' Stick',
         'CD containing \'Sounds of the Sewer\'',
         'Squeeky Vent Flap',
-        'Subscription to Nintendo Power Magazine',
-        'DeLorean Time Machine',
-        'Unkillable Cockroach',
-        'Dungeons & Dragons Rulebook',
-        'Boxed Copy of Quest 64',
-        'James Bond\'s Gadget Wristwatch',
-        'Tube of Go-Gurt',
-        'Digital Watch',
-        'Laser Pointer',
-        'The Secret Cow Level',
-        'AOL Free Trial CD-ROM',
-        'E.T. for Atari 2600',
-        'Season 2 of Knight Rider',
-        'Spam E-Mails',
-        'Half-Life 3 Release Date',
-        'Source Code of Jurassic Park',
-        'Moldy Cheese',
-        'Comic Book Collection',
-        'Hardcover Copy of Scott Pilgrim VS the World',
-        'Old Gym Shorts',
-        'Very Cool Sunglasses',
-        'Your High School Yearbook Picture',
-        'Written Invitation to Prom',
-        'The Star Wars Holiday Special',
-        'Oil Change Coupon',
-        'Finger Guns',
-        'Box of Tabletop Games',
-        'Sock Puppets',
-        'The Dog of Wisdom',
-        'Surprised Chipmunk',
-        'Stonks',
-        'A Shrubbery',
-        'Roomba with a Knife',
-        'Wet Cat',
-        'The missing moderator, Frostwares',
-        '1,793 Crossbows',
-        'Holographic First Edition Charizard (Gen 1)',
-        'VR Headset',
-        'Archipelago 1.0 Release Date',
-        'Strand of Galadriel\'s Hair',
-        'Can of Meow-Mix',
-        'Shake-Weight',
-        'DVD Collection of Billy Mays Infomercials',
-        'Old CD Key',
+        'Pack Rat',
+        'Pizza Rat',
+        'Chef Rat',
+        'Ninja Rat',
+        'Gym Rat',
+        'Computer Rat',
+        'Pie Rat',
+        'Ziggu Rat',
+        'Acro Rat',
+        'Lab Rat',
+        'Soc-Rat-es',
+        'Entire Rat Pack',
+        
     )
 }
 
 game_specific_items = {
     'Pokemon Red and Blue': {
         'useful_nonprogression': (
+            'Very Common Candy',
+            'Icy Blue Feather',
+            'Burning Orange Feather',
+            'Charged Yellow Feather',
 
         ),
         'filler': (
 
         ),
         'trap': (
+            'Item-Hider',
 
         ),
         'uncategorized': (
             'Oak\'s Other Parcel',
-            'Very Common Candy',
-            'Item-Hider',
             'Silph Scoop',
             'Mustard Ball',
             'HM02.5 Walk',
-            'Icy Blue Feather',
-            'Burning Orange Feather',
-            'Charged Yellow Feather',
             'Team Rocket Membership Card',
             'Vermillion City Truck Keys',
         ),
@@ -358,43 +327,47 @@ game_specific_items = {
 
     'Ocarina of Time': {
         'useful_nonprogression': (
+           'Silver Skulltula Token',
+           'Pickled Cucco Feet',
 
         ),
         'filler': (
 
         ),
         'trap': (
+            'Overly-Talkative Fairy in a Bottle',
 
         ),
         'uncategorized': (
-            'Silver Skulltula Token',
             'Broken Boss Key',
             'Jabu Jabu\'s Missing Kidney',
-            'Lighest Brightest Arrow',
+            'Lite Brite Arrow',
             'Song of Thyme',
-            'Ganondorf\'s Letter',
+            'Ganondorf\'s Tennis Racket',
+            'Goron Rock Candy',
+            
         ),
     },
 
     'Stardew Valley': {
         'useful_nonprogression': (
+            'Prismatic Chard',
+            'Cheese Seeds',
 
         ),
         'filler': (
 
         ),
         'trap': (
+           'Rotten Parsnip',
+           'Pam\'s Secret Stash',
 
         ),
         'uncategorized': (
-            'Rotten Parsnip',
             'JojaMart Sale Coupon',
-            'Prismatic Chard',
-            'Cheese Seeds',
             'Pickled Dust Sprite',
             'Rotten Walnut',
             'Abigail\'s Birth Certificate',
-            'Pam\'s Secret Stash',
             'Mayor\'s Tax Returns',
         )
     },
