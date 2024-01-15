@@ -376,7 +376,7 @@ game_specific_items = {
         ),
     },
 
-    "Stardew Valley": {
+    'Stardew Valley': {
         'useful_nonprogression': (
 
         ),
