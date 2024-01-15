@@ -121,7 +121,8 @@ class KH1World(World):
             "halloween_town": "Halloween Town Pumpkinhead Event",
             "neverland":      "Neverland Fairy Harp Event",
             "unknown":        "Ansem's Secret Report 13",
-            "final_rest":     "End of the World Final Rest Chest"
+            "final_rest":     "End of the World Final Rest Chest",
+            "postcards":      "Traverse Town Mail Postcard 10 Event"
         }
         self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
 

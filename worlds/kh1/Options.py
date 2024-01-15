@@ -78,6 +78,7 @@ class Goal(Choice):
     option_neverland = 6
     option_sephiroth = 7
     option_unknown = 8
+    option_postcards = 9
     default = 0
 
 @dataclass

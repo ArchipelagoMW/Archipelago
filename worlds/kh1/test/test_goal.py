@@ -46,8 +46,17 @@ class TestNeverland(KH1TestBase):
         "Goal": 6,
     }
 
+class TestSephiroth(KH1TestBase):
+    options = {
+        "Goal": 7,
+    }
 
 class TestUnknown(KH1TestBase):
     options = {
-        "Goal": 7,
+        "Goal": 8,
+    }
+
+class TestPostcards(KH1TestBase):
+    options = {
+        "Goal": 9,
     }
