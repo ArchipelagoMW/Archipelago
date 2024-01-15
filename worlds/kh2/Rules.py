@@ -395,7 +395,7 @@ class KH2FormRules(KH2Rules):
                 loc.access_rule = self.form_rules[loc.name]
 
 
-class KH2PuzzleRules(KH2Rules):
+class KH2PuzzlePiecesRules(KH2Rules):
     player: int
     world: KH2World
     region_rules: Dict[str, Callable[[CollectionState], bool]]
@@ -403,7 +403,7 @@ class KH2PuzzleRules(KH2Rules):
 
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
-        self.puzzle_location_rules = {
+        self.puzzle_pieces_location_rules = {
             LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state),
             LocationName.SunsetPuzzleTT3TSunsetTerrace1:      lambda state: self.has_vertical(state) and self.has_glide(state),  # one over the water fall
             LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state),
@@ -428,19 +428,19 @@ class KH2PuzzleRules(KH2Rules):
             LocationName.HeartPuzzleCourtyardOne:             lambda state: self.has_vertical(state) or self.has_magic_buffer(state),
             LocationName.DaylightPuzzleCollannade:            lambda state: self.has_vertical(state) or self.has_glide(state),
             LocationName.DualityPuzzlePierTree:               lambda state: self.has_vertical(state) or self.has_magic_buffer(state),
-            LocationName.SunsetPuzzleHarbor:                  lambda state: self.has_vertical(state, 2) and state.has_glide(state, 2),
-            LocationName.DaylightPuzzleBlackPearlFlags:       lambda state: self.has_vertical(state, 2) and state.has_glide(state, 2),
+            LocationName.SunsetPuzzleHarbor:                  lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.DaylightPuzzleBlackPearlFlags:       lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.FrontierPuzzleAgrabah:               lambda state: self.stand_break(state),
             LocationName.FrontierPuzzleBazaar:                lambda state: self.stand_break(state),
-            LocationName.SunsetPuzzleBazaar:                  lambda state: self.has_vertical(state, 2) and state.has_glide(state, 2),
-            LocationName.SunsetPuzzleCurlyHill:               lambda state: self.has_vertical(state, 3) and state.has_glide(state, 3),
-            LocationName.SunsetPuzzleToyFactory:              lambda state: self.has_vertical(state) and state.has_glide(state),
-            LocationName.SunsetPuzzleCanyon:                  lambda state: self.has_vertical(state, 3) and state.has_glide(state, 3),
-            LocationName.SunsetPuzzleTwilightView:            lambda state: self.has_vertical(state, 2) and state.has_glide(state, 2),
-            LocationName.DaylightPuzzleNaughts:               lambda state: self.has_vertical(state, 2) and state.has_glide(state, 2),
-            LocationName.SunsetPuzzleRuinPassageOne:          lambda state: self.has_vertical(state, 3) and state.has_glide(state, 3),
-            LocationName.SunsetPuzzleRuinPassageTwo:          lambda state: self.has_vertical(state, 3) and state.has_glide(state, 3),
-            LocationName.DaylightPuzzlePooh:                  lambda state: self.has_vertical(state, 1),
+            LocationName.SunsetPuzzleBazaar:                  lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.SunsetPuzzleCurlyHill:               lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
+            LocationName.SunsetPuzzleToyFactory:              lambda state: self.has_vertical(state) and self.has_glide(state),
+            LocationName.SunsetPuzzleCanyon:                  lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
+            LocationName.SunsetPuzzleTwilightView:            lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.DaylightPuzzleNaughts:               lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.SunsetPuzzleRuinPassageOne:          lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
+            LocationName.SunsetPuzzleRuinPassageTwo:          lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
+            LocationName.DaylightPuzzlePooh:                  lambda state: self.has_vertical(state),
         }
 
     def has_vertical(self, state: CollectionState, amount=1) -> bool:
@@ -459,12 +459,42 @@ class KH2PuzzleRules(KH2Rules):
         return self.kh2_has_any(magic, state)
 
     def stand_break(self, state: CollectionState) -> bool:
-        return self.kh2_has_any([black_magic, form_list, ItemName.FlareForce], state)
+        return state.has_any({ItemName.FireElement,
+                              ItemName.BlizzardElement,
+                              ItemName.ThunderElement,
+                              ItemName.ValorForm,
+                              ItemName.WisdomForm,
+                              ItemName.LimitForm,
+                              ItemName.MasterForm,
+                              ItemName.FinalForm,
+                              ItemName.FlareForce}, self.player)
+
+    def set_kh2_puzzle_pieces_rules(self) -> None:
+        for loc_name, rule in self.puzzle_pieces_location_rules.items():
+            location = self.multiworld.get_location(loc_name, self.player)
+            location.access_rule = rule
+
+
+class KH2PuzzleRules(KH2Rules):
+    player: int
+    world: KH2World
+    location_rules: Dict[str, Callable[[CollectionState], bool]]
+
+    def __init__(self, world: KH2World) -> None:
+        super().__init__(world)
+        self.puzzle_location_rules = {
+            LocationName.AwakeningPuzzle: lambda state: state.has(ItemName.AwakeningPuzzlePiece, self.player, 12),
+            LocationName.HeartPuzzle:     lambda state: state.has(ItemName.HeartPuzzlePiece, self.player, 12),
+            LocationName.FrontierPuzzle:  lambda state: state.has(ItemName.FrontierPuzzlePiece, self.player, 12),
+            LocationName.DualityPuzzle:   lambda state: state.has(ItemName.DualityPuzzlePiece, self.player, 12),
+            LocationName.DaylightPuzzle:  lambda state: state.has(ItemName.DaylightPuzzlePiece, self.player, 48),
+            LocationName.SunsetPuzzle:    lambda state: state.has(ItemName.SunsetPuzzlePiece, self.player, 48),
+        }
 
     def set_kh2_puzzle_rules(self) -> None:
         for loc_name, rule in self.puzzle_location_rules.items():
             location = self.multiworld.get_location(loc_name, self.player)
-            add_rule(location, lambda state: rule(state))
+            location.access_rule = rule
 
 
 class KH2FightRules(KH2Rules):

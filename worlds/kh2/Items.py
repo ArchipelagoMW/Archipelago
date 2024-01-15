@@ -552,6 +552,7 @@ progression_set = {
             ItemName.Teamwork,
             ItemName.TornadoFusion,
             ItemName.HadesCupTrophy],
+            Puzzle_Table.keys(),
         Events_Table]
     for item_name in keys
 }

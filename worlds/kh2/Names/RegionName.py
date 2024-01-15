@@ -192,3 +192,5 @@ KangasPuzzlePieces = "Kangas House Puzzle Piece"
 SpookyCavePuzzlePieces = "Spooky Cave Puzzle Piece"
 StarryHillPuzzlePieces = "Starry Hill Puzzle Piece"
 At1PuzzlePieces = "Atlantica Puzzle Pieces"
+
+PuzzleRegion = "Puzzles: Jiminy  Journal"

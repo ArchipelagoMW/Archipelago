@@ -957,7 +957,8 @@ puzzle_region_list = [
     RegionName.KangasPuzzlePieces,
     RegionName.SpookyCavePuzzlePieces,
     RegionName.StarryHillPuzzlePieces,
-    RegionName.At1PuzzlePieces
+    RegionName.At1PuzzlePieces,
+    RegionName.PuzzleRegion,
 ]
 
 
@@ -1059,7 +1060,15 @@ def create_regions(self):
                                          LocationName.Summonlvl5,
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
-
+    if self.options.PuzzleLocationToggle:
+        KH2REGIONS[RegionName.PuzzleRegion] = [
+            LocationName.AwakeningPuzzle,
+            LocationName.HeartPuzzle,
+            LocationName.FrontierPuzzle,
+            LocationName.DualityPuzzle,
+            LocationName.DaylightPuzzle,
+            LocationName.SunsetPuzzle,
+        ]
     if self.options.PuzzlePiecesLocationToggle:
         KH2REGIONS[RegionName.Tt1PuzzlePieces] = [
             LocationName.AwakeningPuzzleTT1Tower
@@ -1188,7 +1197,7 @@ def create_regions(self):
             LocationName.SunsetPuzzleInterceptor,
             LocationName.SunsetPuzzleSeaDriftRowOne,
             LocationName.SunsetPuzzleSeaDriftKeepWindow,
-            LocationName.SunsetPuzzleSeaDriftKeepAnchor,
+            LocationName.DaylightPuzzleSeaDriftKeepAnchor,
         ]
         KH2REGIONS[RegionName.Ag1PuzzlePieces] = [
             LocationName.FrontierPuzzleAgrabah,
@@ -1295,19 +1304,19 @@ def connect_regions(self):
     player = self.player
     # connecting every first visit to the GoA
     KH2RegionConnections: typing.Dict[str, typing.Set[str]] = {
-        "Menu":                        {RegionName.GoA, },
+        "Menu":                        {RegionName.GoA},
         RegionName.GoA:                {RegionName.Sp, RegionName.Pr, RegionName.Tt, RegionName.Oc, RegionName.Ht,
                                         RegionName.LoD,
                                         RegionName.Twtnw, RegionName.Bc, RegionName.Ag, RegionName.Pl, RegionName.Hb,
                                         RegionName.Dc, RegionName.Stt,
                                         RegionName.Ha1, RegionName.Keyblade, RegionName.LevelsVS1,
                                         RegionName.Valor, RegionName.Wisdom, RegionName.Limit, RegionName.Master,
-                                        RegionName.Final, RegionName.Summon, RegionName.AtlanticaSongOne},
+                                        RegionName.Final, RegionName.Summon, RegionName.AtlanticaSongOne,RegionName.PuzzleRegion},
         RegionName.LoD:                {RegionName.LoD1PuzzlePieces, RegionName.ShanYu},
         RegionName.ShanYu:             {RegionName.LoD2},
         RegionName.LoD2:               {RegionName.AnsemRiku},
         RegionName.AnsemRiku:          {RegionName.LoD2PuzzlePieces, RegionName.StormRider},
-        RegionName.StormRider:         {RegionName.PostStormRiderPuzzlePieces,RegionName.DataXigbar},
+        RegionName.StormRider:         {RegionName.PostStormRiderPuzzlePieces, RegionName.DataXigbar},
         RegionName.Ag:                 {RegionName.Ag1PuzzlePieces, RegionName.TwinLords},
         RegionName.TwinLords:          {RegionName.Ag2},
         RegionName.Ag2:                {RegionName.Ag2PuzzlePieces, RegionName.GenieJafar},

@@ -331,9 +331,16 @@ class SummonLevelLocationToggle(Toggle):
     default = False
 
 
+# todo: make these default false
 class PuzzlePiecesLocationToggle(Toggle):
     """Toggle Puzzle Pieces as Locations"""
     display_name = "Puzzle Pieces Locations"
+    default = True
+
+
+class PuzzleLocationToggle(Toggle):
+    """Toggles The Puzzles in Jiminy's journal as Locations"""
+    display_name = "Puzzle Location"
     default = True
 
 
@@ -376,4 +383,5 @@ class KingdomHearts2Options(PerGameCommonOptions):
     AtlanticaToggle: AtlanticaToggle
     CorSkipToggle: CorSkipToggle
     CustomItemPoolQuantity: CustomItemPoolQuantity
-    PuzzlePiecesLocationToggle:PuzzlePiecesLocationToggle
+    PuzzlePiecesLocationToggle: PuzzlePiecesLocationToggle
+    PuzzleLocationToggle: PuzzleLocationToggle
