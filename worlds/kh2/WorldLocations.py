@@ -577,6 +577,10 @@ TT_Checks = {
     LocationName.AxelDataMagicBoost:                    WorldLocationData(0x1CEB, 4),
 
     'Data Axel':                                        WorldLocationData(7403, 4),
+
+    LocationName.AwakeningPuzzleTT1Tower:            WorldLocationData(0x24A0, 4),
+    LocationName.FrontierPuzzleTT2TramCommon:     WorldLocationData(0x24B8, 4),
+    LocationName.FrontierPuzzleTT2StationPlaza:   WorldLocationData(0x24B8, 0),
 }
 TWTNW_Checks = {
     LocationName.FragmentCrossingMythrilStone:             WorldLocationData(0x23CB, 4),
@@ -898,7 +902,7 @@ tornPageLocks = {
 }
 
 Awakening_Checks = {
-    LocationName.AwakeningPuzzleTT1Tower:            WorldLocationData(0x24A0, 4),
+
     LocationName.AwakeningPuzzleHB1MarketplaceArmor: WorldLocationData(0x24A0, 1),
     LocationName.AwakeningPuzzleHB1Borough:          WorldLocationData(0x24A0, 2),
     LocationName.AwakeningPuzzleHB1MerlinHouse:      WorldLocationData(0x24A0, 0),
@@ -940,8 +944,7 @@ Duality_Checks = {
     LocationName.DualityPuzzleUndersea:            WorldLocationData(0x24B0, 0),
 }
 Frontier_Checks = {
-    LocationName.FrontierPuzzleTT2TramCommon:     WorldLocationData(0x24B8, 4),
-    LocationName.FrontierPuzzleTT2StationPlaza:   WorldLocationData(0x24B8, 0),
+
     LocationName.FrontierPuzzleHB2PosternDoorway: WorldLocationData(0x24B8, 3),
     LocationName.FrontierPuzzleMountainTrail:     WorldLocationData(0x24B8, 7),
     LocationName.FrontierPuzzlePierBoat:          WorldLocationData(0x24B8, 5),

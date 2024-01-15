@@ -1060,15 +1060,6 @@ def create_regions(self):
                                          LocationName.Summonlvl5,
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
-    if self.options.PuzzleLocationToggle:
-        KH2REGIONS[RegionName.PuzzleRegion] = [
-            LocationName.AwakeningPuzzle,
-            LocationName.HeartPuzzle,
-            LocationName.FrontierPuzzle,
-            LocationName.DualityPuzzle,
-            LocationName.DaylightPuzzle,
-            LocationName.SunsetPuzzle,
-        ]
     if self.options.PuzzlePiecesLocationToggle:
         KH2REGIONS[RegionName.Tt1PuzzlePieces] = [
             LocationName.AwakeningPuzzleTT1Tower

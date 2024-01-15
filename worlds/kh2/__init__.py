@@ -309,8 +309,7 @@ class KH2World(World):
         if self.options.PuzzlePiecesLocationToggle:
             puzzle_piece_logic = Rules.KH2PuzzlePiecesRules(self)
             puzzle_piece_logic.set_kh2_puzzle_pieces_rules()
-        puzzle_logic = Rules.KH2PuzzleRules(self)
-        puzzle_logic.set_kh2_puzzle_rules()
+
 
     def generate_output(self, output_directory: str):
         """
