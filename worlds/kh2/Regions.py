@@ -927,10 +927,12 @@ puzzle_region_list = [
     RegionName.Tt3PuzzlePieces,
     RegionName.Hb1PuzzlePieces,
     RegionName.Hb2PuzzlePieces,
+    RegionName.PostThousandHeartless,
     RegionName.CoRFirstFightPuzzlePieces,
     RegionName.CorSecondFightPuzzlePieces,
     RegionName.LoD1PuzzlePieces,
     RegionName.LoD2PuzzlePieces,
+    RegionName.PostStormRiderPuzzlePieces,
     RegionName.Bc1PuzzlePieces,
     RegionName.Bc2PuzzlePieces,
     RegionName.Oc1PuzzlePieces,
@@ -1058,7 +1060,7 @@ def create_regions(self):
                                          LocationName.Summonlvl6,
                                          LocationName.Summonlvl7]
 
-    if True:
+    if self.options.PuzzlePiecesLocationToggle:
         KH2REGIONS[RegionName.Tt1PuzzlePieces] = [
             LocationName.AwakeningPuzzleTT1Tower
         ]
