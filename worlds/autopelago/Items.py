@@ -49,7 +49,7 @@ item_table = {
         'Dark Blue Ghost',
         'Mundane Pickle',
         'Finest Potion',
-        'Plague Doctor's Mask',
+        'Plague Doctor\'s Mask',
         'Bowl of Cereal',
         'Cake',
         'Apple wearing Jeans',
