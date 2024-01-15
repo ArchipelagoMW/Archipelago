@@ -153,6 +153,12 @@ class KH1Context(CommonContext):
                         f.close()
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]):
+        self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"DeathLink: {text}")
+        else:
+            logger.info(f"DeathLink: Received from {data['source']}")
         with open(os.path.join(self.game_communication_path, 'dlreceive'), 'w') as f:
             f.write(str(int(data["time"])))
             f.close()

@@ -298,7 +298,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Ansem's Secret Report 5"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 6"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 7"                                                      , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
-    multiworld.get_location("Ansem's Secret Report 8"                                                      , player).access_rule = lambda state: has_item(state, player, "Hades Cup") and has_x_worlds(state, player, 7)
+    multiworld.get_location("Ansem's Secret Report 8"                                                      , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup") and has_x_worlds(state, player, 7)
     multiworld.get_location("Ansem's Secret Report 9"                                                      , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
     multiworld.get_location("Ansem's Secret Report 10"                                                     , player).access_rule = lambda state: has_emblems(state, player)
    #multiworld.get_location("Ansem's Secret Report 11"                                                     , player).access_rule = lambda state: has_item(state, player, "")
