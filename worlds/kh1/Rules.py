@@ -164,7 +164,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Olympus Coliseum Coliseum Gates Right Blue Trinity Chest"                     , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
     multiworld.get_location("Olympus Coliseum Coliseum Gates Left Blue Trinity Chest"                      , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
     multiworld.get_location("Olympus Coliseum Coliseum Gates White Trinity Chest"                          , player).access_rule = lambda state: has_item(state, player, "White Trinity")
-    multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzara Chest"                               , player).access_rule = lambda state: has_at_least(state, player, "Progressive Blizzard", 2)
+   #multiworld.get_location("Olympus Coliseum Coliseum Gates Blizzara Chest"                               , player).access_rule = lambda state: has_at_least(state, player, "Progressive Blizzard", 2)
    #multiworld.get_location("Monstro Mouth Boat Deck Chest"                                                , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Mouth High Platform Boat Side Chest"                                  , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
     multiworld.get_location("Monstro Mouth High Platform Across from Boat Chest"                           , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
