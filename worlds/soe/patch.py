@@ -30,7 +30,7 @@ def get_base_rom_path(file_name: Optional[str] = None) -> str:
     return file_name
 
 
-def read_rom(stream: BinaryIO, strip_header: bool=True) -> bytes:
+def read_rom(stream: BinaryIO, strip_header: bool = True) -> bytes:
     """Reads rom into bytearray and optionally strips off any smc header"""
     data = stream.read()
     if strip_header and len(data) % 0x400 == 0x200:

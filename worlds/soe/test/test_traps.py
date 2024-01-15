@@ -32,7 +32,8 @@ class Bases:
 
         def test_trap_count(self) -> None:
             """Test that total trap count is correct"""
-            self.assertEqual(self.options["trap_count"], len(self.get_items_by_name(self.option_name_to_item_name.values())))
+            self.assertEqual(self.options["trap_count"],
+                             len(self.get_items_by_name(self.option_name_to_item_name.values())))
 
 
 class TestTrapAllZeroChance(Bases.TrapTestBase):
