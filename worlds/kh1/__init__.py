@@ -11,7 +11,6 @@ from worlds.LauncherComponents import Component, components, Type, launch_subpro
 import random
 
 
-
 def launch_client():
     from .Client import launch
     launch_subprocess(launch, name="KH1 Client")
@@ -19,17 +18,19 @@ def launch_client():
 
 components.append(Component("KH1 Client", "KH1Client", func=launch_client, component_type=Type.CLIENT))
 
+
 class KH1Web(WebWorld):
     theme = "ocean"
     tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up the Kingdom Hearts Randomizer software on your computer. This guide covers single-player, "
-        "multiworld, and related software.",
-        "English",
-        "kh1_en.md",
-        "kh1/en",
-        ["Gicu"]
+            "Multiworld Setup Guide",
+            "A guide to setting up the Kingdom Hearts Randomizer software on your computer. This guide covers single-player, "
+            "multiworld, and related software.",
+            "English",
+            "kh1_en.md",
+            "kh1/en",
+            ["Gicu"]
     )]
+
 
 class KH1World(World):
     """
@@ -51,14 +52,14 @@ class KH1World(World):
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
-        
-        #Fill pool with mandatory items
+
+        # Fill pool with mandatory items
         for i in range(self.options.item_slot_increase):
             level_up_item_pool.append("Item Slot Increase")
         for i in range(self.options.accessory_slot_increase):
             level_up_item_pool.append("Accessory Slot Increase")
-        
-        #Create other pool
+
+        # Create other pool
         for i in range(self.options.strength_increase):
             possible_level_up_item_pool.append("Strength Increase")
         for i in range(self.options.defense_increase):
@@ -69,43 +70,25 @@ class KH1World(World):
             possible_level_up_item_pool.append("Max MP Increase")
         for i in range(self.options.ap_increase):
             possible_level_up_item_pool.append("Max AP Increase")
-        
-        #Fill remaining pool with items from other pool
+
+        # Fill remaining pool with items from other pool
         while len(level_up_item_pool) < 100 and len(possible_level_up_item_pool) > 0:
             level_up_item_pool.append(possible_level_up_item_pool.pop(random.randrange(len(possible_level_up_item_pool))))
-        
+
         level_up_locations = list(get_locations_by_category("Levels").keys())
         random.shuffle(level_up_item_pool)
         i = 0
         while i < len(level_up_item_pool):
             self.multiworld.get_location(level_up_locations[i], self.player).place_locked_item(self.create_item(level_up_item_pool[i]))
             i = i + 1
-        match self.options.goal:
-            case "sephiroth":
-                self.multiworld.get_location("Ansem's Secret Report 12", self.player).place_locked_item(self.create_item("Victory"))
-            case "deep_jungle":
-                self.multiworld.get_location("Chronicles Deep Jungle", self.player).place_locked_item(self.create_item("Victory"))
-            case "agrabah":
-                self.multiworld.get_location("Chronicles Agrabah", self.player).place_locked_item(self.create_item("Victory"))
-            case "monstro":
-                self.multiworld.get_location("Chronicles Monstro", self.player).place_locked_item(self.create_item("Victory"))
-            case "atlantica":
-                self.multiworld.get_location("Ansem's Secret Report 3", self.player).place_locked_item(self.create_item("Victory"))
-            case "halloween_town":
-                self.multiworld.get_location("Chronicles Halloween Town", self.player).place_locked_item(self.create_item("Victory"))
-            case "neverland":
-                self.multiworld.get_location("Ansem's Secret Report 9", self.player).place_locked_item(self.create_item("Victory"))
-            case "unknown":
-                self.multiworld.get_location("Ansem's Secret Report 13", self.player).place_locked_item(self.create_item("Victory"))
-            case "final_rest":
-                self.multiworld.get_location("End of the World Final Rest Chest", self.player).place_locked_item(self.create_item("Victory"))
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1  # for victory placement
         non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]
         if self.options.atlantica or self.options.goal == "atlantica":
             non_filler_item_categories.append("Atlantica")
         for name, data in item_table.items():
             quantity = data.max_quantity
-            
+
             # Ignore filler, it will be added in a later stage.
             if data.category not in non_filler_item_categories:
                 continue
@@ -113,7 +96,7 @@ class KH1World(World):
 
         # Fill any empty locations with filler items.
         item_names = []
-        attempts = 0 #If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
+        attempts = 0  # If we ever try to add items 200 times, and all the items are used up, lets clear the item_names array, we probably don't have enough items
         while len(item_pool) < total_locations:
             item_name = self.get_filler_item_name()
             if item_name not in item_names:
@@ -128,6 +111,20 @@ class KH1World(World):
 
         self.multiworld.itempool += item_pool
 
+    def pre_fill(self) -> None:
+        goal_dict = {
+            "sephiroth":      "Ansem's Secret Report 12",
+            "deep_jungle":    "Chronicles Deep Jungle",
+            "agrabah":        "Chronicles Agrabah",
+            "monstro":        "Chronicles Monstro",
+            "atlantica":      "Ansem's Secret Report 3",
+            "halloween_town": "Chronicles Halloween Town",
+            "neverland":      "Ansem's Secret Report 9",
+            "unknown":        "Ansem's Secret Report 13",
+            "final_rest":     "End of the World Final Rest Chest"
+        }
+        self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
+
     def get_filler_item_name(self) -> str:
         fillers = {}
         disclude = []
@@ -138,7 +135,7 @@ class KH1World(World):
         fillers.update(get_items_by_category("Stat Ups", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
-        
+
     def create_item(self, name: str) -> KH1Item:
         data = item_table[name]
         return KH1Item(name, data.classification, data.code, self.player)
@@ -151,6 +148,6 @@ class KH1World(World):
         set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options.goal, self.options.atlantica\
-            , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase\
-            + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))
+        create_regions(self.multiworld, self.player, self.options.goal, self.options.atlantica \
+                , min((self.options.strength_increase + self.options.defense_increase + self.options.hp_increase + self.options.mp_increase \
+                       + self.options.ap_increase + self.options.accessory_slot_increase + self.options.item_slot_increase), 100))

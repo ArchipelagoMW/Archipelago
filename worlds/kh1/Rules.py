@@ -1,33 +1,12 @@
 from BaseClasses import CollectionState, MultiWorld, LocationProgressType
 from .Locations import get_locations_by_category
 
+
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
-    locations = 0
-    if has_item(state, player,"Wonderland"):
-        locations = locations + 1
-    if has_item(state, player,"Olympus Coliseum"):
-        locations = locations + 1
-    if has_item(state, player,"Deep Jungle"):
-        locations = locations + 1
-    if has_item(state, player,"Agrabah"):
-        locations = locations + 1
-    if has_item(state, player,"Monstro"):
-        locations = locations + 1
-    if has_item(state, player,"Atlantica"):
-        locations = locations + 1
-    if has_item(state, player,"Halloween Town"):
-        locations = locations + 1
-    if has_item(state, player,"Neverland"):
-        locations = locations + 1
-    if has_item(state, player,"Hollow Bastion"):
-        locations = locations + 1
-   #if has_item(state, player,"100 Acre Wood"):
-   #    locations = locations + 1
-    if has_item(state, player,"End of the World"):
-        locations = locations + 1
-    if locations > num_of_worlds:
-        return True
-    return False
+    return sum([1 for world in ["Wonderland", "Olympus Coliseum", "Deep Jungle",
+                                         "Agrabah", "Monstro", "Atlantica",
+                                         "Halloween Town", "Neverland", "Hollow Bastion",
+                                         "End of the World"] if has_item(state, player, world)]) >= num_of_worlds
 
 def has_slides(state: CollectionState, player: int) -> bool:
     return state.has("Slide 1", player) #and state.has("Slide 2", player) and state.has("Slide 3", player) and state.has("Slide 4", player) and state.has("Slide 5", player) and state.has("Slide 6", player)
@@ -278,7 +257,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("End of the World Final Rest Chest"                                            , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Chamber 6 White Trinity Chest"                                        , player).access_rule = lambda state: has_item(state, player, "White Trinity")
    #multiworld.get_location("Awakening Chest"                                                              , player).access_rule = lambda state: has_item(state, player, "")
-    
+
    #multiworld.get_location("Chronicles Sora's Story"                                                      , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player)
     if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
         multiworld.get_location("Chronicles Wonderland"                                                    , player).access_rule = lambda state: has_evidence(state, player)
@@ -306,12 +285,12 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
         multiworld.get_location("Ansem's Secret Report 12"                                                 , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
     if goal == "unknown":
         multiworld.get_location("Ansem's Secret Report 13"                                                 , player).access_rule = lambda state: has_emblems(state, player)
-    
+
     multiworld.get_location("Complete Phil Cup"                                                            , player).access_rule = lambda state: has_item(state, player, "Phil Cup")
     multiworld.get_location("Complete Pegasus Cup"                                                         , player).access_rule = lambda state: has_item(state, player, "Pegasus Cup")
     multiworld.get_location("Complete Hercules Cup"                                                        , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
     multiworld.get_location("Complete Hades Cup"                                                           , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
-    
+
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")
     multiworld.get_entrance("Olympus Coliseum"                                                             , player).access_rule = lambda state: has_item(state, player,"Olympus Coliseum")
@@ -324,6 +303,6 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_entrance("Neverland"                                                                    , player).access_rule = lambda state: has_item(state, player,"Neverland") and has_x_worlds(state, player, 4)
     multiworld.get_entrance("Hollow Bastion"                                                               , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5)
     multiworld.get_entrance("End of the World"                                                             , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_emblems(state, player)
-    
+
     # Win condition.
     multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
