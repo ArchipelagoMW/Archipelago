@@ -103,6 +103,7 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
                               self.logic.region.can_reach(Region.blacksmith) & self.logic.has(MetalBar.iron) & self.logic.relationship.has_hearts(ModNPC.goblin,
                                                                                                                                                   6),
             ModQuest.FancyBlanketTask: self.logic.region.can_reach(Region.haley_house) & self.logic.has(AnimalProduct.wool) &
-                                       self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10)
+                                       self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10) &
+                                       self.logic.relationship.has_hearts(NPC.emily, 8) & self.logic.season.has(Season.winter)
 
         }
