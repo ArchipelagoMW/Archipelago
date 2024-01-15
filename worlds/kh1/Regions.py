@@ -262,18 +262,58 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest"),
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
-   #regions["End of the World"].locations.append("Chronicles Sora's Story")
+    regions["Traverse Town"].locations.append("Traverse Town Dodge Roll Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Fire Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Blue Trinity Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Earthshine Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Oathkeeper Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle White Fang Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Cure Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Jungle King Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Red Trinity Event"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Thunder Event"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Sonic Blade Event"),
+    regions["Wonderland"].locations.append("Wonderland Blizzard Event"),
     if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
-        regions["Wonderland"].locations.append("Chronicles Wonderland")
-    regions["Olympus Coliseum"].locations.append("Chronicles Olympus Coliseum")
-    regions["Deep Jungle"].locations.append("Chronicles Deep Jungle")
-    regions["Agrabah"].locations.append("Chronicles Agrabah")
-    regions["Monstro"].locations.append("Chronicles Monstro")
-   #regions["100 Acre Wood"].locations.append("Chronicles 100 Acre Wood")
+        regions["Wonderland"].locations.append("Wonderland Ifrit's Horn Event"),
+    regions["Agrabah"].locations.append("Agrabah Ray of Light Event"),
+    regions["Agrabah"].locations.append("Agrabah Blizzard Event"),
+    regions["Agrabah"].locations.append("Agrabah Fire Event"),
+    regions["Agrabah"].locations.append("Agrabah Genie Event"),
+    regions["Agrabah"].locations.append("Agrabah Three Wishes Event"),
+    regions["Agrabah"].locations.append("Agrabah Green Trinity Event"),
+    regions["Monstro"].locations.append("Monstro Goofy Cheer Event"),
+    regions["Monstro"].locations.append("Monstro Stop Event"),
     if atlantica or goal == "atlantica":
-        regions["Atlantica"].locations.append("Chronicles Atlantica")
-    regions["Halloween Town"].locations.append("Chronicles Halloween Town")
-   #regions["Neverland"].locations.append("Chronicles Neverland")
+        regions["Atlantica"].locations.append("Atlantica Mermaid Kick Event")
+        regions["Atlantica"].locations.append("Atlantica Thunder Event")
+        regions["Atlantica"].locations.append("Atlantica Crabclaw Event")
+    regions["Halloween Town"].locations.append("Halloween Town Holy Circlet Event")
+    regions["Halloween Town"].locations.append("Halloween Town Gravity Event")
+    regions["Halloween Town"].locations.append("Halloween Town Pumpkinhead Event")
+    regions["Neverland"].locations.append("Neverland Raven's Claw Event")
+    regions["Neverland"].locations.append("Neverland Cure Event")
+    regions["Neverland"].locations.append("Neverland Fairy Harp Event")
+    regions["Neverland"].locations.append("Neverland Tinker Bell Event")
+    regions["Neverland"].locations.append("Neverland Glide Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion White Trinity Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Donald Cheer Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Fireglow Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Ragnarok Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Omega Arts Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Fire Event")
+    regions["End of the World"].locations.append("End of the World Superglide Event")
+    
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 01 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 02 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 03 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 04 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 05 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 06 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 07 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 08 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 09 Event")
+    regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 10 Event")
     
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
