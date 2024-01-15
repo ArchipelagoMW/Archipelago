@@ -165,6 +165,8 @@ stardew_valley_expanded_regions = [
     RegionData(SVERegion.jenkins_cellar),
     RegionData(SVERegion.unclaimed_plot, [SVEEntrance.plot_to_bridge]),
     RegionData(SVERegion.shearwater),
+    RegionData(Region.museum, [SVEEntrance.museum_to_gunther_bedroom]),
+    RegionData(SVERegion.gunther_bedroom),
     RegionData(Region.fish_shop, [SVEEntrance.fish_shop_to_willy_bedroom]),
     RegionData(SVERegion.willy_bedroom),
     RegionData(Region.mountain, [SVEEntrance.mountain_to_guild_summit]),
@@ -270,6 +272,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.first_slash_hallway_to_room, SVERegion.first_slash_spare_room, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.sprite_spring_to_cave,  SVERegion.sprite_spring_cave, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.fish_shop_to_willy_bedroom, SVERegion.willy_bedroom, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(SVEEntrance.museum_to_gunther_bedroom, SVERegion.gunther_bedroom, flag=RandomizationFlag.BUILDINGS),
 ]
 
 alecto_regions = [

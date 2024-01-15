@@ -929,6 +929,8 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
                              (logic.mod.sve.can_buy_bear_recipe()))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.railroad_to_grampleton_station, player),
                              logic.received(SVEQuestItem.scarlett_job_offer))
+    MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.museum_to_gunther_bedroom, player),
+                             logic.relationship.has_hearts(ModNPC.gunther, 2))
     logic.mod.sve.initialize_rules()
     for location in logic.registry.sve_location_rules:
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
