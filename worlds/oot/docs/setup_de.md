@@ -81,7 +81,7 @@ YAML-Überprüfungsseite: [YAML-Überprüfungsseite](/check)
 (Der folgende Prozess ist bei den meisten ROM-basierenden Spielen sehr ähnlich.)
 
 Wenn du einer Multiworld beitrittst, wirst du gefordert eine YAML-Datei bei dem Host abzugeben. Ist dies getan,
-erhälst du (in der Regel) einem Link, von dem Host der Multiworld. Dieser führt dich zu einem Raum in dem alle
+erhälst du (in der Regel) einen Link vom Host der Multiworld. Dieser führt dich zu einem Raum, in dem alle
 teilnehmenden Spieler (bzw. Welten) aufgelistet sind. Du solltest dich dann auf **deine** Welt konzentrieren
 und klicke dann auf `Download APZ5 File...`.
 ![Screenshot of a Multiworld Room with an Ocarina of Time Player](/static/generated/docs/Ocarina%20of%20Time/MultiWorld-room_oot.png)
