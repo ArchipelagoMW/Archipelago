@@ -395,6 +395,51 @@ class KH2FormRules(KH2Rules):
                 loc.access_rule = self.form_rules[loc.name]
 
 
+class KH2PuzzleRules(KH2Rules):
+    player: int
+    world: KH2World
+    region_rules: Dict[str, Callable[[CollectionState], bool]]
+    location_rules: Dict[str, Callable[[CollectionState], bool]]
+
+    def __init__(self, world: KH2World) -> None:
+        super().__init__(world)
+        self.puzzle_location_rules = {
+            LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state),
+            LocationName.SunsetPuzzleTT3TSunsetTerrace1:      lambda state: self.has_vertical(state) and self.has_glide(state),  # one over the water fall
+            LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state),
+            LocationName.DaylightPuzzleTT3MansionFoyer2:      lambda state: self.has_vertical(state) and self.has_glide(state, 3),  # one over the door
+            LocationName.HeartPuzzleHB1MarketplaceItem:       lambda state: self.has_vertical(state),
+            LocationName.SunsetPuzzleHB1Borough:              lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.SunsetPuzzleHB2Corridors:            lambda state: self.has_vertical(state) and self.has_glide(state),
+            LocationName.FrontierPuzzleHB2PosternDoorway:     lambda state: self.has_vertical(state) and self.has_glide(state),
+            LocationName.SunsetPuzzleHB2BaileyDancers:        lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.SunsetPuzzleEncampmentAwayFromStand: lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.FrontierPuzzleMountainTrail:         lambda state: self.has_vertical(state) and self.has_glide(state),
+            LocationName.HeartPuzzleVillageHome:              lambda state: self.has_vertical(state, 2),
+            LocationName.DaylightPuzzleVillageBell:           lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2)
+        }
+
+    def has_vertical(self, state: CollectionState, amount=1) -> bool:
+        # amount_to_vertical = {
+        #    1: self.kh2_dict_count({ItemName.HighJump: 1, ItemName.AerialDodge: 1}, state),
+        #    2: self.kh2_dict_count({ItemName.HighJump: 2, ItemName.AerialDodge: 2}, state),
+        #    3: self.kh2_dict_count({ItemName.HighJump: 3, ItemName.AerialDodge: 3}, state),
+        #    4: self.kh2_dict_count({ItemName.HighJump: 4, ItemName.AerialDodge: 4}, state),
+        # }
+        return self.kh2_dict_count({ItemName.HighJump: amount, ItemName.AerialDodge: amount}, state)
+
+    def has_glide(self, state: CollectionState, amount=1) -> bool:
+        return state.has(ItemName.Glide, self.player, amount)
+
+    def has_magic_buffer(self, state: CollectionState) -> bool:
+        return self.kh2_has_any(magic, state)
+
+    def set_kh2_fight_rules(self) -> None:
+        for loc_name, rule in self.puzzle_location_rules.items():
+            location = self.multiworld.get_location(loc_name, self.player)
+            add_rule(location, lambda state: rule(state))
+
+
 class KH2FightRules(KH2Rules):
     player: int
     world: KH2World
