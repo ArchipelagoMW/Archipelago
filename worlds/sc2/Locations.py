@@ -1580,7 +1580,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.enemy_shadow_door_controls(state)),
         LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Southeast Door Lock", SC2NCO_LOC_ID_OFFSET + 705, LocationType.VANILLA,
                      lambda state: logic.enemy_shadow_door_controls(state)),
-        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Plasma Rifle", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
+        LocationData("In the Enemy's Shadow", "In the Enemy's Shadow: Facility: Blazefire Gunblade", SC2NCO_LOC_ID_OFFSET + 706, LocationType.VANILLA,
                      lambda state: logic.enemy_shadow_second_stage(state)
                                    and (story_tech_granted
                                         or state.has(ItemNames.NOVA_BLINK, player)
