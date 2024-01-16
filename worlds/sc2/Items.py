@@ -1555,7 +1555,7 @@ item_table = {
     ItemNames.CARRIER_GRAVITON_CATAPULT: ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 3, SC2Race.PROTOSS, origin={"wol"}, parent_item=ItemNames.CARRIER,
         description="Carriers can launch Interceptors more quickly."),
     ItemNames.CARRIER_HULL_OF_PAST_GLORIES: ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 4, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.CARRIER,
-        description="Carriers gain +2 Armour."),
+        description="Carriers gain +2 armour."),
     ItemNames.VOID_RAY_DESTROYER_FLUX_VANES: ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"},
         description="Increases Void Ray and Destroyer movement speed."),
     ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DESTROYER,
