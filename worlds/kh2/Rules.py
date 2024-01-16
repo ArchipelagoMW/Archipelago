@@ -270,7 +270,7 @@ class KH2WorldRules(KH2Rules):
                 add_item_rule(location, lambda item: item.player == self.player and item.name in SupportAbility_Table.keys())
 
     def set_kh2_goal(self):
-        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
+        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnasEventLocation, self.player)
         if self.multiworld.Goal[self.player] == "three_proofs":
             final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
             if self.multiworld.FinalXemnas[self.player]:
