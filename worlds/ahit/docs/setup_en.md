@@ -33,7 +33,7 @@ To connect to the multiworld server, simply run the **ArchipelagoAHITClient** an
 
 Commands will not work on the title screen, you must be in-game to use them. To use console commands, make sure ***Enable Developer Console*** is checked in Game Settings and press the tilde key or TAB while in-game.
 
-`ap_say <message>` - Send a chat message to the server. Supports commands, such as !hint or !release.
+`ap_say <message>` - Send a chat message to the server. Supports commands, such as `!hint` or `!release`.
 
 `ap_deathlink` - Toggle Death Link.
 
