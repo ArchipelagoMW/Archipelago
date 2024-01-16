@@ -345,11 +345,6 @@ class Yugioh06World(World):
             "third_tier_5_campaign_boss_campaign_opponents": self.options.third_tier_5_campaign_boss_campaign_opponents.value,
             "number_of_challenges": self.options.number_of_challenges.value,
         }
-        for start_item in self.options.start_inventory_from_pool:
-            if start_item not in slot_data:
-                slot_data[start_item] = []
-            for i in range(0, self.options.start_inventory_from_pool[start_item]):
-                slot_data[start_item].extend(["Your Pocket", self.player])
 
         for plando_item in self.multiworld.plando_items[self.player]:
             if plando_item["from_pool"]:
@@ -361,7 +356,7 @@ class Yugioh06World(World):
                     slot_data[item] = []
                     for item_location in self.multiworld.find_item_locations(item, self.player):
                         slot_data[item].extend([item_location.name, item_location.player])
-        slot_data["removed challenges"] = self.removed_challenge
+        slot_data["removed challenges"] = self.removed_challenges
 
         return slot_data
 
