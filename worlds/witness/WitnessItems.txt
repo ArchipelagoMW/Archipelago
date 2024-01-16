@@ -69,6 +69,7 @@ Doors:
 1167 - Town Maze Rooftop Bridge (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
 1172 - Town Cargo Box Entry (Panel) - 0x0A0C8
+1173 - Town Desert Laser Redirect Control (Panel) - 0x09F98
 1182 - Windmill Turn Control (Panel) - 0x17D02
 1184 - Theater Entry (Panel) - 0x17F89
 1185 - Theater Video Input (Panel) - 0x00815
@@ -234,7 +235,7 @@ Doors:
 2000 - Desert Control Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 2005 - Quarry Stoneworks Control Panels - 0x03678,0x03676,0x03679,0x03675
 2010 - Quarry Boathouse Control Panels - 0x03852,0x03858,0x275FA
-2015 - Town Control Panels - 0x2896A,0x334D8
+2015 - Town Control Panels - 0x2896A,0x334D8,0x09F98
 2020 - Windmill & Theater Control Panels - 0x17D02,0x00815
 2025 - Bunker Control Panels - 0x34BC5,0x34BC6,0x0A079
 2030 - Swamp Control Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07
@@ -250,6 +251,7 @@ Doors:
 2125 - Monastery Panels - 0x09D9B,0x00C92,0x00B10
 2130 - Town Church & RGB House Panels - 0x28998,0x28A0D,0x334D8
 2135 - Town Maze Panels - 0x2896A,0x28A79
+2137 - Town Dockside House Panels - 0x0A0C8,0x09F98
 2140 - Windmill & Theater Panels - 0x17D02,0x00815,0x17F5F,0x17F89,0x0A168,0x33AB2
 2145 - Treehouse Panels - 0x0A182,0x0288C,0x02886,0x2700B,0x17CBC,0x037FF
 2150 - Bunker Panels - 0x34BC5,0x34BC6,0x0A079,0x0A099,0x17C2E
