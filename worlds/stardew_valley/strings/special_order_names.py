@@ -36,3 +36,5 @@ class ModSpecialOrder:
     an_elegant_reception = "An Elegant Reception"
     fairy_garden = "Fairy Garden"
     homemade_fertilizer = "Homemade Fertilizer"
+    geode_order = "Geode Order"
+    dwarf_scroll = "Dwarven Scrolls"

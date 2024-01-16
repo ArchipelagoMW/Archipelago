@@ -19,7 +19,7 @@ from ...strings.fertilizer_names import Fertilizer
 from ...strings.food_names import Meal
 from ...strings.geode_names import Geode
 from ...strings.material_names import Material
-from ...strings.metal_names import MetalBar
+from ...strings.metal_names import MetalBar, Artifact
 from ...strings.monster_drop_names import Loot
 from ...strings.region_names import Region, SVERegion
 from ...strings.special_order_names import SpecialOrder, ModSpecialOrder
@@ -61,6 +61,14 @@ RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
                                               self.logic.region.can_reach(SVERegion.blue_moon_vineyard),
                 ModSpecialOrder.homemade_fertilizer: self.logic.crafting.can_craft(all_crafting_recipes_by_name[Fertilizer.quality]) &
                                                      self.logic.region.can_reach(SVERegion.susans_house)  # quest requires you make the fertilizer
+            })
+
+        if ModNames.jasper in self.options.mods:
+            special_orders.update({
+                ModSpecialOrder.dwarf_scroll: self.logic.has_all(*(Artifact.dwarf_scroll_i, Artifact.dwarf_scroll_ii, Artifact.dwarf_scroll_iii,
+                                                                   Artifact.dwarf_scroll_iv,)),
+                ModSpecialOrder.geode_order: self.logic.has_all(*(Geode.geode, Geode.frozen, Geode.magma, Geode.omni,)) &
+                                             self.logic.relationship.has_hearts(ModNPC.jasper, 8)
             })
 
         return special_orders
