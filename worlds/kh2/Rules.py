@@ -432,7 +432,7 @@ class KH2PuzzlePiecesRules(KH2Rules):
             LocationName.DaylightPuzzleBlackPearlFlags:       lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.FrontierPuzzleAgrabah:               lambda state: self.stand_break(state),
             LocationName.FrontierPuzzleBazaar:                lambda state: self.stand_break(state),
-            LocationName.SunsetPuzzleBazaar:                  lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
+            LocationName.SunsetPuzzleBazaar:                  lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),#only need aerial dodge
             LocationName.SunsetPuzzleCurlyHill:               lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
             LocationName.SunsetPuzzleToyFactory:              lambda state: self.has_vertical(state) and self.has_glide(state),
             LocationName.SunsetPuzzleCanyon:                  lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
@@ -440,7 +440,7 @@ class KH2PuzzlePiecesRules(KH2Rules):
             LocationName.DaylightPuzzleNaughts:               lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.SunsetPuzzleRuinPassageOne:          lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
             LocationName.SunsetPuzzleRuinPassageTwo:          lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),
-            LocationName.DaylightPuzzlePooh:                  lambda state: self.has_vertical(state),
+            LocationName.DaylightPuzzlePooh:                  lambda state: self.has_vertical(state), #only needs aerial dodge,
         }
 
     def has_vertical(self, state: CollectionState, amount=1) -> bool:

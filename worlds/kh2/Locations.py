@@ -960,14 +960,14 @@ Sunset_Checks = {
     LocationName.SunsetPuzzleRuinPassageOne:           LocationData(47, "PuzzlePiece"),
     LocationName.SunsetPuzzleRuinPassageTwo:           LocationData(48, "PuzzlePiece")
 }
-#Puzzle_Checks = {
+# Puzzle_Checks = {
 #    LocationName.AwakeningPuzzle: LocationData(1, "Puzzle"),
 #    LocationName.HeartPuzzle:     LocationData(2, "Puzzle"),
 #    LocationName.FrontierPuzzle:  LocationData(3, "Puzzle"),
 #    LocationName.DualityPuzzle:   LocationData(4, "Puzzle"),
 #    LocationName.DaylightPuzzle:  LocationData(5, "Puzzle"),
 #    LocationName.SunsetPuzzle:    LocationData(6, "Puzzle"),
-#}
+# }
 event_location_to_item = {
     LocationName.HostileProgramEventLocation:    ItemName.HostileProgramEvent,
     LocationName.McpEventLocation:               ItemName.McpEvent,
@@ -1037,6 +1037,7 @@ event_location_to_item = {
     LocationName.Axel1EventLocation:             ItemName.Axel1Event,
     LocationName.Axel2EventLocation:             ItemName.Axel2Event,
     LocationName.DataRoxasEventLocation:         ItemName.DataRoxasEvent,
+    LocationName.FinalXemnasEventLocation:       ItemName.Victory,
 }
 all_weapon_slot = {
     LocationName.FAKESlot,

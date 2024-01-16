@@ -2,8 +2,8 @@ import typing
 
 from BaseClasses import MultiWorld, Region
 
-from .Locations import KH2Location, event_location_to_item, Heart_Checks, Duality_Checks, Frontier_Checks, Sunset_Checks, Daylight_Checks
-from . import LocationName, RegionName, Events_Table
+from .Locations import KH2Location, event_location_to_item
+from . import LocationName, RegionName
 
 KH2REGIONS: typing.Dict[str, typing.List[str]] = {
     "Menu":                        [],
