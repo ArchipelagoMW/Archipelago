@@ -1,33 +1,191 @@
-from typing import Dict, List, Set, Union
+from typing import Dict, List, Union
 
-REGIONS: Dict[str, List[str]] = {
-    "Menu": [],
-    "Tower HQ": [],
-    "The Shop": [],
-    "The Craftsman's Corner": [],
-    "Tower of Time": [],
-    "Ninja Village": ["Ninja Village - Candle", "Ninja Village - Astral Seed"],
-    "Ninja Village - Right": [],
-    "Autumn Hills": ["Autumn Hills - Climbing Claws", "Autumn Hills - Key of Hope", "Autumn Hills - Leaf Golem"],
-    "Forlorn Temple": ["Forlorn Temple - Demon King"],
-    "Forlorn Temple Outside Shop": [],
-    "Catacombs": ["Catacombs - Necro", "Catacombs - Ruxxtin's Amulet", "Catacombs - Ruxxtin"],
-    "Bamboo Creek": ["Bamboo Creek - Claustro"],
-    "Howling Grotto": ["Howling Grotto - Wingsuit", "Howling Grotto - Emerald Golem"],
-    "Quillshroom Marsh": ["Quillshroom Marsh - Seashell", "Quillshroom Marsh - Queen of Quills"],
-    "Searing Crags": ["Searing Crags - Rope Dart"],
-    "Searing Crags Upper": ["Searing Crags - Power Thistle", "Searing Crags - Key of Strength",
-                            "Searing Crags - Astral Tea Leaves"],
-    "Glacial Peak": [],
-    "Cloud Ruins": [],
-    "Cloud Ruins Right": ["Cloud Ruins - Acro"],
-    "Underworld": ["Searing Crags - Pyro", "Underworld - Key of Chaos"],
-    "Dark Cave": [],
-    "Riviere Turquoise Entrance": [],
-    "Riviere Turquoise": ["Riviere Turquoise - Butterfly Matriarch"],
-    "Sunken Shrine": ["Sunken Shrine - Lightfoot Tabi", "Sunken Shrine - Sun Crest", "Sunken Shrine - Moon Crest",
-                      "Sunken Shrine - Key of Love"],
-    "Elemental Skylands": ["Elemental Skylands - Key of Symbiosis"],
+
+LOCATIONS: Dict[str, List[str]] = {
+    "Ninja Village": [
+        "Ninja Village - Candle",
+        "Ninja Village - Astral Seed"
+    ],
+    "Autumn Hills - Climbing Claws Shop": [
+        "Autumn Hills - Climbing Claws",
+        "Autumn Hills Seal - Trip Saws",
+    ],
+    "Autumn Hills - Key of Hope Checkpoint": [
+        "Autumn Hills - Key of Hope",
+    ],
+    "Autumn Hills - Double Swing Checkpoint": [
+        "Autumn Hills Seal - Double Swing Saws",
+    ],
+    "Autumn Hills - Spike Ball Swing Checkpoint": [
+        "Autumn Hills Seal - Spike Ball Swing",
+        "Autumn Hills Seal - Spike Ball Darts",
+    ],
+    "Autumn Hills - Leaf Golem Shop": [
+        "Autumn Hills - Leaf Golem",
+    ],
+    "Forlorn Temple - Rocket Maze Checkpoint": [
+        "Forlorn Temple Seal - Rocket Maze",
+    ],
+    "Forlorn Temple - Rocket Sunset Shop": [
+        "Forlorn Temple Seal - Rocket Sunset",
+    ],
+    "Forlorn Temple - Demon King Shop": [
+        "Forlorn Temple - Demon King",
+    ],
+    "Catacombs - Top Left": [
+        "Catacombs - Necro",
+    ],
+    "Catacombs - Triple Spike Crushers Shop": [
+        "Catacombs Seal - Triple Spike Crushers",
+    ],
+    "Catacombs - Dirty Pond Checkpoint": [
+        "Catacombs Seal - Crusher Gauntlet",
+        "Catacombs Seal - Dirty Pond",
+    ],
+    "Catacombs - Ruxxtin Shop": [
+        "Catacombs - Ruxxtin's Amulet",
+        "Catacombs - Ruxxtin",
+    ],
+    "Bamboo Creek - Spike Crushers Shop": [
+        "Bamboo Creek Seal - Spike Crushers and Doors",
+    ],
+    "Bamboo Creek - Spike Ball Pits Checkpoint": [
+        "Bamboo Creek Seal - Spike Ball Pits",
+    ],
+    "Bamboo Creek - Time Loop Shop": [
+        "Bamboo Creek Seal - Spike Crushers and Doors v2",
+        "Bamboo Creek - Claustro",
+    ],
+    "Howling Grotto - Wingsuit Shop": [
+        "Howling Grotto - Wingsuit",
+        "Howling Grotto Seal - Windy Saws and Balls",
+    ],
+    "Howling Grotto - Crushing Pits Shop": [
+        "Howling Grotto Seal - Crushing Pits",
+    ],
+    "Howling Grotto - Breezy Crushers Checkpoint": [
+        "Howling Grotto Seal - Breezy Crushers",
+    ],
+    "Howling Grotto - Emerald Golem Shop": [
+        "Howling Grotto - Emerald Golem",
+    ],
+    "Quillshroom Marsh - Seashell Checkpoint": [
+        "Quillshroom Marsh - Seashell",
+    ],
+    "Quillshroom Marsh - Spikey Window Shop": [
+        "Quillshroom Marsh Seal - Spikey Window",
+    ],
+    "Quillshroom Marsh - Sand Trap Shop": [
+        "Quillshroom Marsh Seal - Sand Trap",
+    ],
+    "Quillshroom Marsh - Spike Wave Checkpoint": [
+        "Quillshroom Marsh Seal - Do the Spike Wave",
+    ],
+    "Quillshroom Marsh - Queen of Quills Shop": [
+        "Quillshroom Marsh - Queen of Quills",
+    ],
+    "Searing Crags - Rope Dart Shop": [
+        "Searing Crags - Rope Dart",
+    ],
+    "Searing Crags - Triple Ball Spinner Checkpoint": [
+        "Searing Crags Seal - Triple Ball Spinner",
+    ],
+    "Searing Crags - Raining Rocks Checkpoint": [
+        "Searing Crags Seal - Raining Rocks",
+    ],
+    "Searing Crags - Colossuses Shop": [
+        "Searing Crags Seal - Rhythm Rocks",
+        "Searing Crags - Power Thistle",
+        "Searing Crags - Astral Tea Leaves",
+    ],
+    "Searing Crags - Key of Strength Shop": [
+        "Searing Crags - Key of Strength",
+    ],
+    "Searing Crags - Right": [
+        "Searing Crags - Pyro",
+    ],
+    "Glacial Peak - Ice Climbers' Shop": [
+        "Glacial Peak Seal - Ice Climbers",
+    ],
+    "Glacial Peak - Projectile Spike Pit Checkpoint": [
+        "Glacial Peak Seal - Projectile Spike Pit",
+    ],
+    "Glacial Peak - Air Swag Checkpoint": [
+        "Glacial Peak Seal - Glacial Air Swag",
+    ],
+    "Tower of Time - First Checkpoint": [
+        "Tower of Time Seal - Time Waster Seal",
+    ],
+    "Tower of Time - Third Checkpoint": [
+        "Tower of Time Seal - Lantern Climb",
+    ],
+    "Tower of Time - Fifth Checkpoint": [
+        "Tower of Time Seal - Arcane Orbs",
+    ],
+    "Cloud Ruins - Ghost Pit Checkpoint": [
+        "Cloud Ruins Seal - Ghost Pit",
+    ],
+    "Cloud Ruins - Toothbrush Alley Checkpoint": [
+        "Cloud Ruins Seal - Toothbrush Alley",
+    ],
+    "Cloud Ruins - Saw Pit Checkpoint": [
+        "Cloud Ruins Seal - Saw Pit",
+    ],
+    "Cloud Ruins - Final Flight Checkpoint": [
+        "Cloud Ruins - Acro",
+    ],
+    "Underworld - Entrance Shop": [
+        "Underworld Seal - Sharp and Windy Climb",
+    ],
+    "Underworld - Fireball Wave Shop": [
+        "Underworld Seal - Spike Wall",
+        "Underworld Seal - Fireball Wave",
+    ],
+    "Underworld - Hot Tub Checkpoint": [
+        "Underworld Seal - Rising Fanta",
+    ],
+    "Underworld - Key of Chaos Shop": [
+        "Underworld - Key of Chaos",
+    ],
+    "Riviere Turquoise - Waterfall Shop": [
+        "Riviere Turquoise Seal - Bounces and Balls",
+    ],
+    "Riviere Turquoise - Launch of Faith Shop": [
+        "Riviere Turquoise Seal - Launch of Faith",
+    ],
+    "Riviere Turquoise - Restock Shop": [
+        "Riviere Turquoise Seal - Flower Power",
+    ],
+    "Riviere Turquoise - Butterfly Matriarch Shop": [
+        "Riviere Turquoise - Butterfly Matriarch",
+    ],
+    "Sunken Shrine - Lifeguard Shop": [
+        "Sunken Shrine Seal - Ultra Lifeguard",
+    ],
+    "Sunken Shrine - Lightfoot Tabi Checkpoint": [
+        "Sunken Shrine - Lightfoot Tabi",
+    ],
+    "Sunken Shrine Portal": [
+        "Sunken Shrine - Key of Love",
+    ],
+    "Sunken Shrine - Tabi Gauntlet Shop": [
+        "Sunken Shrine Seal - Tabi Gauntlet",
+    ],
+    "Sunken Shrine - Sun Crest Checkpoint": [
+        "Sunken Shrine - Sun Crest",
+    ],
+    "Sunken Shrine - Waterfall Paradise Checkpoint": [
+        "Sunken Shrine Seal - Waterfall Paradise",
+    ],
+    "Sunken Shrine - Moon Crest Checkpoint": [
+        "Sunken Shrine - Moon Crest",
+    ],
+    "Elemental Skylands": [
+        "Elemental Skylands Seal - Air",
+        "Elemental Skylands Seal - Water",
+        "Elemental Skylands Seal - Fire",
+        "Elemental Skylands - Key of Symbiosis",
+    ],
     "Corrupted Future": ["Corrupted Future - Key of Courage"],
     "Music Box": ["Rescue Phantom"],
 }
@@ -151,101 +309,80 @@ SUB_REGIONS: Dict[str, List[str]] = {
     "Cloud Ruins": [
         "Left",
         "Entrance Shop",
-        "First Gap Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Checkpoint",
-        "Checkpoint",
-        "Checkpoint",
-        "Checkpoint",
+        "Pillar Glide Shop",
+        "Crushers' Descent Shop",
+        "Seeing Spikes Shop",
+        "Sliding Spikes Shop",
+        "Final Flight Shop",
+        "Manfred's Shop",
+        "Spike Float Checkpoint",
+        "Ghost Pit Checkpoint",
+        "Toothbrush Alley Checkpoint",
+        "Saw Pit Checkpoint",
     ],
     "Underworld": [
         "Left",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Checkpoint",
-        "Checkpoint",
-        "Checkpoint",
+        "Entrance Shop",
+        "Fireball Wave Shop",
+        "Long Climb Shop",
+        "Barm'athaziel Shop",
+        "Key of Chaos Shop",
+        "Hot Dip Checkpoint",
+        "Hot Tub Checkpoint",
+        "Lava Run Checkpoint",
     ],
     "Riviere Turquoise": [
         "Right",
         "Portal",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Checkpoint",
+        "Waterfall Shop",
+        "Launch of Faith Shop",
+        "Log Flume Shop",
+        "Log Climb Shop",
+        "Restock Shop",
+        "Butterfly Matriarch Shop",
+        "Flower Flight Checkpoint",
     ],
     "Sunken Shrine": [
         "Left",
         "Portal",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Shop",
-        "Checkpoint",
-        "Checkpoint",
-        "Checkpoint",
-        "Checkpoint",
-    ]
+        "Entrance Shop",
+        "Lifeguard Shop",
+        "Sun Path Shop",
+        "Tabi Gauntlet Shop",
+        "Moon Path Shop",
+        "Ninja Tabi Checkpoint",
+        "Sun Crest Checkpoint",
+        "Waterfall Paradise Checkpoint",
+        "Moon Crest Checkpoint",
+    ],
 }
 
-
-SEALS: Dict[str, List[str]] = {
-    "Ninja Village": ["Ninja Village Seal - Tree House"],
-    "Autumn Hills": ["Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
-                     "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts"],
-    "Catacombs": ["Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet",
-                  "Catacombs Seal - Dirty Pond"],
-    "Bamboo Creek": ["Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
-                     "Bamboo Creek Seal - Spike Crushers and Doors v2"],
-    "Howling Grotto": ["Howling Grotto Seal - Windy Saws and Balls", "Howling Grotto Seal - Crushing Pits",
-                       "Howling Grotto Seal - Breezy Crushers"],
-    "Quillshroom Marsh": ["Quillshroom Marsh Seal - Spikey Window", "Quillshroom Marsh Seal - Sand Trap",
-                          "Quillshroom Marsh Seal - Do the Spike Wave"],
-    "Searing Crags": ["Searing Crags Seal - Triple Ball Spinner"],
-    "Searing Crags Upper": ["Searing Crags Seal - Raining Rocks", "Searing Crags Seal - Rhythm Rocks"],
-    "Glacial Peak": ["Glacial Peak Seal - Ice Climbers", "Glacial Peak Seal - Projectile Spike Pit",
-                     "Glacial Peak Seal - Glacial Air Swag"],
-    "Tower of Time": ["Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
-                      "Tower of Time Seal - Arcane Orbs"],
-    "Cloud Ruins Right": ["Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
-                          "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room"],
-    "Underworld": ["Underworld Seal - Sharp and Windy Climb", "Underworld Seal - Spike Wall",
-                   "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta"],
-    "Forlorn Temple": ["Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset"],
-    "Sunken Shrine": ["Sunken Shrine Seal - Ultra Lifeguard", "Sunken Shrine Seal - Waterfall Paradise",
-                      "Sunken Shrine Seal - Tabi Gauntlet"],
-    "Riviere Turquoise Entrance": ["Riviere Turquoise Seal - Bounces and Balls"],
-    "Riviere Turquoise": ["Riviere Turquoise Seal - Launch of Faith", "Riviere Turquoise Seal - Flower Power"],
-    "Elemental Skylands": ["Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
-                           "Elemental Skylands Seal - Fire"]
-}
 
 MEGA_SHARDS: Dict[str, List[str]] = {
-    "Autumn Hills": ["Autumn Hills Mega Shard", "Hidden Entrance Mega Shard"],
-    "Catacombs": ["Catacombs Mega Shard"],
-    "Bamboo Creek": ["Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard"],
-    "Howling Grotto": ["Bottom Left Mega Shard", "Near Portal Mega Shard", "Pie in the Sky Mega Shard"],
-    "Quillshroom Marsh": ["Quillshroom Marsh Mega Shard"],
-    "Searing Crags Upper": ["Searing Crags Mega Shard"],
-    "Glacial Peak": ["Glacial Peak Mega Shard"],
-    "Cloud Ruins": ["Cloud Entrance Mega Shard", "Time Warp Mega Shard"],
-    "Cloud Ruins Right": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
-    "Underworld": ["Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
-    "Forlorn Temple": ["Sunny Day Mega Shard", "Down Under Mega Shard"],
-    "Sunken Shrine": ["Mega Shard of the Moon", "Beginner's Mega Shard", "Mega Shard of the Stars", "Mega Shard of the Sun"],
-    "Riviere Turquoise Entrance": ["Waterfall Mega Shard"],
-    "Riviere Turquoise": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
+    "Autumn Hills - Lakeside Checkpoint": ["Autumn Hills Mega Shard"],
+    "Forlorn Temple - Outside Shop": ["Hidden Entrance Mega Shard"],
+    "Forlorn Temple - Sunny Day Checkpoint": ["Sunny Day Mega Shard"],
+    "Forlorn Temple - Demon King Shop": ["Down Under Mega Shard"],
+    "Catacombs - Top Left": ["Catacombs Mega Shard"],
+    "Bamboo Creek - Spike Crushers Shop": ["Above Entrance Mega Shard"],
+    "Bamboo Creek - Abandoned Shop": ["Abandoned Mega Shard"],
+    "Bamboo Creek - Time Loop Shop": ["Time Loop Mega Shard"],
+    "Howling Grotto - Lost Woods Checkpoint": ["Bottom Left Mega Shard"],
+    "Howling Grotto - Breezy Crushers Checkpoint": ["Near Portal Mega Shard", "Pie in the Sky Mega Shard"],
+    "Quillshroom Marsh - Spikey Window Shop": ["Quillshroom Marsh Mega Shard"],
+    "Searing Crags - Searing Mega Shard Shop": ["Searing Crags Mega Shard"],
+    "Glacial Peak - Glacial Mega Shard Shop": ["Glacial Peak Mega Shard"],
+    "Cloud Ruins - Entrance Shop": ["Cloud Entrance Mega Shard"],
+    "Cloud Ruins - Spike Float Checkpoint": ["Time Warp Mega Shard"],
+    "Cloud Ruins - Manfred's Shop": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
+    "Underworld - Entrance Shop": ["Under Entrance Mega Shard"],
+    "Underworld - Hot Tub Checkpoint": ["Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
+    "Riviere Turquoise - Waterfall Shop": ["Waterfall Mega Shard"],
+    "Riviere Turquoise - Restock Shop": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
+    "Sunken Shrine - Entrance Shop": ["Mega Shard of the Stars"],
+    "Sunken Shrine - Portal": ["Beginner's Mega Shard"],
+    "Sunken Shrine - Sun Crest Checkpoint": ["Mega Shard of the Sun"],
+    "Sunken Shrine - Waterfall Shop": ["Mega Shard of the Moon"],
     "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
 
@@ -262,55 +399,22 @@ REGION_CONNECTIONS: Dict[str, Union[Dict[str, str], str]] = {
         "ToTHQ Sunken Shrine Portal": "Sunken Shrine Portal",
         "Artificer's Portal": "Corrupted Future",
         "Home": "The Shop",
-        "Money Sink": "The Craftsman's Corner",
         "Shrink Down": "Music Box",
     },
-    "Ninja Village - Right": "Autumn Hills",
-    "Autumn Hills - Left": "Ninja Village",
-    "Autumn Hills - Right": "Forlorn Temple",
-    "Autumn Hills - Bottom": "Catacombs",
-    "Autumn Hills Portal": "Tower HQ",
-    "Forlorn Temple - Left": "Autumn Hills",
-    "Forlorn Temple - Bottom": "Catacombs",
-    "Forlorn Temple - Right": "Bamboo Creek",
-    "Catacombs - Top Left": "Forlorn Temple",
-    "Catacombs - Bottom Left": "Autumn Hills",
-    "Catacombs - Bottom": "Dark Cave",
-    "Catacombs - Right": "Bamboo Creek",
-    "Dark Cave": {
-        "Dark Cave - Right": "Catacombs - Bottom",
-        "Dark Cave - Left": "Riviere Turquoise - Right",
+    "The Shop": {
+        "Money Sink": "The Craftsman's Corner",
     },
-    "Bamboo Creek - Bottom Left": "Catacombs - Right",
-    "Bamboo Creek - Top Left": "Forlorn Temple - Right",
-    "Bamboo Creek - Right": "Howling Grotto - Top",
-    "Howling Grotto - Left": "Bamboo Creek - Right",
-    "Howling Grotto - Top": "Quillshroom Marsh - Bottom Left",
-    "Howling Grotto - Right": "Quillshroom Marsh - Top Left",
-    "Howling Grotto - Bottom": "Sunken Shrine",
-    "Howling Grotto Portal": "Tower HQ",
-    "Quillshroom Marsh - Top Left": "Howling Grotto - Right",
-    "Quillshroom Marsh - Bottom Left": "Howling Grotto - Top",
-    "Quillshroom Marsh - Top Right": "Searing Crags - Left",
-    "Quillshroom Marsh - Bottom Right": "Searing Crags - Bottom",
-    "Searing Crags - Left": "Quillshroom Marsh - Top Right",
-    "Searing Crags - Top": "Glacial Peak - Bottom",
-    "Searing Crags - Bottom": "Quillshroom Marsh - Bottom Right",
-    "Searing Crags - Right": "Underworld - Left",
-    "Searing Crags Portal": "Tower HQ",
-    "Glacial Peak - Bottom": "Searing Crags - Top",
-    "Glacial Peak - Top": "Cloud Ruins - Left",
-    "Glacial Peak Portal": "Tower HQ",
-    "Cloud Ruins - Left": "Glacial Peak - Top",
-    "Underworld - Top Left": "Searing Crags - Right",
-    "Sunken Shrine - Left": "Howling Grotto - Bottom",
-    "Sunken Shrine Portal": "Tower HQ",
-    "Riviere Turquoise Portal": "Tower HQ",
 }
 """Vanilla layout mapping with all Tower HQ portals open. format is source[entrance_name][exit_region] or source[exit_region]"""
 
 
-IN_AREA_REGION_CONNECTIONS: Dict[str, Dict[str, str]] = {
-    
-}
-"""Vanilla layout mapping of sub region connections within the larger regions."""
+# regions that don't have sub-regions and their exits
+LEVELS: List[str] = [
+    "Menu",
+    "Tower HQ",
+    "The Shop",
+    "The Craftsman's Corner",
+    "Elemental Skylands",
+    "Corrupted Future",
+    "Music Box",
+]

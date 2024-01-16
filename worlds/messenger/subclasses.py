@@ -2,8 +2,10 @@ from functools import cached_property
 from typing import Optional, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
+from .connections import CONNECTIONS
 from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .regions import MEGA_SHARDS, REGIONS, SEALS
+from .regions import MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
+from .rules import parse_rule
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
@@ -11,25 +13,44 @@ if TYPE_CHECKING:
 
 
 class MessengerRegion(Region):
-    
-    def __init__(self, name: str, world: "MessengerWorld") -> None:
+    parent: str
+
+    def __init__(self, name: str, world: "MessengerWorld", parent: Optional[str] = None) -> None:
         super().__init__(name, world.player, world.multiworld)
-        locations = [loc for loc in REGIONS[self.name]]
-        if self.name == "The Shop":
+        self.parent = parent
+        locations = []
+        if name in LOCATIONS:
+            locations = [loc for loc in LOCATIONS[name]]
+
+        if name == "The Shop":
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
                               for shop_loc in SHOP_ITEMS}
             self.add_locations(shop_locations, MessengerShopLocation)
-        elif self.name == "The Craftsman's Corner":
+        elif name == "The Craftsman's Corner":
             self.add_locations({figurine: world.location_name_to_id[figurine] for figurine in FIGURINES},
                                MessengerLocation)
-        elif self.name == "Tower HQ":
+        elif name == "Tower HQ":
             locations.append("Money Wrench")
-        if self.name in SEALS:  # from what bit of testing i did this is faster than get
-            locations += SEALS[self.name]
-        if world.options.shuffle_shards and self.name in MEGA_SHARDS:
-            locations += MEGA_SHARDS[self.name]
+
+        if world.options.shuffle_shards and name in MEGA_SHARDS:
+            locations += MEGA_SHARDS[name]
         loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
+
+        if parent and name in CONNECTIONS[parent]:
+            region_data = CONNECTIONS[parent][name]
+            for index, exit_name in enumerate(region_data["exits"]):
+                reg_exit = self.create_exit(exit_name)
+                reg_exit.access_rule = parse_rule(region_data["rules"][index], self.player)
+        elif name in REGION_CONNECTIONS:
+            for exit_name, connecting_region in REGION_CONNECTIONS[name].items():
+                if isinstance(connecting_region, dict):
+                    for rule in connecting_region.values():
+                        reg_exit = self.create_exit(exit_name)
+                        reg_exit.access_rule = parse_rule(rule, self.player)
+                else:
+                    self.create_exit(exit_name)
+
         world.multiworld.regions.append(self)
 
 

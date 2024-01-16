@@ -248,6 +248,10 @@ class MessengerOOBRules(MessengerRules):
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
+def parse_rule(rule_string: str, player: int) -> CollectionRule:
+    return lambda state: True
+
+
 def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     multiworld = world.multiworld
 

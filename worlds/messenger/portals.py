@@ -187,7 +187,7 @@ CHECKPOINTS = {
         "Water Logged",
     ],
     "Sunken Shrine": [
-        "Ninja Tabi",
+        "Lightfoot Tabi",
         "Sun Crest",
         "Waterfall Paradise",
         "Moon Crest",

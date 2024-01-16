@@ -7,11 +7,12 @@ from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
+from .connections import CONNECTIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
 from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
-from .regions import MEGA_SHARDS, REGIONS, REGION_CONNECTIONS, SEALS
-from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
+from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS, SEALS
+from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules, parse_rule
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion
 
@@ -112,9 +113,22 @@ class MessengerWorld(World):
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
-        for region in [MessengerRegion(reg_name, self) for reg_name in REGIONS]:
-            if region.name in REGION_CONNECTIONS:
-                region.add_exits(REGION_CONNECTIONS[region.name])
+        # create and connect static connections
+        for region in [MessengerRegion(level, self) for level in LEVELS]:
+            region.add_exits(REGION_CONNECTIONS)
+            for reg_exit in region.exits:
+                rules = REGION_CONNECTIONS[region.name][reg_exit.name]
+                if isinstance(rules, dict):
+                    for rule in rules.values():
+                        reg_exit.access_rule = parse_rule(rule, self.player)
+        # create and connect complex regions that have sub-regions
+        for region in [MessengerRegion(reg_name, self, parent)
+                       for parent, sub_region in CONNECTIONS.items()
+                       for reg_name in sub_region]:
+            connection_data = CONNECTIONS[region.parent][region.name]
+            for index, exit_name in enumerate(connection_data["exits"]):
+                region_exit = region.create_exit(exit_name)
+                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player)
 
     def create_items(self) -> None:
         # create items that are always in the item pool
