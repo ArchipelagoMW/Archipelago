@@ -28,11 +28,14 @@ class ShuffleSymbols(DefaultOnToggle):
     display_name = "Shuffle Symbols"
 
 
-class ShuffleLasers(Toggle):
+class ShuffleLasers(Choice):
     """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
     Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
     be redirected as normal, for both applications of redirection."""
     display_name = "Shuffle Lasers"
+    option_off = 0
+    option_local = 1
+    option_anywhere = 2
 
 
 class ShuffleDoors(Choice):
@@ -114,9 +117,13 @@ class ShufflePostgame(Toggle):
 
 
 class VictoryCondition(Choice):
-    """Change the victory condition from the original game's ending (elevator) to beating the Challenge
-    or solving the mountaintop box, either using the short solution
-    (7 lasers or whatever you've changed it to) or the long solution (11 lasers or whatever you've changed it to)."""
+    """Set the victory condition for this world.
+    Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
+    Challenge: Beat the secret Challenge (requires Challenge Lasers).
+    Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
+    Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+    It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
+    to count, the laser locks on the Elevator and Challenge Timer panels do not."""
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
@@ -133,10 +140,13 @@ class PuzzleRandomization(Choice):
 
 
 class MountainLasers(Range):
-    """Sets the amount of beams required to enter the final area."""
+    """Sets the amount of lasers required to enter the Mountain.
+    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without
+    the hatch being opened.
+    This change will also be applied logically to the long solution ("Challenge Lasers" setting)."""
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
-    range_end = 7
+    range_end = 11
     default = 7
 
 
@@ -182,8 +192,17 @@ class HintAmount(Range):
 
 class DeathLink(Toggle):
     """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
-    The effect of a "death" in The Witness is a Power Surge."""
+    The effect of a "death" in The Witness is a Bonk Trap."""
     display_name = "Death Link"
+
+
+class DeathLinkAmnesty(Range):
+    """Number of panel fails to allow before sending a death through Death Link.
+    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 5
+    default = 1
 
 
 @dataclass
@@ -209,3 +228,4 @@ class TheWitnessOptions(PerGameCommonOptions):
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
     death_link: DeathLink
+    death_link_amnesty: DeathLinkAmnesty

@@ -2,22 +2,7 @@ import typing
 
 from BaseClasses import Item
 from .Names import ItemName
-
-
-class KH2Item(Item):
-    game: str = "Kingdom Hearts 2"
-
-
-class ItemData(typing.NamedTuple):
-    quantity: int = 0
-    kh2id: int = 0
-    # Save+ mem addr
-    memaddr: int = 0
-    # some items have bitmasks. if bitmask>0 bitor to give item else
-    bitmask: int = 0
-    # if ability then
-    ability: bool = False
-
+from .Subclasses import ItemData
 
 # 0x130000
 Reports_Table = {
@@ -349,7 +334,7 @@ GoofyAbility_Table = {
 
 Wincon_Table = {
     ItemName.LuckyEmblem: ItemData(kh2id=367, memaddr=0x3641),  # letter item
-    ItemName.Victory:     ItemData(kh2id=263, memaddr=0x111),
+    # ItemName.Victory:     ItemData(kh2id=263, memaddr=0x111),
     ItemName.Bounty:      ItemData(kh2id=461, memaddr=0x365E),  # Dummy 14
     # ItemName.UniversalKey:ItemData(,365,0x363F,0)#Tournament Poster
 }

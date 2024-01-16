@@ -1,19 +1,9 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName, ItemName
-
-
-class KH2Location(Location):
-    game: str = "Kingdom Hearts 2"
-
-
-class LocationData(typing.NamedTuple):
-    locid: int
-    yml: str
-    charName: str = "Sora"
-    charNumber: int = 1
-
+from .Names import LocationName, ItemName, RegionName
+from .Subclasses import LocationData
+from .Regions import KH2REGIONS
 
 # data's addrcheck sys3 addr obtained roomid bit index is eventid
 LoD_Checks = {
@@ -541,7 +531,7 @@ TWTNW_Checks = {
     LocationName.Xemnas1:                               LocationData(26, "Double Get Bonus"),
     LocationName.Xemnas1GetBonus:                       LocationData(26, "Second Get Bonus"),
     LocationName.Xemnas1SecretAnsemReport13:            LocationData(537, "Chest"),
-    LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
+    # LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
     LocationName.XemnasDataPowerBoost:                  LocationData(554, "Chest"),
 }
 
@@ -1530,4 +1520,10 @@ exclusion_table = {
     "Chests":        {
         location for location, data in all_locations.items() if location not in event_location_to_item.keys() and location not in popups_set and location != LocationName.StationofSerenityPotion and data.yml == "Chest"
     }
+}
+
+location_groups: typing.Dict[str, list]
+location_groups = {
+    Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
+    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs
 }
