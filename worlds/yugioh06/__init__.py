@@ -16,7 +16,7 @@ from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_item
     challenges, useful
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations
+from .Opponents import get_opponents, get_opponent_locations, get_other_opponents
 from .Options import Yugioh06Options
 from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
 from .Rules import set_rules
@@ -442,6 +442,19 @@ class Yugioh06World(World):
                 rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
                 rom_data[0x1e5e2e9 + space] = booster_pack_price[1]
                 rom_data[0x1e5e2ea + space] = 5
+        for i in range(0, 121):
+            space = i * 32
+            print(str(i) + ": " + str(int.from_bytes(rom_data[0x1e58d0e + space:0x1e58d10 + space], 'little')) + ', ' +
+              str(int.from_bytes(rom_data[0x1e58d10 + space:0x1e58d12 + space], 'little')) + ', "' +
+              rom_data[0x1e58d12 + space:0x1e58d28 + space].decode('ascii').replace("\x00", "\\x00") + '",')
+        i = 0
+        for opp in get_other_opponents(self.multiworld, self.player):
+            space = i * 32
+            rom_data[0x000f3ba + i] = opp.id
+            rom_data[0x1e58d0e + space:0x1e58d10 + space] = opp.card_id.to_bytes(2, 'little')
+            rom_data[0x1e58d10 + space:0x1e58d12 + space] = opp.deck_name_id.to_bytes(2, 'little')
+            rom_data[0x1e58d12 + space:0x1e58d28 + space] = opp.deck_file.encode('ascii')
+            i = i+1
         return rom_data
 
     def generate_output(self, output_directory: str):
