@@ -11,7 +11,7 @@ from .connections import CONNECTIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
 from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
-from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS, SEALS
+from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules, parse_rule
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion
@@ -189,13 +189,13 @@ class MessengerWorld(World):
         self.multiworld.itempool += filler
 
     def set_rules(self) -> None:
-        logic = self.options.logic_level
-        if logic == Logic.option_normal:
-            MessengerRules(self).set_messenger_rules()
-        elif logic == Logic.option_hard:
-            MessengerHardRules(self).set_messenger_rules()
-        else:
-            MessengerOOBRules(self).set_messenger_rules()
+        # logic = self.options.logic_level
+        # if logic == Logic.option_normal:
+        #     MessengerRules(self).set_messenger_rules()
+        # elif logic == Logic.option_hard:
+        #     MessengerHardRules(self).set_messenger_rules()
+        # else:
+        #     MessengerOOBRules(self).set_messenger_rules()
         add_closed_portal_reqs(self)
         # i need ER to happen after rules exist so i can validate it
         if self.options.shuffle_portals:
