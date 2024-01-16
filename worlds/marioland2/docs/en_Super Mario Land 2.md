@@ -1,8 +1,8 @@
 # Super Mario Land 2: 6 Golden Coins
 
-## Where is the settings page?
+## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 config file.
 
 ## What items and locations get shuffled?
