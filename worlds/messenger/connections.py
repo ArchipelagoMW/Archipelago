@@ -20,8 +20,9 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Right": {
             "exits": [
                 "Forlorn Temple - Left",
+                "Autumn Hills - Leaf Golem Shop",
             ],
-            "rules": ["True"],
+            "rules": ["True", "True"],
         },
         "Bottom": {
             "exits": [
@@ -32,8 +33,9 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Portal": {
             "exits": [
                 "Tower HQ",
+                "Autumn Hills - Dimension Climb Shop",
             ],
-            "rules": ["True"],
+            "rules": ["True", "True"],
         },
         "Climbing Claws Shop": {
             "exits": [
@@ -377,6 +379,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             "exits": [
                 "Howling Grotto - Wingsuit Shop",
                 "Howling Grotto - Crushing Pits Shop",
+                "Howling Grotto - Bottom",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -719,6 +722,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Pillar Glide Shop": {
             "exits": [
                 "Cloud Ruins - Spike Float Checkpoint",
+                "Cloud Ruins - Ghost Pit Checkpoint",
                 "Cloud Ruins - Crushers' Descent Shop",
             ],
             "rules": ["True", "True", "True"],
@@ -853,6 +857,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Right": {
             "exits": [
                 "Catacombs - Bottom",
+                "Dark Cave - Left",
             ],
             "rules": ["True", "True", "True"],
         },

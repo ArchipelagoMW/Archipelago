@@ -21,6 +21,9 @@ class MessengerRegion(Region):
         locations = []
         if name in LOCATIONS:
             locations = [loc for loc in LOCATIONS[name]]
+        # portal event locations since portals can be opened from their exit regions
+        if "Portal" in name:
+            locations.append(name.replace(" -", ""))
 
         if name == "The Shop":
             shop_locations = {f"The Shop - {shop_loc}": world.location_name_to_id[f"The Shop - {shop_loc}"]
