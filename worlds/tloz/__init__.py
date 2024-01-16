@@ -64,7 +64,7 @@ class TLoZWorld(World):
     every time.
     """
     options_dataclass = TlozOptions
-    options = TlozOptions
+    options: TlozOptions
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
