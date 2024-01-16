@@ -193,6 +193,15 @@ class DeathLink(Toggle):
     display_name = "Death Link"
 
 
+class DeathLinkAmnesty(Range):
+    """Number of panel fails to allow before sending a death through Death Link.
+    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc."""
+    display_name = "Death Link Amnesty"
+    range_start = 0
+    range_end = 5
+    default = 1
+
+
 @dataclass
 class TheWitnessOptions(PerGameCommonOptions):
     puzzle_randomization: PuzzleRandomization
@@ -216,3 +225,4 @@ class TheWitnessOptions(PerGameCommonOptions):
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
     death_link: DeathLink
+    death_link_amnesty: DeathLinkAmnesty
