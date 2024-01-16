@@ -37,21 +37,7 @@ class MessengerRegion(Region):
         loc_dict = {loc: world.location_name_to_id.get(loc, None) for loc in locations}
         self.add_locations(loc_dict, MessengerLocation)
 
-        if parent and name in CONNECTIONS[parent]:
-            region_data = CONNECTIONS[parent][name]
-            for index, exit_name in enumerate(region_data["exits"]):
-                reg_exit = self.create_exit(exit_name)
-                reg_exit.access_rule = parse_rule(region_data["rules"][index], self.player)
-        elif name in REGION_CONNECTIONS:
-            for exit_name, connecting_region in REGION_CONNECTIONS[name].items():
-                if isinstance(connecting_region, dict):
-                    for rule in connecting_region.values():
-                        reg_exit = self.create_exit(exit_name)
-                        reg_exit.access_rule = parse_rule(rule, self.player)
-                else:
-                    self.create_exit(exit_name)
-
-        world.multiworld.regions.append(self)
+        self.multiworld.regions.append(self)
 
 
 class MessengerLocation(Location):

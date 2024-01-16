@@ -21,6 +21,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             "exits": [
                 "Forlorn Temple - Left",
             ],
+            "rules": ["True"],
         },
         "Bottom": {
             "exits": [
@@ -110,7 +111,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Right": {
             "exits": [
-                "Bamboo Creek - Left",
+                "Bamboo Creek - Top Left",
                 "Forlorn Temple - Demon King Shop",
             ],
             "rules": ["True", "True", "True"],
@@ -133,7 +134,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Entrance Shop": {
             "exits": [
                 "Forlorn Temple - Outside Shop",
-                "Forlorn Temple - Sunny Dat Checkpoint",
+                "Forlorn Temple - Sunny Day Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -252,7 +253,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Catacombs - Crusher Gauntlet Checkpoint",
                 "Catacombs - Ruxxtin Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True", "True", "True"],
         },
     },
     "Bamboo Creek": {
@@ -434,7 +435,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Quillshroom Marsh - Bottom Right",
                 "Quillshroom Marsh - Spike Wave Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True", "True", "True"],
         },
         "Queen of Quills Shop": {
             "exits": [
@@ -502,7 +503,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Searing Crags - Colossuses Shop",
                 "Tower HQ",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True", "True", "True", "True"],
         },
         "Rope Dart Shop": {
             "exits": [
@@ -540,7 +541,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Searing Crags - Portal",
                 "Searing Crags - Top",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True", "True", "True"],
         },
         "Key of Strength Shop": {
             "exits": [
@@ -567,7 +568,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Bottom": {
             "exits": [
                 "Searing Crags - Top",
-                "Ice Climbers' Shop",
+                "Glacial Peak - Ice Climbers' Shop",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -581,7 +582,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Top": {
             "exits": [
-                "Tower Entrance Shop",
+                "Glacial Peak - Tower Entrance Shop",
                 "Cloud Ruins - Left",
                 "Glacial Peak - Portal",
             ],
@@ -653,7 +654,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Arcane Golem Shop": {
             "exits": [
                 "Tower HQ",
-                "Sixth Checkpoint",
+                "Tower of Time - Sixth Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -695,7 +696,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Sixth Checkpoint": {
             "exits": [
                 "Tower of Time - Fifth Checkpoint",
-                "Tower of Time - Arcane Shop",
+                "Tower of Time - Arcane Golem Shop",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -941,7 +942,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Sunken Shrine - Moon Path Shop",
                 "Tower HQ",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True", "True", "True", "True"],
         },
         "Entrance Shop": {
             "exits": [

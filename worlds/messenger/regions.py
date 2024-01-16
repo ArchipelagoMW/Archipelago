@@ -165,7 +165,7 @@ LOCATIONS: Dict[str, List[str]] = {
     "Sunken Shrine - Lightfoot Tabi Checkpoint": [
         "Sunken Shrine - Lightfoot Tabi",
     ],
-    "Sunken Shrine Portal": [
+    "Sunken Shrine - Portal": [
         "Sunken Shrine - Key of Love",
     ],
     "Sunken Shrine - Tabi Gauntlet Shop": [
@@ -389,21 +389,21 @@ MEGA_SHARDS: Dict[str, List[str]] = {
 
 
 REGION_CONNECTIONS: Dict[str, Union[Dict[str, str], str]] = {
-    "Menu": {"Start Game": "Tower HQ"},
+    "Menu": {"Tower HQ": "Start Game"},
     "Tower HQ": {
-        "ToTHQ Autumn Hills Portal": "Autumn Hills Portal",
-        "ToTHQ Howling Grotto Portal": "Howling Grotto Portal",
-        "ToTHQ Searing Crags Portal": "Searing Crags Portal",
-        "ToTHQ Glacial Peak Portal": "Glacial Peak Portal",
-        "ToTHQ -> Tower of Time": "Tower of Time - Left",
-        "ToTHQ Riviere Turquoise Portal": "Riviere Turquoise Portal",
-        "ToTHQ Sunken Shrine Portal": "Sunken Shrine Portal",
-        "Artificer's Portal": "Corrupted Future",
-        "Home": "The Shop",
-        "Shrink Down": "Music Box",
+        "Autumn Hills - Portal": "ToTHQ Autumn Hills Portal",
+        "Howling Grotto - Portal": "ToTHQ Howling Grotto Portal",
+        "Searing Crags - Portal": "ToTHQ Searing Crags Portal",
+        "Glacial Peak - Portal": "ToTHQ Glacial Peak Portal",
+        "Tower of Time - Left": "ToTHQ -> Tower of Time",
+        "Riviere Turquoise - Portal": "ToTHQ Riviere Turquoise Portal",
+        "Sunken Shrine - Portal": "ToTHQ Sunken Shrine Portal",
+        "Corrupted Future": "Artificer's Portal",
+        "The Shop": "Home",
+        "Music Box": "Shrink Down",
     },
     "The Shop": {
-        "Money Sink": "The Craftsman's Corner",
+        "The Craftsman's Corner": "Money Sink",
     },
 }
 """Vanilla layout mapping with all Tower HQ portals open. format is source[entrance_name][exit_region] or source[exit_region]"""

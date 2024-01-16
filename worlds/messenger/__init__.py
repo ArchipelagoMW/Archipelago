@@ -112,22 +112,27 @@ class MessengerWorld(World):
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
-        # create and connect static connections
-        for region in [MessengerRegion(level, self) for level in LEVELS]:
-            region.add_exits(REGION_CONNECTIONS)
+        # create simple regions
+        for level in LEVELS:
+            MessengerRegion(level, self)
+        # create and connect complex regions that have sub-regions
+        for region in [MessengerRegion(f"{parent} - {reg_name}", self, parent)
+                       for parent, sub_region in CONNECTIONS.items()
+                       for reg_name in sub_region]:
+            region_name = region.name.replace(f"{region.parent} - ", "")
+            connection_data = CONNECTIONS[region.parent][region_name]
+            for index, exit_region in enumerate(connection_data["exits"]):
+                region_exit = region.connect(self.multiworld.get_region(exit_region, self.player))
+                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player)
+        # all regions need to be created before i can do these connections so we create and connect the complex first
+        for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
+            region = self.multiworld.get_region(region_name, self.player)
+            region.add_exits(REGION_CONNECTIONS[region.name])
             for reg_exit in region.exits:
-                rules = REGION_CONNECTIONS[region.name][reg_exit.name]
+                rules = REGION_CONNECTIONS[region.name][reg_exit.connected_region.name]
                 if isinstance(rules, dict):
                     for rule in rules.values():
                         reg_exit.access_rule = parse_rule(rule, self.player)
-        # create and connect complex regions that have sub-regions
-        for region in [MessengerRegion(reg_name, self, parent)
-                       for parent, sub_region in CONNECTIONS.items()
-                       for reg_name in sub_region]:
-            connection_data = CONNECTIONS[region.parent][region.name]
-            for index, exit_name in enumerate(connection_data["exits"]):
-                region_exit = region.create_exit(exit_name)
-                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player)
 
     def create_items(self) -> None:
         # create items that are always in the item pool
