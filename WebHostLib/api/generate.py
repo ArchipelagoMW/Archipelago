@@ -20,8 +20,8 @@ def generate_api():
         race = False
         meta_options_source = {}
         if 'file' in request.files:
-            file = request.files['file']
-            options = get_yaml_data(file)
+            files = request.files.getlist('file')
+            options = get_yaml_data(files)
             if isinstance(options, Markup):
                 return {"text": options.striptags()}, 400
             if isinstance(options, str):
