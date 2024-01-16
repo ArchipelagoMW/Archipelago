@@ -16,7 +16,7 @@ from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
-from .Options import TheWitnessOptions
+from .options import TheWitnessOptions
 from .utils import get_audio_logs
 from logging import warning, error
 
@@ -43,7 +43,6 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 14
 
     StaticWitnessLogic()
     StaticWitnessLocations()
@@ -91,10 +90,10 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
-        disabled_locations = self.multiworld.exclude_locations[self.player].value
+        disabled_locations = self.options.exclude_locations.value
 
         self.player_logic = WitnessPlayerLogic(
-            self, disabled_locations, self.multiworld.start_inventory[self.player].value
+            self, disabled_locations, self.options.start_inventory.value
         )
 
         self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
@@ -272,7 +271,7 @@ class WitnessWorld(World):
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
             if self.items.item_data[item_name].local_only:
-                self.multiworld.local_items[self.player].value.add(item_name)
+                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
         hint_amount = self.options.hint_amount.value
