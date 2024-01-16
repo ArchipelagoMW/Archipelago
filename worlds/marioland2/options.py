@@ -18,7 +18,7 @@ class GoldenCoinsRequired(Range):
 
 class DifficultyMode(Choice):
     """Play in normal or easy mode. You can also start in Normal Mode with an "upgrade" to Easy Mode in the item pool,
-    or start in Easy Mode with a Normal Mode "Trap" in the item pool."""
+    or start in Easy Mode with a Normal Mode "trap" in the item pool."""
     display_name = "Difficulty Mode"
     option_normal = 0
     option_easy = 1

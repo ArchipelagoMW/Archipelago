@@ -36,7 +36,10 @@ class MarioLand2Client(BizHawkClient):
         ctx.auth = auth_name
 
     async def game_watcher(self, ctx: BizHawkClientContext):
-        from . import locations, items, START_IDS
+        from . import START_IDS
+        from .items import items
+        from .locations import locations
+
         (game_loaded_check, level_data, music, auto_scroll_enabled, auto_scroll_levels, current_level, midway_point,
          bcd_lives) = \
             await read(ctx.bizhawk_ctx, [(0x0046, 10, "CartRAM"), (0x0848, 42, "CartRAM"), (0x0469, 1, "CartRAM"),
