@@ -227,9 +227,8 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Eraser",
             "Black/White Squares",
             "Colored Squares",
-            "Colored Dots",
             "Sound Dots",
-            "Symmetry"
+            "Progressive Symmetry"
         ]
 
         priority.update(world.random.sample(symbols, 5))

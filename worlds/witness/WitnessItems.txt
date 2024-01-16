@@ -16,6 +16,7 @@ Symbols:
 72 - Colored Squares
 80 - Arrows
 200 - Progressive Dots - Dots,Full Dots
+210 - Progressive Symmetry - Symmetry,Colored Dots
 260 - Progressive Stars - Stars,Stars + Same Colored Symbol
 
 Useful:
