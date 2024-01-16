@@ -4218,9 +4218,6 @@
       SIX:
         id: Backside Room/Panel_six_six_5
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
@@ -4296,9 +4293,6 @@
       SIX:
         id: Backside Room/Panel_six_six_6
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
