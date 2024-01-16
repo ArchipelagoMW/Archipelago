@@ -6,6 +6,7 @@ import dataclasses
 from typing import Dict, Optional, List, Tuple, Set
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
+from .presets import witness_option_presets
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
@@ -16,7 +17,7 @@ from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
-from .Options import TheWitnessOptions
+from .options import TheWitnessOptions
 from .utils import get_audio_logs, build_weighted_int_list
 from logging import warning, error
 
@@ -32,6 +33,8 @@ class WitnessWebWorld(WebWorld):
         ["NewSoupVi", "Jarno"]
     )]
 
+    options_presets = witness_option_presets
+
 
 class WitnessWorld(World):
     """
@@ -41,7 +44,6 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-    data_version = 15
 
     StaticWitnessLogic()
     StaticWitnessLocations()
@@ -90,10 +92,10 @@ class WitnessWorld(World):
         }
 
     def generate_early(self):
-        disabled_locations = self.multiworld.exclude_locations[self.player].value
+        disabled_locations = self.options.exclude_locations.value
 
         self.player_logic = WitnessPlayerLogic(
-            self, disabled_locations, self.multiworld.start_inventory[self.player].value
+            self, disabled_locations, self.options.start_inventory.value
         )
 
         self.locat: WitnessPlayerLocations = WitnessPlayerLocations(self, self.player_logic)
@@ -104,14 +106,29 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = dict()
 
-        if not (self.options.shuffle_symbols or self.options.shuffle_doors or self.options.shuffle_lasers):
-            if self.multiworld.players == 1:
-                warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
-                        f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't"
-                        f" seem right.")
-            else:
-                raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any"
-                                f" progression items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle.")
+        interacts_with_multiworld = (
+                self.options.shuffle_symbols or
+                self.options.shuffle_doors or
+                self.options.shuffle_lasers == "anywhere"
+        )
+
+        has_progression = (
+                interacts_with_multiworld
+                or self.options.shuffle_lasers == "local"
+                or self.options.shuffle_boat
+                or self.options.early_caves == "add_to_pool"
+        )
+
+        if not has_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
+        elif not interacts_with_multiworld and self.multiworld.players > 1:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
+
+        if self.options.shuffle_lasers == "local":
+            self.options.local_items.value |= self.item_name_groups["Lasers"]
 
     def create_regions(self):
         self.regio.create_regions(self, self.player_logic)
@@ -178,7 +195,8 @@ class WitnessWorld(World):
         extra_checks = [
             ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
             ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
-            ("Desert Outside", "Desert Surface 3"),
+            ("Desert Outside", "Desert Surface 1"),
+            ("Desert Outside", "Desert Surface 2"),
         ]
 
         for i in range(num_early_locs, needed_size):
@@ -255,7 +273,7 @@ class WitnessWorld(World):
             self.own_itempool += new_items
             self.multiworld.itempool += new_items
             if self.items.item_data[item_name].local_only:
-                self.multiworld.local_items[self.player].value.add(item_name)
+                self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
         hint_amount = self.options.hint_amount.value
