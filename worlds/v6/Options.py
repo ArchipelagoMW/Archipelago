@@ -1,8 +1,10 @@
 import typing
-from Options import Option, DeathLink, Range, Toggle
+from dataclasses import dataclass
+from Options import Option, DeathLink, Range, Toggle, PerGameCommonOptions
 
 class DoorCost(Range):
     """Amount of Trinkets required to enter Areas. Set to 0 to disable artificial locks."""
+    display_name = "Door Cost"
     range_start = 0
     range_end = 3
     default = 3
@@ -13,6 +15,7 @@ class AreaCostRandomizer(Toggle):
 
 class DeathLinkAmnesty(Range):
     """Amount of Deaths to take before sending a DeathLink signal, for balancing difficulty"""
+    display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 30
     default = 15
@@ -25,11 +28,11 @@ class MusicRandomizer(Toggle):
     """Randomize Music"""
     display_name = "Music Randomizer"
 
-v6_options: typing.Dict[str,type(Option)] = {
-    "MusicRandomizer": MusicRandomizer,
-    "AreaRandomizer": AreaRandomizer,
-    "DoorCost": DoorCost,
-    "AreaCostRandomizer": AreaCostRandomizer,
-    "death_link": DeathLink,
-    "DeathLinkAmnesty": DeathLinkAmnesty
-}
+@dataclass
+class V6Options(PerGameCommonOptions):
+    music_rando: MusicRandomizer
+    area_rando: AreaRandomizer
+    door_cost: DoorCost
+    area_cost: AreaCostRandomizer
+    death_link: DeathLink
+    death_link_amnesty: DeathLinkAmnesty
