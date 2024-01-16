@@ -1277,7 +1277,7 @@ item_table = {
     ItemNames.NOVA_RANGEFINDER_OCULUS: ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"}),
     ItemNames.NOVA_DOMINATION: ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
     ItemNames.NOVA_BLINK: ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, quantity=2, origin={"nco"}, classification=ItemClassification.progression),
     ItemNames.NOVA_ENERGY_SUIT_MODULE: ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"}),
     ItemNames.NOVA_ARMORED_SUIT_MODULE: ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
     ItemNames.NOVA_JUMP_SUIT_MODULE: ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
