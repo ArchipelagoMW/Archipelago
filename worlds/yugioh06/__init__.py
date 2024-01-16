@@ -2,7 +2,7 @@ import logging
 import os
 import random
 import sys
-from typing import ClassVar
+from typing import ClassVar, Dict, Any
 
 import bsdiff4
 import math
@@ -111,6 +111,8 @@ class Yugioh06World(World):
     def __init__(self, world: MultiWorld, player: int):
         super().__init__(world, player)
         self.removed_challenges = None
+        self.starting_booster = None
+        self.starting_opponent = None
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
@@ -300,10 +302,10 @@ class Yugioh06World(World):
             self.multiworld.regions.append(region)
 
     def generate_early(self):
-        starting_opponent = self.multiworld.random.choice(tier_1_opponents)
-        self.multiworld.push_precollected(self.create_item(starting_opponent))
-        starting_pack = self.multiworld.random.choice(booster_packs)
-        self.multiworld.push_precollected(self.create_item(starting_pack))
+        self.starting_opponent = self.multiworld.random.choice(tier_1_opponents)
+        self.multiworld.push_precollected(self.create_item(self.starting_opponent))
+        self.starting_booster = self.multiworld.random.choice(booster_packs)
+        self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
         challenge = list((Limited_Duels | Theme_Duels).keys())
@@ -328,6 +330,70 @@ class Yugioh06World(World):
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
         rom_data = bytearray(rom_data)
         return rom_data
+
+    def fill_slot_data(self) -> Dict[str, Any]:
+        slot_data: Dict[str, Any] = {
+            "structure_deck": self.options.structure_deck.value,
+            "banlist": self.options.banlist.value,
+            "final_campaign_boss_unlock_condition": self.options.final_campaign_boss_unlock_condition.value,
+            "fourth_tier_5_campaign_boss_unlock_condition": self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
+            "third_tier_5_campaign_boss_unlock_condition": self.options.third_tier_5_campaign_boss_unlock_condition.value,
+            "final_campaign_boss_challenges": self.options.final_campaign_boss_challenges.value,
+            "fourth_tier_5_campaign_boss_challenges": self.options.fourth_tier_5_campaign_boss_challenges.value,
+            "third_tier_5_campaign_boss_challenges": self.options.third_tier_5_campaign_boss_campaign_opponents.value,
+            "final_campaign_boss_campaign_opponents": self.options.final_campaign_boss_campaign_opponents.value,
+            "fourth_tier_5_campaign_boss_campaign_opponents": self.options.fourth_tier_5_campaign_boss_unlock_condition.value,
+            "third_tier_5_campaign_boss_campaign_opponents": self.options.third_tier_5_campaign_boss_campaign_opponents.value,
+            "number_of_challenges": self.options.number_of_challenges.value,
+        }
+        for start_item in self.options.start_inventory_from_pool:
+            if start_item not in slot_data:
+                slot_data[start_item] = []
+            for i in range(0, self.options.start_inventory_from_pool[start_item]):
+                slot_data[start_item].extend(["Your Pocket", self.player])
+
+        for plando_item in self.multiworld.plando_items[self.player]:
+            if plando_item["from_pool"]:
+                items_to_find = set()
+                for item_type in [key for key in ["item", "items"] if key in plando_item]:
+                    for item in plando_item[item_type]:
+                        items_to_find.add(item)
+                for item in items_to_find:
+                    slot_data[item] = []
+                    for item_location in self.multiworld.find_item_locations(item, self.player):
+                        slot_data[item].extend([item_location.name, item_location.player])
+        slot_data["removed challenges"] = self.removed_challenge
+
+        return slot_data
+
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
+        # bypassing random yaml settings
+        self.options.structure_deck.value = slot_data["structure_deck"]
+        self.options.banlist.value = slot_data["banlist"]
+        self.options.final_campaign_boss_unlock_condition.value = slot_data["final_campaign_boss_unlock_condition"]
+        self.options.fourth_tier_5_campaign_boss_unlock_condition.value =\
+            slot_data["fourth_tier_5_campaign_boss_unlock_condition"]
+        self.options.third_tier_5_campaign_boss_unlock_condition.value =\
+            slot_data["third_tier_5_campaign_boss_unlock_condition"]
+        self.options.final_campaign_boss_challenges.value =\
+            slot_data["final_campaign_boss_challenges"]
+        self.options.fourth_tier_5_campaign_boss_challenges.value =\
+            slot_data["fourth_tier_5_campaign_boss_challenges"]
+        self.options.third_tier_5_campaign_boss_challenges.value =\
+            slot_data["third_tier_5_campaign_boss_challenges"]
+        self.options.final_campaign_boss_campaign_opponents.value = \
+            slot_data["final_campaign_boss_campaign_opponents"]
+        self.options.fourth_tier_5_campaign_boss_campaign_opponents.value = \
+            slot_data["fourth_tier_5_campaign_boss_campaign_opponents"]
+        self.options.third_tier_5_campaign_boss_campaign_opponents.value = \
+            slot_data["third_tier_5_campaign_boss_campaign_opponents"]
+        self.options.number_of_challenges.value =\
+            slot_data["number_of_challenges"]
+        self.removed_challenges = slot_data["removed challenges"]
+        self.starting_booster = slot_data["starting_booster"]
+        self.starting_opponent = slot_data["starting_opponent"]
+        all_state = self.multiworld.get_all_state(False)
+
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
