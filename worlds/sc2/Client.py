@@ -600,7 +600,7 @@ def calculate_items(ctx: SC2Context) -> typing.Dict[SC2Race, typing.List[int]]:
             accumulators[item_data.race][type_flaggroups[item_data.race][item_data.type]] |= 1 << item_data.number
 
         # exists multiple times
-        elif item_data.type == "Upgrade" or item_data.type == "Progressive Upgrade":
+        elif item_data.type in ["Upgrade", "Progressive Upgrade","Progressive Upgrade 2"]:
             flaggroup = type_flaggroups[item_data.race][item_data.type]
 
             # Generic upgrades apply only to Weapon / Armor upgrades
