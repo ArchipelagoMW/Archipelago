@@ -1056,9 +1056,6 @@ class Location:
 
     @property
     def hint_text(self) -> str:
-        hint_text = getattr(self, "_hint_text", None)
-        if hint_text:
-            return hint_text
         return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
