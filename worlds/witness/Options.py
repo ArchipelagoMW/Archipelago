@@ -140,10 +140,13 @@ class PuzzleRandomization(Choice):
 
 
 class MountainLasers(Range):
-    """Sets the amount of beams required to enter the final area."""
+    """Sets the amount of lasers required to enter the Mountain.
+    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without
+    the hatch being opened.
+    This change will also be applied logically to the long solution ("Challenge Lasers" setting)."""
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
-    range_end = 7
+    range_end = 11
     default = 7
 
 
