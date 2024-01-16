@@ -2670,6 +2670,28 @@
     paintings:
       - id: arrows_painting_12
         orientation: north
+    progression:
+      Progressive Colorful:
+        - room: The Colorful (White)
+          door: Progress Door
+        - room: The Colorful (Black)
+          door: Progress Door
+        - room: The Colorful (Red)
+          door: Progress Door
+        - room: The Colorful (Yellow)
+          door: Progress Door
+        - room: The Colorful (Blue)
+          door: Progress Door
+        - room: The Colorful (Purple)
+          door: Progress Door
+        - room: The Colorful (Orange)
+          door: Progress Door
+        - room: The Colorful (Green)
+          door: Progress Door
+        - room: The Colorful (Brown)
+          door: Progress Door
+        - room: The Colorful (Gray)
+          door: Progress Door
   Welcome Back Area:
     entrances:
       Starting Room:
