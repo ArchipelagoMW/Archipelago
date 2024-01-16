@@ -16,37 +16,16 @@ Players may choose their own goal, multiple goals, or leave it up to the randomi
 Rides, scenery, rules, and a variety of new items have been placed in the unlock shop. 
 
 
-### Quality of Life
-- Tutorial is skipped
-- Non-linear level order
-- "Auto-Complete" feature to finish a level early when a target score is obtained
-- Bugfixes for issues present in the base game (including "Sink Bug" and "Double Serving")
-- All chef avatars automatically unlocked
-- Optionally, level time can be reduced to make progression faster paced
+### Custom Goals
+The Archipelago plugin allows players to create their own custom scenario objectives. These can be stacked for added challenge. The goals are:
+
+Guests: Requires a minimum guest count in your park to win.
+Rating: Requires a minimum park rating to win.
+Park Value: Requires a minimum park value to win.
+Roller Coasters: Requires a minimum number of roller coasters to win. Additionally, minimum stats for excitement, intensity, and nausea can be required for extra challenge.
+Pay off loan: Requires the loan to be paid off to win.
+Unique Rides: A new objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
+Monopoly Mode: A new objective. (Nearly) Every unowned tile in the park will be purchasable. (Tiles with paths will have construction rights instead) Once you own the entire map, you win! 40 more items will be added to the item pool, 20 land purchase discounts and 20 construction rights discounts. Each one will reduce the cost of their respective tiles by $10, down to the price of free.
 
 ### Randomization Options
 
-- *Shuffle Level Order*
-    - Replaces each level on the overworld with a random level
-    - DLC levels can show up on the Story Overworld
-    - Optionally exclude "Horde" Levels
-    - Optionally exclude "Prep" Levels
-
-### Difficulty Adjustments
-- Stars required to unlock levels have been rebalanced
-- Points required to earn stars have been rebalanced
-    - Based off of the current World Record on the game's [Leaderboard](https://overcooked.greeny.dev)
-    - 1-Star/2-Star scores are much closer to the 3-Star Score
-- Significantly reduced the time allotted to beat the final level
-- Reduced penalty for expired order
-
-## Difficulty Table
-
-Before generating your first seed, you can use the following table to determine what difficulty is appropriate for your personal Overcooked! journey.
-
-| Vanilla Game | Star Difficulty % |
-| ----------- | ----------- |
-| First Playthrough | 10-25% |
-| 3-Star | 25-40% |
-| 4-Star | 40-55% |
-| Community-Optimized Strats | 55%+ |

@@ -120,6 +120,7 @@ class OpenRCT2World(World):
             self.multiworld.scenario[self.player].value = new_scenario
 
         monopoly_mode = self.multiworld.monopoly_mode[self.player].value
+        include_gamespeed_items = self.multiworld.include_gamespeed_items[self.player].value
         furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
         spam_traps = self.multiworld.spam_traps[self.player].value
         bathroom_traps = self.multiworld.bathroom_traps[self.player].value
@@ -130,8 +131,8 @@ class OpenRCT2World(World):
                  self.multiworld.forbid_landscape_changes[self.player].value,
                  self.multiworld.forbid_marketing_campaigns[self.player].value,
                  self.multiworld.forbid_tree_removal[self.player].value]
-        items = set_openRCT2_items(scenario, rules, monopoly_mode, furry_convention_traps, spam_traps, bathroom_traps,
-                                   filler)
+        items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, 
+                                   spam_traps, bathroom_traps, filler)
 
         self.item_table = items[0]
         self.item_frequency = items[1]
@@ -270,6 +271,11 @@ class OpenRCT2World(World):
         # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
 
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
+        if not self.multiworld.include_gamespeed_items[self.player].value:# If the user doesn't want to unlock speed, give it to em for free
+            count = 0
+            while count < 4:
+                self.multiworld.push_precollected(self.create_item("Progressive Speed"))
+                count += 1
 
         print("Here's the multiworld item pool:")
         print(len(self.multiworld.itempool))
@@ -401,7 +407,7 @@ class OpenRCT2World(World):
                     unlock["Lives"] = random.randint(50, 1000)
 
             # Handles the selection of a prerequisite and associated stats
-            if number > 2 and unlock["Lives"] == 0:  # We'll never have a prereq on the first 3 items or on blood prices
+            if number > 15 and unlock["Lives"] == 0:  # We'll never have a prereq on the first 15 items or on blood prices
                 if random.random() < length_modifier:  # Determines if we have a prereq
                     if random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
@@ -421,9 +427,9 @@ class OpenRCT2World(World):
                             unlock["RidePrereq"] = \
                                 [random.randint(1, 3), chosen_prereq, excitement, intensity, nausea,0]
                         elif chosen_prereq in item_info["transport_rides"]:
-                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         elif chosen_prereq in item_info["water_rides"]:
-                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
                     else:  # Prereq is not a specific ride

@@ -415,7 +415,7 @@ class Scenario(Choice):
     option_build_your_own_six_flags_magic_mountain = Scenario.build_your_own_six_flags_magic_mountain.value
     option_build_your_own_six_flags_park = Scenario.build_your_own_six_flags_park.value
     option_build_your_own_six_flags_over_texas = Scenario.build_your_own_six_flags_over_texas.value
-    default = Scenario.forest_frontiers.value    
+    default = Scenario.build_your_own_six_flags_park.value    
 
 class DeathLink(Choice):
     """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
@@ -638,6 +638,10 @@ class Monopoly_Mode(OpenRCT2Toggle):
     """Monopoly Mode is a new objective type. Every unowned tile will be set to purchasable (Or purchasable construction rights for any unowned tile with a grounded path. Elevated paths will not be purchasable). To complete the objective, all tiles on the map must be purchased. Multiple Objectives can be enabled!"""
     display_name = "Monopoly Mode"
 
+class Include_Gamespeed_Items(OpenRCT2OnToggle):
+    """If included, the ability to use the speed toggle will be restricted behind an item. 4 items total will be added, each progressively unlocking a faster speed."""
+    display_name = "Include Gamespeed Items"
+
 class Furry_Convention_Traps(Range):
     """When found, instantly hosts a furry convention in your park! Adding traps will increase the total number of items in the world."""
     display_name = "Furry Convention Trap"
@@ -703,6 +707,7 @@ openRCT2_options = {
     "park_rating_objective": Park_Rating_Objective,
     "pay_off_loan": Pay_Off_Loan,
     "monopoly_mode": Monopoly_Mode,
+    "include_gamespeed_items": Include_Gamespeed_Items,
     # park rules. Depending on the option, these may affect which items are created
     "difficult_guest_generation": Difficult_Guest_Generation,
     "difficult_park_rating": Difficult_Park_Rating,

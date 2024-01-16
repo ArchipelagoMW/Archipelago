@@ -33,7 +33,7 @@ Once OpenRCT2 is up and running, you'll need to install the [Roller Coaster Tyco
 
 *By default, these settings will only use levels from Roller Coaster Tycoon 2. If you own Roller Coaster Tycoon 1 or any of the expansion packs for either game, you may select the scenario for use in your game of Archipelago.
 
-2. Export your yaml file and use it to generate a new randomized game
+2. Export your yaml file and use it to generate a new randomized game or generate a game on the spot.
 
 *For instructions on how to generate an Archipelago game, refer to the [Archipelago Setup Guide](../../../../tutorial/Archipelago/setup/en)*
 
