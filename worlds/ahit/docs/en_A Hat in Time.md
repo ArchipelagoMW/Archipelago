@@ -2,13 +2,13 @@
 
 ## Where is the options page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-settings) contains all the options you need to configure and export a
 config file.
 
 ## What does randomization do to this game?
 
 Items which the player would normally acquire throughout the game have been moved around. 
-Chapter costs are randomized in a progressive order based on your settings, 
+Chapter costs are randomized in a progressive order based on your options, 
 so for example you could go to Subcon Forest -> Battle of the Birds -> Alpine Skyline, etc. in that order. If act shuffle is turned on, 
 the levels and Time Rifts in these chapters will be randomized as well.
  
