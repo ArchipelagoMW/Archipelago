@@ -234,45 +234,44 @@ class Yugioh06World(World):
             if opponent.tier == 5 and opponent.column > 2:
                 unlock_amount = 0
                 is_challenge = True
-                match opponent.column:
-                    case 3:
-                        if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1:
-                            unlock_item = "Challenge Beaten"
-                            unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
-                            is_challenge = True
-                        else:
-                            unlock_item = "Campaign Boss Beaten"
-                            unlock_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
-                            is_challenge = False
-                    case 4:
-                        if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1:
-                            unlock_item = "Challenge Beaten"
-                            unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
-                            is_challenge = True
-                        else:
-                            unlock_item = "Campaign Boss Beaten"
-                            unlock_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
-                            is_challenge = False
-                    case 5:
-                        if self.options.final_campaign_boss_unlock_condition.value == 1:
-                            unlock_item = "Challenge Beaten"
-                            unlock_amount = self.options.final_campaign_boss_challenges.value
-                            is_challenge = True
-                        else:
-                            unlock_item = "Campaign Boss Beaten"
-                            unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
-                            is_challenge = False
+                if opponent.column == 3:
+                    if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1:
+                        unlock_item = "Challenge Beaten"
+                        unlock_amount = self.options.third_tier_5_campaign_boss_challenges.value
+                        is_challenge = True
+                    else:
+                        unlock_item = "Campaign Boss Beaten"
+                        unlock_amount = self.options.third_tier_5_campaign_boss_campaign_opponents.value
+                        is_challenge = False
+                if opponent.column == 4:
+                    if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1:
+                        unlock_item = "Challenge Beaten"
+                        unlock_amount = self.options.fourth_tier_5_campaign_boss_challenges.value
+                        is_challenge = True
+                    else:
+                        unlock_item = "Campaign Boss Beaten"
+                        unlock_amount = self.options.fourth_tier_5_campaign_boss_campaign_opponents.value
+                        is_challenge = False
+                if opponent.column == 5:
+                    if self.options.final_campaign_boss_unlock_condition.value == 1:
+                        unlock_item = "Challenge Beaten"
+                        unlock_amount = self.options.final_campaign_boss_challenges.value
+                        is_challenge = True
+                    else:
+                        unlock_item = "Campaign Boss Beaten"
+                        unlock_amount = self.options.final_campaign_boss_campaign_opponents.value
+                        is_challenge = False
                 if is_challenge:
                     entrance.access_rule = \
-                    (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
-                        opp.rule(state))(opponent, unlock_item, unlock_amount)
+                        (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
+                                                                 opp.rule(state))(opponent, unlock_item, unlock_amount)
                 else:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
                                                                  opp.rule(state))(opponent, unlock_item, unlock_amount)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
-                    state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+                state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -371,15 +370,15 @@ class Yugioh06World(World):
         self.options.structure_deck.value = slot_data["structure_deck"]
         self.options.banlist.value = slot_data["banlist"]
         self.options.final_campaign_boss_unlock_condition.value = slot_data["final_campaign_boss_unlock_condition"]
-        self.options.fourth_tier_5_campaign_boss_unlock_condition.value =\
+        self.options.fourth_tier_5_campaign_boss_unlock_condition.value = \
             slot_data["fourth_tier_5_campaign_boss_unlock_condition"]
-        self.options.third_tier_5_campaign_boss_unlock_condition.value =\
+        self.options.third_tier_5_campaign_boss_unlock_condition.value = \
             slot_data["third_tier_5_campaign_boss_unlock_condition"]
-        self.options.final_campaign_boss_challenges.value =\
+        self.options.final_campaign_boss_challenges.value = \
             slot_data["final_campaign_boss_challenges"]
-        self.options.fourth_tier_5_campaign_boss_challenges.value =\
+        self.options.fourth_tier_5_campaign_boss_challenges.value = \
             slot_data["fourth_tier_5_campaign_boss_challenges"]
-        self.options.third_tier_5_campaign_boss_challenges.value =\
+        self.options.third_tier_5_campaign_boss_challenges.value = \
             slot_data["third_tier_5_campaign_boss_challenges"]
         self.options.final_campaign_boss_campaign_opponents.value = \
             slot_data["final_campaign_boss_campaign_opponents"]
@@ -387,13 +386,12 @@ class Yugioh06World(World):
             slot_data["fourth_tier_5_campaign_boss_campaign_opponents"]
         self.options.third_tier_5_campaign_boss_campaign_opponents.value = \
             slot_data["third_tier_5_campaign_boss_campaign_opponents"]
-        self.options.number_of_challenges.value =\
+        self.options.number_of_challenges.value = \
             slot_data["number_of_challenges"]
         self.removed_challenges = slot_data["removed challenges"]
         self.starting_booster = slot_data["starting_booster"]
         self.starting_opponent = slot_data["starting_opponent"]
         all_state = self.multiworld.get_all_state(False)
-
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
