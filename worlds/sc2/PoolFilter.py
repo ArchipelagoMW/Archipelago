@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Set, Union
+from typing import Callable, Dict, List, Set, Union, Tuple
 from BaseClasses import MultiWorld, ItemClassification, Item, Location
 from .Items import get_full_item_list, spider_mine_sources, second_pass_placeable_items, progressive_if_nco, \
     progressive_if_ext, spear_of_adun_calldowns, spear_of_adun_castable_passives, nova_equipment
@@ -227,7 +227,7 @@ class ValidInventory:
             len(FACTORY_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure and \
             len(STARPORT_UNITS.intersection(self.logical_inventory)) > self.min_units_per_structure
 
-    def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Callable]) -> List[Item]:
+    def generate_reduced_inventory(self, inventory_size: int, mission_requirements: List[Tuple[str, Callable]]) -> List[Item]:
         """Attempts to generate a reduced inventory that can fulfill the mission requirements."""
         inventory = list(self.item_pool)
         locked_items = list(self.locked_items)
@@ -246,7 +246,7 @@ class ValidInventory:
             # Only run logic checks when removing logic items
             if item.name in self.logical_inventory:
                 self.logical_inventory.remove(item.name)
-                if not all(requirement(self) for requirement in requirements):
+                if not all(requirement(self) for (_, requirement) in mission_requirements):
                     # If item cannot be removed, lock or revert
                     self.logical_inventory.append(item.name)
                     for _ in range(get_item_quantity(item, self.multiworld, self.player)):
@@ -315,11 +315,12 @@ class ValidInventory:
                     locked_upgrade_count += 1
 
         if self.min_units_per_structure > 0 and self.has_units_per_structure():
-            requirements.append(lambda state: state.has_units_per_structure())
+            requirements.append(("Minimum units per structure", lambda state: state.has_units_per_structure()))
 
         # Determining if the full-size inventory can complete campaign
-        if not all(requirement(self) for requirement in requirements):
-            raise Exception("Too many items excluded - campaign is impossible to complete.")
+        failed_locations: List[str] = [location for (location, requirement) in requirements if not requirement(self)]
+        if len(failed_locations) > 0:
+            raise Exception(f"Too many items excluded - couldn't satisfy access rules for the following locations:\n{failed_locations}")
 
         # Optionally locking generic items
         generic_items = [item for item in inventory if item.name in second_pass_placeable_items]
@@ -532,7 +533,7 @@ def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC
     inventory_size = len(open_locations)
     used_races = get_used_races(mission_req_table, multiworld, player)
     nova_equipment_used = is_nova_equipment_used(mission_req_table)
-    mission_requirements = [location.access_rule for location in location_cache]
+    mission_requirements = [(location.name, location.access_rule) for location in location_cache]
     valid_inventory = ValidInventory(multiworld, player, item_pool, existing_items, locked_items, used_races, nova_equipment_used)
 
     valid_items = valid_inventory.generate_reduced_inventory(inventory_size, mission_requirements)
