@@ -30,8 +30,9 @@ Filler:
 #503 - Energy Fill (Max) - 1
 
 Traps:
-600 - Slowness - 8
+600 - Slowness - 6
 610 - Power Surge - 2
+615 - Bonk - 1
 
 Jokes:
 650 - Functioning Brain
