@@ -375,7 +375,7 @@ c_item_name = generic_item_table['key'][2]
 d_item_name = generic_item_table['key'][3]
 e_item_name = generic_item_table['key'][4]
 f_item_name = generic_item_table['key'][5]
-goal_item_name = generic_item_table['key'][6]
+goal_item_name = generic_item_table['goal'][0]
 
 item_name_to_defined_classification = {
     item_name: classification for comp in ( \
