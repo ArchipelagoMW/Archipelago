@@ -1,6 +1,6 @@
 # A Hat in Time
 
-## Where is the settings page?
+## Where is the options page?
 
 The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
 config file.
