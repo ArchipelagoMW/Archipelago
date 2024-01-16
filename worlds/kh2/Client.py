@@ -821,7 +821,8 @@ class KH2Context(CommonContext):
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
-        if not ctx.final_xemnas and ctx.kh2_loc_name_to_id[LocationName.FinalXemnas] in ctx.locations_checked:
+        if not ctx.final_xemnas and ctx.kh2_read_byte(ctx.Save + all_world_locations[LocationName.FinalXemnas].addrObtained) \
+                & 0x1 << all_world_locations[LocationName.FinalXemnas].bitIndex > 0:
             ctx.final_xemnas = True
     # three proofs
     if ctx.kh2slotdata['Goal'] == 0:
