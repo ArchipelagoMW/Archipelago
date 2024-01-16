@@ -1202,6 +1202,61 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                                   0x6B,  # RTL
                                   ])
 
+    if world.options.starsanity:
+        rom.write_bytes(0x3A600, [0x48,  # PHA
+                                  0xDA,  # PHX
+                                  0x5A,  # PHY
+                                  0x29, 0xFF, 0x00,  # AND #$00FF
+                                  0x48,  # PHA
+                                  0xAE, 0xCF, 0x53,  # LDX $53CF
+                                  0xAC, 0xD3, 0x53,  # LDY $53D3
+                                  0xA9, 0x00, 0x00,  # LDA #$0000
+                                  0x88,  # DEY
+                                  0xE0, 0x00, 0x00,  # CPX #$0000
+                                  0xF0, 0x07,  # BEQ $07A61D
+                                  0x18,  # CLC
+                                  0x69, 0x07, 0x00,  # ADC #$0007
+                                  0xCA,  # DEX
+                                  0x80, 0xF4,  # BRA $07A611
+                                  0xC0, 0x00, 0x00,  # CPY #$0000
+                                  0xF0, 0x04,  # BEQ $07A626
+                                  0x1A,  # INC
+                                  0x88,  # DEY
+                                  0x80, 0xF7,  # BRA $07A61D
+                                  0x0A,  # ASL
+                                  0xAA,  # TAX
+                                  0xBF, 0x20, 0xD0, 0x07,  # LDA $07D020, X
+                                  0x3A,  # DEC
+                                  0x0A,  # ASL
+                                  0x0A,  # ASL
+                                  0x0A,  # ASL
+                                  0x0A,  # ASL
+                                  0x0A,  # ASL
+                                  0x0A,  # ASL
+                                  0xAA,  # TAX
+                                  0x68,  # PLA
+                                  0xC9, 0x00, 0x00,  # CMP #$0000
+                                  0xF0, 0x04,  # BEQ $07A63E
+                                  0xE8,  # INX
+                                  0x3A,  # DEC
+                                  0x80, 0xF7,  # BRA $07A635
+                                  0xBD, 0x00, 0xB0,  # LDA $B000, X
+                                  0x09, 0x01, 0x00,  # ORA #$0001
+                                  0x9D, 0x00, 0xB0,  # STA $B000, X
+                                  0x7A,  # PLY
+                                  0xFA,  # PLX
+                                  0x68,  # PLA
+                                  0xEB,  # XBA
+                                  0x29, 0xFF, 0x00,  # AND #$00FF
+                                  0x6B,  # RET
+                                  ])
+
+        rom.write_bytes(0xA23EB, [
+            0xB9, 0xA2, 0x07,  # LDA $07A2, Y
+            0x22, 0x00, 0xA6, 0x07,  # JSL $07A600
+            0xEA, 0xEA, 0xEA,  # NOP, NOP, NOP
+        ])
+
     rooms = world.rooms
     if world.options.music_shuffle > 0:
         if world.options.music_shuffle == 1:
@@ -1267,6 +1322,7 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     rom.write_byte(0x3D014, world.options.stage_shuffle.value)
     rom.write_byte(0x3D016, world.options.ow_boss_requirement.value)
     rom.write_byte(0x3D018, world.options.consumables.value)
+    rom.write_byte(0x3D01A, world.options.starsanity.value)
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):

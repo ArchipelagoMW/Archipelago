@@ -250,6 +250,14 @@ class ConsumableChecks(Toggle):
     display_name = "Consumable-sanity"
 
 
+class StarChecks(Toggle):
+    """
+    When enabled, every star in a given stage will become a check.
+    Will increase the possible filler pool to include 1/3/5 stars.
+    """
+    display_name = "Starsanity"
+
+
 class KirbyFlavorPreset(Choice):
     """
     The color of Kirby, from a list of presets.
@@ -407,6 +415,7 @@ class KDL3Options(PerGameCommonOptions):
     ow_boss_requirement: OpenWorldBossRequirement
     boss_requirement_random: BossRequirementRandom
     consumables: ConsumableChecks
+    starsanity: StarChecks
     kirby_flavor_preset: KirbyFlavorPreset
     kirby_flavor: KirbyFlavor
     gooey_flavor_preset: GooeyFlavorPreset

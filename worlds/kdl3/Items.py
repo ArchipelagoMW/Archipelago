@@ -59,6 +59,9 @@ misc_item_table = {
     "1-Up": ItemData(0x770021, False),
     "Maxim Tomato": ItemData(0x770022, False),
     "Invincible Candy": ItemData(0x770023, False),
+    "Little Star": ItemData(0x770024, False),
+    "Medium Star": ItemData(0x770025, False),
+    "Big Star": ItemData(0x770026, False),
 }
 
 trap_item_table = {

@@ -47,8 +47,9 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                         room_entry["entity_load"], room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
                             None for location in room_entry["locations"]
-                            if not any([x in location for x in ["1-Up", "Maxim"]]) or
-                            world.options.consumables}, KDL3Location)
+                            if (not any([x in location for x in ["1-Up", "Maxim"]]) or
+                            world.options.consumables.value) and (not "Star" in location or world.options.starsanity.value)},
+                           KDL3Location)
         rooms[room.name] = room
         for location in room.locations:
             if "Animal" in location.name:
