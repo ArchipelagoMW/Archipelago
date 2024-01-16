@@ -415,7 +415,7 @@ class KH2PuzzlePiecesRules(KH2Rules):
             LocationName.SunsetPuzzleHB2BaileyDancers:        lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.SunsetPuzzleEncampmentAwayFromStand: lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.FrontierPuzzleMountainTrail:         lambda state: self.has_vertical(state) and self.has_glide(state),
-            LocationName.HeartPuzzleVillageHome:              lambda state: self.has_vertical(state, 2),
+            LocationName.HeartPuzzleVillageHome:              lambda state: self.has_vertical(state, 1),
             LocationName.DaylightPuzzleVillageBell:           lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.DaylightPuzzleThroneRoomClose:       lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.DaylightPuzzleRoomFar:               lambda state: self.has_vertical(state, 3) and self.has_glide(state, 3),

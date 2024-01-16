@@ -819,15 +819,6 @@ class KH2Context(CommonContext):
             logger.info(e)
             logger.info("line 840")
 
-    async def checkPuzzleLocations(self):
-        for puzzle_dict in [Awakening_Checks, Heart_Checks, Duality_Checks, Frontier_Checks, Daylight_Checks, Sunset_Checks]:
-            for location, data in puzzle_dict.items():
-                if location in self.kh2_loc_name_to_id.keys():
-                    locationId = self.kh2_loc_name_to_id[location]
-                    if locationId not in self.locations_checked \
-                            and self.kh2_read_byte(self.Save + data.addrObtained) & 0x1 << data.bitIndex > 0:
-                        self.sending = self.sending + [(int(locationId))]
-
 
 def finishedGame(ctx: KH2Context, message):
     if ctx.kh2slotdata['FinalXemnas'] == 1:
@@ -902,7 +893,6 @@ async def kh2_watcher(ctx: KH2Context):
                 await ctx.verifyChests()
                 await ctx.verifyItems()
                 await ctx.verifyLevel()
-                await ctx.checkPuzzleLocations()
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
