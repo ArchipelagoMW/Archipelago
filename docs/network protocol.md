@@ -329,7 +329,7 @@ Sent to the server to retrieve the items that are on a specified list of locatio
 Fully remote clients without a patch file may use this to "place" items onto the in-game locations, such as displaying their names, items classification etc. before/upon pickup.
 
 LocationScouts can also be used to inform the server of locations the client has seen, but not checked, to create a hint as if the player had run `!hint_location` on this location, but without deducting hint points.
-This is useful in cases in which the item may appear in the game world, such as 'ledge items' in A Link to the Past. To do this, set the "create_as_hint" parameter to a non-zero value.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
 
 #### Arguments
 | Name | Type | Notes |
