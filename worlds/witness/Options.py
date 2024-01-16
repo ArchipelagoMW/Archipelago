@@ -114,9 +114,13 @@ class ShufflePostgame(Toggle):
 
 
 class VictoryCondition(Choice):
-    """Change the victory condition from the original game's ending (elevator) to beating the Challenge
-    or solving the mountaintop box, either using the short solution
-    (7 lasers or whatever you've changed it to) or the long solution (11 lasers or whatever you've changed it to)."""
+    """Set the victory condition for this world.
+    Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
+    Challenge: Beat the secret Challenge (requires Challenge Lasers).
+    Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
+    Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+    It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
+    to count, the laser locks on the Elevator and Challenge Timer panels do not."""
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
