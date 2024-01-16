@@ -1,24 +1,12 @@
-""" FillType_* is not a real kivy type - just something to fill unknown typing. """
-
-from typing import Sequence
-
-FillType_Vec = Sequence[int]
-
-
-class FillType_Drawable:
-    def __init__(self, *, pos: FillType_Vec = ..., size: FillType_Vec = ...) -> None: ...
-
-
-class FillType_Texture(FillType_Drawable):
-    pass
+from .texture import FillType_Drawable, FillType_Vec, Texture
 
 
 class FillType_Shape(FillType_Drawable):
-    texture: FillType_Texture
+    texture: Texture
 
     def __init__(self,
                  *,
-                 texture: FillType_Texture = ...,
+                 texture: Texture = ...,
                  pos: FillType_Vec = ...,
                  size: FillType_Vec = ...) -> None: ...
 
@@ -35,6 +23,6 @@ class Rectangle(FillType_Shape):
     def __init__(self,
                  *,
                  source: str = ...,
-                 texture: FillType_Texture = ...,
+                 texture: Texture = ...,
                  pos: FillType_Vec = ...,
                  size: FillType_Vec = ...) -> None: ...

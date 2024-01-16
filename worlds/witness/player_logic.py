@@ -106,7 +106,8 @@ class WitnessPlayerLogic:
                 elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
                     new_items = frozenset({frozenset([option_entity])})
                     self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
-                elif option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
+                elif option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
+                                       "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
                 else:
                     new_items = self.reduce_req_within_region(option_entity)
@@ -322,7 +323,10 @@ class WitnessPlayerLogic:
         elif victory == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        if chal_lasers <= 7:
+        # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
+        # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
+        # Furthermore, if the user sets mountain_lasers > 7, the box is rotated to not require Mountain Entry either.
+        if chal_lasers <= 7 or mnt_lasers > 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
                 "0xFFF00 - 11 Lasers - True",
