@@ -224,7 +224,7 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
-                and not early_color_hallways is False:
+                and not early_color_hallways:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
             # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
