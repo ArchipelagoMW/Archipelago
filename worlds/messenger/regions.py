@@ -358,11 +358,10 @@ SUB_REGIONS: Dict[str, List[str]] = {
 }
 
 
+# order is slightly funky here for back compat
 MEGA_SHARDS: Dict[str, List[str]] = {
     "Autumn Hills - Lakeside Checkpoint": ["Autumn Hills Mega Shard"],
     "Forlorn Temple - Outside Shop": ["Hidden Entrance Mega Shard"],
-    "Forlorn Temple - Sunny Day Checkpoint": ["Sunny Day Mega Shard"],
-    "Forlorn Temple - Demon King Shop": ["Down Under Mega Shard"],
     "Catacombs - Top Left": ["Catacombs Mega Shard"],
     "Bamboo Creek - Spike Crushers Shop": ["Above Entrance Mega Shard"],
     "Bamboo Creek - Abandoned Shop": ["Abandoned Mega Shard"],
@@ -377,12 +376,14 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Cloud Ruins - Manfred's Shop": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
     "Underworld - Entrance Shop": ["Under Entrance Mega Shard"],
     "Underworld - Hot Tub Checkpoint": ["Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
+    "Forlorn Temple - Sunny Day Checkpoint": ["Sunny Day Mega Shard"],
+    "Forlorn Temple - Demon King Shop": ["Down Under Mega Shard"],
+    "Sunken Shrine - Waterfall Shop": ["Mega Shard of the Moon"],
+    "Sunken Shrine - Portal": ["Beginner's Mega Shard"],
+    "Sunken Shrine - Entrance Shop": ["Mega Shard of the Stars"],
+    "Sunken Shrine - Sun Crest Checkpoint": ["Mega Shard of the Sun"],
     "Riviere Turquoise - Waterfall Shop": ["Waterfall Mega Shard"],
     "Riviere Turquoise - Restock Shop": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
-    "Sunken Shrine - Entrance Shop": ["Mega Shard of the Stars"],
-    "Sunken Shrine - Portal": ["Beginner's Mega Shard"],
-    "Sunken Shrine - Sun Crest Checkpoint": ["Mega Shard of the Sun"],
-    "Sunken Shrine - Waterfall Shop": ["Mega Shard of the Moon"],
     "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
 

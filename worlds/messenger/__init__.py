@@ -65,7 +65,6 @@ class MessengerWorld(World):
                            for location_id, location in
                            enumerate([
                                *ALWAYS_LOCATIONS,
-                               *[seal for seals in SEALS.values() for seal in seals],
                                *[shard for shards in MEGA_SHARDS.values() for shard in shards],
                                *BOSS_LOCATIONS,
                                *[f"The Shop - {shop_loc}" for shop_loc in SHOP_ITEMS],
