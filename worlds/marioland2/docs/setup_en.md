@@ -37,7 +37,7 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Super Mario Land 2 Player Settings Page](/games/Super%20Mario%20Land%202/player-settings)
+You can generate a yaml or download a template by visiting the [Super Mario Land 2 Player Options Page](/games/Super%20Mario%20Land%202/player-options)
 
 ## Joining a MultiWorld Game
 
