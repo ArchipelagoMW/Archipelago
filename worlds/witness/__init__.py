@@ -6,6 +6,7 @@ from typing import Dict, Optional
 
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
+from .presets import witness_option_presets
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
@@ -30,6 +31,8 @@ class WitnessWebWorld(WebWorld):
         "setup/en",
         ["NewSoupVi", "Jarno"]
     )]
+
+    options_presets = witness_option_presets
 
 
 class WitnessWorld(World):
@@ -102,14 +105,29 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = dict()
 
-        if not (self.options.shuffle_symbols or self.options.shuffle_doors or self.options.shuffle_lasers):
-            if self.multiworld.players == 1:
-                warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
-                        f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't"
-                        f" seem right.")
-            else:
-                raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any"
-                                f" progression items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle.")
+        interacts_with_multiworld = (
+                self.options.shuffle_symbols or
+                self.options.shuffle_doors or
+                self.options.shuffle_lasers == "anywhere"
+        )
+
+        has_progression = (
+                interacts_with_multiworld
+                or self.options.shuffle_lasers == "local"
+                or self.options.shuffle_boat
+                or self.options.early_caves == "add_to_pool"
+        )
+
+        if not has_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
+        elif not interacts_with_multiworld and self.multiworld.players > 1:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
+
+        if self.options.shuffle_lasers == "local":
+            self.options.local_items.value |= self.item_name_groups["Lasers"]
 
     def create_regions(self):
         self.regio.create_regions(self, self.player_logic)
