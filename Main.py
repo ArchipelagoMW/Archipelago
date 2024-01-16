@@ -114,7 +114,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
 
-        for item_name, count in world.start_inventory_from_pool.setdefault(player, StartInventoryPool({})).value.items():
+        for item_name, count in getattr(world.worlds[player].options,
+                                        "start_inventory_from_pool",
+                                        StartInventoryPool({})).value.items():
             for _ in range(count):
                 world.push_precollected(world.create_item(item_name, player))
             # remove from_pool items also from early items handling, as starting is plenty early.
@@ -167,10 +169,14 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
 
     # remove starting inventory from pool items.
     # Because some worlds don't actually create items during create_items this has to be as late as possible.
-    if any(world.start_inventory_from_pool[player].value for player in world.player_ids):
+    if any(getattr(world.worlds[player].options, "start_inventory_from_pool", None) for player in world.player_ids):
         new_items: List[Item] = []
         depletion_pool: Dict[int, Dict[str, int]] = {
-            player: world.start_inventory_from_pool[player].value.copy() for player in world.player_ids}
+            player: getattr(world.worlds[player].options,
+                            "start_inventory_from_pool",
+                            StartInventoryPool({})).value.copy()
+            for player in world.player_ids
+        }
         for player, items in depletion_pool.items():
             player_world: AutoWorld.World = world.worlds[player]
             for count in items.values():
