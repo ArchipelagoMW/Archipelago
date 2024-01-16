@@ -28,11 +28,14 @@ class ShuffleSymbols(DefaultOnToggle):
     display_name = "Shuffle Symbols"
 
 
-class ShuffleLasers(Toggle):
+class ShuffleLasers(Choice):
     """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
     Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
     be redirected as normal, for both applications of redirection."""
     display_name = "Shuffle Lasers"
+    option_off = 0
+    option_local = 1
+    option_anywhere = 2
 
 
 class ShuffleDoors(Choice):
