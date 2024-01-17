@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 from worlds.generic.Rules import add_rule
-from .Locations import food_locations, shop_locations
+from .Locations import food_locations, shop_locations, gleeok_locations
 from .ItemPool import dangerous_weapon_locations
 from .Options import StartingPosition
 
@@ -79,6 +79,10 @@ def set_rules(tloz_world: "TLoZWorld"):
         if options.ExpandedPool or "Drop" not in location:
             add_rule(world.get_location(location, player),
                      lambda state: state.has("Food", player))
+
+    for location in gleeok_locations:
+        add_rule(world.get_location(location, player),
+                 lambda state: state.has_group("swords", player) or state.has("Magical Rod", player))
 
     add_rule(world.get_location("Level 8 Item (Magical Key)", player),
              lambda state: state.has("Bow", player) and state.has_group("arrows", player))
