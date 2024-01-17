@@ -17,6 +17,7 @@ from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, se
 class KH2ClientCommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
+        death_link=False
         if death_link:
             death_link = False
             self.output(f"Death Link turned off")
