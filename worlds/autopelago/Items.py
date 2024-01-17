@@ -2,24 +2,37 @@ from typing import Literal
 
 from BaseClasses import ItemClassification
 
-generic_item_table: dict[Literal['goal', 'key', 'other_progression', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], tuple[str, ...]] = {
+generic_item_table: dict[Literal['goal', 'key', 'rat', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], tuple[str, ...]] = {
     'goal': (
         'Lockheed SR-71 Blackbird',
     ),
     'key': (
-        'A Cookie',
-        'Fresh Banana Peel',
-        'MacGuffin',
-        'Blue Turtle Shell',
-        'Red Matador\'s Cape',
-        'Pair of Fake Mouse Ears',
-        'Bribe',
-        'Masterful Longsword',
-        'Legally Binding Contract',
-        'Priceless Antique',
-        'Premium Can of Prawn Food',
+        'A Cookie',                  # a
+        'Fresh Banana Peel',         # b
+        'MacGuffin',                 # c
+        'Blue Turtle Shell',         # d
+        'Red Matador\'s Cape',       # e
+        'Pair of Fake Mouse Ears',   # f
+        'Bribe',                     # (none)
+        'Masterful Longsword',       # (none)
+        'Legally Binding Contract',  # (none)
+        'Priceless Antique',         # (none)
+        'Premium Can of Prawn Food', # (none)
     ),
-    'other_progression': (
+    'rat': (
+        'Normal Rat', # please keep this concept as the first item in the list kthxbai (feel free to rename tho)
+        'Pack Rat',
+        'Pizza Rat',
+        'Chef Rat',
+        'Ninja Rat',
+        'Gym Rat',
+        'Computer Rat',
+        'Pie Rat',
+        'Ziggu Rat',
+        'Acro Rat',
+        'Lab Rat',
+        'Soc-Rat-es',
+        'Entire Rat Pack',
     ),
     'useful_nonprogression': (
         'Refreshing Glass of Lemonade',
@@ -284,18 +297,6 @@ generic_item_table: dict[Literal['goal', 'key', 'other_progression', 'useful_non
         'CD containing \'Sounds of the Sewer\'',
         'Squeeky Vent Flap',
         'Rule stating that Rats Cannot Play Basketball',
-        'Pack Rat',
-        'Pizza Rat',
-        'Chef Rat',
-        'Ninja Rat',
-        'Gym Rat',
-        'Computer Rat',
-        'Pie Rat',
-        'Ziggu Rat',
-        'Acro Rat',
-        'Lab Rat',
-        'Soc-Rat-es',
-        'Entire Rat Pack',
     ),
 }
 
@@ -392,10 +393,11 @@ game_specific_items: dict[str, dict[Literal['useful_nonprogression', 'filler', '
 all_item_names = [ \
     item for comp in ( \
         (item for items in generic_item_table.values() for item in items), \
-        (item for game_items in game_specific_items.values() for items in game_items.values() for item in items)) \
-    for item in comp \
+        (item for game_items in game_specific_items.values() for items in game_items.values() for item in items), \
+    ) for item in comp \
 ]
 
+normal_rat_item_name = generic_item_table['rat'][0]
 a_item_name = generic_item_table['key'][0]
 b_item_name = generic_item_table['key'][1]
 c_item_name = generic_item_table['key'][2]
@@ -408,13 +410,13 @@ item_name_to_defined_classification = {
     item_name: classification for comp in ( \
         ( (item_name, ItemClassification.progression) for item_name in generic_item_table['goal'] ), \
         ( (item_name, ItemClassification.progression) for item_name in generic_item_table['key'] ), \
-        ( (item_name, ItemClassification.progression_skip_balancing) for item_name in generic_item_table['other_progression'] ), \
         ( (item_name, ItemClassification.useful) for item_name in generic_item_table['useful_nonprogression'] ), \
         ( (item_name, ItemClassification.useful) for game_items in game_specific_items.values() for item_name in game_items['useful_nonprogression'] ), \
         ( (item_name, ItemClassification.filler) for item_name in generic_item_table['filler'] ), \
         ( (item_name, ItemClassification.filler) for game_items in game_specific_items.values() for item_name in game_items['filler'] ), \
         ( (item_name, ItemClassification.trap) for item_name in generic_item_table['trap'] ), \
         ( (item_name, ItemClassification.trap) for game_items in game_specific_items.values() for item_name in game_items['trap'] ), \
+        ( (item_name, None) for item_name in generic_item_table['rat'] ), \
         ( (item_name, None) for item_name in generic_item_table['uncategorized'] ), \
         ( (item_name, None) for game_items in game_specific_items.values() for item_name in game_items['uncategorized'] ), \
     ) for item_name, classification in comp
