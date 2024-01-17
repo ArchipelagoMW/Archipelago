@@ -87,6 +87,8 @@ class AutopelagoWorld(World):
         full_item_table = { c: [item_name for item_name in items] for c, items in generic_item_table.items() }
         dlc_games = { game for game in game_specific_items }
         for category, items in full_item_table.items():
+            if category not in { 'useful_nonprogression', 'filler', 'trap', 'uncategorized' }:
+                continue
             replacements_made = 0
             for game_name in self.multiworld.game.values():
                 if game_name not in dlc_games:
