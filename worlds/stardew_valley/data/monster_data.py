@@ -137,6 +137,9 @@ register_monster_modification(ModNames.deepwoods, shadow_brute, update_monster_l
 register_monster_modification(ModNames.deepwoods, cave_fly, update_monster_locations)
 register_monster_modification(ModNames.deepwoods, green_slime, update_monster_locations)
 
+register_monster_modification(ModNames.boarding_house, pepper_rex, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, shadow_brute, update_monster_locations)
+
 
 def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]:
     monsters_by_name = {}
@@ -151,7 +154,7 @@ def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]
     return monsters_by_name
 
 
-def all_monsters_by_category_given_mods(mods: Set[str]) -> Dict[str, Tuple[StardewMonster,...]]:
+def all_monsters_by_category_given_mods(mods: Set[str]) -> Dict[str, Tuple[StardewMonster, ...]]:
     monsters_by_category = {}
     for monster in all_monsters:
         current_monster = monster

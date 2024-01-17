@@ -22,7 +22,7 @@ from ...strings.metal_names import Ore, MetalBar
 from ...strings.monster_drop_names import Loot
 from ...strings.monster_names import Monster
 from ...strings.quest_names import Quest, ModQuest
-from ...strings.region_names import Region, SVERegion
+from ...strings.region_names import Region, SVERegion, BoardingHouseRegion
 from ...strings.season_names import Season
 from ...strings.villager_names import ModNPC, NPC
 from ...strings.wallet_item_names import Wallet
@@ -34,7 +34,8 @@ class ModQuestLogicMixin(BaseLogicMixin):
         self.quest = ModQuestLogic(*args, **kwargs)
 
 
-class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin, TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
+class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogicMixin, RegionLogicMixin,
+                                    TimeLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MonsterLogicMixin]]):
     def get_modded_quest_rules(self) -> Dict[str, StardewRule]:
         quests = dict()
         quests.update(self._get_juna_quest_rules())
@@ -42,6 +43,8 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
         quests.update(self._get_ayeisha_quest_rules())
         quests.update(self._get_sve_quest_rules())
         quests.update(self._get_distant_lands_quest_rules())
+        quests.update(self._get_boarding_house_quest_rules())
+        quests.update((self._get_hat_mouse_quest_rules()))
         return quests
 
     def _get_juna_quest_rules(self):
@@ -106,4 +109,20 @@ class ModQuestLogic(BaseLogic[Union[HasLogicMixin, QuestLogicMixin, ReceivedLogi
                                        self.logic.has(ArtisanGood.cloth) & self.logic.relationship.has_hearts(ModNPC.goblin, 10) &
                                        self.logic.relationship.has_hearts(NPC.emily, 8) & self.logic.season.has(Season.winter)
 
+        }
+
+    def _get_boarding_house_quest_rules(self):
+        if ModNames.boarding_house not in self.options.mods:
+            return {}
+
+        return {
+            ModQuest.PumpkinSoup: self.logic.region.can_reach(BoardingHouseRegion.boarding_house_first) & self.logic.has(Vegetable.pumpkin)
+        }
+
+    def _get_hat_mouse_quest_rules(self):
+        if ModNames.lacey not in self.options.mods:
+            return {}
+
+        return {
+            ModQuest.HatMouseHat: self.logic.relationship.has_hearts(ModNPC.lacey, 2) & self.logic.time.has_lived_months(4)
         }
