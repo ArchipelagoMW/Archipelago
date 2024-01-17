@@ -106,8 +106,6 @@ generic_item_table: dict[Literal['goal', 'key', 'other_progression', 'useful_non
         'Cat-shaped Wall Clock',
         'Printer Driver Disc',
         'Off-brand Soda Can',
-        
-        
     ),
     'trap': (
         'Half of a Worm',
@@ -298,7 +296,7 @@ generic_item_table: dict[Literal['goal', 'key', 'other_progression', 'useful_non
         'Lab Rat',
         'Soc-Rat-es',
         'Entire Rat Pack',
-    )
+    ),
 }
 
 game_specific_items: dict[str, dict[Literal['useful_nonprogression', 'filler', 'trap', 'uncategorized'], tuple[str, ...]]] = {
@@ -361,7 +359,33 @@ game_specific_items: dict[str, dict[Literal['useful_nonprogression', 'filler', '
             'Rotten Walnut',
             'Abigail\'s Birth Certificate',
             'Mayor\'s Tax Returns',
-        )
+        ),
+    },
+
+    'Seriously just replace this text with your best guess about how to type the game name, and I will fix it if it is wrong': {
+        'useful_nonprogression': (
+            'You can put your first item here', # and comment about how you want it to be used here
+            'You can put the second item here', # and a comment for it can go here too
+        ),
+        'filler': (
+            '#item', # hashtag item. yeah, you can put those # characters inside the name
+            'no comment',
+        ),
+        'trap': (
+        ),
+        'uncategorized': (
+        ),
+    },
+
+    'you can copy-paste these blocks starting from this quoted text and ending at the curly brace with the comma after it, just make sure to change this quoted text to something else': {
+        'useful_nonprogression': (
+        ),
+        'filler': (
+        ),
+        'trap': (
+        ),
+        'uncategorized': (
+        ),
     },
 }
 
