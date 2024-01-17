@@ -58,6 +58,7 @@ Currently, the following games are supported:
 * Heretic
 * Landstalker: The Treasures of King Nole
 * Final Fantasy Mystic Quest
+* TUNIC
 * A Short Hike
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
