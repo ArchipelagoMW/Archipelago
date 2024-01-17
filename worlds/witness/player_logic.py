@@ -530,7 +530,8 @@ class WitnessPlayerLogic:
             "0x01BEA": difficulty == "none" and eps_shuffled,  # Keep PP2
             "0x0A0C9": eps_shuffled or discards_shuffled or disable_non_randomized,  # Cargo Box Entry Door
             "0x09EEB": discards_shuffled or mountain_upper_included,  # Mountain Floor 2 Elevator Control Panel
-            "0x17CAB": symbols_shuffled or not disable_non_randomized,  # Jungle Popup Wall Panel
+            "0x17CAB": symbols_shuffled or not disable_non_randomized or "0x17CAB" not in self.DOOR_ITEMS_BY_ID,
+            # Jungle Popup Wall Panel
         }
 
         # Now, return the keys of the dict entries where the result is False to get unrequired major items
