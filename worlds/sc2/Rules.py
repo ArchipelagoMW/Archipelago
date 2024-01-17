@@ -593,10 +593,12 @@ class SC2Logic:
             or (
                     self.take_over_ai_allies
                     and (
-                        state.has(ItemNames.BATTLECRUISER, self.player)
+                            state.has(ItemNames.BATTLECRUISER, self.player)
+                            or (
+                                    state.has(ItemNames.ULTRALISK, self.player)
+                                    and self.protoss_competent_anti_air(state)
+                            )
                     )
-                    or (state.has(ItemNames.ULTRALISK, self.player)
-                        and self.protoss_competent_anti_air(state))
             )
 
     def essence_of_eternity_requirement(self, state: CollectionState) -> bool:
