@@ -5,7 +5,7 @@ from worlds.AutoWorld import World, WebWorld
 
 from .ArbitraryGameDefs import \
     BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in, \
-    rat_count_for_balancing, rat_count_skip_balancing, useful_count, filler_count, trap_count
+    rat_item_count_for_balancing, rat_item_count_skip_balancing, useful_item_count, filler_item_count, trap_item_count
 
 from .Items import \
     normal_rat_item_name, a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name, goal_item_name, \
@@ -111,7 +111,7 @@ class AutopelagoWorld(World):
             for item_name in next_up_to_n_item_names(category, n):
                 self._all_live_items_excluding_goal_and_normal_rats.append(item_name)
                 self._item_name_to_classification[item_name] = classification
-                n -= item_name_to_rat_count[item_name] if item_name in item_name_to_rat_count else 1
+                n -= 1
 
             assert n == 0 or category == 'rat', f'Only normal rats should use the overflow ({n=}, {category=}, {classification=})'
             match classification:
@@ -122,11 +122,11 @@ class AutopelagoWorld(World):
                     assert self._normal_rats_skip_balancing_count is None, 'Normal rats should only be added once for non-balancing.'
                     self._normal_rats_skip_balancing_count = n
 
-        append_next_n_item_names('rat', rat_count_for_balancing, ItemClassification.progression)
-        append_next_n_item_names('rat', rat_count_skip_balancing, ItemClassification.progression_skip_balancing)
-        append_next_n_item_names('useful_nonprogression', useful_count, ItemClassification.useful)
-        append_next_n_item_names('filler', filler_count, ItemClassification.filler)
-        append_next_n_item_names('trap', trap_count, ItemClassification.trap)
+        append_next_n_item_names('rat', rat_item_count_for_balancing, ItemClassification.progression)
+        append_next_n_item_names('rat', rat_item_count_skip_balancing, ItemClassification.progression_skip_balancing)
+        append_next_n_item_names('useful_nonprogression', useful_item_count, ItemClassification.useful)
+        append_next_n_item_names('filler', filler_item_count, ItemClassification.filler)
+        append_next_n_item_names('trap', trap_item_count, ItemClassification.trap)
 
     def set_rules(self):
         def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None):
