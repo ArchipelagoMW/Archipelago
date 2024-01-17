@@ -114,6 +114,7 @@ class KH1World(World):
     def pre_fill(self) -> None:
         goal_dict = {
             "sephiroth":      "Ansem's Secret Report 12",
+            "wonderland":     "Wonderland Ifrit's Horn Event",
             "deep_jungle":    "Deep Jungle Jungle King Event",
             "agrabah":        "Agrabah Genie Event",
             "monstro":        "Monstro Stop Event",
