@@ -310,7 +310,6 @@ class KH2World(World):
             puzzle_piece_logic = Rules.KH2PuzzlePiecesRules(self)
             puzzle_piece_logic.set_kh2_puzzle_pieces_rules()
 
-
     def generate_output(self, output_directory: str):
         """
         Generates the .zip for OpenKH (The KH Mod Manager)

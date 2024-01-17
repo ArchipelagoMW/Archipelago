@@ -853,9 +853,9 @@ class KH2Context(CommonContext):
     async def is_dead(self):
         # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
         #todo: look into if the < 40 is needed for the first if
-        if self.kh2_read_byte(0xAB9078) == 0 and self.kh2_read_byte(self.Save + 0x3607) < 40:
+        if self.kh2_read_byte(0x68863A) == 0 and self.kh2_read_byte(self.Save + 0x3607) < 40:
             self.is_dead_flag = False
-        elif self.kh2_read_byte(0xAB9078) > 0 and not self.is_dead_flag and self.kh2_read_byte(self.Save + 0x3607) < 40:
+        elif self.kh2_read_byte(0x68863A) > 0 and not self.is_dead_flag and self.kh2_read_byte(self.Save + 0x3607) < 40:
             self.is_dead_flag = True
             await self.send_death(death_text="Sora Died")
 
