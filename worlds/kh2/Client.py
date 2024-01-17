@@ -11,7 +11,18 @@ from .Names import ItemName
 from .WorldLocations import *
 
 from NetUtils import ClientStatus
-from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop
+from CommonClient import gui_enabled, logger, get_base_parser, CommonContext, server_loop, ClientCommandProcessor
+
+
+class KH2ClientCommandProcessor(ClientCommandProcessor):
+    def _cmd_deathlink(self):
+        """Toggles Deathlink"""
+        if death_link:
+            death_link = False
+            self.output(f"Death Link turned off")
+        else:
+            death_link = True
+            self.output(f"Death Link turned on")
 
 
 class KH2Context(CommonContext):
@@ -113,7 +124,7 @@ class KH2Context(CommonContext):
         # self.sveroom = 0x2A09C00 + 0x41
         # 0 not in battle 1 in yellow battle 2 red battle #short
         # self.inBattle = 0x2A0EAC4 + 0x40
-        # self.onDeath = 0xAB9078
+        self.onDeath = 0xAB9078
         # PC Address anchors
         self.Now = 0x0714DB8
         self.Save = 0x09A70B0
@@ -162,13 +173,15 @@ class KH2Context(CommonContext):
 
         self.ability_code_list = None
         self.master_growth = {"High Jump", "Quick Run", "Dodge Roll", "Aerial Dodge", "Glide"}
-
+        self.tags = {"AP", "DeathLink"}
         self.base_hp = 20
         self.base_mp = 100
         self.base_drive = 5
         self.base_accessory_slots = 1
         self.base_armor_slots = 1
         self.base_item_slots = 3
+        self.is_dead_flag = False
+        self.deathlink_flag = False
         self.front_ability_slots = [0x2546, 0x2658, 0x276C, 0x2548, 0x254A, 0x254C, 0x265A, 0x265C, 0x265E, 0x276E, 0x2770, 0x2772]
 
     async def server_auth(self, password_requested: bool = False):
@@ -326,7 +339,8 @@ class KH2Context(CommonContext):
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
-
+        # if cmd in {"Deathlink"}:
+        #    asyncio.create_task(self.kill_sora(args))
         if cmd in {"DataPackage"}:
             self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
             self.lookup_id_to_location = {v: k for k, v in self.kh2_loc_name_to_id.items()}
@@ -481,6 +495,16 @@ class KH2Context(CommonContext):
         }.items():
             if self.kh2_read_byte(self.Save + anchor) < self.kh2_seed_save["Levels"][leveltype]:
                 self.kh2_write_byte(self.Save + anchor, self.kh2_seed_save["Levels"][leveltype])
+
+    def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
+        """Gets dispatched when a new DeathLink is triggered by another linked player."""
+        self.last_death_link = max(data["time"], self.last_death_link)
+        text = data.get("cause", "")
+        if text:
+            logger.info(f"DeathLink: {text}")
+        else:
+            logger.info(f"DeathLink: Received from {data['source']}")
+        self.kill_sora()
 
     async def give_item(self, item, location):
         try:
@@ -810,7 +834,7 @@ class KH2Context(CommonContext):
                 #    self.kh2_write_byte(self.Save + item_data.memaddr, amount_of_items)
 
             if "PoptrackerVersionCheck" in self.kh2slotdata:
-                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) != 1:  # telling the goa they are on version 4.3
+                if self.kh2slotdata["PoptrackerVersionCheck"] > 4.2 and self.kh2_read_byte(self.Save + 0x3607) <=0:  # telling the goa they are on version 4.3
                     self.kh2_write_byte(self.Save + 0x3607, 1)
 
         except Exception as e:
@@ -818,6 +842,21 @@ class KH2Context(CommonContext):
                 self.kh2connected = False
             logger.info(e)
             logger.info("line 840")
+
+    def kill_sora(self):
+        print()
+        current_value = self.kh2_read_byte(self.Save + 0x3607)
+        self.kh2_write_byte(self.Save + 0x3607, current_value + 40)
+        # self.kh2_write_byte(0x820500, 64)
+
+    async def is_dead(self):
+        # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
+        #todo: look into if the < 40 is needed for the first if
+        if self.kh2_read_byte(0xAB9078) == 0 and self.kh2_read_byte(self.Save + 0x3607) < 40:
+            self.is_dead_flag = False
+        elif self.kh2_read_byte(0xAB9078) > 0 and not self.is_dead_flag and self.kh2_read_byte(self.Save + 0x3607) < 40:
+            self.is_dead_flag = True
+            await self.send_death(death_text="Sora Died")
 
 
 def finishedGame(ctx: KH2Context, message):
@@ -894,6 +933,7 @@ async def kh2_watcher(ctx: KH2Context):
                 await ctx.verifyChests()
                 await ctx.verifyItems()
                 await ctx.verifyLevel()
+                await ctx.is_dead()
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
