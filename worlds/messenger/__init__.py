@@ -123,7 +123,7 @@ class MessengerWorld(World):
             connection_data = CONNECTIONS[region.parent][region_name]
             for index, exit_region in enumerate(connection_data["exits"]):
                 region_exit = region.connect(self.multiworld.get_region(exit_region, self.player))
-                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player)
+                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player, self.options.logic_level.value)
         # all regions need to be created before i can do these connections so we create and connect the complex first
         for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
             region = self.multiworld.get_region(region_name, self.player)
@@ -207,14 +207,17 @@ class MessengerWorld(World):
             shuffle_portals(self)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        return {
+        slot_data = {
             "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
+            "portal_mapping": self.portal_mapping if self.portal_mapping else [],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
+        print(slot_data)
+        return slot_data
 
     def get_filler_item_name(self) -> str:
         if not getattr(self, "_filler_items", None):

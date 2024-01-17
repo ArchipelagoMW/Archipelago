@@ -15,12 +15,12 @@ SHUFFLEABLE_PORTAL_ENTRANCES = [
 
 
 OUTPUT_PORTALS = [
-    "Autumn Hills Portal",
-    "Riviere Turquoise Portal",
-    "Howling Grotto Portal",
-    "Sunken Shrine Portal",
-    "Searing Crags Portal",
-    "Glacial Peak Portal",
+    "Autumn Hills",
+    "Riviere Turquoise",
+    "Howling Grotto",
+    "Sunken Shrine",
+    "Searing Crags",
+    "Glacial Peak",
 ]
 
 
@@ -203,7 +203,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     if shuffle_type > ShufflePortals.option_shops:
         shop_points.update(CHECKPOINTS)
     out_to_parent = {checkpoint: parent for parent, checkpoints in shop_points.items() for checkpoint in checkpoints}
-    available_portals = list(shop_points.values())
+    available_portals = [val for zone in shop_points.values() for val in zone]
     
     world.portal_mapping = []
     for portal in OUTPUT_PORTALS:
@@ -223,7 +223,8 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         
         available_portals.remove(warp_point)
         if shuffle_type < ShufflePortals.option_anywhere:
-            available_portals -= shop_points[out_to_parent[warp_point]]
+            available_portals = [portal for portal in available_portals
+                                 if portal not in shop_points[out_to_parent[warp_point]]]
     
     if not validate_portals(world):
         disconnect_portals(world)
@@ -237,9 +238,9 @@ def connect_portal(world: "MessengerWorld", portal: str, out_region: str) -> Non
 
 def disconnect_portals(world: "MessengerWorld") -> None:
     for portal in OUTPUT_PORTALS:
-        entrance = world.multiworld.get_entrance(portal, world.player)
-        entrance.parent_region.exits.remove(entrance)
-        entrance.connected_region.exits.remove(entrance)
+        entrance = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
+        entrance.connected_region.entrances.remove(entrance)
+        entrance.connected_region = None
 
 
 def validate_portals(world: "MessengerWorld") -> bool:

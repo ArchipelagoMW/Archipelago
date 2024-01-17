@@ -1,9 +1,9 @@
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING, Union
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
 from .constants import NOTES, PHOBEKINS
-from .options import MessengerAccessibility
+from .options import Logic, MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -248,8 +248,35 @@ class MessengerOOBRules(MessengerRules):
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def parse_rule(rule_string: str, player: int) -> CollectionRule:
-    return lambda state: True
+def parse_rule(rule_string: Union[str, List[str]], player: int, logic_level: int) -> CollectionRule:
+    if not rule_string or rule_string == "True":
+        return lambda state: True
+
+    def parse_string(rule_string: str) -> CollectionRule:
+        if "hard" in rule_string:
+            if logic_level >= Logic.option_hard:
+                rule_string.replace(", hard", "")
+                items = rule_string.split(", ")
+                return lambda state: state.has_all(items, player)
+            return lambda state: True
+        # elif "challenging" in rule_string:
+        #     if logic_level >= Logic.option_challenging:
+        #         items = rule_string.split(", ")
+        #         return lambda state: state.has_all(items, player)
+        #     return lambda state: True
+        items = rule_string.split(", ")
+        return lambda state: state.has_all(items, player)
+
+    if isinstance(rule_string, list):
+        combined_rule = None
+        for rule in rule_string:
+            if combined_rule is None:
+                combined_rule = parse_string(rule)
+            else:
+                combined_rule = combined_rule or parse_string(rule)
+        return combined_rule
+    else:
+        return parse_string(rule_string)
 
 
 def set_self_locking_items(world: "MessengerWorld", player: int) -> None:

@@ -35,7 +35,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Tower HQ",
                 "Autumn Hills - Dimension Climb Shop",
             ],
-            "rules": ["True", "True"],
+            "rules": ["True", "Wingsuit, Rope Dart"],
         },
         "Climbing Claws Shop": {
             "exits": [
