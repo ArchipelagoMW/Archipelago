@@ -274,8 +274,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Thunder Event"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Sonic Blade Event"),
     regions["Wonderland"].locations.append("Wonderland Blizzard Event"),
-    if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
-        regions["Wonderland"].locations.append("Wonderland Ifrit's Horn Event"),
+    regions["Wonderland"].locations.append("Wonderland Ifrit's Horn Event"),
     regions["Agrabah"].locations.append("Agrabah Ray of Light Event"),
     regions["Agrabah"].locations.append("Agrabah Blizzard Event"),
     regions["Agrabah"].locations.append("Agrabah Fire Event"),
@@ -314,6 +313,8 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 08 Event")
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 09 Event")
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 10 Event")
+    
+    regions["Traverse Town"].locations.append("Traverse Town Aero Event")
     
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")

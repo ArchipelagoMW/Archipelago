@@ -70,15 +70,16 @@ class Goal(Choice):
     """
     display_name = "Goal"
     option_final_rest = 0
-    option_deep_jungle = 1
-    option_agrabah = 2
-    option_monstro = 3
-    option_atlantica = 4
-    option_halloween_town = 5
-    option_neverland = 6
-    option_sephiroth = 7
-    option_unknown = 8
-    option_postcards = 9
+    option_wonderland = 1
+    option_deep_jungle = 2
+    option_agrabah = 3
+    option_monstro = 4
+    option_atlantica = 5
+    option_halloween_town = 6
+    option_neverland = 7
+    option_sephiroth = 8
+    option_unknown = 9
+    option_postcards = 10
     default = 0
 
 @dataclass

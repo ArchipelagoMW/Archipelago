@@ -303,6 +303,8 @@ location_table: Dict[str, KH1LocationData] = {
     "Traverse Town Mail Postcard 09 Event":                                             KH1LocationData("Events",     265_6128),
     "Traverse Town Mail Postcard 10 Event":                                             KH1LocationData("Events",     265_6129),
     
+    "Traverse Town Aero Event":                                                         KH1LocationData("Events",     265_6131),
+    
     "Ansem's Secret Report 1":                                                          KH1LocationData("Reports",    265_7018),
     "Ansem's Secret Report 2":                                                          KH1LocationData("Reports",    265_7017),
     "Ansem's Secret Report 3":                                                          KH1LocationData("Reports",    265_7016),

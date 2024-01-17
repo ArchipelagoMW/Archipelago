@@ -30,7 +30,7 @@ def has_postcards(state: CollectionState, player: int, postcards_required: int) 
     postcards_available = 3 #You can get three postcards without no items
     if has_item(state, player, "Progressive Thunder"):
         postcards_available = postcards_available + 2 #Gizmo Shop Postcards
-    if has_item(state, player, "Red Trinity") and has_item(state, player, "Green Trinity"):
+    if  has_item(state, player, "Green Trinity"):
         postcards_available = postcards_available + 1 #After locking Traverse Town, examine the Synthesis Shop poster.
     if has_item(state, player, "Monstro") and has_item(state, player, "High Jump"):
         postcards_available = postcards_available + 1 #Gepetto's House Pot on Shelf
@@ -281,8 +281,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("Olympus Coliseum Thunder Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Olympus Coliseum Sonic Blade Event"                                           , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Wonderland Blizzard Event"                                                    , player).access_rule = lambda state: has_item(state, player, "")
-    if goal in ["final_rest", "unknown"]:
-        multiworld.get_location("Wonderland Ifrit's Horn Event"                                                , player).access_rule = lambda state: has_evidence(state, player)
+    multiworld.get_location("Wonderland Ifrit's Horn Event"                                                , player).access_rule = lambda state: has_evidence(state, player)
    #multiworld.get_location("Agrabah Ray of Light Event"                                                   , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Agrabah Blizzard Event"                                                       , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Agrabah Fire Event"                                                           , player).access_rule = lambda state: has_item(state, player, "")
@@ -321,6 +320,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Traverse Town Mail Postcard 08 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 8)
     multiworld.get_location("Traverse Town Mail Postcard 09 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 9)
     multiworld.get_location("Traverse Town Mail Postcard 10 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 10)
+    
+    multiworld.get_location("Traverse Town Aero Event"                                                     , player).access_rule = lambda state: has_item(state, player, "Red Trinity")
 
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
