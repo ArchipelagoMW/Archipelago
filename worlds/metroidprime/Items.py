@@ -41,7 +41,7 @@ suit_upgrade_table = {
     "Energy Tank": ItemData(5031024, ItemClassification.useful),
     "Spring Ball": ItemData(5031025, ItemClassification.useful),
     # item 026 is a health refill
-    # "Placeholder 2": ItemData(5031027, ItemClassification.filler)
+    "Ice Trap": ItemData(5031027, ItemClassification.trap),
     "Wavebuster": ItemData(5031028, ItemClassification.filler),
 }
 
