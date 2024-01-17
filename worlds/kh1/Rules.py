@@ -26,6 +26,17 @@ def has_item(state: CollectionState, player: int, item) -> bool:
 def has_at_least(state: CollectionState, player: int, item, x) -> bool:
     return state.count(item, player) >= x
 
+def has_postcards(state: CollectionState, player: int, postcards_required: int) -> bool:
+    postcards_available = 3 #You can get three postcards without no items
+    if has_item(state, player, "Progressive Thunder"):
+        postcards_available = postcards_available + 2 #Gizmo Shop Postcards
+    if  has_item(state, player, "Green Trinity"):
+        postcards_available = postcards_available + 1 #After locking Traverse Town, examine the Synthesis Shop poster.
+    if has_item(state, player, "Monstro") and has_item(state, player, "High Jump"):
+        postcards_available = postcards_available + 1 #Gepetto's House Pot on Shelf
+    postcards_available = postcards_available + state.count("Postcard", player) #3 can be found in chests/events
+    return postcards_available >= postcards_required
+
 def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     #Location rules.
     #Keys
@@ -258,17 +269,60 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Monstro Chamber 6 White Trinity Chest"                                        , player).access_rule = lambda state: has_item(state, player, "White Trinity")
    #multiworld.get_location("Awakening Chest"                                                              , player).access_rule = lambda state: has_item(state, player, "")
 
-   #multiworld.get_location("Chronicles Sora's Story"                                                      , player).access_rule = lambda state: has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 7) and has_item(state, player, "High Jump") and has_item(state, player, "Glide") and has_emblems(state, player)
-    if goal in ["final_rest", "unknown"]: #Not possible if HB is complete, could interefere with other win cons if 4 emblems is not go-mode
-        multiworld.get_location("Chronicles Wonderland"                                                    , player).access_rule = lambda state: has_evidence(state, player)
-   #multiworld.get_location("Chronicles Olympus Coliseum"                                                  , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Chronicles Deep Jungle"                                                       , player).access_rule = lambda state: has_slides(state, player)
-   #multiworld.get_location("Chronicles Agrabah"                                                           , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Chronicles Monstro"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
-   #multiworld.get_location("Chronicles 100 Acre Wood"                                                     , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Chronicles Atlantica"                                                         , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Chronicles Halloween Town"                                                    , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
-   #multiworld.get_location("Chronicles Neverland"                                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+   #multiworld.get_location("Traverse Town Dodge Roll Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Traverse Town Fire Event"                                                     , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Traverse Town Blue Trinity Event"                                             , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Traverse Town Earthshine Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Traverse Town Oathkeeper Event"                                               , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Deep Jungle White Fang Event"                                                 , player).access_rule = lambda state: has_slides(state, player)
+    multiworld.get_location("Deep Jungle Cure Event"                                                       , player).access_rule = lambda state: has_slides(state, player)
+    multiworld.get_location("Deep Jungle Jungle King Event"                                                , player).access_rule = lambda state: has_slides(state, player)
+    multiworld.get_location("Deep Jungle Red Trinity Event"                                                , player).access_rule = lambda state: has_slides(state, player)
+   #multiworld.get_location("Olympus Coliseum Thunder Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Olympus Coliseum Sonic Blade Event"                                           , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Wonderland Blizzard Event"                                                    , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Wonderland Ifrit's Horn Event"                                                , player).access_rule = lambda state: has_evidence(state, player)
+   #multiworld.get_location("Agrabah Ray of Light Event"                                                   , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Agrabah Blizzard Event"                                                       , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Agrabah Fire Event"                                                           , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Agrabah Genie Event"                                                          , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Agrabah Three Wishes Event"                                                   , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Agrabah Green Trinity Event"                                                  , player).access_rule = lambda state: has_item(state, player, "")
+   #multiworld.get_location("Monstro Goofy Cheer Event"                                                    , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Monstro Stop Event"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
+    if atlantica or goal == "atlantica":
+       #multiworld.get_location("Atlantica Mermaid Kick Event"                                             , player).access_rule = lambda state: has_item(state, player "")
+        multiworld.get_location("Atlantica Thunder Event"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+        multiworld.get_location("Atlantica Crabclaw Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+    multiworld.get_location("Halloween Town Holy Circlet Event"                                            , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
+    multiworld.get_location("Halloween Town Gravity Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
+    multiworld.get_location("Halloween Town Pumpkinhead Event"                                             , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
+    multiworld.get_location("Neverland Raven's Claw Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Cure Event"                                                         , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Fairy Harp Event"                                                   , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Tinker Bell Event"                                                  , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+    multiworld.get_location("Neverland Glide Event"                                                        , player).access_rule = lambda state: has_item(state, player, "Green Trinity")
+   #multiworld.get_location("Hollow Bastion White Trinity Event"                                           , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Hollow Bastion Donald Cheer Event"                                            , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion Fireglow Event"                                                , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion Ragnarok Event"                                                , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion Omega Arts Event"                                              , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Hollow Bastion Fire Event"                                                    , player).access_rule = lambda state: has_emblems(state, player)
+   #multiworld.get_location("End of the World Superglide Event"                                            , player).access_rule = lambda state: has_item(state, player, "")
+    
+    multiworld.get_location("Traverse Town Mail Postcard 01 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 1)
+    multiworld.get_location("Traverse Town Mail Postcard 02 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 2)
+    multiworld.get_location("Traverse Town Mail Postcard 03 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 3)
+    multiworld.get_location("Traverse Town Mail Postcard 04 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 4)
+    multiworld.get_location("Traverse Town Mail Postcard 05 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 5)
+    multiworld.get_location("Traverse Town Mail Postcard 06 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 6)
+    multiworld.get_location("Traverse Town Mail Postcard 07 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 7)
+    multiworld.get_location("Traverse Town Mail Postcard 08 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 8)
+    multiworld.get_location("Traverse Town Mail Postcard 09 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 9)
+    multiworld.get_location("Traverse Town Mail Postcard 10 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 10)
+    
+    multiworld.get_location("Traverse Town Aero Event"                                                     , player).access_rule = lambda state: has_item(state, player, "Red Trinity")
+
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     if atlantica or goal == "atlantica":

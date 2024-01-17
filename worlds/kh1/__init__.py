@@ -114,14 +114,15 @@ class KH1World(World):
     def pre_fill(self) -> None:
         goal_dict = {
             "sephiroth":      "Ansem's Secret Report 12",
-            "deep_jungle":    "Chronicles Deep Jungle",
-            "agrabah":        "Chronicles Agrabah",
-            "monstro":        "Chronicles Monstro",
-            "atlantica":      "Ansem's Secret Report 3",
-            "halloween_town": "Chronicles Halloween Town",
-            "neverland":      "Ansem's Secret Report 9",
+            "deep_jungle":    "Deep Jungle Jungle King Event",
+            "agrabah":        "Agrabah Genie Event",
+            "monstro":        "Monstro Stop Event",
+            "atlantica":      "Atlantica Crabclaw Event",
+            "halloween_town": "Halloween Town Pumpkinhead Event",
+            "neverland":      "Neverland Fairy Harp Event",
             "unknown":        "Ansem's Secret Report 13",
-            "final_rest":     "End of the World Final Rest Chest"
+            "final_rest":     "End of the World Final Rest Chest",
+            "postcards":      "Traverse Town Mail Postcard 10 Event"
         }
         self.multiworld.get_location(goal_dict[self.options.goal.current_key], self.player).place_locked_item(self.create_item("Victory"))
 
