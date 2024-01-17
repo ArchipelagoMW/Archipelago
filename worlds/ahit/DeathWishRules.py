@@ -12,7 +12,6 @@ from .Locations import zero_jumps, zero_jumps_expert, zero_jumps_hard, death_wis
 dw_requirements = {
     "Beat the Heat": LocData(umbrella=True),
     "So You're Back From Outer Space": LocData(hookshot=True),
-    "She Speedran from Outer Space": LocData(required_hats=[HatType.SPRINT]),
     "Mafia's Jumps": LocData(required_hats=[HatType.ICE]),
     "Vault Codes in the Wind": LocData(required_hats=[HatType.SPRINT]),
 
@@ -20,7 +19,7 @@ dw_requirements = {
     "10 Seconds until Self-Destruct": LocData(hookshot=True),
     "Community Rift: Rhythm Jump Studio": LocData(required_hats=[HatType.ICE]),
 
-    "Speedrun Well": LocData(hookshot=True, hit_requirement=1, required_hats=[HatType.SPRINT]),
+    "Speedrun Well": LocData(hookshot=True, hit_requirement=1),
     "Boss Rush": LocData(umbrella=True, hookshot=True),
     "Community Rift: Twilight Travels": LocData(hookshot=True, required_hats=[HatType.DWELLER]),
 
