@@ -21,6 +21,7 @@ generic_item_table: dict[Literal['goal', 'key', 'rat', 'useful_nonprogression', 
     ),
     'rat': (
         'Normal Rat', # please keep this concept as the first item in the list kthxbai (feel free to rename tho)
+        'Entire Rat Pack', # please keep this concept as the second item in the list kthxbai (feel free to rename tho)
         'Pack Rat',
         'Pizza Rat',
         'Chef Rat',
@@ -32,7 +33,6 @@ generic_item_table: dict[Literal['goal', 'key', 'rat', 'useful_nonprogression', 
         'Acro Rat',
         'Lab Rat',
         'Soc-Rat-es',
-        'Entire Rat Pack',
     ),
     'useful_nonprogression': (
         'Refreshing Glass of Lemonade',
@@ -406,6 +406,11 @@ e_item_name = generic_item_table['key'][4]
 f_item_name = generic_item_table['key'][5]
 goal_item_name = generic_item_table['goal'][0]
 
+item_name_to_rat_count = {
+    item_name: 5 if item_name == 'Entire Rat Pack' else 1 \
+    for item_name in generic_item_table['rat'] \
+}
+
 item_name_to_defined_classification = {
     item_name: classification for comp in ( \
         ( (item_name, ItemClassification.progression) for item_name in generic_item_table['goal'] ), \
@@ -419,5 +424,5 @@ item_name_to_defined_classification = {
         ( (item_name, None) for item_name in generic_item_table['rat'] ), \
         ( (item_name, None) for item_name in generic_item_table['uncategorized'] ), \
         ( (item_name, None) for game_items in game_specific_items.values() for item_name in game_items['uncategorized'] ), \
-    ) for item_name, classification in comp
+    ) for item_name, classification in comp \
 }

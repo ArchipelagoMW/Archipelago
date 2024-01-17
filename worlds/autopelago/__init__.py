@@ -5,11 +5,11 @@ from worlds.AutoWorld import World, WebWorld
 
 from .ArbitraryGameDefs import \
     BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in, \
-    prog_count_balancing_excluding_goal, prog_count_skip_balancing, useful_count, filler_count, trap_count
+    rat_count_for_balancing, rat_count_skip_balancing, useful_count, filler_count, trap_count
 
 from .Items import \
-    normal_rat_item_name, a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name, \
-    goal_item_name, all_item_names, generic_item_table, game_specific_items, item_name_to_defined_classification
+    normal_rat_item_name, a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name, goal_item_name, \
+    all_item_names, generic_item_table, game_specific_items, item_name_to_defined_classification, item_name_to_rat_count
 
 def _gen_ids():
     next_id = BASE_ID
@@ -111,7 +111,7 @@ class AutopelagoWorld(World):
             for item_name in next_up_to_n_item_names(category, n):
                 self._all_live_items_excluding_goal_and_normal_rats.append(item_name)
                 self._item_name_to_classification[item_name] = classification
-                n -= 1
+                n -= item_name_to_rat_count[item_name] if item_name in item_name_to_rat_count else 1
 
             assert n == 0 or category == 'rat', f'Only normal rats should use the overflow ({n=}, {category=}, {classification=})'
             match classification:
@@ -122,8 +122,8 @@ class AutopelagoWorld(World):
                     assert self._normal_rats_skip_balancing_count is None, 'Normal rats should only be added once for non-balancing.'
                     self._normal_rats_skip_balancing_count = n
 
-        append_next_n_item_names('rat', prog_count_balancing_excluding_goal - len(self._all_live_items_excluding_goal_and_normal_rats), ItemClassification.progression)
-        append_next_n_item_names('rat', prog_count_skip_balancing, ItemClassification.progression_skip_balancing)
+        append_next_n_item_names('rat', rat_count_for_balancing, ItemClassification.progression)
+        append_next_n_item_names('rat', rat_count_skip_balancing, ItemClassification.progression_skip_balancing)
         append_next_n_item_names('useful_nonprogression', useful_count, ItemClassification.useful)
         append_next_n_item_names('filler', filler_count, ItemClassification.filler)
         append_next_n_item_names('trap', trap_count, ItemClassification.trap)
@@ -138,8 +138,8 @@ class AutopelagoWorld(World):
             r_from_real.exits.append(connection)
             connection.connect(r_to_real)
 
-        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeA, lambda state: state.prog_items[self.player].total() >= 8)
-        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeB, lambda state: state.prog_items[self.player].total() >= 8)
+        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeA, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 8)
+        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.After8RatsBeforeB, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 8)
         _connect(AutopelagoRegion.After8RatsBeforeA, AutopelagoRegion.A)
         _connect(AutopelagoRegion.After8RatsBeforeB, AutopelagoRegion.B)
         _connect(AutopelagoRegion.A, AutopelagoRegion.AfterABeforeC, lambda state: state.has(a_item_name, self.player))
@@ -148,10 +148,10 @@ class AutopelagoWorld(World):
         _connect(AutopelagoRegion.AfterBBeforeD, AutopelagoRegion.D)
         _connect(AutopelagoRegion.C, AutopelagoRegion.AfterCBefore20Rats, lambda state: state.has(c_item_name, self.player))
         _connect(AutopelagoRegion.D, AutopelagoRegion.AfterDBefore20Rats, lambda state: state.has(d_item_name, self.player))
-        _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: state.prog_items[self.player].total() >= 20)
-        _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: state.prog_items[self.player].total() >= 20)
-        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: state.prog_items[self.player].total() >= 20)
-        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: state.prog_items[self.player].total() >= 20)
+        _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
+        _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
+        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
+        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
         _connect(AutopelagoRegion.After20RatsBeforeE, AutopelagoRegion.E)
         _connect(AutopelagoRegion.After20RatsBeforeF, AutopelagoRegion.F)
         _connect(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal, lambda state: state.has(e_item_name, self.player))

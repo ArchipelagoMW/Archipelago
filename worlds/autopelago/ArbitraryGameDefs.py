@@ -73,12 +73,14 @@ num_locations_in = {
     AutopelagoRegion.TryingForGoal: 1,
 }
 
-prog_count_balancing_excluding_goal = 20
-prog_count_skip_balancing = 20
+key_count = 7
+rat_count_for_balancing = 20
+rat_count_skip_balancing = 20
 
 total_count = sum(location_count for location_count in num_locations_in.values())
 
-prog_count = 1 + prog_count_balancing_excluding_goal + prog_count_skip_balancing
+prog_count = key_count + rat_count_for_balancing + rat_count_skip_balancing
+del key_count
 even_split_count = (total_count - prog_count) // 3
 
 useful_count = even_split_count
