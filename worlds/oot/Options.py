@@ -1271,7 +1271,7 @@ class LogicTricks(OptionList):
     https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/LogicTricks.py
     """
     display_name = "Logic Tricks"
-    valid_keys = frozenset(normalized_name_tricks)
+    valid_keys = tuple(normalized_name_tricks.keys())
     valid_keys_casefold = True
 
 
