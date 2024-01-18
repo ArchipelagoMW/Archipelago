@@ -79,3 +79,6 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         tool_rule = self.logic.tool.has_tool(Tool.watering_can, ToolMaterial.tiers[level])
         spell_rule = self.logic.received(MagicSpell.water) & self.logic.magic.can_use_altar() & self.logic.received(ModSkillLevel.magic_level, level)
         return tool_rule | spell_rule
+
+    def has_any_tool(self) -> StardewRule:
+        return self.has_tool(Tool.axe) | self.has_tool(Tool.pickaxe) | self.has_tool(Tool.scythe) | self.has_tool(Tool.hoe)

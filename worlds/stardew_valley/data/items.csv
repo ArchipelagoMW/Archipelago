@@ -805,6 +805,7 @@ id,name,classification,groups,mod_name
 10413,Pemmican Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10415,Ginger Tincture Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+10416,Special Pumpkin Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Boarding House and Bus Stop Extension
 10450,Void Mint Seeds,progression,CROPSANITY,Distant Lands - Witch Swamp Overhaul
 10451,Vile Ancient Fruit Seeds,progression,CROPSANITY,Distant Lands - Witch Swamp Overhaul
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
@@ -832,6 +833,13 @@ id,name,classification,groups,mod_name
 10603,Haste Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
 10604,Hero Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
 10605,Armor Elixir Recipe,progression,CRAFTSANITY,Stardew Valley Expanded
+10606,Neanderthal Skeleton Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10607,Pterodactyl Skeleton L Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10608,Pterodactyl Skeleton M Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10609,Pterodactyl Skeleton R Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10610,T-Rex Skeleton L Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10611,T-Rex Skeleton M Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
+10612,T-Rex Skeleton R Recipe,progression,CRAFTSANITY,Boarding House and Bus Stop Extension
 10701,Resource Pack: 3 Magic Elixir,filler,RESOURCE_PACK,Magic
 10702,Resource Pack: 3 Travel Core,filler,RESOURCE_PACK,Magic
 10703,Preservation Chamber,filler,"RESOURCE_PACK,RESOURCE_PACK_USEFUL",Archaeology
