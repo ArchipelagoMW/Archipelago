@@ -229,7 +229,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_master_angler:
             self.create_event_location(location_table[GoalName.master_angler],
-                                       self.logic.fishing.can_catch_every_fish(),
+                                       self.logic.fishing.can_catch_every_fish_in_slot(self.get_all_location_names()),
                                        Event.victory)
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(location_table[GoalName.complete_museum],
@@ -277,6 +277,9 @@ class StardewValleyWorld(World):
                                        Event.victory)
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has(Event.victory, self.player)
+
+    def get_all_location_names(self) -> List[str]:
+        return list(location.name for location in self.multiworld.get_locations(self.player))
 
     def create_item(self, item: Union[str, ItemData], override_classification: ItemClassification = None) -> StardewItem:
         if isinstance(item, str):

@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
@@ -8,7 +8,8 @@ from .season_logic import SeasonLogicMixin
 from .skill_logic import SkillLogicMixin
 from .tool_logic import ToolLogicMixin
 from ..data import FishItem, fish_data
-from ..options import ExcludeGingerIsland
+from ..locations import LocationTags, locations_by_tag
+from ..options import ExcludeGingerIsland, Fishsanity
 from ..options import SpecialOrderLocations
 from ..stardew_rule import StardewRule, True_, False_, And
 from ..strings.fish_names import SVEFish
@@ -75,7 +76,7 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
         return False_()
 
     def can_catch_every_fish(self) -> StardewRule:
-        rules = [self.logic.skill.has_level(Skill.fishing, 10), self.logic.tool.has_fishing_rod(4)]
+        rules = [self.has_max_fishing()]
         exclude_island = self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
         exclude_extended_family = self.options.special_order_locations != SpecialOrderLocations.option_board_qi
         for fish in fish_data.get_fish_for_mods(self.options.mods.value):
@@ -84,4 +85,16 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             if exclude_extended_family and fish in fish_data.extended_family:
                 continue
             rules.append(self.logic.fishing.can_catch_fish(fish))
+        return And(*rules)
+
+    def can_catch_every_fish_in_slot(self, all_location_names_in_slot: List[str]) -> StardewRule:
+        if self.options.fishsanity == Fishsanity.option_none:
+            return self.can_catch_every_fish()
+
+        rules = [self.has_max_fishing()]
+
+        for fishsanity_location in locations_by_tag[LocationTags.FISHSANITY]:
+            if fishsanity_location.name not in all_location_names_in_slot:
+                continue
+            rules.append(self.logic.region.can_reach_location(fishsanity_location.name))
         return And(*rules)

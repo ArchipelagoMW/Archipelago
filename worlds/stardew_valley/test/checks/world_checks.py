@@ -17,12 +17,20 @@ def assert_victory_exists(tester: unittest.TestCase, multiworld: MultiWorld):
     tester.assertIn(StardewItem("Victory", ItemClassification.progression, None, 1), multiworld.get_items())
 
 
+def can_reach_victory(multiworld: MultiWorld) -> (bool, str):
+    victory = multiworld.find_item("Victory", 1)
+    can_win = victory.can_reach(multiworld.state)
+    return can_win, victory.access_rule.explain(multiworld.state)
+
+
+def assert_can_reach_victory(tester: unittest.TestCase, multiworld: MultiWorld):
+    tester.assertTrue(*can_reach_victory(multiworld))
+
+
 def collect_all_then_assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
     for item in multiworld.get_items():
         multiworld.state.collect(item)
-    victory = multiworld.find_item("Victory", 1)
-    can_win = victory.can_reach(multiworld.state)
-    tester.assertTrue(can_win, victory.access_rule.explain(multiworld.state))
+    assert_can_reach_victory(tester, multiworld)
 
 
 def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):

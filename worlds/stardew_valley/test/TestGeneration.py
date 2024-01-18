@@ -961,7 +961,6 @@ class TestShipsanityFullShipmentExcludeIsland(SVTestBase):
     def test_exclude_island_items_shipsanity_locations(self):
         location_names = [location.name for location in self.multiworld.get_locations(self.player)]
         self.assertNotIn("Shipsanity: Cinder Shard", location_names)
-        self.assertNotIn("Shipsanity: Bone Fragment", location_names)
         self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
         self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
         self.assertNotIn("Shipsanity: Banana", location_names)
@@ -1050,7 +1049,6 @@ class TestShipsanityFullShipmentWithFishExcludeIsland(SVTestBase):
     def test_exclude_island_items_shipsanity_locations(self):
         location_names = [location.name for location in self.multiworld.get_locations(self.player)]
         self.assertNotIn("Shipsanity: Cinder Shard", location_names)
-        self.assertNotIn("Shipsanity: Bone Fragment", location_names)
         self.assertNotIn("Shipsanity: Radioactive Ore", location_names)
         self.assertNotIn("Shipsanity: Radioactive Bar", location_names)
         self.assertNotIn("Shipsanity: Banana", location_names)

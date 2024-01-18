@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TypeVar, Generic, Dict
+from typing import TypeVar, Generic, Dict, List
 
 from ..options import StardewValleyOptions
 from ..stardew_rule import StardewRule

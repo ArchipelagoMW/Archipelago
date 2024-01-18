@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import List
 
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
