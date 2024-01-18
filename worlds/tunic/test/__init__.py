@@ -2,5 +2,5 @@ from test.bases import WorldTestBase
 
 
 class TunicTestBase(WorldTestBase):
-    game = "Tunic"
+    game = "TUNIC"
     player: int = 1

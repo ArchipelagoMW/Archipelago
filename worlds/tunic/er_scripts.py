@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 
 
 class TunicERItem(Item):
-    game: str = "Tunic"
+    game: str = "TUNIC"
 
 
 class TunicERLocation(Location):
-    game: str = "Tunic"
+    game: str = "TUNIC"
 
 
 def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[int, str]]:
