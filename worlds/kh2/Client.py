@@ -22,7 +22,7 @@ class KH2CommandProcessor(ClientCommandProcessor):
     def _cmd_deathlink(self):
         """Toggles Deathlink"""
         if self.ctx.deathlink_toggle:
-            #self.ctx.tags.add("DeathLink")
+            # self.ctx.tags.add("DeathLink")
             self.ctx.deathlink_toggle = False
             self.output(f"Death Link turned off")
         else:
@@ -38,8 +38,6 @@ class KH2CommandProcessor(ClientCommandProcessor):
         """Removes player from the deathlink blacklist"""
         if player_name in self.ctx.deathlink_blacklist:
             self.ctx.deathlink_blacklist.remove(player_name)
-
-
 
 
 class KH2Context(CommonContext):
