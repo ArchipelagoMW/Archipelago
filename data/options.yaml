@@ -20,7 +20,7 @@
 #    You can also verify that your Archipelago options are valid at this site:
 #        https://archipelago.gg/check
 
-# Your name in-game. There is a 16-character limit.
+# Your name in-game, limited to 16 characters.
 #     {player} will be replaced with the player's slot number.
 #     {PLAYER} will be replaced with the player's slot number, if that slot number is greater than 1.
 #     {number} will be replaced with the counter value of the name.
