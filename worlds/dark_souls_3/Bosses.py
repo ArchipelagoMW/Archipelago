@@ -237,7 +237,7 @@ all_bosses = [
         "RC: Soul of Slave Knight Gael",
         "RC: Blood of the Dark Soul - end boss drop",
     }),
-    DS3BossInfo("Soul of Cinder", 4100800),
+    DS3BossInfo("Lords of Cinder", 4100800),
 ]
 
 default_yhorm_location = DS3BossInfo("Yhorm the Giant", 3900800, locations = {
