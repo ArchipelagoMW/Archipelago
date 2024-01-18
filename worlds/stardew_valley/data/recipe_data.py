@@ -8,7 +8,7 @@ from ..strings.fish_names import Fish, SVEFish, WaterItem, DistantLandsFish
 from ..strings.flower_names import Flower
 from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForageable
 from ..strings.ingredient_names import Ingredient
-from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal
+from ..strings.food_names import Meal, SVEMeal, Beverage, DistantLandsMeal, BoardingHouseMeal
 from ..strings.material_names import Material
 from ..strings.metal_names import Fossil
 from ..strings.monster_drop_names import Loot
@@ -202,6 +202,9 @@ crayfish_soup = friendship_recipe(DistantLandsMeal.crayfish_soup, ModNPC.goblin,
                                                                                      DistantLandsFish.purple_algae: 1, WaterItem.white_algae: 1}, ModNames.distant_lands)
 pemmican = friendship_recipe(DistantLandsMeal.pemmican, ModNPC.goblin, 8, {Loot.bug_meat: 1, Fish.any: 1, Forageable.salmonberry: 3,
                                                                            Material.stone: 2}, ModNames.distant_lands)
+
+special_pumpkin_soup = friendship_recipe(BoardingHouseMeal.special_pumpkin_soup, ModNPC.joel, 6, {Vegetable.pumpkin: 2, AnimalProduct.large_goat_milk: 1,
+                                                                                                  Vegetable.garlic: 1}, ModNames.boarding_house)
 
 
 all_cooking_recipes_by_name = {recipe.meal: recipe for recipe in all_cooking_recipes}

@@ -16,7 +16,7 @@ from ..strings.forageable_names import Forageable, SVEForage, DistantLandsForage
 from ..strings.ingredient_names import Ingredient
 from ..strings.machine_names import Machine
 from ..strings.material_names import Material
-from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral
+from ..strings.metal_names import Ore, MetalBar, Fossil, Artifact, Mineral, ModFossil
 from ..strings.monster_drop_names import Loot
 from ..strings.quest_names import Quest
 from ..strings.region_names import Region, SVERegion
@@ -288,5 +288,27 @@ armor_elixir = shop_recipe(ModEdible.armor_elixir, SVERegion.alesia_shop, 50000,
                                                                                   Fossil.bone_fragment: 5}, ModNames.sve)
 ginger_tincture = friendship_recipe(ModConsumable.ginger_tincture, ModNPC.goblin, 4, {DistantLandsForageable.brown_amanita: 1, Forageable.ginger: 5,
                                                                                       Material.cinder_shard: 1, DistantLandsForageable.swamp_herb: 1}, ModNames.distant_lands)
+
+neanderthal_skeleton = shop_recipe(ModCraftable.neanderthal_skeleton, Region.mines_dwarf_shop, 5000,
+                                   {ModFossil.neanderthal_skull: 1, ModFossil.neanderthal_ribs: 1, ModFossil.neanderthal_pelvis: 1, ModFossil.neanderthal_limb_bones: 1,
+                                                                                                      MetalBar.iron: 5, Material.hardwood: 10}, ModNames.boarding_house)
+pterodactyl_skeleton_l = shop_recipe(ModCraftable.pterodactyl_skeleton_l, Region.mines_dwarf_shop, 5000,
+                                     {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_skull: 1, ModFossil.pterodactyl_l_wing_bone: 1,
+                                      MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+pterodactyl_skeleton_m = shop_recipe(ModCraftable.pterodactyl_skeleton_m, Region.mines_dwarf_shop, 5000,
+                                     {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_vertebra: 1, ModFossil.pterodactyl_ribs: 1,
+                                      MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+pterodactyl_skeleton_r = shop_recipe(ModCraftable.pterodactyl_skeleton_r, Region.mines_dwarf_shop, 5000,
+                                     {ModFossil.pterodactyl_phalange: 1, ModFossil.pterodactyl_claw: 1, ModFossil.pterodactyl_r_wing_bone: 1,
+                                      MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+trex_skeleton_l = shop_recipe(ModCraftable.trex_skeleton_l, Region.mines_dwarf_shop, 5000,
+                              {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_tooth: 1, ModFossil.dinosaur_skull: 1,
+                               MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+trex_skeleton_m = shop_recipe(ModCraftable.trex_skeleton_m, Region.mines_dwarf_shop, 5000,
+                              {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_ribs: 1, ModFossil.dinosaur_claw: 1,
+                               MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
+trex_skeleton_r = shop_recipe(ModCraftable.trex_skeleton_r, Region.mines_dwarf_shop, 5000,
+                              {ModFossil.dinosaur_vertebra: 1, ModFossil.dinosaur_femur: 1, ModFossil.dinosaur_pelvis: 1,
+                               MetalBar.iron: 10, Material.hardwood: 15}, ModNames.boarding_house)
 
 all_crafting_recipes_by_name = {recipe.item: recipe for recipe in all_crafting_recipes}
