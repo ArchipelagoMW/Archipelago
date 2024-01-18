@@ -515,7 +515,7 @@ class KH2Context(CommonContext):
 
     def on_deathlink(self, data: typing.Dict[str, typing.Any]) -> None:
         """Gets dispatched when a new DeathLink is triggered by another linked player."""
-        if data["Source"] not in self.deathlink_blacklist:
+        if data["source"] not in self.deathlink_blacklist:
             self.last_death_link = max(data["time"], self.last_death_link)
             text = data.get("cause", "")
             if text:
