@@ -34,7 +34,7 @@ ice_trap              = "Ice Trap"
 stun_trap             = "Stun Trap"
 literature_trap       = "Literature Trap"
 timer_trap            = "Timer Trap"
-reverse_controls_trap = "Reverse Controls Trap"
+reverse_controls_trap = "Reverse Trap"
 thwimp_trap           = "Thwimp Trap"
 
 # Other Definitions

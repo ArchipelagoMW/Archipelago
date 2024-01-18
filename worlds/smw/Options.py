@@ -244,11 +244,11 @@ class TimerTrapWeight(BaseTrapWeight):
     display_name = "Timer Trap Weight"
 
 
-class ReverseControlsTrapWeight(BaseTrapWeight):
+class ReverseTrapWeight(BaseTrapWeight):
     """
     Likelihood of a receiving a trap which causes the controls to be reversed in the current level
     """
-    display_name = "Reverse Controls Trap Weight"
+    display_name = "Reverse Trap Weight"
     
     
 class ThwimpTrapWeight(BaseTrapWeight):
@@ -396,7 +396,7 @@ class SMWOptions(PerGameCommonOptions):
     stun_trap_weight: StunTrapWeight
     literature_trap_weight: LiteratureTrapWeight
     timer_trap_weight: TimerTrapWeight
-    reverse_controls_trap_weight: ReverseControlsTrapWeight
+    reverse_trap_weight: ReverseTrapWeight
     thwimp_trap_weight: ThwimpTrapWeight
     autosave: Autosave
     early_climb: EarlyClimb
