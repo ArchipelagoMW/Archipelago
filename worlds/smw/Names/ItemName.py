@@ -30,10 +30,12 @@ blue_switch_palace   = "Blue Switch Palace"
 special_world_clear = "Special Zone Clear"
 
 # Trap Definitions
-ice_trap        = "Ice Trap"
-stun_trap       = "Stun Trap"
-literature_trap = "Literature Trap"
-timer_trap      = "Timer Trap"
+ice_trap              = "Ice Trap"
+stun_trap             = "Stun Trap"
+literature_trap       = "Literature Trap"
+timer_trap            = "Timer Trap"
+reverse_controls_trap = "Reverse Controls Trap"
+thwimp_trap           = "Thwimp Trap"
 
 # Other Definitions
 victory   = "The Princess"

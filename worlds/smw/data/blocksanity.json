@@ -64,7 +64,7 @@
         ["fly",    "0820", "00E0", []],
         ["green",  "0560", "00E0", ["greenswitch"]],
         ["yellow", "0050", "0140", ["yellowswitch"]],
-        ["vine",   "02B0", "00E0", ["carry"]]
+        ["vine",   "02B0", "00E0", ["carry spin mushroom", "yoshi"]]
     ],
     "00A_donut_secret_1": [
         ["single", "02C0", "0130", ["swim"]],
@@ -159,22 +159,22 @@
         ["single", "0720", "0140", []],
         ["yoshi",  "0D20", "00F0", []],
         ["vine",   "0DB0", "0130", []],
-        ["green",  "11A0", "0070", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0080", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0090", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00A0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00B0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00C0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00D0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00E0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "00F0", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0100", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0110", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0120", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0130", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0140", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0150", ["greenswitch cape", "greenswitch carry"]],
-        ["green",  "11A0", "0160", ["greenswitch cape", "greenswitch carry"]],
+        ["green",  "11A0", "0070", ["greenswitch cape"]],
+        ["green",  "11A0", "0080", ["greenswitch cape"]],
+        ["green",  "11A0", "0090", ["greenswitch cape"]],
+        ["green",  "11A0", "00A0", ["greenswitch cape"]],
+        ["green",  "11A0", "00B0", ["greenswitch cape"]],
+        ["green",  "11A0", "00C0", ["greenswitch cape"]],
+        ["green",  "11A0", "00D0", ["greenswitch cape"]],
+        ["green",  "11A0", "00E0", ["greenswitch cape"]],
+        ["green",  "11A0", "00F0", ["greenswitch cape"]],
+        ["green",  "11A0", "0100", ["greenswitch cape"]],
+        ["green",  "11A0", "0110", ["greenswitch cape"]],
+        ["green",  "11A0", "0120", ["greenswitch cape"]],
+        ["green",  "11A0", "0130", ["greenswitch cape"]],
+        ["green",  "11A0", "0140", ["greenswitch cape"]],
+        ["green",  "11A0", "0150", ["greenswitch cape"]],
+        ["green",  "11A0", "0160", ["greenswitch cape"]],
         ["yellow", "1240", "0120", ["yellowswitch"]],
         ["yellow", "1280", "0140", ["yellowswitch"]],
         ["yellow", "1290", "0140", ["yellowswitch"]]
@@ -298,7 +298,6 @@
         ["yellow", "0CD0", "0120", ["yellowswitch"]],
         ["yellow", "0CE0", "0120", ["yellowswitch"]],
         ["yellow", "0DA0", "00F0", ["yellowswitch"]],
-        ["yellow", "0E90", "00C0", ["yellowswitch carry"]],
         ["bonus",  "10A0", "0080", []]
     ],
     "104_yoshis_house": [],
@@ -324,7 +323,7 @@
         ["yoshi",  "0B30", "0150", []],
         ["single", "0B40", "0150", []],
         ["vine",   "0C80", "0100", []],
-        ["yellow", "0DF0", "0120", []]
+        ["yellow", "0DF0", "0120", ["yellowswitch"]]
     ],
     "107_vanilla_ghost_house": [
         ["power", "0200", "0100", []],
@@ -434,6 +433,7 @@
         ["power",  "0780", "00F0", ["swim climb", "swim yoshi"]],
         ["power",  "0880", "0100", ["swim climb", "swim yoshi"]],
         ["power",  "0730", "0040", ["swim climb", "swim yoshi"]],
+        ["power",  "0D10", "0100", ["swim climb", "swim yoshi"]],
         ["multi",  "0290", "0130", ["swim climb", "swim yoshi"]],
         ["multi",  "1150", "0140", ["swim climb", "swim yoshi"]]
     ],
@@ -668,7 +668,6 @@
         ["yoshi", "0080", "0140", []],
         ["wings", "0A50", "0140", []]
     ],
-
     "12D_special_zone_4": [
         ["power", "0490", "0140", ["flower"]],
         ["star",  "0AF0", "00F0", ["flower carry", "flower pswitch"]]
@@ -686,13 +685,13 @@
     "134_star_road_1": [],
     "135_star_road_4": [
         ["power", "0540", "0090", []],
-        ["green", "0C00", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C10", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C20", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C30", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C40", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C50", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape"]],
-        ["green", "0C60", "0140", ["greenswitch specialworld yoshi carry", "greenswitch run cape", "greenswitch redswitch"]],
+        ["green", "0C00", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C10", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C20", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C30", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C40", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C50", "0140", ["greenswitch yoshi carry"]],
+        ["green", "0C60", "0140", ["greenswitch yoshi carry"]],
         ["key",   "0D40", "0160", ["carry yoshi", "greenswitch redswitch carry"]]
     ],
     "136_star_road_5": [
