@@ -112,3 +112,7 @@ class DistantLandsMeal:
     crayfish_soup = "Crayfish Soup"
     pemmican = "Pemmican"
     void_mint_tea = "Void Mint Tea"
+
+
+class BoardingHouseMeal:
+    special_pumpkin_soup = "Special Pumpkin Soup"

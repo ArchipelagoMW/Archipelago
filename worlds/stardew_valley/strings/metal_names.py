@@ -104,3 +104,42 @@ class Fossil:
     snake_skull = fossil("Snake Skull")
     snake_vertebrae = fossil("Snake Vertebrae")
     trilobite = fossil("Trilobite")
+
+
+class ModArtifact:
+    ancient_hilt = "Ancient Hilt"
+    ancient_blade = "Ancient Blade"
+    mask_piece_1 = "Mask Piece 1"
+    mask_piece_2 = "Mask Piece 2"
+    mask_piece_3 = "Mask Piece 3"
+    ancient_doll_body = "Ancient Doll Body"
+    ancient_doll_legs = "Ancient Doll Legs"
+    prismatic_shard_piece_1 = "Prismatic Shard Piece 1"
+    prismatic_shard_piece_2 = "Prismatic Shard Piece 2"
+    prismatic_shard_piece_3 = "Prismatic Shard Piece 3"
+    prismatic_shard_piece_4 = "Prismatic Shard Piece 4"
+    chipped_amphora_piece_1 = "Chipped Amphora Piece 1"
+    chipped_amphora_piece_2 = "Chipped Amphora Piece 2"
+
+
+class ModFossil:
+    neanderthal_limb_bones = "Neanderthal Limb Bones"
+    neanderthal_ribs = "Neanderthal Ribs"
+    neanderthal_skull = "Neanderthal Skull"
+    neanderthal_pelvis = "Neanderthal Pelvis"
+    dinosaur_tooth = "Dinosaur Tooth"
+    dinosaur_skull = "Dinosaur Skull"
+    dinosaur_claw = "Dinosaur Claw"
+    dinosaur_femur = "Dinosaur Femur"
+    dinosaur_ribs = "Dinosaur Ribs"
+    dinosaur_pelvis = "Dinosaur Pelvis"
+    dinosaur_vertebra = "Dinosaur Vertebra"
+    pterodactyl_ribs = "Pterodactyl Ribs"
+    pterodactyl_skull = "Pterodactyl Skull"
+    pterodactyl_r_wing_bone = "Pterodactyl R Wing Bone"
+    pterodactyl_l_wing_bone = "Pterodactyl L Wing Bone"
+    pterodactyl_phalange = "Pterodactyl Phalange"
+    pterodactyl_vertebra = "Pterodactyl Vertebra"
+    pterodactyl_claw = "Pterodactyl Claw"
+
+

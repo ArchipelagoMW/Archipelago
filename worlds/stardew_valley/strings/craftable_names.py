@@ -157,6 +157,13 @@ class ModCraftable:
     glass_fence = "Glass Fence"
     wooden_display = "Wooden Display"
     hardwood_display = "Hardwood Display"
+    neanderthal_skeleton = "Neanderthal Skeleton"
+    pterodactyl_skeleton_l = "Pterodactyl Skeleton L"
+    pterodactyl_skeleton_m = "Pterodactyl Skeleton M"
+    pterodactyl_skeleton_r = "Pterodactyl Skeleton R"
+    trex_skeleton_l = "T-Rex Skeleton L"
+    trex_skeleton_m = "T-Rex Skeleton M"
+    trex_skeleton_r = "T-Rex Skeleton R"
 
 
 class ModMachine:
