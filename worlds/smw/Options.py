@@ -244,6 +244,20 @@ class TimerTrapWeight(BaseTrapWeight):
     display_name = "Timer Trap Weight"
 
 
+class ReverseControlsTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the controls to be reversed in the current level
+    """
+    display_name = "Reverse Controls Trap Weight"
+    
+    
+class ThwimpTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes a Thwimp to spawn above the player
+    """
+    display_name = "Thwimp Trap Weight"
+    
+
 class Autosave(DefaultOnToggle):
     """
     Whether a save prompt will appear after every level
@@ -382,6 +396,8 @@ class SMWOptions(PerGameCommonOptions):
     stun_trap_weight: StunTrapWeight
     literature_trap_weight: LiteratureTrapWeight
     timer_trap_weight: TimerTrapWeight
+    reverse_controls_trap_weight: ReverseControlsTrapWeight
+    thwimp_trap_weight: ThwimpTrapWeight
     autosave: Autosave
     early_climb: EarlyClimb
     overworld_speed: OverworldSpeed

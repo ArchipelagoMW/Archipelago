@@ -59,6 +59,8 @@ SMW_NUM_EVENTS_ADDR       = WRAM_START + 0x1F2E
 SMW_SFX_ADDR              = WRAM_START + 0x1DFC
 SMW_PAUSE_ADDR            = WRAM_START + 0x13D4
 SMW_MESSAGE_QUEUE_ADDR    = WRAM_START + 0xC391
+SMW_ACTIVE_THWIMP_ADDR    = WRAM_START + 0x0F3C
+SMW_GOAL_ITEM_COUNT       = WRAM_START + 0x1A01E
 
 SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x1A00E
 
@@ -235,6 +237,13 @@ class SMWSNIClient(SNIClient):
                     self.add_trap_to_queue(next_trap, message)
                     return
                 else:
+                    if next_trap.item == 0xBC001D:
+                        # Special case thwimp trap
+                        # Do not fire if the previous thwimp hasn't reached the player's Y pos
+                        active_thwimp = await snes_read(ctx, SMW_ACTIVE_THWIMP_ADDR, 0x1)
+                        if active_thwimp[0] != 0xFF:
+                            self.add_trap_to_queue(next_trap, message)
+                            return
                     verify_game_state = await snes_read(ctx, SMW_GAME_STATE_ADDR, 0x1)
                     if verify_game_state[0] == 0x14 and len(trap_rom_data[next_trap.item]) > 2:
                         snes_buffered_write(ctx, SMW_SFX_ADDR, bytes([trap_rom_data[next_trap.item][2]]))
@@ -518,12 +527,13 @@ class SMWSNIClient(SNIClient):
 
                 snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
             elif item.item in icon_rom_data:
-                if verify_game_state[0] == 0x14:
-                    queue_addr = await snes_read(ctx, WRAM_START + icon_rom_data[item.item][0], 2)
-                    queue_addr = queue_addr[0]+(queue_addr[1]<<8)
-                    queue_addr += 1
-                    snes_buffered_write(ctx, WRAM_START + icon_rom_data[item.item][0], bytes([queue_addr&0xFF, (queue_addr>>8)&0xFF]))
-
+                queue_addr = await snes_read(ctx, WRAM_START + icon_rom_data[item.item][0], 2)
+                queue_addr = queue_addr[0]+(queue_addr[1]<<8)
+                queue_addr += 1
+                snes_buffered_write(ctx, WRAM_START + icon_rom_data[item.item][0], bytes([queue_addr&0xFF, (queue_addr>>8)&0xFF]))
+                if (goal[0] == 0 and item.item == 0xBC0012) or (goal[0] == 1 and item.item == 0xBC0002):
+                    goal_item_count = await snes_read(ctx, SMW_GOAL_ITEM_COUNT, 1)
+                    snes_buffered_write(ctx, SMW_GOAL_ITEM_COUNT, bytes([goal_item_count[0] + 1]))
 
             elif item.item in ability_rom_data:
                 # Handle Upgrades
