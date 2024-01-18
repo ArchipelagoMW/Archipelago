@@ -1274,11 +1274,12 @@ def create_regions(self):
         KH2REGIONS[RegionName.StarryHillPuzzlePieces] = [
             LocationName.DaylightPuzzleStarryHill
         ]
-        KH2REGIONS[RegionName.At1PuzzlePieces] = [
-            LocationName.DualityPuzzleUndersea,
-            LocationName.FrontierPuzzleTritonOne,
-            LocationName.FrontierPuzzleTritonTwo,
-        ]
+        if not self.options.AtlanticaToggle:
+            KH2REGIONS[RegionName.At1PuzzlePieces] = [
+                LocationName.DualityPuzzleUndersea,
+                LocationName.FrontierPuzzleTritonOne,
+                LocationName.FrontierPuzzleTritonTwo,
+            ]
     # for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
     #    for location in region_name:
     #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
