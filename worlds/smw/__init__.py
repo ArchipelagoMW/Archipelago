@@ -323,3 +323,10 @@ class SMWWorld(World):
 
     def set_rules(self):
         set_rules(self)
+
+    @classmethod
+    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
+        return
+        if multiworld.get_game_players("Super Mario World"):
+            progitempool.sort(
+                key=lambda item: 0 if (item.name != 'Yoshi Egg') else 1)
