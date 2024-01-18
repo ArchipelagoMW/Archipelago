@@ -1274,7 +1274,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.StarryHillPuzzlePieces] = [
             LocationName.DaylightPuzzleStarryHill
         ]
-        if not self.options.AtlanticaToggle:
+        if self.options.AtlanticaToggle:
             KH2REGIONS[RegionName.At1PuzzlePieces] = [
                 LocationName.DualityPuzzleUndersea,
                 LocationName.FrontierPuzzleTritonOne,

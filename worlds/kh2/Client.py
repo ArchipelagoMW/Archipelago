@@ -864,7 +864,7 @@ class KH2Context(CommonContext):
 
     async def is_dead(self):
         # if hp is 0 and sora has 5 drive gauge and deathlink flag isnt set
-        if self.kh2_read_int(0x2AE5750) != 0 and self.kh2_read_int(self.game_over) == 0 and self.kh2_read_byte(0x820500) == 0:
+        if self.deathlink_toggle and self.kh2_read_int(0x2AE5750) != 0 and self.kh2_read_int(self.game_over) == 0 and self.kh2_read_byte(0x820500) == 0:
             self.kh2_write_int(0x820500, 69)
             await self.send_death(death_text="Sora Died")
 
