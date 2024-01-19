@@ -170,6 +170,8 @@ def set_entrance_rules(logic, multiworld, player, world_options: StardewValleyOp
                              logic.received("Bus Repair").simplify())
     MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_skull_cavern, player),
                              logic.received(Wallet.skull_key).simplify())
+    MultiWorldRules.set_rule(multiworld.get_entrance(Entrance.enter_casino, player),
+                             logic.received("Club Card").simplify())
     for floor in range(25, 200 + 25, 25):
         MultiWorldRules.set_rule(multiworld.get_entrance(dig_to_skull_floor(floor), player),
                                  logic.can_mine_to_skull_cavern_floor(floor).simplify())
