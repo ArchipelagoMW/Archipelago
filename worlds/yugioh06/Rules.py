@@ -42,7 +42,7 @@ def set_rules(world):
             lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
                           state.yugioh06_difficulty(player, 2),
         "Exactly 0 LP Bonus": lambda state: state.yugioh06_difficulty(player, 2),
-        "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player),
+        "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player) or state.yugioh06_difficulty(player, 6),
         "Exodia Finish Bonus": lambda state: state.has("Can Exodia Win", player),
         "Last Turn Finish Bonus": lambda state: state.has("Can Last Turn Win", player),
         "Yata-Garasu Finish Bonus": lambda state: state.has("Can Yata Lock", player),

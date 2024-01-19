@@ -124,6 +124,7 @@ class MoneyRewardMultiplier(Range):
 class NormalizeBoostersPacks(Toggle):
     """If enabled every booster pack costs the same otherwise vanilla cost is used"""
     display_name = "Normalize Booster Packs"
+    default = True
 
 
 class BoosterPackPrices(Range):
@@ -141,6 +142,11 @@ class AddEmptyBanList(Toggle):
     """Adds a Ban List where everything is at 3 to the item pool"""
     display_name = "Add Empty Ban List"
 
+
+class CampaignOpponentsShuffle(Toggle):
+    """Replaces the campaign with random opponents from the entire game"""
+    display_name = "Campaign Opponents Shuffle"
+    default = False
 
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):
@@ -161,3 +167,4 @@ class Yugioh06Options(PerGameCommonOptions):
     normalize_boosters_packs: NormalizeBoostersPacks
     booster_pack_prices: BoosterPackPrices
     add_empty_banList: AddEmptyBanList
+    campaign_opponents_shuffle: CampaignOpponentsShuffle

@@ -15,7 +15,14 @@ class OpponentData(NamedTuple):
     deck_file: str = ''
     rule: Callable[[CollectionState], bool] = lambda state: True
 
-opponets = [
+    def tier(self, tier):
+        self.tier = tier
+
+    def column(self, column):
+        self.column = column
+
+
+challenge_opponents = [
     OpponentData(27, "Exarion Universe", [], 1, 1, 5452, 13001, "deck/theme_001.ydc\x00\x00\x00\x00"),
     OpponentData(28, "Stone Statue of the Aztecs", [], 1, 1, 4754, 13002, "deck/theme_002.ydc\x00\x00\x00\x00"),
     OpponentData(29, "Raging Flame Sprite", [], 1, 1, 6189, 13003, "deck/theme_003.ydc\x00\x00\x00\x00"),
@@ -97,9 +104,37 @@ opponets = [
     OpponentData(101, "Alkana Knight Joker", [], 1, 1, 6454, 23023, "deck/limit_023.ydc\x00\x00\x00\x00"),
     OpponentData(102, "Sorcerer of Dark Magic", [], 1, 1, 6086, 23024, "deck/limit_024.ydc\x00\x00\x00\x00"),
     OpponentData(103, "Shinato, King of a Higher Plane", [], 1, 1, 5697, 23025, "deck/limit_025.ydc\x00\x00\x00\x00"),
+    OpponentData(104, "Ryu Kokki", [], 1, 1, 5902, 23026, "deck/limit_027.ydc\x00\x00\x00\x00"),
+    OpponentData(105, "Cyber Dragon", [], 1, 1, 6390, 23027, "deck/limit_028.ydc\x00\x00\x00\x00"),
+    OpponentData(106, "Ryu Kokki", [], 1, 1, 6405, 23028, "deck/limit_029.ydc\x00\x00\x00\x00"),
+    OpponentData(107, "Dark Dreadroute", [], 1, 1, 6319, 23029, "deck/limit_030.ydc\x00\x00\x00\x00"),
+    OpponentData(108, "Thestalos the Firestorm Monarch", [], 1, 1, 6190, 23030, "deck/limit_031.ydc\x00\x00\x00\x00"),
+    OpponentData(109, "Master of Oz", [], 1, 1, 6127, 23031, "deck/limit_032.ydc\x00\x00\x00\x00"),
+    OpponentData(110, "Orca Mega-Fortress of Darkness", [], 1, 1, 5896, 23032, "deck/limit_033.ydc\x00\x00\x00\x00"),
+    OpponentData(111, "Airknight Parshath", [], 1, 1, 5023, 23033, "deck/limit_034.ydc\x00\x00\x00\x00"),
+    OpponentData(112, "Dark Scorpion Burglars", [], 1, 1, 5425, 23034, "deck/limit_035.ydc\x00\x00\x00\x00"),
+    OpponentData(113, "Gilford the Lightning", [], 1, 1, 5451, 23035, "deck/limit_036.ydc\x00\x00\x00\x00"),
+    OpponentData(114, "Embodiment of Apophis", [], 1, 1, 5234, 23036, "deck/limit_037.ydc\x00\x00\x00\x00"),
+    OpponentData(115, "Great Maju Garzett", [], 1, 1, 5768, 23037, "deck/limit_038.ydc\x00\x00\x00\x00"),
+    OpponentData(116, "Black Luster Soldier - Envoy of the Beginning", [], 1, 1, 5835, 23038,
+                 "deck/limit_039.ydc\x00\x00\x00\x00"),
+    OpponentData(117, "Red-Eyes B. Dragon", [], 1, 1, 4088, 23039, "deck/limit_040.ydc\x00\x00\x00\x00"),
+    OpponentData(118, "Blue-Eyes White Dragon", [], 1, 1, 4007, 23040, "deck/limit_041.ydc\x00\x00\x00\x00"),
+    OpponentData(119, "Dark Magician", [], 1, 1, 4041, 23041, "deck/limit_042.ydc\x00\x00\x00\x00"),
+    OpponentData(0, "Kuriboh SD", [], 1, 1, 4064, 1510, "deck/SD0_STARTER.ydc\x00\x00"),
+    OpponentData(10, "Red-Eyes Darkness Dragon SD", [], 1, 1, 6292, 1511, "deck/SD1_DRAGON.ydc\x00\x00\x00"),
+    OpponentData(11, "Vampire Genesis SD", [], 1, 1, 6293, 1512, "deck/SD2_UNDEAD.ydc\x00\x00\x00"),
+    OpponentData(12, "Infernal Flame Emperor SD", [], 1, 1, 6294, 1513, "deck/SD3_FIRE.ydc\x00\x00\x00\x00\x00"),
+    OpponentData(13, "Ocean Dragon Lord - Neo-Daedalus", [], 1, 1, 6295, 1514,
+                 "deck/SD4_UMI.ydc\x00\x00\x00\x00\x00\x00"),
+    OpponentData(15, "Gilford the Legend", [], 1, 1, 6456, 1515, "deck/SD5_SOLDIER.ydc\x00\x00"),
+    OpponentData(16, "Dark Eradicator Warlock", [], 1, 1, 6530, 1516, "deck/SD6_MAGICIAN.ydc\x00"),
+    OpponentData(17, "Guardian Exode", [], 1, 1, 6640, 1517, "deck/SD7_GANSEKI.ydc\x00\x00"),
+    OpponentData(7, "Goblin King 2", ["Quick-Finish"], 2, 3, 5973, 8007, "deck/LV2_kingG2.ydc\x00\x00\x00"),
 ]
 
-def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[OpponentData, ...]:
+
+def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], randomize: bool = False) -> Tuple[OpponentData, ...]:
     opponents_table: List[OpponentData] = [
         # Tier 1
         OpponentData(0, "Kuriboh", [], 1, 1, 4064, 8000, "deck/LV1_kuriboh.ydc\x00\x00"),
@@ -138,7 +173,8 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: state.yugioh06_difficulty(player, 3)),
         OpponentData(18, "Goldd, Wu-Lord of Dark World", ["Quick-Finish"], 4, 4, 6505, 8018, "deck/LV4_ankokukai.ydc",
                      lambda state: state.yugioh06_difficulty(player, 3)),
-        OpponentData(19, "Elemental Hero Erikshieler", ["Quick-Finish"], 4, 5, 6639, 8019, "deck/LV4_Ehero.ydc\x00\x00\x00\x00",
+        OpponentData(19, "Elemental Hero Erikshieler", ["Quick-Finish"], 4, 5, 6639, 8019,
+                     "deck/LV4_Ehero.ydc\x00\x00\x00\x00",
                      lambda state: state.yugioh06_difficulty(player, 3)),
         # Tier 5
         OpponentData(20, "Raviel, Lord of Phantasms", [], 5, 1, 6565, 8020, "deck/LV5_ravieru.ydc\x00\x00",
@@ -152,40 +188,26 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         OpponentData(24, "Cyber End Dragon", ["Goal"], 5, 5, 6397, 8024, "deck/LV5_cyber.ydc\x00\x00\x00\x00",
                      lambda state: state.yugioh06_difficulty(player, 7)),
     ]
-    return tuple(opponents_table)
+    if not randomize:
+        return tuple(opponents_table)
+    opponents = opponents_table + challenge_opponents
+    goal = multiworld.random.choice([o for o in opponents if "Goal" in o.campaignInfo])
+    opponents.remove(goal)
+    multiworld.random.shuffle(opponents)
+    chosen_ones = opponents[:24]
+    chosen_ones.append(goal)
+    tier = 1
+    column = 1
+    recreation = []
+    for opp in chosen_ones:
+        recreation.append(OpponentData(opp.id, opp.name, opp.campaignInfo, tier, column, opp.card_id,
+                                       opp.deck_name_id, opp.deck_file, opp.rule))
+        column = column + 1
+        if column > 5:
+            column = 1
+            tier = tier + 1
 
-
-def get_other_opponents(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[OpponentData, ...]:
-    opponents_table: List[OpponentData] = [
-        OpponentData(104, "Ryu Kokki", [], 1, 1, 5902, 23026, "deck/limit_027.ydc\x00\x00\x00\x00"),
-        OpponentData(105, "Cyber Dragon", [], 1, 1, 6390, 23027, "deck/limit_028.ydc\x00\x00\x00\x00"),
-        OpponentData(106, "Ryu Kokki", [], 1, 1, 6405, 23028, "deck/limit_029.ydc\x00\x00\x00\x00"),
-        OpponentData(107, "Dark Dreadroute", [], 1, 1, 6319, 23029, "deck/limit_030.ydc\x00\x00\x00\x00"),
-        OpponentData(108, "Thestalos the Firestorm Monarch", [], 1, 1, 6190, 23030, "deck/limit_031.ydc\x00\x00\x00\x00"),
-        OpponentData(109, "Master of Oz", [], 1, 1, 6127, 23031, "deck/limit_032.ydc\x00\x00\x00\x00"),
-        OpponentData(110, "Orca Mega-Fortress of Darkness", [], 1, 1, 5896, 23032, "deck/limit_033.ydc\x00\x00\x00\x00"),
-        OpponentData(111, "Airknight Parshath", [], 1, 1, 5023, 23033, "deck/limit_034.ydc\x00\x00\x00\x00"),
-        OpponentData(112, "Dark Scorpion Burglars", [], 1, 1, 5425, 23034, "deck/limit_035.ydc\x00\x00\x00\x00"),
-        OpponentData(113, "Gilford the Lightning", [], 1, 1, 5451, 23035, "deck/limit_036.ydc\x00\x00\x00\x00"),
-        OpponentData(114, "Embodiment of Apophis", [], 1, 1, 5234, 23036, "deck/limit_037.ydc\x00\x00\x00\x00"),
-        OpponentData(115, "Great Maju Garzett", [], 1, 1, 5768, 23037, "deck/limit_038.ydc\x00\x00\x00\x00"),
-        OpponentData(116, "Black Luster Soldier - Envoy of the Beginning", [], 1, 1, 5835, 23038, "deck/limit_039.ydc\x00\x00\x00\x00"),
-        OpponentData(117, "Red-Eyes B. Dragon", [], 1, 1, 4088, 23039, "deck/limit_040.ydc\x00\x00\x00\x00"),
-        OpponentData(118, "Blue-Eyes White Dragon", [], 1, 1, 4007, 23040, "deck/limit_041.ydc\x00\x00\x00\x00"),
-        OpponentData(119, "Dark Magician", [], 1, 1, 4041, 23041, "deck/limit_042.ydc\x00\x00\x00\x00"),
-        OpponentData(0, "Kuriboh SD", [], 1, 1, 4064, 1510, "deck/SD0_STARTER.ydc\x00\x00"),
-        OpponentData(10, "Red-Eyes Darkness Dragon SD", [], 1, 1, 6292, 1511, "deck/SD1_DRAGON.ydc\x00\x00\x00"),
-        OpponentData(11, "Vampire Genesis SD", [], 1, 1, 6293, 1512, "deck/SD2_UNDEAD.ydc\x00\x00\x00"),
-        OpponentData(12, "Infernal Flame Emperor SD", [], 1, 1, 6294, 1513, "deck/SD3_FIRE.ydc\x00\x00\x00\x00\x00"),
-        OpponentData(13, "Ocean Dragon Lord - Neo-Daedalus", [], 1, 1, 6295, 1514, "deck/SD4_UMI.ydc\x00\x00\x00\x00\x00\x00"),
-        OpponentData(15, "Gilford the Legend", [], 1, 1, 6456, 1515, "deck/SD5_SOLDIER.ydc\x00\x00"),
-        OpponentData(16, "Dark Eradicator Warlock", [], 1, 1, 6530, 1516, "deck/SD6_MAGICIAN.ydc\x00"),
-        OpponentData(17, "Guardian Exode", [], 1, 1, 6640, 1517, "deck/SD7_GANSEKI.ydc\x00\x00"),
-        OpponentData(7, "Goblin King 2", ["Quick-Finish"], 2, 3, 5973, 8007, "deck/LV2_kingG2.ydc\x00\x00\x00",
-                     lambda state: state.yugioh06_difficulty(player, 1)),
-
-    ]
-    return tuple(opponents_table)
+    return tuple(recreation)
 
 
 def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:

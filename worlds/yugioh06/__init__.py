@@ -16,7 +16,7 @@ from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_item
     challenges, useful
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations, get_other_opponents
+from .Opponents import get_opponents, get_opponent_locations
 from .Options import Yugioh06Options
 from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
 from .Rules import set_rules
@@ -113,6 +113,7 @@ class Yugioh06World(World):
         self.removed_challenges = None
         self.starting_booster = None
         self.starting_opponent = None
+        self.campaign_opponents = None
 
     def create_item(self, name: str) -> Item:
         return Item(name, ItemClassification.progression, self.item_name_to_id[name], self.player)
@@ -158,7 +159,7 @@ class Yugioh06World(World):
             location.place_locked_item(item)
             location.event = True
 
-        for opponent in get_opponents(self.multiworld, self.player):
+        for opponent in self.campaign_opponents:
             for location_name, event in get_opponent_locations(opponent).items():
                 if event is not None and not isinstance(event, int):
                     item = Yugioh2006Item(
@@ -226,7 +227,7 @@ class Yugioh06World(World):
 
         campaign = self.multiworld.get_region('Campaign', self.player)
         # Campaign Opponents
-        for opponent in get_opponents(self.multiworld, self.player):
+        for opponent in self.campaign_opponents:
             unlock_item = "Campaign Tier " + str(opponent.tier) + " Column " + str(opponent.column)
             region = create_region(self,
                                    opponent.name, get_opponent_locations(opponent))
@@ -322,6 +323,8 @@ class Yugioh06World(World):
         normal = [e for e in challenge if e not in excluded and e not in prio]
         total = list(excluded) + normal + list(prio)
         self.removed_challenges = total[:noc]
+        self.campaign_opponents = get_opponents(self.multiworld, self.player,
+                                                self.options.campaign_opponents_shuffle.value)
 
     def apply_base_path(self, rom):
         base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))
@@ -442,19 +445,15 @@ class Yugioh06World(World):
                 rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
                 rom_data[0x1e5e2e9 + space] = booster_pack_price[1]
                 rom_data[0x1e5e2ea + space] = 5
-        for i in range(0, 121):
-            space = i * 32
-            print(str(i) + ": " + str(int.from_bytes(rom_data[0x1e58d0e + space:0x1e58d10 + space], 'little')) + ', ' +
-              str(int.from_bytes(rom_data[0x1e58d10 + space:0x1e58d12 + space], 'little')) + ', "' +
-              rom_data[0x1e58d12 + space:0x1e58d28 + space].decode('ascii').replace("\x00", "\\x00") + '",')
-        i = 0
-        for opp in get_other_opponents(self.multiworld, self.player):
-            space = i * 32
-            rom_data[0x000f3ba + i] = opp.id
-            rom_data[0x1e58d0e + space:0x1e58d10 + space] = opp.card_id.to_bytes(2, 'little')
-            rom_data[0x1e58d10 + space:0x1e58d12 + space] = opp.deck_name_id.to_bytes(2, 'little')
-            rom_data[0x1e58d12 + space:0x1e58d28 + space] = opp.deck_file.encode('ascii')
-            i = i+1
+        if self.options.campaign_opponents_shuffle.value:
+            i = 0
+            for opp in self.campaign_opponents:
+                space = i * 32
+                rom_data[0x000f3ba + i] = opp.id
+                rom_data[0x1e58d0e + space:0x1e58d10 + space] = opp.card_id.to_bytes(2, 'little')
+                rom_data[0x1e58d10 + space:0x1e58d12 + space] = opp.deck_name_id.to_bytes(2, 'little')
+                rom_data[0x1e58d12 + space:0x1e58d28 + space] = opp.deck_file.encode('ascii')
+                i = i+1
         return rom_data
 
     def generate_output(self, output_directory: str):
