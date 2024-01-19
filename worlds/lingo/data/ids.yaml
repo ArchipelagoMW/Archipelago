@@ -57,8 +57,6 @@ panels:
   Hub Room:
     ORDER: 444432
     SLAUGHTER: 444433
-    NEAR: 444434
-    FAR: 444435
     TRACE: 444436
     RAT: 444437
     OPEN: 444438
@@ -123,6 +121,9 @@ panels:
     RACECAR (White): 444489
     SOLOS (White): 444490
     Achievement: 444491
+  Near Far Area:
+    NEAR: 444434
+    FAR: 444435
   Warts Straw Area:
     WARTS: 444492
     STRAW: 444493
@@ -985,9 +986,6 @@ doors:
     Tenacious Entrance:
       item: 444426
       location: 444433
-    Symmetry Door:
-      item: 444428
-      location: 445204
     Shortcut to Hedge Maze:
       item: 444430
       location: 444436
@@ -1044,6 +1042,10 @@ doors:
       location: 445210
     White Palindromes:
       location: 445211
+  Near Far Area:
+    Door:
+      item: 444428
+      location: 445204
   Warts Straw Area:
     Door:
       item: 444451

@@ -399,8 +399,7 @@
         door: Crossroads Entrance
       The Tenacious:
         door: Tenacious Entrance
-      Warts Straw Area:
-        door: Symmetry Door
+      Near Far Area: True
       Hedge Maze:
         door: Shortcut to Hedge Maze
       Orange Tower First Floor:
@@ -427,14 +426,6 @@
         id: Palindrome Room/Panel_slaughter_laughter
         colors: red
         tag: midred
-      NEAR:
-        id: Symmetry Room/Panel_near_far
-        colors: black
-        tag: botblack
-      FAR:
-        id: Symmetry Room/Panel_far_near
-        colors: black
-        tag: botblack
       TRACE:
         id: Maze Room/Panel_trace_trace
         tag: midwhite
@@ -477,14 +468,6 @@
         group: Entrances to The Tenacious
         panels:
           - SLAUGHTER
-      Symmetry Door:
-        id:
-          - Symmetry Room Area Doors/Door_near_far
-          - Symmetry Room Area Doors/Door_far_near
-        group: Symmetry Doors
-        panels:
-          - NEAR
-          - FAR
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_trace_trace
         group: Hedge Maze Doors
@@ -962,11 +945,36 @@
           - LEVEL (White)
           - RACECAR (White)
           - SOLOS (White)
+  Near Far Area:
+    entrances:
+      Hub Room: True
+      Warts Straw Area:
+        door: Door
+    panels:
+      NEAR:
+        id: Symmetry Room/Panel_near_far
+        colors: black
+        tag: botblack
+      FAR:
+        id: Symmetry Room/Panel_far_near
+        colors: black
+        tag: botblack
+    doors:
+      Door:
+        id:
+          - Symmetry Room Area Doors/Door_near_far
+          - Symmetry Room Area Doors/Door_far_near
+        group: Symmetry Doors
+        item_name: Symmetry Room - Near Far Door
+        location_name: Symmetry Room - NEAR, FAR
+        panels:
+          - NEAR
+          - FAR
   Warts Straw Area:
     entrances:
-      Hub Room:
-        room: Hub Room
-        door: Symmetry Door
+      Near Far Area:
+        room: Near Far Area
+        door: Door
       Leaf Feel Area:
         door: Door
     panels:
@@ -984,6 +992,8 @@
           - Symmetry Room Area Doors/Door_warts_straw
           - Symmetry Room Area Doors/Door_straw_warts
         group: Symmetry Doors
+        item_name: Symmetry Room - Warts Straw Door
+        location_name: Symmetry Room - WARTS, STRAW
         panels:
           - WARTS
           - STRAW
@@ -1009,6 +1019,8 @@
           - Symmetry Room Area Doors/Door_leaf_feel
           - Symmetry Room Area Doors/Door_feel_leaf
         group: Symmetry Doors
+        item_name: Symmetry Room - Leaf Feel Door
+        location_name: Symmetry Room - LEAF, FEEL
         panels:
           - LEAF
           - FEEL
