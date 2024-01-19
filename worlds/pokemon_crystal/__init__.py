@@ -56,7 +56,7 @@ class PokemonCrystalWorld(World):
     options: PokemonCrystalOptions
 
     data_version = 0
-    required_client_version = (0, 4, 3)
+    required_client_version = (0, 4, 4)
 
     item_name_to_id = create_item_label_to_code_map()
     location_name_to_id = create_location_label_to_id_map()
@@ -181,7 +181,8 @@ class PokemonCrystalWorld(World):
                             new_pkmn_data[1], int(new_pkmn_data[0]))
                         move_offset += 1
                     new_party[i] = new_pkmn_data
-                self.generated_trainers[trainer_name]._replace(pokemon=new_party)
+                self.generated_trainers[trainer_name] = self.generated_trainers[trainer_name]._replace(
+                    pokemon=new_party)
 
         generate_output(self, output_directory)
 

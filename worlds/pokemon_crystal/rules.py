@@ -294,6 +294,11 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_ROUTE_44"), lambda state: has_n_badges(state, 7))
 
+    # Route 43
+
+    set_rule(get_location("Route 43 - Sludge Bomb from Guard in Gate"),
+             lambda state: state.has("EVENT_CLEARED_ROCKET_HIDEOUT", world.player))
+
     # Lake of Rage
 
     set_rule(get_location("EVENT_DECIDED_TO_HELP_LANCE"), can_surf)
@@ -332,6 +337,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"),
              lambda state: state.has("EVENT_BEAT_CLAIR", world.player))
+
+    add_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"), can_surf)
 
     # Dragons Den
 
@@ -483,7 +490,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"),
              lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
 
-    set_rule(get_entrance("REGION_VERMILION_PORT -> REGION_FAST_SHIP_1F"),
+    set_rule(get_entrance("REGION_VERMILION_PORT_PASSAGE -> REGION_VERMILION_PORT"),
              lambda state: state.has("S.S. Ticket", world.player))
 
     # Saffron
