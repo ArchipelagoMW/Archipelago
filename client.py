@@ -296,4 +296,3 @@ class WL4Client(BizHawkClient):
             tags = args.get('tags', [])
             if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
-                ctx.on_deathlink(args['data'])
