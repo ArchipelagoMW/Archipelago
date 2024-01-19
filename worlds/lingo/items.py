@@ -28,6 +28,10 @@ class ItemData(NamedTuple):
             # door shuffle is on and tower isn't progressive
             return world.options.shuffle_doors != ShuffleDoors.option_none \
                 and not world.options.progressive_orange_tower
+        elif self.mode == "the colorful":
+            # complex door shuffle is on and colorful isn't progressive
+            return world.options.shuffle_doors == ShuffleDoors.option_complex \
+                and not world.options.progressive_colorful
         elif self.mode == "complex door":
             return world.options.shuffle_doors == ShuffleDoors.option_complex
         elif self.mode == "door group":
@@ -70,6 +74,8 @@ def load_item_data():
             if room_name in PROGRESSION_BY_ROOM and door_name in PROGRESSION_BY_ROOM[room_name]:
                 if room_name == "Orange Tower":
                     door_mode = "orange tower"
+                elif room_name == "The Colorful":
+                    door_mode = "the colorful"
                 else:
                     door_mode = "special"
 

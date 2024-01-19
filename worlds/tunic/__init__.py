@@ -24,15 +24,15 @@ class TunicWeb(WebWorld):
         )
     ]
     theme = "grassFlowers"
-    game = "Tunic"
+    game = "TUNIC"
 
 
 class TunicItem(Item):
-    game: str = "Tunic"
+    game: str = "TUNIC"
 
 
 class TunicLocation(Location):
-    game: str = "Tunic"
+    game: str = "TUNIC"
 
 
 class TunicWorld(World):
@@ -41,7 +41,7 @@ class TunicWorld(World):
     about a small fox on a big adventure. Stranded on a mysterious beach, armed with only your own curiosity, you will
     confront colossal beasts, collect strange and powerful items, and unravel long-lost secrets. Be brave, tiny fox!
     """
-    game = "Tunic"
+    game = "TUNIC"
     web = TunicWeb()
 
     data_version = 2
