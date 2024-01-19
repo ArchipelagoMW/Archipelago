@@ -2307,30 +2307,58 @@ def handle_uncompressed_player_gfx(rom):
     SMW_COMPRESSED_PLAYER_GFX = 0x40000
     SMW_COMPRESSED_ANIMATED_GFX = 0x43FC0
     SMW_COMPRESSED_GFX_00 = 0x459F9
+    SMW_COMPRESSED_GFX_10 = 0x4EF1E
+    SMW_COMPRESSED_GFX_28 = 0x5C06C
     compressed_player_gfx = rom.read_bytes(SMW_COMPRESSED_PLAYER_GFX, 0x3FC0)
     compressed_animated_gfx = rom.read_bytes(SMW_COMPRESSED_ANIMATED_GFX, 0x1A39)
     compressed_gfx_00 = rom.read_bytes(SMW_COMPRESSED_GFX_00, 0x0838)
+    compressed_gfx_10 = rom.read_bytes(SMW_COMPRESSED_GFX_10, 0x0891)
+    compressed_gfx_28 = rom.read_bytes(SMW_COMPRESSED_GFX_28, 0x0637)
     decompressed_player_gfx = decompress_gfx(compressed_player_gfx)
     decompressed_animated_gfx = convert_3bpp(decompress_gfx(compressed_animated_gfx))
     decompressed_gfx_00 = convert_3bpp(decompress_gfx(compressed_gfx_00))
+    decompressed_gfx_10 = convert_3bpp(decompress_gfx(compressed_gfx_10))
+    decompressed_gfx_28 = decompress_gfx(compressed_gfx_28)
 
     # Copy berry tiles
     order = [0x26C, 0x26D, 0x26E, 0x26F,
              0x27C, 0x27D, 0x27E, 0x27F,
              0x2E0, 0x2E1, 0x2E2, 0x2E3,
              0x2E4, 0x2E5, 0x2E6, 0x2E7]
-    decompressed_animated_gfx += copy_gfx_tiles(decompressed_player_gfx, order)
+    decompressed_animated_gfx += copy_gfx_tiles(decompressed_player_gfx, order, [5, 32])
 
     # Copy Mario's auxiliary tiles
     order = [0x80, 0x91, 0x81, 0x90, 0x82, 0x83]
-    decompressed_gfx_00 += copy_gfx_tiles(decompressed_player_gfx, order)
+    decompressed_gfx_00 += copy_gfx_tiles(decompressed_player_gfx, order, [5, 32])
     order = [0x69, 0x69, 0x0C, 0x69, 0x1A, 0x1B, 0x0D, 0x69, 0x22, 0x23, 0x32, 0x33, 0x0A, 0x0B, 0x20, 0x21,
              0x30, 0x31, 0x7E, 0x69, 0x80, 0x4A, 0x81, 0x5B, 0x82, 0x4B, 0x83, 0x5A, 0x84, 0x69, 0x85, 0x85]
-    player_small_tiles = copy_gfx_tiles(decompressed_gfx_00, order)
+    player_small_tiles = copy_gfx_tiles(decompressed_gfx_00, order, [5, 32])
+
+    # Copy OW mario tiles
+    order = [0x06, 0x07, 0x16, 0x17,
+             0x08, 0x09, 0x18, 0x19,
+             0x0A, 0x0B, 0x1A, 0x1B,
+             0x0C, 0x0D, 0x1C, 0x1D,
+             0x0E, 0x0F, 0x1E, 0x1F,
+             0x20, 0x21, 0x30, 0x31,
+             0x24, 0x25, 0x34, 0x35,
+             0x46, 0x47, 0x56, 0x57,
+             0x64, 0x65, 0x74, 0x75,
+             0x66, 0x67, 0x76, 0x77,
+             0x2E, 0x2F, 0x3E, 0x3F,
+             0x40, 0x41, 0x50, 0x51,
+             0x42, 0x43, 0x52, 0x53]
+    player_map_tiles = copy_gfx_tiles(decompressed_gfx_10, order, [5, 32])
+
+    # Copy HUD mario tiles
+    order = [0x30, 0x31, 0x32, 0x33, 0x34]
+    player_name_tiles = copy_gfx_tiles(decompressed_gfx_28, order, [4, 16])
 
     rom.write_bytes(0xE0000, decompressed_player_gfx)
     rom.write_bytes(0xE8000, decompressed_animated_gfx)
     rom.write_bytes(0xE6000, player_small_tiles)
+    rom.write_bytes(0xE6400, player_map_tiles)
+    rom.write_bytes(0xE6C00, player_name_tiles)
 
     # Skip Player & Animated tile decompression
     rom.write_bytes(0x03888, bytearray([0x60])) # RTS
@@ -2573,54 +2601,130 @@ def handle_uncompressed_player_gfx(rom):
     rom.write_bytes(0xE7000, read_graphics_file("indicators.bin"))
     # Upload indicator GFX
     UPLOAD_INDICATOR_GFX = 0x87000
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0000, bytearray([0xAD, 0x00, 0x01]))             # upload_score_sprite_gfx:    lda $0100
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0003, bytearray([0xC9, 0x13]))                   #                             cmp #$13
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0005, bytearray([0xD0, 0x7A]))                   #                             bne .skip
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0007, bytearray([0xA5, 0x7C]))                   #                             lda $7C
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0009, bytearray([0xD0, 0x76]))                   #                             bne .skip
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000B, bytearray([0xE6, 0x7C]))                   #                             inc $7C
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000D, bytearray([0xC2, 0x20]))                   #                             rep #$20
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000F, bytearray([0xA0, 0x80]))                   #                             ldy #$80
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0011, bytearray([0x8C, 0x15, 0x21]))             #                             sty $2115
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0014, bytearray([0xA9, 0x01, 0x18]))             #                             lda #$1801
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0017, bytearray([0x8D, 0x20, 0x43]))             #                             sta $4320
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x001A, bytearray([0xA0, 0x1C]))                   #                             ldy.b #score_sprites_tiles>>16
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x001C, bytearray([0x8C, 0x24, 0x43]))             #                             sty $4324
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x001F, bytearray([0xA9, 0x00, 0xF0]))             #                             lda.w #score_sprites_tiles
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0022, bytearray([0x8D, 0x22, 0x43]))             #                             sta $4322
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0025, bytearray([0xA9, 0xA0, 0x64]))             # .nums_01                    lda #$64A0
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0028, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x002B, bytearray([0xA9, 0x40, 0x00]))             #                             lda #$0040
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x002E, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0031, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0034, bytearray([0xA9, 0xA0, 0x65]))             # .nums_35                    lda #$65A0
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0037, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x003A, bytearray([0xA9, 0x40, 0x00]))             #                             lda #$0040
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x003D, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0040, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0043, bytearray([0xA9, 0xA0, 0x61]))             # .plus_coin                  lda #$61A0
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0046, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0049, bytearray([0xA9, 0x40, 0x00]))             #                             lda #$0040
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x004C, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x004F, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0052, bytearray([0xA9, 0xA0, 0x60]))             # .egg_mushroom               lda #$60A0
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0055, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0058, bytearray([0xA9, 0x40, 0x00]))             #                             lda #$0040
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x005B, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x005E, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0061, bytearray([0xA9, 0xE0, 0x67]))             # .flower_feather             lda #$67E0
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0064, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0067, bytearray([0xA9, 0x40, 0x00]))             #                             lda #$0040
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x006A, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x006D, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0070, bytearray([0xA9, 0x80, 0x63]))             # .token                      lda #$6380
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0073, bytearray([0x8D, 0x16, 0x21]))             #                             sta $2116
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0076, bytearray([0xA9, 0x20, 0x00]))             #                             lda #$0020
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0079, bytearray([0x8D, 0x25, 0x43]))             #                             sta $4325
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x007C, bytearray([0x8E, 0x0B, 0x42]))             #                             stx $420B
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x007F, bytearray([0xE2, 0x20]))                   #                             sep #$20
-    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0081, bytearray([0x6B]))                         # .skip                       rtl 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0000, bytearray([0xAD, 0x00, 0x01]))       # upload_score_sprite_gfx:    lda $0100
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0003, bytearray([0xC9, 0x13]))             #                             cmp #$13
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0005, bytearray([0xF0, 0x03]))             #                             beq .check_level
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0007, bytearray([0x4C, 0x9D, 0xF0]))       #                             jmp .check_map
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000A, bytearray([0xA5, 0x7C]))             # .check_level                lda $7C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000C, bytearray([0xF0, 0x03]))             #                             beq ..perform 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x000E, bytearray([0x4C, 0x9C, 0xF0]))       #                             jmp .skip
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0011, bytearray([0xE6, 0x7C]))             # ..perform                   inc $7C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0013, bytearray([0xC2, 0x20]))             #                             rep #$20
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0015, bytearray([0xA0, 0x80]))             #                             ldy #$80
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0017, bytearray([0x8C, 0x15, 0x21]))       #                             sty $2115
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x001A, bytearray([0xA9, 0x01, 0x18]))       #                             lda #$1801
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x001D, bytearray([0x8D, 0x20, 0x43]))       #                             sta $4320
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0020, bytearray([0xA0, 0x1C]))             #                             ldy.b #$1C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0022, bytearray([0x8C, 0x24, 0x43]))       #                             sty $4324
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0025, bytearray([0xA9, 0x00, 0xF0]))       #                             lda.w #$F000
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0028, bytearray([0x8D, 0x22, 0x43]))       #                             sta $4322
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x002B, bytearray([0xA9, 0xA0, 0x64]))       # .nums_01                    lda #$64A0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x002E, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0031, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0034, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0037, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x003A, bytearray([0xA9, 0xA0, 0x65]))       # .nums_35                    lda #$65A0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x003D, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0040, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0043, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0046, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0049, bytearray([0xA9, 0xA0, 0x61]))       # .plus_coin                  lda #$61A0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x004C, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x004F, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0052, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0055, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0058, bytearray([0xA9, 0xA0, 0x60]))       # .egg_mushroom               lda #$60A0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x005B, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x005E, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0061, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0064, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0067, bytearray([0xA9, 0xE0, 0x67]))       # .thwimp                     lda #$67E0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x006A, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x006D, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0070, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0073, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0076, bytearray([0xA9, 0x80, 0x63]))       # .token                      lda #$6380
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0079, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x007C, bytearray([0xA9, 0x20, 0x00]))       #                             lda #$0020
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x007F, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0082, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0085, bytearray([0xA9, 0x00, 0xEC]))       # .layer_3                    lda #$EC00
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0088, bytearray([0x8D, 0x22, 0x43]))       #                             sta $4322
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x008B, bytearray([0xA9, 0x80, 0x41]))       #                             lda #$4180
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x008E, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0091, bytearray([0xA9, 0x50, 0x00]))       #                             lda #$0050
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0094, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0097, bytearray([0x8E, 0x0B, 0x42]))       #                             stx $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x009A, bytearray([0xE2, 0x20]))             #                             sep #$20
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x009C, bytearray([0x6B]))                   # .skip                       rtl 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x009D, bytearray([0xC9, 0x0E]))             # .check_map                  cmp #$0E
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x009F, bytearray([0xF0, 0x51]))             #                             beq .map_pal
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00A1, bytearray([0xC9, 0x0D]))             #                             cmp #$0D
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00A3, bytearray([0xD0, 0xF7]))             #                             bne .skip
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00A5, bytearray([0xA5, 0x7C]))             #                             lda $7C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00A7, bytearray([0xD0, 0xF3]))             #                             bne .skip
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00A9, bytearray([0xE6, 0x7C]))             #                             inc $7C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00AB, bytearray([0xC2, 0x20]))             #                             rep #$20
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00AD, bytearray([0xA0, 0x80]))             #                             ldy #$80
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00AF, bytearray([0x8C, 0x15, 0x21]))       #                             sty $2115
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00B2, bytearray([0xA9, 0x01, 0x18]))       #                             lda #$1801
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00B5, bytearray([0x8D, 0x20, 0x43]))       #                             sta $4320
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00B8, bytearray([0xA0, 0x1C]))             #                             ldy.b #$1C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00BA, bytearray([0x8C, 0x24, 0x43]))       #                             sty $4324
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00BD, bytearray([0xA9, 0x00, 0xE4]))       #                             lda.w #$E400
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00C0, bytearray([0x8D, 0x22, 0x43]))       #                             sta $4322
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00C3, bytearray([0xDA]))                   #                             phx 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00C4, bytearray([0x9B]))                   #                             txy 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00C5, bytearray([0xA2, 0x18]))             #                             ldx.b #(.map_targets_end-.map_targets-1)*2
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00C7, bytearray([0xA9, 0x40, 0x00]))       # ..loop                      lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00CA, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00CD, bytearray([0xBF, 0x80, 0xFF, 0x10])) #                             lda.l .map_targets,x
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00D1, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00D4, bytearray([0x8C, 0x0B, 0x42]))       #                             sty $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00D7, bytearray([0xBF, 0x80, 0xFF, 0x10])) #                             lda.l .map_targets,x
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00DB, bytearray([0x18]))                   #                             clc 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00DC, bytearray([0x69, 0x00, 0x01]))       #                             adc #$0100
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00DF, bytearray([0x8D, 0x16, 0x21]))       #                             sta $2116
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00E2, bytearray([0xA9, 0x40, 0x00]))       #                             lda #$0040
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00E5, bytearray([0x8D, 0x25, 0x43]))       #                             sta $4325
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00E8, bytearray([0x8C, 0x0B, 0x42]))       #                             sty $420B
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00EB, bytearray([0xCA]))                   #                             dex 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00EC, bytearray([0xCA]))                   #                             dex 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00ED, bytearray([0x10, 0xD8]))             #                             bpl .loop
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00EF, bytearray([0xFA]))                   #                             plx 
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00F0, bytearray([0xE2, 0x20]))             #                             sep #$20
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00F2, bytearray([0xA9, 0xA3]))             # .map_pal                    lda #$A3
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00F4, bytearray([0x8D, 0x21, 0x21]))       #                             sta $2121
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00F7, bytearray([0xAF, 0x9C, 0xB5, 0x00])) #                             lda $00B59C
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00FB, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x00FE, bytearray([0xAF, 0x9D, 0xB5, 0x00])) #                             lda $00B59D
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0102, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0105, bytearray([0xAF, 0x9E, 0xB5, 0x00])) #                             lda $00B59E
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0109, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x010C, bytearray([0xAF, 0x9F, 0xB5, 0x00])) #                             lda $00B59F
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0110, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0113, bytearray([0xAF, 0xA0, 0xB5, 0x00])) #                             lda $00B5A0
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0117, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x011A, bytearray([0xAF, 0xA1, 0xB5, 0x00])) #                             lda $00B5A1
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x011E, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0121, bytearray([0xAF, 0xA2, 0xB5, 0x00])) #                             lda $00B5A2
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0125, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0128, bytearray([0xAF, 0xA3, 0xB5, 0x00])) #                             lda $00B5A3
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x012C, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x012F, bytearray([0xAF, 0xA4, 0xB5, 0x00])) #                             lda $00B5A4
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0133, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x0136, bytearray([0xAF, 0xA5, 0xB5, 0x00])) #                             lda $00B5A5
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x013A, bytearray([0x8D, 0x22, 0x21]))       #                             sta $2122
+    rom.write_bytes(UPLOAD_INDICATOR_GFX + 0x013D, bytearray([0x6B]))                   #                             rtl 
 
+    vram_targets = bytearray([
+        0x20,0x64, 0x00,0x64, 0xE0,0x62,
+        0x60,0x66, 0x40,0x66,
+        0x60,0x64,
+        0x40,0x62, 0x00,0x62,
+        0xE0,0x60, 0xC0,0x60, 0xA0,0x60, 0x80,0x60, 0x60,0x60
+    ])
+    rom.write_bytes(0x87F80, vram_targets)
 
 def decompress_gfx(compressed_graphics):
     # This code decompresses graphics in LC_LZ2 format in order to be able to swap player and yoshi's graphics with ease.
@@ -2682,11 +2786,11 @@ def convert_3bpp(decompressed_gfx):
     return converted_gfx
 
 
-def copy_gfx_tiles(original, order):
+def copy_gfx_tiles(original, order, size):
     result = bytearray([])
     for x in range(len(order)):
-        z = order[x] << 5
-        result += bytearray([original[z+y] for y in range(32)])
+        z = order[x] << size[0]
+        result += bytearray([original[z+y] for y in range(size[1])])
     return result
 
 
@@ -2970,6 +3074,29 @@ def patch_rom(world: World, rom, player, active_level_dict):
 
     # Handle extra traps
     handle_traps(rom)
+
+    # Mario Start! -> Player Start!
+    text_data_top_tiles = bytearray([
+        0x00,0xFF,0x4D,0x4C,0x03,0x4D,0x5D,0xFF,0x4C,0x4B,
+        0x4A,0x03,0x4E,0x01,0x00,0x02,0x00,0x4a,0x4E,0xFF
+    ])
+    text_data_top_props = bytearray([
+        0x34,0x30,0x34,0x34,0x34,0x34,0x34,0x30,0x34,0x34,
+        0x34,0x34,0x34,0x34,0x34,0x34,0x34,0x34,0x34,0x30
+    ])
+    text_data_bottom_tiles = bytearray([
+        0x10,0xFF,0x00,0x5C,0x13,0x00,0x5D,0xFF,0x5C,0x5B,
+        0x00,0x13,0x5E,0x11,0x00,0x12,0x00,0x03,0x5E,0xFF
+    ])
+    text_data_bottom_props = bytearray([
+        0x34,0x30,0xb4,0x34,0x34,0xb4,0xf4,0x30,0x34,0x34,
+        0xB4,0x34,0x34,0x34,0xb4,0x34,0xb4,0xb4,0x34,0x30
+    ])
+
+    rom.write_bytes(0x010D1, text_data_top_tiles)
+    rom.write_bytes(0x01139, text_data_top_props)
+    rom.write_bytes(0x01105, text_data_bottom_tiles)
+    rom.write_bytes(0x0116A, text_data_bottom_props)
 
     # Handle Level Shuffle
     handle_level_shuffle(rom, active_level_dict)
