@@ -1,9 +1,14 @@
 import itertools
 from collections import Counter
-from typing import Dict, List, NamedTuple, Set
+from typing import Dict, List, NamedTuple, Set, TYPE_CHECKING
 
-from BaseClasses import Item, ItemClassification, MultiWorld
-from .Options import BossesAsChecks, VictoryCondition, ExtraOrbs
+from BaseClasses import Item, ItemClassification
+from .options import BossesAsChecks, VictoryCondition, ExtraOrbs
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
+else:
+    NoitaWorld = object
 
 
 class ItemData(NamedTuple):
@@ -44,39 +49,40 @@ def create_kantele(victory_condition: VictoryCondition) -> List[str]:
     return ["Kantele"] if victory_condition.value >= VictoryCondition.option_pure_ending else []
 
 
-def create_random_items(multiworld: MultiWorld, player: int, weights: Dict[str, int], count: int) -> List[str]:
+def create_random_items(world: NoitaWorld, weights: Dict[str, int], count: int) -> List[str]:
     filler_pool = weights.copy()
-    if multiworld.bad_effects[player].value == 0:
+    if not world.options.bad_effects:
         del filler_pool["Trap"]
 
-    return multiworld.random.choices(population=list(filler_pool.keys()),
-                                     weights=list(filler_pool.values()),
-                                     k=count)
+    return world.random.choices(population=list(filler_pool.keys()),
+                                weights=list(filler_pool.values()),
+                                k=count)
 
 
-def create_all_items(multiworld: MultiWorld, player: int) -> None:
-    locations_to_fill = len(multiworld.get_unfilled_locations(player))
+def create_all_items(world: NoitaWorld) -> None:
+    player = world.player
+    locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
 
     itempool = (
         create_fixed_item_pool()
-        + create_orb_items(multiworld.victory_condition[player], multiworld.extra_orbs[player])
-        + create_spatial_awareness_item(multiworld.bosses_as_checks[player])
-        + create_kantele(multiworld.victory_condition[player])
+        + create_orb_items(world.options.victory_condition, world.options.extra_orbs)
+        + create_spatial_awareness_item(world.options.bosses_as_checks)
+        + create_kantele(world.options.victory_condition)
     )
 
     # if there's not enough shop-allowed items in the pool, we can encounter gen issues
     # 39 is the number of shop-valid items we need to guarantee
     if len(itempool) < 39:
-        itempool += create_random_items(multiworld, player, shop_only_filler_weights, 39 - len(itempool))
+        itempool += create_random_items(world, shop_only_filler_weights, 39 - len(itempool))
         # this is so that it passes tests and gens if you have minimal locations and only one player
-        if multiworld.players == 1:
-            for location in multiworld.get_unfilled_locations(player):
+        if world.multiworld.players == 1:
+            for location in world.multiworld.get_unfilled_locations(player):
                 if "Shop Item" in location.name:
                     location.item = create_item(player, itempool.pop())
-            locations_to_fill = len(multiworld.get_unfilled_locations(player))
+            locations_to_fill = len(world.multiworld.get_unfilled_locations(player))
 
-    itempool += create_random_items(multiworld, player, filler_weights, locations_to_fill - len(itempool))
-    multiworld.itempool += [create_item(player, name) for name in itempool]
+    itempool += create_random_items(world, filler_weights, locations_to_fill - len(itempool))
+    world.multiworld.itempool += [create_item(player, name) for name in itempool]
 
 
 # 110000 - 110032
