@@ -15,22 +15,23 @@ class YoshiLogic:
         self.boss_order = boss_order
         self.luigi_pieces = luigi_pieces
 
-        
-        if not None or world.options.stage_logic.value == 0:
-            self.game_logic = "Easy"
-        elif world.options.stage_logic.value == 1:
-            self.game_logic = "Normal"
-        else:
-            self.game_logic = "Hard"
+        if world:
+            if world.options.stage_logic.value == 0:
+                self.game_logic = "Easy"
+            elif world.options.stage_logic.value == 1:
+                self.game_logic = "Normal"
+            else:
+                self.game_logic = "Hard"
 
         if world:
             self.midring_start = world.options.shuffle_midrings.value == 0
             self.consumable_logic = world.options.item_logic.value != 0
 
-        if not None or world.options.hidden_object_visibility.value >= 2:
-            self.clouds_always_visible = True
-        else:
-            self.clouds_always_visible = False
+        if world:
+            if world.options.hidden_object_visibility.value >= 2:
+                self.clouds_always_visible = True
+            else:
+                self.clouds_always_visible = False
 
         if world:
             self.bowser_door = world.options.bowser_door_mode.value
