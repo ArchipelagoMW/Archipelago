@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 import ModuleUpdate
 
 ModuleUpdate.update()
@@ -12,7 +13,7 @@ from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all
 from .Names import ItemName
 from .WorldLocations import *
 
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from CommonClient import ClientCommandProcessor, gui_enabled, logger, get_base_parser, CommonContext, server_loop
 
 
@@ -29,12 +30,12 @@ class KH2CommandProcessor(ClientCommandProcessor):
             self.ctx.deathlink_toggle = True
             self.output(f"Death Link turned on")
 
-    def _cmd_block_player_from_deathlink(self, player_name: str = ""):
+    def _cmd_add_to_blacklist(self, player_name: str = ""):
         """Adds player to deathlink blacklist"""
         if player_name not in self.ctx.deathlink_blacklist:
             self.ctx.deathlink_blacklist.append(player_name)
 
-    def _cmd_unblock_player_from_deathlink(self, player_name: str = ""):
+    def _cmd_remove_from_blacklist(self, player_name: str = ""):
         """Removes player from the deathlink blacklist"""
         if player_name in self.ctx.deathlink_blacklist:
             self.ctx.deathlink_blacklist.remove(player_name)
@@ -357,6 +358,19 @@ class KH2Context(CommonContext):
             if "checked_locations" in args:
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
+
+        if cmd == "PrintJSON":
+            # shamelessly stolen from kh1
+            if args["type"] == "ItemSend":
+                item = args["item"]
+                networkItem = NetworkItem(*item)
+                recieverID = args["receiving"]
+                senderID = networkItem.player
+                locationID = networkItem.location
+                if recieverID != self.slot and senderID == self.slot:
+                    itemName = self.item_names[networkItem.item]
+                    itemCategory = networkItem.flags
+                    recieverName = self.player_names[recieverID]
 
         if cmd in {"DataPackage"}:
             self.kh2_loc_name_to_id = args["data"]["games"]["Kingdom Hearts 2"]["location_name_to_id"]
