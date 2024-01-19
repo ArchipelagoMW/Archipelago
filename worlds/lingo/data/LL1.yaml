@@ -2213,6 +2213,7 @@
           - Master Room Doors/Door_master_down
           - Master Room Doors/Door_master_down2
         skip_location: True
+        item_name: Mastery
         panels:
           - THE MASTER
       Mastery Panels:
@@ -2229,25 +2230,25 @@
             panel: MASTERY
           - room: Hedge Maze
             panel: MASTERY (1)
-          - room: Roof
-            panel: MASTERY (1)
-          - room: Roof
-            panel: MASTERY (2)
+          - room: Behind A Smile
+            panel: MASTERY
+          - room: Sixteen Colorful Squares
+            panel: MASTERY
           - MASTERY
           - room: Hedge Maze
             panel: MASTERY (2)
-          - room: Roof
-            panel: MASTERY (3)
-          - room: Roof
-            panel: MASTERY (4)
-          - room: Roof
-            panel: MASTERY (5)
+          - room: Among Treetops
+            panel: MASTERY
+          - room: Horizon's Edge
+            panel: MASTERY
+          - room: Beneath The Lookout
+            panel: MASTERY
           - room: Elements Area
             panel: MASTERY
           - room: Pilgrim Antechamber
             panel: MASTERY
-          - room: Roof
-            panel: MASTERY (6)
+          - room: Rooftop Staircase
+            panel: MASTERY
     paintings:
       - id: map_painting2
         orientation: north
@@ -2259,44 +2260,12 @@
       Crossroads:
         room: Crossroads
         door: Roof Access
+  Behind A Smile:
+    entrances:
+      Roof: True
     panels:
-      MASTERY (1):
+      MASTERY:
         id: Master Room/Panel_mastery_mastery6
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (2):
-        id: Master Room/Panel_mastery_mastery7
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (3):
-        id: Master Room/Panel_mastery_mastery10
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (4):
-        id: Master Room/Panel_mastery_mastery11
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (5):
-        id: Master Room/Panel_mastery_mastery12
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (6):
-        id: Master Room/Panel_mastery_mastery15
         tag: midwhite
         hunt: True
         required_door:
@@ -2305,6 +2274,61 @@
       STAIRCASE:
         id: Open Areas/Panel_staircase
         tag: midwhite
+  Sixteen Colorful Squares:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery7
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Among Treetops:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery10
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Horizon's Edge:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery11
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Beneath The Lookout:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery12
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Rooftop Staircase:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery15
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
   Orange Tower Basement:
     entrances:
       Orange Tower Sixth Floor:
@@ -2762,6 +2786,7 @@
         door: Exit
       Eight Alcove:
         door: Eight Door
+      The Optimistic: True
     panels:
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
@@ -2811,16 +2836,6 @@
         id: Rhyme Room/Panel_locked_knocked
         colors: purple
         tag: midpurp
-      BACKSIDE:
-        id: Backside Room/Panel_backside_1
-        tag: midwhite
-      The Optimistic:
-        id: Countdown Panels/Panel_optimistic_optimistic
-        check: True
-        tag: forbid
-        required_door:
-          door: Backsides
-        achievement: The Optimistic
       PAST:
         id: Shuffle Room/Panel_past_present
         colors: brown
@@ -2922,17 +2937,6 @@
             panel: GREEN
           - room: Outside The Agreeable
             panel: PURPLE
-      Backsides:
-        event: True
-        panels:
-          - room: The Observant
-            panel: BACKSIDE
-          - room: Yellow Backside Area
-            panel: BACKSIDE
-          - room: Directional Gallery
-            panel: BACKSIDE
-          - room: The Bearer
-            panel: BACKSIDE
       Eight Door:
         id: Red Blue Purple Room Area Doors/Door_a_strands2
         skip_location: True
@@ -3042,6 +3046,28 @@
         id: Rhyme Room/Panel_bed_dead
         colors: purple
         tag: toppurp
+  The Optimistic:
+    entrances:
+      Outside The Initiated: True
+    panels:
+      BACKSIDE:
+        id: Backside Room/Panel_backside_1
+        tag: midwhite
+      Achievement:
+        id: Countdown Panels/Panel_optimistic_optimistic
+        check: True
+        tag: forbid
+        required_panel:
+          - panel: BACKSIDE
+          - room: The Observant
+            panel: BACKSIDE
+          - room: Yellow Backside Area
+            panel: BACKSIDE
+          - room: Directional Gallery
+            panel: BACKSIDE
+          - room: The Bearer
+            panel: BACKSIDE
+        achievement: The Optimistic
   The Traveled:
     entrances:
       Hub Room:
@@ -3142,7 +3168,7 @@
       Outside The Undeterred: True
       Crossroads: True
       Hedge Maze: True
-      Outside The Initiated: True # backside
+      The Optimistic: True # backside
       Directional Gallery: True # backside
       Yellow Backside Area: True
       The Bearer:
@@ -6789,10 +6815,6 @@
         id: Panel Room/Panel_room_floor_9
         colors: gray
         tag: forbid
-      FLOOR (10):
-        id: Panel Room/Panel_room_floor_10
-        colors: gray
-        tag: forbid
       CEILING (1):
         id: Panel Room/Panel_room_ceiling_1
         colors: gray
@@ -6811,6 +6833,10 @@
         tag: forbid
       CEILING (5):
         id: Panel Room/Panel_room_ceiling_5
+        colors: gray
+        tag: forbid
+      CEILING (6):
+        id: Panel Room/Panel_room_floor_10
         colors: gray
         tag: forbid
       WALL (1):
@@ -7574,7 +7600,7 @@
           - black
           - blue
         tag: chain mid black blue
-      BREAD:
+      CHEESE:
         id: Challenge Room/Panel_bread_mold
         colors: brown
         tag: double botbrown

@@ -279,14 +279,19 @@ panels:
     THE END: 444620
     THE MASTER: 444621
     MASTERY: 444622
-  Roof:
-    MASTERY (1): 444623
-    MASTERY (2): 444624
-    MASTERY (3): 444625
-    MASTERY (4): 444626
-    MASTERY (5): 444627
-    MASTERY (6): 444628
+  Behind A Smile:
+    MASTERY: 444623
     STAIRCASE: 444629
+  Sixteen Colorful Squares:
+    MASTERY: 444624
+  Among Treetops:
+    MASTERY: 444625
+  Horizon's Edge:
+    MASTERY: 444626
+  Beneath The Lookout:
+    MASTERY: 444627
+  Rooftop Staircase:
+    MASTERY: 444628
   Orange Tower Basement:
     MASTERY: 444630
     THE LIBRARY: 444631
@@ -341,8 +346,6 @@ panels:
     ORANGE: 444663
     UNCOVER: 444664
     OXEN: 444665
-    BACKSIDE: 444666
-    The Optimistic: 444667
     PAST: 444668
     FUTURE: 444669
     FUTURE (2): 444670
@@ -351,6 +354,9 @@ panels:
     SMILE: 444673
     ANGERED: 444674
     VOTE: 444675
+  The Optimistic:
+    BACKSIDE: 444666
+    Achievement: 444667
   The Initiated:
     Achievement: 444676
     DAUGHTER: 444677
@@ -794,12 +800,12 @@ panels:
     FLOOR (7): 445044
     FLOOR (8): 445045
     FLOOR (9): 445046
-    FLOOR (10): 445047
     CEILING (1): 445048
     CEILING (2): 445049
     CEILING (3): 445050
     CEILING (4): 445051
     CEILING (5): 445052
+    CEILING (6): 445047
     WALL (1): 445053
     WALL (2): 445054
     WALL (3): 445055
@@ -933,7 +939,7 @@ panels:
     CORNER: 445182
     STRAWBERRIES: 445183
     GRUB: 445184
-    BREAD: 445185
+    CHEESE: 445185
     COLOR: 445186
     WRITER: 445187
     '02759': 445188
