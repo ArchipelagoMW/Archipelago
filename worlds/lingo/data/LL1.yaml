@@ -3205,7 +3205,7 @@
         door: Shortcut to The Steady
       The Bearer:
         room: The Bearer
-        door: Shortcut to The Bold
+        door: Entrance
       Directional Gallery:
         # There is a painting warp here from the Directional Gallery, but it
         # only appears when the sixes are revealed. It could be its own item if
@@ -4148,7 +4148,7 @@
   The Bearer:
     entrances:
       Outside The Bold:
-        door: Shortcut to The Bold
+        door: Entrance
       Orange Tower Fifth Floor:
         room: Art Gallery
         door: Exit
@@ -4225,7 +4225,7 @@
           - yellow
         tag: mid red yellow
     doors:
-      Shortcut to The Bold:
+      Entrance:
         id: Red Blue Purple Room Area Doors/Door_middle_middle
         panels:
           - MIDDLE
