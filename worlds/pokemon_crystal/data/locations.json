@@ -584,7 +584,7 @@
 		"default_item": "ULTRA_BALL"
 	},
 	"MOUNT_MORTAR_1F_OUTSIDE_ETHER": {
-		"label": "Mount Mortar 2F Outside - Item Up West Ladder",
+		"label": "Mount Mortar 1F Outside - Item Up West Ladder",
 		"flag": "EVENT_MOUNT_MORTAR_1F_OUTSIDE_ETHER",
 		"type": "itemball",
 		"tags": ["Overworld"],
@@ -592,7 +592,7 @@
 		"default_item": "ETHER"
 	},
 	"MOUNT_MORTAR_1F_OUTSIDE_REVIVE": {
-		"label": "Mount Mortar 2F Outside - Item Up East Ladder",
+		"label": "Mount Mortar 1F Outside - Item Up East Ladder",
 		"flag": "EVENT_MOUNT_MORTAR_1F_OUTSIDE_REVIVE",
 		"type": "itemball",
 		"tags": ["Overworld"],
