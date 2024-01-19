@@ -2656,9 +2656,7 @@
         tag: forbid
     doors:
       Progress Door:
-        id:
-          - Doorway Room Doors/Door_gray
-          - Doorway Room Doors/Door_gray2 # See comment below
+        id: Doorway Room Doors/Door_gray
         item_name: The Colorful - Gray Door
         location_name: The Colorful - Gray
         group: Colorful Doors
