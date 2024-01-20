@@ -419,9 +419,24 @@ location_table: Dict[str, KH1LocationData] = {
     "Level 099":                                                                        KH1LocationData("Levels",     265_8099),
     "Level 100":                                                                        KH1LocationData("Levels",     265_8100),
     "Complete Phil Cup":                                                                KH1LocationData("Cups",       265_9001),
-    "Complete Pegasus Cup":                                                             KH1LocationData("Cups",       265_9002),
-    "Complete Hercules Cup":                                                            KH1LocationData("Cups",       265_9003),
-    "Complete Hades Cup":                                                               KH1LocationData("Cups",       265_9004),
+    "Complete Phil Cup Solo":                                                           KH1LocationData("Cups",       265_9002),
+    "Complete Phil Cup Time Trial":                                                     KH1LocationData("Cups",       265_9003),
+    "Complete Pegasus Cup":                                                             KH1LocationData("Cups",       265_9004),
+    "Complete Pegasus Cup Solo":                                                        KH1LocationData("Cups",       265_9005),
+    "Complete Pegasus Cup Time Trial":                                                  KH1LocationData("Cups",       265_9006),
+    "Complete Hercules Cup":                                                            KH1LocationData("Cups",       265_9007),
+    "Complete Hercules Cup Solo":                                                       KH1LocationData("Cups",       265_9008),
+    "Complete Hercules Cup Time Trial":                                                 KH1LocationData("Cups",       265_9009),
+    "Complete Hades Cup":                                                               KH1LocationData("Cups",       265_9010),
+    "Complete Hades Cup Solo":                                                          KH1LocationData("Cups",       265_9011),
+    "Complete Hades Cup Time Trial":                                                    KH1LocationData("Cups",       265_9012),
+    "Hades Cup Defeat Cloud and Leon Event":                                            KH1LocationData("Cups",       265_9013),
+    "Hades Cup Defeat Yuffie Event":                                                    KH1LocationData("Cups",       265_9014),
+    "Hades Cup Defeat Cerberus Event":                                                  KH1LocationData("Cups",       265_9015),
+    "Hades Cup Defeat Behemoth Event":                                                  KH1LocationData("Cups",       265_9016),
+    "Hades Cup Defeat Hades Event":                                                     KH1LocationData("Cups",       265_9017),
+    "Pegasus Cup Defeat Cloud Event":                                                   KH1LocationData("Cups",       265_9018),
+    "Pegasus Cup Yellow Trinity Event":                                                 KH1LocationData("Cups",       265_9019)
 }
 
 event_location_table: Dict[str, KH1LocationData] = {
