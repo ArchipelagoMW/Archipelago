@@ -37,13 +37,13 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can generate a yaml or download a template by visiting the [Super Mario Land 2 Player Settings Page](/games/Super%20Mario%20Land%202/player-settings)
+You can generate a yaml or download a template by visiting the [Super Mario Land 2 Player Options Page](/games/Super%20Mario%20Land%202/player-options)
 
 ## Joining a MultiWorld Game
 
 ### Generating and Patching a Game
 
-1. Create your settings file (YAML).
+1. Create your options file (YAML).
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have a `.apsml2` file extension.
 3. Open `ArchipelagoLauncher.exe`
