@@ -49,10 +49,10 @@ class MarioLand2Client(BizHawkClient):
                                          (0x02A0, 1, "CartRAM"),
                                          (0x022C, 1, "CartRAM")])
 
-        current_level = int.from_bytes(current_level)
-        midway_point = int.from_bytes(midway_point)
-        music = int.from_bytes(music)
-        auto_scroll_enabled = int.from_bytes(auto_scroll_enabled)
+        current_level = int.from_bytes(current_level, "big")
+        midway_point = int.from_bytes(midway_point, "big")
+        music = int.from_bytes(music, "big")
+        auto_scroll_enabled = int.from_bytes(auto_scroll_enabled, "big")
         level_data = list(level_data)
         lives = bcd_lives.hex()
 
@@ -167,7 +167,8 @@ class MarioLand2Client(BizHawkClient):
                     data_writes.append((0x02C8, [0x01], "CartRAM"))
 
         success = await guarded_write(ctx.bizhawk_ctx, data_writes, [(0x0848, level_data, "CartRAM"),
-                                                                     (0x022C, [int.from_bytes(bcd_lives)], "CartRAM")])
+                                                                     (0x022C, [int.from_bytes(bcd_lives, "big")],
+                                                                      "CartRAM")])
 
         if success and energy_link_add is not None:
             await ctx.send_msgs([{
