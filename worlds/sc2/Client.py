@@ -171,7 +171,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.output("Cutscenes will now be skipped.")
             self.ctx.skip_cutscenes = 1
 
-    def _cmd_color(self, color: str = "") -> None:
+    def _cmd_color(self, faction: str = "", color: str = "") -> None:
+        """Changes the player color for a given faction."""
         player_colors = [
             "White", "Red", "Blue", "Teal",
             "Purple", "Yellow", "Orange", "Green",
@@ -179,19 +180,40 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             "Brown", "LightGreen", "DarkGrey", "Pink",
             "Rainbow", "Random", "Default"
         ]
+        var_names = {
+            'raynor': 'player_color_raynor',
+            'kerrigan': 'player_color_zerg',
+            'primal': 'player_color_zerg_primal',
+            'protoss': 'player_color_protoss',
+            'nova': 'player_color_nova',
+        }
+        self.output(f" --> /color {faction} {color}")
+        faction = faction.lower()
+        if not faction:
+            for faction_name, key in var_names.items():
+                self.output(f"Current player color for {faction_name}: {player_colors[self.ctx.__dict__[key]]}")
+            self.output("To change your color, add the faction name and color after the command.")
+            self.output("Available factions: " + ', '.join(var_names))
+            self.output("Available colors: " + ', '.join(player_colors))
+            return
+        elif faction not in var_names:
+            self.output(f"Unknown faction '{faction}'.")
+            self.output("Available factions: " + ', '.join(var_names))
+            return
         match_colors = [player_color.lower() for player_color in player_colors]
-        if color:
+        if not color:
+            self.output(f"Current player color for {faction}: {player_colors[self.ctx.__dict__[var_names[faction]]]}")
+            self.output("To change this faction's colors, add the name of the color after the command.")
+            self.output("Available colors: " + ', '.join(player_colors))
+        else:
             if color.lower() not in match_colors:
                 self.output(color + " is not a valid color.  Available colors: " + ', '.join(player_colors))
                 return
             if color.lower() == "random":
                 color = random.choice(player_colors[:16])
-            self.ctx.player_color_raynor = match_colors.index(color.lower())
-            self.output("Color set to " + player_colors[self.ctx.player_color_raynor])
-        else:
-            self.output("Current player color: " + player_colors[self.ctx.player_color_raynor])
-            self.output("To change your colors, add the name of the color after the command.")
-            self.output("Available colors: " + ', '.join(player_colors))
+            self.ctx.__dict__[var_names[faction]] = match_colors.index(color.lower())
+            self.ctx.pending_color_update = True
+            self.output(f"Color for {faction} set to " + player_colors[self.ctx.__dict__[var_names[faction]]])
 
     def _cmd_disable_mission_check(self) -> bool:
         """Disables the check to see if a mission is available to play.  Meant for co-op runs where one player can play
@@ -307,6 +329,9 @@ class SC2Context(CommonContext):
     player_color_raynor = ColorChoice.option_blue
     player_color_zerg = ColorChoice.option_orange
     player_color_zerg_primal = ColorChoice.option_purple
+    player_color_protoss = ColorChoice.option_blue
+    player_color_nova = ColorChoice.option_dark_grey
+    pending_color_update = False
     kerrigan_presence = 0
     kerrigan_primal_status = 0
     levels_per_check = 0
@@ -398,6 +423,8 @@ class SC2Context(CommonContext):
             self.player_color_raynor = args["slot_data"].get("player_color_terran_raynor", ColorChoice.option_blue)
             self.player_color_zerg = args["slot_data"].get("player_color_zerg", ColorChoice.option_orange)
             self.player_color_zerg_primal = args["slot_data"].get("player_color_zerg_primal", ColorChoice.option_purple)
+            self.player_color_protoss = args["slot_data"].get("player_color_protoss", ColorChoice.option_blue)
+            self.player_color_nova = args["slot_data"].get("player_color_nova", ColorChoice.option_dark_grey)
             self.generic_upgrade_missions = args["slot_data"].get("generic_upgrade_missions", GenericUpgradeMissions.default)
             self.generic_upgrade_items = args["slot_data"].get("generic_upgrade_items", GenericUpgradeItems.option_individual_items)
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
@@ -766,18 +793,26 @@ async def starcraft_launch(ctx: SC2Context, mission_id: int):
 
 
 class ArchipelagoBot(bot.bot_ai.BotAI):
-    game_running: bool = False
-    mission_completed: bool = False
-    boni: typing.List[bool]
-    setup_done: bool
-    ctx: SC2Context
-    mission_id: int
-    want_close: bool = False
-    can_read_game = False
-    last_received_update: int = 0
-    last_kerrigan_level: int = 0
+    __slots__ = [
+        'game_running',
+        'mission_completed',
+        'boni',
+        'setup_done',
+        'ctx',
+        'mission_id',
+        'want_close',
+        'can_read_game',
+        'last_received_update',
+        'last_kerrigan_level',
+    ]
 
-    def __init__(self, ctx: SC2Context, mission_id):
+    def __init__(self, ctx: SC2Context, mission_id: int):
+        self.game_running = False
+        self.mission_completed = False
+        self.want_close = False
+        self.can_read_game = False
+        self.last_received_update: int = 0
+        self.last_kerrigan_level: int = 0
         self.setup_done = False
         self.ctx = ctx
         self.ctx.last_bot = self
@@ -828,13 +863,14 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             await self.updateTerranTech(start_items)
             await self.updateZergTech(start_items)
             await self.updateProtossTech(start_items)
-            await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
-            await self.chat_send("?SetColor ks" + str(self.ctx.player_color_zerg))
-            await self.chat_send("?SetColor pz" + str(self.ctx.player_color_zerg_primal))
+            await self.updateColors()
             await self.chat_send("?LoadFinished")
             self.last_received_update = len(self.ctx.items_received)
 
         else:
+            if self.ctx.pending_color_update:
+                await self.updateColors()
+
             if not self.ctx.announcements.empty():
                 message = self.ctx.announcements.get(timeout=1)
                 await self.chat_send("?SendMessage " + message)
@@ -900,6 +936,13 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
+    async def updateColors(self):
+        await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
+        await self.chat_send("?SetColor ks " + str(self.ctx.player_color_zerg))
+        await self.chat_send("?SetColor pz " + str(self.ctx.player_color_zerg_primal))
+        await self.chat_send("?SetColor da " + str(self.ctx.player_color_protoss))
+        await self.chat_send("?SetColor nova " + str(self.ctx.player_color_nova))
+        self.ctx.pending_color_update = False
 
     async def updateTerranTech(self, current_items):
         terran_items = current_items[SC2Race.TERRAN]
