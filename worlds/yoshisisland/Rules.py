@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from .level_logic import YoshiLogic
-from ..generic.Rules import set_rule
+from worlds.generic.Rules import set_rule
 
 
 
