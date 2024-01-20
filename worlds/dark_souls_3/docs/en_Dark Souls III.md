@@ -23,10 +23,16 @@ The goal is to find the four "Cinders of a Lord" items randomized into the multi
 Practically anything can be found in other worlds including pieces of armor, upgraded weapons, key items, consumables,
 spells, upgrade materials, etc...
 
-## What do Dark Souls III location names mean?
+## Where can I learn more about Dark Souls III locations?
 
 Location names have to pack a lot of information into very little space. To better understand them,
 check out the [location guide], which explains all the names used in locations and provides more
 detailed descriptions for each individual location.
 
 [location guide]: /tutorial/Dark%20Souls%20III/locations/en
+
+## Where can I learn more about Dark Souls III items?
+
+Check out the [item guide], which explains the named groups available for items.
+
+[item guide]: /tutorial/Dark%20Souls%20III/items/en

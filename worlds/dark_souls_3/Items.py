@@ -156,6 +156,31 @@ class DS3ItemData():
         if not self.base_ds3_code: self.base_ds3_code = self.ds3_code
         DS3ItemData.__item_id += 1
 
+    def item_groups(self) -> List[str]:
+        """The names of item groups this item should appear in.
+
+        This is computed from the properties assigned to this item."""
+        names = []
+        if self.classification == ItemClassification.progression: names.append("Progression")
+        if self.name.startswith("Cinders of a Lord -"): names.append("Cinders")
+
+        names.append({
+            DS3ItemCategory.WEAPON_UPGRADE_5: "Weapons",
+            DS3ItemCategory.WEAPON_UPGRADE_10: "Weapons",
+            DS3ItemCategory.WEAPON_UPGRADE_10_INFUSIBLE: "Weapons",
+            DS3ItemCategory.SHIELD: "Shields",
+            DS3ItemCategory.SHIELD_INFUSIBLE: "Shields",
+            DS3ItemCategory.ARMOR: "Armor",
+            DS3ItemCategory.RING: "Rings",
+            DS3ItemCategory.SPELL: "Spells",
+            DS3ItemCategory.MISC: "Miscellaneous",
+            DS3ItemCategory.UNIQUE: "Unique",
+            DS3ItemCategory.BOSS: "Boss Souls",
+            DS3ItemCategory.SOUL: "Small Souls",
+            DS3ItemCategory.UPGRADE: "Upgrade",
+            DS3ItemCategory.HEALING: "Healing",
+        }[default_item.category])
+
     def counts(self, counts: List[int]) -> Generator["DS3ItemData", None, None]:
         """Returns an iterable of copies of this item with the given counts."""
         yield self
@@ -1614,13 +1639,42 @@ _cut_content_items = [
     DS3ItemData("Dorris Swarm",                        0x40393870, DS3ItemCategory.UNIQUE),
 ]
 
+
+item_name_groups = {
+    "Progression": set(),
+    "Cinders": set(),
+    "Weapons": set(),
+    "Shields": set(),
+    "Armor": set(),
+    "Rings": set(),
+    "Spells": set(),
+    "Miscellaneous": set(),
+    "Unique": set(),
+    "Boss Souls": set(),
+    "Small Souls": set(),
+    "Upgrade": set(),
+    "Healing": set(),
+}
+
+
 item_descriptions = {
+    "Progression": "Items which unlock locations.",
     "Cinders": """
       All four Cinders of a Lord.
 
       Once you have these four, you can fight Soul of Cinder and win the game.
     """,
+    "Miscellaneous": "Generic stackable items, such as arrows, firebombs, buffs, and so on.",
+    "Unique": """
+      Items that are unique per NG cycle, such as scrolls, keys, ashes, and so on. Doesn't include
+      equipment, spells, or souls.
+    """,
+    "Boss Souls": "Souls that can be traded with Ludleth, including Soul of Rosaria.",
+    "Small Souls": "Soul items, not including boss souls.",
+    "Upgrade": "Upgrade items, including titanite, gems, and Shriving Stones.",
+    "Healing": "Undead Bone Shards and Estus Shards.",
 }
+
 
 _all_items = _vanilla_items + _dlc_items
 

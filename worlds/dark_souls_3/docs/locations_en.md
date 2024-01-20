@@ -1,5 +1,91 @@
 # Dark Souls III Locations
 
+## Table of Contents
+
+* [Location Groups](#location-groups)
+* [Understanding Location Names](#understanding-location-names)
+  * [HWL: High Wall of Lothric](#high-wall-of-lothric)
+  * [US: Undead Settlement](#undead-settlement)
+  * [RS: Road of Sacrifices](#road-of-sacrifices)
+  * [CD: Cathedral of the Deep](#cathedral-of-the-deep)
+  * [FK: Farron Keep](#farron-keep)
+  * [CC: Catacombs of Carthus](#catacombs-of-carthus)
+  * [SL: Smouldering Lake](#smouldering-lake)
+  * [IBV: Irithyll of the Boreal Valley](#irithyll-of-the-boreal-valley)
+  * [ID: Irithyll Dungeon](#irithyll-dungeon)
+  * [PC: Profaned Capital](#profaned-capital)
+  * [AL: Anor Londo](#anor-londo)
+  * [LC: Lothric Castle](#lothric-castle)
+  * [CKG: Consumed King's Garden](#consumed-kings-garden)
+  * [GA: Grand Archives](#grand-archives)
+  * [UG: Untended Graves](#untended-graves)
+  * [AP: Archdragon Peak](#archdragon-peak)
+  * [PW1: Painted World of Ariandel (Before Contraption)](#painted-world-of-ariandel-%28before-contraption%29)
+  * [PW2: Painted World of Ariandel (After Contraption)](#painted-world-of-ariandel-%28after-contraption%29)
+  * [DH: Dreg Heap](#dreg-heap)
+  * [RC: Ringed City](#ringed-city)
+* [Detailed Location Descriptions](#detailed-location-descriptions)
+
+## Location Groups
+
+The Dark Souls III randomizer supports a number of location group names, which
+can be used in YAML options like `exclude_locations` to refer to many locations
+at once:
+
+* **Prominent:** A small number of locations that are in very obvious locations.
+  Mostly boss drops. Ideal for setting as priority locations.
+
+* **Progression:** Locations that contain items in vanilla which unlock other
+  locations.
+
+* **Boss rewards:** Boss drops. Does not include soul transfusions or shop
+  items.
+
+* **Miniboss Rewards:** Miniboss drops. Only includes enemies considered
+  minibosses by the enemy randomizer.
+
+* **Mimic Rewards:** Drops from enemies that are mimics in vanilla.
+
+* **Hostile NPC Rewards:** Drops from NPCs that are hostile to you. This
+  includes scripted invaders and initially-friendly NPCs that must be fought as
+  part of their quest.
+
+* **Friendly NPC Rewards:** Items given by friendly NPCs as part of their quests
+  or from non-violent interaction.
+
+* **Upgrade:** Locations that contain upgrade items in vanilla, including
+  titanite, gems, and Shriving Stones.
+
+* **Small Souls:** Locations that contain soul items in vanilla, not including
+  boss souls.
+
+* **Boss Souls:** Locations that contain boss souls in vanilla, as well as Soul
+  of Rosaria.
+
+* **Unique:** Locations that contain items in vanilla that are unique per NG
+  cycle, such as scrolls, keys, ashes, and so on. Doesn't cover equipment,
+  spells, or souls.
+
+* **Healing:** Locations that contain Undead Bone Shards and Estus Shards in
+  vanilla.
+
+* **Miscellaneous:** Locations that contain generic stackable items in vanilla,
+  such as arrows, firebombs, buffs, and so on.
+
+* **Hidden:** Locations that are particularly difficult to find, such as behind
+  illusory walls, down hidden drops, and so on. Does not include large locations
+  like Untended Graves or Archdragon Peak.
+
+* **Weapons:** Locations that contain weapons in vanilla.
+
+* **Shields:** Locations that contain shields in vanilla.
+
+* **Armor:** Locations that contain armor in vanilla.
+
+* **Rings:** Locations that contain rings in vanilla.
+
+* **Spells:** Locations that contain spells in vanilla.
+
 ## Understanding Location Names
 
 All locations begin with an abbreviation indicating their general region. Most
