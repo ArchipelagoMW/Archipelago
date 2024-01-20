@@ -42,9 +42,7 @@ SC2LOTV_ITEM_ID_OFFSET = SC2HOTS_ITEM_ID_OFFSET + 1000
 WEAPON_ARMOR_UPGRADE_NOTE = inspect.cleandoc("""
     Must be researched during the mission if the mission type isn't set to auto-unlock generic upgrades.
 """)
-LASER_TARGETING_SYSTEMS_DESCRIPTION = inspect.cleandoc("""
-    Increases vision by 2 and weapon range by 1.
-""")
+LASER_TARGETING_SYSTEMS_DESCRIPTION = "Increases vision by 2 and weapon range by 1."
 STIMPACK_SMALL_COST = 10
 STIMPACK_SMALL_HEAL = 30
 STIMPACK_LARGE_COST = 20
@@ -55,9 +53,7 @@ STIMPACK_TEMPLATE = inspect.cleandoc("""
 """)
 STIMPACK_SMALL_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_SMALL_COST, STIMPACK_SMALL_HEAL)
 STIMPACK_LARGE_DESCRIPTION = STIMPACK_TEMPLATE.format(STIMPACK_LARGE_COST, STIMPACK_LARGE_HEAL)
-SMART_SERVOS_DESCRIPTION = inspect.cleandoc("""
-    Increases transformation speed between modes.
-""")
+SMART_SERVOS_DESCRIPTION = "Increases transformation speed between modes."
 INTERNAL_TECH_MODULE_DESCRIPTION_TEMPLATE = "{} can be trained from a {} without an attached Tech Lab."
 RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE = "Reduces {} resource and supply cost."
 RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE = "Reduces {} resource cost."
@@ -427,7 +423,7 @@ item_table = {
     ItemNames.FIREBAT_INFERNAL_PRE_IGNITER:
         ItemData(235 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 2, SC2Race.TERRAN,
                  parent_item=ItemNames.FIREBAT, origin={"bw"},
-                 description="Firebats do additional 4 damage to Light Armor."),
+                 description="Firebats do an additional 4 damage to Light Armor."),
     ItemNames.FIREBAT_KINETIC_FOAM:
         ItemData(236 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 3, SC2Race.TERRAN,
                  parent_item=ItemNames.FIREBAT, origin={"ext"},
@@ -435,7 +431,7 @@ item_table = {
     ItemNames.FIREBAT_NANO_PROJECTORS:
         ItemData(237 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 4, SC2Race.TERRAN,
                  parent_item=ItemNames.FIREBAT, origin={"ext"},
-                 description="Increasex Firebat attack range by 2"),
+                 description="Increases Firebat attack range by 2"),
     ItemNames.MARAUDER_JUGGERNAUT_PLATING:
         ItemData(238 + SC2WOL_ITEM_ID_OFFSET, "Armory 2", 5, SC2Race.TERRAN,
                  parent_item=ItemNames.MARAUDER, origin={"ext"},
