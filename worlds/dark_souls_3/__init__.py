@@ -462,7 +462,10 @@ class DarkSouls3World(World):
             self._add_entrance_rule("Ringed City", "Small Envoy Banner")
 
             if self.options.late_dlc:
-                self._add_entrance_rule("Painted World of Ariandel (After Contraption)", "Small Doll")
+                self._add_entrance_rule(
+                    "Painted World of Ariandel (Before Contraption)",
+                    "Small Doll"
+                )
 
         # Define the access rules to some specific locations
         if self.is_location_available("FS: Lift Chamber Key - Leonhard"):
@@ -812,9 +815,13 @@ class DarkSouls3World(World):
             item.name for item in self.multiworld.itempool
             if item.player == self.player
         }
-        # Always make this available early because so many items are useless without it.
         if 'Pyromancy Flame' in randomized_items:
-            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 1
+            # Make this available early because so many items are useless without it.
+            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 2
+        if 'Transposing Kiln' in randomized_items:
+            # Make this available early so players can make use of their boss souls.
+            self.multiworld.early_items[self.player]['Transposing Kiln'] = 2
+        # Make this available pretty early 
         if 'Small Lothric Banner' in randomized_items:
             if self.options.early_banner == "early_global":
                 self.multiworld.early_items[self.player]['Small Lothric Banner'] = 1
