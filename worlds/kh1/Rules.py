@@ -280,7 +280,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Deep Jungle Red Trinity Event"                                                , player).access_rule = lambda state: has_slides(state, player)
    #multiworld.get_location("Olympus Coliseum Thunder Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Olympus Coliseum Sonic Blade Event"                                           , player).access_rule = lambda state: has_item(state, player, "")
-   #multiworld.get_location("Wonderland Blizzard Event"                                                    , player).access_rule = lambda state: has_item(state, player, "")
+    multiworld.get_location("Wonderland Blizzard Event"                                                    , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Wonderland Ifrit's Horn Event"                                                , player).access_rule = lambda state: has_evidence(state, player)
    #multiworld.get_location("Agrabah Ray of Light Event"                                                   , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Agrabah Blizzard Event"                                                       , player).access_rule = lambda state: has_item(state, player, "")
