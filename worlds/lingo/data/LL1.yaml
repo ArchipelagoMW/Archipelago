@@ -6193,6 +6193,7 @@
       Exit:
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
+        item_name: Orange Tower Fifth Floor - Quadruple Intersection
         panels:
           - ONE ROAD MANY TURNS
     paintings:
@@ -6212,7 +6213,6 @@
         - Third Floor
         - Fourth Floor
         - Fifth Floor
-        - Exit
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
