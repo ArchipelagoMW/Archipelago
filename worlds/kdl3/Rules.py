@@ -204,14 +204,64 @@ def set_rules(world: "KDL3World") -> None:
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
                  lambda state: can_reach_needle(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
-                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
+                 lambda state: can_reach_ice(state, world.player) and
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
-                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
+                 lambda state: can_reach_ice(state, world.player) and
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
         add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
-                 lambda state: can_reach_ice(state, world.player) and can_reach_rick(state, world.player))
+                 lambda state: can_reach_ice(state, world.player) and
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
         add_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
                  lambda state: can_reach_cutter(state, world.player))
 
+    if world.options.starsanity:
+        # ranges are our friend
+        for i in range(7, 11):
+            add_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
+                     lambda state: can_reach_cutter(state, world.player))
+        for i in range(11, 14):
+            add_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
+                     lambda state: can_reach_parasol(state, world.player))
+        for i in [1, 3, 4, 9, 10]:
+            add_rule(world.multiworld.get_location(f"Grass Land 2 - Star {i}", world.player),
+                     lambda state: can_reach_stone(state, world.player))
+        add_rule(world.multiworld.get_location("Grass Land 2 - Star 2", world.player),
+                 lambda state: can_reach_burning(state, world.player))
+        add_rule(world.multiworld.get_location("Ripple Field 2 - Star 17", world.player),
+                 lambda state: can_reach_kine(state, world.player))
+        for i in range(41, 43):
+            # any star past this point also needs kine, but so does the exit
+            add_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
+                     lambda state: can_reach_kine(state, world.player))
+        for i in range(46, 49):
+            # also requires kine, but only for access from the prior room
+            add_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
+                     lambda state: can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
+        for i in range(12, 18):
+            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+                     lambda state: can_reach_ice(state, world.player) and
+                     (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+        for i in range(21, 23):
+            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+                     lambda state: can_reach_chuchu(state, world.player))
+        for r in [range(19, 21), range(23, 31)]:
+            for i in r:
+                add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+                         lambda state: can_reach_clean(state, world.player))
+        for i in range(31, 41):
+            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+                     lambda state: can_reach_burning(state, world.player))
+        for r in [range(1, 31), range(44, 51)]:
+            for i in r:
+                add_rule(world.multiworld.get_location(f"Cloudy Park 4 - Star {i}", world.player),
+                         lambda state: can_reach_clean(state, world.player))
+        for i in [18, *list(range(20, 25))]:
+            add_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
+                     lambda state: can_reach_ice(state, world.player))
+        for i in [19, *list(range(25, 30))]:
+            add_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
+                     lambda state: can_reach_ice(state, world.player))
     # copy ability access edge cases
     # Kirby cannot eat enemies fully submerged in water. Vast majority of cases, the enemy can be brought to the surface
     # and eaten by inhaling while falling on top of them

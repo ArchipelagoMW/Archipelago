@@ -7,7 +7,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
     trap_item_table, copy_ability_access_table
-from .Locations import location_table, KDL3Location, level_consumables, consumable_locations
+from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
 from .Regions import create_levels, default_levels
@@ -180,8 +180,11 @@ class KDL3World(World):
         itempool.extend([self.create_item(name) for name in copy_ability_table])
         itempool.extend([self.create_item(name) for name in animal_friend_table])
         required_percentage = self.options.heart_stars_required / 100.0
-        remaining_items = (len(location_table) if self.options.consumables
-                           else len(location_table) - len(consumable_locations)) - len(itempool)
+        remaining_items = len(location_table)
+        if not self.options.consumables:
+            remaining_items -= len(consumable_locations)
+        if not self.options.starsanity:
+            remaining_items -= len(star_locations)
         total_heart_stars = self.options.total_heart_stars
         required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
                                    5)  # ensure at least 1 heart star required
