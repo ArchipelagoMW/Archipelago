@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title id="title">A Player's Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/autopelagoTracker.css') }}"/>
+    <script type="application/json" id="script_data">
+        {{ script_data|tojson }}
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='assets/autopelagoTracker.js') }}"></script>
+</head>
+
+<body>
+    {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
+    <div style="margin-bottom: 0.5rem">
+        <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
+    </div>
+
+    <div id="tracker">
+        It is <span id="day">today</span>, my dudes.
+    </div>
+</body>
+
+</html>

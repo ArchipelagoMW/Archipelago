@@ -879,6 +879,23 @@ if "A Link to the Past" in network_data_package["games"]:
     _multiworld_trackers["A Link to the Past"] = render_ALinkToThePast_multiworld_tracker
     _player_trackers["A Link to the Past"] = render_ALinkToThePast_tracker
 
+if "Autopelago" in network_data_package["games"]:
+    def render_Autopelago_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
+        script_data = {
+            "player_name": tracker_data.get_player_name(team, player),
+            "day": datetime.datetime.now().strftime('%A'),
+        }
+
+        return render_template(
+            template_name_or_list="tracker__Autopelago.html",
+            room=tracker_data.room,
+            team=team,
+            player=player,
+            script_data=script_data,
+        )
+
+    _player_trackers["Autopelago"] = render_Autopelago_tracker
+
 if "Minecraft" in network_data_package["games"]:
     def render_Minecraft_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         icons = {
