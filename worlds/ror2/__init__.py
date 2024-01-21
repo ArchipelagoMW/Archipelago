@@ -44,8 +44,8 @@ class RiskOfRainWorld(World):
     }
     location_name_to_id = item_pickups
 
-    data_version = 8
-    required_client_version = (0, 4, 4)
+    data_version = 9
+    required_client_version = (0, 4, 5)
     web = RiskOfWeb()
     total_revivals: int
 
@@ -90,7 +90,11 @@ class RiskOfRainWorld(World):
         environments_pool = {}
         # only mess with the environments if they are set as items
         if self.options.goal == "explore":
-
+            if not self.options.require_stages:
+                self.multiworld.push_precollected(self.multiworld.create_item("Stage 1", self.player))
+                self.multiworld.push_precollected(self.multiworld.create_item("Stage 2", self.player))
+                self.multiworld.push_precollected(self.multiworld.create_item("Stage 3", self.player))
+                self.multiworld.push_precollected(self.multiworld.create_item("Stage 4", self.player))
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
             if self.options.dlc_sotv:
@@ -122,7 +126,10 @@ class RiskOfRainWorld(World):
         else:
             # explore mode
             # Add Stage items for logic gates
-            itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
+            if self.options.require_stages and not self.options.progressive_stages:
+                itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
+            elif self.options.require_stages and self.options.progressive_stages:
+                itempool += ["Progressive Stage"] * 4
             total_locations = len(
                 get_locations(
                     chests=self.options.chests_per_stage.value,
