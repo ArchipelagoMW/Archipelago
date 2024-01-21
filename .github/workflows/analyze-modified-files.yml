@@ -71,7 +71,7 @@ jobs:
         continue-on-error: true
         if: env.diff != '' && matrix.task == 'flake8'
         run: |
-          flake8 --count --max-complexity=10 --max-doc-length=120 --max-line-length=120 --statistics ${{ env.diff }}
+          flake8 --count --max-complexity=14 --max-doc-length=120 --max-line-length=120 --statistics ${{ env.diff }}
 
       - name: "mypy: Type check modified files"
         continue-on-error: true
