@@ -131,7 +131,7 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                     del local_early
             del early
 
-    logger.info('Creating World.')
+    logger.info('Creating MultiWorld.')
     AutoWorld.call_all(multiworld, "create_regions")
 
     logger.info('Creating Items.')
