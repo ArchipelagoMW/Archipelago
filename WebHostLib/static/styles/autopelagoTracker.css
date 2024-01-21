@@ -1,0 +1,75 @@
+.tracker-container div {
+    border: 1px solid red;
+}
+
+.tracker-container {
+    display: flex;
+    flex-direction: row;
+
+    text-align: center;
+}
+
+.game-state-container {
+    flex: 1 1 20%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.rats-and-auras-container {
+    flex: auto;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.received-items-container {
+    flex: auto;
+
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.world-maps-container {
+    flex: 4 1 80%;
+}
+
+.rats-container {
+    flex: 1 1 50%;
+
+    display: flex;
+    flex-flow: row wrap;
+    min-width: 140px;
+}
+
+.auras-container {
+    flex: 1 1 50%;
+
+    display: flex;
+    flex-direction: column;
+    min-width: 140px;
+}
+
+.beneficial-auras-container {
+    flex: 1 1 50%;
+}
+
+.harmful-auras-container {
+    flex: 1 1 50%;
+}
+
+.item-not-found {
+    filter: saturate(0.3) brightness(0.3);
+}
+
+.normal-rat {
+    position: relative;
+    height: min-content;
+}
+
+.overlaid-text {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}

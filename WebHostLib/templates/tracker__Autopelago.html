@@ -4,7 +4,7 @@
 <head>
     <title id="title">A Player's Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/autopelagoTracker.css') }}"/>
-    <script type="application/json" id="script_data">
+    <script type="application/json" id="script-data">
         {{ script_data|tojson }}
     </script>
     <script type="text/javascript" src="{{ url_for('static', filename='assets/autopelagoTracker.js') }}"></script>
@@ -16,8 +16,31 @@
         <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
     </div>
 
-    <div id="tracker">
-        It is <span id="day">today</span>, my dudes.
+    <div class="tracker-container">
+        <div class="game-state-container">
+            <div class="rats-and-auras-container">
+                <div class="rats-container">
+                    <div class="normal-rat">
+                        <img src="/static/static/icons/autopelago/Rat token 1.webp" title="Normal Rats" alt="Normal Rats" />
+                        <span id="rat-count" class="overlaid-text">0</span>
+                    </div>
+                </div>
+                <div class="auras-container">
+                    <div class="beneficial-auras-container" style="font-size: 2vw;">
+                        YOUR BENEFICIAL AURAS DISPLAY HERE.
+                    </div>
+                    <div class="harmful-auras-container" style="font-size: 2vw;">
+                        YOUR HARMFUL AURAS DISPLAY HERE.
+                    </div>
+                </div>
+            </div>
+            <div class="received-items-container" style="font-size: 2vw;">
+                YOUR RECEIVED ITEMS DISPLAY HERE.  THERE ARE MANY ITEMS LIKE IT, BUT THIS ONE IS MINE.  HELLO.  IT ME.  YOUR ITEM.
+            </div>
+        </div>
+        <div class="world-maps-container" style="font-size: 8vw;">
+            YOUR WORLD MAPS DISPLAY HERE.
+        </div>
     </div>
 </body>
 

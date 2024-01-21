@@ -8,9 +8,9 @@ const loadTrackerData = async (url, dom) => {
       dom = domParser.parseFromString(responseText, 'text/html');
     }
 
-    const parsed = JSON.parse(dom.getElementById('script_data').text);
+    const parsed = JSON.parse(dom.getElementById('script-data').text);
     document.getElementById('title').text = `${parsed.player_name}'s Tracker`;
-    document.getElementById('day').textContent = parsed.day;
+    document.getElementById('rat-count').textContent = `${parsed.rat_count}`;
   } catch (error) {
     // log it, but don't let that stop the next interval
     console.error(error);
