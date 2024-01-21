@@ -196,9 +196,8 @@ class LingoPlayerLogic:
             ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
             ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
             ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
-            ["Champion's Rest", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"],
-            ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
-            ["Outside The Agreeable", "Tenacious Entrance"]
+            ["Color Hunt", "Shortcut to The Steady"], ["The Bearer", "Shortcut to The Bold"], ["Art Gallery", "Exit"],
+            ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
         ]
         pilgrimage_reqs = AccessRequirements()
         for door in fake_pilgrimage:
