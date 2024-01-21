@@ -108,9 +108,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 write_bytes(patched_rom, [get_random_poke(random)], address + 1)
 
     if world.options.normalize_encounter_rates:
-        write_bytes(patched_rom, [14, 0, 28, 1, 42, 2, 57, 3, 71, 4, 86, 5, 100, 6],
+        write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
                     data.rom_addresses["AP_Prob_GrassMon"])
-        write_bytes(patched_rom, [33, 0, 66, 1, 100, 2],
+        write_bytes(patched_rom, [33, 0, 66, 2, 100, 4],
                     data.rom_addresses["AP_Prob_WaterMon"])
 
     if world.options.full_tmhm_compatibility:
