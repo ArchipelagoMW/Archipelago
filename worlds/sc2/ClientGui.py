@@ -15,7 +15,7 @@ from kivy.properties import StringProperty
 
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
 from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race
+    SC2Mission, SC2Race, SC2Campaign
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission
@@ -138,22 +138,30 @@ class SC2Manager(GameManager):
                         categories[mission_info.category].append(mission_index)
 
                     max_mission_count = max(len(categories[category]) for category in categories)
-                    campaign_layout_height = (max_mission_count + 2) * 50
+                    if max_mission_count == 1:
+                        campaign_layout_height = 115
+                    else:
+                        campaign_layout_height = (max_mission_count + 2) * 50
                     multi_campaign_layout_height += campaign_layout_height
                     campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
-                    campaign_layout.add_widget(
-                        Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
-                    )
+                    if campaign != SC2Campaign.GLOBAL:
+                        campaign_layout.add_widget(
+                            Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
+                        )
                     mission_layout = MissionLayout()
 
                     for category in categories:
-                        category_panel = MissionCategory()
+                        category_name_height = 0
+                        category_spacing = 3
                         if category.startswith('_'):
                             category_display_name = ''
                         else:
                             category_display_name = category
+                            category_name_height += 25
+                            category_spacing = 10
+                        category_panel = MissionCategory(padding=[category_spacing,6,category_spacing,6])
                         category_panel.add_widget(
-                            Label(text=category_display_name, size_hint_y=None, height=25, outline_width=1))
+                            Label(text=category_display_name, size_hint_y=None, height=category_name_height, outline_width=1))
 
                         for mission in categories[category]:
                             text: str = mission
