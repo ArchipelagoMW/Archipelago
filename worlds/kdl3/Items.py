@@ -76,6 +76,17 @@ filler_item_weights = {
     "Invincible Candy": 2
 }
 
+star_item_weights = {
+    "Little Star": 4,
+    "Medium Star": 2,
+    "Big Star": 1
+}
+
+total_filler_weights = {
+    **filler_item_weights,
+    **star_item_weights
+}
+
 
 item_table = {
     **copy_ability_table,

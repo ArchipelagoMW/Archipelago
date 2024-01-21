@@ -6,7 +6,7 @@ from Fill import fill_restrictive
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, item_names, copy_ability_table, animal_friend_table, filler_item_weights, KDL3Item, \
-    trap_item_table, copy_ability_access_table
+    trap_item_table, copy_ability_access_table, star_item_weights, total_filler_weights
 from .Locations import location_table, KDL3Location, level_consumables, consumable_locations, star_locations
 from .Names.AnimalFriendSpawns import animal_friend_spawns
 from .Names.EnemyAbilities import vanilla_enemies, enemy_mapping, enemy_restrictive
@@ -100,7 +100,10 @@ class KDL3World(World):
             classification = ItemClassification.trap
         return KDL3Item(name, classification, item.code, self.player)
 
-    def get_filler_item_name(self) -> str:
+    def get_filler_item_name(self, include_stars=True) -> str:
+        if include_stars:
+            return self.random.choices(list(total_filler_weights.keys()),
+                                       weights=list(total_filler_weights.values()))[0]
         return self.random.choices(list(filler_item_weights.keys()),
                                    weights=list(filler_item_weights.values()))[0]
 
@@ -180,14 +183,18 @@ class KDL3World(World):
         itempool.extend([self.create_item(name) for name in copy_ability_table])
         itempool.extend([self.create_item(name) for name in animal_friend_table])
         required_percentage = self.options.heart_stars_required / 100.0
-        remaining_items = len(location_table)
+        remaining_items = len(location_table) - len(itempool)
         if not self.options.consumables:
             remaining_items -= len(consumable_locations)
-        if not self.options.starsanity:
-            remaining_items -= len(star_locations)
+        remaining_items -= len(star_locations)
+        if self.options.starsanity:
+            # star fill, keep consumable pool locked to consumable and fill 767 stars specifically
+            itempool.extend([self.create_item(self.random.choices(list(star_item_weights.keys()),
+                                              weights=list(star_item_weights.values()))[0])
+                             for _ in range(767)])
         total_heart_stars = self.options.total_heart_stars
         required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
-                                   5)  # ensure at least 1 heart star required
+                                   5)  # ensure at least 1 heart star required per world
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.options.filler_percentage / 100.0))
         trap_amount = math.floor(filler_amount * (self.options.trap_percentage / 100.0))
@@ -214,7 +221,7 @@ class KDL3World(World):
                 requirements.insert(i - 1, quotient * i)
         self.boss_requirements = requirements
         itempool.extend([self.create_item("Heart Star") for _ in range(required_heart_stars)])
-        itempool.extend([self.create_item(self.get_filler_item_name())
+        itempool.extend([self.create_item(self.get_filler_item_name(False))
                          for _ in range(filler_amount + (remaining_items - total_heart_stars))])
         itempool.extend([self.create_item(self.get_trap_item_name())
                          for _ in range(trap_amount)])
