@@ -12,6 +12,7 @@ from .OpenKH import patch_kh2
 from .Options import KingdomHearts2Options
 from .Regions import create_regions, connect_regions
 from .Rules import *
+from .Subclasses import KH2Item
 
 
 def launch_client():
@@ -49,7 +50,9 @@ class KH2World(World):
                        for item_id, item in enumerate(item_dictionary_table.keys(), 0x130000)}
     location_name_to_id = {item: location
                            for location, item in enumerate(all_locations.keys(), 0x130000)}
+
     item_name_groups = item_groups
+    location_name_groups = location_groups
 
     visitlocking_dict: Dict[str, int]
     plando_locations: Dict[str, str]
@@ -253,11 +256,8 @@ class KH2World(World):
         self.goofy_gen_early()
         self.keyblade_gen_early()
 
-        if self.multiworld.FinalXemnas[self.player]:
-            self.plando_locations[LocationName.FinalXemnas] = ItemName.Victory
-        else:
-            self.plando_locations[LocationName.FinalXemnas] = self.create_filler().name
-        self.total_locations -= 1
+        # final xemnas isn't a location anymore
+        # self.total_locations -= 1
 
         if self.options.WeaponSlotStartHint:
             for location in all_weapon_slot:
