@@ -3,7 +3,7 @@ from unittest import TestCase
 from worlds.AutoWorld import AutoWorldRegister
 
 
-class TestMapping(TestCase):
+class TestNameGroups(TestCase):
     def test_item_name_groups_not_empty(self) -> None:
         """
         Test that there are no empty item name groups, which is likely a bug.
