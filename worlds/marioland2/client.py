@@ -191,10 +191,11 @@ class MarioLand2Client(BizHawkClient):
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict):
         super().on_package(ctx, cmd, args)
         if cmd == 'Connected':
-            ctx.set_notify(f"EnergyLink{ctx.team}")
-            if ctx.slot_data and "energy_link" in ctx.slot_data and ctx.slot_data["energy_link"] and ctx.ui:
-                ctx.ui.enable_energy_link()
-                ctx.ui.energy_link_label.text = "Lives: Standby"
+            if ctx.slot_data["energy_link"]:
+                ctx.set_notify(f"EnergyLink{ctx.team}")
+                if ctx.ui:
+                    ctx.ui.enable_energy_link()
+                    ctx.ui.energy_link_label.text = "Lives: Standby"
         elif cmd == "SetReply" and args["key"].startswith("EnergyLink"):
             if ctx.ui:
                 ctx.ui.energy_link_label.text = f"Lives: {int(args['value'] / BANK_EXCHANGE_RATE)}"
