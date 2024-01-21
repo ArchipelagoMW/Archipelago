@@ -354,8 +354,8 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Cerberus Event")
     regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Behemoth Event")
     regions["Olympus Coliseum"].locations.append("Hades Cup Defeat Hades Event")
-    regions["Olympus Coliseum"].locations.append("Pegasus Cup Defeat Cloud Event")
-    regions["Olympus Coliseum"].locations.append("Pegasus Cup Yellow Trinity Event")
+    regions["Olympus Coliseum"].locations.append("Hercules Cup Defeat Cloud Event")
+    regions["Olympus Coliseum"].locations.append("Hercules Cup Yellow Trinity Event")
 
     # Set up the regions correctly.
     for name, data in regions.items():
