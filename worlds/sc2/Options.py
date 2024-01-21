@@ -1,8 +1,10 @@
 from dataclasses import dataclass, fields, Field
-from typing import Dict, FrozenSet, Union, Set
+from typing import FrozenSet, Union, Set
+
 from BaseClasses import MultiWorld
-from Options import Choice, Option, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
-from .MissionTables import SC2Campaign, SC2Mission
+from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
+from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
+    campaign_mission_table
 
 
 class GameDifficulty(Choice):
@@ -19,6 +21,7 @@ class GameDifficulty(Choice):
     option_brutal = 3
     default = 1
 
+
 class GameSpeed(Choice):
     """Optional setting to override difficulty-based game speed."""
     display_name = "Game Speed"
@@ -29,6 +32,7 @@ class GameSpeed(Choice):
     option_fast = 4
     option_faster = 5
     default = option_default
+
 
 class DisableForcedCamera(Toggle):
     """
@@ -43,8 +47,9 @@ class SkipCutscenes(Toggle):
     """
     display_name = "Skip Cutscenes"
 
+
 class AllInMap(Choice):
-    """Determines what version of All-In (final map) that will be generated for the campaign."""
+    """Determines what version of All-In (WoL final map) that will be generated for the campaign."""
     display_name = "All In Map"
     option_ground = 0
     option_air = 1
@@ -53,9 +58,9 @@ class AllInMap(Choice):
 class MissionOrder(Choice):
     """
     Determines the order the missions are played in.  The last three mission orders end in a random mission.
-    Vanilla (29): Keeps the standard mission order and branching from the WoL Campaign.
-    Vanilla Shuffled (29): Keeps same branching paths from the WoL Campaign but randomizes the order of missions within.
-    Mini Campaign (15): Shorter version of the campaign with randomized missions and optional branches.
+    Vanilla (83 total if all campaigns enabled): Keeps the standard mission order and branching from the vanilla Campaigns.
+    Vanilla Shuffled (83 total if all campaigns enabled): Keeps same branching paths from the vanilla Campaigns but randomizes the order of missions within.
+    Mini Campaign (47 total if all campaigns enabled): Shorter version of the campaign with randomized missions and optional branches.
     Medium Grid (16):  A 4x4 grid of random missions.  Start at the top-left and forge a path towards bottom-right mission to win.
     Mini Grid (9):  A 3x3 version of Grid.  Complete the bottom-right mission to win.
     Blitz (12):  12 random missions that open up very quickly.  Complete the bottom-right mission to win.
@@ -177,6 +182,11 @@ class EnableLotVMissions(DefaultOnToggle):
 class EnableEpilogueMissions(DefaultOnToggle):
     """
     Enables missions from Epilogue campaign.
+    These missions are considered very hard.
+
+    Enabling Wings of Liberty, Heart of the Swarm and Legacy of the Void is strongly recommended in order to play Epilogue.
+    Not recommended for short mission orders.
+    See also: Exclude Very Hard Missions
     """
     display_name = "Enable Epilogue missions"
 
@@ -321,6 +331,7 @@ class EnsureGenericItems(Range):
     Mercenaries, Kerrigan levels and abilities, and Spear of Adun abilities
     Increasing this percentage will make units less common.
     """
+    display_name = "Ensure Generic Items"
     range_start = 0
     range_end = 100
     default = 25
@@ -565,6 +576,28 @@ class ExcludedMissions(OptionSet):
     valid_keys = {mission.mission_name for mission in SC2Mission}
 
 
+class ExcludeVeryHardMissions(Choice):
+    """
+    Excludes Very Hard missions outside of Epilogue campaign (All-In, Salvation, and all Epilogue missions are considered Very Hard).
+    Doesn't apply to "Vanilla" mission order.
+
+    Default: Not excluded for mission orders "Vanilla Shuffled" or "Grid" with Maximum Campaign Size >= 20,
+             excluded for any other order
+    Yes: Non-Epilogue Very Hard missions are excluded and won't be generated
+    No: Non-Epilogue Very Hard missions can appear normally. Not recommended for too short mission orders.
+
+    See also: Excluded Missions, Enable Epilogue Missions, Maximum Campaign Size
+    """
+    display_name = "Exclude Very Hard Missions"
+    option_default = 0
+    option_true = 1
+    option_false = 2
+
+    @classmethod
+    def get_option_name(cls, value):
+        return ["Default", "Yes", "No"][int(value)]
+
+
 class LocationInclusion(Choice):
     option_enabled = 0
     option_resources = 1
@@ -643,6 +676,7 @@ class MineralsPerItem(Range):
     """
     Configures how many minerals per resource item are given.
     """
+    display_name = "Minerals Per Item"
     range_start = 0
     range_end = 500
     default = 25
@@ -652,6 +686,7 @@ class VespenePerItem(Range):
     """
     Configures how many vespene per resource item is given.
     """
+    display_name = "Vespene Per Item"
     range_start = 0
     range_end = 500
     default = 25
@@ -661,6 +696,7 @@ class StartingSupplyPerItem(Range):
     """
     Configures how many starting supply per item is given.
     """
+    display_name = "Starting Supply Per Item"
     range_start = 0
     range_end = 200
     default = 5
@@ -713,6 +749,7 @@ class Starcraft2Options(PerGameCommonOptions):
     locked_items: LockedItems
     excluded_items: ExcludedItems
     excluded_missions: ExcludedMissions
+    exclude_very_hard_missions: ExcludeVeryHardMissions
     nco_items: NovaCovertOpsItems
     bw_items: BroodWarItems
     ext_items: ExtendedItems
@@ -760,6 +797,38 @@ def get_disabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campai
     disabled_campaigns = all_campaigns.difference(enabled_campaigns)
     disabled_campaigns.remove(SC2Campaign.GLOBAL)
     return disabled_campaigns
+
+
+def get_excluded_missions(multiworld: MultiWorld, player: int) -> Set[SC2Mission]:
+    mission_order_type = get_option_value(multiworld, player, "mission_order")
+    excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
+    shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
+    disabled_campaigns = get_disabled_campaigns(multiworld, player)
+
+    excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
+
+    # Excluding Very Hard missions depending on options
+    if (get_option_value(multiworld, player, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_true
+        ) or (
+            get_option_value(multiworld, player, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_default
+            and (
+                    mission_order_type not in [MissionOrder.option_vanilla_shuffled, MissionOrder.option_grid]
+                    or (
+                            mission_order_type == MissionOrder.option_grid
+                            and get_option_value(multiworld, player, "maximum_campaign_size") < 20
+                    )
+            )
+    ):
+        excluded_missions.union([mission for mission in SC2Mission if
+                                 mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE])
+    # Omitting No-Build missions if not shuffling no-build
+    if not shuffle_no_build:
+        excluded_missions = excluded_missions.union(get_no_build_missions())
+    # Omitting missions not in enabled campaigns
+    for campaign in disabled_campaigns:
+        excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
+
+    return excluded_missions
 
 
 campaign_depending_orders = [

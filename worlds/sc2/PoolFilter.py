@@ -9,7 +9,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns
+    ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild
 from . import ItemNames
 
 # Items with associated upgrades
@@ -39,10 +39,8 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
-    disabled_campaigns = get_disabled_campaigns(multiworld, player)
-    excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
     grant_story_tech = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
-    excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
+    excluded_missions: Set[SC2Mission] = get_excluded_missions(multiworld, player)
     mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
     for mission in SC2Mission:
         if not mission_pools.get(mission.pool):
@@ -65,12 +63,6 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
             mission_pools[MissionPools.FINAL] = [list(campaign_alt_final_mission_locations[goal_campaign].keys())[0]]
         remove_final_mission_from_other_pools(mission_pools)
         return mission_pools
-    # Omitting No-Build missions if not shuffling no-build
-    if not shuffle_no_build:
-        excluded_missions = excluded_missions.union(get_no_build_missions())
-    # Omitting missions not in enabled campaigns
-    for campaign in disabled_campaigns:
-        excluded_missions = excluded_missions.union(campaign_mission_table[campaign])
 
     # Finding the goal map
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
@@ -95,22 +87,25 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
 
     # Mission pool changes
     adv_tactics = get_option_value(multiworld, player, "required_tactics") != RequiredTactics.option_standard
+
     def move_mission(mission: SC2Mission, current_pool, new_pool):
         if mission in mission_pools[current_pool]:
             mission_pools[current_pool].remove(mission)
             mission_pools[new_pool].append(mission)
     # WoL
-    if not get_option_value(multiworld, player, 'shuffle_no_build'):
+    if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
         # Replacing No Build missions with Easy missions
         move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.DEVILS_PLAYGROUND, MissionPools.EASY, MissionPools.STARTER)
-        # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
-        move_mission(SC2Mission.OUTBREAK, MissionPools.EASY, MissionPools.MEDIUM)
-        # Pushing extra Normal missions to Easy
+        # Pushing this to Easy
         move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.MEDIUM, MissionPools.EASY)
-        move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
-        move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
+        if shuffle_no_build == ShuffleNoBuild.option_false:
+            # Pushing Outbreak to Normal, as it cannot be placed as the second mission on Build-Only
+            move_mission(SC2Mission.OUTBREAK, MissionPools.EASY, MissionPools.MEDIUM)
+            # Pushing extra Normal missions to Easy
+            move_mission(SC2Mission.ECHOES_OF_THE_FUTURE, MissionPools.MEDIUM, MissionPools.EASY)
+            move_mission(SC2Mission.CUTTHROAT, MissionPools.MEDIUM, MissionPools.EASY)
         # Additional changes on Advanced Tactics
         if adv_tactics:
             move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.EASY, MissionPools.STARTER)
