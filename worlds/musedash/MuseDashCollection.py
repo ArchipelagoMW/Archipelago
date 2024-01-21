@@ -58,13 +58,13 @@ class MuseDashCollections:
     }
 
     filler_items: Dict[str, int] = {
-        "Great To Perfect (5 Pack)": STARTING_CODE + 30,
+        "Great To Perfect (10 Pack)": STARTING_CODE + 30,
         "Miss To Great (5 Pack)": STARTING_CODE + 31,
         "Extra Life": STARTING_CODE + 32,
     }
-    
+
     filler_item_weights: Dict[str, int] = {
-        "Great To Perfect (5 Pack)": 10,
+        "Great To Perfect (10 Pack)": 10,
         "Miss To Great (5 Pack)": 3,
         "Extra Life": 1,
     }
