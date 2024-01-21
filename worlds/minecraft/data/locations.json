@@ -113,7 +113,15 @@
         "Sneak 100",
         "When the Squad Hops into Town",
         "With Our Powers Combined!",
-        "You've Got a Friend in Me"
+        "You've Got a Friend in Me",
+        "The Power of Books",
+        "Planting the Past",
+        "Crafting a New Look",
+        "Smithing with Style",
+        "Respecting the Remnants",
+        "Smells Interesting",
+        "Little Sniffs",
+        "Careful Restoration"
     ],
     "locations_by_region": {
         "Overworld": [
@@ -180,7 +188,14 @@
             "Bukkit Bukkit",
             "It Spreads",
             "Sneak 100",
-            "When the Squad Hops into Town"
+            "The Power of Books",
+            "Planting the Past",
+            "Crafting a New Look",
+            "Smithing with Style",
+            "Respecting the Remnants",
+            "Smells Interesting",
+            "Little Sniffs",
+            "Careful Restoration"
         ],
         "The Nether": [
             "Hot Tourist Destinations",
