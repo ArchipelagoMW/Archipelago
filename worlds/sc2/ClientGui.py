@@ -13,10 +13,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.properties import StringProperty
 
-from CommonClient import CommonContext
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
 from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, MissionInfo, SC2Campaign, SC2Race
+    SC2Mission, SC2Race
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission

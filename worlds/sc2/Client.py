@@ -972,9 +972,17 @@ def request_unfinished_missions(ctx: SC2Context) -> None:
     if ctx.mission_req_table:
         message = "Unfinished Missions: "
         unlocks = initialize_blank_mission_dict(ctx.mission_req_table)
-        unfinished_locations = initialize_blank_mission_dict(ctx.mission_req_table)
+        unfinished_locations: typing.Dict[SC2Mission, typing.List[str]] = {}
 
         _, unfinished_missions = calc_unfinished_missions(ctx, unlocks=unlocks)
+
+        for mission in unfinished_missions:
+            objectives = set(ctx.locations_for_mission(mission))
+            if objectives:
+                remaining_objectives = objectives.difference(ctx.checked_locations)
+                unfinished_locations[mission] = [ctx.location_names[location_id] for location_id in remaining_objectives]
+            else:
+                unfinished_locations[mission] = []
 
         # Removing All-In from location pool
         final_mission = lookup_id_to_mission[ctx.final_mission]
@@ -1029,22 +1037,30 @@ def is_mission_available(ctx: SC2Context, mission_id_to_check: int) -> bool:
     return any(mission_id_to_check == ctx.mission_req_table[ctx.find_campaign(mission)][mission].mission.id for mission in unfinished_missions)
 
 
-def mark_up_mission_name(ctx: SC2Context, mission: str, unlock_table: typing.Dict) -> str:
+def mark_up_mission_name(ctx: SC2Context, mission_name: str, unlock_table: typing.Dict) -> str:
     """Checks if the mission is required for game completion and adds '*' to the name to mark that."""
 
-    if ctx.mission_req_table[ctx.find_campaign(mission)][mission].completion_critical:
+    campaign = ctx.find_campaign(mission_name)
+    mission_info = ctx.mission_req_table[campaign][mission_name]
+    if mission_info.completion_critical:
         if ctx.ui:
-            message = "[color=AF99EF]" + mission + "[/color]"
+            message = "[color=AF99EF]" + mission_name + "[/color]"
         else:
-            message = "*" + mission + "*"
+            message = "*" + mission_name + "*"
     else:
-        message = mission
+        message = mission_name
 
     if ctx.ui:
-        unlocks = unlock_table[mission]
+        campaign_missions = list(ctx.mission_req_table[campaign].keys())
+        unlocks: typing.List[str]
+        index = campaign_missions.index(mission_name)
+        if index in unlock_table[campaign]:
+            unlocks = unlock_table[campaign][index]
+        else:
+            unlocks = []
 
         if len(unlocks) > 0:
-            pre_message = f"[ref={list(ctx.mission_req_table).index(mission)}|Unlocks: "
+            pre_message = f"[ref={mission_info.mission.id}|Unlocks: "
             pre_message += ", ".join(f"{unlock}({ctx.mission_req_table[ctx.find_campaign(unlock)][unlock].mission.id})" for unlock in unlocks)
             pre_message += f"]"
             message = pre_message + message + "[/ref]"
@@ -1057,8 +1073,9 @@ def mark_up_objectives(message, ctx, unfinished_locations, mission):
 
     if ctx.ui:
         locations = unfinished_locations[mission]
+        campaign = ctx.find_campaign(mission)
 
-        pre_message = f"[ref={list(ctx.mission_req_table).index(mission) + 30}|"
+        pre_message = f"[ref={list(ctx.mission_req_table[campaign]).index(mission) + 30}|"
         pre_message += "<br>".join(location for location in locations)
         pre_message += f"]"
         formatted_message = pre_message + message + "[/ref]"
@@ -1104,10 +1121,13 @@ def calc_available_missions(ctx: SC2Context, unlocks: typing.Optional[dict] = No
                 for unlock in ctx.mission_req_table[campaign][mission_name].required_world:
                     parsed_unlock = parse_unlock(unlock)
                     # TODO prophecy-only wants to connect to WoL here
-                    unlock_mission = list(ctx.mission_req_table[parsed_unlock.campaign])[parsed_unlock.connect_to - 1]
+                    index = parsed_unlock.connect_to - 1
+                    unlock_mission = list(ctx.mission_req_table[parsed_unlock.campaign])[index]
                     unlock_campaign = ctx.find_campaign(unlock_mission)
-                    if unlocks[unlock_campaign]:
-                        unlocks[unlock_campaign][parsed_unlock.connect_to - 1].append(mission_name)
+                    if unlock_campaign in unlocks:
+                        if index not in unlocks[unlock_campaign]:
+                            unlocks[unlock_campaign][index] = list()
+                        unlocks[unlock_campaign][index].append(mission_name)
 
             if mission_reqs_completed(ctx, mission_name, missions_complete):
                 available_missions.append(mission_name)
@@ -1192,10 +1212,10 @@ def mission_reqs_completed(ctx: SC2Context, mission_name: str, missions_complete
 
 
 def initialize_blank_mission_dict(location_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]]):
-    unlocks: typing.Dict[SC2Campaign, list] = {}
+    unlocks: typing.Dict[SC2Campaign, typing.Dict] = {}
 
     for mission in list(location_table):
-        unlocks[mission] = []
+        unlocks[mission] = {}
 
     return unlocks
 
