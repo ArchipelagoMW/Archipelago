@@ -152,14 +152,14 @@ class SC2Manager(GameManager):
 
                     for category in categories:
                         category_name_height = 0
-                        category_spacing = 5
+                        category_spacing = 3
                         if category.startswith('_'):
                             category_display_name = ''
                         else:
                             category_display_name = category
                             category_name_height += 25
-                            category_spacing += 5
-                        category_panel = MissionCategory(padding=[category_spacing,5,category_spacing,5])
+                            category_spacing = 10
+                        category_panel = MissionCategory(padding=[category_spacing,6,category_spacing,6])
                         category_panel.add_widget(
                             Label(text=category_display_name, size_hint_y=None, height=category_name_height, outline_width=1))
 
