@@ -15,7 +15,7 @@ from kivy.properties import StringProperty
 
 from worlds.sc2.Client import SC2Context, calc_unfinished_missions, parse_unlock
 from worlds.sc2.MissionTables import lookup_id_to_mission, lookup_name_to_mission, campaign_race_exceptions, \
-    SC2Mission, SC2Race
+    SC2Mission, SC2Race, SC2Campaign
 from worlds.sc2.Locations import LocationType, lookup_location_id_to_type
 from worlds.sc2.Options import LocationInclusion
 from worlds.sc2 import SC2World, get_first_mission
@@ -144,7 +144,7 @@ class SC2Manager(GameManager):
                         campaign_layout_height = (max_mission_count + 2) * 50
                     multi_campaign_layout_height += campaign_layout_height
                     campaign_layout = CampaignLayout(size_hint_y=None, height=campaign_layout_height)
-                    if campaign.campaign_name != "Global":
+                    if campaign != SC2Campaign.GLOBAL:
                         campaign_layout.add_widget(
                             Label(text=campaign.campaign_name, size_hint_y=None, height=25, outline_width=1)
                         )
