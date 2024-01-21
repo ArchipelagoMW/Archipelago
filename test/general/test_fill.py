@@ -46,8 +46,8 @@ class PlayerDefinition(object):
     basic_items: List[Item]
     regions: List[Region]
 
-    def __init__(self, world: MultiWorld, id: int, menu: Region, locations: List[Location] = [], prog_items: List[Item] = [], basic_items: List[Item] = []):
-        self.multiworld = world
+    def __init__(self, multi_world: MultiWorld, id: int, menu: Region, locations: List[Location] = [], prog_items: List[Item] = [], basic_items: List[Item] = []):
+        self.multiworld = multi_world
         self.id = id
         self.menu = menu
         self.locations = locations
@@ -72,7 +72,7 @@ class PlayerDefinition(object):
         return region
 
 
-def fill_region(world: MultiWorld, region: Region, items: List[Item]) -> List[Item]:
+def fill_region(multi_world: MultiWorld, region: Region, items: List[Item]) -> List[Item]:
     items = items.copy()
     while len(items) > 0:
         location = region.locations.pop(0)
@@ -80,7 +80,7 @@ def fill_region(world: MultiWorld, region: Region, items: List[Item]) -> List[It
         if location.item:
             return items
         item = items.pop(0)
-        world.push_item(location, item, False)
+        multi_world.push_item(location, item, False)
         location.event = item.advancement
 
     return items
