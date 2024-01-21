@@ -10,7 +10,8 @@ import os
 import asyncio
 import json
 from pymem import pymem
-from . import item_dictionary_table, exclusion_item_table, CheckDupingItems, all_locations, exclusion_table, SupportAbility_Table, ActionAbility_Table, all_weapon_slot
+from .Items import item_dictionary_table, exclusion_item_table, CheckDupingItems, SupportAbility_Table, ActionAbility_Table
+from .Locations import  all_locations, exclusion_table, all_weapon_slot
 from .Names import ItemName
 from .WorldLocations import *
 

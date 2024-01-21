@@ -1,7 +1,7 @@
 import logging
 from typing import List
 
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, Item, Location
 from Fill import fill_restrictive
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.AutoWorld import World, WebWorld
@@ -227,6 +227,9 @@ class KH2World(World):
 
         if not self.options.PuzzlePiecesLocationToggle:
             self.total_locations -= 144
+
+        elif not self.options.AtlanticaToggle:
+            self.total_locations -= 3
 
         self.set_excluded_locations()
 

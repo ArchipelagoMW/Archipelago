@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import MultiWorld, Region
+from BaseClasses import Region
 
 from . import Locations
 from .Subclasses import KH2Location
