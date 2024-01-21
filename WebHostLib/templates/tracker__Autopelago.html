@@ -3,43 +3,113 @@
 
 <head>
     <title id="title">A Player's Tracker</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/autopelagoTracker.css') }}"/>
-    <script type="application/json" id="script-data">
-        {{ script_data|tojson }}
-    </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='assets/autopelagoTracker.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/8.0.1/normalize.css" integrity="sha512-oHDEc8Xed4hiW6CxD7qjbnI+B07vDdX7hEPTvn9pSZO1bcRqHp8mj9pyr+8RVC2GmtEfI2Bi9Ke9Ass0as+zpg==" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/autopelagoTracker.css') }}" />
+    <script type="application/json" id="script-data">{{ script_data|tojson }}</script>
+    <script async type="text/javascript" src="{{ url_for('static', filename='assets/autopelagoTracker.js') }}"></script>
 </head>
 
 <body>
-    {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
-    <div style="margin-bottom: 0.5rem">
-        <a href="{{ url_for("get_generic_game_tracker", tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
-    </div>
-
-    <div class="tracker-container">
-        <div class="game-state-container">
-            <div class="rats-and-auras-container">
-                <div class="rats-container">
-                    <div class="normal-rat">
-                        <img src="/static/static/icons/autopelago/Rat token 1.webp" title="Normal Rats" alt="Normal Rats" />
-                        <span id="rat-count" class="overlaid-text">0</span>
-                    </div>
-                </div>
-                <div class="auras-container">
-                    <div class="beneficial-auras-container" style="font-size: 2vw;">
-                        YOUR BENEFICIAL AURAS DISPLAY HERE.
-                    </div>
-                    <div class="harmful-auras-container" style="font-size: 2vw;">
-                        YOUR HARMFUL AURAS DISPLAY HERE.
-                    </div>
-                </div>
-            </div>
-            <div class="received-items-container" style="font-size: 2vw;">
-                YOUR RECEIVED ITEMS DISPLAY HERE.  THERE ARE MANY ITEMS LIKE IT, BUT THIS ONE IS MINE.  HELLO.  IT ME.  YOUR ITEM.
-            </div>
+    <div class="page-container">
+        {# TODO: Replace this with a proper wrapper for each tracker when developing TrackerAPI. #}
+        <div class="generic-tracker-link">
+            <a href="{{ url_for('get_generic_game_tracker', tracker=room.tracker, tracked_team=team, tracked_player=player) }}">Switch To Generic Tracker</a>
         </div>
-        <div class="world-maps-container" style="font-size: 8vw;">
-            YOUR WORLD MAPS DISPLAY HERE.
+
+        <div class="tracker-container">
+            <div class="game-state-container">
+                <div class="rats-and-auras-container">
+                    <div class="rats-container">
+                        <div class="normal-rat not-found">
+                            <img src="{{ url_for('static', filename='static/icons/autopelago/Rat token 1.webp') }}" title="Normal Rats" alt="Normal Rats" />
+                            <span id="rat-count" class="overlaid-text">0</span>
+                        </div>
+                        <div class="pack-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Pack Rat" alt="Pack Rat" />
+                        </div>
+                        <div class="pizza-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Pizza Rat" alt="Pizza Rat" />
+                        </div>
+                        <div class="chef-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Chef Rat" alt="Chef Rat" />
+                        </div>
+                        <div class="ninja-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Ninja Rat" alt="Ninja Rat" />
+                        </div>
+                        <div class="gym-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Gym Rat" alt="Gym Rat" />
+                        </div>
+                        <div class="computer-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Computer Rat" alt="Computer Rat" />
+                        </div>
+                        <div class="pie-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Pie Rat" alt="Pie Rat" />
+                        </div>
+                        <div class="ziggu-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Ziggu Rat" alt="Ziggu Rat" />
+                        </div>
+                        <div class="acro-rat not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Acro Rat" alt="Acro Rat" />
+                        </div>
+                        <div class="lab-rat not-found">
+                            <img src="{{ url_for('static', filename='static/icons/autopelago/Rat Doctor 1.webp') }}" title="Lab Rat" alt="Lab Rat" />
+                        </div>
+                        <div class="soc-rates not-found">
+                            <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Soc-Rat-es" alt="Soc-Rat-es" />
+                        </div>
+                    </div>
+                    <div class="auras-container">
+                        <h2>Good</h2>
+                        <ul>
+                            <li>you have UNO</li>
+                            <li>over 9,000</li>
+                        </ul>
+                        <h2>Bad</h2>
+                        <ul>
+                            <li>i have the oldest Xbox known to man</li>
+                            <li>what? 9,000?!</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="received-items-container">
+                    <div class="a-cookie not-found">
+                      <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="A Cookie" alt="A Cookie" />
+                    </div>
+                    <div class="fresh-banana-peel not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Fresh Banana Peel" alt="Fresh Banana Peel" />
+                    </div>
+                    <div class="macguffin not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="MacGuffin" alt="MacGuffin" />
+                    </div>
+                    <div class="blue-turtle-shell not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Blue Turtle Shell" alt="Blue Turtle Shell" />
+                    </div>
+                    <div class="red-matador-cape not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Red Matador's Cape" alt="Red Matador's Cape" />
+                    </div>
+                    <div class="pair-of-fake-mouse-ears not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Pair of Fake Mouse Ears" alt="Pair of Fake Mouse Ears" />
+                    </div>
+                    <div class="bribe not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Bribe" alt="Bribe" />
+                    </div>
+                    <div class="masterful-longsword not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Masterful Longsword" alt="Masterful Longsword" />
+                    </div>
+                    <div class="legally-binding-contract not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Legally Binding Contract" alt="Legally Binding Contract" />
+                    </div>
+                    <div class="priceless-antique not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Priceless Antique" alt="Priceless Antique" />
+                    </div>
+                    <div class="premium-can-of-prawn-food not-found">
+                        <img src="https://static.wikia.nocookie.net/wowpedia/images/9/90/BTNTemp.png" title="Premium Can of Prawn Food" alt="Premium Can of Prawn Food" />
+                    </div>
+                </div>
+            </div>
+            <div class="world-maps-container" style="font-size: 8vw;">
+                YOUR WORLD MAPS DISPLAY HERE.
+            </div>
         </div>
     </div>
 </body>

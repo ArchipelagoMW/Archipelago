@@ -885,11 +885,10 @@ if "A Link to the Past" in network_data_package["games"]:
 
 if "Autopelago" in network_data_package["games"]:
     def render_Autopelago_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
-        item_name_to_id = tracker_data.item_name_to_id["Autopelago"]
-        inventory = tracker_data.get_player_inventory_counts(team, player)
+        item_id_to_name = tracker_data.item_id_to_name["Autopelago"]
         script_data = {
             "player_name": tracker_data.get_player_name(team, player),
-            "rat_count": inventory[item_name_to_id["Normal Rat"]] + (inventory[item_name_to_id["Entire Rat Pack"]] * 5),
+            "inventory": { item_id_to_name[item_id]: cnt for item_id, cnt in tracker_data.get_player_inventory_counts(team, player).items() },
             "game_state": tracker_data.get_stored_data()[f"autopelago_state_{team}_{player}"],
         }
 

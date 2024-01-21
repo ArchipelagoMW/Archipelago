@@ -1,33 +1,37 @@
-.tracker-container div {
-    border: 1px solid red;
-}
-
-.tracker-container {
-    display: flex;
-    flex-direction: row;
-
-    text-align: center;
-}
-
-.game-state-container {
-    flex: 1 1 20%;
+.page-container {
+    height: 100vh;
 
     display: flex;
     flex-direction: column;
 }
 
-.rats-and-auras-container {
+.generic-tracker-link {
+    flex: initial;
+
+    margin-bottom: 0.5rem;
+}
+
+.tracker-container {
     flex: auto;
 
     display: flex;
     flex-direction: row;
 }
 
-.received-items-container {
-    flex: auto;
+.game-state-container {
+    flex: 1 1 20%;
+}
 
+.rats-and-auras-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.received-items-container {
     display: flex;
     flex-flow: row wrap;
+    justify-content: start;
+    align-content: start;
 }
 
 .world-maps-container {
@@ -39,32 +43,24 @@
 
     display: flex;
     flex-flow: row wrap;
-    min-width: 140px;
-}
-
-.auras-container {
-    flex: 1 1 50%;
-
-    display: flex;
-    flex-direction: column;
-    min-width: 140px;
-}
-
-.beneficial-auras-container {
-    flex: 1 1 50%;
-}
-
-.harmful-auras-container {
-    flex: 1 1 50%;
-}
-
-.item-not-found {
-    filter: saturate(0.3) brightness(0.3);
+    justify-content: start;
+    align-content: start;
 }
 
 .normal-rat {
     position: relative;
-    height: min-content;
+}
+
+.auras-container {
+    flex: 1 1 50%;
+}
+
+.auras-container h2:nth-of-type(1) {
+    margin-top: 0;
+}
+
+.not-found {
+    filter: saturate(0.5) brightness(0.3);
 }
 
 .overlaid-text {
