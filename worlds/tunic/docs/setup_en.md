@@ -48,19 +48,17 @@ The filepath to the mod should look like `BepInEx/plugins/Tunic Archipelago/Tuni
 
 Launch the game, and if everything was installed correctly you should see `Randomizer + Archipelago Mod Ver. x.y.z` in the top left corner of the title screen!
 
-## Configure Archipelago Settings
+## Configure Archipelago Options
 
 ### Configure Your YAML File
 
-Visit the [TUNIC settings page](/games/Tunic/player-settings) to generate a YAML with your selected settings.
+Visit the [TUNIC options page](/games/Tunic/player-options) to generate a YAML with your selected options.
 
 ### Configure Your Mod Settings
-Launch the game and click the button labeled `Open Settings File` on the Title Screen. 
-This will open the settings file in your default text editor, allowing you to edit your connection info.
-At the top of the file, fill in *Player*, *Hostname*, *Port*, and *Password* (if required) with the correct information for your room. 
-The rest of the settings that appear in this file can be changed in the `Randomizer Settings` submenu of the in-game options menu.
+Launch the game and click the button labeled `Open AP Config` on the Title Screen.
+In the menu that opens, fill in *Player*, *Hostname*, *Port*, and *Password* (if required) with the correct information for your room.
 
-Once your player settings have been saved, press `Connect`. If everything was configured properly, you should see `Status: Connected!` and your chosen game options will be shown under `World Settings`.
+Once you've input your information, click on Close. If everything was configured properly, you should see `Status: Connected!` and your chosen game options will be shown under `World Settings`.
 
 An error message will display if the game fails to connect to the server.
 
