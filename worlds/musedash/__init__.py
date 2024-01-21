@@ -72,7 +72,7 @@ class MuseDashWorld(World):
 
     def generate_early(self):
         dlc_songs = {key for key in self.options.dlc_packs.value}
-        if (self.options.allow_just_as_planned_dlc_songs.value):
+        if self.options.allow_just_as_planned_dlc_songs.value:
             dlc_songs.add(self.md_collection.MUSE_PLUS_DLC)
 
         streamer_mode = self.options.streamer_mode_enabled
@@ -86,7 +86,7 @@ class MuseDashWorld(World):
         while True:
             # In most cases this should only need to run once
             available_song_keys = self.md_collection.get_songs_with_settings(
-                dlc_songs, streamer_mode, lower_diff_threshold, higher_diff_threshold)
+                dlc_songs, bool(streamer_mode.value), lower_diff_threshold, higher_diff_threshold)
 
             available_song_keys = self.handle_plando(available_song_keys)
 
@@ -163,13 +163,7 @@ class MuseDashWorld(World):
                     break
                 self.included_songs.append(available_song_keys.pop())
 
-        self.location_count = len(self.starting_songs) + len(self.included_songs)
-        location_multiplier = 1 + (self.get_additional_item_percentage() / 100.0)
-        self.location_count = floor(self.location_count * location_multiplier)
-
-        minimum_location_count = len(self.included_songs) + self.get_music_sheet_count()
-        if self.location_count < minimum_location_count:
-            self.location_count = minimum_location_count
+        self.location_count = 2 * (len(self.starting_songs) + len(self.included_songs))
 
     def create_item(self, name: str) -> Item:
         if name == self.md_collection.MUSIC_SHEET_NAME:
@@ -274,8 +268,6 @@ class MuseDashWorld(World):
         self.random.shuffle(included_song_copy)
         all_selected_locations.extend(included_song_copy)
 
-        two_item_location_count = self.location_count - len(all_selected_locations)
-
         # Make a region per song/album, then adds 1-2 item locations to them
         for i in range(0, len(all_selected_locations)):
             name = all_selected_locations[i]
@@ -283,10 +275,11 @@ class MuseDashWorld(World):
             self.multiworld.regions.append(region)
             song_select_region.connect(region, name, lambda state, place=name: state.has(place, self.player))
 
-            # Up to 2 Locations are defined per song
-            region.add_locations({name + "-0": self.md_collection.song_locations[name + "-0"]}, MuseDashLocation)
-            if i < two_item_location_count:
-                region.add_locations({name + "-1": self.md_collection.song_locations[name + "-1"]}, MuseDashLocation)
+            # Muse Dash requires 2 locations per song to be *interesting*. Balanced out by filler.
+            region.add_locations({
+                    name + "-0": self.md_collection.song_locations[name + "-0"],
+                    name + "-1": self.md_collection.song_locations[name + "-1"]
+            }, MuseDashLocation)
 
     def set_rules(self) -> None:
         self.multiworld.completion_condition[self.player] = lambda state: \
@@ -305,19 +298,14 @@ class MuseDashWorld(World):
 
         return trap_list
 
-    def get_additional_item_percentage(self) -> int:
-        trap_count = self.options.trap_count_percentage.value
-        song_count = self.options.music_sheet_count_percentage.value
-        return max(trap_count + song_count, self.options.additional_item_percentage.value)
-
     def get_trap_count(self) -> int:
         multiplier = self.options.trap_count_percentage.value / 100.0
-        trap_count = (len(self.starting_songs) * 2) + len(self.included_songs)
+        trap_count = len(self.starting_songs) + len(self.included_songs)
         return max(0, floor(trap_count * multiplier))
 
     def get_music_sheet_count(self) -> int:
         multiplier = self.options.music_sheet_count_percentage.value / 100.0
-        song_count = (len(self.starting_songs) * 2) + len(self.included_songs)
+        song_count = len(self.starting_songs) + len(self.included_songs)
         return max(1, floor(song_count * multiplier))
 
     def get_music_sheet_win_count(self) -> int:
