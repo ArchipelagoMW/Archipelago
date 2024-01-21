@@ -963,7 +963,7 @@ class KH2Context(CommonContext):
             await self.send_death(death_text="Sora Died")
 
     def to_khscii(self, input):
-        # credit to topaztk for this.
+        # credit to TopazTK for this.
         out_list = []
         char_count = 0
         # Throughout the text, do:
@@ -1083,7 +1083,8 @@ async def kh2_watcher(ctx: KH2Context):
                 await ctx.verifyItems()
                 await ctx.verifyLevel()
                 await ctx.is_dead()
-                await ctx.update_death_link(ctx.deathlink_toggle)
+                if (ctx.deathlink_toggle and "DeathLink" not in ctx.tags) or (not ctx.deathlink_toggle and "DeathLink" in ctx.tags):
+                    await ctx.update_death_link(ctx.deathlink_toggle)
                 message = [{"cmd": 'LocationChecks', "locations": ctx.sending}]
                 if finishedGame(ctx, message) and not ctx.kh2_finished_game:
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
@@ -1098,10 +1099,6 @@ async def kh2_watcher(ctx: KH2Context):
                     if ctx.kh2 is not None:
                         logger.info("You are now auto-tracking")
                         ctx.kh2connected = True
-            # if death_link and "DeathLink" not in ctx.tags:
-            #    await ctx.update_death_link(death_link)
-            # if not death_link and "DeathLink" in ctx.tags:
-            #    await ctx.update_death_link(death_link)
         except Exception as e:
             if ctx.kh2connected:
                 ctx.kh2connected = False
