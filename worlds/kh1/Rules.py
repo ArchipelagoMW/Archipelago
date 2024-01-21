@@ -357,8 +357,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Hades Cup Defeat Cerberus Event"                                              , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
     multiworld.get_location("Hades Cup Defeat Behemoth Event"                                              , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
     multiworld.get_location("Hades Cup Defeat Hades Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
-    multiworld.get_location("Pegasus Cup Defeat Cloud Event"                                               , player).access_rule = lambda state: has_item(state, player, "Pegasus Cup")
-    multiworld.get_location("Pegasus Cup Yellow Trinity Event"                                             , player).access_rule = lambda state: has_item(state, player, "Pegasus Cup")
+    multiworld.get_location("Hercules Cup Defeat Cloud Event"                                              , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
+    multiworld.get_location("Hercules Cup Yellow Trinity Event"                                            , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
 
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")
