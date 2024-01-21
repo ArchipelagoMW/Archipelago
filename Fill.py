@@ -491,7 +491,7 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
 
 def flood_items(multiworld: MultiWorld) -> None:
     # get items to distribute
-    wormultiworldld.random.shuffle(multiworld.itempool)
+    multiworld.random.shuffle(multiworld.itempool)
     itempool = multiworld.itempool
     progress_done = False
 
