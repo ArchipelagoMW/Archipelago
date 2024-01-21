@@ -1,0 +1,38 @@
+{
+	"Gen 9 High Tiers": 	{
+		"connects_to": [],
+		"requires": "|Gen 9 High Tiers Key|"
+	},
+	"Gen 9 Low Tiers": 	{
+		"connects_to": [],
+		"requires": "|Gen 9 Low Tiers Key|"
+	},
+	"Other Metagames": 	{
+		"connects_to": [],
+		"requires": "|Other Metagames Key|"
+	},
+	"National Dex": 	{
+		"connects_to": [],
+		"requires": "|National Dex Key|"
+	},
+	"New Gens Random Tiers": 	{
+		"connects_to": [],
+		"requires": "|New Gens Random Tiers Key|"
+	},
+	"Retro Gens Random Tiers": 	{
+		"connects_to": [],
+		"requires": "|Retro Gens Random Tiers Key|"
+	},
+	"Gen 9 Random Tiers": 	{
+		"connects_to": [],
+		"requires": "|Gen 9 Random Tiers Key|"
+	},
+	"New Gens OU": 	{
+		"connects_to": [],
+		"requires": "|New Gens OU Key|"
+	},
+	"Retro Gens OU": 	{
+		"connects_to": [],
+		"requires": "|Retro Gens OU Key|"
+}
+}

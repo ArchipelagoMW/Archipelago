@@ -1,0 +1,627 @@
+[
+	{
+		"name": "$100 Bills (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "$100 Bills (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Balearic Pumping (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Balearic Pumping (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Beat Saber (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Beat Saber (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Breezer (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Breezer (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Commercial Pumping (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Commercial Pumping (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Country Rounds (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Country Rounds (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Escape (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Escape (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Legend (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Legend (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Lvl Insane (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Lvl Insane (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Turn Me On (Pass)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Turn Me On (A+ Ranking)",
+		"region": "OST Vol. 1",
+		"category": ["OST 1"],
+		"requires": []
+	},
+	{
+		"name": "Be There For You (Pass)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Be There For You (A+ Ranking)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Elixia (Pass)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Elixia (A+ Ranking)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "I Need You (Pass)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "I Need You (A+ Ranking)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Rum n' Bass (Pass)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Rum n' Bass (A+ Ranking)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Unlimited Power (Pass)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Unlimited Power (A+ Ranking)",
+		"region": "OST Vol. 2",
+		"category": ["OST 2"],
+		"requires": []
+	},
+	{
+		"name": "Origins (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Origins (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Reason For Living (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Reason For Living (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Give a Little Love (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Give a Little Love (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Full Charge (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Full Charge (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Immortal (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Immortal (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Burning Sands (Pass)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Burning Sands (A+ Ranking)",
+		"region": "OST Vol. 3",
+		"category": ["OST 3"],
+		"requires": []
+	},
+	{
+		"name": "Into the Dream (Pass)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "Into the Dream (A+ Ranking)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "It Takes Me (Pass)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "It Takes Me (A+ Ranking)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "LUDICROUS+ (Pass)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "LUDICROUS+ (A+ Ranking)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "Spin Eternally (Pass)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "Spin Eternally (A+ Ranking)",
+		"region": "OST Vol. 4",
+		"category": ["OST 4"],
+		"requires": []
+	},
+	{
+		"name": "$1.78 (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "$1.78 (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Curtains (All Night Long) (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Curtains (All Night Long) (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Final-Boss-Chan (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Final-Boss-Chan (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Firestarter (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Firestarter (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "I Wanna Be A Machine (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "I Wanna Be A Machine (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Magic (Pass)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "Magic (A+ Ranking)",
+		"region": "OST Vol. 5",
+		"category": ["OST 5"],
+		"requires": []
+	},
+	{
+		"name": "$100 Bills (Camellia's \"215$-Step\" Remix) (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "$100 Bills (Camellia's \"215$-Step\" Remix) (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Escape Remix (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Escape Remix (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Spooky Beat (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Spooky Beat (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "FitBeat (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "FitBeat (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Crab Rave (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "Crab Rave (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "POP/STARS - K/DA (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "POP/STARS - K/DA (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "One Hope (Pass)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "One Hope (A+ Ranking)",
+		"region": "Extras",
+		"category": ["Extras"],
+		"requires": []
+	},
+	{
+		"name": "EXiT This Earth's Atmosphere (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "EXiT This Earth's Atmosphere (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Ghost (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Ghost (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Light it up (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Light it up (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Crystallized (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Crystallized (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Cycle Hit (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "Cycle Hit (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "WHAT THE CAT!? (Pass)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"name": "WHAT THE CAT!? (A+ Ranking)",
+		"region": "Camellia",
+		"category": ["Camellia"],
+		"requires": []
+	},
+	{
+		"region": "Custom Songs",
+		"name": "Custom Song Pass 1",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:1"]
+	},
+	{
+		"name": "Custom Song Pass 2",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:2"]
+	},
+	{
+		"name": "Custom Song Pass 3",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:3"]
+	},
+	{
+		"name": "Custom Song Pass 4",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:4"]
+	},
+	{
+		"name": "Custom Song Pass 5",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:5"]
+	},
+	{
+		"name": "Custom Song Pass 6",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:6"]
+	},
+	{
+		"name": "Custom Song Pass 7",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:7"]
+	},
+	{
+		"name": "Custom Song Pass 8",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:8"]
+	},
+	{
+		"name": "Custom Song Pass 9",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:9"]
+	},
+	{
+		"name": "Custom Song Pass 10",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:10"]
+	},
+	{
+		"name": "Custom Song Pass 11",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:11"]
+	},
+	{
+		"name": "Custom Song Pass 12",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:12"]
+	},
+	{
+		"name": "Custom Song Pass 13",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:13"]
+	},
+	{
+		"name": "Custom Song Pass 14",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:14"]
+	},
+	{
+		"name": "Custom Song Pass 15",
+		"region": "Custom Songs",
+		"category": ["Custom Songs"],
+		"requires": ["Custom Songs Unlock:15"]
+	},
+	
+	{
+		"name": "Cleared!",
+		"victory": true,
+		"category": ["Victory"],
+		"requires": "|Bloq:20|"
+	}
+]

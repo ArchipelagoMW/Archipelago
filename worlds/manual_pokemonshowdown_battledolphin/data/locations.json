@@ -1,0 +1,2408 @@
+[
+	{
+		"name": "Gen 9 OU - 1",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 2",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 3",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 4",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 5",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 6",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 7",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 8",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 9",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 OU - 10",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 1",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 2",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 3",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 4",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 5",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 6",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 7",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 8",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 9",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 UU - 10",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 1",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 2",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 3",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 4",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 5",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 6",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 7",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 8",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 9",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Monotype - 10",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 1",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 2",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 3",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 4",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 5",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 6",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 7",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 8",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 9",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 1v1 - 10",
+		"region": "Gen 9 High Tiers",
+		"category": ["Gen 9 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 1",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 2",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 3",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 4",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 5",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 6",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 7",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 8",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 9",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 RU - 10",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 RU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 1",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 2",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 3",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 4",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 5",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 6",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 7",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 8",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 9",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 NU - 10",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 NU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 1",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 2",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 3",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 4",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 5",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 6",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 7",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 8",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 9",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 PU - 10",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 PU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 1",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 2",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 3",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 4",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 5",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 6",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 7",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 8",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 9",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 ZU - 10",
+		"region": "Gen 9 Low Tiers",
+		"category": ["Gen 9 ZU"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 1",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 2",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 3",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 4",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 5",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 6",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 7",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 8",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 9",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 1 - 10",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 1"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 1",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 2",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 3",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 4",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 5",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 6",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 7",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 8",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 9",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "OM of the Month 2 - 10",
+		"region": "Other Metagames",
+		"category": ["OM of the Month 2"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 1",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 2",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 3",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 4",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 5",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 6",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 7",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 8",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 9",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Almost Any Ability - 10",
+		"region": "Other Metagames",
+		"category": ["Almost Any Ability"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 1",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 2",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 3",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 4",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 5",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 6",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 7",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 8",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 9",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Godly Gift - 10",
+		"region": "Other Metagames",
+		"category": ["Godly Gift"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 1",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 2",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 3",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 4",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 5",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 6",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 7",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 8",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 9",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "Shared Power - 10",
+		"region": "Other Metagames",
+		"category": ["Shared Power"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 1",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 2",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 3",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 4",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 5",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 6",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 7",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 8",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 9",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "STABmons - 10",
+		"region": "Other Metagames",
+		"category": ["STABmons"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 1",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 2",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 3",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 4",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 5",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 6",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 7",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 8",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 9",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex - 10",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 1",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 2",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 3",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 4",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 5",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 6",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 7",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 8",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 9",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex UU - 10",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex UU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 1",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 2",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 3",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 4",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 5",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 6",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 7",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 8",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 9",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 National Dex Monotype - 10",
+		"region": "National Dex",
+		"category": ["Gen 9 National Dex Monotype"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 1",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 2",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 3",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 4",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 5",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 6",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 7",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 8",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 9",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 National Dex - 10",
+		"region": "National Dex",
+		"category": ["Gen 8 National Dex"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Random Battle - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Blitz - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Blitz"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Monotype Random Battle - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Monotype Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Random Battle Mayhem - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Random Battle Mayhem"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Gen 9 Hackmons Cup - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Gen 9 Hackmons Cup"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 1",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 2",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 3",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 4",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 5",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 6",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 7",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 8",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 9",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Challenge Cup 1v1 - 10",
+		"region": "Gen 9 Random Tiers",
+		"category": ["Challenge Cup 1v1"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 1",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 2",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 3",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 4",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 5",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 6",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 7",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 8",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 9",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 Random Battle - 10",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 8 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 1",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 2",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 3",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 4",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 5",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 6",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 7",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 8",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 9",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 Random Battle - 10",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 7 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 1",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 2",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 3",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 4",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 5",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 6",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 7",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 8",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 9",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 Random Battle - 10",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 6 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 1",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 2",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 3",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 4",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 5",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 6",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 7",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 8",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 9",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 Random Battle - 10",
+		"region": "New Gens Random Tiers",
+		"category": ["Gen 5 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 1",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 2",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 3",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 4",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 5",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 6",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 7",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 8",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 9",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 Random Battle - 10",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 4 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 1",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 2",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 3",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 4",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 5",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 6",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 7",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 8",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 9",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 Random Battle - 10",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 3 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 1",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 2",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 3",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 4",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 5",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 6",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 7",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 8",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 9",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 Random Battle - 10",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 2 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 1",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 2",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 3",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 4",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 5",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 6",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 7",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 8",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 9",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 Random Battle - 10",
+		"region": "Retro Gens Random Tiers",
+		"category": ["Gen 1 Random Battle"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 1",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 2",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 3",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 4",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 5",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 6",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 7",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 8",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 9",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 8 OU - 10",
+		"region": "New Gens OU",
+		"category": ["Gen 8 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 1",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 2",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 3",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 4",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 5",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 6",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 7",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 8",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 9",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 7 OU - 10",
+		"region": "New Gens OU",
+		"category": ["Gen 7 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 1",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 2",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 3",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 4",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 5",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 6",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 7",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 8",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 9",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 6 OU - 10",
+		"region": "New Gens OU",
+		"category": ["Gen 6 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 1",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 2",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 3",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 4",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 5",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 6",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 7",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 8",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 9",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 5 OU - 10",
+		"region": "New Gens OU",
+		"category": ["Gen 5 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 1",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 2",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 3",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 4",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 5",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 6",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 7",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 8",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 9",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 4 OU - 10",
+		"region": "Retro Gens OU",
+		"category": ["Gen 4 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 1",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 2",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 3",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 4",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 5",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 6",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 7",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 8",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 9",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 3 OU - 10",
+		"region": "Retro Gens OU",
+		"category": ["Gen 3 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 1",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 2",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 3",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 4",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 5",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 6",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 7",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 8",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 9",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 2 OU - 10",
+		"region": "Retro Gens OU",
+		"category": ["Gen 2 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 1",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 2",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 3",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 4",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 5",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 6",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 7",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 8",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 9",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "Gen 1 OU - 10",
+		"region": "Retro Gens OU",
+		"category": ["Gen 1 OU"],
+		"requires": []
+	},
+	{
+		"name": "The Pokemon Champion",
+		"victory": true,
+		"category": [],
+		"requires": "|Trophy:40|"
+	}
+]

@@ -1,0 +1,43 @@
+{	
+	"game": "PokemonShowdown",
+	"creator": "BattleDolphin",
+
+	"filler_item_name": "Slugma",
+
+	"starting_items": [
+		{
+			"item_categories": ["Gen 1"],
+			"random": 6
+		},
+		{
+			"item_categories": ["OU"],
+			"random": 1
+		},
+		{
+			"item_categories": ["UU"],
+			"random": 3
+		},
+		{
+			"item_categories": ["RU"],
+			"random": 1
+		},
+		{
+			"item_categories": ["NU"],
+			"random": 1
+		},
+		{
+			"item_categories": ["PU"],
+			"random": 1
+		},
+		{
+			"item_categories": ["ZU"],
+			"random": 7
+		},
+		{
+			"item_categories": ["Keys"],
+			"random": 1
+		}
+
+	]
+
+}

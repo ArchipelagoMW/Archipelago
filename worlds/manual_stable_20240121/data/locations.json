@@ -1,0 +1,308 @@
+[
+    { 
+        "name": "Beat the Game - Ryu", 
+        "category": ["Starter Team", "Left Side"],
+        "requires": "|Ryu|"
+    },
+    { 
+        "name": "Beat the Game - Chun-Li", 
+        "category": ["Starter Team", "Left Side"],
+        "requires": "|Chun-Li|"
+    },
+    { 
+        "name": "Beat the Game - Akuma", 
+        "category": ["Starter Team", "Left Side"],
+        "requires": "|Akuma|"
+    },
+
+    { 
+        "name": "Beat the Game - Jill", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Jill|"
+    },
+    { 
+        "name": "Beat the Game - Shuma-Gorath", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Shuma-Gorath|"
+    },
+    { 
+        "name": "Beat the Game - Nemesis T-Type", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Nemesis T-Type|"
+    },
+    { 
+        "name": "Beat the Game - Firebrand", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Firebrand|"
+    },
+    { 
+        "name": "Beat the Game - Strider Hiryu", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Strider Hiryu|"
+    },
+    { 
+        "name": "Beat the Game - Phoenix Wright", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Phoenix Wright|"
+    },
+    { 
+        "name": "Beat the Game - Nova", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Nova|"
+    },
+    { 
+        "name": "Beat the Game - Ghost Rider", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Ghost Rider|"
+    },
+    { 
+        "name": "Beat the Game - Hawkeye", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Hawkeye|"
+    },
+    { 
+        "name": "Beat the Game - Doctor Strange", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Doctor Strange|"
+    },
+    { 
+        "name": "Beat the Game - Chris", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Chris|"
+    },
+    { 
+        "name": "Beat the Game - Arthur", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Arthur|"
+    },
+    { 
+        "name": "Beat the Game - Frank West", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Frank West|"
+    },
+    { 
+        "name": "Beat the Game - Vergil", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Vergil|"
+    },
+    { 
+        "name": "Beat the Game - Iron Fist", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Iron Fist|"
+    },
+    { 
+        "name": "Beat the Game - Rocket Raccoon", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Rocket Raccoon|"
+    },
+    { 
+        "name": "Beat the Game - Captain America", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Captain America|"
+    },
+    { 
+        "name": "Beat the Game - Dormammu", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Dormammu|"
+    },
+    { 
+        "name": "Beat the Game - Wesker", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Wesker|"
+    },
+    { 
+        "name": "Beat the Game - Zero", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Zero|"
+    },
+    { 
+        "name": "Beat the Game - Dante", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Dante|"
+    },
+    { 
+        "name": "Beat the Game - Deadpool", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Deadpool|"
+    },
+    { 
+        "name": "Beat the Game - Wolverine", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Wolverine|"
+    },
+    { 
+        "name": "Beat the Game - Iron Man", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Iron Man|"
+    },
+    { 
+        "name": "Beat the Game - Doctor Doom", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Doctor Doom|"
+    },
+    { 
+        "name": "Beat the Game - Morrigan", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Morrigan|"
+    },
+    { 
+        "name": "Beat the Game - Tron", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Tron|"
+    },
+    { 
+        "name": "Beat the Game - Trish", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Trish|"
+    },
+    { 
+        "name": "Beat the Game - X-23", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|X-23|"
+    },
+    { 
+        "name": "Beat the Game - Storm", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Storm|"
+    },
+    { 
+        "name": "Beat the Game - Thor", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Thor|"
+    },
+    { 
+        "name": "Beat the Game - M.O.D.O.K.", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|M.O.D.O.K.|"
+    },
+    { 
+        "name": "Beat the Game - Felicia", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Felicia|"
+    },
+    { 
+        "name": "Beat the Game - Spencer", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Spencer|"
+    },
+    { 
+        "name": "Beat the Game - Viewtiful Joe", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Viewtiful Joe|"
+    },
+    { 
+        "name": "Beat the Game - Spider-Man", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Spider-Man|"
+    },
+    { 
+        "name": "Beat the Game - Sentinel", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Sentinel|"
+    },
+    { 
+        "name": "Beat the Game - Hulk", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Hulk|"
+    },
+    { 
+        "name": "Beat the Game - Super-Skrull", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Super-Skrull|"
+    },
+    { 
+        "name": "Beat the Game - Hsien-Ko", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Hsien-Ko|"
+    },
+    { 
+        "name": "Beat the Game - Haggar", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Haggar|"
+    },
+    { 
+        "name": "Beat the Game - C. Viper", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|C. Viper|"
+    },
+    { 
+        "name": "Beat the Game - Amaterasu", 
+        "category": ["Unlocked Teams", "Left Side"],
+        "requires": "|Amaterasu|"
+    },
+    { 
+        "name": "Beat the Game - Phoenix", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Phoenix|"
+    },
+    { 
+        "name": "Beat the Game - Magneto", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Magneto|"
+    },
+    { 
+        "name": "Beat the Game - She-Hulk", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|She-Hulk|"
+    },
+    { 
+        "name": "Beat the Game - Taskmaster", 
+        "category": ["Unlocked Teams", "Right Side"],
+        "requires": "|Taskmaster|"
+    },
+
+    {
+        "name": "We Saved the World!",
+        "victory": true,
+        "category": ["All Characters Complete!"],
+        "requires": [
+            "Jill",
+            "Shuma-Gorath",
+            "Nemesis T-Type",
+            "Firebrand",
+            "Strider Hiryu",
+            "Phoenix Wright",
+            "Nova",
+            "Ghost Rider",
+            "Hawkeye",
+            "Doctor Strange", 
+            "Chris",
+            "Arthur",
+            "Frank West",
+            "Vergil",
+            "Iron Fist",
+            "Rocket Raccoon",
+            "Captain America",
+            "Dormammu",
+            "Wesker",
+            "Zero",
+            "Dante",
+            "Deadpool",
+            "Wolverine",
+            "Iron Man",
+            "Doctor Doom",
+            "Morrigan",
+            "Tron",
+            "Trish",
+            "X-23",
+            "Storm",
+            "Thor",
+            "M.O.D.O.K.",
+            "Felicia",
+            "Spencer",
+            "Viewtiful Joe",
+            "Spider-Man",
+            "Sentinel",
+            "Hulk",
+            "Super-Skrull",
+            "Hsien-Ko",
+            "Haggar",
+            "C. Viper",
+            "Amaterasu",
+            "Phoenix",
+            "Magneto",
+            "She-Hulk",
+            "Taskmaster"
+        ]
+    }
+]

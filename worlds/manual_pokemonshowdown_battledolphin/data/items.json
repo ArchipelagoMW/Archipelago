@@ -1,0 +1,4382 @@
+[
+	{
+		"count":1,
+		"name": "Gen 9 High Tiers Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Gen 9 Low Tiers Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Other Metagames Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "National Dex Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "New Gens Random Tiers Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Retro Gens Random Tiers Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Gen 9 Random Tiers Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "New Gens OU Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Retro Gens OU Key",
+		"category": ["Keys"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Life Orb",
+		"category": ["Held Items"],
+		"useful": true
+	},
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Choice Band",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Choice Scarf",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Choice Specs",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Leftovers",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Heavy Duty Boots",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Eviolite",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Assault Vest",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Expert Belt",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Focus Sash",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Flame + Toxic Orb",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Black Sludge",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Loaded Dice",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Air Balloon",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Key Stone",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Z-Ring",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Tera Orb",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Berry Farm",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Rocky Helmet",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "All Type Boosting Items",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Weakness Policy",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Booster Energy",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Held Items"],
+        "name": "Light Clay",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Abomasnow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Absol",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Accelgor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Aegislash",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Aerodactyl",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Aggron",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Aipom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Alakazam",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Alcremie",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Alomomola",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Altaria",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Ambipom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Amoonguss",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Ampharos",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Appletun",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Araquanid",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Arbok",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Arboliva",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Arcanine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Arcanine-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Archaludon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Archeops",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Arctibax",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Arctovish",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Arctozolt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Ariados",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Armaldo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Armarouge",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Aromatisse",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Articuno",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Articuno-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Audino",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Aurorus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Avalugg",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Avalugg-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Azelf",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Azumarill",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Banette",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Barbaracle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Barraskewda",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Basculegion-Female",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Basculegion-Male",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Basculin",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Bastiodon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Beartic",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Beautifly",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Beedrill",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Beheeyem",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Bellibolt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Bellossom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Bewear",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Bibarel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Bisharp",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Blacephalon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Blastoise",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Blaziken",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Blissey",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Boltund",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Bombirdier",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Bouffalant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Brambleghast",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Braviary",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Braviary-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Breloom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Bronzong",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Bronzor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Brute Bonnet",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Bruxish",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Butterfree",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Buzzwole",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Cacturne",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Calyrex",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Camerupt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Carbink",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Carkol",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Carnivine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Carracosta",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Castform",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Celebi",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Celesteela",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Centiskorch",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ceruledge",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Cetitan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Chandelure",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU", "Gen 1"],
+        "name": "Chansey",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Charizard",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Charjabug",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Chatot",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Cherrim",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Chesnaught",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Chimecho",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Cinccino",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Cinderace",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Clamperl",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Clawitzer",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Claydol",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU", "Gen 1"],
+        "name": "Clefable",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Clefairy",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Clodsire",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU", "Gen 1"],
+        "name": "Cloyster",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Coalossal",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Cobalion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Cofagrigus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Combusken",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Comfey",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Conkeldurr",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Copperajah",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Corsola",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Corsola-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Corviknight",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Crabominable",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Cradily",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Cramorant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Crawdaunt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Cresselia",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Crobat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Crocalor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Crustle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Cryogonal",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Cursola",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Cutiefly",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Cyclizar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dachsbun",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Darkrai",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Darmanitan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Decidueye",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Decidueye-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dedenne",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Delcatty",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Delibird",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Delphox",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Deoxys-Defence",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Deoxys-Speed",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Dewgong",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Dhelmise",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Diancie",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Diggersby",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Dipplin",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Ditto",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Dodrio",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Dondozo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Donphan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Dottler",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Doublade",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Dracozolt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Dragalge",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Dragapult",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dragonair",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Dragonite",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Drakloak",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Drampa",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Drapion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Drednaw",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Drifblim",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Drilbur",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Druddigon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Dubwool",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Dudunsparce",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Dugtrio",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dugtrio-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dunsparce",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Duosion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Duraladon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Durant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dusclops",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Dusknoir",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Dustox",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Eelektrik",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Eelektross",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Eevee",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Eiscue",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Eldegoss",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Electabuzz",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Electivire",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Electrode",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Electrode-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Emboar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Emolga",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Empoleon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Enamorus-Inarnate",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Enamorus-Therian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Entei",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Escavalier",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Espeon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Excadrill",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Exeggutor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Exeggutor-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Exploud",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Falinks",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Farfetch'd",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Farigiraf",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Fearow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Feraligatr",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Ferroseed",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Ferrothorn",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Fezandipiti",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Flamigo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Flapple",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Flareon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Floatzel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Floragato",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Florges",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Flygon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Forretress",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Fraxure",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Frogadier",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Froslass",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Frosmoth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Furfrou",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Furret",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Gabite",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Gallade",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Galvantula",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Garbodor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Garchomp",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Gardevoir",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Garganacl",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Gastrodon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Gengar",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Gholdengo",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Gigalith",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Girafarig",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Glaceon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Glalie",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Glastrier",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Gligar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Glimmora",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Gliscor",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Gogoat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Golbat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Golduck",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Golem",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Golem-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Golisopod",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Golurk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Goodra",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Goodra-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Gorebyss",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Gothitelle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Gouging Fire",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Gourgeist",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Grafaiai",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Granbull",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Grapploct",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Graveler",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Graveler-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Great Tusk",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Greedent",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Greninja",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Grimmsnarl",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Grotle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Grumpig",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Gumshoos",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Gurdurr",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Guzzlord",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Gyarados",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Hakamo-o",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Hariyama",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Hatterene",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Hattrem",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Haunter",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Hawlucha",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Haxorus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Heatmor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Heatran",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Heliolisk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Heracross",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Hippopotas",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Hippowdon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Hitmonchan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU", "Gen 1"],
+        "name": "Hitmonlee",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Hitmontop",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Honchkrow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Hoopa",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Hoopa-Unbound",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Houndoom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Houndstone",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Huntail",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Hydrapple",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Hydreigon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Hypno",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Illumise",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Incineroar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Indeedee",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Infernape",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Inteleon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Iron Boulder",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Iron Crown",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Iron Hands",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Iron Jugulis",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Iron Leaves",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Iron Moth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Iron Thorns",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Iron Treads",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Iron Valiant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Ivysaur",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Jellicent",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Jirachi",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Jolteon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Jumpluff",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Jynx",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Kabutops",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Kadabra",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Kangaskhan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Kartana",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Kecleon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Keldeo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Kilowattrel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Kingambit",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Kingdra",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Kingler",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Klang",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Klawf",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Kleavor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Klefki",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Klinklang",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Komala",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Kommo-o",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Kricketune",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Krokorok",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Krookodile",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Kyurem",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Kyurem-Black",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Lairon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Lampent",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Landorus-T",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Lanturn",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Lapras",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Latias",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Latios",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Leafeon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Leavanny",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Ledian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Lickilicky",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Lickitung",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Liepard",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Lilligant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Lilligant-Hisuan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Linoone",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Linoone-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Lokix",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Lopunny",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Lucario",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Ludicolo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Lumineon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Lunatone",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Lurantis",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Luvdisc",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Luxray",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Lycanroc-Dusk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Lycanroc-Midday",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Lycanroc-Midnight",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Mabosstiff",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Machamp",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Machoke",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Magcargo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Magearna",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Magmar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Magmortar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Magneton",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Magnezone",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Malamar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Mamoswine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Manaphy",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Mandibuzz",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Manectric",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mantine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mantyke",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Maractus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mareanie",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Marill",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Marowak",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Marowak-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Marshtomp",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Masquerain",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Maushold",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mawile",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Medicham",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Meganium",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Melmetal",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Meloetta",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Meowscarada",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Meowstic-Female",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Meowstic-Male",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Mesprit",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Metagross",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Metang",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Mew",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Mienshao",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Mightyena",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Milotic",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Miltank",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Mimikyu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Minior",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Minun",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Misdreavus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Mismagius",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Moltres",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Moltres-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Monferno",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Morgrem",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Morpeko",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mothim",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Mr. Mime",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mr. Mime-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Mr. Rime",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Mudsdale",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Muk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Muk-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Munkidori",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Murkrow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Musharna",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Naclstack",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Necrozma",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Nidoking",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Nidoqueen",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Nihilego",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Ninetales",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ninetales-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Ninjask",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Noctowl",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Noivern",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Nosepass",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Numel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Obstagoon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Octillery",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ogerpon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ogerpon-Cornerstone",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Ogerpon-Wellspring",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Oinkologne",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Okidogi",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Omastar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Onix",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Oranguru",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Orbeetle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Oricorio-Baile",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Oricorio-Pa'u",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Oricorio-Pom-Pom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Oricorio-Sensu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Orthworm",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Overqwil",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Pachirisu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Palossand",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Pangoro",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Parasect",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Passimian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Pawmot",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Pecharunt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Pelipper",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Perrserker",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Persian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Persian-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Phione",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Pidgeot",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Pikachu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Piloswine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Pincurchin",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Pinsir",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Plusle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Politoed",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Poliwrath",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Polteageist",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Porygon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Porygon-Z",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Porygon2",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Primarina",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Primeape",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Prinplup",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Probopass",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Pupitar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Purugly",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Pyroar",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Pyukumuku",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Quagsire",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Quaquaval",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Quaxwell",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Quilladin",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Qwilfish",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Qwilfish-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Raboot",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Rabsca",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Raging Bolt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Raichu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Raichu-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Raikou",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Rampardos",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Rapidash",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Rapidash-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Raticate",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Raticate-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Regice",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Regidrago",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Regieleki",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Regigigas",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Regirock",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Registeel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Relicanth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Reuniclus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Revraroom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Rhydon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Rhyperior",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ribombee",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Rillaboom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Roaring Moon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Roselia",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Roserade",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Rotom",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Rotom-Fan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Rotom-Frost",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Rotom-Heat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Rotom-Mow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Rotom-Wash",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Runerigus",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sableye",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Salamence",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Salazzle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Samurott",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Samurott-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Sandaconda",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Sandslash",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Sandslash-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Sandy Shocks",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Sawk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sawsbuck",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Sceptile",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Scizor",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Scolipede",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Scovillain",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Scrafty",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Scream Tail",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Scyther",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Seadra",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Seaking",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Seismitoad",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Serperior",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Servine",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Seviper",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Sharpedo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Shaymin",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Shedinja",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Shelgon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Shiftry",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Shiinotic",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Shuckle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Sigilyph",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Silvally",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Simipour",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Simisage",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Simisear",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Sinistcha",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sinistea",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Sirfetch'd",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Skarmory",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Skeledirge",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Skuntank",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Slaking",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sliggoo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sliggoo-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Slither Wing",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU", "Gen 1"],
+        "name": "Slowbro",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Slowbro-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Slowking",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Slowking-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Slurpuff",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Smeargle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sneasel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Sneasel-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Snorlax",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Snover",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Solrock",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Spidops",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Spinda",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Spiritomb",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Squawkabilly",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Stakataka",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Stantler",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Staraptor",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Staravia",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Starmie",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Steelix",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Stonjourner",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Stoutland",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Stunfisk",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Stunfisk-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sudowoodo",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Suicune",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Sunflora",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Swalot",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Swampert",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Swanna",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Swellow",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Swoobat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Sylveon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Talonflame",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "Gen 1"],
+        "name": "Tangela",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tangrowth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tapu Bulu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tapu Fini",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tapu Koko",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tapu Lele",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Tatsugiri",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Tauros",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Tauros-Paldean-Aqua",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Tauros-Paldean-Blaze",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Tauros-Paldean-Combat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Tentacruel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Terrakion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Thievul",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Throh",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Thundurus-Incarnate",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Thundurus-Therian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Thwackey",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Ting-Lu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Tinkaton",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Tinkatuff",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Toedscool",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Toedscruel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Togedemaru",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Togekiss",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Togetic",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Torkoal",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Tornadus-Incarnate",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Tornadus-T",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Torracat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Torterra",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Toucannon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Toxapex",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Toxicroak",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Toxtricity",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Trevenant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Tropius",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Tsareena",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Turtonator",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Type: Null",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Typhlosion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Typhlosion-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Tyranitar",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Tyrantrum",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Umbreon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Unfezant",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Unown",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Ursaluna",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Ursaring",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Urshifu-Rapid Strike",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Uxie",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Vanilluxe",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU", "Gen 1"],
+        "name": "Vaporeon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Veluza",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU", "Gen 1"],
+        "name": "Venomoth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Venusaur",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Vespiquen",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Victini",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Victreebel",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Vigoroth",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Vikavolt",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Vileplume",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Virizion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Vivillon",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Volbeat",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Volcanion",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Volcarona",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Vullaby",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Vulpix",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Vulpix-Alolan",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Wailord",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Walking Wake",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Walrein",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Wartortle",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Watchog",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Weavile",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU", "Gen 1"],
+        "name": "Weezing",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Weezing-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Whimsicott",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Whiscash",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU", "Gen 1"],
+        "name": "Wigglytuff",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Wishiwashi",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Wo-Chien",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Wobbuffet",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Wormadam",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Wugtrio",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Wyrdeer",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Xatu",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Xurkitree",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Yanma",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Yanmega",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "OU"],
+        "name": "Zamazenta",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Zangoose",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU", "Gen 1"],
+        "name": "Zapdos",
+        "useful": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "UU"],
+        "name": "Zapdos-Galarian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Zarude",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "PU"],
+        "name": "Zebstrika",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Zeraora",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "NU"],
+        "name": "Zoroark",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "RU"],
+        "name": "Zoroark-Hisuian",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon", "ZU"],
+        "name": "Zweilous",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Zygarde-10%",
+        "filler": true
+    },
+    {
+        "count":1,
+        "category": ["Pokemon"],
+        "name": "Zygarde-50%",
+        "filler": true
+    },
+	{
+		"count": "40",
+		"name": "Trophy",
+		"category": ["Trophies"],
+		"progression": true
+	}
+]

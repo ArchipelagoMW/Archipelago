@@ -1,0 +1,56 @@
+[
+	{
+		"count": "35",
+		"name": "Bloq",
+		"category": ["Bloqs"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "OST 1 Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "OST 2 Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "OST 3 Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "OST 4 Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "OST 5 Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Extras Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "1",
+		"name": "Camellia Unlock",
+		"category": ["Pack Unlocks"],
+		"progression": true
+	},
+	{
+		"count": "15",
+		"name": "Custom Songs Unlock",
+		"category": ["Custom Song Unlocks"],
+		"progression": true
+	}
+]

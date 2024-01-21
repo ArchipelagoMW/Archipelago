@@ -1,0 +1,13 @@
+{
+	"game": "BeatSaber",
+	"creator": "Alphie",
+	
+	"filler_item_name": "Bombs",
+	
+	"starting_items": [
+	{
+		"items": ["OST 1 Unlock", "OST 2 Unlock", "OST 3 Unlock", "OST 4 Unlock", "OST 5 Unlock", "Extras Unlock", "Camellia Unlock"],
+		"random": 1
+	}
+]
+}

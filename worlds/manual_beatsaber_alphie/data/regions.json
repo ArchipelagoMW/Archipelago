@@ -1,0 +1,36 @@
+{
+	"OST Vol. 1": 	{
+		"starting": false,
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 4", "OST Vol. 5", "Extras", "Camellia", "Custom Songs"],
+		"requires": "|OST 1 Unlock|"
+	},
+	"OST Vol. 2": 	{
+		"starting": false,
+		"connects_to": ["OST Vol. 1", "OST Vol. 3", "OST Vol. 4", "OST Vol. 5", "Extras", "Camellia", "Custom Songs"],
+		"requires": "|OST 2 Unlock|"
+	},
+	"OST Vol. 3": 	{
+		"starting": false,
+		"connects_to": ["OST Vol. 2", "OST Vol. 1", "OST Vol. 4", "OST Vol. 5", "Extras", "Camellia", "Custom Songs"],
+		"requires": "|OST 3 Unlock|"
+	},
+	"OST Vol. 4": 	{
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 1", "OST Vol. 5", "Extras", "Camellia", "Custom Songs"],
+		"requires": "|OST 4 Unlock|"
+	},
+	"OST Vol. 5": 	{
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 4", "OST Vol. 1", "Extras", "Camellia", "Custom Songs"],
+		"requires": "|OST 5 Unlock|"
+	},
+	"Extras": 	{
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 4", "OST Vol. 5", "OST Vol. 1", "Camellia", "Custom Songs"],
+		"requires": "|Extras Unlock|"
+	},
+	"Camellia": 	{
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 4", "OST Vol. 5", "Extras", "OST Vol. 1", "Custom Songs"],
+		"requires": "|Camellia Unlock|"
+	},
+	"Custom Songs": 	{
+		"connects_to": ["OST Vol. 2", "OST Vol. 3", "OST Vol. 4", "OST Vol. 5", "Extras", "Camellia", "OST Vol. 1"]
+	}
+}
