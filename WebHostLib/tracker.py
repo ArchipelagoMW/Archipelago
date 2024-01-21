@@ -77,6 +77,10 @@ class TrackerData:
         """Retrieves the seed name."""
         return self._multidata["seed_name"]
 
+    def get_stored_data(self) -> Dict[str, Any]:
+        """Retrieves the collection of data stored in the world on behalf of various clients."""
+        return self._multisave["stored_data"]
+
     def get_slot_data(self, team: int, player: int) -> Dict[str, Any]:
         """Retrieves the slot data for a given player."""
         return self._multidata["slot_data"][player]
@@ -886,6 +890,7 @@ if "Autopelago" in network_data_package["games"]:
         script_data = {
             "player_name": tracker_data.get_player_name(team, player),
             "rat_count": inventory[item_name_to_id["Normal Rat"]] + (inventory[item_name_to_id["Entire Rat Pack"]] * 5),
+            "game_state": tracker_data.get_stored_data()[f"autopelago_state_{team}_{player}"],
         }
 
         return render_template(
