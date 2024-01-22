@@ -1,5 +1,5 @@
 .page-container {
-    height: 100vh;
+    margin: 8px;
 
     display: flex;
     flex-direction: column;
@@ -41,13 +41,21 @@
 .rats-container {
     flex: 1 1 50%;
 
+    min-width: 128px; /* For now! I want to eventually shrink the images based on @media */
+
     display: flex;
     flex-flow: row wrap;
     justify-content: start;
     align-content: start;
 }
 
-.normal-rat {
+.received-item img {
+    max-width: 64px;
+    max-height: 64px;
+    object-fit: scale-down;
+}
+
+.received-normal-rat {
     position: relative;
 }
 
@@ -59,7 +67,7 @@
     margin-top: 0;
 }
 
-.not-found {
+.not-found img {
     filter: saturate(0.5) brightness(0.3);
 }
 

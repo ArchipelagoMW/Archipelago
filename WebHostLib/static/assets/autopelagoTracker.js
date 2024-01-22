@@ -4,9 +4,9 @@ class Payload {
         return this.inventory['Normal Rat'] + (this.inventory['Entire Rat Pack'] * 5);
     }
 
-    markFoundIf(prop, className) {
+    markFoundIf(prop, classNameSuffix) {
         if (prop(this) > 0) {
-            for (const container of document.getElementsByClassName(className)) {
+            for (const container of document.getElementsByClassName(`received-${classNameSuffix}`)) {
                 container.classList.remove('not-found');
             }
         }
