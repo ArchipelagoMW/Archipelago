@@ -2,7 +2,7 @@ import typing
 import settings
 from typing import Dict, Any
 from BaseClasses import Tutorial, ItemClassification
-from ..AutoWorld import WebWorld, World
+from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table, bowsers, bowsersMini, event, hidden, coins
 from .Options import mlss_options
 from .Regions import create_regions, connect_regions
