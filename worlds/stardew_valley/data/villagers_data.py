@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict, Callable, Set
 
 from ..strings.food_names import Beverage
-from ..strings.region_names import Region, SVERegion, AlectoRegion
+from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
 from ..mods.mod_data import ModNames
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
