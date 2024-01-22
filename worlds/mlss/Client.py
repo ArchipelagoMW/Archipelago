@@ -266,7 +266,6 @@ class MLSSClient(BizHawkClient):
 
 
 def find_key(dictionary, target):
-    from CommonClient import logger
     leftover = target
 
     for key, value in dictionary.items():
