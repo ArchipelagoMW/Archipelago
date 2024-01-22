@@ -97,6 +97,7 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            print("Slot Data: " + str(args['slot_data']))
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
