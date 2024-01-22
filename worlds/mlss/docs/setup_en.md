@@ -16,7 +16,7 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
 ## Optional Software
 
 - [Poptracker](https://github.com/black-sliver/PopTracker/releases)
-  -[MLSS Autotracker](https://github.com/seto10987/MLSS-PopTracker/releases)
+  - [MLSS Autotracker](https://github.com/seto10987/MLSS-PopTracker/releases)
 
 ## Configuring your YAML file
 
