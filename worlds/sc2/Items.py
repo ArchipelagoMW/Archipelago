@@ -1250,9 +1250,18 @@ item_table = {
         ItemData(623 + SC2WOL_ITEM_ID_OFFSET, "Laboratory", 12, SC2Race.TERRAN,
                  description="Mercenary calldowns are no longer limited by charges."),
 
-    ItemNames.ZEALOT: ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.STALKER: ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.HIGH_TEMPLAR: ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
+    ItemNames.ZEALOT:
+        ItemData(700 + SC2WOL_ITEM_ID_OFFSET, "Unit", 0, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Powerful melee warrior. Can use the charge ability."),
+    ItemNames.STALKER: 
+        ItemData(701 + SC2WOL_ITEM_ID_OFFSET, "Unit", 1, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Ranged attack strider. Can use the Blink ability."),
+    ItemNames.HIGH_TEMPLAR: 
+        ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="[todo]"),             
     ItemNames.DARK_TEMPLAR: ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.IMMORTAL: ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
     ItemNames.COLOSSUS: ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
@@ -1290,7 +1299,7 @@ item_table = {
     ItemNames.NOVA_NUKE: ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
 
     # HotS
-    ItemNames.ZERGLING: ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
+    ItemNames.ZERGLING: ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}, description="Basic zerg unit, cheap and expendable."),
     ItemNames.SWARM_QUEEN: ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.ROACH: ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
     ItemNames.HYDRALISK: ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, SC2Race.ZERG, classification=ItemClassification.progression, origin={"hots"}),
