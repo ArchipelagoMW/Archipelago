@@ -54,7 +54,7 @@ cpants = [
 
 
 def get_base_rom_as_bytes() -> bytes:
-    with open(get_base_rom_path("Mario & Luigi - Superstar Saga (U).gba"), "rb") as infile:
+    with open(get_settings().mlss_options.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
     return base_rom_bytes

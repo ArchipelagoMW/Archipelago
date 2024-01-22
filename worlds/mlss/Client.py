@@ -11,24 +11,6 @@ import logging
 import math
 import asyncio
 
-# This imports the bizhawk apworld if it's not already imported. This code block should be removed for a PR.
-if "worlds._bizhawk" not in sys.modules:
-    import importlib
-    import os
-    import zipimport
-
-    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
-    if os.path.isfile(bh_apworld_path):
-        importer = zipimport.zipimporter(bh_apworld_path)
-        spec = importer.find_spec(os.path.basename(bh_apworld_path).rsplit(".", 1)[0])
-        mod = importlib.util.module_from_spec(spec)
-        mod.__package__ = f"worlds.{mod.__package__}"
-        mod.__name__ = f"worlds.{mod.__name__}"
-        sys.modules[mod.__name__] = mod
-        importer.exec_module(mod)
-    elif not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        raise Exception("Did not find _bizhawk.apworld required to play Mario & Luigi Superstar Saga.")
-
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk.client import BizHawkClient
 

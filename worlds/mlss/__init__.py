@@ -48,7 +48,7 @@ class MLSSWorld(World):
     web = MLSSWebWorld()
     data_version = 1
     option_definitions = mlss_options
-    settings = typing.ClassVar[MLSSSettings]
+    settings: typing.ClassVar[MLSSSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
     required_client_version = (0, 4, 4)
