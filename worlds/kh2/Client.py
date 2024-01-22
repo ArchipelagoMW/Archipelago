@@ -83,6 +83,7 @@ class KH2Context(CommonContext):
             "AmountInvo": {
                 "Ability":      {},
                 "Amount":       {
+                    "Bounty": 0,
                 },
                 "Growth":       {
                     "High Jump":    0, "Quick Run": 0, "Dodge Roll": 0,
