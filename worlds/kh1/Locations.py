@@ -305,6 +305,23 @@ location_table: Dict[str, KH1LocationData] = {
     
     "Traverse Town Aero Event":                                                         KH1LocationData("Events",     265_6131),
     
+    "Atlantica Undersea Gorge Blizzard Clam":                                           KH1LocationData("Clam",       265_6201),
+    "Atlantica Undersea Gorge Ocean Floor Clam":                                        KH1LocationData("Clam",       265_6202),
+    "Atlantica Undersea Valley Higher Cave Clam":                                       KH1LocationData("Clam",       265_6203),
+    "Atlantica Undersea Valley Lower Cave Clam":                                        KH1LocationData("Clam",       265_6204),
+    "Atlantica Undersea Valley Fire Clam":                                              KH1LocationData("Clam",       265_6205),
+    "Atlantica Undersea Valley Wall Clam":                                              KH1LocationData("Clam",       265_6206),
+    "Atlantica Undersea Valley Pillar Clam":                                            KH1LocationData("Clam",       265_6207),
+    "Atlantica Undersea Valley Ocean Floor Clam":                                       KH1LocationData("Clam",       265_6208),
+    "Atlantica Triton's Palace Thunder Clam":                                           KH1LocationData("Clam",       265_6209),
+    "Atlantica Triton's Palace Wall Right Clam":                                        KH1LocationData("Clam",       265_6210),
+    "Atlantica Triton's Palace Near Path Clam":                                         KH1LocationData("Clam",       265_6211),
+    "Atlantica Triton's Palace Wall Left Clam":                                         KH1LocationData("Clam",       265_6212),
+    "Atlantica Cavern Nook Clam":                                                       KH1LocationData("Clam",       265_6213),
+    "Atlantica Below Deck Clam":                                                        KH1LocationData("Clam",       265_6214),
+    "Atlantica Undersea Garden Clam":                                                   KH1LocationData("Clam",       265_6215),
+    "Atlantica Undersea Cave Clam":                                                     KH1LocationData("Clam",       265_6216),
+    
     "Ansem's Secret Report 1":                                                          KH1LocationData("Reports",    265_7018),
     "Ansem's Secret Report 2":                                                          KH1LocationData("Reports",    265_7017),
     "Ansem's Secret Report 3":                                                          KH1LocationData("Reports",    265_7016),
