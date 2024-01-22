@@ -21,6 +21,13 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
+class ProgressiveColorful(DefaultOnToggle):
+    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    If off, there is an item for each room of The Colorful, meaning that random rooms in the middle of the sequence can open up without giving you access to them.
+    If on, there are ten progressive items, which open up the sequence from White forward."""
+    display_name = "Progressive Colorful"
+
+
 class LocationChecks(Choice):
     """On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for
     achievement panels and a small handful of other panels.
@@ -117,6 +124,7 @@ class DeathLink(Toggle):
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
     progressive_orange_tower: ProgressiveOrangeTower
+    progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels

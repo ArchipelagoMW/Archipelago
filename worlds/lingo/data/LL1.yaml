@@ -1118,7 +1118,13 @@
         id: Cross Room/Panel_north_missing
         colors: green
         tag: forbid
-        required_room: Outside The Bold
+        required_panel:
+          - room: Outside The Bold
+            panel: MOUTH
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
       DIAMONDS:
         id: Cross Room/Panel_diamonds_missing
         colors: green
@@ -2635,12 +2641,6 @@
         panels:
           - OBSTACLE
   The Colorful:
-    # The set of required_doors in the achievement panel should prevent
-    # generation from asking you to solve The Colorful before opening all of the
-    # doors. Access from the roof is included so that the painting here could be
-    # an entrance. The client will have to be hardcoded to not open the door to
-    # the achievement until all of the doors are open, whether by solving the
-    # panels or through receiving items.
     entrances:
       The Colorful (Gray):
         room: The Colorful (Gray)
@@ -2651,31 +2651,53 @@
         id: Countdown Panels/Panel_colorful_colorful
         check: True
         tag: forbid
-        required_door:
+        required_panel:
           - room: The Colorful (White)
-            door: Progress Door
+            panel: BEGIN
           - room: The Colorful (Black)
-            door: Progress Door
+            panel: FOUND
           - room: The Colorful (Red)
-            door: Progress Door
+            panel: LOAF
           - room: The Colorful (Yellow)
-            door: Progress Door
+            panel: CREAM
           - room: The Colorful (Blue)
-            door: Progress Door
+            panel: SUN
           - room: The Colorful (Purple)
-            door: Progress Door
+            panel: SPOON
           - room: The Colorful (Orange)
-            door: Progress Door
+            panel: LETTERS
           - room: The Colorful (Green)
-            door: Progress Door
+            panel: WALLS
           - room: The Colorful (Brown)
-            door: Progress Door
+            panel: IRON
           - room: The Colorful (Gray)
-            door: Progress Door
+            panel: OBSTACLE
         achievement: The Colorful
     paintings:
       - id: arrows_painting_12
         orientation: north
+    progression:
+      Progressive Colorful:
+        - room: The Colorful (White)
+          door: Progress Door
+        - room: The Colorful (Black)
+          door: Progress Door
+        - room: The Colorful (Red)
+          door: Progress Door
+        - room: The Colorful (Yellow)
+          door: Progress Door
+        - room: The Colorful (Blue)
+          door: Progress Door
+        - room: The Colorful (Purple)
+          door: Progress Door
+        - room: The Colorful (Orange)
+          door: Progress Door
+        - room: The Colorful (Green)
+          door: Progress Door
+        - room: The Colorful (Brown)
+          door: Progress Door
+        - room: The Colorful (Gray)
+          door: Progress Door
   Welcome Back Area:
     entrances:
       Starting Room:
@@ -4202,9 +4224,6 @@
       SIX:
         id: Backside Room/Panel_six_six_5
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
@@ -4280,9 +4299,6 @@
       SIX:
         id: Backside Room/Panel_six_six_6
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
@@ -4404,9 +4420,14 @@
         colors: blue
         tag: forbid
         required_panel:
-          room: The Bearer (West)
-          panel: SMILE
-        required_room: Outside The Bold
+          - room: The Bearer (West)
+            panel: SMILE
+          - room: Outside The Bold
+            panel: MOUTH
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
   Cross Tower (South):
     entrances: # No roof access
       The Bearer (North):
