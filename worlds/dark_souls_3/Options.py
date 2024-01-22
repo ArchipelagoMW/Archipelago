@@ -438,7 +438,7 @@ class ImpatientMimicsOption(Toggle):
 
     This is ignored unless enemies are randomized.
     """
-    display_name = "All Chests Are Mimics"
+    display_name = "Impatient Mimics"
 
 
 class DS3ExcludeLocations(ExcludeLocations):
