@@ -1,5 +1,5 @@
 from functools import cached_property
-from typing import Union
+from typing import Union, List
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
@@ -8,9 +8,9 @@ from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from ..locations import LocationTags, locations_by_tag
-from ..options import ExcludeGingerIsland
+from ..options import ExcludeGingerIsland, Shipsanity
 from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule
+from ..stardew_rule import StardewRule, And
 from ..strings.ap_names.event_names import Event
 from ..strings.building_names import Building
 
@@ -46,3 +46,15 @@ class ShippingLogic(BaseLogic[Union[ReceivedLogicMixin, ShippingLogicMixin, Buil
                 continue
             all_items_to_ship.append(location.name[len(shipsanity_prefix):])
         return self.logic.building.has_building(Building.shipping_bin) & self.logic.has_all(*all_items_to_ship)
+
+    def can_ship_everything_in_slot(self, all_location_names_in_slot: List[str]) -> StardewRule:
+        if self.options.shipsanity == Shipsanity.option_none:
+            return self.can_ship_everything()
+
+        rules = [self.logic.building.has_building(Building.shipping_bin)]
+
+        for shipsanity_location in locations_by_tag[LocationTags.SHIPSANITY]:
+            if shipsanity_location.name not in all_location_names_in_slot:
+                continue
+            rules.append(self.logic.region.can_reach_location(shipsanity_location.name))
+        return And(*rules)

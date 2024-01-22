@@ -57,6 +57,20 @@ class Goal(Choice):
         return super().get_option_name(value)
 
 
+class FarmType(Choice):
+    """What farm to play on?"""
+    internal_name = "farm_type"
+    display_name = "Farm Type"
+    default = "random"
+    option_standard = 0
+    option_riverland = 1
+    option_forest = 2
+    option_hill_top = 3
+    option_wilderness = 4
+    option_four_corners = 5
+    option_beach = 6
+
+
 class StartingMoney(NamedRange):
     """Amount of gold when arriving at the farm.
     Set to -1 or unlimited for infinite money"""
@@ -679,6 +693,7 @@ class Mods(OptionSet):
 @dataclass
 class StardewValleyOptions(PerGameCommonOptions):
     goal: Goal
+    farm_type: FarmType
     starting_money: StartingMoney
     profit_margin: ProfitMargin
     bundle_randomization: BundleRandomization

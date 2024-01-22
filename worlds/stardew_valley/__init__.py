@@ -129,7 +129,6 @@ class StardewValleyWorld(World):
 
     def create_items(self):
         self.total_progression_items = 0
-        self.precollect_farm_type()
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]
@@ -152,25 +151,6 @@ class StardewValleyWorld(World):
         setup_early_items(self.multiworld, self.options, self.player, self.multiworld.random)
         self.setup_player_events()
         self.setup_victory()
-
-    def precollect_farm_type(self):
-        all_farm_types = items_by_group[Group.FARM_TYPE]
-        all_farm_type_names = [farm_type.name for farm_type in all_farm_types]
-
-        chosen_farm_types = []
-        for item in self.multiworld.precollected_items[self.player]:
-            if item.name in all_farm_type_names:
-                chosen_farm_types.append(item)
-
-        for item in chosen_farm_types:
-            self.multiworld.precollected_items[self.player].remove(item)
-
-        chosen_farm_types = [item.name for item in chosen_farm_types]
-        if not chosen_farm_types:
-            chosen_farm_types = all_farm_type_names
-
-        starting_farm = self.create_starting_item(self.multiworld.random.choice(chosen_farm_types))
-        self.multiworld.push_precollected(starting_farm)
 
     def precollect_starting_season(self):
         if self.options.season_randomization == SeasonRandomization.option_progressive:
@@ -249,7 +229,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_full_shipment:
             self.create_event_location(location_table[GoalName.full_shipment],
-                                       self.logic.shipping.can_ship_everything(),
+                                       self.logic.shipping.can_ship_everything_in_slot(self.get_all_location_names()),
                                        Event.victory)
         elif self.options.goal == Goal.option_gourmet_chef:
             self.create_event_location(location_table[GoalName.gourmet_chef],

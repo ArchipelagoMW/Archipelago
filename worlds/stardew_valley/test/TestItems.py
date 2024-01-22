@@ -87,9 +87,6 @@ class TestItems(SVTestCase):
                 break
             seed = random.randrange(sys.maxsize)
             multiworld = setup_solo_multiworld(seed=seed)
-            starting_farm_items = [item for item in multiworld.precollected_items[1] if item.name in all_farms]
-            farm_items = [item for item in multiworld.get_items() if item.name in all_farms]
-            self.assertEqual(len(starting_farm_items), 1)
-            self.assertEqual(len(farm_items), 0)
-            starting_farms_rolled.add(f"{starting_farm_items[0]}")
+            starting_farm = multiworld.worlds[1].fill_slot_data()["farm_type"]
+            starting_farms_rolled.add(starting_farm)
         self.assertEqual(len(starting_farms_rolled), 7)
