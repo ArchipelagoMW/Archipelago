@@ -65,9 +65,9 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
     # Should be cached
     def can_forage(self, season: str | Iterable[str], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
         season_rule = False_()
-        if type(season) is str:
+        if isinstance(season, str):
             season_rule = self.logic.season.has(season)
-        if type(season) is Iterable[str]:
+        elif isinstance(season, Iterable):
             season_rule = self.logic.season.has_any(season)
         region_rule = self.logic.region.can_reach(region)
         if need_hoe:

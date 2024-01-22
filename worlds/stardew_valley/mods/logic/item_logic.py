@@ -64,9 +64,9 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
 
     def append_vanilla_item_rules(self, item_rule: Dict[str, StardewRule]):
         if ModNames.sve in self.options.mods:
-            item_rule.update(self.append_vanilla_item_rules_for_sve(item_rule))
+            item_rule.update(self.get_modified_item_rules_for_sve(item_rule))
         if ModNames.deepwoods in self.options.mods:
-            item_rule.update(self.append_vanilla_item_rules_for_deep_woods(item_rule))
+            item_rule.update(self.get_modified_item_rules_for_deep_woods(item_rule))
         return item_rule
 
     def get_sve_item_rules(self):
@@ -125,7 +125,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                 }
         # @formatter:on
 
-    def append_vanilla_item_rules_for_sve(self, items: Dict[str, StardewRule]):
+    def get_modified_item_rules_for_sve(self, items: Dict[str, StardewRule]):
         return {
             Loot.void_essence: items[Loot.void_essence] | self.logic.region.can_reach(SVERegion.highlands_cavern) | self.logic.region.can_reach(
                 SVERegion.crimson_badlands),
@@ -158,7 +158,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                                                self.logic.combat.can_fight_at_level(Performance.maximum)),
         }
 
-    def append_vanilla_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
+    def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
         return {
             Fruit.apple: items[Fruit.apple] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),  # Deep enough to have seen such a tree at least once
             Fruit.apricot: items[Fruit.apricot] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
@@ -191,8 +191,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                 display_item_rule = self.logic.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.logic.has(item)
                 if "Wooden" in display_type:
                     archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
-                else:
-                    archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
+                archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         return archaeology_item_rules
 
     def get_distant_lands_item_rules(self):
