@@ -191,7 +191,8 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                 display_item_rule = self.logic.crafting.can_craft(all_crafting_recipes_by_name[display_type]) & self.logic.has(item)
                 if "Wooden" in display_type:
                     archaeology_item_rules[location_name] = display_item_rule & preservation_chamber_rule
-                archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
+                else:
+                    archaeology_item_rules[location_name] = display_item_rule & hardwood_preservation_chamber_rule
         return archaeology_item_rules
 
     def get_distant_lands_item_rules(self):

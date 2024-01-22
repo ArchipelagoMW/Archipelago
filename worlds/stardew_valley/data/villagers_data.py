@@ -463,7 +463,7 @@ for npc in all_villagers:
 
 def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
     if not npc.mod_name:
-        return False
+        return True
     for mod in npc.mod_name.split(","):
         if mod in mods:
             return True
@@ -473,7 +473,7 @@ def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
 def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
     villagers_for_current_mods = []
     for npc in all_villagers:
-        if not villager_included_for_any_mod(npc, mods) and npc.mod_name:
+        if not villager_included_for_any_mod(npc, mods):
             continue
         modified_npc = npc
         for active_mod in mods:
