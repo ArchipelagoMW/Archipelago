@@ -3,7 +3,7 @@ from typing import List, Tuple, Optional, Dict, Callable, Set
 
 from ..strings.food_names import Beverage
 from ..strings.region_names import Region, SVERegion, AlectoRegion
-from ..mods.mod_data import ModNames, mods_with_multiple_villager_sources
+from ..mods.mod_data import ModNames
 from ..strings.generic_names import Generic
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
@@ -462,6 +462,8 @@ for npc in all_villagers:
 
 
 def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
+    if not npc.mod_name:
+        return False
     for mod in npc.mod_name.split(","):
         if mod in mods:
             return True
@@ -471,9 +473,7 @@ def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
 def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
     villagers_for_current_mods = []
     for npc in all_villagers:
-        if npc.mod_name in mods_with_multiple_villager_sources and not villager_included_for_any_mod(npc, mods):
-            continue
-        elif npc.mod_name not in mods_with_multiple_villager_sources and npc.mod_name and npc.mod_name not in mods:
+        if not villager_included_for_any_mod(npc, mods) and npc.mod_name:
             continue
         modified_npc = npc
         for active_mod in mods:

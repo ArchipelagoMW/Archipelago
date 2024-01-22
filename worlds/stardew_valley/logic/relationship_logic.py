@@ -1,5 +1,6 @@
 import math
-from typing import Union
+from functools import cached_property
+from typing import Union, List
 
 from Utils import cache_self1
 from .base_logic import BaseLogic, BaseLogicMixin
@@ -10,10 +11,9 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
-from ..data.villagers_data import all_villagers_by_name, Villager
-from ..mods.mod_data import mods_with_multiple_villager_sources
+from ..data.villagers_data import all_villagers_by_name, Villager, get_villagers_for_mods
 from ..options import Friendsanity
-from ..stardew_rule import StardewRule, True_, False_, And, Or, Count
+from ..stardew_rule import StardewRule, True_, And, Or
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
@@ -40,6 +40,10 @@ class RelationshipLogicMixin(BaseLogicMixin):
 
 class RelationshipLogic(BaseLogic[Union[
     RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
+
+    @cached_property
+    def all_villagers_given_mods(self) -> List[Villager]:
+        return get_villagers_for_mods(self.options.mods.value)
 
     def can_date(self, npc: str) -> StardewRule:
         return self.logic.relationship.has_hearts(npc, 8) & self.logic.has(Gift.bouquet)
@@ -178,12 +182,4 @@ class RelationshipLogic(BaseLogic[Union[
     @cache_self1
     def npc_is_in_current_slot(self, name: str) -> bool:
         npc = all_villagers_by_name[name]
-        mod = npc.mod_name
-        if mod not in mods_with_multiple_villager_sources:
-            mod_rule_if_exists = mod in self.options.mods
-        else:
-            sources = mod.split(",")
-            mod_rule_if_exists = False_()
-            for single_mod in sources:
-                mod_rule_if_exists = mod_rule_if_exists | (single_mod in self.options.mods)
-        return not mod or mod_rule_if_exists
+        return npc in self.all_villagers_given_mods
