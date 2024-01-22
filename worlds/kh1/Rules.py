@@ -15,7 +15,7 @@ def has_evidence(state: CollectionState, player: int) -> bool:
     return state.has("Footprints", player) #or state.has("Stench", player) or state.has("Claw Marks", player) or state.has("Antenna", player)
 
 def can_glide(state: CollectionState, player: int) -> bool:
-    return state.has("Glide", player) or state.has("Super Glide", player)
+    return state.has("Glide", player) or state.has("Superglide", player)
 
 def has_emblems(state: CollectionState, player: int) -> bool:
     return state.has("Emblem Piece (Flame)", player) and state.has("Emblem Piece (Chest)", player) and state.has("Emblem Piece (Statue)", player) and state.has("Emblem Piece (Fountain)", player)
