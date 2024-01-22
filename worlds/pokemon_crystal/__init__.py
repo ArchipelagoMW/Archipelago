@@ -12,6 +12,7 @@ from .rules import set_rules
 from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
+from .utils import get_random_pokemon
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -100,15 +101,6 @@ class PokemonCrystalWorld(World):
             move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if move.level <= level]
             return self.random.choice(move_pool)
 
-        def get_random_pokemon(types=None):
-            pokemon_pool = []
-            if types is None or types[0] is None:
-                pokemon_pool = [pkmn_name for pkmn_name, _data in crystal_data.pokemon.items() if pkmn_name != "UNOWN"]
-            else:
-                pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in crystal_data.pokemon.items()
-                                if pkmn_name != "UNOWN" and pkmn_data.types == types]
-            return self.random.choice(pokemon_pool)
-
         def get_random_helditem():
             helditems = [item.item_const for item_id, item in crystal_data.items.items()
                          if "Unique" not in item.tags and "INVALID" not in item.tags]
@@ -139,7 +131,7 @@ class PokemonCrystalWorld(World):
                 rival_fights = [(trainer_name, trainer) for trainer_name, trainer in crystal_data.trainers.items() if
                                 trainer_name.startswith("RIVAL_" + evo_line[0])]
 
-                evo_line[0] = get_random_pokemon()
+                evo_line[0] = get_random_pokemon(self.random)
                 for trainer_name, trainer in rival_fights:
                     set_rival_fight(trainer_name, trainer, evo_line[0])
 
@@ -169,7 +161,7 @@ class PokemonCrystalWorld(World):
                         match_types = [None, None]
                         if self.options.randomize_trainer_parties == 1:
                             match_types = crystal_data.pokemon[new_pkmn_data[1]].types
-                        new_pokemon = get_random_pokemon(match_types)
+                        new_pokemon = get_random_pokemon(self.random, match_types)
                         new_pkmn_data[1] = new_pokemon
                     if trainer_data.trainer_type in ["TRAINERTYPE_ITEM", "TRAINERTYPE_ITEM_MOVES"]:
                         new_pkmn_data[2] = get_random_helditem()

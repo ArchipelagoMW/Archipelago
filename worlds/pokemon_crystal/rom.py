@@ -8,6 +8,7 @@ from settings import get_settings
 
 from .items import reverse_offset_item_value, item_const_name_to_id
 from .data import data
+from .utils import get_random_pokemon_id
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
@@ -63,7 +64,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
 
     if world.options.randomize_static_pokemon:
         for pokemon, count in static.items():
-            new_pokemon = get_random_poke(random)
+            new_pokemon = get_random_pokemon_id(random)
             base_flag = "AP_Static_" + pokemon
             if count == 0:
                 address = data.rom_addresses[base_flag] + 1
@@ -94,7 +95,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             if (address_name.startswith("AP_WildGrass")):
                 cur_address = address + 4
                 for i in range(7):
-                    random_poke = get_random_poke(random)
+                    random_poke = get_random_pokemon_id(random)
                     write_bytes(patched_rom, [random_poke], cur_address)  # morn
                     write_bytes(patched_rom, [random_poke], cur_address + 14)  # day
                     write_bytes(patched_rom, [random_poke], cur_address + 28)  # nite
@@ -102,10 +103,10 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
             if (address_name.startswith("AP_WildWater")):
                 cur_address = address + 2
                 for i in range(3):
-                    write_bytes(patched_rom, [get_random_poke(random)], cur_address)
+                    write_bytes(patched_rom, [get_random_pokemon_id(random)], cur_address)
                     cur_address += 2
             if address_name == "AP_Misc_Intro_Wooper":
-                write_bytes(patched_rom, [get_random_poke(random)], address + 1)
+                write_bytes(patched_rom, [get_random_pokemon_id(random)], address + 1)
 
     if world.options.normalize_encounter_rates:
         write_bytes(patched_rom, [14, 0, 28, 2, 42, 4, 57, 6, 71, 8, 86, 10, 100, 12],
@@ -206,10 +207,6 @@ def write_bytes(data, byte_array, address):
     for byte in byte_array:
         data[address] = byte
         address += 1
-
-
-def get_random_poke(random):
-    return random.randint(1, 251)
 
 
 def get_random_move(random):
