@@ -316,6 +316,24 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     
     regions["Traverse Town"].locations.append("Traverse Town Aero Event")
     
+    if atlantica or goal == "atlantica":
+        regions["Atlantica"].locations.append("Atlantica Undersea Gorge Blizzard Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Gorge Ocean Floor Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Higher Cave Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Lower Cave Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Fire Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Wall Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Pillar Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Valley Ocean Floor Clam")
+        regions["Atlantica"].locations.append("Atlantica Triton's Palace Thunder Clam")
+        regions["Atlantica"].locations.append("Atlantica Triton's Palace Wall Right Clam")
+        regions["Atlantica"].locations.append("Atlantica Triton's Palace Near Path Clam")
+        regions["Atlantica"].locations.append("Atlantica Triton's Palace Wall Left Clam")
+        regions["Atlantica"].locations.append("Atlantica Cavern Nook Clam")
+        regions["Atlantica"].locations.append("Atlantica Below Deck Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Garden Clam")
+        regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
+    
     regions["Agrabah"].locations.append("Ansem's Secret Report 1")
     regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
     if atlantica or goal == "atlantica":

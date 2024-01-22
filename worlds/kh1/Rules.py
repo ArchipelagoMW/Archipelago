@@ -15,7 +15,7 @@ def has_evidence(state: CollectionState, player: int) -> bool:
     return state.has("Footprints", player) #or state.has("Stench", player) or state.has("Claw Marks", player) or state.has("Antenna", player)
 
 def can_glide(state: CollectionState, player: int) -> bool:
-    return state.has("Glide", player) or state.has("Super Glide", player)
+    return state.has("Glide", player) or state.has("Superglide", player)
 
 def has_emblems(state: CollectionState, player: int) -> bool:
     return state.has("Emblem Piece (Flame)", player) and state.has("Emblem Piece (Chest)", player) and state.has("Emblem Piece (Statue)", player) and state.has("Emblem Piece (Fountain)", player)
@@ -322,6 +322,24 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Traverse Town Mail Postcard 10 Event"                                         , player).access_rule = lambda state: has_postcards(state, player, 10)
     
     multiworld.get_location("Traverse Town Aero Event"                                                     , player).access_rule = lambda state: has_item(state, player, "Red Trinity")
+    
+    if atlantica or goal == "atlantica":
+        multiworld.get_location("Atlantica Undersea Gorge Blizzard Clam"                                       , player).access_rule = lambda state: has_item(state, player, "Progressive Blizzard")
+       #multiworld.get_location("Atlantica Undersea Gorge Ocean Floor Clam"                                    , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Valley Higher Cave Clam"                                   , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Valley Lower Cave Clam"                                    , player).access_rule = lambda state: has_item(state, player, "")
+        multiworld.get_location("Atlantica Undersea Valley Fire Clam"                                          , player).access_rule = lambda state: has_item(state, player, "Progressive Fire")
+       #multiworld.get_location("Atlantica Undersea Valley Wall Clam"                                          , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Valley Pillar Clam"                                        , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Valley Ocean Floor Clam"                                   , player).access_rule = lambda state: has_item(state, player, "")
+        multiworld.get_location("Atlantica Triton's Palace Thunder Clam"                                       , player).access_rule = lambda state: has_item(state, player, "Progressive Thunder")
+       #multiworld.get_location("Atlantica Triton's Palace Wall Right Clam"                                    , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Triton's Palace Near Path Clam"                                     , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Triton's Palace Wall Left Clam"                                     , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Cavern Nook Clam"                                                   , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Below Deck Clam"                                                    , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Garden Clam"                                               , player).access_rule = lambda state: has_item(state, player, "")
+       #multiworld.get_location("Atlantica Undersea Cave Clam"                                                 , player).access_rule = lambda state: has_item(state, player, "")
 
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
