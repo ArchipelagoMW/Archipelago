@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
+from Options import NamedRange, Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
 class StrengthIncrease(Range):
     """
@@ -82,6 +82,21 @@ class Goal(Choice):
     option_postcards = 10
     default = 0
 
+class EXPMultiplier(NamedRange):
+    """
+    Determines the multiplier to apply to EXP gained
+    """
+    display_name = "EXP Multiplier"
+    default = 16
+    range_start = default / 2
+    range_end = 48
+    special_range_names = {
+        "half": default / 2,
+        "normal": default,
+        "double": default * 2,
+        "triple": default * 3,
+    }
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -93,3 +108,4 @@ class KH1Options(PerGameCommonOptions):
     mp_increase: MPIncrease
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
+    exp_multiplier: EXPMultiplier

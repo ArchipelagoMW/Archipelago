@@ -139,7 +139,7 @@ class KH1World(World):
         return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
 
     def fill_slot_data(self) -> dict:
-        slot_data = {"EXP Multiplier": 1.0}
+        slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)/16}
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:

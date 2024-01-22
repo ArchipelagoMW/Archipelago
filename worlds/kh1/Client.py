@@ -97,7 +97,13 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
-            print("Slot Data: " + str(args['slot_data']))
+            if "EXP Multiplier" in list(args['slot_data'].keys()):
+                xp_mult = args['slot_data']["EXP Multiplier"]
+            else:
+                xp_mult = 1.0
+            with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
+                f.write(str(xp_mult))
+                f.close()
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
