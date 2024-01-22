@@ -94,8 +94,7 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
             return (self.logic.action.can_pan() & self.logic.tool.has_tool(Tool.hoe, ToolMaterial.iron)) & shifter_rule
         if level >= 3:
             return self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.copper)
-        else:
-            return self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)
+        return self.logic.action.can_pan() | self.logic.tool.has_tool(Tool.hoe, ToolMaterial.basic)
 
     def can_earn_cooking_skill_level(self, level: int) -> StardewRule:
         if level >= 6:
