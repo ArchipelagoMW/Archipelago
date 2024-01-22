@@ -630,7 +630,7 @@ def set_monstersanity_rules(all_location_names: List[str], logic: StardewLogic, 
         set_monstersanity_progressive_category_rules(all_location_names, logic, multiworld, player, world_options)
         return
 
-    set_monstersanity_category_rules(all_location_names, logic, multiworld, player, world_options)
+    set_monstersanity_category_rules(all_location_names, logic, multiworld, player, monstersanity_option)
 
 
 def set_monstersanity_monster_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
@@ -659,11 +659,11 @@ def set_monstersanity_progressive_single_category_rules(all_location_names: List
     location_names = sorted(location_names, key=lambda name: get_monster_eradication_number(name, monster_category))
     for i in range(5):
         location_name = location_names[i]
-        set_monstersanity_progressive_category_rule(all_location_names, logic, multiworld, player, monster_category, location_name, world_options, i)
+        set_monstersanity_progressive_category_rule(all_location_names, logic, multiworld, player, monster_category, location_name, i)
 
 
 def set_monstersanity_progressive_category_rule(all_location_names: List[str], logic: StardewLogic, multiworld, player,
-                                                monster_category: str, location_name: str, world_options: StardewValleyOptions, goal_index):
+                                                monster_category: str, location_name: str, goal_index):
     if location_name not in all_location_names:
         return
     location = multiworld.get_location(location_name, player)
@@ -682,13 +682,13 @@ def get_monster_eradication_number(location_name, monster_category) -> int:
     return 1000
 
 
-def set_monstersanity_category_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_monstersanity_category_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, monstersanity_option):
     for monster_category in logic.monster.all_monsters_by_category:
         location_name = f"{monster_eradication_prefix}{monster_category}"
         if location_name not in all_location_names:
             continue
         location = multiworld.get_location(location_name, player)
-        if world_options.monstersanity == Monstersanity.option_one_per_category:
+        if monstersanity_option == Monstersanity.option_one_per_category:
             rule = logic.monster.can_kill_any(logic.monster.all_monsters_by_category[monster_category])
         else:
             rule = logic.monster.can_kill_all(logic.monster.all_monsters_by_category[monster_category], 4)

@@ -403,7 +403,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.registry.item_rules.update(self.registry.crop_rules)
 
         self.registry.item_rules.update(self.mod.item.get_modded_item_rules())
-        self.mod.item.append_vanilla_item_rules(self.registry.item_rules)  # New regions and content means new ways to obtain old items
+        self.mod.item.modify_vanilla_item_rules_with_mod_additions(self.registry.item_rules)  # New regions and content means new ways to obtain old items
 
         # For some recipes, the cooked item can be obtained directly, so we either cook it or get it
         for recipe in self.registry.cooking_rules:

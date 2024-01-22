@@ -8,9 +8,9 @@ class DeepWoodsItem:
     obelisk_sigil = "Progressive Woods Obelisk Sigils"
 
 
-class SkillItem:
-    luck_skill = "Luck Level"
-    archaeology_level = "Archaeology Level"
+class SkillLevel:
+    luck = "Luck Level"
+    archaeology = "Archaeology Level"
 
 
 class SVEQuestItem:

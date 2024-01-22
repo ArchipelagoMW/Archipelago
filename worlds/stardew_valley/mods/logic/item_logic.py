@@ -62,7 +62,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             items.update(self.get_distant_lands_item_rules())
         return items
 
-    def append_vanilla_item_rules(self, item_rule: Dict[str, StardewRule]):
+    def modify_vanilla_item_rules_with_mod_additions(self, item_rule: Dict[str, StardewRule]):
         if ModNames.sve in self.options.mods:
             item_rule.update(self.get_modified_item_rules_for_sve(item_rule))
         if ModNames.deepwoods in self.options.mods:

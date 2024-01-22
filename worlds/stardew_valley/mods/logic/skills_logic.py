@@ -15,7 +15,7 @@ from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression
 from ...stardew_rule import StardewRule, False_, True_
-from ...strings.ap_names.mods.mod_items import SkillItem
+from ...strings.ap_names.mods.mod_items import SkillLevel
 from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.building_names import Building
 from ...strings.geode_names import Geode
