@@ -63,7 +63,7 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
         return self.logic.money.can_spend_at(Region.fish_shop, prices[level])
 
     # Should be cached
-    def can_forage(self, season: str | Iterable[str], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
+    def can_forage(self, season: Union[str, Iterable[str]], region: str = Region.forest, need_hoe: bool = False) -> StardewRule:
         season_rule = False_()
         if isinstance(season, str):
             season_rule = self.logic.season.has(season)
