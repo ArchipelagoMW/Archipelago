@@ -2578,7 +2578,7 @@ id,region,name,tags,mod_name
 7055,Abandoned Mines - 3,Abandoned Treasure - Floor 3,MANDATORY,Boarding House and Bus Stop Extension
 7056,Abandoned Mines - 4,Abandoned Treasure - Floor 4,MANDATORY,Boarding House and Bus Stop Extension
 7057,Abandoned Mines - 5,Abandoned Treasure - Floor 5,MANDATORY,Boarding House and Bus Stop Extension
-7401,Farm,Craft Magic Elixir,CRAFTSANITY,Magic
+7401,Farm,Cook Magic Elixir,COOKSANITY,Magic
 7402,Farm,Craft Travel Core,CRAFTSANITY,Magic
 7403,Farm,Craft Haste Elixir,CRAFTSANITY,Stardew Valley Expanded
 7404,Farm,Craft Hero Elixir,CRAFTSANITY,Stardew Valley Expanded
@@ -2596,7 +2596,7 @@ id,region,name,tags,mod_name
 7416,Farm,Craft Preservation Chamber,CRAFTSANITY,Archaeology
 7417,Farm,Craft Hardwood Preservation Chamber,CRAFTSANITY,Archaeology
 7418,Farm,Craft Ancient Battery Production Station,CRAFTSANITY,Archaeology
-7451,Adventurer's Guild,Magic Elixir Recipe,CRAFTSANITY,Magic
+7451,Adventurer's Guild,Magic Elixir Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Magic
 7452,Adventurer's Guild,Travel Core Recipe,CRAFTSANITY,Magic
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
@@ -2913,36 +2913,23 @@ id,region,name,tags,mod_name
 8215,Shipping,Shipsanity: Pemmican,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
 8216,Shipping,Shipsanity: Void Mint Tea,SHIPSANITY,Distant Lands - Witch Swamp Overhaul
 8217,Shipping,Shipsanity: Ginger Tincture,"SHIPSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
-8219,Shipping,Shipsanity: Ancient Hilt,SHIPSANITY,Boarding House and Bus Stop Extension
-8220,Shipping,Shipsanity: Neanderthal Limb Bones,SHIPSANITY,Boarding House and Bus Stop Extension
-8221,Shipping,Shipsanity: Ancient Blade,SHIPSANITY,Boarding House and Bus Stop Extension
-8222,Shipping,Shipsanity: Dinosaur Claw,SHIPSANITY,Boarding House and Bus Stop Extension
-8223,Shipping,Shipsanity: Special Pumpkin Soup,SHIPSANITY,Boarding House and Bus Stop Extension
-8224,Shipping,Shipsanity: Pterodactyl L Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
-8225,Shipping,Shipsanity: Ancient Doll Legs,SHIPSANITY,Boarding House and Bus Stop Extension
-8226,Shipping,Shipsanity: Mask Piece 2,SHIPSANITY,Boarding House and Bus Stop Extension
-8227,Shipping,Shipsanity: Dinosaur Skull,SHIPSANITY,Boarding House and Bus Stop Extension
-8228,Shipping,Shipsanity: Dinosaur Tooth,SHIPSANITY,Boarding House and Bus Stop Extension
-8229,Shipping,Shipsanity: Pterodactyl Egg,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Boarding House and Bus Stop Extension
-8230,Shipping,Shipsanity: Pterodactyl Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
-8231,Shipping,Shipsanity: Dinosaur Vertebra,SHIPSANITY,Boarding House and Bus Stop Extension
-8232,Shipping,Shipsanity: Neanderthal Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
-8233,Shipping,Shipsanity: Dinosaur Pelvis,SHIPSANITY,Boarding House and Bus Stop Extension
-8234,Shipping,Shipsanity: Dinosaur Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
-8235,Shipping,Shipsanity: Prismatic Shard Piece 1,SHIPSANITY,Boarding House and Bus Stop Extension
-8236,Shipping,Shipsanity: Prismatic Shard Piece 3,SHIPSANITY,Boarding House and Bus Stop Extension
-8237,Shipping,Shipsanity: Pterodactyl Phalange,SHIPSANITY,Boarding House and Bus Stop Extension
-8238,Shipping,Shipsanity: Ancient Doll Body,SHIPSANITY,Boarding House and Bus Stop Extension
-8239,Shipping,Shipsanity: Pterodactyl Vertebra,SHIPSANITY,Boarding House and Bus Stop Extension
-8240,Shipping,Shipsanity: Neanderthal Pelvis,SHIPSANITY,Boarding House and Bus Stop Extension
-8241,Shipping,Shipsanity: Pterodactyl Skull,SHIPSANITY,Boarding House and Bus Stop Extension
-8242,Shipping,Shipsanity: Prismatic Shard Piece 2,SHIPSANITY,Boarding House and Bus Stop Extension
-8243,Shipping,Shipsanity: Dinosaur Femur,SHIPSANITY,Boarding House and Bus Stop Extension
-8244,Shipping,Shipsanity: Chipped Amphora Piece 2,SHIPSANITY,Boarding House and Bus Stop Extension
-8245,Shipping,Shipsanity: Mask Piece 1,SHIPSANITY,Boarding House and Bus Stop Extension
-8246,Shipping,Shipsanity: Prismatic Shard Piece 4,SHIPSANITY,Boarding House and Bus Stop Extension
-8247,Shipping,Shipsanity: Pterodactyl Claw,SHIPSANITY,Boarding House and Bus Stop Extension
-8248,Shipping,Shipsanity: Neanderthal Skull,SHIPSANITY,Boarding House and Bus Stop Extension
-8249,Shipping,Shipsanity: Pterodactyl R Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
-8250,Shipping,Shipsanity: Mask Piece 3,SHIPSANITY,Boarding House and Bus Stop Extension
-8251,Shipping,Shipsanity: Chipped Amphora Piece 1,SHIPSANITY,Boarding House and Bus Stop Extension
+8218,Shipping,Shipsanity: Neanderthal Limb Bones,SHIPSANITY,Boarding House and Bus Stop Extension
+8219,Shipping,Shipsanity: Dinosaur Claw,SHIPSANITY,Boarding House and Bus Stop Extension
+8220,Shipping,Shipsanity: Special Pumpkin Soup,SHIPSANITY,Boarding House and Bus Stop Extension
+8221,Shipping,Shipsanity: Pterodactyl L Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
+8222,Shipping,Shipsanity: Dinosaur Skull,SHIPSANITY,Boarding House and Bus Stop Extension
+8223,Shipping,Shipsanity: Dinosaur Tooth,SHIPSANITY,Boarding House and Bus Stop Extension
+8224,Shipping,Shipsanity: Pterodactyl Egg,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Boarding House and Bus Stop Extension
+8225,Shipping,Shipsanity: Pterodactyl Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
+8226,Shipping,Shipsanity: Dinosaur Vertebra,SHIPSANITY,Boarding House and Bus Stop Extension
+8227,Shipping,Shipsanity: Neanderthal Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
+8228,Shipping,Shipsanity: Dinosaur Pelvis,SHIPSANITY,Boarding House and Bus Stop Extension
+8229,Shipping,Shipsanity: Dinosaur Ribs,SHIPSANITY,Boarding House and Bus Stop Extension
+8230,Shipping,Shipsanity: Pterodactyl Phalange,SHIPSANITY,Boarding House and Bus Stop Extension
+8231,Shipping,Shipsanity: Pterodactyl Vertebra,SHIPSANITY,Boarding House and Bus Stop Extension
+8232,Shipping,Shipsanity: Neanderthal Pelvis,SHIPSANITY,Boarding House and Bus Stop Extension
+8233,Shipping,Shipsanity: Pterodactyl Skull,SHIPSANITY,Boarding House and Bus Stop Extension
+8234,Shipping,Shipsanity: Dinosaur Femur,SHIPSANITY,Boarding House and Bus Stop Extension
+8235,Shipping,Shipsanity: Pterodactyl Claw,SHIPSANITY,Boarding House and Bus Stop Extension
+8236,Shipping,Shipsanity: Neanderthal Skull,SHIPSANITY,Boarding House and Bus Stop Extension
+8237,Shipping,Shipsanity: Pterodactyl R Wing Bone,SHIPSANITY,Boarding House and Bus Stop Extension
