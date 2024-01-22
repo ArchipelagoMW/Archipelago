@@ -68,7 +68,7 @@
 }
 
 .not-found img {
-    filter: saturate(0.5) brightness(0.3);
+    filter: saturate(0.2) brightness(0.3);
 }
 
 .overlaid-text {
