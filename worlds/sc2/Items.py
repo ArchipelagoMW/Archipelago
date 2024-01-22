@@ -1,4 +1,5 @@
 import inspect
+from pydoc import describe
 
 from BaseClasses import Item, ItemClassification, MultiWorld
 import typing
@@ -1261,21 +1262,43 @@ item_table = {
     ItemNames.HIGH_TEMPLAR: 
         ItemData(702 + SC2WOL_ITEM_ID_OFFSET, "Unit", 2, SC2Race.PROTOSS, 
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
-                 description="[todo]"),             
-    ItemNames.DARK_TEMPLAR: ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.IMMORTAL: ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.COLOSSUS: ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.PHOENIX: ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.VOID_RAY: ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
-    ItemNames.CARRIER: ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"wol", "lotv"}),
+                 description="Potent psionic master. Can use the Feedback and Psionic Storm abilities. Can merge into an Archon."),             
+    ItemNames.DARK_TEMPLAR: 
+        ItemData(703 + SC2WOL_ITEM_ID_OFFSET, "Unit", 3, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Deadly warrior-assassin. Permanently cloaked. Can use the Shadow Fury ability."),
+    ItemNames.IMMORTAL: 
+        ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Assault strider. Can use Barrier to absorb damage."),
+    ItemNames.COLOSSUS: ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Battle strider with a powerful area attack. Can walk up and down cliffs. Attacks set fire to the ground, dealing extra damage to enemies over time."),
+    ItemNames.PHOENIX: ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities."),
+    ItemNames.VOID_RAY: ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Surgical strike craft. Has the Prismatic Alignment and Prismatic Range abilities."),
+    ItemNames.CARRIER: ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, 
+                 classification=ItemClassification.progression, origin={"wol", "lotv"},
+                 description="Capital ship. Builds and launches Interceptors that attack enemy targets. Repair Drones heal nearby mechanical units."),
 
     # Filler items to fill remaining spots
-    ItemNames.STARTING_MINERALS: ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, classification=ItemClassification.filler),
-    ItemNames.STARTING_VESPENE: ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, SC2Race.ANY, quantity=0, classification=ItemClassification.filler),
+    ItemNames.STARTING_MINERALS: ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, 
+                 classification=ItemClassification.filler,
+                 description="Increases the starting minerals for all missions by 15."),
+    ItemNames.STARTING_VESPENE: ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, SC2Race.ANY, quantity=0, 
+                 classification=ItemClassification.filler,
+                 description="Increases the starting vespene for all missions by 15."),
     # This Filler item isn't placed by the generator yet unless plando'd
-    ItemNames.STARTING_SUPPLY: ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, SC2Race.ANY, quantity=0, classification=ItemClassification.filler),
+    ItemNames.STARTING_SUPPLY: ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.filler,
+                 description="Increases the starting supply for all missions by 2."),
     # This item is used to "remove" location from the game. Never placed unless plando'd
-    ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0, classification=ItemClassification.trap),
+    ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0,
+                 classification=ItemClassification.trap,
+                 description="Does nothing. Used to 'remove' location from the game."),
 
     # Nova gear
     ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}),
