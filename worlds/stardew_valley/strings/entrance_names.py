@@ -349,6 +349,7 @@ class BoardingHouseEntrance:
     abandoned_mines_3_to_abandoned_mines_4 = "Abandoned Mines - 3 to Abandoned Mines - 4"
     abandoned_mines_4_to_abandoned_mines_5 = "Abandoned Mines - 4 to Abandoned Mines - 5"
     abandoned_mines_5_to_the_lost_valley = "Abandoned Mines - 5 to The Lost Valley"
+    lost_valley_to_lost_valley_minecart = "The Lost Valley to Lost Valley Minecart"
     abandoned_mines_entrance_to_the_lost_valley = "Abandoned Mines Entrance to The Lost Valley"
     the_lost_valley_to_gregory_tent = "The Lost Valley to Gregory's Tent"
     the_lost_valley_to_lost_valley_ruins = "The Lost Valley to Lost Valley Ruins"

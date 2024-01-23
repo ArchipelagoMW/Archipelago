@@ -311,10 +311,12 @@ boarding_house_regions = [
     RegionData(BoardingHouseRegion.abandoned_mines_4, [BoardingHouseEntrance.abandoned_mines_4_to_abandoned_mines_5]),
     RegionData(BoardingHouseRegion.abandoned_mines_5, [BoardingHouseEntrance.abandoned_mines_5_to_the_lost_valley]),
     RegionData(BoardingHouseRegion.the_lost_valley, [BoardingHouseEntrance.the_lost_valley_to_gregory_tent,
+                                                     BoardingHouseEntrance.lost_valley_to_lost_valley_minecart,
                                                      BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins]),
     RegionData(BoardingHouseRegion.gregory_tent),
     RegionData(BoardingHouseRegion.lost_valley_ruins, [BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_1,
                                                        BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2]),
+    RegionData(BoardingHouseRegion.lost_valley_minecart),
     RegionData(BoardingHouseRegion.lost_valley_house_1),
     RegionData(BoardingHouseRegion.lost_valley_house_2)
 ]
@@ -329,7 +331,7 @@ boarding_house_entrances = [
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(BoardingHouseEntrance.boarding_house_plateau_to_abandoned_mines_entrance, BoardingHouseRegion.abandoned_mines_entrance,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_the_lost_valley, BoardingHouseRegion.the_lost_valley, flag=RandomizationFlag.BUILDINGS),
+    ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_the_lost_valley, BoardingHouseRegion.lost_valley_minecart, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_entrance_to_abandoned_mines_1a, BoardingHouseRegion.abandoned_mines_1a,
                    flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_1a_to_abandoned_mines_1b, BoardingHouseRegion.abandoned_mines_1b, flag=RandomizationFlag.BUILDINGS),
@@ -340,7 +342,8 @@ boarding_house_entrances = [
     ConnectionData(BoardingHouseEntrance.abandoned_mines_4_to_abandoned_mines_5, BoardingHouseRegion.abandoned_mines_5, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.abandoned_mines_5_to_the_lost_valley, BoardingHouseRegion.the_lost_valley, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.the_lost_valley_to_gregory_tent, BoardingHouseRegion.gregory_tent, flag=RandomizationFlag.BUILDINGS),
-    ConnectionData(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, BoardingHouseRegion.lost_valley_ruins),
+    ConnectionData(BoardingHouseEntrance.lost_valley_to_lost_valley_minecart, BoardingHouseRegion.lost_valley_minecart),
+    ConnectionData(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, BoardingHouseRegion.lost_valley_ruins, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_1, BoardingHouseRegion.lost_valley_house_1, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(BoardingHouseEntrance.lost_valley_ruins_to_lost_valley_house_2, BoardingHouseRegion.lost_valley_house_2, flag=RandomizationFlag.BUILDINGS)
 

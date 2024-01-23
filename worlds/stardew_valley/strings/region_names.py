@@ -298,6 +298,7 @@ class BoardingHouseRegion:
     the_lost_valley = "The Lost Valley"
     gregory_tent = "Gregory's Tent"
     lost_valley_ruins = "Lost Valley Ruins"
+    lost_valley_minecart = "Lost Valley Minecart"
     lost_valley_house_1 = "Lost Valley Ruins - First House"
     lost_valley_house_2 = "Lost Valley Ruins - Second House"
     buffalo_ranch = "Buffalo's Ranch"
