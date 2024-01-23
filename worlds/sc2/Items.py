@@ -1298,7 +1298,7 @@ item_table = {
     # This item is used to "remove" location from the game. Never placed unless plando'd
     ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.trap,
-                 description="Does nothing. Used to 'remove' location from the game."),
+                 description="Does nothing. Used to remove a location from the game."),
 
     # Nova gear
     ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}),
