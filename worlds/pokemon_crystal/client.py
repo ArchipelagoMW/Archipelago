@@ -11,7 +11,6 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
-
 EXPECTED_ROM_VERSION = 0
 
 
@@ -25,7 +24,7 @@ class PokemonCrystalClient(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = set()
-        self.goal_flag = data.event_flags["EVENT_BEAT_ELITE_FOUR"]
+        self.goal_flag = None
 
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -113,7 +112,7 @@ class PokemonCrystalClient(BizHawkClient):
                         if location_id in ctx.server_locations:
                             local_checked_locations.add(location_id)
 
-                        if flag_id == self.goal_flag:
+                        if self.goal_flag is not None and flag_id == self.goal_flag:
                             game_clear = True
 
             if local_checked_locations != self.local_checked_locations:
