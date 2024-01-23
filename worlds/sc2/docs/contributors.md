@@ -13,9 +13,7 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * Hopop (@hopop201)
 * Alice Voltaire (@AliceVoltaire)
 * Genderdruid (@ArchonofFail)
-
-### Non-code design changes
-* CrazedCollie
+* CrazedCollie (@FoxOfWar)
 
 ### Additional Beta testing and bug reports
 * Varcklen (@Varcklen)
