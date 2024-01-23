@@ -16,30 +16,21 @@ from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 ROOM_ARRAY_POINTER = 0x51fa00
-
-# Add .apmlss suffix to bizhawk client
-from worlds.LauncherComponents import SuffixIdentifier, components
-for component in components:
-    if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apmlss"))
-        break
-
 
 class MLSSClient(BizHawkClient):
     game = "Mario & Luigi Superstar Saga"
     system = "GBA"
+    patch_suffix = ".apmlss"
     local_checked_locations: Set[int]
     goal_flag: int
     rom_slot_name: Optional[str]
-    player: int
     eCount: int
     eUsed: [int]
     player_name: Optional[str]
     checked_flags: dict[int, list] = {}
+    ctx: BizHawkClientContext
 
     def __init__(self) -> None:
         super().__init__()
@@ -47,7 +38,6 @@ class MLSSClient(BizHawkClient):
         self.local_set_events = {}
         self.local_found_key_items = {}
         self.rom_slot_name = None
-        self.lock = asyncio.Lock
         self.eCount = 0
         self.eUsed = []
 
@@ -80,8 +70,6 @@ class MLSSClient(BizHawkClient):
         ctx.watcher_timeout = 0.125
         self.rom_slot_name = rom_name
         name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(0xB0, 16, "ROM")]))[0])
-        player = ((await bizhawk.read(ctx.bizhawk_ctx, [(0xAF, 1, "ROM")]))[0][0])
-        self.player = player + 1
         name = bytes([byte for byte in name_bytes if byte != 0]).decode("UTF-8")
         self.player_name = name
         logger.info(name)
@@ -98,7 +86,9 @@ class MLSSClient(BizHawkClient):
         from CommonClient import logger
         try:
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x4564, 59, "EWRAM"),
-                                                              (0x2330, 2, "IWRAM"), (0x3FE0, 1, "IWRAM"), (0x304A, 1, "EWRAM"), (0x304B, 1, "EWRAM"), (0x304C, 4, "EWRAM"), (0x4800, 6, "EWRAM"), (0x4808, 2, "EWRAM"), (0x4407, 1, "EWRAM"), (0x2339, 1, "IWRAM")])
+                                                              (0x2330, 2, "IWRAM"), (0x3FE0, 1, "IWRAM"), (0x304A, 1, "EWRAM"),
+                                                              (0x304B, 1, "EWRAM"), (0x304C, 4, "EWRAM"), (0x4800, 6, "EWRAM"),
+                                                              (0x4808, 2, "EWRAM"), (0x4407, 1, "EWRAM"), (0x2339, 1, "IWRAM")])
             flags = read_state[0]
             room = (read_state[1][1] << 8) + read_state[1][0]
             shop_init = read_state[2][0]
@@ -128,28 +118,20 @@ class MLSSClient(BizHawkClient):
                         location = pants[shop_address][shop_scroll]
                 if location in ctx.server_locations:
                     locs_to_send.add(location)
-
+            # Loop for recieving items. Item is written as an ID into 0x3057.
+            # ASM read the ID in a loop and give the player the item before resetting the RAM address to 0x0.
+            # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):
                 item_data = items_by_id[ctx.items_received[received_index + i].item]
-                b = await bizhawk.read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")])
                 await asyncio.sleep(.05)
+                b = await bizhawk.read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")])
                 if b[0][0] == 0:
                     await bizhawk.write(ctx.bizhawk_ctx, [(0x3057, [id_to_RAM(item_data.itemID)], "EWRAM"), (0x4808, [(received_index + i + 1) // 0x100, (received_index + i + 1) % 0x100], "EWRAM")])
                 else:
                     break
 
-            '''for i, item in enumerate(ctx.items_received):
-                if i < received_index:
-                    i += 1
-                    continue
-                item_data = items_by_id[item.item]
-                b = await bizhawk.read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")])
-                await asyncio.sleep(.05)
-                if b[0][0] == 0:
-                    await bizhawk.write(ctx.bizhawk_ctx, [(0x3057, [id_to_RAM(item_data.itemID)], "EWRAM"), (0x4808, [(i + 1) // 0x100, (i + 1) % 0x100], "EWRAM")])
-                else:
-                    break '''
-
+            # Early return and location send if you are currently in a shop,
+            # since other flags aren't going to change
             if shopping & 0x3 == 0x3:
                 if locs_to_send != self.local_checked_locations:
                     self.local_checked_locations = locs_to_send
