@@ -938,6 +938,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
         MultiWorldRules.set_rule(multiworld.get_location(location, player),
                                  logic.registry.sve_location_rules[location])
     set_sve_ginger_island_rules(logic, multiworld, player, world_options)
+    set_boarding_house_rules(logic, multiworld, player, world_options)
 
 
 def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
@@ -954,11 +955,5 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
 def set_boarding_house_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if ModNames.boarding_house not in world_options.mods:
         return
-    MultiWorldRules.set_rule(multiworld.get_entrance(BoardingHouseEntrance.abandoned_mines_1a_to_abandoned_mines_1b, player),
-                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
-    MultiWorldRules.set_rule(multiworld.get_entrance(BoardingHouseEntrance.abandoned_mines_2b_to_abandoned_mines_3, player),
-                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
-    MultiWorldRules.set_rule(multiworld.get_entrance(BoardingHouseEntrance.abandoned_mines_5_to_the_lost_valley, player),
-                             logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
-    MultiWorldRules.set_rule(MultiWorld.get_entrance(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, player),
+    MultiWorldRules.set_rule(multiworld.get_entrance(BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, player),
                              logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
