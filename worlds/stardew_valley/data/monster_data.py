@@ -139,6 +139,12 @@ register_monster_modification(ModNames.deepwoods, green_slime, update_monster_lo
 
 register_monster_modification(ModNames.boarding_house, pepper_rex, update_monster_locations)
 register_monster_modification(ModNames.boarding_house, shadow_brute, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, iridium_bat, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, frost_bat, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, cave_fly, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, bat, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, grub, update_monster_locations)
+register_monster_modification(ModNames.boarding_house, bug, update_monster_locations)
 
 
 def all_monsters_by_name_given_mods(mods: Set[str]) -> Dict[str, StardewMonster]:
