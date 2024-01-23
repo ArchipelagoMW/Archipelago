@@ -1,5 +1,5 @@
-import typing
-from Options import Choice, Option, Toggle, StartInventoryPool
+from Options import Choice, Option, Toggle, StartInventoryPool, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class IntroSkip(Toggle):
@@ -245,29 +245,29 @@ class ChuckleBeans(Choice):
     default = 2
 
 
-mlss_options: typing.Dict[str, type(Option)] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "coins": Coins,
-    "difficult_logic": DifficultLogic,
-    "skip_intro": IntroSkip,
-    "castle_skip": BowsersCastleSkip,
-    "extra_pipes": ExtraPipes,
-    "skip_minecart": SkipMinecart,
-    "disable_surf": DisableSurf,
-    "harhalls_pants": HarhallsPants,
-    "hidden_visible": HiddenVisible,
-    "blocks_invisible": BlocksInvisible,
-    "chuckle_beans": ChuckleBeans,
-    "music_options": MusicOptions,
-    "randomize_sounds": RandomSounds,
-    "randomize_enemies": RandomizeEnemies,
-    "randomize_bosses": RandomizeBosses,
-    "randomize_backgrounds": RandomizeBackgrounds,
-    "scale_stats": ScaleStats,
-    "scale_pow": ScalePow,
-    "tattle_hp": TattleHp,
-    "mario_color": MarioColor,
-    "luigi_color": LuigiColor,
-    "mario_pants": MarioPants,
-    "luigi_pants": LuigiPants
-}
+@dataclass
+class MLSSOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    coins: Coins
+    difficult_logic: DifficultLogic
+    skip_intro: IntroSkip
+    castle_skip: BowsersCastleSkip
+    extra_pipes: ExtraPipes
+    skip_minecart: SkipMinecart
+    disable_surf: DisableSurf
+    harhalls_pants: HarhallsPants
+    hidden_visible: HiddenVisible
+    blocks_invisible: BlocksInvisible
+    chuckle_beans: ChuckleBeans
+    music_options: MusicOptions
+    randomize_sounds: RandomSounds
+    randomize_enemies: RandomizeEnemies
+    randomize_bosses: RandomizeBosses
+    randomize_backgrounds: RandomizeBackgrounds
+    scale_stats: ScaleStats
+    scale_pow: ScalePow
+    tattle_hp: TattleHp
+    mario_color: MarioColor
+    luigi_color: LuigiColor
+    mario_pants: MarioPants
+    luigi_pants: LuigiPants

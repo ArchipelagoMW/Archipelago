@@ -4,11 +4,8 @@ from typing import Dict, Any
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table, bowsers, bowsersMini, event, hidden, coins
-from .Options import mlss_options
-from .Regions import create_regions, connect_regions
-from .Rules import set_rules
+from .Options import MLSSOptions
 from .Items import MLSSItem, itemList, item_frequencies, item_table
-from .Rom import Rom
 from .Names.LocationName import LocationName
 from .Client import MLSSClient
 
@@ -33,7 +30,7 @@ class MLSSSettings(settings.Group):
         """File name of the MLSS US rom"""
         copy_to = "Mario & Luigi - Superstar Saga (U).gba"
         description = "MLSS ROM File"
-        md5s = [Rom.hash]
+        md5s = ["4b1a5897d89d9e74ec7f630eefdfd435"]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
     rom_start: bool = True
@@ -47,7 +44,8 @@ class MLSSWorld(World):
     game = "Mario & Luigi Superstar Saga"
     web = MLSSWebWorld()
     data_version = 1
-    option_definitions = mlss_options
+    options_dataclass = MLSSOptions
+    options: MLSSOptions
     settings: typing.ClassVar[MLSSSettings]
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {loc_data.name: loc_data.id for loc_data in all_locations}
@@ -57,34 +55,35 @@ class MLSSWorld(World):
 
     def generate_early(self) -> None:
         self.excluded_locations = []
-        if self.multiworld.chuckle_beans[self.player] == 0:
+        if self.options.chuckle_beans == 0:
             self.excluded_locations += [location.name for location in all_locations if "Digspot" in location.name]
-        if self.multiworld.castle_skip[self.player]:
+        if self.options.castle_skip:
             self.excluded_locations += [location.name for location in all_locations if "Bowser" in location.name]
-        if self.multiworld.chuckle_beans[self.player] == 1:
+        if self.options.chuckle_beans == 1:
             self.excluded_locations = [location.name for location in all_locations if location.id in hidden]
-        if self.multiworld.skip_minecart[self.player]:
+        if self.options.skip_minecart:
             self.excluded_locations += [LocationName.HoohooMountainBaseMinecartCaveDigspot]
-        if self.multiworld.disable_surf[self.player]:
+        if self.options.disable_surf:
             self.excluded_locations += [LocationName.SurfMinigame]
-        if self.multiworld.harhalls_pants[self.player]:
+        if self.options.harhalls_pants:
             self.excluded_locations += [LocationName.HarhallsPants]
-        if not self.multiworld.coins[self.player]:
+        if not self.options.coins:
             self.excluded_locations += [location.name for location in all_locations if location in coins]
 
     def create_regions(self) -> None:
-        create_regions(self.multiworld, self.player, self.excluded_locations)
-        connect_regions(self.multiworld, self.player)
+        from .Regions import create_regions, connect_regions
+        create_regions(self, self.excluded_locations)
+        connect_regions(self)
 
     def fill_slot_data(self) -> dict:
         return {
-            "CastleSkip": self.multiworld.castle_skip[self.player].value,
-            "SkipMinecart": self.multiworld.skip_minecart[self.player].value,
-            "DisableSurf": self.multiworld.disable_surf[self.player].value,
-            "HarhallsPants": self.multiworld.harhalls_pants[self.player].value,
-            "ChuckleBeans": self.multiworld.chuckle_beans[self.player].value,
-            "DifficultLogic": self.multiworld.difficult_logic[self.player].value,
-            "Coins": self.multiworld.coins[self.player].value
+            "CastleSkip": self.options.castle_skip.value,
+            "SkipMinecart": self.options.skip_minecart.value,
+            "DisableSurf": self.options.disable_surf.value,
+            "HarhallsPants": self.options.harhalls_pants.value,
+            "ChuckleBeans": self.options.chuckle_beans.value,
+            "DifficultLogic": self.options.difficult_logic.value,
+            "Coins": self.options.coins.value
         }
 
     def generate_basic(self) -> None:
@@ -116,13 +115,13 @@ class MLSSWorld(World):
     def create_items(self) -> None:
         # First add in all progression and useful items
         required_items = []
-        precollected = [item for item in itemList if item in self.multiworld.precollected_items[self.player]]
+        precollected = [item for item in itemList if item in self.multiworld.precollected_items]
         for item in itemList:
             if item.progression != ItemClassification.filler and item.progression != ItemClassification.skip_balancing and item not in precollected:
                 freq = item_frequencies.get(item.itemName, 1)
                 if freq is None:
                     freq = 1
-                if self.multiworld.harhalls_pants[self.player] and "Harhall's" in item.itemName:
+                if self.options.harhalls_pants and "Harhall's" in item.itemName:
                     continue
                 required_items += [item.itemName for _ in range(freq)]
 
@@ -133,13 +132,13 @@ class MLSSWorld(World):
         filler_items = []
         for item in itemList:
             if item.progression == ItemClassification.filler:
-                if item.itemName == "5 Coins" and not self.multiworld.coins[self.player]:
+                if item.itemName == "5 Coins" and not self.options.coins:
                     continue
                 freq = item_frequencies.get(item.itemName)
-                if self.multiworld.chuckle_beans[self.player] == 0:
+                if self.options.chuckle_beans == 0:
                     if item.itemName == "Chuckle Bean":
                         continue
-                if self.multiworld.chuckle_beans[self.player] == 1:
+                if self.options.chuckle_beans == 1:
                     if item.itemName == "Chuckle Bean":
                         freq -= 59
                 if freq is None:
@@ -147,19 +146,19 @@ class MLSSWorld(World):
                 filler_items += [item.itemName for _ in range(freq)]
 
         remaining = len(all_locations) - len(required_items) - len(event) - 3
-        if self.multiworld.castle_skip[self.player]:
+        if self.options.castle_skip:
             remaining -= (len(bowsers) + len(bowsersMini))
-        if self.multiworld.skip_minecart[self.player]:
+        if self.options.skip_minecart:
             remaining -= 1
-        if self.multiworld.disable_surf[self.player]:
+        if self.options.disable_surf:
             remaining -= 1
-        if self.multiworld.harhalls_pants[self.player]:
+        if self.options.harhalls_pants:
             remaining -= 1
-        if self.multiworld.chuckle_beans[self.player] == 0:
+        if self.options.chuckle_beans == 0:
             remaining -= 186
-        if self.multiworld.chuckle_beans[self.player] == 1:
-            remaining -= 59
-        if not self.multiworld.coins[self.player]:
+        if self.options.chuckle_beans == 1:
+            remaining -= 58
+        if not self.options.coins:
             remaining -= len(coins)
         for i in range(remaining):
             filler_item_name = self.multiworld.random.choice(filler_items)
@@ -168,7 +167,8 @@ class MLSSWorld(World):
             filler_items.remove(filler_item_name)
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player, self.excluded_locations)
+        from .Rules import set_rules
+        set_rules(self, self.excluded_locations)
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.can_reach("PostJokes", "Region", self.player)
 
@@ -177,14 +177,15 @@ class MLSSWorld(World):
         return MLSSItem(item.itemName, item.progression, item.code, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        rom = Rom(self.multiworld, self.player)
+        from .Rom import Rom
+        rom = Rom(self)
 
         for location_name in location_table.keys():
-            if (self.multiworld.skip_minecart[self.player] and "Minecart" in location_name and "After" not in location_name) or (self.multiworld.castle_skip[self.player] and "Bowser" in location_name) or (self.multiworld.disable_surf[self.player] and "Surf Minigame" in location_name) or (self.multiworld.harhalls_pants[self.player] and "Harhall's" in location_name):
+            if (self.options.skip_minecart and "Minecart" in location_name and "After" not in location_name) or (self.options.castle_skip and "Bowser" in location_name) or (self.options.disable_surf and "Surf Minigame" in location_name) or (self.options.harhalls_pants and "Harhall's" in location_name):
                 continue
-            if (self.multiworld.chuckle_beans[self.player] == 0 and "Digspot" in location_name) or (self.multiworld.chuckle_beans[self.player] == 1 and location_table[location_name] in hidden):
+            if (self.options.chuckle_beans == 0 and "Digspot" in location_name) or (self.options.chuckle_beans == 1 and location_table[location_name] in hidden):
                 continue
-            if not self.multiworld.coins[self.player] and "Coin" in location_name:
+            if not self.options.coins and "Coin" in location_name:
                 continue
             location = self.multiworld.get_location(location_name, self.player)
             if location in self.multiworld.get_region("Event", self.player).locations:

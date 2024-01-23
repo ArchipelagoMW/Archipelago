@@ -201,7 +201,7 @@ bosses = [
     0x5042CC,
     0x5042EC,
     0x50430C,
-    # 0x50438C, Popple 3
+    0x50438C,
     0x5045CC,
     0x5045EC,
     0x50460C
