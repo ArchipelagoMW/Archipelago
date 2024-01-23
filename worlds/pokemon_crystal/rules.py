@@ -207,6 +207,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
                                                                                                   world.player) and state.has(
         "EVENT_CLEARED_RADIO_TOWER", world.player))
 
+    set_rule(get_entrance("REGION_TIN_TOWER_2F -> REGION_TIN_TOWER_3F"),
+             lambda state: state.has("EVENT_BEAT_ELITE_FOUR", world.player))
+
     # Olivine City
     set_rule(get_location("EVENT_JASMINE_RETURNED_TO_GYM"), lambda state: state.has("Secretpotion", world.player))
 

@@ -66,11 +66,6 @@ class PokemonCrystalClient(BizHawkClient):
         ctx.auth = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
 
     async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        if ctx.slot_data is not None:
-            if ctx.slot_data["goal"] == 0:
-                self.goal_flag = data.event_flags["EVENT_BEAT_ELITE_FOUR"]
-            else:
-                self.goal_flag = data.event_flags["EVENT_BEAT_RED"]
         try:
             overworld_guard = (data.ram_addresses["wArchipelagoSafeWrite"], [1], "WRAM")
 
@@ -133,3 +128,10 @@ class PokemonCrystalClient(BizHawkClient):
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
+
+    def on_package(self, ctx, cmd, args):
+        if cmd == 'Connected':
+            if "goal" in args['slot_data'] and args['slot_data']["goal"] == 0:
+                self.goal_flag = data.event_flags["EVENT_BEAT_ELITE_FOUR"]
+            else:
+                self.goal_flag = data.event_flags["EVENT_BEAT_RED"]
