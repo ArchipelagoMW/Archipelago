@@ -1,7 +1,7 @@
 # BizHawk Client
 
 `BizHawkClient` is an abstract base class for a client that can access the memory of a ROM running in BizHawk. It does
-the legwork of connecting python to a lua connector script, letting you focus on the loop of checking locations and
+the legwork of connecting Python to a Lua connector script, letting you focus on the loop of checking locations and
 making on-the-fly modifications based on updates from the server. It also provides the same experience to users across
 multiple games that use it, and was built in response to a growing number of similar but separate bespoke game clients
 which are/were largely exclusive to BizHawk anyway.
@@ -10,8 +10,8 @@ It's similar to `SNIClient`, but where `SNIClient` is designed to work for speci
 emulators/hardware, `BizHawkClient` is designed to work for specifically BizHawk across the different systems BizHawk
 supports.
 
-The idea is that `BizHawkClient` connects to and communicates with a lua script running in BizHawk. It provides an api
-that will call BizHawk functions for you to do thing like read and write memory. And on an interval, control will be
+The idea is that `BizHawkClient` connects to and communicates with a Lua script running in BizHawk. It provides an API
+that will call BizHawk functions for you to do things like read and write memory. And on an interval, control will be
 handed to a function you write for your game (`game_watcher`) which should interact with the game's memory to check what
 locations have been checked, give the player items, detect and send deathlinks, etc...
 
@@ -24,12 +24,12 @@ Table of Contents:
 
 ## Connector Requests
 
-Communication with BizHawk is done through `connector_bizhawk_generic.lua`. The client sends requests to the lua script
-via sockets, the lua script processes the request and sends the corresponding responses.
+Communication with BizHawk is done through `connector_bizhawk_generic.lua`. The client sends requests to the Lua script
+via sockets; the Lua script processes the request and sends the corresponding responses.
 
-The lua script includes its own documentation, but you probably don't need to care about the specifics. Instead, you'll
-be using the functions in `worlds/_bizhawk/__init__.py`. If for some reason you do need more control over the specific
-requests being sent or their order, you can still use `send_requests` to directly communicate with the connector script.
+The Lua script includes its own documentation, but you probably don't need to worry about the specifics. Instead, you'll
+be using the functions in `worlds/_bizhawk/__init__.py`. If you do need more control over the specific requests being
+sent or their order, you can still use `send_requests` to directly communicate with the connector script.
 
 It's not necessary to use the UI or client context if you only want to interact with the connector script. You can
 import and use just `worlds/_bizhawk/__init__.py`, which only depends on default modules.
@@ -73,21 +73,21 @@ async def send_requests(ctx, req_list) -> list[dict[str, Any]]
 requests and then call `send_requests` for you. You can call `send_requests` yourself for more direct control, but make
 sure to read the docs in `connector_bizhawk_generic.lua`.
 
-A bundle of requests sent by `send_requests` will all be executed on the same frame, and by extension so will any helper
-that calls `send_requests`. For example, if you were to call `read` with 3 items on your `read_list`, all 3 addresses
-will be read on the same frame and then sent back.
+A bundle of requests sent by `send_requests` will all be executed on the same frame, and by extension, so will any
+helper that calls `send_requests`. For example, if you were to call `read` with 3 items on your `read_list`, all 3
+addresses will be read on the same frame and then sent back.
 
-It also means that by default the only way to run multiple requests on the same frame is for them to be included in the
-same `send_requests` call. As soon as the connector finishes responding to a list of requests, it will advance the frame
-before checking for the next batch.
+It also means that, by default, the only way to run multiple requests on the same frame is for them to be included in
+the same `send_requests` call. As soon as the connector finishes responding to a list of requests, it will advance the
+frame before checking for the next batch.
 
 ### Requests that depend on other requests
 
 The fact that you have to wait at least a frame to act on any response may raise concerns. For example, Pokemon
-Emerald's save data is at a dynamic location in memory. It moves around when you load a new map. There is a static
+Emerald's save data is at a dynamic location in memory; it moves around when you load a new map. There is a static
 variable that holds the address of the save data, so we want to read the static variable to get the save address, and
 then use that address in a `write` to send the player an item. But between the `read` that tells us the address of the
-save data and the `write` to save data itself, an arbitrary number of frames have executed, and the player may have
+save data and the `write` to save data itself, an arbitrary number of frames have been executed, and the player may have
 loaded a new map, meaning we've written data to who knows where.
 
 There are two solutions to this problem.
@@ -98,23 +98,23 @@ if the guard validated and the data was written, and `False` if the guard failed
 
 ```py
 # Get the address of the save data
-read_result: bytes = (await _bizhawk.read(ctx, [(0x301111, 4, "System Bus")]))[0]
+read_result: bytes = (await _bizhawk.read(ctx, [(0x3001111, 4, "System Bus")]))[0]
 save_data_address = int.from_bytes(read_result, "little")
 
 # Write to `save_data_address` if it hasn't changed
 write_result: bool = await _bizhawk.guarded_write(
     ctx,
     [(save_data_address, [0xAA, 0xBB], "System Bus")],
-    [(0x301111, read_result, "System Bus")]
+    [(0x3001111, read_result, "System Bus")]
 )
 
 if write_result:
-    # The data at 0x301111 was still the same value as
+    # The data at 0x3001111 was still the same value as
     # what was returned from the first `_bizhawk.read`,
     # so the data was written.
     ...
 else:
-    # The data at 0x301111 has changed since the
+    # The data at 0x3001111 has changed since the
     # first `_bizhawk.read`, so the data was not written.
     ...
 ```
@@ -129,7 +129,7 @@ enough, players will notice a stutter in the emulation.
 await _bizhawk.lock(ctx)
 
 # Get the address of the save data
-read_result: bytes = (await _bizhawk.read(ctx, [(0x301111, 4, "System Bus")]))[0]
+read_result: bytes = (await _bizhawk.read(ctx, [(0x3001111, 4, "System Bus")]))[0]
 save_data_address = int.from_bytes(read_result, "little")
 
 # Write to `save_data_address`
@@ -158,8 +158,8 @@ of the code itself.
 
 `game` should be the same value you use for your world definition.
 
-`system` can either be a string or a tuple of strings. This is the system (or systems) which your client is intended to
-handle games on (SNES, GBA, etc...). It's used to prevent validators from running on unknown systems and crashing. The
+`system` can either be a string or a tuple of strings. This is the system (or systems) that your client is intended to
+handle games on (SNES, GBA, etc.). It's used to prevent validators from running on unknown systems and crashing. The
 actual abbreviation corresponds to whatever BizHawk returns from `emu.getsystemid()`.
 
 `patch_suffix` is an optional `ClassVar` meant to specify the file extensions you want to register. It can be a string
@@ -168,8 +168,8 @@ select dialog and they will be associated with BizHawkClient. This does not affe
 associate the file extension with Archipelago.
 
 `validate_rom` is called to figure out whether a given ROM belongs to your client. It will only be called when a ROM is
-running on a system you specified in your `system` class variable. In most cases that will be a single system and you
-can be sure that you're not about to try to read from nonexistant domains or out of bounds. If you decide to claim this
+running on a system you specified in your `system` class variable. In most cases, that will be a single system and you
+can be sure that you're not about to try to read from nonexistent domains or out of bounds. If you decide to claim this
 ROM as yours, this is where you should do setup for things like `items_handling`.
 
 `game_watcher` is the "main loop" of your client where you should be checking memory and sending new items to the ROM.
@@ -185,7 +185,7 @@ subclass of `CommonContext`. It additionally includes `slot_data` (if you are co
 
 ### Example
 
-A very simple client might look like this. All addresses here are made up, you should obviously be using addresses that
+A very simple client might look like this. All addresses here are made up; you should obviously be using addresses that
 make sense for your specific ROM. The `validate_rom` here tries to read the name of the ROM. If it gets the value it
 wanted, it sets a couple values on `ctx` and returns `True`. The `game_watcher` reads some data from memory and acts on
 it by sending messages to AP. You should be smarter than this example, which will send `LocationChecks` messages even if
@@ -255,7 +255,7 @@ class MyGameClient(BizHawkClient):
 
 - Make sure your client gets imported when your world is imported. You probably don't need to actually use anything in
 your `client.py` elsewhere, but you still have to import the file for your client to register itself.
-- When it comes to performance, there are two directions to optimize:  
+- When it comes to performance, there are two directions to optimize:
   1. When you have to do something all on the same frame, do as little as possible. Only read and write necessary data,
   and if you have to use locks, unlock as soon as it's okay to advance frames. This is probably the obvious one.
   2. Multiple things that don't have to happen on the same frame should be split up if they're likely to be slow.
@@ -269,7 +269,7 @@ server connection before trying to interact with it.
 that input will be used to authenticate with the `Connect` command. You can override `set_auth` in your own client to
 set it automatically based on data in the ROM or on your client instance.
 - You can override `on_package` in your client to watch raw packages, but don't forget you also have access to a
-subclass of `CommonContext` and its api.
+subclass of `CommonContext` and its API.
 - You can import `BizHawkClientContext` for type hints using `typing.TYPE_CHECKING`. Importing it without conditions at
 the top of the file will probably cause a circular dependency.
 - Your game's system may have multiple usable cores in BizHawk. You can use `get_cores` to try to determine which one is
