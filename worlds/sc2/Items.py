@@ -1287,14 +1287,14 @@ item_table = {
     # Filler items to fill remaining spots
     ItemNames.STARTING_MINERALS: ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, 
                  classification=ItemClassification.filler,
-                 description="Increases the starting minerals for all missions by 15."),
+                 description="Increases the starting minerals for all missions."),
     ItemNames.STARTING_VESPENE: ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, SC2Race.ANY, quantity=0, 
                  classification=ItemClassification.filler,
-                 description="Increases the starting vespene for all missions by 15."),
+                 description="Increases the starting vespene for all missions."),
     # This Filler item isn't placed by the generator yet unless plando'd
     ItemNames.STARTING_SUPPLY: ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler,
-                 description="Increases the starting supply for all missions by 2."),
+                 description="Increases the starting supply for all missions."),
     # This item is used to "remove" location from the game. Never placed unless plando'd
     ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.trap,
