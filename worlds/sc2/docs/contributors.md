@@ -1,27 +1,32 @@
 # Contributors
-Contibutors are listed with preferred or Discord names first, with github usernames written in parentheses if it is different.
+Contibutors are listed with preferred or Discord names first, with github usernames prepended with an `@`
 
 ## Update 2024.0
 ### Code Changes
-* Ziktofel
-* Salzkorn
-* EnvyDragon
+* Ziktofel (@Ziktofel)
+* Salzkorn (@Salzkorn)
+* EnvyDragon (@EnvyDragon)
 * Phanerus (@MatthewMarinets)
 * Madi Sylveon (@MadiMadsen)
-* Magnemania
-* Subsourian
-* Hopop
-* Alice Voltaire
+* Magnemania (@Magnemania)
+* Subsourian (@Subsourian)
+* Hopop (@hopop201)
+* Alice Voltaire (@AliceVoltaire)
 * Genderdruid (@ArchonofFail)
 
 ### Non-code design changes
 * CrazedCollie
 
 ### Additional Beta testing and bug reports
-* Varcklen
-* BicolourSnake
-* NobleXenon
-* Severencir
-* neocerber
-* MaxTousss
-* Matiya-star
+* Varcklen (@Varcklen)
+* BicolourSnake (@Bicoloursnake)
+* @NobleXenon
+* Severencir (@Severencir)
+* neocerber (@neocerber @MaxTousss)
+* @Matiya-star
+
+## Older versions
+Not all contributors to older versions of Archipelago Starcraft 2 are known.
+
+TheCondor (@TheCondor07) is the original maintainer of the project.
+
