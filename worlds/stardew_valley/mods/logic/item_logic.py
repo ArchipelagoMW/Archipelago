@@ -11,6 +11,7 @@ from ...logic.fishing_logic import FishingLogicMixin
 from ...logic.has_logic import HasLogicMixin
 from ...logic.money_logic import MoneyLogicMixin
 from ...logic.museum_logic import MuseumLogicMixin
+from ...logic.quest_logic import QuestLogicMixin
 from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
@@ -33,6 +34,7 @@ from ...strings.material_names import Material
 from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil, ModArtifact
 from ...strings.monster_drop_names import ModLoot, Loot
 from ...strings.performance_names import Performance
+from ...strings.quest_names import ModQuest
 from ...strings.region_names import Region, SVERegion, DeepWoodsRegion, BoardingHouseRegion
 from ...strings.season_names import Season
 from ...strings.seed_names import SVESeed, DistantLandsSeed
@@ -51,7 +53,7 @@ class ModItemLogicMixin(BaseLogicMixin):
 
 
 class ModItemLogic(BaseLogic[Union[CombatLogicMixin, ReceivedLogicMixin, CropLogicMixin, CookingLogicMixin, FishingLogicMixin, HasLogicMixin, MoneyLogicMixin,
-RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, CraftingLogicMixin, SkillLogicMixin, TimeLogicMixin]]):
+RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, ToolLogicMixin, CraftingLogicMixin, SkillLogicMixin, TimeLogicMixin, QuestLogicMixin]]):
 
     def get_modded_item_rules(self) -> Dict[str, StardewRule]:
         items = dict()
@@ -204,8 +206,8 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         return {
             DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
             DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
-            DistantLandsSeed.vile_ancient_fruit: self.logic.money.can_spend_at(Region.oasis, 50) & self.has_seed_unlocked(DistantLandsSeed.vile_ancient_fruit),
-            DistantLandsSeed.void_mint: self.logic.money.can_spend_at(Region.oasis, 80) & self.has_seed_unlocked(DistantLandsSeed.void_mint),
+            DistantLandsSeed.vile_ancient_fruit: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(ModQuest.CorruptedCropsTask),
+            DistantLandsSeed.void_mint: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(ModQuest.CorruptedCropsTask),
             DistantLandsCrop.void_mint: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.void_mint),
             DistantLandsCrop.vile_ancient_fruit: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.vile_ancient_fruit),
         }

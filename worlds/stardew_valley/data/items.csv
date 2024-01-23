@@ -806,8 +806,8 @@ id,name,classification,groups,mod_name
 10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10415,Ginger Tincture Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
 10416,Special Pumpkin Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Boarding House and Bus Stop Extension
-10450,Void Mint Seeds,progression,CROPSANITY,Distant Lands - Witch Swamp Overhaul
-10451,Vile Ancient Fruit Seeds,progression,CROPSANITY,Distant Lands - Witch Swamp Overhaul
+10450,Void Mint Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
+10451,Vile Ancient Fruit Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded
 10502,Diamond Wand,filler,"WEAPON,DEPRECATED",Stardew Valley Expanded
 10503,Iridium Bomb,progression,,Stardew Valley Expanded
