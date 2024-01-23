@@ -2625,10 +2625,10 @@ id,region,name,tags,mod_name
 7515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7516,Sophia's House,Fairy Garden,"SPECIAL_ORDER_BOARD,GINGER_ISLAND",Stardew Valley Expanded
 7517,Susan's House,Homemade Fertilizer,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
-7519,Witch's Swamp,Corrupted Crops Task,"STORY_QUEST,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+7519,Witch's Swamp,Corrupted Crops Task,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
 7520,Witch's Swamp,A New Pot,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
 7521,Witch's Swamp,Fancy Blanket Task,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
-7522,Witch's Swamp,Witch's order,"STORY_QUEST,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+7522,Witch's Swamp,Witch's order,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
 7523,Boarding House - First Floor,Pumpkin Soup,STORY_QUEST,Boarding House and Bus Stop Extension
 7524,Museum,Geode Order,SPECIAL_ORDER_BOARD,Professor Jasper Thomas
 7525,Museum,Dwarven Scrolls,SPECIAL_ORDER_BOARD,Professor Jasper Thomas

@@ -320,13 +320,18 @@ def extend_walnut_purchase_locations(randomized_locations: List[LocationData], o
 
 def extend_mandatory_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
     mandatory_locations = [location for location in locations_by_tag[LocationTags.MANDATORY]]
-    if ModNames.distant_lands in options.mods:
-        if ModNames.alecto in options.mods:
-            mandatory_locations.append(location_table[ModQuest.WitchOrder])
-        else:
-            mandatory_locations.append(location_table[ModQuest.CorruptedCropsTask])
     filtered_mandatory_locations = filter_disabled_locations(options, mandatory_locations)
     randomized_locations.extend(filtered_mandatory_locations)
+
+
+def extend_situational_quest_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
+    if options.quest_locations < 0:
+        return
+    if ModNames.distant_lands in options.mods:
+        if ModNames.alecto in options.mods:
+            randomized_locations.append(location_table[ModQuest.WitchOrder])
+        else:
+            randomized_locations.append(location_table[ModQuest.CorruptedCropsTask])
 
 
 def extend_bundle_locations(randomized_locations: List[LocationData], bundle_rooms: List[BundleRoom]):
@@ -482,6 +487,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_chefsanity_locations(randomized_locations, options)
     extend_craftsanity_locations(randomized_locations, options)
     extend_quests_locations(randomized_locations, options)
+    extend_situational_quest_locations(randomized_locations, options)
 
     for location_data in randomized_locations:
         location_collector(location_data.name, location_data.code, location_data.region)
