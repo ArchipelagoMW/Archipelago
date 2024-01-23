@@ -57,24 +57,6 @@ class TestBaseLocationDependencies(SVTestBase):
         SeasonRandomization.internal_name: SeasonRandomization.option_randomized
     }
 
-    def test_lance_chest_requires_quest_thoroughly(self):  # the method can be reused for other locations that seem troublesome.
-        item_list = ["Spring", "Summer", "Fall", "Winter", "Marlon's Boat Paddle"]
-        item_list.extend(weapon for weapon in ["Progressive Weapon"]*3)
-        item_list.extend(tool for tool in ["Progressive Axe"]*2)
-        item_list.extend(tool for tool in ["Progressive Pickaxe"]*2)
-        missing_items = []
-        missing_items.extend(item_list)
-        rule = self.world.logic.region.can_reach_location("Lance's Diamond Wand")
-        self.assertFalse(rule(self.multiworld.state), msg="Has No Items")
-        for item in item_list:
-            missing_items.remove(item)
-            created_item = self.world.create_item(item)
-            self.multiworld.state.collect(created_item, event=False)
-            if not missing_items:
-                continue
-            self.assertFalse(rule(self.multiworld.state), rule.explain(self.multiworld.state))
-        self.assertTrue(rule(self.multiworld.state), rule.explain(self.multiworld.state))
-
 
 class TestBaseItemGeneration(SVTestBase):
     options = {

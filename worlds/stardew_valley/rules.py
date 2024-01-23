@@ -947,8 +947,6 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
                              logic.received(SVEQuestItem.marlon_boat_paddle))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.wizard_to_fable_reef, player),
                              logic.received(SVEQuestItem.fable_reef_portal))
-    MultiWorldRules.set_rule(multiworld.get_location(SVELocation.diamond_wand, player),
-                             logic.quest.can_complete_quest(ModQuest.MonsterCrops) & logic.region.can_reach(SVERegion.lances_house))
     MultiWorldRules.set_rule(multiworld.get_entrance(SVEEntrance.highlands_to_cave, player),
                              logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
 
