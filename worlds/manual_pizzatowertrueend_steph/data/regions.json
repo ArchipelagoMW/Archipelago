@@ -1,0 +1,22 @@
+{
+	"Floor 1 - Tower Lobby": 	{
+		"requires": [],
+		"connects_to": []
+	},
+	"Floor 2 - Western District": 	{
+		"requires": "|Floor 2 Key|",
+		"connects_to": []
+	},
+	"Floor 3 - Vacation Resort": 	{
+		"requires": "|Floor 3 Key|",
+		"connects_to": []
+	},
+	"Floor 4 - Slum": 	{
+		"requires": "|Floor 4 Key|",
+		"connects_to": []
+	},
+	"Floor 5 - Staff Only": 	{
+		"requires": "|Floor 5 Key|",
+		"connects_to": []
+}
+}

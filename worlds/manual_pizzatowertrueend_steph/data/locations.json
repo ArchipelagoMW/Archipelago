@@ -1,0 +1,1081 @@
+[
+	{
+		"name": "John Gutter - Mushroom Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter - Cheese Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter - Tomato Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter - Sausage Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter - Pineapple Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter - Secret Treasure",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Jerome - John Gutter|"
+	},
+	{
+		"name": "John Gutter 1st Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter 2nd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "John Gutter 3rd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Pizzascape - Mushroom Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape - Cheese Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape - Tomato Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape - Sausage Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape - Pineapple Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape - Secret Treasure",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation| AND |Jerome - Pizzascape|"
+	},
+	{
+		"name": "Pizzascape 1st Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape 2nd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation|"
+	},
+	{
+		"name": "Pizzascape 3rd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Knight Transformation| AND |Ball Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Mushroom Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Cheese Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Tomato Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Sausage Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Pineapple Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese - Secret Treasure",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation| AND |Jerome - Ancient Cheese|"
+	},
+	{
+		"name": "Ancient Cheese 1st Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese 2nd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Ancient Cheese 3rd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Bomb Transformation|"
+	},
+	{
+		"name": "Bloodsauce Dungeon - Mushroom Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon - Cheese Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon - Tomato Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon - Sausage Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon - Pineapple Toppin",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon - Secret Treasure",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|Jerome - Bloodsauce Dungeon|"
+	},
+	{
+		"name": "Bloodsauce Dungeon 1st Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon 2nd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Bloodsauce Dungeon 3rd Secret",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": []
+	},
+	{
+		"name": "Pepperman Boss Key (100 PPs)",
+		"category": ["Floor 1"],
+		"region": "Floor 1 - Tower Lobby",
+		"requires": "|10 Pepper Pounds:10|"
+	},
+	{
+		"name": "Oregano Desert - Mushroom Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert - Cheese Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert - Tomato Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert - Sausage Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert - Pineapple Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert - Secret Treasure",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation| AND |Jerome - Oregano Desert|"
+	},
+	{
+		"name": "Oregano Desert 1st Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert 2nd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Oregano Desert 3rd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Firemouth Transformation|"
+	},
+	{
+		"name": "Wasteyard - Mushroom Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard - Cheese Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard - Tomato Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard - Sausage Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard - Pineapple Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard - Secret Treasure",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation| AND |Jerome - Wasteyard|"
+	},
+	{
+		"name": "Wasteyard 1st Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard 2nd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Wasteyard 3rd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Ghost Transformation|"
+	},
+	{
+		"name": "Fun Farm - Mushroom Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm - Cheese Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm - Tomato Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm - Sausage Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm - Pineapple Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm - Secret Treasure",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation| AND |Jerome - Fun Farm|"
+	},
+	{
+		"name": "Fun Farm 1st Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm 2nd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fun Farm 3rd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Mort Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Mushroom Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Cheese Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Tomato Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Sausage Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Pineapple Toppin",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon - Secret Treasure",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation| AND |Jerome - Fast Food Saloon|"
+	},
+	{
+		"name": "Fast Food Saloon 1st Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon 2nd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Fast Food Saloon 3rd Secret",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|Weenie Mount Transformation|"
+	},
+	{
+		"name": "Vigilante Boss Key (150 BBs)",
+		"category": ["Floor 2"],
+		"region": "Floor 2 - Western District",
+		"requires": "|10 Bounty Bucks:15| AND |Revolver Transformation|"
+	},
+	{
+		"name": "Crust Cove - Mushroom Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove - Cheese Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove - Tomato Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove - Sausage Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove - Pineapple Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove - Secret Treasure",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation| AND |Jerome - Crust Cove|"
+	},
+	{
+		"name": "Crust Cove 1st Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove 2nd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Crust Cove 3rd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Barrel Transformation|"
+	},
+	{
+		"name": "Gnome Forest - Mushroom Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest - Cheese Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest - Tomato Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest - Sausage Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest - Pineapple Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest - Secret Treasure",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo| AND |Jerome - Gnome Forest|"
+	},
+	{
+		"name": "Gnome Forest 1st Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest 2nd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Gnome Forest 3rd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Deep-Dish 9 - Mushroom Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 - Cheese Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 - Tomato Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 - Sausage Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 - Pineapple Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 - Secret Treasure",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation| AND |Jerome - Deep-Dish 9|"
+	},
+	{
+		"name": "Deep-Dish 9 1st Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 2nd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Deep-Dish 9 3rd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Rocket Transformation|"
+	},
+	{
+		"name": "Golf - Mushroom Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf - Cheese Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf - Tomato Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf - Sausage Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf - Pineapple Toppin",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf - Secret Treasure",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation| AND |Jerome - Golf|"
+	},
+	{
+		"name": "Golf 1st Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf 2nd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Golf 3rd Secret",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "The Noise Boss Key (200 NFTs)",
+		"category": ["Floor 3"],
+		"region": "Floor 3 - Vacation Resort",
+		"requires": "|10 Noise-Fungible Tokens:20|"
+	},
+	{
+		"name": "The Pig City - Mushroom Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City - Cheese Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City - Tomato Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City - Sausage Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City - Pineapple Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City - Secret Treasure",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo| AND |Jerome - The Pig City|"
+	},
+	{
+		"name": "The Pig City 1st Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City 2nd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "The Pig City 3rd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Gustavo|"
+	},
+	{
+		"name": "Peppibot Factory - Mushroom Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory - Cheese Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory - Tomato Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory - Sausage Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory - Pineapple Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory - Secret Treasure",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation| AND |Jerome - Peppibot Factory|"
+	},
+	{
+		"name": "Peppibot Factory 1st Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Peppibot Factory 2nd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation| AND |Bomb Transformation|"
+	},
+	{
+		"name": "Peppibot Factory 3rd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Boxed Transformation|"
+	},
+	{
+		"name": "Sewers - Mushroom Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers - Cheese Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers - Tomato Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers - Sausage Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers - Pineapple Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers - Secret Treasure",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation| AND |Jerome - Sewers|"
+	},
+	{
+		"name": "Sewers 1st Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers 2nd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "Sewers 3rd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Cheese Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Mushroom Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Cheese Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Tomato Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Sausage Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Pineapple Toppin",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator - Secret Treasure",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation| AND |Jerome - R-R-Freezerator|"
+	},
+	{
+		"name": "R-R-Freezerator 1st Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator 2nd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "R-R-Freezerator 3rd Secret",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|Pepper Pizza Transformation|"
+	},
+	{
+		"name": "Fake Peppino Boss Key (200 CCs)",
+		"category": ["Floor 4"],
+		"region": "Floor 4 - Slum",
+		"requires": "|10 Counterfeit Coins:20|"
+	},
+	{
+		"name": "Pizzascare - Mushroom Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare - Cheese Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare - Tomato Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare - Sausage Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare - Pineapple Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare - Secret Treasure",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation| AND |Jerome - Pizzascare|"
+	},
+	{
+		"name": "Pizzascare 1st Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare 2nd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Pizzascare 3rd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Ball Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Mushroom Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Cheese Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Tomato Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Sausage Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Pineapple Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound - Secret Treasure",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound 1st Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound 2nd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "Don't Make A Sound 3rd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation|"
+	},
+	{
+		"name": "WAR - Mushroom Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR - Cheese Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR - Tomato Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR - Sausage Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR - Pineapple Toppin",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR - Secret Treasure",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation| AND |Jerome - WAR|"
+	},
+	{
+		"name": "WAR 1st Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR 2nd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "WAR 3rd Secret",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|Shotgun Transformation| AND |Rocket Transformation|"
+	},
+	{
+		"name": "Pizzaface (All Other Bosses)",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|10 Pepper Pounds:10| AND |10 Bounty Bucks:15| AND |10 Noise-Fungible Tokens:20| AND |10 Counterfeit Coins:20| AND |Revolver Transformation|",
+		"place_item": ["The Crumbling Tower of Pizza"]
+	},
+	{
+		"name": "The Crumbling Tower of Pizza",
+		"category": ["Floor 5"],
+		"region": "Floor 5 - Staff Only",
+		"requires": "|The Crumbling Tower of Pizza| AND |Shotgun Transformation| AND |Rocket Transformation| AND |Weenie Mount Transformation|",
+		"victory": false,
+		"place_item": ["Credits"]
+	},
+	{
+		"name": "True End",
+		"region": "Floor 5 - Staff Only",
+		"category": ["Victory"],
+		"requires": "|Secret Treasure:19|",
+		"place_item": ["True End"]
+	},
+	{
+		"name": "Victory",
+		"victory": true,
+		"category": ["Victory"],
+		"requires": "|Credits| AND |True End|",
+		"place_item": ["Victory (Seed Finished)"]
+	}
+]

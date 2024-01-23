@@ -1,0 +1,284 @@
+[
+	{
+		"name": "Floor 2 Key",
+		"category": ["Progression"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Floor 3 Key",
+		"category": ["Progression"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Floor 4 Key",
+		"category": ["Progression"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Floor 5 Key",
+		"category": ["Progression"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "10 Pepper Pounds",
+		"category": ["Money"],
+		"count":15,
+		"progression": true
+	},
+	{
+		"name": "10 Bounty Bucks",
+		"category": ["Money"],
+		"count":20,
+		"progression": true
+	},
+	{
+		"name": "10 Noise-Fungible Tokens",
+		"category": ["Money"],
+		"count":25,
+		"progression": true
+	},
+	{
+		"name": "10 Counterfeit Coins",
+		"category": ["Money"],
+		"count":25,
+		"progression": true
+	},
+	{
+		"name": "Knight Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Ball Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Bomb Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Firemouth Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Ghost Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Mort Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Weenie Mount Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Revolver Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Barrel Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Rocket Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Cheese Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Boxed Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Pepper Pizza Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Shotgun Transformation",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Gustavo",
+		"category": ["Transformation"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "The Crumbling Tower of Pizza",
+		"category": ["Progression"],
+		"count":1,
+		"progression": true
+	},
+	{
+		"name": "Secret Treasure",
+		"count":19,
+		"category": [],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - John Gutter",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Pizzascape",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Ancient Cheese",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Bloodsauce Dungeon",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Oregano Desert",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Wasteyard",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Fun Farm",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Fast Food Saloon",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Crust Cove",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Gnome Forest",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Golf",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Deep-Dish 9",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - The Pig City",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Peppibot Factory",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Sewers",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - R-R-Freezerator",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Pizzascare",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - Don't Make A Sound",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Jerome - WAR",
+		"category": ["Jerome"],
+		"progression_skip_balancing": true
+	},
+	{
+		"count":1,
+		"name": "Credits",
+		"category": ["Victory"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "True End",
+		"category": ["Victory"],
+		"progression": true
+	},
+	{
+		"count":1,
+		"name": "Victory (Seed Finished)",
+		"category": ["Victory"],
+		"progression": true
+	}
+]
