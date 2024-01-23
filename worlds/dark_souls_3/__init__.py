@@ -554,7 +554,9 @@ class DarkSouls3World(World):
         for (soul, soul_name, items) in transpositions:
             self._add_location_rule([
                 f"FS: {item} - Ludleth for {soul_name}" for item in items
-            ], soul)
+            ], lambda state: (
+                state.has(soul, self.player) and state.has("Transposing Kiln", self.player)
+            ))
 
         # List missable locations even though they never contain progression items so that the game
         # knows what sphere they're in. This is especially useful for item smoothing. We could add
@@ -809,12 +811,13 @@ class DarkSouls3World(World):
             item.name for item in self.multiworld.itempool
             if item.player == self.player
         }
+
         if 'Pyromancy Flame' in randomized_items:
             # Make this available early because so many items are useless without it.
-            self.multiworld.early_items[self.player]['Pyromancy Flame'] = 2
+            self._add_entrance_rule("Road of Sacrifices", "Pyromancy Flame")
         if 'Transposing Kiln' in randomized_items:
             # Make this available early so players can make use of their boss souls.
-            self.multiworld.early_items[self.player]['Transposing Kiln'] = 2
+            self._add_entrance_rule("Road of Sacrifices", "Transposing Kiln")
         # Make this available pretty early 
         if 'Small Lothric Banner' in randomized_items:
             if self.options.early_banner == "early_global":
