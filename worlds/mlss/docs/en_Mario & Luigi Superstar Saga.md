@@ -15,7 +15,7 @@ The game has been changed to an open-world style as opposed to the linear style 
 
 Other Features such as Turbo through textboxes (Hold L/R+A) and Pipe Warping from any room (Hold L+R+SELECT) have been added for convenience.
 
-Enemies and Bosses can be randomized, and there stats can scaled to feel more the vanilla games stats.
+Enemies and Bosses can be randomized, and their stats can be scaled to feel more like the vanilla game's stats.
 
 Other aspects of the game can be randomized as well such as music, sounds, battle backgrounds, Mario and Luigis Colors, and more.
 
