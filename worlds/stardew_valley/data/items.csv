@@ -801,11 +801,11 @@ id,name,classification,groups,mod_name
 10409,Void Delight Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10410,Void Salmon Sushi Recipe,progression,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 10411,Mushroom Kebab Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-10412,Crayfish Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
+10412,Crayfish Soup Recipe,progression,,Distant Lands - Witch Swamp Overhaul
 10413,Pemmican Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 10414,Void Mint Tea Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-10415,Ginger Tincture Recipe,progression,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
-10416,Special Pumpkin Soup Recipe,progression,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Boarding House and Bus Stop Extension
+10415,Ginger Tincture Recipe,progression,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
+10416,Special Pumpkin Soup Recipe,progression,,Boarding House and Bus Stop Extension
 10450,Void Mint Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
 10451,Vile Ancient Fruit Seeds,progression,DEPRECATED,Distant Lands - Witch Swamp Overhaul
 10501,Marlon's Boat Paddle,progression,GINGER_ISLAND,Stardew Valley Expanded

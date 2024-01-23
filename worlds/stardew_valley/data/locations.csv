@@ -2608,7 +2608,6 @@ id,region,name,tags,mod_name
 7453,Alesia Shop,Haste Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7454,Isaac Shop,Hero Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
 7455,Alesia Shop,Armor Elixir Recipe,CRAFTSANITY,Stardew Valley Expanded
-7456,Witch's Swamp,Ginger Tincture Recipe,"CRAFTSANITY,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
 7501,Mountain,Missing Envelope,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7502,Forest,Lost Emerald Ring,"STORY_QUEST",Ayeisha - The Postal Worker (Custom NPC)
 7503,Forest,Mr.Ginger's request,"STORY_QUEST",Mister Ginger (cat npc)
@@ -2619,21 +2618,21 @@ id,region,name,tags,mod_name
 7508,Railroad,The Railroad Boulder,"STORY_QUEST",Stardew Valley Expanded
 7509,Grandpa's Shed Interior,Grandpa's Shed,"STORY_QUEST",Stardew Valley Expanded
 7510,Aurora Vineyard,Aurora Vineyard,"STORY_QUEST",Stardew Valley Expanded
-7511,Adventurer's Guild,Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
+7511,Lance's House Main,Monster Crops,"STORY_QUEST,GINGER_ISLAND",Stardew Valley Expanded
 7512,Sewer,Void Soul Retrieval,"STORY_QUEST",Stardew Valley Expanded
 7513,Fairhaven Farm,Andy's Cellar,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7514,Adventurer's Guild,A Mysterious Venture,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7515,Jenkins' Residence,An Elegant Reception,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
 7516,Sophia's House,Fairy Garden,"SPECIAL_ORDER_BOARD,GINGER_ISLAND",Stardew Valley Expanded
 7517,Susan's House,Homemade Fertilizer,SPECIAL_ORDER_BOARD,Stardew Valley Expanded
-7519,Witch's Swamp,Corrupted Crops Task,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
-7520,Witch's Swamp,A New Pot,"MANDATORY,STORY_QUEST",Distant Lands - Witch Swamp Overhaul
-7521,Witch's Swamp,Fancy Blanket Task,"MANDATORY,STORY_QUEST",Distant Lands - Witch Swamp Overhaul
-7522,Witch's Swamp,Witch's order,GINGER_ISLAND,Distant Lands - Witch Swamp Overhaul
-7523,Boarding House - First Floor,Pumpkin Soup,"MANDATORY,STORY_QUEST",Boarding House and Bus Stop Extension
+7519,Witch's Swamp,Corrupted Crops Task,"STORY_QUEST,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+7520,Witch's Swamp,A New Pot,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
+7521,Witch's Swamp,Fancy Blanket Task,STORY_QUEST,Distant Lands - Witch Swamp Overhaul
+7522,Witch's Swamp,Witch's order,"STORY_QUEST,GINGER_ISLAND",Distant Lands - Witch Swamp Overhaul
+7523,Boarding House - First Floor,Pumpkin Soup,STORY_QUEST,Boarding House and Bus Stop Extension
 7524,Museum,Geode Order,SPECIAL_ORDER_BOARD,Professor Jasper Thomas
 7525,Museum,Dwarven Scrolls,SPECIAL_ORDER_BOARD,Professor Jasper Thomas
-7526,Mouse House,Hats for the Hat Mouse,"MANDATORY,STORY_QUEST",Hat Mouse Lacey
+7526,Mouse House,Hats for the Hat Mouse,STORY_QUEST,Hat Mouse Lacey
 7551,Kitchen,Cook Baked Berry Oatmeal,COOKSANITY,Stardew Valley Expanded
 7552,Kitchen,Cook Flower Cookie,COOKSANITY,Stardew Valley Expanded
 7553,Kitchen,Cook Big Bark Burger,COOKSANITY,Stardew Valley Expanded
@@ -2648,6 +2647,7 @@ id,region,name,tags,mod_name
 7562,Kitchen,Cook Crayfish Soup,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7563,Kitchen,Cook Pemmican,COOKSANITY,Distant Lands - Witch Swamp Overhaul
 7564,Kitchen,Cook Void Mint Tea,COOKSANITY,Distant Lands - Witch Swamp Overhaul
+7565,Kitchen,Cook Special Pumpkin Soup,COOKSANITY,Boarding House and Bus Stop Extension
 7601,Bear Shop,Baked Berry Oatmeal Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7602,Bear Shop,Flower Cookie Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7603,Saloon,Big Bark Burger Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
@@ -2659,10 +2659,8 @@ id,region,name,tags,mod_name
 7609,Sewer,Void Delight Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Stardew Valley Expanded
 7610,Sewer,Void Salmon Sushi Recipe,"CHEFSANITY,CHEFSANITY_PURCHASE",Stardew Valley Expanded
 7611,Witch's Swamp,Mushroom Kebab Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-7612,Witch's Swamp,Crayfish Soup Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7613,Witch's Swamp,Pemmican Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
 7614,Witch's Swamp,Void Mint Tea Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Distant Lands - Witch Swamp Overhaul
-7615,Boarding House - First Floor,Special Pumpkin Soup Recipe,"CHEFSANITY,CHEFSANITY_FRIENDSHIP",Boarding House and Bus Stop Extension
 7616,Mines Dwarf Shop,Neanderthal Skeleton Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7617,Mines Dwarf Shop,Pterodactyl Skeleton L Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
 7618,Mines Dwarf Shop,Pterodactyl Skeleton M Recipe,CRAFTSANITY,Boarding House and Bus Stop Extension
@@ -2673,7 +2671,6 @@ id,region,name,tags,mod_name
 7651,Alesia Shop,Tempered Galaxy Dagger,MANDATORY,Stardew Valley Expanded
 7652,Isaac Shop,Tempered Galaxy Sword,MANDATORY,Stardew Valley Expanded
 7653,Isaac Shop,Tempered Galaxy Hammer,MANDATORY,Stardew Valley Expanded
-7654,Lance's House Main,Lance's Diamond Wand,"MANDATORY,GINGER_ISLAND",Stardew Valley Expanded
 7701,Island South,Fishsanity: Baby Lunaloo,"FISHSANITY,GINGER_ISLAND",Stardew Valley Expanded
 7702,Crimson Badlands,Fishsanity: Bonefish,FISHSANITY,Stardew Valley Expanded
 7703,Forest,Fishsanity: Bull Trout,FISHSANITY,Stardew Valley Expanded
