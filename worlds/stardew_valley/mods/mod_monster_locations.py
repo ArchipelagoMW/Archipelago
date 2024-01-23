@@ -24,7 +24,7 @@ deepwoods_monsters_locations: Dict[str, Tuple[str, ...]] = {
 boardinghouse_monsters_locations: Dict[str, Tuple[str, ...]] = {
     Monster.shadow_brute: (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1, BoardingHouseRegion.lost_valley_house_2,),
     Monster.pepper_rex: (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1, BoardingHouseRegion.lost_valley_house_2,),
-    Monster.iridium_bat: (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1, BoardingHouseRegion.lost_valley_house_2,),
+    Monster.iridium_bat: (BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_2,),
     Monster.grub: (BoardingHouseRegion.abandoned_mines_1a, BoardingHouseRegion.abandoned_mines_1b, BoardingHouseRegion.abandoned_mines_2a,
                    BoardingHouseRegion.abandoned_mines_2b,),
     Monster.bug: (BoardingHouseRegion.abandoned_mines_1a, BoardingHouseRegion.abandoned_mines_1b,),
