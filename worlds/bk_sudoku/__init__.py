@@ -7,16 +7,25 @@ from ..AutoWorld import WebWorld, World
 class Bk_SudokuWebWorld(WebWorld):
     options_page = "games/Sudoku/info/en"
     theme = 'partyTime'
-    tutorials = [
-        Tutorial(
-            tutorial_name='Setup Guide',
-            description='A guide to playing BK Sudoku',
-            language='English',
-            file_name='setup_en.md',
-            link='setup/en',
-            authors=['Jarno']
-        )
-    ]
+
+    setup_en = Tutorial(
+        tutorial_name='Setup Guide',
+        description='A guide to playing BK Sudoku',
+        language='English',
+        file_name='setup_en.md',
+        link='setup/en',
+        authors=['Jarno']
+    )
+    setup_de = Tutorial(
+        tutorial_name='Setup Anleitung',
+        description='Eine Anleitung um BK-Sudoku zu spielen',
+        language='Deutsch',
+        file_name='setup_de.md',
+        link='setup/de',
+        authors=['Held_der_Zeit']
+    )
+    
+    tutorials = [setup_en, setup_de]
 
 
 class Bk_SudokuWorld(World):

@@ -205,6 +205,12 @@ def run_server_process(room_id, ponyconfig: dict, static_server_data: dict,
             ctx.auto_shutdown = Room.get(id=room_id).timeout
         ctx.shutdown_task = asyncio.create_task(auto_shutdown(ctx, []))
         await ctx.shutdown_task
+
+        # ensure auto launch is on the same page in regard to room activity.
+        with db_session:
+            room: Room = Room.get(id=ctx.room_id)
+            room.last_activity = datetime.datetime.utcnow() - datetime.timedelta(seconds=room.timeout + 60)
+
         logging.info("Shutting down")
 
     with Locker(room_id):

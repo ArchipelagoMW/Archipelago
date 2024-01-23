@@ -1,9 +1,8 @@
 Items:
 Arrows
 Progressive Dots
-Colored Dots
 Sound Dots
-Symmetry
+Progressive Symmetry
 Triangles
 Eraser
 Shapers
