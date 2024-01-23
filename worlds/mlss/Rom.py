@@ -578,31 +578,28 @@ class Rom:
         index = -1
         for key, value in shop.items():
             if location.address in value:
-                match key:
-                    case 0x3C05f0:
-                        index = value.index(location.address)
-                    case _:
-                        index = value.index(location.address) + 14
+                if key == 0x3C05f0:
+                    index = value.index(location.address)
+                else:
+                    index = value.index(location.address) + 14
 
         for key, value in badge.items():
             if index != -1:
                 break
             if location.address in value:
-                match key:
-                    case 0x3C0618:
-                        index = value.index(location.address) + 24
-                    case _:
-                        index = value.index(location.address) + 41
+                if key == 0x3C0618:
+                    index = value.index(location.address) + 24
+                else:
+                    index = value.index(location.address) + 41
 
         for key, value in pants.items():
             if index != -1:
                 break
             if location.address in value:
-                match key:
-                    case 0x3C0618:
-                        index = value.index(location.address) + 48
-                    case _:
-                        index = value.index(location.address) + 66
+                if key ==0x3C0618:
+                    index = value.index(location.address) + 48
+                else:
+                    index = value.index(location.address) + 66
 
         dstring = f"{self.world.multiworld.player_name[item.player]}: {item.name}"
         self.stream.seek(0xD11000 + (index * 0x40), 0)
