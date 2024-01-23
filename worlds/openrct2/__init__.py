@@ -408,7 +408,7 @@ class OpenRCT2World(World):
 
             # Handles the selection of a prerequisite and associated stats
             if number > 15 and unlock["Lives"] == 0:  # We'll never have a prereq on the first 15 items or on blood prices
-                if random.random() < length_modifier:  # Determines if we have a prereq
+                if (random.random() < length_modifier) or (len(logic_table) * .85 < number):  # Determines if we have a prereq
                     if random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)

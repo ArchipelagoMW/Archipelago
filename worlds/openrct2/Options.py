@@ -189,8 +189,8 @@ class Randomization_Range(IntEnum):
     extreme = 3
 
 class Scenario_Length(IntEnum):
-    speedrun = 0
-    normal = 1
+    synchronous_short = 0
+    synchronous_long = 1
     lengthy = 2
     marathon = 3
     
@@ -482,14 +482,18 @@ class Randomization_Range(Choice):
 
 class Scenario_Length(Choice):
     """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
+    Synchronus Short: Around 2 hours to complete.
+    Synchronus Long: Around 4 hours to complete.
+    Lengthy: Recommended for Asynchs.
+    Marathon: Recommended for Asynchs.
     """
     auto_display_name = True
     display_name = "Scenario Length"
-    option_speedrun = Scenario_Length.speedrun.value
-    option_normal = Scenario_Length.normal.value
+    option_synchronous_short = Scenario_Length.synchronous_short.value
+    option_synchronous_long = Scenario_Length.synchronous_long.value
     option_lengthy = Scenario_Length.lengthy.value
     option_marathon = Scenario_Length.marathon.value
-    default = Scenario_Length.normal.value
+    default = Scenario_Length.synchronous_short.value
 
 class Stat_ReRolls(Choice):
     """How often to rerandomize the stats for ride types. Build the Theme Park of Theseus!
