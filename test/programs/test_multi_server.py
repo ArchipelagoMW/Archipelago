@@ -1,5 +1,6 @@
 import unittest
-from MultiServer import Context, ServerCommandProcessor
+import typing
+from MultiServer import Context, ServerCommandProcessor, CommandProcessor
 
 
 class TestResolvePlayerName(unittest.TestCase):
@@ -38,3 +39,19 @@ class TestResolvePlayerName(unittest.TestCase):
         assert p.resolve_player("ABC") == (1, 2, "abc"), "case insensitive resolves when 1 match"
         assert p.resolve_player("abcd") == (1, 3, "abCD"), "case insensitive resolves when 1 match"
         assert not p.resolve_player("aB"), "partial name shouldn't resolve to player"
+    
+    def test_echo_commands_on_request(self) -> None:
+        processor = CommandProcessor()
+        processor.echo_commands = False
+        processor.echo_command_prefix = '>'
+        processor.echo_command_suffix = '<'
+        logged_outputs: typing.List[str] = []
+        processor.output = lambda x: logged_outputs.append(x)
+        command = '/help'
+
+        processor(command)
+        assert f'>{command}<' not in logged_outputs
+
+        processor.echo_commands = True
+        processor(command)
+        assert f'>{command}<' in logged_outputs

@@ -1086,8 +1086,11 @@ def mark_raw(function: typing.Callable[[typing.Any], _Return]) -> typing.Callabl
 
 class CommandProcessor(metaclass=CommandMeta):
     commands: typing.Dict[str, typing.Callable]
-    client = None
+    client: typing.Optional[Client] = None
     marker = "/"
+    echo_commands = False
+    echo_command_prefix = '$ '
+    echo_command_suffix = ''
 
     def output(self, text: str):
         print(text)
@@ -1096,6 +1099,8 @@ class CommandProcessor(metaclass=CommandMeta):
         if not raw:
             return
         try:
+            if self.echo_commands:
+                self.output(f"{self.echo_command_prefix}{raw}{self.echo_command_suffix}")
             command = raw.split()
             basecommand = command[0]
             if basecommand[0] == self.marker:
