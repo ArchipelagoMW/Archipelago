@@ -114,14 +114,14 @@
         "When the Squad Hops into Town",
         "With Our Powers Combined!",
         "You've Got a Friend in Me",
-		"Smells Interesting",
-		"Little Sniffs",
-		"Planting the Past",
-		"Crafting a New Look",
-		"Smithing with Style",
-		"Respecting the Remnants",
-		"Careful Restoration",
-		"The Power of Books"
+        "Smells Interesting",
+        "Little Sniffs",
+        "Planting the Past",
+        "Crafting a New Look",
+        "Smithing with Style",
+        "Respecting the Remnants",
+        "Careful Restoration",
+        "The Power of Books"
     ],
     "locations_by_region": {
         "Overworld": [
@@ -189,13 +189,13 @@
             "It Spreads",
             "Sneak 100",
             "When the Squad Hops into Town",
-			"Smells Interesting",
-			"Little Sniffs",
-			"Planting the Past",
-			"Crafting a New Look",
-			"Smithing with Style",
-			"Respecting the Remnants",
-			"Careful Restoration"
+            "Smells Interesting",
+            "Little Sniffs",
+            "Planting the Past",
+            "Crafting a New Look",
+            "Smithing with Style",
+            "Respecting the Remnants",
+            "Careful Restoration"
         ],
         "The Nether": [
             "Hot Tourist Destinations",
@@ -214,7 +214,7 @@
             "Is It a Balloon?",
             "Feels Like Home",
             "With Our Powers Combined!",
-			"The Power of Books"
+            "The Power of Books"
         ],
         "The End": [
             "Free the End",
