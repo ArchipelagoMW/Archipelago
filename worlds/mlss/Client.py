@@ -30,7 +30,6 @@ class MLSSClient(BizHawkClient):
     eUsed: [int]
     player_name: Optional[str]
     checked_flags: dict[int, list] = {}
-    ctx: BizHawkClientContext
 
     def __init__(self) -> None:
         super().__init__()
@@ -41,7 +40,7 @@ class MLSSClient(BizHawkClient):
         self.eCount = 0
         self.eUsed = []
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
@@ -75,7 +74,7 @@ class MLSSClient(BizHawkClient):
         logger.info(name)
 
         for i in range(59):
-            self.checked_flags[i] = [9, 10]
+            self.checked_flags[i] = []
 
         return True
 
