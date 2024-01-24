@@ -5,7 +5,7 @@
     }
 
     a {
-        filter: brightness(2);
+        filter: brightness(3);
     }
 }
 
@@ -70,8 +70,12 @@
     margin-top: 0;
 }
 
-.not-found img {
-    filter: saturate(0.2) brightness(0.3);
+.received-item:not(.not-found) {
+    filter: drop-shadow(0px 0px 10px rgba(150, 150, 0, 0.70));
+}
+
+.received-item.not-found {
+    filter: saturate(0.2) brightness(0.3) drop-shadow(0px 0px 10px rgba(234, 126, 128, 0.60));
 }
 
 .overlaid-text {
