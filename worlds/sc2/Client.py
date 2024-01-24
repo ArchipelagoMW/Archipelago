@@ -78,6 +78,7 @@ def get_metadata_file() -> str:
 
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
+    echo_commands = True
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -174,8 +175,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     def _cmd_resources_per_check(self, minerals: str = "-", gas: str = "-", supply: str = "-") -> None:
         """Sets the amount of resources the player receives per resource filler check.
         Use an argument of '-' to leave a resource value unchanged"""
-        self.output(f" --> /resources_per_check {minerals} {gas} {supply}")
-
         def parse_number(value: str, previous_value: int) -> int:
             value = value.strip("-")
             if value:
@@ -210,7 +209,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             'protoss': 'player_color_protoss',
             'nova': 'player_color_nova',
         }
-        self.output(f" --> /color {faction} {color}")
         faction = faction.lower()
         if not faction:
             for faction_name, key in var_names.items():
