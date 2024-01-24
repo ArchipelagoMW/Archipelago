@@ -1,12 +1,7 @@
-@media (prefers-color-scheme: dark) {
-    body {
-        color: #eee;
-        background: #121212;
-    }
-
-    a {
-        filter: brightness(3);
-    }
+body {
+    color-scheme: light dark;
+    color: CanvasText;
+    background: Canvas;
 }
 
 .page-container {
