@@ -250,7 +250,7 @@ def get_rules_lookup(player: int):
             "Glow and Behold!": lambda state: can_adventure(state, player),
             "Whatever Floats Your Goat!": lambda state: can_adventure(state, player),
             "Caves & Cliffs": lambda state: has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Progressive Tools', player, 2),
-            "Feels like home": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Fishing Rod', player) and
+            "Feels Like Home": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and state.has('Fishing Rod', player) and
                 (fortress_loot(state, player) or complete_raid(state, player)) and state.has("Saddle", player)),
             "Sound of Music": lambda state: state.has("Progressive Tools", player, 2) and has_iron_ingots(state, player) and basic_combat(state, player),
             "Star Trader": lambda state: (has_iron_ingots(state, player) and state.has('Bucket', player) and
