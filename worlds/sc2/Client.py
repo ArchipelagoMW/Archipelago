@@ -170,6 +170,29 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         else:
             self.output("Cutscenes will now be skipped.")
             self.ctx.skip_cutscenes = 1
+    
+    def _cmd_resources_per_check(self, minerals: str = "-", gas: str = "-", supply: str = "-") -> None:
+        """Sets the amount of resources the player receives per resource filler check.
+        Use an argument of '-' to leave a resource value unchanged"""
+        self.output(f" --> /resources_per_check {minerals} {gas} {supply}")
+
+        def parse_number(value: str, previous_value: int) -> int:
+            value = value.strip("-")
+            if value:
+                try:
+                    return int(value, base=0)
+                except ValueError:
+                    self.output(f"'{value}' is not a valid integer")
+            return previous_value
+
+        self.ctx.minerals_per_item = parse_number(minerals, self.ctx.minerals_per_item)
+        self.ctx.vespene_per_item = parse_number(gas, self.ctx.vespene_per_item)
+        self.ctx.starting_supply_per_item = parse_number(supply, self.ctx.starting_supply_per_item)
+        self.output(
+            f"Current resource values per check: "
+            f"{self.ctx.minerals_per_item} minerals, "
+            f"{self.ctx.vespene_per_item} gas, "
+            f"{self.ctx.starting_supply_per_item} supply")
 
     def _cmd_color(self, faction: str = "", color: str = "") -> None:
         """Changes the player color for a given faction."""
@@ -320,54 +343,55 @@ class SC2Context(CommonContext):
     command_processor = StarcraftClientProcessor
     game = STARCRAFT2
     items_handling = 0b111
-    difficulty = -1
-    game_speed = -1
-    disable_forced_camera = 0
-    skip_cutscenes = 0
-    all_in_choice = 0
-    mission_order = 0
-    player_color_raynor = ColorChoice.option_blue
-    player_color_zerg = ColorChoice.option_orange
-    player_color_zerg_primal = ColorChoice.option_purple
-    player_color_protoss = ColorChoice.option_blue
-    player_color_nova = ColorChoice.option_dark_grey
-    pending_color_update = False
-    kerrigan_presence = 0
-    kerrigan_primal_status = 0
-    levels_per_check = 0
-    checks_per_level = 1
-    mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
-    final_mission: int = 29
-    announcements: queue.Queue = queue.Queue()
-    sc2_run_task: typing.Optional[asyncio.Task] = None
-    missions_unlocked: bool = False  # allow launching missions ignoring requirements
-    generic_upgrade_missions = 0
-    generic_upgrade_research = 0
-    generic_upgrade_items = 0
-    location_inclusions: typing.Dict[LocationType, LocationInclusion] = {}
-    plando_locations: typing.List[str] = []
-    current_tooltip = None
-    last_loc_list = None
-    difficulty_override = -1
-    game_speed_override = -1
-    mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
-    last_bot: typing.Optional[ArchipelagoBot] = None
-    slot_data_version = 2
-    grant_story_tech = False
-    required_tactics = RequiredTactics.option_standard
-    take_over_ai_allies = TakeOverAIAllies.option_false
-    spear_of_adun_presence = SpearOfAdunPresence.option_not_present
-    spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
-    spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
-    spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
-    minerals_per_item = 15
-    vespene_per_item = 15
-    starting_supply_per_item = 2
-    nova_covert_ops_only = False
 
     def __init__(self, *args, **kwargs) -> None:
         super(SC2Context, self).__init__(*args, **kwargs)
         self.raw_text_parser = SC2JSONtoTextParser(self)
+
+        self.difficulty = -1
+        self.game_speed = -1
+        self.disable_forced_camera = 0
+        self.skip_cutscenes = 0
+        self.all_in_choice = 0
+        self.mission_order = 0
+        self.player_color_raynor = ColorChoice.option_blue
+        self.player_color_zerg = ColorChoice.option_orange
+        self.player_color_zerg_primal = ColorChoice.option_purple
+        self.player_color_protoss = ColorChoice.option_blue
+        self.player_color_nova = ColorChoice.option_dark_grey
+        self.pending_color_update = False
+        self.kerrigan_presence = 0
+        self.kerrigan_primal_status = 0
+        self.levels_per_check = 0
+        self.checks_per_level = 1
+        self.mission_req_table: typing.Dict[SC2Campaign, typing.Dict[str, MissionInfo]] = {}
+        self.final_mission: int = 29
+        self.announcements: queue.Queue = queue.Queue()
+        self.sc2_run_task: typing.Optional[asyncio.Task] = None
+        self.missions_unlocked: bool = False  # allow launching missions ignoring requirements
+        self.generic_upgrade_missions = 0
+        self.generic_upgrade_research = 0
+        self.generic_upgrade_items = 0
+        self.location_inclusions: typing.Dict[LocationType, LocationInclusion] = {}
+        self.plando_locations: typing.List[str] = []
+        self.current_tooltip = None
+        self.last_loc_list = None
+        self.difficulty_override = -1
+        self.game_speed_override = -1
+        self.mission_id_to_location_ids: typing.Dict[int, typing.List[int]] = {}
+        self.last_bot: typing.Optional[ArchipelagoBot] = None
+        self.slot_data_version = 2
+        self.grant_story_tech = 0
+        self.required_tactics = RequiredTactics.option_standard
+        self.take_over_ai_allies = TakeOverAIAllies.option_false
+        self.spear_of_adun_presence = SpearOfAdunPresence.option_not_present
+        self.spear_of_adun_present_in_no_build = SpearOfAdunPresentInNoBuild.option_false
+        self.spear_of_adun_autonomously_cast_ability_presence = SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present
+        self.spear_of_adun_autonomously_cast_present_in_no_build = SpearOfAdunAutonomouslyCastPresentInNoBuild.option_false
+        self.minerals_per_item = 15
+        self.vespene_per_item = 15
+        self.starting_supply_per_item = 2
+        self.nova_covert_ops_only = False
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2
