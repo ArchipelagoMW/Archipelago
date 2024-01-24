@@ -2,10 +2,8 @@ from functools import cached_property
 from typing import Optional, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
-from .connections import CONNECTIONS
 from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .regions import MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
-from .rules import parse_rule
+from .regions import MEGA_SHARDS, LOCATIONS
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
 
 if TYPE_CHECKING:
@@ -22,7 +20,7 @@ class MessengerRegion(Region):
         if name in LOCATIONS:
             locations = [loc for loc in LOCATIONS[name]]
         # portal event locations since portals can be opened from their exit regions
-        if "Portal" in name:
+        if name.endswith("Portal"):
             locations.append(name.replace(" -", ""))
 
         if name == "The Shop":

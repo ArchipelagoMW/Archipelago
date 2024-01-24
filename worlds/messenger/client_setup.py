@@ -17,14 +17,30 @@ def launch_game() -> None:
     """Check the game installation, then launch it"""
     if not (is_linux or is_windows):
         return
-    
+
     def courier_installed() -> bool:
         """Check if Courier is installed"""
         return os.path.exists(os.path.join(folder, "miniinstaller-log.txt"))
-    
+
+    def mod_installed() -> bool:
+        """Check if the mod is installed"""
+        return os.path.exists(os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml"))
+
+    def request_data(url: str) -> Any:
+        """Fetches json response from given url"""
+        logging.info(f"requesting {url}")
+        response = requests.get(url)
+        if response.status_code == 200:  # success
+            try:
+                data = response.json()
+            except requests.exceptions.JSONDecodeError:
+                raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
+        else:
+            raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
+        return data
+
     def install_courier() -> None:
         """Installs latest version of Courier"""
-    
         # can't use latest since courier uses pre-release tags
         courier_url = "https://api.github.com/repos/Brokemia/Courier/releases"
         latest_download = request_data(courier_url)[0]["assets"][-1]["browser_download_url"]
@@ -35,6 +51,7 @@ def launch_game() -> None:
     
         working_directory = os.getcwd()
         os.chdir(folder)
+        # linux handling
         if is_linux:
             mono_exe = which("mono")
             if not mono_exe:
@@ -52,6 +69,7 @@ def launch_game() -> None:
                 installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
         else:
             installer = subprocess.Popen(os.path.join(folder, "MiniInstaller.exe"), shell=False)
+
         failure = installer.wait()
         if failure:
             messagebox("Failure", "Failed to install Courier", True)
@@ -63,23 +81,19 @@ def launch_game() -> None:
             messagebox("Success!", "Courier successfully installed!")
         messagebox("Failure", "Failed to install Courier", True)
         raise RuntimeError("Failed to install Courier")
-    
-    def mod_installed() -> bool:
-        """Check if the mod is installed"""
-        return os.path.exists(os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml"))
-    
-    def request_data(url: str) -> Any:
-        """Fetches json response from given url"""
-        logging.info(f"requesting {url}")
-        response = requests.get(url)
-        if response.status_code == 200:  # success
-            try:
-                data = response.json()
-            except requests.exceptions.JSONDecodeError:
-                raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
-        else:
-            raise RuntimeError(f"Unable to fetch data. (status code {response.status_code})")
-        return data
+
+    def install_mod() -> None:
+        """Installs latest version of the mod"""
+        # TODO: add /latest before actual PR since i want pre-releases for now
+        url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
+        assets = request_data(url)["assets"]
+        release_url = assets[-1]["browser_download_url"]
+
+        with urllib.request.urlopen(release_url) as download:
+            with ZipFile(io.BytesIO(download.read()), "r") as zf:
+                zf.extractall(folder)
+
+        messagebox("Success!", "Latest mod successfully installed!")
 
     def available_mod_update() -> bool:
         """Check if there's an available update"""
@@ -93,18 +107,6 @@ def launch_game() -> None:
 
         return tuplize_version(latest_version) > tuplize_version(installed_version)
 
-    def install_mod() -> None:
-        """Installs latest version of the mod"""
-        url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
-        assets = request_data(url)["assets"]
-        release_url = assets[0]["browser_download_url"]
-    
-        with urllib.request.urlopen(release_url) as download:
-            with ZipFile(io.BytesIO(download.read()), "r") as zf:
-                zf.extractall(folder)
-    
-        messagebox("Success!", "Latest mod successfully installed!")
-    
     from . import MessengerWorld
     folder = os.path.dirname(MessengerWorld.settings.game_path)
     if not courier_installed():

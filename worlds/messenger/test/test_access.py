@@ -22,11 +22,21 @@ class AccessTest(MessengerTestBase):
     def test_dart(self) -> None:
         """locations that hard require the Rope Dart"""
         locations = [
-            "Ninja Village Seal - Tree House", "Autumn Hills - Key of Hope", "Howling Grotto Seal - Crushing Pits",
-            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
-            "Tower of Time Seal - Arcane Orbs", "Cloud Ruins Seal - Ghost Pit", "Underworld Seal - Rising Fanta",
-            "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard", "Rescue Phantom",
+            "Ninja Village Seal - Tree House",
+            "Autumn Hills - Key of Hope",
+            "Howling Grotto Seal - Crushing Pits",
+            "Glacial Peak Seal - Ice Climbers",
+            "Tower of Time Seal - Time Waster",
+            "Tower of Time Seal - Lantern Climb",
+            "Tower of Time Seal - Arcane Orbs",
+            "Cloud Ruins Seal - Ghost Pit",
+            "Underworld Seal - Rising Fanta",
+            "Elemental Skylands - Key of Symbiosis",
+            "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire",
+            "Earth Mega Shard",
+            "Water Mega Shard",
+            "Rescue Phantom",
         ]
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)

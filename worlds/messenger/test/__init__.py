@@ -9,4 +9,5 @@ class MessengerTestBase(WorldTestBase):
     
     def setUp(self) -> None:
         super().setUp()
-        self.world = self.multiworld.worlds[self.player]
+        if self.constructed:
+            self.world = self.multiworld.worlds[self.player]

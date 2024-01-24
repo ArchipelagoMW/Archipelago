@@ -50,7 +50,7 @@ class AvailablePortals(Range):
     display_name = "Number of Available Starting Portals"
     range_start = 3
     range_end = 6
-    default = 4
+    default = 6
 
 
 class ShufflePortals(TextChoice):
@@ -70,7 +70,7 @@ class ShufflePortals(TextChoice):
     option_shops = 1
     option_checkpoints = 2
     option_anywhere = 3
-    default = 2
+    default = 0
 
 
 class Goal(Choice):

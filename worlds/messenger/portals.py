@@ -34,7 +34,7 @@ REGION_ORDER = [
     "Searing Crags",
     "Glacial Peak",
     "Tower of Time",
-    "CloudRuins",
+    "Cloud Ruins",
     "Underworld",
     "Riviere Turquoise",
     "Sunken Shrine",
@@ -95,29 +95,30 @@ SHOP_POINTS = {
     ],
     "Cloud Ruins": [
         "Entrance",
-        "First Gap",
-        "Left Middle",
-        "Right Middle",
-        "Pre Acro",
-        "Pre Manfred",
+        "Pillar Glide",
+        "Crushers' Descent",
+        "Seeing Spikes",
+        "Final Flight",
+        "Manfred's",
     ],
     "Underworld": [
         "Left",
-        "Spike Wall",
-        "Middle",
-        "Right",
+        "Fireball Wave",
+        "Long Climb",
+        # "Barm'athaziel",  # not currently valid
+        "Key of Chaos",
     ],
     "Riviere Turquoise": [
-        "Pre Fairy",
-        "Pre Flower Pit",
-        "Pre Restock",
-        "Pre Ascension",
+        "Waterfall",
         "Launch of Faith",
-        "Post Waterfall",
+        "Log Flume",
+        "Log Climb",
+        "Restock",
+        "Butterfly Matriarch",
     ],
     "Sunken Shrine": [
         "Above Portal",
-        "Ultra Lifeguard",
+        "Lifeguard",
         "Sun Path",
         "Tabi Gauntlet",
         "Moon Path",
@@ -127,7 +128,7 @@ SHOP_POINTS = {
 
 CHECKPOINTS = {
     "Autumn Hills": [
-        "Hope Path",
+        "Hope Latch",
         "Key of Hope",
         "Lakeside",
         "Double Swing",
@@ -173,18 +174,18 @@ CHECKPOINTS = {
         "Sixth",
     ],
     "Cloud Ruins": [
-        "Time Warp",
+        "Spike Float",
         "Ghost Pit",
-        "Toothrush Alley",
+        "Toothbrush Alley",
         "Saw Pit",
     ],
     "Underworld": [
-        "Sharp Drop",
-        "Final Stretch",
+        "Hot Dip",
         "Hot Tub",
+        "Lava Run",
     ],
     "Riviere Turquoise": [
-        "Water Logged",
+        "Flower Flight",
     ],
     "Sunken Shrine": [
         "Lightfoot Tabi",
@@ -209,6 +210,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     for portal in OUTPUT_PORTALS:
         warp_point = world.random.choice(available_portals)
         parent = out_to_parent[warp_point]
+        # determine the name of the region of the warp point and save it in our
         exit_string = f"{parent.strip(' ')} - "
         if "Portal" in warp_point:
             exit_string += "Portal"
@@ -226,14 +228,15 @@ def shuffle_portals(world: "MessengerWorld") -> None:
             available_portals = [portal for portal in available_portals
                                  if portal not in shop_points[out_to_parent[warp_point]]]
     
+    print(f"exits: {world.portal_mapping}")
     if not validate_portals(world):
         disconnect_portals(world)
         shuffle_portals(world)
 
 
 def connect_portal(world: "MessengerWorld", portal: str, out_region: str) -> None:
-    (world.multiworld.get_region("Tower HQ", world.player)
-     .connect(world.multiworld.get_region(out_region, world.player), portal))
+    entrance = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
+    entrance.connect(world.multiworld.get_region(out_region, world.player))
 
 
 def disconnect_portals(world: "MessengerWorld") -> None:

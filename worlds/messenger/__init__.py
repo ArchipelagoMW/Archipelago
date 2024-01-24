@@ -3,6 +3,7 @@ from typing import Any, ClassVar, Dict, List, Optional
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
 from Options import Accessibility
+from Utils import visualize_regions
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
@@ -12,7 +13,7 @@ from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTE
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
 from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
-from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules, parse_rule
+from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion
 
@@ -121,18 +122,12 @@ class MessengerWorld(World):
                        for reg_name in sub_region]:
             region_name = region.name.replace(f"{region.parent} - ", "")
             connection_data = CONNECTIONS[region.parent][region_name]
-            for index, exit_region in enumerate(connection_data["exits"]):
-                region_exit = region.connect(self.multiworld.get_region(exit_region, self.player))
-                region_exit.access_rule = parse_rule(connection_data["rules"][index], self.player, self.options.logic_level.value)
+            for exit_region in connection_data["exits"]:
+                region.connect(self.multiworld.get_region(exit_region, self.player))
         # all regions need to be created before i can do these connections so we create and connect the complex first
         for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
             region = self.multiworld.get_region(region_name, self.player)
             region.add_exits(REGION_CONNECTIONS[region.name])
-            for reg_exit in region.exits:
-                rules = REGION_CONNECTIONS[region.name][reg_exit.connected_region.name]
-                if isinstance(rules, dict):
-                    for rule in rules.values():
-                        reg_exit.access_rule = parse_rule(rule, self.player)
 
     def create_items(self) -> None:
         # create items that are always in the item pool
@@ -193,6 +188,7 @@ class MessengerWorld(World):
         self.multiworld.itempool += filler
 
     def set_rules(self) -> None:
+        MessengerRules(self).set_messenger_rules()
         # logic = self.options.logic_level
         # if logic == Logic.option_normal:
         #     MessengerRules(self).set_messenger_rules()
@@ -205,6 +201,7 @@ class MessengerWorld(World):
         if self.options.shuffle_portals:
             disconnect_portals(self)
             shuffle_portals(self)
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
@@ -213,7 +210,7 @@ class MessengerWorld(World):
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
-            "portal_mapping": self.portal_mapping if self.portal_mapping else [],
+            "portal_exits": self.portal_mapping if self.portal_mapping else [],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         print(slot_data)

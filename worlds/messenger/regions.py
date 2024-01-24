@@ -2,9 +2,10 @@ from typing import Dict, List, Union
 
 
 LOCATIONS: Dict[str, List[str]] = {
-    "Ninja Village": [
+    "Ninja Village - Nest": [
         "Ninja Village - Candle",
-        "Ninja Village - Astral Seed"
+        "Ninja Village - Astral Seed",
+        "Ninja Village Seal - Tree House",
     ],
     "Autumn Hills - Climbing Claws Shop": [
         "Autumn Hills - Climbing Claws",
@@ -114,7 +115,7 @@ LOCATIONS: Dict[str, List[str]] = {
         "Glacial Peak Seal - Glacial Air Swag",
     ],
     "Tower of Time - First Checkpoint": [
-        "Tower of Time Seal - Time Waster Seal",
+        "Tower of Time Seal - Time Waster",
     ],
     "Tower of Time - Third Checkpoint": [
         "Tower of Time Seal - Lantern Climb",
@@ -131,10 +132,13 @@ LOCATIONS: Dict[str, List[str]] = {
     "Cloud Ruins - Saw Pit Checkpoint": [
         "Cloud Ruins Seal - Saw Pit",
     ],
-    "Cloud Ruins - Final Flight Checkpoint": [
+    "Cloud Ruins - Final Flight Shop": [
         "Cloud Ruins - Acro",
     ],
-    "Underworld - Entrance Shop": [
+    "Cloud Ruins - Manfred's Shop": [
+        "Cloud Ruins Seal - Money Farm Room",
+    ],
+    "Underworld - Left Shop": [
         "Underworld Seal - Sharp and Windy Climb",
     ],
     "Underworld - Fireball Wave Shop": [
@@ -371,16 +375,16 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Quillshroom Marsh - Spikey Window Shop": ["Quillshroom Marsh Mega Shard"],
     "Searing Crags - Searing Mega Shard Shop": ["Searing Crags Mega Shard"],
     "Glacial Peak - Glacial Mega Shard Shop": ["Glacial Peak Mega Shard"],
-    "Cloud Ruins - Entrance Shop": ["Cloud Entrance Mega Shard"],
+    "Cloud Ruins - Cloud Entrance Shop": ["Cloud Entrance Mega Shard"],
     "Cloud Ruins - Spike Float Checkpoint": ["Time Warp Mega Shard"],
     "Cloud Ruins - Manfred's Shop": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
-    "Underworld - Entrance Shop": ["Under Entrance Mega Shard"],
+    "Underworld - Left Shop": ["Under Entrance Mega Shard"],
     "Underworld - Hot Tub Checkpoint": ["Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
     "Forlorn Temple - Sunny Day Checkpoint": ["Sunny Day Mega Shard"],
     "Forlorn Temple - Demon King Shop": ["Down Under Mega Shard"],
-    "Sunken Shrine - Waterfall Shop": ["Mega Shard of the Moon"],
+    "Sunken Shrine - Waterfall Paradise Checkpoint": ["Mega Shard of the Moon"],
     "Sunken Shrine - Portal": ["Beginner's Mega Shard"],
-    "Sunken Shrine - Entrance Shop": ["Mega Shard of the Stars"],
+    "Sunken Shrine - Above Portal Shop": ["Mega Shard of the Stars"],
     "Sunken Shrine - Sun Crest Checkpoint": ["Mega Shard of the Sun"],
     "Riviere Turquoise - Waterfall Shop": ["Waterfall Mega Shard"],
     "Riviere Turquoise - Restock Shop": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
@@ -388,7 +392,7 @@ MEGA_SHARDS: Dict[str, List[str]] = {
 }
 
 
-REGION_CONNECTIONS: Dict[str, Union[Dict[str, str], str]] = {
+REGION_CONNECTIONS: Dict[str, Dict[str, str]] = {
     "Menu": {"Tower HQ": "Start Game"},
     "Tower HQ": {
         "Autumn Hills - Portal": "ToTHQ Autumn Hills Portal",
@@ -406,7 +410,7 @@ REGION_CONNECTIONS: Dict[str, Union[Dict[str, str], str]] = {
         "The Craftsman's Corner": "Money Sink",
     },
 }
-"""Vanilla layout mapping with all Tower HQ portals open. format is source[entrance_name][exit_region] or source[exit_region]"""
+"""Vanilla layout mapping with all Tower HQ portals open. format is source[exit_region][entrance_name]"""
 
 
 # regions that don't have sub-regions and their exits

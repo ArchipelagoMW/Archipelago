@@ -6,14 +6,21 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Right": {
             "exits": [
                 "Autumn Hills - Left",
+                "Ninja Village - Nest",
             ],
             "rules": ["True"],
         },
+        "Nest": {
+            "exits": [
+                "Ninja Village - Right",
+            ]
+        }
     },
     "Autumn Hills": {
         "Left": {
             "exits": [
                 "Ninja Village - Right",
+                "Autumn Hills - Climbing Claws Shop",
             ],
             "rules": ["True"],
         },
@@ -27,6 +34,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Bottom": {
             "exits": [
                 "Catacombs - Bottom Left",
+                "Autumn Hills - Double Swing Checkpoint",
             ],
             "rules": ["True"],
         },
@@ -47,7 +55,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Hope Path Shop": {
             "exits": [
                 "Autumn Hills - Climbing Claws Shop",
-                "Autumn Hills - Hope Path Checkpoint",
+                "Autumn Hills - Hope Latch Checkpoint",
                 "Autumn Hills - Lakeside Checkpoint",
             ],
             "rules": ["True", "True", "True"],
@@ -67,7 +75,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             ],
             "rules": ["True", "True"],
         },
-        "Hope Path Checkpoint": {
+        "Hope Latch Checkpoint": {
             "exits": [
                 "Autumn Hills - Hope Path Shop",
                 "Autumn Hills - Key of Hope Checkpoint",
@@ -76,7 +84,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Key of Hope Checkpoint": {
             "exits": [
-                "Autumn Hills - Hope Path Checkpoint",
+                "Autumn Hills - Hope Latch Checkpoint",
                 "Autumn Hills - Lakeside Checkpoint",
             ],
             "rules": ["True", "True", "True"],
@@ -92,6 +100,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             "exits": [
                 "Autumn Hills - Dimension Climb Shop",
                 "Autumn Hills - Spike Ball Swing Checkpoint",
+                "Autumn Hills - Bottom",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -138,21 +147,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Forlorn Temple - Outside Shop",
                 "Forlorn Temple - Sunny Day Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
-        },
-        "Sunny Day Checkpoint": {
-            "exits": [
-                "Forlorn Temple - Outside Shop",
-                "Forlorn Temple - Rocket Maze Checkpoint",
-            ],
-            "rules": ["True", "True", "True"],
-        },
-        "Rocket Maze Checkpoint": {
-            "exits": [
-                "Forlorn Temple - Sunny Day Checkpoint",
-                "Forlorn Temple - Climb Shop",
-            ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Climb Shop": {
             "exits": [
@@ -186,6 +181,20 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             "exits": [
                 "Forlorn Temple - Final Fall Shop",
                 "Forlorn Temple - Right",
+            ],
+            "rules": ["True", "True", "True"],
+        },
+        "Sunny Day Checkpoint": {
+            "exits": [
+                "Forlorn Temple - Entrance Shop",
+                "Forlorn Temple - Rocket Maze Checkpoint",
+            ],
+            "rules": ["True", "True", "True"],
+        },
+        "Rocket Maze Checkpoint": {
+            "exits": [
+                "Forlorn Temple - Sunny Day Checkpoint",
+                "Forlorn Temple - Climb Shop",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -323,28 +332,28 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Bamboo Creek - Right",
                 "Howling Grotto - Wingsuit Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["Wingsuit", "True"],
         },
         "Top": {
             "exits": [
                 "Howling Grotto - Crushing Pits Shop",
-                "Quillshroom Marsh - Bottom Right",
+                "Quillshroom Marsh - Bottom Left",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Right": {
             "exits": [
                 "Howling Grotto - Emerald Golem Shop",
                 "Quillshroom Marsh - Top Left",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Bottom": {
             "exits": [
                 "Howling Grotto - Lost Woods Checkpoint",
                 "Sunken Shrine - Left",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Portal": {
             "exits": [
@@ -358,13 +367,14 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Howling Grotto - Left",
                 "Howling Grotto - Lost Woods Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["Wingsuit", "True"],
         },
         "Crushing Pits Shop": {
             "exits": [
                 "Howling Grotto - Lost Woods Checkpoint",
                 "Howling Grotto - Portal",
                 "Howling Grotto - Breezy Crushers Checkpoint",
+                "Howling Grotto - Top",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -482,21 +492,21 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Searing Crags - Colossuses Shop",
                 "Glacial Peak - Bottom",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Bottom": {
             "exits": [
                 "Searing Crags - Portal",
                 "Quillshroom Marsh - Bottom Right",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Right": {
             "exits": [
                 "Searing Crags - Portal",
                 "Underworld - Left",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Portal": {
             "exits": [
@@ -506,28 +516,28 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Searing Crags - Colossuses Shop",
                 "Tower HQ",
             ],
-            "rules": ["True", "True", "True", "True", "True"],
+            "rules": ["True", "Lightfoot Tabi", "Wingsuit", "Wingsuit", "True"],
         },
         "Rope Dart Shop": {
             "exits": [
                 "Searing Crags - Left",
                 "Searing Crags - Triple Ball Spinner Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", ["Wingsuit", "Rope Dart"]],
         },
         "Triple Ball Spinner Shop": {
             "exits": [
                 "Searing Crags - Triple Ball Spinner Checkpoint",
                 "Searing Crags - Searing Mega Shard Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Searing Mega Shard Shop": {
             "exits": [
                 "Searing Crags - Triple Ball Spinner Shop",
                 "Searing Crags - Raining Rocks Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Before Final Climb Shop": {
             "exits": [
@@ -544,27 +554,27 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Searing Crags - Portal",
                 "Searing Crags - Top",
             ],
-            "rules": ["True", "True", "True", "True"],
+            "rules": ["True", ["Power Thistle, [Rope Dart, 'Wingsuit, Second Strike']"], "True", "True"],
         },
         "Key of Strength Shop": {
             "exits": [
                 "Searing Crags - Searing Mega Shard Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True"],
         },
         "Triple Ball Spinner Checkpoint": {
             "exits": [
                 "Searing Crags - Rope Dart Shop",
                 "Searing Crags - Triple Ball Spinner Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Raining Rocks Checkpoint": {
             "exits": [
                 "Searing Crags - Searing Mega Shard Shop",
                 "Searing Crags - Before Final Climb Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
     },
     "Glacial Peak": {
@@ -589,14 +599,14 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Cloud Ruins - Left",
                 "Glacial Peak - Portal",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "Ruxxtin's Amulet", "True"],
         },
         "Portal": {
             "exits": [
                 "Glacial Peak - Top",
                 "Tower HQ",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": [["Wingsuit", "Rope Dart"], "True"],
         },
         "Ice Climbers' Shop": {
             "exits": [
@@ -644,11 +654,11 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
     "Tower of Time": {
         "Left": {
             "exits": [
-                "Tower of Time - Entrance Shop",
+                "Tower of Time - Final Chance Shop",
             ],
             "rules": ["True", "True", "True"],
         },
-        "Entrance Shop": {
+        "Final Chance Shop": {
             "exits": [
                 "Tower of Time - First Checkpoint",
             ],
@@ -663,7 +673,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "First Checkpoint": {
             "exits": [
-                "Tower of Time - Entrance Shop",
+                "Tower of Time - Final Chance Shop",
                 "Tower of Time - Second Checkpoint",
             ],
             "rules": ["True", "True", "True"],
@@ -708,11 +718,11 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Left": {
             "exits": [
                 "Glacial Peak - Top",
-                "Cloud Ruins - Entrance Shop",
+                "Cloud Ruins - Cloud Entrance Shop",
             ],
             "rules": ["True", "True", "True"],
         },
-        "Entrance Shop": {
+        "Cloud Entrance Shop": {
             "exits": [
                 "Cloud Ruins - Left",
                 "Cloud Ruins - Spike Float Checkpoint",
@@ -725,14 +735,14 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Cloud Ruins - Ghost Pit Checkpoint",
                 "Cloud Ruins - Crushers' Descent Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "Wingsuit, [Rope Dart, Meditation, Path of Resilience]", "True"],
         },
         "Crushers' Descent Shop": {
             "exits": [
                 "Cloud Ruins - Pillar Glide Shop",
                 "Cloud Ruins - Toothbrush Alley Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Seeing Spikes Shop": {
             "exits": [
@@ -746,33 +756,33 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
                 "Cloud Ruins - Seeing Spikes Shop",
                 "Cloud Ruins - Saw Pit Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Final Flight Shop": {
             "exits": [
                 "Cloud Ruins - Saw Pit Checkpoint",
                 "Cloud Ruins - Manfred's Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Manfred's Shop": {
             "exits": [
                 "Cloud Ruins - Final Flight Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True"],
         },
         "Spike Float Checkpoint": {
             "exits": [
-                "Cloud Ruins - Entrance Shop",
+                "Cloud Ruins - Cloud Entrance Shop",
                 "Cloud Ruins - Pillar Glide Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Ghost Pit Checkpoint": {
             "exits": [
-                "Cloud Ruins - Spike Float Checkpoint",
+                "Cloud Ruins - Pillar Glide Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True"],
         },
         "Toothbrush Alley Checkpoint": {
             "exits": [
@@ -792,12 +802,12 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
     "Underworld": {
         "Left": {
             "exits": [
-                "Underworld - Entrance Shop",
+                "Underworld - Left Shop",
                 "Searing Crags - Right",
             ],
             "rules": ["True", "True", "True"],
         },
-        "Entrance Shop": {
+        "Left Shop": {
             "exits": [
                 "Underworld - Left",
                 "Underworld - Hot Dip Checkpoint",
@@ -832,7 +842,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Hot Dip Checkpoint": {
             "exits": [
-                "Underworld - Entrance Shop",
+                "Underworld - Left Shop",
                 "Underworld - Fireball Wave Shop",
                 "Underworld - Lava Run Checkpoint",
             ],
@@ -942,26 +952,26 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Portal": {
             "exits": [
                 "Sunken Shrine - Left",
-                "Sunken Shrine - Entrance Shop",
+                "Sunken Shrine - Above Portal Shop",
                 "Sunken Shrine - Sun Path Shop",
                 "Sunken Shrine - Moon Path Shop",
                 "Tower HQ",
             ],
-            "rules": ["True", "True", "True", "True", "True"],
+            "rules": ["True", "True", "Lightfoot Tabi", "Lightfoot Tabi", "True"],
         },
-        "Entrance Shop": {
+        "Above Portal Shop": {
             "exits": [
                 "Sunken Shrine - Portal",
                 "Sunken Shrine - Lifeguard Shop",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Lifeguard Shop": {
             "exits": [
-                "Sunken Shrine - Entrance Shop",
+                "Sunken Shrine - Above Portal Shop",
                 "Sunken Shrine - Lightfoot Tabi Checkpoint",
             ],
-            "rules": ["True", "True", "True"],
+            "rules": ["True", "True"],
         },
         "Sun Path Shop": {
             "exits": [
