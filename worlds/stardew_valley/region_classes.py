@@ -34,6 +34,10 @@ class RegionData:
         merged_exits = list(set(merged_exits))
         return RegionData(self.name, merged_exits)
 
+    def get_without_exit(self, exit_to_remove: str):
+        exits = [exit for exit in self.exits if exit != exit_to_remove]
+        return RegionData(self.name, exits)
+
     def get_clone(self):
         return self.get_merged_with(None)
 

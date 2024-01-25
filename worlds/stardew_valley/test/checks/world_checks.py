@@ -27,15 +27,9 @@ def assert_can_reach_victory(tester: unittest.TestCase, multiworld: MultiWorld):
     tester.assertTrue(*can_reach_victory(multiworld))
 
 
-def collect_all_then_assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
-    for item in multiworld.get_items():
-        multiworld.state.collect(item)
-    assert_can_reach_victory(tester, multiworld)
-
-
 def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
     assert_victory_exists(tester, multiworld)
-    collect_all_then_assert_can_win(tester, multiworld)
+    assert_can_reach_victory(tester, multiworld)
 
 
 def assert_same_number_items_locations(tester: unittest.TestCase, multiworld: MultiWorld):
@@ -43,6 +37,18 @@ def assert_same_number_items_locations(tester: unittest.TestCase, multiworld: Mu
     tester.assertEqual(len(multiworld.itempool), len(non_event_locations))
 
 
+def assert_can_reach_everything(tester: unittest.TestCase, multiworld: MultiWorld):
+    for location in multiworld.get_locations():
+        can_reach = location.can_reach(multiworld.state)
+        if hasattr(location.access_rule, "explain"):
+            tester.assertTrue(can_reach, location.access_rule.explain(multiworld.state))
+        else:
+            tester.assertTrue(can_reach)
+
+
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
-    assert_can_win(tester, multiworld)
     assert_same_number_items_locations(tester, multiworld)
+    for item in multiworld.get_items():
+        multiworld.state.collect(item)
+    assert_can_win(tester, multiworld)
+    assert_can_reach_everything(tester, multiworld)

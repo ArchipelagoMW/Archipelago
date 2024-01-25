@@ -6,7 +6,7 @@ from itertools import chain, combinations
 from typing import List, Union
 
 from BaseClasses import MultiWorld
-from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods
+from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
 from ..TestOptions import basic_checks
 from ... import items, Group, ItemClassification
 from ...items import item_table, items_by_group
@@ -48,6 +48,17 @@ class TestGenerateModsOptions(SVTestCase):
                     check_stray_mod_items(mod, self, multiworld)
                     # if self.skip_extra_tests:
                     #     return  # assume the rest will work as well
+
+    def test_allsanity_all_mods_when_generate_then_basic_checks(self):
+        multi_world = setup_solo_multiworld(allsanity_options_with_mods())
+        basic_checks(self, multi_world)
+
+    def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
+        options = allsanity_options_with_mods()
+        options = {key: options[key] for key in options}
+        options.update({ExcludeGingerIsland: ExcludeGingerIsland.option_true})
+        multi_world = setup_solo_multiworld(options)
+        basic_checks(self, multi_world)
 
 
 class TestBaseLocationDependencies(SVTestBase):

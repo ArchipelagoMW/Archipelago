@@ -1,3 +1,5 @@
+from typing import Dict, List
+
 from ..strings.entrance_names import Entrance, DeepWoodsEntrance, EugeneEntrance, LaceyEntrance, BoardingHouseEntrance, \
     JasperEntrance, AlecEntrance, YobaEntrance, JunaEntrance, MagicEntrance, AyeishaEntrance, RileyEntrance, SVEEntrance, AlectoEntrance
 from ..strings.region_names import Region, DeepWoodsRegion, EugeneRegion, JasperRegion, BoardingHouseRegion, \
@@ -219,7 +221,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grandpa_shed_to_town, Region.town),
     ConnectionData(SVEEntrance.bmv_to_sophia, SVERegion.sophias_house, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside),
+    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(SVEEntrance.guild_to_interior, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.backwoods_to_grove, SVERegion.enchanted_grove, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(SVEEntrance.grove_to_outpost_warp, SVERegion.grove_outpost_warp),
@@ -350,7 +352,7 @@ boarding_house_entrances = [
 
 ]
 
-vanilla_connections_to_remove_by_mod = {
+vanilla_connections_to_remove_by_mod: Dict[str, List[ConnectionData]] = {
     ModNames.sve: [ConnectionData(Entrance.mountain_to_the_mines, Region.mines,
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
                    ConnectionData(Entrance.mountain_to_adventurer_guild, Region.adventurer_guild,

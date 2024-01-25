@@ -256,7 +256,7 @@ vanilla_connections = [
     ConnectionData(Entrance.enter_slime_hutch, Region.slime_hutch),
     ConnectionData(Entrance.shipping, Region.shipping),
     ConnectionData(Entrance.use_desert_obelisk, Region.desert),
-    ConnectionData(Entrance.use_island_obelisk, Region.island_south),
+    ConnectionData(Entrance.use_island_obelisk, Region.island_south, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.use_farm_obelisk, Region.farm),
     ConnectionData(Entrance.backwoods_to_mountain, Region.mountain),
     ConnectionData(Entrance.bus_stop_to_town, Region.town),
@@ -352,7 +352,7 @@ vanilla_connections = [
                    flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(Entrance.fish_shop_to_boat_tunnel, Region.boat_tunnel,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(Entrance.boat_to_ginger_island, Region.island_south),
+    ConnectionData(Entrance.boat_to_ginger_island, Region.island_south, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.enter_tide_pools, Region.tide_pools),
     ConnectionData(Entrance.fishing, Region.fishing),
     ConnectionData(Entrance.mountain_to_the_mines, Region.mines,
@@ -413,7 +413,7 @@ vanilla_connections = [
     ConnectionData(Entrance.island_south_to_east, Region.island_east, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_south_to_southeast, Region.island_south_east,
                    flag=RandomizationFlag.GINGER_ISLAND),
-    ConnectionData(Entrance.use_island_resort, Region.island_resort),
+    ConnectionData(Entrance.use_island_resort, Region.island_resort, flag=RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_west_to_islandfarmhouse, Region.island_farmhouse,
                    flag=RandomizationFlag.BUILDINGS | RandomizationFlag.GINGER_ISLAND),
     ConnectionData(Entrance.island_cooking, Region.kitchen),
@@ -488,19 +488,37 @@ def create_final_regions(world_options) -> List[RegionData]:
     return final_regions
 
 
-def create_final_connections(world_options) -> List[ConnectionData]:
-    final_connections = []
-    final_connections.extend(vanilla_connections)
-    if world_options.mods is None:
-        return final_connections
-    for mod in world_options.mods.value:
+def create_final_connections_and_regions(world_options) -> Tuple[Dict[str, ConnectionData], Dict[str, RegionData]]:
+    regions_data: Dict[str, RegionData] = {region.name: region for region in create_final_regions(world_options)}
+    connections = {connection.name: connection for connection in vanilla_connections}
+    connections = modify_connections_for_mods(connections, world_options.mods)
+    include_island = world_options.exclude_ginger_island == ExcludeGingerIsland.option_false
+    return remove_ginger_island_regions_and_connections(regions_data, connections, include_island)
+
+
+def remove_ginger_island_regions_and_connections(regions_by_name: Dict[str, RegionData], connections: Dict[str, ConnectionData], include_island: bool):
+    if include_island:
+        return connections, regions_by_name
+    for connection_name in list(connections):
+        connection = connections[connection_name]
+        if connection.flag & RandomizationFlag.GINGER_ISLAND:
+            regions_by_name.pop(connection.destination, None)
+            connections.pop(connection_name)
+            regions_by_name = {name: regions_by_name[name].get_without_exit(connection_name) for name in regions_by_name}
+    return connections, regions_by_name
+
+
+def modify_connections_for_mods(connections: Dict[str, ConnectionData], mods) -> Dict[str, ConnectionData]:
+    if mods is None:
+        return connections
+    for mod in mods.value:
         if mod not in ModDataList:
             continue
         if mod in vanilla_connections_to_remove_by_mod:
             for connection_data in vanilla_connections_to_remove_by_mod[mod]:
-                final_connections.remove(connection_data)
-        final_connections.extend(ModDataList[mod].connections)
-    return final_connections
+                connections.pop(connection_data.name)
+        connections.update({connection.name: connection for connection in ModDataList[mod].connections})
+    return connections
 
 
 def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionData) -> RegionData:
@@ -516,36 +534,34 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
 
 def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) -> Tuple[
     Dict[str, Region], Dict[str, str]]:
-    final_regions = create_final_regions(world_options)
-    regions: Dict[str: Region] = {region.name: region_factory(region.name, region.exits) for region in final_regions}
-    entrances: Dict[str: Entrance] = {entrance.name: entrance for region in regions.values() for entrance in region.exits}
+    entrances_data, regions_data = create_final_connections_and_regions(world_options)
+    regions_by_name: Dict[str: Region] = {region_name: region_factory(region_name, regions_data[region_name].exits) for region_name in regions_data}
+    entrances_by_name: Dict[str: Entrance] = {entrance.name: entrance for region in regions_by_name.values() for entrance in region.exits
+                                              if entrance.name in entrances_data}
 
-    regions_by_name: Dict[str, RegionData] = {region.name: region for region in final_regions}
-    connections, randomized_data = randomize_connections(random, world_options, regions_by_name)
+    connections, randomized_data = randomize_connections(random, world_options, regions_data, entrances_data)
 
     for connection in connections:
-        if connection.name in entrances:
-            entrances[connection.name].connect(regions[connection.destination])
-    return regions, randomized_data
+        if connection.name in entrances_by_name:
+            entrances_by_name[connection.name].connect(regions_by_name[connection.destination])
+    return regions_by_name, randomized_data
 
 
-def randomize_connections(random: Random, world_options: StardewValleyOptions, regions_by_name: Dict[str, RegionData])\
-        -> Tuple[List[ConnectionData], Dict[str, str]]:
+def randomize_connections(random: Random, world_options: StardewValleyOptions, regions_by_name: Dict[str, RegionData],
+                          connections_by_name: Dict[str, ConnectionData]) -> Tuple[List[ConnectionData], Dict[str, str]]:
     connections_to_randomize: List[ConnectionData] = []
-    final_connections = create_final_connections(world_options)
-    connections_by_name: Dict[str, ConnectionData] = {connection.name: connection for connection in final_connections}
     if world_options.entrance_randomization == EntranceRandomization.option_pelican_town:
-        connections_to_randomize = [connection for connection in final_connections if
-                                    RandomizationFlag.PELICAN_TOWN in connection.flag]
+        connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
+                                    RandomizationFlag.PELICAN_TOWN in connections_by_name[connection].flag]
     elif world_options.entrance_randomization == EntranceRandomization.option_non_progression:
-        connections_to_randomize = [connection for connection in final_connections if
-                                    RandomizationFlag.NON_PROGRESSION in connection.flag]
+        connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
+                                    RandomizationFlag.NON_PROGRESSION in connections_by_name[connection].flag]
     elif world_options.entrance_randomization == EntranceRandomization.option_buildings:
-        connections_to_randomize = [connection for connection in final_connections if
-                                    RandomizationFlag.BUILDINGS in connection.flag]
+        connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
+                                    RandomizationFlag.BUILDINGS in connections_by_name[connection].flag]
     elif world_options.entrance_randomization == EntranceRandomization.option_chaos:
-        connections_to_randomize = [connection for connection in final_connections if
-                                    RandomizationFlag.BUILDINGS in connection.flag]
+        connections_to_randomize = [connections_by_name[connection] for connection in connections_by_name if
+                                    RandomizationFlag.BUILDINGS in connections_by_name[connection].flag]
         connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
 
         # On Chaos, we just add the connections to randomize, unshuffled, and the client does it every day
@@ -553,7 +569,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
         for connection in connections_to_randomize:
             randomized_data_for_mod[connection.name] = connection.name
             randomized_data_for_mod[connection.reverse] = connection.reverse
-        return final_connections, randomized_data_for_mod
+        return list(connections_by_name.values()), randomized_data_for_mod
 
     connections_to_randomize = remove_excluded_entrances(connections_to_randomize, world_options)
     random.shuffle(connections_to_randomize)
@@ -561,7 +577,7 @@ def randomize_connections(random: Random, world_options: StardewValleyOptions, r
     random.shuffle(destination_pool)
 
     randomized_connections = randomize_chosen_connections(connections_to_randomize, destination_pool)
-    add_non_randomized_connections(final_connections, connections_to_randomize, randomized_connections)
+    add_non_randomized_connections(list(connections_by_name.values()), connections_to_randomize, randomized_connections)
 
     swap_connections_until_valid(regions_by_name, connections_by_name, randomized_connections, connections_to_randomize, random)
     randomized_connections_for_generation = create_connections_for_generation(randomized_connections)

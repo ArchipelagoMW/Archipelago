@@ -40,7 +40,7 @@ class TestGenerateDynamicOptions(SVTestCase):
     def test_given_special_range_when_generate_then_basic_checks(self):
         options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
-            if not isinstance(option, NamedRange):
+            if not issubclass(option, NamedRange):
                 continue
             for value in option.special_range_names:
                 with self.subTest(f"{option_name}: {value}"):
