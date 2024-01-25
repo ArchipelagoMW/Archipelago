@@ -21,12 +21,13 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed, \
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize, \
-    KerriganChecksPerLevelPack, \
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
+from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed,
+    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize,
+    KerriganChecksPerLevelPack, TakeOverAIAllies,
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence,
     SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
+)
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -173,8 +174,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.ctx.skip_cutscenes = 1
     
     def _cmd_resources_per_check(self, minerals: str = "-", gas: str = "-", supply: str = "-") -> None:
-        """Sets the amount of resources the player receives per resource filler check.
-        Use an argument of '-' to leave a resource value unchanged"""
+        """Sets the amount of resources the player receives per resource filler check. Use an argument of '-' to leave a resource value unchanged"""
         def parse_number(value: str, previous_value: int) -> int:
             value = value.strip("-")
             if value:
@@ -192,6 +192,11 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             f"{self.ctx.minerals_per_item} minerals, "
             f"{self.ctx.vespene_per_item} gas, "
             f"{self.ctx.starting_supply_per_item} supply")
+    
+    def _cmd_toggle_control_ally(self) -> None:
+        """Toggles the "Take Over AI Allies" option. Note turning this off for a world generated with it on may lead to logically unbeatable games."""
+        self.ctx.take_over_ai_allies = not self.ctx.take_over_ai_allies
+        self.output(f"{TakeOverAIAllies.display_name} set to {self.ctx.take_over_ai_allies}")
 
     def _cmd_color(self, faction: str = "", color: str = "") -> None:
         """Changes the player color for a given faction."""
