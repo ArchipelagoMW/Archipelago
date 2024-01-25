@@ -1,6 +1,7 @@
 # Archipelago API
 
-This document tries to explain some internals required to implement a game for Archipelago's generation and server.
+This document tries to explain some aspects of the Archipelago World API used when implementing the generation logic of
+a game.
 
 Client implementation is out of scope of this document. Please refer to an existing game that provides a similar API to
 yours, and the following documents:
@@ -18,13 +19,14 @@ Clients that connect to the server to sync items can be in any language that all
 ## Coding style
 
 AP follows a [style guide](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/style.md).
-When in doubt use an IDE with coding style linter, for example PyCharm Community Edition.
+When in doubt, use an IDE with coding style linter, for example PyCharm Community Edition.
 
 ## Docstrings
 
 Docstrings are strings attached to an object in Python that describe what the object is supposed to be. Certain
 docstrings will be picked up and used by AP. They are assigned by writing a string without any assignment right below a
-definition. The string must be a triple-quoted string, and should follow [reST style](https://peps.python.org/pep-0287/).
+definition. The string must be a triple-quoted string, and should
+follow [reST style](https://peps.python.org/pep-0287/).
 
 Example:
 
@@ -38,36 +40,37 @@ class MyGameWorld(World):
 
 ## Definitions
 
-This section will cover various classes and objects you can use for your world. While some of the attributes and methods
-are mentioned here, not all of them are, but you can find them in `BaseClasses.py`.
+This section covers various classes and objects you can use for your world. While some of the attributes and methods
+are mentioned here, not all of them are, but you can find them in
+[`BaseClasses.py`](https://github.com/ArchipelagoMW/Archipelago/blob/main/BaseClasses.py).
 
 ### World Class
 
-A `World` class is the class with all the specifics of a certain game to be included. It will be instantiated for each
-player that rolls a seed for that game.
+A `World` is the class with all the specifics of a certain game that is to be included. A new instance will be created
+for each player of the game for any given generated multiworld.
 
 ### WebWorld Class
 
 A `WebWorld` class contains specific attributes and methods that can be modified for your world specifically on the
 webhost:
 
-* `options_page`, which can be changed to a link instead of an AP generated options page.
+* `options_page` can be changed to a link instead of an AP-generated options page.
 
-* `theme` to be used for your game specific AP pages. Available themes:
+* `theme` to be used for your game-specific AP pages. Available themes:
 
   | dirt                                       | grass (default)                             | grassFlowers                                       | ice                                       | jungle                                       | ocean                                       | partyTime                                       | stone                                       |
-    |--------------------------------------------|---------------------------------------------|----------------------------------------------------|-------------------------------------------|----------------------------------------------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
+        |--------------------------------------------|---------------------------------------------|----------------------------------------------------|-------------------------------------------|----------------------------------------------|---------------------------------------------|-------------------------------------------------|---------------------------------------------|
   | <img src="img/theme_dirt.JPG" width="100"> | <img src="img/theme_grass.JPG" width="100"> | <img src="img/theme_grassFlowers.JPG" width="100"> | <img src="img/theme_ice.JPG" width="100"> | <img src="img/theme_jungle.JPG" width="100"> | <img src="img/theme_ocean.JPG" width="100"> | <img src="img/theme_partyTime.JPG" width="100"> | <img src="img/theme_stone.JPG" width="100"> |
 
 * `bug_report_page` (optional) can be a link to a bug reporting page, most likely a GitHub issue page, that will be
-  placed by the site to help direct users to report bugs.
+  placed by the site to help users report bugs.
 
 * `tutorials` list of `Tutorial` classes where each class represents a guide to be generated on the webhost.
 
-* `game_info_languages` (optional) List of strings for defining the existing gameinfo pages your game supports. The
+* `game_info_languages` (optional) list of strings for defining the existing game info pages your game supports. The
   documents must be prefixed with the same string as defined here. Default already has 'en'.
 
-* `options_presets` (optional) A `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values
+* `options_presets` (optional) `Dict[str, Dict[str, Any]]` where the keys are the names of the presets and the values
   are the options to be set for that preset. The options are defined as a `Dict[str, Any]` where the keys are the names
   of the options and the values are the values to be set for that option. These presets will be available for users to
   select from on the game's options page.
@@ -125,7 +128,7 @@ through `self.multiworld` from your `World` object.
 
 ### Player
 
-The player is just an integer in AP and is accessible through `self.player` from your `World` object.
+The player is just an `int` in AP and is accessible through `self.player` from your `World` object.
 
 ### Player Options
 
@@ -134,15 +137,16 @@ should play out. These can control aspects such as what locations should be shuf
 etc. Players provide the customized options for their World in the form of yamls.
 
 By convention, options are defined in `options.py` and will be used when parsing the players' yaml files. Each option
-has its own class, which inherits from a base option type, has a docstring to describe it, and a `display_name` property
-for display on the website and in spoiler logs.
+has its own class, which inherits from a base option type, a docstring to describe it, and a `display_name` property
+shown on the website and in spoiler logs.
 
-The available options are defined by creating a `dataclass`, which must be a subclass of `PerGameCommonOptions`, and has
-defined fields for the option names to be used in the player yamls and for options access, with their types matching the
+The available options are defined by creating a `dataclass`, which must be a subclass of `PerGameCommonOptions`. It has
+defined fields for the option names used in the player yamls and used for options access, with their types matching the
 appropriate Option class. By convention, the strings that define your option names should be in `snake_case`. The
 `dataclass` is then assigned to your `World` by defining its `options_dataclass`. Option results are then automatically
 added to the `World` object for easy access, between `World` creation and `generate_early`. These are accessible through
-`self.options.<option_name>`, and you can get a dictionary with option values via `self.options.as_dict(<option_names>)`,
+`self.options.<option_name>`, and you can get a dictionary with option values
+via `self.options.as_dict(<option_names>)`,
 passing the desired option names as strings.
 
 Common option types are `Toggle`, `DefaultOnToggle`, `Choice`, and `Range`.
@@ -150,8 +154,8 @@ For more information, see the [options api doc](options%20api.md).
 
 ### World Settings
 
-Settings are set by the user sans the generation process, and can be used for those settings that may affect generation
-or client behavior, but should be static between generations, such as the path to a ROM file.
+Settings are set by the user outside the generation process. They can be used for those settings that may affect
+generation or client behavior, but should remain static between generations, such as the path to a ROM file.
 These settings are accessible through `self.settings.<setting_name>` or `cls.settings.<setting_name>`.
 
 Users can set these in their `host.yaml` file. Some settings may automatically open a file browser if a file is missing.
@@ -164,10 +168,10 @@ Locations are places where items can be located in your game. This may be chests
 could also be progress in a research tree, or even something more abstract like a level up.
 
 Each location has a `name` and an `address` (hereafter referred to as an `id`), is placed in a Region, has access rules,
-and a classification.
-The name needs to be unique in each game and must not be numeric (must contain least 1 letter or symbol). The ID needs
-to be unique across all games, and is best in the same range as the item IDs.
-World-specific IDs are 1 to 2<sup>53</sup>-1, IDs ≤ 0 are global and reserved.
+and has a classification. The name needs to be unique within each game and must not be numeric (must contain least 1
+letter or symbol). The ID needs to be unique across all games, and is best kept in the same range as the item IDs.
+
+World-specific IDs must be in the range 1 to 2<sup>53</sup>-1; IDs ≤ 0 are global and reserved.
 
 Classification is one of `LocationProgressType.DEFAULT`, `PRIORITY` or `EXCLUDED`.
 The Fill algorithm will force progression items to be placed at priority locations, giving a higher chance of them being
@@ -175,8 +179,8 @@ required, and will prevent progression and useful items from being placed at exc
 
 #### Documenting Locations
 
-Worlds can optionally provide a `location_descriptions` map which contains human-friendly descriptions of locations or
-location groups. These descriptions will show up in location-selection options in the Weighted Options page. Extra
+Worlds can optionally provide a `location_descriptions` map which contains human-friendly descriptions of locations and
+location groups. These descriptions will show up in location-selection options on the Weighted Options page. Extra
 indentation and single newlines will be collapsed into spaces.
 
 ```python
@@ -184,11 +188,12 @@ indentation and single newlines will be collapsed into spaces.
 
 location_descriptions = {
     "Red Potion #6": "In a secret destructible block under the second stairway",
-    "L2 Spaceship": """
-    The group of all items in the spaceship in Level 2.
-    
-    This doesn't include the item on the spaceship door, since it can be accessed without the Spaceship Key.
-    """
+    "L2 Spaceship":
+        """
+        The group of all items in the spaceship in Level 2.
+
+        This doesn't include the item on the spaceship door, since it can be accessed without the Spaceship Key.
+        """
 }
 ```
 
@@ -211,11 +216,11 @@ research in a research tree.
 Each item has a `name`, a `code` (hereafter referred to as `id`), and a classification.
 The most important classification is `progression`. Progression items are items which a player *may* require to progress
 in their world. If an item can possibly be considered for logic (it's referenced in a location's rules) it *must* be
-progression. Progression items will be assigned to locations with higher priority and moved around to meet defined rules
-and accomplish progression balancing.
+progression. Progression items will be assigned to locations with higher priority, and moved around to meet defined rules
+and satisfy progression balancing.
 
-The name needs to be unique in each game, meaning a duplicate item has the same ID. Name must not be numeric (must
-contain at least 1 letter or symbol).
+The name needs to be unique within each game, meaning if you need to create multiple items with the same name, they
+will all have the same ID. Name must not be numeric (must contain at least 1 letter or symbol).
 
 Other classifications include:
 
@@ -229,20 +234,21 @@ Other classifications include:
 
 #### Documenting Items
 
-Worlds can optionally provide an `item_descriptions` map which contains human-friendly descriptions of items or item
-groups. These descriptions will show up in item-selection options in the Weighted Options page. Extra indentation and
+Worlds can optionally provide an `item_descriptions` map which contains human-friendly descriptions of items and item
+groups. These descriptions will show up in item-selection options on the Weighted Options page. Extra indentation and
 single newlines will be collapsed into spaces.
 
 ```python
 # items.py
 
 item_descriptions = {
-    "Red Potion":    "A standard health potion",
-    "Spaceship Key": """
-    The key to the spaceship in Level 2.
+    "Red Potion": "A standard health potion",
+    "Spaceship Key":
+        """
+        The key to the spaceship in Level 2.
 
-    This is necessary to get to the Star Realm.
-    """
+        This is necessary to get to the Star Realm.
+        """
 }
 ```
 
@@ -261,13 +267,13 @@ class MyGameWorld(World):
 
 An Event is a special combination of a Location and an Item, with both having an `id` of `None`. These can be used to
 track certain logic interactions, with the Event Item being required for access in other locations or regions, but not
-being "real". Since the item and location have no id, they get dropped at the end of generation and so the server is
-never made aware of them and these locations can never be checked, nor the items received during play.
+being "real". Since the item and location have no ID, they get dropped at the end of generation and so the server is
+never made aware of them and these locations can never be checked, nor can the items be received during play.
 They may also be used for making the spoiler log look nicer, i.e. by having a `"Victory"` Event Item, that
-is required to finish the game, it will be very clear where the player finishes, rather than only seeing their last
-relevant found Item. Events function just like any other Location, and can still have their own access rules, etc.
+is required to finish the game. This makes it very clear when the player finishes, rather than only seeing their last
+relevant Item. Events function just like any other Location, and can still have their own access rules, etc.
 By convention, the Event "pair" of Location and Item typically have the same name, though this is not a requirement.
-They must not exist in the `name_to_id` lookups, as they have no id.
+They must not exist in the `name_to_id` lookups, as they have no ID.
 
 The most common way to create an Event pair is to create and place the Item on the Location as soon as it's created:
 
@@ -284,20 +290,21 @@ class MyGameWorld(World):
 
 ### Regions
 
-Regions are logical containers, that typically hold locations that share some common access rules. If location logic is
-written from scratch, using regions greatly simplifies the definition and allows to somewhat easily implement things
-like entrance randomizer in logic.
+Regions are logical containers that typically hold locations that share some common access rules. If location logic is
+written from scratch, using regions greatly simplifies the requirements and can help with implementing things
+like entrance randomization in logic.
 
-Regions have a list called `exits`, which are `Entrance` objects representing
-transitions to other regions.
+Regions have a list called `exits`, containing `Entrance` objects representing transitions to other regions.
 
-There has to be one special region "Menu" from which the logic unfolds. AP assumes that a player will always be able to
+There must be one special region, "Menu", from which the logic unfolds. AP assumes that a player will always be able to
 return to the "Menu" region by resetting the game ("Save and quit").
 
 ### Entrances
 
-An `Entrance` connects to a region, is assigned to region's exits and has rules to define if it and thus the connected
-region is accessible. They can be static (regular logic) or be defined/connected during generation (entrance randomizer).
+An `Entrance` has a `parent_region` and `connected_region`, where it is in the `exits` of its parent, and the
+`entrances` of its connected region. The `Entrance` then has rules assigned to it to determine if it can be passed
+through, making the connected region accessible. They can be static (regular logic) or be defined/connected during
+generation (entrance randomization).
 
 ### Access Rules
 
@@ -307,7 +314,7 @@ An access rule is a function that returns `True` or `False` for a `Location` or 
 ### Item Rules
 
 An item rule is a function that returns `True` or `False` for a `Location` based on a single item. It can be used to
-reject placement of an item there.
+reject the placement of an item there.
 
 ## Implementation
 
@@ -330,13 +337,13 @@ See [pip documentation](https://pip.pypa.io/en/stable/cli/pip_install/#requireme
 
 ### Relative Imports
 
-AP will only import the `__init__.py`. Depending on code size it makes sense to use multiple files and use relative
+AP will only import the `__init__.py`. Depending on code size, it may make sense to use multiple files and use relative
 imports to access them.
 
 e.g. `from .options import MyGameOptions` from your `__init__.py` will load `world/[world_name]/options.py` and make
 its `MyGameOptions` accessible.
 
-When imported names pile up it may be easier to use `from . import options` and access the variable as
+When imported names pile up, it may be easier to use `from . import options` and access the variable as
 `options.MyGameOptions`.
 
 Imports from directories outside your world should use absolute imports. Correct use of relative / absolute imports is
@@ -348,7 +355,7 @@ Each world uses its own subclass of `BaseClasses.Item`. The constructor can be o
 it, e.g. "price in shop". Since the constructor is only ever called from your code, you can add whatever arguments you
 like to the constructor.
 
-In its simplest form we only set the game name and use the default constructor:
+In its simplest form, we only set the game name and use the default constructor:
 
 ```python
 from BaseClasses import Item
@@ -358,12 +365,13 @@ class MyGameItem(Item):
     game: str = "My Game"
 ```
 
-By convention this class definition will either be placed in your `__init__.py` or your `items.py`. For a more
-elaborate example see `worlds/oot/Items.py`.
+By convention, this class definition will either be placed in your `__init__.py` or your `items.py`. For a more
+elaborate example see
+[`worlds/oot/Items.py`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/oot/Items.py).
 
-### Your location type
+### Your Location Type
 
-The same we have done for items above, we will do for locations:
+The same thing we did for items above, we will now do for locations:
 
 ```python
 from BaseClasses import Location
@@ -420,7 +428,7 @@ class MyGameWorld(World):
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a property.
     base_id = 1234
-    # Instead of dynamic numbering, IDs could be part of data.
+    # instead of dynamic numbering, IDs could be part of data
 
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
@@ -446,16 +454,17 @@ The world has to provide the following things for generation:
 * additions to the regions list: at least one called "Menu"
 * locations placed inside those regions
 * a `def create_item(self, item: str) -> MyGameItem` to create any item on demand
-* applying `self.multiworld.push_precollected` for world defined start inventory
+* applying `self.multiworld.push_precollected` for world-defined start inventory
 
 In addition, the following methods can be implemented and are called in this order during generation:
 
-* `stage_assert_generate(cls, multiworld: MultiWorld)` is a class method called at the start of generation to check the
-  existence of prerequisite files, usually a ROM for games which require one.
+* `stage_assert_generate(cls, multiworld: MultiWorld)`
+  a class method called at the start of generation to check for the existence of prerequisite files, usually a ROM for
+  games which require one.
 * `generate_early(self)`
   called per player before any items or locations are created. You can set properties on your
   world here. Already has access to player options and RNG. This is the earliest step where the world should start
-  setting up for the current multiworld, as any steps before this the multiworld itself is still getting set up.
+  setting up for the current multiworld, as the multiworld itself is still setting up before this point.
 * `create_regions(self)`
   called to place player's regions and their locations into the MultiWorld's regions list.
   If it's hard to separate, this can be done during `generate_early` or `create_items` as well.
@@ -465,11 +474,12 @@ In addition, the following methods can be implemented and are called in this ord
 * `set_rules(self)`
   called to set access and item rules on locations and entrances.
 * `generate_basic(self)`
-  called after the previous steps. Player specific randomization that does not affect logic can be done here.
-* `pre_fill(self)`, `fill_hook(self)` and `post_fill(self)` are called to modify item placement
-  before, during and after the regular fill process; all finishing before `generate_output`. Any items that need to be
-  placed during `pre_fill` should not exist in the itempool, and if any items that need to be filled this way, but need
-  to be in state while you fill other items, they can be returned from `get_prefill_items`.
+  player-specific randomization that does not affect logic can be done here.
+* `pre_fill(self)`, `fill_hook(self)` and `post_fill(self)`
+  called to modify item placement before, during, and after the regular fill process; all finishing before
+  `generate_output`. Any items that need to be placed during `pre_fill` should not exist in the itempool, and if there
+  are any items that need to be filled this way, but need to be in state while you fill other items, they can be
+  returned from `get_prefill_items`.
 * `generate_output(self, output_directory: str)`
   creates the output files if there is output to be generated. When this is called,
   `self.multiworld.get_locations(self.player)` has all locations for the player, with attribute `item` pointing to the
@@ -499,7 +509,7 @@ def create_regions(self) -> None:
     self.multiworld.regions.append(menu_region)  # or use += [menu_region...]
 
     main_region = Region("Main Area", self.player, self.multiworld)
-    # Add main area's locations to main area (all but final boss)
+    # add main area's locations to main area (all but final boss)
     main_region.add_locations(main_region_locations, MyGameLocation)
     # or 
     # main_region.locations = \
@@ -507,17 +517,17 @@ def create_regions(self) -> None:
     self.multiworld.regions.append(main_region)
 
     boss_region = Region("Boss Room", self.player, self.multiworld)
-    # Add event to Boss Room
+    # add event to Boss Room
     boss_region.locations.append(MyGameLocation(self.player, "Final Boss", None, boss_region))
 
-    # If entrances are not randomized, they should be connected here, otherwise they can also be connected at a later stage.
-    # Create Entrances and connect the Regions
+    # if entrances are not randomized, they should be connected here, otherwise they can also be connected at a later stage
+    # create Entrances and connect the Regions
     menu_region.connect(main_region)  # connects the "Menu" and "Main Area", can also pass a rule
     # or
     main_region.add_exits({"Boss Room": "Boss Door"}, {"Boss Room": lambda state: state.has("Sword", self.player)})
-    # Connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
+    # connects the "Main Area" and "Boss Room" regions, and places a rule requiring the "Sword" item to traverse
 
-    # If setting location access rules from data is easier here, set_rules can possibly be omitted.
+    # if setting location access rules from data is easier here, set_rules can possibly be omitted
 ```
 
 #### create_item
@@ -529,7 +539,7 @@ from .items import is_progression  # this is just a dummy
 
 
 def create_item(self, item: str) -> MyGameItem:
-    # This is called when AP wants to create an item by name (for plando) or when you call it from your own code.
+    # this is called when AP wants to create an item by name (for plando) or when you call it from your own code
     classification = ItemClassification.progression if is_progression(item) else
     ItemClassification.filler
 
@@ -631,10 +641,11 @@ def set_rules(self) -> None:
 ### Custom Logic Rules
 
 Custom methods can be defined for your logic rules. The access rule that ultimately gets assigned to the Location or
-Entrance should be a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
-Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other functions,
-but this can also be achieved by defining a method with the appropriate format and assigning it directly, such as
-[The Messenger](/worlds/messenger/rules.py).
+Entrance should be
+a [`CollectionRule`](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/generic/Rules.py#L9).
+Typically, this is done by defining a lambda expression on demand at the relevant bit, typically calling other
+functions, but this can also be achieved by defining a method with the appropriate format and assigning it directly.
+For an example, see [The Messenger](/worlds/messenger/rules.py).
 
 ```python
 # logic.py
@@ -644,8 +655,9 @@ from BaseClasses import CollectionState
 
 def mygame_has_key(self, state: CollectionState, player: int) -> bool:
     # More arguments above are free to choose, since you can expect this is only called in your world
-    # MultiWorld can be accessed through state.multiworld, explicitly passing in MyGameWorld instance for easy
-    # options access is also a valid approach
+    # MultiWorld can be accessed through state.multiworld.
+    # Explicitly passing in MyGameWorld instance for easy options access is also a valid approach, but it's generally
+    # better to check options before rule assignment since the individual functions can be called thousands of times
     return state.has("key", player)  # or whatever
 ```
 
@@ -657,7 +669,6 @@ from . import logic
 
 
 class MyGameWorld(World):
-
     # ...
     def set_rules(self) -> None:
         set_rule(self.multiworld.get_location("A Door", self.player),
@@ -666,13 +677,13 @@ class MyGameWorld(World):
 
 ### Logic Mixin
 
-While lambdas and events could do pretty much anything, more complex logic can be handled in logic mixins.
+While lambdas and events can do pretty much anything, more complex logic can be handled in logic mixins.
 
-When importing a file that defines a class that inherits from `worlds.AutoWorld.LogicMixin` the `CollectionState` class
+When importing a file that defines a class that inherits from `worlds.AutoWorld.LogicMixin`, the `CollectionState` class
 is automatically extended by the mixin's members. These members should be prefixed with the name of the implementing
 world since the namespace is shared with all other logic mixins.
 
-Some uses could be to add additional variables to the state object, or have a custom state machine that gets modified
+Some uses could be to add additional variables to the state object, or to have a custom state machine that gets modified
 with the state.
 Please do this with caution and only when necessary.
 
@@ -680,11 +691,11 @@ Please do this with caution and only when necessary.
 
 ```python
 def pre_fill(self) -> None:
-  # place item Herb into location Chest1 for some reason
-  item = self.create_item("Herb")
-  self.multiworld.get_location("Chest1", self.player).place_locked_item(item)
-  # in most cases it's better to do this at the same time the itempool is
-  # filled to avoid accidental duplicates, such as manually placed and still in the itempool
+    # place item Herb into location Chest1 for some reason
+    item = self.create_item("Herb")
+    self.multiworld.get_location("Chest1", self.player).place_locked_item(item)
+    # in most cases it's better to do this at the same time the itempool is
+    # filled to avoid accidental duplicates, such as manually placed and still in the itempool
 ```
 
 ### Generate Output
@@ -695,19 +706,18 @@ from .mod import generate_mod
 
 def generate_output(self, output_directory: str) -> None:
     # How to generate the mod or ROM highly depends on the game.
-    # If the mod is written in Lua, Jinja can be used to fill a template
-    # If the mod reads a json file, `json.dump()` can be used to generate that
+    # If the mod is written in Lua, Jinja can be used to fill a template.
+    # If the mod reads a json file, `json.dump()` can be used to generate that.
     # code below is a dummy
     data = {
-        "seed":          self.multiworld.seed_name,  # to verify the server's multiworld
-        "slot":          self.multiworld.player_name[self.player],  # to connect to server
-        "items":         {location.name: location.item.name
-        if location.item.player == self.player else "Remote"
-                          for location in self.multiworld.get_filled_locations(self.player)},
+        "seed": self.multiworld.seed_name,  # to verify the server's multiworld
+        "slot": self.multiworld.player_name[self.player],  # to connect to server
+        "items": {location.name: location.item.name
+                  if location.item.player == self.player else "Remote"
+                  for location in self.multiworld.get_filled_locations(self.player)},
         # store start_inventory from player's .yaml
         # make sure to mark as not remote_start_inventory when connecting if stored in rom/mod
-        "starter_items": [item.name for item
-                          in self.multiworld.precollected_items[self.player]],
+        "starter_items": [item.name for item in self.multiworld.precollected_items[self.player]],
     }
 
     # add needed option results to the dictionary
@@ -726,19 +736,20 @@ def generate_output(self, output_directory: str) -> None:
 ### Slot Data
 
 If the game client needs to know information about the generated seed, a preferred method of transferring the data
-is through the slot data. This can be filled from the `fill_slot_data` method of your world by returning
-a `Dict[str, Any]`, but should be limited to data that is absolutely necessary to not waste resources. Slot data is
+is through the slot data. This is filled with the `fill_slot_data` method of your world by returning
+a `Dict[str, Any]`, but, to not waste resources, should be limited to data that is absolutely necessary. Slot data is
 sent to your client once it has successfully [connected](network%20protocol.md#connected).
-If you need to know information about locations in your world; instead of propagating the slot data, it is preferable
+If you need to know information about locations in your world, instead of propagating the slot data, it is preferable
 to use [LocationScouts](network%20protocol.md#locationscouts), since that data already exists on the server. The most
-common usage of slot data is to send option results that the client needs to be aware of.
+common usage of slot data is sending option results that the client needs to be aware of.
 
 ```python
 def fill_slot_data(self) -> Dict[str, Any]:
     # In order for our game client to handle the generated seed correctly we need to know what the user selected
-    # for their difficulty and final boss HP
-    # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting
-    # The options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the option's value
+    # for their difficulty and final boss HP.
+    # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting.
+    # The options dataclass has a method to return a `Dict[str, Any]` of each option name provided and the relevant
+    # option's value.
     return self.options.as_dict("difficulty", "final_boss_hp")
 ```
 
@@ -757,8 +768,8 @@ version is displayed on the website.
 #### Tutorials
 
 Your game can have as many tutorials in as many languages as you like, with each one having a relevant `Tutorial`
-defined in the `WebWorld`. The file name you use aren't particularly important, but it should be descriptive of what
-the tutorial is covering, and the name of the file must match the relative URL provided in the `Tutorial`. Currently,
+defined in the `WebWorld`. The file name you use isn't particularly important, but it should be descriptive of what
+the tutorial covers, and the name of the file must match the relative URL provided in the `Tutorial`. Currently,
 the JS that determines this ignores the provided file name and will search for `game/document_lang.md`, where
 `game/document/lang` is the provided URL.
 
@@ -780,7 +791,7 @@ class MyGameTestBase(WorldTestBase):
     game = "My Game"
 ```
 
-Next using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
+Next, using the rules defined in the above `set_rules` we can test that the chests have the correct access rules.
 
 Example `test_chest_access.py`
 
@@ -789,20 +800,19 @@ from . import MyGameTestBase
 
 
 class TestChestAccess(MyGameTestBase):
-
     def test_sword_chests(self) -> None:
         """Test locations that require a sword"""
         locations = ["Chest1", "Chest2"]
         items = [["Sword"]]
-        # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained.
+        # this will test that each location can't be accessed without the "Sword", but can be accessed once obtained
         self.assertAccessDependency(locations, items)
 
     def test_any_weapon_chests(self) -> None:
         """Test locations that require any weapon"""
         locations = [f"Chest{i}" for i in range(3, 6)]
         items = [["Sword"], ["Axe"], ["Spear"]]
-        # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them.
+        # this will test that chests 3-5 can't be accessed without any weapon, but can be with just one of them
         self.assertAccessDependency(locations, items)
 ```
 
-For more information on tests check the [tests doc](tests.md).
+For more information on tests, check the [tests doc](tests.md).
