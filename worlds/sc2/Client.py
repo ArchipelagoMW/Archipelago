@@ -194,7 +194,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             f"{self.ctx.starting_supply_per_item} supply")
     
     def _cmd_toggle_control_ally(self) -> None:
-        """Toggles the "Take Over AI Allies" option. Note turning this off for a world generated with it on may lead to logically unbeatable games."""
+        """Toggles the "Take Over AI Allies" option. Note toggling this option away from what it was at generation may lead to logically unbeatable games."""
         self.ctx.take_over_ai_allies = not self.ctx.take_over_ai_allies
         self.output(f"{TakeOverAIAllies.display_name} set to {self.ctx.take_over_ai_allies}")
 
