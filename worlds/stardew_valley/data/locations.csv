@@ -2756,8 +2756,8 @@ id,region,name,tags,mod_name
 8054,Shipping,Shipsanity: Meteor Carp,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8055,Shipping,Shipsanity: Minnow,"SHIPSANITY,SHIPSANITY_FISH",Stardew Valley Expanded
 8056,Shipping,Shipsanity: Mixed Berry Pie,SHIPSANITY,Stardew Valley Expanded
-8057,Shipping,Shipsanity: Monster Fruit,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
-8058,Shipping,Shipsanity: Monster Mushroom,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
+8057,Shipping,Shipsanity: Monster Fruit,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT,GINGER_ISLAND",Stardew Valley Expanded
+8058,Shipping,Shipsanity: Monster Mushroom,"SHIPSANITY,SHIPSANITY_CROP,SHIPSANITY_FULL_SHIPMENT,GINGER_ISLAND",Stardew Valley Expanded
 8059,Shipping,Shipsanity: Mushroom Berry Rice,SHIPSANITY,Stardew Valley Expanded
 8060,Shipping,Shipsanity: Mushroom Colony,"SHIPSANITY,SHIPSANITY_FULL_SHIPMENT",Stardew Valley Expanded
 8061,Shipping,Shipsanity: Ornate Treasure Chest,"SHIPSANITY,GINGER_ISLAND",Stardew Valley Expanded
