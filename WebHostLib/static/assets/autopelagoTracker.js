@@ -1,7 +1,7 @@
 "use strict";
 class Payload {
     get current_region_classes() {
-        let currentRegion = this.game_state.currentRegion;
+        let currentRegion = this.game_state.current_region;
         if (currentRegion == 'Traveling') {
             currentRegion = this.game_state.destination_region;
         }
