@@ -427,7 +427,7 @@ yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
 zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
 alecto = villager(ModNPC.alecto, False, witch_attic, Generic.any, universal_loves, False, ModNames.alecto)
-lacey = villager(ModNPC.lacey, True, hat_house, Season.spring, universal_loves, True, ModNames.lacey)
+lacey = villager(ModNPC.lacey, True, forest, Season.spring, universal_loves, True, ModNames.lacey)
 
 # Boarding House Villagers
 gregory = villager(ModNPC.gregory, True, the_lost_valley, Season.fall, universal_loves, False, ModNames.boarding_house)
