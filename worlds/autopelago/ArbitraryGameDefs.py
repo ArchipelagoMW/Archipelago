@@ -5,6 +5,7 @@ from enum import Enum, auto
 class AutopelagoRegion(Enum):
     # Traveling = auto() # only used by the game
     Before8Rats = auto()
+    Gate8Rats = auto()
     After8RatsBeforeA = auto()
     After8RatsBeforeB = auto()
     A = auto()
@@ -15,6 +16,7 @@ class AutopelagoRegion(Enum):
     D = auto()
     AfterCBefore20Rats = auto()
     AfterDBefore20Rats = auto()
+    Gate20Rats = auto()
     After20RatsBeforeE = auto()
     After20RatsBeforeF = auto()
     E = auto()
@@ -26,6 +28,8 @@ class AutopelagoRegion(Enum):
         match self:
             case AutopelagoRegion.Before8Rats:
                 return f"b8r_{i}"
+            case AutopelagoRegion.Gate8Rats:
+                return "g8r"
             case AutopelagoRegion.After8RatsBeforeA:
                 return f"a8rba_{i}"
             case AutopelagoRegion.After8RatsBeforeB:
@@ -38,6 +42,8 @@ class AutopelagoRegion(Enum):
                 return f"acb20r_{i}"
             case AutopelagoRegion.AfterDBefore20Rats:
                 return f"adb20r_{i}"
+            case AutopelagoRegion.Gate20Rats:
+                return "g20r"
             case AutopelagoRegion.After20RatsBeforeE:
                 return f"a20rbe_{i}"
             case AutopelagoRegion.After20RatsBeforeF:
@@ -55,10 +61,12 @@ BASE_ID = 300000
 
 # keep in sync with s_numLocationsIn in the game code
 num_locations_in = {
+    AutopelagoRegion.Gate8Rats: 1,
     AutopelagoRegion.A: 1,
     AutopelagoRegion.B: 1,
     AutopelagoRegion.C: 1,
     AutopelagoRegion.D: 1,
+    AutopelagoRegion.Gate20Rats: 1,
     AutopelagoRegion.E: 1,
     AutopelagoRegion.F: 1,
     AutopelagoRegion.Before8Rats: 40,

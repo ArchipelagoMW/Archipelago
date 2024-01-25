@@ -1,3 +1,9 @@
+:root {
+    --not-found-filter-recolor: saturate(0.2) brightness(0.3);
+    --not-found-filter-drop-shadow: drop-shadow(0px 0px 10px rgba(234, 126, 128, 0.60));
+    --found-filter-drop-shadow: drop-shadow(0px 0px 10px rgba(150, 150, 0, 0.70));
+}
+
 body {
     color-scheme: light dark;
     color: CanvasText;
@@ -66,11 +72,11 @@ body {
 }
 
 .received-item:not(.not-found) img {
-    filter: drop-shadow(0px 0px 10px rgba(150, 150, 0, 0.70));
+    filter: var(--found-filter-drop-shadow);
 }
 
 .received-item.not-found img {
-    filter: saturate(0.2) brightness(0.3) drop-shadow(0px 0px 10px rgba(234, 126, 128, 0.60));
+    filter: var(--not-found-filter-recolor) var(--not-found-filter-drop-shadow);
 }
 
 .overlaid-text {
@@ -78,4 +84,35 @@ body {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.arrow-line,.arrow-head {
+    stroke: CanvasText;
+    fill: Canvas;
+}
+
+.checked-location:not(.not-checked,not-open) {
+    filter: var(--found-filter-drop-shadow);
+}
+
+.checked-location.not-checked.not-open {
+    filter: var(--not-found-filter-recolor) var(--not-found-filter-drop-shadow);
+}
+
+.traversed-path.current-region .arrow-line {
+    stroke-dasharray: 5;
+    animation: 1s linear 0s infinite dash;
+}
+
+.traversed-path.not-open {
+    filter: var(--not-found-filter-recolor);
+}
+
+@keyframes dash {
+    from {
+        stroke-dashoffset: 10;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
 }

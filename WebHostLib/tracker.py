@@ -886,9 +886,11 @@ if "A Link to the Past" in network_data_package["games"]:
 if "Autopelago" in network_data_package["games"]:
     def render_Autopelago_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         item_id_to_name = tracker_data.item_id_to_name["Autopelago"]
+        location_id_to_name = tracker_data.location_id_to_name["Autopelago"]
         script_data = {
             "player_name": tracker_data.get_player_name(team, player),
             "inventory": { item_id_to_name[item_id]: cnt for item_id, cnt in tracker_data.get_player_inventory_counts(team, player).items() },
+            "checked_locations": [location_id_to_name[location_id] for location_id in tracker_data.get_player_checked_locations(team, player)],
             "game_state": tracker_data.get_stored_data()[f"autopelago_state_{team}_{player}"],
         }
 

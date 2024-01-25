@@ -1,7 +1,65 @@
 "use strict";
 class Payload {
+    get current_region_classes() {
+        switch (this.game_state.current_region) {
+            case 'Before8Rats':
+                return ['before-basketball'];
+
+            case 'Gate8Rats':
+                return ['checked-basketball'];
+
+            case 'After8RatsBeforeA':
+                return ['before-minotaur-maze'];
+
+            case 'After8RatsBeforeB':
+                return ['before-restaurant'];
+
+            case 'A':
+                return ['checked-minotaur-maze'];
+
+            case 'B':
+                return ['checked-restaurant'];
+
+            case 'AfterABeforeC':
+                return ['before-prawn-stars'];
+
+            case 'AfterBBeforeD':
+                return ['before-heavy-boulder'];
+
+            case 'C':
+                return ['checked-prawn-stars'];
+
+            case 'D':
+                return ['checked-heavy-boulder'];
+
+            case 'AfterCBefore20Rats':
+                return ['before-bowling-ball-door', 'after-prawn-stars'];
+
+            case 'AfterDBefore20Rats':
+                return ['before-bowling-ball-door', 'after-heavy-boulder'];
+
+            case 'Gate20Rats':
+                return ['checked-bowling-ball-door'];
+
+            case 'After20RatsBeforeE':
+                return ['before-captured-goldfish'];
+
+            case 'After20RatsBeforeF':
+                return ['before-computer-pad'];
+
+            case 'E':
+                return ['checked-captured-goldfish'];
+
+            case 'F':
+                return ['checked-computer-pad'];
+
+            case 'TryingForGoal':
+                return ['checked-goal'];
+        }
+    }
+
     get completed_goal() {
-        return this.game_state.current_region == "CompletedGoal";
+        return this.game_state.current_region == 'CompletedGoal';
     }
 
     get rat_count() {
@@ -12,6 +70,30 @@ class Payload {
         if (prop(this) > 0) {
             for (const container of document.getElementsByClassName(`received-${classNameSuffix}`)) {
                 container.classList.remove('not-found');
+            }
+        }
+    }
+
+    markPathOpenIf(prop, classNameSuffix) {
+        if (prop(this)) {
+            for (const container of document.getElementsByClassName(`before-${classNameSuffix}`)) {
+                container.classList.remove('not-open');
+            }
+        }
+    }
+
+    markLocationOpenIf(prop, classNameSuffix) {
+        if (prop(this)) {
+            for (const container of document.getElementsByClassName(`checked-${classNameSuffix}`)) {
+                container.classList.remove('not-open');
+            }
+        }
+    }
+
+    markCheckedIf(prop, classNameSuffix) {
+        if (prop(this)) {
+            for (const container of document.getElementsByClassName(`checked-${classNameSuffix}`)) {
+                container.classList.remove('not-checked');
             }
         }
     }
@@ -56,7 +138,56 @@ const loadTrackerData = async (url, dom) => {
         parsed.markFoundIf(x => x.inventory['Priceless Antique'], 'priceless-antique');
         parsed.markFoundIf(x => x.inventory['Premium Can of Prawn Food'], 'premium-can-of-prawn-food');
 
-        completedGoal = parsed.completed_goal;
+        const checked_locations = new Set(parsed.checked_locations);
+        parsed.markCheckedIf(() => checked_locations.has('g8r'), 'basketball');
+        parsed.markCheckedIf(() => checked_locations.has('a'), 'minotaur-maze');
+        parsed.markCheckedIf(() => checked_locations.has('b'), 'restaurant');
+        parsed.markCheckedIf(() => checked_locations.has('c'), 'prawn-stars');
+        parsed.markCheckedIf(() => checked_locations.has('d'), 'heavy-boulder');
+        parsed.markCheckedIf(() => checked_locations.has('g20r'), 'bowling-ball-door');
+        parsed.markCheckedIf(() => checked_locations.has('e'), 'captured-goldfish');
+        parsed.markCheckedIf(() => checked_locations.has('f'), 'computer-pad');
+        parsed.markCheckedIf(() => checked_locations.has('goal'), 'goal');
+
+        parsed.markLocationOpenIf(x => x.rat_count >= 8, 'basketball');
+        parsed.markLocationOpenIf(x => checked_locations.has('g8r') && x.inventory['A Cookie'] > 0, 'minotaur-maze');
+        parsed.markLocationOpenIf(x => checked_locations.has('g8r') && x.inventory['Fresh Banana Peel'] > 0, 'restaurant');
+        parsed.markLocationOpenIf(x => checked_locations.has('a') && x.inventory['MacGuffin'] > 0, 'prawn-stars');
+        parsed.markLocationOpenIf(x => checked_locations.has('b') && x.inventory['Blue Turtle Shell'] > 0, 'heavy-boulder');
+        parsed.markLocationOpenIf(x => x.rat_count >= 20 && (checked_locations.has('c') || checked_locations.has('d')), 'bowling-ball-door');
+        parsed.markLocationOpenIf(x => checked_locations.has('g20r') && x.inventory['Red Matador\'s Cape'] > 0, 'captured-goldfish');
+        parsed.markLocationOpenIf(x => checked_locations.has('g20r') && x.inventory['Pair of Fake Mouse Ears'] > 0, 'computer-pad');
+        parsed.markLocationOpenIf(() => checked_locations.has('e') || checked_locations.has('f'), 'goal');
+
+        parsed.markPathOpenIf(x => checked_locations.has('g8r'), 'minotaur-maze');
+        parsed.markPathOpenIf(x => checked_locations.has('g8r'), 'restaurant');
+        parsed.markPathOpenIf(x => checked_locations.has('a'), 'prawn-stars');
+        parsed.markPathOpenIf(x => checked_locations.has('b'), 'heavy-boulder');
+        parsed.markPathOpenIf(x => checked_locations.has('c'), 'bowling-ball-door after-prawn-stars');
+        parsed.markPathOpenIf(x => checked_locations.has('d'), 'bowling-ball-door after-heavy-boulder');
+        parsed.markPathOpenIf(x => checked_locations.has('g20r'), 'captured-goldfish');
+        parsed.markPathOpenIf(x => checked_locations.has('g20r'), 'computer-pad');
+        parsed.markPathOpenIf(x => checked_locations.has('e'), 'goal after-captured-goldfish');
+        parsed.markPathOpenIf(x => checked_locations.has('f'), 'goal after-computer-pad');
+
+        if (!(completedGoal = parsed.completed_goal)) {
+            const currentRegionClasses = parsed.current_region_classes;
+            let needsChange = false;
+            for (const container of document.getElementsByClassName('current-region')) {
+                for (const currentRegionClass of currentRegionClasses) {
+                    if (!container.classList.contains(currentRegionClass)) {
+                        container.classList.remove('current-region');
+                        needsChange = true;
+                    }
+                }
+            }
+
+            if (needsChange) {
+                for (const container of document.getElementsByClassName(currentRegionClasses.join(' '))) {
+                    container.classList.add('current-region');
+                }
+            }
+        }
     }
     catch (error) {
         // log it, but don't let that stop the next interval
