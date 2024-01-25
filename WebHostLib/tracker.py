@@ -79,7 +79,7 @@ class TrackerData:
 
     def get_stored_data(self) -> Dict[str, Any]:
         """Retrieves the collection of data stored in the world on behalf of various clients."""
-        return self._multisave["stored_data"]
+        return self._multisave.get("stored_data", {})
 
     def get_slot_data(self, team: int, player: int) -> Dict[str, Any]:
         """Retrieves the slot data for a given player."""
@@ -891,7 +891,7 @@ if "Autopelago" in network_data_package["games"]:
             "player_name": tracker_data.get_player_name(team, player),
             "inventory": { item_id_to_name[item_id]: cnt for item_id, cnt in tracker_data.get_player_inventory_counts(team, player).items() },
             "checked_locations": [location_id_to_name[location_id] for location_id in tracker_data.get_player_checked_locations(team, player)],
-            "game_state": tracker_data.get_stored_data()[f"autopelago_state_{team}_{player}"],
+            "game_state": tracker_data.get_stored_data().get(f"autopelago_state_{team}_{player}", {}),
         }
 
         return render_template(

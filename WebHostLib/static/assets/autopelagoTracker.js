@@ -1,7 +1,12 @@
 "use strict";
 class Payload {
     get current_region_classes() {
-        switch (this.game_state.current_region) {
+        let currentRegion = this.game_state.currentRegion;
+        if (currentRegion == 'Traveling') {
+            currentRegion = this.game_state.destination_region;
+        }
+
+        switch (currentRegion) {
             case 'Before8Rats':
                 return ['before-basketball'];
 
@@ -55,7 +60,23 @@ class Payload {
 
             case 'TryingForGoal':
                 return ['checked-goal'];
+
+            default:
+                return [];
         }
+    }
+
+    get aura_modifiers() {
+        let stepInterval = 1;
+        for (const aura of this.game_state.auras ?? []) {
+            if (aura["$type"] == "stepInterval") {
+                stepInterval *= aura.modifier;
+            }
+        }
+
+        return {
+            stepInterval: stepInterval,
+        };
     }
 
     get completed_goal() {
@@ -100,7 +121,7 @@ class Payload {
 }
 
 const domParser = new DOMParser();
-const reloadTrackerDataInterval = 15000;
+const reloadTrackerDataInterval = 1000; // FOR NOW
 const loadTrackerData = async (url, dom) => {
     let completedGoal = false;
     try {
@@ -169,6 +190,11 @@ const loadTrackerData = async (url, dom) => {
         parsed.markPathOpenIf(x => checked_locations.has('g20r'), 'computer-pad');
         parsed.markPathOpenIf(x => checked_locations.has('e'), 'goal after-captured-goldfish');
         parsed.markPathOpenIf(x => checked_locations.has('f'), 'goal after-computer-pad');
+
+        const { stepInterval } = parsed.aura_modifiers;
+        for (const container of document.getElementsByClassName('movement-speed-text')) {
+            container.textContent = `${1 / stepInterval}x`;
+        }
 
         if (!(completedGoal = parsed.completed_goal)) {
             const currentRegionClasses = parsed.current_region_classes;
