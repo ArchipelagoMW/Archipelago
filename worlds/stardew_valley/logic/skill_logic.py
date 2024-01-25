@@ -55,12 +55,13 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
                                                tool_material) | self.logic.magic.can_use_clear_debris_instead_of_tool_level(
                 tool_level)
         elif skill == Skill.mining:
-            xp_rule = self.logic.tool.has_tool(Tool.pickaxe,
-                                               tool_material) | self.logic.magic.can_use_clear_debris_instead_of_tool_level(
-                tool_level)
+            xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) |\
+                      self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
+            xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         elif skill == Skill.combat:
             combat_tier = Performance.tiers[tool_level]
             xp_rule = self.logic.combat.can_fight_at_level(combat_tier)
+            xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         else:
             raise Exception(f"Unknown skill: {skill}")
 
