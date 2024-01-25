@@ -26,6 +26,13 @@ class ALttPLocation(Location):
         self.player_address = player_address
         self._hint_text = hint_text
 
+    @property
+    def hint_text(self) -> str:
+        hint_text = getattr(self, "_hint_text", None)
+        if hint_text:
+            return hint_text
+        return "at " + self.name.replace("_", " ").replace("-", " ")
+
 
 class ALttPItem(Item):
     game: str = "A Link to the Past"
