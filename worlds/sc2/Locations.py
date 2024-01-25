@@ -380,7 +380,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_basic_anti_air(state) and
                                     (adv_tactics or
                                            logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
-        LocationData("Devil's Playground", "Devil's Playground: Zerg Cleaned", SC2WOL_LOC_ID_OFFSET + 1308, LocationType.EXTRA,
+        LocationData("Devil's Playground", "Devil's Playground: Zerg Cleared", SC2WOL_LOC_ID_OFFSET + 1308, LocationType.CHALLENGE,
                      lambda state: logic.terran_competent_anti_air(state) and (
                                            logic.terran_common_unit(state) or state.has(ItemNames.REAPER, player))),
         LocationData("Welcome to the Jungle", "Welcome to the Jungle: Victory", SC2WOL_LOC_ID_OFFSET + 1400, LocationType.VICTORY,
