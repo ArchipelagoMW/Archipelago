@@ -22,6 +22,7 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * Severencir (@Severencir)
 * neocerber (@neocerber @MaxTousss)
 * @Matiya-star
+* Ixzine
 
 ## Older versions
 Not all contributors to older versions of Archipelago Starcraft 2 are known.
