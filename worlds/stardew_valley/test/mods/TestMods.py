@@ -1,8 +1,6 @@
 import random
 import sys
 import unittest
-from collections import Counter
-from itertools import chain, combinations
 from typing import List, Union
 
 from BaseClasses import MultiWorld
@@ -14,7 +12,7 @@ from ...locations import location_table
 from ...mods.mod_data import all_mods
 from ...options import Mods, EntranceRandomization, Friendsanity, SeasonRandomization, SpecialOrderLocations, ExcludeGingerIsland, TrapItems, Chefsanity, \
     Shipsanity, Craftsanity, ToolProgression
-from ...regions import RandomizationFlag, create_final_connections, randomize_connections, create_final_regions
+from ...regions import RandomizationFlag, randomize_connections, create_final_connections_and_regions
 
 
 def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
@@ -141,18 +139,17 @@ class TestModEntranceRando(SVTestCase):
                                  Mods.internal_name: all_mods}
                 multiworld = setup_solo_multiworld(world_options)
                 world = multiworld.worlds[1]
-                final_regions = create_final_regions(world.options)
-                final_connections = create_final_connections(world.options)
+                final_connections, final_regions = create_final_connections_and_regions(world.options)
 
-                regions_by_name = {region.name: region for region in final_regions}
-                _, randomized_connections = randomize_connections(rand, world.options, regions_by_name)
+                _, randomized_connections = randomize_connections(rand, world.options, final_regions, final_connections)
 
-                for connection in final_connections:
+                for connection_name in final_connections:
+                    connection = final_connections[connection_name]
                     if flag in connection.flag:
-                        connection_in_randomized = connection.name in randomized_connections
+                        connection_in_randomized = connection_name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
                         self.assertTrue(connection_in_randomized,
-                                        f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
+                                        f"Connection {connection_name} should be randomized but it is not in the output. Seed = {seed}")
                         self.assertTrue(reverse_in_randomized,
                                         f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
 
