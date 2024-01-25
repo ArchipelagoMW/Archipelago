@@ -80,8 +80,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     set_rule(get_entrance("REGION_NEW_BARK_TOWN -> REGION_ROUTE_27:WEST"), can_surf)
 
-    set_rule(get_location("Elm's Lab - Everstone from Elm"),
-             lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
+    # set_rule(get_location("Elm's Lab - Everstone from Elm"),
+    #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
     set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: state.has("Rising Badge", world.player))
 
@@ -520,7 +520,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 15 - Item"), can_cut)
 
     # Route 20
-    set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"), can_surf)
+    set_rule(get_entrance("REGION_ROUTE_19 -> REGION_ROUTE_20"),
+             lambda state: state.has("EVENT_CINNABAR_ROCKS_CLEARED", world.player) and can_surf(state))
 
     set_rule(get_entrance("REGION_CINNABAR_ISLAND -> REGION_ROUTE_20"), can_surf)
 

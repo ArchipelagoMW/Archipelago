@@ -2528,7 +2528,7 @@
 		"script": "AP_NPC_Route25_NUGGET"
 	},
 	"TM37_SANDSTORM": {
-		"label": "Route 27 - Sandstorm from Sandstorm Guy ?",
+		"label": "Route 27 - Sandstorm from Woman in House",
 		"flag": "EVENT_GOT_TM37_SANDSTORM",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
@@ -2536,7 +2536,7 @@
 		"script": "AP_NPC_Route27SandstormHouse_TM_SANDSTORM"
 	},
 	"TM47_STEEL_WING": {
-		"label": "Route 28 - Steel Wing from Steel Wing Guy ?",
+		"label": "Route 28 - Steel Wing from Celebrity in House",
 		"flag": "EVENT_GOT_TM47_STEEL_WING",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
