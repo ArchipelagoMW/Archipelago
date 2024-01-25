@@ -279,7 +279,8 @@ def get_rules_lookup(player: int):
                 state.can_reach("Bastion Remnant", 'Region', player) and  # Snout Armor Trim
                 state.can_reach("End City", 'Region', player) and  # Spire Armor Trim
                 state.has("Progressive Tools", player, 2) and  # Ward and Silence Armor Trims
-                state.has("Fishing Rod", player) and can_brew_potions(state, player)),  # Water Breathing Potions for the Tide Armor Trim; might not be necessary
+                ((state.has("Fishing Rod", player) and can_brew_potions(state, player)) or  # Water Breathing Potions for the Tide Armor Trim
+                state.has("Bucket", player))),  # Access to Milk and Axolotls for the Tide Armor Trim
             "Respecting the Remnants": lambda state: can_excavate(state, player),
             "Careful Restoration": lambda state: can_excavate(state, player),
             "The Power of Books": lambda state: state.has("Progressive Tools", player, 2),
