@@ -201,7 +201,7 @@ class MessengerWorld(World):
         if self.options.shuffle_portals:
             disconnect_portals(self)
             shuffle_portals(self)
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
@@ -213,7 +213,6 @@ class MessengerWorld(World):
             "portal_exits": self.portal_mapping if self.portal_mapping else [],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
-        print(slot_data)
         return slot_data
 
     def get_filler_item_name(self) -> str:

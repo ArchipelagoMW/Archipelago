@@ -70,7 +70,7 @@ class ShufflePortals(TextChoice):
     option_shops = 1
     option_checkpoints = 2
     option_anywhere = 3
-    default = 0
+    default = 2
 
 
 class Goal(Choice):

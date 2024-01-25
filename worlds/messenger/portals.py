@@ -227,8 +227,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         if shuffle_type < ShufflePortals.option_anywhere:
             available_portals = [portal for portal in available_portals
                                  if portal not in shop_points[out_to_parent[warp_point]]]
-    
-    print(f"exits: {world.portal_mapping}")
+
     if not validate_portals(world):
         disconnect_portals(world)
         shuffle_portals(world)
