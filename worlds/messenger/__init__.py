@@ -106,6 +106,7 @@ class MessengerWorld(World):
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
+        self.starting_portals = []
         if self.options.available_portals > AvailablePortals.range_start:
             # there's 3 specific portals that the game forces open
             self.starting_portals = self.random.choices(SHUFFLEABLE_PORTAL_ENTRANCES,

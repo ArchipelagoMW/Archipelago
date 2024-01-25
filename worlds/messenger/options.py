@@ -57,11 +57,11 @@ class ShufflePortals(TextChoice):
     """
     Whether the portals lead to random places.
     Entering a portal from its vanilla area will always lead to HQ, and will unlock it if relevant.
-    
+
     None: Portals will take you where they're supposed to.
     Shops: Portals can lead to any area except Music Box and Elemental Skylands, with each portal output guaranteed to not overlap with another portal's. Will only put you at a portal or a shop.
     Checkpoints: Like Shops except checkpoints without shops are also valid drop points.
-    Anywhere: Like Shuffle except it's possible for multiple portals to output to the same map.
+    Anywhere: Like Checkpoints except it's possible for multiple portals to output to the same map.
     """
     display_name = "Shuffle Portal Outputs"
     option_none = 0
@@ -69,7 +69,7 @@ class ShufflePortals(TextChoice):
     option_shops = 1
     option_checkpoints = 2
     option_anywhere = 3
-    default = 2
+    default = 0
 
 
 class Goal(Choice):
