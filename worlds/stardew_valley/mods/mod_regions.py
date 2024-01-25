@@ -221,7 +221,7 @@ mandatory_sve_connections = [
     ConnectionData(SVEEntrance.grandpa_interior_to_upstairs, SVERegion.grandpas_shed_upstairs, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.grandpa_shed_to_town, Region.town),
     ConnectionData(SVEEntrance.bmv_to_sophia, SVERegion.sophias_house, flag=RandomizationFlag.NON_PROGRESSION | RandomizationFlag.LEAD_TO_OPEN_AREA),
-    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside, flag=RandomizationFlag.GINGER_ISLAND),
+    ConnectionData(SVEEntrance.summit_to_highlands, SVERegion.highlands_outside),
     ConnectionData(SVEEntrance.guild_to_interior, Region.adventurer_guild, flag=RandomizationFlag.BUILDINGS),
     ConnectionData(SVEEntrance.backwoods_to_grove, SVERegion.enchanted_grove, flag=RandomizationFlag.BUILDINGS | RandomizationFlag.LEAD_TO_OPEN_AREA),
     ConnectionData(SVEEntrance.grove_to_outpost_warp, SVERegion.grove_outpost_warp),
