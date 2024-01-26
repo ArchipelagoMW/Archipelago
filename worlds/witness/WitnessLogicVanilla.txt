@@ -525,7 +525,7 @@ Town Obelisk (Town) - Entry - True:
 159755 - 0xFFE55 (Obelisk Side 6) - 0x28B91 & 0x03BCE & 0x03BCF & 0x03BD1 & 0x339B6 & 0x33A20 & 0x33A29 & 0x33A2A & 0x33B06 - True
 159759 - 0x0A16C (Obelisk) - True - True
 
-Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - RGB House - 0x28A61 - Town Inside Cargo Box - 0x0A0C9 - Outside Windmill - True:
+Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x28AA2 - Town Church - True - Town Wooden Rooftop - 0x034F5 - Town RGB House - 0x28A61 - Town Inside Cargo Box - 0x0A0C9 - Outside Windmill - True:
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Black/White Squares & Shapers
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
@@ -578,15 +578,15 @@ Town Church (Town):
 158227 - 0x28A69 (Church Lattice) - 0x03BB0 - True
 159553 - 0x03BD1 (Black Line Church EP) - True - True
 
-RGB House (Town) - RGB Room - 0x2897B:
+Town RGB House (Town RGB House) - Town RGB House Upstairs - 0x2897B:
 158242 - 0x034E4 (Sound Room Left) - True - True
 158243 - 0x034E3 (Sound Room Right) - True - Sound Dots
-Door - 0x2897B (RGB House Stairs) - 0x034E4 & 0x034E3
+Door - 0x2897B (Stairs) - 0x034E4 & 0x034E3
 
-RGB Room (Town):
+Town RGB House Upstairs (Town RGB House Upstairs):
 158244 - 0x334D8 (RGB Control) - True - Rotated Shapers & Colored Squares
-158245 - 0x03C0C (RGB Room Left) - 0x334D8 - Colored Squares & Black/White Squares
-158246 - 0x03C08 (RGB Room Right) - 0x334D8 - Stars
+158245 - 0x03C0C (Left) - 0x334D8 - Colored Squares & Black/White Squares
+158246 - 0x03C08 (Right) - 0x334D8 - Stars
 
 Town Tower (Town Tower) - Town - True - Town Tower Top - 0x27798 & 0x27799 & 0x2779A & 0x2779C:
 Door - 0x27798 (Second Door) - 0x28ACC
