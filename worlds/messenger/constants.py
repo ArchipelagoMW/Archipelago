@@ -24,6 +24,7 @@ PROG_ITEMS = [
     # "Astral Seed",
     # "Astral Tea Leaves",
     "Money Wrench",
+    "Candle",
 ]
 
 PHOBEKINS = [

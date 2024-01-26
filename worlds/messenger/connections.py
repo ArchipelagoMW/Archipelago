@@ -166,27 +166,25 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Descent Shop": {
             "exits": [
                 "Forlorn Temple - Rocket Sunset Shop",
-                "Forlorn Temple - Final Fall Shop",
+                "Forlorn Temple - Saw Gauntlet Shop",
             ],
             "rules": ["True", "True", "True"],
         },
-        "Final Fall Shop": {
+        "Saw Gauntlet Shop": {
             "exits": [
-                "Forlorn Temple - Descent Shop",
                 "Forlorn Temple - Demon King Shop",
             ],
             "rules": ["True", "True", "True"],
         },
         "Demon King Shop": {
             "exits": [
-                "Forlorn Temple - Final Fall Shop",
+                "Forlorn Temple - Saw Gauntlet Shop",
                 "Forlorn Temple - Right",
             ],
             "rules": ["True", "True", "True"],
         },
         "Sunny Day Checkpoint": {
             "exits": [
-                "Forlorn Temple - Entrance Shop",
                 "Forlorn Temple - Rocket Maze Checkpoint",
             ],
             "rules": ["True", "True", "True"],
@@ -277,7 +275,6 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Top Left": {
             "exits": [
-                "Forlorn Temple - Right",
                 "Bamboo Creek - Abandoned Shop",
             ],
             "rules": ["True", "True", "True"],
@@ -525,7 +522,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             ],
             "rules": ["True", ["Wingsuit", "Rope Dart"]],
         },
-        "Triple Ball Spinner Shop": {
+        "Falling Rocks Shop": {
             "exits": [
                 "Searing Crags - Triple Ball Spinner Checkpoint",
                 "Searing Crags - Searing Mega Shard Shop",
@@ -534,8 +531,8 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Searing Mega Shard Shop": {
             "exits": [
-                "Searing Crags - Triple Ball Spinner Shop",
-                "Searing Crags - Raining Rocks Checkpoint",
+                "Searing Crags - Falling Rocks Shop",
+                "Searing Crags - Before Final Climb Shop",
             ],
             "rules": ["True", "True"],
         },
@@ -565,7 +562,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         "Triple Ball Spinner Checkpoint": {
             "exits": [
                 "Searing Crags - Rope Dart Shop",
-                "Searing Crags - Triple Ball Spinner Shop",
+                "Searing Crags - Falling Rocks Shop",
             ],
             "rules": ["True", "True"],
         },
@@ -666,49 +663,42 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Arcane Golem Shop": {
             "exits": [
-                "Tower HQ",
                 "Tower of Time - Sixth Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "First Checkpoint": {
             "exits": [
-                "Tower of Time - Final Chance Shop",
                 "Tower of Time - Second Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "Second Checkpoint": {
             "exits": [
-                "Tower of Time - First Checkpoint",
                 "Tower of Time - Third Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "Third Checkpoint": {
             "exits": [
-                "Tower of Time - Second Checkpoint",
                 "Tower of Time - Fourth Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "Fourth Checkpoint": {
             "exits": [
-                "Tower of Time - Third Checkpoint",
                 "Tower of Time - Fifth Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "Fifth Checkpoint": {
             "exits": [
-                "Tower of Time - Fourth Checkpoint",
                 "Tower of Time - Sixth Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
         "Sixth Checkpoint": {
             "exits": [
-                "Tower of Time - Fifth Checkpoint",
                 "Tower of Time - Arcane Golem Shop",
             ],
             "rules": ["True", "True", "True"],
@@ -836,7 +826,6 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Key of Chaos Shop": {
             "exits": [
-                "Underworld - Lava Run Checkpoint",
             ],
             "rules": ["True", "True", "True"],
         },
@@ -908,28 +897,24 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Log Flume Shop": {
             "exits": [
-                "Riviere Turquoise - Launch of Faith Shop",
                 "Riviere Turquoise - Log Climb Shop",
             ],
             "rules": ["True", "True", "True"],
         },
         "Log Climb Shop": {
             "exits": [
-                "Riviere Turquoise - Log Flume Shop",
                 "Riviere Turquoise - Restock Shop",
             ],
             "rules": ["True", "True", "True"],
         },
         "Restock Shop": {
             "exits": [
-                "Riviere Turquoise - Log Climb Shop",
                 "Riviere Turquoise - Butterfly Matriarch Shop",
             ],
             "rules": ["True", "True", "True"],
         },
         "Butterfly Matriarch Shop": {
             "exits": [
-                "Riviere Turquoise - Restock Shop",
             ],
             "rules": ["True", "True", "True"],
         },

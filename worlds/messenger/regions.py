@@ -102,7 +102,7 @@ LOCATIONS: Dict[str, List[str]] = {
     "Searing Crags - Key of Strength Shop": [
         "Searing Crags - Key of Strength",
     ],
-    "Searing Crags - Right": [
+    "Searing Crags - Portal": [
         "Searing Crags - Pyro",
     ],
     "Glacial Peak - Ice Climbers' Shop": [
@@ -117,7 +117,7 @@ LOCATIONS: Dict[str, List[str]] = {
     "Tower of Time - First Checkpoint": [
         "Tower of Time Seal - Time Waster",
     ],
-    "Tower of Time - Third Checkpoint": [
+    "Tower of Time - Fourth Checkpoint": [
         "Tower of Time Seal - Lantern Climb",
     ],
     "Tower of Time - Fifth Checkpoint": [

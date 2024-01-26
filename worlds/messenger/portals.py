@@ -54,7 +54,7 @@ SHOP_POINTS = {
         "Climb",
         "Rocket Sunset",
         "Descent",
-        "Final Fall",
+        "Saw Gauntlet",
         "Demon King",
     ],
     "Catacombs": [
@@ -78,7 +78,7 @@ SHOP_POINTS = {
     ],
     "Searing Crags": [
         "Rope Dart",
-        "Triple Ball Spinner",
+        "Falling Rocks",
         "Searing Mega Shard",
         "Before Final Climb",
         "Colossuses",
