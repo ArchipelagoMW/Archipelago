@@ -87,7 +87,14 @@ def launch_game() -> None:
         # TODO: add /latest before actual PR since i want pre-releases for now
         url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
         assets = request_data(url)["assets"]
-        release_url = assets[-1]["browser_download_url"]
+        for asset in assets:
+            if "TheMessengerRandomizerModAP" in asset["name"]:
+                release_url = asset["browser_download_url"]
+                break
+        else:
+            messagebox("Failure!", "something went wrong while trying to get latest mod version")
+            logging.error(assets)
+            return
 
         with urllib.request.urlopen(release_url) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
@@ -97,14 +104,38 @@ def launch_game() -> None:
 
     def available_mod_update() -> bool:
         """Check if there's an available update"""
-        url = "https://raw.githubusercontent.com/alwaysintreble/TheMessengerRandomizerModAP/archipelago/courier.toml"
-        remote_data = requests.get(url).text
-        latest_version = remote_data.splitlines()[1].strip("version = \"")
+        url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
+        assets = request_data(url)["assets"]
+        # TODO simplify once we're done with 0.13.0 alpha
+        for asset in assets:
+            if "TheMessengerRandomizerAP" in asset["name"]:
+                if asset["label"]:
+                    latest_version = asset["label"]
+                    break
+                names = asset["name"].split("-")
+                if len(names) > 2:
+                    if names[-1].isnumeric():
+                        latest_version = names[-1]
+                        break
+                    latest_version = 1
+                    break
+                latest_version = names[1]
+                break
+        else:
+            return False
 
         toml_path = os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
         with open(toml_path, "r") as f:
             installed_version = f.read().splitlines()[1].strip("version = \"")
 
+        if not installed_version.isnumeric():
+            if installed_version[-1].isnumeric():
+                installed_version = installed_version[-1]
+            else:
+                installed_version = 1
+            return latest_version > installed_version
+        elif latest_version >= 1:
+            return True
         return tuplize_version(latest_version) > tuplize_version(installed_version)
 
     from . import MessengerWorld
