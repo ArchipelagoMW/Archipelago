@@ -41,7 +41,6 @@ class KH1World(World):
     options_dataclass = KH1Options
     options: KH1Options
     topology_present = True
-    data_version = 4
     required_client_version = (0, 3, 5)
     web = KH1Web()
 
