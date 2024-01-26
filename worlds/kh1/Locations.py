@@ -452,8 +452,9 @@ location_table: Dict[str, KH1LocationData] = {
     "Hades Cup Defeat Cerberus Event":                                                  KH1LocationData("Cups",       265_9015),
     "Hades Cup Defeat Behemoth Event":                                                  KH1LocationData("Cups",       265_9016),
     "Hades Cup Defeat Hades Event":                                                     KH1LocationData("Cups",       265_9017),
-    "Hercules Cup Defeat Cloud Event":                                                   KH1LocationData("Cups",       265_9018),
-    "Hercules Cup Yellow Trinity Event":                                                 KH1LocationData("Cups",       265_9019)
+    "Hercules Cup Defeat Cloud Event":                                                  KH1LocationData("Cups",       265_9018),
+    "Hercules Cup Yellow Trinity Event":                                                KH1LocationData("Cups",       265_9019),
+    "Final Ansem":                                                                      KH1LocationData("Final",      265_9999)
 }
 
 event_location_table: Dict[str, KH1LocationData] = {
