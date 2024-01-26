@@ -201,7 +201,7 @@ class SVTestCase(unittest.TestCase):
     world: StardewValleyWorld
     player: ClassVar[int] = 1
     # Set False to not skip some 'extra' tests
-    skip_extra_tests: bool = True
+    skip_base_tests: bool = True
     # Set False to run tests that take long
     skip_long_tests: bool = True
 
@@ -210,6 +210,9 @@ class SVTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
+        base_tests_key = "base"
+        if base_tests_key in os.environ:
+            cls.skip_base_tests = not bool(os.environ[base_tests_key])
         long_tests_key = "long"
         if long_tests_key in os.environ:
             cls.skip_long_tests = not bool(os.environ[long_tests_key])
@@ -225,7 +228,7 @@ class SVTestBase(WorldTestBase, SVTestCase):
 
     @property
     def run_default_tests(self) -> bool:
-        if self.skip_long_tests:
+        if self.skip_base_tests:
             return False
         # world_setup is overridden, so it'd always run default tests when importing SVTestBase
         is_not_stardew_test = type(self) is not SVTestBase

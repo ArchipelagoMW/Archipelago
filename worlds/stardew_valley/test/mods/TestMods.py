@@ -44,8 +44,6 @@ class TestGenerateModsOptions(SVTestCase):
                     multiworld = setup_solo_multiworld({EntranceRandomization.internal_name: EntranceRandomization.options[option], Mods: mod})
                     basic_checks(self, multiworld)
                     check_stray_mod_items(mod, self, multiworld)
-                    # if self.skip_extra_tests:
-                    #     return  # assume the rest will work as well
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
         multi_world = setup_solo_multiworld(allsanity_options_with_mods())
