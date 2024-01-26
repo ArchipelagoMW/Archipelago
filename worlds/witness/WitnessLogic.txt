@@ -1071,7 +1071,7 @@ Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33
 Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
 Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 
-Mountain Bottom Floor Pillars Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
+Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
 158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
@@ -1081,7 +1081,7 @@ Mountain Bottom Floor Pillars Room (Mountain Final Room) - Elevator - 0x339BB & 
 158528 - 0x03859 (Left Pillar 3) - 0x0383F - Shapers
 158529 - 0x339BB (Left Pillar 4) - 0x03859 - Black/White Squares & Stars & Symmetry
 
-Elevator (Mountain Final Room):
+Elevator (Mountain Bottom Floor):
 158530 - 0x3D9A6 (Elevator Door Closer Left) - True - True
 158531 - 0x3D9A7 (Elevator Door Close Right) - True - True
 158532 - 0x3C113 (Elevator Entry Left) - 0x3D9A6 | 0x3D9A7 - True
