@@ -23,10 +23,6 @@ body {
     grid-template-columns: 1fr 4fr;
 }
 
-.game-state-container {
-    grid-column: 1;
-}
-
 .rats-and-auras-container {
     display: grid;
     grid-template-columns: minmax(128px, 1.05fr) 1fr; /* thought: shrink the images based on @media? seems overkill... */
@@ -39,14 +35,7 @@ body {
     align-content: start;
 }
 
-.world-maps-container {
-    grid-column: 2;
-    width: 80%;
-}
-
 .rats-container {
-    grid-column: 1;
-
     display: flex;
     flex-flow: row wrap;
     justify-content: start;
@@ -61,10 +50,6 @@ body {
 
 .received-normal-rat {
     position: relative;
-}
-
-.auras-container {
-    grid-column: 2;
 }
 
 .auras-container h2:nth-of-type(1) {
