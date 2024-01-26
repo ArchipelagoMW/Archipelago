@@ -8,8 +8,8 @@ from .ArbitraryGameDefs import \
     rat_item_count_for_balancing, rat_item_count_skip_balancing, useful_item_count, filler_item_count, trap_item_count
 
 from .Items import \
-    normal_rat_item_name, a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name, goal_item_name, \
-    all_item_names, generic_item_table, game_specific_items, item_name_to_defined_classification, item_name_to_rat_count
+    normal_rat_item_name, goal_item_name, all_item_names, generic_item_table, \
+    game_specific_items, item_name_to_defined_classification, item_name_to_rat_count
 
 def _gen_ids():
     next_id = BASE_ID
@@ -78,7 +78,13 @@ class AutopelagoWorld(World):
     def __init__(self, multiworld: MultiWorld, player: int):
         super().__init__(multiworld, player)
         self._item_name_to_classification = { item_name: classification for item_name, classification in item_name_to_defined_classification.items() if classification is not None }
-        self._all_live_items_excluding_goal_and_normal_rats: list[str] = [a_item_name, b_item_name, c_item_name, d_item_name, e_item_name, f_item_name]
+        self._all_live_items_excluding_goal_and_normal_rats: list[str] = [
+            'Red Matador\'s Cape',
+            'Premium Can of Prawn Food',
+            'A Cookie',
+            'Bribe',
+            'Masterful Longsword',
+        ]
         self._normal_rats_balancing_count = None
         self._normal_rats_skip_balancing_count = None
 
@@ -140,30 +146,23 @@ class AutopelagoWorld(World):
             r_from_real.exits.append(connection)
             connection.connect(r_to_real)
 
-        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.Gate8Rats, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 8)
-        _connect(AutopelagoRegion.Before8Rats, AutopelagoRegion.Gate8Rats, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 8)
-        _connect(AutopelagoRegion.Gate8Rats, AutopelagoRegion.After8RatsBeforeA)
-        _connect(AutopelagoRegion.Gate8Rats, AutopelagoRegion.After8RatsBeforeB)
-        _connect(AutopelagoRegion.After8RatsBeforeA, AutopelagoRegion.A)
-        _connect(AutopelagoRegion.After8RatsBeforeB, AutopelagoRegion.B)
-        _connect(AutopelagoRegion.A, AutopelagoRegion.AfterABeforeC, lambda state: state.has(a_item_name, self.player))
-        _connect(AutopelagoRegion.B, AutopelagoRegion.AfterBBeforeD, lambda state: state.has(b_item_name, self.player))
-        _connect(AutopelagoRegion.AfterABeforeC, AutopelagoRegion.C)
-        _connect(AutopelagoRegion.AfterBBeforeD, AutopelagoRegion.D)
-        _connect(AutopelagoRegion.C, AutopelagoRegion.AfterCBefore20Rats, lambda state: state.has(c_item_name, self.player))
-        _connect(AutopelagoRegion.D, AutopelagoRegion.AfterDBefore20Rats, lambda state: state.has(d_item_name, self.player))
-        _connect(AutopelagoRegion.AfterCBefore20Rats, AutopelagoRegion.Gate20Rats, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.Gate20Rats, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.Gate20Rats, AutopelagoRegion.After20RatsBeforeE)
-        _connect(AutopelagoRegion.Gate20Rats, AutopelagoRegion.After20RatsBeforeF)
-        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeE, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.AfterDBefore20Rats, AutopelagoRegion.After20RatsBeforeF, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.After20RatsBeforeE, AutopelagoRegion.E)
-        _connect(AutopelagoRegion.After20RatsBeforeF, AutopelagoRegion.F)
-        _connect(AutopelagoRegion.E, AutopelagoRegion.TryingForGoal, lambda state: state.has(e_item_name, self.player))
-        _connect(AutopelagoRegion.F, AutopelagoRegion.TryingForGoal, lambda state: state.has(f_item_name, self.player))
+        _connect(AutopelagoRegion.BeforeBasketball, AutopelagoRegion.Basketball, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 5)
+        _connect(AutopelagoRegion.Basketball, AutopelagoRegion.BeforeMinotaur)
+        _connect(AutopelagoRegion.Basketball, AutopelagoRegion.BeforePrawnStars)
+        _connect(AutopelagoRegion.BeforeMinotaur, AutopelagoRegion.Minotaur)
+        _connect(AutopelagoRegion.BeforePrawnStars, AutopelagoRegion.PrawnStars)
+        _connect(AutopelagoRegion.Minotaur, AutopelagoRegion.BeforeRestaurant, lambda state: state.has('Red Matador\'s Cape', self.player))
+        _connect(AutopelagoRegion.PrawnStars, AutopelagoRegion.BeforePirateBakeSale, lambda state: state.has('Premium Can of Prawn Food', self.player))
+        _connect(AutopelagoRegion.BeforeRestaurant, AutopelagoRegion.Restaurant)
+        _connect(AutopelagoRegion.BeforePirateBakeSale, AutopelagoRegion.PirateBakeSale)
+        _connect(AutopelagoRegion.Restaurant, AutopelagoRegion.AfterRestaurant, lambda state: state.has('A Cookie', self.player))
+        _connect(AutopelagoRegion.PirateBakeSale, AutopelagoRegion.AfterPirateBakeSale, lambda state: state.has('Bribe', self.player))
+        _connect(AutopelagoRegion.AfterRestaurant, AutopelagoRegion.BowlingBallDoor)
+        _connect(AutopelagoRegion.AfterPirateBakeSale, AutopelagoRegion.BowlingBallDoor)
+        _connect(AutopelagoRegion.BowlingBallDoor, AutopelagoRegion.BeforeGoldfish, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
+        _connect(AutopelagoRegion.BeforeGoldfish, AutopelagoRegion.Goldfish)
 
-        self.multiworld.get_location("goal", self.player).place_locked_item(self.create_item(goal_item_name))
+        self.multiworld.get_location("goldfish", self.player).place_locked_item(self.create_item(goal_item_name))
         self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item_name, self.player)
 
     def create_item(self, name: str, classification: ItemClassification | None = None):
@@ -186,7 +185,7 @@ class AutopelagoWorld(World):
         self.multiworld.regions.append(menu)
         entrance = Entrance(self.player, '', menu)
         menu.exits.append(entrance)
-        entrance.connect(self.multiworld.get_region(AutopelagoRegion.Before8Rats.name, self.player))
+        entrance.connect(self.multiworld.get_region(AutopelagoRegion.BeforeBasketball.name, self.player))
 
     def create_region(self, r: AutopelagoRegion):
         region = Region(r.name, self.player, self.multiworld)

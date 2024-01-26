@@ -7,17 +7,17 @@ generic_item_table: dict[Literal['goal', 'key', 'rat', 'useful_nonprogression', 
         'Lockheed SR-71 Blackbird',
     ),
     'key': (
-        'A Cookie',                  # a
-        'Fresh Banana Peel',         # b
-        'MacGuffin',                 # c
-        'Blue Turtle Shell',         # d
-        'Red Matador\'s Cape',       # e
-        'Pair of Fake Mouse Ears',   # f
-        'Bribe',                     # (none)
-        'Masterful Longsword',       # (none)
-        'Legally Binding Contract',  # (none)
-        'Priceless Antique',         # (none)
-        'Premium Can of Prawn Food', # (none)
+        'Red Matador\'s Cape',
+        'Premium Can of Prawn Food',
+        'A Cookie',
+        'Bribe',
+        'Masterful Longsword',
+        'Fresh Banana Peel',
+        'MacGuffin',
+        'Blue Turtle Shell',
+        'Pair of Fake Mouse Ears',
+        'Legally Binding Contract',
+        'Priceless Antique',
     ),
     'rat': (
         'Normal Rat', # please keep this concept as the first item in the list kthxbai (feel free to rename tho)
@@ -398,12 +398,6 @@ all_item_names = [ \
 ]
 
 normal_rat_item_name = generic_item_table['rat'][0]
-a_item_name = generic_item_table['key'][0]
-b_item_name = generic_item_table['key'][1]
-c_item_name = generic_item_table['key'][2]
-d_item_name = generic_item_table['key'][3]
-e_item_name = generic_item_table['key'][4]
-f_item_name = generic_item_table['key'][5]
 goal_item_name = generic_item_table['goal'][0]
 
 item_name_to_rat_count = {

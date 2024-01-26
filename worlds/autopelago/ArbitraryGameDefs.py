@@ -4,54 +4,55 @@ from enum import Enum, auto
 # keep in sync with Region in the game code
 class AutopelagoRegion(Enum):
     # Traveling = auto() # only used by the game
-    Before8Rats = auto()
-    Gate8Rats = auto()
-    After8RatsBeforeA = auto()
-    After8RatsBeforeB = auto()
-    A = auto()
-    B = auto()
-    AfterABeforeC = auto()
-    AfterBBeforeD = auto()
-    C = auto()
-    D = auto()
-    AfterCBefore20Rats = auto()
-    AfterDBefore20Rats = auto()
-    Gate20Rats = auto()
-    After20RatsBeforeE = auto()
-    After20RatsBeforeF = auto()
-    E = auto()
-    F = auto()
-    TryingForGoal = auto()
+    BeforeBasketball = auto()
+    Basketball = auto()
+    BeforeMinotaur = auto()
+    BeforePrawnStars = auto()
+    Minotaur = auto()
+    PrawnStars = auto()
+    BeforeRestaurant = auto()
+    BeforePirateBakeSale = auto()
+    Restaurant = auto()
+    PirateBakeSale = auto()
+    AfterRestaurant = auto()
+    AfterPirateBakeSale = auto()
+    BowlingBallDoor = auto()
+    BeforeGoldfish = auto()
+    Goldfish = auto()
     # CompletedGoal = auto() # only used by the game
 
     def get_location_name(self, i: int):
         match self:
-            case AutopelagoRegion.Before8Rats:
-                return f"b8r_{i}"
-            case AutopelagoRegion.Gate8Rats:
-                return "g8r"
-            case AutopelagoRegion.After8RatsBeforeA:
-                return f"a8rba_{i}"
-            case AutopelagoRegion.After8RatsBeforeB:
-                return f"a8rbb_{i}"
-            case AutopelagoRegion.AfterABeforeC:
-                return f"aabc_{i}"
-            case AutopelagoRegion.AfterBBeforeD:
-                return f"abbd_{i}"
-            case AutopelagoRegion.AfterCBefore20Rats:
-                return f"acb20r_{i}"
-            case AutopelagoRegion.AfterDBefore20Rats:
-                return f"adb20r_{i}"
-            case AutopelagoRegion.Gate20Rats:
-                return "g20r"
-            case AutopelagoRegion.After20RatsBeforeE:
-                return f"a20rbe_{i}"
-            case AutopelagoRegion.After20RatsBeforeF:
-                return f"a20rbf_{i}"
-            case AutopelagoRegion.TryingForGoal:
-                return "goal"
-            case _:
-                return self.name.lower()
+            case AutopelagoRegion.BeforeBasketball:
+                return f"pre-basketball #{i}"
+            case AutopelagoRegion.Basketball:
+                return "basketball"
+            case AutopelagoRegion.BeforeMinotaur:
+                return f"pre-minotaur #{i}"
+            case AutopelagoRegion.BeforePrawnStars:
+                return f"pre-prawn stars #{i}"
+            case AutopelagoRegion.Minotaur:
+                return "minotaur"
+            case AutopelagoRegion.PrawnStars:
+                return "prawn stars"
+            case AutopelagoRegion.BeforeRestaurant:
+                return f"pre-restaurant #{i}"
+            case AutopelagoRegion.BeforePirateBakeSale:
+                return f"pre-pirate bake sale #{i}"
+            case AutopelagoRegion.Restaurant:
+                return "restaurant"
+            case AutopelagoRegion.PirateBakeSale:
+                return "pirate bake sale"
+            case AutopelagoRegion.AfterRestaurant:
+                return f"pre-bowling ball door (from restaurant) #{i}"
+            case AutopelagoRegion.AfterPirateBakeSale:
+                return f"pre-bowling ball door (from pirate bake sale) #{i}"
+            case AutopelagoRegion.BowlingBallDoor:
+                return "bowling ball door"
+            case AutopelagoRegion.BeforeGoldfish:
+                return f"pre-goldfish #{i}"
+            case AutopelagoRegion.Goldfish:
+                return "goldfish"
 
 
 GAME_NAME = "Autopelago"
@@ -61,29 +62,27 @@ BASE_ID = 300000
 
 # keep in sync with s_numLocationsIn in the game code
 num_locations_in = {
-    AutopelagoRegion.Gate8Rats: 1,
-    AutopelagoRegion.A: 1,
-    AutopelagoRegion.B: 1,
-    AutopelagoRegion.C: 1,
-    AutopelagoRegion.D: 1,
-    AutopelagoRegion.Gate20Rats: 1,
-    AutopelagoRegion.E: 1,
-    AutopelagoRegion.F: 1,
-    AutopelagoRegion.Before8Rats: 40,
-    AutopelagoRegion.After8RatsBeforeA: 10,
-    AutopelagoRegion.After8RatsBeforeB: 10,
-    AutopelagoRegion.AfterABeforeC: 10,
-    AutopelagoRegion.AfterBBeforeD: 10,
-    AutopelagoRegion.AfterCBefore20Rats: 10,
-    AutopelagoRegion.AfterDBefore20Rats: 10,
-    AutopelagoRegion.After20RatsBeforeE: 20,
-    AutopelagoRegion.After20RatsBeforeF: 20,
-    AutopelagoRegion.TryingForGoal: 1,
+    AutopelagoRegion.Basketball: 1,
+    AutopelagoRegion.Minotaur: 1,
+    AutopelagoRegion.PrawnStars: 1,
+    AutopelagoRegion.Restaurant: 1,
+    AutopelagoRegion.PirateBakeSale: 1,
+    AutopelagoRegion.BowlingBallDoor: 1,
+    AutopelagoRegion.Goldfish: 1,
+
+    AutopelagoRegion.BeforeBasketball: 40,
+    AutopelagoRegion.BeforeMinotaur: 10,
+    AutopelagoRegion.BeforePrawnStars: 10,
+    AutopelagoRegion.BeforeRestaurant: 10,
+    AutopelagoRegion.BeforePirateBakeSale: 10,
+    AutopelagoRegion.AfterRestaurant: 10,
+    AutopelagoRegion.AfterPirateBakeSale: 10,
+    AutopelagoRegion.BeforeGoldfish: 20,
 }
 
-key_item_count = 7
+key_item_count = 5 # not including the goal item
 rat_item_count_for_balancing = 16
-rat_item_count_skip_balancing = 20
+rat_item_count_skip_balancing = 10
 
 total_item_count = sum(location_count for location_count in num_locations_in.values())
 
