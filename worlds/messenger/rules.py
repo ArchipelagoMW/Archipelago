@@ -126,7 +126,7 @@ class MessengerRules:
                 lambda state: self.has_wingsuit(state) and (self.has_dart(state) or self.can_dboost(state)),
             "Tower of Time - Third Checkpoint -> Tower of Time - Fourth Checkpoint":
                 lambda state: self.has_wingsuit(state) or self.can_dboost(state),
-            "Tower of Time - Fourth Checkpoint -> Tower of TIme - Fifth Checkpiont":
+            "Tower of Time - Fourth Checkpoint -> Tower of Time - Fifth Checkpoint":
                 lambda state: self.has_wingsuit(state) and self.has_dart(state),
             "Tower of Time - Fifth Checkpoint -> Tower of Time - Sixth Checkpoint":
                 self.has_wingsuit,
@@ -184,7 +184,7 @@ class MessengerRules:
                 lambda state: self.has_dart(state) or (self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) and self.can_dboost(state),  # doable with only d-boosting but it's pretty hard so only for hard logic
-            "Riviere Turquoise - Flower Flight Checkpoint -> Waterfall Shop":
+            "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
                 lambda state: False,  # doable with d-boosting but it's pretty hard so only for hard logic
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
@@ -202,6 +202,8 @@ class MessengerRules:
         self.location_rules = {
             # ninja village
             "Ninja Village Seal - Tree House": self.has_dart,
+            "Ninja Village - Candle":
+                lambda state: state.multiworld.get_location("Searing Crags - Astral Tea Leaves", self.player).can_reach(state),
             # autumn hills
             "Autumn Hills Seal - Spike Ball Darts": self.is_aerobatic,
             "Autumn Hills Seal - Trip Saws": self.has_wingsuit,
@@ -225,10 +227,10 @@ class MessengerRules:
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
             "Glacial Peak Seal - Projectile Spike Pit": self.can_destroy_projectiles,
-            "Time Warp Mega Shard": lambda state: self.has_vertical(state) or self.can_dboost(state),
             # tower of time
             "Tower of Time Seal - Time Waster": self.has_dart,
             # cloud ruins
+            "Time Warp Mega Shard": lambda state: self.has_vertical(state) or self.can_dboost(state),
             "Cloud Ruins Seal - Toothbrush Alley": self.has_dart,  # nothing needed for hard
             "Cloud Ruins Seal - Saw Pit": self.has_vertical,  # nothing for hard
             # underworld

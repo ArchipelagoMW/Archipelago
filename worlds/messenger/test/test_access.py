@@ -24,12 +24,18 @@ class AccessTest(MessengerTestBase):
         locations = [
             "Ninja Village Seal - Tree House",
             "Autumn Hills - Key of Hope",
+            "Forlorn Temple - Demon King",
+            "Down Under Mega Shard",
             "Howling Grotto Seal - Crushing Pits",
             "Glacial Peak Seal - Ice Climbers",
             "Tower of Time Seal - Time Waster",
             "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs",
             "Cloud Ruins Seal - Ghost Pit",
+            "Cloud Ruins Seal - Money Farm Room",
+            "Cloud Ruins Seal - Toothbrush Alley",
+            "Money Farm Room Mega Shard 1",
+            "Money Farm Room Mega Shard 2",
             "Underworld Seal - Rising Fanta",
             "Elemental Skylands - Key of Symbiosis",
             "Elemental Skylands Seal - Water",
@@ -144,6 +150,32 @@ class AccessTest(MessengerTestBase):
         """Crocomire but not"""
         locations = ["Corrupted Future - Key of Courage"]
         items = [["Demon King Crown"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_dboost(self) -> None:
+        """
+        short for damage boosting, d-boosting is a technique in video games where the player intentionally or
+        unintentionally takes damage and uses the several following frames of invincibility to defeat or get past an
+        enemy or obstacle, most commonly used in platformers such as the Super Mario games
+        """
+        locations = [
+            "Riviere Turquoise Seal - Bounces and Balls", "Searing Crags Seal - Triple Ball Spinner",
+            "Forlorn Temple - Demon King", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
+            "Sunny Day Mega Shard", "Down Under Mega Shard",
+        ]
+        items = [["Path of Resilience", "Meditation", "Second Wind"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_currents(self) -> None:
+        """there's one of these but oh man look at it go"""
+        self.assertAccessDependency(["Elemental Skylands Seal - Water"], [["Currents Master"]])
+
+    def test_strike(self) -> None:
+        """strike is pretty cool but it doesn't block much"""
+        locations = [
+            "Glacial Peak Seal - Projectile Spike Pit", "Elemental Skylands Seal - Fire",
+        ]
+        items = [["Strike of the Ninja"]]
         self.assertAccessDependency(locations, items)
 
     def test_goal(self) -> None:

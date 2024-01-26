@@ -49,6 +49,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
             "exits": [
                 "Autumn Hills - Left",
                 "Autumn Hills - Hope Path Shop",
+                "Autumn Hills - Lakeside Checkpoint",
             ],
             "rules": ["True", "True"],
         },
@@ -91,7 +92,7 @@ CONNECTIONS: Dict[str, Dict[str, Dict[str, List[str]]]] = {
         },
         "Lakeside Checkpoint": {
             "exits": [
-                "Autumn Hills - Hope Path Shop",
+                "Autumn Hills - Climbing Claws Shop",
                 "Autumn Hills - Dimension Climb Shop",
             ],
             "rules": ["True", "True", "True"],
