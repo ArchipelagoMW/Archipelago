@@ -47,7 +47,7 @@ class MoneyLogic(BaseLogic[Union[RegionLogicMixin, MoneyLogicMixin, TimeLogicMix
         if amount < 10000:
             return shipping_rule
 
-        seed_rules = self.logic.region.can_reach_any((Region.pierre_store, Region.oasis))
+        seed_rules = self.logic.received(Event.can_shop_at_pierre)
         if amount < 40000:
             return shipping_rule & seed_rules
 

@@ -533,7 +533,7 @@ def modify_vanilla_regions(existing_region: RegionData, modified_region: RegionD
 
 
 def create_regions(region_factory: RegionFactory, random: Random, world_options: StardewValleyOptions) -> Tuple[
-    Dict[str, Region], Dict[str, str]]:
+    Dict[str, Region], Dict[str, Entrance], Dict[str, str]]:
     entrances_data, regions_data = create_final_connections_and_regions(world_options)
     regions_by_name: Dict[str: Region] = {region_name: region_factory(region_name, regions_data[region_name].exits) for region_name in regions_data}
     entrances_by_name: Dict[str: Entrance] = {entrance.name: entrance for region in regions_by_name.values() for entrance in region.exits
@@ -544,7 +544,7 @@ def create_regions(region_factory: RegionFactory, random: Random, world_options:
     for connection in connections:
         if connection.name in entrances_by_name:
             entrances_by_name[connection.name].connect(regions_by_name[connection.destination])
-    return regions_by_name, randomized_data
+    return regions_by_name, entrances_by_name, randomized_data
 
 
 def randomize_connections(random: Random, world_options: StardewValleyOptions, regions_by_name: Dict[str, RegionData],

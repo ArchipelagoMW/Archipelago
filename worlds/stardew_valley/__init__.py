@@ -22,6 +22,7 @@ from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
 from .strings.goal_names import Goal as GoalName
 from .strings.region_names import Region as RegionName
+from .strings.entrance_names import Entrance as EntranceName
 
 client_version = 0
 
@@ -117,7 +118,7 @@ class StardewValleyWorld(World):
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
-        world_regions, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
+        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
             region = world_regions[region]
@@ -126,6 +127,17 @@ class StardewValleyWorld(World):
 
         create_locations(add_location, self.modified_bundles, self.options, self.multiworld.random)
         self.multiworld.regions.extend(world_regions.values())
+
+        self.register_indirect_connections(world_regions, world_entrances)
+
+    def register_indirect_connections(self, world_regions, world_entrances):
+        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+            return
+        walnut_room = world_regions[RegionName.qi_walnut_room]
+        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_20])
+        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_60])
+        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_100])
+        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.enter_dangerous_skull_cavern])
 
     def create_items(self):
         self.total_progression_items = 0
@@ -189,6 +201,8 @@ class StardewValleyWorld(World):
     def setup_action_events(self):
         can_ship_event = LocationData(None, RegionName.shipping, Event.can_ship_items)
         self.create_event_location(can_ship_event, True_(), Event.can_ship_items)
+        can_shop_pierre_event = LocationData(None, RegionName.pierre_store, Event.can_shop_at_pierre)
+        self.create_event_location(can_shop_pierre_event, True_(), Event.can_shop_at_pierre)
 
     def setup_victory(self):
         if self.options.goal == Goal.option_community_center:

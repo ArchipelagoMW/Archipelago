@@ -670,6 +670,8 @@ class CollectionState():
         queue = deque(self.blocked_connections[player])
         start = self.multiworld.get_region('Menu', player)
 
+        rrp_at_start = len(rrp)
+
         # init on first call - this can't be done on construction since the regions don't exist yet
         if start not in rrp:
             rrp.add(start)

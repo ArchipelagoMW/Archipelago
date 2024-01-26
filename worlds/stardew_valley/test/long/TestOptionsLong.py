@@ -5,6 +5,8 @@ from Options import NamedRange
 from .option_names import options_to_include
 from ..checks.world_checks import basic_checks
 from .. import setup_solo_multiworld, SVTestCase, SVTestBase
+from ... import Goal
+from ...options import EntranceRandomization, SpecialOrderLocations, Monstersanity
 
 
 def get_option_choices(option) -> Dict[str, int]:
@@ -37,11 +39,17 @@ class TestGenerateDynamicOptions(SVTestCase):
                             basic_checks(self, multiworld)
 
 
-class TestDynamicOptionDebug(SVTestBase):
-    options = {
-        "goal": "gourmet_chef",
-        "friendsanity": "bachelors"
-    }
+class TestDynamicOptionDebug(SVTestCase):
 
     def test_option_pair_debug(self):
-        basic_checks(self, self.multiworld)
+        options = {
+            SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
+            Monstersanity.internal_name: Monstersanity.option_one_per_monster,
+        }
+        for i in range(1):
+            # seed = int(random() * pow(10, 18) - 1)
+            seed = 823942126251776128
+            with self.subTest(f"Seed: {seed}"):
+                print(f"Seed: {seed}")
+                multiworld = setup_solo_multiworld(options, seed)
+                basic_checks(self, multiworld)
