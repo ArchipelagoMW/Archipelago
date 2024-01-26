@@ -179,7 +179,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("Monstro Mouth Boat Deck Chest"                                                , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Mouth High Platform Boat Side Chest"                                  , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
     multiworld.get_location("Monstro Mouth High Platform Across from Boat Chest"                           , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
-    multiworld.get_location("Monstro Mouth Near Ship Chest"                                                , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
+   #multiworld.get_location("Monstro Mouth Near Ship Chest"                                                , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
     multiworld.get_location("Monstro Mouth Green Trinity Top of Boat Chest"                                , player).access_rule = lambda state: (has_item(state, player, "High Jump") or can_glide(state, player)) and has_item(state, player, "Green Trinity")
    #multiworld.get_location("Monstro Chamber 2 Ground Chest"                                               , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Monstro Chamber 2 Platform Chest"                                             , player).access_rule = lambda state: has_item(state, player, "")
@@ -377,6 +377,8 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Hades Cup Defeat Hades Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Phil Cup") and has_item(state, player, "Pegasus Cup") and has_item(state, player, "Hercules Cup")
     multiworld.get_location("Hercules Cup Defeat Cloud Event"                                              , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
     multiworld.get_location("Hercules Cup Yellow Trinity Event"                                            , player).access_rule = lambda state: has_item(state, player, "Hercules Cup")
+    
+   #multiworld.get_location("Final Ansem"                                                                  , player).access_rule = lambda state: has_item(state, player, "")
 
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                                   , player).access_rule = lambda state: has_item(state, player,"Wonderland")

@@ -57,3 +57,8 @@ class TestPostcards(KH1TestBase):
     options = {
         "Goal": 10,
     }
+
+class TestFinalRest(KH1TestBase):
+    options = {
+        "Goal": 11,
+    }

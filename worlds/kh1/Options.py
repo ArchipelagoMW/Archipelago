@@ -80,7 +80,8 @@ class Goal(Choice):
     option_sephiroth = 8
     option_unknown = 9
     option_postcards = 10
-    default = 0
+    option_final_ansem = 11
+    default = 11
 
 class EXPMultiplier(NamedRange):
     """
@@ -88,13 +89,17 @@ class EXPMultiplier(NamedRange):
     """
     display_name = "EXP Multiplier"
     default = 16
-    range_start = default / 2
-    range_end = 48
+    range_start = default / 4
+    range_end = 160
     special_range_names = {
-        "half": default / 2,
-        "normal": default,
-        "double": default * 2,
-        "triple": default * 3,
+        "0.25x": default / 4,
+        "0.5x": default / 2,
+        "1x": default,
+        "2x": default * 2,
+        "3x": default * 3,
+        "4x": default * 4,
+        "8x": default * 8,
+        "10x": default * 10,
     }
 
 @dataclass
