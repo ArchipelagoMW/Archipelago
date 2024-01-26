@@ -62,8 +62,7 @@ AbilityLogicMixin, SpecialOrderLogicMixin, MonsterLogicMixin]]):
                                               self.logic.has_all(Mineral.ruby, Mineral.topaz, Mineral.emerald, Mineral.jade, Mineral.amethyst,
                                                                  ArtisanGood.cloth)),
             SpecialOrder.gifts_for_george: self.logic.season.has(Season.spring) & self.logic.has(Forageable.leek),
-            SpecialOrder.fragments_of_the_past: self.logic.region.can_reach(Region.dig_site) & self.logic.tool.has_tool(Tool.pickaxe) &
-                                                self.logic.monster.can_kill(Monster.skeleton),
+            SpecialOrder.fragments_of_the_past: self.logic.monster.can_kill(Monster.skeleton),
             SpecialOrder.gus_famous_omelet: self.logic.has(AnimalProduct.any_egg),
             SpecialOrder.crop_order: self.logic.ability.can_farm_perfectly() & self.logic.received(Event.can_ship_items),
             SpecialOrder.community_cleanup: self.logic.skill.can_crab_pot,
