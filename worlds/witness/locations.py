@@ -412,8 +412,8 @@ class StaticWitnessLocations:
 
         "Mountain Bottom Floor Caves Entry Panel",
 
-        "Mountain Final Room Left Pillar 4",
-        "Mountain Final Room Right Pillar 4",
+        "Mountain Bottom Floor Left Pillar 4",
+        "Mountain Bottom Floor Right Pillar 4",
 
         "Challenge Vault Box",
         "Theater Challenge Video",
