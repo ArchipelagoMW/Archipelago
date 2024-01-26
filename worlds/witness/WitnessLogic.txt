@@ -983,7 +983,7 @@ Door - 0x00085 (Vault Door) - 0x002A6
 Mountainside Vault (Mountainside):
 158666 - 0x03542 (Vault Box) - True - True
 
-Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
+Mountaintop (Mountaintop) - Mountain Floor 1 - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
 158406 - 0x09F7F (Box Short) - 7 Lasers + Redirect - True
 158407 - 0x17C34 (Mountain Entry Panel) - 0x09F7F - Stars & Black/White Squares & Stars + Same Colored Symbol
@@ -995,10 +995,10 @@ Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 
 ==Mountain (Inside)==
 
-Mountain Top Layer (Mountain Floor 1) - Mountain Top Layer Bridge - 0x09E39:
+Mountain Floor 1 (Mountain Floor 1) - Mountain Floor 1 Bridge - 0x09E39:
 158408 - 0x09E39 (Light Bridge Controller) - True - Black/White Squares & Colored Squares & Eraser
 
-Mountain Top Layer Bridge (Mountain Floor 1) - Mountain Top Layer At Door - TrueOneWay:
+Mountain Floor 1 Bridge (Mountain Floor 1) - Mountain Floor 1 At Door - TrueOneWay:
 158409 - 0x09E7A (Right Row 1) - True - Black/White Squares & Dots
 158410 - 0x09E71 (Right Row 2) - 0x09E7A - Black/White Squares & Dots
 158411 - 0x09E72 (Right Row 3) - 0x09E71 - Black/White Squares & Shapers & Dots
@@ -1017,7 +1017,7 @@ Mountain Top Layer Bridge (Mountain Floor 1) - Mountain Top Layer At Door - True
 158424 - 0x09EAD (Trash Pillar 1) - True - Black/White Squares & Shapers
 158425 - 0x09EAF (Trash Pillar 2) - 0x09EAD - Black/White Squares & Shapers
 
-Mountain Top Layer At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
+Mountain Floor 1 At Door (Mountain Floor 1) - Mountain Floor 2 - 0x09E54:
 Door - 0x09E54 (Exit) - 0x09EAF & 0x09F6E & 0x09E6B & 0x09E7B
 
 Mountain Floor 2 (Mountain Floor 2) - Mountain Floor 2 Light Bridge Room Near - 0x09FFB - Mountain Floor 2 Blue Bridge - 0x09E86 - Mountain Pink Bridge EP - TrueOneWay:
@@ -1051,10 +1051,10 @@ Mountain Floor 2 Light Bridge Room Far (Mountain Floor 2):
 Mountain Floor 2 Elevator Room (Mountain Floor 2) - Mountain Floor 2 Elevator - TrueOneWay:
 158613 - 0x17F93 (Elevator Discard) - True - Triangles
 
-Mountain Floor 2 Elevator (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EEB - Mountain Third Layer - 0x09EEB:
+Mountain Floor 2 Elevator (Mountain Floor 2) - Mountain Floor 2 Elevator Room - 0x09EEB - Mountain Floor 3 - 0x09EEB:
 158439 - 0x09EEB (Elevator Control Panel) - True - Dots
 
-Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueOneWay - Mountain Bottom Floor - 0x09F89 - Mountain Pink Bridge EP - TrueOneWay:
+Mountain Floor 3 (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueOneWay - Mountain Bottom Floor - 0x09F89 - Mountain Pink Bridge EP - TrueOneWay:
 158440 - 0x09FC1 (Giant Puzzle Bottom Left) - True - Shapers & Eraser
 158441 - 0x09F8E (Giant Puzzle Bottom Right) - True - Shapers & Eraser
 158442 - 0x09F01 (Giant Puzzle Top Right) - True - Rotated Shapers
@@ -1064,14 +1064,14 @@ Mountain Third Layer (Mountain Bottom Floor) - Mountain Floor 2 Elevator - TrueO
 159314 - 0x09D5E (Blue Bridge EP) - 0x09E86 & 0x09ED8 - True
 Door - 0x09F89 (Exit) - 0x09FDA
 
-Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33 - Final Room - 0x0C141:
+Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33 - Mountain Bottom Floor Pillars Room - 0x0C141:
 158614 - 0x17FA2 (Discard) - 0xFFF00 - Triangles
 158445 - 0x01983 (Final Room Entry Left) - True - Shapers & Stars
 158446 - 0x01987 (Final Room Entry Right) - True - Colored Squares & Dots
 Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
 Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 
-Final Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
+Mountain Bottom Floor Pillars Room (Mountain Final Room) - Elevator - 0x339BB & 0x33961:
 158522 - 0x0383A (Right Pillar 1) - True - Stars
 158523 - 0x09E56 (Right Pillar 2) - 0x0383A - Stars & Dots
 158524 - 0x09E5A (Right Pillar 3) - 0x09E56 - Dots & Full Dots
@@ -1100,7 +1100,7 @@ Door - 0x2D77D (Caves Entry) - 0x00FF8
 
 ==Caves==
 
-Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Path to Challenge - 0x019A5:
+Caves (Caves) - Main Island - 0x2D73F | 0x2D859 - Caves Path to Challenge - 0x019A5:
 158451 - 0x335AB (Elevator Inside Control) - True - Dots & Black/White Squares
 158452 - 0x335AC (Elevator Upper Outside Control) - 0x335AB - Black/White Squares
 158453 - 0x3369D (Elevator Lower Outside Control) - 0x335AB - Black/White Squares & Dots
@@ -1155,7 +1155,7 @@ Door - 0x2D73F (Mountain Shortcut Door) - 0x021D7
 Door - 0x2D859 (Swamp Shortcut Door) - 0x17CF2
 159341 - 0x3397C (Skylight EP) - True - True
 
-Path to Challenge (Caves) - Challenge - 0x0A19A:
+Caves Path to Challenge (Caves) - Challenge - 0x0A19A:
 158477 - 0x0A16E (Challenge Entry Panel) - True - Stars & Shapers & Stars + Same Colored Symbol
 Door - 0x0A19A (Challenge Entry) - 0x0A16E
 
