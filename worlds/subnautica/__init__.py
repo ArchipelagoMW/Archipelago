@@ -5,7 +5,8 @@ import itertools
 from typing import List, Dict, Any, cast
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
-from worlds.AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld, staticproperty
+from Utils import cache_argsless
 from . import items
 from . import locations
 from . import creatures
@@ -16,19 +17,24 @@ from .rules import set_rules
 logger = logging.getLogger("Subnautica")
 
 
-class SubnaticaWeb(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Guide",
-        "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
-        "English",
-        "setup_en.md",
-        "setup/en",
-        ["Berserker"]
-    )]
-
-
 all_locations = {data["name"]: loc_id for loc_id, data in locations.location_table.items()}
 all_locations.update(creatures.creature_locations)
+
+
+@staticproperty
+@cache_argsless
+def web():
+    class SubnaticaWeb(WebWorld):
+        tutorials = [Tutorial(
+            "Multiworld Setup Guide",
+            "A guide to setting up the Subnautica randomizer connected to an Archipelago Multiworld",
+            "English",
+            "setup_en.md",
+            "setup/en",
+            ["Berserker"]
+        )]
+
+    return SubnaticaWeb()
 
 
 class SubnauticaWorld(World):
@@ -38,7 +44,7 @@ class SubnauticaWorld(World):
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
     game = "Subnautica"
-    web = SubnaticaWeb()
+    web = web
 
     item_name_to_id = {data.name: item_id for item_id, data in items.item_table.items()}
     location_name_to_id = all_locations
