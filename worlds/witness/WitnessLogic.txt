@@ -588,7 +588,7 @@ Town RGB House Upstairs (Town RGB House Upstairs):
 158245 - 0x03C0C (Left) - 0x334D8 - Colored Squares & Black/White Squares
 158246 - 0x03C08 (Right) - 0x334D8 - Stars
 
-Town Tower (Town Tower) - Town - True - Town Tower Top - 0x27799C:
+Town Tower (Town Tower) - Town - True - Town Tower Top - 0x2779C:
 Door - 0x27799 (First Door) - 0x28A69
 
 Town Tower After First Door (Town Tower) - Town Tower After Second Door - 0x27798:
