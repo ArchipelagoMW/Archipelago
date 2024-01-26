@@ -1,7 +1,7 @@
 :root {
     --not-found-filter-recolor: saturate(0.2) brightness(0.3);
-    --not-found-filter-drop-shadow: drop-shadow(0px 0px 10px rgba(234, 126, 128, 0.60));
-    --found-filter-drop-shadow: drop-shadow(0px 0px 10px rgba(150, 150, 0, 0.70));
+    --not-found-filter-drop-shadow: drop-shadow(0px 0px 5px rgba(234, 126, 128, 0.60));
+    --found-filter-drop-shadow: drop-shadow(0px 0px 5px rgba(150, 150, 0, 0.70));
 }
 
 body {
@@ -99,6 +99,12 @@ body {
     filter: var(--not-found-filter-recolor) var(--not-found-filter-drop-shadow);
 }
 
+.checked-location.current-region {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: 1s linear 0s infinite wiggle;
+}
+
 .traversed-path.current-region .arrow-line {
     stroke-dasharray: 5;
     animation: 1s linear 0s infinite dash;
@@ -106,6 +112,20 @@ body {
 
 .traversed-path.not-open {
     filter: var(--not-found-filter-recolor);
+}
+
+@keyframes wiggle {
+    0% {
+        transform: rotate(-15deg);
+    }
+
+    50% {
+        transform: rotate(15deg);
+    }
+
+    100% {
+        transform: rotate(-15deg);
+    }
 }
 
 @keyframes dash {
