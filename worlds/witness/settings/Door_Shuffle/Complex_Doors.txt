@@ -144,7 +144,7 @@ Town RGB House Entry Panel
 Town Church Entry Panel
 Town Maze Panel
 Windmill Entry Panel
-Town Sound Room Right
+Town RGB House Sound Room Right
 Town Red Rooftop 5
 Town Church Lattice
 Town Tall Hexagonal

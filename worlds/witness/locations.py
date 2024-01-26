@@ -116,7 +116,7 @@ class StaticWitnessLocations:
 
         "Town RGB House Upstairs Left",
         "Town RGB House Upstairs Right",
-        "Town Sound Room Right",
+        "Town RGB House Sound Room Right",
 
         "Windmill Theater Entry Panel",
         "Theater Exit Left Panel",
