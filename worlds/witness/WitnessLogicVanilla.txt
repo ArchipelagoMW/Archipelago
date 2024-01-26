@@ -1066,9 +1066,9 @@ Door - 0x09F89 (Exit) - 0x09FDA
 
 Mountain Bottom Floor (Mountain Bottom Floor) - Mountain Path to Caves - 0x17F33 - Mountain Bottom Floor Pillars Room - 0x0C141:
 158614 - 0x17FA2 (Discard) - 0xFFF00 - Triangles
-158445 - 0x01983 (Final Room Entry Left) - True - Shapers & Stars
-158446 - 0x01987 (Final Room Entry Right) - True - Colored Squares & Dots
-Door - 0x0C141 (Final Room Entry) - 0x01983 & 0x01987
+158445 - 0x01983 (Pillars Room Entry Left) - True - Shapers & Stars
+158446 - 0x01987 (Pillars Room Entry Right) - True - Colored Squares & Dots
+Door - 0x0C141 (Pillars Room Entry) - 0x01983 & 0x01987
 Door - 0x17F33 (Rock Open) - 0x17FA2 | 0x334E1
 
 Mountain Bottom Floor Pillars Room (Mountain Bottom Floor) - Elevator - 0x339BB & 0x33961:

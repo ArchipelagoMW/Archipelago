@@ -201,7 +201,7 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
             always.append("Triangles")
 
     if wincon == 0:
-        always += ["Mountain Bottom Floor Final Room Entry (Door)", "Mountain Bottom Floor Doors"]
+        always += ["Mountain Bottom Floor Pillars Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
     if wincon == 1:
         always += ["Challenge Entry (Panel)", "Caves Panels"]

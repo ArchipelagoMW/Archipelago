@@ -119,8 +119,8 @@ Mountain Floor 2 Light Bridge Controller Near
 Mountain Floor 2 Light Bridge Controller Far
 Mountain Floor 2 Far Row 6
 Mountain Bottom Floor Giant Puzzle
-Mountain Bottom Floor Final Room Entry Left
-Mountain Bottom Floor Final Room Entry Right
+Mountain Bottom Floor Pillars Room Entry Left
+Mountain Bottom Floor Pillars Room Entry Right
 Mountain Bottom Floor Discard
 Mountain Bottom Floor Rock Control
 Mountain Bottom Floor Caves Entry Panel

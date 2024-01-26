@@ -407,8 +407,8 @@ class StaticWitnessLocations:
         "Mountain Floor 2 Elevator Discard",
         "Mountain Bottom Floor Giant Puzzle",
 
-        "Mountain Bottom Floor Final Room Entry Left",
-        "Mountain Bottom Floor Final Room Entry Right",
+        "Mountain Bottom Floor Pillars Room Entry Left",
+        "Mountain Bottom Floor Pillars Room Entry Right",
 
         "Mountain Bottom Floor Caves Entry Panel",
 

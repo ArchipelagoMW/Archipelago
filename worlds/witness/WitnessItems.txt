@@ -195,7 +195,7 @@ Doors:
 1828 - Mountain Floor 2 Exit (Door) - 0x09EDD
 1831 - Mountain Floor 2 Staircase Far (Door) - 0x09E07
 1834 - Mountain Bottom Floor Giant Puzzle Exit (Door) - 0x09F89
-1840 - Mountain Bottom Floor Final Room Entry (Door) - 0x0C141
+1840 - Mountain Bottom Floor Pillars Room Entry (Door) - 0x0C141
 1843 - Mountain Bottom Floor Rock (Door) - 0x17F33
 1846 - Caves Entry (Door) - 0x2D77D
 1849 - Caves Pillar Door - 0x019A5
