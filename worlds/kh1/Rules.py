@@ -37,6 +37,9 @@ def has_postcards(state: CollectionState, player: int, postcards_required: int) 
     postcards_available = postcards_available + state.count("Postcard", player) #3 can be found in chests/events
     return postcards_available >= postcards_required
 
+def has_offensive_magic(state: CollectionState, player: int) -> bool:
+    return state.has("Progressive Fire", player) or state.has("Progressive Blizzard", player) or state.has("Progressive Thunder", player) or state.has("Progressive Gravity", player) or state.has("Progressive Stop", player)
+
 def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     #Location rules.
     #Keys
@@ -74,7 +77,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
     multiworld.get_location("Wonderland Lotus Forest Through the Painting Thunder Plant Chest"             , player).access_rule = lambda state: has_item(state, player, "Progressive Thunder") and has_evidence(state, player)
     multiworld.get_location("Wonderland Lotus Forest Glide Chest"                                          , player).access_rule = lambda state: can_glide(state, player)
    #multiworld.get_location("Wonderland Lotus Forest Nut Chest"                                            , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Wonderland Lotus Forest Corner Chest"                                         , player).access_rule = lambda state: has_item(state, player, "High Jump")
+    multiworld.get_location("Wonderland Lotus Forest Corner Chest"                                         , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
     multiworld.get_location("Wonderland Bizarre Room Lamp Chest"                                           , player).access_rule = lambda state: has_evidence(state, player)
     multiworld.get_location("Wonderland Tea Party Garden Above Lotus Forest Entrance 2nd Chest"            , player).access_rule = lambda state: can_glide(state, player)
     multiworld.get_location("Wonderland Tea Party Garden Above Lotus Forest Entrance 1st Chest"            , player).access_rule = lambda state: can_glide(state, player)
@@ -85,7 +88,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("Deep Jungle Tree House Rooftop Chest"                                         , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Deep Jungle Hippo's Lagoon Center Chest"                                      , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Deep Jungle Hippo's Lagoon Left Chest"                                        , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Deep Jungle Hippo's Lagoon Right Chest"                                       , player).access_rule = lambda state: has_item(state, player, "High Jump")
+    multiworld.get_location("Deep Jungle Hippo's Lagoon Right Chest"                                       , player).access_rule = lambda state: has_item(state, player, "High Jump") or can_glide(state, player)
    #multiworld.get_location("Deep Jungle Vines Chest"                                                      , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Deep Jungle Vines 2 Chest"                                                    , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Deep Jungle Climbing Trees Blue Trinity Chest"                                , player).access_rule = lambda state: has_item(state, player, "Blue Trinity")
@@ -291,9 +294,9 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("Monstro Goofy Cheer Event"                                                    , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Monstro Stop Event"                                                           , player).access_rule = lambda state: has_item(state, player, "High Jump")
     if atlantica or goal == "atlantica":
-       #multiworld.get_location("Atlantica Mermaid Kick Event"                                             , player).access_rule = lambda state: has_item(state, player "")
-        multiworld.get_location("Atlantica Thunder Event"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
-        multiworld.get_location("Atlantica Crabclaw Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+        multiworld.get_location("Atlantica Mermaid Kick Event"                                             , player).access_rule = lambda state: has_offensive_magic(state, player)
+        multiworld.get_location("Atlantica Thunder Event"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
+        multiworld.get_location("Atlantica Crabclaw Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
     multiworld.get_location("Halloween Town Holy Circlet Event"                                            , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
     multiworld.get_location("Halloween Town Gravity Event"                                                 , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
     multiworld.get_location("Halloween Town Pumpkinhead Event"                                             , player).access_rule = lambda state: has_item(state, player, "Jack-In-The-Box") and has_item(state, player, "Progressive Fire")
@@ -344,7 +347,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool):
    #multiworld.get_location("Ansem's Secret Report 1"                                                      , player).access_rule = lambda state: has_item(state, player, "")
     multiworld.get_location("Ansem's Secret Report 2"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     if atlantica or goal == "atlantica":
-        multiworld.get_location("Ansem's Secret Report 3"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick")
+        multiworld.get_location("Ansem's Secret Report 3"                                                  , player).access_rule = lambda state: has_item(state, player, "Mermaid Kick") and has_offensive_magic(state, player)
     multiworld.get_location("Ansem's Secret Report 4"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 5"                                                      , player).access_rule = lambda state: has_emblems(state, player)
     multiworld.get_location("Ansem's Secret Report 6"                                                      , player).access_rule = lambda state: has_emblems(state, player)
