@@ -9,12 +9,12 @@ from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .connections import CONNECTIONS
-from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
+from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
 from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
-from .shop import FIGURINES, SHOP_ITEMS, shuffle_shop_prices
+from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
 from .subclasses import MessengerItem, MessengerRegion
 
 components.append(
@@ -73,10 +73,10 @@ class MessengerWorld(World):
                                "Money Wrench",
                            ], base_offset)}
     item_name_groups = {
-        "Notes": set(NOTES),
-        "Keys": set(NOTES),
-        "Crest": {"Sun Crest", "Moon Crest"},
-        "Phobe": set(PHOBEKINS),
+        "Notes":    set(NOTES),
+        "Keys":     set(NOTES),
+        "Crest":    {"Sun Crest", "Moon Crest"},
+        "Phobe":    set(PHOBEKINS),
         "Phobekin": set(PHOBEKINS),
     }
 
@@ -86,6 +86,7 @@ class MessengerWorld(World):
 
     total_seals: int = 0
     required_seals: int = 0
+    created_seals: int = 0
     total_shards: int = 0
     shop_prices: Dict[str, int]
     figurine_prices: Dict[str, int]
@@ -137,10 +138,10 @@ class MessengerWorld(World):
             self.create_item(item)
             for item in self.item_name_to_id
             if item not in
-            {
-                "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
-                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-            } and "Time Shard" not in item
+               {
+                   "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
+                   *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+               } and "Time Shard" not in item
         ]
 
         if self.options.limited_movement:
@@ -154,8 +155,8 @@ class MessengerWorld(World):
             notes = [note for note in NOTES if note not in self.multiworld.precollected_items[self.player]]
             self.random.shuffle(notes)
             precollected_notes_amount = NotesNeeded.range_end - \
-                self.options.notes_needed - \
-                (len(NOTES) - len(notes))
+                                        self.options.notes_needed - \
+                                        (len(NOTES) - len(notes))
             if precollected_notes_amount:
                 for note in notes[:precollected_notes_amount]:
                     self.multiworld.push_precollected(self.create_item(note))
@@ -172,17 +173,15 @@ class MessengerWorld(World):
             self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
 
             seals = [self.create_item("Power Seal") for _ in range(self.total_seals)]
-            for i in range(self.required_seals):
-                seals[i].classification = ItemClassification.progression_skip_balancing
             itempool += seals
 
         self.multiworld.itempool += itempool
         remaining_fill = len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool)
         if remaining_fill < 10:
             self._filler_items = self.random.choices(
-                                      list(FILLER)[2:],
-                                      weights=list(FILLER.values())[2:],
-                                      k=remaining_fill
+                list(FILLER)[2:],
+                weights=list(FILLER.values())[2:],
+                k=remaining_fill
             )
         filler = [self.create_filler() for _ in range(remaining_fill)]
 
@@ -206,12 +205,12 @@ class MessengerWorld(World):
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
-            "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
-            "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
-            "max_price": self.total_shards,
-            "required_seals": self.required_seals,
+            "shop":             {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
+            "figures":          {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
+            "max_price":        self.total_shards,
+            "required_seals":   self.required_seals,
             "starting_portals": self.starting_portals,
-            "portal_exits": self.portal_mapping if self.portal_mapping else [],
+            "portal_exits":     self.portal_mapping if self.portal_mapping else [],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data
@@ -227,15 +226,35 @@ class MessengerWorld(World):
 
     def create_item(self, name: str) -> MessengerItem:
         item_id: Optional[int] = self.item_name_to_id.get(name, None)
-        override_prog = getattr(self, "multiworld") is not None and \
-            name in {"Windmill Shuriken"} and \
-            self.options.logic_level > Logic.option_normal
-        count = 0
+        return MessengerItem(
+            name,
+            ItemClassification.progression if item_id is None else self.get_item_classification(name),
+            item_id,
+            self.player
+        )
+
+    def get_item_classification(self, name: str) -> ItemClassification:
         if "Time Shard " in name:
             count = int(name.strip("Time Shard ()"))
             count = count if count >= 100 else 0
             self.total_shards += count
-        return MessengerItem(name, self.player, item_id, override_prog, count)
+            return ItemClassification.progression_skip_balancing if count else ItemClassification.filler
+
+        if name == "Windmill Shuriken":
+            return ItemClassification.progression if self.options.logic_level else ItemClassification.filler
+
+        if name == "Power Seal":
+            self.created_seals += 1
+            return ItemClassification.progression_skip_balancing \
+                if self.required_seals >= self.created_seals else ItemClassification.filler
+
+        if name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
+            return ItemClassification.progression
+
+        if name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
+            return ItemClassification.useful
+
+        return ItemClassification.filler
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)

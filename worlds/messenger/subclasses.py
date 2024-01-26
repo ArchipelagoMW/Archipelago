@@ -47,7 +47,7 @@ class MessengerLocation(Location):
     def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:
         super().__init__(player, name, loc_id, parent)
         if loc_id is None:
-            self.place_locked_item(MessengerItem(name, parent.player, None))
+            self.place_locked_item(MessengerItem(name, ItemClassification.progression, None, parent.player))
 
 
 class MessengerShopLocation(MessengerLocation):
@@ -78,15 +78,3 @@ class MessengerShopLocation(MessengerLocation):
 
 class MessengerItem(Item):
     game = "The Messenger"
-
-    def __init__(self, name: str, player: int, item_id: Optional[int] = None, override_progression: bool = False,
-                 count: int = 0) -> None:
-        if count:
-            item_class = ItemClassification.progression_skip_balancing
-        elif item_id is None or override_progression or name in {*NOTES, *PROG_ITEMS, *PHOBEKINS, *PROG_SHOP_ITEMS}:
-            item_class = ItemClassification.progression
-        elif name in {*USEFUL_ITEMS, *USEFUL_SHOP_ITEMS}:
-            item_class = ItemClassification.useful
-        else:
-            item_class = ItemClassification.filler
-        super().__init__(name, item_class, item_id, player)
