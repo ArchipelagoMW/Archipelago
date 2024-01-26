@@ -1,4 +1,5 @@
-from Options import Choice, FreeText, Toggle, Range
+from Options import Choice, FreeText, Toggle, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class Logic(Choice):
@@ -321,36 +322,36 @@ class KaelisMomFightsMinotaur(Toggle):
     default = 0
 
 
-option_definitions = {
-    "logic": Logic,
-    "brown_boxes": BrownBoxes,
-    "sky_coin_mode": SkyCoinMode,
-    "shattered_sky_coin_quantity": ShatteredSkyCoinQuantity,
-    "starting_weapon": StartingWeapon,
-    "progressive_gear": ProgressiveGear,
-    "leveling_curve": LevelingCurve,
-    "starting_companion": StartingCompanion,
-    "available_companions": AvailableCompanions,
-    "companions_locations": CompanionsLocations,
-    "kaelis_mom_fight_minotaur": KaelisMomFightsMinotaur,
-    "companion_leveling_type": CompanionLevelingType,
-    "companion_spellbook_type": CompanionSpellbookType,
-    "enemies_density": EnemiesDensity,
-    "enemies_scaling_lower": EnemiesScalingLower,
-    "enemies_scaling_upper": EnemiesScalingUpper,
-    "bosses_scaling_lower": BossesScalingLower,
-    "bosses_scaling_upper": BossesScalingUpper,
-    "enemizer_attacks": EnemizerAttacks,
-    "enemizer_groups": EnemizerGroups,
-    "shuffle_res_weak_types": ShuffleResWeakType,
-    "shuffle_enemies_position": ShuffleEnemiesPositions,
-    "progressive_formations": ProgressiveFormations,
-    "doom_castle_mode": DoomCastle,
-    "doom_castle_shortcut": DoomCastleShortcut,
-    "tweak_frustrating_dungeons": TweakFrustratingDungeons,
-    "map_shuffle": MapShuffle,
-    "crest_shuffle": CrestShuffle,
-    "shuffle_battlefield_rewards": ShuffleBattlefieldRewards,
-    "map_shuffle_seed": MapShuffleSeed,
-    "battlefields_battles_quantities": BattlefieldsBattlesQuantities,
-}
+@dataclass
+class FFMQOptions(PerGameCommonOptions):
+    logic: Logic
+    brown_boxes: BrownBoxes
+    sky_coin_mode: SkyCoinMode
+    shattered_sky_coin_quantity: ShatteredSkyCoinQuantity
+    starting_weapon: StartingWeapon
+    progressive_gear: ProgressiveGear
+    leveling_curve: LevelingCurve
+    starting_companion: StartingCompanion
+    available_companions: AvailableCompanions
+    companions_locations: CompanionsLocations
+    kaelis_mom_fight_minotaur: KaelisMomFightsMinotaur
+    companion_leveling_type: CompanionLevelingType
+    companion_spellbook_type: CompanionSpellbookType
+    enemies_density: EnemiesDensity
+    enemies_scaling_lower: EnemiesScalingLower
+    enemies_scaling_upper: EnemiesScalingUpper
+    bosses_scaling_lower: BossesScalingLower
+    bosses_scaling_upper: BossesScalingUpper
+    enemizer_attacks: EnemizerAttacks
+    enemizer_groups: EnemizerGroups
+    shuffle_res_weak_types: ShuffleResWeakType
+    shuffle_enemies_position: ShuffleEnemiesPositions
+    progressive_formations: ProgressiveFormations
+    doom_castle_mode: DoomCastle
+    doom_castle_shortcut: DoomCastleShortcut
+    tweak_frustrating_dungeons: TweakFrustratingDungeons
+    map_shuffle: MapShuffle
+    crest_shuffle: CrestShuffle
+    shuffle_battlefield_rewards: ShuffleBattlefieldRewards
+    map_shuffle_seed: MapShuffleSeed
+    battlefields_battles_quantities: BattlefieldsBattlesQuantities

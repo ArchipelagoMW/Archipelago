@@ -10,7 +10,7 @@ from .Regions import create_regions, location_table, set_rules, stage_set_rules,
     non_dead_end_crest_warps
 from .Items import item_table, item_groups, create_items, FFMQItem, fillers
 from .Output import generate_output
-from .Options import option_definitions
+from .Options import FFMQOptions
 from .Client import FFMQClient
 
 
@@ -45,7 +45,8 @@ class FFMQWorld(World):
 
     item_name_to_id = {name: data.id for name, data in item_table.items() if data.id is not None}
     location_name_to_id = location_table
-    option_definitions = option_definitions
+    options_dataclass = FFMQOptions
+    options: FFMQOptions
 
     topology_present = True
 
@@ -69,20 +70,20 @@ class FFMQWorld(World):
         super().__init__(world, player)
 
     def generate_early(self):
-        if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
-            self.multiworld.brown_boxes[self.player].value = 1
-        if self.multiworld.enemies_scaling_lower[self.player].value > \
-                self.multiworld.enemies_scaling_upper[self.player].value:
-            (self.multiworld.enemies_scaling_lower[self.player].value,
-             self.multiworld.enemies_scaling_upper[self.player].value) =\
-                (self.multiworld.enemies_scaling_upper[self.player].value,
-                 self.multiworld.enemies_scaling_lower[self.player].value)
-        if self.multiworld.bosses_scaling_lower[self.player].value > \
-                self.multiworld.bosses_scaling_upper[self.player].value:
-            (self.multiworld.bosses_scaling_lower[self.player].value,
-             self.multiworld.bosses_scaling_upper[self.player].value) =\
-                (self.multiworld.bosses_scaling_upper[self.player].value,
-                 self.multiworld.bosses_scaling_lower[self.player].value)
+        if self.options.sky_coin_mode == "shattered_sky_coin":
+            self.options.brown_boxes.value = 1
+        if self.options.enemies_scaling_lower.value > \
+                self.options.enemies_scaling_upper.value:
+            (self.options.enemies_scaling_lower.value,
+             self.options.enemies_scaling_upper.value) =\
+                (self.options.enemies_scaling_upper.value,
+                 self.options.enemies_scaling_lower.value)
+        if self.options.bosses_scaling_lower.value > \
+                self.options.bosses_scaling_upper.value:
+            (self.options.bosses_scaling_lower.value,
+             self.options.bosses_scaling_upper.value) =\
+                (self.options.bosses_scaling_upper.value,
+                 self.options.bosses_scaling_lower.value)
 
     @classmethod
     def stage_generate_early(cls, multiworld):
@@ -177,14 +178,14 @@ class FFMQWorld(World):
 
     def extend_hint_information(self, hint_data):
         hint_data[self.player] = {}
-        if self.multiworld.map_shuffle[self.player]:
+        if self.options.map_shuffle:
             single_location_regions = ["Subregion Volcano Battlefield", "Subregion Mac's Ship", "Subregion Doom Castle"]
             for subregion in ["Subregion Foresta", "Subregion Aquaria", "Subregion Frozen Fields", "Subregion Fireburg",
                               "Subregion Volcano Battlefield", "Subregion Windia", "Subregion Mac's Ship",
                               "Subregion Doom Castle"]:
                 region = self.multiworld.get_region(subregion, self.player)
                 for location in region.locations:
-                    if location.address and self.multiworld.map_shuffle[self.player] != "dungeons":
+                    if location.address and self.options.map_shuffle != "dungeons":
                         hint_data[self.player][location.address] = (subregion.split("Subregion ")[-1]
                                                                     + (" Region" if subregion not in
                                                                        single_location_regions else ""))
@@ -204,10 +205,10 @@ class FFMQWorld(World):
                             for location in exit_check.connected_region.locations:
                                 if location.address:
                                     hint = []
-                                    if self.multiworld.map_shuffle[self.player] != "dungeons":
+                                    if self.options.map_shuffle != "dungeons":
                                         hint.append((subregion.split("Subregion ")[-1] + (" Region" if subregion not
                                                     in single_location_regions else "")))
-                                    if self.multiworld.map_shuffle[self.player] != "overworld" and subregion not in \
+                                    if self.options.map_shuffle != "overworld" and subregion not in \
                                             ("Subregion Mac's Ship", "Subregion Doom Castle"):
                                         hint.append(overworld_spot.name.split("Overworld - ")[-1].replace("Pazuzu",
                                             "Pazuzu's"))
