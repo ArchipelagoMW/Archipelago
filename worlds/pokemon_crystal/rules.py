@@ -83,6 +83,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # set_rule(get_location("Elm's Lab - Everstone from Elm"),
     #          lambda state: state.has("EVENT_GOT_TOGEPI_EGG_FROM_ELMS_AIDE", world.player))
 
+    set_rule(get_location("Elm's Lab - Gift from Aide After Returning Mystery Egg"),
+             lambda state: state.has("Mystery Egg", world.player))
+
     set_rule(get_location("Elm's Lab - Master Ball from Elm"), lambda state: state.has("Rising Badge", world.player))
 
     set_rule(get_location("Elm's Lab - S.S. Ticket from Elm"),
@@ -203,9 +206,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Burned Tower 1F - Item"), can_rocksmash)
     set_rule(get_location("Burned Tower B1F - Item"), can_strength)
 
-    set_rule(get_entrance("REGION_ECRUTEAK_CITY -> REGION_TIN_TOWER_1F"), lambda state: state.has("Clear Bell",
-                                                                                                  world.player) and state.has(
-        "EVENT_CLEARED_RADIO_TOWER", world.player))
+    set_rule(get_entrance("REGION_ECRUTEAK_CITY -> REGION_TIN_TOWER_1F"),
+             lambda state: state.has("Clear Bell", world.player) and
+                           state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
 
     # Olivine City
     set_rule(get_location("EVENT_JASMINE_RETURNED_TO_GYM"), lambda state: state.has("Secretpotion", world.player))
@@ -232,12 +235,14 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     if hidden():
         set_rule(get_location("Route 41 - Hidden Item on Southwest Island"), can_whirlpool)
 
-    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_NW"), can_whirlpool)
-    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_NE"), can_whirlpool)
-    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_SW"), can_whirlpool)
-    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_SE"), can_whirlpool)
-
-    # Whirl Islands
+    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_NW"),
+             lambda state: can_whirlpool(state) and can_flash(state))
+    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_NE"),
+             lambda state: can_whirlpool(state) and can_flash(state))
+    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_SW"),
+             lambda state: can_whirlpool(state) and can_flash(state))
+    set_rule(get_entrance("REGION_ROUTE_41 -> REGION_WHIRL_ISLAND_SE"),
+             lambda state: can_whirlpool(state) and can_flash(state))
 
     # Cianwood
 
@@ -341,16 +346,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     add_rule(get_entrance("REGION_BLACKTHORN_CITY -> REGION_DRAGONS_DEN_1F"), can_surf)
 
     # Dragons Den
-
-    set_rule(get_location("Dragon's Den B1F - Item 3"), can_surf)
-    set_rule(get_location("Dragon's Den B1F - Item 3"), lambda state: can_surf(state) and can_whirlpool(state))
+    set_rule(get_location("Dragon's Den B1F - Item 3"), can_whirlpool)
 
     if hidden():
-        set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 1"), can_surf)
         set_rule(get_location("Dragon's Den B1F - Hidden Item in Water 2"),
-                 lambda state: can_surf(state) and can_whirlpool(state))
+                 can_whirlpool)
         set_rule(get_location("Dragon's Den B1F - Hidden Item in SE Corner"),
-                 lambda state: can_surf(state) and can_whirlpool(state))
+                 can_whirlpool)
 
     # Route 45
 
@@ -399,6 +401,8 @@ def set_rules(world: PokemonCrystalWorld) -> None:
         set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
 
     # Silver Cave
+    set_rule(get_entrance("REGION_SILVER_CAVE_OUTSIDE -> REGION_SILVER_CAVE_ROOM_1"), can_flash)
+
     if hidden():
         set_rule(get_location("Outside Silver Cave - Hidden Item Across Water"), can_surf)
 
@@ -428,7 +432,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Cerulean
     if hidden():
-        set_rule(get_location("Cerulean City - Hidden Item in Water"), can_cut)
+        set_rule(get_location("Cerulean City - Hidden Item in Water"), can_surf)
 
     set_rule(get_entrance("REGION_CERULEAN_CITY -> REGION_ROUTE_9"), can_cut)
 
@@ -461,7 +465,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_location("Route 12 - Item 2"), lambda state: can_cut(state) and can_surf(state))
 
     if hidden():
-        set_rule(get_location("Route 12 - Hidden Item on Island"), can_cut)
+        set_rule(get_location("Route 12 - Hidden Item on Island"), can_surf)
 
     # Vermilion
     set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),

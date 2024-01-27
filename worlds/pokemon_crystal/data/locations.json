@@ -2815,6 +2815,14 @@
 		"default_item": "POTION",
 		"script": "AP_NPC_ElmsLab_POTION"
 	},
+	"POKE_BALL_FROM_ELMS_AIDE": {
+		"label": "Elm's Lab - Gift from Aide After Returning Mystery Egg",
+		"flag": "EVENT_GOT_POKE_BALL_FROM_ELMS_AIDE",
+		"type": "giveitem",
+		"tags": ["NPCGift"],
+		"default_item": "POKE_BALL",
+		"script": "AP_NPC_ElmsLab_POKE_BALL"
+	},
 	"ZEPHYR_BADGE_FROM_FALKNER": {
 		"label": "Violet Gym - Zephyr Badge from Falkner",
 		"flag": "EVENT_ZEPHYR_BADGE_FROM_FALKNER",
