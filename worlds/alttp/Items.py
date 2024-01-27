@@ -1,23 +1,23 @@
 import typing
 
-from BaseClasses import ItemClassification as IC
+from BaseClasses import ItemClassification as IC, MultiWorld
 
 
-def GetBeemizerItem(world, player: int, item):
+def GetBeemizerItem(multiworld: MultiWorld, player: int, item):
     item_name = item if isinstance(item, str) else item.name
 
     if item_name not in trap_replaceable:
         return item
 
     # first roll - replaceable item should be replaced, within beemizer_total_chance
-    if not world.beemizer_total_chance[player] or world.random.random() > (world.beemizer_total_chance[player] / 100):
+    if not multiworld.beemizer_total_chance[player] or multiworld.random.random() > (multiworld.beemizer_total_chance[player] / 100):
         return item
 
     # second roll - bee replacement should be trap, within beemizer_trap_chance
-    if not world.beemizer_trap_chance[player] or world.random.random() > (world.beemizer_trap_chance[player] / 100):
-        return "Bee" if isinstance(item, str) else world.create_item("Bee", player)
+    if not multiworld.beemizer_trap_chance[player] or multiworld.random.random() > (multiworld.beemizer_trap_chance[player] / 100):
+        return "Bee" if isinstance(item, str) else multiworld.create_item("Bee", player)
     else:
-        return "Bee Trap" if isinstance(item, str) else world.create_item("Bee Trap", player)        
+        return "Bee Trap" if isinstance(item, str) else multiworld.create_item("Bee Trap", player)
 
 
 # should be replaced with direct world.create_item(item) call in the future

@@ -180,7 +180,7 @@ def get_dungeon_item_pool(multiworld: MultiWorld) -> typing.List[ALttPItem]:
             for item in get_dungeon_item_pool_player(world)]
 
 
-def get_dungeon_item_pool_player(world) -> typing.List[ALttPItem]:
+def get_dungeon_item_pool_player(world: ALTTPWorld) -> typing.List[ALttPItem]:
     return [item
             for dungeon in world.dungeons.values()
             for item in dungeon.all_items]

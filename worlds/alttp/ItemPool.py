@@ -1,8 +1,11 @@
 from collections import namedtuple
 import logging
+from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification
 from Fill import FillError
+if TYPE_CHECKING:
+    from . import ALTTPWorld
 
 from .SubClasses import ALttPLocation, LTTPRegion, LTTPRegionType
 from .Shops import TakeAny, total_shop_slots, set_up_shops, shuffle_shops, create_dynamic_shop_locations
@@ -225,7 +228,7 @@ for diff in {'easy', 'normal', 'hard', 'expert'}:
     )
 
 
-def generate_itempool(world):
+def generate_itempool(world: "ALTTPWorld"):
     player = world.player
     multiworld = world.multiworld
 
@@ -399,11 +402,11 @@ def generate_itempool(world):
             loc.address = None
         elif multiworld.goal[player] == 'icerodhunt':
             # key drop item removed because of icerodhunt
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Nothing'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
             multiworld.push_precollected(drop_item)
         elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(world, player, 'Small Key (Universal)'), player))
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
     if multiworld.goal[player] == 'icerodhunt':
