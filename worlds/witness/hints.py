@@ -652,17 +652,12 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
     remaining_location_hints = intended_location_hints - always_hints_to_use
     priority_hints_to_use = int(max(0.0, min(possible_priority_hints / 2, remaining_location_hints / 2)))
 
-    amt_of_used_always_hints = 0
-    amt_of_used_priority_hints = 0
-
     for _ in range(always_hints_to_use):
-        amt_of_used_always_hints += 1
         location_hint = always_hints.pop()
         generated_hints.append(word_direct_hint(world, location_hint))
         already_hinted_locations.add(location_hint.location)
 
     for _ in range(priority_hints_to_use):
-        amt_of_used_priority_hints += 1
         location_hint = priority_hints.pop()
         generated_hints.append(word_direct_hint(world, location_hint))
         already_hinted_locations.add(location_hint.location)
@@ -679,6 +674,10 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
     # If we don't have enough hints yet, recalculate always and priority hints, then fill with random hints
     if len(generated_hints) < hint_amount:
         remaining_needed_location_hints = hint_amount - len(generated_hints)
+
+        # Save old values for used always and priority hints for later calculations
+        amt_of_used_always_hints = always_hints_to_use
+        amt_of_used_priority_hints = priority_hints_to_use
 
         # Recalculate how many always hints and priority hints are supposed to be used
         intended_location_hints = remaining_needed_location_hints + location_hints_created_in_round_1
