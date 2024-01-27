@@ -634,7 +634,7 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
         if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }
 
-    intended_location_hints = area_hints - hint_amount
+    intended_location_hints = hint_amount - area_hints
 
     # First, make always and priority hints.
 
@@ -652,18 +652,20 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
     remaining_location_hints = intended_location_hints - always_hints_to_use
     priority_hints_to_use = int(max(0.0, min(possible_priority_hints / 2, remaining_location_hints / 2)))
 
+    amt_of_used_always_hints = 0
+    amt_of_used_priority_hints = 0
+
     for _ in range(always_hints_to_use):
+        amt_of_used_always_hints += 1
         location_hint = always_hints.pop()
         generated_hints.append(word_direct_hint(world, location_hint))
         already_hinted_locations.add(location_hint.location)
 
     for _ in range(priority_hints_to_use):
+        amt_of_used_priority_hints += 1
         location_hint = priority_hints.pop()
         generated_hints.append(word_direct_hint(world, location_hint))
         already_hinted_locations.add(location_hint.location)
-
-    amt_of_used_always_hints = len(always_hints) - always_hints_to_use
-    amt_of_used_priority_hints = len(priority_hints) - priority_hints_to_use
 
     location_hints_created_in_round_1 = len(generated_hints)
 
