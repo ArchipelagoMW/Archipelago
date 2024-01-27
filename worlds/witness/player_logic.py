@@ -591,6 +591,7 @@ class WitnessPlayerLogic:
         self.REQUIREMENTS_BY_HEX = dict()
         self.USED_EVENT_NAMES_BY_HEX = dict()
         self.CONNECTIONS_BY_REGION_NAME = dict()
+        self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI = set()
 
         # Make independent requirements for entities
         for entity_hex in self.DEPENDENT_REQUIREMENTS_BY_HEX.keys():
