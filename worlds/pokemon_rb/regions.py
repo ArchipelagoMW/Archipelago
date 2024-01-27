@@ -1904,6 +1904,38 @@ def create_regions(self):
                 lambda state: logic.can_fly(state, player) and state.has("Town Map", player), one_way=True,
                 name="Town Map Fly Location")
 
+    cache = multiworld.regions.entrance_cache[self.player].copy()
+    if multiworld.badgesanity[player]:
+        badges = None
+        badge_locs = None
+    else:
+        badges = [item for item in self.item_pool if "Badge" in item.name]
+        for badge in badges:
+           self.item_pool.remove(badge)
+        badge_locs = [multiworld.get_location(loc, player) for loc in [
+            "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
+            "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+            "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
+        ]]
+    for attempt in range(10):
+        try:
+            door_shuffle(self, multiworld, player, badges.copy(), badge_locs)
+        except DoorShuffleException as e:
+            if True: #attempt == 9: #TODO
+                raise e
+            for region in self.multiworld.get_regions(player):
+                for entrance in reversed(region.exits):
+                    if isinstance(entrance, PokemonRBWarp):
+                        region.exits.remove(entrance)
+            multiworld.regions.entrance_cache[self.player] = cache
+            for loc in badge_locs:
+                loc.item = None
+                loc.locked = False
+        else:
+            break
+
+
+def door_shuffle(world, multiworld, player, badges, badge_locs):
     entrances = []
     for region_name, region_entrances in warp_data.items():
         for entrance_data in region_entrances:
@@ -1958,7 +1990,7 @@ def create_regions(self):
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
-            if self.multiworld.key_items_only[self.player]:
+            if multiworld.key_items_only[player]:
                 usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
         if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
             forced_connections.update(insanity_mandatory_connections)
@@ -2004,7 +2036,7 @@ def create_regions(self):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
             forced_pokemarts = multiworld.random.sample(pokemart_entrances, 8)
-            if self.multiworld.key_items_only[self.player]:
+            if multiworld.key_items_only[player]:
                 forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
             for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
@@ -2102,7 +2134,7 @@ def create_regions(self):
         single_entrance_dungeon_entrances = dungeon_entrances.copy()
 
         for i in range(2):
-            if True or not multiworld.random.randint(0, 2):
+            if not multiworld.random.randint(0, 2):
                 placed_connecting_interior_dungeons.append(multi_purpose_dungeons[i])
                 interior_dungeon_entrances.append([multi_purpose_dungeon_entrances[i], None])
             else:
@@ -2215,14 +2247,6 @@ def create_regions(self):
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
         if not multiworld.badgesanity[player]:
-            badges = [item for item in self.item_pool if "Badge" in item.name]
-            for badge in badges:
-               self.item_pool.remove(badge)
-            badge_locs = []
-            for loc in ["Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
-                        "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
-                        "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]:
-                badge_locs.append(multiworld.get_location(loc, player))
             multiworld.random.shuffle(badges)
             while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player]:
                 multiworld.random.shuffle(badges)
@@ -2233,7 +2257,7 @@ def create_regions(self):
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
                     and ("Badge" not in item or multiworld.badgesanity[player]):
-                state.collect(self.create_item(item))
+                state.collect(world.create_item(item))
 
         multiworld.random.shuffle(entrances)
         reachable_entrances = []
@@ -2269,7 +2293,7 @@ def create_regions(self):
                 "Defeat Viridian Gym Giovanni",
             ]
 
-        event_locations = self.multiworld.get_filled_locations(player)
+        event_locations = multiworld.get_filled_locations(player)
 
         def adds_reachable_entrances(entrances_copy, item, dead_end_cache):
             ret = dead_end_cache.get(item.name)
@@ -2314,28 +2338,28 @@ def create_regions(self):
             return True
 
         starting_entrances = len(entrances)
-        dc_connected = []
         rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name]
         entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
+        dc_destinations = None
+        if multiworld.door_shuffle[player] == "decoupled":
+            dc_destinations = entrances.copy()
+
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(locations=event_locations)
 
             if rock_tunnel_entrances and logic.rock_tunnel(state, player):
                 entrances += rock_tunnel_entrances
+                if multiworld.entrance_shuffle[player] == "decoupled":
+                    dc_destinations += rock_tunnel_entrances
                 rock_tunnel_entrances = None
 
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
-            assert reachable_entrances, \
-                "Ran out of reachable entrances in Pokemon Red and Blue door shuffle"
+            if not reachable_entrances:
+                raise DoorShuffleException("Ran out of reachable entrances in Pokemon Red and Blue door shuffle")
             multiworld.random.shuffle(entrances)
-            if multiworld.door_shuffle[player] == "decoupled" and len(entrances) == 1:
-                entrances += dc_connected
-                entrances[-1].connect(entrances[0])
-                while len(entrances) > 1:
-                    entrances.pop(0).connect(entrances[0])
-                break
+
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
@@ -2344,10 +2368,8 @@ def create_regions(self):
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
                 if multiworld.door_shuffle[player] == "decoupled":
-                    entrances.sort(key=lambda e: 1 if e.connected_region is not None else 2 if e not in
-                                   reachable_entrances else 0)
-                    assert entrances[0].connected_region is None,\
-                        "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
+                    entrances.sort(key=lambda e: e not in reachable_entrances)
+                    dc_destinations.sort(key=lambda e: e in reachable_entrances)
                 elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
                         entrances) <= (starting_entrances - 3):
                     entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
@@ -2363,19 +2385,19 @@ def create_regions(self):
                         entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
 
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
-                assert entrances[0] in reachable_entrances, \
-                    "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle"
+                if entrances[0] not in reachable_entrances:
+                    raise DoorShuffleException(
+                        "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle")
             if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
                     <= (starting_entrances - 3)):
-                entrance_b = entrances.pop(1)
+                entrance_b = dc_destinations.pop(0)
+            elif multiworld.door_shuffle[player] == "decoupled":
+                entrance_b = dc_destinations.pop()
             else:
                 entrance_b = entrances.pop()
             entrance_a = entrances.pop(0)
             entrance_a.connect(entrance_b)
-            if multiworld.door_shuffle[player] == "decoupled":
-                entrances.append(entrance_b)
-                dc_connected.append(entrance_a)
-            else:
+            if multiworld.door_shuffle[player] != "decoupled":
                 entrance_b.connect(entrance_a)
 
         if multiworld.door_shuffle[player] == "full":
@@ -2443,9 +2465,18 @@ class PokemonRBWarp(Entrance):
     def access_rule(self, state):
         if self.connected_region is None:
             return False
+        if "Elevator" in self.parent_region.name and (
+                (state.multiworld.all_elevators_locked[self.player]
+                 or "Rocket Hideout" in self.parent_region.name)
+                and not state.has("Lift Key", self.player)):
+            return False
         if "Rock Tunnel" in self.parent_region.name or "Rock Tunnel" in self.connected_region.name:
             return logic.rock_tunnel(state, self.player)
         return True
+
+
+class DoorShuffleException(Exception):
+    pass
 
 
 class PokemonRBRegion(Region):

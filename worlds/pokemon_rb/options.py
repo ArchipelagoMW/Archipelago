@@ -228,7 +228,7 @@ class SplitCardKey(Choice):
 
 class AllElevatorsLocked(Toggle):
     """Adds requirements to the Celadon Department Store elevator and Silph Co elevators to have the Lift Key.
-    No logical implications normally, but may have a significant impact on Insanity Door Shuffle."""
+    No logical implications normally, but may have a significant impact on Insanity or Decoupled Door Shuffle."""
     display_name = "All Elevators Locked"
     default = 1
 
@@ -324,22 +324,8 @@ class DoorShuffle(Choice):
     option_simple = 1
     option_full = 2
     option_insanity = 3
-    # Disabled for now, has issues with elevators that need to be resolved
-    # option_decoupled = 4
+    option_decoupled = 4
     default = 0
-
-    # remove assertions that blow up checks for decoupled
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return other.value == self.value
-        elif isinstance(other, str):
-            return other == self.current_key
-        elif isinstance(other, int):
-            return other == self.value
-        elif isinstance(other, bool):
-            return other == bool(self.value)
-        else:
-            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
 class WarpTileShuffle(Toggle):
