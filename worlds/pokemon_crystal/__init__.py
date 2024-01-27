@@ -187,7 +187,8 @@ class PokemonCrystalWorld(World):
             "full_tmhm_compatibility",
             "blind_trainers",
             "better_marts",
-            "goal"
+            "goal",
+            "require_itemfinder"
         )
         return slot_data
 

@@ -287,7 +287,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Behind boulder, need to come down from 2F for this
 
     set_rule(get_entrance("REGION_MOUNT_MORTAR_B1F:BACK -> REGION_MOUNT_MORTAR_B1F"),
-             lambda state: can_strength(state) and can_surf(state))
+             lambda state: can_strength(state) and can_surf(state) and can_waterfall(state))
 
     # Mahogany Town
 
@@ -331,7 +331,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     # Ice Path
     set_rule(get_entrance("REGION_ICE_PATH_B2F_MAHOGANY_SIDE -> REGION_ICE_PATH_B3F"), can_strength)
 
-    set_rule(get_location("Ice Path B2F - Item 1"), can_strength)
+    set_rule(get_location("Ice Path B2F - Item 2"), can_strength)
 
     # Blackthorn
 
