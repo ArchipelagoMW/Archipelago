@@ -16,7 +16,7 @@ from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_item
     challenges, useful
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
-from .Opponents import get_opponents, get_opponent_locations
+from .Opponents import get_opponents, get_opponent_locations, challenge_opponents
 from .Options import Yugioh06Options
 from .Rom import YGO06DeltaPatch, get_base_rom_path, MD5Europe, MD5America
 from .Rules import set_rules
@@ -265,14 +265,14 @@ class Yugioh06World(World):
                 if is_challenge:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
-                                                                 opp.rule(state))(opponent, unlock_item, unlock_amount)
+                                                                 state.yugioh06_difficulty(self.player, opp.difficulty))(opponent, unlock_item, unlock_amount)
                 else:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
-                                                                 opp.rule(state))(opponent, unlock_item, unlock_amount)
+                                                                 state.yugioh06_difficulty(self.player, opp.difficulty))(opponent, unlock_item, unlock_amount)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
-                state.has(unlock, self.player) and opp.rule(state))(unlock_item, opponent)
+                state.has(unlock, self.player) and state.yugioh06_difficulty(self.player, opp.difficulty))(unlock_item, opponent)
             campaign.exits.append(entrance)
             entrance.connect(region)
             self.multiworld.regions.append(region)
@@ -315,7 +315,8 @@ class Yugioh06World(World):
                                    if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
                                    self.options.final_campaign_boss_challenges.value
                                    if self.options.final_campaign_boss_unlock_condition.value == 1 else 0,
-                                   self.options.number_of_challenges.value)
+                                   self.options.number_of_challenges.value
+                                   if hasattr(self.multiworld, "generation_is_fake") else 0, 91)
 
         self.random.shuffle(challenge)
         excluded = self.options.exclude_locations.value.intersection(challenge)
@@ -360,7 +361,8 @@ class Yugioh06World(World):
                     for item_location in self.multiworld.find_item_locations(item, self.player):
                         slot_data[item].extend([item_location.name, item_location.player])
         slot_data["removed challenges"] = self.removed_challenges
-
+        slot_data["starting_booster"] = self.starting_booster
+        slot_data["starting_opponent"] = self.starting_opponent
         return slot_data
 
     def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
