@@ -19,7 +19,7 @@ Clients that connect to the server to sync items can be in any language that all
 ## Coding style
 
 AP follows a [style guide](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/style.md).
-When in doubt, use an IDE with coding style linter, for example PyCharm Community Edition.
+When in doubt, use an IDE with a code-style linter, for example PyCharm Community Edition.
 
 ## Docstrings
 
