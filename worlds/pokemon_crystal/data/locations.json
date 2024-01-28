@@ -2113,7 +2113,7 @@
 	},
 	"EXPN_CARD": {
 		"label": "Lavender Radio Tower - EXPN Card",
-		"flag": "AP_NPC_PlayersHouse1F_POKE_GEAR",
+		"flag": "EVENT_GOT_EXPN_CARD",
 		"type": "giveitem",
 		"tags": ["NPCGift"],
 		"default_item": "EXPN_CARD",
@@ -2133,7 +2133,7 @@
 		"type": "giveitem",
 		"tags": ["NPCGift", "Pokedex"],
 		"default_item": "POKE_DEX",
-		"script": "AP_NPC_AzaleaGym_TM_FURY_CUTTER"
+		"script": "AP_NPC_MrPokemonsHouse_POKE_DEX"
 	},
 	"TM49_FURY_CUTTER": {
 		"label": "Azalea Gym - TM49 from Bugsy",

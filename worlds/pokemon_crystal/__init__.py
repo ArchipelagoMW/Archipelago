@@ -69,7 +69,7 @@ class PokemonCrystalWorld(World):
 
     def create_regions(self) -> None:
         regions = create_regions(self)
-        create_locations(self, regions, self.options.randomize_hidden_items)
+        create_locations(self, regions)
         self.multiworld.regions.extend(regions.values())
 
     def create_items(self) -> None:

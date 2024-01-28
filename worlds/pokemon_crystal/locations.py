@@ -60,7 +60,8 @@ def create_locations(world: PokemonCrystalWorld, regions: Dict[str, Region]) -> 
 
     for region_name, region_data in data.regions.items():
         region = regions[region_name]
-        filtered_locations = [loc for loc in region_data.locations if not exclude.intersection(set(loc.tags))]
+        filtered_locations = [loc for loc in region_data.locations if
+                              not exclude.intersection(set(data.locations[loc].tags))]
         for location_name in filtered_locations:
             location_data = data.locations[location_name]
             location = PokemonCrystalLocation(
