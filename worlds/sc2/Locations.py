@@ -1189,9 +1189,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Amon's Reach", "Amon's Reach: Victory", SC2LOTV_LOC_ID_OFFSET + 900, LocationType.VICTORY,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_light_anti_air(state)),
-        LocationData("Amon's Reach", "Amon's Reach: Close Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 901, LocationType.VANILLA,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_anti_light_anti_air(state)),
+        LocationData("Amon's Reach", "Amon's Reach: Close Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 901, LocationType.VANILLA),
         LocationData("Amon's Reach", "Amon's Reach: North Solarite Reserve", SC2LOTV_LOC_ID_OFFSET + 902, LocationType.VANILLA,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_anti_light_anti_air(state)),
