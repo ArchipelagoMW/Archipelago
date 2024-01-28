@@ -155,6 +155,18 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         address = data.rom_addresses["AP_Setting_ItemSFX"] + 1
         write_bytes(patched_rom, [0], address)
 
+    if world.options.reusable_tms:
+        address = data.rom_addresses["AP_Setting_ReusableTMs"] + 1
+        write_bytes(patched_rom, [1], address)
+
+    if world.options.guaranteed_catch:
+        address = data.rom_addresses["AP_Setting_GuaranteedCatch"] + 1
+        write_bytes(patched_rom, [1], address)
+
+    if world.options.minimum_catch_rate > 0:
+        address = data.rom_addresses["AP_Setting_MinCatchrate"] + 1
+        write_bytes(patched_rom, [world.options.minimum_catch_rate], address)
+
     if world.options.better_marts:
         mart_address = data.rom_addresses["Marts"]
         better_mart_address = data.rom_addresses["MartBetterMart"] - 0x10000

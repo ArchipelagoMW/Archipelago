@@ -71,6 +71,26 @@ class FullTmHmCompatibility(Toggle):
     default = 0
 
 
+class ReusableTMs(Toggle):
+    """TMs can be used an infinite number of times"""
+    display_name = "Reusable TMs"
+    default = 0
+
+
+class GuaranteedCatch(Toggle):
+    """Balls have a 100% success rate"""
+    display_name = "Guaranteed Catch"
+    default = 0
+
+
+class MinimumCatchRate(Range):
+    """Sets a minimum catch rate for wild Pokemon"""
+    display_name = "Minimum Catch Rate"
+    default = 0
+    range_start = 0
+    range_end = 255
+
+
 class BlindTrainers(Toggle):
     """Trainers have no vision and will not start battles unless interacted with"""
     display_name = "Blind Trainers"
@@ -110,6 +130,9 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_trainer_parties: RandomizeTrainerParties
     randomize_learnsets: RandomizeLearnsets
     full_tmhm_compatibility: FullTmHmCompatibility
+    reusable_tms: ReusableTMs
+    guaranteed_catch: GuaranteedCatch
+    minimum_catch_rate: MinimumCatchRate
     blind_trainers: BlindTrainers
     better_marts: BetterMarts
     experience_modifier: ExpModifier
