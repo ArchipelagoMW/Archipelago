@@ -53,7 +53,8 @@ structure_contents = {
         "Magical Dimension",
         "Mage Power"
         "Spell-Counter Cards"
-    }
+    },
+    "none": {}
 }
 
 

@@ -10,7 +10,9 @@ structure_deck_selection = {
     # Warrior'S TRIUMPH
     4: 0x11,
     # SPELLCASTER'S JUDGEMENT
-    5: 0x15
+    5: 0x15,
+    # Draft Mode
+    6: 0x1
 }
 
 banlist_ids = {

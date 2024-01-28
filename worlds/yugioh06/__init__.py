@@ -1,6 +1,5 @@
 import logging
 import os
-import random
 import sys
 from typing import ClassVar, Dict, Any
 
@@ -126,9 +125,9 @@ class Yugioh06World(World):
             items.pop("No Banlist")
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
-        for pc in self.multiworld.precollected_items[self.player]:
-            if pc in items:
-                items.pop(pc.name)
+        items.pop(self.starting_opponent)
+        items.pop(self.starting_booster)
+        items.pop(Banlist_Items.get(self.options.banlist.value))
         for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
@@ -305,16 +304,20 @@ class Yugioh06World(World):
             self.multiworld.regions.append(region)
 
     def generate_early(self):
+        if self.options.structure_deck.current_key == "none":
+            boosters = core_booster
+        else:
+            boosters = booster_packs
         for item in self.options.start_inventory:
             if item in tier_1_opponents:
                 self.starting_opponent = item
-            if item in booster_packs:
+            if item in boosters:
                 self.starting_booster = item
         if not self.starting_opponent:
             self.starting_opponent = self.multiworld.random.choice(tier_1_opponents)
         self.multiworld.push_precollected(self.create_item(self.starting_opponent))
         if not self.starting_booster:
-            self.starting_booster = self.multiworld.random.choice(booster_packs)
+            self.starting_booster = self.multiworld.random.choice(boosters)
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
@@ -345,6 +348,11 @@ class Yugioh06World(World):
             ocg_patch_location = "/".join((os.path.dirname(self.__file__), "patches/ocg.bsdiff4"))
             with openFile(ocg_patch_location, "rb") as ocg_patch:
                 rom_data = bsdiff4.patch(rom_data, ocg_patch.read())
+        structure_deck = self.options.structure_deck
+        if structure_deck.current_key == 'none':
+            draft_patch_location = "/".join((os.path.dirname(self.__file__), "patches/draft.bsdiff4"))
+            with openFile(draft_patch_location, "rb") as draft_patch:
+                rom_data = bsdiff4.patch(rom_data, draft_patch.read())
         rom_data = bytearray(rom_data)
         return rom_data
 

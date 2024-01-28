@@ -13,6 +13,7 @@ class StructureDeck(Choice):
     option_fury_from_the_deep = 3
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
+    option_none = 6
     default = "random"
 
 
