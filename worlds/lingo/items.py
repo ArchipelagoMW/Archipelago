@@ -50,7 +50,7 @@ class LingoItem(Item):
 
 
 ALL_ITEM_TABLE: Dict[str, ItemData] = {}
-ITEMS_BY_GROUP: Dict[str, list[str]] = {}
+ITEMS_BY_GROUP: Dict[str, List[str]] = {}
 
 
 def load_item_data():
