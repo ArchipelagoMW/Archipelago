@@ -1,5 +1,5 @@
 import logging
-from typing import Any, ClassVar, Dict, List, Optional
+from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
 from Options import Accessibility
@@ -92,6 +92,7 @@ class MessengerWorld(World):
     figurine_prices: Dict[str, int]
     _filler_items: List[str]
     starting_portals: List[str]
+    spoiler_portal_mapping: Dict[str, str]
     portal_mapping: List[int]
 
     def generate_early(self) -> None:
@@ -201,9 +202,13 @@ class MessengerWorld(World):
         if self.options.shuffle_portals:
             disconnect_portals(self)
             shuffle_portals(self)
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
+
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        if self.options.shuffle_portals:
+            spoiler_handle.write(f"\nPortal Warps:\n{self.spoiler_portal_mapping}")
 
     def fill_slot_data(self) -> Dict[str, Any]:
+        visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
         slot_data = {
             "shop":             {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures":          {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},

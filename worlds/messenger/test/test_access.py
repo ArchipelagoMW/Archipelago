@@ -180,9 +180,9 @@ class AccessTest(MessengerTestBase):
 
     def test_goal(self) -> None:
         """Test some different states to verify goal requires the correct items"""
-        self.collect_all_but([*NOTES, "Rescue Phantom"])
+        self.collect_all_but([*NOTES, "Do the Thing!"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
-        self.collect_all_but(["Key of Love", "Rescue Phantom"])
+        self.collect_all_but(["Key of Love", "Do the Thing!"])
         self.assertBeatable(False)
         self.collect_by_name(["Key of Love"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), True)

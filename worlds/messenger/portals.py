@@ -207,6 +207,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     available_portals = [val for zone in shop_points.values() for val in zone]
     
     world.portal_mapping = []
+    world.spoiler_portal_mapping = {}
     for portal in OUTPUT_PORTALS:
         warp_point = world.random.choice(available_portals)
         parent = out_to_parent[warp_point]
@@ -221,6 +222,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         else:
             exit_string += f"{warp_point} Checkpoint"
             world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp_point)}"))
+        world.spoiler_portal_mapping[portal] = exit_string
         connect_portal(world, portal, exit_string)
         
         available_portals.remove(warp_point)
@@ -255,8 +257,6 @@ def validate_portals(world: "MessengerWorld") -> bool:
 
 def add_closed_portal_reqs(world: "MessengerWorld") -> None:
     closed_portals = [entrance for entrance in SHUFFLEABLE_PORTAL_ENTRANCES if entrance not in world.starting_portals]
-    if not closed_portals:
-        return
     for portal in closed_portals:
         tower_exit = world.multiworld.get_entrance(f"ToTHQ {portal}", world.player)
         tower_exit.access_rule = lambda state: state.has(portal, world.player)

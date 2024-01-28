@@ -1,9 +1,9 @@
-from typing import Dict, List, TYPE_CHECKING, Union
+from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
+from worlds.generic.Rules import CollectionRule, add_rule, allow_self_locking_items
 from .constants import NOTES, PHOBEKINS
-from .options import Logic, MessengerAccessibility
+from .options import MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -42,6 +42,8 @@ class MessengerRules:
             # Autumn Hills
             "Autumn Hills - Portal -> Autumn Hills - Dimension Climb Shop":
                 lambda state: self.has_wingsuit(state) and self.has_dart(state),
+            "Autumn Hills - Dimension Climb Shop -> Autumn Hills - Portal":
+                self.has_vertical,
             "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Hope Path Shop":
                 self.has_dart,
             "Autumn Hills - Hope Path Shop -> Autumn Hills - Hope Latch Checkpoint":
@@ -72,16 +74,21 @@ class MessengerRules:
             # Howling Grotto
             "Howling Grotto - Portal -> Howling Grotto - Crushing Pits Shop":
                 self.has_wingsuit,
-            "Howling Grotto - Left -> Bamboo Creek - Right":
+            "Howling Grotto - Wingsuit Shop -> Howling Grotto - Left":
                 self.has_wingsuit,
             "Howling Grotto - Wingsuit Shop -> Howling Grotto - Lost Woods Checkpoint":
                 self.has_wingsuit,
+            "Howling Grotto - Lost Woods Checkpoint -> Howling Grotto - Bottom":
+                lambda state: state.has("Seashell", self.player),
             "Howling Grotto - Crushing Pits Shop -> Howling Grotto - Portal":
                 lambda state: self.has_wingsuit(state) or self.can_dboost(state),
             "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Emerald Golem Shop":
                 self.has_wingsuit,
             "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop":
-                lambda state: self.has_wingsuit(state) or self.can_dboost(state) or self.can_destroy_projectiles(state),
+                lambda state: (self.has_wingsuit(state) or self.can_dboost(state) or self.can_destroy_projectiles(state))
+                              and state.multiworld.get_region("Howling Grotto - Emerald Golem Shop", self.player).can_reach(state),
+            "Howling Grotto - Emerald Golem Shop -> Howling Grotto - Right":
+                self.has_wingsuit,
             # Searing Crags
             "Searing Crags - Rope Dart Shop -> Searing Crags - Triple Ball Spinner Checkpoint":
                 self.has_vertical,
@@ -178,7 +185,7 @@ class MessengerRules:
                               or (self.has_dart(state) and self.has_wingsuit(state)),
             # Dark Cave
             "Dark Cave - Right -> Dark Cave - Left":
-                lambda state: state.has("Candle", self.player),
+                lambda state: state.has("Candle", self.player) and self.has_dart(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
                 lambda state: self.has_dart(state) or (self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
@@ -301,7 +308,7 @@ class MessengerRules:
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
 
-        multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
+        multiworld.completion_condition[self.player] = lambda state: state.has("Do the Thing!", self.player)
         # if multiworld.accessibility[self.player]:  # not locations accessibility
         #     set_self_locking_items(self.world, self.player)
 

@@ -47,6 +47,8 @@ class MessengerLocation(Location):
     def __init__(self, player: int, name: str, loc_id: Optional[int], parent: MessengerRegion) -> None:
         super().__init__(player, name, loc_id, parent)
         if loc_id is None:
+            if name == "Rescue Phantom":
+                name = "Do the Thing!"
             self.place_locked_item(MessengerItem(name, ItemClassification.progression, None, parent.player))
 
 
