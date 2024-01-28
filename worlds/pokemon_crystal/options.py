@@ -22,6 +22,12 @@ class RequireItemfinder(DefaultOnToggle):
     display_name = "Require Itemfinder"
 
 
+class RandomizePokegear(Toggle):
+    """Shuffles the Pokegear and cards into the pool"""
+    display_name = "Randomize Pokegear"
+    default = 0
+
+
 class RandomizeStarters(Toggle):
     """Randomizes species of starter Pokemon"""
     display_name = "Randomize Starters"
@@ -123,6 +129,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     goal: Goal
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
+    randomize_pokegear: RandomizePokegear
     randomize_starters: RandomizeStarters
     randomize_wilds: RandomizeWilds
     normalize_encounter_rates: NormalizeEncounterRates

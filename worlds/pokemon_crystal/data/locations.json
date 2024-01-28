@@ -2087,6 +2087,54 @@
 		"script": "WhirlIslandSWUltraBall",
 		"default_item": "ULTRA_BALL"
 	},
+	"RADIO_CARD": {
+		"label": "Radio Tower 1F - Radio Card from Quiz",
+		"flag": "EVENT_GOT_RADIO_CARD",
+		"type": "giveitem",
+		"tags": ["NPCGift", "Pokegear"],
+		"default_item": "RADIO_CARD",
+		"script": "AP_NPC_RadioTower1F_RADIO_CARD"
+	},
+	"MAP_CARD": {
+		"label": "Cherrygrove City - Map Card from Guide",
+		"flag": "EVENT_GOT_MAP_CARD",
+		"type": "giveitem",
+		"tags": ["NPCGift", "Pokegear"],
+		"default_item": "MAP_CARD",
+		"script": "AP_NPC_CherrygroveCity_MAP_CARD"
+	},
+	"PHONE_CARD": {
+		"label": "Player's House - Phone Card from Mom",
+		"flag": "EVENT_GOT_PHONE_CARD",
+		"type": "giveitem",
+		"tags": ["NPCGift", "Pokegear"],
+		"default_item": "PHONE_CARD",
+		"script": "AP_NPC_PlayersHouse1F_PHONE_CARD"
+	},
+	"EXPN_CARD": {
+		"label": "Lavender Radio Tower - EXPN Card",
+		"flag": "AP_NPC_PlayersHouse1F_POKE_GEAR",
+		"type": "giveitem",
+		"tags": ["NPCGift"],
+		"default_item": "EXPN_CARD",
+		"script": "AP_LavRadioTower1F_EXPN_CARD"
+	},
+	"POKEGEAR": {
+		"label": "Player's House - Pokegear from Mom",
+		"flag": "EVENT_GOT_POKEGEAR",
+		"type": "giveitem",
+		"tags": ["NPCGift"],
+		"default_item": "POKE_GEAR",
+		"script": "AP_NPC_PlayersHouse1F_POKE_GEAR"
+	},
+	"POKEDEX": {
+		"label": "Route 30 - Pokedex from Oak",
+		"flag": "EVENT_GOT_POKEDEX",
+		"type": "giveitem",
+		"tags": ["NPCGift", "Pokedex"],
+		"default_item": "POKE_DEX",
+		"script": "AP_NPC_AzaleaGym_TM_FURY_CUTTER"
+	},
 	"TM49_FURY_CUTTER": {
 		"label": "Azalea Gym - TM49 from Bugsy",
 		"flag": "EVENT_GOT_TM49_FURY_CUTTER",

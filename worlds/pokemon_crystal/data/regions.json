@@ -512,7 +512,8 @@
 			"REGION_ROUTE_29"
 		],
 		"locations": [
-			"MYSTIC_WATER_IN_CHERRYGROVE"
+			"MYSTIC_WATER_IN_CHERRYGROVE",
+			"MAP_CARD"
 		],
 		"events": []
 	},
@@ -1524,7 +1525,9 @@
 		"exits": [
 			"REGION_LAVENDER_TOWN"
 		],
-		"locations": [],
+		"locations": [
+			"EXPN_CARD"
+		],
 		"events": [
 			"EVENT_GOT_EXPN_CARD"
 		]
@@ -2136,7 +2139,9 @@
 			"REGION_NEW_BARK_TOWN",
 			"REGION_PLAYERS_HOUSE_2F"
 		],
-		"locations": [],
+		"locations": [
+			"POKEGEAR"
+		],
 		"events": [
 			"EVENT_TEMPORARY_UNTIL_MAP_RELOAD_1",
 			"EVENT_PLAYERS_HOUSE_MOM_1",
@@ -2225,7 +2230,9 @@
 			"REGION_GOLDENROD_CITY",
 			"REGION_RADIO_TOWER_2F"
 		],
-		"locations": [],
+		"locations": [
+			"RADIO_CARD"
+		],
 		"events": []
 	},
 	"REGION_RADIO_TOWER_2F": {

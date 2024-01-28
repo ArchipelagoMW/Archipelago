@@ -67,6 +67,17 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     def hidden():
         return world.options.randomize_hidden_items
 
+    def pokegear():
+        return world.options.randomize_pokegear
+
+    def expn(state: CollectionState):
+        if pokegear():
+            return (state.has("Pokegear", world.player)
+                    and state.has("Radio Card", world.player)
+                    and state.has("EXPN Card", world.player))
+        else:
+            return state.has("EVENT_GOT_EXPN_CARD", world.player)
+
     # Goal
     if world.options.goal == 1:
         world.multiworld.completion_condition[world.player] = lambda state: state.has("EVENT_BEAT_RED", world.player)
@@ -455,8 +466,13 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_ROUTE_10_SOUTH -> REGION_ROCK_TUNNEL_1F"), can_flash)
 
     # Lavendar
-    set_rule(get_location("EVENT_GOT_EXPN_CARD"), lambda state: state.has(
-        "EVENT_RESTORED_POWER_TO_KANTO", world.player))
+
+    if pokegear():
+        set_rule(get_location("Lavender Radio Tower - EXPN Card"), lambda state: state.has(
+            "EVENT_RESTORED_POWER_TO_KANTO", world.player))
+    else:
+        set_rule(get_location("EVENT_GOT_EXPN_CARD"), lambda state: state.has(
+            "EVENT_RESTORED_POWER_TO_KANTO", world.player))
 
     # Route 12
 
@@ -480,19 +496,15 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     if hidden():
         set_rule(get_location("Vermilion Port - Hidden Item in Buoy"), can_surf)
 
-    set_rule(get_location("EVENT_FOUGHT_SNORLAX"), lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
+    set_rule(get_location("EVENT_FOUGHT_SNORLAX"), expn)
 
-    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_ROUTE_11"),
-             lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
+    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_ROUTE_11"), expn)
 
-    set_rule(get_entrance("REGION_ROUTE_11 -> REGION_VERMILION_CITY"),
-             lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
+    set_rule(get_entrance("REGION_ROUTE_11 -> REGION_VERMILION_CITY"), expn)
 
-    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_DIGLETTS_CAVE"),
-             lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
+    set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_DIGLETTS_CAVE"), expn)
 
-    set_rule(get_entrance("REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"),
-             lambda state: state.has("EVENT_GOT_EXPN_CARD", world.player))
+    set_rule(get_entrance("REGION_DIGLETTS_CAVE -> REGION_VERMILION_CITY"), expn)
 
     set_rule(get_entrance("REGION_VERMILION_PORT_PASSAGE -> REGION_VERMILION_PORT"),
              lambda state: state.has("S.S. Ticket", world.player))
