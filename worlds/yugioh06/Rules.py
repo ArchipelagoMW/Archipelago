@@ -51,12 +51,9 @@ def set_rules(world):
         "Konami Bonus": lambda state: state.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"],
                                     player) or state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
                                         "Poison of the Old Man"], player) and state.yugioh06_difficulty(player, 8),
-        # placeholder
-        # TODO: Add more ways to do over 4000 at once
-        "Max Damage Bonus": lambda state: state.has_any(["Wave-Motion Cannon", "Megamorph", "United We Stand"], player),
-        # TODO: Special Summon Collection C isn't handled yet
+        "Max Damage Bonus": lambda state: state.has_any(["Wave-Motion Cannon", "Megamorph", "United We Stand",
+                                                         "Mage Power"], player),
         "Fusion Summon Bonus": lambda state: state.has_any(["Polymerization", "Fusion Gate", "Power Bond"], player),
-        # TODO: Probably missing some from side sets
         "Ritual Summon Bonus": lambda state: state.has("Ritual", player),
         "Over 20000 LP Bonus": lambda state: can_gain_lp_every_turn(state, player)
                                              and state.has("Can Stall with ST", player),
@@ -138,7 +135,6 @@ def set_rules(world):
                              "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Gorg the Strong",
                              "Cliff the Trap Remover"], player),
         "Can Exodia Win":
-            # TODO: more ways to win with Exodia
             lambda state: state.has_all(["Exodia", "Heart of the Underdog"], player),
         "Can Last Turn Win":
             lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and \
@@ -367,7 +363,6 @@ def set_rules(world):
                           and state.has("Can Stall with Monsters", player)
                           and state.has("A Cat of Ill Omen", player)
                           and state.yugioh06_difficulty(player, 2),
-        # TODO: Add more OTKs
         "TD35 Huge Damage in a Turn":
             lambda state: state.has_all(["Cyber-Stein", "Cyber Twin Dragon", "Megamorph"], player)
                           and state.yugioh06_difficulty(player, 3),

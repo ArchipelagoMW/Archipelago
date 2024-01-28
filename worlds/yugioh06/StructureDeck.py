@@ -51,6 +51,7 @@ structure_contents = {
         "Skilled Dark Magician",
         "Tsukuyomi",
         "Magical Dimension",
+        "Mage Power"
         "Spell-Counter Cards"
     }
 }
