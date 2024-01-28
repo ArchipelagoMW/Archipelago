@@ -127,7 +127,8 @@ class Yugioh06World(World):
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
         for pc in self.multiworld.precollected_items[self.player]:
-            items.pop(pc.name)
+            if pc in items:
+                items.pop(pc.name)
         for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
@@ -304,9 +305,16 @@ class Yugioh06World(World):
             self.multiworld.regions.append(region)
 
     def generate_early(self):
-        self.starting_opponent = self.multiworld.random.choice(tier_1_opponents)
+        for item in self.options.start_inventory:
+            if item in tier_1_opponents:
+                self.starting_opponent = item
+            if item in booster_packs:
+                self.starting_booster = item
+        if not self.starting_opponent:
+            self.starting_opponent = self.multiworld.random.choice(tier_1_opponents)
         self.multiworld.push_precollected(self.create_item(self.starting_opponent))
-        self.starting_booster = self.multiworld.random.choice(booster_packs)
+        if not self.starting_booster:
+            self.starting_booster = self.multiworld.random.choice(booster_packs)
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
@@ -317,8 +325,8 @@ class Yugioh06World(World):
                                    if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
                                    self.options.final_campaign_boss_challenges.value
                                    if self.options.final_campaign_boss_unlock_condition.value == 1 else 0,
-                                   self.options.number_of_challenges.value
-                                   if hasattr(self.multiworld, "generation_is_fake") else 0, 91)
+                                   self.options.number_of_challenges.value,
+                                   91 if hasattr(self.multiworld, "generation_is_fake") else 0)
 
         self.random.shuffle(challenge)
         excluded = self.options.exclude_locations.value.intersection(challenge)
