@@ -126,6 +126,8 @@ class Yugioh06World(World):
             items.pop("No Banlist")
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
+        for pc in self.multiworld.precollected_items[self.player]:
+            items.pop(pc.name)
         for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
@@ -327,10 +329,14 @@ class Yugioh06World(World):
         self.campaign_opponents = get_opponents(self.multiworld, self.player,
                                                 self.options.campaign_opponents_shuffle.value)
 
-    def apply_base_path(self, rom):
+    def apply_base_patch(self, rom):
         base_patch_location = "/".join((os.path.dirname(self.__file__), "patch.bsdiff4"))
         with openFile(base_patch_location, "rb") as base_patch:
             rom_data = bsdiff4.patch(rom.read(), base_patch.read())
+        if self.options.ocg_arts:
+            ocg_patch_location = "/".join((os.path.dirname(self.__file__), "patches/ocg.bsdiff4"))
+            with openFile(ocg_patch_location, "rb") as ocg_patch:
+                rom_data = bsdiff4.patch(rom_data, ocg_patch.read())
         rom_data = bytearray(rom_data)
         return rom_data
 
@@ -395,7 +401,7 @@ class Yugioh06World(World):
 
     def apply_randomizer(self):
         with open(get_base_rom_path(), 'rb') as rom:
-            rom_data = self.apply_base_path(rom)
+            rom_data = self.apply_base_patch(rom)
 
         structure_deck = self.options.structure_deck
         structure_deck_data_location = 0x000fd0aa

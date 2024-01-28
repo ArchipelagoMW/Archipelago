@@ -148,6 +148,12 @@ class CampaignOpponentsShuffle(Toggle):
     display_name = "Campaign Opponents Shuffle"
     default = False
 
+
+class OCGArts(Toggle):
+    """Always use the OCG artworks for cards"""
+    display_name = "OCG Arts"
+    default = False
+
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):
     structure_deck: StructureDeck
@@ -168,3 +174,4 @@ class Yugioh06Options(PerGameCommonOptions):
     booster_pack_prices: BoosterPackPrices
     add_empty_banList: AddEmptyBanList
     campaign_opponents_shuffle: CampaignOpponentsShuffle
+    ocg_arts: OCGArts
