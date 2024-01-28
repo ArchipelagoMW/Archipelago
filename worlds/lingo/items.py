@@ -87,6 +87,9 @@ def load_item_data():
                          door.door_ids, door.painting_ids)
             ITEMS_BY_GROUP.setdefault("Doors", []).append(door.item_name)
 
+            if door.item_group is not None:
+                ITEMS_BY_GROUP.setdefault(door.item_group, []).append(door.item_name)
+
     for group, group_door_ids in door_groups.items():
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
                                          ItemClassification.progression, "door group", group_door_ids, [])

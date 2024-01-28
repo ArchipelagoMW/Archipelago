@@ -63,6 +63,7 @@
   # - item_name:      Overrides the name of the item generated for this door.
   #                   If not specified, the item name will be generated from
   #                   the room name and the door name.
+  # - item_group:     If set, this item will be in the specified item group.
   # - location_name:  Overrides the name of the location generated for this
   #                   door. If not specified, the location name will be
   #                   generated using the names of the panels.
@@ -243,6 +244,7 @@
       Seeker Entrance:
         id: Entry Room Area Doors/Door_entrance_entrance
         item_name: The Seeker - Entrance
+        item_group: Room Entrances
         panels:
           - OPEN
       Rhyme Room Entrance:
@@ -475,6 +477,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_slaughter_laughter
         group: Entrances to The Tenacious
+        item_group: Room Entrances
         panels:
           - SLAUGHTER
       Symmetry Door:
@@ -501,6 +504,7 @@
         id: Appendix Room Area Doors/Door_open_open
         item_name: The Traveled - Entrance
         group: Entrance to The Traveled
+        item_group: Room Entrances
         panels:
           - OPEN
       Lost Door:
@@ -562,6 +566,7 @@
     doors:
       Sun Painting:
         item_name: Pilgrim Room - Sun Painting
+        item_group: Paintings
         location_name: Pilgrim Room - HOT CRUST
         painting_id: pilgrim_painting2
         panels:
@@ -732,11 +737,13 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_decay_day
         group: Entrances to The Tenacious
+        item_group: Room Entrances
         panels:
           - DECAY
       Discerning Entrance:
         id: Shuffle Room Area Doors/Door_nope_open
         item_name: The Discerning - Entrance
+        item_group: Room Entrances
         panels:
           - NOPE
       Tower Entrance:
@@ -1144,6 +1151,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
         group: Entrances to The Tenacious
+        item_group: Room Entrances
         panels:
           - MASSACRED
       Black Door:
@@ -1154,10 +1162,12 @@
       Agreeable Entrance:
         id: Symmetry Room Area Doors/Door_close_open
         item_name: The Agreeable - Entrance
+        item_group: Room Entrances
         panels:
           - CLOSE
       Painting Shortcut:
         item_name: Starting Room - Street Painting
+        item_group: Paintings
         painting_id: eyes_yellow_painting2
         panels:
           - RIGHT
@@ -1217,6 +1227,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_dread_dead
         group: Entrances to The Tenacious
+        item_group: Room Entrances
         panels:
           - DREAD
   The Agreeable:
@@ -1285,6 +1296,7 @@
     doors:
       Shortcut to Hedge Maze:
         id: Symmetry Room Area Doors/Door_bye_hi
+        item_group: Room Entrances
         group: Hedge Maze Doors
         panels:
           - BYE
@@ -1379,11 +1391,13 @@
         id: Maze Area Doors/Door_maze_maze
         item_name: The Perceptive - Entrance
         group: Hedge Maze Doors
+        item_group: Room Entrances
         panels:
           - DOWN
       Painting Shortcut:
         painting_id: garden_painting_tower2
         item_name: Starting Room - Hedge Maze Painting
+        item_group: Paintings
         skip_location: True
         panels:
           - DOWN
@@ -1395,6 +1409,7 @@
         skip_location: True
         item_name: The Observant - Entrance
         group: Observant Doors
+        item_group: Room Entrances
         panels:
           - room: The Perceptive
             panel: GAZE
@@ -2367,6 +2382,7 @@
       Painting Shortcut:
         painting_id: flower_painting_8
         item_name: Starting Room - Flower Painting
+        item_group: Paintings
         skip_location: True
         panels:
           - room: First Second Third Fourth
@@ -2905,6 +2921,7 @@
       Initiated Entrance:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked
         item_name: The Initiated - Entrance
+        item_group: Room Entrances
         panels:
           - OXEN
       # These would be more appropriate in Champion's Rest, but as currently
@@ -2957,6 +2974,7 @@
             panel: BACKSIDE
       Eight Door:
         id: Red Blue Purple Room Area Doors/Door_a_strands2
+        item_group: Room Entrances
         skip_location: True
         panels:
           - room: The Incomparable
@@ -3153,6 +3171,7 @@
       Color Hallways Entrance:
         id: Appendix Room Area Doors/Door_hello_hi
         group: Entrance to The Traveled
+        item_group: Room Entrances
         panels:
           - HELLO
   Color Hallways:
@@ -3268,17 +3287,20 @@
       Bold Entrance:
         id: Red Blue Purple Room Area Doors/Door_unopened_open
         item_name: The Bold - Entrance
+        item_group: Room Entrances
         panels:
           - UNOPEN
       Painting Shortcut:
         painting_id: pencil_painting6
         skip_location: True
         item_name: Starting Room - Pencil Painting
+        item_group: Paintings
         panels:
           - UNOPEN
       Steady Entrance:
         id: Rock Room Doors/Door_2
         item_name: The Steady - Entrance
+        item_group: Room Entrances
         panels:
           - BEGIN
       Lilac Entrance:
@@ -3499,6 +3521,7 @@
       Undeterred Entrance:
         id: Red Blue Purple Room Area Doors/Door_pen_open
         item_name: The Undeterred - Entrance
+        item_group: Room Entrances
         panels:
           - PEN
       Painting Shortcut:
@@ -3507,11 +3530,13 @@
           - arrows_painting3
         skip_location: True
         item_name: Starting Room - Blue Painting
+        item_group: Paintings
         panels:
           - PEN
       Green Painting:
         painting_id: maze_painting_3
         skip_location: True
+        item_group: Paintings
         panels:
           - FOUR
       Twos:
@@ -3519,6 +3544,7 @@
           - Count Up Room Area Doors/Door_two_hider
           - Count Up Room Area Doors/Door_two_hider_2
         include_reduce: True
+        item_group: Numbers
         panels:
           - ONE
       Threes:
@@ -3528,6 +3554,7 @@
           - Count Up Room Area Doors/Door_three_hider_3
         location_name: Twos
         include_reduce: True
+        item_group: Numbers
         panels:
           - TWO (1)
           - TWO (2)
@@ -3546,6 +3573,7 @@
           - Count Up Room Area Doors/Door_four_hider_3
           - Count Up Room Area Doors/Door_four_hider_4
         skip_location: True
+        item_group: Numbers
         panels:
           - THREE (1)
           - THREE (2)
@@ -3557,6 +3585,7 @@
           - Count Up Room Area Doors/Door_five_hider_5
         location_name: Fours
         item_name: Number Hunt - Fives
+        item_group: Numbers
         include_reduce: True
         panels:
           - FOUR
@@ -3569,6 +3598,7 @@
       Challenge Entrance:
         id: Count Up Room Area Doors/Door_zero_unlocked
         item_name: Number Hunt - Challenge Entrance
+        item_group: Room Entrances
         panels:
           - ZERO
     paintings:
@@ -3729,6 +3759,7 @@
           - Count Up Room Area Doors/Door_six_hider_6
         painting_id: pencil_painting3 # See note in Outside The Bold
         location_name: Fives
+        item_group: Numbers
         include_reduce: True
         panels:
           - FIVE
@@ -3751,6 +3782,7 @@
           - Count Up Room Area Doors/Door_seven_hider_6
           - Count Up Room Area Doors/Door_seven_hider_7
         location_name: Sixes
+        item_group: Numbers
         include_reduce: True
         panels:
           - SIX
@@ -3776,6 +3808,7 @@
           - Count Up Room Area Doors/Door_eight_hider_7
           - Count Up Room Area Doors/Door_eight_hider_8
         location_name: Sevens
+        item_group: Numbers
         include_reduce: True
         panels:
           - SEVEN
@@ -3803,6 +3836,7 @@
           - Count Up Room Area Doors/Door_nine_hider_8
           - Count Up Room Area Doors/Door_nine_hider_9
         location_name: Eights
+        item_group: Numbers
         include_reduce: True
         panels:
           - EIGHT
@@ -3825,6 +3859,7 @@
         id: Count Up Room Area Doors/Door_zero_hider_2
         location_name: Nines
         item_name: Outside The Undeterred - Zero Door
+        item_group: Numbers
         include_reduce: True
         panels:
           - NINE
@@ -5734,6 +5769,7 @@
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
         item_name: The Wondrous - Entrance
+        item_group: Room Entrances
         panels:
           - SHRINK
   The Wondrous (Doorknob):
@@ -5754,6 +5790,7 @@
           - arrows_painting2
         skip_location: True
         item_name: Starting Room - Symmetry Painting
+        item_group: Paintings
         panels:
           - room: Outside The Wondrous
             panel: SHRINK
@@ -5858,6 +5895,7 @@
     doors:
       Exit:
         id: Red Blue Purple Room Area Doors/Door_wonderland_exit
+        item_group: Paintings
         painting_id: arrows_painting_9
         include_reduce: True
         panels:
@@ -6054,6 +6092,7 @@
       Wanderer Entrance:
         id: Tower Room Area Doors/Door_wanderer_entrance
         item_name: The Wanderer - Entrance
+        item_group: Room Entrances
         panels:
           - WANDERLUST
       Tower Entrance:
@@ -6986,6 +7025,7 @@
       Wise Entrance:
         id: Clock Room Area Doors/Door_time_start
         item_name: The Wise - Entrance
+        item_group: Room Entrances
         panels:
           - KITTEN
           - CAT
@@ -7239,6 +7279,7 @@
       Scientific Entrance:
         id: Red Blue Purple Room Area Doors/Door_chemistry_lab
         item_name: The Scientific - Entrance
+        item_group: Room Entrances
         panels:
           - OPEN
   The Scientific:
@@ -7674,5 +7715,6 @@
     doors:
       Welcome Door:
         id: Entry Room Area Doors/Door_challenge_challenge
+        item_group: Room Entrances
         panels:
           - WELCOME
