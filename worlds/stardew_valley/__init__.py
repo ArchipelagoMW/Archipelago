@@ -14,7 +14,7 @@ from .logic.bundle_logic import BundleLogic
 from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRandomization, BundlePrice, NumberOfLuckBuffs, NumberOfMovementBuffs, \
-    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems
+    BackpackProgression, BuildingProgression, ExcludeGingerIsland, TrapItems, EntranceRandomization
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
@@ -337,6 +337,12 @@ class StardewValleyWorld(World):
             return include_traps, exclude_island
         else:
             return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
+
+    def generate_output(self, output_directory: str):
+        if self.options.entrance_randomization == EntranceRandomization.option_disabled:
+            return
+        for original_entrance, replaced_entrance in self.randomized_entrances.items():
+            self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
 
