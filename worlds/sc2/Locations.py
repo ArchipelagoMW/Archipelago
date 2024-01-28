@@ -1114,9 +1114,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("The Growing Shadow", "The Growing Shadow: West Pylon", SC2LOTV_LOC_ID_OFFSET + 503, LocationType.VANILLA,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("The Growing Shadow", "The Growing Shadow: Nexus", SC2LOTV_LOC_ID_OFFSET + 504, LocationType.EXTRA,
-                     lambda state: logic.protoss_common_unit(state)
-                                   and logic.protoss_basic_anti_air(state)),
+        LocationData("The Growing Shadow", "The Growing Shadow: Nexus", SC2LOTV_LOC_ID_OFFSET + 504, LocationType.EXTRA),
         LocationData("The Growing Shadow", "The Growing Shadow: Templar Base", SC2LOTV_LOC_ID_OFFSET + 505, LocationType.EXTRA,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
@@ -1154,8 +1152,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Sky Shield", "Sky Shield: North EMP Scrambler", SC2LOTV_LOC_ID_OFFSET + 703, LocationType.VANILLA,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),
-        LocationData("Sky Shield", "Sky Shield: Mid Stabilizer", SC2LOTV_LOC_ID_OFFSET + 704, LocationType.EXTRA
-                     ),
+        LocationData("Sky Shield", "Sky Shield: Mid Stabilizer", SC2LOTV_LOC_ID_OFFSET + 704, LocationType.EXTRA),
         LocationData("Sky Shield", "Sky Shield: Southwest Stabilizer", SC2LOTV_LOC_ID_OFFSET + 705, LocationType.EXTRA,
                      lambda state: logic.protoss_common_unit(state)
                                    and logic.protoss_basic_anti_air(state)),

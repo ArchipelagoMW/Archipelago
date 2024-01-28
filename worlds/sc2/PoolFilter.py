@@ -9,7 +9,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild
+    ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild, ExtraLocations
 from . import ItemNames
 
 # Items with associated upgrades
@@ -40,6 +40,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     grant_story_tech = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
+    extra_locations = get_option_value(multiworld, player, "extra_locations")
     excluded_missions: Set[SC2Mission] = get_excluded_missions(multiworld, player)
     mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
     for mission in SC2Mission:
@@ -95,9 +96,15 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     # WoL
     if shuffle_no_build == ShuffleNoBuild.option_false or adv_tactics:
         # Replacing No Build missions with Easy missions
+        # WoL
         move_mission(SC2Mission.ZERO_HOUR, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.EVACUATION, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.DEVILS_PLAYGROUND, MissionPools.EASY, MissionPools.STARTER)
+        # LotV
+        move_mission(SC2Mission.THE_GROWING_SHADOW, MissionPools.EASY, MissionPools.STARTER)
+        move_mission(SC2Mission.THE_SPEAR_OF_ADUN, MissionPools.EASY, MissionPools.STARTER)
+        if extra_locations == ExtraLocations.option_enabled:
+            move_mission(SC2Mission.SKY_SHIELD, MissionPools.EASY, MissionPools.STARTER)
         # Pushing this to Easy
         move_mission(SC2Mission.THE_GREAT_TRAIN_ROBBERY, MissionPools.MEDIUM, MissionPools.EASY)
         if shuffle_no_build == ShuffleNoBuild.option_false:
