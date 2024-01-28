@@ -50,14 +50,16 @@ class LingoItem(Item):
 
 
 ALL_ITEM_TABLE: Dict[str, ItemData] = {}
+ITEMS_BY_GROUP: Dict[str, list[str]] = {}
 
 
 def load_item_data():
-    global ALL_ITEM_TABLE
+    global ALL_ITEM_TABLE, ITEMS_BY_GROUP
 
     for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
         ALL_ITEM_TABLE[color] = ItemData(get_special_item_id(color), ItemClassification.progression,
                                          "colors", [], [])
+        ITEMS_BY_GROUP.setdefault("Colors", []).append(color)
 
     door_groups: Dict[str, List[str]] = {}
     for room_name, doors in DOORS_BY_ROOM.items():
@@ -83,10 +85,12 @@ def load_item_data():
                 ItemData(get_door_item_id(room_name, door_name),
                          ItemClassification.filler if door.junk_item else ItemClassification.progression, door_mode,
                          door.door_ids, door.painting_ids)
+            ITEMS_BY_GROUP.setdefault("Doors", []).append(door.item_name)
 
     for group, group_door_ids in door_groups.items():
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
                                          ItemClassification.progression, "door group", group_door_ids, [])
+        ITEMS_BY_GROUP.setdefault("Doors", []).append(group)
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,
@@ -102,6 +106,11 @@ def load_item_data():
     for item_name, classification in special_items.items():
         ALL_ITEM_TABLE[item_name] = ItemData(get_special_item_id(item_name), classification,
                                              "special", [], [])
+
+        if classification == ItemClassification.filler:
+            ITEMS_BY_GROUP.setdefault("Junk", []).append(item_name)
+        elif classification == ItemClassification.trap:
+            ITEMS_BY_GROUP.setdefault("Traps", []).append(item_name)
 
     for item_name in PROGRESSIVE_ITEMS:
         ALL_ITEM_TABLE[item_name] = ItemData(get_progressive_item_id(item_name),
