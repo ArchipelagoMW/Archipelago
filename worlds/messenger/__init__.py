@@ -11,7 +11,7 @@ from .client_setup import launch_game
 from .connections import CONNECTIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
-from .portals import SHUFFLEABLE_PORTAL_ENTRANCES, add_closed_portal_reqs, disconnect_portals, shuffle_portals
+from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
@@ -108,11 +108,9 @@ class MessengerWorld(World):
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
-        self.starting_portals = []
-        if self.options.available_portals > AvailablePortals.range_start:
-            # there's 3 specific portals that the game forces open
-            self.starting_portals = self.random.choices(SHUFFLEABLE_PORTAL_ENTRANCES,
-                                                        k=self.options.available_portals - 3)
+        available_portals = ["Riviere Turquoise Portal", "Sunken Shrine Portal", "Searing Crags Portal"]
+        self.starting_portals = (["Autumn Hills Portal", "Howling Grotto Portal", "Glacial Peak Portal"] +
+                                 self.random.sample(available_portals, k=self.options.available_portals - 3))
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -204,18 +202,24 @@ class MessengerWorld(World):
             shuffle_portals(self)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        if self.options.available_portals < 6:
+            spoiler_handle.write(f"\nStarting Portals:\n")
+            for portal in self.starting_portals:
+                spoiler_handle.write(f"{portal}\n")
         if self.options.shuffle_portals:
-            spoiler_handle.write(f"\nPortal Warps:\n{self.spoiler_portal_mapping}")
+            spoiler_handle.write(f"\nPortal Warps:\n")
+            for portal, output in self.spoiler_portal_mapping.items():
+                spoiler_handle.write(f"{portal + ' Portal:':33}{output}\n")
 
     def fill_slot_data(self) -> Dict[str, Any]:
         visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
         slot_data = {
-            "shop":             {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
-            "figures":          {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
-            "max_price":        self.total_shards,
-            "required_seals":   self.required_seals,
+            "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
+            "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
+            "max_price": self.total_shards,
+            "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
-            "portal_exits":     self.portal_mapping if self.portal_mapping else [],
+            "portal_exits": self.portal_mapping if self.portal_mapping else [],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data

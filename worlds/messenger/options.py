@@ -47,7 +47,7 @@ class EarlyMed(Toggle):
 
 class AvailablePortals(Range):
     """Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are currently always available. If portal outputs are not randomized, Searing Crags will also be available."""
-    display_name = "Number of Available Starting Portals"
+    display_name = "Available Starting Portals"
     range_start = 3
     range_end = 6
     default = 6

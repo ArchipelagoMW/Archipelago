@@ -7,14 +7,7 @@ if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-SHUFFLEABLE_PORTAL_ENTRANCES = [
-    "Riviere Turquoise Portal",
-    "Sunken Shrine Portal",
-    "Searing Crags Portal",
-]
-
-
-OUTPUT_PORTALS = [
+PORTALS = [
     "Autumn Hills",
     "Riviere Turquoise",
     "Howling Grotto",
@@ -199,7 +192,7 @@ CHECKPOINTS = {
 def shuffle_portals(world: "MessengerWorld") -> None:
     shuffle_type = world.options.shuffle_portals
     shop_points = SHOP_POINTS.copy()
-    for portal in OUTPUT_PORTALS:
+    for portal in PORTALS:
         shop_points[portal].append(f"{portal} Portal")
     if shuffle_type > ShufflePortals.option_shops:
         shop_points.update(CHECKPOINTS)
@@ -208,7 +201,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     
     world.portal_mapping = []
     world.spoiler_portal_mapping = {}
-    for portal in OUTPUT_PORTALS:
+    for portal in PORTALS:
         warp_point = world.random.choice(available_portals)
         parent = out_to_parent[warp_point]
         # determine the name of the region of the warp point and save it in our
@@ -241,7 +234,7 @@ def connect_portal(world: "MessengerWorld", portal: str, out_region: str) -> Non
 
 
 def disconnect_portals(world: "MessengerWorld") -> None:
-    for portal in OUTPUT_PORTALS:
+    for portal in PORTALS:
         entrance = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
         entrance.connected_region.entrances.remove(entrance)
         entrance.connected_region = None
@@ -249,14 +242,17 @@ def disconnect_portals(world: "MessengerWorld") -> None:
 
 def validate_portals(world: "MessengerWorld") -> bool:
     new_state = CollectionState(world.multiworld)
-    for loc in set(world.multiworld.get_locations(world.player)):
-        if loc.can_reach(new_state):
+    new_state.update_reachable_regions(world.player)
+    reachable_locs = 0
+    for loc in world.multiworld.get_locations(world.player):
+        reachable_locs += loc.can_reach(new_state)
+        if reachable_locs > 5:
             return True
     return False
 
 
 def add_closed_portal_reqs(world: "MessengerWorld") -> None:
-    closed_portals = [entrance for entrance in SHUFFLEABLE_PORTAL_ENTRANCES if entrance not in world.starting_portals]
+    closed_portals = [entrance for entrance in PORTALS if f"{entrance} Portal" not in world.starting_portals]
     for portal in closed_portals:
-        tower_exit = world.multiworld.get_entrance(f"ToTHQ {portal}", world.player)
+        tower_exit = world.multiworld.get_entrance(f"ToTHQ {portal} Portal", world.player)
         tower_exit.access_rule = lambda state: state.has(portal, world.player)

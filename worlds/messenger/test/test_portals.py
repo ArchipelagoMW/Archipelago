@@ -1,7 +1,7 @@
 from BaseClasses import CollectionState
 from . import MessengerTestBase
 from .. import MessengerWorld
-from ..portals import OUTPUT_PORTALS
+from ..portals import PORTALS
 
 
 class PortalTestBase(MessengerTestBase):
@@ -16,7 +16,7 @@ class PortalTestBase(MessengerTestBase):
             "Searing Crags Portal": [["Searing Crags Portal", "Wingsuit"], ["Searing Crags Portal", "Rope Dart"]],  # grotto -> quillshroom -> crags there's two separate paths
             "Glacial Peak Portal": [["Glacial Peak Portal", "Wingsuit"], ["Glacial Peak Portal", "Rope Dart"]],  # grotto -> quillshroom -> crags -> peak or crags -> peak
         }
-        for portal in OUTPUT_PORTALS:
+        for portal in PORTALS:
             name = f"{portal} Portal"
             entrance_name = f"ToTHQ {name}"
             with self.subTest(portal=name, entrance_name=entrance_name):
