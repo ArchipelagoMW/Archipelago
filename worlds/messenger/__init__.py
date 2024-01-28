@@ -108,9 +108,9 @@ class MessengerWorld(World):
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
-        available_portals = ["Riviere Turquoise Portal", "Sunken Shrine Portal", "Searing Crags Portal"]
-        self.starting_portals = (["Autumn Hills Portal", "Howling Grotto Portal", "Glacial Peak Portal"] +
-                                 self.random.sample(available_portals, k=self.options.available_portals - 3))
+        self.starting_portals = [f"{portal} Portal"
+                                 for portal in PORTALS[:3] +
+                                 self.random.sample(PORTALS[3:], k=self.options.available_portals - 3)]
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
