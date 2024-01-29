@@ -337,8 +337,15 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
 
 def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
-    new_options = set(new_weights) - set(weights)
-    weights.update(new_weights)
+    cleaned_weights = {}
+    for option in new_weights:
+        if "merge_" in option:
+            option_name = option.replace("merge_", "")
+            new_items = new_weights[option]
+            new_items.extend(weights[option_name])
+            cleaned_weights[option_name] = new_items
+    new_options = set(cleaned_weights) - set(weights)
+    weights.update(cleaned_weights)
     if new_options:
         for new_option in new_options:
             logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
@@ -400,7 +407,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
-            key = get_choice("option_name", option_set)
+            key = get_choice("option_name", option_set).replace("merge_", "")
             if key not in currently_targeted_weights:
                 logging.warning(f'Specified option name {option_set["option_name"]} did not '
                                 f'match with a root option. '
