@@ -73,21 +73,18 @@ class MMBN3Client(BizHawkClient):
 
         try:
             # Check ROM name/patch version
-            rom_name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x108, 32, "ROM")]))[0])
+            rom_name_bytes = ((await bizhawk.read(ctx.bizhawk_ctx, [(0xA0, 16, "ROM")]))[0])
             rom_name = bytes([byte for byte in rom_name_bytes if byte != 0]).decode("ascii")
-            """
-            if not rom_name.startswith("pokemon emerald version"):
+            if not rom_name.startswith("MEGA_EXE3_BLA3XE"):
                 return False
-            if rom_name == "pokemon emerald version":
-                logger.info("ERROR: You appear to be running an unpatched version of Pokemon Emerald. "
-                            "You need to generate a patch file and use it to create a patched ROM.")
-                return False
-            if rom_name != EXPECTED_ROM_NAME:
-                logger.info("ERROR: The patch file used to create this ROM is not compatible with "
-                            "this client. Double check your client version against the version being "
-                            "used by the generator.")
-                return False
-            """
+            else:
+                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(player_name_offset, player_name_length, "ROM")]))[0]
+                try:
+                    bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
+                except UnicodeDecodeError:
+                    logger.info("ERROR: You appear to be running an unpatched version of MegaMan Battle Network 3 Blue. "
+                                "You need to generate a patch file and use it to create a patched ROM.")
+                    return False
         except UnicodeDecodeError:
             return False
         except bizhawk.RequestFailedError:
