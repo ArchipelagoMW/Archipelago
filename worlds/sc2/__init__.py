@@ -203,6 +203,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
     starter_items: List[Item] = []
     non_local_items = get_option_value(multiworld, player, "non_local_items")
     starter_unit = get_option_value(multiworld, player, "starter_unit")
+    enabled_campaigns = get_enabled_campaigns(multiworld, player)
     first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
     # Ensuring that first mission is completable
     if starter_unit == StarterUnit.option_off:
@@ -260,9 +261,9 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 elif local_basic_unit == ItemNames.SIEGE_TANK:
                     support_item = ItemNames.SIEGE_TANK_JUMP_JETS
                 if support_item is not None:
-                    starter_items.append(add_starter_item(multiworld, player, excluded_items, support_item))
-            if lookup_name_to_mission[first_mission].campaign == SC2Campaign.NCO:
-                starter_items.append(add_starter_item(multiworld, player, excluded_items, ItemNames.LIBERATOR_RAID_ARTILLERY))
+                    starter_items.append(add_starter_item(multiworld, player, excluded_items, [support_item]))
+            if enabled_campaigns == {SC2Campaign.NCO}:
+                starter_items.append(add_starter_item(multiworld, player, excluded_items, [ItemNames.LIBERATOR_RAID_ARTILLERY]))
     
     starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
     assert isinstance(starter_abilities, int)
