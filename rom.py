@@ -1,18 +1,23 @@
+from __future__ import annotations
+
 import hashlib
 import itertools
 import random
 from pathlib import Path
-from typing import Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional, TYPE_CHECKING
 
 import bsdiff4
 
 import Utils
-from BaseClasses import MultiWorld
 from Patch import APDeltaPatch
 
 from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
 from .items import WL4Item, filter_items
 from .types import ItemType, Passage
+from .options import Difficulty, MusicShuffle, OpenDoors, WarioVoiceShuffle
+
+if TYPE_CHECKING:
+    from . import WL4World
 
 
 # The Japanese and international versions have the same ROM mapping and in fact
@@ -88,25 +93,15 @@ class LocalRom():
             stream.write(self.buffer)
 
 
-# Unused; written only for my future reference
-def shuffle_keyzer(rom: LocalRom, multiworld: MultiWorld, player: int):
-    # Use setting world.keyzer[player]
-    rom.write_halfword(0x8075F18, 0x7849)  # ldrb r1, [r1, #1]  ; ItemGetFlgSet_LoadSavestateInfo2RAM()
-    rom.write_halfword(0x808127C, 0x7848)  # ldrb r0, [r1, #1]  ; SeisanSave()
-    rom.write_halfword(0x8081282, 0x7048)  # strb r0, [r1, #1]  ; SeisanSave()
-
-    # TODO skip cutscene so Wario doesn't walk through locked doors
-
-
 class MultiworldExtData(NamedTuple):
     receiver: str
     name: str
 
 
-def fill_items(rom: LocalRom, multiworld: MultiWorld, player: int):
+def fill_items(rom: LocalRom, world: WL4World):
     # Place item IDs and collect multiworld entries
     multiworld_items = {}
-    for location in multiworld.get_locations(player):
+    for location in world.multiworld.get_locations(world.player):
         itemid = location.item.code if location.item is not None else ...
         locationid = location.address
         playerid = location.item.player
@@ -119,10 +114,10 @@ def fill_items(rom: LocalRom, multiworld: MultiWorld, player: int):
             itemid = 0xF0
         itemname = location.item.name
 
-        if playerid == player:
+        if playerid == world.player:
             playername = None
         else:
-            playername = multiworld.player_name[playerid]
+            playername = world.multiworld.player_name[playerid]
 
         location_offset = location.level_offset() + location.entry_offset()
         item_location = get_symbol('ItemLocationTable', location_offset)
@@ -134,19 +129,19 @@ def fill_items(rom: LocalRom, multiworld: MultiWorld, player: int):
         else:
             multiworld_items[ext_data_location] = None
 
-    create_starting_inventory(rom, multiworld, player)
+    create_starting_inventory(rom, world)
 
     strings = create_strings(rom, multiworld_items)
     write_multiworld_table(rom, multiworld_items, strings)
 
 
-def create_starting_inventory(rom: LocalRom, multiworld: MultiWorld, player: int):
+def create_starting_inventory(rom: LocalRom, world: WL4World):
     # Precollected items
-    for item in multiworld.precollected_items[player]:
+    for item in world.multiworld.precollected_items[world.player]:
         give_item(rom, item)
 
     # Removed gem pieces
-    required_jewels = multiworld.required_jewels[player].value
+    required_jewels = world.options.required_jewels.value
     required_jewels_entry = min(1, required_jewels)
     for name, item in filter_items(type=ItemType.JEWEL):
         if item.passage() in (Passage.ENTRY, Passage.GOLDEN):
@@ -155,19 +150,19 @@ def create_starting_inventory(rom: LocalRom, multiworld: MultiWorld, player: int
             copies = 4 - required_jewels
 
         for _ in range(copies):
-            give_item(rom, WL4Item.from_name(name, player))
+            give_item(rom, WL4Item.from_name(name, world.player))
 
     # Free Keyzer
     def set_keyzer(passage, level):
         address = level_to_start_inventory_address(passage, level)
         rom.write_byte(address, rom.read_byte(address) | 0x20)
 
-    if multiworld.open_doors[player].value:
+    if world.options.open_doors != OpenDoors.option_off:
         set_keyzer(Passage.ENTRY, 0)
         for passage, level in itertools.product(range(1, 5), range(4)):
             set_keyzer(passage, level)
 
-    if multiworld.open_doors[player].value == 2:
+    if world.options.open_doors.value == OpenDoors.option_open:
         set_keyzer(Passage.GOLDEN, 0)
 
 
@@ -240,9 +235,9 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
-def set_difficulty_level(rom: LocalRom, difficulty: int):
-    mov_r0 = 0x2000 | difficulty           # mov r0, #difficulty
-    cmp_r0 = 0x2800 | difficulty           # cmp r0, #difficulty
+def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
+    mov_r0 = 0x2000 | difficulty.value     # mov r0, #difficulty
+    cmp_r0 = 0x2800 | difficulty.value     # cmp r0, #difficulty
 
     # SramtoWork_Load()
     rom.write_halfword(0x8091558, mov_r0)  # Force difficulty (anti-cheese)
@@ -298,14 +293,14 @@ other_songs = [  # Not made to play in levels
 ]
 
 
-def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
-    music_shuffle = multiworld.music_shuffle[player].value
-    if music_shuffle == 0:
+def shuffle_music(rom: LocalRom, music_shuffle: MusicShuffle):
+    if music_shuffle == MusicShuffle.option_none:
         return
+    # music_shuffle >= MusicShuffle.option_levels_only
     music_pool = [*level_songs]
-    if music_shuffle >= 2:
+    if music_shuffle >= MusicShuffle.option_levels_and_extras:
         music_pool += level_adjacent_songs
-    if music_shuffle >= 3:
+    if music_shuffle >= MusicShuffle.option_full:
         music_pool += other_songs
 
     music_table_address = 0x8098028
@@ -338,8 +333,8 @@ def shuffle_music(rom: LocalRom, multiworld: MultiWorld, player: int):
     rom.write_halfword(mystic_lake_doors[26] + 10, 0x2A2)
 
 
-def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int):
-    if not multiworld.wario_voice_shuffle[player]:
+def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
+    if not shuffle.value:
         return
 
     voice_set_pointer_address = 0x86D3648
@@ -354,27 +349,27 @@ def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int)
         rom.write_word(voice_set_length_address + 4 * i, length)
 
 
-def patch_rom(rom: LocalRom, multiworld: MultiWorld, player: int):
-    fill_items(rom, multiworld, player)
+def patch_rom(rom: LocalRom, world: WL4World):
+    fill_items(rom, world)
 
     # Write player name and number
-    player_name = multiworld.player_name[player].encode('utf-8')
+    player_name = world.multiworld.player_name[world.player].encode('utf-8')
     rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), player)
+    rom.write_byte(get_symbol('PlayerID'), world.player)
 
     # Set deathlink
-    rom.write_byte(get_symbol('DeathLinkFlag'), multiworld.death_link[player].value)
+    rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
-    set_difficulty_level(rom, multiworld.difficulty[player].value)
+    set_difficulty_level(rom, world.options.difficulty)
 
     # Break hard blocks without stopping
-    if (multiworld.smash_through_hard_blocks[player].value):
+    if (world.options.smash_through_hard_blocks.value):
         rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
         rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
         rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
 
-    shuffle_music(rom, multiworld, player)
-    shuffle_wario_voice_sets(rom, multiworld, player)
+    shuffle_music(rom, world.options.music_shuffle)
+    shuffle_wario_voice_sets(rom, world.options.wario_voice_shuffle)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:

@@ -7,8 +7,8 @@ from worlds.AutoWorld import WebWorld, World
 
 from .client import WL4Client
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
-from .locations import location_name_to_id, setup_locations
-from .options import wl4_options
+from .locations import location_name_to_id
+from .options import GoldenJewels, PoolJewels, WL4Options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 from .rules import set_access_rules
@@ -51,7 +51,8 @@ class WL4World(World):
     '''
 
     game: str = 'Wario Land 4'
-    option_definitions = wl4_options
+    options_dataclass = WL4Options
+    options: WL4Options
     settings: ClassVar[WL4Settings]
     topology_present = False
 
@@ -64,19 +65,16 @@ class WL4World(World):
     web = WL4Web()
 
     def generate_early(self):
-        options = self.multiworld.worlds[self.player].options
-        if options.required_jewels > options.pool_jewels:
-            options.pool_jewels = options.required_jewels
-            self.multiworld.pool_jewels[self.player] = options.required_jewels
-        if options.required_jewels >= 1 and options.golden_jewels == 0:
-            options.golden_jewels = 1
-            self.multiworld.golden_jewels[self.player] = options.golden_jewels
+        if self.options.required_jewels > self.options.pool_jewels:
+            self.options.pool_jewels = PoolJewels(self.options.required_jewels)
+        if self.options.required_jewels >= 1 and self.options.golden_jewels == 0:
+            self.options.golden_jewels = GoldenJewels(1)
 
     def create_regions(self):
-        location_table = setup_locations(self.multiworld, self.player)
-        create_regions(self.multiworld, self.player, location_table)
-        set_access_rules(self.multiworld, self.player)
-        connect_regions(self.multiworld, self.player)
+        location_table = self.setup_locations()
+        create_regions(self, location_table)
+        set_access_rules(self)
+        connect_regions(self)
 
         passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
         for passage in passages:
@@ -89,21 +87,21 @@ class WL4World(World):
         golden_diva.show_in_spoiler = False
 
     def create_items(self):
-        difficulty = self.multiworld.difficulty[self.player].value
+        difficulty = self.options.difficulty
         gem_pieces = 18 * 4
         cds = 16
-        full_health_items = (9, 7, 6)[difficulty]
+        full_health_items = (9, 7, 6)[difficulty.value]
         total_required_locations = gem_pieces + cds + full_health_items
 
         itempool = []
 
-        required_jewels = self.multiworld.required_jewels[self.player].value
-        pool_jewels = self.multiworld.pool_jewels[self.player].value
+        required_jewels = self.options.required_jewels.value
+        pool_jewels = self.options.pool_jewels.value
         for name, item in filter_items(type=ItemType.JEWEL):
             if item.passage() == Passage.ENTRY:
                 copies = min(pool_jewels, 1)
             elif item.passage() == Passage.GOLDEN:
-                copies = self.multiworld.golden_jewels[self.player]
+                copies = self.options.golden_jewels.value
             else:
                 copies = pool_jewels
 
@@ -145,9 +143,8 @@ class WL4World(World):
         try:
             world = self.multiworld
             player = self.player
-
             rom = LocalRom(get_base_rom_path())
-            patch_rom(rom, self.multiworld, self.player)
+            patch_rom(rom, self)
 
             rompath = output_path / f'{world.get_out_file_name_base(player)}.gba'
             rom.write_to_file(rompath)
@@ -170,3 +167,7 @@ class WL4World(World):
     def set_rules(self):
         self.multiworld.completion_condition[self.player] = (
             lambda state: state.has('Escape the Pyramid', self.player))
+
+    def setup_locations(self):
+        return {name for name in location_name_to_id
+                if self.options.difficulty in locations.location_table[name].difficulties}
