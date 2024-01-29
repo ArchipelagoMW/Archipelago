@@ -19,7 +19,7 @@ class SC2Logic:
         :return:
         """
         # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
-        return state.has_group("Dummy", self.player, 0) \
+        return state.has_group("Missions", self.player, 0) \
             or state.has_any(items, self.player)
 
     # WoL
