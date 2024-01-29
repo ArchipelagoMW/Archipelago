@@ -391,7 +391,7 @@ def create_structured_regions(
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
 
-    mission_order = mission_orders[mission_order_type]
+    mission_order = mission_orders[mission_order_type]()
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     shuffle_campaigns = get_option_value(multiworld, player, "shuffle_campaigns")
 
