@@ -26,6 +26,8 @@ class Group(enum.Enum):
     Coin = enum.auto()
     Trap = enum.auto()
     Twice = enum.auto()
+    Shard = enum.auto()
+
 
 
 @dataclass(frozen=True)
@@ -119,6 +121,9 @@ def create_items_lfod(world_options, created_items, world):
             if item.has_any_group(Group.Twice):
                 created_items.append(world.create_item(item))
     if world_options.coinsanity == Options.CoinSanity.option_coin:
+        if world_options.coinbundlequantity == 0.1:
+            create_coin_piece(created_items, world, 889, Group.Freemium)
+            return
         create_coin(world_options, created_items, world, 889, Group.Freemium)
 
 
@@ -132,6 +137,7 @@ def create_items_basic(world_options, created_items, world):
                 created_items.append(world.create_item(item))
     if world_options.coinsanity == Options.CoinSanity.option_coin:
         if world_options.coinbundlequantity == 0.1:
+            create_coin_piece(created_items, world, 825, Group.DLCQuest)
             return
         create_coin(world_options, created_items, world, 825, Group.DLCQuest)
 
@@ -143,4 +149,10 @@ def create_coin(world_options, created_items, world, coin, group):
             for i in range(coin_bundle_needed):
                 created_items.append(world.create_item(item))
             if coin % world_options.coinbundlequantity != 0:
+                created_items.append(world.create_item(item))
+
+def create_coin_piece(created_items, world, coin, group):
+    for item in items_by_group[group]:
+        if item.has_any_group(Group.Shard):
+            for i in range(coin*10):
                 created_items.append(world.create_item(item))

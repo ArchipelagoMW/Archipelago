@@ -45,3 +45,5 @@ id,name,classification,groups
 45,Temporary Spike,trap,Trap
 46,Loading Screen,trap,Trap
 47,Name Change,trap,Trap
+48,DLC Quest: Coin Piece,progression,"Shard,DLCQuest"
+49,Live Freemium or Die: Coin Piece,progression,"Shard,Freemium"
