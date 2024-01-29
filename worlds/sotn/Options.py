@@ -1,6 +1,6 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Option, Toggle
+from Options import Option, Toggle, Choice
 
 
 class OpenedNO4NO3(Toggle):
@@ -24,10 +24,23 @@ class OpenedDAINO2(Toggle):
     display_name = "OpenedDAINO2"
 
 
+class Difficult(Choice):
+    """
+    Determines the difficult
+    """
+    display_name = "Difficult"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_insane = 3
+    default = 1
+
+
 sotn_option_definitions: Dict[str, type(Option)] = {
     "OpenedNO4NO3": OpenedNO4NO3,
     "OpenedDAIARE": OpenedDAIARE,
     "OpenedDAINO2": OpenedDAINO2,
+    "Difficult": Difficult,
 }
 
 
