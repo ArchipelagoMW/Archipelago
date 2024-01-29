@@ -246,11 +246,11 @@ local changeZenny = function(val)
 		return 0
 	end
 	if memory.read_u32_le(0x20018F4) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
-		memory.write_u32_le(0x20018f4, 0)
+		memory.write_u32_le(0x20018F4, 0)
 		val = 0
 		return "empty"
 	end
-	memory.write_u32_le(0x20018f4, memory.read_u32_le(0x20018F4) + tonumber(val))
+	memory.write_u32_le(0x20018F4, memory.read_u32_le(0x20018F4) + tonumber(val))
 	if memory.read_u32_le(0x20018F4) > 999999 then
 		memory.write_u32_le(0x20018F4, 999999)
 	end
@@ -262,11 +262,11 @@ local changeFrags = function(val)
 		return 0
 	end
 	if memory.read_u16_le(0x20018F8) <= math.abs(tonumber(val)) and tonumber(val) < 0 then
-		memory.write_u16_le(0x20018f8, 0)
+		memory.write_u16_le(0x20018F8, 0)
 		val = 0
 		return "empty"
 	end
-	memory.write_u16_le(0x20018f8, memory.read_u16_le(0x20018F8) + tonumber(val))
+	memory.write_u16_le(0x20018F8, memory.read_u16_le(0x20018F8) + tonumber(val))
 	if memory.read_u16_le(0x20018F8) > 9999 then
 		memory.write_u16_le(0x20018F8, 9999)
 	end
@@ -287,9 +287,6 @@ local changeMaxHealth = function(val)
 	memory.write_u16_le(0x20018A2, memory.read_u16_le(0x20018A2) + tonumber(val))
 	if memory.read_u16_le(0x20018A2) > 9999 then
 		memory.write_u16_le(0x20018A2, 9999)
-	end
-	if IsInBattle() then
-		memory.write_u16_le(0x2037296, memory.read_u16_le(0x20018A2))
 	end
 	return val
 end
@@ -370,13 +367,6 @@ local OpenShortcuts = function()
     if (memory.read_u8(key_item_start_address + 95) > 0) then
        memory.write_u8(0x2000032, bit.bor(memory.read_u8(0x2000032),0x40))
     end
-end
-
-local RestoreItemRam = function()
-    if backup_bytes ~= nil then
-        memory.write_bytes_as_array(0x203fe10, backup_bytes)
-    end
-    backup_bytes = nil
 end
 
 local process_block = function(block)
