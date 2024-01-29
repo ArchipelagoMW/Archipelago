@@ -56,7 +56,7 @@ class CoinSanityRange(NamedRange):
             }
         else:
             special_range_names += {
-                "coin fragments": 0.1,
+                "coin piece": 0.1,
             }
 
 
