@@ -105,7 +105,7 @@ def launch_game() -> None:
     def available_mod_update() -> bool:
         """Check if there's an available update"""
         url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
-        assets = request_data(url)["assets"]
+        assets = request_data(url)[0]["assets"]
         # TODO simplify once we're done with 0.13.0 alpha
         for asset in assets:
             if "TheMessengerRandomizerAP" in asset["name"]:
@@ -133,8 +133,8 @@ def launch_game() -> None:
                 installed_version = installed_version[-1]
             else:
                 installed_version = 1
-            return latest_version > installed_version
-        elif latest_version >= 1:
+            return int(latest_version) > int(installed_version)
+        elif int(latest_version) >= 1:
             return True
         return tuplize_version(latest_version) > tuplize_version(installed_version)
 
