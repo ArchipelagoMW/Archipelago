@@ -8,7 +8,8 @@ import math
 
 USHASH = 'acbb3a2e4a8f865f363dc06df147afa2'
 
-
+# PROBLEMS
+#   Creature, Death, Akmodan II, Medusa relic only spawn after leaving the boss area
 class SOTNDeltaPatch(APDeltaPatch):
     hash = USHASH
     game = "Symphony of the Night"
@@ -81,3 +82,4 @@ def write_to_file(buffer, filename=""):
 
     """with open("teste.cue", 'wb') as outfile:
         outfile.write(bytes(cue_file, 'utf-8'))"""
+
