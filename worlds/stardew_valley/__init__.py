@@ -140,7 +140,6 @@ class StardewValleyWorld(World):
         self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.enter_dangerous_skull_cavern])
 
     def create_items(self):
-        self.total_progression_items = 0
         self.precollect_starting_season()
         items_to_exclude = [excluded_items
                             for excluded_items in self.multiworld.precollected_items[self.player]

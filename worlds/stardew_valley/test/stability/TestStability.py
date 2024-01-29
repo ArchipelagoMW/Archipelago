@@ -3,6 +3,7 @@ import re
 import subprocess
 import sys
 import unittest
+from random import random
 
 from BaseClasses import get_seed
 
@@ -17,7 +18,8 @@ class TestGenerationIsStable(unittest.TestCase):
     """
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
-        seed = get_seed(33778671150797368040)
+        # seed = get_seed(33778671150797368040) # troubleshooting seed
+        seed = random.randrange(sys.maxsize)
 
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])

@@ -3,12 +3,12 @@ from typing import Dict
 
 from BaseClasses import MultiWorld
 from Options import NamedRange, Range
-from worlds.stardew_valley.test import setup_solo_multiworld, SVTestCase
-from worlds.stardew_valley.test.checks.goal_checks import assert_goal_world_is_valid
-from worlds.stardew_valley.test.checks.option_checks import assert_can_reach_island_if_should, assert_cropsanity_same_number_items_and_locations, \
+from .. import setup_solo_multiworld, SVTestCase
+from ..checks.goal_checks import assert_goal_world_is_valid
+from ..checks.option_checks import assert_can_reach_island_if_should, assert_cropsanity_same_number_items_and_locations, \
     assert_festivals_give_access_to_deluxe_scarecrow, assert_has_festival_recipes
-from worlds.stardew_valley.test.checks.world_checks import assert_same_number_items_locations, assert_victory_exists
-from worlds.stardew_valley.test.long.option_names import options_to_include
+from ..checks.world_checks import assert_same_number_items_locations, assert_victory_exists
+from .option_names import options_to_include
 
 
 def get_option_choices(option) -> Dict[str, int]:
