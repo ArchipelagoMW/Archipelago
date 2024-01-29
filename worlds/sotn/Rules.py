@@ -15,110 +15,141 @@ def set_rules(world: MultiWorld, player: int) -> None:
                 location = world.get_location(name, player)
                 forbid_item(location, r[0], player)
         if data.no_offset:
-            # Forbid progression_items and vessel on no offsets locations
-            location = world.get_location(name, player)
-            forbid_item(location, "Gold ring", player)
-            forbid_item(location, "Silver ring", player)
-            forbid_item(location, "Holy glasses", player)
-            forbid_item(location, "Spike breaker", player)
-            for pu in vessel_table.items():
-                forbid_item(location, pu[0], player)
+            # Forbid progression_items and vessel on no offsets despawn locations
+            if name != "NO0 - Holy glasses":
+                location = world.get_location(name, player)
+                forbid_item(location, "Gold ring", player)
+                forbid_item(location, "Silver ring", player)
+                forbid_item(location, "Holy glasses", player)
+                forbid_item(location, "Spike breaker", player)
+                for pu in vessel_table.items():
+                    forbid_item(location, pu[0], player)
 
     # Enforce relics placement on relics locations TODO: Not all relics are need it. Possibility of None on those???
     location = world.get_location("Soul of Bat", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Form of mist", player) and (state.has("Leap stone", player) or
              state.has("Soul of bat", player) or state.has("Gravity boots", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player))))
     location = world.get_location("Fire of Bat", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
     location = world.get_location("Echo of Bat", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Form of mist", player) and
              state.has("Power of mist", player)) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
+    location = world.get_location("Force of Echo", player)
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Soul of Wolf", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Power of Wolf", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
     location = world.get_location("Skill of Wolf", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or state.has("Gravity boots", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
     location = world.get_location("Form of Mist", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Power of Mist", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))) or (state.has("Form of mist", player) and
                                                       state.has("Power of mist", player)))
     location = world.get_location("Gas Cloud", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Cube of Zoe", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Spirit Orb", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Gravity Boots", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Form of mist", player) and
              state.has("Power of mist", player)) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
     location = world.get_location("Leap Stone", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Holy Symbol", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Merman statue", player))
     location = world.get_location("Faerie Scroll", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Jewel of Open", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Merman Statue", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Bat Card", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Form of mist", player) and
              state.has("Power of mist", player)) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
     location = world.get_location("Ghost Card", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
                                                                           (state.has("Leap stone", player) or
                                                                            state.has("Soul of wolf", player) or
                                                                            state.has("Form of mist", player))) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
     location = world.get_location("Faerie Card", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Leap stone", player) or state.has("Soul of bat", player) or
              state.has("Gravity boots", player) or state.has("Form of mist", player) and
              state.has("Power of mist", player))
     location = world.get_location("Demon Card", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Sword Card", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     set_rule(location, lambda state: state.has("Soul of bat", player) or (state.has("Form of mist", player) and
              state.has("Power of mist", player)) or (state.has("Gravity boots", player) and
              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
               state.has("Form of mist", player))))
     location = world.get_location("Heart of Vlad", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Tooth of Vlad", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Rib of Vlad", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Ring of Vlad", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
     location = world.get_location("Eye of Vlad", player)
-    add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    # add_item_rule(location, lambda item: item.player == player and is_relic(item))
+    add_item_rule(location, lambda item: is_relic(item))
 
     # Items rules
     set_rule(world.get_location("ARE - Holy sword(Hidden attic)", player), lambda state:
