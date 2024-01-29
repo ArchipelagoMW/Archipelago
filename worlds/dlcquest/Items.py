@@ -97,12 +97,44 @@ def create_trap_items(world, World_Options: Options.DLCQuestOptions, trap_needed
 def create_items(world, World_Options: Options.DLCQuestOptions, locations_count: int, random: Random):
     created_items = []
     if World_Options.campaign == Options.Campaign.option_basic or World_Options.campaign == Options.Campaign.option_both:
-        for item in items_by_group[Group.DLCQuest]:
-            if item.has_any_group(Group.DLC):
-                created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
-                created_items.append(world.create_item(item))
-        if World_Options.coinsanity == Options.CoinSanity.option_coin:
+        create_items_basic(World_Options, created_items, world)
+
+    if (World_Options.campaign == Options.Campaign.option_live_freemium_or_die or
+            World_Options.campaign == Options.Campaign.option_both):
+        create_items_lfod(World_Options, created_items, world)
+
+    trap_items = create_trap_items(world, World_Options, locations_count - len(created_items), random)
+    created_items += trap_items
+
+    return created_items
+
+
+def create_items_lfod(World_Options, created_items, world):
+    for item in items_by_group[Group.Freemium]:
+        if item.has_any_group(Group.DLC):
+            created_items.append(world.create_item(item))
+        if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
+            created_items.append(world.create_item(item))
+    if World_Options.coinsanity == Options.CoinSanity.option_coin:
+        coin_bundle_needed = math.floor(889 / World_Options.coinbundlequantity)
+        for item in items_by_group[Group.Freemium]:
+            if item.has_any_group(Group.Coin):
+                for i in range(coin_bundle_needed):
+                    created_items.append(world.create_item(item))
+                if 889 % World_Options.coinbundlequantity != 0:
+                    created_items.append(world.create_item(item))
+
+
+def create_items_basic(World_Options, created_items, world):
+    for item in items_by_group[Group.DLCQuest]:
+        if item.has_any_group(Group.DLC):
+            created_items.append(world.create_item(item))
+        if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
+            created_items.append(world.create_item(item))
+    if World_Options.coinsanity == Options.CoinSanity.option_coin:
+        if World_Options.coinbundlequantity == 0.1:
+            a = 1
+        else:
             coin_bundle_needed = math.floor(825 / World_Options.coinbundlequantity)
             for item in items_by_group[Group.DLCQuest]:
                 if item.has_any_group(Group.Coin):
@@ -110,24 +142,3 @@ def create_items(world, World_Options: Options.DLCQuestOptions, locations_count:
                         created_items.append(world.create_item(item))
                     if 825 % World_Options.coinbundlequantity != 0:
                         created_items.append(world.create_item(item))
-
-    if (World_Options.campaign == Options.Campaign.option_live_freemium_or_die or
-            World_Options.campaign == Options.Campaign.option_both):
-        for item in items_by_group[Group.Freemium]:
-            if item.has_any_group(Group.DLC):
-                created_items.append(world.create_item(item))
-            if item.has_any_group(Group.Item) and World_Options.item_shuffle == Options.ItemShuffle.option_shuffled:
-                created_items.append(world.create_item(item))
-        if World_Options.coinsanity == Options.CoinSanity.option_coin:
-            coin_bundle_needed = math.floor(889 / World_Options.coinbundlequantity)
-            for item in items_by_group[Group.Freemium]:
-                if item.has_any_group(Group.Coin):
-                    for i in range(coin_bundle_needed):
-                        created_items.append(world.create_item(item))
-                    if 889 % World_Options.coinbundlequantity != 0:
-                        created_items.append(world.create_item(item))
-
-    trap_items = create_trap_items(world, World_Options, locations_count - len(created_items), random)
-    created_items += trap_items
-
-    return created_items

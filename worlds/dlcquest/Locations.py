@@ -76,3 +76,14 @@ for i in range(1, 826):
 for i in range(1, 890):
     item_coin_freemium = f"Live Freemium or Die: {i} Coin"
     location_table[item_coin_freemium] = offset + 825 + 58 + i
+
+
+offset_special = 3829200000
+
+for i in range(1, 8251):
+    item_coin_fragment = f"DLC Quest: {i/10} Coin Fragment"
+    location_table[item_coin_fragment] = offset_special + i
+
+for i in range(1, 8891):
+    item_coin_fragment_freemium = f"Live Freemium or Die: {i/10} Coin Fragment"
+    location_table[item_coin_fragment_freemium] = offset_special + 8250 + i

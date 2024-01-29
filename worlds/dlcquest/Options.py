@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime
 
 from Options import Choice, DeathLink, NamedRange, PerGameCommonOptions
 
@@ -48,6 +49,17 @@ class CoinSanityRange(NamedRange):
         "normal": 20,
         "high": 50,
     }
+    if datetime.datetime.today().month == 4:
+        if datetime.datetime.today().day == 1:
+            special_range_names += {
+                "surprise": 0.1,
+            }
+        else:
+            special_range_names += {
+                "coin fragments": 0.1,
+            }
+
+
 
 
 class EndingChoice(Choice):
