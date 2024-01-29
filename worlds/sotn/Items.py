@@ -56,6 +56,9 @@ class ItemData:
     def get_item_type(self):
         return self.type
 
+    def get_item_classification(self):
+        return self.ic
+
 
 hand_type_table = {
     "Monster vial 1": ItemData(1, Type.USABLE),
@@ -371,6 +374,7 @@ item_table = {
     **hand_type_table,
     **chest_type_table,
     **helmet_type_table,
+    **cloak_type_table,
     **acc_type_table,
     **vessel_table,
     **relic_table,
