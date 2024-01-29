@@ -15,9 +15,9 @@ from NetUtils import ClientStatus
 from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
-from worlds import network_data_package
+from worlds import network_data_package, AutoWorldRegister
 from worlds.sotn.Items import base_item_id
-from worlds.sotn.Locations import location_table, LocationData, base_location_id
+from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData
 
 
 SYSTEM_MESSAGE_ID = 0
@@ -45,7 +45,7 @@ Payload: client -> lua
     items: list,
 }
 """
-
+# TODO: lua script has_item will not work with more than one of the same item
 sotn_loc_name_to_id = network_data_package["games"]["Symphony of the Night"]["location_name_to_id"]
 
 
@@ -62,6 +62,48 @@ class SotnCommandProcessor(ClientCommandProcessor):
         """Discard current PSX connection state"""
         if isinstance(self.ctx, SotnContext):
             self.ctx.psx_sync_task.cancel()
+
+    def _cmd_missing(self, filter_text = "") -> bool:
+        """List all missing location checks, from your local game state.
+        Can be given text, which will be used as filter."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine missing checks.")
+            return False
+        count = 0
+        checked_count = 0
+        for location, location_id in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id.items():
+            if filter_text and filter_text not in location:
+                continue
+            if location_id < 0:
+                continue
+            if location_id not in self.ctx.locations_checked:
+                if location_id in self.ctx.missing_locations:
+                    self.output('Missing: ' + location)
+                    count += 1
+                # Having missing and checked together is weird
+                """elif location_id in self.ctx.checked_locations:
+                    self.output('Checked: ' + location)
+                    count += 1
+                    checked_count += 1"""
+
+        if count:
+            self.output(
+                f"Found {count} missing location checks.")
+        else:
+            self.output("No missing location checks found.")
+        return True
+
+    def _cmd_zones(self):
+        """List zones names"""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine missing checks.")
+            return False
+
+        for key, value in zones_dict.items():
+            zd: ZoneData = value
+            if zd.abrev == "WRP" or zd.abrev == "RWRP" or zd.abrev == "ST0" or "BO" in zd.abrev:
+                continue
+            self.output(f'{zd.abrev} - {zd.name}')
 
 
 class SotnContext(CommonContext):
@@ -177,12 +219,21 @@ async def parse_bosses(data: dict, ctx: SotnContext):
         return
     if bosses is not None:
         for key, value in bosses.items():
-            if value:
-                if value not in ctx.bosses_dead:
+            if ctx.bosses_dead is not None:
+                if value != ctx.bosses_dead[key]:
+                    ctx.total_bosses_killed += 1
+                    msg = f'Killed: {key} - Total: {ctx.total_bosses_killed}'
+                    logger.info(msg)
+            else:
+                if value:
                     ctx.total_bosses_killed += 1
                     msg = f'Killed: {key} - Total: {ctx.total_bosses_killed}'
                     logger.info(msg)
     ctx.bosses_dead = bosses
+    if "Dracula" in bosses:
+        if bosses["Dracula"] and ctx.total_bosses_killed >= 20:
+            await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
+            ctx.finished_game = True
 
 
 async def psx_sync_task(ctx: SotnContext):
