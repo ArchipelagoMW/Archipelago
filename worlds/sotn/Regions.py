@@ -82,7 +82,7 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     rno3 = Region("Reverse Entrance", player, multiworld)
     for k, v in rno3_locations.items():
         rno3.locations.append(SotnLocation(player, k, v.location_id, rno3))
-    rno4 = Region("Underground Caverns", player, multiworld)
+    rno4 = Region("Reverse Caverns", player, multiworld)
     for k, v in rno4_locations.items():
         rno4.locations.append(SotnLocation(player, k, v.location_id, rno4))
     rnz0 = Region("Necromancy Laboratory", player, multiworld)
