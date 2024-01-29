@@ -1,5 +1,6 @@
 from BaseClasses import Location
 
+
 # I'm assuming this its just to add uniqueness to ids with all worlds in a seed I have no idea how this number is
 # calculate, so just threw some random numbers. 127{zone id}{game id}
 base_location_id = 127000000
@@ -61,7 +62,7 @@ zones_dict = {
     46: ZoneData("RBO5", "Doppleganger40"),
     47: ZoneData("RBO6", "Shaft/Dracula"),
     48: ZoneData("RBO7", "Akmodan II"),
-    49: ZoneData("RB08", "Galamoth"),
+    49: ZoneData("RBO8", "Galamoth"),
 }
 
 
@@ -109,7 +110,7 @@ no3_locations = {
     "NO3 - Turkey": LocationData("Castle Entrance", 3111, [0x4baa2b0, 0x5431f60],
                                  True, False),
     "Cube of Zoe": LocationData("Castle Entrance", 3112,
-                                [0x4b6b082+8, 0x4b6b93e+8, 0x53f8e26+8, 0x53f969+8],
+                                [0x4b6b082+8, 0x4b6b93e+8, 0x53f8e26+8, 0x53f9692+8],
                                 False, True),
     "Power of Wolf": LocationData("Castle Entrance", 3113,
                                   [0x4b6b14a+8, 0x4b6b9ac+8, 0x53f8f16+8, 0x53f9714+8],
@@ -148,7 +149,7 @@ no0_locations = {
     "NO0 - Attack potion(Jewel)": LocationData("Marble Gallery", 11, [0x48fadae]),
     "NO0 - Hammer(Spirit)": LocationData("Marble Gallery", 12, [0x48fadb0]),
     "NO0 - Str. potion": LocationData("Marble Gallery", 13, [0x48fadb2]),
-    "NO0 - Holy glasses": LocationData("Marble Gallery", 3080, [0x456e368]),
+    "NO0 - Holy glasses": LocationData("Marble Gallery", 3080, [0x456e368], False),
     "Spirit Orb": LocationData("Marble Gallery", 3081, [0x48fd1f6+8, 0x48fe278+8],
                                False, True),
     "Gravity Boots": LocationData("Marble Gallery", 3082, [0x48fc9b2+8, 0x48fd944+8],
@@ -168,7 +169,7 @@ no1_locations = {
     "Soul of Wolf": LocationData("Outer Wall", 3092, [0x49d5d36+8, 0x49d658e+8],
                                  False, True)
 }
-# TODO: Find bump librarian item
+
 lib_locations = {
     "LIB - Stone mask": LocationData("Long Library", 1, [0x47a390a]),
     "LIB - Holy rod": LocationData("Long Library", 2, [0x47a390c]),
@@ -179,14 +180,13 @@ lib_locations = {
     "LIB - Potion": LocationData("Long Library", 8, [0x47a3918]),
     "LIB - Antivenom": LocationData("Long Library", 9, [0x47a391a]),
     "LIB - Topaz circlet": LocationData("Long Library", 10, [0x47a391c]),
-    "LIB - Bump librarian": LocationData("Long Library", 3070),
     "LIB - Lesser Demon kill": LocationData("Long Library", None),
     "Soul of Bat": LocationData("Long Library", 3072, [0x47a5b5e+8, 0x47a623e+8],
                                 False, True),
     "Faerie Scroll": LocationData("Long Library", 3073, [0x47a5718+8, 0x47a5dca+8],
                                   False, True),
     "Jewel of Open": LocationData("Long Library", 3074, [0x047a321c], False,
-                                  True),  # TODO: Add librarian function
+                                  True),  # TODO: Add librarian text function
     "Faerie Card": LocationData("Long Library", 3075, [0x47a577c+8, 0x47a5f64+8],
                                 False,True),
 }
@@ -208,7 +208,7 @@ nz1_locations = {
     "NZ1 - Shuriken": LocationData("Clock Tower", 3152, [0x55737a0], True),
     "NZ1 - TNT": LocationData("Clock Tower", 3153, [0x55737a8], True),
     "NZ1 - Karasuman kill": LocationData("Clock Tower", None),
-    "Fire of Bat": LocationData("Clock Tower", 3155, [0x5575356, 0x5575e92], False,
+    "Fire of Bat": LocationData("Clock Tower", 3155, [0x5575356+8, 0x5575e92+8], False,
                                 True)
 }
 
@@ -484,7 +484,7 @@ rno1_locations = {
     "RNO1 - Luck potion": LocationData("Reverse Outer Wall", 4, [0x5050174]),
     "RNO1 - Shield potion": LocationData("Reverse Outer Wall", 5, [0x5050176]),
     "RNO1 - High potion": LocationData("Reverse Outer Wall", 6, [0x5050178]),
-    "RNO1 - Garnet": LocationData("Reverse Outer Wall", 7, []),
+    "RNO1 - Garnet": LocationData("Reverse Outer Wall", 7, [0x505017a]),
     "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3240, [0x507d08c], True),
     "RNO1 - Creature kill": LocationData("Reverse Outer Wall", None),
     "Tooth of Vlad": LocationData("Reverse Outer Wall", 3242, [0x5051d4a+8, 0x5052566+8],
@@ -524,7 +524,7 @@ rno3_locations = {
 }
 
 rno4_locations = {
-    "RNO4 - Alucard shield": LocationData("Reverse Caverns", 0, [0x526c0e]),
+    "RNO4 - Alucard shield": LocationData("Reverse Caverns", 0, [0x526c0e8]),
     "RNO4 - Shiitake 1(Near entrance passage)": LocationData("Reverse Caverns", 1, [0x526c0ea]),
     "RNO4 - Toadstool(Waterfall)": LocationData("Reverse Caverns", 2, [0x526c0ec]),
     "RNO4 - Shiitake 2(Waterfall)": LocationData("Reverse Caverns", 3, [0x526c0ee]),
