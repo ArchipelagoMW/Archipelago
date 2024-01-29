@@ -90,11 +90,14 @@ class RiskOfRainWorld(World):
         environments_pool = {}
         # only mess with the environments if they are set as items
         if self.options.goal == "explore":
-            if not self.options.require_stages:
+            if not self.options.require_stages and not self.options.progressive_stages:
                 self.multiworld.push_precollected(self.multiworld.create_item("Stage 1", self.player))
                 self.multiworld.push_precollected(self.multiworld.create_item("Stage 2", self.player))
                 self.multiworld.push_precollected(self.multiworld.create_item("Stage 3", self.player))
                 self.multiworld.push_precollected(self.multiworld.create_item("Stage 4", self.player))
+            elif not self.options.require_stages and self.options.progressive_stages:
+                for _ in range(4):
+                    self.multiworld.push_precollected(self.multiworld.create_item("Progressive Stage", self.player))
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
             if self.options.dlc_sotv:
@@ -213,8 +216,8 @@ class RiskOfRainWorld(World):
         options_dict = self.options.as_dict("item_pickup_step", "shrine_use_step", "goal", "victory", "total_locations",
                                             "chests_per_stage", "shrines_per_stage", "scavengers_per_stage",
                                             "scanner_per_stage", "altars_per_stage", "total_revivals",
-                                            "start_with_revive", "final_stage_death", "death_link",
-                                            casing="camel")
+                                            "start_with_revive", "final_stage_death", "death_link", "require_stages",
+                                            "progressive_stages", casing="camel")
         return {
             **options_dict,
             "seed": "".join(self.random.choice(string.digits) for _ in range(16)),
