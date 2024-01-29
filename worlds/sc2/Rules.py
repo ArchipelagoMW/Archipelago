@@ -1,6 +1,7 @@
+from typing import Set
+
 from BaseClasses import MultiWorld, CollectionState
-from worlds.AutoWorld import LogicMixin
-from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, GameDifficulty, \
+from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, get_enabled_campaigns, MissionOrder
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings
 from .MissionTables import SC2Race, SC2Campaign
@@ -8,6 +9,18 @@ from . import ItemNames
 
 
 class SC2Logic:
+
+    def lock_any_item(self, state: CollectionState, items: Set[str]) -> bool:
+        """
+        Guarantees that at least one of these items will remain in the world. Doesn't affect placement.
+        Needed for cases when the dynamic pool filtering could remove all the item prerequisites
+        :param state:
+        :param items:
+        :return:
+        """
+        # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
+        return state.has_group("Dummy", self.player, 0) \
+            or state.has_any(items, self.player)
 
     # WoL
     def terran_common_unit(self, state: CollectionState) -> bool:
@@ -551,6 +564,16 @@ class SC2Logic:
             and self.protoss_competent_anti_air(state) \
             and self.protoss_hybrid_counter(state) \
             and self.protoss_basic_splash(state)
+
+    def protoss_stalker_upgrade(self, state: CollectionState) -> bool:
+        return (
+                state.has_any(
+                    {
+                        ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
+                        ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION
+                    }, self.player)
+                and self.lock_any_item(state, {ItemNames.STALKER, ItemNames.INSTIGATOR, ItemNames.SLAYER})
+        )
 
     def steps_of_the_rite_requirement(self, state: CollectionState) -> bool:
         return self.protoss_competent_comp(state) \

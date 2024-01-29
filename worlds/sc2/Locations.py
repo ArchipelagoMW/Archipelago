@@ -1085,9 +1085,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                                    and logic.protoss_anti_armor_anti_air(state) \
                                    and logic.protoss_can_attack_behind_chasm(state)),
         LocationData("Evil Awoken", "Evil Awoken: Victory", SC2LOTV_LOC_ID_OFFSET + 300, LocationType.VICTORY,
-                     lambda state: adv_tactics or state.has_any(
-                         {ItemNames.STALKER_INSTIGATOR_SLAYER_DISINTEGRATING_PARTICLES,
-                          ItemNames.STALKER_INSTIGATOR_SLAYER_PARTICLE_REFLECTION}, player)),
+                     lambda state: adv_tactics or logic.protoss_stalker_upgrade(state)),
         LocationData("Evil Awoken", "Evil Awoken: Temple Investigated", SC2LOTV_LOC_ID_OFFSET + 301, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: Void Catalyst", SC2LOTV_LOC_ID_OFFSET + 302, LocationType.EXTRA),
         LocationData("Evil Awoken", "Evil Awoken: First Particle Cannon", SC2LOTV_LOC_ID_OFFSET + 303, LocationType.VANILLA),
