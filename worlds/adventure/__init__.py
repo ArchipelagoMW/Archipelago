@@ -271,7 +271,7 @@ class AdventureWorld(World):
         overworld_locations_copy = overworld.locations.copy()
         all_locations = self.multiworld.get_locations(self.player)
 
-        locations_copy = all_locations.copy()
+        locations_copy = list(all_locations)
         for loc in all_locations:
             if loc.item is not None or loc.progress_type != LocationProgressType.DEFAULT:
                 locations_copy.remove(loc)
