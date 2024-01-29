@@ -53,9 +53,23 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         or (state.has(laurels, player) and options.logic_rules))
 
     regions["Overworld"].connect(
-        connecting_region=regions["Overworld Laurels"],
+        connecting_region=regions["Overworld Swamp Upper Entry"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Laurels"].connect(
+    regions["Overworld Swamp Upper Entry"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has(laurels, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld Special Shop Entry"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Overworld Special Shop Entry"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has(laurels, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld West Garden Laurels Entry"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Overworld West Garden Laurels Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has(laurels, player))
 
@@ -230,7 +244,6 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["West Garden Laurels Exit"],
         rule=lambda state: state.has(laurels, player))
 
-    # todo: can you wake the boss, then grapple to it, then kill it?
     regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden"],
         rule=lambda state: state.has(laurels, player))
