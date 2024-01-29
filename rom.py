@@ -89,7 +89,7 @@ class LocalRom():
 
 
 # Unused; written only for my future reference
-def shuffle_keyzer(rom: LocalRom, world: MultiWorld, player: int):
+def shuffle_keyzer(rom: LocalRom, multiworld: MultiWorld, player: int):
     # Use setting world.keyzer[player]
     rom.write_halfword(0x8075F18, 0x7849)  # ldrb r1, [r1, #1]  ; ItemGetFlgSet_LoadSavestateInfo2RAM()
     rom.write_halfword(0x808127C, 0x7848)  # ldrb r0, [r1, #1]  ; SeisanSave()
@@ -103,10 +103,10 @@ class MultiworldExtData(NamedTuple):
     name: str
 
 
-def fill_items(rom: LocalRom, world: MultiWorld, player: int):
+def fill_items(rom: LocalRom, multiworld: MultiWorld, player: int):
     # Place item IDs and collect multiworld entries
     multiworld_items = {}
-    for location in world.get_locations(player):
+    for location in multiworld.get_locations(player):
         itemid = location.item.code if location.item is not None else ...
         locationid = location.address
         playerid = location.item.player
@@ -122,7 +122,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         if playerid == player:
             playername = None
         else:
-            playername = world.player_name[playerid]
+            playername = multiworld.player_name[playerid]
 
         location_offset = location.level_offset() + location.entry_offset()
         item_location = get_symbol('ItemLocationTable', location_offset)
@@ -134,7 +134,7 @@ def fill_items(rom: LocalRom, world: MultiWorld, player: int):
         else:
             multiworld_items[ext_data_location] = None
 
-    create_starting_inventory(rom, world, player)
+    create_starting_inventory(rom, multiworld, player)
 
     strings = create_strings(rom, multiworld_items)
     write_multiworld_table(rom, multiworld_items, strings)
@@ -354,27 +354,27 @@ def shuffle_wario_voice_sets(rom: LocalRom, multiworld: MultiWorld, player: int)
         rom.write_word(voice_set_length_address + 4 * i, length)
 
 
-def patch_rom(rom: LocalRom, world: MultiWorld, player: int):
-    fill_items(rom, world, player)
+def patch_rom(rom: LocalRom, multiworld: MultiWorld, player: int):
+    fill_items(rom, multiworld, player)
 
     # Write player name and number
-    player_name = world.player_name[player].encode('utf-8')
+    player_name = multiworld.player_name[player].encode('utf-8')
     rom.write_bytes(get_symbol('PlayerName'), player_name)
     rom.write_byte(get_symbol('PlayerID'), player)
 
     # Set deathlink
-    rom.write_byte(get_symbol('DeathLinkFlag'), world.death_link[player].value)
+    rom.write_byte(get_symbol('DeathLinkFlag'), multiworld.death_link[player].value)
 
-    set_difficulty_level(rom, world.difficulty[player].value)
+    set_difficulty_level(rom, multiworld.difficulty[player].value)
 
     # Break hard blocks without stopping
-    if (world.smash_through_hard_blocks[player].value):
+    if (multiworld.smash_through_hard_blocks[player].value):
         rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
         rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
         rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
 
-    shuffle_music(rom, world, player)
-    shuffle_wario_voice_sets(rom, world, player)
+    shuffle_music(rom, multiworld, player)
+    shuffle_wario_voice_sets(rom, multiworld, player)
 
 
 def get_base_rom_bytes(file_name: str = '') -> bytes:

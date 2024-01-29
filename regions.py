@@ -15,9 +15,9 @@ class WL4Region(Region):
         self.clear_rule = None
 
 
-def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
+def create_regions(multiworld: MultiWorld, player: int, location_table: Set[str]):
     def basic_region(name, locations=()):
-        return create_region(world, player, location_table, name, locations)
+        return create_region(multiworld, player, location_table, name, locations)
 
     def passage_region(passage: Passage):
         return basic_region(passage.long_name())
@@ -68,7 +68,7 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     golden_passage = level_regions('Golden Passage', Passage.GOLDEN, 0)
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
-    world.regions += [
+    multiworld.regions += [
         menu_region,
         *passage_regions,
         *minigame_shops,
@@ -99,13 +99,13 @@ def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
     ]
 
 
-def connect_regions(world: MultiWorld, player: int):
+def connect_regions(multiworld: MultiWorld, player: int):
     def connect_level(level_name):
-        if level_name == 'Hotel Horror' and world.difficulty[player].value == 2:
+        if level_name == 'Hotel Horror' and multiworld.difficulty[player].value == 2:
             rule = None
         else:
             rule = rules.get_access_rule(player, level_name)
-        connect_entrance(world, player, level_name, f'{level_name} (entrance)', level_name, rule)
+        connect_entrance(multiworld, player, level_name, f'{level_name} (entrance)', level_name, rule)
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')
@@ -127,7 +127,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level('Golden Passage')
 
     def connect_with_name(source, destination, name, rule: AccessRule = None):
-        connect_entrance(world, player, name, source, destination, rule)
+        connect_entrance(multiworld, player, name, source, destination, rule)
 
     def connect(source, destination, rule: AccessRule = None):
         connect_with_name(source, destination, f'{source} -> {destination}', rule)
@@ -135,12 +135,12 @@ def connect_regions(world: MultiWorld, player: int):
     def connect_level_exit(source, destination, rule: AccessRule = None):
         level = source
         # No Keyzer means you can just walk past the actual entrance to the next level
-        open_doors = world.open_doors[player].value
+        open_doors = multiworld.open_doors[player].value
         if open_doors == 2 or (open_doors == 1 and level != 'Golden Passage'):
             source += ' (entrance)'
         connect_with_name(source, destination, f'{level} Gate', rule)
 
-    required_jewels = world.required_jewels[player].value
+    required_jewels = multiworld.required_jewels[player].value
     required_jewels_entry = min(1, required_jewels)
 
     connect('Menu', 'Entry Passage')
@@ -191,26 +191,26 @@ def connect_regions(world: MultiWorld, player: int):
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     # Golden Passage is the only level where escaping has different requirements from getting Keyzer
     connect_level_exit('Golden Passage', 'Golden Minigame Shop',
-            lambda state: world.open_doors[player].value == 2 or
+            lambda state: multiworld.open_doors[player].value == 2 or
                           (state.has('Progressive Grab', player) and
                            state.has('Progressive Ground Pound', player)))
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
             rules.make_boss_access_rule(player, Passage.GOLDEN, required_jewels_entry))
 
 
-def create_region(world: MultiWorld, player: int, location_table: Set[str],
+def create_region(multiworld: MultiWorld, player: int, location_table: Set[str],
                   name: str, locations: Iterable[str] = ()) -> WL4Region:
-    region = WL4Region(name, player, world)
+    region = WL4Region(name, player, multiworld)
     for location in locations:
         if location in location_table:
             region.locations.append(WL4Location.from_name(player, location, region))
     return region
 
 
-def connect_entrance(world: MultiWorld, player: int, name: str,
+def connect_entrance(multiworld: MultiWorld, player: int, name: str,
             source: str, target: str, rule: AccessRule = None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
+    source_region = multiworld.get_region(source, player)
+    target_region = multiworld.get_region(target, player)
 
     connection = Entrance(player, name, source_region)
 

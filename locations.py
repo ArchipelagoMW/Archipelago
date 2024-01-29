@@ -268,6 +268,6 @@ class WL4Location(Location):
 def get_level_locations(passage: Passage, level: int):
     return filter(lambda l: location_table[l].level_id() == (passage, level), location_table)
 
-def setup_locations(world: MultiWorld, player: int):
+def setup_locations(multiworld: MultiWorld, player: int):
     return {name for name in location_name_to_id
-            if world.difficulty[player].value in location_table[name].difficulties}
+            if multiworld.difficulty[player].value in location_table[name].difficulties}
