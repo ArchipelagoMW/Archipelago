@@ -885,7 +885,8 @@ def get_base_parser(description: typing.Optional[str] = None):
     return parser
 
 
-def run_as_textclient():
+def run_as_textclient(*args):
+    logger.info(args)
     class TextContext(CommonContext):
         # Text Mode to use !hint and such with games that have no text entry
         tags = CommonContext.tags | {"TextOnly"}
