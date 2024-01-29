@@ -1,14 +1,14 @@
 import copy
 from typing import ClassVar, Dict, Tuple
 
-import settings, typing
+import settings, typing, random
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
 from worlds.LauncherComponents import Component, components, SuffixIdentifier
 from Options import AssembleOptions
 
 
-from .Items import item_table, SotnItem, base_item_id, event_table
+from .Items import item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, Type
 from .Locations import location_table, SotnLocation
 from .Regions import create_regions
 from .Rules import set_rules
@@ -17,7 +17,7 @@ from .Rom import get_base_rom_path, get_base_rom_bytes, write_char, write_short,
 
 components.append(Component('SOTN Client', 'SotnClient', file_identifier=SuffixIdentifier('.apsotn')))
 
-# NOTES: Rom is beeng copied to AP directory
+
 class SotnSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
         """Set this to true to display item received messages in EmuHawk"""
@@ -78,11 +78,35 @@ class SotnWorld(World):
         return SotnItem(name, data.ic, data.index, self.player)
 
     def create_items(self) -> None:
-        # TODO: Add option for vessel quantity
+        vessel_multiplier = 1
         itempool: typing.List[SotnItem] = []
+        easy_items = ["Shield Rod", "Alucard shield", "Power of sire", "Alucard sword", "Mablung Sword", "Crissaegrim",
+                      "Alucard mail", "God's Garb", "Dragon helm", "Twilight cloak", "Ring of varda", "Duplicator"]
+        difficult = self.multiworld.Difficult[self.player]
         added_items = 0
-        life_count = 35
-        heart_count = 35
+        # Last generate 278 Items 386 Locations with all relics
+        # Removed bump librarian
+        total_location = 386
+
+        # Add progression items
+        for i in item_table:
+            data = item_table[i]
+            if data.ic == ItemClassification.progression:
+                itempool += [self.create_item(i)]
+                added_items += 1
+        print(f"Add after progression: {added_items}")
+        # Todo: Improve difficult settings
+        if difficult == 0:
+            vessel_multiplier = 1.25
+        if difficult == 1:
+            vessel_multiplier = 1
+        if difficult == 2:
+            vessel_multiplier = 0.5
+        if difficult == 3:
+            vessel_multiplier = 0
+
+        life_count = round(35 * vessel_multiplier)
+        heart_count = round(35 * vessel_multiplier)
 
         for lv in range(life_count):
             itempool += [self.create_item("Life Vessel")]
@@ -92,18 +116,54 @@ class SotnWorld(World):
             itempool += [self.create_item("Heart Vessel")]
             added_items += 1
 
-        for item in map(self.create_item, item_table):
-            if item in event_table:
-                continue
-            itempool += [item]
-            added_items += 1
+        if difficult == 0:
+            for _ in range(45):
+                if added_items == total_location:
+                    break
+                rng_item = random.choice(easy_items)
+                itempool += [self.create_item(rng_item)]
+                added_items += 1
 
-        # Last generate 278 Items 386 Locations
-        total_location = 386
+        if difficult == 1:
+            for _ in range(30):
+                if added_items == total_location:
+                    break
+                rng_item = random.choice(easy_items)
+                itempool += [self.create_item(rng_item)]
+                added_items += 1
 
-        itempool += [self.create_item("Monster vial 1") for _ in range(total_location - added_items)]
+        if difficult == 2:
+            relic_list = ["Fire of bat", "Force of echo", "Power of wolf", "Skill of wolf", "Power of mist",
+                          "Gas cloud", "Spirit orb", "Faerie scroll", "Bat card", "Ghost card", "Faerie card",
+                          "Demon card"]
+            # total_relics = 28, added progression = 16. 12 spots left
+            for _ in range(6):
+                rng_relic = random.choice(relic_list)
+                itempool += [self.create_item(rng_relic)]
+                itempool += [self.create_item("Sword card")]
+                added_items += 2
+            for _ in range(5):
+                rng_item = random.choice(easy_items)
+                itempool += [self.create_item(rng_item)]
+                added_items += 1
+
+        if difficult == 3:
+            for _ in range(12):
+                itempool += [self.create_item("Sword card")]
+                added_items += 1
+
+        print(f"Before junk: {added_items}")
+
+        # Still have space? Add junk items
+        itempool += [self.create_random_junk() for _ in range(total_location - added_items)]
 
         self.multiworld.itempool += itempool
+
+    def create_random_junk(self) -> SotnItem:
+        junk_list = ["Orange", "Apple", "Banana", "Grapes", "Strawberry", "Pineapple", "Peanuts", "Toadstool"]
+        rng_junk = random.choice(junk_list)
+        data = item_table[rng_junk]
+        return SotnItem(rng_junk, data.ic, data.index, self.player)
 
     def create_regions(self) -> None:
         create_regions(self.multiworld, self.player)
@@ -152,6 +212,53 @@ class SotnWorld(World):
         self.multiworld.get_location("RNZ1 - Darkwing bat kill", self.player).place_locked_item(
             self.create_event("Boss token"))
 
+    def pre_fill(self) -> None:
+        from Fill import fill_restrictive
+        attempts = 5
+        world = self.multiworld
+        player = self.player
+        all_state = world.get_all_state(use_cache=True)
+        relics = [self.create_item(name) for name in relic_table]
+
+        relic_locations = [world.get_location('Soul of Bat', player),
+                           world.get_location('Fire of Bat', player),
+                           world.get_location('Echo of Bat', player),
+                           world.get_location('Force of Echo', player),
+                           world.get_location('Soul of Wolf', player),
+                           world.get_location('Power of Wolf', player),
+                           world.get_location('Skill of Wolf', player),
+                           world.get_location('Form of Mist', player),
+                           world.get_location('Power of Mist', player),
+                           world.get_location('Gas Cloud', player),
+                           world.get_location('Cube of Zoe', player),
+                           world.get_location('Spirit Orb', player),
+                           world.get_location('Gravity Boots', player),
+                           world.get_location('Leap Stone', player),
+                           world.get_location('Holy Symbol', player),
+                           world.get_location('Faerie Scroll', player),
+                           world.get_location('Jewel of Open', player),
+                           world.get_location('Merman Statue', player),
+                           world.get_location('Bat Card', player),
+                           world.get_location('Ghost Card', player),
+                           world.get_location('Faerie Card', player),
+                           world.get_location('Demon Card', player),
+                           world.get_location('Sword Card', player),
+                           world.get_location('Heart of Vlad', player),
+                           world.get_location('Tooth of Vlad', player),
+                           world.get_location('Rib of Vlad', player),
+                           world.get_location('Ring of Vlad', player),
+                           world.get_location('Eye of Vlad', player),
+                           ]
+        placed_relics = {loc.item.name for loc in relic_locations if loc.item}
+        unplaced_relics = [relic for relic in relics if relic.name not in placed_relics]
+        empty_relic_locations = [loc for loc in relic_locations if not loc.item]
+        for attempt in range(attempts):
+            relicpool = unplaced_relics.copy()
+            relic_locs = empty_relic_locations.copy()
+            world.random.shuffle(relic_locs)
+            fill_restrictive(world, all_state, relic_locs, relicpool, True, lock=True,
+                             name="SOTN Relics placement")
+
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
 
@@ -178,9 +285,25 @@ class SotnWorld(World):
                 loc_data = location_table[loc.name]
                 if loc_data.rom_address:
                     for address in loc_data.rom_address:
-                        write_short(patched_rom, address, 0x0004)
+                        if loc_data.no_offset:
+                            write_short(patched_rom, address, 0x0000)
+                        else:
+                            if loc_data.can_be_relic:
+                                if loc.name == "Holy Symbol" or loc.name == "Form of Mist":
+                                    write_short(patched_rom, address, 0x000a)
+                                    write_short(patched_rom, address - 2, 0x0090)
+                                    write_short(patched_rom, address - 4, 0x000c)
+                                elif loc.name == "Gas Cloud":
+                                    write_short(patched_rom, address, 0xffff)
+                                else:
+                                    write_short(patched_rom, address, 0x000a)
+                                    write_short(patched_rom, address - 2, 0x0080)
+                                    write_short(patched_rom, address - 4, 0x000c)
+                            else:
+                                write_short(patched_rom, address, 0x0004)
 
 
+        # TODO: Move patch instructions to Rom.py
         # Fix softlock when using gold & silver ring
         offset = 0x492df64
         offset = write_word(patched_rom, offset, 0xa0202ee8)
