@@ -410,7 +410,7 @@ class SC2Logic:
 
     def zerg_pass_vents(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
-            or state.has(ItemNames.ZERGLING, self.player) \
+            or state.has_any({ItemNames.ZERGLING, ItemNames.HYDRALISK, ItemNames.ROACH}, self.player) \
             or (self.advanced_tactics and state.has(ItemNames.INFESTOR, self.player))
 
     def supreme_requirement(self, state: CollectionState) -> bool:
