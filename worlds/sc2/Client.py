@@ -921,6 +921,11 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
+                kerrigan_level = kerrigan_level_adjusted(self.ctx, current_items, 0, 0)
+                if kerrigan_level > self.last_kerrigan_level:
+                    # Update Kerrigan level if a level item was given. Ensure that there won't be any deleveling
+                    # Levels from checks gained if configured are handled elsewhere
+                    self.last_kerrigan_level = kerrigan_level
                 await self.updateTerranTech(current_items)
                 await self.updateZergTech(current_items)
                 await self.updateProtossTech(current_items)
@@ -946,7 +951,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
                     for x, completed in enumerate(self.boni):
                         if not completed and game_state & (1 << (x + 2)):
-                            # Store check amount ahead of time to avoid server changing value mid calculation
+                            # Store check amount ahead of time to avoid server changing value mid-calculation
                             checks = len(self.ctx.checked_locations)
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
