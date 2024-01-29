@@ -11,18 +11,18 @@ class Goal(Choice):
     Grandpa's Evaluation: Succeed Grandpa's evaluation with 4 lit candles
     Bottom of the Mines: Reach level 120 in the mineshaft
     Cryptic Note: Complete the quest "Cryptic Note" where Mr Qi asks you to reach floor 100 in the Skull Cavern
-    Master Angler: Catch every fish in the game. Pairs well with Fishsanity
+    Master Angler: Catch every fish. Adapts to chosen Fishsanity option
     Complete Collection: Complete the museum by donating every possible item. Pairs well with Museumsanity
-    Full House: Get married and have two children. Pairs well with Friendsanity.
+    Full House: Get married and have two children. Pairs well with Friendsanity
     Greatest Walnut Hunter: Find all 130 Golden Walnuts
-    Protector of the Valley: Complete all the monster slayer goals. Pairs well with Monstersanity
-    Full Shipment: Ship every item in the collection tab. Pairs well with Shipsanity
-    Gourmet Chef: Cook every recipe. Pairs well with Chefsanity and Cooksanity
-    Craft Master: Craft every item. Pairs well with Craftsanity
+    Protector of the Valley: Complete all the monster slayer goals. Adapts to Monstersanity
+    Full Shipment: Ship every item in the collection tab. Adapts to Shipsanity
+    Gourmet Chef: Cook every recipe. Adapts to Cooksanity
+    Craft Master: Craft every item. Adapts to Craftsanity
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
     Allsanity: Complete every check in your slot
-    Perfection: Attain Perfection, based on the vanilla definition.
+    Perfection: Attain Perfection, based on the vanilla definition
     """
     internal_name = "goal"
     display_name = "Goal"
