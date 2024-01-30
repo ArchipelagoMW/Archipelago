@@ -268,15 +268,6 @@ def run_component(component: Component, *args):
         logging.warning(f"Component {component} does not appear to be executable.")
 
 
-def find_component(game: str) -> Component:
-    for component in components:
-        if component.game_name and component.game_name == game:
-            return component
-        elif component.display_name == "Text Client":
-            text_client_component = component
-    return text_client_component
-
-
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
@@ -292,7 +283,6 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         if not component:
             logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
 
-    
     if args["update_settings"]:
         update_settings()
     if "file" in args:
