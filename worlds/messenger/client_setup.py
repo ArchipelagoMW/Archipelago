@@ -2,10 +2,12 @@ import io
 import logging
 import os.path
 import subprocess
+import sys
 import urllib.request
+from pathlib import Path
 from shutil import which
 from tkinter.messagebox import askyesnocancel
-from typing import Any
+from typing import Any, Optional
 from zipfile import ZipFile
 
 import requests
@@ -13,7 +15,7 @@ import requests
 from Utils import is_linux, is_windows, messagebox, tuplize_version
 
 
-def launch_game() -> None:
+def launch_game(url: Optional[str] = None) -> None:
     """Check the game installation, then launch it"""
     if not (is_linux or is_windows):
         return
@@ -26,10 +28,10 @@ def launch_game() -> None:
         """Check if the mod is installed"""
         return os.path.exists(os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml"))
 
-    def request_data(url: str) -> Any:
+    def request_data(request_url: str) -> Any:
         """Fetches json response from given url"""
-        logging.info(f"requesting {url}")
-        response = requests.get(url)
+        logging.info(f"requesting {request_url}")
+        response = requests.get(request_url)
         if response.status_code == 200:  # success
             try:
                 data = response.json()
@@ -158,6 +160,12 @@ def launch_game() -> None:
                                            "Old mod version detected. Would you like to update now?")
             if should_update:
                 install_mod()
-    if is_linux and not which("mono"):  # don't launch the game if we're on steam deck
-        return
-    os.startfile("steam://rungameid/764790")
+    logging.info(url)
+    if is_linux:
+        os.startfile("steam://rungameid/764790")
+    else:
+        os.chdir(Path(MessengerWorld.settings.game_path).parent)
+        if url:
+            subprocess.Popen([MessengerWorld.settings.game_path, str(url)])
+        else:
+            subprocess.Popen(MessengerWorld.settings.game_path)
