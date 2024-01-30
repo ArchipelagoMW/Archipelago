@@ -60,7 +60,7 @@ class TunicWorld(World):
 
     def generate_early(self) -> None:
         # Universal tracker stuff, shouldn't do anything in standard gen
-        if self.multiworld.re_gen_passthrough["TUNIC"]:
+        try self.multiworld.re_gen_passthrough["TUNIC"]:
             passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
             self.options.start_with_sword.value = passthrough["start_with_sword"]
             self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
@@ -162,7 +162,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
-        if self.multiworld.re_gen_passthrough:
+        try self.multiworld.re_gen_passthrough:
             passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
             self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Pages 24-25 (Prayer)"]
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Pages 42-43 (Holy Cross)"]
