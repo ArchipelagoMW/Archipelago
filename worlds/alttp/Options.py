@@ -122,7 +122,8 @@ class TriforcePiecesAvailable(Range):
 
 
 class TriforcePiecesRequired(Range):
-    """Set to how many extra triforces pieces are available to collect in the world."""
+    """Set to how many out of X triforce pieces you need to win the game in a triforce hunt.
+    Default is 20. Max is 90, Min is 1."""
     display_name = "Triforce Pieces Required"
     range_start = 1
     range_end = 90
