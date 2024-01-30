@@ -1132,7 +1132,7 @@
         tag: forbid
         required_panel:
           - room: Outside The Bold
-            panel: MOUTH
+            panel: SOUND
           - room: Outside The Bold
             panel: YEAST
           - room: Outside The Bold
@@ -3288,7 +3288,7 @@
         tag: midwhite
         required_door:
           door: Stargazer Door
-      MOUTH:
+      SOUND:
         id: Cross Room/Panel_mouth_south
         colors: purple
         tag: midpurp
@@ -4459,7 +4459,7 @@
           - room: The Bearer (West)
             panel: SMILE
           - room: Outside The Bold
-            panel: MOUTH
+            panel: SOUND
           - room: Outside The Bold
             panel: YEAST
           - room: Outside The Bold
