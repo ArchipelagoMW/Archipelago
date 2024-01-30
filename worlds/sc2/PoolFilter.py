@@ -406,7 +406,7 @@ class ValidInventory:
                 and ItemNames.KERRIGAN_SPAWN_BANELINGS not in self.logical_inventory
         ):
             inventory = [item for item in inventory if item.name != ItemNames.ZERGLING_BANELING_ASPECT]
-            inventory = [item for item in inventory if item_list[item.name].parent_item == ItemNames.ZERGLING_BANELING_ASPECT]
+            inventory = [item for item in inventory if item_list[item.name].parent_item != ItemNames.ZERGLING_BANELING_ASPECT]
         # Spawn Banelings without Zergling => remove Baneling unit, keep upgrades except macro ones
         if (ItemNames.ZERGLING_BANELING_ASPECT in self.logical_inventory
             and ItemNames.ZERGLING not in self.logical_inventory
