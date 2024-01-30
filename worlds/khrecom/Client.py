@@ -86,6 +86,13 @@ class KHRECOMContext(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            if "Starting CP" in list(args['slot_data'].keys()):
+                starting_cp = args['slot_data']["Starting CP"]
+            else:
+                starting_cp = 275
+            with open(os.path.join(self.game_communication_path, "startcp.cfg"), 'w') as f:
+                f.write(str(starting_cp))
+                f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):

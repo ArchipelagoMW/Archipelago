@@ -9,7 +9,7 @@ class KHRECOMRegionData(NamedTuple):
     region_exits: Optional[List[str]]
 
 
-def create_regions(multiworld: MultiWorld, player: int, days: bool):
+def create_regions(multiworld: MultiWorld, player: int, days: bool, checks_behind_leon: bool):
     regions: Dict[str, RLRegionData] = {
         "Menu":     KHRECOMRegionData(None, ["Floor 1"]),
         "Floor 1":  KHRECOMRegionData([], ["Warp"]),
@@ -39,8 +39,9 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     regions["Floor 1"].locations.append("Starting Checks (Magic Cards Blizzard)")
     regions["Floor 1"].locations.append("Starting Checks (Magic Cards Cure)")
     regions["Floor 1"].locations.append("Traverse Town Post Floor (Magic Cards Fire)")
-    regions["Floor 1"].locations.append("Traverse Town Room of Beginnings")
-    regions["Floor 1"].locations.append("Traverse Town Room of Beginnings (Summon Cards Simba)")
+    if checks_behind_leon:
+        regions["Floor 1"].locations.append("Traverse Town Room of Beginnings")
+        regions["Floor 1"].locations.append("Traverse Town Room of Beginnings (Summon Cards Simba)")
     regions["Floor 1"].locations.append("Traverse Town Room of Guidance")
     regions["Floor 1"].locations.append("Traverse Town Room of Truth")
     regions["Floor 1"].locations.append("Traverse Town Room of Truth (Enemy Cards Guard Armor)")
@@ -156,6 +157,8 @@ def create_regions(multiworld: MultiWorld, player: int, days: bool):
     if days:
        #regions["Floor 13"].locations.append("Castle Oblivion Bounty (Enemy Cards Lexaeus)")
         regions["Floor 13"].locations.append("Castle Oblivion Room of Rewards (Attack Cards Star Seeker)")
+    
+    regions["Floor 13"].locations.append("Final Marluxia")
     
     regions["Heartless"].locations.append("Heartless Air Pirate")                                              
     regions["Heartless"].locations.append("Heartless Air Soldier")                                             

@@ -38,6 +38,21 @@ class DaysLocations(Toggle):
     """
     display_name = "Days Locations"
 
+class StartingCP(Range):
+    """
+    Adjust your starting CP.
+    """
+    display_name = "Starting CP"
+    range_start = 275
+    range_end = 600
+    default = 275
+
+class ChecksBehindLeon(Toggle):
+    """
+    Toggle whether to include checks behind the Leon sleight tutorial.  If left off, the player can safely skip that room.
+    """
+    display_name = "Checks Behind Leon"
+
 @dataclass
 class KHRECOMOptions(PerGameCommonOptions):
     zeroes: Zeroes
@@ -46,3 +61,5 @@ class KHRECOMOptions(PerGameCommonOptions):
     enemy_cards: EnemyCards
     days_items: DaysItems
     days_locations: DaysLocations
+    starting_cp: StartingCP
+    checks_behind_leon: ChecksBehindLeon

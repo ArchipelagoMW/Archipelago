@@ -11,7 +11,10 @@ from .Locations import get_locations_by_category
 #    return state.has_all({"Key of Beginnings F" + floor_num, "Key of Guidance F" + floor_num, "Key to Truth F" + floor_num}, player)
 
 def has_castle_oblivion(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel", "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan", "World Card Halloween Town", "World Card Atlantica", "World Card Destiny Islands"}, player) and has_x_worlds(state, player, 8)
+    return state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel"\
+        , "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan", "Friend Card Pluto"\
+        , "World Card Halloween Town", "World Card Atlantica", "World Card Destiny Islands"\
+        }, player) and has_x_worlds(state, player, 8)
 
 def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
     locations = 0

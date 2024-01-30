@@ -49,7 +49,8 @@ class KHRECOMWorld(World):
 
     def create_items(self):
         item_pool: List[KHRECOMItem] = []
-        self.multiworld.get_location("Castle Oblivion Field Marluxia", self.player).place_locked_item(self.create_item("Victory"))
+        self.multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
+        self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
         starting_locations = get_locations_by_category("Starting")
         starting_locations = random.sample(list(starting_locations.keys()),4)
         starting_worlds = get_items_by_category("World Unlocks", [])
@@ -118,4 +119,8 @@ class KHRECOMWorld(World):
         set_rules(self.multiworld, self.player, self.options.days_locations)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options.days_locations)
+        create_regions(self.multiworld, self.player, self.options.days_locations, self.options.checks_behind_leon)
+    
+    def fill_slot_data(self) -> dict:
+        slot_data = {"Starting CP": int(self.options.starting_cp)}
+        return slot_data
