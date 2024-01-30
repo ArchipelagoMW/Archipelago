@@ -112,13 +112,12 @@ def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Comp
     if path is None:
         return None, None
     if path.startswith("archipelago://"):
-        logging.info("found uri")
-        queries = urllib.parse.parse_qs(path)
+        url = urllib.parse.urlparse(path)
+        queries = urllib.parse.parse_qs(url.query)
         if "game" in queries:
-            game = urllib.parse.parse_qs(path)["game"][0]
+            game = queries["game"][0]
         else:  # TODO around 0.5.0 - this is for pre this change webhost uri's
             game = "Archipelago"
-        logging.info(game)
         for component in components:
             if component.supports_uri and component.game_name == game:
                 return path, component
