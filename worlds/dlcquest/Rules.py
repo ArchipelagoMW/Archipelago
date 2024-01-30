@@ -460,7 +460,7 @@ def self_basic_coinsanity_piece_rules(player, world):
     set_rule(world.get_location("Pet Pack", player),
              lambda state: state.has("DLC Quest: Coin Piece", player, 50))
     set_rule(world.get_location("Sexy Outfits Pack", player),
-             lambda state: state.has("DLC Quest: Coin Bundle", player, 50))
+             lambda state: state.has("DLC Quest: Coin Piece", player, 50))
     set_rule(world.get_location("Top Hat Pack", player),
              lambda state: state.has("DLC Quest: Coin Piece", player, 50))
     set_rule(world.get_location("Map Pack", player),
