@@ -38,12 +38,12 @@ USEFUL_ITEMS = [
 ]
 
 FILLER = {
-    "Time Shard": 5,
-    "Time Shard (10)": 10,
-    "Time Shard (50)": 20,
-    "Time Shard (100)": 20,
-    "Time Shard (300)": 10,
-    "Time Shard (500)": 5,
+    "Time Piece": 5,
+    "Time Piece (10)": 10,
+    "Time Piece (50)": 20,
+    "Time Piece (100)": 20,
+    "Time Piece (300)": 10,
+    "Time Piece (500)": 5,
 }
 
 # item_name_to_id needs to be deterministic and match upstream

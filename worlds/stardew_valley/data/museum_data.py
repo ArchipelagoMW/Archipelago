@@ -198,7 +198,7 @@ class Mineral:
                           geodes=common.fishing_chest)
     diamond = create_mineral("Diamond", 72, Region.mines_floor_60,
                              geodes=common.fishing_chest)
-    prismatic_shard = create_mineral("Prismatic Shard", 74, Region.skull_cavern_100,
+    prismatic_shard = create_mineral("Prismatic Piece", 74, Region.skull_cavern_100,
                                      geodes=unlikely,
                                      monsters=unlikely)
     alamite = create_mineral("Alamite", 538, Region.town,

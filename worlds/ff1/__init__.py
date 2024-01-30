@@ -72,12 +72,12 @@ class FF1World(World):
         terminated_event.place_locked_item(terminated_item)
 
         items = get_options(self.multiworld, 'items', self.player)
-        goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Shard"]],
+        goal_rule = generate_rule([[name for name in items.keys() if name in FF1_PROGRESSION_LIST and name != "Piece"]],
                                   self.player)
         terminated_event.access_rule = goal_rule
-        if "Shard" in items.keys():
+        if "Piece" in items.keys():
             def goal_rule_and_shards(state):
-                return goal_rule(state) and state.has("Shard", self.player, 32)
+                return goal_rule(state) and state.has("Piece", self.player, 32)
             terminated_event.access_rule = goal_rule_and_shards
         if "MARK" in items.keys():
             # Fail generation for Noverworld and provide link to old FFR website

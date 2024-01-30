@@ -117,8 +117,8 @@ def set_easy_double_jump_glitch_rules(world_options, player, world):
 def self_basic_coinsanity_funded_purchase_rules(world_options, player, world):
     if world_options.coinsanity != Options.CoinSanity.option_coin:
         return
-    if world_options.coinbundlequantity == 0.1:
-        self_basic_coinsanity_shard_rules(player, world)
+    if world_options.coinbundlequantity == -1:
+        self_basic_coinsanity_piece_rules(player, world)
         return
     number_of_bundle = math.floor(825 / world_options.coinbundlequantity)
     for i in range(number_of_bundle):
@@ -316,8 +316,8 @@ def set_lfod_shuffled_items_rules(world_options, player, world):
 def self_lfod_coinsanity_funded_purchase_rules(world_options, player, world):
     if world_options.coinsanity != Options.CoinSanity.option_coin:
         return
-    if world_options.coinbundlequantity == 0.1:
-        self_lfod_coinsanity_shard_rules(player, world)
+    if world_options.coinbundlequantity == -1:
+        self_lfod_coinsanity_piece_rules(player, world)
         return
     number_of_bundle = math.floor(889 / world_options.coinbundlequantity)
     for i in range(number_of_bundle):
@@ -438,10 +438,10 @@ def set_completion_condition(world_options, player, world):
             "Victory Freemium", player)
 
 
-def self_basic_coinsanity_shard_rules(player, world):
+def self_basic_coinsanity_piece_rules(player, world):
     for i in range(1,8251):
 
-        item_coin = f"DLC Quest: {i / 10} Coin Fragment"
+        item_coin = f"DLC Quest: {i / 10} Coin Piece"
         set_rule(world.get_location(item_coin, player),
                  has_enough_coin(player, math.ceil(i / 10)))
 
@@ -479,10 +479,10 @@ def self_basic_coinsanity_shard_rules(player, world):
              lambda state: state.has("DLC Quest: Coin Piece", player, 50))
 
 
-def self_lfod_coinsanity_shard_rules(player, world):
+def self_lfod_coinsanity_piece_rules(player, world):
     for i in range(1, 8891):
 
-        item_coin_freemium = f"Live Freemium or Die: {i / 10} Coin"
+        item_coin_freemium = f"Live Freemium or Die: {i / 10} Coin Piece"
         set_rule(world.get_location(item_coin_freemium, player),
                  has_enough_coin_freemium(player, math.ceil(i / 10)))
 
@@ -523,4 +523,3 @@ def self_lfod_coinsanity_shard_rules(player, world):
              lambda state: state.has("Live Freemium or Die: Coin Piece", player, 100))
     set_rule(world.get_location("Remove Ads Pack", player),
              lambda state: state.has("Live Freemium or Die: Coin Piece", player, 250))
-    

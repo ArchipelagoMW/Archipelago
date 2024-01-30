@@ -49,15 +49,12 @@ class CoinSanityRange(NamedRange):
         "normal": 20,
         "high": 50,
     }
-    if datetime.datetime.today().month == 4:
+    if datetime.datetime.today().month == 1:
         if datetime.datetime.today().day == 1:
-            special_range_names += {
-                "surprise": 0.1,
-            }
+            special_range_names["suprise"] =-1
         else:
-            special_range_names += {
-                "coin piece": 0.1,
-            }
+            special_range_names["coin piece"] =-1
+
 
 
 

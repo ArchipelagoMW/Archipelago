@@ -86,8 +86,8 @@ class MessengerRules:
             "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
             "Sunken Shrine Seal - Waterfall Paradise": self.has_tabi,
             "Sunken Shrine Seal - Tabi Gauntlet": self.has_tabi,
-            "Mega Shard of the Moon": self.has_tabi,
-            "Mega Shard of the Sun": self.has_tabi,
+            "Mega Piece of the Moon": self.has_tabi,
+            "Mega Piece of the Sun": self.has_tabi,
             # riviere turquoise
             "Riviere Turquoise Seal - Bounces and Balls": self.can_dboost,
             "Riviere Turquoise Seal - Launch of Faith": lambda state: self.can_dboost(state) or self.has_dart(state),
@@ -97,8 +97,8 @@ class MessengerRules:
             "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) and
                                                              state.has("Currents Master", self.player),
             "Elemental Skylands Seal - Fire": lambda state: self.has_dart(state) and self.can_destroy_projectiles(state),
-            "Earth Mega Shard": self.has_dart,
-            "Water Mega Shard": self.has_dart,
+            "Earth Mega Piece": self.has_dart,
+            "Water Mega Piece": self.has_dart,
             # corrupted future
             "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
                                                                              self.player),
@@ -185,7 +185,7 @@ class MessengerHardRules(MessengerRules):
             "Glacial Peak Seal - Ice Climbers": lambda state: self.has_vertical(state) or self.can_dboost(state),
             "Glacial Peak Seal - Projectile Spike Pit": self.true,
             "Glacial Peak Seal - Glacial Air Swag": lambda state: self.has_windmill(state) or self.has_vertical(state),
-            "Glacial Peak Mega Shard": lambda state: self.has_windmill(state) or self.has_vertical(state),
+            "Glacial Peak Mega Piece": lambda state: self.has_windmill(state) or self.has_vertical(state),
             "Cloud Ruins Seal - Ghost Pit": self.true,
             "Bamboo Creek - Claustro": self.has_wingsuit,
             "Tower of Time Seal - Lantern Climb": self.has_wingsuit,
@@ -194,8 +194,8 @@ class MessengerHardRules(MessengerRules):
             "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)
                                                              or self.has_windmill(state)) and
                                                             self.can_destroy_projectiles(state),
-            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
-            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+            "Earth Mega Piece": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+            "Water Mega Piece": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
         })
 
         self.extra_rules = {
@@ -213,7 +213,7 @@ class MessengerHardRules(MessengerRules):
         for loc, rule in self.extra_rules.items():
             if not self.world.options.shuffle_seals and "Seal" in loc:
                 continue
-            if not self.world.options.shuffle_shards and "Shard" in loc:
+            if not self.world.options.shuffle_shards and "Piece" in loc:
                 continue
             add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
 

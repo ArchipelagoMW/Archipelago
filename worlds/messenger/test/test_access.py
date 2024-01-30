@@ -13,8 +13,8 @@ class AccessTest(MessengerTestBase):
             "Searing Crags - Pyro", "Underworld - Key of Chaos", "Underworld Seal - Sharp and Windy Climb",
             "Underworld Seal - Spike Wall", "Underworld Seal - Fireball Wave", "Underworld Seal - Rising Fanta",
             "Sunken Shrine - Sun Crest", "Sunken Shrine - Moon Crest", "Sunken Shrine Seal - Waterfall Paradise",
-            "Sunken Shrine Seal - Tabi Gauntlet", "Mega Shard of the Moon", "Mega Shard of the Sun",
-            "Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"
+            "Sunken Shrine Seal - Tabi Gauntlet", "Mega Piece of the Moon", "Mega Piece of the Sun",
+            "Under Entrance Mega Piece", "Hot Tub Mega Piece", "Projectile Pit Mega Piece"
         ]
         items = [["Lightfoot Tabi"]]
         self.assertAccessDependency(locations, items)
@@ -26,7 +26,7 @@ class AccessTest(MessengerTestBase):
             "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
             "Tower of Time Seal - Arcane Orbs", "Cloud Ruins Seal - Ghost Pit", "Underworld Seal - Rising Fanta",
             "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard", "Rescue Phantom",
+            "Elemental Skylands Seal - Fire", "Earth Mega Piece", "Water Mega Piece", "Rescue Phantom",
         ]
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)
@@ -48,10 +48,10 @@ class AccessTest(MessengerTestBase):
             "Underworld Seal - Fireball Wave", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Water",
             "Elemental Skylands Seal - Fire", "Elemental Skylands - Key of Symbiosis",
             "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset", "Ninja Village - Astral Seed",
-            "Searing Crags - Astral Tea Leaves", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard",
-            "Sunny Day Mega Shard", "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard",
-            "Abandoned Mega Shard", "Time Loop Mega Shard", "Earth Mega Shard", "Water Mega Shard",
-            "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
+            "Searing Crags - Astral Tea Leaves", "Autumn Hills Mega Piece", "Hidden Entrance Mega Piece",
+            "Sunny Day Mega Piece", "Down Under Mega Piece", "Catacombs Mega Piece", "Above Entrance Mega Piece",
+            "Abandoned Mega Piece", "Time Loop Mega Piece", "Earth Mega Piece", "Water Mega Piece",
+            "Money Farm Room Mega Piece 1", "Money Farm Room Mega Piece 2",
             "Autumn Hills - Leaf Golem", "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
         ]
         items = [["Wingsuit"]]
@@ -82,11 +82,11 @@ class AccessTest(MessengerTestBase):
             "Riviere Turquoise Seal - Launch of Faith",
             "Searing Crags Seal - Triple Ball Spinner", "Searing Crags Seal - Raining Rocks",
             "Searing Crags Seal - Rhythm Rocks", "Ninja Village - Astral Seed", "Searing Crags - Astral Tea Leaves",
-            "Rescue Phantom", "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard", "Sunny Day Mega Shard",
-            "Down Under Mega Shard", "Catacombs Mega Shard", "Above Entrance Mega Shard", "Abandoned Mega Shard",
-            "Time Loop Mega Shard", "Searing Crags Mega Shard", "Glacial Peak Mega Shard", "Cloud Entrance Mega Shard",
-            "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
-            "Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2", "Earth Mega Shard", "Water Mega Shard",
+            "Rescue Phantom", "Autumn Hills Mega Piece", "Hidden Entrance Mega Piece", "Sunny Day Mega Piece",
+            "Down Under Mega Piece", "Catacombs Mega Piece", "Above Entrance Mega Piece", "Abandoned Mega Piece",
+            "Time Loop Mega Piece", "Searing Crags Mega Piece", "Glacial Peak Mega Piece", "Cloud Entrance Mega Piece",
+            "Time Warp Mega Piece", "Money Farm Room Mega Piece 1", "Money Farm Room Mega Piece 2",
+            "Quick Restock Mega Piece 1", "Quick Restock Mega Piece 2", "Earth Mega Piece", "Water Mega Piece",
             "Autumn Hills - Leaf Golem", "Catacombs - Ruxxtin", "Howling Grotto - Emerald Golem"
         ]
         items = [["Wingsuit", "Rope Dart"]]
@@ -96,8 +96,8 @@ class AccessTest(MessengerTestBase):
         """Locations that require Ruxxtin's Amulet"""
         locations = [
             "Cloud Ruins - Acro", "Cloud Ruins Seal - Ghost Pit", "Cloud Ruins Seal - Toothbrush Alley",
-            "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room", "Cloud Entrance Mega Shard",
-            "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"
+            "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room", "Cloud Entrance Mega Piece",
+            "Time Warp Mega Piece", "Money Farm Room Mega Piece 1", "Money Farm Room Mega Piece 2"
         ]
         # Cloud Ruins requires Ruxxtin's Amulet
         items = [["Ruxxtin's Amulet"]]
@@ -107,8 +107,8 @@ class AccessTest(MessengerTestBase):
         """Elemental Skylands and Corrupted Future require the Magic Firefly"""
         locations = [
             "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Air", "Elemental Skylands Seal - Fire",
-            "Elemental Skylands Seal - Water", "Corrupted Future - Key of Courage", "Earth Mega Shard",
-            "Water Mega Shard"
+            "Elemental Skylands Seal - Water", "Corrupted Future - Key of Courage", "Earth Mega Piece",
+            "Water Mega Piece"
         ]
         items = [["Magic Firefly"]]
         self.assertAccessDependency(locations, items)

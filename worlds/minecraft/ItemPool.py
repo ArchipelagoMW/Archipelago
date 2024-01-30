@@ -37,7 +37,7 @@ def build_item_pool(mc_world: World) -> List[Item]:
 	# Dragon egg shards
 	if multiworld.egg_shards_required[player] > 0:
 		num = multiworld.egg_shards_available[player]
-		itempool += [mc_world.create_item("Dragon Egg Shard") for _ in range(num)]
+		itempool += [mc_world.create_item("Dragon Egg Piece") for _ in range(num)]
 
 	# Bee traps
 	bee_trap_percentage = multiworld.bee_traps[player] * 0.01

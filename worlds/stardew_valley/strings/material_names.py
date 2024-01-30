@@ -6,4 +6,4 @@ class Material:
     stone = "Stone"
     wood = "Wood"
     clay = "Clay"
-    cinder_shard = "Cinder Shard"
+    cinder_shard = "Cinder Piece"

@@ -50,7 +50,7 @@ item_table: Dict[str, TunicItemData] = {
     "Old House Key": TunicItemData(ItemClassification.progression, 1, 34, "keys"),
     "Key": TunicItemData(ItemClassification.progression, 2, 35, "keys"),
     "Fortress Vault Key": TunicItemData(ItemClassification.progression, 1, 36, "keys"),
-    "Flask Shard": TunicItemData(ItemClassification.useful, 12, 37, "potions"),
+    "Flask Piece": TunicItemData(ItemClassification.useful, 12, 37, "potions"),
     "Potion Flask": TunicItemData(ItemClassification.useful, 5, 38, "potions"),
     "Golden Coin": TunicItemData(ItemClassification.progression, 17, 39),
     "Card Slot": TunicItemData(ItemClassification.useful, 4, 40),

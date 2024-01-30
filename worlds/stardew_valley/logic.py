@@ -213,7 +213,7 @@ class StardewLogic:
             "Energy Tonic": self.can_reach_region(Region.hospital) & self.can_spend_money(1000),
             Material.fiber: True_(),
             Forageable.fiddlehead_fern: self.can_forage(Season.summer, Region.secret_woods),
-            "Magic Rock Candy": self.can_reach_region(Region.desert) & self.has("Prismatic Shard"),
+            "Magic Rock Candy": self.can_reach_region(Region.desert) & self.has("Prismatic Piece"),
             "Fishing Chest": self.can_fish_chests(),
             Craftable.flute_block: self.has_relationship(NPC.robin, 6) & self.can_reach_region(Region.carpenter) & self.has(Material.wood) & self.has(Ore.copper) & self.has(Material.fiber),
             Geode.frozen: self.can_mine_in_the_mines_floor_41_80(),
@@ -521,7 +521,7 @@ class StardewLogic:
                          self.can_reach_region(Region.island_west) & self.has_total_skill_level(50) &
                          self.has(Machine.seed_maker) & self.has_building(Building.shipping_bin),
             SpecialOrder.lets_play_a_game: self.has_junimo_kart_max_level(),
-            SpecialOrder.four_precious_stones: self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Shard") &
+            SpecialOrder.four_precious_stones: self.has_lived_months(MAX_MONTHS) & self.has("Prismatic Piece") &
                                     self.can_mine_perfectly_in_the_skull_cavern(),
             SpecialOrder.qis_hungry_challenge: self.can_mine_perfectly_in_the_skull_cavern() & self.has_max_buffs(),
             SpecialOrder.qis_cuisine: self.can_cook() & (self.can_spend_money_at(Region.saloon, 205000) | self.can_spend_money_at(Region.pierre_store, 170000)) &
@@ -1416,7 +1416,7 @@ class StardewLogic:
 
     def has_any_universal_love(self) -> StardewRule:
         return self.has(Gift.golden_pumpkin) | self.has("Magic Rock Candy") | self.has(Gift.pearl) | self.has(
-            "Prismatic Shard") | self.has(AnimalProduct.rabbit_foot)
+            "Prismatic Piece") | self.has(AnimalProduct.rabbit_foot)
 
     def has_jelly(self) -> StardewRule:
         return self.can_preserves_jar(Fruit.any)

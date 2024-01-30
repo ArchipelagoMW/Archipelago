@@ -20,20 +20,20 @@ class HardLogicTest(MessengerTestBase):
             "Autumn Hills - Climbing Claws", "Autumn Hills - Key of Hope", "Autumn Hills - Leaf Golem",
             "Autumn Hills Seal - Trip Saws", "Autumn Hills Seal - Double Swing Saws",
             "Autumn Hills Seal - Spike Ball Swing", "Autumn Hills Seal - Spike Ball Darts",
-            "Autumn Hills Mega Shard", "Hidden Entrance Mega Shard",
+            "Autumn Hills Mega Piece", "Hidden Entrance Mega Piece",
             # forlorn temple
             "Forlorn Temple - Demon King",
             "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
-            "Sunny Day Mega Shard", "Down Under Mega Shard",
+            "Sunny Day Mega Piece", "Down Under Mega Piece",
             # catacombs
             "Catacombs - Necro", "Catacombs - Ruxxtin's Amulet", "Catacombs - Ruxxtin",
             "Catacombs Seal - Triple Spike Crushers", "Catacombs Seal - Crusher Gauntlet", "Catacombs Seal - Dirty Pond",
-            "Catacombs Mega Shard",
+            "Catacombs Mega Piece",
             # bamboo creek
             "Bamboo Creek - Claustro",
             "Bamboo Creek Seal - Spike Crushers and Doors", "Bamboo Creek Seal - Spike Ball Pits",
             "Bamboo Creek Seal - Spike Crushers and Doors v2",
-            "Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard",
+            "Above Entrance Mega Piece", "Abandoned Mega Piece", "Time Loop Mega Piece",
             # howling grotto
             "Howling Grotto - Emerald Golem", "Howling Grotto Seal - Crushing Pits", "Howling Grotto Seal - Crushing Pits",
             # searing crags
@@ -41,7 +41,7 @@ class HardLogicTest(MessengerTestBase):
             # cloud ruins
             "Cloud Ruins - Acro", "Cloud Ruins Seal - Ghost Pit",
             "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
-            "Cloud Entrance Mega Shard", "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
+            "Cloud Entrance Mega Piece", "Time Warp Mega Piece", "Money Farm Room Mega Piece 1", "Money Farm Room Mega Piece 2",
             # underworld
             "Underworld Seal - Rising Fanta", "Underworld Seal - Sharp and Windy Climb",
             # elemental skylands
@@ -88,7 +88,7 @@ class HardLogicTest(MessengerTestBase):
         self.assertAccessDependency(["Glacial Peak Seal - Projectile Spike Pit"],
                                     [["Strike of the Ninja"], ["Windmill Shuriken"], ["Rope Dart"], ["Wingsuit"]],
                                     True)
-        self.assertAccessDependency(["Glacial Peak Seal - Glacial Air Swag", "Glacial Peak Mega Shard"],
+        self.assertAccessDependency(["Glacial Peak Seal - Glacial Air Swag", "Glacial Peak Mega Piece"],
                                     [["Windmill Shuriken"], ["Wingsuit"], ["Rope Dart"]],
                                     True)
 

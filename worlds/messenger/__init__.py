@@ -95,7 +95,7 @@ class MessengerWorld(World):
             {
                 "Power Seal", *NOTES, *FIGURINES,
                 *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-            } and "Time Shard" not in item
+            } and "Time Piece" not in item
         ]
 
         if self.options.goal == Goal.option_open_music_box:
@@ -170,20 +170,20 @@ class MessengerWorld(World):
             name in {"Windmill Shuriken"} and \
             self.options.logic_level > Logic.option_normal
         count = 0
-        if "Time Shard " in name:
-            count = int(name.strip("Time Shard ()"))
+        if "Time Piece " in name:
+            count = int(name.strip("Time Piece ()"))
             count = count if count >= 100 else 0
             self.total_shards += count
         return MessengerItem(name, self.player, item_id, override_prog, count)
 
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         change = super().collect(state, item)
-        if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Shard ()"))
+        if change and "Time Piece" in item.name:
+            state.prog_items[self.player]["Shards"] += int(item.name.strip("Time Piece ()"))
         return change
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
         change = super().remove(state, item)
-        if change and "Time Shard" in item.name:
-            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
+        if change and "Time Piece" in item.name:
+            state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Piece ()"))
         return change
