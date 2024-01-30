@@ -77,7 +77,7 @@ item_table: Dict[str, ItemData] = {
     'Mind Refresh ULTRA': ItemData('UseItem', 1337064, 0),
     'Antidote': ItemData('UseItem', 1337065, 0),
     'Chaos Rose': ItemData('UseItem', 1337066, 0),
-    'Warp Piece': ItemData('UseItem', 1337067),
+    'Warp Shard': ItemData('UseItem', 1337067),
     'Dream Wisp': ItemData('UseItem', 1337068, 0),
     'PlaceHolderItem1': ItemData('UseItem', 1337069, 0),
     'Lachiemi Sun': ItemData('UseItem', 1337070, 0),

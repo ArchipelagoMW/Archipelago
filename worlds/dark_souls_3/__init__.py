@@ -354,7 +354,7 @@ class DarkSouls3World(World):
 
         if name in key_item_names:
             item_classification = ItemClassification.progression
-        elif item_dictionary[name].category in useful_categories or name in {"Estus Piece", "Undead Bone Piece"}:
+        elif item_dictionary[name].category in useful_categories or name in {"Estus Shard", "Undead Bone Shard"}:
             item_classification = ItemClassification.useful
         else:
             item_classification = ItemClassification.filler

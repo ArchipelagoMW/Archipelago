@@ -62,21 +62,21 @@ SEALS: Dict[str, List[str]] = {
 }
 
 MEGA_SHARDS: Dict[str, List[str]] = {
-    "Autumn Hills": ["Autumn Hills Mega Piece", "Hidden Entrance Mega Piece"],
-    "Catacombs": ["Catacombs Mega Piece"],
-    "Bamboo Creek": ["Above Entrance Mega Piece", "Abandoned Mega Piece", "Time Loop Mega Piece"],
-    "Howling Grotto": ["Bottom Left Mega Piece", "Near Portal Mega Piece", "Pie in the Sky Mega Piece"],
-    "Quillshroom Marsh": ["Quillshroom Marsh Mega Piece"],
-    "Searing Crags Upper": ["Searing Crags Mega Piece"],
-    "Glacial Peak": ["Glacial Peak Mega Piece"],
-    "Cloud Ruins": ["Cloud Entrance Mega Piece", "Time Warp Mega Piece"],
-    "Cloud Ruins Right": ["Money Farm Room Mega Piece 1", "Money Farm Room Mega Piece 2"],
-    "Underworld": ["Under Entrance Mega Piece", "Hot Tub Mega Piece", "Projectile Pit Mega Piece"],
-    "Forlorn Temple": ["Sunny Day Mega Piece", "Down Under Mega Piece"],
-    "Sunken Shrine": ["Mega Piece of the Moon", "Beginner's Mega Piece", "Mega Piece of the Stars", "Mega Piece of the Sun"],
-    "Riviere Turquoise Entrance": ["Waterfall Mega Piece"],
-    "Riviere Turquoise": ["Quick Restock Mega Piece 1", "Quick Restock Mega Piece 2"],
-    "Elemental Skylands": ["Earth Mega Piece", "Water Mega Piece"],
+    "Autumn Hills": ["Autumn Hills Mega Shard", "Hidden Entrance Mega Shard"],
+    "Catacombs": ["Catacombs Mega Shard"],
+    "Bamboo Creek": ["Above Entrance Mega Shard", "Abandoned Mega Shard", "Time Loop Mega Shard"],
+    "Howling Grotto": ["Bottom Left Mega Shard", "Near Portal Mega Shard", "Pie in the Sky Mega Shard"],
+    "Quillshroom Marsh": ["Quillshroom Marsh Mega Shard"],
+    "Searing Crags Upper": ["Searing Crags Mega Shard"],
+    "Glacial Peak": ["Glacial Peak Mega Shard"],
+    "Cloud Ruins": ["Cloud Entrance Mega Shard", "Time Warp Mega Shard"],
+    "Cloud Ruins Right": ["Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2"],
+    "Underworld": ["Under Entrance Mega Shard", "Hot Tub Mega Shard", "Projectile Pit Mega Shard"],
+    "Forlorn Temple": ["Sunny Day Mega Shard", "Down Under Mega Shard"],
+    "Sunken Shrine": ["Mega Shard of the Moon", "Beginner's Mega Shard", "Mega Shard of the Stars", "Mega Shard of the Sun"],
+    "Riviere Turquoise Entrance": ["Waterfall Mega Shard"],
+    "Riviere Turquoise": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
+    "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
 }
 
 

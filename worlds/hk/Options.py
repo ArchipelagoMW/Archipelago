@@ -29,7 +29,7 @@ option_docstrings = {
     "RandomizeCharms": "Allow for Charms to be randomized into the item pool and open their locations for "
                        "randomization. Includes Charms\n    sold in shops.",
     "RandomizeKeys": "Allow for Keys to be randomized into the item pool. Includes those sold in shops.",
-    "RandomizeMaskShards": "Allow for Mask Piece to be randomized into the item pool and open their locations for"
+    "RandomizeMaskShards": "Allow for Mask Shard to be randomized into the item pool and open their locations for"
                            " randomization.",
     "RandomizeVesselFragments": "Allow for Vessel Fragments to be randomized into the item pool and open their "
                                 "locations for randomization.",

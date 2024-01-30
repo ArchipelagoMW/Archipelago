@@ -299,7 +299,7 @@ def set_rules(mc_world: World) -> None:
 
     egg_shards = min(multiworld.egg_shards_required[player], multiworld.egg_shards_available[player])
     completion_requirements = lambda state: (location_count(state) >= multiworld.advancement_goal[player]
-        and state.has("Dragon Egg Piece", player, egg_shards))
+        and state.has("Dragon Egg Shard", player, egg_shards))
     multiworld.completion_condition[player] = lambda state: completion_requirements(state) and defeated_bosses(state)
 
     # Set exclusions on hard/unreasonable/postgame

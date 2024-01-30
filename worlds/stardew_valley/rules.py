@@ -108,7 +108,7 @@ def set_rules(world):
     MultiWorldRules.add_rule(multiworld.get_location("Old Master Cannoli", player),
                              logic.has("Sweet Gem Berry").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Galaxy Sword Shrine", player),
-                             logic.has("Prismatic Piece").simplify())
+                             logic.has("Prismatic Shard").simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Have a Baby", player),
                              logic.can_reproduce(1).simplify())
     MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),

@@ -51,7 +51,7 @@ class CoinSanityRange(NamedRange):
     }
     if datetime.datetime.today().month == 4:
         if datetime.datetime.today().day == 1:
-            special_range_names["suprise"] =-1
+            special_range_names["surprise"] =-1
         else:
             special_range_names["coin piece"] =-1
 

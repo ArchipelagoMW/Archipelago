@@ -22,7 +22,7 @@ FF1_PROGRESSION_LIST = [
     "Rod", "Cube", "Lute", "Key", "Chime", "Oxyale",
     "Ship", "Canoe", "Floater", "Mark", "Sigil", "Canal",
     "Crown", "Crystal", "Herb", "Tnt", "Adamant", "Slab", "Ruby", "Bottle",
-    "Piece",
+    "Shard",
     "EarthOrb", "FireOrb", "WaterOrb", "AirOrb"
 ]
 

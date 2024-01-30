@@ -579,8 +579,8 @@ location_tables = {
     # Progressive
     "Progressive Items 1": [] +
         # Upgrade materials
-        [DS3LocationData(f"Titanite Piece #{i + 1}",       "Titanite Piece",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
-        [DS3LocationData(f"Large Titanite Piece #{i + 1}", "Large Titanite Piece", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(28)] +
+        [DS3LocationData(f"Titanite Shard #{i + 1}",       "Titanite Shard",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(26)] +
+        [DS3LocationData(f"Large Titanite Shard #{i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(28)] +
         [DS3LocationData(f"Titanite Slab #{i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
         [DS3LocationData(f"Twinkling Titanite #{i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)],
 
@@ -657,7 +657,7 @@ location_tables = {
 
     "Progressive Items DLC": [] +
         # Upgrade materials
-        [DS3LocationData(f"Large Titanite Piece ${i + 1}", "Large Titanite Piece", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
+        [DS3LocationData(f"Large Titanite Shard ${i + 1}", "Large Titanite Shard", DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(3)] +
         [DS3LocationData(f"Titanite Chunk ${i + 1}",       "Titanite Chunk",       DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(15)] +
         [DS3LocationData(f"Titanite Slab ${i + 1}",        "Titanite Slab",        DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(2)] +
         [DS3LocationData(f"Twinkling Titanite ${i + 1}",   "Twinkling Titanite",   DS3LocationCategory.PROGRESSIVE_ITEM) for i in range(5)] +
@@ -684,8 +684,8 @@ location_tables = {
 
     "Progressive Items Health": [] +
         # Healing
-        [DS3LocationData(f"Estus Piece #{i + 1}",       "Estus Piece",       DS3LocationCategory.HEALTH) for i in range(11)] +
-        [DS3LocationData(f"Undead Bone Piece #{i + 1}", "Undead Bone Piece", DS3LocationCategory.HEALTH) for i in range(10)],
+        [DS3LocationData(f"Estus Shard #{i + 1}",       "Estus Shard",       DS3LocationCategory.HEALTH) for i in range(11)] +
+        [DS3LocationData(f"Undead Bone Shard #{i + 1}", "Undead Bone Shard", DS3LocationCategory.HEALTH) for i in range(10)],
 }
 
 location_dictionary: Dict[str, DS3LocationData] = {}

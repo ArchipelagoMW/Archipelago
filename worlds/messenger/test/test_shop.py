@@ -28,7 +28,7 @@ class ShopCostTest(MessengerTestBase):
         locations = [
             "Riviere Turquoise Seal - Bounces and Balls",
             "Forlorn Temple - Demon King", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
-            "Sunny Day Mega Piece", "Down Under Mega Piece",
+            "Sunny Day Mega Shard", "Down Under Mega Shard",
         ]
         items = [["Path of Resilience", "Meditation", "Second Wind"]]
         self.assertAccessDependency(locations, items)

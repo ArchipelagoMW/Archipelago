@@ -56,7 +56,7 @@ class RandomizeHealthLocations(Toggle):
 class RandomizeProgressiveLocationsOption(Toggle):
     """Randomizes upgrade materials and consumables such as the titanite shards, firebombs, resin, etc...
 
-    Instead of specific locations, these are progressive, so Titanite Piece #1 is the first titanite shard
+    Instead of specific locations, these are progressive, so Titanite Shard #1 is the first titanite shard
     you pick up, regardless of whether it's from an enemy drop late in the game or an item on the ground in the
     first 5 minutes."""
     display_name = "Randomize Progressive Locations"
