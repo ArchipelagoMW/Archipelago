@@ -70,6 +70,8 @@ class TunicWorld(World):
             self.options.lanternless.value = passthrough["lanternless"],
             self.options.maskless.value = passthrough["maskless"],
             self.options.hexagon_quest.value = passthrough["hexagon_quest"]
+        except:
+            pass
             
         if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
             self.options.start_inventory.value["Sword"] = 1
@@ -162,11 +164,16 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        
+        # stuff for universal tracker support, can be ignored for standard gen
         try:
             passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
             self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Pages 24-25 (Prayer)"]
             self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Pages 42-43 (Holy Cross)"]
             self.ability_unlocks["Pages 52-53 (Ice Rod)"] = passthrough["Pages 52-53 (Ice Rod)"]
+        except:
+            pass
+            
         if self.options.entrance_rando:
             portal_pairs, portal_hints = create_er_regions(self)
             for portal1, portal2 in portal_pairs.items():
