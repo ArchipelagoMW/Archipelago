@@ -46,6 +46,6 @@ Puedes usar la [página de configuraciones para Hollow Knight](/games/Hollow%20K
    
 ## Comandos
 Mientras juegas en el Multiworld puedes interactuar con el servidor con una variedad de comandos anotados en la
-[Guía de comandos](/tutorial/Archipelago/commands/en). Como este juego no tiene actualmente un cliente de texto, puedes de forma opcional conectarte al multiworld con el cliente de Texto, que puede ser encontrado en la
+[Guía de comandos](/tutorial/Archipelago/commands/en). Como este juego no tiene actualmente un cliente de texto, puedes de forma opcional conectarte al multiworld con el Text Client, que se puede encontrar en la
 [Instalación principal de Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases) como "Archipelago Text Client" para introducir
  estos comandos.
