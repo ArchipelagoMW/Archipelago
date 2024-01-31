@@ -922,7 +922,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                missions_beaten = await self.missions_beaten_count()
+                missions_beaten = self.missions_beaten_count()
                 kerrigan_level = get_kerrigan_level(self.ctx, current_items, missions_beaten)
                 await self.updateTerranTech(current_items)
                 await self.updateZergTech(current_items, kerrigan_level)
