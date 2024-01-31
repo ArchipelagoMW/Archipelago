@@ -824,7 +824,7 @@ class SC2Logic:
         return self.nova_any_weapon(state) \
             and self.nova_splash(state) \
             and self.terran_beats_protoss_deathball(state) \
-            and self.terran_defense_rating(state, True, True) > 6
+            and self.terran_defense_rating(state, True, True) >= 7
 
     def night_terrors_requirement(self, state: CollectionState) -> bool:
         return self.terran_common_unit(state) \
