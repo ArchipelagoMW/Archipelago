@@ -8,8 +8,8 @@ pickaxe = "Pickaxe"
 humble_bindle = "Humble Indie Bindle"
 box_supplies = "Box of Various Supplies"
 locations = [sword, gun, wooden_sword, pickaxe, humble_bindle, box_supplies]
-prog_weapon_basic = "Progressive Weapon Basic"
-prog_weapon_lfod = "Progressive Weapon LFOD"
+prog_weapon_basic = "DLC Quest: Progressive Weapon"
+prog_weapon_lfod = "Live Freemium or Die: Progressive Weapon"
 items = [prog_weapon_basic, prog_weapon_lfod, humble_bindle, box_supplies]
 
 important_pack = "Incredibly Important Pack"
