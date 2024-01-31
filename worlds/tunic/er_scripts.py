@@ -482,7 +482,7 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
 
 # this is for making the connections themselves
-def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal], two_plus: List[Portal]) -> Tuple(Dict[Portal, Portal], List[Portal], List[Portal]):
+def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal], two_plus: List[Portal]) -> Tuple[Dict[Portal, Portal], List[Portal], List[Portal]]:
     portal_pairs: Dict[Portal, Portal] = {}
     for connection in plando_connections:
         entrance = connection.entrance
@@ -523,5 +523,5 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
 
         portal_pairs[portal1] = portal2
             
-    return tuple(portal_pairs, dead_ends, two_plus)
+    return (portal_pairs, dead_ends, two_plus)
 
