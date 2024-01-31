@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Any, Iterable, Optional, Union, List
+from typing import Dict, Any, Iterable, Optional, Union, List, TextIO
 
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, MultiWorld
 from Options import PerGameCommonOptions
@@ -337,14 +337,38 @@ class StardewValleyWorld(World):
         else:
             return self.options.trap_items != TrapItems.option_no_traps, self.options.exclude_ginger_island == ExcludeGingerIsland.option_true
 
-    def generate_output(self, output_directory: str):
+    def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
+        """Write to the spoiler header. If individual it's right at the end of that player's options,
+        if as stage it's right under the common header before per-player options."""
+        self.add_entrances_to_spoiler_log()
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        """Write to the spoiler "middle", this is after the per-player options and before locations,
+        meant for useful or interesting info."""
+        self.add_bundles_to_spoiler_log(spoiler_handle)
+
+    def add_bundles_to_spoiler_log(self, spoiler_handle: TextIO):
+        if self.options.bundle_randomization == BundleRandomization.option_vanilla:
+            return
+        player_name = self.multiworld.get_player_name(self.player)
+        spoiler_handle.write(f"\n\nCommunity Center ({player_name}):\n")
+        for room in self.modified_bundles:
+            for bundle in room.bundles:
+                spoiler_handle.write(f"\t[{room.name}] {bundle.name} ({bundle.number_required} required):\n")
+                for i, item in enumerate(bundle.items):
+                    if "Basic" in item.quality:
+                        quality = ""
+                    else:
+                        quality = f" ({item.quality.split(' ')[0]})"
+                    spoiler_handle.write(f"\t\t{item.amount}x {item.item_name}{quality}\n")
+
+    def add_entrances_to_spoiler_log(self):
         if self.options.entrance_randomization == EntranceRandomization.option_disabled:
             return
         for original_entrance, replaced_entrance in self.randomized_entrances.items():
             self.multiworld.spoiler.set_entrance(original_entrance, replaced_entrance, "entrance", self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-
         bundles = dict()
         for room in self.modified_bundles:
             bundles[room.name] = dict()
