@@ -142,9 +142,9 @@ def create_items_basic(world_options, created_items, world):
         create_coin(world_options, created_items, world, 825, 250, Group.DLCQuest)
 
 
-def create_coin(world_options, created_items, world, total_coin, required_coin, group):
-    coin_bundle_required = math.ceil(required_coin / world_options.coinbundlequantity)
-    coin_bundle_useful = math.ceil((total_coin - coin_bundle_required * world_options.coinbundlequantity) / world_options.coinbundlequantity)
+def create_coin(world_options, created_items, world, total_coins, required_coins, group):
+    coin_bundle_required = math.ceil(required_coins / world_options.coinbundlequantity)
+    coin_bundle_useful = math.ceil((total_coins - coin_bundle_required * world_options.coinbundlequantity) / world_options.coinbundlequantity)
     for item in items_by_group[group]:
         if item.has_any_group(Group.Coin):
             for i in range(coin_bundle_required):
@@ -152,10 +152,11 @@ def create_coin(world_options, created_items, world, total_coin, required_coin, 
             for i in range(coin_bundle_useful):
                 created_items.append(DLCQuestItem(item.name, ItemClassification.useful, item.code, world.player))
 
-def create_coin_piece(created_items, world, total_coin, require_coin, group):
+
+def create_coin_piece(created_items, world, total_coins, required_coins, group):
     for item in items_by_group[group]:
         if item.has_any_group(Group.Piece):
-            for i in range(require_coin*10):
+            for i in range(required_coins*10):
                 created_items.append(world.create_item(item))
-            for i in range(total_coin - require_coin):
-                    created_items.append(DLCQuestItem(item.name, ItemClassification.useful, item.code, world.player))
+            for i in range((total_coins - required_coins) * 10):
+                created_items.append(DLCQuestItem(item.name, ItemClassification.useful, item.code, world.player))
