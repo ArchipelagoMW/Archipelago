@@ -34,8 +34,7 @@ class MessengerRules:
             "Artificer's Portal":
                 lambda state: state.has_all({"Demon King Crown", "Magic Firefly"}, self.player),
             "Shrink Down":
-                lambda state: (state.has_all(NOTES, self.player) or self.has_enough_seals(state))
-                              and self.has_dart(state),
+                lambda state: state.has_all(NOTES, self.player) or self.has_enough_seals(state),
             # the shop
             "Money Sink":
                 lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
@@ -308,6 +307,8 @@ class MessengerRules:
             if loc.name in self.location_rules:
                 loc.access_rule = self.location_rules[loc.name]
 
+        if self.world.options.music_box and not self.world.options.limited_movement:
+            add_rule(multiworld.get_entrance("Shrink Down", self.player), self.has_dart)
         multiworld.completion_condition[self.player] = lambda state: state.has("Do the Thing!", self.player)
         # if multiworld.accessibility[self.player]:  # not locations accessibility
         #     set_self_locking_items(self.world, self.player)

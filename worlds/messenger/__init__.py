@@ -3,7 +3,7 @@ from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
 from Options import Accessibility
-from Utils import visualize_regions
+from Utils import visualize_regions, output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
@@ -210,6 +210,18 @@ class MessengerWorld(World):
             spoiler_handle.write(f"\nPortal Warps:\n")
             for portal, output in self.spoiler_portal_mapping.items():
                 spoiler_handle.write(f"{portal + ' Portal:':33}{output}\n")
+
+    def generate_output(self, output_directory: str) -> None:
+        out_path = output_path(self.multiworld.get_out_file_name_base(self.player) + ".aptm")
+        if self.multiworld.players > 1 or "The Messenger\\Archipelago\\output" not in out_path:
+            return
+        from json import dump
+        data = {
+            "slot_data": self.fill_slot_data(),
+            "loc_data": {loc.address: {loc.item.code: loc.item.name} for loc in self.multiworld.get_filled_locations() if loc.address},
+        }
+        with open(out_path, "w") as f:
+            dump(data, f)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
