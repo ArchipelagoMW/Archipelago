@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool
 
 
 class ShuffleDoors(Choice):
@@ -136,3 +136,4 @@ class LingoOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool
