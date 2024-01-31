@@ -389,21 +389,12 @@ class KerriganPresence(Choice):
     option_not_present_and_no_passives = 2
 
 
-class KerriganChecksPerLevelPack(Range):
-    """Determines how many locations need to be checked for a level pack to be received.  Missions have between 4 and 5 locations each."""
-    display_name = "Checks Per Kerrigan Level Pack"
-    range_start = 1
-    range_end = 10
-    default = 1
-
-
-class KerriganCheckLevelPackSize(Range):
-    """Determines how many levels Kerrigan gains when enough locations are checked."""
-    display_name = "Check Level Pack Size"
+class KerriganLevelsPerMissionCompleted(Range):
+    """Determines how many levels Kerrigan gains when a mission is beaten."""
+    display_name = "Levels Per Mission Beaten"
     range_start = 0
-    range_end = 5
+    range_end = 20
     default = 0
-
 
 class KerriganLevelItemSum(Range):
     """Determines the sum of the level items in the world.  This does not affect levels gained from checks."""
@@ -742,8 +733,7 @@ class Starcraft2Options(PerGameCommonOptions):
     generic_upgrade_research: GenericUpgradeResearch
     generic_upgrade_items: GenericUpgradeItems
     kerrigan_presence: KerriganPresence
-    kerrigan_checks_per_level_pack: KerriganChecksPerLevelPack
-    kerrigan_check_level_pack_size: KerriganCheckLevelPackSize
+    kerrigan_levels_per_mission_completed: KerriganLevelsPerMissionCompleted
     kerrigan_level_item_sum: KerriganLevelItemSum
     kerrigan_level_item_distribution: KerriganLevelItemDistribution
     start_primary_abilities: StartPrimaryAbilities

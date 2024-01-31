@@ -151,7 +151,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     if grant_story_tech or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
-        move_mission(SC2Mission.THE_INFINITE_CYCLE, MissionPools.MEDIUM, MissionPools.STARTER)
+        move_mission(SC2Mission.THE_INFINITE_CYCLE, MissionPools.HARD, MissionPools.STARTER)
     if get_option_value(multiworld, player, "take_over_ai_allies") == TakeOverAIAllies.option_true:
         move_mission(SC2Mission.HARBINGER_OF_OBLIVION, MissionPools.MEDIUM, MissionPools.STARTER)
     if len(mission_pools[MissionPools.STARTER]) < 2 and not kerriganless or adv_tactics:
@@ -224,7 +224,10 @@ class ValidInventory:
         return all(item in self.logical_inventory for item in items)
 
     def has_group(self, item_group: str, player: int, count: int = 1):
-        return False  # Currently only used for Marine Medic logic, deliberately fails here
+        return False  # Deliberately fails here, as item pooling is not aware about mission layout
+
+    def count_group(self, item_name_group: str, player: int) -> int:
+        return 0  # For item filtering assume no missions are beaten
 
     def count(self, item: str, player: int) -> int:
         return len([inventory_item for inventory_item in self.logical_inventory if inventory_item == item])

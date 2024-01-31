@@ -3,7 +3,8 @@ from typing import Set
 from BaseClasses import MultiWorld, CollectionState
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, get_enabled_campaigns, MissionOrder
-from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings
+from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
+    kerrigan_levels, get_full_item_list
 from .MissionTables import SC2Race, SC2Campaign
 from . import ItemNames
 
@@ -18,9 +19,17 @@ class SC2Logic:
         :param items:
         :return:
         """
-        # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
-        return state.has_group("Missions", self.player, 0) \
+        return self.is_item_placement(state) \
             or state.has_any(items, self.player)
+
+    def is_item_placement(self, state):
+        """
+        Tells if it's item placement or item pool filter
+        :param state:
+        :return: True for item placement, False for pool filter
+        """
+        # has_group with count = 0 is always true for item placement and always false for SC2 item filtering
+        return state.has_group("Missions", self.player, 0)
 
     # WoL
     def terran_common_unit(self, state: CollectionState) -> bool:
@@ -416,7 +425,27 @@ class SC2Logic:
     def supreme_requirement(self, state: CollectionState) -> bool:
         return self.story_tech_granted \
             or not self.kerrigan_unit_available \
-            or state.has_all({ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_MEND}, self.player)
+            or (
+                state.has_all({ItemNames.KERRIGAN_LEAPING_STRIKE, ItemNames.KERRIGAN_MEND}, self.player)
+                and self.kerrigan_levels(state, 35)
+            )
+
+    def kerrigan_levels(self, state: CollectionState, target: int) -> bool:
+        if self.story_tech_granted or not self.kerrigan_unit_available:
+            return True  # Levels are granted by story tech
+        if self.kerrigan_levels_per_mission_completed > 0 and not self.is_item_placement(state):
+            # Levels can be granted from mission completion.
+            # Item pool filtering isn't aware of missions beaten. Assume that missions beaten will fulfill this rule.
+            return True
+        levels = 0
+        levels += self.kerrigan_levels_per_mission_completed * state.count_group("Missions", self.player)
+        for kerrigan_level_item in kerrigan_levels:
+            level_amount = get_full_item_list()[kerrigan_level_item].number
+            item_count = state.count(kerrigan_level_item, self.player)
+            levels += item_count * level_amount
+
+        return levels >= target
+
 
     def the_reckoning_requirement(self, state: CollectionState) -> bool:
         if self.take_over_ai_allies:
@@ -531,6 +560,7 @@ class SC2Logic:
             or (
                 self.two_kerrigan_actives(state)
                 and self.basic_kerrigan(state)
+                and self.kerrigan_levels(state, 70)
             )
 
     def protoss_basic_splash(self, state: CollectionState) -> bool:
@@ -896,6 +926,7 @@ class SC2Logic:
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
         self.take_over_ai_allies = get_option_value(multiworld, self.player, "take_over_ai_allies") == TakeOverAIAllies.option_true
         self.kerrigan_unit_available = get_option_value(multiworld, self.player, 'kerrigan_presence') in kerrigan_unit_available
+        self.kerrigan_levels_per_mission_completed = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed")
         self.story_tech_granted = get_option_value(multiworld, self.player, "grant_story_tech") == GrantStoryTech.option_true
         self.basic_terran_units = get_basic_units(self.multiworld, self.player, SC2Race.TERRAN)
         self.basic_zerg_units = get_basic_units(self.multiworld, self.player, SC2Race.ZERG)

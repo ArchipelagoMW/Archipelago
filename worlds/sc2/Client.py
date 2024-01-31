@@ -22,8 +22,7 @@ from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
 from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed,
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, KerriganCheckLevelPackSize,
-    KerriganChecksPerLevelPack, TakeOverAIAllies,
+    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
     DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence,
     SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
@@ -457,8 +456,7 @@ class SC2Context(CommonContext):
             self.generic_upgrade_research = args["slot_data"].get("generic_upgrade_research", GenericUpgradeResearch.option_vanilla)
             self.kerrigan_presence = args["slot_data"].get("kerrigan_presence", KerriganPresence.option_vanilla)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
-            self.levels_per_check = args["slot_data"].get("kerrigan_check_level_pack_size", KerriganCheckLevelPackSize.default)
-            self.checks_per_level = args["slot_data"].get("kerrigan_checks_per_level_pack", KerriganChecksPerLevelPack.default)
+            self.kerrigan_levels_per_mission_completed = args["slot_data"].get("kerrigan_levels_per_mission_completed", 0)
             self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
             self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
@@ -732,11 +730,12 @@ def calc_difficulty(difficulty: int):
 
     return 'X'
 
-def kerrigan_level_adjusted(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]], checks: int, extra_checks: int) -> int:
+
+def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]], missions_beaten: int) -> int:
     value = items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
-    value -= (checks // ctx.checks_per_level) * ctx.levels_per_check
-    value += ((checks + extra_checks) // ctx.checks_per_level) * ctx.levels_per_check
+    value += missions_beaten * ctx.kerrigan_levels_per_mission_completed
     return value
+
 
 def calculate_kerrigan_options(ctx: SC2Context) -> int:
     options = 0
@@ -752,6 +751,7 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
         options |= 1 << 2
 
     return options
+
 
 def caclulate_soa_options(ctx: SC2Context) -> int:
     options = 0
@@ -830,7 +830,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         'want_close',
         'can_read_game',
         'last_received_update',
-        'last_kerrigan_level',
     ]
 
     def __init__(self, ctx: SC2Context, mission_id: int):
@@ -839,7 +838,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         self.want_close = False
         self.can_read_game = False
         self.last_received_update: int = 0
-        self.last_kerrigan_level: int = 0
         self.setup_done = False
         self.ctx = ctx
         self.ctx.last_bot = self
@@ -857,7 +855,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         if not self.setup_done:
             self.setup_done = True
             start_items = calculate_items(self.ctx)
-            self.last_kerrigan_level = start_items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
             if self.ctx.difficulty_override >= 0:
@@ -921,13 +918,10 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                kerrigan_level = kerrigan_level_adjusted(self.ctx, current_items, 0, 0)
-                if kerrigan_level > self.last_kerrigan_level:
-                    # Update Kerrigan level if a level item was given. Ensure that there won't be any deleveling
-                    # Levels from checks gained if configured are handled elsewhere
-                    self.last_kerrigan_level = kerrigan_level
+                missions_beaten = len([location for location in self.ctx.locations_checked if location % VICTORY_MODULO == 0])
+                kerrigan_level = get_kerrigan_level(self.ctx, current_items, missions_beaten)
                 await self.updateTerranTech(current_items)
-                await self.updateZergTech(current_items)
+                await self.updateZergTech(current_items, kerrigan_level)
                 await self.updateProtossTech(current_items)
                 self.last_received_update = len(self.ctx.items_received)
 
@@ -957,14 +951,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                                 [{"cmd": 'LocationChecks',
                                   "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id + x + 1]}])
                             self.boni[x] = True
-                            # Kerrigan level needs manual updating if the check's receiver isn't the local player
-                            if self.ctx.levels_per_check > 0 and self.last_received_update == len(self.ctx.items_received):
-                                current_items = calculate_items(self.ctx)
-                                new_level = kerrigan_level_adjusted(self.ctx, current_items, checks, 1)
-                                if self.last_kerrigan_level != new_level:
-                                    self.last_kerrigan_level = new_level
-                                    await self.updateZergTech(current_items)
-
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
@@ -983,12 +969,12 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
             terran_items[5], terran_items[6], terran_items[7], terran_items[8], terran_items[9], terran_items[10],
             terran_items[11], terran_items[12], terran_items[13]))
 
-    async def updateZergTech(self, current_items):
+    async def updateZergTech(self, current_items, kerrigan_level):
         zerg_items = current_items[SC2Race.ZERG]
         kerrigan_primal_by_items = kerrigan_primal(self.ctx, current_items)
         kerrigan_primal_bot_value = 1 if kerrigan_primal_by_items else 0
         await self.chat_send("?GiveZergTech {} {} {} {} {} {} {} {} {} {} {} {}".format(
-            self.last_kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
+            kerrigan_level, kerrigan_primal_bot_value, zerg_items[0], zerg_items[1], zerg_items[2],
             zerg_items[3], zerg_items[4], zerg_items[5], zerg_items[6], zerg_items[9], zerg_items[10], zerg_items[11]
         ))
 
