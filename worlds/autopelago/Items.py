@@ -1,3 +1,4 @@
+from random import shuffle
 from typing import Literal
 
 from BaseClasses import ItemClassification
@@ -389,6 +390,17 @@ game_specific_items: dict[str, dict[Literal['useful_nonprogression', 'filler', '
         ),
     },
 }
+
+for category in ('useful_nonprogression', 'filler', 'trap', 'uncategorized'):
+    l = list(generic_item_table[category])
+    shuffle(l)
+    generic_item_table[category] = tuple(l)
+
+for game in game_specific_items:
+    for category in ('useful_nonprogression', 'filler', 'trap', 'uncategorized'):
+        l = list(game_specific_items[game][category])
+        shuffle(l)
+        game_specific_items[game][category] = tuple(l)
 
 all_item_names = [ \
     item for comp in ( \
