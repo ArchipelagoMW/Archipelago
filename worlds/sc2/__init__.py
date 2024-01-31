@@ -432,7 +432,8 @@ def place_exclusion_item(item_name, location, locked_locations, player):
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
     total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
     if get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
-            or total_levels == 0:
+            or total_levels == 0 \
+            or SC2Campaign.HOTS not in get_enabled_campaigns(multiworld, player):
         return
     
     def add_kerrigan_level_items(level_amount: int, item_amount: int):

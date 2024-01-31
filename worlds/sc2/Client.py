@@ -21,12 +21,16 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed,
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence,
-    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
-)
+from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
+                                GameSpeed,
+                                GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
+                                LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations,
+                                VanillaLocations,
+                                DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics,
+                                SpearOfAdunPresence,
+                                SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
+                                SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableHotsMissions
+                                )
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -467,6 +471,7 @@ class SC2Context(CommonContext):
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
+            self.enable_hots_missions = args["slot_data"].get("enable_hots_missions", EnableHotsMissions.option_false)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
@@ -742,7 +747,7 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
 
     # Bits 0, 1
     # Kerrigan unit available
-    if ctx.kerrigan_presence in kerrigan_unit_available:
+    if ctx.kerrigan_presence in kerrigan_unit_available and ctx.enable_hots_missions == EnableHotsMissions.option_true:
         options |= 1 << 0
 
     # Bit 2

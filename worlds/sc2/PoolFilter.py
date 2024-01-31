@@ -132,7 +132,8 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
             and get_option_value(multiworld, player, "shuffle_campaigns") == ShuffleCampaigns.option_false:
         move_mission(SC2Mission.DARK_WHISPERS, MissionPools.EASY, MissionPools.STARTER)
     # HotS
-    kerriganless = get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available
+    kerriganless = get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
+        or SC2Campaign.HOTS not in enabled_campaigns
     if adv_tactics:
         # Medium -> Easy
         for mission in (SC2Mission.FIRE_IN_THE_SKY, SC2Mission.WAKING_THE_ANCIENT, SC2Mission.CONVICTION):
@@ -553,7 +554,8 @@ def filter_items(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC
 def get_used_races(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]], multiworld: MultiWorld, player: int) -> Set[SC2Race]:
     grant_story_tech = get_option_value(multiworld, player, "grant_story_tech")
     take_over_ai_allies = get_option_value(multiworld, player, "take_over_ai_allies")
-    kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
+    kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence") \
+        and SC2Campaign.HOTS in get_enabled_campaigns(multiworld, player)
     missions = missions_in_mission_table(mission_req_table)
 
     # By missions

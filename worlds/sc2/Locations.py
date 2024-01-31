@@ -1,9 +1,9 @@
 from enum import IntEnum
 from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any
 from BaseClasses import MultiWorld
-from . import ItemNames
+from . import ItemNames, SC2Campaign
 from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
-    TakeOverAIAllies
+    TakeOverAIAllies, get_enabled_campaigns
 from .Rules import SC2Logic
 
 from BaseClasses import Location
@@ -78,7 +78,8 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
     logic_level = get_option_value(multiworld, player, 'required_tactics')
     adv_tactics = logic_level != RequiredTactics.option_standard
-    kerriganless = get_option_value(multiworld, player, 'kerrigan_presence') not in kerrigan_unit_available
+    kerriganless = get_option_value(multiworld, player, 'kerrigan_presence') not in kerrigan_unit_available \
+        or SC2Campaign.HOTS not in get_enabled_campaigns(multiworld, player)
     story_tech_granted = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
     logic = SC2Logic(multiworld, player)
     location_table: List[LocationData] = [
