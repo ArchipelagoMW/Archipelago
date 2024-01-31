@@ -21,12 +21,13 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, GameSpeed,
-    GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence,
-    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, SpearOfAdunAutonomouslyCastPresentInNoBuild
-)
+from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, \
+    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, \
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
+    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
+    SpearOfAdunAutonomouslyCastPresentInNoBuild
+
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
@@ -394,6 +395,7 @@ class SC2Context(CommonContext):
         self.vespene_per_item = 15
         self.starting_supply_per_item = 2
         self.nova_covert_ops_only = False
+        self.kerrigan_levels_per_mission_completed = 0
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2

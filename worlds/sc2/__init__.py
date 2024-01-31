@@ -115,11 +115,15 @@ class SC2World(World):
                     if not isinstance(slot_req_table[campaign.id][mission]["required_world"][index], dict):
                         slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
+        enabled_campaigns = get_enabled_campaigns(self.multiworld, self.player)
         slot_data["plando_locations"] = get_plando_locations(self.multiworld, self.player)
-        slot_data["nova_covert_ops_only"] = (get_enabled_campaigns(self.multiworld, self.player) == {SC2Campaign.NCO})
+        slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
         slot_data["version"] = 3
+
+        if SC2Campaign.HOTS not in enabled_campaigns:
+            slot_data["kerrigan_presence"] = KerriganPresence.option_not_present
         return slot_data
 
 
@@ -432,7 +436,8 @@ def place_exclusion_item(item_name, location, locked_locations, player):
 def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
     total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
     if get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
-            or total_levels == 0:
+            or total_levels == 0 \
+            or SC2Campaign.HOTS not in get_enabled_campaigns(multiworld, player):
         return
     
     def add_kerrigan_level_items(level_amount: int, item_amount: int):

@@ -161,9 +161,6 @@ class EnableProphecyMissions(DefaultOnToggle):
 class EnableHotsMissions(DefaultOnToggle):
     """
     Enables missions from Heart of the Swarm campaign.
-
-    Note: It's recommended to set Kerrigan Presence to Not Present if playing Legacy of the Void without
-    Heart of the Swarm due to The Infinite Cycle mission mechanics.
     """
     display_name = "Enable Heart of the Swarm missions"
 
@@ -178,9 +175,6 @@ class EnableLotVPrologueMissions(DefaultOnToggle):
 class EnableLotVMissions(DefaultOnToggle):
     """
     Enables missions from Legacy of the Void campaign.
-
-    Note: It's recommended to set Kerrigan Presence to Not Present if playing Legacy of the Void without
-    Heart of the Swarm due to The Infinite Cycle mission mechanics.
     """
     display_name = "Enable Legacy of the Void (main campaign) missions"
 
@@ -381,7 +375,7 @@ class KerriganPresence(Choice):
         In missions where the Kerrigan unit is required, story abilities are given in same way as Grant Story Tech is set to true
     Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear.
 
-    Note :Recommended to set Not Present if playing Legacy of the Void without Heart of the Swarm due to The Infinite Cycle mission mechanics
+    Note: Always set to "Not Present" if Heart of the Swarm campaign is disabled.
     """
     display_name = "Kerrigan Presence"
     option_vanilla = 0

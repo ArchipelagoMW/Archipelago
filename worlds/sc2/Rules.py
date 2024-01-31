@@ -925,7 +925,8 @@ class SC2Logic:
         self.logic_level = get_option_value(multiworld, self.player, 'required_tactics')
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
         self.take_over_ai_allies = get_option_value(multiworld, self.player, "take_over_ai_allies") == TakeOverAIAllies.option_true
-        self.kerrigan_unit_available = get_option_value(multiworld, self.player, 'kerrigan_presence') in kerrigan_unit_available
+        self.kerrigan_unit_available = get_option_value(multiworld, self.player, 'kerrigan_presence') in kerrigan_unit_available \
+            and SC2Campaign.HOTS in get_enabled_campaigns(multiworld, self.player)
         self.kerrigan_levels_per_mission_completed = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed")
         self.story_tech_granted = get_option_value(multiworld, self.player, "grant_story_tech") == GrantStoryTech.option_true
         self.basic_terran_units = get_basic_units(self.multiworld, self.player, SC2Race.TERRAN)
