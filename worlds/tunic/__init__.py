@@ -71,6 +71,7 @@ class TunicWorld(World):
                 self.options.lanternless.value = passthrough["lanternless"]
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = passthrough["entrance_rando"]
             
         if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
             self.options.start_inventory.value["Sword"] = 1
@@ -176,6 +177,40 @@ class TunicWorld(World):
             portal_pairs, portal_hints = create_er_regions(self)
             for portal1, portal2 in portal_pairs.items():
                 self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
+
+            if hasattr(self.multiworld, "re_gen_passthrough"):
+                if "TUNIC" in self.multiworld.re_gen_passthrough:
+                    passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                    from BaseClasses import Entrance
+                    from .er_data import portal_mapping
+                    entrance_dict: Dict[str, Entrance] = {entrance.name: entrance
+                                                          for region in self.multiworld.get_regions(self.player)
+                                                          for entrance in region.entrances}
+                    slot_portals: Dict[str, str] = passthrough["Entrance Rando"]
+                    self.tunic_portal_pairs = slot_portals
+                    for portal1, portal2 in slot_portals.items():
+                        portal_name1: str = ""
+                        portal_name2: str = ""
+                        entrance1 = None
+                        entrance2 = None
+                        for portal in portal_mapping:
+                            if portal.scene_destination() == portal1:
+                                portal_name1 = portal.name
+                            if portal.scene_destination() == portal2:
+                                portal_name2 = portal.name
+
+                        for entrance_name, entrance in entrance_dict.items():
+                            if entrance_name.startswith(portal_name1):
+                                entrance1 = entrance
+                            if entrance_name.startswith(portal_name2):
+                                entrance2 = entrance
+                        if entrance1 is None:
+                            raise Exception("entrance1 not found, portal1 is " + portal1)
+                        if entrance2 is None:
+                            raise Exception("entrance2 not found, portal2 is " + portal2)
+                        entrance1.connected_region = entrance2.parent_region
+                        entrance2.connected_region = entrance1.parent_region
+
             self.er_portal_hints = portal_hints
 
         else:
