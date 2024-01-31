@@ -105,176 +105,63 @@
                 </div>
             </div>
             <div class="world-maps-container">
-                <svg
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:svg="http://www.w3.org/2000/svg"
-                    width="100%"
-                    viewBox="0 0 635 189"
-                    version="1.1">
-                    <g transform="translate(4,185.2)">
-                    <g class="checked-location checked-basketball not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Basketball.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="82.926598"
-                            y="-115.67" />
+                <svg width="100%" viewBox="0.00 0.00 422.00 164.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <g>
+                      <g class="checked-location not-checked not-open checked-basketball">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Basketball.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="4" y="76" />
+                      </g>
+                      <g class="traversed-path before-basketball after-start current-region">
+                        <path fill="none" stroke="black" d="M31,39.72C31,48.04 31,56.35 31,64.67" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="34.5,64.49 31,74.49 27.5,64.49 34.5,64.49" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-minotaur">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Minotaur Maze.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="94" y="42" />
+                      </g>
+                      <g class="traversed-path before-minotaur after-basketball">
+                        <path fill="none" stroke="black" d="M57.93,90.98C65.98,87.87 75.02,84.38 83.65,81.05" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="82.26,77.83 92.85,77.49 84.78,84.36 82.26,77.83" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-prawn-stars">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Prawn Stars.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="94" y="110" />
+                      </g>
+                      <g class="traversed-path before-prawn-stars after-basketball">
+                        <path fill="none" stroke="black" d="M57.93,111.02C65.98,114.13 75.02,117.62 83.65,120.95" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="84.78,117.64 92.85,124.51 82.26,124.17 84.78,117.64" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-restaurant">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Restaurant.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="184" y="42" />
+                      </g>
+                      <g class="traversed-path before-restaurant after-minotaur">
+                        <path fill="none" stroke="black" d="M147.93,67C155.71,67 164.42,67 172.78,67" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="172.74,63.5 182.74,67 172.74,70.5 172.74,63.5" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-pirate-bake-sale">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Pirate Bake Sale.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="184" y="110" />
+                      </g>
+                      <g class="traversed-path before-pirate-bake-sale after-prawn-stars">
+                        <path fill="none" stroke="black" d="M147.93,135C155.71,135 164.42,135 172.78,135" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="172.74,131.5 182.74,135 172.74,138.5 172.74,131.5" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-bowling-ball-door">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Bowling Ball Door.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="274" y="76" />
+                      </g>
+                      <g class="traversed-path before-bowling-ball-door after-restaurant">
+                        <path fill="none" stroke="black" d="M237.93,77.02C245.98,80.13 255.02,83.62 263.65,86.95" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="264.78,83.64 272.85,90.51 262.26,90.17 264.78,83.64" class="arrow-head" />
+                      </g>
+                      <g class="traversed-path before-bowling-ball-door after-pirate-bake-sale">
+                        <path fill="none" stroke="black" d="M237.93,124.98C245.98,121.87 255.02,118.38 263.65,115.05" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="262.26,111.83 272.85,111.49 264.78,118.36 262.26,111.83" class="arrow-head" />
+                      </g>
+                      <g class="checked-location not-checked not-open checked-captured-goldfish">
+                        <image xlink:href="{{ url_for('static', filename='static/icons/autopelago/Captured Goldfish.webp') }}" width="54px" height="54px" preserveAspectRatio="xMinYMin" x="364" y="76" />
+                      </g>
+                      <g class="traversed-path before-captured-goldfish after-bowling-ball-door">
+                        <path fill="none" stroke="black" d="M327.93,101C335.71,101 344.42,101 352.78,101" class="arrow-line" />
+                        <polygon fill="black" stroke="black" points="352.74,97.5 362.74,101 352.74,104.5 352.74,97.5" class="arrow-head" />
+                      </g>
                     </g>
-                    <g class="traversed-path before-basketball current-region">
-                        <path
-                            class="arrow-line"
-                            d="m 4.06,-90.77 c 8.72,0.01 41.02,0.04 67.67,0.07" />
-                        <polygon
-                            class="arrow-head"
-                            points="81.59,-90.7 71.58,-87.21 71.59,-94.21" />
-                    </g>
-                    <g class="checked-location checked-minotaur-maze not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Minotaur Maze.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="173.836"
-                            y="-181.198" />
-                    </g>
-                    <g class="traversed-path before-minotaur-maze not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 136.71,-109.98 c 8.8,-6.34 18.73,-13.5 28.1,-20.25" />
-                        <polygon
-                            class="arrow-head"
-                            points="172.7,-135.92 166.64,-127.23 162.54,-132.91" />
-                    </g>
-                    <g class="checked-location checked-restaurant not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Restaurant.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="173.55"
-                            y="-50" />
-                    </g>
-                    <g class="traversed-path before-restaurant not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 136.63,-71.32 c 8.77,6.35 18.67,13.53 28.01,20.29" />
-                        <polygon
-                            class="arrow-head"
-                            points="172.5,-45.32 162.35,-48.36 166.46,-54.03" />
-                    </g>
-                    <g class="checked-location checked-prawn-stars not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Prawn Stars.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="294.91699"
-                            y="-177.661" />
-                    </g>
-                    <g class="traversed-path before-prawn-stars not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 227.71,-155.41 c 16.46,0.48 37.79,1.1 55.99,1.63" />
-                        <polygon
-                            class="arrow-head"
-                            points="293.61,-153.49 283.51,-150.28 283.71,-157.28" />
-                    </g>
-                    <g class="checked-location bowling-ball-door not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Bowling Ball Door.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="406.10001"
-                            y="-115.534" />
-                    </g>
-                    <g class="traversed-path before-bowling-ball-door after-prawn-stars not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 348.83,-137.62 c 14.34,8.01 32.19,17.98 47.76,26.68" />
-                        <polygon
-                            class="arrow-head"
-                            points="405.11,-106.17 394.68,-108 398.09,-114.11" />
-                    </g>
-                    <g class="checked-location checked-captured-goldfish not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Captured Goldfish.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="517.12"
-                            y="-155.32401" />
-                    </g>
-                    <g class="traversed-path before-captured-goldfish not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 459.97,-100.17 c 14.05,-5.03 31.47,-11.27 46.8,-16.77" />
-                        <polygon
-                            class="arrow-head"
-                            points="516.07,-120.27 507.84,-113.6 505.47,-120.19" />
-                    </g>
-                    <g class="checked-location checked-computer-pad not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Computer Pad.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="517.151"
-                            y="-75.849701" />
-                    </g>
-                    <g class="traversed-path before-computer-pad not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 459.98,-80.93 c 14.05,5.02 31.47,11.25 46.81,16.73" />
-                        <polygon
-                            class="arrow-head"
-                            points="516.09,-60.88 505.5,-60.95 507.85,-67.54" />
-                    </g>
-                    <g class="traversed-path before-goal after-captured-goldfish not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 571.05,-117.14 c 14.21,6.95 30.95,15.14 41.96,20.53" />
-                        <polygon
-                            class="arrow-head"
-                            points="621.93,-92.24 611.41,-93.49 614.49,-99.78" />
-                    </g>
-                    <g class="checked-location checked-heavy-boulder not-checked not-open">
-                        <image
-                            xlink:href="{{ url_for('static', filename='static/icons/autopelago/Heavy Boulder.webp') }}"
-                            width="64px"
-                            height="64px"
-                            preserveAspectRatio="xMinYMin"
-                            x="294.556"
-                            y="-53.455101" />
-                    </g>
-                    <g class="traversed-path before-heavy-boulder not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 227.41,-25.77 c 16.45,-0.47 37.76,-1.08 55.95,-1.59" />
-                        <polygon
-                            class="arrow-head"
-                            points="293.26,-27.65 283.37,-23.86 283.17,-30.86" />
-                    </g>
-                    <g class="traversed-path before-bowling-ball-door after-heavy-boulder not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 348.27,-43.32 c 14.38,-8.01 32.34,-18 48.03,-26.73" />
-                        <polygon
-                            class="arrow-head"
-                            points="404.89,-74.83 397.86,-66.91 394.45,-73.03" />
-                    </g>
-                    <g class="traversed-path before-goal after-computer-pad not-open">
-                        <path
-                            class="arrow-line"
-                            d="m 571.07,-64.13 c 14.21,-7.02 30.93,-15.27 41.95,-20.7" />
-                        <polygon
-                            class="arrow-head"
-                            points="621.93,-89.24 614.52,-81.67 611.42,-87.95" />
-                    </g>
-                    </g>
-                </svg>
+                  </svg>
             </div>
         </div>
     </div>

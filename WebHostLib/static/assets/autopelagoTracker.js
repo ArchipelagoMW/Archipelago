@@ -14,13 +14,13 @@ class Payload {
                 return ['checked-basketball'];
 
             case 'BeforeMinotaur':
-                return ['before-minotaur-maze'];
+                return ['before-minotaur'];
 
             case 'BeforePrawnStars':
                 return ['before-prawn-stars'];
 
             case 'Minotaur':
-                return ['checked-minotaur-maze'];
+                return ['checked-minotaur'];
 
             case 'PrawnStars':
                 return ['checked-prawn-stars'];
@@ -152,7 +152,7 @@ const loadTrackerData = async (url, dom) => {
 
         const checked_locations = new Set(parsed.checked_locations);
         parsed.markCheckedIf(() => checked_locations.has('basketball'), 'basketball');
-        parsed.markCheckedIf(() => checked_locations.has('minotaur'), 'minotaur-maze');
+        parsed.markCheckedIf(() => checked_locations.has('minotaur'), 'minotaur');
         parsed.markCheckedIf(() => checked_locations.has('prawn stars'), 'prawn-stars');
         parsed.markCheckedIf(() => checked_locations.has('restaurant'), 'restaurant');
         parsed.markCheckedIf(() => checked_locations.has('pirate bake sale'), 'pirate-baked-sale');
@@ -160,14 +160,14 @@ const loadTrackerData = async (url, dom) => {
         parsed.markCheckedIf(() => checked_locations.has('goal'), 'captured-goldfish');
 
         parsed.markLocationOpenIf(x => x.rat_count >= 5, 'basketball');
-        parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Red Matador\'s Cape'] > 0, 'minotaur-maze');
+        parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Red Matador\'s Cape'] > 0, 'minotaur');
         parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Premium Can of Prawn Food'] > 0, 'prawn-stars');
-        parsed.markLocationOpenIf(x => checked_locations.has('minotaur-maze') && x.inventory['A Cookie'] > 0, 'restaurant');
+        parsed.markLocationOpenIf(x => checked_locations.has('minotaur') && x.inventory['A Cookie'] > 0, 'restaurant');
         parsed.markLocationOpenIf(x => checked_locations.has('prawn-stars') && x.inventory['Bribe'] > 0, 'pirate-bake-sale');
         parsed.markLocationOpenIf(x => x.rat_count >= 20 && (checked_locations.has('restaurant') || checked_locations.has('pirate-bake-sale')), 'bowling-ball-door');
         parsed.markLocationOpenIf(x => checked_locations.has('bowling-ball-door') && x.inventory['Masterful Longsword'] > 0, 'captured-goldfish');
 
-        parsed.markPathOpenIf(x => checked_locations.has('basketball'), 'minotaur-maze');
+        parsed.markPathOpenIf(x => checked_locations.has('basketball'), 'minotaur');
         parsed.markPathOpenIf(x => checked_locations.has('basketball'), 'prawn-stars');
         parsed.markPathOpenIf(x => checked_locations.has('minotaur'), 'restaurant');
         parsed.markPathOpenIf(x => checked_locations.has('prawn-stars'), 'pirate-bake-sale');
