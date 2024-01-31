@@ -398,6 +398,7 @@ class SC2Context(CommonContext):
         self.vespene_per_item = 15
         self.starting_supply_per_item = 2
         self.nova_covert_ops_only = False
+        self.kerrigan_levels_per_mission_completed = 0
 
     async def server_auth(self, password_requested: bool = False) -> None:
         self.game = STARCRAFT2
@@ -471,7 +472,6 @@ class SC2Context(CommonContext):
             self.minerals_per_item = args["slot_data"].get("minerals_per_item", 15)
             self.vespene_per_item = args["slot_data"].get("vespene_per_item", 15)
             self.starting_supply_per_item = args["slot_data"].get("starting_supply_per_item", 2)
-            self.enable_hots_missions = args["slot_data"].get("enable_hots_missions", EnableHotsMissions.option_false)
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
@@ -747,7 +747,7 @@ def calculate_kerrigan_options(ctx: SC2Context) -> int:
 
     # Bits 0, 1
     # Kerrigan unit available
-    if ctx.kerrigan_presence in kerrigan_unit_available and ctx.enable_hots_missions == EnableHotsMissions.option_true:
+    if ctx.kerrigan_presence in kerrigan_unit_available:
         options |= 1 << 0
 
     # Bit 2
