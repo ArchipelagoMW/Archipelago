@@ -237,6 +237,7 @@ class MessengerRules:
             "Tower of Time Seal - Time Waster": self.has_dart,
             # cloud ruins
             "Time Warp Mega Shard": lambda state: self.has_vertical(state) or self.can_dboost(state),
+            "Cloud Ruins Seal - Ghost Pit": self.has_vertical,  # nothing needed for hard
             "Cloud Ruins Seal - Toothbrush Alley": self.has_dart,  # nothing needed for hard
             "Cloud Ruins Seal - Saw Pit": self.has_vertical,  # nothing for hard
             # underworld
