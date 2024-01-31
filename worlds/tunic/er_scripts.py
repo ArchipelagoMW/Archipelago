@@ -203,9 +203,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 two_plus.append(portal)
 
+    # deal with plando connections here, and also universal tracker support
     if hasattr(world.multiworld, "re_gen_passthrough") and "TUNIC" in world.multiworld.re_gen_passthrough:
-        slot_connections = world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"]
-        for portal1, portal2 in slot_connections.items():
+        # universal tracker stuff, won't do anything in normal gen
+        for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
             portal_name1 = ""
             portal_name2 = ""
             for portal in portal_mapping:
@@ -221,8 +222,9 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     else:
         # awaiting generic connection plando support
         pass
-            
-    portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
+
+    if plando_connections:
+        portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
     
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
