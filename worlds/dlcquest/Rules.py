@@ -331,7 +331,7 @@ def self_lfod_coinsanity_funded_purchase_rules(world_options, player, world):
 
     add_rule(world.get_entrance("Boss Door", player),
              lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
-                                     math.ceil(889 / world_options.coinbundlequantity)))
+                                     math.ceil(200 / world_options.coinbundlequantity)))
 
     set_rule(world.get_location("Particles Pack", player),
              lambda state: state.has("Live Freemium or Die: Coin Bundle", player,
@@ -390,7 +390,7 @@ def set_lfod_self_funded_purchase_rules(world_options, has_enough_coin_freemium,
     if world_options.coinsanity != Options.CoinSanity.option_none:
         return
     add_rule(world.get_entrance("Boss Door", player),
-             has_enough_coin_freemium(player, 889))
+             has_enough_coin_freemium(player, 200))
 
     set_rule(world.get_location("Particles Pack", player),
              has_enough_coin_freemium(player, 5))
