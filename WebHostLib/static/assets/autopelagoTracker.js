@@ -125,7 +125,7 @@ class Payload {
 }
 
 const domParser = new DOMParser();
-const reloadTrackerDataInterval = 1000; // FOR NOW
+const reloadTrackerDataInterval = 60000;
 const loadTrackerData = async (url, dom) => {
     let completedGoal = false;
     try {
