@@ -42,7 +42,7 @@ item_table = {
     "Repel": ItemData(30, ItemClassification.filler, ["Consumables"]),
     "Old Amber": ItemData(31, ItemClassification.progression_skip_balancing, ["Unique", "Fossils", "Key Items"]),
     "Fire Stone": ItemData(32, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
-    "Thunder Stone": ItemData(33, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones" "Key Items"]),
+    "Thunder Stone": ItemData(33, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
     "Water Stone": ItemData(34, ItemClassification.progression_skip_balancing, ["Unique", "Evolution Stones", "Key Items"]),
     "HP Up": ItemData(35, ItemClassification.filler, ["Consumables", "Vitamins"]),
     "Protein": ItemData(36, ItemClassification.filler, ["Consumables", "Vitamins"]),
