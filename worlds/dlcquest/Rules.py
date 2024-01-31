@@ -73,21 +73,21 @@ def set_basic_shuffled_items_rules(world_options, player, world):
     if world_options.item_shuffle != Options.ItemShuffle.option_shuffled:
         return
     set_rule(world.get_entrance("Behind Ogre", player),
-             lambda state: state.has("Progressive Weapon Basic", player, 2))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player, 2))
     set_rule(world.get_entrance("Tree", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_entrance("Cave Tree", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_entrance("True Double Jump", player),
              lambda state: state.has("Double Jump Pack", player))
     set_rule(world.get_location("Shepherd Sheep", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_location("North West Ceiling Sheep", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_location("North West Alcove Sheep", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_location("West Cave Sheep", player),
-             lambda state: state.has("Progressive Weapon Basic", player))
+             lambda state: state.has("DLC Quest: Progressive Weapon", player))
     set_rule(world.get_location("Gun", player),
              lambda state: state.has("Gun Pack", player))
 
@@ -296,11 +296,11 @@ def set_lfod_shuffled_items_rules(world_options, player, world):
     if world_options.item_shuffle != Options.ItemShuffle.option_shuffled:
         return
     set_rule(world.get_entrance("Vines", player),
-             lambda state: state.has("Progressive Weapon LFOD", player))
+             lambda state: state.has("Live Freemium or Die: Progressive Weapon", player))
     set_rule(world.get_entrance("Behind Rocks", player),
-             lambda state: state.has("Progressive Weapon LFOD", player, 2))
+             lambda state: state.has("Live Freemium or Die: Progressive Weapon", player, 2))
     set_rule(world.get_entrance("Pickaxe Hard Cave", player),
-             lambda state: state.has("Progressive Weapon LFOD", player, 2))
+             lambda state: state.has("Live Freemium or Die: Progressive Weapon", player, 2))
 
     set_rule(world.get_location("Wooden Sword", player),
              lambda state: state.has("Incredibly Important Pack", player))
