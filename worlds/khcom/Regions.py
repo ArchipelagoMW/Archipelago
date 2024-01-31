@@ -166,6 +166,7 @@ def create_regions(multiworld: MultiWorld, player: int):
     regions["Floor 13"].locations.append("F13 Castle Oblivion Event (Characters I Marluxia)")            
     regions["Floor 13"].locations.append("F13 Castle Oblivion Post Floor (Story Castle Oblivion)")            
     regions["Floor 13"].locations.append("F13 Castle Oblivion Post Marluxia (Attack Cards Diamond Dust)")     
+    regions["Floor 13"].locations.append("Final Marluxia")
     
     regions["Heartless"].locations.append("Heartless Air Pirate")                                              
     regions["Heartless"].locations.append("Heartless Air Soldier")                                             

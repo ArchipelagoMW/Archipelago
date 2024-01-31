@@ -14,6 +14,8 @@ end
 
 function define_item_ids()
     item_ids = {}
+    item_ids["Victory"]                          = 2660000
+    
     item_ids["Bronze Card Pack"]                 = 2661001
     item_ids["Silver Card Pack"]                 = 2661002
     item_ids["Gold Card Pack"]                   = 2661003
@@ -362,6 +364,7 @@ function define_battle_cards()
     battle_cards["Marluxia"] = {0x231, 0x231}
     battle_cards["Lexaeus"] = {0x233, 0x233}
     battle_cards["Ansem"] = {0x234, 0x234}
+    battle_cards["Victory"] = {0x235, 0x235}
     return battle_cards
 end
 
@@ -821,13 +824,19 @@ end
 
 function update_world_assignments()
     i = 1
-    while i <= #floor_assignment_values do
+    while i <= #floor_assignment_values-1 do
         if get_stored_gold_cards("Key of Beginnings", i) < 1 then
             memory.writebyte(floor_assignment_addresses[i], 0x0A)
         else
             memory.writebyte(floor_assignment_addresses[i], floor_assignment_values[i])
         end
         i = i + 1
+    end
+    if all_friends_found() then
+        memory.writebyte(floor_assignment_addresses[13], floor_assignment_values[13])
+        add_gold_card("Key of Beginnings F13")
+    else
+        memory.writebyte(floor_assignment_addresses[13], 0x0A)
     end
 end
 
@@ -1020,6 +1029,18 @@ function check_journal()
     end
 end
 
+function check_final_marluxia()
+    if memory.read_s16_le(0x2031F50) == 0 and get_floor_number() == 13 then
+        if not file_exists(client_communication_path .. "send2679999") then
+            file = io.open(client_communication_path .. "send2679999", "w")
+            io.output(file)
+            io.write("")
+            io.close(file)
+        end
+    end
+    return false
+end
+
 function receive_items()
     number_of_items_received = 0
     while file_exists(client_communication_path .. "AP_" .. get_moogle_points() + 1 .. ".item") do
@@ -1065,6 +1086,10 @@ function receive_items()
         end
         if string.sub(received_item_name, -1) == "0" and not item_found then
             add_battle_card_specific_value(received_item_name:sub(1, -3), 0)
+            item_found = true
+        end
+        if received_item_name == "Victory" then
+            add_battle_card(received_item_name)
             item_found = true
         end
         for k,v in pairs(win_conditions) do
@@ -1170,19 +1195,25 @@ function is_used(card_value)
     return (card_value % 0x8000) >= 0x1000
 end
 
-function check_if_victorious()
+function all_friends_found()
+    local unique_friends = {}
+    for k,v in pairs(win_conditions) do
+        unique_friends[k] = 0
+    end
     local i = 0
     local battle_cards = get_battle_cards()
     for k,v in pairs(battle_cards) do
         for ik, iv in pairs(win_conditions) do
-            if v == iv then
+            if v == iv and unique_friends[ik] == 0 then
                 i = i + 1
+                unique_friends[ik] = 1
             end
         end
     end
     if i >= 7 then
-        send_victory()
+        return true
     end
+    return false
 end
 
 function update_floor_status()
@@ -1206,7 +1237,7 @@ end
 
 function update_post_floor_cutscene_valid()
     i = 2
-    while i < 13 do
+    while i <= 13 do
         if can_complete_floor(i) then
             x = memory.readbyte(floor_progress_addresses[i])
             x = bit.clear(x, 2)
@@ -1229,11 +1260,23 @@ function remove_premium_cards()
     end
 end
 
+function victorious()
+    local battle_cards = get_battle_cards()
+    for k,v in pairs(battle_cards) do
+        if v % 0x1000 == 0x0235 then
+            return true
+        end
+    end
+    return false
+end
+
 function send_victory()
-    file = io.open(client_communication_path .. "victory", "w")
-    io.output(file)
-    io.write("")
-    io.close(file)
+    if not file_exists(client_communication_path .. "victory") then
+        file = io.open(client_communication_path .. "victory", "w")
+        io.output(file)
+        io.write("")
+        io.close(file)
+    end
 end
 
 function main_loop(last_variables)
@@ -1263,11 +1306,14 @@ function main_loop(last_variables)
     end
     if frame % 180 == 0 and current_playtime > 3 then
         check_journal()
+        check_final_marluxia()
         last_deck_pointers = get_deck_pointers()
         receive_items()
         reassign_deck_pointers(last_deck_pointers)
         set_key_description_text()
-        check_if_victorious()
+        if victorious() then
+            send_victory()
+        end
         remove_premium_cards()
     end
     update_current_gold_card_qty(get_floor_number())

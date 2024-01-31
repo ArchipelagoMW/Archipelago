@@ -26,6 +26,8 @@ def get_items_by_category(category: str, disclude: list) -> Dict[str, KHCOMItemD
 
 
 item_table: Dict[str, KHCOMItemData] = {
+    "Victory":                           KHCOMItemData("Victory",        code = 266_0000, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
+    
     #Battle Cards
     "Bronze Card Pack":                  KHCOMItemData("Packs",          code = 266_1001, classification = ItemClassification.filler,                        weight = 500),
     "Silver Card Pack":                  KHCOMItemData("Packs",          code = 266_1002, classification = ItemClassification.filler,                        weight = 300),
@@ -246,7 +248,7 @@ item_table: Dict[str, KHCOMItemData] = {
     "World Card 100 Acre Wood":          KHCOMItemData("World Unlocks" , code = 266_3010, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "World Card Twilight Town":          KHCOMItemData("World Unlocks" , code = 266_3011, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "World Card Destiny Islands":        KHCOMItemData("World Unlocks" , code = 266_3012, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
-    "World Card Castle Oblivion":        KHCOMItemData("World Unlocks" , code = 266_3013, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
+   #"World Card Castle Oblivion":        KHCOMItemData("World Unlocks" , code = 266_3013, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Traverse Town":      KHCOMItemData("Gold Map Cards", code = 266_3301, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Key to Rewards Wonderland":         KHCOMItemData("Gold Map Cards", code = 266_3302, classification = ItemClassification.useful,      max_quantity = 1, weight = 1),
     "Key to Rewards Olympus Coliseum":   KHCOMItemData("Gold Map Cards", code = 266_3303, classification = ItemClassification.progression, max_quantity = 1, weight = 1),

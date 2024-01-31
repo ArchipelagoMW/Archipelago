@@ -49,6 +49,7 @@ class KHCOMWorld(World):
 
     def create_items(self):
         item_pool: List[KHCOMItem] = []
+        self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
         starting_locations = get_locations_by_category("Starting")
         starting_locations = random.sample(list(starting_locations.keys()),8)
         starting_worlds = get_items_by_category("World Unlocks", [])

@@ -190,6 +190,8 @@ location_table: Dict[str, KHCOMLocationData] = {
     "Heartless Wizard":                                                  KHCOMLocationData("Progression",  267_1429),
     "Heartless Wyvern":                                                  KHCOMLocationData("Progression",  267_1430),
     "Heartless Yellow Opera":                                            KHCOMLocationData("Progression",  267_1431),
+    
+    "Final Marluxia":                                                    KHCOMLocationData("Progression",  267_9999),
 }
 
 event_location_table: Dict[str, KHCOMLocationData] = {

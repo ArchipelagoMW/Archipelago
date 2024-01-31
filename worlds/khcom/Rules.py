@@ -34,8 +34,6 @@ def has_x_worlds(state: CollectionState, player: int, num_of_worlds) -> bool:
         locations = locations + 1
     if has_item(state, player,"World Card Destiny Islands"):
         locations = locations + 1
-    if has_item(state, player,"World Card Castle Oblivion"):
-        locations = locations + 1
     if locations > num_of_worlds:
         return True
     return False
@@ -89,9 +87,7 @@ def set_rules(multiworld: MultiWorld, player: int):
     multiworld.get_entrance("Floor 10"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card 100 Acre Wood")
     multiworld.get_entrance("Floor 11"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Twilight Town") and has_x_worlds(state, player, 5)
     multiworld.get_entrance("Floor 12"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Destiny Islands") and has_x_worlds(state, player, 7)
-    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: has_item(state, player,"World Card Castle Oblivion") and has_x_worlds(state, player, 9)
-    
-    
+    multiworld.get_entrance("Floor 13"                                                           , player).access_rule = lambda state: state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel", "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan"}, player) and has_x_worlds(state, player, 9)
     
     # Win condition.
-    multiworld.completion_condition[player] = lambda state: state.has_all({"Friend Card Donald", "Friend Card Goofy", "Friend Card Aladdin", "Friend Card Ariel", "Friend Card Beast", "Friend Card Jack", "Friend Card Peter Pan"}, player)
+    multiworld.completion_condition[player] = lambda state: state.has_all({"Victory"}, player)
