@@ -60,16 +60,16 @@ class TunicWorld(World):
 
     def generate_early(self) -> None:
         # Universal tracker stuff, shouldn't do anything in standard gen
-        if hasattr(self.multiworld,"re_gen_passthrough"):
+        if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
                 passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
                 self.options.start_with_sword.value = passthrough["start_with_sword"]
                 self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
                 self.options.sword_progression.value = passthrough["sword_progression"]
                 self.options.ability_shuffling.value = passthrough["ability_shuffling"]
-                self.options.logic_rules.value = passthrough["logic_rules"],
-                self.options.lanternless.value = passthrough["lanternless"],
-                self.options.maskless.value = passthrough["maskless"],
+                self.options.logic_rules.value = passthrough["logic_rules"]
+                self.options.lanternless.value = passthrough["lanternless"]
+                self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
             
         if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
@@ -165,12 +165,12 @@ class TunicWorld(World):
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
         
         # stuff for universal tracker support, can be ignored for standard gen
-        if hasattr(self.multiworld,"re_gen_passthrough"):
+        if hasattr(self.multiworld, "re_gen_passthrough"):
             if "TUNIC" in self.multiworld.re_gen_passthrough:
                 passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
-                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Pages 24-25 (Prayer)"]
-                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Pages 42-43 (Holy Cross)"]
-                self.ability_unlocks["Pages 52-53 (Ice Rod)"] = passthrough["Pages 52-53 (Ice Rod)"]
+                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
+                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
+                self.ability_unlocks["Pages 52-53 (Ice Rod)"] = passthrough["Hexagon Quest Ice Rod"]
             
         if self.options.entrance_rando:
             portal_pairs, portal_hints = create_er_regions(self)
@@ -261,7 +261,7 @@ class TunicWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
+    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> Dict[str, Any]:
         # swapping entrances around so the mapping matches what was generated
         if slot_data["entrance_rando"]:
             from BaseClasses import Entrance
