@@ -75,7 +75,20 @@ class Payload {
     }
 
     get rat_count() {
-        return this.inventory['Normal Rat'] + (this.inventory['Entire Rat Pack'] * 5);
+        return 0 +
+            this.inventory['Normal Rat'] +
+            this.inventory['Pack Rat'] +
+            this.inventory['Pizza Rat'] +
+            this.inventory['Chef Rat'] +
+            this.inventory['Ninja Rat'] +
+            this.inventory['Gym Rat'] +
+            this.inventory['Computer Rat'] +
+            this.inventory['Pie Rat'] +
+            this.inventory['Ziggu Rat'] +
+            this.inventory['Acro Rat'] +
+            this.inventory['Lab Rat'] +
+            this.inventory['Soc-Rat-es'] +
+            (this.inventory['Entire Rat Pack'] * 5);
     }
 
     markFoundIf(prop, classNameSuffix) {
