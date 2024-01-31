@@ -203,21 +203,32 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 two_plus.append(portal)
 
+    connected_regions: Set[str] = set()
+    # make better start region stuff when/if implementing random start
+    start_region = "Overworld"
+    connected_regions.update(add_dependent_regions(start_region, logic_rules))
+
     # deal with plando connections here, and also universal tracker support
     if hasattr(world.multiworld, "re_gen_passthrough") and "TUNIC" in world.multiworld.re_gen_passthrough:
         # universal tracker stuff, won't do anything in normal gen
         for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
             portal_name1 = ""
             portal_name2 = ""
+
+            # skip this if 10 fairies laurels location is on, it can be handled normally
+            if portal1 == "Overworld Redux, Waterfall_" and portal2 == "Waterfall, Overworld Redux_" and world.options.laurels_location == "10_fairies":
+                continue
+            
             for portal in portal_mapping:
                 if portal.scene_destination() == portal1:
                     portal_name1 = portal.name
-                    print(portal.name)
+                    connected_regions.update(add_dependent_regions(portal.region, logic_rules))
                 if portal.scene_destination() == portal2:
                     portal_name2 = portal.name
-                    print(portal.name)
-            if not portal_name1 or not portal_name2:
-                print("one or both portal names messed up")
+                    connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+            # shops have special handling
+            if not portal_name2 and portal2 == "Shop, Previous Region_":
+                portal_name2 = "Shop Portal"
             plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
     else:
         # awaiting generic connection plando support
@@ -226,11 +237,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     if plando_connections:
         portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
     
-    connected_regions: Set[str] = set()
-    # make better start region stuff when/if implementing random start
-    start_region = "Overworld"
-    connected_regions.update(add_dependent_regions(start_region, logic_rules))
-
     # need to plando fairy cave, or it could end up laurels locked
     # fix this later to be random? probably not?
     if world.options.laurels_location == "10_fairies":
@@ -314,6 +320,10 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         shop_count = 1
         shop_scenes.add("Overworld Redux")
 
+    # for universal tracker, we want to skip shop gen
+    if hasattr(world.multiworld, "re_gen_passthrough") and "TUNIC" in world.multiworld.re_gen_passthrough:
+        shop_count = 0
+    
     for i in range(shop_count):
         portal1 = None
         for portal in two_plus:
@@ -484,6 +494,7 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 # this is for making the connections themselves
 def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal], two_plus: List[Portal]) -> Tuple[Dict[Portal, Portal], List[Portal], List[Portal]]:
     portal_pairs: Dict[Portal, Portal] = {}
+    shop_num = 1
     for connection in plando_connections:
         entrance = connection.entrance
         exit = connection.exit
@@ -513,7 +524,11 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
                 if exit == portal.name:
                     portal2 = portal
                     break
-            dead_ends.remove(portal2)
+            if exit == "Shop Portal":
+                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region_")
+                shop_num += 1
+            else:
+                dead_ends.remove(portal2)
         else:
             two_plus.remove(portal2)
 
@@ -524,4 +539,3 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
         portal_pairs[portal1] = portal2
             
     return (portal_pairs, dead_ends, two_plus)
-
