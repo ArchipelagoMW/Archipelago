@@ -523,5 +523,5 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
 
         portal_pairs[portal1] = portal2
             
-    return (portal_pairs, dead_ends, two_plus)
+    return tuple(portal_pairs, dead_ends, two_plus)
 
