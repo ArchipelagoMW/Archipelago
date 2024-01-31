@@ -185,7 +185,7 @@ subclass of `CommonContext`. It additionally includes `slot_data` (if you are co
 
 ### Example
 
-A very simple client might look like this. All addresses here are made up; you should obviously be using addresses that
+A very simple client might look like this. All addresses here are made up; you should instead be using addresses that
 make sense for your specific ROM. The `validate_rom` here tries to read the name of the ROM. If it gets the value it
 wanted, it sets a couple values on `ctx` and returns `True`. The `game_watcher` reads some data from memory and acts on
 it by sending messages to AP. You should be smarter than this example, which will send `LocationChecks` messages even if
@@ -259,10 +259,10 @@ your `client.py` elsewhere, but you still have to import the file for your clien
   1. If you need to execute multiple commands on the same frame, do as little work as possible. Only read and write necessary data,
   and if you have to use locks, unlock as soon as it's okay to advance frames. This is probably the obvious one.
   2. Multiple things that don't have to happen on the same frame should be split up if they're likely to be slow.
-  Remember, the game watcher runs fewer times per second than you can count on your hands. Extra function calls on the
-  client aren't that big of a deal; the player will not notice if your `game_watcher` is slow. But the emulator has to
-  be done with any given set of commands in 1/60th of a second to avoid hiccups (faster still if your players use
-  speedup). Bundling multiple reads together is likelier to cause a worse user experience.
+  Remember, the game watcher runs only a few times per second. Extra function calls on the client aren't that big of a
+  deal; the player will not notice if your `game_watcher` is slow. But the emulator has to be done with any given set of
+  commands in 1/60th of a second to avoid hiccups (faster still if your players use speedup). Too many reads of too much
+  data at the same time is more likely to cause a bad user experience.
 - Your `game_watcher` will be called regardless of the status of the client's connection to the server. Double-check the
 server connection before trying to interact with it.
 - By default, the player will be asked to provide their slot name after connecting to the server and validating, and
@@ -276,4 +276,4 @@ the top of the file will probably cause a circular dependency.
 currently loaded (it's the best we can do). Some cores may differ in the names of memory domains. It's good to check all
 the available cores to find differences before your users do.
 - The connector script includes a DEBUG variable that you can use to log requests/responses. (Be aware that as the log
-grows in size in BizHawk it begins to stutter while trying to print it.)
+grows in size in BizHawk, it begins to stutter while trying to print it.)
