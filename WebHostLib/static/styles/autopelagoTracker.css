@@ -12,27 +12,40 @@ body {
 
 .page-container {
     margin: 8px;
+
+    display: grid;
+    grid-template-rows: min-content min-content 1fr;
+    grid-template-columns: 1fr 4fr;
 }
 
 .generic-tracker-link {
     margin-bottom: 0.5rem;
-}
 
-.tracker-container {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
+    grid-row: 1;
+    grid-column: 1 / span 2;
 }
 
 .rats-and-auras-container {
+    grid-row: 2;
+    grid-column: 1;
+
     display: grid;
     grid-template-columns: minmax(128px, 1.05fr) 1fr; /* thought: shrink the images based on @media? seems overkill... */
 }
 
 .received-items-container {
+    grid-row: 3;
+    grid-column: 1;
+    
     display: flex;
     flex-flow: row wrap;
     justify-content: start;
     align-content: start;
+}
+
+.world-maps-container {
+    grid-row: 1 / span 3;
+    grid-column: 2;
 }
 
 .rats-container {
