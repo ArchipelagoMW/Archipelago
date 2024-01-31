@@ -172,6 +172,9 @@ html {
   display: inline-block;
   font-size: 1.3rem;
 }
+#weighted-options .unsupported-option {
+  margin-top: 0.5rem;
+}
 #weighted-options .world-container .options-container {
   display: none;
   flex-direction: column;
@@ -180,6 +183,22 @@ html {
   margin-left: 0.5rem;
   display: none;
   flex-direction: column;
+}
+#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 0.5rem;
+}
+#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper button {
+  width: auto;
+  height: auto;
+  padding: 0 0.25rem;
+  margin-left: 0.15rem;
+  border-radius: 4px;
+  cursor: default;
+}
+#weighted-options .world-container .options-container .options-wrapper .custom-value-wrapper button:active {
+  margin-bottom: 1px;
 }
 #weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) .options-container {
   display: flex;
@@ -193,7 +212,7 @@ html {
 #weighted-options .world-container:has(h2.world-name):has(input[type=checkbox].collapse-toggle:checked) span.world-collapse-arrow {
   transform: rotate(90deg);
 }
-#weighted-options .set-container {
+#weighted-options .set-container, #weighted-options .dict-container, #weighted-options .list-container {
   display: flex;
   flex-direction: column;
   background-color: rgba(0, 0, 0, 0.25);
@@ -206,14 +225,14 @@ html {
   padding-right: 0.25rem;
   padding-left: 0.25rem;
 }
-#weighted-options .set-container .set-divider {
+#weighted-options .set-container .divider, #weighted-options .dict-container .divider, #weighted-options .list-container .divider {
   width: 100%;
   height: 2px;
   background-color: rgba(20, 20, 20, 0.25);
   margin-top: 0.125rem;
   margin-bottom: 0.125rem;
 }
-#weighted-options .set-container .set-entry {
+#weighted-options .set-container .set-entry, #weighted-options .set-container .dict-entry, #weighted-options .set-container .list-entry, #weighted-options .dict-container .set-entry, #weighted-options .dict-container .dict-entry, #weighted-options .dict-container .list-entry, #weighted-options .list-container .set-entry, #weighted-options .list-container .dict-entry, #weighted-options .list-container .list-entry {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -222,13 +241,13 @@ html {
   user-select: none;
   line-height: 1rem;
 }
-#weighted-options .set-container .set-entry:hover {
+#weighted-options .set-container .set-entry:hover, #weighted-options .set-container .dict-entry:hover, #weighted-options .set-container .list-entry:hover, #weighted-options .dict-container .set-entry:hover, #weighted-options .dict-container .dict-entry:hover, #weighted-options .dict-container .list-entry:hover, #weighted-options .list-container .set-entry:hover, #weighted-options .list-container .dict-entry:hover, #weighted-options .list-container .list-entry:hover {
   background-color: rgba(20, 20, 20, 0.25);
 }
-#weighted-options .set-container .set-entry input[type=checkbox] {
+#weighted-options .set-container .set-entry input[type=checkbox], #weighted-options .set-container .dict-entry input[type=checkbox], #weighted-options .set-container .list-entry input[type=checkbox], #weighted-options .dict-container .set-entry input[type=checkbox], #weighted-options .dict-container .dict-entry input[type=checkbox], #weighted-options .dict-container .list-entry input[type=checkbox], #weighted-options .list-container .set-entry input[type=checkbox], #weighted-options .list-container .dict-entry input[type=checkbox], #weighted-options .list-container .list-entry input[type=checkbox] {
   margin-right: 0.25rem;
 }
-#weighted-options .set-container .set-entry input[type=number] {
+#weighted-options .set-container .set-entry input[type=number], #weighted-options .set-container .dict-entry input[type=number], #weighted-options .set-container .list-entry input[type=number], #weighted-options .dict-container .set-entry input[type=number], #weighted-options .dict-container .dict-entry input[type=number], #weighted-options .dict-container .list-entry input[type=number], #weighted-options .list-container .set-entry input[type=number], #weighted-options .list-container .dict-entry input[type=number], #weighted-options .list-container .list-entry input[type=number] {
   max-width: 1.5rem;
   max-height: 1rem;
   margin-left: 0.125rem;
@@ -236,11 +255,11 @@ html {
   /* Hide arrows on input[type=number] fields */
   -moz-appearance: textfield;
 }
-#weighted-options .set-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .set-entry input[type=number]::-webkit-inner-spin-button {
+#weighted-options .set-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .set-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .set-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .set-container .list-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .dict-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .dict-container .list-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .set-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .set-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .dict-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .dict-entry input[type=number]::-webkit-inner-spin-button, #weighted-options .list-container .list-entry input[type=number]::-webkit-outer-spin-button, #weighted-options .list-container .list-entry input[type=number]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-#weighted-options .set-container .set-entry label {
+#weighted-options .set-container .set-entry label, #weighted-options .set-container .dict-entry label, #weighted-options .set-container .list-entry label, #weighted-options .dict-container .set-entry label, #weighted-options .dict-container .dict-entry label, #weighted-options .dict-container .list-entry label, #weighted-options .list-container .set-entry label, #weighted-options .list-container .dict-entry label, #weighted-options .list-container .list-entry label {
   flex-grow: 1;
   margin-right: 0;
   min-width: unset;

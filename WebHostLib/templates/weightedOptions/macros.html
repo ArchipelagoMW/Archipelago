@@ -64,11 +64,38 @@
 {% endmacro %}
 
 {% macro FreeText(world_name, option_name, option) %}
-
+    <div class="hint-text">
+        This option allows custom values only. Please enter your desired values below.
+        <div class="custom-value-wrapper">
+            <input class="custom-value" data-option="{{ world_name }}-{{ option_name }}" placeholder="Custom Value" />
+            <button data-option="{{ world_name }}-{{ option_name }}">Add</button>
+        </div>
+        <table>
+            <tbody>
+                <!-- This table to be filled by JS -->
+            </tbody>
+        </table>
+    </div>
 {% endmacro %}
 
 {% macro TextChoice(world_name, option_name, option) %}
-
+    <div class="hint-text">
+        Custom values are also allowed for this option. To create one, enter it into the input box below.
+        <div class="custom-value-wrapper">
+            <input class="custom-value" data-option="{{ world_name }}-{{ option_name }}" placeholder="Custom Value" />
+            <button data-option="{{ world_name }}-{{ option_name }}">Add</button>
+        </div>
+    </div>
+    <table>
+        <tbody>
+            {% for id, name in option.name_lookup.items() %}
+                {% if name != 'random' %}
+                    {{ RangeRow(world_name, option_name, option, option.get_option_name(id), name) }}
+                {% endif %}
+            {% endfor %}
+            {{ RandomRows(world_name, option_name, option) }}
+        </tbody>
+    </table>
 {% endmacro %}
 
 {% macro PlandoBosses(world_name, option_name, option) %}
@@ -77,11 +104,37 @@
 {% endmacro %}
 
 {% macro ItemDict(world_name, option_name, option, world) %}
-
+    <div class="dict-container">
+        {% for item_name in world.item_names|sort %}
+            <div class="dict-entry">
+                <label for="{{ world_name }}-{{ option_name }}-{{ item_name }}-qty">{{ item_name }}</label>
+                <input
+                    type="number"
+                    id="{{ world_name }}-{{ option_name }}-{{ item_name }}-qty"
+                    name="{{ world_name }}-{{ option_name }}-{{ item_name }}-qty"
+                    value="0"
+                />
+            </div>
+        {% endfor %}
+    </div>
 {% endmacro %}
 
 {% macro OptionList(world_name, option_name, option) %}
-
+    <div class="list-container">
+        {% for key in option.valid_keys|sort %}
+            <div class="list-entry">
+                <input
+                    type="checkbox"
+                    id="{{ world_name }}-{{ option_name }}-{{ key }}"
+                    name="{{ world_name }}-{{ option_name }}-{{ key }}"
+                    value="1"
+                />
+                <label for="{{ world_name }}-{{ option_name }}-{{ key }}">
+                    {{ key }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
 {% endmacro %}
 
 {% macro LocationSet(world_name, option_name, option, world) %}
@@ -95,7 +148,7 @@
             {% endif %}
         {% endfor %}
         {% if world.location_name_groups.keys()|length > 1 %}
-            <div class="set-divider">&nbsp;</div>
+            <div class="divider">&nbsp;</div>
         {% endif %}
         {% for location_name in world.location_names|sort %}
             <div class="set-entry">

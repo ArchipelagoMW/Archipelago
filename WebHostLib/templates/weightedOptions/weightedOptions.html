@@ -130,6 +130,11 @@
                                             {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
                                                 {{ inputs.OptionSet(world_name, option_name, option) }}
 
+                                            {% else %}
+                                                <div class="unsupported-option">
+                                                    This option is not supported. Please edit your .yaml file manually.
+                                                </div>
+
                                             {% endif %}
                                         </div>
                                     {% endfor %}
