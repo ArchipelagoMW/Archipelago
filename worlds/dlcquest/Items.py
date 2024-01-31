@@ -144,7 +144,7 @@ def create_items_basic(world_options, created_items, world):
 
 def create_coin(world_options, created_items, world, total_coin, required_coin, group):
     coin_bundle_required = math.ceil(required_coin / world_options.coinbundlequantity)
-    coin_bundle_useful = math.ceil((total_coin - required_coin) / world_options.coinbundlequantity)
+    coin_bundle_useful = math.ceil((total_coin - coin_bundle_required * world_options.coinbundlequantity) / world_options.coinbundlequantity)
     for item in items_by_group[group]:
         if item.has_any_group(Group.Coin):
             for i in range(coin_bundle_required):
