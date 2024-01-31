@@ -7,59 +7,50 @@ class Payload {
         }
 
         switch (currentRegion) {
-            case 'Before8Rats':
+            case 'BeforeBasketball':
                 return ['before-basketball'];
 
-            case 'Gate8Rats':
+            case 'Basketball':
                 return ['checked-basketball'];
 
-            case 'After8RatsBeforeA':
+            case 'BeforeMinotaur':
                 return ['before-minotaur-maze'];
 
-            case 'After8RatsBeforeB':
-                return ['before-restaurant'];
-
-            case 'A':
-                return ['checked-minotaur-maze'];
-
-            case 'B':
-                return ['checked-restaurant'];
-
-            case 'AfterABeforeC':
+            case 'BeforePrawnStars':
                 return ['before-prawn-stars'];
 
-            case 'AfterBBeforeD':
-                return ['before-heavy-boulder'];
+            case 'Minotaur':
+                return ['checked-minotaur-maze'];
 
-            case 'C':
+            case 'PrawnStars':
                 return ['checked-prawn-stars'];
 
-            case 'D':
-                return ['checked-heavy-boulder'];
+            case 'BeforeRestaurant':
+                return ['before-restaurant'];
 
-            case 'AfterCBefore20Rats':
-                return ['before-bowling-ball-door', 'after-prawn-stars'];
+            case 'BeforePirateBakeSale':
+                return ['before-pirate-bake-sale'];
 
-            case 'AfterDBefore20Rats':
-                return ['before-bowling-ball-door', 'after-heavy-boulder'];
+            case 'Restaurant':
+                return ['checked-restaurant'];
 
-            case 'Gate20Rats':
+            case 'PirateBakeSale':
+                return ['checked-pirate-bake-sale'];
+
+            case 'AfterRestaurant':
+                return ['after-restaurant'];
+
+            case 'AfterPirateBakeSale':
+                return ['after-pirate-bake-sale'];
+
+            case 'BowlingBallDoor':
                 return ['checked-bowling-ball-door'];
 
-            case 'After20RatsBeforeE':
+            case 'BeforeGoldfish':
                 return ['before-captured-goldfish'];
 
-            case 'After20RatsBeforeF':
-                return ['before-computer-pad'];
-
-            case 'E':
+            case 'Goldfish':
                 return ['checked-captured-goldfish'];
-
-            case 'F':
-                return ['checked-computer-pad'];
-
-            case 'TryingForGoal':
-                return ['checked-goal'];
 
             default:
                 return [];
@@ -160,36 +151,29 @@ const loadTrackerData = async (url, dom) => {
         parsed.markFoundIf(x => x.inventory['Premium Can of Prawn Food'], 'premium-can-of-prawn-food');
 
         const checked_locations = new Set(parsed.checked_locations);
-        parsed.markCheckedIf(() => checked_locations.has('g8r'), 'basketball');
-        parsed.markCheckedIf(() => checked_locations.has('a'), 'minotaur-maze');
-        parsed.markCheckedIf(() => checked_locations.has('b'), 'restaurant');
-        parsed.markCheckedIf(() => checked_locations.has('c'), 'prawn-stars');
-        parsed.markCheckedIf(() => checked_locations.has('d'), 'heavy-boulder');
-        parsed.markCheckedIf(() => checked_locations.has('g20r'), 'bowling-ball-door');
-        parsed.markCheckedIf(() => checked_locations.has('e'), 'captured-goldfish');
-        parsed.markCheckedIf(() => checked_locations.has('f'), 'computer-pad');
-        parsed.markCheckedIf(() => checked_locations.has('goal'), 'goal');
+        parsed.markCheckedIf(() => checked_locations.has('basketball'), 'basketball');
+        parsed.markCheckedIf(() => checked_locations.has('minotaur'), 'minotaur-maze');
+        parsed.markCheckedIf(() => checked_locations.has('prawn stars'), 'prawn-stars');
+        parsed.markCheckedIf(() => checked_locations.has('restaurant'), 'restaurant');
+        parsed.markCheckedIf(() => checked_locations.has('pirate bake sale'), 'pirate-baked-sale');
+        parsed.markCheckedIf(() => checked_locations.has('bowling ball door'), 'bowling-ball-door');
+        parsed.markCheckedIf(() => checked_locations.has('goal'), 'captured-goldfish');
 
-        parsed.markLocationOpenIf(x => x.rat_count >= 8, 'basketball');
-        parsed.markLocationOpenIf(x => checked_locations.has('g8r') && x.inventory['A Cookie'] > 0, 'minotaur-maze');
-        parsed.markLocationOpenIf(x => checked_locations.has('g8r') && x.inventory['Fresh Banana Peel'] > 0, 'restaurant');
-        parsed.markLocationOpenIf(x => checked_locations.has('a') && x.inventory['MacGuffin'] > 0, 'prawn-stars');
-        parsed.markLocationOpenIf(x => checked_locations.has('b') && x.inventory['Blue Turtle Shell'] > 0, 'heavy-boulder');
-        parsed.markLocationOpenIf(x => x.rat_count >= 20 && (checked_locations.has('c') || checked_locations.has('d')), 'bowling-ball-door');
-        parsed.markLocationOpenIf(x => checked_locations.has('g20r') && x.inventory['Red Matador\'s Cape'] > 0, 'captured-goldfish');
-        parsed.markLocationOpenIf(x => checked_locations.has('g20r') && x.inventory['Pair of Fake Mouse Ears'] > 0, 'computer-pad');
-        parsed.markLocationOpenIf(() => checked_locations.has('e') || checked_locations.has('f'), 'goal');
+        parsed.markLocationOpenIf(x => x.rat_count >= 5, 'basketball');
+        parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Red Matador\'s Cape'] > 0, 'minotaur-maze');
+        parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Premium Can of Prawn Food'] > 0, 'prawn-stars');
+        parsed.markLocationOpenIf(x => checked_locations.has('minotaur-maze') && x.inventory['A Cookie'] > 0, 'restaurant');
+        parsed.markLocationOpenIf(x => checked_locations.has('prawn-stars') && x.inventory['Bribe'] > 0, 'pirate-bake-sale');
+        parsed.markLocationOpenIf(x => x.rat_count >= 20 && (checked_locations.has('restaurant') || checked_locations.has('pirate-bake-sale')), 'bowling-ball-door');
+        parsed.markLocationOpenIf(x => checked_locations.has('bowling-ball-door') && x.inventory['Masterful Longsword'] > 0, 'captured-goldfish');
 
-        parsed.markPathOpenIf(x => checked_locations.has('g8r'), 'minotaur-maze');
-        parsed.markPathOpenIf(x => checked_locations.has('g8r'), 'restaurant');
-        parsed.markPathOpenIf(x => checked_locations.has('a'), 'prawn-stars');
-        parsed.markPathOpenIf(x => checked_locations.has('b'), 'heavy-boulder');
-        parsed.markPathOpenIf(x => checked_locations.has('c'), 'bowling-ball-door after-prawn-stars');
-        parsed.markPathOpenIf(x => checked_locations.has('d'), 'bowling-ball-door after-heavy-boulder');
-        parsed.markPathOpenIf(x => checked_locations.has('g20r'), 'captured-goldfish');
-        parsed.markPathOpenIf(x => checked_locations.has('g20r'), 'computer-pad');
-        parsed.markPathOpenIf(x => checked_locations.has('e'), 'goal after-captured-goldfish');
-        parsed.markPathOpenIf(x => checked_locations.has('f'), 'goal after-computer-pad');
+        parsed.markPathOpenIf(x => checked_locations.has('basketball'), 'minotaur-maze');
+        parsed.markPathOpenIf(x => checked_locations.has('basketball'), 'prawn-stars');
+        parsed.markPathOpenIf(x => checked_locations.has('minotaur'), 'restaurant');
+        parsed.markPathOpenIf(x => checked_locations.has('prawn-stars'), 'pirate-bake-sale');
+        parsed.markPathOpenIf(x => checked_locations.has('restaurant'), 'bowling-ball-door after-restaurant');
+        parsed.markPathOpenIf(x => checked_locations.has('pirate-bake-sale'), 'bowling-ball-door after-pirate-bake-sale');
+        parsed.markPathOpenIf(x => checked_locations.has('bowling-ball-door'), 'captured-goldfish');
 
         const { stepInterval } = parsed.aura_modifiers;
         for (const container of document.getElementsByClassName('movement-speed-text')) {
