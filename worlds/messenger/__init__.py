@@ -198,6 +198,7 @@ class MessengerWorld(World):
         add_closed_portal_reqs(self)
         # i need ER to happen after rules exist so i can validate it
         if self.options.shuffle_portals:
+            self.__class__.topology_present = True
             disconnect_portals(self)
             shuffle_portals(self)
 
@@ -224,7 +225,7 @@ class MessengerWorld(World):
             dump(data, f)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
         slot_data = {
             "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
