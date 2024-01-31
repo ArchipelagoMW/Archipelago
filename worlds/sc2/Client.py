@@ -21,16 +21,13 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import (MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
-                                GameSpeed,
-                                GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
-                                LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations,
-                                VanillaLocations,
-                                DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics,
-                                SpearOfAdunPresence,
-                                SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
-                                SpearOfAdunAutonomouslyCastPresentInNoBuild, EnableHotsMissions
-                                )
+from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, \
+    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, \
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
+    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
+    SpearOfAdunAutonomouslyCastPresentInNoBuild
+
 
 if __name__ == "__main__":
     init_logging("SC2Client", exception_logger="Client")
