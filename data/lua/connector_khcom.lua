@@ -1030,7 +1030,7 @@ function check_journal()
 end
 
 function check_final_marluxia()
-    if memory.read_s16_le(0x2031F50) == 0 and get_floor_number() == 13 then
+    if memory.read_s16_le(0x2031F50) == 0 and memory.read_s16_le(0x2031F52) == 2237 and get_floor_number() == 13 then
         if not file_exists(client_communication_path .. "send2679999") then
             file = io.open(client_communication_path .. "send2679999", "w")
             io.output(file)
