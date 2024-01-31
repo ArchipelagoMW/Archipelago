@@ -160,7 +160,7 @@ class AutopelagoWorld(World):
         _connect(AutopelagoRegion.AfterRestaurant, AutopelagoRegion.BowlingBallDoor)
         _connect(AutopelagoRegion.AfterPirateBakeSale, AutopelagoRegion.BowlingBallDoor)
         _connect(AutopelagoRegion.BowlingBallDoor, AutopelagoRegion.BeforeGoldfish, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.BeforeGoldfish, AutopelagoRegion.Goldfish)
+        _connect(AutopelagoRegion.BeforeGoldfish, AutopelagoRegion.Goldfish, lambda state: state.has('Masterful Longsword', self.player))
 
         self.multiworld.get_location("goldfish", self.player).place_locked_item(self.create_item(goal_item_name))
         self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item_name, self.player)
