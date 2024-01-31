@@ -155,9 +155,9 @@ const loadTrackerData = async (url, dom) => {
         parsed.markCheckedIf(() => checked_locations.has('minotaur'), 'minotaur');
         parsed.markCheckedIf(() => checked_locations.has('prawn stars'), 'prawn-stars');
         parsed.markCheckedIf(() => checked_locations.has('restaurant'), 'restaurant');
-        parsed.markCheckedIf(() => checked_locations.has('pirate bake sale'), 'pirate-baked-sale');
+        parsed.markCheckedIf(() => checked_locations.has('pirate bake sale'), 'pirate-bake-sale');
         parsed.markCheckedIf(() => checked_locations.has('bowling ball door'), 'bowling-ball-door');
-        parsed.markCheckedIf(() => checked_locations.has('goal'), 'captured-goldfish');
+        parsed.markCheckedIf(() => checked_locations.has('goldfish'), 'captured-goldfish');
 
         parsed.markLocationOpenIf(x => x.rat_count >= 5, 'basketball');
         parsed.markLocationOpenIf(x => checked_locations.has('basketball') && x.inventory['Red Matador\'s Cape'] > 0, 'minotaur');
@@ -180,7 +180,15 @@ const loadTrackerData = async (url, dom) => {
             container.textContent = `${1 / stepInterval}x`;
         }
 
-        if (!(completedGoal = parsed.completed_goal)) {
+        if (completedGoal = parsed.completed_goal) {
+            for (const container of document.getElementsByClassName('current-region')) {
+                container.classList.remove('current-region');
+            }
+
+            for (const container of document.getElementsByClassName('checked-captured-goldfish')) {
+                container.classList.add('current-region');
+            }
+        } else {
             const currentRegionClasses = parsed.current_region_classes;
             let needsChange = false;
             for (const container of document.getElementsByClassName('current-region')) {
