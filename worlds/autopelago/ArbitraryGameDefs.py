@@ -86,7 +86,7 @@ rat_item_count_skip_balancing = 10
 
 total_item_count = sum(location_count for location_count in num_locations_in.values())
 
-prog_item_count = key_item_count + rat_item_count_for_balancing + rat_item_count_skip_balancing
+prog_item_count = key_item_count + rat_item_count_for_balancing + rat_item_count_skip_balancing + 1
 del key_item_count
 even_split_item_count = (total_item_count - prog_item_count) // 3
 
