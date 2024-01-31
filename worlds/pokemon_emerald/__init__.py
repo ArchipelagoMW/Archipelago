@@ -88,6 +88,7 @@ class PokemonEmeraldWorld(World):
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     free_fly_location_id: int
     blacklisted_moves: Set[int]
+    auth: bytes
 
     modified_species: List[Optional[SpeciesData]]
     modified_maps: Dict[str, MapData]
@@ -310,6 +311,9 @@ class PokemonEmeraldWorld(World):
         set_rules(self)
 
     def generate_basic(self) -> None:
+        # Create auth
+        self.auth = self.random.randbytes(16)
+
         # Randomize wild encounters
         # Must be done here for Wailord/Relicanth, and eventually for dexsanity
         if self.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
@@ -1032,6 +1036,10 @@ class PokemonEmeraldWorld(World):
             randomize_starters()
 
         generate_output(self, output_directory)
+
+    def modify_multidata(self, multidata: Dict[str, Any]):
+        import base64
+        multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = self.options.as_dict(

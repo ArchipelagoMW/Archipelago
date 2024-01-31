@@ -123,7 +123,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     if world.options.free_fly_location:
         _set_bytes_little_endian(
             patched_rom,
-            data.rom_addresses["gArchipelagoOptions"] + 0x16,
+            data.rom_addresses["gArchipelagoOptions"] + 0x20,
             1,
             world.free_fly_location_id
         )
@@ -297,112 +297,112 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Options
     # struct ArchipelagoOptions
     # {
-    #     /* 0x00 */ bool8 advanceTextWithHoldA;
-    #     /* 0x01 */ u8 terraCaveLocationId:4;
+    #     /* 0x00 */ u16 birchPokemon;
+    #     /* 0x02 */ bool8 advanceTextWithHoldA;
+    #     /* 0x03 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
+    #     /* 0x04 */ bool8 betterShopsEnabled;
+    #     /* 0x05 */ bool8 reusableTms;
+    #     /* 0x06 */ bool8 guaranteedCatch;
+    #     /* 0x07 */ bool8 nerfSpinners;
+    #     /* 0x08 */ bool8 areTrainersBlind;
+    #     /* 0x09 */ u16 expMultiplierNumerator;
+    #     /* 0x0B */ u16 expMultiplierDenominator;
+    #     /* 0x0D */ bool8 matchTrainerLevels;
+    #     /* 0x0E */ s8 matchTrainerLevelBonus;
+    #     /* 0x0F */ bool8 eliteFourRequiresGyms;
+    #     /* 0x10 */ u8 eliteFourRequiredCount;
+    #     /* 0x11 */ bool8 normanRequiresGyms;
+    #     /* 0x12 */ u8 normanRequiredCount;
+    #     /* 0x13 */ u8 startingBadges;
+    #     /* 0x14 */ u32 hmTotalBadgeRequirements;
+    #     /* 0x18 */ u8 hmSpecificBadgeRequirements[8];
+    #     /* 0x20 */ u8 freeFlyLocation;
+    #     /* 0x21 */ u8 terraCaveLocationId:4;
     #                u8 marineCaveLocationId:4;
-    #     /* 0x02 */ bool8 areTrainersBlind;
-    #     /* 0x03 */ bool8 canFlyWithoutBadge;
-    #     /* 0x04 */ u16 expMultiplierNumerator;
-    #     /* 0x06 */ u16 expMultiplierDenominator;
-    #     /* 0x08 */ u16 birchPokemon;
-    #     /* 0x0A */ bool8 guaranteedCatch;
-    #     /* 0x0B */ bool8 betterShopsEnabled;
-    #     /* 0x0C */ bool8 eliteFourRequiresGyms;
-    #     /* 0x0D */ u8 eliteFourRequiredCount;
-    #     /* 0x0E */ bool8 normanRequiresGyms;
-    #     /* 0x0F */ u8 normanRequiredCount;
-    #     /* 0x10 */ u8 startingBadges;
-    #     /* 0x11 */ u8 receivedItemMessageFilter; // 0 = Show All; 1 = Show Progression Only; 2 = Show None
-    #     /* 0x12 */ bool8 reusableTms;
-    #     /* 0x13 */ bool8 addRoute115Boulders;
-    #     /* 0x14 */ u16 removedBlockers;
-    #     /* 0x16 */ u8 freeFlyLocation;
-    #     /* 0x17 */ bool8 matchTrainerLevels;
-    #     /* 0x18 */ u8 activeEasterEgg;
-    #     /* 0x19 */ s8 matchTrainerLevelBonus;
-    #     /* 0x1A */ bool8 berryTreesRandomized;
-    #     /* 0x1B */ bool8 isWarpRando;
-    #     /* 0x1C */ bool8 addBumpySlopes;
-    #     /* 0x1D */ bool8 isDexsanity;
+    #     /* 0x22 */ bool8 addRoute115Boulders;
+    #     /* 0x23 */ bool8 addBumpySlopes;
+    #     /* 0x24 */ bool8 modifyRoute118;
+    #     /* 0x25 */ u16 removedBlockers;
+    #     /* 0x27 */ bool8 berryTreesRandomized;
+    #     /* 0x28 */ bool8 isDexsanity;
+    #     /* 0x29 */ bool8 isTrainersanity;
+    #     /* 0x2A */ bool8 isWarpRando;
+    #     /* 0x2B */ u8 activeEasterEgg;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
-
-    # Set hold A to advance text
-    turbo_a = 1 if world.options.turbo_a else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x00, 1, turbo_a)
-
-    # Set terra/marine cave locations
-    terra_cave_id = cave_event_to_id_map[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
-    marine_cave_id = cave_event_to_id_map[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
-    _set_bytes_little_endian(patched_rom, options_address + 0x01, 1, terra_cave_id | (marine_cave_id << 4))
-
-    # Set blind trainers
-    blind_trainers = 1 if world.options.blind_trainers else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, blind_trainers)
-
-    # Set HM badge requirements
-    hms_requiring_badge_bitfield = 0
-    hms_requiring_badge_bitfield |= (1 << 0) if "HM01 Cut" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 1) if "HM02 Fly" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 2) if "HM03 Surf" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 3) if "HM04 Strength" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 4) if "HM05 Flash" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 5) if "HM06 Rock Smash" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 6) if "HM07 Waterfall" in world.options.hms_requiring_badge.value else 0
-    hms_requiring_badge_bitfield |= (1 << 7) if "HM08 Dive" in world.options.hms_requiring_badge.value else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, hms_requiring_badge_bitfield)
-
-    # Set exp modifier
-    numerator = min(max(world.options.exp_modifier.value, 0), 2**16 - 1)
-    _set_bytes_little_endian(patched_rom, options_address + 0x04, 2, numerator)
-    _set_bytes_little_endian(patched_rom, options_address + 0x06, 2, 100)
 
     # Set Birch pokemon
     _set_bytes_little_endian(
         patched_rom,
-        options_address + 0x08,
+        options_address + 0x00,
         2,
         get_random_species(world.random, data.species).species_id
     )
 
-    # Set guaranteed catch
-    guaranteed_catch = 1 if world.options.guaranteed_catch else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x0A, 1, guaranteed_catch)
-
-    # Set better shops
-    better_shops = 1 if world.options.better_shops else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x0B, 1, better_shops)
-
-    # Set elite four requirement
-    elite_four_requires_gyms = 1 if world.options.elite_four_requirement == EliteFourRequirement.option_gyms else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x0C, 1, elite_four_requires_gyms)
-
-    # Set elite four count
-    elite_four_count = min(max(world.options.elite_four_count.value, 0), 8)
-    _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, elite_four_count)
-
-    # Set norman requirement
-    norman_requires_gyms = 1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, norman_requires_gyms)
-
-    # Set norman count
-    norman_count = min(max(world.options.norman_count.value, 0), 8)
-    _set_bytes_little_endian(patched_rom, options_address + 0x0F, 1, norman_count)
-
-    # Set starting badges
-    _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, starting_badges)
+    # Set hold A to advance text
+    _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, 1 if world.options.turbo_a else 0)
 
     # Set receive item messages type
-    receive_item_messages_type = world.options.receive_item_messages.value
-    _set_bytes_little_endian(patched_rom, options_address + 0x11, 1, receive_item_messages_type)
+    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, world.options.receive_item_messages.value)
+
+    # Set better shops
+    _set_bytes_little_endian(patched_rom, options_address + 0x04, 1, 1 if world.options.better_shops else 0)
 
     # Set reusable TMs
-    reusable_tms = 1 if world.options.reusable_tms else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, reusable_tms)
+    _set_bytes_little_endian(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms else 0)
+
+    # Set guaranteed catch
+    _set_bytes_little_endian(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
+
+    # Set blind trainers
+    _set_bytes_little_endian(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
+
+    # Set exp modifier
+    _set_bytes_little_endian(patched_rom, options_address + 0x09, 2, min(max(world.options.exp_modifier.value, 0), 2**16 - 1))
+    _set_bytes_little_endian(patched_rom, options_address + 0x0B, 2, 100)
+
+    # Set match trainer levels
+    _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, 1 if world.options.match_trainer_levels else 0)
+
+    # Set match trainer levels bonus
+    match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
+    _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
+
+    # Set elite four requirement
+    _set_bytes_little_endian(
+        patched_rom,
+        options_address + 0x0F,
+        1,
+        1 if world.options.elite_four_requirement == EliteFourRequirement.option_gyms else 0
+    )
+
+    # Set elite four count
+    _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, min(max(world.options.elite_four_count.value, 0), 8))
+
+    # Set norman requirement
+    _set_bytes_little_endian(
+        patched_rom,
+        options_address + 0x111,
+        1,
+        1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0
+    )
+
+    # Set norman count
+    _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, min(max(world.options.norman_count.value, 0), 8))
+
+    # Set starting badges
+    _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, starting_badges)
+
+    # Set terra/marine cave locations
+    terra_cave_id = cave_event_to_id_map[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
+    marine_cave_id = cave_event_to_id_map[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
+    _set_bytes_little_endian(patched_rom, options_address + 0x21, 1, terra_cave_id | (marine_cave_id << 4))
 
     # Set route 115 boulders
-    route_115_boulders = 1 if world.options.extra_boulders else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, route_115_boulders)
+    _set_bytes_little_endian(patched_rom, options_address + 0x22, 1, 1 if world.options.extra_boulders else 0)
+
+    # Swap route 115 layout if bumpy slope enabled
+    _set_bytes_little_endian(patched_rom, options_address + 0x23, 1, 1 if world.options.extra_bumpy_slope else 0)
 
     # Set removed blockers
     removed_roadblocks = world.options.remove_roadblocks.value
@@ -414,14 +414,31 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     removed_roadblocks_bitfield |= (1 << 4) if "Route 119 Aqua Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 5) if "Route 112 Magma Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in removed_roadblocks else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x14, 2, removed_roadblocks_bitfield)
+    _set_bytes_little_endian(patched_rom, options_address + 0x25, 2, removed_roadblocks_bitfield)
 
-    # Set match trainer levels
-    match_trainer_levels = 1 if world.options.match_trainer_levels else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x17, 1, match_trainer_levels)
+    # Mark berry trees as randomized
+    _set_bytes_little_endian(patched_rom, options_address + 0x27, 1, 1 if world.options.berry_trees else 0)
+
+    # Mark dexsanity as enabled
+    _set_bytes_little_endian(patched_rom, options_address + 0x28, 1, 1 if world.options.dexsanity else 0)
+
+    # Mark trainersanity as enabled
+    _set_bytes_little_endian(patched_rom, options_address + 0x28, 1, 1 if world.options.trainersanity else 0)
 
     # Set easter egg data
-    _set_bytes_little_endian(patched_rom, options_address + 0x18, 1, easter_egg[0])
+    _set_bytes_little_endian(patched_rom, options_address + 0x2B, 1, easter_egg[0])
+
+    # Set HM badge requirements
+    # hms_requiring_badge_bitfield = 0
+    # hms_requiring_badge_bitfield |= (1 << 0) if "HM01 Cut" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 1) if "HM02 Fly" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 2) if "HM03 Surf" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 3) if "HM04 Strength" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 4) if "HM05 Flash" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 5) if "HM06 Rock Smash" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 6) if "HM07 Waterfall" in world.options.hms_requiring_badge.value else 0
+    # hms_requiring_badge_bitfield |= (1 << 7) if "HM08 Dive" in world.options.hms_requiring_badge.value else 0
+    # _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, hms_requiring_badge_bitfield)
 
     if easter_egg[0] == 2:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
@@ -435,25 +452,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
 
-    # Set match trainer levels multiplier
-    match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
-    _set_bytes_little_endian(patched_rom, options_address + 0x19, 1, match_trainer_levels_bonus)  # Works with negatives
-
-    # Mark berry trees as randomized
-    berry_trees = 1 if world.options.berry_trees else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x1A, 1, berry_trees)
-
-    # Swap route 115 layout if bumpy slope enabled
-    extra_bumpy_slope = 1 if world.options.extra_bumpy_slope else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x1C, 1, extra_bumpy_slope)
-
-    # Mark dexsanity as enabled
-    dexsanity = 1 if world.options.dexsanity else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x1D, 1, dexsanity)
-
-    # Set slot name
-    player_name = world.multiworld.get_player_name(world.player)
-    for i, byte in enumerate(player_name.encode("utf-8")):
+    # Set slot auth
+    for i, byte in enumerate(world.auth):
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Randomize music
@@ -486,7 +486,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     with open(output_path, "wb") as out_file:
         out_file.write(patched_rom)
     patch = PokemonEmeraldDeltaPatch(os.path.splitext(output_path)[0] + ".apemerald", player=world.player,
-                                     player_name=player_name, patched_path=output_path)
+                                     player_name=world.multiworld.get_player_name(world.player),
+                                     patched_path=output_path)
 
     patch.write()
     os.unlink(output_path)
