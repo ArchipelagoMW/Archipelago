@@ -857,6 +857,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
         if not self.setup_done:
             self.setup_done = True
             start_items = calculate_items(self.ctx)
+            missions_beaten = self.missions_beaten_count()
+            kerrigan_level = get_kerrigan_level(self.ctx, start_items, missions_beaten)
             kerrigan_options = calculate_kerrigan_options(self.ctx)
             soa_options = caclulate_soa_options(self.ctx)
             if self.ctx.difficulty_override >= 0:
@@ -887,7 +889,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 start_items[SC2Race.ANY][2]
             ))
             await self.updateTerranTech(start_items)
-            await self.updateZergTech(start_items)
+            await self.updateZergTech(start_items, kerrigan_level)
             await self.updateProtossTech(start_items)
             await self.updateColors()
             await self.chat_send("?LoadFinished")
@@ -920,7 +922,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
             if self.last_received_update < len(self.ctx.items_received):
                 current_items = calculate_items(self.ctx)
-                missions_beaten = len([location for location in self.ctx.locations_checked if location % VICTORY_MODULO == 0])
+                missions_beaten = await self.missions_beaten_count()
                 kerrigan_level = get_kerrigan_level(self.ctx, current_items, missions_beaten)
                 await self.updateTerranTech(current_items)
                 await self.updateZergTech(current_items, kerrigan_level)
@@ -955,6 +957,9 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                             self.boni[x] = True
                 else:
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
+
+    def missions_beaten_count(self):
+        return len([location for location in self.ctx.locations_checked if location % VICTORY_MODULO == 0])
 
     async def updateColors(self):
         await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
