@@ -393,8 +393,7 @@ class KerriganLevelsPerMissionCompleted(Range):
     """
     Determines how many levels Kerrigan gains when a mission is beaten.
 
-    NOTE: Don't set it too low non-zero value if missions Supreme or The Infinite Cycle are in the pool
-    due to their level requirements. The generation can fail in these cases.
+    NOTE: Setting this too low can result in generation failures if The Infinite Cycle or Supreme are in the mission pool.
     """
     display_name = "Levels Per Mission Beaten"
     range_start = 0
@@ -406,7 +405,7 @@ class KerriganLevelItemSum(Range):
     """
     Determines the sum of the level items in the world.  This does not affect levels gained from checks.
 
-    NOTE: Following missions have these level requirements:
+    NOTE: The following missions have these level requirements:
     Supreme: 35
     The Infinite Cycle: 70
     """
