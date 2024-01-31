@@ -26,7 +26,7 @@ name: YourName{number} # Your name in-game. Spaces will be replaced with undersc
 game: # Pick a game to play
   A Link to the Past: 1
 requires:
-  version: 0.4.3 # Version of Archipelago required for this yaml to work as expected.
+  version: 0.4.4 # Version of Archipelago required for this yaml to work as expected.
 A Link to the Past:
   progression_balancing:
     # A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
