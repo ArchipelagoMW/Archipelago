@@ -375,7 +375,7 @@ class KerriganPresence(Choice):
         In missions where the Kerrigan unit is required, story abilities are given in same way as Grant Story Tech is set to true
     Not Present And No Passives:  In addition to the above, Kerrigan's passive abilities affecting other units (such as Twin Drones) will not appear.
 
-    Note: It's always assumed to "Not Present" if Heart of the Swarm campaign is disabled.
+    Note: Always set to "Not Present" if Heart of the Swarm campaign is disabled.
     """
     display_name = "Kerrigan Presence"
     option_vanilla = 0
