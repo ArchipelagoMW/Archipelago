@@ -1826,7 +1826,20 @@ no_logic_starting_units = {
         ItemNames.ULTRALISK,
         ItemNames.SWARM_HOST
     }),
-    SC2Race.PROTOSS: advanced_basic_units[SC2Race.PROTOSS]
+    SC2Race.PROTOSS: advanced_basic_units[SC2Race.PROTOSS].union({
+        ItemNames.CARRIER,
+        ItemNames.TEMPEST,
+        ItemNames.VOID_RAY,
+        ItemNames.DESTROYER,
+        ItemNames.COLOSSUS,
+        ItemNames.WRATHWALKER,
+        ItemNames.SCOUT,
+        ItemNames.HIGH_TEMPLAR,
+        ItemNames.SIGNIFIER,
+        ItemNames.ASCENDANT,
+        ItemNames.DARK_ARCHON,
+        ItemNames.SUPPLICANT,
+    })
 }
 
 not_balanced_starting_units = {
@@ -1834,7 +1847,9 @@ not_balanced_starting_units = {
     ItemNames.THOR,
     ItemNames.BANSHEE,
     ItemNames.BATTLECRUISER,
-    ItemNames.ULTRALISK
+    ItemNames.ULTRALISK,
+    ItemNames.CARRIER,
+    ItemNames.TEMPEST,
 }
 
 
