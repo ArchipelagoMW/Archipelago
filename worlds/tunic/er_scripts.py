@@ -4,6 +4,7 @@ from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
     dependent_regions, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
+from worlds.generic import PlandoConnection
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -22,12 +23,17 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
     portal_pairs: Dict[Portal, Portal] = pair_portals(world)
     logic_rules = world.options.logic_rules
 
+    # output the entrances to the spoiler log here for convenience
+    for portal1, portal2 in portal_pairs.items():
+        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+
     # check if a portal leads to a hallway. if it does, update the hint text accordingly
     def hint_helper(portal: Portal, hint_string: str = "") -> str:
         # start by setting it as the name of the portal, for the case we're not using the hallway helper
         if hint_string == "":
             hint_string = portal.name
 
+        # unrestricted has fewer hallways, like the well rail
         if logic_rules == "unrestricted":
             hallways = hallway_helper_ur
         else:
@@ -69,6 +75,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
         return hint_string
 
     # create our regions, give them hint text if they're in a spot where it makes sense to
+    # we're limiting which ones get hints so that it still gets that ER feel with a little less BS
     for region_name, region_data in tunic_er_regions.items():
         hint_text = "error"
         if region_data.hint == 1:
@@ -90,7 +97,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
                     break
             regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
         elif region_data.hint == 3:
-            # only the west garden portal item for now
+            # west garden portal item is at a dead end in restricted, otherwise just in west garden
             if region_name == "West Garden Portal Item":
                 if world.options.logic_rules:
                     for portal1, portal2 in portal_pairs.items():
@@ -178,6 +185,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
+    plando_connections: List[PlandoConnection] = []
     fixed_shop = False
     logic_rules = world.options.logic_rules.value
 
@@ -195,6 +203,27 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             else:
                 two_plus.append(portal)
 
+    if hasattr(world.multiworld, "re_gen_passthrough") and "TUNIC" in world.multiworld.re_gen_passthrough:
+        slot_connections = world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"]
+        for portal1, portal2 in slot_connections.items():
+            portal_name1 = ""
+            portal_name2 = ""
+            for portal in portal_mapping:
+                if portal.scene_destination() == portal1:
+                    portal_name1 = portal.name
+                    print(portal.name)
+                if portal.scene_destination() == portal2:
+                    portal_name2 = portal.name
+                    print(portal.name)
+            if not portal_name1 or not portal_name2:
+                print("one or both portal names messed up")
+            plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+    else:
+        # awaiting generic connection plando support
+        pass
+            
+    portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
+    
     connected_regions: Set[str] = set()
     # make better start region stuff when/if implementing random start
     start_region = "Overworld"
@@ -312,9 +341,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     if len(two_plus) == 1:
         raise Exception("two plus had an odd number of portals, investigate this")
-
-    for portal1, portal2 in portal_pairs.items():
-        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
 
     return portal_pairs
 
@@ -451,3 +477,49 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # false means you're good to place the portal
     return False
+
+
+# this is for making the connections themselves
+def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal], two_plus: List[Portal]) -> Tuple(Dict[Portal, Portal], List[Portal], List[Portal]):
+    portal_pairs: Dict[Portal, Portal] = {}
+    for connection in plando_connections:
+        entrance = connection.entrance
+        exit = connection.exit
+
+        portal1 = None
+        portal2 = None
+
+        # search two_plus for both at once
+        for portal in two_plus:
+            if entrance == portal.name:
+                portal1 = portal
+            if exit == portal.name:
+                portal2 = portal
+
+        # search dead_ends individually since we can't really remove items from two_plus during the loop
+        if not portal1:
+            for portal in dead_ends:
+                if entrance == portal.name:
+                    portal1 = portal
+                    break
+            dead_ends.remove(portal1)
+        else:
+            two_plus.remove(portal1)
+
+        if not portal2:
+            for portal in dead_ends:
+                if exit == portal.name:
+                    portal2 = portal
+                    break
+            dead_ends.remove(portal2)
+        else:
+            two_plus.remove(portal2)
+
+        if not portal1 or not portal2:
+            # exception
+            pass
+
+        portal_pairs[portal1] = portal2
+            
+    return (portal_pairs, dead_ends, two_plus)
+
