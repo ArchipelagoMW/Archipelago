@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from .options import ShuffleDoors
+from .options import ShuffleDoors, SunwarpAccess
 from .static_logic import DOORS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, \
     get_door_item_id, get_progressive_item_id, get_special_item_id
 
@@ -28,6 +28,9 @@ class ItemData(NamedTuple):
             return world.options.shuffle_doors == ShuffleDoors.option_complex
         elif self.mode == "door group":
             return world.options.shuffle_doors == ShuffleDoors.option_simple
+        elif self.mode == "sunwarps group":
+            return world.options.shuffle_doors == ShuffleDoors.option_simple\
+                and world.options.sunwarp_access == SunwarpAccess.option_unlock
         elif self.mode == "special":
             return False
         else:
@@ -72,8 +75,13 @@ def load_item_data():
                          door.door_ids, door.painting_ids)
 
     for group, group_door_ids in door_groups.items():
+        item_mode = "door group"
+        if group == "Sunwarps":
+            # This is a special case, because sunwarps can be disabled.
+            item_mode = "sunwarps group"
+
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
-                                         ItemClassification.progression, "door group", group_door_ids, [])
+                                         ItemClassification.progression, item_mode, group_door_ids, [])
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,

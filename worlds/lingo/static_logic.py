@@ -17,6 +17,7 @@ class RoomEntrance(NamedTuple):
     room: str  # source room
     door: Optional[RoomAndDoor]
     painting: bool
+    sunwarp: bool
 
 
 class Room(NamedTuple):
@@ -202,7 +203,7 @@ def process_entrance(source_room, doors, room_obj):
 
     # If the value of an entrance is just True, that means that the entrance is always accessible.
     if doors is True:
-        room_obj.entrances.append(RoomEntrance(source_room, None, False))
+        room_obj.entrances.append(RoomEntrance(source_room, None, False, False))
     elif isinstance(doors, dict):
         # If the value of an entrance is a dictionary, that means the entrance requires a door to be accessible, is a
         # painting-based entrance, or both.
@@ -210,7 +211,7 @@ def process_entrance(source_room, doors, room_obj):
             PAINTING_EXIT_ROOMS.add(room_obj.name)
             PAINTING_ENTRANCES += 1
 
-            room_obj.entrances.append(RoomEntrance(source_room, None, True))
+            room_obj.entrances.append(RoomEntrance(source_room, None, True, False))
         else:
             if "painting" in doors and doors["painting"]:
                 PAINTING_EXIT_ROOMS.add(room_obj.name)
@@ -219,7 +220,7 @@ def process_entrance(source_room, doors, room_obj):
             room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
                 doors["room"] if "room" in doors else None,
                 doors["door"]
-            ), doors["painting"] if "painting" in doors else False))
+            ), doors["painting"] if "painting" in doors else False, doors["sunwarp"] if "sunwarp" in doors else False))
     else:
         # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
         # entrance.
@@ -231,7 +232,7 @@ def process_entrance(source_room, doors, room_obj):
             room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
                 door["room"] if "room" in door else None,
                 door["door"]
-            ), door["painting"] if "painting" in door else False))
+            ), door["painting"] if "painting" in door else False, door["sunwarp"] if "sunwarp" in door else False))
 
 
 def process_panel(room_name, panel_name, panel_data):

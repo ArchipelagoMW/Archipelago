@@ -54,6 +54,8 @@
   #                   this door will open the doors listed here.
   # - painting_id:    An internal ID of a painting that should be moved upon
   #                   receiving this door.
+  # - warp_id:        An internal ID or IDs of warps that should be disabled
+  #                   until receiving this door.
   # - panels:         These are the panels that canonically open this door. If
   #                   there is only one panel for the door, then that panel is a
   #                   check. If there is more than one panel, then that entire
@@ -508,6 +510,10 @@
         junk_item: True
         panels:
           - LOST
+      1 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_1
+        group: Sunwarps
+        skip_location: True
     paintings:
       - id: maze_painting
         orientation: west
@@ -570,6 +576,20 @@
         event: True
         panels:
           - PILGRIMAGE
+    progression:
+      Progressive Pilgrimage:
+        - room: Hub Room
+          door: 1 Sunwarp
+        - room: Hot Crusts Area
+          door: 2 Sunwarp
+        - room: Orange Tower Third Floor
+          door: 3 Sunwarp
+        - room: Orange Tower First Floor
+          door: 4 Sunwarp
+        - room: Orange Tower Fourth Floor
+          door: 5 Sunwarp
+        - room: Outside The Agreeable
+          door: 6 Sunwarp
   Pilgrim Room:
     entrances:
       The Seeker:
@@ -646,7 +666,12 @@
           - THIS
   Crossroads:
     entrances:
-      Hub Room: True # The sunwarp means that we never need the ORDER door
+      Hub Room:
+        - room: Hub Room
+          door: 1 Sunwarp
+          sunwarp: True
+        - room: Hub Room
+          door: Crossroads Entrance
       Color Hallways: True
       The Tenacious:
         door: Tenacious Entrance
@@ -1185,6 +1210,10 @@
           - WINTER
           - DIAMONDS
           - FIRE
+      6 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_6
+        group: Sunwarps
+        skip_location: True
     paintings:
       - id: panda_painting
         orientation: south
@@ -1913,6 +1942,10 @@
           - SALT
           - room: Directional Gallery
             panel: PEPPER
+      4 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_4
+        group: Sunwarps
+        skip_location: True
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
@@ -1933,7 +1966,10 @@
       Orange Tower Fourth Floor:
         room: Orange Tower
         door: Fourth Floor
-      Hot Crusts Area: True # sunwarp
+      Hot Crusts Area:
+        room: Hot Crusts Area
+        door: 2 Sunwarp
+        sunwarp: True
       Bearer Side Area: # This is complicated because of The Bearer's topology
         room: Bearer Side Area
         door: Shortcut to Tower
@@ -1982,6 +2018,10 @@
           - RED
           - room: Directional Gallery
             panel: YELLOW
+      3 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_3
+        group: Sunwarps
+        skip_location: True
     paintings:
       - id: arrows_painting_6
         orientation: east
@@ -2035,6 +2075,10 @@
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
         panels:
           - HOT CRUSTS
+      5 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_5
+        group: Sunwarps
+        skip_location: True
   Hot Crusts Area:
     entrances:
       Orange Tower Fourth Floor:
@@ -2049,6 +2093,12 @@
         required_door:
           room: Number Hunt
           door: Eights
+    doors:
+      2 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_2
+        group: Sunwarps
+        skip_location: True
+        item_name: Orange Tower Fourth Floor - 2 Sunwarp
     paintings:
       - id: smile_painting_8
         orientation: north
@@ -2778,7 +2828,10 @@
       Knight Night Exit:
         room: Knight Night (Final)
         door: Exit
-      Orange Tower Third Floor: True # sunwarp
+      Orange Tower Third Floor:
+        room: Orange Tower Third Floor
+        door: 3 Sunwarp
+        sunwarp: True
       Orange Tower Fifth Floor:
         room: Art Gallery
         door: Exit
@@ -3393,7 +3446,10 @@
   Outside The Undeterred:
     entrances:
       Color Hallways: True
-      Orange Tower First Floor: True # sunwarp
+      Orange Tower First Floor:
+        room: Orange Tower First Floor
+        door: 4 Sunwarp
+        sunwarp: True
       Orange Tower Second Floor: True
       The Artistic (Smiley): True
       The Artistic (Panda): True
@@ -3852,7 +3908,10 @@
           door: Eights
   Directional Gallery:
     entrances:
-      Outside The Agreeable: True # sunwarp
+      Outside The Agreeable:
+        room: Outside The Agreeable
+        door: 6 Sunwarp
+        sunwarp: True
       Orange Tower First Floor:
         room: Orange Tower First Floor
         door: Salt Pepper Door
@@ -4024,7 +4083,10 @@
     entrances:
       Outside The Bold:
         door: Shortcut to The Steady
-      Orange Tower Fourth Floor: True # sunwarp
+      Orange Tower Fourth Floor:
+        room: Orange Tower Fourth Floor
+        door: 5 Sunwarp
+        sunwarp: True
       Roof: True # through ceiling of sunwarp
     panels:
       EXIT:

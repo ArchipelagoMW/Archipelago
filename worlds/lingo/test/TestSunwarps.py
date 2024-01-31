@@ -1,0 +1,182 @@
+from . import LingoTestBase
+
+
+class TestVanillaDoorsNormalSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "none",
+        "shuffle_colors": "true",
+        "sunwarp_access": "normal"
+    }
+
+    def test_access(self):
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+
+        self.collect_by_name("Yellow")
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestSimpleDoorsNormalSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "simple",
+        "sunwarp_access": "normal"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+
+        self.collect_by_name(["Crossroads - Tower Entrances", "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestSimpleDoorsDisabledSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "simple",
+        "sunwarp_access": "disabled"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+
+        self.collect_by_name(["Hub Room - Crossroads Entrance", "Crossroads - Tower Entrancse",
+                              "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestSimpleDoorsUnlockSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "simple",
+        "sunwarp_access": "unlock"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name(["Crossroads - Tower Entrances", "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+        self.collect_by_name("Sunwarps")
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestComplexDoorsNormalSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "complex",
+        "sunwarp_access": "normal"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+
+        self.collect_by_name(["Crossroads - Tower Entrance", "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestComplexDoorsDisabledSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "complex",
+        "sunwarp_access": "disabled"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+
+        self.collect_by_name(["Hub Room - Crossroads Entrance", "Crossroads - Tower Entrance",
+                              "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestComplexDoorsUnlockSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "complex",
+        "sunwarp_access": "unlock"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Hub Room - 1 Sunwarp")
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name(["Crossroads - Tower Entrance", "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+        self.collect_by_name("Orange Tower Fourth Floor - 2 Sunwarp")
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+        self.collect_by_name("Orange Tower Third Floor - 3 Sunwarp")
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestComplexDoorsProgressiveSunwarps(LingoTestBase):
+    options = {
+        "shuffle_doors": "complex",
+        "sunwarp_access": "progressive"
+    }
+
+    def test_access(self):
+        self.remove_forced_good_item()
+
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name("Second Room - Exit Door")
+        self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        progressive_pilgrimage = self.get_items_by_name("Progressive Pilgrimage")
+        self.collect(progressive_pilgrimage[0])
+        self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
+
+        self.collect_by_name(["Crossroads - Tower Entrance", "Orange Tower Fourth Floor - Hot Crusts Door"])
+        self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+        self.collect(progressive_pilgrimage[1])
+        self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
+        self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+        self.collect(progressive_pilgrimage[2])
+        self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))

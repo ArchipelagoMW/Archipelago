@@ -993,6 +993,8 @@ doors:
     Lost Door:
       item: 444435
       location: 444440
+    1 Sunwarp:
+      item: 444581
   Pilgrim Antechamber:
     Sun Painting:
       item: 444436
@@ -1067,6 +1069,8 @@ doors:
     Lookout Entrance:
       item: 444579
       location: 445271
+    6 Sunwarp:
+      item: 444584
   Dread Hallway:
     Tenacious Entrance:
       item: 444462
@@ -1124,6 +1128,8 @@ doors:
     Salt Pepper Door:
       item: 444485
       location: 445220
+    4 Sunwarp:
+      item: 444585
   Orange Tower Third Floor:
     Red Barrier:
       item: 444486
@@ -1132,10 +1138,14 @@ doors:
     Orange Barrier:
       item: 444488
       location: 445221
+    3 Sunwarp:
+      item: 444586
   Orange Tower Fourth Floor:
     Hot Crusts Door:
       item: 444490
       location: 444610
+    5 Sunwarp:
+      item: 444587
   Orange Tower Fifth Floor:
     Welcome Back:
       item: 444491
@@ -1427,6 +1437,9 @@ doors:
     Welcome Door:
       item: 444574
       location: 445176
+  Hot Crusts Area:
+    2 Sunwarp:
+      item: 444588
 door_groups:
   Rhyme Room Doors: 444418
   Dead End Area Access: 444420
@@ -1447,9 +1460,11 @@ door_groups:
   Colorful Doors: 444498
   Directional Gallery Doors: 444531
   Artistic Doors: 444545
+  Sunwarps: 444582
 progression:
   Progressive Hallway Room: 444461
   Progressive Fearless: 444470
   Progressive Orange Tower: 444482
   Progressive Art Gallery: 444563
   Progressive Colorful: 444580
+  Progressive Pilgrimage: 444583

@@ -3,6 +3,7 @@ from typing import Dict, Optional, TYPE_CHECKING
 from BaseClasses import Entrance, ItemClassification, Region
 from .items import LingoItem
 from .locations import LingoLocation
+from .options import SunwarpAccess
 from .player_logic import LingoPlayerLogic
 from .rules import lingo_can_use_entrance, make_location_lambda
 from .static_logic import ALL_ROOMS, PAINTINGS, Room, RoomAndDoor
@@ -72,6 +73,10 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
             if entrance.painting and painting_shuffle:
                 continue
 
+            # Don't connect sunwarps if sunwarps are disabled.
+            if entrance.sunwarp and world.options.sunwarp_access == SunwarpAccess.option_disabled:
+                continue
+
             entrance_name = f"{entrance.room} to {room.name}"
             if entrance.door is not None:
                 if entrance.door.room is not None:
@@ -79,12 +84,17 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
                 else:
                     entrance_name += f" (through {room.name} - {entrance.door.door})"
 
-            connect_entrance(regions, regions[entrance.room], regions[room.name], entrance_name, entrance.door, world,
+            effective_door = entrance.door
+            if entrance.sunwarp and world.options.sunwarp_access == SunwarpAccess.option_normal:
+                effective_door = None
+
+            connect_entrance(regions, regions[entrance.room], regions[room.name], entrance_name, effective_door, world,
                              player_logic)
 
     # Add the fake pilgrimage.
-    connect_entrance(regions, regions["Outside The Agreeable"], regions["Pilgrim Antechamber"], "Pilgrimage",
-                     RoomAndDoor("Pilgrim Antechamber", "Pilgrimage"), world, player_logic)
+    if world.options.sunwarp_access != SunwarpAccess.option_disabled:
+        connect_entrance(regions, regions["Outside The Agreeable"], regions["Pilgrim Antechamber"], "Pilgrimage",
+                         RoomAndDoor("Pilgrim Antechamber", "Pilgrimage"), world, player_logic)
 
     if early_color_hallways:
         regions["Starting Room"].connect(regions["Outside The Undeterred"], "Early Color Hallways")

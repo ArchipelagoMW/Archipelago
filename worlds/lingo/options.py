@@ -58,6 +58,18 @@ class ShufflePaintings(Toggle):
     display_name = "Shuffle Paintings"
 
 
+class SunwarpAccess(Choice):
+    """On "normal", all sunwarps are enabled from the start.
+    On "disabled", all sunwarps are disabled.
+    On "unlock", sunwarps start off disabled. If on complex doors, each has a corresponding item that unlocks it. If on simple doors, there is one item that unlocks all six.
+    On "progressive", sunwarps start off disabled, and they unlock in order using a progressive item. Only compatible with complex doors."""
+    display_name = "Sunwarp Access"
+    option_normal = 0
+    option_disabled = 1
+    option_unlock = 2
+    option_progressive = 3
+
+
 class VictoryCondition(Choice):
     """Change the victory condition.
     On "the_end", the goal is to solve THE END at the top of the tower.
@@ -129,6 +141,7 @@ class LingoOptions(PerGameCommonOptions):
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
     shuffle_paintings: ShufflePaintings
+    sunwarp_access: SunwarpAccess
     victory_condition: VictoryCondition
     mastery_achievements: MasteryAchievements
     level_2_requirement: Level2Requirement

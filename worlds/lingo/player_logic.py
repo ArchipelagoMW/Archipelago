@@ -3,7 +3,7 @@ from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
-from .options import LocationChecks, ShuffleDoors, VictoryCondition
+from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
     RoomAndPanel
@@ -54,6 +54,13 @@ def should_split_progression(progression_name: str, world: "LingoWorld") -> Prog
             return ProgressiveItemBehavior.PROGRESSIVE
         else:
             return ProgressiveItemBehavior.SPLIT
+    elif progression_name == "Progressive Pilgrimage":
+        if world.options.sunwarp_access == SunwarpAccess.option_unlock:
+            return ProgressiveItemBehavior.SPLIT
+        elif world.options.sunwarp_access == SunwarpAccess.option_progressive:
+            return ProgressiveItemBehavior.PROGRESSIVE
+        else:
+            return ProgressiveItemBehavior.DISABLE
 
     return ProgressiveItemBehavior.PROGRESSIVE
 
@@ -225,14 +232,28 @@ class LingoPlayerLogic:
             ["Art Gallery", "Exit"], ["The Tenacious", "Shortcut to Hub Room"],
             ["Outside The Agreeable", "Tenacious Entrance"]
         ]
-        pilgrimage_reqs = AccessRequirements()
-        for door in fake_pilgrimage:
-            door_object = DOORS_BY_ROOM[door[0]][door[1]]
-            if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
-                pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
-            else:
-                pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
-        self.door_reqs.setdefault("Pilgrim Antechamber", {})["Pilgrimage"] = pilgrimage_reqs
+        if world.options.sunwarp_access != SunwarpAccess.option_normal:
+            fake_pilgrimage += [
+                ["Hub Room", "1 Sunwarp"], ["Hot Crusts Area", "2 Sunwarp"], ["Orange Tower Third Floor", "3 Sunwarp"],
+                ["Orange Tower First Floor", "4 Sunwarp"], ["Orange Tower Fourth Floor", "5 Sunwarp"],
+                ["Outside The Agreeable", "6 Sunwarp"]
+            ]
+
+        if world.options.sunwarp_access != SunwarpAccess.option_normal and door_shuffle == ShuffleDoors.option_none:
+            raise Exception("Sunwarp access must be normal with vanilla doors.")
+        elif world.options.sunwarp_access == SunwarpAccess.option_progressive \
+                and door_shuffle == ShuffleDoors.option_simple:
+            raise Exception("Sunwarp access can't be progressive on simple doors.")
+
+        if world.options.sunwarp_access != SunwarpAccess.option_disabled:
+            pilgrimage_reqs = AccessRequirements()
+            for door in fake_pilgrimage:
+                door_object = DOORS_BY_ROOM[door[0]][door[1]]
+                if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
+                    pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
+                else:
+                    pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
+            self.door_reqs.setdefault("Pilgrim Antechamber", {})["Pilgrimage"] = pilgrimage_reqs
 
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:
