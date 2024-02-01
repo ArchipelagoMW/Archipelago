@@ -146,3 +146,6 @@ triggers:
 
 In this example, if the `start_location` option rolls `landing_site`, only a starting hint for Morph Ball will be created.
 If `aqueduct` is rolled, a starting hint for Gravity Suit will also be created alongside the hint for Morph Ball.
+
+Note that for lists, items can only be added, not removed or replaced. For dicts, defining a value for a present key will 
+replace that value within the dict.
