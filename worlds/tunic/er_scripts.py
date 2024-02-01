@@ -533,9 +533,10 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
         else:
             two_plus.remove(portal2)
 
-        if not portal1 or not portal2:
-            # exception
-            pass
+        if not portal1:
+            raise Exception("could not find entrance named " + p_entrance + " for Tunic player's plando")
+        if not portal2:
+            raise Exception("could not find entrance named " + p_exit + " for Tunic player's plando")
 
         portal_pairs[portal1] = portal2
             
