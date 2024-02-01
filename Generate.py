@@ -342,10 +342,11 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
         if option.startswith("__merge_"):
             option_name = option.replace("__merge_", "")
             new_items = new_weights[option]
-            if isinstance(new_items, dict):
-                new_items.update(weights[option_name])
-            else:
-                new_items.extend(weights[option_name])
+            if option_name in weights:
+                if isinstance(new_items, dict):
+                    new_items.update(weights[option_name])
+                else:
+                    new_items.extend(weights[option_name])
             cleaned_weights[option_name] = new_items
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
