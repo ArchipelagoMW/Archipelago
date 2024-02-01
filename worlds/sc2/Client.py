@@ -24,8 +24,8 @@ from worlds.sc2 import ItemNames
 from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, \
     GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, \
     LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, TakeOverAIAllies, RequiredTactics, SpearOfAdunPresence, \
-    SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics, \
+    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
     SpearOfAdunAutonomouslyCastPresentInNoBuild
 
 
@@ -459,7 +459,10 @@ class SC2Context(CommonContext):
             self.kerrigan_presence = args["slot_data"].get("kerrigan_presence", KerriganPresence.option_vanilla)
             self.kerrigan_primal_status = args["slot_data"].get("kerrigan_primal_status", KerriganPrimalStatus.option_vanilla)
             self.kerrigan_levels_per_mission_completed = args["slot_data"].get("kerrigan_levels_per_mission_completed", 0)
+            self.kerrigan_levels_per_mission_completed_cap = args["slot_data"].get("kerrigan_levels_per_mission_completed_cap", -1)
+            self.kerrigan_total_level_cap = args["slot_data"].get("kerrigan_total_level_cap", -1)
             self.grant_story_tech = args["slot_data"].get("grant_story_tech", GrantStoryTech.option_false)
+            self.grant_story_levels = args["slot_data"].get("grant_story_levels", GrantStoryLevels.option_additive)
             self.required_tactics = args["slot_data"].get("required_tactics", RequiredTactics.option_standard)
             self.take_over_ai_allies = args["slot_data"].get("take_over_ai_allies", TakeOverAIAllies.option_false)
             self.spear_of_adun_presence = args["slot_data"].get("spear_of_adun_presence", SpearOfAdunPresence.option_not_present)
@@ -472,8 +475,9 @@ class SC2Context(CommonContext):
             self.nova_covert_ops_only = args["slot_data"].get("nova_covert_ops_only", False)
 
             if self.required_tactics == RequiredTactics.option_no_logic:
-                # Locking Grant Story Tech if no logic
+                # Locking Grant Story Tech/Levels if no logic
                 self.grant_story_tech = GrantStoryTech.option_true
+                self.grant_story_levels = GrantStoryLevels.option_minimum
 
             self.location_inclusions = {
                 LocationType.VICTORY: LocationInclusion.option_enabled, # Victory checks are always enabled
@@ -734,9 +738,14 @@ def calc_difficulty(difficulty: int):
 
 
 def get_kerrigan_level(ctx: SC2Context, items: typing.Dict[SC2Race, typing.List[int]], missions_beaten: int) -> int:
-    value = items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
-    value += missions_beaten * ctx.kerrigan_levels_per_mission_completed
-    return value
+    item_value = items[SC2Race.ZERG][type_flaggroups[SC2Race.ZERG]["Level"]]
+    mission_value = missions_beaten * ctx.kerrigan_levels_per_mission_completed
+    if ctx.kerrigan_levels_per_mission_completed_cap != -1:
+        mission_value = min(mission_value, ctx.kerrigan_levels_per_mission_completed_cap)
+    total_value = item_value + mission_value
+    if ctx.kerrigan_total_level_cap != -1:
+        total_value = min(total_value, ctx.kerrigan_total_level_cap)
+    return total_value
 
 
 def calculate_kerrigan_options(ctx: SC2Context) -> int:
@@ -869,7 +878,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 game_speed = self.ctx.game_speed_override
             else:
                 game_speed = self.ctx.game_speed
-            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {}".format(
+            await self.chat_send("?SetOptions {} {} {} {} {} {} {} {} {} {} {} {} {}".format(
                 difficulty,
                 self.ctx.generic_upgrade_research,
                 self.ctx.all_in_choice,
@@ -881,7 +890,8 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                 self.ctx.take_over_ai_allies,
                 soa_options,
                 self.ctx.mission_order,
-                1 if self.ctx.nova_covert_ops_only else 0
+                1 if self.ctx.nova_covert_ops_only else 0,
+                self.ctx.grant_story_levels
             ))
             await self.chat_send("?GiveResources {} {} {}".format(
                 start_items[SC2Race.ANY][0],
@@ -949,8 +959,6 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
 
                     for x, completed in enumerate(self.boni):
                         if not completed and game_state & (1 << (x + 2)):
-                            # Store check amount ahead of time to avoid server changing value mid-calculation
-                            checks = len(self.ctx.checked_locations)
                             await self.ctx.send_msgs(
                                 [{"cmd": 'LocationChecks',
                                   "locations": [get_location_offset(self.mission_id) + VICTORY_MODULO * self.mission_id + x + 1]}])
@@ -959,7 +967,7 @@ class ArchipelagoBot(bot.bot_ai.BotAI):
                     await self.chat_send("?SendMessage LostConnection - Lost connection to game.")
 
     def missions_beaten_count(self):
-        return len([location for location in self.ctx.locations_checked if location % VICTORY_MODULO == 0])
+        return len([location for location in self.ctx.checked_locations if location % VICTORY_MODULO == 0])
 
     async def updateColors(self):
         await self.chat_send("?SetColor rr " + str(self.ctx.player_color_raynor))
