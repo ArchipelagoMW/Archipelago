@@ -9,10 +9,10 @@ from .options import PokemonCrystalOptions
 from .regions import create_regions
 from .items import PokemonCrystalItem, create_item_label_to_code_map, get_item_classification
 from .rules import set_rules
-from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data)
+from .data import (PokemonData, MoveData, TrainerData, LearnsetData, data as crystal_data, BASE_OFFSET)
 from .rom import generate_output
 from .locations import create_locations, PokemonCrystalLocation, create_location_label_to_id_map
-from .utils import get_random_pokemon
+from .utils import get_random_pokemon, get_random_filler_item, get_random_held_item
 
 
 class PokemonCrystalSettings(settings.Group):
@@ -79,7 +79,10 @@ class PokemonCrystalWorld(World):
             if location.address is not None
         ]
 
-        default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
+        default_itempool = [self.create_item_by_code(
+            location.default_item_code if location.default_item_code > BASE_OFFSET
+            else get_random_filler_item(self.random))
+            for location in item_locations]
         self.multiworld.itempool += default_itempool
 
     def set_rules(self) -> None:
@@ -100,11 +103,6 @@ class PokemonCrystalWorld(World):
         def get_random_move_from_learnset(pokemon, level):
             move_pool = [move.move for move in crystal_data.pokemon[pokemon].learnset if move.level <= level]
             return self.random.choice(move_pool)
-
-        def get_random_helditem():
-            helditems = [item.item_const for item_id, item in crystal_data.items.items()
-                         if "Unique" not in item.tags and "INVALID" not in item.tags]
-            return self.random.choice(helditems)
 
         def set_rival_fight(trainer_name, trainer, new_pokemon):
             trainer.pokemon[-1][1] = new_pokemon
@@ -164,7 +162,7 @@ class PokemonCrystalWorld(World):
                         new_pokemon = get_random_pokemon(self.random, match_types)
                         new_pkmn_data[1] = new_pokemon
                     if trainer_data.trainer_type in ["TRAINERTYPE_ITEM", "TRAINERTYPE_ITEM_MOVES"]:
-                        new_pkmn_data[2] = get_random_helditem()
+                        new_pkmn_data[2] = get_random_held_item(self.random)
                     if trainer_data.trainer_type not in ["TRAINERTYPE_MOVES", "TRAINERTYPE_ITEM_MOVES"]:
                         continue
                     move_offset = 2 if trainer_data.trainer_type == "TRAINERTYPE_MOVES" else 3

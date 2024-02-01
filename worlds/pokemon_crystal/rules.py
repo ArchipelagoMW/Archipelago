@@ -55,6 +55,15 @@ def set_rules(world: PokemonCrystalWorld) -> None:
             "Earth Badge"
         ]]) >= n
 
+    def has_rocket_badges(state: CollectionState):
+        return has_n_badges(state, world.options.elite_four_badges - 1)
+
+    def has_elite_four_badges(state: CollectionState):
+        return has_n_badges(state, world.options.elite_four_badges)
+
+    def has_red_badges(state: CollectionState):
+        return has_n_badges(state, world.options.red_badges)
+
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
 
@@ -193,7 +202,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Radio Tower
 
-    set_rule(get_entrance("REGION_RADIO_TOWER_2F -> REGION_RADIO_TOWER_3F"), lambda state: has_n_badges(state, 7))
+    set_rule(get_entrance("REGION_RADIO_TOWER_2F -> REGION_RADIO_TOWER_3F"), has_rocket_badges)
 
     set_rule(get_entrance("REGION_RADIO_TOWER_3F -> REGION_RADIO_TOWER_4F:CARDKEY"),
              lambda state: state.has("Card Key", world.player))
@@ -308,7 +317,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_MAHOGANY_GYM"),
              lambda state: state.has("EVENT_CLEARED_ROCKET_HIDEOUT", world.player))
 
-    set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_ROUTE_44"), lambda state: has_n_badges(state, 7))
+    set_rule(get_entrance("REGION_MAHOGANY_TOWN -> REGION_ROUTE_44"), has_rocket_badges)
 
     # Route 43
 
@@ -391,9 +400,9 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Victory Road
 
-    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), lambda state: has_n_badges(state, 8))
+    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_VICTORY_ROAD"), has_elite_four_badges)
 
-    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), lambda state: has_n_badges(state, 8))
+    set_rule(get_entrance("REGION_VICTORY_ROAD_GATE -> REGION_ROUTE_26"), has_elite_four_badges)
 
     set_rule(get_entrance("REGION_ROUTE_28 -> REGION_VICTORY_ROAD_GATE"),
              lambda state: state.has("EVENT_OPENED_MT_SILVER", world.player))
@@ -487,7 +496,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_VERMILION_CITY -> REGION_VERMILION_GYM"),
              lambda state: can_cut(state) or can_surf(state))
 
-    set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), lambda state: has_n_badges(state, 16))
+    set_rule(get_location("Vermilion City - HP Up from Man by PokeCenter"), has_red_badges)
 
     set_rule(get_location("Vermilion City - Lost Item from Guy in Fan Club"),
              lambda state: state.has("EVENT_RESTORED_POWER_TO_KANTO", world.player) and state.has(
@@ -547,7 +556,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
 
     # Pallet
 
-    set_rule(get_location("EVENT_OPENED_MT_SILVER"), lambda state: has_n_badges(state, 16))
+    set_rule(get_location("EVENT_OPENED_MT_SILVER"), has_red_badges)
 
     if world.options.require_itemfinder:
         for location in world.multiworld.get_locations(world.player):

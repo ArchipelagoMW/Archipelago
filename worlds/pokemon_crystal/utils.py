@@ -1,4 +1,4 @@
-from .data import data
+from .data import data, BASE_OFFSET
 
 
 def get_random_pokemon(random, types=None):
@@ -9,6 +9,18 @@ def get_random_pokemon(random, types=None):
         pokemon_pool = [pkmn_name for pkmn_name, pkmn_data in data.pokemon.items()
                         if pkmn_name != "UNOWN" and pkmn_data.types == types]
     return random.choice(pokemon_pool)
+
+
+def get_random_held_item(random):
+    helditems = [item.item_const for item_id, item in data.items.items()
+                 if "Unique" not in item.tags and "INVALID" not in item.tags]
+    return random.choice(helditems)
+
+
+def get_random_filler_item(random):
+    helditems = [item_id for item_id, item in data.items.items()
+                 if "Unique" not in item.tags and "INVALID" not in item.tags]
+    return random.choice(helditems) + BASE_OFFSET
 
 
 def get_random_pokemon_id(random):

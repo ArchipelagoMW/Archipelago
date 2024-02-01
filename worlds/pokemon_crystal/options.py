@@ -11,6 +11,22 @@ class Goal(Choice):
     option_red = 1
 
 
+class EliteFourBadges(Range):
+    """Number of badges required to enter Victory Road"""
+    display_name = "Elite Four Badges"
+    default = 8
+    range_start = 1
+    range_end = 16
+
+
+class RedBadges(Range):
+    """Number of badges required to open Silver Cave"""
+    display_name = "Red Badges"
+    default = 16
+    range_start = 1
+    range_end = 16
+
+
 class RandomizeHiddenItems(Toggle):
     """Shuffles hidden items into the pool"""
     display_name = "Randomize Hidden Items"
@@ -127,6 +143,8 @@ class ItemReceiveSound(DefaultOnToggle):
 @dataclass
 class PokemonCrystalOptions(PerGameCommonOptions):
     goal: Goal
+    elite_four_badges: EliteFourBadges
+    red_badges: RedBadges
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
     randomize_pokegear: RandomizePokegear

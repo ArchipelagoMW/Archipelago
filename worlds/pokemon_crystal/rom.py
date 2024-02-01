@@ -180,6 +180,16 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
 
+    elite_four_value = world.options.elite_four_badges - 1
+    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_VictoryRoadBadges"] + 1)
+    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_RocketBadges_2"] + 1)
+    elite_four_value -= 1
+    if elite_four_value < 0:
+        elite_four_value = 0
+    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_RocketBadges_1"] + 1)
+    red_value = world.options.red_badges - 1
+    write_bytes(patched_rom, [red_value], data.rom_addresses["AP_Setting_RedBadges"] + 1)
+
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
     start_inventory = world.options.start_inventory.value.copy()
     for item, quantity in start_inventory.items():
