@@ -11,7 +11,7 @@ import asyncio
 import json
 from pymem import pymem
 from .Items import item_dictionary_table, exclusion_item_table, CheckDupingItems, SupportAbility_Table, ActionAbility_Table
-from .Locations import  all_locations, exclusion_table, all_weapon_slot
+from .Locations import all_locations, exclusion_table, all_weapon_slot
 from .Names import ItemName
 from .WorldLocations import *
 
@@ -60,7 +60,7 @@ class KH2Context(CommonContext):
         self.growthlevel = None
         self.kh2connected = False
         self.kh2_finished_game = False
-        self.serverconneced = False
+        self.serverconnected = False
         self.item_name_to_data = {name: data for name, data, in item_dictionary_table.items()}
         self.location_name_to_data = {name: data for name, data, in all_locations.items()}
         self.kh2_loc_name_to_id = None
@@ -281,7 +281,7 @@ class KH2Context(CommonContext):
 
     async def connection_closed(self):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname is not None and self.auth is not None:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
                     'w') as f:
@@ -290,7 +290,7 @@ class KH2Context(CommonContext):
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         self.kh2connected = False
-        self.serverconneced = False
+        self.serverconnected = False
         if self.kh2seedname not in {None} and self.auth not in {None}:
             with open(os.path.join(self.game_communication_path, f"kh2save2{self.kh2seedname}{self.auth}.json"),
                     'w') as f:
@@ -422,7 +422,7 @@ class KH2Context(CommonContext):
                         },
                     },
                 }
-            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconneced:
+            if start_index > self.kh2_seed_save_cache["itemIndex"] and self.serverconnected:
                 self.kh2_seed_save_cache["itemIndex"] = start_index
                 for item in args['items']:
                     asyncio.create_task(self.give_item(item.item, item.location))
@@ -502,7 +502,7 @@ class KH2Context(CommonContext):
                 if self.kh2connected:
                     self.kh2connected = False
                 logger.info("Game is not open.")
-            self.serverconneced = True
+            self.serverconnected = True
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 
     async def checkWorldLocations(self):
@@ -1004,7 +1004,8 @@ class KH2Context(CommonContext):
         # When the list ends, we add a terminator and return the string.
 
         if len(input) >= 24:
-            out_list.append([0x2E, 0x2E, 0x2E])
+            for _ in range(3):
+                out_list.append(0x2E)
 
         out_list.append(0x00)
         return out_list
@@ -1076,7 +1077,7 @@ def finishedGame(ctx: KH2Context, message):
 async def kh2_watcher(ctx: KH2Context):
     while not ctx.exit_event.is_set():
         try:
-            if ctx.kh2connected and ctx.serverconneced:
+            if ctx.kh2connected and ctx.serverconnected:
                 ctx.sending = []
                 await ctx.checkWorldLocations()
                 await ctx.checkLevels()
@@ -1092,10 +1093,10 @@ async def kh2_watcher(ctx: KH2Context):
                     await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
                     ctx.kh2_finished_game = True
                 await ctx.send_msgs(message)
-            elif not ctx.kh2connected and ctx.serverconneced:
+            elif not ctx.kh2connected and ctx.serverconnected:
                 logger.info("Game Connection lost. waiting 15 seconds until trying to reconnect.")
                 ctx.kh2 = None
-                while not ctx.kh2connected and ctx.serverconneced:
+                while not ctx.kh2connected and ctx.serverconnected:
                     await asyncio.sleep(15)
                     ctx.kh2 = pymem.Pymem(process_name="KINGDOM HEARTS II FINAL MIX")
                     if ctx.kh2 is not None:
