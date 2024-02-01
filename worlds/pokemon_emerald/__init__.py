@@ -26,10 +26,7 @@ from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges,
                       PokemonEmeraldOptions, HmRequirements)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
                       get_random_damaging_move, get_random_type)
-from .regions import create_regions
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
-from .rules import set_rules
-from .sanity_check import validate_regions
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
 
@@ -109,6 +106,8 @@ class PokemonEmeraldWorld(World):
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        from .sanity_check import validate_regions
+
         if not os.path.exists(cls.settings.rom_file):
             raise FileNotFoundError(cls.settings.rom_file)
 
@@ -200,6 +199,7 @@ class PokemonEmeraldWorld(World):
             self.options.norman_count.value = max_norman_count
 
     def create_regions(self) -> None:
+        from .regions import create_regions
         regions = create_regions(self)
 
         tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}  # Tags with progression items always included
@@ -374,6 +374,7 @@ class PokemonEmeraldWorld(World):
                 self.multiworld.itempool.append(item)
 
     def set_rules(self) -> None:
+        from .rules import set_rules
         set_rules(self)
 
     def generate_basic(self) -> None:
