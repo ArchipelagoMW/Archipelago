@@ -339,10 +339,13 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
-        if "merge_" in option:
-            option_name = option.replace("merge_", "")
+        if option.startswith("__merge_"):
+            option_name = option.replace("__merge_", "")
             new_items = new_weights[option]
-            new_items.extend(weights[option_name])
+            if isinstance(new_items, dict):
+                new_items.update(weights[option_name])
+            else:
+                new_items.extend(weights[option_name])
             cleaned_weights[option_name] = new_items
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
@@ -479,6 +482,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if any(weight.startswith("__merge") for weight in game_weights) or \
+       any(weight.startswith("__merge") for weight in weights):
+        raise Exception(f"!merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])

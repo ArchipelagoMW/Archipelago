@@ -224,7 +224,7 @@ class UniqueKeyLoader(SafeLoader):
         for key_node, value_node in node.value:
             if value_node.tag == "!merge":
                 # this might need type-checking?
-                key_node.value = f"merge_{key_node.value}"
+                key_node.value = f"__merge_{key_node.value}"
             key = self.construct_object(key_node, deep=deep)
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
@@ -234,7 +234,12 @@ class UniqueKeyLoader(SafeLoader):
         return super().construct_mapping(node, deep)
 
     def merge_keys(self, node):
-        return self.construct_sequence(node)
+        if node.id == "sequence":
+            return self.construct_sequence(node)
+        elif node.id == "mapping":
+            return self.construct_mapping(node)
+        else:
+            raise Exception(f"Cannot apply !merge to node of type {node.id}")
 
 
 UniqueKeyLoader.add_constructor("!merge", UniqueKeyLoader.merge_keys)
