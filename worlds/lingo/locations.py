@@ -20,14 +20,6 @@ class LocationData(NamedTuple):
     panels: List[RoomAndPanel]
     classification: LocationClassification
 
-    def panel_ids(self):
-        ids = set()
-        for panel in self.panels:
-            effective_room = self.room if panel.room is None else panel.room
-            panel_data = PANELS_BY_ROOM[effective_room][panel.panel]
-            ids = ids | set(panel_data.internal_ids)
-        return ids
-
 
 class LingoLocation(Location):
     """

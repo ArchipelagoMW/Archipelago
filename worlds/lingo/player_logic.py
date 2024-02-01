@@ -1,11 +1,11 @@
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
+from .datatypes import Door, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
-from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
-    RoomAndPanel
+from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -243,8 +243,9 @@ class LingoPlayerLogic:
             else:
                 good_item_options += ["Welcome Back Area - Shortcut to Starting Room"]
 
-            for painting_obj in PAINTINGS_BY_ROOM["Starting Room"]:
-                if not painting_obj.enter_only or painting_obj.required_door is None:
+            for painting_obj in PAINTINGS.values():
+                if not painting_obj.enter_only or painting_obj.required_door is None\
+                        or painting_obj.room != "Starting Room":
                     continue
 
                 # If painting shuffle is on, we only want to consider paintings that actually go somewhere.
