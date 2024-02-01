@@ -54,11 +54,25 @@ _LOOPING_MUSIC = [
     "MUS_RG_ENCOUNTER_DEOXYS", "MUS_RG_TRAINER_TOWER", "MUS_RG_SLOW_PALLET", "MUS_RG_TEACHY_TV_MENU"
 ]
 
-_FANFARES = [
-    "MUS_OBTAIN_BADGE", "MUS_OBTAIN_ITEM", "MUS_EVOLVED", "MUS_OBTAIN_TMHM", "MUS_OBTAIN_BERRY", "MUS_HEAL",
-    "MUS_MOVE_DELETED", "MUS_TOO_BAD", "MUS_OBTAIN_B_POINTS", "MUS_REGISTER_MATCH_CALL", "MUS_OBTAIN_SYMBOL",
-    "MUS_RG_JIGGLYPUFF", "MUS_RG_HEAL", "MUS_RG_DEX_RATING", "MUS_RG_OBTAIN_KEY_ITEM", "MUS_RG_CAUGHT_INTRO",
-    "MUS_RG_PHOTO", "MUS_RG_POKE_FLUTE"
+_FANFARES: List[Tuple[str, int]] = [
+    ("MUS_LEVEL_UP",             80),
+    ("MUS_OBTAIN_ITEM",         160),
+    ("MUS_EVOLVED",             220),
+    ("MUS_OBTAIN_TMHM",         220),
+    ("MUS_HEAL",                160),
+    ("MUS_OBTAIN_BADGE",        340),
+    ("MUS_MOVE_DELETED",        180),
+    ("MUS_OBTAIN_BERRY",        120),
+    ("MUS_AWAKEN_LEGEND",       710),
+    ("MUS_SLOTS_JACKPOT",       250),
+    ("MUS_SLOTS_WIN",           150),
+    ("MUS_TOO_BAD",             160),
+    ("MUS_RG_POKE_FLUTE",       450),
+    ("MUS_RG_OBTAIN_KEY_ITEM",  170),
+    ("MUS_RG_DEX_RATING",       196),
+    ("MUS_OBTAIN_B_POINTS",     313),
+    ("MUS_OBTAIN_SYMBOL",       318),
+    ("MUS_REGISTER_MATCH_CALL", 135),
 ]
 
 
@@ -501,14 +515,20 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Randomize fanfares
     if world.options.fanfares:
-        randomized_fanfares = copy.copy(_FANFARES)
+        randomized_fanfares: List[Tuple[str, int]] = copy.copy(_FANFARES)
         world.random.shuffle(randomized_fanfares)
-        for original_fanfare, randomized_fanfare in zip(_FANFARES, randomized_fanfares):
+        for i, randomized_fanfare in enumerate(randomized_fanfares):
             _set_bytes_little_endian(
                 patched_rom,
-                data.rom_addresses["gRandomizedSoundTable"] + (data.constants[original_fanfare] * 2),
+                data.rom_addresses["sFanfares"] + (i * 4) + 0,
                 2,
-                data.constants[randomized_fanfare]
+                data.constants[randomized_fanfare[0]]
+            )
+            _set_bytes_little_endian(
+                patched_rom,
+                data.rom_addresses["sFanfares"] + (i * 4) + 2,
+                2,
+                randomized_fanfare[1]
             )
 
     # Write Output
