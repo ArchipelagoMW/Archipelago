@@ -49,7 +49,9 @@
     "has_grass": true,
     "has_water": false,
     "has_fishing": true,
-    "locations": [],
+    "locations": [
+      "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD"
+    ],
     "events": [],
     "exits": [
       "REGION_ROUTE103/WATER",
@@ -514,7 +516,8 @@
       "TRAINER_EDWIN_1_REWARD",
       "TRAINER_ALYSSA_REWARD",
       "TRAINER_EDWARD_REWARD",
-      "TRAINER_DALE_REWARD"
+      "TRAINER_DALE_REWARD",
+      "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD"
     ],
     "events": [],
     "exits": [
@@ -1850,7 +1853,8 @@
       "BERRY_TREE_36",
       "TRAINER_FABIAN_REWARD",
       "TRAINER_YASU_REWARD",
-      "TRAINER_HIDEO_REWARD"
+      "TRAINER_HIDEO_REWARD",
+      "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD"
     ],
     "events": [],
     "exits": [

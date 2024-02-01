@@ -179,6 +179,26 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
             # ITEM"
             location_info.append((location.address - BASE_OFFSET, location.item.player, location.item.name))
 
+    if world.options.trainersanity:
+        # Duplicate entries for rival fights
+        # For each of the 5 fights, there are 6 variations that have to be accounted for (for starters * genders)
+        # The Brendan Mudkip is used as a proxy in the rest of the AP code
+        for locale in ["ROUTE_103", "ROUTE_110", "ROUTE_119", "RUSTBORO", "LILYCOVE"]:
+            location = world.multiworld.get_location(data.locations[f"TRAINER_BRENDAN_{locale}_MUDKIP_REWARD"].label, world.player)
+            alternates = [
+                f"TRAINER_BRENDAN_{locale}_TREECKO",
+                f"TRAINER_BRENDAN_{locale}_TORCHIC",
+                f"TRAINER_MAY_{locale}_MUDKIP",
+                f"TRAINER_MAY_{locale}_TREECKO",
+                f"TRAINER_MAY_{locale}_TORCHIC"
+            ]
+            for trainer in alternates:
+                location_info.append((
+                    data.constants["TRAINER_FLAGS_START"] + data.constants[trainer],
+                    location.item.player,
+                    location.item.name
+                ))
+
     player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
     item_name_offsets: Dict[str, int] = {}
     next_item_name_offset = 0

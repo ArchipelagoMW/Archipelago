@@ -276,6 +276,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         get_location("EVENT_RETURN_DEVON_GOODS"),
         lambda state: state.has("EVENT_RECOVER_DEVON_GOODS", world.player)
     )
+    if world.options.trainersanity:
+        set_rule(
+            get_location("TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD"),
+            lambda state: state.has("EVENT_RETURN_DEVON_GOODS", world.player)
+        )
 
     # Devon Corp
     set_rule(
