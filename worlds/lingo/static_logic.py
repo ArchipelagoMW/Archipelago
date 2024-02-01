@@ -5,7 +5,6 @@ import pickle
 
 from .datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
 
-
 ALL_ROOMS: List[Room] = []
 DOORS_BY_ROOM: Dict[str, Dict[str, Door]] = {}
 PANELS_BY_ROOM: Dict[str, Dict[str, Panel]] = {}
@@ -72,7 +71,7 @@ def get_progressive_item_id(name: str):
 
 def load_static_data_from_file():
     global PAINTINGS, ALL_ROOMS, DOORS_BY_ROOM, PANELS_BY_ROOM, PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS, PAINTING_EXITS, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
-    
+
     try:
         from importlib.resources import files
     except ImportError:
@@ -82,7 +81,7 @@ def load_static_data_from_file():
 
     with files(data).joinpath("generated.dat").open("rb") as file:
         pickdata = pickle.load(file)
-        
+
         PAINTINGS = pickdata["PAINTINGS"]
         ALL_ROOMS = pickdata["ALL_ROOMS"]
         DOORS_BY_ROOM = pickdata["DOORS_BY_ROOM"]
