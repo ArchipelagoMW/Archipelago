@@ -253,7 +253,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         two_plus.remove(portal1)
         dead_ends.remove(portal2)
 
-    if world.options.fixed_shop:
+    if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         fixed_shop = True
         portal1 = None
         for portal in two_plus:
@@ -352,7 +352,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs[portal1] = portal2
 
     if len(two_plus) == 1:
-        raise Exception("two plus had an odd number of portals, investigate this")
+        raise Exception("two plus had an odd number of portals, investigate this. last portal is " + two_plus[0].name)
 
     return portal_pairs
 
@@ -525,7 +525,7 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
                 if p_exit == portal.name:
                     portal2 = portal
                     break
-            if exit == "Shop Portal":
+            if p_exit == "Shop Portal":
                 portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region_")
                 shop_num += 1
             else:
