@@ -5,7 +5,7 @@ from collections import Counter
 import copy
 import logging
 import os
-from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
+from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, Union
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial
 from Fill import FillError, fill_restrictive
@@ -23,7 +23,7 @@ from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
-                      PokemonEmeraldOptions)
+                      PokemonEmeraldOptions, HmRequirements)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
                       get_random_damaging_move, get_random_type)
 from .regions import create_regions
@@ -88,6 +88,7 @@ class PokemonEmeraldWorld(World):
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     free_fly_location_id: int
     blacklisted_moves: Set[int]
+    hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
     modified_species: List[Optional[SpeciesData]]
@@ -117,6 +118,19 @@ class PokemonEmeraldWorld(World):
         return "Great Ball"
 
     def generate_early(self) -> None:
+        self.hm_requirements = {
+            "HM01 Cut": ["Stone Badge"],
+            "HM02 Fly": ["Feather Badge"],
+            "HM03 Surf": ["Balance Badge"],
+            "HM04 Strength": ["Heat Badge"],
+            "HM05 Flash": ["Knuckle Badge"],
+            "HM06 Rock Smash": ["Dynamo Badge"],
+            "HM07 Waterfall": ["Rain Badge"],
+            "HM08 Dive": ["Mind Badge"]
+        }
+        if self.options.hm_requirements == HmRequirements.option_fly_without_badge:
+            self.hm_requirements["HM02 Fly"] = 0
+
         self.blacklisted_moves = {emerald_data.move_labels[label] for label in self.options.move_blacklist.value}
 
         # In race mode we don't patch any item location information into the ROM
@@ -1063,7 +1077,6 @@ class PokemonEmeraldWorld(World):
             "legendary_hunt_count",
             "extra_boulders",
             "remove_roadblocks",
-            "hms_requiring_badge",
             "allowed_legendary_hunt_encounters",
             "extra_bumpy_slope",
             "free_fly_location",

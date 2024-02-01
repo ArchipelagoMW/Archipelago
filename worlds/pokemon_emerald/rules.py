@@ -1,7 +1,7 @@
 """
 Logic rule definitions for Pokemon Emerald
 """
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable, Dict
 
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
@@ -17,26 +17,14 @@ if TYPE_CHECKING:
 # Rules are organized by town/route/dungeon and ordered approximately
 # by when you would first reach that place in a vanilla playthrough.
 def set_rules(world: "PokemonEmeraldWorld") -> None:
-    def can_cut(state: CollectionState):
-        return state.has("HM01 Cut", world.player) and state.has("Stone Badge", world.player)
-
-    def can_surf(state: CollectionState):
-        return state.has("HM03 Surf", world.player) and state.has("Balance Badge", world.player)
-
-    def can_strength(state: CollectionState):
-        return state.has("HM04 Strength", world.player) and state.has("Heat Badge", world.player)
-
-    def can_flash(state: CollectionState):
-        return state.has("HM05 Flash", world.player) and state.has("Knuckle Badge", world.player)
-
-    def can_rock_smash(state: CollectionState):
-        return state.has("HM06 Rock Smash", world.player) and state.has("Dynamo Badge", world.player)
-
-    def can_waterfall(state: CollectionState):
-        return state.has("HM07 Waterfall", world.player) and state.has("Rain Badge", world.player)
-
-    def can_dive(state: CollectionState):
-        return state.has("HM08 Dive", world.player) and state.has("Mind Badge", world.player)
+    hm_rules: Dict[str, Callable[[CollectionState], bool]] = {}
+    for hm, badges in world.hm_requirements.items():
+        if isinstance(badges, list):
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
+                                                               and state.has_all(badges, world.player)
+        else:
+            hm_rules[hm] = lambda state, hm=hm, badges=badges: state.has(hm, world.player) \
+                                                               and state.has_group("Badges", world.player, badges)
 
     def has_acro_bike(state: CollectionState):
         return state.has("Acro Bike", world.player)
@@ -55,7 +43,6 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "EVENT_DEFEAT_TATE_AND_LIZA",
             "EVENT_DEFEAT_JUAN"
         ]]) >= n
-
 
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
         num_encounters = 0
@@ -121,16 +108,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
                  lambda state: state.has("EVENT_DEFEAT_CHAMPION", world.player))
 
     # Sky
-    if "HM02 Fly" in world.options.hms_requiring_badge:
-        set_rule(
-            get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY"),
-            lambda state: state.has("HM02 Fly", world.player) and state.has("Feather Badge", world.player)
-        )
-    else:
-        set_rule(
-            get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY"),
-            lambda state: state.has("HM02 Fly", world.player)
-        )
+    set_rule(
+        get_entrance("REGION_LITTLEROOT_TOWN/MAIN -> REGION_SKY"),
+        hm_rules["HM02 Fly"]
+    )
     set_rule(
         get_entrance("REGION_SKY -> REGION_LITTLEROOT_TOWN/MAIN"),
         lambda state: state.has("EVENT_VISITED_LITTLEROOT_TOWN", world.player)
@@ -217,31 +198,31 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 102
     set_rule(
         get_entrance("REGION_ROUTE102/MAIN -> REGION_ROUTE102/POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Route 103
     set_rule(
         get_entrance("REGION_ROUTE103/EAST -> REGION_ROUTE103/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE103/WEST -> REGION_ROUTE103/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE103/EAST -> REGION_ROUTE103/EAST_TREE_MAZE"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
 
     # Petalburg City
     set_rule(
         get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/SOUTH_POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_PETALBURG_CITY/MAIN -> REGION_PETALBURG_CITY/NORTH_POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_location("NPC_GIFT_RECEIVED_HM_SURF"),
@@ -269,15 +250,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 104
     set_rule(
         get_entrance("REGION_ROUTE104/SOUTH -> REGION_ROUTE104/SOUTH_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE104/NORTH -> REGION_ROUTE104/NORTH_POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE104/NORTH -> REGION_ROUTE104/TREE_ALCOVE_2"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("REGION_ROUTE104_MR_BRINEYS_HOUSE/MAIN -> REGION_DEWFORD_TOWN/MAIN"),
@@ -287,7 +268,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Petalburg Woods
     set_rule(
         get_entrance("REGION_PETALBURG_WOODS/WEST_PATH -> REGION_PETALBURG_WOODS/EAST_PATH"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
 
     # Rustboro City
@@ -305,7 +286,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 116
     set_rule(
         get_entrance("REGION_ROUTE116/WEST -> REGION_ROUTE116/WEST_ABOVE_LEDGE"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("REGION_ROUTE116/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
@@ -323,15 +304,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Rusturf Tunnel
     set_rule(
         get_entrance("REGION_RUSTURF_TUNNEL/WEST -> REGION_RUSTURF_TUNNEL/EAST"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_RUSTURF_TUNNEL/EAST -> REGION_RUSTURF_TUNNEL/WEST"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_location("NPC_GIFT_RECEIVED_HM_STRENGTH"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_location("EVENT_RECOVER_DEVON_GOODS"),
@@ -341,19 +322,19 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 115
     set_rule(
         get_entrance("REGION_ROUTE115/SOUTH_BELOW_LEDGE -> REGION_ROUTE115/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEHIND_ROCK"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE115/NORTH_BELOW_SLOPE -> REGION_ROUTE115/NORTH_ABOVE_SLOPE"),
@@ -375,11 +356,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.extra_boulders:
         set_rule(
             get_entrance("REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE -> REGION_ROUTE115/SOUTH_ABOVE_LEDGE"),
-            can_strength
+            hm_rules["HM04 Strength"]
         )
         set_rule(
             get_entrance("REGION_ROUTE115/SOUTH_ABOVE_LEDGE -> REGION_ROUTE115/SOUTH_BEACH_NEAR_CAVE"),
-            can_strength
+            hm_rules["HM04 Strength"]
         )
 
     if world.options.extra_bumpy_slope:
@@ -396,14 +377,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 105
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_105_1", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE105/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_105_2", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
@@ -416,11 +397,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 106
     set_rule(
         get_entrance("REGION_ROUTE106/EAST -> REGION_ROUTE106/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE106/WEST -> REGION_ROUTE106/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Dewford Town
@@ -451,7 +432,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 107
     set_rule(
         get_entrance("REGION_DEWFORD_TOWN/MAIN -> REGION_ROUTE107/MAIN"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Route 109
@@ -465,13 +446,13 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE109/BEACH -> REGION_ROUTE109/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Slateport City
     set_rule(
         get_entrance("REGION_SLATEPORT_CITY/MAIN -> REGION_ROUTE134/WEST"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_location("EVENT_TALK_TO_DOCK"),
@@ -493,11 +474,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 110
     set_rule(
         get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/SOUTH_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE110/MAIN -> REGION_ROUTE110/NORTH_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/WEST -> REGION_ROUTE110_SEASIDE_CYCLING_ROAD_SOUTH_ENTRANCE/EAST"),
@@ -520,7 +501,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Trick House
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE1/REWARDS"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE2/ENTRANCE"),
@@ -532,7 +513,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE3/REWARDS"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE"),
@@ -540,7 +521,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/ENTRANCE -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE4/REWARDS"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_ROUTE110_TRICK_HOUSE_ENTRANCE/MAIN -> REGION_ROUTE110_TRICK_HOUSE_PUZZLE5/ENTRANCE"),
@@ -568,7 +549,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 117
     set_rule(
         get_entrance("REGION_ROUTE117/MAIN -> REGION_ROUTE117/PONDS"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_location("EVENT_ENCOUNTER_LATIOS"),
@@ -590,15 +571,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE111/MIDDLE -> REGION_ROUTE111/SOUTH"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/SOUTH_POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE111/SOUTH -> REGION_ROUTE111/MIDDLE"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("MAP_ROUTE111:4/MAP_TRAINER_HILL_ENTRANCE:0"),
@@ -610,7 +591,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("MAP_DESERT_RUINS:0/MAP_ROUTE111:1"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
 
     # Route 112
@@ -627,17 +608,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Fiery Path
     set_rule(
         get_entrance("REGION_FIERY_PATH/MAIN -> REGION_FIERY_PATH/BEHIND_BOULDER"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
 
     # Route 114
     set_rule(
         get_entrance("REGION_ROUTE114/MAIN -> REGION_ROUTE114/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE114/WATER -> REGION_ROUTE114/ABOVE_WATERFALL"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("MAP_ROUTE114_FOSSIL_MANIACS_TUNNEL:2/MAP_DESERT_UNDERPASS:0"),
@@ -659,15 +640,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Meteor Falls
     set_rule(
         get_entrance("REGION_METEOR_FALLS_1F_1R/MAIN -> REGION_METEOR_FALLS_1F_1R/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_1F_1R/WATER -> REGION_METEOR_FALLS_1F_1R/WATER_ABOVE_WATERFALL"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_1F_1R/ABOVE_WATERFALL -> REGION_METEOR_FALLS_1F_1R/WATER_ABOVE_WATERFALL"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("MAP_METEOR_FALLS_1F_1R:5/MAP_METEOR_FALLS_STEVENS_CAVE:0"),
@@ -675,27 +656,27 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT -> REGION_METEOR_FALLS_1F_2R/LEFT_SPLIT_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT -> REGION_METEOR_FALLS_1F_2R/RIGHT_SPLIT_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_B1F_1R/HIGHEST_LADDER -> REGION_METEOR_FALLS_B1F_1R/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_B1F_1R/NORTH_SHORE -> REGION_METEOR_FALLS_B1F_1R/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_B1F_1R/SOUTH_SHORE -> REGION_METEOR_FALLS_B1F_1R/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_METEOR_FALLS_B1F_2R/ENTRANCE -> REGION_METEOR_FALLS_B1F_2R/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Jagged Pass
@@ -729,25 +710,25 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_3F/TOP -> REGION_MIRAGE_TOWER_3F/BOTTOM"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_3F/BOTTOM -> REGION_MIRAGE_TOWER_3F/TOP"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_MIRAGE_TOWER_4F/MAIN -> REGION_MIRAGE_TOWER_4F/FOSSIL_PLATFORM"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
 
     # Abandoned Ship
     set_rule(
         get_entrance("REGION_ABANDONED_SHIP_ROOMS_B1F/CENTER -> REGION_ABANDONED_SHIP_UNDERWATER1/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS/MAIN -> REGION_ABANDONED_SHIP_UNDERWATER2/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("MAP_ABANDONED_SHIP_HIDDEN_FLOOR_CORRIDORS:0/MAP_ABANDONED_SHIP_HIDDEN_FLOOR_ROOMS:0"),
@@ -779,11 +760,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 118
     set_rule(
         get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE118/EAST -> REGION_TERRA_CAVE_ENTRANCE/MAIN"),
@@ -801,7 +782,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 119
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE119/LOWER -> REGION_ROUTE119/LOWER_ACROSS_RAILS"),
@@ -813,15 +794,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE119/UPPER -> REGION_ROUTE119/MIDDLE_RIVER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE119/MIDDLE_RIVER -> REGION_ROUTE119/ABOVE_WATERFALL"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/MIDDLE_RIVER"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_ROUTE119/ABOVE_WATERFALL -> REGION_ROUTE119/ABOVE_WATERFALL_ACROSS_RAILS"),
@@ -858,19 +839,19 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_ROUTE120/NORTH_POND_SHORE -> REGION_ROUTE120/NORTH_POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/SOUTH_ALCOVE"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/SOUTH_PONDS"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE120/SOUTH_ALCOVE -> REGION_ROUTE120/SOUTH"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("MAP_ROUTE120:0/MAP_ANCIENT_TOMB:0"),
@@ -878,17 +859,17 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("MAP_ANCIENT_TOMB:1/MAP_ANCIENT_TOMB:2"),
-        can_flash
+        hm_rules["HM05 Flash"]
     )
 
     # Route 121
     set_rule(
         get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE121/WEST"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
     set_rule(
         get_entrance("REGION_ROUTE121/EAST -> REGION_ROUTE121/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Safari Zone
@@ -898,7 +879,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_NORTHWEST/MAIN -> REGION_SAFARI_ZONE_NORTHWEST/POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTH/MAIN -> REGION_SAFARI_ZONE_NORTH/MAIN"),
@@ -910,11 +891,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHWEST/MAIN -> REGION_SAFARI_ZONE_SOUTHWEST/POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SAFARI_ZONE_SOUTHEAST/MAIN -> REGION_SAFARI_ZONE_SOUTHEAST/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     if "Safari Zone Construction Workers" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -925,27 +906,27 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 122
     set_rule(
         get_entrance("REGION_ROUTE122/MT_PYRE_ENTRANCE -> REGION_ROUTE122/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Route 123
     set_rule(
         get_entrance("REGION_ROUTE123/EAST -> REGION_ROUTE122/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE123/EAST -> REGION_ROUTE123/POND"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_ROUTE123/EAST -> REGION_ROUTE123/EAST_BEHIND_TREE"),
-        can_cut
+        hm_rules["HM01 Cut"]
     )
 
     # Lilycove City
     set_rule(
         get_entrance("REGION_LILYCOVE_CITY/MAIN -> REGION_LILYCOVE_CITY/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_LILYCOVE_CITY_HARBOR/MAIN -> REGION_SS_TIDAL_CORRIDOR/MAIN"),
@@ -977,11 +958,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Magma Hideout
     set_rule(
         get_entrance("REGION_MAGMA_HIDEOUT_1F/ENTRANCE -> REGION_MAGMA_HIDEOUT_1F/MAIN"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_MAGMA_HIDEOUT_1F/MAIN -> REGION_MAGMA_HIDEOUT_1F/ENTRANCE"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
 
     # Aqua Hideout
@@ -992,83 +973,83 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         )
         set_rule(
             get_entrance("REGION_AQUA_HIDEOUT_1F/MAIN -> REGION_AQUA_HIDEOUT_1F/WATER"),
-            lambda state: can_surf(state) and state.has("EVENT_AQUA_STEALS_SUBMARINE", world.player)
+            lambda state: hm_rules["HM03 Surf"](state) and state.has("EVENT_AQUA_STEALS_SUBMARINE", world.player)
         )
 
     # Route 124
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/BIG_AREA"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/SMALL_AREA_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/SMALL_AREA_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/SMALL_AREA_3"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/TUNNEL_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/TUNNEL_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/TUNNEL_3"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/MAIN -> REGION_UNDERWATER_ROUTE124/TUNNEL_4"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/NORTH_ENCLOSED_AREA_1 -> REGION_UNDERWATER_ROUTE124/TUNNEL_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/NORTH_ENCLOSED_AREA_2 -> REGION_UNDERWATER_ROUTE124/TUNNEL_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/NORTH_ENCLOSED_AREA_3 -> REGION_UNDERWATER_ROUTE124/TUNNEL_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/SOUTH_ENCLOSED_AREA_1 -> REGION_UNDERWATER_ROUTE124/TUNNEL_3"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/SOUTH_ENCLOSED_AREA_2 -> REGION_UNDERWATER_ROUTE124/TUNNEL_3"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE124/SOUTH_ENCLOSED_AREA_3 -> REGION_UNDERWATER_ROUTE124/TUNNEL_4"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
 
     # Mossdeep City
     set_rule(
         get_entrance("REGION_MOSSDEEP_CITY/MAIN -> REGION_MOSSDEEP_CITY/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_MOSSDEEP_CITY/MAIN -> REGION_ROUTE124/MAIN"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_MOSSDEEP_CITY/MAIN -> REGION_ROUTE125/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_MOSSDEEP_CITY/MAIN -> REGION_ROUTE127/MAIN"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_location("EVENT_DEFEAT_MAXIE_AT_SPACE_STATION"),
@@ -1086,14 +1067,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 125
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_125_1", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE125/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_125_2", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
@@ -1102,87 +1083,87 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Shoal Cave
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/SOUTH -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_WEST_CORNER -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_ENTRANCE_ROOM/NORTH_EAST_CORNER -> REGION_SHOAL_CAVE_ENTRANCE_ROOM/HIGH_TIDE_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/EAST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/HIGH_TIDE_EAST_MIDDLE_GROUND -> REGION_SHOAL_CAVE_INNER_ROOM/NORTH_WEST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_WEST_CORNER -> REGION_SHOAL_CAVE_INNER_ROOM/NORTH_WEST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_INNER_ROOM/RARE_CANDY_PLATFORM -> REGION_SHOAL_CAVE_INNER_ROOM/SOUTH_EAST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/NORTH_WEST -> REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/EAST"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/EAST -> REGION_SHOAL_CAVE_LOW_TIDE_LOWER_ROOM/NORTH_WEST"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
 
     # Route 126
     set_rule(
         get_entrance("REGION_ROUTE126/MAIN -> REGION_UNDERWATER_ROUTE126/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE126/MAIN -> REGION_UNDERWATER_ROUTE126/SMALL_AREA_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE126/NEAR_ROUTE_124 -> REGION_UNDERWATER_ROUTE126/TUNNEL"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE126/NORTH_WEST_CORNER -> REGION_UNDERWATER_ROUTE126/TUNNEL"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE126/WEST -> REGION_UNDERWATER_ROUTE126/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE126/WEST -> REGION_UNDERWATER_ROUTE126/SMALL_AREA_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
 
     # Sootopolis City
     set_rule(
         get_entrance("REGION_SOOTOPOLIS_CITY/WATER -> REGION_UNDERWATER_SOOTOPOLIS_CITY/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_SOOTOPOLIS_CITY/EAST -> REGION_SOOTOPOLIS_CITY/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SOOTOPOLIS_CITY/WEST -> REGION_SOOTOPOLIS_CITY/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SOOTOPOLIS_CITY/ISLAND -> REGION_SOOTOPOLIS_CITY/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("MAP_SOOTOPOLIS_CITY:3/MAP_CAVE_OF_ORIGIN_ENTRANCE:0"),
@@ -1204,38 +1185,38 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 127
     set_rule(
         get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/TUNNEL"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/AREA_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/AREA_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE127/MAIN -> REGION_UNDERWATER_ROUTE127/AREA_3"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE127/ENCLOSED_AREA -> REGION_UNDERWATER_ROUTE127/TUNNEL"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_127_1", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE127/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_127_2", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
@@ -1244,97 +1225,97 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 128
     set_rule(
         get_entrance("REGION_ROUTE128/MAIN -> REGION_UNDERWATER_ROUTE128/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE128/MAIN -> REGION_UNDERWATER_ROUTE128/AREA_1"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_ROUTE128/MAIN -> REGION_UNDERWATER_ROUTE128/AREA_2"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
 
     # Seafloor Cavern
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ENTRANCE/MAIN -> REGION_SEAFLOOR_CAVERN_ENTRANCE/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ENTRANCE/WATER -> REGION_UNDERWATER_SEAFLOOR_CAVERN/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM1/NORTH"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM1/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM1/SOUTH"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_WEST"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_EAST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM2/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM2/SOUTH_EAST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/EAST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/EAST -> REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/SOUTH_WEST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM5/SOUTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM5/NORTH_WEST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM6/NORTH_WEST -> REGION_SEAFLOOR_CAVERN_ROOM6/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM6/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM6/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM7/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM7/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM7/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM7/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM8/NORTH -> REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     set_rule(
         get_entrance("REGION_SEAFLOOR_CAVERN_ROOM8/SOUTH -> REGION_SEAFLOOR_CAVERN_ROOM8/NORTH"),
-        can_strength
+        hm_rules["HM04 Strength"]
     )
     if "Seafloor Cavern Aqua Grunt" not in world.options.remove_roadblocks.value:
         set_rule(
@@ -1345,14 +1326,14 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 129
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_1 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_129_1", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
     )
     set_rule(
         get_entrance("REGION_UNDERWATER_ROUTE129/MARINE_CAVE_ENTRANCE_2 -> REGION_UNDERWATER_MARINE_CAVE/MAIN"),
-        lambda state: can_dive(state) and \
+        lambda state: hm_rules["HM08 Dive"](state) and \
             state.has("EVENT_DEFEAT_CHAMPION", world.player) and \
             state.has("MARINE_CAVE_ROUTE_129_2", world.player) and \
             state.has("EVENT_DEFEAT_SHELLY", world.player)
@@ -1361,15 +1342,15 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Pacifidlog Town
     set_rule(
         get_entrance("REGION_PACIFIDLOG_TOWN/MAIN -> REGION_PACIFIDLOG_TOWN/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_PACIFIDLOG_TOWN/MAIN -> REGION_ROUTE131/MAIN"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_PACIFIDLOG_TOWN/MAIN -> REGION_ROUTE132/EAST"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Sky Pillar
@@ -1399,7 +1380,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Route 134
     set_rule(
         get_entrance("REGION_ROUTE134/MAIN -> REGION_UNDERWATER_ROUTE134/MAIN"),
-        can_dive
+        hm_rules["HM08 Dive"]
     )
     set_rule(
         get_location("EVENT_UNDO_REGI_SEAL"),
@@ -1413,65 +1394,65 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     # Ever Grande City
     set_rule(
         get_entrance("REGION_EVER_GRANDE_CITY/SEA -> REGION_EVER_GRANDE_CITY/SOUTH"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_EVER_GRANDE_CITY/SOUTH -> REGION_EVER_GRANDE_CITY/SEA"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Victory Road
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/SOUTH_WEST_MAIN -> REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/SOUTH_WEST_LADDER_UP -> REGION_VICTORY_ROAD_B1F/SOUTH_WEST_MAIN"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_UPPER -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST"),
-        can_rock_smash
+        hm_rules["HM06 Rock Smash"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST -> REGION_VICTORY_ROAD_B1F/MAIN_LOWER_EAST"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B1F/MAIN_LOWER_WEST -> REGION_VICTORY_ROAD_B1F/MAIN_UPPER"),
-        lambda state: can_rock_smash(state) and can_strength(state)
+        lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST -> REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST_ISLAND -> REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_EAST -> REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_WEST_WATER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/UPPER -> REGION_VICTORY_ROAD_B2F/UPPER_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_VICTORY_ROAD_B2F/UPPER -> REGION_VICTORY_ROAD_B2F/LOWER_EAST_WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
 
     # Pokemon League
@@ -1493,11 +1474,11 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_WEST/CAVE_ENTRANCE -> REGION_BATTLE_FRONTIER_OUTSIDE_WEST/WATER"),
-        can_surf
+        hm_rules["HM03 Surf"]
     )
     set_rule(
         get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL"),
-        lambda state: state.has("Wailmer Pail", world.player) and can_surf(state)
+        lambda state: state.has("Wailmer Pail", world.player) and hm_rules["HM03 Surf"](state)
     )
     set_rule(
         get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/MAIN"),
@@ -1505,7 +1486,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
     set_rule(
         get_entrance("REGION_BATTLE_FRONTIER_OUTSIDE_EAST/WATER -> REGION_BATTLE_FRONTIER_OUTSIDE_EAST/ABOVE_WATERFALL"),
-        can_waterfall
+        hm_rules["HM07 Waterfall"]
     )
 
     # Pokedex Rewards
@@ -1530,19 +1511,19 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         # Route 117
         set_rule(
             get_location("ITEM_ROUTE_117_REVIVE"),
-            can_cut
+            hm_rules["HM01 Cut"]
         )
 
         # Route 114
         set_rule(
             get_location("ITEM_ROUTE_114_PROTEIN"),
-            can_rock_smash
+            hm_rules["HM06 Rock Smash"]
         )
 
         # Victory Road
         set_rule(
             get_location("ITEM_VICTORY_ROAD_B1F_FULL_RESTORE"),
-            lambda state: can_rock_smash(state) and can_strength(state)
+            lambda state: hm_rules["HM06 Rock Smash"](state) and hm_rules["HM04 Strength"](state)
         )
 
     # Hidden Items
@@ -1550,13 +1531,13 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         # Route 120
         set_rule(
             get_location("HIDDEN_ITEM_ROUTE_120_RARE_CANDY_1"),
-            can_cut
+            hm_rules["HM01 Cut"]
         )
 
         # Route 121
         set_rule(
             get_location("HIDDEN_ITEM_ROUTE_121_NUGGET"),
-            can_cut
+            hm_rules["HM01 Cut"]
         )
 
     # NPC Gifts
@@ -1641,56 +1622,56 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     if world.options.require_flash in [DarkCavesRequireFlash.option_only_granite_cave, DarkCavesRequireFlash.option_both]:
         add_rule(
             get_entrance("MAP_GRANITE_CAVE_1F:2/MAP_GRANITE_CAVE_B1F:1"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_GRANITE_CAVE_B1F:3/MAP_GRANITE_CAVE_B2F:1"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
 
     # Victory Road
     if world.options.require_flash in [DarkCavesRequireFlash.option_only_victory_road, DarkCavesRequireFlash.option_both]:
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_1F:2/MAP_VICTORY_ROAD_B1F:5"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_1F:4/MAP_VICTORY_ROAD_B1F:4"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_1F:3/MAP_VICTORY_ROAD_B1F:2"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B1F:3/MAP_VICTORY_ROAD_B2F:1"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B1F:1/MAP_VICTORY_ROAD_B2F:2"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B1F:6/MAP_VICTORY_ROAD_B2F:3"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B1F:0/MAP_VICTORY_ROAD_B2F:0"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B2F:3/MAP_VICTORY_ROAD_B1F:6"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B2F:2/MAP_VICTORY_ROAD_B1F:1"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B2F:0/MAP_VICTORY_ROAD_B1F:0"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )
         add_rule(
             get_entrance("MAP_VICTORY_ROAD_B2F:1/MAP_VICTORY_ROAD_B1F:3"),
-            can_flash
+            hm_rules["HM05 Flash"]
         )

@@ -393,6 +393,43 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set starting badges
     _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, starting_badges)
 
+    # Set HM badge requirements
+    field_move_order = [
+        "HM01 Cut",
+        "HM05 Flash",
+        "HM06 Rock Smash",
+        "HM04 Strength",
+        "HM03 Surf",
+        "HM02 Fly",
+        "HM08 Dive",
+        "HM07 Waterfall"
+    ]
+    badge_to_bit = {
+        "Stone Badge": 1 << 0,
+        "Knuckle Badge": 1 << 1,
+        "Dynamo Badge": 1 << 2,
+        "Heat Badge": 1 << 3,
+        "Balance Badge": 1 << 4,
+        "Feather Badge": 1 << 5,
+        "Mind Badge": 1 << 6,
+        "Rain Badge": 1 << 7
+    }
+
+    # Number of badges
+    # Uses 4 bits per HM. 0-8 means it's a valid requirement, otherwise use specific badges.
+    hm_badge_counts = 0
+    for i, hm in enumerate(field_move_order):
+        hm_badge_counts |= (world.hm_requirements[hm] if isinstance(world.hm_requirements[hm], int) else 0xF) << (i * 4)
+    _set_bytes_little_endian(patched_rom, options_address + 0x14, 4, hm_badge_counts)
+
+    # Specific badges
+    for i, hm in enumerate(field_move_order):
+        if isinstance(world.hm_requirements, list):
+            bitfield = 0
+            for badge in world.hm_requirements:
+                bitfield |= badge_to_bit[badge]
+            _set_bytes_little_endian(patched_rom, options_address + 0x18 + i, 1, bitfield)
+
     # Set terra/marine cave locations
     terra_cave_id = cave_event_to_id_map[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
     marine_cave_id = cave_event_to_id_map[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
@@ -427,18 +464,6 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Set easter egg data
     _set_bytes_little_endian(patched_rom, options_address + 0x2B, 1, easter_egg[0])
-
-    # Set HM badge requirements
-    # hms_requiring_badge_bitfield = 0
-    # hms_requiring_badge_bitfield |= (1 << 0) if "HM01 Cut" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 1) if "HM02 Fly" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 2) if "HM03 Surf" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 3) if "HM04 Strength" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 4) if "HM05 Flash" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 5) if "HM06 Rock Smash" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 6) if "HM07 Waterfall" in world.options.hms_requiring_badge.value else 0
-    # hms_requiring_badge_bitfield |= (1 << 7) if "HM08 Dive" in world.options.hms_requiring_badge.value else 0
-    # _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, hms_requiring_badge_bitfield)
 
     if easter_egg[0] == 2:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)

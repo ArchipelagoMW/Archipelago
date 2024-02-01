@@ -4,7 +4,7 @@ Option definitions for Pokemon Emerald
 from dataclasses import dataclass
 from typing import Dict, Type
 
-from Options import Choice, DefaultOnToggle, Option, OptionSet, Range, Toggle, FreeText, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, TextChoice, OptionSet, Range, Toggle, FreeText, PerGameCommonOptions
 
 from .data import data
 
@@ -654,31 +654,14 @@ class FreeFlyLocation(Toggle):
     display_name = "Free Fly Location"
 
 
-class HmsRequiringBadge(OptionSet):
+class HmRequirements(TextChoice):
     """
-    Sets which badges require their corresponding badge to use in the overworld
+    Sets the requirements to use HMs outside of battle
     """
-    display_name = "HMs Requiring Badge"
-    valid_keys = frozenset([
-        "HM01 Cut",
-        "HM02 Fly",
-        "HM03 Surf",
-        "HM04 Strength",
-        "HM05 Flash",
-        "HM06 Rock Smash",
-        "HM07 Waterfall",
-        "HM08 Dive"
-    ])
-    default = frozenset([
-        "HM01 Cut",
-        "HM02 Fly",
-        "HM03 Surf",
-        "HM04 Strength",
-        "HM05 Flash",
-        "HM06 Rock Smash",
-        "HM07 Waterfall",
-        "HM08 Dive"
-    ])
+    display_name = "HM Requirements"
+    default = 0
+    option_vanilla = 0
+    option_fly_without_badge = 1
 
 
 class TurboA(Toggle):
@@ -798,7 +781,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     extra_boulders: ExtraBoulders
     extra_bumpy_slope: ExtraBumpySlope
     free_fly_location: FreeFlyLocation
-    hms_requiring_badge: HmsRequiringBadge
+    hm_requirements: HmRequirements
 
     turbo_a: TurboA
     receive_item_messages: ReceiveItemMessages
