@@ -34,7 +34,7 @@ class LocationData(NamedTuple):
     rule: Optional[Callable[[Any], bool]] = Location.access_rule
 
 
-def get_location_types(multiworld: MultiWorld, player: int, inclusion_type: LocationInclusion) -> Set[LocationInclusion]:
+def get_location_types(multiworld: MultiWorld, player: int, inclusion_type: LocationInclusion) -> Set[LocationType]:
     """
 
     :param multiworld:
