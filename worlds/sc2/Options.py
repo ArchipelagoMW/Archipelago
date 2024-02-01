@@ -395,13 +395,30 @@ class KerriganLevelsPerMissionCompleted(Range):
     default = 0
 
 
-class KerriganLevelItemSum(Range):
+class KerriganLevelsPerMissionCompletedCap(Range):
     """
-    Determines the sum of the level items in the world.  This does not affect levels gained from checks.
+    Limits how many total levels Kerrigan can gain from beating missions.  This does not affect levels gained from items.  
+    Set to -1 to disable this limit.
 
     NOTE: The following missions have these level requirements:
     Supreme: 35
     The Infinite Cycle: 70
+    See Grant Story Levels for more details.
+    """
+    display_name = "Levels Per Mission Beaten Cap"
+    range_start = -1
+    range_end = 140
+    default = -1
+
+
+class KerriganLevelItemSum(Range):
+    """
+    Determines the sum of the level items in the world.  This does not affect levels gained from beating missions.
+
+    NOTE: The following missions have these level requirements:
+    Supreme: 35
+    The Infinite Cycle: 70
+    See Grant Story Levels for more details.
     """
     display_name = "Kerrigan Level Item Sum"
     range_start = 0
@@ -415,7 +432,7 @@ class KerriganLevelItemDistribution(Choice):
     Vanilla:  Uses the distribution in the vanilla campaign.
     This entails 32 individual levels and 6 packs of varying sizes.
     This distribution always adds up to 70, ignoring the Level Item Sum setting.
-    Smooth:  Uses a custom, condensed distribution of items between sizes 4 and 10,
+    Smooth:  Uses a custom, condensed distribution of 10 items between sizes 4 and 10,
     intended to fit more levels into settings with little room for filler while keeping some variance in level gains.
     This distribution always adds up to 70, ignoring the Level Item Sum setting.
     Size 70:  Uses items worth 70 levels each.
@@ -441,6 +458,22 @@ class KerriganLevelItemDistribution(Choice):
     default = option_smooth
 
 
+class KerriganTotalLevelCap(Range):
+    """
+    Limits how many total levels Kerrigan can gain from any source.  Depending on your other settings,
+    there may be more levels available in the world, but they will not affect Kerrigan.  
+    Set to -1 to disable this limit.
+
+    NOTE: The following missions have these level requirements:
+    Supreme: 35
+    The Infinite Cycle: 70
+    See Grant Story Levels for more details.
+    """
+    display_name = "Total Level Cap"
+    range_start = -1
+    range_end = 140
+    default = -1
+
 
 class StartPrimaryAbilities(Range):
     """Number of Primary Abilities (Kerrigan Tier 1, 2, and 4) to start the game with.
@@ -453,7 +486,7 @@ class StartPrimaryAbilities(Range):
 
 class KerriganPrimalStatus(Choice):
     """Determines when Kerrigan appears in her Primal Zerg form.
-    This halves her maximum energy, but greatly increases her energy regeneration.
+    This greatly increases her energy regeneration.
 
     Vanilla:  Kerrigan is human in missions that canonically appear before The Crucible,
     and zerg thereafter.
@@ -553,6 +586,31 @@ class GrantStoryTech(Toggle):
     Locked to true if Required Tactics is set to no logic.
     """
     display_name = "Grant Story Tech"
+
+
+class GrantStoryLevels(Choice):
+    """
+    If enabled, grants Kerrigan the required minimum levels for the following missions:
+    Supreme: 35
+    The Infinite Cycle: 70
+    The bonus levels only apply during the listed missions, and can exceed the Total Level Cap.
+
+    If disabled, either of these missions is included, and there are not enough levels in the world, generation may fail.  
+    To prevent this, either increase the amount of levels in the world, or enable this option.
+
+    If disabled and Required Tactics is set to no logic, this option is forced to Minimum.
+
+    Disabled: Kerrigan does not get bonus levels for these missions,
+              instead the levels must be gained from items or beating missions.
+    Additive: Kerrigan gains bonus levels equal to the mission's required level.
+    Minimum: Kerrigan is either at her real level, or at the mission's required level,
+             depending on which is higher.
+    """
+    display_name = "Grant Story Levels"
+    option_disabled = 0
+    option_additive = 1
+    option_minimum = 2
+    default = option_minimum
 
 
 class TakeOverAIAllies(Toggle):
@@ -739,8 +797,10 @@ class Starcraft2Options(PerGameCommonOptions):
     generic_upgrade_items: GenericUpgradeItems
     kerrigan_presence: KerriganPresence
     kerrigan_levels_per_mission_completed: KerriganLevelsPerMissionCompleted
+    kerrigan_levels_per_mission_completed_cap: KerriganLevelsPerMissionCompletedCap
     kerrigan_level_item_sum: KerriganLevelItemSum
     kerrigan_level_item_distribution: KerriganLevelItemDistribution
+    kerrigan_total_level_cap: KerriganTotalLevelCap
     start_primary_abilities: StartPrimaryAbilities
     kerrigan_primal_status: KerriganPrimalStatus
     spear_of_adun_presence: SpearOfAdunPresence
@@ -748,6 +808,7 @@ class Starcraft2Options(PerGameCommonOptions):
     spear_of_adun_autonomously_cast_ability_presence: SpearOfAdunAutonomouslyCastAbilityPresence
     spear_of_adun_autonomously_cast_present_in_no_build: SpearOfAdunAutonomouslyCastPresentInNoBuild
     grant_story_tech: GrantStoryTech
+    grant_story_levels: GrantStoryLevels
     take_over_ai_allies: TakeOverAIAllies
     locked_items: LockedItems
     excluded_items: ExcludedItems

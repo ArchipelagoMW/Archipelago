@@ -2,7 +2,8 @@ from typing import Set
 
 from BaseClasses import MultiWorld, CollectionState
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
-    GrantStoryTech, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, get_enabled_campaigns, MissionOrder
+    GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
+    get_enabled_campaigns, MissionOrder
 from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerrigan_actives, air_defense_ratings, \
     kerrigan_levels, get_full_item_list
 from .MissionTables import SC2Race, SC2Campaign
@@ -431,18 +432,26 @@ class SC2Logic:
             )
 
     def kerrigan_levels(self, state: CollectionState, target: int) -> bool:
-        if self.story_tech_granted or not self.kerrigan_unit_available:
-            return True  # Levels are granted by story tech
-        if self.kerrigan_levels_per_mission_completed > 0 and not self.is_item_placement(state):
+        if self.story_levels_granted or not self.kerrigan_unit_available:
+            return True  # Levels are granted
+        if self.kerrigan_levels_per_mission_completed > 0 \
+           and self.kerrigan_levels_per_mission_completed_cap > 0 \
+           and not self.is_item_placement(state):
             # Levels can be granted from mission completion.
             # Item pool filtering isn't aware of missions beaten. Assume that missions beaten will fulfill this rule.
             return True
-        levels = 0
-        levels += self.kerrigan_levels_per_mission_completed * state.count_group("Missions", self.player)
+        # Levels from missions beaten
+        levels = self.kerrigan_levels_per_mission_completed * state.count_group("Missions", self.player)
+        if self.kerrigan_levels_per_mission_completed_cap != -1:
+            levels = min(levels, self.kerrigan_levels_per_mission_completed_cap)
+        # Levels from items
         for kerrigan_level_item in kerrigan_levels:
             level_amount = get_full_item_list()[kerrigan_level_item].number
             item_count = state.count(kerrigan_level_item, self.player)
             levels += item_count * level_amount
+        # Total level cap
+        if self.kerrigan_total_level_cap != -1:
+            levels = min(levels, self.kerrigan_total_level_cap)
 
         return levels >= target
 
@@ -928,7 +937,10 @@ class SC2Logic:
         self.kerrigan_unit_available = get_option_value(multiworld, self.player, 'kerrigan_presence') in kerrigan_unit_available \
             and SC2Campaign.HOTS in get_enabled_campaigns(multiworld, self.player)
         self.kerrigan_levels_per_mission_completed = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed")
+        self.kerrigan_levels_per_mission_completed_cap = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed_cap")
+        self.kerrigan_total_level_cap = get_option_value(multiworld, self.player, "kerrigan_total_level_cap")
         self.story_tech_granted = get_option_value(multiworld, self.player, "grant_story_tech") == GrantStoryTech.option_true
+        self.story_levels_granted = get_option_value(multiworld, self.player, "grant_story_levels") != GrantStoryLevels.option_disabled
         self.basic_terran_units = get_basic_units(self.multiworld, self.player, SC2Race.TERRAN)
         self.basic_zerg_units = get_basic_units(self.multiworld, self.player, SC2Race.ZERG)
         self.basic_protoss_units = get_basic_units(self.multiworld, self.player, SC2Race.PROTOSS)
