@@ -304,7 +304,7 @@ item_table: Dict[str, KHRECOMItemData] = {
     "Friend Card Beast":                 KHRECOMItemData("Friend Cards",     code = 268_5005, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Friend Card Peter Pan":             KHRECOMItemData("Friend Cards",     code = 268_5006, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
     "Friend Card Jack":                  KHRECOMItemData("Friend Cards",     code = 268_5007, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
-    "Friend Card Pluto":                 KHRECOMItemData("Friend Cards",     code = 268_5008, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
+    "Friend Card Pluto":                 KHRECOMItemData("Manual Placement", code = 268_5008, classification = ItemClassification.progression, max_quantity = 1, weight = 1),
 }
 
 event_item_table: Dict[str, KHRECOMItemData] = {
