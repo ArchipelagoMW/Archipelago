@@ -208,7 +208,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
-    # deal with plando connections here, and also universal tracker support
+    # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
             # universal tracker stuff, won't do anything in normal gen
@@ -232,6 +232,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if not portal_name2 and portal2 == "Shop, Previous Region_":
                     portal_name2 = "Shop Portal"
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+
+    # todo: get plando connections from yaml, 
 
     if plando_connections:
         portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
@@ -369,6 +371,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 
 
 # loop through the static connections, return regions you can reach from this region
+# todo: refactor to take region_name and dependent_regions
 def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
     region_set = set()
     if not logic_rules:
@@ -492,6 +495,9 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
 
 # this is for making the connections themselves
+# todo: refactor to take dependent_regions, have it modify the regions you get based on these connections
+# so if you connect forest belltower upper to zig lower back, forest belltower upper is added to zig lower back's
+# and zig lower back is added to forest belltower upper's dependent regions
 def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal],
                               two_plus: List[Portal]) -> Tuple[Dict[Portal, Portal], List[Portal], List[Portal]]:
     portal_pairs: Dict[Portal, Portal] = {}
