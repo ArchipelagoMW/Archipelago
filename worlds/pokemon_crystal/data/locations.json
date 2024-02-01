@@ -608,7 +608,7 @@
 		"default_item": "DRAGON_SCALE"
 	},
 	"MOUNT_MORTAR_2F_INSIDE_ELIXER": {
-		"label": "Mount Mortar 2F - Item 1",
+		"label": "Mount Mortar 2F - Item 2",
 		"flag": "EVENT_MOUNT_MORTAR_2F_INSIDE_ELIXER",
 		"type": "itemball",
 		"tags": ["Overworld"],
