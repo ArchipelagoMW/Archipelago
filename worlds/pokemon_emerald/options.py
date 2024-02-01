@@ -562,6 +562,13 @@ class BlindTrainers(Toggle):
     display_name = "Blind Trainers"
 
 
+class NerfSpinners(Toggle):
+    """
+    Trainers will rotate in predictable patterns on a set interval instead of randomly and don't turn toward you when you run
+    """
+    display_name = "Nerf Spinners"
+
+
 class MatchTrainerLevels(Toggle):
     """
     When you start a battle with a trainer, your party's levels will be automatically set to match that trainer.
@@ -780,6 +787,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     guaranteed_catch: GuaranteedCatch
     exp_modifier: ExpModifier
     blind_trainers: BlindTrainers
+    nerf_spinners: NerfSpinners
     match_trainer_levels: MatchTrainerLevels
     match_trainer_levels_bonus: MatchTrainerLevelsBonus
     double_battle_chance: DoubleBattleChance

@@ -354,6 +354,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set guaranteed catch
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
 
+    # Set nerf spinners
+    _set_bytes_little_endian(patched_rom, options_address + 0x07, 1, 1 if world.options.nerf_spinners else 0)
+
     # Set blind trainers
     _set_bytes_little_endian(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
 
