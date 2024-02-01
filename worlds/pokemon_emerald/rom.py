@@ -441,6 +441,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Swap route 115 layout if bumpy slope enabled
     _set_bytes_little_endian(patched_rom, options_address + 0x23, 1, 1 if world.options.extra_bumpy_slope else 0)
 
+    # Swap route 115 layout if bumpy slope enabled
+    _set_bytes_little_endian(patched_rom, options_address + 0x24, 1, 1 if world.options.modify_118 else 0)
+
     # Set removed blockers
     removed_roadblocks = world.options.remove_roadblocks.value
     removed_roadblocks_bitfield = 0

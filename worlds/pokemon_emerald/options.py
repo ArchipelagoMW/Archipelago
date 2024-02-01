@@ -647,6 +647,14 @@ class ExtraBumpySlope(Toggle):
     display_name = "Extra Bumpy Slope"
 
 
+class ModifyRoute118(Toggle):
+    """
+    Changes the layout of Route 118 so that it must be crossed with the Acro Bike instead of Surf.
+    This aims to take some power away from Surf by restricting how much it allows you to access.
+    """
+    display_name = "Modify Route 118"
+
+
 class FreeFlyLocation(Toggle):
     """
     Enables flying to one random location when Mom gives you the running shoes (excluding cities reachable with no items)
@@ -780,6 +788,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     remove_roadblocks: RemoveRoadblocks
     extra_boulders: ExtraBoulders
     extra_bumpy_slope: ExtraBumpySlope
+    modify_118: ModifyRoute118
     free_fly_location: FreeFlyLocation
     hm_requirements: HmRequirements
 

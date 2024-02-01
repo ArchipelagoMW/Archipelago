@@ -1685,12 +1685,13 @@
     "events": [],
     "exits": [
       "REGION_MAUVILLE_CITY/MAIN",
-      "REGION_ROUTE118/WATER",
+      "REGION_ROUTE118/WEST_WATER",
+      "REGION_ROUTE118/EAST",
       "REGION_TERRA_CAVE_ENTRANCE/MAIN"
     ],
     "warps": []
   },
-  "REGION_ROUTE118/WATER": {
+  "REGION_ROUTE118/WEST_WATER": {
     "parent_map": "MAP_ROUTE118",
     "has_grass": false,
     "has_water": true,
@@ -1699,6 +1700,19 @@
     "events": [],
     "exits": [
       "REGION_ROUTE118/WEST",
+      "REGION_ROUTE118/EAST_WATER"
+    ],
+    "warps": []
+  },
+  "REGION_ROUTE118/EAST_WATER": {
+    "parent_map": "MAP_ROUTE118",
+    "has_grass": false,
+    "has_water": true,
+    "has_fishing": true,
+    "locations": [],
+    "events": [],
+    "exits": [
+      "REGION_ROUTE118/WEST_WATER",
       "REGION_ROUTE118/EAST"
     ],
     "warps": []
@@ -1721,7 +1735,8 @@
     ],
     "events": [],
     "exits": [
-      "REGION_ROUTE118/WATER",
+      "REGION_ROUTE118/EAST_WATER",
+      "REGION_ROUTE118/WEST",
       "REGION_ROUTE119/LOWER",
       "REGION_ROUTE123/WEST",
       "REGION_TERRA_CAVE_ENTRANCE/MAIN"

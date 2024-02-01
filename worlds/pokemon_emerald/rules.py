@@ -758,12 +758,39 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
     )
 
     # Route 118
+    if world.options.modify_118:
+        set_rule(
+            get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/EAST"),
+            has_acro_bike
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WEST"),
+            has_acro_bike
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE118/WEST_WATER -> REGION_ROUTE118/EAST_WATER"),
+            lambda state: False
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE118/EAST_WATER -> REGION_ROUTE118/WEST_WATER"),
+            lambda state: False
+        )
+    else:
+        set_rule(
+            get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/EAST"),
+            lambda state: False
+        )
+        set_rule(
+            get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WEST"),
+            lambda state: False
+        )
+
     set_rule(
-        get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WATER"),
+        get_entrance("REGION_ROUTE118/WEST -> REGION_ROUTE118/WEST_WATER"),
         hm_rules["HM03 Surf"]
     )
     set_rule(
-        get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/WATER"),
+        get_entrance("REGION_ROUTE118/EAST -> REGION_ROUTE118/EAST_WATER"),
         hm_rules["HM03 Surf"]
     )
     set_rule(
