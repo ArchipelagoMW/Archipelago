@@ -75,6 +75,9 @@ joke_hints = [
     "Have you tried Bumper Stickers?\nMaybe after spending so much time on this island, you are longing for a simpler puzzle game.",
     "Have you tried Pokemon Emerald?\nI'm going to say it: 10/10, just the right amount of water.",
     "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
+    "Have you tried Final Fantasy Mystic Quest?\nApparently, it was made in an attempt to simplify Final Fantasy for the western market.\nThey were right, I suck at RPGs.",
+    "Have you tried Shivers?\nWitness 2 should totally feature a haunted Museum.",
+    "Have you tried Heretic?\nWait, there is a Doom Engine game where you can look UP AND DOWN???",
     
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
@@ -148,7 +151,7 @@ joke_hints = [
     "You don't have Boat? Invisible boat time!\nYou do have boat? Boat clipping time!",
     "Cet indice est en français. Nous nous excusons de tout inconvénients engendrés par cela.",
     "How many of you have personally witnessed a total solar eclipse?",
-    "In the Treehouse area, you will find \n[Error: Data not found] progression items.",
+    "In the Treehouse area, you will find 69 progression items.\nNice.\n(Source: Just trust me)",
     "Lingo\nLingoing\nLingone",
     "The name of the captain was Albert Einstein.",
     "Panel impossible Sigma plz fix",
