@@ -15,7 +15,7 @@ from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
 from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
-                   TrainerData, data as emerald_data)
+                   TrainerData, POSTGAME_MAPS, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
@@ -229,17 +229,15 @@ class PokemonEmeraldWorld(World):
                     continue  # Location not in multiworld
 
         if self.options.goal == Goal.option_champion:
-            # Always required to beat champion before receiving this
+            # Always required to beat champion before receiving these
             exclude_locations([
-                "Littleroot Town - S.S. Ticket from Norman"
+                "Littleroot Town - S.S. Ticket from Norman",
+                "Littleroot Town - Aurora Ticket from Norman",
+                "Littleroot Town - Eon Ticket from Norman",
+                "Littleroot Town - Mystic Ticket from Norman",
+                "Littleroot Town - Old Sea Map from Norman",
+                "Trick House Puzzle 8 - Item"
             ])
-
-            # S.S. Ticket requires beating champion, so ferry is not accessible until after goal
-            if not self.options.enable_ferry:
-                exclude_locations([
-                    "SS Tidal - Hidden Item in Lower Deck Trash Can",
-                    "SS Tidal - TM49 from Thief"
-                ])
 
             # Construction workers don't move until champion is defeated
             if "Safari Zone Construction Workers" not in self.options.remove_roadblocks.value:
@@ -383,7 +381,6 @@ class PokemonEmeraldWorld(World):
         self.auth = self.random.randbytes(16)
 
         # Randomize wild encounters
-        # Must be done here for Wailord/Relicanth, and eventually for dexsanity
         if self.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
             should_match_bst = self.options.wild_pokemon in {
                 RandomizeWildPokemon.option_match_base_stats,
@@ -406,11 +403,13 @@ class PokemonEmeraldWorld(World):
             if not self.options.allow_wild_legendaries:
                 wild_encounter_blacklist |= LEGENDARY_POKEMON
 
-            placed_wailord = False
-            placed_relicanth = False
+            priority_species = [emerald_data.constants["SPECIES_WAILORD"], emerald_data.constants["SPECIES_RELICANTH"]]
 
             # Loop over map data to modify their encounter slots
-            for map_data in self.modified_maps.values():
+            map_names = list(self.modified_maps.keys())
+            self.random.shuffle(map_names)
+            for map_name in map_names:
+                map_data = self.modified_maps[map_name]
                 new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
                 old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
 
@@ -430,18 +429,20 @@ class PokemonEmeraldWorld(World):
                                 if catch_em_all and len(catch_em_all_placed) < 386:
                                     merged_blacklist |= catch_em_all_placed
 
-                                new_species_id = get_random_species(
-                                    self.random,
-                                    self.modified_species,
-                                    target_bst,
-                                    target_type,
-                                    merged_blacklist
-                                ).species_id
+                                if len(priority_species) > 0:
+                                    new_species_id = priority_species.pop()
+                                else:
+                                    new_species_id = get_random_species(
+                                        self.random,
+                                        self.modified_species,
+                                        target_bst,
+                                        target_type,
+                                        merged_blacklist
+                                    ).species_id
                                 species_old_to_new_map[species_id] = new_species_id
 
-                                if catch_em_all:
+                                if catch_em_all and map_data.name not in POSTGAME_MAPS:
                                     catch_em_all_placed.add(new_species_id)
-
 
                         # Actually create the new list of slots and encounter table
                         new_slots: List[int] = []
@@ -473,40 +474,12 @@ class PokemonEmeraldWorld(World):
                                 # Get the corresponding location and change the event name to reflect the new species
                                 slot_location = self.multiworld.get_location(encounter_location_name, self.player)
                                 slot_location.item.name = f"CATCH_{emerald_data.species[new_species_id].name}"
-
-                                # Mark Wailord and Relicanth as placed somewhere in logic
-                                if new_species_id == emerald_data.constants["SPECIES_WAILORD"]:
-                                    placed_wailord = True
-                                elif new_species_id == emerald_data.constants["SPECIES_RELICANTH"]:
-                                    placed_relicanth = True
                             except KeyError:
                                 pass  # Map probably isn't included; should be careful here about bad encounter location names
 
                 map_data.land_encounters = new_encounters[0]
                 map_data.water_encounters = new_encounters[1]
                 map_data.fishing_encounters = new_encounters[2]
-
-            # If we somehow didn't place any Wailord or Relicanth, force them
-            # into some easy to access places. These species are required for
-            # access to the Sealed Chamber
-            if not placed_wailord:
-                self.modified_maps["MAP_RUSTURF_TUNNEL"].land_encounters = EncounterTableData(
-                    [313] * 12,
-                    self.modified_maps["MAP_RUSTURF_TUNNEL"].land_encounters.address
-                )
-                self.multiworld.get_location(
-                    "MAP_RUSTURF_TUNNEL_LAND_ENCOUNTERS_1",
-                    self.player
-                ).item.name = "CATCH_SPECIES_WAILORD"
-            if not placed_relicanth:
-                self.modified_maps["MAP_PETALBURG_CITY"].water_encounters = EncounterTableData(
-                    [381] * 5,
-                    self.modified_maps["MAP_PETALBURG_CITY"].water_encounters.address
-                )
-                self.multiworld.get_location(
-                    "MAP_PETALBURG_CITY_WATER_ENCOUNTERS_1",
-                    self.player
-                ).item.name = "CATCH_SPECIES_RELICANTH"
 
         # Set our free fly location
         # If not enabled, set it to Littleroot Town by default

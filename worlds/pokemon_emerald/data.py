@@ -26,6 +26,14 @@ IGNORABLE_MAPS = {
 }
 """These maps exist but don't show up in the rando or are unused, and so should be discarded"""
 
+POSTGAME_MAPS = {
+    "MAP_DESERT_UNDERPASS",
+    "MAP_SAFARI_ZONE_NORTHEAST",
+    "MAP_SAFARI_ZONE_SOUTHEAST",
+    "MAP_METEOR_FALLS_STEVENS_CAVE",
+}
+"""These maps have encounters and are locked behind beating the champion. Those encounter slots should be ignored for logical access to a species."""
+
 
 class Warp:
     """
