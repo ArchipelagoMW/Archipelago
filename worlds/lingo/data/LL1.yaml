@@ -6174,7 +6174,7 @@
         id: Painting Room/Panel_our_four
         colors: blue
         tag: midblue
-      ONE ROAD MANY TURNS:
+      ORDER:
         id: Painting Room/Panel_order_onepathmanyturns
         tag: forbid
         colors:
@@ -6230,7 +6230,7 @@
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
         panels:
-          - ONE ROAD MANY TURNS
+          - ORDER
     paintings:
       - id: smile_painting_3
         orientation: west
