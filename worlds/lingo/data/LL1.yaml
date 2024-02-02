@@ -244,7 +244,7 @@
       Seeker Entrance:
         id: Entry Room Area Doors/Door_entrance_entrance
         item_name: The Seeker - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - OPEN
       Rhyme Room Entrance:
@@ -477,7 +477,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_slaughter_laughter
         door_group: Entrances to The Tenacious
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - SLAUGHTER
       Symmetry Door:
@@ -504,7 +504,7 @@
         id: Appendix Room Area Doors/Door_open_open
         item_name: The Traveled - Entrance
         door_group: Entrance to The Traveled
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - OPEN
       Lost Door:
@@ -737,13 +737,13 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_decay_day
         door_group: Entrances to The Tenacious
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - DECAY
       Discerning Entrance:
         id: Shuffle Room Area Doors/Door_nope_open
         item_name: The Discerning - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - NOPE
       Tower Entrance:
@@ -1151,7 +1151,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_massacred_sacred
         door_group: Entrances to The Tenacious
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - MASSACRED
       Black Door:
@@ -1162,7 +1162,7 @@
       Agreeable Entrance:
         id: Symmetry Room Area Doors/Door_close_open
         item_name: The Agreeable - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - CLOSE
       Painting Shortcut:
@@ -1227,7 +1227,7 @@
       Tenacious Entrance:
         id: Palindrome Room Area Doors/Door_dread_dead
         door_group: Entrances to The Tenacious
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - DREAD
   The Agreeable:
@@ -1296,7 +1296,7 @@
     doors:
       Shortcut to Hedge Maze:
         id: Symmetry Room Area Doors/Door_bye_hi
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         door_group: Hedge Maze Doors
         panels:
           - BYE
@@ -1391,7 +1391,7 @@
         id: Maze Area Doors/Door_maze_maze
         item_name: The Perceptive - Entrance
         door_group: Hedge Maze Doors
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - DOWN
       Painting Shortcut:
@@ -1409,7 +1409,7 @@
         skip_location: True
         item_name: The Observant - Entrance
         door_group: Observant Doors
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - room: The Perceptive
             panel: GAZE
@@ -2921,7 +2921,7 @@
       Initiated Entrance:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked
         item_name: The Initiated - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - OXEN
       # These would be more appropriate in Champion's Rest, but as currently
@@ -2974,7 +2974,7 @@
             panel: BACKSIDE
       Eight Door:
         id: Red Blue Purple Room Area Doors/Door_a_strands2
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         skip_location: True
         panels:
           - room: The Incomparable
@@ -3171,7 +3171,7 @@
       Color Hallways Entrance:
         id: Appendix Room Area Doors/Door_hello_hi
         door_group: Entrance to The Traveled
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - HELLO
   Color Hallways:
@@ -3287,7 +3287,7 @@
       Bold Entrance:
         id: Red Blue Purple Room Area Doors/Door_unopened_open
         item_name: The Bold - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - UNOPEN
       Painting Shortcut:
@@ -3300,7 +3300,7 @@
       Steady Entrance:
         id: Rock Room Doors/Door_2
         item_name: The Steady - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - BEGIN
       Lilac Entrance:
@@ -3521,7 +3521,7 @@
       Undeterred Entrance:
         id: Red Blue Purple Room Area Doors/Door_pen_open
         item_name: The Undeterred - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - PEN
       Painting Shortcut:
@@ -3598,7 +3598,7 @@
       Challenge Entrance:
         id: Count Up Room Area Doors/Door_zero_unlocked
         item_name: Number Hunt - Challenge Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - ZERO
     paintings:
@@ -5769,7 +5769,7 @@
       Wondrous Entrance:
         id: Red Blue Purple Room Area Doors/Door_wonderland
         item_name: The Wondrous - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - SHRINK
   The Wondrous (Doorknob):
@@ -6092,7 +6092,7 @@
       Wanderer Entrance:
         id: Tower Room Area Doors/Door_wanderer_entrance
         item_name: The Wanderer - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - WANDERLUST
       Tower Entrance:
@@ -7025,7 +7025,7 @@
       Wise Entrance:
         id: Clock Room Area Doors/Door_time_start
         item_name: The Wise - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - KITTEN
           - CAT
@@ -7279,7 +7279,7 @@
       Scientific Entrance:
         id: Red Blue Purple Room Area Doors/Door_chemistry_lab
         item_name: The Scientific - Entrance
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - OPEN
   The Scientific:
@@ -7715,6 +7715,6 @@
     doors:
       Welcome Door:
         id: Entry Room Area Doors/Door_challenge_challenge
-        item_group: Room Entrances
+        item_group: Achievement Room Entrances
         panels:
           - WELCOME
