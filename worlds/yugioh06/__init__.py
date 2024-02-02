@@ -472,6 +472,7 @@ class Yugioh06World(World):
             int((function_addresses.get(self.options.final_campaign_boss_unlock_condition.value) - 0xef22) / 2)
         rom_data[0xf4734:0xf4738] = self.options.starting_money.value.to_bytes(4, 'little')
         rom_data[0xe70c] = self.options.money_reward_multiplier.value
+        rom_data[0xe6e4] = self.options.money_reward_multiplier.value
         if self.options.normalize_boosters_packs.value:
             booster_pack_price = self.options.booster_pack_prices.value.to_bytes(2, 'little')
             for booster in range(51):
