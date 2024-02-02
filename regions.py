@@ -1,12 +1,17 @@
-import itertools
-from typing import Iterable, Sequence, Set
+from __future__ import annotations
 
-from BaseClasses import MultiWorld, Region, Entrance
+import itertools
+from typing import Iterable, Sequence, Set, TYPE_CHECKING
+
+from BaseClasses import Region, Entrance
 
 from . import rules
 from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
+from .options import Difficulty, OpenDoors
 
+if TYPE_CHECKING:
+    from . import WL4World
 
 # itertools.pairwise from Python 3.10
 def pairwise(iterable):
@@ -22,24 +27,24 @@ def pairwise(iterable):
 class WL4Region(Region):
     clear_rule: AccessRule
 
-    def __init__(self, name: str, player: int, multiworld: MultiWorld):
-        super().__init__(name, player, multiworld)
+    def __init__(self, name: str, world: WL4World):
+        super().__init__(name, world.player, world.multiworld)
         self.clear_rule = None
 
 
-def basic_region_creator(world: MultiWorld, player: int, location_table: Set[str]):
+def basic_region_creator(world: WL4World, location_table: Set[str]):
     def basic_region(name, locations=()):
-        return create_region(world, player, location_table, name, locations)
+        return create_region(world, location_table, name, locations)
     return basic_region
 
 
-def create_regions(world: MultiWorld, player: int, location_table: Set[str]):
-    create_main_regions(world, player, location_table)
-    create_level_regions(world, player, location_table)
+def create_regions(world: WL4World, location_table: Set[str]):
+    create_main_regions(world, location_table)
+    create_level_regions(world, location_table)
 
 
-def create_main_regions(world: MultiWorld, player: int, location_table: Set[str]):
-    basic_region = basic_region_creator(world, player, location_table)
+def create_main_regions(world: WL4World, location_table: Set[str]):
+    basic_region = basic_region_creator(world, location_table)
 
     def passage_region(passage: Passage):
         return basic_region(passage.long_name())
@@ -62,7 +67,7 @@ def create_main_regions(world: MultiWorld, player: int, location_table: Set[str]
     catbat = boss_region(Passage.SAPPHIRE, 'Catbat')
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
-    world.regions += [
+    world.multiworld.regions += [
         menu_region,
         *passage_regions,
         *minigame_shops,
@@ -114,11 +119,11 @@ def get_region_names(level_name: str, merge: bool = False) -> Sequence[str]:
     return entrance, *regions
 
 
-def create_level_regions(world: MultiWorld, player: int, location_table: Set[str]):
-    basic_region = basic_region_creator(world, player, location_table)
+def create_level_regions(world: WL4World, location_table: Set[str]):
+    basic_region = basic_region_creator(world, location_table)
 
     def level_regions(name: str, passage: Passage, level: int):
-        portal_setting = world.portal[player].value
+        portal_setting = world.options.portal.value
         region_names = get_region_names(name)
         regions = {region: basic_region(region) for region in region_names}
         for loc_name, location in get_level_location_data(passage, level):
@@ -129,7 +134,7 @@ def create_level_regions(world: MultiWorld, player: int, location_table: Set[str
             else:
                 region_name = name
             if loc_name in location_table:
-                location = WL4Location.from_name(player, loc_name, regions[region_name])
+                location = WL4Location.from_name(world.player, loc_name, regions[region_name])
                 regions[region_name].locations.append(location)
         return regions.values()
 
@@ -157,7 +162,7 @@ def create_level_regions(world: MultiWorld, player: int, location_table: Set[str
 
     golden_passage = level_regions('Golden Passage', Passage.GOLDEN, 0)
 
-    world.regions += [
+    world.multiworld.regions += [
         *hall_of_hieroglyphs,
         *palm_tree_paradise,
         *wildflower_fields,
@@ -179,8 +184,8 @@ def create_level_regions(world: MultiWorld, player: int, location_table: Set[str
     ]
 
 
-def connect_regions(world: MultiWorld, player: int):
-    portal_setting = world.portal[player].value
+def connect_regions(world: WL4World):
+    portal_setting = world.options.portal.value
 
     def connect_level(level_name):
         regions = get_region_names(level_name)
@@ -188,11 +193,11 @@ def connect_regions(world: MultiWorld, player: int):
             # The Ringosuki is usually on the ground and needs to be carried to
             # the top of the room with Heavy Grab, but it's already there on S-Hard.
             # Probably the only region in the game with a difficulty-dependent access rule
-            if dest == 'Hotel Horror - Switch Room' and world.difficulty[player].value == 2:
+            if dest == 'Hotel Horror - Switch Room' and world.options.difficulty == Difficulty.option_s_hard:
                 access_rule = None
             else:
-                access_rule = rules.get_access_rule(player, dest)
-            connect_entrance(world, player, dest, source, dest, access_rule)
+                access_rule = rules.get_access_rule(world.player, dest)
+            connect_entrance(world, dest, source, dest, access_rule)
 
     connect_level('Hall of Hieroglyphs')
     connect_level('Palm Tree Paradise')
@@ -214,15 +219,17 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level('Golden Passage')
 
     def connect_with_name(source, destination, name, rule: AccessRule = None):
-        connect_entrance(world, player, name, source, destination, rule)
+        connect_entrance(world, name, source, destination, rule)
 
     def connect(source, destination, rule: AccessRule = None):
         connect_with_name(source, destination, f'{source} -> {destination}', rule)
 
     def connect_level_exit(level, destination, rule: AccessRule = None):
         # No Keyzer means you can just walk past the actual entrance to the next level
-        open_doors = world.open_doors[player].value
-        if open_doors == 2 or (open_doors == 1 and level != 'Golden Passage'):
+        open_doors = world.options.open_doors
+        if (open_doors == OpenDoors.option_open
+            or (open_doors == OpenDoors.option_closed_diva and level != 'Golden Passage')
+           ):
             region = f'{level} (entrance)'
         elif portal_setting:
             region = rules.get_keyzer_region(level)
@@ -230,14 +237,14 @@ def connect_regions(world: MultiWorld, player: int):
             region = get_region_names(level)[-1]
         connect_with_name(region, destination, f'{level} Gate', rule)
 
-    required_jewels = world.required_jewels[player].value
+    required_jewels = world.options.required_jewels.value
     required_jewels_entry = min(1, required_jewels)
 
     connect('Menu', 'Entry Passage')
     connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
     connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
     connect('Entry Minigame Shop', 'Entry Passage Boss',
-            rules.make_boss_access_rule(player, Passage.ENTRY, required_jewels_entry))
+            rules.make_boss_access_rule(world.player, Passage.ENTRY, required_jewels_entry))
 
     connect('Menu', 'Emerald Passage')
     connect('Emerald Passage', 'Palm Tree Paradise (entrance)')
@@ -246,7 +253,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level_exit('Mystic Lake', 'Monsoon Jungle (entrance)')
     connect_level_exit('Monsoon Jungle', 'Emerald Minigame Shop')
     connect('Emerald Minigame Shop', 'Emerald Passage Boss',
-            rules.make_boss_access_rule(player, Passage.EMERALD, required_jewels))
+            rules.make_boss_access_rule(world.player, Passage.EMERALD, required_jewels))
 
     connect('Menu', 'Ruby Passage')
     connect('Ruby Passage', 'The Curious Factory (entrance)')
@@ -255,7 +262,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level_exit('40 Below Fridge', 'Pinball Zone (entrance)')
     connect_level_exit('Pinball Zone', 'Ruby Minigame Shop')
     connect('Ruby Minigame Shop', 'Ruby Passage Boss',
-            rules.make_boss_access_rule(player, Passage.RUBY, required_jewels))
+            rules.make_boss_access_rule(world.player, Passage.RUBY, required_jewels))
 
     connect('Menu', 'Topaz Passage')
     connect('Topaz Passage', 'Toy Block Tower (entrance)')
@@ -264,7 +271,7 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level_exit('Doodle Woods', 'Domino Row (entrance)')
     connect_level_exit('Domino Row', 'Topaz Minigame Shop')
     connect('Topaz Minigame Shop', 'Topaz Passage Boss',
-            rules.make_boss_access_rule(player, Passage.TOPAZ, required_jewels))
+            rules.make_boss_access_rule(world.player, Passage.TOPAZ, required_jewels))
 
     connect('Menu', 'Sapphire Passage')
     connect('Sapphire Passage', 'Crescent Moon Village (entrance)')
@@ -273,35 +280,30 @@ def connect_regions(world: MultiWorld, player: int):
     connect_level_exit('Fiery Cavern', 'Hotel Horror (entrance)')
     connect_level_exit('Hotel Horror', 'Sapphire Minigame Shop')
     connect('Sapphire Minigame Shop', 'Sapphire Passage Boss',
-            rules.make_boss_access_rule(player, Passage.SAPPHIRE, required_jewels))
+            rules.make_boss_access_rule(world.player, Passage.SAPPHIRE, required_jewels))
 
     connect('Menu', 'Golden Pyramid',
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
-                                     'Topaz Passage Clear', 'Sapphire Passage Clear'}, player))
+                                     'Topaz Passage Clear', 'Sapphire Passage Clear'}, world.player))
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     connect_level_exit('Golden Passage', 'Golden Minigame Shop')
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-            rules.make_boss_access_rule(player, Passage.GOLDEN, required_jewels_entry))
+            rules.make_boss_access_rule(world.player, Passage.GOLDEN, required_jewels_entry))
 
 
-def create_region(world: MultiWorld, player: int, location_table: Set[str],
-                  name: str, locations: Iterable[str] = ()) -> WL4Region:
-    region = WL4Region(name, player, world)
-    add_locations_to_region(region, player, location_table, locations)
+def create_region(world: WL4World, location_table: Set[str], name: str,
+                  locations: Iterable[str] = ()) -> WL4Region:
+    region = WL4Region(name, world)
+    for location in locations:
+        if location in location_table:
+            region.locations.append(WL4Location.from_name(world.player, location, region))
     return region
 
 
-def add_locations_to_region(region: WL4Region, player: int,
-                            location_table: Set[str], locations: Iterable[str]):
-    for location in locations:
-        if location in location_table:
-            region.locations.append(WL4Location.from_name(player, location, region))
-
-
-def connect_entrance(world: MultiWorld, player: int, name: str,
-            source: str, target: str, rule: AccessRule = None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
+def connect_entrance(world: WL4World, name: str, source: str, target: str, rule: AccessRule = None):
+    multiworld, player = world.multiworld, world.player
+    source_region = multiworld.get_region(source, player)
+    target_region = multiworld.get_region(target, player)
 
     connection = Entrance(player, name, source_region)
 

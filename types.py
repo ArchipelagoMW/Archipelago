@@ -56,10 +56,4 @@ class Passage(IntEnum):
         return ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire', 'Golden')[self]
 
 
-class Difficulty(IntEnum):
-    NORMAL = 0
-    HARD = 1
-    S_HARD = 2
-
-
 AccessRule = Optional[Callable[[CollectionState], bool]]

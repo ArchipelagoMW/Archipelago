@@ -1,6 +1,6 @@
-from typing import Dict, Type
+from dataclasses import dataclass
 
-from Options import Choice, Option, Toggle, DeathLink, Range
+from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
 
 
 class Difficulty(Choice):
@@ -104,15 +104,15 @@ class WarioVoiceShuffle(Toggle):
     display_name = "Shuffle Wario's voices"
 
 
-wl4_options: Dict[str, Type[Option]] = {
-    'difficulty': Difficulty,
-    'pool_jewels': PoolJewels,
-    'golden_jewels': GoldenJewels,
-    'required_jewels': RequiredJewels,
-    'open_doors': OpenDoors,
-    'portal': Portal,
-    'smash_through_hard_blocks': SmashThroughHardBlocks,
-    'death_link': DeathLink,
-    'music_shuffle': MusicShuffle,
-    'wario_voice_shuffle': WarioVoiceShuffle,
-}
+@dataclass
+class WL4Options(PerGameCommonOptions):
+    difficulty: Difficulty
+    pool_jewels: PoolJewels
+    golden_jewels: GoldenJewels
+    required_jewels: RequiredJewels
+    open_doors: OpenDoors
+    portal: Portal
+    smash_through_hard_blocks: SmashThroughHardBlocks
+    death_link: DeathLink
+    music_shuffle: MusicShuffle
+    wario_voice_shuffle: WarioVoiceShuffle

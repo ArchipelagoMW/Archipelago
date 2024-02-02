@@ -3,7 +3,8 @@ from typing import NamedTuple, Optional, Sequence, Tuple, Union
 from BaseClasses import Location, MultiWorld, Region
 
 from .data import ap_id_offset
-from .types import Difficulty, ItemFlag, LocationType, Passage
+from .options import Difficulty
+from .types import ItemFlag, LocationType, Passage
 
 
 class LocationData(NamedTuple):
@@ -25,12 +26,12 @@ class LocationData(NamedTuple):
         return self.status_bit[0:2]
 
 
-_NORMAL = (Difficulty.NORMAL,)
-_HARD = (Difficulty.HARD,)
-_S_HARD = (Difficulty.S_HARD,)
-_EASIER = (Difficulty.NORMAL, Difficulty.HARD)
-_HARDER = (Difficulty.HARD, Difficulty.S_HARD)
-_ALL = (Difficulty.NORMAL, Difficulty.HARD, Difficulty.S_HARD)
+_NORMAL = (Difficulty.option_normal,)
+_HARD = (Difficulty.option_hard,)
+_S_HARD = (Difficulty.option_s_hard,)
+_EASIER = _NORMAL + _HARD
+_HARDER = _HARD + _S_HARD
+_ALL = _NORMAL + _HARD + _S_HARD
 
 
     # Location                                                         Source              Passage        Level  Bit in level data       Region              Difficulties
@@ -271,7 +272,3 @@ def get_level_locations(passage: Passage, level: int):
 
 def get_level_location_data(passage: Passage, level: int):
     return filter(lambda l: l[1].level_id() == (passage, level), location_table.items())
-
-def setup_locations(world: MultiWorld, player: int):
-    return {name for name in location_name_to_id
-            if world.difficulty[player].value in location_table[name].difficulties}

@@ -1,10 +1,14 @@
+from __future__ import annotations
 
-from typing import Mapping, Iterable, Optional, Tuple, Union
-from BaseClasses import CollectionState, MultiWorld
+from typing import Mapping, Iterable, Optional, Tuple, Union, TYPE_CHECKING
+from BaseClasses import CollectionState
 
 from . import items
 from .types import AccessRule, ItemType, Passage
 from .locations import location_table as w4_locations
+
+if TYPE_CHECKING:
+    from . import WL4World
 
 
 RequiredItem = Union[str, Tuple[str, int]]
@@ -65,12 +69,12 @@ def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
     return needs_items(player, jewel_list)
 
 
-def set_access_rules(multiworld: MultiWorld, player: int):
-    location_rules = difficulty_location_rules[multiworld.difficulty[player].value]
+def set_access_rules(world: WL4World):
+    location_rules = difficulty_location_rules[world.options.difficulty.value]
     for name, items in location_rules.items():
         try:
-            location = multiworld.get_location(name, player)
-            location.access_rule = needs_items(player, items)
+            location = world.multiworld.get_location(name, world.player)
+            location.access_rule = needs_items(world.player, items)
         except KeyError as k:
             # Raise for invalid location names, not ones that aren't in this player's world
             if name not in w4_locations:
