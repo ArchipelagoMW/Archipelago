@@ -48,7 +48,7 @@ class KH1World(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     def create_items(self):
-        if self.options.reports_in_pool < self.options.required_reports):
+        if self.options.reports_in_pool < self.options.required_reports:
             print("LESS REPORTS IN POOL THAN REQUIRED REPORTS, SWAPPING")
         
         item_pool: List[KH1Item] = []
