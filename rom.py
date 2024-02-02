@@ -236,78 +236,6 @@ def write_multiworld_table(rom: LocalRom,
             entry_address += 8
 
 
-def patch_rom(rom: LocalRom, multiworld: MultiWorld, player: int):
-    fill_items(rom, multiworld, player)
-
-    # Write player name and number
-    player_name = multiworld.player_name[player].encode('utf-8')
-    rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), player)
-
-    apply_options(rom, multiworld.worlds[player].options)
-
-
-def apply_options(rom: LocalRom, options: PerGameCommonOptions):
-    rom.write_byte(get_symbol('DeathLinkFlag'), options.death_link.value)
-
-    set_difficulty_level(rom, options.difficulty.value)
-
-    # TODO: Maybe make it stay open so it looks cleaner
-    if (options.portal.value):
-        rom.write_halfword(0x802AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
-        rom.write_halfword(0x802B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-        rom.write_halfword(0x802B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-
-    # Break hard blocks without stopping
-    if (options.smash_through_hard_blocks.value):
-        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
-        rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
-        rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
-
-    shuffle_music(rom, options.music_shuffle.value)
-
-    if (options.wario_voice_shuffle.value):
-        shuffle_wario_voice_sets(rom)
-
-
-def patch_rom(rom: LocalRom, multiworld: MultiWorld, player: int):
-    fill_items(rom, multiworld, player)
-
-    # Write player name and number
-    player_name = multiworld.player_name[player].encode('utf-8')
-    rom.write_bytes(get_symbol('PlayerName'), player_name)
-    rom.write_byte(get_symbol('PlayerID'), player)
-
-    apply_options(rom, multiworld.worlds[player].options)
-
-
-def apply_options(rom: LocalRom, options: PerGameCommonOptions):
-    rom.write_byte(get_symbol('DeathLinkFlag'), options.death_link.value)
-
-    set_difficulty_level(rom, options.difficulty.value)
-
-    # TODO: Maybe make it stay open so it looks cleaner
-    if (options.portal.value):
-        rom.write_halfword(0x802AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
-        rom.write_halfword(0x802AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
-        rom.write_halfword(0x802B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-        rom.write_halfword(0x802B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
-
-    # Break hard blocks without stopping
-    if (options.smash_through_hard_blocks.value):
-        rom.write_halfword(0x806ED5A, 0x46C0)  # nop            ; WarSidePanel_Attack()
-        rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
-        rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
-
-    shuffle_music(rom, options.music_shuffle.value)
-
-    if (options.wario_voice_shuffle.value):
-        shuffle_wario_voice_sets(rom)
-
-
 def set_difficulty_level(rom: LocalRom, difficulty: Difficulty):
     mov_r0 = 0x2000 | difficulty.value     # mov r0, #difficulty
     cmp_r0 = 0x2800 | difficulty.value     # cmp r0, #difficulty
@@ -434,6 +362,14 @@ def patch_rom(rom: LocalRom, world: WL4World):
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
     set_difficulty_level(rom, world.options.difficulty)
+
+    # TODO: Maybe make it stay open so it looks cleaner
+    if (world.options.portal.value):
+        rom.write_halfword(0x802AC56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        rom.write_halfword(0x802ACB2, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_small()
+        rom.write_halfword(0x802AE56, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_mid()
+        rom.write_halfword(0x802B052, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
+        rom.write_halfword(0x802B0BE, 0x46C0)  # nop  ; EntityAI_Tmain_docodoor_uzu_big()
 
     # Break hard blocks without stopping
     if (world.options.smash_through_hard_blocks.value):
