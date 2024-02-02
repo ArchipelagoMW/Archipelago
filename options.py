@@ -92,6 +92,19 @@ class SmashThroughHardBlocks(Toggle):
     display_name = "Smash Hard Blocks Without Stopping"
 
 
+class MultiworldSend(Choice):
+    '''
+    When to send items items to other worlds.
+    On escape: Like your own items, only count other players' items when the level is complete.
+    Immediately: Send other players' items as soon as you take them from the box.
+    Regardless of this setting, sending items from a level you can't clear is not in logic.
+    '''
+    display_name = "Send Other Players' Items"
+    option_on_escape = 0
+    option_immediately = 1
+    default = option_on_escape
+
+
 class MusicShuffle(Choice):
     '''
     Music shuffle type
@@ -125,6 +138,7 @@ class WL4Options(PerGameCommonOptions):
     open_doors: OpenDoors
     portal: Portal
     smash_through_hard_blocks: SmashThroughHardBlocks
+    send_multiworld_items: MultiworldSend
     death_link: DeathLink
     music_shuffle: MusicShuffle
     wario_voice_shuffle: WarioVoiceShuffle

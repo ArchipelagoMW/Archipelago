@@ -377,6 +377,10 @@ def patch_rom(rom: LocalRom, world: WL4World):
         rom.write_halfword(0x806EDD0, 0xD00E)  # beq 0x806EDF0  ; WarDownPanel_Attack()
         rom.write_halfword(0x806EE68, 0xE010)  # b 0x806EE8C    ; WarUpPanel_Attack()
 
+    # Multiworld send
+    rom.write_byte(get_symbol('SendMultiworldItemsImmediately'),
+                   world.options.send_multiworld_items.value)
+
     shuffle_music(rom, world.options.music_shuffle)
     shuffle_wario_voice_sets(rom, world.options.wario_voice_shuffle)
 
