@@ -2,7 +2,7 @@ from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
-    dependent_regions, dependent_regions_nmg, dependent_regions_ur
+    dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
 from worlds.generic import PlandoConnection
 
@@ -189,6 +189,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     fixed_shop = False
     logic_rules = world.options.logic_rules.value
 
+    if not logic_rules:
+        dependent_regions = dependent_regions_restricted
+    elif logic_rules == 1:
+        dependent_regions = dependent_regions_nmg
+    else:
+        dependent_regions = dependent_regions_ur
+
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
         for portal in portal_mapping:
@@ -224,22 +231,30 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 for portal in portal_mapping:
                     if portal.scene_destination() == portal1:
                         portal_name1 = portal.name
-                        connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
                     if portal.scene_destination() == portal2:
                         portal_name2 = portal.name
-                        connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
                 # shops have special handling
                 if not portal_name2 and portal2 == "Shop, Previous Region_":
                     portal_name2 = "Shop Portal"
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
-    # todo: get plando connections from yaml, 
-
     if plando_connections:
-        portal_pairs, dead_ends, two_plus = create_plando_connections(plando_connections, dead_ends, two_plus)
+        portal_pairs, dependent_regions, dead_ends, two_plus = \
+            create_plando_connections(plando_connections, dependent_regions, dead_ends, two_plus)
+
+        # if we have plando connections, our connected regions may change somewhat
+        while True:
+            test1 = len(connected_regions)
+            for region in connected_regions.copy():
+                connected_regions.update(add_dependent_regions(region, logic_rules))
+            test2 = len(connected_regions)
+            if test1 == test2:
+                break
     
     # need to plando fairy cave, or it could end up laurels locked
-    # fix this later to be random? probably not?
+    # fix this later to be random after adding some item logic to dependent regions
     if world.options.laurels_location == "10_fairies":
         portal1 = None
         portal2 = None
@@ -375,7 +390,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
     region_set = set()
     if not logic_rules:
-        regions_to_add = dependent_regions
+        regions_to_add = dependent_regions_restricted
     elif logic_rules == 1:
         regions_to_add = dependent_regions_nmg
     else:
@@ -495,11 +510,11 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
 
 # this is for making the connections themselves
-# todo: refactor to take dependent_regions, have it modify the regions you get based on these connections
-# so if you connect forest belltower upper to zig lower back, forest belltower upper is added to zig lower back's
-# and zig lower back is added to forest belltower upper's dependent regions
-def create_plando_connections(plando_connections: List[PlandoConnection], dead_ends: List[Portal],
-                              two_plus: List[Portal]) -> Tuple[Dict[Portal, Portal], List[Portal], List[Portal]]:
+def create_plando_connections(plando_connections: List[PlandoConnection],
+                              dependent_regions: Dict[Tuple[str, ...], List[str]], dead_ends: List[Portal],
+                              two_plus: List[Portal]) \
+        -> Tuple[Dict[Portal, Portal], Dict[Tuple[str, ...], List[str]], List[Portal], List[Portal]]:
+
     portal_pairs: Dict[Portal, Portal] = {}
     shop_num = 1
     for connection in plando_connections:
@@ -545,5 +560,12 @@ def create_plando_connections(plando_connections: List[PlandoConnection], dead_e
             raise Exception("could not find entrance named " + p_exit + " for Tunic player's plando")
 
         portal_pairs[portal1] = portal2
+
+        # update dependent regions based on the plando'd connections, to make sure the portals connect well, logically
+        for origins, destinations in dependent_regions.items():
+            if portal1.region in origins:
+                destinations.append(portal2.region)
+            if portal2.region in origins:
+                destinations.append(portal1.region)
             
-    return portal_pairs, dead_ends, two_plus
+    return portal_pairs, dependent_regions, dead_ends, two_plus
