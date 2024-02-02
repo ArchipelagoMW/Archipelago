@@ -34,7 +34,7 @@ class Door(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
     event: bool
-    group: Optional[str]
+    door_group: Optional[str]
     include_reduce: bool
     junk_item: bool
     item_group: Optional[str]
@@ -366,10 +366,10 @@ def process_door(room_name, door_name, door_data):
     else:
         junk_item = False
 
-    if "group" in door_data:
-        group = door_data["group"]
+    if "door_group" in door_data:
+        door_group = door_data["door_group"]
     else:
-        group = None
+        door_group = None
 
     if "item_group" in door_data:
         item_group = door_data["item_group"]
@@ -430,7 +430,7 @@ def process_door(room_name, door_name, door_data):
         painting_ids = []
 
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
-                    painting_ids, event, group, include_reduce, junk_item, item_group)
+                    painting_ids, event, door_group, include_reduce, junk_item, item_group)
 
     DOORS[door_obj.item_name] = door_obj
     DOORS_BY_ROOM[room_name][door_name] = door_obj

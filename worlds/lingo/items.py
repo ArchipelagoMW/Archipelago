@@ -67,11 +67,11 @@ def load_item_data():
             if door.skip_item is True or door.event is True:
                 continue
 
-            if door.group is None:
+            if door.door_group is None:
                 door_mode = "doors"
             else:
                 door_mode = "complex door"
-                door_groups.setdefault(door.group, []).extend(door.door_ids)
+                door_groups.setdefault(door.door_group, []).extend(door.door_ids)
 
             if room_name in PROGRESSION_BY_ROOM and door_name in PROGRESSION_BY_ROOM[room_name]:
                 if room_name == "Orange Tower":
