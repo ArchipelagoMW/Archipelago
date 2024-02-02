@@ -12,7 +12,7 @@ from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassi
 from .utils import openFile
 from ..AutoWorld import World, WebWorld
 from .Items import item_to_index, tier_1_opponents, booster_packs, excluded_items, Banlist_Items, core_booster, \
-    challenges, useful
+    challenges, useful, draft_boosters, draft_opponents
 from .Locations import Bonuses, Limited_Duels, Theme_Duels, Campaign_Opponents, Required_Cards, \
     get_beat_challenge_events, special, collection_events
 from .Opponents import get_opponents, get_opponent_locations, challenge_opponents
@@ -267,11 +267,16 @@ class Yugioh06World(World):
                 if is_challenge:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has(item, self.player, amount) and
-                                                                 state.yugioh06_difficulty(self.player, opp.difficulty))(opponent, unlock_item, unlock_amount)
+                                                                 state.yugioh06_difficulty(self.player, opp.difficulty)
+                                                                 and state.has_all(opp.additional_info, self.player))\
+                                                                (opponent, unlock_item, unlock_amount)
+
                 else:
                     entrance.access_rule = \
                         (lambda opp, item, amount: lambda state: state.has_group(item, self.player, amount) and
-                                                                 state.yugioh06_difficulty(self.player, opp.difficulty))(opponent, unlock_item, unlock_amount)
+                                                                 state.yugioh06_difficulty(self.player, opp.difficulty)
+                                                                 and state.has_all(opp.additional_info, self.player))\
+                                                                 (opponent, unlock_item, unlock_amount)
             else:
                 entrance.access_rule = (lambda unlock, opp: lambda state:
                 state.has(unlock, self.player) and state.yugioh06_difficulty(self.player, opp.difficulty))(unlock_item, opponent)
@@ -305,16 +310,21 @@ class Yugioh06World(World):
 
     def generate_early(self):
         if self.options.structure_deck.current_key == "none":
-            boosters = core_booster
+            boosters = draft_boosters
+            if self.options.campaign_opponents_shuffle.value:
+                opponents = tier_1_opponents
+            else:
+                opponents = draft_opponents
         else:
             boosters = booster_packs
+            opponents = tier_1_opponents
         for item in self.options.start_inventory:
-            if item in tier_1_opponents:
+            if item in opponents:
                 self.starting_opponent = item
             if item in boosters:
                 self.starting_booster = item
         if not self.starting_opponent:
-            self.starting_opponent = self.multiworld.random.choice(tier_1_opponents)
+            self.starting_opponent = self.multiworld.random.choice(opponents)
         self.multiworld.push_precollected(self.create_item(self.starting_opponent))
         if not self.starting_booster:
             self.starting_booster = self.multiworld.random.choice(boosters)

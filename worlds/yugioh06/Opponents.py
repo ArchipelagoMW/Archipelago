@@ -15,6 +15,7 @@ class OpponentData(NamedTuple):
     deck_name_id: int = 0
     deck_file: str = ''
     difficulty: int = 1
+    additional_info: List[str] = []
 
     def tier(self, tier):
         self.tier = tier
@@ -29,7 +30,8 @@ challenge_opponents = [
     OpponentData(28, "Stone Statue of the Aztecs", [], 4, 1, 4754, 13002, "deck/theme_002.ydc\x00\x00\x00\x00", 3),
     OpponentData(29, "Raging Flame Sprite", [], 1, 1, 6189, 13003, "deck/theme_003.ydc\x00\x00\x00\x00", 0),
     OpponentData(30, "Princess Pikeru", [], 1, 1, 6605, 13004, "deck/theme_004.ydc\x00\x00\x00\x00", 0),
-    OpponentData(31, "Princess Curran", ["Quick-Finish"], 1, 1, 6606, 13005, "deck/theme_005.ydc\x00\x00\x00\x00", 0),
+    OpponentData(31, "Princess Curran", ["Quick-Finish"], 1, 1, 6606, 13005, "deck/theme_005.ydc\x00\x00\x00\x00", 0,
+                 ["Has Back-row removal"]),
     OpponentData(32, "Gearfried the Iron Knight", ["Quick-Finish"], 2, 1, 5059, 13006, "deck/theme_006.ydc\x00\x00\x00\x00", 1),
     OpponentData(33, "Zaborg the Thunder Monarch", [], 3, 1, 5965, 13007, "deck/theme_007.ydc\x00\x00\x00\x00", 2),
     OpponentData(34, "Kycoo the Ghost Destroyer", ["Quick-Finish"], 3, 1, 5248, 13008, "deck/theme_008.ydc\x00\x00\x00\x00"),
@@ -55,7 +57,8 @@ challenge_opponents = [
     OpponentData(54, "Demise, King of Armageddon", [], 4, 1, 6613, 13028, "deck/theme_028.ydc\x00\x00\x00\x00", 2),
     OpponentData(55, "Yamata Dragon", [], 3, 1, 5377, 13029, "deck/theme_029.ydc\x00\x00\x00\x00", 2),
     OpponentData(56, "Blue-Eyes Ultimate Dragon", [], 3, 1, 4386, 13030, "deck/theme_030.ydc\x00\x00\x00\x00", 2),
-    OpponentData(57, "Wave-Motion Cannon", [], 4, 1, 5614, 13031, "deck/theme_031.ydc\x00\x00\x00\x00", 3),
+    OpponentData(57, "Wave-Motion Cannon", [], 4, 1, 5614, 13031, "deck/theme_031.ydc\x00\x00\x00\x00", 3,
+                 ["Has Back-row removal"]),
     # Unused opponent
     # OpponentData(58, "Yata-Garasu", [], 1, 1, 5375, 13032, "deck/theme_031.ydc\x00\x00\x00\x00"),
     # Unused opponent
@@ -102,7 +105,7 @@ challenge_opponents = [
     OpponentData(96, "Blue-Eyes Toon Dragon", ["Quick-Finish"], 2, 1, 4773, 23018, "deck/limit_018.ydc\x00\x00\x00\x00", 1),
     OpponentData(97, "Tsukuyomi", [], 3, 1, 5780, 23019, "deck/limit_019.ydc\x00\x00\x00\x00", 2),
     OpponentData(98, "Silent Swordsman LV3", ["Quick-Finish"], 2, 1, 6162, 23020, "deck/limit_020.ydc\x00\x00\x00\x00", 2),
-    OpponentData(99, "Elemental Hero Flame Wingman", ["Quick-Finish"], 1, 1, 6344, 23021, "deck/limit_021.ydc\x00\x00\x00\x00", 0),
+    OpponentData(99, "Elemental Hero Flame Wingman", ["Quick-Finish"], 2, 1, 6344, 23021, "deck/limit_021.ydc\x00\x00\x00\x00", 0),
     OpponentData(100, "Armed Dragon LV7", ["Quick-Finish"], 2, 1, 6107, 23022, "deck/limit_022.ydc\x00\x00\x00\x00", 0),
     OpponentData(101, "Alkana Knight Joker", ["Quick-Finish"], 1, 1, 6454, 23023, "deck/limit_023.ydc\x00\x00\x00\x00", 0),
     OpponentData(102, "Sorcerer of Dark Magic", [], 4, 1, 6086, 23024, "deck/limit_024.ydc\x00\x00\x00\x00", 3),
@@ -124,13 +127,13 @@ challenge_opponents = [
     OpponentData(117, "Red-Eyes B. Dragon", [], 4, 1, 4088, 23039, "deck/limit_039.ydc\x00\x00\x00\x00", 3),
     OpponentData(118, "Blue-Eyes White Dragon", [], 4, 1, 4007, 23040, "deck/limit_040.ydc\x00\x00\x00\x00", 3),
     OpponentData(119, "Dark Magician", [], 4, 1, 4041, 23041, "deck/limit_041.ydc\x00\x00\x00\x00", 3),
-OpponentData(119, "Dark Magician", [], 4, 1, 4041, 23041, "deck/limit_042.ydc\x00\x00\x00\x00", 3),
     OpponentData(0, "Starter", ["Quick-Finish"], 1, 1, 4064, 1510, "deck/SD0_STARTER.ydc\x00\x00", 0),
     OpponentData(10, "DRAGON'S ROAR", ["Quick-Finish"], 2, 1, 6292, 1511, "deck/SD1_DRAGON.ydc\x00\x00\x00", 1),
     OpponentData(11, "ZOMBIE MADNESS", ["Quick-Finish"], 2, 1, 6293, 1512, "deck/SD2_UNDEAD.ydc\x00\x00\x00", 1),
-    OpponentData(12, "BLAZING DESTRUCTION", ["Quick-Finish"], 2, 1, 6368, 1513, "deck/SD3_FIRE.ydc\x00\x00\x00\x00\x00", 1),
+    OpponentData(12, "BLAZING DESTRUCTION", ["Quick-Finish"], 2, 1, 6368, 1513, "deck/SD3_FIRE.ydc\x00\x00\x00\x00\x00", 1,
+                 ["Has Back-row removal"]),
     OpponentData(13, "FURY FROM THE DEEP", [], 2, 1, 6376, 1514,
-                 "deck/SD4_UMI.ydc\x00\x00\x00\x00\x00\x00", 1),
+                 "deck/SD4_UMI.ydc\x00\x00\x00\x00\x00\x00", 1, ["Has Back-row removal"]),
     OpponentData(15, "WARRIORS TRIUMPH", ["Quick-Finish"], 2, 1, 6456, 1515, "deck/SD5_SOLDIER.ydc\x00\x00", 1),
     OpponentData(16, "SPELLCASTERS JUDGEMENT", ["Quick-Finish"], 2, 1, 6530, 1516, "deck/SD6_MAGICIAN.ydc\x00", 1),
     OpponentData(17, "INVICIBLE FORTRESS", [], 2, 1, 6640, 1517, "deck/SD7_GANSEKI.ydc\x00\x00", 1),
@@ -142,13 +145,15 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     opponents_table: List[OpponentData] = [
         # Tier 1
         OpponentData(0, "Kuriboh", [], 1, 1, 4064, 8000, "deck/LV1_kuriboh.ydc\x00\x00"),
-        OpponentData(1, "Scapegoat", [], 1, 2, 4818, 8001, "deck/LV1_sukego.ydc\x00\x00\x00"),
-        OpponentData(2, "Skull Servant", [], 1, 3, 4030, 8002, "deck/LV1_waito.ydc\x00\x00\x00\x00"),
-        OpponentData(3, "Watapon", [], 1, 4, 6092, 8003, "deck/LV1_watapon.ydc\x00\x00"),
+        OpponentData(1, "Scapegoat", [], 1, 2, 4818, 8001, "deck/LV1_sukego.ydc\x00\x00\x00", 0, ["Has Back-row removal"]),
+        OpponentData(2, "Skull Servant", [], 1, 3, 4030, 8002, "deck/LV1_waito.ydc\x00\x00\x00\x00", 0,
+                     ["Has Back-row removal"]),
+        OpponentData(3, "Watapon", [], 1, 4, 6092, 8003, "deck/LV1_watapon.ydc\x00\x00", 0, ["Has Back-row removal"]),
         OpponentData(4, "White Magician Pikeru", [], 1, 5, 5975, 8004, "deck/LV1_pikeru.ydc\x00\x00\x00"),
         # Tier 2
         OpponentData(5, "Battery Man C", ["Quick-Finish"], 2, 1, 6428, 8005, "deck/LV2_denti.ydc\x00\x00\x00\x00", 1),
-        OpponentData(6, "Ojama Yellow", [], 2, 2, 5811, 8006, "deck/LV2_ojama.ydc\x00\x00\x00\x00", 1),
+        OpponentData(6, "Ojama Yellow", [], 2, 2, 5811, 8006, "deck/LV2_ojama.ydc\x00\x00\x00\x00", 1,
+                     ["Has Back-row removal"]),
         OpponentData(7, "Goblin King", ["Quick-Finish"], 2, 3, 5973, 8007, "deck/LV2_kingG.ydc\x00\x00\x00\x00", 1),
         OpponentData(8, "Des Frog", ["Quick-Finish"], 2, 4, 6424, 8008, "deck/LV2_kaeru.ydc\x00\x00\x00\x00", 1),
         OpponentData(9, "Water Dragon", ["Quick-Finish"], 2, 5, 6481, 8009, "deck/LV2_waterD.ydc\x00\x00\x00", 1),
@@ -157,8 +162,10 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
                      2),
         OpponentData(11, "Vampire Genesis", ["Quick-Finish"], 3, 2, 6293, 8011, "deck/LV3_vamp.ydc\x00\x00\x00\x00\x00",
                      2),
-        OpponentData(12, "Infernal Flame Emperor", [], 3, 3, 6368, 8012, "deck/LV3_flame.ydc\x00\x00\x00\x00", 2),
-        OpponentData(13, "Ocean Dragon Lord - Neo-Daedalus", [], 3, 4, 6376, 8013, "deck/LV3_daidaros.ydc\x00", 2),
+        OpponentData(12, "Infernal Flame Emperor", [], 3, 3, 6368, 8012, "deck/LV3_flame.ydc\x00\x00\x00\x00", 2,
+                     ["Has Back-row removal"]),
+        OpponentData(13, "Ocean Dragon Lord - Neo-Daedalus", [], 3, 4, 6376, 8013, "deck/LV3_daidaros.ydc\x00", 2,
+                     ["Has Back-row removal"]),
         OpponentData(14, "Helios Duo Megiste", ["Quick-Finish"], 3, 5, 6647, 8014, "deck/LV3_heriosu.ydc\x00\x00", 2),
         # Tier 4
         OpponentData(15, "Gilford the Legend", ["Quick-Finish"], 4, 1, 6456, 8015, "deck/LV4_gilfo.ydc\x00\x00\x00\x00",
@@ -178,7 +185,7 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     if not randomize:
         return tuple(opponents_table)
     opponents = opponents_table + challenge_opponents
-    start = multiworld.random.choice([o for o in opponents if o.tier == 1])
+    start = multiworld.random.choice([o for o in opponents if o.tier == 1 and len(o.additional_info) == 0])
     opponents.remove(start)
     goal = multiworld.random.choice([o for o in opponents if "Goal" in o.campaignInfo])
     opponents.remove(goal)
@@ -212,3 +219,5 @@ def get_opponent_locations(opponent: OpponentData) -> dict[str, str]:
     for info in opponent.campaignInfo:
         location[opponent.name + "-> " + info] = info
     return location
+
+

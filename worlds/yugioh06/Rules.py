@@ -1,6 +1,5 @@
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.generic.Rules import add_rule
 from .Fusions import count_has_materials
-from worlds.yugioh06 import Limited_Duels, Theme_Duels, booster_packs
 
 
 def set_rules(world):
@@ -36,12 +35,15 @@ def set_rules(world):
         "Max ATK Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "No Spell Cards Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "No Trap Cards Bonus": lambda state: state.yugioh06_difficulty(player, 2),
+        "No Damage Bonus": lambda state: state.has("Campaign Boss Beaten", player, 3),
         "Low Deck Bonus": lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
                                         state.yugioh06_difficulty(player, 3),
         "Extremely Low Deck Bonus":
             lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
                           state.yugioh06_difficulty(player, 2),
+        "Opponent's Turn Finish Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "Exactly 0 LP Bonus": lambda state: state.yugioh06_difficulty(player, 2),
+        "Reversal Finish Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "Quick Finish Bonus": lambda state: state.has("Quick-Finish", player) or state.yugioh06_difficulty(player, 6),
         "Exodia Finish Bonus": lambda state: state.has("Can Exodia Win", player),
         "Last Turn Finish Bonus": lambda state: state.has("Can Last Turn Win", player),
@@ -146,8 +148,9 @@ def set_rules(world):
         "Can Stall with Monsters":
             lambda state: state.yugioh06_has_individual(["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
         "Can Stall with ST":
-            lambda state: state.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], player) >= 2
-
+            lambda state: state.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], player) >= 2,
+        "Has Back-row removal":
+            lambda state: back_row_removal(state, player)
 
     }
     access_rules = {
@@ -711,14 +714,14 @@ def only_spellcaster(state, player):
 
 def equip_unions(state, player):
     return (state.has("Burning Beast", player) and state.has("Freezing Beast", player) and
-            state.has("Metallizing Parasite - Lunatite", player) and state.has("Mother Grizzly", player) or \
+            state.has("Metallizing Parasite - Lunatite", player) and state.has("Mother Grizzly", player) or
             state.has("Dark Blade", player) and state.has("Pitch-Dark Dragon", player) and
             state.has("Giant Orc", player) and state.has("Second Goblin", player) and
             state.has("Mystic Tomato", player) or
             state.has("Decayed Commander", player) and state.has("Zombie Tiger", player) and
             state.has("Vampire Orchis", player) and state.has("Des Dendle", player) and
             state.has("Giant Rat", player) or
-            state.has("Indomitable Fighter Lei Lei", player) and state.has("Protective Soul Ailin", player) and \
+            state.has("Indomitable Fighter Lei Lei", player) and state.has("Protective Soul Ailin", player) and
             state.has("V-Tiger Jet", player) and state.has("W-Wing Catapult", player) and
             state.has("Shining Angel", player) or
             state.has("X-Head Cannon", player) and state.has("Y-Dragon Head", player) and
@@ -848,3 +851,17 @@ def counter_traps(state, player):
                                           "Seven Tools of the Bandit",
                                           "Solemn Judgment",
                                           "Spell Shield Type-8"], player) >= 5
+
+def back_row_removal(state, player):
+    return state.yugioh06_has_individual(["Anteatereatingant",
+                                          "B.E.S. Tetran",
+                                          "Breaker the Magical Warrior",
+                                          "Calamity of the Wicked",
+                                          "Chiron the Mage",
+                                          "Dust Tornado",
+                                          "Heavy Storm",
+                                          "Mystical Space Typhoon",
+                                          "Mobius the Frost Monarch",
+                                          "Raigeki Break",
+                                          "Stamping Destruction",
+                                          "Swarm of Locusts"], player) >= 2

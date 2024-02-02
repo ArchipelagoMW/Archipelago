@@ -211,6 +211,25 @@ core_booster = (
     "SHADOW OF INFINITY",
 )
 
+draft_boosters = (
+    "METAL RAIDERS",
+    "PHARAOH'S SERVANT",
+    "PHARAONIC GUARDIAN",
+    "LABYRINTH OF NIGHTMARE",
+    "LEGACY OF DARKNESS",
+    "MAGICIAN'S FORCE",
+    "DARK CRISIS",
+    "INVASION OF CHAOS",
+    "RISE OF DESTINY",
+    "ELEMENTAL ENERGY",
+    "SHADOW OF INFINITY",
+)
+
+draft_opponents = (
+    "Campaign Tier 1 Column 1",
+    "Campaign Tier 1 Column 5"
+)
+
 booster_packs = (
     "LEGEND OF B.E.W.D.",
     "METAL RAIDERS",

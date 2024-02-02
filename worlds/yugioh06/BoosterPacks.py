@@ -26,7 +26,8 @@ booster_contents = {
         "Magic Jammer",
         "Seven Tools of the Bandit",
         "Solemn Judgment",
-        "Dream Clown"
+        "Dream Clown",
+        "Heavy Storm"
     },
     "PHARAOH'S SERVANT": {
         "Beast of Talwar",
@@ -65,7 +66,9 @@ booster_contents = {
         "Wandering Mummy",
         "Royal Keeper",
         "Book of Moon",
-        "Book of Taiyou"
+        "Book of Taiyou",
+        "Dust Tornado",
+        "Raigeki Break"
     },
     "SPELL RULER": {
         "Ritual",
@@ -87,7 +90,8 @@ booster_contents = {
         "Rush Recklessly",
         "The Reliable Guardian",
         "Senju of the Thousand Hands",
-        "Sonic Bird"
+        "Sonic Bird",
+        "Mystical Space Typhoon"
     },
     "LABYRINTH OF NIGHTMARE": {
         "Destiny Board",
@@ -136,7 +140,7 @@ booster_contents = {
         "Fushi No Tori",
         "Maharaghi",
         "Susa Soldier",
-        "Emergency Provisions"
+        "Emergency Provisions",
     },
     "MAGICIAN'S FORCE": {
         "Huge Revolution",
@@ -178,7 +182,7 @@ booster_contents = {
         "Magical Marionette",
         "Royal Magical Library",
         "Spell Shield Type-8",
-        "Tribute Doll"
+        "Tribute Doll",
     },
     "DARK CRISIS": {
         "Final Countdown",
@@ -264,7 +268,8 @@ booster_contents = {
         "Element Dragon",
         "Horus the Black Flame Dragon LV4",
         "Level Up!",
-        "Howling Insect"
+        "Howling Insect",
+        "Mobius the Frost Monarch"
     },
     "RISE OF DESTINY": {
         "Homunculus the Alchemic Being",
@@ -335,7 +340,8 @@ booster_contents = {
         "Elemental Hero WildEdge",
         "Elemental Hero Wildheart",
         "Elemental Hero Bladedge",
-        "Pot of Avarice"
+        "Pot of Avarice",
+        "B.E.S. Tetran"
     },
     "SHADOW OF INFINITY": {
         "Hamon, Lord of Striking Thunder",
@@ -347,7 +353,8 @@ booster_contents = {
         "Tenkabito Shien",
         "Princess Pikeru",
         "Gokipon",
-        "Demise, King of Armageddon"
+        "Demise, King of Armageddon",
+        "Anteatereatingant"
     },
     "GAME GIFT COLLECTION": {
         "Ritual",
@@ -372,7 +379,8 @@ booster_contents = {
         "Negate Attack",
         "Foolish Burial",
         "Card Destruction",
-        "Dark Magic Ritual"
+        "Dark Magic Ritual",
+        "Calamity of the Wicked"
     },
     "Special Gift Collection": {
         "Gate Guardian",
@@ -519,7 +527,8 @@ booster_contents = {
         "Cyber Twin Dragon",
         "Green Gadget",
         "Red Gadget",
-        "Yellow Gadget"
+        "Yellow Gadget",
+        "B.E.S. Tetran"
     },
     "Spellcaster Collection A": {
         "Exodia",
@@ -550,7 +559,6 @@ booster_contents = {
         "Familiar-Possessed - Hiita",
         "Familiar-Possessed - Wynn",
         "Breaker the magical Warrior",
-        "Breaker the magical Warrior",
         "The Tricky",
         "Gravekeeper's Spy",
         "Gravekeeper's Guard",
@@ -562,7 +570,8 @@ booster_contents = {
         "Magical Marionette",
         "Mythical Beast Cerberus",
         "Royal Magical Library",
-        "Aussa the Earth Charmer"
+        "Aussa the Earth Charmer",
+
     },
     "Zombie Collection": {
         "Skull Servant",
@@ -769,7 +778,8 @@ booster_contents = {
         "The Light - Hex-Sealed Fusion",
         "Ultimate Insect Lv3",
         "Ultimate Insect Lv5",
-        "Rescue Cat"
+        "Rescue Cat",
+        "Anteatereatingant"
     },
     "Equipment Collection": {
         "Megamorph",
@@ -827,7 +837,8 @@ booster_contents = {
         "Solemn Judgment",
         "Spell Shield Type-8",
         "Book of Moon",
-        "Serial Spell"
+        "Serial Spell",
+        "Mystical Space Typhoon"
     },
     "Direct Damage Collection": {
         "Hamon, Lord of Striking Thunder",
@@ -854,7 +865,7 @@ booster_contents = {
         "Decayed Commander",
         "Jowls of Dark Demise",
         "Stealth Bird",
-        "Elemental Hero Bladedge"
+        "Elemental Hero Bladedge",
     },
     "Direct Attack Collection": {
         "Victory D.",

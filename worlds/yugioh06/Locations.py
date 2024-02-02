@@ -196,7 +196,8 @@ collection_events = {
     "Can Exodia Win": None,
     "Can Yata Lock": None,
     "Can Stall with Monsters": None,
-    "Can Stall with ST": None
+    "Can Stall with ST": None,
+    "Has Back-row removal": None
 }
 
 def get_beat_challenge_events(self):

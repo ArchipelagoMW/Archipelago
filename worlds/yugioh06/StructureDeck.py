@@ -8,7 +8,11 @@ structure_contents = {
         "Stamping Destruction",
         "Nobleman of Crossout",
         "Creature Swap",
-        "Reload"
+        "Reload",
+        "Stamping Destruction",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon",
     },
     "zombie_madness": {
         "Pyramid Turtle",
@@ -17,7 +21,10 @@ structure_contents = {
         "Book of Life",
         "Call of the Mummy",
         "Creature Swap",
-        "Reload"
+        "Reload",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon"
     },
     "blazing_destruction": {
         "Inferno",
@@ -26,13 +33,20 @@ structure_contents = {
         "Ultimate Baseball Kid",
         "Fire Beaters",
         "Tribute to The Doomed",
-        "Level Limit - Area B"
+        "Level Limit - Area B",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon"
     },
     "fury_from_the_deep": {
         "Mother Grizzly",
         "Water Beaters",
         "Gravity Bind",
-        "Reload"
+        "Reload",
+        "Mobius the Frost Monarch",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon"
     },
     "warriors_triumph": {
         "Gearfried the Iron Knight",
@@ -41,7 +55,10 @@ structure_contents = {
         "Exiled Force",
         "Reinforcement of the Army",
         "Warrior Beaters",
-        "Reload"
+        "Reload",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon"
     },
     "spellcasters_judgement": {
         "Dark Magician",
@@ -52,7 +69,10 @@ structure_contents = {
         "Tsukuyomi",
         "Magical Dimension",
         "Mage Power"
-        "Spell-Counter Cards"
+        "Spell-Counter Cards",
+        "Heavy Storm",
+        "Dust Tornado",
+        "Mystical Space Typhoon"
     },
     "none": {}
 }
