@@ -190,13 +190,7 @@ def connect_regions(world: WL4World):
     def connect_level(level_name):
         regions = get_region_names(level_name)
         for source, dest in pairwise(regions):
-            # The Ringosuki is usually on the ground and needs to be carried to
-            # the top of the room with Heavy Grab, but it's already there on S-Hard.
-            # Probably the only region in the game with a difficulty-dependent access rule
-            if dest == 'Hotel Horror - Switch Room' and world.options.difficulty == Difficulty.option_s_hard:
-                access_rule = None
-            else:
-                access_rule = rules.get_access_rule(world.player, dest)
+            access_rule = rules.get_access_rule(world, dest)
             connect_entrance(world, dest, source, dest, access_rule)
 
     connect_level('Hall of Hieroglyphs')
@@ -244,7 +238,7 @@ def connect_regions(world: WL4World):
     connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
     connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
     connect('Entry Minigame Shop', 'Entry Passage Boss',
-            rules.make_boss_access_rule(world.player, Passage.ENTRY, required_jewels_entry))
+            rules.make_boss_access_rule(world, Passage.ENTRY, required_jewels_entry))
 
     connect('Menu', 'Emerald Passage')
     connect('Emerald Passage', 'Palm Tree Paradise (entrance)')
@@ -253,7 +247,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Mystic Lake', 'Monsoon Jungle (entrance)')
     connect_level_exit('Monsoon Jungle', 'Emerald Minigame Shop')
     connect('Emerald Minigame Shop', 'Emerald Passage Boss',
-            rules.make_boss_access_rule(world.player, Passage.EMERALD, required_jewels))
+            rules.make_boss_access_rule(world, Passage.EMERALD, required_jewels))
 
     connect('Menu', 'Ruby Passage')
     connect('Ruby Passage', 'The Curious Factory (entrance)')
@@ -262,7 +256,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('40 Below Fridge', 'Pinball Zone (entrance)')
     connect_level_exit('Pinball Zone', 'Ruby Minigame Shop')
     connect('Ruby Minigame Shop', 'Ruby Passage Boss',
-            rules.make_boss_access_rule(world.player, Passage.RUBY, required_jewels))
+            rules.make_boss_access_rule(world, Passage.RUBY, required_jewels))
 
     connect('Menu', 'Topaz Passage')
     connect('Topaz Passage', 'Toy Block Tower (entrance)')
@@ -271,7 +265,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Doodle Woods', 'Domino Row (entrance)')
     connect_level_exit('Domino Row', 'Topaz Minigame Shop')
     connect('Topaz Minigame Shop', 'Topaz Passage Boss',
-            rules.make_boss_access_rule(world.player, Passage.TOPAZ, required_jewels))
+            rules.make_boss_access_rule(world, Passage.TOPAZ, required_jewels))
 
     connect('Menu', 'Sapphire Passage')
     connect('Sapphire Passage', 'Crescent Moon Village (entrance)')
@@ -280,7 +274,7 @@ def connect_regions(world: WL4World):
     connect_level_exit('Fiery Cavern', 'Hotel Horror (entrance)')
     connect_level_exit('Hotel Horror', 'Sapphire Minigame Shop')
     connect('Sapphire Minigame Shop', 'Sapphire Passage Boss',
-            rules.make_boss_access_rule(world.player, Passage.SAPPHIRE, required_jewels))
+            rules.make_boss_access_rule(world, Passage.SAPPHIRE, required_jewels))
 
     connect('Menu', 'Golden Pyramid',
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
@@ -288,7 +282,7 @@ def connect_regions(world: WL4World):
     connect('Golden Pyramid', 'Golden Passage (entrance)')
     connect_level_exit('Golden Passage', 'Golden Minigame Shop')
     connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-            rules.make_boss_access_rule(world.player, Passage.GOLDEN, required_jewels_entry))
+            rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
 
 
 def create_region(world: WL4World, location_table: Set[str], name: str,

@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from typing import Mapping, Iterable, Optional, Tuple, Union, TYPE_CHECKING
-from BaseClasses import CollectionState
+import functools
+from typing import Callable, Mapping, NamedTuple, Optional, Sequence, Tuple, Union, TYPE_CHECKING
 
-from . import items
-from .types import AccessRule, ItemType, Passage
-from .locations import location_table as w4_locations
+from BaseClasses import CollectionState
+from Options import Option
+
+from . import items, locations, options
+from .types import ItemType, Passage
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -30,13 +32,35 @@ def resolve_helper(item_name: RequiredItem):
         return requirement
 
 
-def needs_items(player: int, requirements: Iterable[Iterable[RequiredItem]]) -> AccessRule:
-    def has_requirements(state: CollectionState):
-        def has_item(requirement: RequiredItem):
-            item, count = resolve_helper(requirement)
-            return state.has(item, player, count)
-        return any(map(lambda all_list: all(map(has_item, all_list)), requirements))
-    return has_requirements
+class Requirement(NamedTuple):
+    inner: Callable[[WL4World, CollectionState], bool]
+
+    def __or__(self, rhs: Requirement):
+        return Requirement(lambda w, s: self.inner(w, s) or rhs.inner(w, s))
+
+    def __and__(self, rhs: Requirement):
+        return Requirement(lambda w, s: self.inner(w, s) and rhs.inner(w, s))
+
+    def apply_world(self, world: WL4World):
+        return functools.partial(self.inner, world)
+
+
+def has(item_name: str) -> Requirement:
+    item, count = resolve_helper(item_name)
+    return Requirement(lambda w, s: s.has(item, w.player, count))
+
+def has_all(items: Sequence[str]) -> Requirement:
+    return Requirement(lambda w, s: all(has(item).inner(w, s) for item in items))
+
+def has_any(items: Sequence[str]) -> Requirement:
+    return Requirement(lambda w, s: any(has(item).inner(w, s) for item in items))
+
+
+def option(option_name: str, choice: Option):
+    return Requirement(lambda w, _: getattr(w.options, option_name) == choice)
+
+def difficulty(difficulty: options.Difficulty):
+    return option('difficulty', difficulty)
 
 
 def _get_escape_region(level_name: str, lookup: Mapping[str, Optional[str]]):
@@ -56,28 +80,27 @@ def get_frog_switch_region(level_name: str):
     return _get_escape_region(level_name, frog_switch_regions)
 
 
-def get_access_rule(player: int, region_name: str):
+def get_access_rule(world: WL4World, region_name: str):
     rule = region_rules[region_name]
     if rule is None:
         return None
-    return needs_items(player, rule)
+    return rule.apply_world(world)
 
 
-def make_boss_access_rule(player: int, passage: Passage, jewels_needed: int):
-    jewel_list = [[(name, jewels_needed)
-                  for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]]
-    return needs_items(player, jewel_list)
+def make_boss_access_rule(world: WL4World, passage: Passage, jewels_needed: int):
+    jewel_list = [(name, jewels_needed)
+                  for name in items.filter_item_names(type=ItemType.JEWEL, passage=passage)]
+    return has_all(jewel_list).apply_world(world)
 
 
 def set_access_rules(world: WL4World):
-    location_rules = difficulty_location_rules[world.options.difficulty.value]
-    for name, items in location_rules.items():
+    for name, rule in location_rules.items():
         try:
             location = world.multiworld.get_location(name, world.player)
-            location.access_rule = needs_items(world.player, items)
+            location.access_rule = rule.apply_world(world)
         except KeyError as k:
             # Raise for invalid location names, not ones that aren't in this player's world
-            if name not in w4_locations:
+            if name not in locations.location_table:
                 raise ValueError(f'Location {name} does not exist') from k
 
 
@@ -118,127 +141,105 @@ frog_switch_regions = {
 }
 
 
+normal = options.Difficulty.option_normal
+hard = options.Difficulty.option_hard
+s_hard = options.Difficulty.option_s_hard
+
+
 # Regions are linear, so each region from the same level adds to the previous
-region_rules = {
-    'Hall of Hieroglyphs':                  [['Dash Attack', 'Grab', 'Super Ground Pound']],
+region_rules: Mapping[str, Requirement] = {
+    'Hall of Hieroglyphs':                  has_all(['Dash Attack', 'Grab', 'Super Ground Pound']),
 
-    'Palm Tree Paradise':                     None,
-    'Wildflower Fields - Before Sunflower':   None,
-    'Wildflower Fields - After Sunflower':  [['Super Ground Pound', 'Swim']],
-    'Mystic Lake - Shore':                    None,
-    'Mystic Lake - Shallows':               [['Swim']],
-    'Mystic Lake - Depths':                 [['Head Smash']],
-    'Monsoon Jungle - Upper':                 None,
-    'Monsoon Jungle - Lower':               [['Ground Pound']],
+    'Palm Tree Paradise':                   None,
+    'Wildflower Fields - Before Sunflower': None,
+    'Wildflower Fields - After Sunflower':  has_all(['Super Ground Pound', 'Swim']),
+    'Mystic Lake - Shore':                  None,
+    'Mystic Lake - Shallows':               has('Swim'),
+    'Mystic Lake - Depths':                 has('Head Smash'),
+    'Monsoon Jungle - Upper':               None,
+    'Monsoon Jungle - Lower':               has('Ground Pound'),
 
-    'The Curious Factory':                    None,
-    'The Toxic Landfill':                   [['Dash Attack', 'Super Ground Pound', 'Head Smash']],
-    '40 Below Fridge':                      [['Super Ground Pound']],
-    'Pinball Zone - Early Rooms':           [['Grab']],
-    'Pinball Zone - Late Rooms':            [['Ground Pound']],
-    'Pinball Zone - Escape':                [['Head Smash']],
+    'The Curious Factory':                  None,
+    'The Toxic Landfill':                   has_all(['Dash Attack', 'Super Ground Pound', 'Head Smash']),
+    '40 Below Fridge':                      has('Super Ground Pound'),
+    'Pinball Zone - Early Rooms':           has('Grab'),
+    'Pinball Zone - Late Rooms':            has('Ground Pound'),
+    'Pinball Zone - Escape':                has('Head Smash'),
 
-    'Toy Block Tower':                      [['Heavy Grab']],
-    'The Big Board':                        [['Ground Pound']],
-    'Doodle Woods':                           None,
-    'Domino Row - Before Lake':               None,
+    'Toy Block Tower':                      has('Heavy Grab'),
+    'The Big Board':                        has('Ground Pound'),
+    'Doodle Woods':                         None,
+    'Domino Row - Before Lake':             None,
     # Note: You can also open the way to the exit by throwing a Toy Car across
     # the green room, but that feels obscure enough that I should just ignore it
-    'Domino Row - After Lake':              [['Swim', 'Ground Pound'], ['Swim', 'Head Smash']],
+    'Domino Row - After Lake':              has('Swim') & has_any(['Ground Pound', 'Head Smash']),
+    'Crescent Moon Village - Upper':        has('Head Smash'),
+    'Crescent Moon Village - Lower':        has('Dash Attack'),
+    'Arabian Night - Town':                 None,
+    'Arabian Night - Sewer':                has('Swim'),
+    'Fiery Cavern - Flaming':               None,
+    'Fiery Cavern - Frozen':                has_all(['Ground Pound', 'Dash Attack', 'Head Smash']),
+    'Hotel Horror - Hotel':                 None,
+    'Hotel Horror - Switch Room':           has('Heavy Grab') | difficulty(s_hard),
 
-    'Crescent Moon Village - Upper':        [['Head Smash']],
-    'Crescent Moon Village - Lower':        [['Dash Attack']],
-    'Arabian Night - Town':                   None,
-    'Arabian Night - Sewer':                [['Swim']],
-    'Fiery Cavern - Flaming':                 None,
-    'Fiery Cavern - Frozen':                [['Ground Pound', 'Dash Attack', 'Head Smash']],
-    'Hotel Horror - Hotel':                   None,
-    'Hotel Horror - Switch Room':           [['Heavy Grab']],
-
-    'Golden Passage - Passage':             [['Swim']],
-    'Golden Passage - Keyzer Area':         [['Ground Pound', 'Grab']],
+    'Golden Passage - Passage':             has('Swim'),
+    'Golden Passage - Keyzer Area':         has_all(['Ground Pound', 'Grab']),
 }
 
 
-location_rules_all = {
-    'Cractus':       [['Ground Pound']],
-    'Cuckoo Condor': [['Grab']],
-    'Aerodent':      [['Grab']],
-    'Catbat':        [['Ground Pound']],
-    'Golden Diva':   [['Grab']],
+location_rules: Mapping[str, Requirement] = {
+    'Cractus':       has('Ground Pound'),
+    'Cuckoo Condor': has('Grab'),
+    'Aerodent':      has('Grab'),
+    'Catbat':        has('Ground Pound'),
+    'Golden Diva':   has('Grab'),
 
-    'Mystic Lake - Large Cave Box':                   [['Head Smash']],
-    'Mystic Lake - Small Cave Box':                   [['Dash Attack']],
-    'Mystic Lake - Rock Cave Box':                    [['Grab']],
-    'Mystic Lake - CD Box':                           [['Dash Attack']],
-    'Monsoon Jungle - Puffy Hallway Box':             [['Dash Attack']],
-    'Monsoon Jungle - Full Health Item Box':          [['Swim']],
-    'Monsoon Jungle - CD Box':                        [['Ground Pound']],
+    'Wildflower Fields - 8-Shaped Cave Box':
+            has('Super Ground Pound') & ((difficulty(hard) & has('Grab')) | (difficulty(s_hard) & has('Heavy Grab'))),
+    'Mystic Lake - Large Cave Box':                   has('Head Smash'),
+    'Mystic Lake - Small Cave Box':                   has('Dash Attack'),
+    'Mystic Lake - Rock Cave Box':                    has('Grab'),
+    'Mystic Lake - CD Box':                           has('Dash Attack'),
+    # HACK: It should be in the depths on S-Hard, but I don't have handling for
+    # this box's region varying with difficulty
+    'Mystic Lake - Full Health Item Box':
+            ((difficulty(normal) | difficulty(hard)) & has('Grab')) |
+            (difficulty(s_hard) & has_all(['Swim', 'Head Smash', 'Dash Attack'])),
+    'Monsoon Jungle - Fat Plummet Box':
+            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has('Ground Pound'),
+    'Monsoon Jungle - Buried Cave Box':
+            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has('Grab'),
+    'Monsoon Jungle - Puffy Hallway Box':             has('Dash Attack'),
+    'Monsoon Jungle - Full Health Item Box':          has('Swim'),
+    'Monsoon Jungle - CD Box':                        has('Ground Pound'),
 
-    'The Curious Factory - Gear Elevator Box':        [['Dash Attack']],
-    'The Toxic Landfill - Current Circle Box':        [['Swim']],
-    'The Toxic Landfill - Transformation Puzzle Box': [['Heavy Grab'], ['Enemy Jump']],
-    '40 Below Fridge - CD Box':                       [['Head Smash']],
-    'Pinball Zone - Full Health Item Box':            [['Super Ground Pound']],
-    'Pinball Zone - Pink Room Full Health Item Box':  [['Super Ground Pound']],
+    'The Curious Factory - Gear Elevator Box':        has('Dash Attack'),
+    'The Toxic Landfill - Current Circle Box':        has('Swim'),
+    'The Toxic Landfill - Transformation Puzzle Box': has_any(['Heavy Grab', 'Enemy Jump']),
+    '40 Below Fridge - CD Box':                       has('Head Smash'),
+    'Pinball Zone - Full Health Item Box':            has('Super Ground Pound'),
+    'Pinball Zone - Pink Room Full Health Item Box':  has('Super Ground Pound'),
 
-    'Toy Block Tower - Digging Room Box':             [['Dash Attack']],
-    'Toy Block Tower - Full Health Item Box':         [['Dash Attack']],
-    'The Big Board - Hard Enemy Room Box':            [['Grab']],
-    'The Big Board - Full Health Item Box':           [['Grab', 'Enemy Jump']],
-    'Doodle Woods - Blue Circle Box':                 [['Enemy Jump']],
-    'Doodle Woods - Pink Circle Box':                 [['Ground Pound']],
-    'Doodle Woods - Gray Square Box':                 [['Ground Pound']],
-    'Domino Row - Keyzer Room Box':                   [['Ground Pound']],
+    'Toy Block Tower - Digging Room Box':             has('Dash Attack'),
+    'Toy Block Tower - Full Health Item Box':         has('Dash Attack'),
+    'The Big Board - Hard Enemy Room Box':            has('Grab'),
+    'The Big Board - Full Health Item Box':           has_all(['Grab', 'Enemy Jump']),
+    'Doodle Woods - Blue Circle Box':                 has('Enemy Jump'),
+    'Doodle Woods - Pink Circle Box':                 has('Ground Pound'),
+    'Doodle Woods - Gray Square Box':                 has('Ground Pound'),
+    'Doodle Woods - CD Box':
+            difficulty(normal) & has('Ground Pound') | difficulty(hard) | difficulty(s_hard),
+    'Domino Row - Swimming Detour Box':               has('Head Smash'),
+    'Domino Row - Keyzer Room Box':                   has('Ground Pound'),
 
-    'Crescent Moon Village - Agile Bat Hidden Box':   [['Ground Pound', 'Grab']],
-    'Crescent Moon Village - Sewer Box':              [['Swim']],
-    'Arabian Night - Flying Carpet Dash Attack Box':  [['Dash Attack']],
-    'Arabian Night - Kool-Aid Box':                   [['Dash Attack']],
+    'Crescent Moon Village - Agile Bat Hidden Box':   has_all(['Ground Pound', 'Grab']),
+    'Crescent Moon Village - Sewer Box':              has('Swim'),
+    'Arabian Night - Onomi Box':
+            difficulty(normal) | (difficulty(hard) | difficulty(s_hard)) & has_any(['Ground Pound', 'Head Smash']),
+    'Arabian Night - Sewer Box':
+            difficulty(normal) | ((difficulty(hard) | difficulty(s_hard)) & has('Super Ground Pound')),
+    'Arabian Night - Flying Carpet Dash Attack Box':  has('Dash Attack'),
+    'Arabian Night - Kool-Aid Box':                   has('Dash Attack'),
 
-    'Golden Passage - Mad Scienstein Box':            [['Ground Pound']],
+    'Golden Passage - Mad Scienstein Box':            has('Ground Pound'),
 }
-
-
-location_rules_normal = {
-    **location_rules_all,
-
-    'Mystic Lake - Full Health Item Box': [['Grab']],
-    'Doodle Woods - CD Box':              [['Ground Pound']],
-    'Domino Row - Swimming Detour Box':   [['Head Smash']],
-}
-
-location_rules_hard = {
-    **location_rules_all,
-
-    'Wildflower Fields - 8-Shaped Cave Box': [['Super Ground Pound', 'Grab']],
-    'Mystic Lake - Full Health Item Box':    [['Grab']],
-    'Monsoon Jungle - Fat Plummet Box':      [['Ground Pound']],
-    'Monsoon Jungle - Buried Cave Box':      [['Grab']],
-
-    'Domino Row - Swimming Detour Box':      [['Head Smash']],
-
-    'Arabian Night - Onomi Box':             [['Ground Pound'], ['Head Smash']],
-    'Arabian Night - Sewer Box':             [['Super Ground Pound']],
-}
-
-location_rules_s_hard = {
-    **location_rules_all,
-
-    'Wildflower Fields - 8-Shaped Cave Box': [['Super Ground Pound', 'Heavy Grab']],
-    'Mystic Lake - Rock Cave Box':           [['Grab']],
-    # HACK: It should be in the depths, but I don't have handling for this
-    # box's region varying with difficulty
-    'Mystic Lake - Full Health Item Box':    [['Swim', 'Head Smash', 'Dash Attack']],
-    'Monsoon Jungle - Fat Plummet Box':      [['Ground Pound']],
-    'Monsoon Jungle - Buried Cave Box':      [['Grab']],
-
-    'Arabian Night - Onomi Box':             [['Ground Pound'], ['Head Smash']],
-    'Arabian Night - Sewer Box':             [['Super Ground Pound']],
-}
-
-difficulty_location_rules = (
-    location_rules_normal,
-    location_rules_hard,
-    location_rules_s_hard,
-)
