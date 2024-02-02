@@ -48,6 +48,9 @@ class KH1World(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
 
     def create_items(self):
+        if self.options.reports_in_pool < self.options.required_reports):
+            print("LESS REPORTS IN POOL THAN REQUIRED REPORTS, SWAPPING")
+        
         item_pool: List[KH1Item] = []
         possible_level_up_item_pool = []
         level_up_item_pool = []
@@ -82,7 +85,7 @@ class KH1World(World):
             i = i + 1
 
         total_locations = len(self.multiworld.get_unfilled_locations(self.player)) - 1  # for victory placement
-        non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades"]
+        non_filler_item_categories = ["Key", "Magic", "Worlds", "Trinities", "Cups", "Summons", "Abilities", "Shared Abilities", "Keyblades", "Accessory", "Weapons"]
         if self.options.atlantica or self.options.goal == "atlantica":
             non_filler_item_categories.append("Atlantica")
         for name, data in item_table.items():
@@ -92,6 +95,9 @@ class KH1World(World):
             if data.category not in non_filler_item_categories:
                 continue
             item_pool += [self.create_item(name) for _ in range(0, quantity)]
+        
+        for i in range(max(self.options.required_reports, self.options.reports_in_pool)):
+            item_pool += [self.create_item("Ansem's Report " + str(i+1))]
 
         # Fill any empty locations with filler items.
         item_names = []
@@ -112,7 +118,7 @@ class KH1World(World):
 
     def pre_fill(self) -> None:
         goal_dict = {
-            "sephiroth":      "Ansem's Secret Report 12",
+            "sephiroth":      "Ansem's Report 12",
             "wonderland":     "Wonderland Ifrit's Horn Event",
             "deep_jungle":    "Deep Jungle Jungle King Event",
             "agrabah":        "Agrabah Genie Event",
@@ -120,7 +126,7 @@ class KH1World(World):
             "atlantica":      "Atlantica Crabclaw Event",
             "halloween_town": "Halloween Town Pumpkinhead Event",
             "neverland":      "Neverland Fairy Harp Event",
-            "unknown":        "Ansem's Secret Report 13",
+            "unknown":        "Ansem's Report 13",
             "final_rest":     "End of the World Final Rest Chest",
             "postcards":      "Traverse Town Mail Postcard 10 Event",
             "final_ansem":    "Final Ansem"
@@ -131,8 +137,6 @@ class KH1World(World):
         fillers = {}
         disclude = []
         fillers.update(get_items_by_category("Item", disclude))
-        fillers.update(get_items_by_category("Accessory", disclude))
-        fillers.update(get_items_by_category("Weapons", disclude))
         fillers.update(get_items_by_category("Camping", disclude))
         fillers.update(get_items_by_category("Stat Ups", disclude))
         weights = [data.weight for data in fillers.values()]
@@ -140,6 +144,7 @@ class KH1World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)/16}
+        slot_data = {"Required Reports": min(int(self.options.required_reports), int(self.options.reports_in_pool))}
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:
@@ -151,7 +156,7 @@ class KH1World(World):
         return KH1Item(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica)
+        set_rules(self.multiworld, self.player, self.options.goal, self.options.atlantica, min(self.options.required_reports, self.options.reports_in_pool))
 
     def create_regions(self):
         create_regions(self.multiworld, self.player, self.options.goal, self.options.atlantica \

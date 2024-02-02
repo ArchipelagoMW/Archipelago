@@ -97,6 +97,8 @@ class KH1Context(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
+            
+            #Handle Slot Data
             if "EXP Multiplier" in list(args['slot_data'].keys()):
                 xp_mult = args['slot_data']["EXP Multiplier"]
             else:
@@ -104,6 +106,15 @@ class KH1Context(CommonContext):
             with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
                 f.write(str(xp_mult))
                 f.close()
+            
+            if "Required Reports" in list(args['slot_data'].keys()):
+                reports_required = args['slot_data']["Required Reports"]
+            else:
+                reports_required = 4
+            with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
+                f.write(str(reports_required))
+                f.close()
+            #End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]

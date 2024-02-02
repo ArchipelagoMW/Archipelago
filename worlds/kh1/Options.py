@@ -102,6 +102,24 @@ class EXPMultiplier(NamedRange):
         "10x": default * 10,
     }
 
+class RequiredReports(Range):
+    """
+    Determines the number of Ansem's Reports needed to open End of the World
+    """
+    diplay_name = "Reports to Open End of the World"
+    default = 4
+    range_start = 1
+    range_end = 13
+
+class ReportsInPool(Range):
+    """
+    Determines the number of Ansem's Reports in the item pool.
+    """
+    diplay_name = "Reports in Pool"
+    default = 4
+    range_start = 1
+    range_end = 13
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -114,3 +132,5 @@ class KH1Options(PerGameCommonOptions):
     accessory_slot_increase: AccessorySlotIncrease
     item_slot_increase: ItemSlotIncrease
     exp_multiplier: EXPMultiplier
+    required_reports: RequiredReports
+    reports_in_pool: ReportsInPool

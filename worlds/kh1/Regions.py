@@ -334,22 +334,22 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
         regions["Atlantica"].locations.append("Atlantica Undersea Garden Clam")
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
     
-    regions["Agrabah"].locations.append("Ansem's Secret Report 1")
-    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 2")
+    regions["Agrabah"].locations.append("Ansem's Report 1")
+    regions["Hollow Bastion"].locations.append("Ansem's Report 2")
     if atlantica or goal == "atlantica":
-        regions["Atlantica"].locations.append("Ansem's Secret Report 3")
-    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 4")
-    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 5")
-    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 6")
-    regions["Halloween Town"].locations.append("Ansem's Secret Report 7")
-    regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 8")
-    regions["Neverland"].locations.append("Ansem's Secret Report 9")
-    regions["Hollow Bastion"].locations.append("Ansem's Secret Report 10")
-   #regions["Agrabah"].locations.append("Ansem's Secret Report 11")
+        regions["Atlantica"].locations.append("Ansem's Report 3")
+    regions["Hollow Bastion"].locations.append("Ansem's Report 4")
+    regions["Hollow Bastion"].locations.append("Ansem's Report 5")
+    regions["Hollow Bastion"].locations.append("Ansem's Report 6")
+    regions["Halloween Town"].locations.append("Ansem's Report 7")
+    regions["Olympus Coliseum"].locations.append("Ansem's Report 8")
+    regions["Neverland"].locations.append("Ansem's Report 9")
+    regions["Hollow Bastion"].locations.append("Ansem's Report 10")
+   #regions["Agrabah"].locations.append("Ansem's Report 11")
     if goal == "sephiroth":
-        regions["Olympus Coliseum"].locations.append("Ansem's Secret Report 12")
+        regions["Olympus Coliseum"].locations.append("Ansem's Report 12")
     if goal == "unknown":
-        regions["Hollow Bastion"].locations.append("Ansem's Secret Report 13")
+        regions["Hollow Bastion"].locations.append("Ansem's Report 13")
    
     for i in range(levels):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
