@@ -263,12 +263,12 @@ def vanilla_shuffle_order() -> Dict[SC2Campaign, List[FillMission]]:
             FillMission(MissionPools.FINAL, [MissionConnection(18, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
         ],
         SC2Campaign.PROLOGUE: [
-            FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", completion_critical=True, removal_priority=1),
-            FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.PROLOGUE)], "_3", completion_critical=True)
+            FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1"),
+            FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", removal_priority=1),
+            FillMission(MissionPools.FINAL, [MissionConnection(1, SC2Campaign.PROLOGUE)], "_3")
         ],
         SC2Campaign.LOTV: [
-            FillMission(MissionPools.STARTER, [MissionConnection(2, SC2Campaign.PROLOGUE)], "Aiur", completion_critical=True),
+            FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.LOTV)], "Aiur", completion_critical=True),
             FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.LOTV)], "Aiur", completion_critical=True, removal_priority=3),
             FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.LOTV)], "Aiur", completion_critical=True),
             FillMission(MissionPools.MEDIUM, [MissionConnection(2, SC2Campaign.LOTV)], "Korhal", completion_critical=True),
@@ -344,11 +344,11 @@ def mini_campaign_order() -> Dict[SC2Campaign, List[FillMission]]:
             FillMission(MissionPools.FINAL, [MissionConnection(11, SC2Campaign.HOTS)], "Korhal", completion_critical=True),
         ],
         SC2Campaign.PROLOGUE: [
-            FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1", completion_critical=True),
-            FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2", completion_critical=True)
+            FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.PROLOGUE)], "_1"),
+            FillMission(MissionPools.FINAL, [MissionConnection(0, SC2Campaign.PROLOGUE)], "_2")
         ],
         SC2Campaign.LOTV: [
-            FillMission(MissionPools.STARTER, [MissionConnection(1, SC2Campaign.PROLOGUE)], "Aiur", completion_critical=True),
+            FillMission(MissionPools.STARTER, [MissionConnection(-1, SC2Campaign.LOTV)], "Aiur",completion_critical=True),
             FillMission(MissionPools.EASY, [MissionConnection(0, SC2Campaign.LOTV)], "Aiur", completion_critical=True),
             FillMission(MissionPools.EASY, [MissionConnection(1, SC2Campaign.LOTV)], "Korhal", completion_critical=True),
             FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.LOTV)], "Shakuras", completion_critical=True),
@@ -534,12 +534,12 @@ vanilla_mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = {
         SC2Mission.THE_RECKONING.mission_name: MissionInfo(SC2Mission.THE_RECKONING, [MissionConnection(19, SC2Campaign.HOTS)], SC2Mission.THE_RECKONING.area, completion_critical=True),
     },
     SC2Campaign.PROLOGUE: {
-        SC2Mission.DARK_WHISPERS.mission_name: MissionInfo(SC2Mission.DARK_WHISPERS, [], SC2Mission.DARK_WHISPERS.area, completion_critical=True),
-        SC2Mission.GHOSTS_IN_THE_FOG.mission_name: MissionInfo(SC2Mission.GHOSTS_IN_THE_FOG, [MissionConnection(1, SC2Campaign.PROLOGUE)], SC2Mission.GHOSTS_IN_THE_FOG.area, completion_critical=True),
-        SC2Mission.EVIL_AWOKEN.mission_name: MissionInfo(SC2Mission.EVIL_AWOKEN, [MissionConnection(2, SC2Campaign.PROLOGUE)], SC2Mission.EVIL_AWOKEN.area, completion_critical=True)
+        SC2Mission.DARK_WHISPERS.mission_name: MissionInfo(SC2Mission.DARK_WHISPERS, [], SC2Mission.DARK_WHISPERS.area),
+        SC2Mission.GHOSTS_IN_THE_FOG.mission_name: MissionInfo(SC2Mission.GHOSTS_IN_THE_FOG, [MissionConnection(1, SC2Campaign.PROLOGUE)], SC2Mission.GHOSTS_IN_THE_FOG.area),
+        SC2Mission.EVIL_AWOKEN.mission_name: MissionInfo(SC2Mission.EVIL_AWOKEN, [MissionConnection(2, SC2Campaign.PROLOGUE)], SC2Mission.EVIL_AWOKEN.area)
     },
     SC2Campaign.LOTV: {
-        SC2Mission.FOR_AIUR.mission_name: MissionInfo(SC2Mission.FOR_AIUR, [MissionConnection(3, SC2Campaign.PROLOGUE)], SC2Mission.FOR_AIUR.area, completion_critical=True),
+        SC2Mission.FOR_AIUR.mission_name: MissionInfo(SC2Mission.FOR_AIUR, [], SC2Mission.FOR_AIUR.area, completion_critical=True),
         SC2Mission.THE_GROWING_SHADOW.mission_name: MissionInfo(SC2Mission.THE_GROWING_SHADOW, [MissionConnection(1, SC2Campaign.LOTV)], SC2Mission.THE_GROWING_SHADOW.area, completion_critical=True),
         SC2Mission.THE_SPEAR_OF_ADUN.mission_name: MissionInfo(SC2Mission.THE_SPEAR_OF_ADUN, [MissionConnection(2, SC2Campaign.LOTV)], SC2Mission.THE_SPEAR_OF_ADUN.area, completion_critical=True),
         SC2Mission.SKY_SHIELD.mission_name: MissionInfo(SC2Mission.SKY_SHIELD, [MissionConnection(3, SC2Campaign.LOTV)], SC2Mission.SKY_SHIELD.area, completion_critical=True),

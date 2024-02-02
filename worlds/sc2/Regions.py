@@ -183,14 +183,7 @@ def create_vanilla_regions(
                 lambda state: state.has("Beat Ghosts in the Fog", player))
 
     if SC2Campaign.LOTV in enabled_campaigns:
-        if SC2Campaign.PROLOGUE in enabled_campaigns:
-            connect(multiworld, player, names, "Evil Awoken", "For Aiur!",
-                    lambda state: state.has("Beat Evil Awoken", player))
-        else:
-            vanilla_mission_reqs[SC2Campaign.LOTV] = vanilla_mission_reqs[SC2Campaign.LOTV].copy()
-            vanilla_mission_reqs[SC2Campaign.LOTV][SC2Mission.FOR_AIUR.mission_name] = MissionInfo(
-                SC2Mission.FOR_AIUR, [], SC2Mission.FOR_AIUR.area)
-            connect(multiworld, player, names, "Menu", "For Aiur!")
+        connect(multiworld, player, names, "Menu", "For Aiur!")
         connect(multiworld, player, names, "For Aiur!", "The Growing Shadow",
                 lambda state: state.has("Beat For Aiur!", player)),
         connect(multiworld, player, names, "The Growing Shadow", "The Spear of Adun",
