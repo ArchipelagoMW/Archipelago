@@ -531,7 +531,7 @@
         id: Lingo Room/Panel_shortcut
         colors: yellow
         tag: midyellow
-      PILGRIMAGE:
+      PILGRIM:
         id: Lingo Room/Panel_pilgrim
         colors: blue
         tag: midblue
@@ -552,7 +552,7 @@
       Exit:
         event: True
         panels:
-          - PILGRIMAGE
+          - PILGRIM
   Pilgrim Room:
     entrances:
       The Seeker:
@@ -6723,7 +6723,7 @@
           - room: Rhyme Room (Target)
             panel: PISTOL
           - room: Rhyme Room (Target)
-            panel: QUARTZ
+            panel: GEM
   Rhyme Room (Target):
     entrances:
       Rhyme Room (Smiley): # one-way
@@ -6751,7 +6751,7 @@
         tag: syn rhyme
         subtag: top
         link: rhyme CRYSTAL
-      QUARTZ:
+      GEM:
         id: Double Room/Panel_crystal_syn
         colors: purple
         tag: syn rhyme
@@ -6776,7 +6776,7 @@
         group: Rhyme Room Doors
         panels:
           - PISTOL
-          - QUARTZ
+          - GEM
           - INNOVATIVE (Top)
           - INNOVATIVE (Bottom)
     paintings:
@@ -7128,7 +7128,7 @@
         id: Hangry Room/Panel_red_top_3
         colors: red
         tag: topred
-      FLUMMOXED:
+      FLUSTERED:
         id: Hangry Room/Panel_red_top_4
         colors: red
         tag: topred
