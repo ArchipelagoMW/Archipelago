@@ -62,6 +62,9 @@ def option(option_name: str, choice: Option):
 def difficulty(difficulty: options.Difficulty):
     return option('difficulty', difficulty)
 
+def logic(logic: options.Logic):
+    return option('logic', logic)
+
 
 def _get_escape_region(level_name: str, lookup: Mapping[str, Optional[str]]):
     region = lookup[level_name]
@@ -144,6 +147,8 @@ frog_switch_regions = {
 normal = options.Difficulty.option_normal
 hard = options.Difficulty.option_hard
 s_hard = options.Difficulty.option_s_hard
+basic = options.Logic.option_basic
+advanced = options.Logic.option_advanced
 
 
 # Regions are linear, so each region from the same level adds to the previous
@@ -163,16 +168,16 @@ region_rules: Mapping[str, Requirement] = {
     'The Toxic Landfill':                   has_all(['Dash Attack', 'Super Ground Pound', 'Head Smash']),
     '40 Below Fridge':                      has('Super Ground Pound'),
     'Pinball Zone - Early Rooms':           has('Grab'),
-    'Pinball Zone - Late Rooms':            has('Ground Pound'),
-    'Pinball Zone - Escape':                has('Head Smash'),
+    'Pinball Zone - Jungle Room':           has('Ground Pound') | logic(advanced),
+    'Pinball Zone - Late Rooms':            has('Ground Pound') | logic(advanced) & has('Heavy Grab'),
+    'Pinball Zone - Escape':                has_all(['Ground Pound', 'Head Smash']),
 
     'Toy Block Tower':                      has('Heavy Grab'),
     'The Big Board':                        has('Ground Pound'),
     'Doodle Woods':                         None,
     'Domino Row - Before Lake':             None,
-    # Note: You can also open the way to the exit by throwing a Toy Car across
-    # the green room, but that feels obscure enough that I should just ignore it
-    'Domino Row - After Lake':              has('Swim') & has_any(['Ground Pound', 'Head Smash']),
+    'Domino Row - After Lake':
+            has('Swim') & (has('Ground Pound') | logic(advanced) & has_any(['Head Smash', 'Grab'])),
     'Crescent Moon Village - Upper':        has('Head Smash'),
     'Crescent Moon Village - Lower':        has('Dash Attack'),
     'Arabian Night - Town':                 None,
@@ -191,7 +196,7 @@ location_rules: Mapping[str, Requirement] = {
     'Cractus':       has('Ground Pound'),
     'Cuckoo Condor': has('Grab'),
     'Aerodent':      has('Grab'),
-    'Catbat':        has('Ground Pound'),
+    'Catbat':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced)),
     'Golden Diva':   has('Grab'),
 
     'Wildflower Fields - 8-Shaped Cave Box':
@@ -226,10 +231,13 @@ location_rules: Mapping[str, Requirement] = {
     'The Big Board - Full Health Item Box':           has_all(['Grab', 'Enemy Jump']),
     'Doodle Woods - Blue Circle Box':                 has('Enemy Jump'),
     'Doodle Woods - Pink Circle Box':                 has('Ground Pound'),
-    'Doodle Woods - Gray Square Box':                 has('Ground Pound'),
+    'Doodle Woods - Gray Square Box':
+            has('Ground Pound') | logic(advanced) & has('Grab'),
     'Doodle Woods - CD Box':
-            difficulty(normal) & has('Ground Pound') | difficulty(hard) | difficulty(s_hard),
+            difficulty(normal) & (has('Ground Pound') | logic(advanced) & has('Grab')) |
+            difficulty(hard) | difficulty(s_hard),
     'Domino Row - Swimming Detour Box':               has('Head Smash'),
+    'Domino Row - Swimming Room Escape Box':          has('Ground Pound'),
     'Domino Row - Keyzer Room Box':                   has('Ground Pound'),
 
     'Crescent Moon Village - Agile Bat Hidden Box':   has_all(['Ground Pound', 'Grab']),

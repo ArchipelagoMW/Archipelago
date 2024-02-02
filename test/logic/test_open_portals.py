@@ -145,14 +145,15 @@ class TestNormalOpenPortal(TestNormal):
 
             ['Domino Row - Rolling Box', False, []],
             ['Domino Row - Rolling Box', False, [], ['Swim']],
-            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Rolling Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Rolling Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Swimming Detour Box', False, []],
             ['Domino Row - Swimming Detour Box', False, [], ['Swim']],
             ['Domino Row - Swimming Detour Box', False, [], ['Head Smash']],
-            ['Domino Row - Swimming Detour Box', True, ['Swim', 'Head Smash']],
+            ['Domino Row - Swimming Detour Box', False, [], ['Progressive Ground Pound']],
+            ['Domino Row - Swimming Detour Box', True,
+             ['Swim', 'Head Smash', 'Progressive Ground Pound']],
 
             ['Domino Row - Keyzer Room Box', False, []],
             ['Domino Row - Keyzer Room Box', False, [], ['Swim']],
@@ -162,7 +163,6 @@ class TestNormalOpenPortal(TestNormal):
             ['Domino Row - CD Box', False, []],
             ['Domino Row - CD Box', False, [], ['Swim']],
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
         ])
 
     def _test_crescent_moon_village(self):
@@ -386,14 +386,15 @@ class TestHardOpenPortal(TestHard):
 
             ['Domino Row - Rolling Box', False, []],
             ['Domino Row - Rolling Box', False, [], ['Swim']],
-            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Rolling Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Rolling Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Swimming Detour Box', False, []],
             ['Domino Row - Swimming Detour Box', False, [], ['Swim']],
+            ['Domino Row - Swimming Detour Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Swimming Detour Box', False, [], ['Head Smash']],
-            ['Domino Row - Swimming Detour Box', True, ['Swim', 'Head Smash']],
+            ['Domino Row - Swimming Detour Box', True,
+             ['Swim', 'Head Smash', 'Progressive Ground Pound']],
 
             ['Domino Row - Keyzer Room Box', False, []],
             ['Domino Row - Keyzer Room Box', False, [], ['Swim']],
@@ -402,9 +403,8 @@ class TestHardOpenPortal(TestHard):
 
             ['Domino Row - CD Box', False, []],
             ['Domino Row - CD Box', False, [], ['Swim']],
-            ['Domino Row - CD Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - CD Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
         ])
 
     def _test_crescent_moon_village(self):
@@ -508,7 +508,7 @@ class TestHardOpenPortal(TestHard):
             ['Hotel Horror - CD Box', True, ['Progressive Grab', 'Progressive Grab']],
         ])
 
-class TestSHardOpenPortals(TestSHard):
+class TestSHardOpenPortal(TestSHard):
     options = {'difficulty': 2, 'portal': 1}
 
     def _test_wildflower_fields(self):
@@ -648,15 +648,13 @@ class TestSHardOpenPortals(TestSHard):
 
             ['Domino Row - Rolling Box', False, []],
             ['Domino Row - Rolling Box', False, [], ['Swim']],
-            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Rolling Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Rolling Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Swimming Room Escape Box', False, []],
             ['Domino Row - Swimming Room Escape Box', False, [], ['Swim']],
-            ['Domino Row - Swimming Room Escape Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Swimming Room Escape Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Keyzer Room Box', False, []],
             ['Domino Row - Keyzer Room Box', False, [], ['Swim']],
@@ -665,8 +663,8 @@ class TestSHardOpenPortals(TestSHard):
 
             ['Domino Row - CD Box', False, []],
             ['Domino Row - CD Box', False, [], ['Swim']],
+            ['Domino Row - CD Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
         ])
 
     def _test_crescent_moon_village(self):

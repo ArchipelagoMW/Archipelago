@@ -93,7 +93,7 @@ regions_in_levels = {
     'The Curious Factory':   None,
     'The Toxic Landfill':    None,
     '40 Below Fridge':       None,
-    'Pinball Zone':          ['Early Rooms', 'Late Rooms', 'Escape'],
+    'Pinball Zone':          ['Early Rooms', 'Jungle Room', 'Late Rooms', 'Escape'],
 
     'Toy Block Tower':       None,
     'The Big Board':         None,

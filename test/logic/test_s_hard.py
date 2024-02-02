@@ -450,21 +450,18 @@ class TestSHard(WL4TestBase):
         self.run_location_tests([
             ['Domino Row - Racing Box', False, []],
             ['Domino Row - Racing Box', False, [], ['Swim']],
-            ['Domino Row - Racing Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Racing Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Racing Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Racing Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Rolling Box', False, []],
             ['Domino Row - Rolling Box', False, [], ['Swim']],
-            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Rolling Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Rolling Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Rolling Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Swimming Room Escape Box', False, []],
             ['Domino Row - Swimming Room Escape Box', False, [], ['Swim']],
-            ['Domino Row - Swimming Room Escape Box', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row - Swimming Room Escape Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - Swimming Room Escape Box', True, ['Swim', 'Head Smash']],
 
             ['Domino Row - Keyzer Room Box', False, []],
             ['Domino Row - Keyzer Room Box', False, [], ['Swim']],
@@ -473,8 +470,8 @@ class TestSHard(WL4TestBase):
 
             ['Domino Row - CD Box', False, []],
             ['Domino Row - CD Box', False, [], ['Swim']],
+            ['Domino Row - CD Box', False, [], ['Progressive Ground Pound']],
             ['Domino Row - CD Box', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row - CD Box', True, ['Swim', 'Head Smash']],
         ])
 
     def _test_aerodent(self):
@@ -590,7 +587,8 @@ class TestSHard(WL4TestBase):
         self.run_location_tests([
             ['Catbat', False, []],
             ['Catbat', False, [], ['Progressive Ground Pound']],
-            ['Catbat', True, ['Progressive Ground Pound']],
+            ['Catbat', False, [], ['Enemy Jump']],
+            ['Catbat', True, ['Progressive Ground Pound', 'Enemy Jump']],
         ])
 
     def _test_golden_passage(self):

@@ -15,6 +15,17 @@ class Difficulty(Choice):
     default = 0
 
 
+class Logic(Choice):
+    '''
+    Advanced logic enables some strategies that are more difficult or can risk forcing a Give Up, many of which involve Grab.
+    See the Discord thread for the tricks Advanced accounts for.
+    '''
+    display_name = 'Logic'
+    option_basic = 0
+    option_advanced = 1
+    default = option_basic
+
+
 class PoolJewels(Range):
     '''
     Number of jewels in the item pool per passage for the main four.
@@ -107,6 +118,7 @@ class WarioVoiceShuffle(Toggle):
 @dataclass
 class WL4Options(PerGameCommonOptions):
     difficulty: Difficulty
+    logic: Logic
     pool_jewels: PoolJewels
     golden_jewels: GoldenJewels
     required_jewels: RequiredJewels

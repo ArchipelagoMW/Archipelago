@@ -128,7 +128,7 @@ location_table = {
     'Pinball Zone - Rolling Room Box':                    LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NE),      'Early Rooms',      _EASIER),
     'Pinball Zone - Switch Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NE),      'Late Rooms',       _S_HARD),
     'Pinball Zone - Fruit Room Box':                      LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SE),      'Early Rooms',      _ALL),
-    'Pinball Zone - Jungle Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SW),      'Late Rooms',       _ALL),
+    'Pinball Zone - Jungle Room Box':                     LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_SW),      'Jungle Room',      _ALL),
     'Pinball Zone - Snow Room Box':                       LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.JEWEL_NW),      'Late Rooms',       _ALL),
     'Pinball Zone - CD Box':                              LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.CD),            'Late Rooms',       _ALL),
     'Pinball Zone - Full Health Item Box':                LocationData(LocationType.BOX,  (Passage.RUBY,     3, ItemFlag.FULL_HEALTH),   'Late Rooms',       _EASIER),

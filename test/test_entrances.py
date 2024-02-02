@@ -101,9 +101,8 @@ class TestEntrancesBasic(TestEntrances):
 
             ['Domino Row Gate', False, []],
             ['Domino Row Gate', False, [], ['Swim']],
-            ['Domino Row Gate', False, [], ['Progressive Ground Pound', 'Head Smash']],
+            ['Domino Row Gate', False, [], ['Progressive Ground Pound']],
             ['Domino Row Gate', True, ['Swim', 'Progressive Ground Pound']],
-            ['Domino Row Gate', True, ['Swim', 'Head Smash']],
         ])
 
     def test_sapphire_levels(self):
@@ -140,6 +139,32 @@ class TestEntrancesBasic(TestEntrances):
             ['Golden Passage Gate', True, ['Swim', 'Progressive Ground Pound', 'Progressive Grab']],
         ])
 
+
+class TestEntrancesAdvanced(TestEntrances):
+    options = {'logic': options.Logic.option_advanced}
+
+    def test_topaz_levels(self):
+        self.starting_regions = ['Toy Block Tower (entrance)', 'The Big Board (entrance)',
+                                 'Doodle Woods (entrance)', 'Domino Row (entrance)']
+        self.run_entrance_tests([
+            ['Toy Block Tower Gate', False, []],
+            ['Toy Block Tower Gate', False, ['Progressive Grab'], ['Progressive Grab']],
+            ['Toy Block Tower Gate', True, ['Progressive Grab', 'Progressive Grab']],
+
+            ['The Big Board Gate', False, []],
+            ['The Big Board Gate', False, [], ['Progressive Ground Pound']],
+            ['The Big Board Gate', True, ['Progressive Ground Pound']],
+
+            ['Doodle Woods Gate', True, []],
+
+            ['Domino Row Gate', False, []],
+            ['Domino Row Gate', False, [], ['Swim']],
+            ['Domino Row Gate', False, [], ['Progressive Ground Pound', 'Head Smash',
+                                            'Progressive Grab']],
+            ['Domino Row Gate', True, ['Swim', 'Progressive Ground Pound']],
+            ['Domino Row Gate', True, ['Swim', 'Head Smash']],
+            ['Domino Row Gate', True, ['Swim', 'Progressive Grab']],
+        ])
 
 class TestEntrancesOpenPortal(TestEntrances):
     options = {'portal': options.Portal.option_open}
