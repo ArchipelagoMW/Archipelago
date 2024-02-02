@@ -4372,15 +4372,15 @@
           - red
           - yellow
         tag: mid yellow red
+        required_panel:
+          room: The Bearer (North)
+          panel: WARTS
       SNOW:
         id: Cross Room/Panel_snow_won
         colors:
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          room: The Bearer (North)
-          panel: WARTS
     doors:
       Side Area Shortcut:
         event: True
