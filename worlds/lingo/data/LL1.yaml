@@ -1448,7 +1448,7 @@
     entrances:
       The Perceptive: True
     panels:
-      NAPS:
+      SPAN:
         id: Naps Room/Panel_naps_span
         colors: black
         tag: midblack
@@ -1474,7 +1474,7 @@
         location_name: The Fearless - First Floor Puzzles
         group: Fearless Doors
         panels:
-          - NAPS
+          - SPAN
           - TEAM
           - TEEM
           - IMPATIENT
@@ -3632,7 +3632,7 @@
         id: Blue Room/Panel_bone_skeleton
         colors: blue
         tag: botblue
-      EYE:
+      EYE (1):
         id: Blue Room/Panel_mouth_face
         colors: blue
         tag: double botblue
@@ -4366,13 +4366,13 @@
         door: Side Area Shortcut
       Roof: True
     panels:
-      SNOW:
+      SMILE:
         id: Cross Room/Panel_smile_lime
         colors:
           - red
           - yellow
         tag: mid yellow red
-      SMILE:
+      SNOW:
         id: Cross Room/Panel_snow_won
         colors:
           - red

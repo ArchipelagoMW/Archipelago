@@ -188,7 +188,7 @@ panels:
     Achievement: 444546
     GAZE: 444547
   The Fearless (First Floor):
-    NAPS: 444548
+    SPAN: 444548
     TEAM: 444549
     TEEM: 444550
     IMPATIENT: 444551
@@ -449,7 +449,7 @@ panels:
   The Undeterred:
     Achievement: 444759
     BONE: 444760
-    EYE: 444761
+    EYE (1): 444761
     MOUTH: 444762
     IRIS: 444763
     EYE (2): 444764
@@ -530,8 +530,8 @@ panels:
     TENT: 444832
     BOWL: 444833
   The Bearer (West):
-    SNOW: 444834
-    SMILE: 444835
+    SMILE: 444834
+    SNOW: 444835
   Bearer Side Area:
     SHORTCUT: 444836
     POTS: 444837
