@@ -192,12 +192,11 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                 f"TRAINER_MAY_{locale}_TREECKO",
                 f"TRAINER_MAY_{locale}_TORCHIC"
             ]
-            for trainer in alternates:
-                location_info.append((
-                    data.constants["TRAINER_FLAGS_START"] + data.constants[trainer],
-                    location.item.player,
-                    location.item.name
-                ))
+            location_info.extend((
+                data.constants["TRAINER_FLAGS_START"] + data.constants[trainer],
+                location.item.player,
+                location.item.name
+            ) for trainer in alternates)
 
     player_name_ids: Dict[str, int] = {world.multiworld.player_name[world.player]: 0}
     item_name_offsets: Dict[str, int] = {}

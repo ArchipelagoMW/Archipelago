@@ -415,15 +415,35 @@ def _init() -> None:
                 raise AssertionError(f"Location [{location_name}] was claimed by multiple regions")
 
             location_json = extracted_data["locations"][location_name]
-            new_location = LocationData(
-                location_name,
-                location_attributes_json[location_name]["label"],
-                region_name,
-                location_json["default_item"],
-                location_json["address"],
-                location_json["flag"],
-                frozenset(location_attributes_json[location_name]["tags"])
-            )
+            if location_name.startswith("TRAINER_BRENDAN_") or location_name.startswith("TRAINER_MAY_"):
+                import re
+                locale = re.match("TRAINER_BRENDAN_([A-Z0-9_]+)_MUDKIP_REWARD", location_name).group(1)
+                alternate_rival_jsons = [extracted_data["locations"][alternate] for alternate in [
+                    f"TRAINER_BRENDAN_{locale}_TORCHIC_REWARD",
+                    f"TRAINER_BRENDAN_{locale}_TREECKO_REWARD",
+                    f"TRAINER_MAY_{locale}_MUDKIP_REWARD",
+                    f"TRAINER_MAY_{locale}_TORCHIC_REWARD",
+                    f"TRAINER_MAY_{locale}_TREECKO_REWARD",
+                ]]
+                new_location = LocationData(
+                    location_name,
+                    location_attributes_json[location_name]["label"],
+                    region_name,
+                    location_json["default_item"],
+                    [location_json["address"]] + [j["address"] for j in alternate_rival_jsons],
+                    location_json["flag"],
+                    frozenset(location_attributes_json[location_name]["tags"])
+                )
+            else:
+                new_location = LocationData(
+                    location_name,
+                    location_attributes_json[location_name]["label"],
+                    region_name,
+                    location_json["default_item"],
+                    location_json["address"],
+                    location_json["flag"],
+                    frozenset(location_attributes_json[location_name]["tags"])
+                )
             new_region.locations.append(location_name)
             data.locations[location_name] = new_location
             claimed_locations.add(location_name)
