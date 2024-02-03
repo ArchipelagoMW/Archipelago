@@ -36,6 +36,7 @@ class Celeste64World(World):
     location_name_to_id = location_table
     item_name_to_id = item_table
 
+
     def create_item(self, name: str) -> Celeste64Item:
         # Potentially don't make all strawberries Progression
         return Celeste64Item(name, item_data_table[name].type, item_data_table[name].code, self.player)
@@ -49,6 +50,7 @@ class Celeste64World(World):
             item_pool.append(self.create_item(ItemName.strawberry))
 
         self.multiworld.itempool += item_pool
+
 
     def create_regions(self) -> None:
         # Create regions.
@@ -69,13 +71,10 @@ class Celeste64World(World):
     def get_filler_item_name(self) -> str:
         return ItemName.strawberry
 
+
     def set_rules(self) -> None:
         set_rules(self)
 
-        # Completion condition.
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(ItemName.strawberry,
-                                                                                    self.player,
-                                                                                    self.options.strawberries_required.value)
 
     def fill_slot_data(self):
         return {
