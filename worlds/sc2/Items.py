@@ -10,7 +10,7 @@ from . import ItemNames
 
 
 class ItemData(typing.NamedTuple):
-    code: typing.Optional[int]
+    code: int
     type: str
     number: int  # Important for bot commands to send the item into the game
     race: SC2Race

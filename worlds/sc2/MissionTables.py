@@ -295,13 +295,13 @@ def vanilla_shuffle_order() -> Dict[SC2Campaign, List[FillMission]]:
         ],
         SC2Campaign.NCO: [
             FillMission(MissionPools.EASY, [MissionConnection(-1, SC2Campaign.NCO)], "_1", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.NCO)], "_1", completion_critical=True),
-            FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.NCO)], "_1", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(2, SC2Campaign.NCO)], "_2", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(3, SC2Campaign.NCO)], "_2", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.NCO)], "_2", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.NCO)], "_3", completion_critical=True),
-            FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.NCO)], "_3", completion_critical=True),
+            FillMission(MissionPools.MEDIUM, [MissionConnection(0, SC2Campaign.NCO)], "_1", completion_critical=True, removal_priority=6),
+            FillMission(MissionPools.MEDIUM, [MissionConnection(1, SC2Campaign.NCO)], "_1", completion_critical=True, removal_priority=5),
+            FillMission(MissionPools.HARD, [MissionConnection(2, SC2Campaign.NCO)], "_2", completion_critical=True, removal_priority=7),
+            FillMission(MissionPools.HARD, [MissionConnection(3, SC2Campaign.NCO)], "_2", completion_critical=True, removal_priority=4),
+            FillMission(MissionPools.HARD, [MissionConnection(4, SC2Campaign.NCO)], "_2", completion_critical=True, removal_priority=3),
+            FillMission(MissionPools.HARD, [MissionConnection(5, SC2Campaign.NCO)], "_3", completion_critical=True, removal_priority=2),
+            FillMission(MissionPools.HARD, [MissionConnection(6, SC2Campaign.NCO)], "_3", completion_critical=True, removal_priority=1),
             FillMission(MissionPools.FINAL, [MissionConnection(7, SC2Campaign.NCO)], "_3", completion_critical=True),
         ]
     }

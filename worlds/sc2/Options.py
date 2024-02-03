@@ -736,7 +736,7 @@ class MasteryLocations(LocationInclusion):
 
 class MineralsPerItem(Range):
     """
-    Configures how many minerals per resource item are given.
+    Configures how many minerals are given per resource item.
     """
     display_name = "Minerals Per Item"
     range_start = 0
@@ -746,7 +746,7 @@ class MineralsPerItem(Range):
 
 class VespenePerItem(Range):
     """
-    Configures how many vespene per resource item is given.
+    Configures how much vespene gas is given per resource item.
     """
     display_name = "Vespene Per Item"
     range_start = 0
@@ -756,7 +756,7 @@ class VespenePerItem(Range):
 
 class StartingSupplyPerItem(Range):
     """
-    Configures how many starting supply per item is given.
+    Configures how much starting supply per is given per item.
     """
     display_name = "Starting Supply Per Item"
     range_start = 0

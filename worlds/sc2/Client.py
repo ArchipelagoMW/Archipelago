@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import copy
 import ctypes
+import enum
+import inspect
 import logging
 import multiprocessing
 import os.path
@@ -21,12 +23,15 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, \
-    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, \
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics, \
-    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
+from worlds.sc2 import Options
+from worlds.sc2.Options import (
+    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
+    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
+    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild
+)
 
 
 if __name__ == "__main__":
@@ -47,7 +52,8 @@ from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_n
 from worlds.sc2.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
+from Options import Option
+from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
@@ -77,9 +83,52 @@ def get_metadata_file() -> str:
     return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Metadata.txt"
 
 
+class ConfigurableOptionType(enum.Enum):
+    INTEGER = enum.auto()
+    ENUM = enum.auto()
+
+class ConfigurableOptionInfo(typing.NamedTuple):
+    name: str
+    variable_name: str
+    option_class: typing.Type[Option]
+    option_type: ConfigurableOptionType = ConfigurableOptionType.ENUM
+    can_break_logic: bool = False
+
+
+class ColouredMessage:
+    def __init__(self, text: str = '') -> None:
+        self.parts: typing.List[dict] = []
+        if text:
+            self(text)
+    def __call__(self, text: str) -> 'ColouredMessage':
+        add_json_text(self.parts, text)
+        return self
+    def coloured(self, text: str, colour: str) -> 'ColouredMessage':
+        add_json_text(self.parts, text, type="color", color=colour)
+        return self
+    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+        add_json_location(self.parts, location_id, player_id)
+        return self
+    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+        add_json_item(self.parts, item_id, player_id, flags)
+        return self
+    def player(self, player_id: int) -> 'ColouredMessage':
+        add_json_text(self.parts, str(player_id), type=JSONTypes.player_id)
+        return self
+    def send(self, ctx: SC2Context) -> None:
+        ctx.on_print_json({"data": self.parts, "cmd": "PrintJSON"})
+
+
 class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
     echo_commands = True
+
+    def formatted_print(self, text: str) -> None:
+        """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
+        # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
+        # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
+        # without having to branch code from CommonClient
+        self.ctx.on_print_json({"data": [{"text": text}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -154,49 +203,116 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.output("To change the game speed, add the name of the speed after the command,"
                         " or Default to select based on difficulty.")
             return False
-
-    def _cmd_disable_forced_camera(self, toggle: str = "") -> None:
-        """Blocks missions from moving/locking the camera. Takes arguments 'true' or 'false.'"""
-        if toggle.lower() in {"off", "0", "false", "none", "null", "no"}:
-            self.output("Forced camera no longer disabled.")
-            self.ctx.disable_forced_camera = 0
-        else:
-            self.output("Forced camera now disabled.")
-            self.ctx.disable_forced_camera = 1
-
-    def _cmd_skip_cutscenes(self, toggle: str = "") -> None:
-        """Skips all cutscenes and prevents dialog from blocking progress. Takes arguments 'true' or 'false.'"""
-        if toggle.lower() in {"off", "0", "false", "none", "null", "no"}:
-            self.output("Cutscenes no longer being skipped.")
-            self.ctx.skip_cutscenes = 0
-        else:
-            self.output("Cutscenes will now be skipped.")
-            self.ctx.skip_cutscenes = 1
     
-    def _cmd_resources_per_check(self, minerals: str = "-", gas: str = "-", supply: str = "-") -> None:
-        """Sets the amount of resources the player receives per resource filler check. Use an argument of '-' to leave a resource value unchanged"""
-        def parse_number(value: str, previous_value: int) -> int:
-            value = value.strip("-")
-            if value:
-                try:
-                    return int(value, base=0)
-                except ValueError:
-                    self.output(f"'{value}' is not a valid integer")
-            return previous_value
+    def _cmd_received(self, filter_search: str = "aptz") -> bool:
+        """
+        List received items.
+        Filter output by faction by passing in a parameter -- include 't' for terran output, 'z' for zerg, 'p' for protoss, and/or 'a' for non-categorized items.
+        """
+        # TODO(mm): The goal is to be able to filter by race, partial item name, and item group
+        # This should probably wait until a refactor that replaces item groups with enums insteaad of strings
+        search_filter_meanings = (('a', SC2Race.ANY), ('t', SC2Race.TERRAN), ('z', SC2Race.ZERG), ('p', SC2Race.PROTOSS))
+        faction_filter: typing.Set[SC2Race] = set()
+        filter_search = filter_search.lower()
+        for char, value in search_filter_meanings:
+            if char in filter_search:
+                faction_filter.add(value)
+        if not faction_filter:
+            faction_filter = set(x[1] for x in search_filter_meanings)
 
-        self.ctx.minerals_per_item = parse_number(minerals, self.ctx.minerals_per_item)
-        self.ctx.vespene_per_item = parse_number(gas, self.ctx.vespene_per_item)
-        self.ctx.starting_supply_per_item = parse_number(supply, self.ctx.starting_supply_per_item)
-        self.output(
-            f"Current resource values per check: "
-            f"{self.ctx.minerals_per_item} minerals, "
-            f"{self.ctx.vespene_per_item} gas, "
-            f"{self.ctx.starting_supply_per_item} supply")
+        items = get_full_item_list()
+        categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
+        parent_to_child: typing.Dict[int, typing.List[int]] = {}
+        items_received: typing.Dict[int, typing.List[NetworkItem]] = {}
+        for item in self.ctx.items_received:
+            items_received.setdefault(item.item, []).append(item)
+        items_received_set = set(items_received)
+        for item_data in items.values():
+            if item_data.parent_item:
+                parent_to_child.setdefault(items[item_data.parent_item].code, []).append(item_data.code)
+            else:
+                categorized_items.setdefault(item_data.race, []).append(item_data.code)
+        for _, faction in search_filter_meanings:
+            if faction not in faction_filter:
+                continue
+            self.formatted_print(f" [u]{faction.name}[/u] ")
+            for item_id in categorized_items[faction]:
+                received_items_of_this_type = items_received.get(item_id, ())
+                for item in received_items_of_this_type:
+                    (ColouredMessage('* ').item(item.item, flags=item.flags)
+                        (" from ").location(item.location, self.ctx.slot)
+                        (" by ").player(item.player)
+                    ).send(self.ctx)
+                if not received_items_of_this_type and items_received_set.intersection(parent_to_child.get(item_id, ())):
+                    # We didn't receive this item, but we have its children
+                    ColouredMessage("- ").coloured(self.ctx.item_names[item_id], "black")(" - not obtained").send(self.ctx)
+                for child_item in parent_to_child.get(item_id, ()):
+                    received_items_of_this_type = items_received.get(child_item, ())
+                    for item in received_items_of_this_type:
+                        (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                            (" from ").location(item.location, self.ctx.slot)
+                            (" by ").player(item.player)
+                        ).send(self.ctx)
+        self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
+        return True
     
-    def _cmd_toggle_control_ally(self) -> None:
-        """Toggles the "Take Over AI Allies" option. Note toggling this option away from what it was at generation may lead to logically unbeatable games."""
-        self.ctx.take_over_ai_allies = not self.ctx.take_over_ai_allies
-        self.output(f"{TakeOverAIAllies.display_name} set to {self.ctx.take_over_ai_allies}")
+    def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
+        """Sets a Starcraft game option that can be changed after generation. Use "/option list" to see all options."""
+
+        LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
+
+        options = (
+            ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True),
+            ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True),
+            ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
+            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
+            ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera),
+            ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes),
+        )
+
+        WARNING_COLOUR = "salmon"
+        CMD_COLOUR = "slateblue"
+        boolean_option_map = {
+            'y': 'true', 'yes': 'true', 'n': 'false', 'no': 'false',
+        }
+
+        help_message = ColouredMessage(inspect.cleandoc("""
+            Options
+        --------------------
+        """))('\n')
+        for option in options:
+            option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split('\n', 1)[0]
+            help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
+                + f" -- {option_help_text}\n")
+            if option.can_break_logic:
+                help_message.coloured(LOGIC_WARNING, WARNING_COLOUR)
+        help_message("--------------------\nEnter an option without arguments to see its current value.\n")
+
+        if not option_name or option_name == 'list' or option_name == 'help':
+            help_message.send(self.ctx)
+            return
+        for option in options:
+            if option_name == option.name:
+                option_value = boolean_option_map.get(option_value, option_value)
+                if not option_value:
+                    pass
+                elif option.option_type == ConfigurableOptionType.ENUM and option_value in option.option_class.options:
+                    self.ctx.__dict__[option.variable_name] = option.option_class.options[option_value]
+                elif option.option_type == ConfigurableOptionType.INTEGER:
+                    try:
+                        self.ctx.__dict__[option.variable_name] = int(option_value, base=0)
+                    except:
+                        self.output(f"{option_value} is not a valid integer")
+                else:
+                    self.output(f"Unknown option value '{option_value}'")
+                ColouredMessage(f"{option.name} is '{option.option_class.get_option_name(self.ctx.__dict__[option.variable_name])}'").send(self.ctx)
+                break
+        else:
+            self.output(f"Unknown option '{option_name}'")
+            help_message.send(self.ctx)
 
     def _cmd_color(self, faction: str = "", color: str = "") -> None:
         """Changes the player color for a given faction."""
@@ -375,7 +491,7 @@ class SC2Context(CommonContext):
         self.generic_upgrade_missions = 0
         self.generic_upgrade_research = 0
         self.generic_upgrade_items = 0
-        self.location_inclusions: typing.Dict[LocationType, LocationInclusion] = {}
+        self.location_inclusions: typing.Dict[LocationType, int] = {}
         self.plando_locations: typing.List[str] = []
         self.current_tooltip = None
         self.last_loc_list = None

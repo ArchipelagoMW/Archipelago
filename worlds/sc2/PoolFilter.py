@@ -9,7 +9,7 @@ from .MissionTables import mission_orders, MissionInfo, MissionPools, \
 from .Options import get_option_value, MissionOrder, \
     get_enabled_campaigns, get_disabled_campaigns, RequiredTactics, kerrigan_unit_available, GrantStoryTech, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
-    ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild, ExtraLocations
+    ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
 from . import ItemNames
 
 # Items with associated upgrades
@@ -40,6 +40,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
     grant_story_tech = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
+    grant_story_levels = get_option_value(multiworld, player, "grant_story_levels") != GrantStoryLevels.option_disabled
     extra_locations = get_option_value(multiworld, player, "extra_locations")
     excluded_missions: Set[SC2Mission] = get_excluded_missions(multiworld, player)
     mission_pools: Dict[MissionPools, List[SC2Mission]] = {}
@@ -149,7 +150,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         move_mission(SC2Mission.TEMPLAR_S_RETURN, MissionPools.EASY, MissionPools.STARTER)
         move_mission(SC2Mission.THE_ESCAPE, MissionPools.MEDIUM, MissionPools.STARTER)
         move_mission(SC2Mission.IN_THE_ENEMY_S_SHADOW, MissionPools.MEDIUM, MissionPools.STARTER)
-    if grant_story_tech or kerriganless:
+    if (grant_story_tech and grant_story_levels) or kerriganless:
         # The player has, all the stuff he needs, provided under these settings
         move_mission(SC2Mission.SUPREME, MissionPools.MEDIUM, MissionPools.STARTER)
         move_mission(SC2Mission.THE_INFINITE_CYCLE, MissionPools.HARD, MissionPools.STARTER)
