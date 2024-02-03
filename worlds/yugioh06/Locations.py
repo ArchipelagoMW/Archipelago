@@ -197,6 +197,7 @@ collection_events = {
     "Can Yata Lock": None,
     "Can Stall with Monsters": None,
     "Can Stall with ST": None,
+    "Can Last Turn Win": None,
     "Has Back-row removal": None
 }
 

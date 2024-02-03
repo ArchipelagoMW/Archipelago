@@ -35,7 +35,7 @@ def set_rules(world):
         "Max ATK Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "No Spell Cards Bonus": lambda state: state.yugioh06_difficulty(player, 2),
         "No Trap Cards Bonus": lambda state: state.yugioh06_difficulty(player, 2),
-        "No Damage Bonus": lambda state: state.has("Campaign Boss Beaten", player, 3),
+        "No Damage Bonus": lambda state: state.has_group("Campaign Boss Beaten", player, 3),
         "Low Deck Bonus": lambda state: state.has_any(["Reasoning", "Monster Gate", "Magical Merchant"], player) and
                                         state.yugioh06_difficulty(player, 3),
         "Extremely Low Deck Bonus":
@@ -51,8 +51,10 @@ def set_rules(world):
         "Skull Servant Finish Bonus": lambda state: state.has("Skull Servant", player) and
                                                     state.yugioh06_difficulty(player, 3),
         "Konami Bonus": lambda state: state.has_all(["Messenger of Peace", "Castle of Dark Illusions", "Mystik Wok"],
-                                    player) or state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
-                                        "Poison of the Old Man"], player) and state.yugioh06_difficulty(player, 8),
+                                                    player) or state.has_all(["Mystik Wok", "Barox", "Cyber-Stein",
+                                                                              "Poison of the Old Man"],
+                                                                             player) and state.yugioh06_difficulty(
+            player, 8),
         "Max Damage Bonus": lambda state: state.has_any(["Wave-Motion Cannon", "Megamorph", "United We Stand",
                                                          "Mage Power"], player),
         "Fusion Summon Bonus": lambda state: state.has_any(["Polymerization", "Fusion Gate", "Power Bond"], player),
@@ -109,46 +111,52 @@ def set_rules(world):
             lambda state: state.has("Dark Scorpion Combination and its required cards", player),
         # Collection Events
         "Ojama Delta Hurricane and required cards":
-            lambda state: state.has_all(["Ojama Delta Hurricane", "Ojama Green", "Ojama Yellow", "Ojama Black"], player),
+            lambda state: state.has_all(["Ojama Delta Hurricane", "Ojama Green", "Ojama Yellow", "Ojama Black"],
+                                        player),
         "Huge Revolution and its required cards":
             lambda state: state.has_all(["Huge Revolution", "Oppressed People", "United Resistance",
-                             "People Running About"], player),
+                                         "People Running About"], player),
         "Perfectly Ultimate Great Moth and its required cards":
             lambda state: state.has_all(["Perfectly Ultimate Great Moth", "Petit Moth", "Cocoon of Evolution"], player),
         "Valkyrion the Magna Warrior and its pieces":
             lambda state: state.has_all(["Valkyrion the Magna Warrior", "Alpha the Magnet Warrior",
-                            "Beta the Magnet Warrior", "Gamma the Magnet Warrior"], player),
+                                         "Beta the Magnet Warrior", "Gamma the Magnet Warrior"], player),
         "Dark Sage and its required cards":
             lambda state: state.has_all(["Dark Sage", "Dark Magician", "Time Wizard"], player),
         "Destiny Board and its letters":
             lambda state: state.has_all(["Destiny Board", "Spirit Message 'I'", "Spirit Message 'N'",
-                            "Spirit Message 'A'", "Spirit Message 'L'"], player),
+                                         "Spirit Message 'A'", "Spirit Message 'L'"], player),
         "XYZ-Dragon Cannon fusions and their materials":
             lambda state: state.has_all(["X-Head Cannon", "Y-Dragon Head", "Z-Metal Tank",
-                            "XY-Dragon Cannon", "XZ-Tank Cannon", "YZ-Tank Dragon", "XYZ-Dragon Cannon"], player),
+                                         "XY-Dragon Cannon", "XZ-Tank Cannon", "YZ-Tank Dragon", "XYZ-Dragon Cannon"],
+                                        player),
         "VWXYZ-Dragon Catapult Cannon and the fusion materials":
             lambda state: state.has_all(["X-Head Cannon", "Y-Dragon Head", "Z-Metal Tank", "XYZ-Dragon Cannon",
-                             "V-Tiger Jet", "W-Wing Catapult", "VW-Tiger Catapult", "VWXYZ-Dragon Catapult Cannon"],
-                            player),
+                                         "V-Tiger Jet", "W-Wing Catapult", "VW-Tiger Catapult",
+                                         "VWXYZ-Dragon Catapult Cannon"],
+                                        player),
         "Gate Guardian and its pieces":
             lambda state: state.has_all(["Gate Guardian", "Kazejin", "Suijin", "Sanga of the Thunder"], player),
         "Dark Scorpion Combination and its required cards":
             lambda state: state.has_all(["Dark Scorpion Combination", "Don Zaloog", "Dark Scorpion - Chick the Yellow",
-                             "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Gorg the Strong",
-                             "Cliff the Trap Remover"], player),
+                                         "Dark Scorpion - Meanae the Thorn", "Dark Scorpion - Gorg the Strong",
+                                         "Cliff the Trap Remover"], player),
         "Can Exodia Win":
             lambda state: state.has_all(["Exodia", "Heart of the Underdog"], player),
         "Can Last Turn Win":
             lambda state: state.has_all(["Last Turn", "Wall of Revealing Light"], player) and \
-                (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"], player)
-                or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
+                          (state.has_any(["Jowgen the Spiritualist", "Jowls of Dark Demise", "Non Aggression Area"],
+                                         player)
+                           or state.has_all(["Cyber-Stein", "The Last Warrior from Another Planet"], player)),
         "Can Yata Lock":
-            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player)\
-                and state.has_any(["No Banlist", "Banlist September 2003"], player),
+            lambda state: state.has_all(["Yata-Garasu", "Chaos Emperor Dragon - Envoy of the End", "Sangan"], player) \
+                          and state.has_any(["No Banlist", "Banlist September 2003"], player),
         "Can Stall with Monsters":
-            lambda state: state.yugioh06_has_individual(["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
+            lambda state: state.yugioh06_has_individual(
+                ["Spirit Reaper", "Giant Germ", "Marshmallon", "Nimble Momonga"], player) >= 2,
         "Can Stall with ST":
-            lambda state: state.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"], player) >= 2,
+            lambda state: state.yugioh06_has_individual(["Level Limit - Area B", "Gravity Bind", "Messenger of Peace"],
+                                                        player) >= 2,
         "Has Back-row removal":
             lambda state: back_row_removal(state, player)
 
@@ -851,6 +859,7 @@ def counter_traps(state, player):
                                           "Seven Tools of the Bandit",
                                           "Solemn Judgment",
                                           "Spell Shield Type-8"], player) >= 5
+
 
 def back_row_removal(state, player):
     return state.yugioh06_has_individual(["Anteatereatingant",
