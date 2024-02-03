@@ -258,14 +258,16 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         LOGIC_WARNING = f"*Note changing this may result in logically unbeatable games*"
         KERRIGAN_PRESENCE = ConfigurableOptionInfo('kerrigan_presence', f'Controls whether Kerrigan will appear in missions')
+        SOA_PRESENCE = ConfigurableOptionInfo('soa_presence', 'Controls when the Spear of Adun topbar will appear')
+        SOA_IN_NOBUILDS = ConfigurableOptionInfo('soa_in_nobuilds', 'Controls if the Spear of Adun will appera in no-build missions')
+        CONTROL_ALLY = ConfigurableOptionInfo('control_ally', f'Controls whether you gain command of your AI allies')
         MINERALS_PER_CHECK = ConfigurableOptionInfo('minerals_per_check', f'The amount of gas you receive per {ItemNames.STARTING_MINERALS} item')
         GAS_PER_CHECK = ConfigurableOptionInfo('gas_per_check', f'The amount of gas you receive per {ItemNames.STARTING_VESPENE} item')
         SUPPLY_PER_CHECK = ConfigurableOptionInfo('supply_per_check', f'The amount of gas you receive per {ItemNames.STARTING_SUPPLY} item')
-        CONTROL_ALLY = ConfigurableOptionInfo('control_ally', f'Controls whether you gain command of your AI allies')
         FORCED_CAMERA = ConfigurableOptionInfo('forced_camera', 'Controls whether the game can move or lock your camera')
         SKIP_CUTSCENES = ConfigurableOptionInfo('skip_cutscenes', 'Controls whether in-game cutscenes will be skipped')
 
-        WARNING_COLOUR = JSONtoTextParser.color_codes["red"]
+        WARNING_COLOUR = JSONtoTextParser.color_codes["salmon"]
         CMD_COLOUR = JSONtoTextParser.color_codes["slateblue"]
 
         help_text = inspect.cleandoc(f"""
@@ -273,11 +275,15 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         --------------------
         [color={CMD_COLOUR}]{KERRIGAN_PRESENCE.name}[/color]: vanilla | not_present | no_passives -- {KERRIGAN_PRESENCE.description}
           [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
+        [color={CMD_COLOUR}]{SOA_PRESENCE.name}[/color]: lotv_protoss | protoss | everywhere | not_present -- {SOA_PRESENCE.description}
+          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
+        [color={CMD_COLOUR}]{SOA_IN_NOBUILDS.name}[/color]: true | false -- {SOA_IN_NOBUILDS.description}
+          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
+        [color={CMD_COLOUR}]{CONTROL_ALLY.name}[/color]: true | false -- {CONTROL_ALLY.description}
+          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
         [color={CMD_COLOUR}]{MINERALS_PER_CHECK.name}[/color]: integer -- {MINERALS_PER_CHECK.description}
         [color={CMD_COLOUR}]{GAS_PER_CHECK.name}[/color]: integer -- {GAS_PER_CHECK.description}
         [color={CMD_COLOUR}]{SUPPLY_PER_CHECK.name}[/color]: integer -- {SUPPLY_PER_CHECK.description}
-        [color={CMD_COLOUR}]{CONTROL_ALLY.name}[/color]: true | false -- {CONTROL_ALLY.description}
-          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
         [color={CMD_COLOUR}]{FORCED_CAMERA.name}[/color]: true | false -- {FORCED_CAMERA.description}
         [color={CMD_COLOUR}]{SKIP_CUTSCENES.name}[/color]: true | false -- {SKIP_CUTSCENES.description}
         --------------------
@@ -298,6 +304,36 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             else:
                 self.output(f"Unknown option value '{option_values[0]}'")
             self.output(f"{KERRIGAN_PRESENCE.name} is '{KerriganPresence.get_option_name(self.ctx.kerrigan_presence)}'")
+        elif option_name == SOA_PRESENCE.name:
+            if not option_values:
+                pass
+            elif option_values[0].lower() == 'lotv_protoss':
+                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_lotv_protoss
+            elif option_values[0].lower() == 'protoss':
+                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_protoss
+            elif option_values[0].lower() == 'everywhere':
+                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_everywhere
+            elif option_values[0].lower() == 'not_present':
+                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_not_present
+            else:
+                self.output(f"Unknown option value '{option_values[0]}'")
+            self.output(f"{SOA_PRESENCE.name} is '{SpearOfAdunPresence.get_option_name(self.ctx.spear_of_adun_presence)}'")
+        elif option_name == SOA_IN_NOBUILDS.name:
+            if not option_values:
+                pass
+            elif option_values[0].lower() in false_values:
+                self.ctx.spear_of_adun_present_in_no_build = 0
+            else:
+                self.ctx.spear_of_adun_present_in_no_build = 1
+            self.output(f"{SOA_IN_NOBUILDS.name} is '{bool(self.ctx.spear_of_adun_present_in_no_build)}'")
+        elif option_name == CONTROL_ALLY.name:
+            if not option_values:
+                pass
+            elif option_values[0].lower() in false_values:
+                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_false
+            else:
+                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_true
+            self.output(f"{CONTROL_ALLY.name} is '{bool(self.ctx.take_over_ai_allies)}'")
         elif option_name == MINERALS_PER_CHECK.name:
             if not option_values:
                 pass
@@ -324,15 +360,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                     self.ctx.starting_supply_per_item = int(option_values[0], base=0)
                 except ValueError:
                     self.output(f"{option_values[0]} is not a valid integer")
-            self.output(f"{GAS_PER_CHECK.name} is '{self.ctx.starting_supply_per_item}'")
-        elif option_name == CONTROL_ALLY.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() in false_values:
-                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_false
-            else:
-                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_true
-            self.output(f"{CONTROL_ALLY.name} is '{bool(self.ctx.take_over_ai_allies)}'")
+            self.output(f"{SUPPLY_PER_CHECK.name} is '{self.ctx.starting_supply_per_item}'")
         elif option_name == FORCED_CAMERA.name:
             # Flipping the truth-value here to avoid double-negatives
             if not option_values:
