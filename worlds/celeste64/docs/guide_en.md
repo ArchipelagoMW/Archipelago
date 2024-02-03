@@ -1,3 +1,3 @@
-# Celeste 64 Start Guide
+# Celeste 64 Setup Guide
 
 TODO
