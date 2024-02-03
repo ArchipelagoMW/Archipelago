@@ -270,22 +270,23 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
 
-        KERRIGAN_PRESENCE = ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True)
-        SOA_PRESENCE = ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True)
-        SOA_IN_NOBUILDS = ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True)
-        CONTROL_ALLY = ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True)
-        MINERALS_PER_CHECK = ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER)
-        GAS_PER_CHECK = ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER)
-        SUPPLY_PER_CHECK = ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER)
-        FORCED_CAMERA = ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera)
-        SKIP_CUTSCENES = ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes)
         options = (
-            KERRIGAN_PRESENCE, SOA_PRESENCE, SOA_IN_NOBUILDS, CONTROL_ALLY,
-            MINERALS_PER_CHECK, GAS_PER_CHECK, SUPPLY_PER_CHECK, FORCED_CAMERA, SKIP_CUTSCENES,
+            ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True),
+            ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True),
+            ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True),
+            ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True),
+            ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER),
+            ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera),
+            ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes),
         )
 
         WARNING_COLOUR = "salmon"
         CMD_COLOUR = "slateblue"
+        boolean_option_map = {
+            'y': 'true', 'yes': 'true', 'n': 'false', 'no': 'false',
+        }
 
         help_message = ColouredMessage(inspect.cleandoc("""
             Options
@@ -304,6 +305,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             return True
         for option in options:
             if option_name == option.name:
+                option_value = boolean_option_map.get(option_value, option_value)
                 if not option_value:
                     pass
                 elif option.option_type == ConfigurableOptionType.ENUM and option_value in option.option_class.options:
