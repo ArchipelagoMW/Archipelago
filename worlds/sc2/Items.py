@@ -1863,44 +1863,6 @@ def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typin
         return basic_units[race]
 
 
-item_name_group_names = {
-    # WoL
-    "Armory 1", "Armory 2", "Armory 3", "Armory 4", "Armory 5", "Armory 6"
-    "Laboratory", "Progressive Upgrade",
-    # HotS
-    "Ability", "Strain", "Mutation 1"
-}
-item_name_groups: typing.Dict[str, typing.List[str]] = {}
-for item, data in get_full_item_list().items():
-    item_name_groups.setdefault(data.type, []).append(item)
-    if data.type in item_name_group_names and '(' in item:
-        short_name = item[:item.find(' (')]
-        item_name_groups[short_name] = [item]
-item_name_groups["Missions"] = ["Beat " + mission.mission_name for mission in SC2Mission]
-item_name_groups["WoL Missions"] = ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.WOL]] + \
-                                   ["Beat " + mission.mission_name for mission in campaign_mission_table[SC2Campaign.PROPHECY]]
-item_name_groups["Aiur"] = [
-    ItemNames.ZEALOT, ItemNames.DRAGOON, ItemNames.SENTRY, ItemNames.AVENGER, ItemNames.HIGH_TEMPLAR,
-    ItemNames.IMMORTAL, ItemNames.REAVER,
-    ItemNames.PHOENIX, ItemNames.SCOUT, ItemNames.ARBITER, ItemNames.CARRIER,
-]
-item_name_groups["Nerazim"] = [
-    ItemNames.CENTURION, ItemNames.STALKER, ItemNames.DARK_TEMPLAR, ItemNames.SIGNIFIER, ItemNames.DARK_ARCHON,
-    ItemNames.ANNIHILATOR,
-    ItemNames.CORSAIR, ItemNames.ORACLE, ItemNames.VOID_RAY,
-]
-item_name_groups["Tal'Darim"] = [
-    ItemNames.SUPPLICANT, ItemNames.SLAYER, ItemNames.HAVOC, ItemNames.BLOOD_HUNTER, ItemNames.ASCENDANT,
-    ItemNames.VANGUARD, ItemNames.WRATHWALKER,
-    ItemNames.DESTROYER, ItemNames.MOTHERSHIP,
-    ItemNames.WARP_PRISM_PHASE_BLASTER,
-]
-item_name_groups["Purifier"] = [
-    ItemNames.SENTINEL, ItemNames.ADEPT, ItemNames.INSTIGATOR, ItemNames.ENERGIZER,
-    ItemNames.COLOSSUS, ItemNames.DISRUPTOR,
-    ItemNames.MIRAGE, ItemNames.TEMPEST,
-]
-
 # Items that can be placed before resources if not already in
 # General upgrades and Mercs
 second_pass_placeable_items: typing.Tuple[str, ...] = (
