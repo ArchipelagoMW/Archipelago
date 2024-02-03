@@ -100,7 +100,7 @@ def set_rules(world: World):
                            state.has(ItemName.double_dash_refill, world.player))
 
     # Completion condition.
-    world.multiworld.completion_condition[self.player] = lambda state: (state.has(ItemName.strawberry,self.player,self.options.strawberries_required.value) and
+    world.multiworld.completion_condition[world.player] = lambda state: (state.has(ItemName.strawberry,world.player,world.options.strawberries_required.value) and
                                                                 state.has(ItemName.feather, world.player) and
                                                                 state.has(ItemName.traffic_block, world.player) and
                                                                 state.has(ItemName.breakables, world.player) and

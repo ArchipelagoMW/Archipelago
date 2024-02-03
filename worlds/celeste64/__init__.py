@@ -5,7 +5,7 @@ from worlds.AutoWorld import WebWorld, World
 from .Items import Celeste64Item, item_data_table, item_table
 from .Locations import Celeste64Location, location_data_table, location_table
 from .Names import ItemName, LocationName
-from .Options import celeste_64_options
+from .Options import Celeste64Options
 from .Regions import region_data_table
 from .Rules import set_rules
 
@@ -32,7 +32,8 @@ class Celeste64World(World):
     game = "Celeste 64"
     data_version = 0
     web = Celeste64WebWorld()
-    option_definitions = celeste_64_options
+    options_dataclass = Celeste64Options
+    options: Celeste64Options
     location_name_to_id = location_table
     item_name_to_id = item_table
 

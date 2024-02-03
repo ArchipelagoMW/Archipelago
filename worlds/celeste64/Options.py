@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 from typing import Dict
 
-from Options import Choice, Option, Toggle, Range, DeathLink
+from Options import Choice, Option, Toggle, Range, DeathLink, PerGameCommonOptions
 
 
 class StrawberriesRequired(Range):
@@ -11,7 +12,7 @@ class StrawberriesRequired(Range):
     default = 15
 
 
-celeste_64_options: Dict[str, type(Option)] = {
-    "death_link": DeathLink,
-    "strawberries_required": StrawberriesRequired,
-}
+@dataclass
+class Celeste64Options(PerGameCommonOptions):
+    death_link: DeathLink
+    strawberries_required: StrawberriesRequired
