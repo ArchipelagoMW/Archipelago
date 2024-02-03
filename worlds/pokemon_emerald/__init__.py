@@ -1121,8 +1121,24 @@ class PokemonEmeraldWorld(World):
         del self.modified_legendary_encounters
         del self.modified_misc_pokemon
         del self.modified_starters
-        del self.modified_maps
         del self.modified_species
+        del self.modified_maps
+
+    def extend_hint_information(self, hint_data):
+        if self.options.dexsanity:
+            from collections import defaultdict
+
+            species_maps = defaultdict(set)
+            for map in self.modified_maps.values():
+                if map.land_encounters is not None:
+                    for encounter in map.land_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+            new_hint_data = {
+                self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
+                for species, maps in species_maps.items()
+            }
+            hint_data[self.player] = new_hint_data
 
     def modify_multidata(self, multidata: Dict[str, Any]):
         import base64
