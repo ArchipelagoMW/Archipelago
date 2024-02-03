@@ -209,7 +209,8 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         List received items.
         Filter output by faction by passing in a parameter -- include 't' for terran output, 'z' for zerg, 'p' for protoss, and/or 'a' for non-categorized items.
         """
-        # I'm personally interested in searching by race, partial item name, and item group  -- Salzkorn
+        # TODO(mm): The goal is to be able to filter by race, partial item name, and item group
+        # This should probably wait until a refactor that replaces item groups with enums insteaad of strings
         search_filter_meanings = (('a', SC2Race.ANY), ('t', SC2Race.TERRAN), ('z', SC2Race.ZERG), ('p', SC2Race.PROTOSS))
         faction_filter: typing.Set[SC2Race] = set()
         filter_search = filter_search.lower()
@@ -222,7 +223,9 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         items = get_full_item_list()
         categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
         parent_to_child: typing.Dict[str, typing.List[int]] = {}
-        items_received: typing.Dict[int, NetworkItem] = {x.item: x for x in self.ctx.items_received}
+        items_received: typing.Dict[int, typing.List[NetworkItem]] = {}
+        for item in self.ctx.items_received:
+            items_received.setdefault(item.item, []).append(item)
         items_received_set = set(items_received)
         for item_data in items.values():
             if item_data.parent_item:
@@ -234,18 +237,21 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 continue
             self.formatted_print(f" [u]{faction.name}[/u] ")
             for item_id in categorized_items[faction]:
-                if item_id in items_received_set:
-                    (ColouredMessage('* ').item(item_id, flags=items_received[item_id].flags)
-                        (" from ").location(items_received[item_id].location, self.ctx.slot)
-                        (" by ").player(items_received[item_id].player)
+                received_items_of_this_type = items_received.get(item_id, ())
+                for item in received_items_of_this_type:
+                    (ColouredMessage('* ').item(item.item, item.flags)
+                        (" from ").location(item.location, self.ctx.slot)
+                        (" by ").player(item.player)
                     ).send(self.ctx)
-                elif items_received_set.intersection(parent_to_child.get(item_id, ())):
+                if not received_items_of_this_type and items_received_set.intersection(parent_to_child.get(item_id, ())):
+                    # We didn't receive this item, but we have its children
                     ColouredMessage("- ").coloured(self.ctx.item_names[item_id], "black")(" - not obtained").send(self.ctx)
                 for child_item in parent_to_child.get(item_id, ()):
-                    if child_item in items_received_set:
-                        (ColouredMessage("  * ").item(child_item, flags=items_received[child_item].flags)
-                            (" from ").location(items_received[child_item].location, self.ctx.slot)
-                            (" by ").player(items_received[child_item].player)
+                    received_items_of_this_type = items_received.get(child_item, ())
+                    for item in received_items_of_this_type:
+                        (ColouredMessage('* ').item(item.item, item.flags)
+                            (" from ").location(item.location, self.ctx.slot)
+                            (" by ").player(item.player)
                         ).send(self.ctx)
         self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
         return True
@@ -278,7 +284,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         --------------------
         """))('\n')
         for option in options:
-            option_help_text = inspect.cleandoc(option.option_class.__doc__).split('\n', 1)[0]
+            option_help_text = inspect.cleandoc(option.option_class.__doc__ or "No description provided.").split('\n', 1)[0]
             help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
                 + f" -- {option_help_text}\n")
             if option.can_break_logic:
@@ -287,7 +293,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         if not option_name or option_name == 'list' or option_name == 'help':
             help_message.send(self.ctx)
-            return True
+            return
         for option in options:
             if option_name == option.name:
                 option_value = boolean_option_map.get(option_value, option_value)
