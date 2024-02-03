@@ -1,11 +1,11 @@
 strawberry = "Strawberry"
 
-dash_refill        = "Dash Refill"
-double_dash_refill = "Double Dash Refill"
-feather            = "Feather"
-coin               = "Coin"
-cassette           = "Cassette"
+dash_refill        = "Dash Refills"
+double_dash_refill = "Double Dash Refills"
+feather            = "Feathers"
+coin               = "Coins"
+cassette           = "Cassettes"
 
-traffic_block = "Traffic Block"
-spring        = "Spring"
+traffic_block = "Traffic Blocks"
+spring        = "Springs"
 breakables    = "Breakable Blocks"

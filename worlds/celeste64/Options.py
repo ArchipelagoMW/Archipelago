@@ -7,8 +7,8 @@ class StrawberriesRequired(Range):
     """How many Strawberries you must receive to finish"""
     display_name = "Strawberries Required"
     range_start = 0
-    range_end = 30
-    default = 20
+    range_end = 20
+    default = 15
 
 
 celeste_64_options: Dict[str, type(Option)] = {
