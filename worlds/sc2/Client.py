@@ -123,27 +123,12 @@ class StarcraftClientProcessor(ClientCommandProcessor):
     ctx: SC2Context
     echo_commands = True
 
-    def markup_message(self, message: str, replace_colour_character: str = '*') -> None:
-        """
-        Sends a coloured message to the GUI and prints a more ascii-friendly version to the console.
-        Messages printed with this function do not appear in the log.
-        """
-        if self.ctx.ui:
-            self.ctx.ui.log_panels['All'].on_message_markup(message)
-        if sys.stdout:
-            cleaned_message = re.sub(r'\[color(=[\da-fA-F]{3,6})\]', replace_colour_character[:1], message)
-            cleaned_message = (cleaned_message
-                .replace('[/color]', replace_colour_character[-1:])
-                .replace('[b]', '**')
-                .replace('[/b]', '**')
-                .replace('[i]', '*')
-                .replace('[/i]', '*')
-                .replace('[u]', '__')
-                .replace('[/u]', '__')
-                .replace('[s]', '~~')
-                .replace('[/s]', '~~')
-            )
-            print(cleaned_message)
+    def formatted_print(self, text: str) -> None:
+        """Prints with kivy formatting to the GUI, and also prints to command-line and to all logs"""
+        # Note(mm): Bold/underline can help readability, but unfortunately the CommonClient does not filter bold tags from command-line output.
+        # Regardless, using `on_print_json` to get formatted text in the GUI and output in the command-line and in the logs,
+        # without having to branch code from CommonClient
+        self.ctx.on_print_json({"data": [{"text": text}]})
 
     def _cmd_difficulty(self, difficulty: str = "") -> bool:
         """Overrides the current difficulty set for the world.  Takes the argument casual, normal, hard, or brutal"""
@@ -247,7 +232,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         for _, faction in search_filter_meanings:
             if faction not in faction_filter:
                 continue
-            self.markup_message(f"[u]{faction.name}[/u]")
+            self.formatted_print(f" [u]{faction.name}[/u] ")
             for item_id in categorized_items[faction]:
                 if item_id in items_received_set:
                     (ColouredMessage('* ').item(item_id, flags=items_received[item_id].flags)
@@ -262,7 +247,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                             (" from ").location(items_received[child_item].location, self.ctx.slot)
                             (" by ").player(items_received[child_item].player)
                         ).send(self.ctx)
-        self.markup_message(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
+        self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
         return True
     
     def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
