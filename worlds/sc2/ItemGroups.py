@@ -51,9 +51,11 @@ for item, data in Items.get_full_item_list().items():
     item_name_groups.setdefault(data.type, []).append(item)
     # Numbered flaggroups get sorted into an unnumbered group
     # Currently supports numbers of one or two digits
-    if item[-2:].strip().isnumeric:
-        type_group = item[:-2].strip()
+    if data.type[-2:].strip().isnumeric:
+        type_group = data.type[:-2].strip()
         item_name_groups.setdefault(type_group, []).append(item)
+        # Flaggroups with numbers are unlisted
+        unlisted_item_name_groups.add(data.type)
     # Items with a bracket get a short-hand name group for ease of use in YAMLs
     if '(' in item:
         short_name = item[:item.find(' (')]
