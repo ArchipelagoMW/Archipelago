@@ -222,27 +222,16 @@ class UniqueKeyLoader(SafeLoader):
     def construct_mapping(self, node, deep=False):
         mapping = set()
         for key_node, value_node in node.value:
-            if value_node.tag == "!merge":
-                # this might need type-checking?
-                key_node.value = f"__merge_{key_node.value}"
             key = self.construct_object(key_node, deep=deep)
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
+            if str(key).replace("@merge", "") in mapping or str(key) + "@merge" in mapping:
+                logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
+                raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
 
         return super().construct_mapping(node, deep)
-
-    def merge_keys(self, node):
-        if node.id == "sequence":
-            return self.construct_sequence(node)
-        elif node.id == "mapping":
-            return self.construct_mapping(node)
-        else:
-            raise Exception(f"Cannot apply !merge to node of type {node.id}")
-
-
-UniqueKeyLoader.add_constructor("!merge", UniqueKeyLoader.merge_keys)
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
 parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)

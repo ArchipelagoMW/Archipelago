@@ -339,8 +339,8 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
-        if option.startswith("__merge_"):
-            option_name = option.replace("__merge_", "")
+        if option.endswith("@merge"):
+            option_name = option.replace("@merge", "")
             new_items = new_weights[option]
             if option_name in weights:
                 if isinstance(new_items, dict):
@@ -348,6 +348,8 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                 else:
                     new_items.extend(weights[option_name])
             cleaned_weights[option_name] = new_items
+        else:
+            cleaned_weights[option] = new_weights[option]
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
@@ -411,7 +413,7 @@ def roll_triggers(weights: dict, triggers: list) -> dict:
             category = option_set.get("option_category", None)
             if category:
                 currently_targeted_weights = currently_targeted_weights[category]
-            key = get_choice("option_name", option_set).replace("merge_", "")
+            key = get_choice("option_name", option_set)
             if key not in currently_targeted_weights:
                 logging.warning(f'Specified option name {option_set["option_name"]} did not '
                                 f'match with a root option. '
@@ -484,9 +486,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
-    if any(weight.startswith("__merge") for weight in game_weights) or \
-       any(weight.startswith("__merge") for weight in weights):
-        raise Exception(f"!merge tag cannot be used outside of trigger contexts.")
+    if any(weight.startswith("@merge") for weight in game_weights) or \
+       any(weight.startswith("@merge") for weight in weights):
+        raise Exception(f"@merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
