@@ -222,7 +222,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
 
         items = get_full_item_list()
         categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
-        parent_to_child: typing.Dict[str, typing.List[int]] = {}
+        parent_to_child: typing.Dict[int, typing.List[int]] = {}
         items_received: typing.Dict[int, typing.List[NetworkItem]] = {}
         for item in self.ctx.items_received:
             items_received.setdefault(item.item, []).append(item)
@@ -249,7 +249,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 for child_item in parent_to_child.get(item_id, ()):
                     received_items_of_this_type = items_received.get(child_item, ())
                     for item in received_items_of_this_type:
-                        (ColouredMessage('* ').item(item.item, item.flags)
+                        (ColouredMessage('  * ').item(item.item, item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
