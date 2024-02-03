@@ -48,7 +48,7 @@ from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_n
 from worlds.sc2.Regions import MissionInfo
 
 import colorama
-from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart
+from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
 pool = concurrent.futures.ThreadPoolExecutor(1)
@@ -81,6 +81,30 @@ def get_metadata_file() -> str:
 class ConfigurableOptionInfo(typing.NamedTuple):
     name: str
     description: str
+
+
+class ColouredMessage:
+    def __init__(self, text: str = '') -> None:
+        self.parts: typing.List[dict] = []
+        if text:
+            self(text)
+    def __call__(self, text: str) -> 'ColouredMessage':
+        add_json_text(self.parts, text)
+        return self
+    def coloured(self, text: str, colour: str) -> 'ColouredMessage':
+        add_json_text(self.parts, text, type="color", color=colour)
+        return self
+    def location(self, location_id: int, player_id: int = 0) -> 'ColouredMessage':
+        add_json_location(self.parts, location_id, player_id)
+        return self
+    def item(self, item_id: int, player_id: int = 0, flags: int = 0) -> 'ColouredMessage':
+        add_json_item(self.parts, item_id, player_id, flags)
+        return self
+    def player(self, player_id: int) -> 'ColouredMessage':
+        add_json_text(self.parts, str(player_id), type=JSONTypes.player_id)
+        return self
+    def send(self, ctx: SC2Context) -> None:
+        ctx.on_print_json({"data": self.parts, "cmd": "PrintJSON"})
 
 
 class StarcraftClientProcessor(ClientCommandProcessor):
@@ -198,11 +222,6 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         if not faction_filter:
             faction_filter = set(x[1] for x in search_filter_meanings)
 
-        UNOBTAINED_COLOUR = '777'
-        PLAYER_COLOUR = SC2JSONtoTextParser.color_codes["yellow"]
-        SELF_COLOUR = SC2JSONtoTextParser.color_codes["magenta"]
-        ITEM_COLOUR = SC2JSONtoTextParser.color_codes["plum"]
-        LOCATION_COLOUR = SC2JSONtoTextParser.color_codes["green"]
         items = get_full_item_list()
         categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
         parent_to_child: typing.Dict[str, typing.List[int]] = {}
@@ -219,20 +238,18 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             self.markup_message(f"[u]{faction.name}[/u]")
             for item_id in categorized_items[faction]:
                 if item_id in items_received_set:
-                    self.markup_message(f"* [color={ITEM_COLOUR}]{self.ctx.item_names[item_id]}[/color]"
-                        f" - from [color={SELF_COLOUR if items_received[item_id].player == self.ctx.slot else PLAYER_COLOUR}]"
-                        f"{self.ctx.player_names[items_received[item_id].player]}[/color]"
-                        f" - at [color={LOCATION_COLOUR}]{self.ctx.location_names[items_received[item_id].location]}[/color]"
-                        , "")
+                    (ColouredMessage('* ').item(item_id, flags=items_received[item_id].flags)
+                        (" from ").location(items_received[item_id].location, self.ctx.slot)
+                        (" by ").player(items_received[item_id].player)
+                    ).send(self.ctx)
                 elif items_received_set.intersection(parent_to_child.get(item_id, ())):
-                    self.markup_message(f"- [color={UNOBTAINED_COLOUR}]{self.ctx.item_names[item_id]}[/color] - not obtained", "()")
+                    ColouredMessage("- ").coloured(self.ctx.item_names[item_id], "black")(" - not obtained").send(self.ctx)
                 for child_item in parent_to_child.get(item_id, ()):
                     if child_item in items_received_set:
-                        self.markup_message(f"  * [color={ITEM_COLOUR}]{self.ctx.item_names[child_item]}[/color]"
-                            f" - from [color={SELF_COLOUR if items_received[child_item].player == self.ctx.slot else PLAYER_COLOUR}]"
-                            f"{self.ctx.player_names[items_received[child_item].player]}[/color]"
-                            f" - at [color={LOCATION_COLOUR}]{self.ctx.location_names[items_received[child_item].location]}[/color]"
-                            , "")
+                        (ColouredMessage("  * ").item(child_item, flags=items_received[child_item].flags)
+                            (" from ").location(items_received[child_item].location, self.ctx.slot)
+                            (" by ").player(items_received[child_item].player)
+                        ).send(self.ctx)
         self.markup_message(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
         return True
     
