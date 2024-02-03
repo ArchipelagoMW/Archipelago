@@ -59,7 +59,8 @@ class ShufflePaintings(Toggle):
 
 
 class SunwarpAccess(Choice):
-    """On "normal", all sunwarps are enabled from the start.
+    """Determines how access to sunwarps works. Using any setting besides "normal" requires door shuffle to be on.
+    On "normal", all sunwarps are enabled from the start.
     On "disabled", all sunwarps are disabled.
     On "unlock", sunwarps start off disabled. If on complex doors, each has a corresponding item that unlocks it. If on simple doors, there is one item that unlocks all six.
     On "progressive", sunwarps start off disabled, and they unlock in order using a progressive item. Only compatible with complex doors."""
