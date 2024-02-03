@@ -14,7 +14,7 @@ import settings
 from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
-from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, TrainerPokemonData, StaticEncounterData,
+from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, TrainerPokemonData, MiscPokemonData,
                    TrainerData, POSTGAME_MAPS, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
@@ -22,7 +22,7 @@ from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location
                         create_locations_with_tags)
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
-                      HmCompatibility, RandomizeStaticEncounters, NormanRequirement, ReceiveItemMessages,
+                      HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement, ReceiveItemMessages,
                       PokemonEmeraldOptions, HmRequirements)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
                       get_random_damaging_move, get_random_type)
@@ -91,7 +91,7 @@ class PokemonEmeraldWorld(World):
     modified_species: List[Optional[SpeciesData]]
     modified_maps: Dict[str, MapData]
     modified_tmhm_moves: List[int]
-    modified_static_encounters: List[int]
+    modified_legendary_encounters: List[int]
     modified_starters: Tuple[int, int, int]
     modified_trainers: List[TrainerData]
 
@@ -850,34 +850,34 @@ class PokemonEmeraldWorld(World):
                 new_moves.add(new_move)
                 self.modified_tmhm_moves[i] = new_move
 
-        def randomize_static_encounters() -> None:
-            if self.options.static_encounters == RandomizeStaticEncounters.option_shuffle:
+        def randomize_legendary_encounters() -> None:
+            if self.options.legendary_encounters == RandomizeLegendaryEncounters.option_shuffle:
                 # Just take the existing species and shuffle them
-                shuffled_species = [encounter.species_id for encounter in emerald_data.static_encounters]
+                shuffled_species = [encounter.species_id for encounter in emerald_data.legendary_encounters]
                 self.random.shuffle(shuffled_species)
 
-                self.modified_static_encounters = []
-                for i, encounter in enumerate(emerald_data.static_encounters):
-                    self.modified_static_encounters.append(StaticEncounterData(
+                self.modified_legendary_encounters = []
+                for i, encounter in enumerate(emerald_data.legendary_encounters):
+                    self.modified_legendary_encounters.append(MiscPokemonData(
                         shuffled_species[i],
                         encounter.address
                     ))
             else:
-                should_match_bst = self.options.static_encounters in {
-                    RandomizeStaticEncounters.option_match_base_stats,
-                    RandomizeStaticEncounters.option_match_base_stats_and_type
+                should_match_bst = self.options.legendary_encounters in {
+                    RandomizeLegendaryEncounters.option_match_base_stats,
+                    RandomizeLegendaryEncounters.option_match_base_stats_and_type
                 }
-                should_match_type = self.options.static_encounters in {
-                    RandomizeStaticEncounters.option_match_type,
-                    RandomizeStaticEncounters.option_match_base_stats_and_type
+                should_match_type = self.options.legendary_encounters in {
+                    RandomizeLegendaryEncounters.option_match_type,
+                    RandomizeLegendaryEncounters.option_match_base_stats_and_type
                 }
 
-                for encounter in emerald_data.static_encounters:
+                for encounter in emerald_data.legendary_encounters:
                     original_species = self.modified_species[encounter.species_id]
                     target_bst = sum(original_species.base_stats) if should_match_bst else None
                     target_type = self.random.choice(original_species.types) if should_match_type else None
 
-                    self.modified_static_encounters.append(StaticEncounterData(
+                    self.modified_legendary_encounters.append(MiscPokemonData(
                         get_random_species(self.random, self.modified_species, target_bst, target_type).species_id,
                         encounter.address
                     ))
@@ -1042,7 +1042,7 @@ class PokemonEmeraldWorld(World):
 
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
         self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
-        self.modified_static_encounters = copy.deepcopy(emerald_data.static_encounters)
+        self.modified_legendary_encounters = copy.deepcopy(emerald_data.legendary_encounters)
         self.modified_starters = copy.deepcopy(emerald_data.starters)
 
         # Randomize species data
@@ -1065,9 +1065,9 @@ class PokemonEmeraldWorld(World):
         if self.options.tm_moves:
             randomize_tm_moves()
 
-        # Randomize static encounters
-        if self.options.static_encounters != RandomizeStaticEncounters.option_vanilla:
-            randomize_static_encounters()
+        # Randomize legendary encounters
+        if self.options.legendary_encounters != RandomizeLegendaryEncounters.option_vanilla:
+            randomize_legendary_encounters()
 
         # Randomize opponents
         if self.options.trainer_parties != RandomizeTrainerParties.option_vanilla:

@@ -355,18 +355,18 @@ class ForceFullyEvolved(Range):
     range_end = 100
     default = 100
 
-class RandomizeStaticEncounters(Choice):
+class RandomizeLegendaryEncounters(Choice):
     """
-    Randomizes static encounters (Rayquaza, hidden Kekleons, fake Voltorb pokeballs, etc...)
+    Randomizes legendary encounters (Rayquaza, Regice, Latias, etc...). The roamer will always be Latios during legendary hunts.
 
-    Vanilla: Static encounters are unchanged
-    Shuffle: Static encounters are shuffled between each other
-    Match Base Stats: Static encounters are replaced with species with approximately the same bst
-    Match Type: Static encounters are replaced with species that share a type with the original
+    Vanilla: Legendary encounters are unchanged
+    Shuffle: Legendary encounters are shuffled between each other
+    Match Base Stats: Legendary encounters are replaced with species with approximately the same bst
+    Match Type: Legendary encounters are replaced with species that share a type with the original
     Match Base Stats and Type: Apply both Match Base Stats and Match Type
     Completely Random: There are no restrictions
     """
-    display_name = "Randomize Static Encounters"
+    display_name = "Randomize Legendary Encounters"
     default = 0
     option_vanilla = 0
     option_shuffle = 1
@@ -768,7 +768,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     trainer_parties: RandomizeTrainerParties
     allow_trainer_legendaries: AllowTrainerLegendaries
     force_fully_evolved: ForceFullyEvolved
-    static_encounters: RandomizeStaticEncounters
+    legendary_encounters: RandomizeLegendaryEncounters
     types: RandomizeTypes
     abilities: RandomizeAbilities
     ability_blacklist: AbilityBlacklist

@@ -220,7 +220,7 @@ class EvolutionData(NamedTuple):
     species_id: int
 
 
-class StaticEncounterData(NamedTuple):
+class MiscPokemonData(NamedTuple):
     species_id: int
     address: int
 
@@ -298,7 +298,7 @@ class PokemonEmeraldData:
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
     species: List[Optional[SpeciesData]]
-    static_encounters: List[StaticEncounterData]
+    legendary_encounters: List[MiscPokemonData]
     tmhm_moves: List[int]
     abilities: List[AbilityData]
     move_labels: Dict[str, int]
@@ -316,7 +316,7 @@ class PokemonEmeraldData:
         self.locations = {}
         self.items = {}
         self.species = []
-        self.static_encounters = []
+        self.legendary_encounters = []
         self.tmhm_moves = []
         self.abilities = []
         self.move_labels = {}
@@ -337,7 +337,7 @@ def create_data_copy() -> PokemonEmeraldData:
     new_copy.species = copy.deepcopy(data.species)
     new_copy.tmhm_moves = copy.deepcopy(data.tmhm_moves)
     new_copy.maps = copy.deepcopy(data.maps)
-    new_copy.static_encounters = copy.deepcopy(data.static_encounters)
+    new_copy.legendary_encounters = copy.deepcopy(data.legendary_encounters)
     new_copy.trainers = copy.deepcopy(data.trainers)
 
 
@@ -934,11 +934,11 @@ def _init() -> None:
             for evolution in species.evolutions:
                 data.species[evolution.species_id].pre_evolution = species.species_id
 
-    # Create static encounter data
-    for static_encounter_json in extracted_data["static_encounters"]:
-        data.static_encounters.append(StaticEncounterData(
-            static_encounter_json["species"],
-            static_encounter_json["address"]
+    # Create legendary encounter data
+    for legendary_encounter_json in extracted_data["legendary_encounters"]:
+        data.legendary_encounters.append(MiscPokemonData(
+            legendary_encounter_json["species"],
+            legendary_encounter_json["address"]
         ))
 
     # TM moves

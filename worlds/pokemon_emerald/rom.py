@@ -308,8 +308,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     if world.options.trainer_parties != RandomizeTrainerParties.option_vanilla or easter_egg[0] == 2:
         _set_opponents(world, patched_rom, easter_egg)
 
-    # Set static pokemon
-    _set_static_encounters(world, patched_rom)
+    # Set legendary pokemon
+    _set_legendary_encounters(world, patched_rom)
 
     # Set starters
     _set_starters(world, patched_rom)
@@ -659,8 +659,8 @@ def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tup
                     _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
-def _set_static_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
-    for encounter in world.modified_static_encounters:
+def _set_legendary_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+    for encounter in world.modified_legendary_encounters:
         _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
 
 
