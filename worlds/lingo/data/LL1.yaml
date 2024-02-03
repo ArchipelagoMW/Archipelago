@@ -6944,7 +6944,7 @@
           door: Mastery
         required_panel:
           room: Room Room
-          panel: WALL (1)
+          panel: WALL (2)
     doors:
       Excavation:
         event: True
