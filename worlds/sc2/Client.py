@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import copy
 import ctypes
+import enum
 import inspect
 import logging
 import multiprocessing
@@ -22,12 +23,15 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
-from worlds.sc2.Options import MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence, \
-    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions, \
-    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations, \
-    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics, \
-    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence, \
+from worlds.sc2 import Options
+from worlds.sc2.Options import (
+    MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
+    GameSpeed, GenericUpgradeItems, GenericUpgradeResearch, ColorChoice, GenericUpgradeMissions,
+    LocationInclusion, ExtraLocations, MasteryLocations, ChallengeLocations, VanillaLocations,
+    DisableForcedCamera, SkipCutscenes, GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, RequiredTactics,
+    SpearOfAdunPresence, SpearOfAdunPresentInNoBuild, SpearOfAdunAutonomouslyCastAbilityPresence,
     SpearOfAdunAutonomouslyCastPresentInNoBuild
+)
 
 
 if __name__ == "__main__":
@@ -48,6 +52,7 @@ from worlds.sc2.MissionTables import lookup_id_to_mission, SC2Campaign, lookup_n
 from worlds.sc2.Regions import MissionInfo
 
 import colorama
+from Options import Option
 from NetUtils import ClientStatus, NetworkItem, JSONtoTextParser, JSONMessagePart, add_json_item, add_json_location, add_json_text, JSONTypes
 from MultiServer import mark_raw
 
@@ -78,9 +83,16 @@ def get_metadata_file() -> str:
     return os.environ["SC2PATH"] + os.sep + "ArchipelagoSC2Metadata.txt"
 
 
+class ConfigurableOptionType(enum.Enum):
+    INTEGER = enum.auto()
+    ENUM = enum.auto()
+
 class ConfigurableOptionInfo(typing.NamedTuple):
     name: str
-    description: str
+    variable_name: str
+    option_class: typing.Type[Option]
+    option_type: ConfigurableOptionType = ConfigurableOptionType.ENUM
+    can_break_logic: bool = False
 
 
 class ColouredMessage:
@@ -253,134 +265,61 @@ class StarcraftClientProcessor(ClientCommandProcessor):
         self.markup_message(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
         return True
     
-    def _cmd_option(self, option_name: str = "", *option_values: str) -> None:
+    def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
         """Sets a Starcraft game option that can be changed after generation. Use "/option list" to see all options."""
 
-        LOGIC_WARNING = f"*Note changing this may result in logically unbeatable games*"
-        KERRIGAN_PRESENCE = ConfigurableOptionInfo('kerrigan_presence', f'Controls whether Kerrigan will appear in missions')
-        SOA_PRESENCE = ConfigurableOptionInfo('soa_presence', 'Controls when the Spear of Adun topbar will appear')
-        SOA_IN_NOBUILDS = ConfigurableOptionInfo('soa_in_nobuilds', 'Controls if the Spear of Adun will appera in no-build missions')
-        CONTROL_ALLY = ConfigurableOptionInfo('control_ally', f'Controls whether you gain command of your AI allies')
-        MINERALS_PER_CHECK = ConfigurableOptionInfo('minerals_per_check', f'The amount of gas you receive per {ItemNames.STARTING_MINERALS} item')
-        GAS_PER_CHECK = ConfigurableOptionInfo('gas_per_check', f'The amount of gas you receive per {ItemNames.STARTING_VESPENE} item')
-        SUPPLY_PER_CHECK = ConfigurableOptionInfo('supply_per_check', f'The amount of gas you receive per {ItemNames.STARTING_SUPPLY} item')
-        FORCED_CAMERA = ConfigurableOptionInfo('forced_camera', 'Controls whether the game can move or lock your camera')
-        SKIP_CUTSCENES = ConfigurableOptionInfo('skip_cutscenes', 'Controls whether in-game cutscenes will be skipped')
+        LOGIC_WARNING = f"  *Note changing this may result in logically unbeatable games*\n"
 
-        WARNING_COLOUR = JSONtoTextParser.color_codes["salmon"]
-        CMD_COLOUR = JSONtoTextParser.color_codes["slateblue"]
+        KERRIGAN_PRESENCE = ConfigurableOptionInfo('kerrigan_presence', 'kerrigan_presence', Options.KerriganPresence, can_break_logic=True)
+        SOA_PRESENCE = ConfigurableOptionInfo('soa_presence', 'spear_of_adun_presence', Options.SpearOfAdunPresence, can_break_logic=True)
+        SOA_IN_NOBUILDS = ConfigurableOptionInfo('soa_in_nobuilds', 'spear_of_adun_present_in_no_build', Options.SpearOfAdunPresentInNoBuild, can_break_logic=True)
+        CONTROL_ALLY = ConfigurableOptionInfo('control_ally', 'take_over_ai_allies', Options.TakeOverAIAllies, can_break_logic=True)
+        MINERALS_PER_CHECK = ConfigurableOptionInfo('minerals_per_item', 'minerals_per_item', Options.MineralsPerItem, ConfigurableOptionType.INTEGER)
+        GAS_PER_CHECK = ConfigurableOptionInfo('gas_per_item', 'vespene_per_item', Options.VespenePerItem, ConfigurableOptionType.INTEGER)
+        SUPPLY_PER_CHECK = ConfigurableOptionInfo('supply_per_item', 'starting_supply_per_item', Options.StartingSupplyPerItem, ConfigurableOptionType.INTEGER)
+        FORCED_CAMERA = ConfigurableOptionInfo('no_forced_camera', 'disable_forced_camera', Options.DisableForcedCamera)
+        SKIP_CUTSCENES = ConfigurableOptionInfo('skip_cutscenes', 'skip_cutscenes', Options.SkipCutscenes)
+        options = (
+            KERRIGAN_PRESENCE, SOA_PRESENCE, SOA_IN_NOBUILDS, CONTROL_ALLY,
+            MINERALS_PER_CHECK, GAS_PER_CHECK, SUPPLY_PER_CHECK, FORCED_CAMERA, SKIP_CUTSCENES,
+        )
 
-        help_text = inspect.cleandoc(f"""
+        WARNING_COLOUR = "salmon"
+        CMD_COLOUR = "slateblue"
+
+        help_message = ColouredMessage(inspect.cleandoc("""
             Options
         --------------------
-        [color={CMD_COLOUR}]{KERRIGAN_PRESENCE.name}[/color]: vanilla | not_present | no_passives -- {KERRIGAN_PRESENCE.description}
-          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
-        [color={CMD_COLOUR}]{SOA_PRESENCE.name}[/color]: lotv_protoss | protoss | everywhere | not_present -- {SOA_PRESENCE.description}
-          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
-        [color={CMD_COLOUR}]{SOA_IN_NOBUILDS.name}[/color]: true | false -- {SOA_IN_NOBUILDS.description}
-          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
-        [color={CMD_COLOUR}]{CONTROL_ALLY.name}[/color]: true | false -- {CONTROL_ALLY.description}
-          [color={WARNING_COLOUR}]{LOGIC_WARNING}[/color]
-        [color={CMD_COLOUR}]{MINERALS_PER_CHECK.name}[/color]: integer -- {MINERALS_PER_CHECK.description}
-        [color={CMD_COLOUR}]{GAS_PER_CHECK.name}[/color]: integer -- {GAS_PER_CHECK.description}
-        [color={CMD_COLOUR}]{SUPPLY_PER_CHECK.name}[/color]: integer -- {SUPPLY_PER_CHECK.description}
-        [color={CMD_COLOUR}]{FORCED_CAMERA.name}[/color]: true | false -- {FORCED_CAMERA.description}
-        [color={CMD_COLOUR}]{SKIP_CUTSCENES.name}[/color]: true | false -- {SKIP_CUTSCENES.description}
-        --------------------
-        Enter an option without arguments to see its current value.
-        """)
-        false_values = ('n', 'no', 'false', '0', 'none')
+        """))('\n')
+        for option in options:
+            option_help_text = inspect.cleandoc(option.option_class.__doc__).split('\n', 1)[0]
+            help_message.coloured(option.name, CMD_COLOUR)(": " + " | ".join(option.option_class.options)
+                + f" -- {option_help_text}\n")
+            if option.can_break_logic:
+                help_message.coloured(LOGIC_WARNING, WARNING_COLOUR)
+        help_message("--------------------\nEnter an option without arguments to see its current value.\n")
+
         if not option_name or option_name == 'list' or option_name == 'help':
-            self.markup_message(help_text, "")
-        elif option_name == KERRIGAN_PRESENCE.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() == 'vanilla':
-                self.ctx.kerrigan_presence = KerriganPresence.option_vanilla
-            elif option_values[0].lower() == 'not_present':
-                self.ctx.kerrigan_presence = KerriganPresence.option_not_present
-            elif option_values[0].lower() == 'no_passives':
-                self.ctx.kerrigan_presence = KerriganPresence.option_not_present_and_no_passives
-            else:
-                self.output(f"Unknown option value '{option_values[0]}'")
-            self.output(f"{KERRIGAN_PRESENCE.name} is '{KerriganPresence.get_option_name(self.ctx.kerrigan_presence)}'")
-        elif option_name == SOA_PRESENCE.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() == 'lotv_protoss':
-                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_lotv_protoss
-            elif option_values[0].lower() == 'protoss':
-                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_protoss
-            elif option_values[0].lower() == 'everywhere':
-                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_everywhere
-            elif option_values[0].lower() == 'not_present':
-                self.ctx.kerrigan_presence = SpearOfAdunPresence.option_not_present
-            else:
-                self.output(f"Unknown option value '{option_values[0]}'")
-            self.output(f"{SOA_PRESENCE.name} is '{SpearOfAdunPresence.get_option_name(self.ctx.spear_of_adun_presence)}'")
-        elif option_name == SOA_IN_NOBUILDS.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() in false_values:
-                self.ctx.spear_of_adun_present_in_no_build = 0
-            else:
-                self.ctx.spear_of_adun_present_in_no_build = 1
-            self.output(f"{SOA_IN_NOBUILDS.name} is '{bool(self.ctx.spear_of_adun_present_in_no_build)}'")
-        elif option_name == CONTROL_ALLY.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() in false_values:
-                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_false
-            else:
-                self.ctx.take_over_ai_allies = TakeOverAIAllies.option_true
-            self.output(f"{CONTROL_ALLY.name} is '{bool(self.ctx.take_over_ai_allies)}'")
-        elif option_name == MINERALS_PER_CHECK.name:
-            if not option_values:
-                pass
-            else:
-                try:
-                    self.ctx.minerals_per_item = int(option_values[0], base=0)
-                except ValueError:
-                    self.output(f"{option_values[0]} is not a valid integer")
-            self.output(f"{MINERALS_PER_CHECK.name} is '{self.ctx.minerals_per_item}'")
-        elif option_name == GAS_PER_CHECK.name:
-            if not option_values:
-                pass
-            else:
-                try:
-                    self.ctx.vespene_per_item = int(option_values[0], base=0)
-                except ValueError:
-                    self.output(f"{option_values[0]} is not a valid integer")
-            self.output(f"{GAS_PER_CHECK.name} is '{self.ctx.vespene_per_item}'")
-        elif option_name == SUPPLY_PER_CHECK.name:
-            if not option_values:
-                pass
-            else:
-                try:
-                    self.ctx.starting_supply_per_item = int(option_values[0], base=0)
-                except ValueError:
-                    self.output(f"{option_values[0]} is not a valid integer")
-            self.output(f"{SUPPLY_PER_CHECK.name} is '{self.ctx.starting_supply_per_item}'")
-        elif option_name == FORCED_CAMERA.name:
-            # Flipping the truth-value here to avoid double-negatives
-            if not option_values:
-                pass
-            elif option_values[0].lower() in false_values:
-                self.ctx.disable_forced_camera = 1
-            else:
-                self.ctx.disable_forced_camera = 0
-            self.output(f"{FORCED_CAMERA.name} is set to {not (self.ctx.disable_forced_camera)}")
-        elif option_name == SKIP_CUTSCENES.name:
-            if not option_values:
-                pass
-            elif option_values[0].lower() in false_values:
-                self.ctx.skip_cutscenes = 0
-            else:
-                self.ctx.skip_cutscenes = 1
-            self.output(f"{SKIP_CUTSCENES.name} is set to {bool(self.ctx.disable_forced_camera)}")
+            help_message.send(self.ctx)
+            return True
+        for option in options:
+            if option_name == option.name:
+                if not option_value:
+                    pass
+                elif option.option_type == ConfigurableOptionType.ENUM and option_value in option.option_class.options:
+                    self.ctx.__dict__[option.variable_name] = option.option_class.options[option_value]
+                elif option.option_type == ConfigurableOptionType.INTEGER:
+                    try:
+                        self.ctx.__dict__[option.variable_name] = int(option_value, base=0)
+                    except:
+                        self.output(f"{option_value} is not a valid integer")
+                else:
+                    self.output(f"Unknown option value '{option_value}'")
+                ColouredMessage(f"{option.name} is '{option.option_class.get_option_name(self.ctx.__dict__[option.variable_name])}'").send(self.ctx)
+                break
         else:
             self.output(f"Unknown option '{option_name}'")
-            self.markup_message(help_text, "")
+            help_message.send(self.ctx)
 
     def _cmd_color(self, faction: str = "", color: str = "") -> None:
         """Changes the player color for a given faction."""
