@@ -14,7 +14,8 @@ class StructureDeck(Choice):
     option_warriors_triumph = 4
     option_spellcasters_judgement = 5
     option_none = 6
-    default = "random"
+    option_random_deck = 7
+    default = 7
 
 
 class Banlist(Choice):

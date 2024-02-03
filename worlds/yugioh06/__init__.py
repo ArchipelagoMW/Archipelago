@@ -24,16 +24,6 @@ from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
 from .RomValues import structure_deck_selection, banlist_ids, function_addresses
 
-if "worlds._bizhawk" not in sys.modules:
-    bh_apworld_path = os.path.join(os.path.dirname(sys.modules["worlds"].__file__), "_bizhawk.apworld")
-    if not os.path.isfile(bh_apworld_path) and not os.path.isdir(os.path.splitext(bh_apworld_path)[0]):
-        logging.warning("Did not find _bizhawk.apworld required to play Yu-Gi-Oh! 2006. Still able to generate.")
-    else:
-        from .Client_bh import YuGiOh2006Client  # Unused, but required to register with BizHawkClient
-else:
-    from .Client_bh import YuGiOh2006Client  # Unused, but required to register with BizHawkClient
-
-
 class Yugioh06Web(WebWorld):
     theme = "stone"
     setup = Tutorial(
@@ -318,6 +308,9 @@ class Yugioh06World(World):
         else:
             boosters = booster_packs
             opponents = tier_1_opponents
+
+        if self.options.structure_deck.current_key == "random_deck":
+            self.options.structure_deck.value = self.random.choice([0, 1, 2, 3, 4, 5])
         for item in self.options.start_inventory:
             if item in opponents:
                 self.starting_opponent = item
