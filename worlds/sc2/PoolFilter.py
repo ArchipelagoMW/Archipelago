@@ -275,7 +275,7 @@ class ValidInventory:
             unit_nb_upgrades = {}
             for item in inventory:
                 cItem = item_list[item.name]
-                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                if cItem.parent_item in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:
@@ -288,7 +288,7 @@ class ValidInventory:
             # For those two categories, we count them but dont include them in removal
             for item in locked_items + self.existing_items:
                 cItem = item_list[item.name]
-                if cItem.type in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                if cItem.parent_item in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:
@@ -347,6 +347,7 @@ class ValidInventory:
                 removable_generic_items.append(item)
 
         # Main cull process
+        unused_items = [] # Reusable items for the second pass
         while len(inventory) + len(locked_items) > inventory_size:
             if len(inventory) == 0:
                 # There are more items than locations and all of them are already locked due to YAML or logic.
@@ -390,7 +391,9 @@ class ValidInventory:
                             continue
                         attempt_removal(item_to_remove)
             else:
-                attempt_removal(item)
+                # Unimportant upgrades may be added again in the second pass
+                if attempt_removal(item):
+                    unused_items.append(item.name)
 
         # Removing extra dependencies
         # WoL
@@ -476,7 +479,9 @@ class ValidInventory:
         replacement_items = [item for item in self.item_pool
                              if (item not in inventory
                                  and item not in self.locked_items
-                                 and item.name in second_pass_placeable_items)]
+                                 and (
+                                     item.name in second_pass_placeable_items
+                                     or item.name in unused_items))]
         self.multiworld.random.shuffle(replacement_items)
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
