@@ -239,7 +239,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
             for item_id in categorized_items[faction]:
                 received_items_of_this_type = items_received.get(item_id, ())
                 for item in received_items_of_this_type:
-                    (ColouredMessage('* ').item(item.item, item.flags)
+                    (ColouredMessage('* ').item(item.item, flags=item.flags)
                         (" from ").location(item.location, self.ctx.slot)
                         (" by ").player(item.player)
                     ).send(self.ctx)
@@ -249,7 +249,7 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 for child_item in parent_to_child.get(item_id, ()):
                     received_items_of_this_type = items_received.get(child_item, ())
                     for item in received_items_of_this_type:
-                        (ColouredMessage('  * ').item(item.item, item.flags)
+                        (ColouredMessage('  * ').item(item.item, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
