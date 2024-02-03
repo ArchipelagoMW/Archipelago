@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 def set_rules(tloz_world: "TLoZWorld"):
     player = tloz_world.player
     world = tloz_world.multiworld
+    options = tloz_world.options
 
     # Boss events for a nicer spoiler log play through
     for level in range(1, 9):
@@ -23,7 +24,7 @@ def set_rules(tloz_world: "TLoZWorld"):
     # No dungeons without weapons except for the dangerous weapon locations if we're dangerous, no unsafe dungeons
     for i, level in enumerate(tloz_world.levels[1:10]):
         for location in level.locations:
-            if world.StartingPosition[player] < StartingPosition.option_dangerous \
+            if options.StartingPosition < StartingPosition.option_dangerous \
                     or location.name not in dangerous_weapon_locations:
                 add_rule(world.get_location(location.name, player),
                          lambda state: state.has_group("weapons", player))
@@ -66,7 +67,7 @@ def set_rules(tloz_world: "TLoZWorld"):
              lambda state: state.has("Recorder", player))
     add_rule(world.get_location("Level 7 Boss", player),
              lambda state: state.has("Recorder", player))
-    if world.ExpandedPool[player]:
+    if options.ExpandedPool:
         add_rule(world.get_location("Level 7 Key Drop (Stalfos)", player),
                  lambda state: state.has("Recorder", player))
         add_rule(world.get_location("Level 7 Bomb Drop (Digdogger)", player),
@@ -75,13 +76,13 @@ def set_rules(tloz_world: "TLoZWorld"):
                  lambda state: state.has("Recorder", player))
 
     for location in food_locations:
-        if world.ExpandedPool[player] or "Drop" not in location:
+        if options.ExpandedPool or "Drop" not in location:
             add_rule(world.get_location(location, player),
                      lambda state: state.has("Food", player))
 
     add_rule(world.get_location("Level 8 Item (Magical Key)", player),
              lambda state: state.has("Bow", player) and state.has_group("arrows", player))
-    if world.ExpandedPool[player]:
+    if options.ExpandedPool:
         add_rule(world.get_location("Level 8 Bomb Drop (Darknuts North)", player),
                  lambda state: state.has("Bow", player) and state.has_group("arrows", player))
 
@@ -106,13 +107,13 @@ def set_rules(tloz_world: "TLoZWorld"):
     for location in stepladder_locations:
         add_rule(world.get_location(location, player),
                  lambda state: state.has("Stepladder", player))
-    if world.ExpandedPool[player]:
+    if options.ExpandedPool:
         for location in stepladder_locations_expanded:
             add_rule(world.get_location(location, player),
                      lambda state: state.has("Stepladder", player))
 
     # Don't allow Take Any Items until we can actually get in one
-    if world.ExpandedPool[player]:
+    if options.ExpandedPool:
         add_rule(world.get_location("Take Any Item Left", player),
                  lambda state: state.has_group("candles", player) or
                                state.has("Raft", player))
