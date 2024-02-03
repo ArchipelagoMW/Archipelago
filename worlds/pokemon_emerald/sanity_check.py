@@ -10,7 +10,6 @@ from .data import load_json_data, data
 
 _ignorable_locations = {
     "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",  # Is permanently mssiable and has special behavior that sets the flag early
-    "TRAINER_GRUNT_MT_PYRE_4_REWARD",  # Disappears when you get the Magma Emblem
 
     # Duplicate rival fights. All variations are represented by the Brandon + Mudkip version
     "TRAINER_BRENDAN_ROUTE_103_TREECKO_REWARD",

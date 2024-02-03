@@ -1343,7 +1343,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
-    "label": "Mossdeep City - Gift from Man in Space Center",
+    "label": "Space Center - Gift from Man",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_WATER_PULSE": {
@@ -1427,7 +1427,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_THIEF": {
-    "label": "Slateport City - TM46 from Aqua Grunt in Museum",
+    "label": "Oceanic Museum - TM46 from Aqua Grunt in Museum",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TM_STEEL_WING": {
@@ -3422,2123 +3422,1927 @@
   },
 
   "TRAINER_AARON_REWARD": {
-    "label": "TRAINER_AARON_REWARD",
+    "label": "Route 134 - Dragon Tamer Aaron",
     "tags": ["Trainer"]
   },
   "TRAINER_ABIGAIL_1_REWARD": {
-    "label": "TRAINER_ABIGAIL_1_REWARD",
+    "label": "Route 110 - Triathlete Abigail",
     "tags": ["Trainer"]
   },
   "TRAINER_AIDAN_REWARD": {
-    "label": "TRAINER_AIDAN_REWARD",
+    "label": "Route 127 - Bird Keeper Aidan",
     "tags": ["Trainer"]
   },
   "TRAINER_AISHA_REWARD": {
-    "label": "TRAINER_AISHA_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_ALAN_REWARD": {
-    "label": "TRAINER_ALAN_REWARD",
+    "label": "Route 117 - Battle Girl Aisha",
     "tags": ["Trainer"]
   },
   "TRAINER_ALBERTO_REWARD": {
-    "label": "TRAINER_ALBERTO_REWARD",
+    "label": "Route 123 - Bird Keeper Alberto",
     "tags": ["Trainer"]
   },
   "TRAINER_ALBERT_REWARD": {
-    "label": "TRAINER_ALBERT_REWARD",
+    "label": "Victory Road 1F - Cooltrainer Albert",
     "tags": ["Trainer"]
   },
   "TRAINER_ALEXA_REWARD": {
-    "label": "TRAINER_ALEXA_REWARD",
+    "label": "Route 128 - Cooltrainer Alexa",
     "tags": ["Trainer"]
   },
   "TRAINER_ALEXIA_REWARD": {
-    "label": "TRAINER_ALEXIA_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_ALEXIS_REWARD": {
-    "label": "TRAINER_ALEXIS_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Alexia",
     "tags": ["Trainer"]
   },
   "TRAINER_ALEX_REWARD": {
-    "label": "TRAINER_ALEX_REWARD",
+    "label": "Route 134 - Bird Keeper Alex",
     "tags": ["Trainer"]
   },
   "TRAINER_ALICE_REWARD": {
-    "label": "TRAINER_ALICE_REWARD",
+    "label": "Route 109 - Swimmer Alice",
     "tags": ["Trainer"]
   },
   "TRAINER_ALIX_REWARD": {
-    "label": "TRAINER_ALIX_REWARD",
+    "label": "Route 115 - Psychic Alix",
     "tags": ["Trainer"]
   },
   "TRAINER_ALLEN_REWARD": {
-    "label": "TRAINER_ALLEN_REWARD",
+    "label": "Route 102 - Youngster Allen",
     "tags": ["Trainer"]
   },
   "TRAINER_ALLISON_REWARD": {
-    "label": "TRAINER_ALLISON_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_ALVARO_REWARD": {
-    "label": "TRAINER_ALVARO_REWARD",
+    "label": "Route 129 - Triathlete Allison",
     "tags": ["Trainer"]
   },
   "TRAINER_ALYSSA_REWARD": {
-    "label": "TRAINER_ALYSSA_REWARD",
+    "label": "Route 110 - Triathlete Alyssa",
     "tags": ["Trainer"]
   },
   "TRAINER_AMY_AND_LIV_1_REWARD": {
-    "label": "TRAINER_AMY_AND_LIV_1_REWARD",
+    "label": "Route 103 - Twins Amy and Liv",
     "tags": ["Trainer"]
   },
   "TRAINER_ANNA_AND_MEG_1_REWARD": {
-    "label": "TRAINER_ANNA_AND_MEG_1_REWARD",
+    "label": "Route 117 - Sr. and Jr. Anna and Meg",
     "tags": ["Trainer"]
   },
   "TRAINER_ANDREA_REWARD": {
-    "label": "TRAINER_ANDREA_REWARD",
+    "label": "Sootopolis Gym - Lass Andrea",
     "tags": ["Trainer"]
   },
   "TRAINER_ANDRES_1_REWARD": {
-    "label": "TRAINER_ANDRES_1_REWARD",
+    "label": "Route 105 - Ruin Maniac Andres",
     "tags": ["Trainer"]
   },
   "TRAINER_ANDREW_REWARD": {
-    "label": "TRAINER_ANDREW_REWARD",
+    "label": "Route 103 - Fisherman Andrew",
     "tags": ["Trainer"]
   },
   "TRAINER_ANGELICA_REWARD": {
-    "label": "TRAINER_ANGELICA_REWARD",
+    "label": "Route 120 - Parasol Lady Angelica",
     "tags": ["Trainer"]
   },
   "TRAINER_ANGELINA_REWARD": {
-    "label": "TRAINER_ANGELINA_REWARD",
+    "label": "Route 114 - Picnicker Angelina",
     "tags": ["Trainer"]
   },
   "TRAINER_ANGELO_REWARD": {
-    "label": "TRAINER_ANGELO_REWARD",
+    "label": "Mauville Gym - Bug Maniac Angelo",
     "tags": ["Trainer"]
   },
   "TRAINER_ANNIKA_REWARD": {
-    "label": "TRAINER_ANNIKA_REWARD",
+    "label": "Sootopolis Gym - Pokefan Annika",
     "tags": ["Trainer"]
   },
   "TRAINER_ANTHONY_REWARD": {
-    "label": "TRAINER_ANTHONY_REWARD",
+    "label": "Route 110 - Triathlete Anthony",
     "tags": ["Trainer"]
   },
   "TRAINER_ARCHIE_REWARD": {
-    "label": "TRAINER_ARCHIE_REWARD",
+    "label": "Seafloor Cavern Room 9 - Aqua Leader Archie",
     "tags": ["Trainer"]
   },
   "TRAINER_ASHLEY_REWARD": {
-    "label": "TRAINER_ASHLEY_REWARD",
+    "label": "Fortree Gym - Picnicker Ashley",
     "tags": ["Trainer"]
   },
   "TRAINER_ATHENA_REWARD": {
-    "label": "TRAINER_ATHENA_REWARD",
+    "label": "Route 127 - Cooltrainer Athena",
     "tags": ["Trainer"]
   },
   "TRAINER_ATSUSHI_REWARD": {
-    "label": "TRAINER_ATSUSHI_REWARD",
+    "label": "Mt Pyre 5F - Black Belt Atsushi",
     "tags": ["Trainer"]
   },
   "TRAINER_AURON_REWARD": {
-    "label": "TRAINER_AURON_REWARD",
+    "label": "Route 125 - Expert Auron",
     "tags": ["Trainer"]
   },
   "TRAINER_AUSTINA_REWARD": {
-    "label": "TRAINER_AUSTINA_REWARD",
+    "label": "Route 109 - Tuber Austina",
     "tags": ["Trainer"]
   },
   "TRAINER_AUTUMN_REWARD": {
-    "label": "TRAINER_AUTUMN_REWARD",
+    "label": "Jagged Pass - Picnicker Autumn",
     "tags": ["Trainer"]
   },
   "TRAINER_AXLE_REWARD": {
-    "label": "TRAINER_AXLE_REWARD",
+    "label": "Lavaridge Gym - Kindler Axle",
     "tags": ["Trainer"]
   },
   "TRAINER_BARNY_REWARD": {
-    "label": "TRAINER_BARNY_REWARD",
+    "label": "Route 118 - Fisherman Barny",
     "tags": ["Trainer"]
   },
   "TRAINER_BARRY_REWARD": {
-    "label": "TRAINER_BARRY_REWARD",
+    "label": "Route 126 - Swimmer Barry",
     "tags": ["Trainer"]
   },
   "TRAINER_BEAU_REWARD": {
-    "label": "TRAINER_BEAU_REWARD",
+    "label": "Route 111 - Camper Beau",
     "tags": ["Trainer"]
   },
   "TRAINER_BECKY_REWARD": {
-    "label": "TRAINER_BECKY_REWARD",
+    "label": "Route 111 - Picnicker Becky",
     "tags": ["Trainer"]
   },
   "TRAINER_BECK_REWARD": {
-    "label": "TRAINER_BECK_REWARD",
+    "label": "Route 133 - Bird Keeper Beck",
     "tags": ["Trainer"]
   },
   "TRAINER_BENJAMIN_1_REWARD": {
-    "label": "TRAINER_BENJAMIN_1_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BENNY_REWARD": {
-    "label": "TRAINER_BENNY_REWARD",
+    "label": "Route 110 - Triathlete Benjamin",
     "tags": ["Trainer"]
   },
   "TRAINER_BEN_REWARD": {
-    "label": "TRAINER_BEN_REWARD",
+    "label": "Mauville Gym - Youngster Ben",
     "tags": ["Trainer"]
   },
   "TRAINER_BERKE_REWARD": {
-    "label": "TRAINER_BERKE_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Berke",
     "tags": ["Trainer"]
   },
   "TRAINER_BERNIE_1_REWARD": {
-    "label": "TRAINER_BERNIE_1_REWARD",
+    "label": "Route 114 - Kindler Bernie",
     "tags": ["Trainer"]
   },
   "TRAINER_BETHANY_REWARD": {
-    "label": "TRAINER_BETHANY_REWARD",
+    "label": "Sootopolis Gym - Pokefan Bethany",
     "tags": ["Trainer"]
   },
   "TRAINER_BETH_REWARD": {
-    "label": "TRAINER_BETH_REWARD",
+    "label": "Route 107 - Swimmer Beth",
     "tags": ["Trainer"]
   },
   "TRAINER_BEVERLY_REWARD": {
-    "label": "TRAINER_BEVERLY_REWARD",
+    "label": "Route 105 - Swimmer Beverly",
     "tags": ["Trainer"]
   },
   "TRAINER_BIANCA_REWARD": {
-    "label": "TRAINER_BIANCA_REWARD",
+    "label": "Route 111 - Picnicker Bianca",
     "tags": ["Trainer"]
   },
   "TRAINER_BILLY_REWARD": {
-    "label": "TRAINER_BILLY_REWARD",
+    "label": "Route 104 - Youngster Billy",
     "tags": ["Trainer"]
   },
   "TRAINER_BLAKE_REWARD": {
-    "label": "TRAINER_BLAKE_REWARD",
+    "label": "Mossdeep Gym - Psychic Blake",
     "tags": ["Trainer"]
   },
   "TRAINER_BRANDEN_REWARD": {
-    "label": "TRAINER_BRANDEN_REWARD",
+    "label": "Route 111 - Camper Branden",
     "tags": ["Trainer"]
   },
   "TRAINER_BRANDI_REWARD": {
-    "label": "TRAINER_BRANDI_REWARD",
+    "label": "Route 117 - Psychic Brandi",
     "tags": ["Trainer"]
   },
   "TRAINER_BRAWLY_1_REWARD": {
-    "label": "TRAINER_BRAWLY_1_REWARD",
+    "label": "Dewford Gym - Leader Brawly",
     "tags": ["Trainer"]
   },
   "TRAINER_BRAXTON_REWARD": {
-    "label": "TRAINER_BRAXTON_REWARD",
+    "label": "Route 123 - Cooltrainer Braxton",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDAN_LILYCOVE_MUDKIP_REWARD": {
-    "label": "TRAINER_BRENDAN_LILYCOVE_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_LILYCOVE_TORCHIC_REWARD": {
-    "label": "TRAINER_BRENDAN_LILYCOVE_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_LILYCOVE_TREECKO_REWARD": {
-    "label": "TRAINER_BRENDAN_LILYCOVE_TREECKO_REWARD",
+    "label": "Lilycove City - Rival Brendan/May",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_103_TORCHIC_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_103_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_103_TREECKO_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_103_TREECKO_REWARD",
+    "label": "Route 103 - Rival Brendan/May",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_110_TORCHIC_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_110_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_110_TREECKO_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_110_TREECKO_REWARD",
+    "label": "Route 110 - Rival Brendan/May",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_119_TORCHIC_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_119_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_ROUTE_119_TREECKO_REWARD": {
-    "label": "TRAINER_BRENDAN_ROUTE_119_TREECKO_REWARD",
+    "label": "Route 119 - Rival Brendan/May",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD": {
-    "label": "TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_RUSTBORO_TORCHIC_REWARD": {
-    "label": "TRAINER_BRENDAN_RUSTBORO_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_BRENDAN_RUSTBORO_TREECKO_REWARD": {
-    "label": "TRAINER_BRENDAN_RUSTBORO_TREECKO_REWARD",
+    "label": "Rustboro City - Rival Brendan/May",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDA_REWARD": {
-    "label": "TRAINER_BRENDA_REWARD",
+    "label": "Route 126 - Swimmer Brenda",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENDEN_REWARD": {
-    "label": "TRAINER_BRENDEN_REWARD",
+    "label": "Dewford Gym - Sailor Brenden",
     "tags": ["Trainer"]
   },
   "TRAINER_BRENT_REWARD": {
-    "label": "TRAINER_BRENT_REWARD",
+    "label": "Route 119 - Bug Maniac Brent",
     "tags": ["Trainer"]
   },
   "TRAINER_BRIANNA_REWARD": {
-    "label": "TRAINER_BRIANNA_REWARD",
+    "label": "Sootopolis Gym - Lady Brianna",
     "tags": ["Trainer"]
   },
   "TRAINER_BRICE_REWARD": {
-    "label": "TRAINER_BRICE_REWARD",
+    "label": "Route 112 - Hiker Brice",
     "tags": ["Trainer"]
   },
   "TRAINER_BRIDGET_REWARD": {
-    "label": "TRAINER_BRIDGET_REWARD",
+    "label": "Sootopolis Gym - Beauty Bridget",
     "tags": ["Trainer"]
   },
   "TRAINER_BROOKE_1_REWARD": {
-    "label": "TRAINER_BROOKE_1_REWARD",
+    "label": "Route 111 - Cooltrainer Brooke",
     "tags": ["Trainer"]
   },
   "TRAINER_BRYANT_REWARD": {
-    "label": "TRAINER_BRYANT_REWARD",
+    "label": "Route 112 - Kindler Bryant",
     "tags": ["Trainer"]
   },
   "TRAINER_BRYAN_REWARD": {
-    "label": "TRAINER_BRYAN_REWARD",
+    "label": "Route 111 - Ruin Maniac Bryan",
     "tags": ["Trainer"]
   },
   "TRAINER_CALE_REWARD": {
-    "label": "TRAINER_CALE_REWARD",
+    "label": "Route 121 - Bug Maniac Cale",
     "tags": ["Trainer"]
   },
   "TRAINER_CALLIE_REWARD": {
-    "label": "TRAINER_CALLIE_REWARD",
+    "label": "Route 120 - Battle Girl Callie",
     "tags": ["Trainer"]
   },
   "TRAINER_CALVIN_1_REWARD": {
-    "label": "TRAINER_CALVIN_1_REWARD",
+    "label": "Route 102 - Youngster Calvin",
     "tags": ["Trainer"]
   },
   "TRAINER_CAMDEN_REWARD": {
-    "label": "TRAINER_CAMDEN_REWARD",
+    "label": "Route 127 - Triathlete Camden",
     "tags": ["Trainer"]
   },
   "TRAINER_CAMERON_1_REWARD": {
-    "label": "TRAINER_CAMERON_1_REWARD",
+    "label": "Route 123 - Psychic Cameron",
     "tags": ["Trainer"]
   },
   "TRAINER_CAMRON_REWARD": {
-    "label": "TRAINER_CAMRON_REWARD",
+    "label": "Route 107 - Triathlete Camron",
     "tags": ["Trainer"]
   },
   "TRAINER_CARLEE_REWARD": {
-    "label": "TRAINER_CARLEE_REWARD",
+    "label": "Route 128 - Swimmer Carlee",
     "tags": ["Trainer"]
   },
   "TRAINER_CAROLINA_REWARD": {
-    "label": "TRAINER_CAROLINA_REWARD",
+    "label": "Route 108 - Cooltrainer Carolina",
     "tags": ["Trainer"]
   },
   "TRAINER_CAROLINE_REWARD": {
-    "label": "TRAINER_CAROLINE_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Caroline",
     "tags": ["Trainer"]
   },
   "TRAINER_CAROL_REWARD": {
-    "label": "TRAINER_CAROL_REWARD",
+    "label": "Route 112 - Picnicker Carol",
     "tags": ["Trainer"]
   },
   "TRAINER_CARTER_REWARD": {
-    "label": "TRAINER_CARTER_REWARD",
+    "label": "Route 109 - Fisherman Carter",
     "tags": ["Trainer"]
   },
   "TRAINER_CATHERINE_1_REWARD": {
-    "label": "TRAINER_CATHERINE_1_REWARD",
+    "label": "Route 119 - Pokemon Ranger Catherine",
     "tags": ["Trainer"]
   },
   "TRAINER_CEDRIC_REWARD": {
-    "label": "TRAINER_CEDRIC_REWARD",
+    "label": "Mt Pyre 6F - Psychic Cedric",
     "tags": ["Trainer"]
   },
   "TRAINER_CELIA_REWARD": {
-    "label": "TRAINER_CELIA_REWARD",
+    "label": "Route 111 - Picnicker Celia",
     "tags": ["Trainer"]
   },
   "TRAINER_CELINA_REWARD": {
-    "label": "TRAINER_CELINA_REWARD",
+    "label": "Route 111 - Aroma Lady Celina",
     "tags": ["Trainer"]
   },
   "TRAINER_CHAD_REWARD": {
-    "label": "TRAINER_CHAD_REWARD",
+    "label": "Route 124 - Swimmer Chad",
     "tags": ["Trainer"]
   },
   "TRAINER_CHANDLER_REWARD": {
-    "label": "TRAINER_CHANDLER_REWARD",
+    "label": "Route 109 - Tuber Chandler",
     "tags": ["Trainer"]
   },
   "TRAINER_CHARLIE_REWARD": {
-    "label": "TRAINER_CHARLIE_REWARD",
+    "label": "Abandoned Ship 1F - Tuber Charlie",
     "tags": ["Trainer"]
   },
   "TRAINER_CHARLOTTE_REWARD": {
-    "label": "TRAINER_CHARLOTTE_REWARD",
+    "label": "Route 114 - Picnicker Charlotte",
     "tags": ["Trainer"]
   },
   "TRAINER_CHASE_REWARD": {
-    "label": "TRAINER_CHASE_REWARD",
+    "label": "Route 129 - Triathlete Chase",
     "tags": ["Trainer"]
   },
   "TRAINER_CHESTER_REWARD": {
-    "label": "TRAINER_CHESTER_REWARD",
+    "label": "Route 118 - Bird Keeper Chester",
     "tags": ["Trainer"]
   },
   "TRAINER_CHIP_REWARD": {
-    "label": "TRAINER_CHIP_REWARD",
+    "label": "Route 120 - Ruin Maniac Chip",
     "tags": ["Trainer"]
   },
   "TRAINER_CHRIS_REWARD": {
-    "label": "TRAINER_CHRIS_REWARD",
+    "label": "Route 119 - Fisherman Chris",
     "tags": ["Trainer"]
   },
   "TRAINER_CINDY_1_REWARD": {
-    "label": "TRAINER_CINDY_1_REWARD",
+    "label": "Route 104 - Lady Cindy",
     "tags": ["Trainer"]
   },
   "TRAINER_CLARENCE_REWARD": {
-    "label": "TRAINER_CLARENCE_REWARD",
+    "label": "Route 129 - Swimmer Clarence",
     "tags": ["Trainer"]
   },
   "TRAINER_CLARISSA_REWARD": {
-    "label": "TRAINER_CLARISSA_REWARD",
+    "label": "Route 120 - Parasol Lady Clarissa",
     "tags": ["Trainer"]
   },
   "TRAINER_CLARK_REWARD": {
-    "label": "TRAINER_CLARK_REWARD",
+    "label": "Route 116 - Hiker Clark",
     "tags": ["Trainer"]
   },
   "TRAINER_CLAUDE_REWARD": {
-    "label": "TRAINER_CLAUDE_REWARD",
+    "label": "Route 114 - Fisherman Claude",
     "tags": ["Trainer"]
   },
   "TRAINER_CLIFFORD_REWARD": {
-    "label": "TRAINER_CLIFFORD_REWARD",
+    "label": "Mossdeep Gym - Gentleman Clifford",
     "tags": ["Trainer"]
   },
   "TRAINER_COBY_REWARD": {
-    "label": "TRAINER_COBY_REWARD",
+    "label": "Route 113 - Bird Keeper Coby",
     "tags": ["Trainer"]
   },
   "TRAINER_COLE_REWARD": {
-    "label": "TRAINER_COLE_REWARD",
+    "label": "Lavaridge Gym - Kindler Cole",
     "tags": ["Trainer"]
   },
   "TRAINER_COLIN_REWARD": {
-    "label": "TRAINER_COLIN_REWARD",
+    "label": "Route 120 - Bird Keeper Colin",
     "tags": ["Trainer"]
   },
   "TRAINER_COLTON_REWARD": {
-    "label": "TRAINER_COLTON_REWARD",
+    "label": "SS Tidal - Pokefan Colton",
     "tags": ["Trainer"]
   },
   "TRAINER_CONNIE_REWARD": {
-    "label": "TRAINER_CONNIE_REWARD",
+    "label": "Sootopolis Gym - Beauty Connie",
     "tags": ["Trainer"]
   },
   "TRAINER_CONOR_REWARD": {
-    "label": "TRAINER_CONOR_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_CORA_REWARD": {
-    "label": "TRAINER_CORA_REWARD",
+    "label": "Route 133 - Expert Conor",
     "tags": ["Trainer"]
   },
   "TRAINER_CORY_1_REWARD": {
-    "label": "TRAINER_CORY_1_REWARD",
+    "label": "Route 108 - Sailor Cory",
     "tags": ["Trainer"]
   },
   "TRAINER_CRISSY_REWARD": {
-    "label": "TRAINER_CRISSY_REWARD",
+    "label": "Sootopolis Gym - Lass Crissy",
     "tags": ["Trainer"]
   },
   "TRAINER_CRISTIAN_REWARD": {
-    "label": "TRAINER_CRISTIAN_REWARD",
+    "label": "Dewford Gym - Black Belt Cristian",
     "tags": ["Trainer"]
   },
   "TRAINER_CRISTIN_1_REWARD": {
-    "label": "TRAINER_CRISTIN_1_REWARD",
+    "label": "Route 121 - Cooltrainer Cristin",
     "tags": ["Trainer"]
   },
   "TRAINER_CYNDY_1_REWARD": {
-    "label": "TRAINER_CYNDY_1_REWARD",
+    "label": "Route 115 - Battle Girl Cyndy",
     "tags": ["Trainer"]
   },
   "TRAINER_DAISUKE_REWARD": {
-    "label": "TRAINER_DAISUKE_REWARD",
+    "label": "Route 111 - Black Belt Daisuke",
     "tags": ["Trainer"]
   },
   "TRAINER_DAISY_REWARD": {
-    "label": "TRAINER_DAISY_REWARD",
+    "label": "Route 103 - Aroma Lady Daisy",
     "tags": ["Trainer"]
   },
   "TRAINER_DALE_REWARD": {
-    "label": "TRAINER_DALE_REWARD",
+    "label": "Route 110 - Fisherman Dale",
     "tags": ["Trainer"]
   },
   "TRAINER_DALTON_1_REWARD": {
-    "label": "TRAINER_DALTON_1_REWARD",
+    "label": "Route 118 - Guitarist Dalton",
     "tags": ["Trainer"]
   },
   "TRAINER_DANA_REWARD": {
-    "label": "TRAINER_DANA_REWARD",
+    "label": "Route 132 - Swimmer Dana",
     "tags": ["Trainer"]
   },
   "TRAINER_DANIELLE_REWARD": {
-    "label": "TRAINER_DANIELLE_REWARD",
+    "label": "Lavaridge Gym - Battle Girl Danielle",
     "tags": ["Trainer"]
   },
   "TRAINER_DAPHNE_REWARD": {
-    "label": "TRAINER_DAPHNE_REWARD",
+    "label": "Sootopolis Gym - Lady Daphne",
     "tags": ["Trainer"]
   },
   "TRAINER_DARCY_REWARD": {
-    "label": "TRAINER_DARCY_REWARD",
+    "label": "Route 132 - Cooltrainer Darcy",
     "tags": ["Trainer"]
   },
   "TRAINER_DARIAN_REWARD": {
-    "label": "TRAINER_DARIAN_REWARD",
+    "label": "Route 104 - Fisherman Darian",
     "tags": ["Trainer"]
   },
   "TRAINER_DARIUS_REWARD": {
-    "label": "TRAINER_DARIUS_REWARD",
+    "label": "Fortree Gym - Bird Keeper Darius",
     "tags": ["Trainer"]
   },
   "TRAINER_DARRIN_REWARD": {
-    "label": "TRAINER_DARRIN_REWARD",
+    "label": "Route 107 - Swimmer Darrin",
     "tags": ["Trainer"]
   },
   "TRAINER_DAVID_REWARD": {
-    "label": "TRAINER_DAVID_REWARD",
+    "label": "Route 109 - Swimmer David",
     "tags": ["Trainer"]
   },
   "TRAINER_DAVIS_REWARD": {
-    "label": "TRAINER_DAVIS_REWARD",
+    "label": "Route 123 - Bug Catcher Davis",
     "tags": ["Trainer"]
   },
   "TRAINER_DAWSON_REWARD": {
-    "label": "TRAINER_DAWSON_REWARD",
+    "label": "Route 116 - Rich Boy Dawson",
     "tags": ["Trainer"]
   },
   "TRAINER_DAYTON_REWARD": {
-    "label": "TRAINER_DAYTON_REWARD",
+    "label": "Route 119 - Kindler Dayton",
     "tags": ["Trainer"]
   },
   "TRAINER_DEANDRE_REWARD": {
-    "label": "TRAINER_DEANDRE_REWARD",
+    "label": "Route 118 - Youngster Deandre",
     "tags": ["Trainer"]
   },
   "TRAINER_DEAN_REWARD": {
-    "label": "TRAINER_DEAN_REWARD",
+    "label": "Route 126 - Swimmer Dean",
     "tags": ["Trainer"]
   },
   "TRAINER_DEBRA_REWARD": {
-    "label": "TRAINER_DEBRA_REWARD",
+    "label": "Route 133 - Swimmer Debra",
     "tags": ["Trainer"]
   },
   "TRAINER_DECLAN_REWARD": {
-    "label": "TRAINER_DECLAN_REWARD",
+    "label": "Route 124 - Swimmer Declan",
     "tags": ["Trainer"]
   },
   "TRAINER_DEMETRIUS_REWARD": {
-    "label": "TRAINER_DEMETRIUS_REWARD",
+    "label": "Abandoned Ship 1F - Youngster Demetrius",
     "tags": ["Trainer"]
   },
   "TRAINER_DENISE_REWARD": {
-    "label": "TRAINER_DENISE_REWARD",
+    "label": "Route 107 - Swimmer Denise",
     "tags": ["Trainer"]
   },
   "TRAINER_DEREK_REWARD": {
-    "label": "TRAINER_DEREK_REWARD",
+    "label": "Route 117 - Bug Maniac Derek",
     "tags": ["Trainer"]
   },
   "TRAINER_DEVAN_REWARD": {
-    "label": "TRAINER_DEVAN_REWARD",
+    "label": "Route 116 - Hiker Devan",
     "tags": ["Trainer"]
   },
   "TRAINER_DIANA_1_REWARD": {
-    "label": "TRAINER_DIANA_1_REWARD",
+    "label": "Jagged Pass - Picnicker Diana",
     "tags": ["Trainer"]
   },
   "TRAINER_DIANNE_REWARD": {
-    "label": "TRAINER_DIANNE_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Dianne",
     "tags": ["Trainer"]
   },
   "TRAINER_DILLON_REWARD": {
-    "label": "TRAINER_DILLON_REWARD",
+    "label": "Route 113 - Youngster Dillon",
     "tags": ["Trainer"]
   },
   "TRAINER_DOMINIK_REWARD": {
-    "label": "TRAINER_DOMINIK_REWARD",
+    "label": "Route 105 - Swimmer Dominik",
     "tags": ["Trainer"]
   },
   "TRAINER_DONALD_REWARD": {
-    "label": "TRAINER_DONALD_REWARD",
+    "label": "Route 119 - Bug Maniac Donald",
     "tags": ["Trainer"]
   },
   "TRAINER_DONNY_REWARD": {
-    "label": "TRAINER_DONNY_REWARD",
+    "label": "Route 127 - Triathlete Donny",
     "tags": ["Trainer"]
   },
   "TRAINER_DOUGLAS_REWARD": {
-    "label": "TRAINER_DOUGLAS_REWARD",
+    "label": "Route 106 - Swimmer Douglas",
     "tags": ["Trainer"]
   },
   "TRAINER_DOUG_REWARD": {
-    "label": "TRAINER_DOUG_REWARD",
+    "label": "Route 119 - Bug Catcher Doug",
     "tags": ["Trainer"]
   },
   "TRAINER_DRAKE_REWARD": {
-    "label": "TRAINER_DRAKE_REWARD",
+    "label": "Ever Grande City - Elite Four Drake",
     "tags": ["Trainer"]
   },
   "TRAINER_DREW_REWARD": {
-    "label": "TRAINER_DREW_REWARD",
+    "label": "Route 111 - Camper Drew",
     "tags": ["Trainer"]
   },
   "TRAINER_DUNCAN_REWARD": {
-    "label": "TRAINER_DUNCAN_REWARD",
+    "label": "Abandoned Ship B1F - Sailor Duncan",
     "tags": ["Trainer"]
   },
   "TRAINER_DUSTY_1_REWARD": {
-    "label": "TRAINER_DUSTY_1_REWARD",
+    "label": "Route 111 - Ruin Maniac Dusty",
     "tags": ["Trainer"]
   },
   "TRAINER_DWAYNE_REWARD": {
-    "label": "TRAINER_DWAYNE_REWARD",
+    "label": "Route 109 - Sailor Dwayne",
     "tags": ["Trainer"]
   },
   "TRAINER_DYLAN_1_REWARD": {
-    "label": "TRAINER_DYLAN_1_REWARD",
+    "label": "Route 117 - Triathlete Dylan",
     "tags": ["Trainer"]
   },
   "TRAINER_DEZ_AND_LUKE_REWARD": {
-    "label": "TRAINER_DEZ_AND_LUKE_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_EDDIE_REWARD": {
-    "label": "TRAINER_EDDIE_REWARD",
+    "label": "Mt Pyre 2F - Young Couple Dez and Luke",
     "tags": ["Trainer"]
   },
   "TRAINER_EDGAR_REWARD": {
-    "label": "TRAINER_EDGAR_REWARD",
+    "label": "Victory Road 1F - Cooltrainer Edgar",
     "tags": ["Trainer"]
   },
   "TRAINER_EDMOND_REWARD": {
-    "label": "TRAINER_EDMOND_REWARD",
+    "label": "Route 109 - Sailor Edmond",
     "tags": ["Trainer"]
   },
   "TRAINER_EDWARDO_REWARD": {
-    "label": "TRAINER_EDWARDO_REWARD",
+    "label": "Fortree Gym - Bird Keeper Edwardo",
     "tags": ["Trainer"]
   },
   "TRAINER_EDWARD_REWARD": {
-    "label": "TRAINER_EDWARD_REWARD",
+    "label": "Route 110 - Psychic Edward",
     "tags": ["Trainer"]
   },
   "TRAINER_EDWIN_1_REWARD": {
-    "label": "TRAINER_EDWIN_1_REWARD",
+    "label": "Route 110 - Collector Edwin",
     "tags": ["Trainer"]
   },
   "TRAINER_ED_REWARD": {
-    "label": "TRAINER_ED_REWARD",
+    "label": "Route 123 - Collector Ed",
     "tags": ["Trainer"]
   },
   "TRAINER_ELIJAH_REWARD": {
-    "label": "TRAINER_ELIJAH_REWARD",
+    "label": "Route 109 - Bird Keeper Elijah",
     "tags": ["Trainer"]
   },
   "TRAINER_ELI_REWARD": {
-    "label": "TRAINER_ELI_REWARD",
+    "label": "Lavaridge Gym - Hiker Eli",
     "tags": ["Trainer"]
   },
   "TRAINER_ELLIOT_1_REWARD": {
-    "label": "TRAINER_ELLIOT_1_REWARD",
+    "label": "Route 106 - Fisherman Elliot",
     "tags": ["Trainer"]
   },
   "TRAINER_ERIC_REWARD": {
-    "label": "TRAINER_ERIC_REWARD",
+    "label": "Jagged Pass - Hiker Eric",
     "tags": ["Trainer"]
   },
   "TRAINER_ERNEST_1_REWARD": {
-    "label": "TRAINER_ERNEST_1_REWARD",
+    "label": "Route 125 - Sailor Ernest",
     "tags": ["Trainer"]
   },
   "TRAINER_ETHAN_1_REWARD": {
-    "label": "TRAINER_ETHAN_1_REWARD",
+    "label": "Jagged Pass - Camper Ethan",
     "tags": ["Trainer"]
   },
   "TRAINER_FABIAN_REWARD": {
-    "label": "TRAINER_FABIAN_REWARD",
+    "label": "Route 119 - Guitarist Fabian",
     "tags": ["Trainer"]
   },
   "TRAINER_FELIX_REWARD": {
-    "label": "TRAINER_FELIX_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Felix",
     "tags": ["Trainer"]
   },
   "TRAINER_FERNANDO_1_REWARD": {
-    "label": "TRAINER_FERNANDO_1_REWARD",
+    "label": "Route 123 - Guitarist Fernando",
     "tags": ["Trainer"]
   },
   "TRAINER_FLANNERY_1_REWARD": {
-    "label": "TRAINER_FLANNERY_1_REWARD",
+    "label": "Lavaridge Gym - Leader Flannery",
     "tags": ["Trainer"]
   },
   "TRAINER_FLINT_REWARD": {
-    "label": "TRAINER_FLINT_REWARD",
+    "label": "Fortree Gym - Camper Flint",
     "tags": ["Trainer"]
   },
   "TRAINER_FOSTER_REWARD": {
-    "label": "TRAINER_FOSTER_REWARD",
+    "label": "Route 105 - Ruin Maniac Foster",
     "tags": ["Trainer"]
   },
   "TRAINER_FRANKLIN_REWARD": {
-    "label": "TRAINER_FRANKLIN_REWARD",
+    "label": "Route 133 - Swimmer Franklin",
     "tags": ["Trainer"]
   },
   "TRAINER_FREDRICK_REWARD": {
-    "label": "TRAINER_FREDRICK_REWARD",
+    "label": "Route 123 - Expert Fredrick",
     "tags": ["Trainer"]
   },
   "TRAINER_GABRIELLE_1_REWARD": {
-    "label": "TRAINER_GABRIELLE_1_REWARD",
+    "label": "Mt Pyre 3F - Pokemon Breeder Gabrielle",
     "tags": ["Trainer"]
   },
   "TRAINER_GARRET_REWARD": {
-    "label": "TRAINER_GARRET_REWARD",
+    "label": "SS Tidal - Rich Boy Garret",
     "tags": ["Trainer"]
   },
   "TRAINER_GARRISON_REWARD": {
-    "label": "TRAINER_GARRISON_REWARD",
+    "label": "Abandoned Ship 1F - Ruin Maniac Garrison",
     "tags": ["Trainer"]
   },
   "TRAINER_GEORGE_REWARD": {
-    "label": "TRAINER_GEORGE_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_GEORGIA_REWARD": {
-    "label": "TRAINER_GEORGIA_REWARD",
+    "label": "Petalburg Gym - Cooltrainer George",
     "tags": ["Trainer"]
   },
   "TRAINER_GERALD_REWARD": {
-    "label": "TRAINER_GERALD_REWARD",
+    "label": "Lavaridge Gym - Cooltrainer Gerald",
     "tags": ["Trainer"]
   },
   "TRAINER_GILBERT_REWARD": {
-    "label": "TRAINER_GILBERT_REWARD",
+    "label": "Route 132 - Swimmer Gilbert",
     "tags": ["Trainer"]
   },
   "TRAINER_GINA_AND_MIA_1_REWARD": {
-    "label": "TRAINER_GINA_AND_MIA_1_REWARD",
+    "label": "Route 104 - Twins Gina and Mia",
     "tags": ["Trainer"]
   },
   "TRAINER_GLACIA_REWARD": {
-    "label": "TRAINER_GLACIA_REWARD",
+    "label": "Ever Grande City - Elite Four Glacia",
     "tags": ["Trainer"]
   },
   "TRAINER_GRACE_REWARD": {
-    "label": "TRAINER_GRACE_REWARD",
+    "label": "Route 124 - Swimmer Grace",
     "tags": ["Trainer"]
   },
   "TRAINER_GREG_REWARD": {
-    "label": "TRAINER_GREG_REWARD",
+    "label": "Route 119 - Bug Catcher Greg",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD",
+    "label": "Aqua Hideout 1F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 6",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 7",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD": {
-    "label": "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_GRUNT_JAGGED_PASS_REWARD": {
-    "label": "TRAINER_GRUNT_JAGGED_PASS_REWARD",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 8",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD",
+    "label": "Magma Hideout 3F - Team Magma Grunt 10",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD",
+    "label": "Magma Hideout 4F - Team Magma Grunt 11",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD",
+    "label": "Magma Hideout 4F - Team Magma Grunt 12",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD",
+    "label": "Magma Hideout 4F - Team Magma Grunt 13",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 14",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 15",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD",
+    "label": "Magma Hideout 3F - Team Magma Grunt 16",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD",
+    "label": "Magma Hideout 1F - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD",
+    "label": "Magma Hideout 1F - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 6",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 7",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD",
+    "label": "Magma Hideout 2F - Team Magma Grunt 8",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD": {
-    "label": "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD",
+    "label": "Magma Hideout 3F - Team Magma Grunt 9",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD": {
-    "label": "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD",
+    "label": "Mt Chimney - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD": {
-    "label": "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD",
+    "label": "Mt Chimney - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_1_REWARD": {
-    "label": "TRAINER_GRUNT_MT_PYRE_1_REWARD",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_2_REWARD": {
-    "label": "TRAINER_GRUNT_MT_PYRE_2_REWARD",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_3_REWARD": {
-    "label": "TRAINER_GRUNT_MT_PYRE_3_REWARD",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_4_REWARD": {
-    "label": "TRAINER_GRUNT_MT_PYRE_4_REWARD",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MUSEUM_1_REWARD": {
-    "label": "TRAINER_GRUNT_MUSEUM_1_REWARD",
+    "label": "Oceanic Museum - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MUSEUM_2_REWARD": {
-    "label": "TRAINER_GRUNT_MUSEUM_2_REWARD",
+    "label": "Oceanic Museum - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_PETALBURG_WOODS_REWARD": {
-    "label": "TRAINER_GRUNT_PETALBURG_WOODS_REWARD",
+    "label": "Petalburg Woods - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD": {
-    "label": "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD",
+    "label": "Rusturf Tunnel - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD": {
-    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD",
+    "label": "Seafloor Cavern Room 1 - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD": {
-    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD",
+    "label": "Seafloor Cavern Room 1 - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD": {
-    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD",
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD": {
-    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD",
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD": {
-    "label": "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD",
+    "label": "Seafloor Cavern Room 3 - Team Aqua Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_1_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_1_REWARD",
+    "label": "Space Center - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_2_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_2_REWARD",
+    "label": "Space Center - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_3_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_3_REWARD",
+    "label": "Space Center - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_4_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_4_REWARD",
+    "label": "Space Center - Team Magma Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_5_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_5_REWARD",
+    "label": "Space Center - Team Magma Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_6_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_6_REWARD",
+    "label": "Space Center - Team Magma Grunt 6",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_7_REWARD": {
-    "label": "TRAINER_GRUNT_SPACE_CENTER_7_REWARD",
+    "label": "Space Center - Team Magma Grunt 7",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_1_REWARD": {
-    "label": "TRAINER_GRUNT_WEATHER_INST_1_REWARD",
+    "label": "Weather Institute 1F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_2_REWARD": {
-    "label": "TRAINER_GRUNT_WEATHER_INST_2_REWARD",
+    "label": "Weather Institute 2F - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_3_REWARD": {
-    "label": "TRAINER_GRUNT_WEATHER_INST_3_REWARD",
+    "label": "Weather Institute 2F - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_4_REWARD": {
-    "label": "TRAINER_GRUNT_WEATHER_INST_4_REWARD",
+    "label": "Weather Institute 1F - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_5_REWARD": {
-    "label": "TRAINER_GRUNT_WEATHER_INST_5_REWARD",
+    "label": "Weather Institute 2F - Team Aqua Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GWEN_REWARD": {
-    "label": "TRAINER_GWEN_REWARD",
+    "label": "Route 109 - Tuber Gwen",
     "tags": ["Trainer"]
   },
   "TRAINER_HAILEY_REWARD": {
-    "label": "TRAINER_HAILEY_REWARD",
+    "label": "Route 109 - Tuber Hailey",
     "tags": ["Trainer"]
   },
   "TRAINER_HALEY_1_REWARD": {
-    "label": "TRAINER_HALEY_1_REWARD",
+    "label": "Route 104 - Lass Haley",
     "tags": ["Trainer"]
   },
   "TRAINER_HALLE_REWARD": {
-    "label": "TRAINER_HALLE_REWARD",
+    "label": "Victory Road B1F - Cooltrainer Halle",
     "tags": ["Trainer"]
   },
   "TRAINER_HANNAH_REWARD": {
-    "label": "TRAINER_HANNAH_REWARD",
+    "label": "Mossdeep Gym - Psychic Hannah",
     "tags": ["Trainer"]
   },
   "TRAINER_HARRISON_REWARD": {
-    "label": "TRAINER_HARRISON_REWARD",
+    "label": "Route 128 - Swimmer Harrison",
     "tags": ["Trainer"]
   },
   "TRAINER_HAYDEN_REWARD": {
-    "label": "TRAINER_HAYDEN_REWARD",
+    "label": "Route 111 - Kindler Hayden",
     "tags": ["Trainer"]
   },
   "TRAINER_HECTOR_REWARD": {
-    "label": "TRAINER_HECTOR_REWARD",
+    "label": "Route 115 - Collector Hector",
     "tags": ["Trainer"]
   },
   "TRAINER_HEIDI_REWARD": {
-    "label": "TRAINER_HEIDI_REWARD",
+    "label": "Route 111 - Picnicker Heidi",
     "tags": ["Trainer"]
   },
   "TRAINER_HELENE_REWARD": {
-    "label": "TRAINER_HELENE_REWARD",
+    "label": "Route 115 - Battle Girl Helene",
     "tags": ["Trainer"]
   },
   "TRAINER_HENRY_REWARD": {
-    "label": "TRAINER_HENRY_REWARD",
+    "label": "Route 127 - Fisherman Henry",
     "tags": ["Trainer"]
   },
   "TRAINER_HERMAN_REWARD": {
-    "label": "TRAINER_HERMAN_REWARD",
+    "label": "Route 131 - Swimmer Herman",
     "tags": ["Trainer"]
   },
   "TRAINER_HIDEO_REWARD": {
-    "label": "TRAINER_HIDEO_REWARD",
+    "label": "Route 119 - Ninja Boy Hideo",
     "tags": ["Trainer"]
   },
   "TRAINER_HITOSHI_REWARD": {
-    "label": "TRAINER_HITOSHI_REWARD",
+    "label": "Route 134 - Black Belt Hitoshi",
     "tags": ["Trainer"]
   },
   "TRAINER_HOPE_REWARD": {
-    "label": "TRAINER_HOPE_REWARD",
+    "label": "Victory Road 1F - Cooltrainer Hope",
     "tags": ["Trainer"]
   },
   "TRAINER_HUDSON_REWARD": {
-    "label": "TRAINER_HUDSON_REWARD",
+    "label": "Route 134 - Sailor Hudson",
     "tags": ["Trainer"]
   },
   "TRAINER_HUEY_REWARD": {
-    "label": "TRAINER_HUEY_REWARD",
+    "label": "Route 109 - Sailor Huey",
     "tags": ["Trainer"]
   },
   "TRAINER_HUGH_REWARD": {
-    "label": "TRAINER_HUGH_REWARD",
+    "label": "Route 119 - Bird Keeper Hugh",
     "tags": ["Trainer"]
   },
   "TRAINER_HUMBERTO_REWARD": {
-    "label": "TRAINER_HUMBERTO_REWARD",
+    "label": "Fortree Gym - Bird Keeper Humberto",
     "tags": ["Trainer"]
   },
   "TRAINER_IMANI_REWARD": {
-    "label": "TRAINER_IMANI_REWARD",
+    "label": "Route 105 - Swimmer Imani",
     "tags": ["Trainer"]
   },
   "TRAINER_IRENE_REWARD": {
-    "label": "TRAINER_IRENE_REWARD",
+    "label": "Route 111 - Picnicker Irene",
     "tags": ["Trainer"]
   },
   "TRAINER_ISAAC_1_REWARD": {
-    "label": "TRAINER_ISAAC_1_REWARD",
+    "label": "Route 117 - Pokemon Breeder Isaac",
     "tags": ["Trainer"]
   },
   "TRAINER_ISABELLA_REWARD": {
-    "label": "TRAINER_ISABELLA_REWARD",
+    "label": "Route 124 - Triathlete Isabella",
     "tags": ["Trainer"]
   },
   "TRAINER_ISABELLE_REWARD": {
-    "label": "TRAINER_ISABELLE_REWARD",
+    "label": "Route 103 - Swimmer Isabelle",
     "tags": ["Trainer"]
   },
   "TRAINER_ISABEL_1_REWARD": {
-    "label": "TRAINER_ISABEL_1_REWARD",
+    "label": "Route 110 - Pokefan Isabel",
     "tags": ["Trainer"]
   },
   "TRAINER_ISAIAH_1_REWARD": {
-    "label": "TRAINER_ISAIAH_1_REWARD",
+    "label": "Route 128 - Triathlete Isaiah",
     "tags": ["Trainer"]
   },
   "TRAINER_ISOBEL_REWARD": {
-    "label": "TRAINER_ISOBEL_REWARD",
+    "label": "Route 126 - Triathlete Isobel",
     "tags": ["Trainer"]
   },
   "TRAINER_IVAN_REWARD": {
-    "label": "TRAINER_IVAN_REWARD",
+    "label": "Route 104 - Fisherman Ivan",
     "tags": ["Trainer"]
   },
   "TRAINER_JACE_REWARD": {
-    "label": "TRAINER_JACE_REWARD",
+    "label": "Lavaridge Gym - Kindler Jace",
     "tags": ["Trainer"]
   },
   "TRAINER_JACKI_1_REWARD": {
-    "label": "TRAINER_JACKI_1_REWARD",
+    "label": "Route 123 - Psychic Jacki",
     "tags": ["Trainer"]
   },
   "TRAINER_JACKSON_1_REWARD": {
-    "label": "TRAINER_JACKSON_1_REWARD",
+    "label": "Route 119 - Pokemon Ranger Jackson",
     "tags": ["Trainer"]
   },
   "TRAINER_JACK_REWARD": {
-    "label": "TRAINER_JACK_REWARD",
+    "label": "Route 134 - Swimmer Jack",
     "tags": ["Trainer"]
   },
   "TRAINER_JACLYN_REWARD": {
-    "label": "TRAINER_JACLYN_REWARD",
+    "label": "Route 110 - Psychic Jaclyn",
     "tags": ["Trainer"]
   },
   "TRAINER_JACOB_REWARD": {
-    "label": "TRAINER_JACOB_REWARD",
+    "label": "Route 110 - Triathlete Jacob",
     "tags": ["Trainer"]
   },
   "TRAINER_JAIDEN_REWARD": {
-    "label": "TRAINER_JAIDEN_REWARD",
+    "label": "Route 115 - Ninja Boy Jaiden",
     "tags": ["Trainer"]
   },
   "TRAINER_JAMES_1_REWARD": {
-    "label": "TRAINER_JAMES_1_REWARD",
+    "label": "Petalburg Woods - Bug Catcher James",
     "tags": ["Trainer"]
   },
   "TRAINER_JANICE_REWARD": {
-    "label": "TRAINER_JANICE_REWARD",
+    "label": "Route 116 - Lass Janice",
     "tags": ["Trainer"]
   },
   "TRAINER_JANI_REWARD": {
-    "label": "TRAINER_JANI_REWARD",
+    "label": "Abandoned Ship 1F - Tuber Jani",
     "tags": ["Trainer"]
   },
   "TRAINER_JARED_REWARD": {
-    "label": "TRAINER_JARED_REWARD",
+    "label": "Fortree Gym - Bird Keeper Jared",
     "tags": ["Trainer"]
   },
   "TRAINER_JASMINE_REWARD": {
-    "label": "TRAINER_JASMINE_REWARD",
+    "label": "Route 110 - Triathlete Jasmine",
     "tags": ["Trainer"]
   },
   "TRAINER_JAYLEN_REWARD": {
-    "label": "TRAINER_JAYLEN_REWARD",
+    "label": "Route 113 - Youngster Jaylen",
     "tags": ["Trainer"]
   },
   "TRAINER_JAZMYN_REWARD": {
-    "label": "TRAINER_JAZMYN_REWARD",
+    "label": "Route 123 - Cooltrainer Jazmyn",
     "tags": ["Trainer"]
   },
   "TRAINER_JEFFREY_1_REWARD": {
-    "label": "TRAINER_JEFFREY_1_REWARD",
+    "label": "Route 120 - Bug Maniac Jeffrey",
     "tags": ["Trainer"]
   },
   "TRAINER_JEFF_REWARD": {
-    "label": "TRAINER_JEFF_REWARD",
+    "label": "Lavaridge Gym - Kindler Jeff",
     "tags": ["Trainer"]
   },
   "TRAINER_JENNA_REWARD": {
-    "label": "TRAINER_JENNA_REWARD",
+    "label": "Route 120 - Pokemon Ranger Jenna",
     "tags": ["Trainer"]
   },
   "TRAINER_JENNIFER_REWARD": {
-    "label": "TRAINER_JENNIFER_REWARD",
+    "label": "Route 120 - Cooltrainer Jennifer",
     "tags": ["Trainer"]
   },
   "TRAINER_JENNY_1_REWARD": {
-    "label": "TRAINER_JENNY_1_REWARD",
+    "label": "Route 124 - Swimmer Jenny",
     "tags": ["Trainer"]
   },
   "TRAINER_JEROME_REWARD": {
-    "label": "TRAINER_JEROME_REWARD",
+    "label": "Route 108 - Swimmer Jerome",
     "tags": ["Trainer"]
   },
   "TRAINER_JERRY_1_REWARD": {
-    "label": "TRAINER_JERRY_1_REWARD",
+    "label": "Route 116 - School Kid Jerry",
     "tags": ["Trainer"]
   },
   "TRAINER_JESSICA_1_REWARD": {
-    "label": "TRAINER_JESSICA_1_REWARD",
+    "label": "Route 121 - Beauty Jessica",
     "tags": ["Trainer"]
   },
   "TRAINER_JOCELYN_REWARD": {
-    "label": "TRAINER_JOCELYN_REWARD",
+    "label": "Dewford Gym - Battle Girl Jocelyn",
     "tags": ["Trainer"]
   },
   "TRAINER_JODY_REWARD": {
-    "label": "TRAINER_JODY_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Jody",
     "tags": ["Trainer"]
   },
   "TRAINER_JOEY_REWARD": {
-    "label": "TRAINER_JOEY_REWARD",
+    "label": "Route 116 - Youngster Joey",
     "tags": ["Trainer"]
   },
   "TRAINER_JOHANNA_REWARD": {
-    "label": "TRAINER_JOHANNA_REWARD",
+    "label": "Route 109 - Beauty Johanna",
     "tags": ["Trainer"]
   },
   "TRAINER_JOHN_AND_JAY_1_REWARD": {
-    "label": "TRAINER_JOHN_AND_JAY_1_REWARD",
+    "label": "Meteor Falls 1F - Old Couple John and Jay",
     "tags": ["Trainer"]
   },
   "TRAINER_JOHNSON_REWARD": {
-    "label": "TRAINER_JOHNSON_REWARD",
+    "label": "Route 116 - Youngster Johnson",
     "tags": ["Trainer"]
   },
   "TRAINER_JONAH_REWARD": {
-    "label": "TRAINER_JONAH_REWARD",
+    "label": "Route 127 - Fisherman Jonah",
     "tags": ["Trainer"]
   },
   "TRAINER_JONAS_REWARD": {
-    "label": "TRAINER_JONAS_REWARD",
+    "label": "Route 123 - Ninja Boy Jonas",
     "tags": ["Trainer"]
   },
   "TRAINER_JONATHAN_REWARD": {
-    "label": "TRAINER_JONATHAN_REWARD",
+    "label": "Route 132 - Cooltrainer Jonathan",
     "tags": ["Trainer"]
   },
   "TRAINER_JOSEPH_REWARD": {
-    "label": "TRAINER_JOSEPH_REWARD",
+    "label": "Route 110 - Guitarist Joseph",
     "tags": ["Trainer"]
   },
   "TRAINER_JOSE_REWARD": {
-    "label": "TRAINER_JOSE_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_JOSHUA_REWARD": {
-    "label": "TRAINER_JOSHUA_REWARD",
+    "label": "Route 116 - Bug Catcher Jose",
     "tags": ["Trainer"]
   },
   "TRAINER_JOSH_REWARD": {
-    "label": "TRAINER_JOSH_REWARD",
+    "label": "Rustboro Gym - Youngster Josh",
     "tags": ["Trainer"]
   },
   "TRAINER_JOSUE_REWARD": {
-    "label": "TRAINER_JOSUE_REWARD",
+    "label": "Route 105 - Bird Keeper Josue",
     "tags": ["Trainer"]
   },
   "TRAINER_JUAN_1_REWARD": {
-    "label": "TRAINER_JUAN_1_REWARD",
+    "label": "Sootopolis Gym - Leader Juan",
     "tags": ["Trainer"]
   },
   "TRAINER_JULIE_REWARD": {
-    "label": "TRAINER_JULIE_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Julie",
     "tags": ["Trainer"]
   },
   "TRAINER_JULIO_REWARD": {
-    "label": "TRAINER_JULIO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_JUSTIN_REWARD": {
-    "label": "TRAINER_JUSTIN_REWARD",
+    "label": "Jagged Pass - Triathlete Julio",
     "tags": ["Trainer"]
   },
   "TRAINER_KAI_REWARD": {
-    "label": "TRAINER_KAI_REWARD",
+    "label": "Route 114 - Fisherman Kai",
     "tags": ["Trainer"]
   },
   "TRAINER_KALEB_REWARD": {
-    "label": "TRAINER_KALEB_REWARD",
+    "label": "Route 110 - Pokefan Kaleb",
     "tags": ["Trainer"]
   },
   "TRAINER_KARA_REWARD": {
-    "label": "TRAINER_KARA_REWARD",
+    "label": "Route 131 - Swimmer Kara",
     "tags": ["Trainer"]
   },
   "TRAINER_KAREN_1_REWARD": {
-    "label": "TRAINER_KAREN_1_REWARD",
+    "label": "Route 116 - School Kid Karen",
     "tags": ["Trainer"]
   },
   "TRAINER_KATE_AND_JOY_REWARD": {
-    "label": "TRAINER_KATE_AND_JOY_REWARD",
+    "label": "Route 121 - Sr. and Jr. Kate and Joy",
     "tags": ["Trainer"]
   },
   "TRAINER_KATELYNN_REWARD": {
-    "label": "TRAINER_KATELYNN_REWARD",
+    "label": "Victory Road 1F - Cooltrainer Katelynn",
     "tags": ["Trainer"]
   },
   "TRAINER_KATELYN_1_REWARD": {
-    "label": "TRAINER_KATELYN_1_REWARD",
+    "label": "Route 128 - Triathlete Katelyn",
     "tags": ["Trainer"]
   },
   "TRAINER_KATHLEEN_REWARD": {
-    "label": "TRAINER_KATHLEEN_REWARD",
+    "label": "Mossdeep Gym - Hex Maniac Kathleen",
     "tags": ["Trainer"]
   },
   "TRAINER_KATIE_REWARD": {
-    "label": "TRAINER_KATIE_REWARD",
+    "label": "Route 130 - Swimmer Katie",
     "tags": ["Trainer"]
   },
   "TRAINER_KAYLA_REWARD": {
-    "label": "TRAINER_KAYLA_REWARD",
+    "label": "Mt Pyre 3F - Psychic Kayla",
     "tags": ["Trainer"]
   },
   "TRAINER_KAYLEY_REWARD": {
-    "label": "TRAINER_KAYLEY_REWARD",
+    "label": "Route 123 - Parasol Lady Kayley",
     "tags": ["Trainer"]
   },
   "TRAINER_KEEGAN_REWARD": {
-    "label": "TRAINER_KEEGAN_REWARD",
+    "label": "Lavaridge Gym - Kindler Keegan",
     "tags": ["Trainer"]
   },
   "TRAINER_KEIGO_REWARD": {
-    "label": "TRAINER_KEIGO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_KEIRA_REWARD": {
-    "label": "TRAINER_KEIRA_REWARD",
+    "label": "Route 120 - Ninja Boy Keigo",
     "tags": ["Trainer"]
   },
   "TRAINER_KELVIN_REWARD": {
-    "label": "TRAINER_KELVIN_REWARD",
+    "label": "Route 134 - Sailor Kelvin",
     "tags": ["Trainer"]
   },
   "TRAINER_KENT_REWARD": {
-    "label": "TRAINER_KENT_REWARD",
+    "label": "Route 119 - Bug Catcher Kent",
     "tags": ["Trainer"]
   },
   "TRAINER_KEVIN_REWARD": {
-    "label": "TRAINER_KEVIN_REWARD",
+    "label": "Route 131 - Swimmer Kevin",
     "tags": ["Trainer"]
   },
   "TRAINER_KIM_AND_IRIS_REWARD": {
-    "label": "TRAINER_KIM_AND_IRIS_REWARD",
+    "label": "Route 125 - Sr. and Jr. Kim and Iris",
     "tags": ["Trainer"]
   },
   "TRAINER_KINDRA_REWARD": {
-    "label": "TRAINER_KINDRA_REWARD",
+    "label": "Route 123 - Hex Maniac Kindra",
     "tags": ["Trainer"]
   },
   "TRAINER_KIRA_AND_DAN_1_REWARD": {
-    "label": "TRAINER_KIRA_AND_DAN_1_REWARD",
+    "label": "Abandoned Ship 1F - Young Couple Kira and Dan",
     "tags": ["Trainer"]
   },
   "TRAINER_KIRK_REWARD": {
-    "label": "TRAINER_KIRK_REWARD",
+    "label": "Mauville Gym - Guitarist Kirk",
     "tags": ["Trainer"]
   },
   "TRAINER_KIYO_REWARD": {
-    "label": "TRAINER_KIYO_REWARD",
+    "label": "Route 132 - Black Belt Kiyo",
     "tags": ["Trainer"]
   },
   "TRAINER_KOICHI_REWARD": {
-    "label": "TRAINER_KOICHI_REWARD",
+    "label": "Route 115 - Black Belt Koichi",
     "tags": ["Trainer"]
   },
   "TRAINER_KOJI_1_REWARD": {
-    "label": "TRAINER_KOJI_1_REWARD",
+    "label": "Route 127 - Black Belt Koji",
     "tags": ["Trainer"]
   },
   "TRAINER_KYLA_REWARD": {
-    "label": "TRAINER_KYLA_REWARD",
+    "label": "Route 106 - Swimmer Kyla",
     "tags": ["Trainer"]
   },
   "TRAINER_KYRA_REWARD": {
-    "label": "TRAINER_KYRA_REWARD",
+    "label": "Route 115 - Triathlete Kyra",
     "tags": ["Trainer"]
   },
   "TRAINER_LAO_1_REWARD": {
-    "label": "TRAINER_LAO_1_REWARD",
+    "label": "Route 113 - Ninja Boy Lao",
     "tags": ["Trainer"]
   },
   "TRAINER_LARRY_REWARD": {
-    "label": "TRAINER_LARRY_REWARD",
+    "label": "Route 112 - Camper Larry",
     "tags": ["Trainer"]
   },
   "TRAINER_LAURA_REWARD": {
-    "label": "TRAINER_LAURA_REWARD",
+    "label": "Dewford Gym - Battle Girl Laura",
     "tags": ["Trainer"]
   },
   "TRAINER_LAUREL_REWARD": {
-    "label": "TRAINER_LAUREL_REWARD",
+    "label": "Route 134 - Swimmer Laurel",
     "tags": ["Trainer"]
   },
   "TRAINER_LAWRENCE_REWARD": {
-    "label": "TRAINER_LAWRENCE_REWARD",
+    "label": "Route 113 - Camper Lawrence",
     "tags": ["Trainer"]
   },
   "TRAINER_LEA_AND_JED_REWARD": {
-    "label": "TRAINER_LEA_AND_JED_REWARD",
+    "label": "SS Tidal - Young Couple Lea and Jed",
     "tags": ["Trainer"]
   },
   "TRAINER_LEAH_REWARD": {
-    "label": "TRAINER_LEAH_REWARD",
+    "label": "Mt Pyre 2F - Hex Maniac Leah",
     "tags": ["Trainer"]
   },
   "TRAINER_LENNY_REWARD": {
-    "label": "TRAINER_LENNY_REWARD",
+    "label": "Route 114 - Hiker Lenny",
     "tags": ["Trainer"]
   },
   "TRAINER_LEONARDO_REWARD": {
-    "label": "TRAINER_LEONARDO_REWARD",
+    "label": "Route 126 - Swimmer Leonardo",
     "tags": ["Trainer"]
   },
   "TRAINER_LEONARD_REWARD": {
-    "label": "TRAINER_LEONARD_REWARD",
+    "label": "SS Tidal - Sailor Leonard",
     "tags": ["Trainer"]
   },
   "TRAINER_LEONEL_REWARD": {
-    "label": "TRAINER_LEONEL_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_LEROY_REWARD": {
-    "label": "TRAINER_LEROY_REWARD",
+    "label": "Route 120 - Cooltrainer Leonel",
     "tags": ["Trainer"]
   },
   "TRAINER_LILA_AND_ROY_1_REWARD": {
-    "label": "TRAINER_LILA_AND_ROY_1_REWARD",
+    "label": "Route 124 - Sis and Bro Lila and Roy",
     "tags": ["Trainer"]
   },
   "TRAINER_LILITH_REWARD": {
-    "label": "TRAINER_LILITH_REWARD",
+    "label": "Dewford Gym - Battle Girl Lilith",
     "tags": ["Trainer"]
   },
   "TRAINER_LINDA_REWARD": {
-    "label": "TRAINER_LINDA_REWARD",
+    "label": "Route 133 - Swimmer Linda",
     "tags": ["Trainer"]
   },
   "TRAINER_LISA_AND_RAY_REWARD": {
-    "label": "TRAINER_LISA_AND_RAY_REWARD",
+    "label": "Route 107 - Sis and Bro Lisa and Ray",
     "tags": ["Trainer"]
   },
   "TRAINER_LOLA_1_REWARD": {
-    "label": "TRAINER_LOLA_1_REWARD",
+    "label": "Route 109 - Tuber Lola",
     "tags": ["Trainer"]
   },
   "TRAINER_LORENZO_REWARD": {
-    "label": "TRAINER_LORENZO_REWARD",
+    "label": "Route 120 - Pokemon Ranger Lorenzo",
     "tags": ["Trainer"]
   },
   "TRAINER_LUCAS_1_REWARD": {
-    "label": "TRAINER_LUCAS_1_REWARD",
+    "label": "Route 114 - Hiker Lucas",
     "tags": ["Trainer"]
   },
   "TRAINER_LUIS_REWARD": {
-    "label": "TRAINER_LUIS_REWARD",
+    "label": "Route 105 - Swimmer Luis",
     "tags": ["Trainer"]
   },
   "TRAINER_LUNG_REWARD": {
-    "label": "TRAINER_LUNG_REWARD",
+    "label": "Route 113 - Ninja Boy Lung",
     "tags": ["Trainer"]
   },
   "TRAINER_LYDIA_1_REWARD": {
-    "label": "TRAINER_LYDIA_1_REWARD",
+    "label": "Route 117 - Pokemon Breeder Lydia",
     "tags": ["Trainer"]
   },
   "TRAINER_LYLE_REWARD": {
-    "label": "TRAINER_LYLE_REWARD",
+    "label": "Petalburg Woods - Bug Catcher Lyle",
     "tags": ["Trainer"]
   },
   "TRAINER_MACEY_REWARD": {
-    "label": "TRAINER_MACEY_REWARD",
+    "label": "Mossdeep Gym - Psychic Macey",
     "tags": ["Trainer"]
   },
   "TRAINER_MADELINE_1_REWARD": {
-    "label": "TRAINER_MADELINE_1_REWARD",
+    "label": "Route 113 - Parasol Lady Madeline",
     "tags": ["Trainer"]
   },
   "TRAINER_MAKAYLA_REWARD": {
-    "label": "TRAINER_MAKAYLA_REWARD",
+    "label": "Route 132 - Expert Makayla",
     "tags": ["Trainer"]
   },
   "TRAINER_MARCEL_REWARD": {
-    "label": "TRAINER_MARCEL_REWARD",
+    "label": "Route 121 - Cooltrainer Marcel",
     "tags": ["Trainer"]
   },
   "TRAINER_MARCOS_REWARD": {
-    "label": "TRAINER_MARCOS_REWARD",
+    "label": "Route 103 - Guitarist Marcos",
     "tags": ["Trainer"]
   },
   "TRAINER_MARC_REWARD": {
-    "label": "TRAINER_MARC_REWARD",
+    "label": "Rustboro Gym - Hiker Marc",
     "tags": ["Trainer"]
   },
   "TRAINER_MARIA_1_REWARD": {
-    "label": "TRAINER_MARIA_1_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MARIELA_REWARD": {
-    "label": "TRAINER_MARIELA_REWARD",
+    "label": "Route 117 - Triathlete Maria",
     "tags": ["Trainer"]
   },
   "TRAINER_MARK_REWARD": {
-    "label": "TRAINER_MARK_REWARD",
+    "label": "Mt Pyre 2F - Pokemaniac Mark",
     "tags": ["Trainer"]
   },
   "TRAINER_MARLENE_REWARD": {
-    "label": "TRAINER_MARLENE_REWARD",
+    "label": "Route 115 - Psychic Marlene",
     "tags": ["Trainer"]
   },
   "TRAINER_MARLEY_REWARD": {
-    "label": "TRAINER_MARLEY_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MARTHA_REWARD": {
-    "label": "TRAINER_MARTHA_REWARD",
+    "label": "Route 134 - Cooltrainer Marley",
     "tags": ["Trainer"]
   },
   "TRAINER_MARY_REWARD": {
-    "label": "TRAINER_MARY_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Mary",
     "tags": ["Trainer"]
   },
   "TRAINER_MATTHEW_REWARD": {
-    "label": "TRAINER_MATTHEW_REWARD",
+    "label": "Route 108 - Swimmer Matthew",
     "tags": ["Trainer"]
   },
   "TRAINER_MATT_REWARD": {
-    "label": "TRAINER_MATT_REWARD",
+    "label": "Aqua Hideout B2F - Aqua Admin Matt",
     "tags": ["Trainer"]
   },
   "TRAINER_MAURA_REWARD": {
-    "label": "TRAINER_MAURA_REWARD",
+    "label": "Mossdeep Gym - Psychic Maura",
     "tags": ["Trainer"]
   },
   "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD": {
-    "label": "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD",
+    "label": "Magma Hideout 4F - Magma Leader Maxie",
     "tags": ["Trainer"]
   },
   "TRAINER_MAXIE_MT_CHIMNEY_REWARD": {
-    "label": "TRAINER_MAXIE_MT_CHIMNEY_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_LILYCOVE_MUDKIP_REWARD": {
-    "label": "TRAINER_MAY_LILYCOVE_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_LILYCOVE_TORCHIC_REWARD": {
-    "label": "TRAINER_MAY_LILYCOVE_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_LILYCOVE_TREECKO_REWARD": {
-    "label": "TRAINER_MAY_LILYCOVE_TREECKO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_103_MUDKIP_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_103_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_103_TORCHIC_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_103_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_103_TREECKO_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_103_TREECKO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_110_MUDKIP_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_110_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_110_TORCHIC_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_110_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_110_TREECKO_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_110_TREECKO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_119_MUDKIP_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_119_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_119_TORCHIC_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_119_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_ROUTE_119_TREECKO_REWARD": {
-    "label": "TRAINER_MAY_ROUTE_119_TREECKO_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_RUSTBORO_MUDKIP_REWARD": {
-    "label": "TRAINER_MAY_RUSTBORO_MUDKIP_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_RUSTBORO_TORCHIC_REWARD": {
-    "label": "TRAINER_MAY_RUSTBORO_TORCHIC_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_MAY_RUSTBORO_TREECKO_REWARD": {
-    "label": "TRAINER_MAY_RUSTBORO_TREECKO_REWARD",
+    "label": "Mt Chimney - Magma Leader Maxie",
     "tags": ["Trainer"]
   },
   "TRAINER_MEL_AND_PAUL_REWARD": {
-    "label": "TRAINER_MEL_AND_PAUL_REWARD",
+    "label": "Route 109 - Young Couple Mel and Paul",
     "tags": ["Trainer"]
   },
   "TRAINER_MELINA_REWARD": {
-    "label": "TRAINER_MELINA_REWARD",
+    "label": "Route 117 - Triathlete Melina",
     "tags": ["Trainer"]
   },
   "TRAINER_MELISSA_REWARD": {
-    "label": "TRAINER_MELISSA_REWARD",
+    "label": "Mt Chimney - Beauty Melissa",
     "tags": ["Trainer"]
   },
   "TRAINER_MICAH_REWARD": {
-    "label": "TRAINER_MICAH_REWARD",
+    "label": "SS Tidal - Gentleman Micah",
     "tags": ["Trainer"]
   },
   "TRAINER_MICHELLE_REWARD": {
-    "label": "TRAINER_MICHELLE_REWARD",
+    "label": "Victory Road B1F - Cooltrainer Michelle",
     "tags": ["Trainer"]
   },
   "TRAINER_MIGUEL_1_REWARD": {
-    "label": "TRAINER_MIGUEL_1_REWARD",
+    "label": "Route 103 - Pokefan Miguel",
     "tags": ["Trainer"]
   },
   "TRAINER_MIKE_2_REWARD": {
-    "label": "TRAINER_MIKE_2_REWARD",
+    "label": "Rusturf Tunnel - Hiker Mike",
     "tags": ["Trainer"]
   },
   "TRAINER_MISSY_REWARD": {
-    "label": "TRAINER_MISSY_REWARD",
+    "label": "Route 108 - Swimmer Missy",
     "tags": ["Trainer"]
   },
   "TRAINER_MITCHELL_REWARD": {
-    "label": "TRAINER_MITCHELL_REWARD",
+    "label": "Victory Road B1F - Cooltrainer Mitchell",
     "tags": ["Trainer"]
   },
   "TRAINER_MOLLIE_REWARD": {
-    "label": "TRAINER_MOLLIE_REWARD",
+    "label": "Route 133 - Expert Mollie",
     "tags": ["Trainer"]
   },
   "TRAINER_MYLES_REWARD": {
-    "label": "TRAINER_MYLES_REWARD",
+    "label": "Route 121 - Pokemon Breeder Myles",
     "tags": ["Trainer"]
   },
   "TRAINER_NANCY_REWARD": {
-    "label": "TRAINER_NANCY_REWARD",
+    "label": "Route 114 - Picnicker Nancy",
     "tags": ["Trainer"]
   },
   "TRAINER_NAOMI_REWARD": {
-    "label": "TRAINER_NAOMI_REWARD",
+    "label": "SS Tidal - Lady Naomi",
     "tags": ["Trainer"]
   },
   "TRAINER_NATE_REWARD": {
-    "label": "TRAINER_NATE_REWARD",
+    "label": "Mossdeep Gym - Gentleman Nate",
     "tags": ["Trainer"]
   },
   "TRAINER_NED_REWARD": {
-    "label": "TRAINER_NED_REWARD",
+    "label": "Route 106 - Fisherman Ned",
     "tags": ["Trainer"]
   },
   "TRAINER_NICHOLAS_REWARD": {
-    "label": "TRAINER_NICHOLAS_REWARD",
+    "label": "Mossdeep Gym - Psychic Nicholas",
     "tags": ["Trainer"]
   },
   "TRAINER_NICOLAS_1_REWARD": {
-    "label": "TRAINER_NICOLAS_1_REWARD",
+    "label": "Meteor Falls 1F - Dragon Tamer Nicolas",
     "tags": ["Trainer"]
   },
   "TRAINER_NIKKI_REWARD": {
-    "label": "TRAINER_NIKKI_REWARD",
+    "label": "Route 126 - Swimmer Nikki",
     "tags": ["Trainer"]
   },
   "TRAINER_NOB_1_REWARD": {
-    "label": "TRAINER_NOB_1_REWARD",
+    "label": "Route 115 - Black Belt Nob",
     "tags": ["Trainer"]
   },
   "TRAINER_NOLAN_REWARD": {
-    "label": "TRAINER_NOLAN_REWARD",
+    "label": "Route 114 - Fisherman Nolan",
     "tags": ["Trainer"]
   },
   "TRAINER_NOLEN_REWARD": {
-    "label": "TRAINER_NOLEN_REWARD",
+    "label": "Route 125 - Swimmer Nolen",
     "tags": ["Trainer"]
   },
   "TRAINER_NORMAN_1_REWARD": {
-    "label": "TRAINER_NORMAN_1_REWARD",
+    "label": "Petalburg Gym - Leader Norman",
     "tags": ["Trainer"]
   },
   "TRAINER_OLIVIA_REWARD": {
-    "label": "TRAINER_OLIVIA_REWARD",
+    "label": "Sootopolis Gym - Beauty Olivia",
     "tags": ["Trainer"]
   },
   "TRAINER_OWEN_REWARD": {
-    "label": "TRAINER_OWEN_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Owen",
     "tags": ["Trainer"]
   },
   "TRAINER_PABLO_1_REWARD": {
-    "label": "TRAINER_PABLO_1_REWARD",
+    "label": "Route 126 - Triathlete Pablo",
     "tags": ["Trainer"]
   },
   "TRAINER_PARKER_REWARD": {
-    "label": "TRAINER_PARKER_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_PATRICIA_REWARD": {
-    "label": "TRAINER_PATRICIA_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Parker",
     "tags": ["Trainer"]
   },
   "TRAINER_PAT_REWARD": {
-    "label": "TRAINER_PAT_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_PAULA_REWARD": {
-    "label": "TRAINER_PAULA_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_PAUL_REWARD": {
-    "label": "TRAINER_PAUL_REWARD",
+    "label": "Route 121 - Pokemon Breeder Pat",
     "tags": ["Trainer"]
   },
   "TRAINER_PAXTON_REWARD": {
-    "label": "TRAINER_PAXTON_REWARD",
+    "label": "Route 132 - Expert Paxton",
     "tags": ["Trainer"]
   },
   "TRAINER_PERRY_REWARD": {
-    "label": "TRAINER_PERRY_REWARD",
+    "label": "Route 118 - Bird Keeper Perry",
     "tags": ["Trainer"]
   },
   "TRAINER_PETE_REWARD": {
-    "label": "TRAINER_PETE_REWARD",
+    "label": "Route 103 - Swimmer Pete",
     "tags": ["Trainer"]
   },
   "TRAINER_PHILLIP_REWARD": {
-    "label": "TRAINER_PHILLIP_REWARD",
+    "label": "SS Tidal - Sailor Phillip",
     "tags": ["Trainer"]
   },
   "TRAINER_PHIL_REWARD": {
-    "label": "TRAINER_PHIL_REWARD",
+    "label": "Route 119 - Bird Keeper Phil",
     "tags": ["Trainer"]
   },
   "TRAINER_PHOEBE_REWARD": {
-    "label": "TRAINER_PHOEBE_REWARD",
+    "label": "Ever Grande City - Elite Four Phoebe",
     "tags": ["Trainer"]
   },
   "TRAINER_PRESLEY_REWARD": {
-    "label": "TRAINER_PRESLEY_REWARD",
+    "label": "Route 125 - Bird Keeper Presley",
     "tags": ["Trainer"]
   },
   "TRAINER_PRESTON_REWARD": {
-    "label": "TRAINER_PRESTON_REWARD",
+    "label": "Mossdeep Gym - Psychic Preston",
     "tags": ["Trainer"]
   },
   "TRAINER_QUINCY_REWARD": {
-    "label": "TRAINER_QUINCY_REWARD",
+    "label": "Victory Road 1F - Cooltrainer Quincy",
     "tags": ["Trainer"]
   },
   "TRAINER_RACHEL_REWARD": {
-    "label": "TRAINER_RACHEL_REWARD",
+    "label": "Route 119 - Parasol Lady Rachel",
     "tags": ["Trainer"]
   },
   "TRAINER_RANDALL_REWARD": {
-    "label": "TRAINER_RANDALL_REWARD",
+    "label": "Petalburg Gym - Cooltrainer Randall",
     "tags": ["Trainer"]
   },
   "TRAINER_REED_REWARD": {
-    "label": "TRAINER_REED_REWARD",
+    "label": "Route 129 - Swimmer Reed",
     "tags": ["Trainer"]
   },
   "TRAINER_RELI_AND_IAN_REWARD": {
-    "label": "TRAINER_RELI_AND_IAN_REWARD",
+    "label": "Route 131 - Sis and Bro Reli and Ian",
     "tags": ["Trainer"]
   },
   "TRAINER_REYNA_REWARD": {
-    "label": "TRAINER_REYNA_REWARD",
+    "label": "Route 134 - Battle Girl Reyna",
     "tags": ["Trainer"]
   },
   "TRAINER_RHETT_REWARD": {
-    "label": "TRAINER_RHETT_REWARD",
+    "label": "Route 103 - Black Belt Rhett",
     "tags": ["Trainer"]
   },
   "TRAINER_RICHARD_REWARD": {
-    "label": "TRAINER_RICHARD_REWARD",
+    "label": "Route 131 - Swimmer Richard",
     "tags": ["Trainer"]
   },
   "TRAINER_RICKY_1_REWARD": {
-    "label": "TRAINER_RICKY_1_REWARD",
+    "label": "Route 109 - Tuber Ricky",
     "tags": ["Trainer"]
   },
   "TRAINER_RICK_REWARD": {
-    "label": "TRAINER_RICK_REWARD",
+    "label": "Route 102 - Bug Catcher Rick",
     "tags": ["Trainer"]
   },
   "TRAINER_RILEY_REWARD": {
-    "label": "TRAINER_RILEY_REWARD",
+    "label": "Route 120 - Ninja Boy Riley",
     "tags": ["Trainer"]
   },
   "TRAINER_ROBERT_1_REWARD": {
-    "label": "TRAINER_ROBERT_1_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_ROBIN_REWARD": {
-    "label": "TRAINER_ROBIN_REWARD",
+    "label": "Route 120 - Bird Keeper Robert",
     "tags": ["Trainer"]
   },
   "TRAINER_RODNEY_REWARD": {
-    "label": "TRAINER_RODNEY_REWARD",
+    "label": "Route 130 - Swimmer Rodney",
     "tags": ["Trainer"]
   },
   "TRAINER_ROGER_REWARD": {
-    "label": "TRAINER_ROGER_REWARD",
+    "label": "Route 127 - Fisherman Roger",
     "tags": ["Trainer"]
   },
   "TRAINER_ROLAND_REWARD": {
-    "label": "TRAINER_ROLAND_REWARD",
+    "label": "Route 124 - Swimmer Roland",
     "tags": ["Trainer"]
   },
   "TRAINER_RONALD_REWARD": {
-    "label": "TRAINER_RONALD_REWARD",
+    "label": "Route 132 - Fisherman Ronald",
     "tags": ["Trainer"]
   },
   "TRAINER_ROSE_1_REWARD": {
-    "label": "TRAINER_ROSE_1_REWARD",
+    "label": "Route 118 - Aroma Lady Rose",
     "tags": ["Trainer"]
   },
   "TRAINER_ROXANNE_1_REWARD": {
-    "label": "TRAINER_ROXANNE_1_REWARD",
+    "label": "Rustboro Gym - Leader Roxanne",
     "tags": ["Trainer"]
   },
   "TRAINER_RUBEN_REWARD": {
-    "label": "TRAINER_RUBEN_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_SALLY_REWARD": {
-    "label": "TRAINER_SALLY_REWARD",
+    "label": "Route 128 - Cooltrainer Ruben",
     "tags": ["Trainer"]
   },
   "TRAINER_SAMANTHA_REWARD": {
-    "label": "TRAINER_SAMANTHA_REWARD",
+    "label": "Mossdeep Gym - Psychic Samantha",
     "tags": ["Trainer"]
   },
   "TRAINER_SAMUEL_REWARD": {
-    "label": "TRAINER_SAMUEL_REWARD",
+    "label": "Victory Road B1F - Cooltrainer Samuel",
     "tags": ["Trainer"]
   },
   "TRAINER_SANTIAGO_REWARD": {
-    "label": "TRAINER_SANTIAGO_REWARD",
+    "label": "Route 130 - Swimmer Santiago",
     "tags": ["Trainer"]
   },
   "TRAINER_SARAH_REWARD": {
-    "label": "TRAINER_SARAH_REWARD",
+    "label": "Route 116 - Lady Sarah",
     "tags": ["Trainer"]
   },
   "TRAINER_SAWYER_1_REWARD": {
-    "label": "TRAINER_SAWYER_1_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_SEBASTIAN_REWARD": {
-    "label": "TRAINER_SEBASTIAN_REWARD",
+    "label": "Mt Chimney - Hiker Sawyer",
     "tags": ["Trainer"]
   },
   "TRAINER_SHANE_REWARD": {
-    "label": "TRAINER_SHANE_REWARD",
+    "label": "Route 114 - Camper Shane",
     "tags": ["Trainer"]
   },
   "TRAINER_SHANNON_REWARD": {
-    "label": "TRAINER_SHANNON_REWARD",
+    "label": "Victory Road B1F - Cooltrainer Shannon",
     "tags": ["Trainer"]
   },
   "TRAINER_SHARON_REWARD": {
-    "label": "TRAINER_SHARON_REWARD",
+    "label": "Route 125 - Swimmer Sharon",
     "tags": ["Trainer"]
   },
   "TRAINER_SHAWN_REWARD": {
-    "label": "TRAINER_SHAWN_REWARD",
+    "label": "Mauville Gym - Guitarist Shawn",
     "tags": ["Trainer"]
   },
   "TRAINER_SHAYLA_REWARD": {
-    "label": "TRAINER_SHAYLA_REWARD",
+    "label": "Route 112 - Aroma Lady Shayla",
     "tags": ["Trainer"]
   },
   "TRAINER_SHEILA_REWARD": {
-    "label": "TRAINER_SHEILA_REWARD",
+    "label": "Mt Chimney - Beauty Sheila",
     "tags": ["Trainer"]
   },
   "TRAINER_SHELBY_1_REWARD": {
-    "label": "TRAINER_SHELBY_1_REWARD",
+    "label": "Mt Chimney - Expert Shelby",
     "tags": ["Trainer"]
   },
   "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD": {
-    "label": "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD",
+    "label": "Seafloor Cavern Room 3 - Aqua Admin Shelly",
     "tags": ["Trainer"]
   },
   "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD": {
-    "label": "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD",
+    "label": "Weather Institute 2F - Aqua Admin Shelly",
     "tags": ["Trainer"]
   },
   "TRAINER_SHIRLEY_REWARD": {
-    "label": "TRAINER_SHIRLEY_REWARD",
+    "label": "Mt Chimney - Beauty Shirley",
     "tags": ["Trainer"]
   },
   "TRAINER_SIDNEY_REWARD": {
-    "label": "TRAINER_SIDNEY_REWARD",
+    "label": "Ever Grande City - Elite Four Sidney",
     "tags": ["Trainer"]
   },
   "TRAINER_SIENNA_REWARD": {
-    "label": "TRAINER_SIENNA_REWARD",
+    "label": "Route 126 - Swimmer Sienna",
     "tags": ["Trainer"]
   },
   "TRAINER_SIMON_REWARD": {
-    "label": "TRAINER_SIMON_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_SOPHIA_REWARD": {
-    "label": "TRAINER_SOPHIA_REWARD",
+    "label": "Route 109 - Tuber Simon",
     "tags": ["Trainer"]
   },
   "TRAINER_SOPHIE_REWARD": {
-    "label": "TRAINER_SOPHIE_REWARD",
+    "label": "Route 113 - Picnicker Sophie",
     "tags": ["Trainer"]
   },
   "TRAINER_SPENCER_REWARD": {
-    "label": "TRAINER_SPENCER_REWARD",
+    "label": "Route 124 - Swimmer Spencer",
     "tags": ["Trainer"]
   },
   "TRAINER_STAN_REWARD": {
-    "label": "TRAINER_STAN_REWARD",
+    "label": "Route 125 - Swimmer Stan",
     "tags": ["Trainer"]
   },
   "TRAINER_STEVEN_REWARD": {
-    "label": "TRAINER_STEVEN_REWARD",
+    "label": "Meteor Falls 1F - Rival Steven",
     "tags": ["Trainer"]
   },
   "TRAINER_STEVE_1_REWARD": {
-    "label": "TRAINER_STEVE_1_REWARD",
+    "label": "Route 114 - Pokemaniac Steve",
     "tags": ["Trainer"]
   },
   "TRAINER_SUSIE_REWARD": {
-    "label": "TRAINER_SUSIE_REWARD",
+    "label": "Route 131 - Swimmer Susie",
     "tags": ["Trainer"]
   },
   "TRAINER_SYLVIA_REWARD": {
-    "label": "TRAINER_SYLVIA_REWARD",
+    "label": "Mossdeep Gym - Hex Maniac Sylvia",
     "tags": ["Trainer"]
   },
   "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD": {
-    "label": "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD",
+    "label": "Magma Hideout 4F - Magma Admin Tabitha",
     "tags": ["Trainer"]
   },
   "TRAINER_TABITHA_MT_CHIMNEY_REWARD": {
-    "label": "TRAINER_TABITHA_MT_CHIMNEY_REWARD",
+    "label": "Mt Chimney - Magma Admin Tabitha",
     "tags": ["Trainer"]
   },
   "TRAINER_TAKAO_REWARD": {
-    "label": "TRAINER_TAKAO_REWARD",
+    "label": "Dewford Gym - Black Belt Takao",
     "tags": ["Trainer"]
   },
   "TRAINER_TAKASHI_REWARD": {
-    "label": "TRAINER_TAKASHI_REWARD",
+    "label": "Route 119 - Ninja Boy Takashi",
     "tags": ["Trainer"]
   },
   "TRAINER_TALIA_REWARD": {
-    "label": "TRAINER_TALIA_REWARD",
+    "label": "Route 131 - Triathlete Talia",
     "tags": ["Trainer"]
   },
   "TRAINER_TAMMY_REWARD": {
-    "label": "TRAINER_TAMMY_REWARD",
+    "label": "Route 121 - Hex Maniac Tammy",
     "tags": ["Trainer"]
   },
   "TRAINER_TANYA_REWARD": {
-    "label": "TRAINER_TANYA_REWARD",
+    "label": "Route 125 - Swimmer Tanya",
     "tags": ["Trainer"]
   },
   "TRAINER_TARA_REWARD": {
-    "label": "TRAINER_TARA_REWARD",
+    "label": "Route 108 - Swimmer Tara",
     "tags": ["Trainer"]
   },
   "TRAINER_TASHA_REWARD": {
-    "label": "TRAINER_TASHA_REWARD",
+    "label": "Mt Pyre 4F - Hex Maniac Tasha",
     "tags": ["Trainer"]
   },
   "TRAINER_TAYLOR_REWARD": {
-    "label": "TRAINER_TAYLOR_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_TED_REWARD": {
-    "label": "TRAINER_TED_REWARD",
+    "label": "Route 119 - Bug Maniac Taylor",
     "tags": ["Trainer"]
   },
   "TRAINER_THALIA_1_REWARD": {
-    "label": "TRAINER_THALIA_1_REWARD",
+    "label": "Abandoned Ship 1F - Beauty Thalia",
     "tags": ["Trainer"]
   },
   "TRAINER_THOMAS_REWARD": {
-    "label": "TRAINER_THOMAS_REWARD",
+    "label": "SS Tidal - Gentleman Thomas",
     "tags": ["Trainer"]
   },
   "TRAINER_TIANA_REWARD": {
-    "label": "TRAINER_TIANA_REWARD",
+    "label": "Route 102 - Lass Tiana",
     "tags": ["Trainer"]
   },
   "TRAINER_TIFFANY_REWARD": {
-    "label": "TRAINER_TIFFANY_REWARD",
+    "label": "Sootopolis Gym - Beauty Tiffany",
     "tags": ["Trainer"]
   },
   "TRAINER_TIMMY_REWARD": {
-    "label": "TRAINER_TIMMY_REWARD",
+    "label": "Route 110 - Youngster Timmy",
     "tags": ["Trainer"]
   },
   "TRAINER_TIMOTHY_1_REWARD": {
-    "label": "TRAINER_TIMOTHY_1_REWARD",
+    "label": "Route 115 - Expert Timothy",
     "tags": ["Trainer"]
   },
   "TRAINER_TISHA_REWARD": {
-    "label": "TRAINER_TISHA_REWARD",
+    "label": "Route 129 - Swimmer Tisha",
     "tags": ["Trainer"]
   },
   "TRAINER_TOMMY_REWARD": {
-    "label": "TRAINER_TOMMY_REWARD",
+    "label": "Rustboro Gym - Youngster Tommy",
     "tags": ["Trainer"]
   },
   "TRAINER_TONY_1_REWARD": {
-    "label": "TRAINER_TONY_1_REWARD",
+    "label": "Route 107 - Swimmer Tony",
     "tags": ["Trainer"]
   },
   "TRAINER_TORI_AND_TIA_REWARD": {
-    "label": "TRAINER_TORI_AND_TIA_REWARD",
+    "label": "Route 113 - Twins Tori and Tia",
     "tags": ["Trainer"]
   },
   "TRAINER_TRAVIS_REWARD": {
-    "label": "TRAINER_TRAVIS_REWARD",
+    "label": "Route 111 - Camper Travis",
     "tags": ["Trainer"]
   },
   "TRAINER_TRENT_1_REWARD": {
-    "label": "TRAINER_TRENT_1_REWARD",
+    "label": "Route 112 - Hiker Trent",
     "tags": ["Trainer"]
   },
   "TRAINER_TYRON_REWARD": {
-    "label": "TRAINER_TYRON_REWARD",
+    "label": "Route 111 - Camper Tyron",
     "tags": ["Trainer"]
   },
   "TRAINER_VALERIE_1_REWARD": {
-    "label": "TRAINER_VALERIE_1_REWARD",
+    "label": "Mt Pyre 6F - Hex Maniac Valerie",
     "tags": ["Trainer"]
   },
   "TRAINER_VANESSA_REWARD": {
-    "label": "TRAINER_VANESSA_REWARD",
+    "label": "Route 121 - Pokefan Vanessa",
     "tags": ["Trainer"]
   },
   "TRAINER_VICKY_REWARD": {
-    "label": "TRAINER_VICKY_REWARD",
+    "label": "Route 111 - Winstrate Vicky",
     "tags": ["Trainer"]
   },
   "TRAINER_VICTORIA_REWARD": {
-    "label": "TRAINER_VICTORIA_REWARD",
+    "label": "Route 111 - Winstrate Victoria",
     "tags": ["Trainer"]
   },
   "TRAINER_VICTOR_REWARD": {
-    "label": "TRAINER_VICTOR_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_VINCENT_REWARD": {
-    "label": "TRAINER_VINCENT_REWARD",
+    "label": "Route 111 - Winstrate Victor",
     "tags": ["Trainer"]
   },
   "TRAINER_VIOLET_REWARD": {
-    "label": "TRAINER_VIOLET_REWARD",
+    "label": "Route 123 - Aroma Lady Violet",
     "tags": ["Trainer"]
   },
   "TRAINER_VIRGIL_REWARD": {
-    "label": "TRAINER_VIRGIL_REWARD",
+    "label": "Mossdeep Gym - Psychic Virgil",
     "tags": ["Trainer"]
   },
   "TRAINER_VITO_REWARD": {
-    "label": "TRAINER_VITO_REWARD",
+    "label": "Victory Road B2F - Cooltrainer Vito",
     "tags": ["Trainer"]
   },
   "TRAINER_VIVIAN_REWARD": {
-    "label": "TRAINER_VIVIAN_REWARD",
+    "label": "Mauville Gym - Battle Girl Vivian",
     "tags": ["Trainer"]
   },
   "TRAINER_VIVI_REWARD": {
-    "label": "TRAINER_VIVI_REWARD",
+    "label": "Route 111 - Winstrate Vivi",
     "tags": ["Trainer"]
   },
   "TRAINER_WADE_REWARD": {
-    "label": "TRAINER_WADE_REWARD",
+    "label": "Route 118 - Fisherman Wade",
     "tags": ["Trainer"]
   },
   "TRAINER_WALLACE_REWARD": {
-    "label": "TRAINER_WALLACE_REWARD",
+    "label": "Ever Grande City - Champion Wallace",
     "tags": ["Trainer"]
   },
   "TRAINER_WALTER_1_REWARD": {
-    "label": "TRAINER_WALTER_1_REWARD",
+    "label": "Route 121 - Gentleman Walter",
     "tags": ["Trainer"]
   },
   "TRAINER_WALLY_MAUVILLE_REWARD": {
-    "label": "TRAINER_WALLY_MAUVILLE_REWARD",
+    "label": "Mauville City - Rival Wally",
     "tags": ["Trainer"]
   },
   "TRAINER_WALLY_VR_1_REWARD": {
-    "label": "TRAINER_WALLY_VR_1_REWARD",
+    "label": "Victory Road 1F - Rival Wally",
     "tags": ["Trainer"]
   },
   "TRAINER_WATTSON_1_REWARD": {
-    "label": "TRAINER_WATTSON_1_REWARD",
+    "label": "Mauville Gym - Leader Wattson",
     "tags": ["Trainer"]
   },
   "TRAINER_WARREN_REWARD": {
-    "label": "TRAINER_WARREN_REWARD",
+    "label": "Route 133 - Cooltrainer Warren",
     "tags": ["Trainer"]
   },
   "TRAINER_WAYNE_REWARD": {
-    "label": "TRAINER_WAYNE_REWARD",
+    "label": "Route 128 - Fisherman Wayne",
     "tags": ["Trainer"]
   },
   "TRAINER_WENDY_REWARD": {
-    "label": "TRAINER_WENDY_REWARD",
+    "label": "Route 123 - Cooltrainer Wendy",
     "tags": ["Trainer"]
   },
   "TRAINER_WILLIAM_REWARD": {
-    "label": "TRAINER_WILLIAM_REWARD",
+    "label": "Mt Pyre 3F - Psychic William",
     "tags": ["Trainer"]
   },
   "TRAINER_WILTON_1_REWARD": {
-    "label": "TRAINER_WILTON_1_REWARD",
+    "label": "Route 111 - Cooltrainer Wilton",
     "tags": ["Trainer"]
   },
   "TRAINER_WINONA_1_REWARD": {
-    "label": "TRAINER_WINONA_1_REWARD",
+    "label": "Fortree Gym - Leader Winona",
     "tags": ["Trainer"]
   },
   "TRAINER_WINSTON_1_REWARD": {
-    "label": "TRAINER_WINSTON_1_REWARD",
+    "label": "Route 104 - Rich Boy Winston",
     "tags": ["Trainer"]
   },
   "TRAINER_WYATT_REWARD": {
-    "label": "TRAINER_WYATT_REWARD",
+    "label": "Route 113 - Pokemaniac Wyatt",
     "tags": ["Trainer"]
   },
   "TRAINER_YASU_REWARD": {
-    "label": "TRAINER_YASU_REWARD",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_YUJI_REWARD": {
-    "label": "TRAINER_YUJI_REWARD",
+    "label": "Route 119 - Ninja Boy Yasu",
     "tags": ["Trainer"]
   },
   "TRAINER_ZANDER_REWARD": {
-    "label": "TRAINER_ZANDER_REWARD",
+    "label": "Mt Pyre 2F - Black Belt Zander",
     "tags": ["Trainer"]
   }
 }
