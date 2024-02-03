@@ -7,6 +7,9 @@ def run_load_worlds_benchmark():
     from Utils import init_logging
 
     # get some general imports cached, to prevent it from being attributed to one world.
+    import orjson
+    orjson.loads("{}")  # orjson runs initialization on first use
+
     import BaseClasses, Launcher, Fill
 
     from worlds import world_sources
