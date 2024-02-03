@@ -23,6 +23,7 @@ from pathlib import Path
 from CommonClient import CommonContext, server_loop, ClientCommandProcessor, gui_enabled, get_base_parser
 from Utils import init_logging, is_windows, async_start
 from worlds.sc2 import ItemNames
+from worlds.sc2.ItemGroups import item_name_groups, unlisted_item_name_groups
 from worlds.sc2 import Options
 from worlds.sc2.Options import (
     MissionOrder, KerriganPrimalStatus, kerrigan_unit_available, KerriganPresence,
@@ -204,26 +205,30 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                         " or Default to select based on difficulty.")
             return False
     
-    def _cmd_received(self, filter_search: str = "aptz") -> bool:
-        """
-        List received items.
-        Filter output by faction by passing in a parameter -- include 't' for terran output, 'z' for zerg, 'p' for protoss, and/or 'a' for non-categorized items.
-        """
-        # TODO(mm): The goal is to be able to filter by race, partial item name, and item group
-        # This should probably wait until a refactor that replaces item groups with enums insteaad of strings
-        search_filter_meanings = (('a', SC2Race.ANY), ('t', SC2Race.TERRAN), ('z', SC2Race.ZERG), ('p', SC2Race.PROTOSS))
-        faction_filter: typing.Set[SC2Race] = set()
-        filter_search = filter_search.lower()
-        for char, value in search_filter_meanings:
-            if char in filter_search:
-                faction_filter.add(value)
-        if not faction_filter:
-            faction_filter = set(x[1] for x in search_filter_meanings)
+    @mark_raw
+    def _cmd_received(self, filter_search: str = "") -> bool:
+        """List received items.
+        Pass in a parameter to filter the search by partial item name or exact item group."""
+        # Groups must be matched case-sensitively, so we properly capitalize the search term
+        # eg. "Spear of Adun" over "Spear Of Adun" or "spear of adun"
+        # This fails a lot of item name matches, but those should be found by partial name match
+        formatted_filter_search = " ".join([(part.lower() if len(part) <= 3 else part.lower().capitalize()) for part in filter_search.split()])
+
+        def item_matches_filter(item_name: str) -> bool:
+            # The filter can be an exact group name or a partial item name
+            # Partial item name can be matched case-insensitively
+            if filter_search.lower() in item_name.lower():
+                return True
+            # The search term should already be formatted as a group name
+            if formatted_filter_search in item_name_groups and item_name in item_name_groups[formatted_filter_search]:
+                return True
+            return False
 
         items = get_full_item_list()
         categorized_items: typing.Dict[SC2Race, typing.List[int]] = {}
         parent_to_child: typing.Dict[int, typing.List[int]] = {}
         items_received: typing.Dict[int, typing.List[NetworkItem]] = {}
+        filter_match_count = 0
         for item in self.ctx.items_received:
             items_received.setdefault(item.item, []).append(item)
         items_received_set = set(items_received)
@@ -232,28 +237,59 @@ class StarcraftClientProcessor(ClientCommandProcessor):
                 parent_to_child.setdefault(items[item_data.parent_item].code, []).append(item_data.code)
             else:
                 categorized_items.setdefault(item_data.race, []).append(item_data.code)
-        for _, faction in search_filter_meanings:
-            if faction not in faction_filter:
-                continue
-            self.formatted_print(f" [u]{faction.name}[/u] ")
+        for faction in SC2Race:
+            has_printed_faction_title = False
+            def print_faction_title():
+                if not has_printed_faction_title:
+                    self.formatted_print(f" [u]{faction.name}[/u] ")
+            
             for item_id in categorized_items[faction]:
-                received_items_of_this_type = items_received.get(item_id, ())
-                for item in received_items_of_this_type:
-                    (ColouredMessage('* ').item(item.item, flags=item.flags)
-                        (" from ").location(item.location, self.ctx.slot)
-                        (" by ").player(item.player)
-                    ).send(self.ctx)
-                if not received_items_of_this_type and items_received_set.intersection(parent_to_child.get(item_id, ())):
-                    # We didn't receive this item, but we have its children
-                    ColouredMessage("- ").coloured(self.ctx.item_names[item_id], "black")(" - not obtained").send(self.ctx)
-                for child_item in parent_to_child.get(item_id, ()):
-                    received_items_of_this_type = items_received.get(child_item, ())
+                item_name = self.ctx.item_names[item_id]
+                received_child_items = items_received_set.intersection(parent_to_child.get(item_id, []))
+                matching_children = [child for child in received_child_items
+                                    if item_matches_filter(self.ctx.item_names[child])]
+                received_items_of_this_type = items_received.get(item_id, [])
+                item_is_match = item_matches_filter(item_name)
+                if item_is_match or len(matching_children) > 0:
+                    # Print found item if it or its children match the filter
+                    if item_is_match:
+                        filter_match_count += len(received_items_of_this_type)
                     for item in received_items_of_this_type:
-                        (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                        print_faction_title()
+                        has_printed_faction_title = True
+                        (ColouredMessage('* ').item(item.item, flags=item.flags)
                             (" from ").location(item.location, self.ctx.slot)
                             (" by ").player(item.player)
                         ).send(self.ctx)
-        self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
+                
+                if received_child_items:
+                    # We have this item's children
+                    if len(matching_children) == 0:
+                        # ...but none of them match the filter
+                        continue
+
+                    if not received_items_of_this_type:
+                        # We didn't receive the item itself
+                        print_faction_title()
+                        has_printed_faction_title = True
+                        ColouredMessage("- ").coloured(item_name, "black")(" - not obtained").send(self.ctx)
+                    
+                    for child_item in matching_children:
+                        received_items_of_this_type = items_received.get(child_item, [])
+                        for item in received_items_of_this_type:
+                            filter_match_count += len(received_items_of_this_type)
+                            (ColouredMessage('  * ').item(item.item, flags=item.flags)
+                                (" from ").location(item.location, self.ctx.slot)
+                                (" by ").player(item.player)
+                            ).send(self.ctx)
+                    
+                    non_matching_children = len(received_child_items) - len(matching_children)
+                    if non_matching_children > 0:
+                        self.formatted_print(f"  + {non_matching_children} child items that don't match the filter")
+        if filter_search == "":
+            self.formatted_print(f"[b]Obtained: {len(self.ctx.items_received)} items[/b]")
+        else:
+            self.formatted_print(f"[b]Filter \"{filter_search}\" found {filter_match_count} out of {len(self.ctx.items_received)} obtained items[/b]")
         return True
     
     def _cmd_option(self, option_name: str = "", option_value: str = "") -> None:
