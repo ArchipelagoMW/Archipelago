@@ -7,7 +7,7 @@
     "version": {
       "description": "The version of this schema that the data is formatted to match",
       "type": "string",
-      "const": "1.0.0"
+      "const": "1"
     },
     "nickname": {
       "description": "The pokemon's nickname",

@@ -174,7 +174,7 @@ def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
     held_item = int.from_bytes(decrypted_substructs[0][2:4], "little")
 
     json_object = {
-        "version": "1.0.0",
+        "version": "1",
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], "little")].national_dex_number,

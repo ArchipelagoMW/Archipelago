@@ -1,8 +1,9 @@
 import asyncio
 import copy
+import orjson
 import time
 from typing import TYPE_CHECKING, Optional, Dict, Set
-
+import uuid
 
 from NetUtils import ClientStatus
 from Options import Toggle
@@ -115,11 +116,12 @@ class PokemonEmeraldClient(BizHawkClient):
     goal_flag: Optional[int]
 
     wonder_trade_update_event: asyncio.Event
-    latest_wonder_trades: dict
     latest_wonder_trade_reply: dict
     wonder_trade_task: Optional[asyncio.Task]
     wonder_trade_cooldown: int
     wonder_trade_cooldown_timer: int
+
+    num_wonder_trade_communications: int
 
     def __init__(self) -> None:
         super().__init__()
@@ -128,10 +130,10 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_found_key_items = {}
         self.goal_flag = None
         self.wonder_trade_update_event = asyncio.Event()
-        self.latest_wonder_trades = {}
         self.wonder_trade_task = None
         self.wonder_trade_cooldown = 5000
         self.wonder_trade_cooldown_timer = 0
+        self.num_wonder_trade_communications = 0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -169,6 +171,8 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        from CommonClient import logger
+
         if ctx.slot_data is not None:
             if ctx.slot_data["goal"] == Goal.option_champion:
                 self.goal_flag = IS_CHAMPION_FLAG
@@ -208,7 +212,7 @@ class PokemonEmeraldClient(BizHawkClient):
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [
-                    (save_block_1_address + 0x3778, 2, "System Bus"),                        # Number of received items
+                    (save_block_1_address + 0x3778, 2, "System Bus"),                      # Number of received items
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
                 ],
                 [overworld_guard, save_block_1_address_guard]
@@ -249,6 +253,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 flag_bytes += read_result[0]
 
             # Read save block 2 address
+            pokedex_caught_bytes = bytes(0)
             if ctx.slot_data is not None and ctx.slot_data["dexsanity"] == Toggle.option_true:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
@@ -273,7 +278,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 pokedex_caught_bytes = read_result[0]
 
             # Wonder Trades (only when connected to the server)
-            if ctx.server is not None and not ctx.server.socket.closed:
+            if ctx.server is not None and not ctx.server.socket.closed and self.num_wonder_trade_communications < 100:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
                     [
@@ -298,15 +303,21 @@ class PokemonEmeraldClient(BizHawkClient):
                     elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
                         # Game is waiting on receiving a trade. See if there are any available trades that were not
                         # sent by this player, and if so, try to receive one.
-                        # TODO: Should filter for trades that can't be completed (like Gen IV+ species) here and/or
-                        # throttle calls to `wonder_trade_receive`.
-                        if self.wonder_trade_cooldown_timer <= 0:
-                            if any(item[0] != ctx.slot for key, item in self.latest_wonder_trades.items() if key != "_lock"):
+                        if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                            if any(item[0] != ctx.slot
+                                    for key, item in ctx.stored_data[f"pokemon_wonder_trades_{ctx.team}"].items()
+                                    if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
                                 received_trade = await self.wonder_trade_receive(ctx)
-                                if received_trade is not None:
+                                if received_trade is None:
+                                    self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
+                                    self.wonder_trade_cooldown *= self.wonder_trade_cooldown
+                                else:
                                     await bizhawk.write(ctx.bizhawk_ctx, [
                                         (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
                                     ])
+                                    logger.info("Wonder trade received!")
+                                    self.wonder_trade_cooldown = 5000
+
                         else:
                             # Very approximate "time since last loop", but extra delay is fine for this
                             self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
@@ -420,6 +431,24 @@ class PokemonEmeraldClient(BizHawkClient):
             # Exit handler and return to main loop to reconnect
             pass
 
+    def check_num_wonder_trade_communiations(self) -> bool:
+        """
+        Because the wonder trade code is so complicated and I have found myself in many infinite loops before,
+        this puts a hard cap on participation in wonder trade communications. That way a bug doesn't cause an absurd
+        number of writes to the server's data storage over the course of a seed.
+        """
+        self.num_wonder_trade_communications += 1
+        if self.num_wonder_trade_communications < 100:
+            return True
+        
+        if self.num_wonder_trade_communications == 100:
+            from CommonClient import logger
+            logger.info("Your client seems to be doing an excessive amount of communication related to wonder trades. "
+                        "Wonder trade communications will be turned off for now to protect the server from excessive "
+                        "data storage updates. Please report this to the dev with details about what you had been doing"
+                        "as it relates to wonder trading.")
+        return False
+
     async def wonder_trade_acquire(self, ctx: "BizHawkClientContext", keep_trying: bool = False) -> Optional[dict]:
         """
         Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
@@ -433,22 +462,23 @@ class PokemonEmeraldClient(BizHawkClient):
         """
         while not ctx.exit_event.is_set():
             lock = int(time.time_ns() / 1000000)
-            uuid = Utils.get_unique_identifier()
+            message_uuid = str(uuid.uuid4())
             await ctx.send_msgs([{
                 "cmd": "Set",
                 "key": f"pokemon_wonder_trades_{ctx.team}",
                 "default": {"_lock": 0},
                 "want_reply": True,
                 "operations": [{"operation": "update", "value": {"_lock": lock}}],
-                "uuid": uuid
+                "uuid": message_uuid
             }])
+            self.check_num_wonder_trade_communiations()
 
             self.wonder_trade_update_event.clear()
             await self.wonder_trade_update_event.wait()
             reply = copy.deepcopy(self.latest_wonder_trade_reply)
 
             # Make sure the most recently received update was triggered by our lock attempt
-            if reply.get("uuid", None) != uuid:
+            if reply.get("uuid", None) != message_uuid:
                 if not keep_trying:
                     return None
                 await asyncio.sleep(self.wonder_trade_cooldown)
@@ -477,6 +507,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 await asyncio.sleep(self.wonder_trade_cooldown)
                 continue
 
+            # We have the lock, reset the cooldown and return
             self.wonder_trade_cooldown = 5000
             return reply
 
@@ -501,6 +532,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 str(wonder_trade_slot): (ctx.slot, data)
             }}]
         }])
+        self.check_num_wonder_trade_communiations()
 
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
 
@@ -509,18 +541,17 @@ class PokemonEmeraldClient(BizHawkClient):
         Tries to pop a pokemon out of the wonder trades. Returns `None` if
         for some reason it can't immediately remove a compatible pokemon.
         """
-        from CommonClient import logger
-
         reply = await self.wonder_trade_acquire(ctx)
 
         if reply is None:
             return None
 
-        # TODO: Filter by whether Emerald knows the species
         candidate_slots = [
             int(slot)
             for slot in reply["value"]
-            if slot != "_lock" and reply["value"][slot][0] != ctx.slot
+            if slot != "_lock" \
+                and reply["value"][slot][0] != ctx.slot \
+                and orjson.loads(reply["value"][slot][1])["species"] <= 386
         ]
 
         if len(candidate_slots) == 0:
@@ -530,6 +561,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "default": {"_lock": 0},
                 "operations": [{"operation": "update", "value": {"_lock": 0}}]
             }])
+            self.check_num_wonder_trade_communiations()
             return None
 
         wonder_trade_slot = max(candidate_slots)
@@ -543,8 +575,8 @@ class PokemonEmeraldClient(BizHawkClient):
                 {"operation": "pop", "value": str(wonder_trade_slot)}
             ]
         }])
+        self.check_num_wonder_trade_communiations()
 
-        logger.info("Wonder trade received!")
         return reply["value"][str(wonder_trade_slot)][1]
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
@@ -556,13 +588,9 @@ class PokemonEmeraldClient(BizHawkClient):
                 "cmd": "Get",
                 "keys": [f"pokemon_wonder_trades_{ctx.team}"]
             }]))
-        elif cmd == "Retrieved":
-            if f"pokemon_wonder_trades_{ctx.team}" in args.get("keys", {}):
-                self.latest_wonder_trades = args["keys"].get(f"pokemon_wonder_trades_{ctx.team}", {})
         elif cmd == "SetReply":
             if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":
                 self.latest_wonder_trade_reply = args
-                self.latest_wonder_trades = args.get("value", {})
 
                 if not self.wonder_trade_update_event.is_set():
                     self.wonder_trade_update_event.set()
