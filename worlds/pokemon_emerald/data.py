@@ -299,6 +299,7 @@ class PokemonEmeraldData:
     items: Dict[int, ItemData]
     species: List[Optional[SpeciesData]]
     legendary_encounters: List[MiscPokemonData]
+    misc_pokemon: List[MiscPokemonData]
     tmhm_moves: List[int]
     abilities: List[AbilityData]
     move_labels: Dict[str, int]
@@ -317,6 +318,7 @@ class PokemonEmeraldData:
         self.items = {}
         self.species = []
         self.legendary_encounters = []
+        self.misc_pokemon = []
         self.tmhm_moves = []
         self.abilities = []
         self.move_labels = {}
@@ -331,14 +333,6 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
 
 
 data = PokemonEmeraldData()
-
-def create_data_copy() -> PokemonEmeraldData:
-    new_copy = PokemonEmeraldData()
-    new_copy.species = copy.deepcopy(data.species)
-    new_copy.tmhm_moves = copy.deepcopy(data.tmhm_moves)
-    new_copy.maps = copy.deepcopy(data.maps)
-    new_copy.legendary_encounters = copy.deepcopy(data.legendary_encounters)
-    new_copy.trainers = copy.deepcopy(data.trainers)
 
 
 def _init() -> None:
@@ -939,6 +933,12 @@ def _init() -> None:
         data.legendary_encounters.append(MiscPokemonData(
             legendary_encounter_json["species"],
             legendary_encounter_json["address"]
+        ))
+
+    for misc_pokemon_json in extracted_data["misc_pokemon"]:
+        data.misc_pokemon.append(MiscPokemonData(
+            misc_pokemon_json["species"],
+            misc_pokemon_json["address"]
         ))
 
     # TM moves

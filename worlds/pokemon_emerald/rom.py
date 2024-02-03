@@ -311,6 +311,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set legendary pokemon
     _set_legendary_encounters(world, patched_rom)
 
+    # Set misc pokemon
+    _set_misc_pokemon(world, patched_rom)
+
     # Set starters
     _set_starters(world, patched_rom)
 
@@ -661,6 +664,11 @@ def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tup
 
 def _set_legendary_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     for encounter in world.modified_legendary_encounters:
+        _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
+
+
+def _set_misc_pokemon(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
+    for encounter in world.modified_misc_pokemon:
         _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
 
 

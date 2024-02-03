@@ -23,7 +23,7 @@ from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement, ReceiveItemMessages,
-                      PokemonEmeraldOptions, HmRequirements)
+                      PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
                       get_random_damaging_move, get_random_type)
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -882,6 +882,38 @@ class PokemonEmeraldWorld(World):
                         encounter.address
                     ))
 
+        def randomize_misc_pokemon() -> None:
+            if self.options.misc_pokemon == RandomizeMiscPokemon.option_shuffle:
+                # Just take the existing species and shuffle them
+                shuffled_species = [encounter.species_id for encounter in emerald_data.misc_pokemon]
+                self.random.shuffle(shuffled_species)
+
+                self.modified_misc_pokemon = []
+                for i, encounter in enumerate(emerald_data.misc_pokemon):
+                    self.modified_misc_pokemon.append(MiscPokemonData(
+                        shuffled_species[i],
+                        encounter.address
+                    ))
+            else:
+                should_match_bst = self.options.misc_pokemon in {
+                    RandomizeMiscPokemon.option_match_base_stats,
+                    RandomizeMiscPokemon.option_match_base_stats_and_type
+                }
+                should_match_type = self.options.misc_pokemon in {
+                    RandomizeMiscPokemon.option_match_type,
+                    RandomizeMiscPokemon.option_match_base_stats_and_type
+                }
+
+                for encounter in emerald_data.misc_pokemon:
+                    original_species = self.modified_species[encounter.species_id]
+                    target_bst = sum(original_species.base_stats) if should_match_bst else None
+                    target_type = self.random.choice(original_species.types) if should_match_type else None
+
+                    self.modified_misc_pokemon.append(MiscPokemonData(
+                        get_random_species(self.random, self.modified_species, target_bst, target_type).species_id,
+                        encounter.address
+                    ))
+
         def randomize_opponent_parties() -> None:
             should_match_bst = self.options.trainer_parties in {
                 RandomizeTrainerParties.option_match_base_stats,
@@ -1043,6 +1075,7 @@ class PokemonEmeraldWorld(World):
         self.modified_trainers = copy.deepcopy(emerald_data.trainers)
         self.modified_tmhm_moves = copy.deepcopy(emerald_data.tmhm_moves)
         self.modified_legendary_encounters = copy.deepcopy(emerald_data.legendary_encounters)
+        self.modified_misc_pokemon = copy.deepcopy(emerald_data.misc_pokemon)
         self.modified_starters = copy.deepcopy(emerald_data.starters)
 
         # Randomize species data
@@ -1069,6 +1102,10 @@ class PokemonEmeraldWorld(World):
         if self.options.legendary_encounters != RandomizeLegendaryEncounters.option_vanilla:
             randomize_legendary_encounters()
 
+        # Randomize misc pokemon
+        if self.options.misc_pokemon != RandomizeMiscPokemon.option_vanilla:
+            randomize_misc_pokemon()
+
         # Randomize opponents
         if self.options.trainer_parties != RandomizeTrainerParties.option_vanilla:
             randomize_opponent_parties()
@@ -1078,6 +1115,14 @@ class PokemonEmeraldWorld(World):
             randomize_starters()
 
         generate_output(self, output_directory)
+
+        del self.modified_trainers
+        del self.modified_tmhm_moves
+        del self.modified_legendary_encounters
+        del self.modified_misc_pokemon
+        del self.modified_starters
+        del self.modified_maps
+        del self.modified_species
 
     def modify_multidata(self, multidata: Dict[str, Any]):
         import base64

@@ -355,6 +355,7 @@ class ForceFullyEvolved(Range):
     range_end = 100
     default = 100
 
+
 class RandomizeLegendaryEncounters(Choice):
     """
     Randomizes legendary encounters (Rayquaza, Regice, Latias, etc...). The roamer will always be Latios during legendary hunts.
@@ -367,6 +368,27 @@ class RandomizeLegendaryEncounters(Choice):
     Completely Random: There are no restrictions
     """
     display_name = "Randomize Legendary Encounters"
+    default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_match_base_stats = 2
+    option_match_type = 3
+    option_match_base_stats_and_type = 4
+    option_completely_random = 5
+
+
+class RandomizeMiscPokemon(Choice):
+    """
+    Randomizes non-legendary static encounters. May grow to include other pokemon like trades or gifts.
+
+    Vanilla: Species are unchanged
+    Shuffle: Species are shuffled between each other
+    Match Base Stats: Species are replaced with species with approximately the same bst
+    Match Type: Species are replaced with species that share a type with the original
+    Match Base Stats and Type: Apply both Match Base Stats and Match Type
+    Completely Random: There are no restrictions
+    """
+    display_name = "Randomize Misc Pokemon"
     default = 0
     option_vanilla = 0
     option_shuffle = 1
@@ -769,6 +791,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     allow_trainer_legendaries: AllowTrainerLegendaries
     force_fully_evolved: ForceFullyEvolved
     legendary_encounters: RandomizeLegendaryEncounters
+    misc_pokemon: RandomizeMiscPokemon
     types: RandomizeTypes
     abilities: RandomizeAbilities
     ability_blacklist: AbilityBlacklist
