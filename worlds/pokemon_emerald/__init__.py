@@ -827,18 +827,14 @@ class PokemonEmeraldWorld(World):
                 combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
 
                 # TMs
-                for i in range(0, 50):
-                    if self.options.tm_compatibility == TmCompatibility.option_fully_compatible:
-                        combatibility_array[i] = True
-                    elif self.options.tm_compatibility == TmCompatibility.option_completely_random:
-                        combatibility_array[i] = self.random.choice([True, False])
+                if self.options.tm_compatibility != TmCompatibility.special_range_names["vanilla"]:
+                    for i in range(0, 50):
+                        combatibility_array[i] = self.random.random() < self.options.tm_compatibility / 100
 
                 # HMs
-                for i in range(50, 58):
-                    if self.options.hm_compatibility == HmCompatibility.option_fully_compatible:
-                        combatibility_array[i] = True
-                    elif self.options.hm_compatibility == HmCompatibility.option_completely_random:
-                        combatibility_array[i] = self.random.choice([True, False])
+                if self.options.hm_compatibility != HmCompatibility.special_range_names["vanilla"]:
+                    for i in range(50, 58):
+                        combatibility_array[i] = self.random.random() < self.options.hm_compatibility / 100
 
                 species.tm_hm_compatibility = bool_array_to_int(combatibility_array)
 

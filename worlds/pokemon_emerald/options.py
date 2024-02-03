@@ -2,9 +2,8 @@
 Option definitions for Pokemon Emerald
 """
 from dataclasses import dataclass
-from typing import Dict, Type
 
-from Options import Choice, DefaultOnToggle, TextChoice, OptionSet, Range, Toggle, FreeText, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, TextChoice, OptionSet, NamedRange, Range, Toggle, FreeText, PerGameCommonOptions
 
 from .data import data
 
@@ -490,35 +489,30 @@ class MoveBlacklist(OptionSet):
     valid_keys = frozenset(data.move_labels.keys())
 
 
-class HmCompatibility(Choice):
+class HmCompatibility(NamedRange):
     """
-    Modifies the compatibility of HMs
-
-    Vanilla: Compatibility is unchanged
-    Fully Compatible: Every species can learn any HM
-    Completely Random: Compatibility is 50/50 for every HM (does not remain consistent across evolution)
+    Sets the percent chance that a given HM is compatible with a species
     """
     display_name = "HM Compatibility"
-    default = 1
-    option_vanilla = 0
-    option_fully_compatible = 1
-    option_completely_random = 2
+    default = -1
+    range_start = 50
+    range_end = 100
+    special_range_names = {
+        "vanilla": -1
+    }
 
 
-class TmCompatibility(Choice):
+class TmCompatibility(NamedRange):
     """
-    Modifies the compatibility of TMs
-
-    Vanilla: Compatibility is unchanged
-    Fully Compatible: Every species can learn any TM
-    Completely Random: Compatibility is 50/50 for every TM (does not remain consistent across evolution)
+    Sets the percent chance that a given TM is compatible with a species
     """
     display_name = "TM Compatibility"
-    default = 0
-    option_vanilla = 0
-    option_fully_compatible = 1
-    option_completely_random = 2
-
+    default = -1
+    range_start = 0
+    range_end = 100
+    special_range_names = {
+        "vanilla": -1
+    }
 
 class TmMoves(Toggle):
     """
