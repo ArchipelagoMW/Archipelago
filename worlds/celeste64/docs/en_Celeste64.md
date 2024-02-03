@@ -1,14 +1,22 @@
-# Clique
+# Celeste 64
 
 ## What is this game?
 
-~~Clique is a psychological survival horror game where a player must survive the temptation to press red buttons.~~
+Relive the magic of Celeste Mountain alongside Madeline in this small, heartfelt 3D platformer.
+Created in a week(ish) by the Celeste team to celebrate the game’s sixth anniversary.
 
-Clique is a joke game developed for Archipelago in March 2023 to showcase how easy it can be to develop a world for
-Archipelago. The objective of the game is to press the big red button. If a player is playing on `hard_mode`, they must
-wait for someone else in the multiworld to "activate" their button before they can press it.
+Ported to Archipelago in a week(ish) by PoryGone, this World provides the following as unlockable items:
+- Strawberries
+- Dash Refills
+- Double Dash Refills
+- Feathers
+- Coins
+- Cassettes
+- Traffic Blocks
+- Springs
+- Breakable Blocks
 
-Clique can be played on most modern HTML5-capable browsers.
+The goal is to collect a certain number of Strawberries, then head to Badeline on her floating island.
 
 ## Where is the settings page?
 
