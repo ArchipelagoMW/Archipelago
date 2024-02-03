@@ -699,15 +699,15 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
         LocationData("Harvest of Screams", "Harvest of Screams: West Ursadon Matriarch", SC2HOTS_LOC_ID_OFFSET + 403, LocationType.VANILLA,
                      lambda state: logic.zerg_common_unit(state)),
         LocationData("Harvest of Screams", "Harvest of Screams: Lost Brood", SC2HOTS_LOC_ID_OFFSET + 404, LocationType.EXTRA),
-        LocationData("Harvest of Screams", "Harvest of Screams: Northeast Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 405, LocationType.VANILLA,
+        LocationData("Harvest of Screams", "Harvest of Screams: Northeast Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 405, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)),
-        LocationData("Harvest of Screams", "Harvest of Screams: Northwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 406, LocationType.VANILLA,
+        LocationData("Harvest of Screams", "Harvest of Screams: Northwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 406, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)),
-        LocationData("Harvest of Screams", "Harvest of Screams: Southwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 407, LocationType.VANILLA,
+        LocationData("Harvest of Screams", "Harvest of Screams: Southwest Psi-link Spire", SC2HOTS_LOC_ID_OFFSET + 407, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)),
-        LocationData("Harvest of Screams", "Harvest of Screams: Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.VANILLA,
+        LocationData("Harvest of Screams", "Harvest of Screams: Nafash", SC2HOTS_LOC_ID_OFFSET + 408, LocationType.EXTRA,
                      lambda state: logic.zerg_common_unit(state)
                                    and logic.zerg_basic_anti_air(state)),
         LocationData("Shoot the Messenger", "Shoot the Messenger: Victory", SC2HOTS_LOC_ID_OFFSET + 500, LocationType.VICTORY,
