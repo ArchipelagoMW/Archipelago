@@ -138,17 +138,6 @@ class PokemonEmeraldWorld(World):
                             self.player, self.multiworld.player_name[self.player])
             self.options.remote_items.value = Toggle.option_true
 
-        # With remote items turned on, players may not see any feedback
-        # that an item was picked up or given to them if they're filtering
-        # incoming items. There's no supported way for the client to tell
-        # whether an item was sent from its own world to trick the filter,
-        # so for now we just force the message filter to off.
-        if self.options.remote_items:
-            logging.warning("Pokemon Emerald: Remote items setting for Player %s (%s) requires receive_item_messages "
-                            "to be set to all. Forcibly changing their setting.", self.player,
-                            self.multiworld.player_name[self.player])
-            self.options.receive_item_messages.value = ReceiveItemMessages.option_all
-
         if self.options.goal == Goal.option_legendary_hunt:
             # Prevent turning off all legendary encounters
             if len(self.options.allowed_legendary_hunt_encounters.value) == 0:

@@ -227,11 +227,12 @@ class PokemonEmeraldClient(BizHawkClient):
             # fill it with the next item
             if num_received_items < len(ctx.items_received) and received_item_is_empty:
                 next_item = ctx.items_received[num_received_items]
+                should_display = 1 if next_item.flags & 1 or next_item.player == ctx.slot else 0
                 await bizhawk.write(ctx.bizhawk_ctx, [
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
                     (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [next_item.flags & 1], "System Bus"),
+                    (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [should_display], "System Bus"),
                 ])
 
             # Read flags in 2 chunks
