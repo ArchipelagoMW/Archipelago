@@ -113,6 +113,7 @@ class PokemonEmeraldClient(BizHawkClient):
     local_checked_locations: Set[int]
     local_set_events: Dict[str, bool]
     local_found_key_items: Dict[str, bool]
+    local_defeated_legendaries: Dict[str, bool]
     goal_flag: Optional[int]
 
     wonder_trade_update_event: asyncio.Event
@@ -128,6 +129,7 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_checked_locations = set()
         self.local_set_events = {}
         self.local_found_key_items = {}
+        self.local_defeated_legendaries = {}
         self.goal_flag = None
         self.wonder_trade_update_event = asyncio.Event()
         self.wonder_trade_task = None
@@ -428,6 +430,22 @@ class PokemonEmeraldClient(BizHawkClient):
                     "operations": [{"operation": "or", "value": key_bitfield}]
                 }])
                 self.local_found_key_items = local_found_key_items
+
+            if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+                if caught_legendaries != self.local_defeated_legendaries and ctx.slot is not None:
+                    legendary_bitfield = 0
+                    for i, legendary_name in enumerate(LEGENDARY_NAMES.values()):
+                        if caught_legendaries[legendary_name]:
+                            legendary_bitfield |= 1 << i
+
+                    await ctx.send_msgs([{
+                        "cmd": "Set",
+                        "key": f"pokemon_emerald_legendaries_{ctx.team}_{ctx.slot}",
+                        "default": 0,
+                        "want_reply": False,
+                        "operations": [{"operation": "or", "value": legendary_bitfield}]
+                    }])
+                    self.local_defeated_legendaries = caught_legendaries
         except bizhawk.RequestFailedError:
             # Exit handler and return to main loop to reconnect
             pass
