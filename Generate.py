@@ -341,13 +341,15 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     for option in new_weights:
         if option.endswith("@merge"):
             option_name = option.replace("@merge", "")
-            new_items = new_weights[option]
+            new_value = new_weights[option]
             if option_name in weights:
-                if isinstance(new_items, dict):
-                    new_items.update(weights[option_name])
+                if isinstance(new_value, dict):
+                    new_value.update(weights[option_name])
+                elif isinstance(new_value, list):
+                    new_value.extend(weights[option_name])
                 else:
-                    new_items.extend(weights[option_name])
-            cleaned_weights[option_name] = new_items
+                    raise Exception("Cannot apply @merge to non-dict or list type.")
+            cleaned_weights[option_name] = new_value
         else:
             cleaned_weights[option] = new_weights[option]
     new_options = set(cleaned_weights) - set(weights)
