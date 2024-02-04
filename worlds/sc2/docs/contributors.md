@@ -21,10 +21,15 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * @NobleXenon
 * Severencir (@Severencir)
 * neocerber (@neocerber @MaxTousss)
-* @Matiya-star
+* Mati @Matiya-star
 * Ixzine
 * sweetox
 * 8thDaughterOfFrost
+* The M8
+* Berserker (@Berserker66)
+* KaitoKid
+* Sheen
+* ProfBytes
 
 ## Older versions
 Not all contributors to older versions of Archipelago Starcraft 2 are known.
