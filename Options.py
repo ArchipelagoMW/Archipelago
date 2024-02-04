@@ -901,17 +901,49 @@ class ItemSet(OptionSet):
     convert_name_groups = True
 
 
+class PlandoTexts(Option[typing.Dict[str, str]], VerifyKeys):
+    default: typing.List = []
+    supports_weighting = False
+
+    def __init__(self, value: typing.Dict[str, str]):
+        self.value = deepcopy(value)
+        super().__init__()
+
+    def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
+        from BaseClasses import PlandoOptions
+        if not (PlandoOptions.texts & plando_options):
+            # plando is disabled but plando options were given so overwrite the options
+            self.value = []
+            logging.warning(f"The plando texts module is turned off, "
+                            f"so text for {player_name} will be ignored.")
+
+    @classmethod
+    def from_any(cls, data: typing.List[typing.Any]) -> Option[typing.Dict[str, str]]:
+        texts = {}
+        if type(data) == list:
+            for text in data:
+                if type(text) == dict:
+                    if random.random() < float(text.get("percentage", 100)/100):
+                        at = text.get("at", None)
+                        if at is not None:
+                            texts[at] = text.get("text", "")
+                else:
+                    raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
+            cls.verify_keys([text.at for text in texts])
+            return cls(texts)
+        else:
+            raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
+
+
 class ConnectionsMeta(AssembleOptions):
     def __new__(mcs, name, bases, attrs):
         if name != "PlandoConnections":
-            if attrs["shared_connections"]:
-                assert "connections" in attrs, f"Please define valid connections for {name}"
-                attrs["connections"] = frozenset((connection.lower() for connection in attrs["connections"]))
-            else:
-                assert "entrances" in attrs, f"Please define valid entrances for {name}"
-                attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
-                assert "exits" in attrs, f"Please define valid exits for {name}"
-                attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
+            assert "entrances" in attrs, f"Please define valid entrances for {name}"
+            attrs["entrances"] = frozenset((connection.lower() for connection in attrs["entrances"]))
+            assert "exits" in attrs, f"Please define valid exits for {name}"
+            attrs["exits"] = frozenset((connection.lower() for connection in attrs["exits"]))
+        if "__doc__" not in attrs:
+            attrs["__doc__"] = PlandoConnections.__doc__
         cls = super().__new__(mcs, name, bases, attrs)
         return cls
 
@@ -920,30 +952,29 @@ class PlandoConnection(typing.NamedTuple):
     entrance: str
     exit: str
     direction: str  # entrance, exit or both
+    percentage: int = 100
 
 
-class PlandoConnections(Option[typing.List["PlandoConnection"]], metaclass=ConnectionsMeta):
+class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=ConnectionsMeta):
     """Generic connections plando. Format is:
     - entrance: "Entrance Name"
       exit: "Exit Name"
       direction: "Direction"
-    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both'.
-    Must override can_connect, which passes an entrance and an exit. Check to see if the connection is valid."""
+      percentage: 100
+    Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
     class Direction:
         Entrance = "entrance"
         Exit = "exit"
         Both = "both"
 
     display_name = "Plando Connections"
-    shared_connections: bool = False
-    """True if all connections can be an entrance or an exit, False otherwise."""
 
     default: typing.List[PlandoConnection] = []
     supports_weighting = False
 
     entrances: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
     exits: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
-    connections: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
 
     def __init__(self, value: typing.List[PlandoConnection]):
         self.value = deepcopy(value)
@@ -951,17 +982,11 @@ class PlandoConnections(Option[typing.List["PlandoConnection"]], metaclass=Conne
 
     @classmethod
     def validate_entrance_name(cls, entrance):
-        if cls.shared_connections:
-            return entrance.lower() in cls.connections
-        else:
-            return entrance.lower() in cls.entrances
+        return entrance.lower() in cls.entrances
 
     @classmethod
     def validate_exit_name(cls, exit):
-        if cls.shared_connections:
-            return exit.lower() in cls.connections
-        else:
-            return exit.lower() in cls.exits
+        return exit.lower() in cls.exits
 
     @classmethod
     def can_connect(cls, entrance, exit):
@@ -995,18 +1020,23 @@ class PlandoConnections(Option[typing.List["PlandoConnection"]], metaclass=Conne
             value = []
             for connection in data:
                 if type(connection) == dict:
-                    entrance = connection.get("entrance", None)
-                    exit = connection.get("exit", None)
-                    direction = connection.get("direction", "both")
-                    if not entrance or not exit:
-                        raise Exception("Plando connection must have an entrance and an exit.")
-                    value.append(PlandoConnection(
-                        entrance,
-                        exit,
-                        direction
-                    ))
+                    percentage = connection.get("percentage", 100)
+                    if random.random() < float(percentage / 100):
+                        entrance = connection.get("entrance", None)
+                        exit = connection.get("exit", None)
+                        direction = connection.get("direction", "both")
+
+                        if not entrance or not exit:
+                            raise Exception("Plando connection must have an entrance and an exit.")
+                        value.append(PlandoConnection(
+                            entrance,
+                            exit,
+                            direction,
+                            percentage
+                        ))
                 elif type(connection) == PlandoConnection:
-                    value.append(connection)
+                    if random.random() < float(connection.percentage / 100):
+                        value.append(connection)
                 else:
                     raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
             cls.validate_plando_connections(value)

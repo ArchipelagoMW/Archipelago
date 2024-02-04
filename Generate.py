@@ -588,18 +588,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
         if not ret.required_medallions[index]:
             raise Exception(f"unknown Medallion {medallion} for {'misery mire' if index == 0 else 'turtle rock'}")
 
-    ret.plando_texts = {}
-    if PlandoOptions.texts in plando_options:
-        tt = TextTable()
-        tt.removeUnwantedText()
-        options = weights.get("plando_texts", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                at = str(get_choice_legacy("at", placement))
-                if at not in tt:
-                    raise Exception(f"No text target \"{at}\" found.")
-                ret.plando_texts[at] = str(get_choice_legacy("text", placement))
-
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:

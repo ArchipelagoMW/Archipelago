@@ -2,9 +2,10 @@ import typing
 
 from BaseClasses import MultiWorld
 from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, \
-    StartInventoryPool, PlandoBosses, PlandoConnections
+    StartInventoryPool, PlandoBosses, PlandoConnections, PlandoTexts
 from .EntranceShuffle import default_connections, default_dungeon_connections, \
     inverted_default_connections, inverted_default_dungeon_connections
+from .Text import TextTable
 
 
 class Logic(Choice):
@@ -442,11 +443,20 @@ class ALttPPlandoConnections(PlandoConnections):
     exits = set([connection[1] for connection in (
         *default_connections, *default_dungeon_connections, *inverted_default_connections,
         *inverted_default_dungeon_connections)])
-    shared_connections = False
+
+
+class ALttPPlandoTexts(PlandoTexts):
+    """Text plando. Format is:
+    - text: 'This is your text'
+      at: text_key
+      percentage: 100
+    Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
+    valid_keys = TextTable.valid_keys
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
     "plando_connections": ALttPPlandoConnections,
+    "plando_texts": ALttPPlandoTexts,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
     "open_pyramid": OpenPyramid,

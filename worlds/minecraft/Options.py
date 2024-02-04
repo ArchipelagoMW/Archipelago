@@ -101,7 +101,6 @@ class StartingItems(OptionList):
 class MCPlandoConnections(PlandoConnections):
     entrances = set(connection[0] for connection in region_info["default_connections"])
     exits = set(connection[1] for connection in region_info["default_connections"])
-    shared_connections = False
 
     @classmethod
     def can_connect(cls, entrance, exit):

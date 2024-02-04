@@ -31,7 +31,6 @@ class TrackRandomRange(Range):
 
 
 class OoTPlandoConnections(PlandoConnections):
-    shared_connections = False
     entrances = set([connection[1][0] for connection in entrance_shuffle_table])
     exits = set([connection[2][0] for connection in entrance_shuffle_table if len(connection) > 2])
 
