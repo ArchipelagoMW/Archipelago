@@ -8,10 +8,12 @@ from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.crafting_logic import CraftingLogicMixin
 from ...logic.crop_logic import CropLogicMixin
 from ...logic.has_logic import HasLogicMixin
+from ...logic.received_logic import ReceivedLogicMixin
 from ...logic.region_logic import RegionLogicMixin
 from ...logic.relationship_logic import RelationshipLogicMixin
 from ...logic.season_logic import SeasonLogicMixin
 from ...logic.wallet_logic import WalletLogicMixin
+from ...strings.ap_names.community_upgrade_names import CommunityUpgrade
 from ...strings.artisan_good_names import ArtisanGood
 from ...strings.craftable_names import Consumable, Edible, Bomb
 from ...strings.crop_names import Fruit
@@ -33,7 +35,7 @@ class ModSpecialOrderLogicMixin(BaseLogicMixin):
 
 
 class ModSpecialOrderLogic(BaseLogic[Union[ActionLogicMixin, ArtisanLogicMixin, CraftingLogicMixin, CropLogicMixin, HasLogicMixin, RegionLogicMixin,
-RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
+ReceivedLogicMixin, RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
     def get_modded_special_orders_rules(self):
         special_orders = {}
         if ModNames.juna in self.options.mods:
@@ -48,7 +50,7 @@ RelationshipLogicMixin, SeasonLogicMixin, WalletLogicMixin]]):
         if ModNames.sve in self.options.mods:
             special_orders.update({
                 ModSpecialOrder.andys_cellar: self.logic.has(Material.stone) & self.logic.has(Material.wood) & self.logic.has(Material.hardwood) &
-                                              self.logic.has(MetalBar.iron) &
+                                              self.logic.has(MetalBar.iron) & self.logic.received(CommunityUpgrade.movie_theater, 1) &
                                               self.logic.region.can_reach(SVERegion.fairhaven_farm),
                 ModSpecialOrder.a_mysterious_venture: self.logic.has(Bomb.cherry_bomb) & self.logic.has(Bomb.bomb) & self.logic.has(Bomb.mega_bomb) &
                                                       self.logic.region.can_reach(Region.adventurer_guild),
