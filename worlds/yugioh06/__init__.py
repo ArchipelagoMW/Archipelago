@@ -23,6 +23,8 @@ from .logic import YuGiOh06Logic
 from .BoosterPacks import booster_contents, get_booster_locations
 from .StructureDeck import get_deck_content_locations
 from .RomValues import structure_deck_selection, banlist_ids, function_addresses
+from .Client_bh import YuGiOh2006Client
+
 
 class Yugioh06Web(WebWorld):
     theme = "stone"
