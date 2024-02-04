@@ -4114,7 +4114,7 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD": {
-    "label": "Aqua Hideout 1F - Team Aqua Grunt 1",
+    "label": "Aqua Hideout 1F - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD": {
@@ -4122,67 +4122,67 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD": {
-    "label": "Aqua Hideout B1F - Team Aqua Grunt 3",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD": {
-    "label": "Aqua Hideout B2F - Team Aqua Grunt 4",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD": {
-    "label": "Aqua Hideout B1F - Team Aqua Grunt 5",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD": {
-    "label": "Aqua Hideout B2F - Team Aqua Grunt 6",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD": {
-    "label": "Aqua Hideout B1F - Team Aqua Grunt 7",
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD": {
-    "label": "Aqua Hideout B2F - Team Aqua Grunt 8",
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD": {
-    "label": "Magma Hideout 3F - Team Magma Grunt 10",
+    "label": "Magma Hideout 3F - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD": {
-    "label": "Magma Hideout 4F - Team Magma Grunt 11",
+    "label": "Magma Hideout 4F - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD": {
-    "label": "Magma Hideout 4F - Team Magma Grunt 12",
+    "label": "Magma Hideout 4F - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD": {
-    "label": "Magma Hideout 4F - Team Magma Grunt 13",
+    "label": "Magma Hideout 4F - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD": {
-    "label": "Magma Hideout 2F - Team Magma Grunt 14",
+    "label": "Magma Hideout 2F - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD": {
-    "label": "Magma Hideout 2F - Team Magma Grunt 15",
+    "label": "Magma Hideout 2F - Team Magma Grunt 5",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD": {
-    "label": "Magma Hideout 3F - Team Magma Grunt 16",
+    "label": "Magma Hideout 3F - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD": {
-    "label": "Magma Hideout 1F - Team Magma Grunt 1",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD": {
     "label": "Magma Hideout 1F - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD": {
+    "label": "Magma Hideout 1F - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD": {
-    "label": "Magma Hideout 2F - Team Magma Grunt 3",
+    "label": "Magma Hideout 2F - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD": {
@@ -4190,7 +4190,7 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD": {
-    "label": "Magma Hideout 2F - Team Magma Grunt 5",
+    "label": "Magma Hideout 2F - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD": {
@@ -4206,7 +4206,7 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD": {
-    "label": "Magma Hideout 3F - Team Magma Grunt 9",
+    "label": "Magma Hideout 3F - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD": {
@@ -4218,19 +4218,19 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_1_REWARD": {
-    "label": "Mt Pyre Summit - Team Aqua Grunt 1",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_GRUNT_MT_PYRE_2_REWARD": {
     "label": "Mt Pyre Summit - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
+  "TRAINER_GRUNT_MT_PYRE_2_REWARD": {
+    "label": "Mt Pyre Summit - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
   "TRAINER_GRUNT_MT_PYRE_3_REWARD": {
-    "label": "Mt Pyre Summit - Team Aqua Grunt 3",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 4",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MT_PYRE_4_REWARD": {
-    "label": "Mt Pyre Summit - Team Aqua Grunt 4",
+    "label": "Mt Pyre Summit - Team Aqua Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_MUSEUM_1_REWARD": {
@@ -4258,31 +4258,31 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD": {
-    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 3",
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD": {
-    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 4",
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD": {
-    "label": "Seafloor Cavern Room 3 - Team Aqua Grunt 5",
+    "label": "Seafloor Cavern Room 3 - Team Aqua Grunt",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_1_REWARD": {
-    "label": "Space Center - Team Magma Grunt 1",
-    "tags": ["Trainer"]
-  },
-  "TRAINER_GRUNT_SPACE_CENTER_2_REWARD": {
     "label": "Space Center - Team Magma Grunt 2",
     "tags": ["Trainer"]
   },
+  "TRAINER_GRUNT_SPACE_CENTER_2_REWARD": {
+    "label": "Space Center - Team Magma Grunt 4",
+    "tags": ["Trainer"]
+  },
   "TRAINER_GRUNT_SPACE_CENTER_3_REWARD": {
-    "label": "Space Center - Team Magma Grunt 3",
+    "label": "Space Center - Team Magma Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_4_REWARD": {
-    "label": "Space Center - Team Magma Grunt 4",
+    "label": "Space Center - Team Magma Grunt 3",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_SPACE_CENTER_5_REWARD": {
@@ -4298,11 +4298,11 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_1_REWARD": {
-    "label": "Weather Institute 1F - Team Aqua Grunt 1",
+    "label": "Weather Institute 1F - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_2_REWARD": {
-    "label": "Weather Institute 2F - Team Aqua Grunt 2",
+    "label": "Weather Institute 2F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_3_REWARD": {
@@ -4310,11 +4310,11 @@
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_4_REWARD": {
-    "label": "Weather Institute 1F - Team Aqua Grunt 4",
+    "label": "Weather Institute 1F - Team Aqua Grunt 1",
     "tags": ["Trainer"]
   },
   "TRAINER_GRUNT_WEATHER_INST_5_REWARD": {
-    "label": "Weather Institute 2F - Team Aqua Grunt 5",
+    "label": "Weather Institute 2F - Team Aqua Grunt 2",
     "tags": ["Trainer"]
   },
   "TRAINER_GWEN_REWARD": {
