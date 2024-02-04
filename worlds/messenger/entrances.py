@@ -38,6 +38,4 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
 
     result = randomize_entrances(world, list(set(regions_to_shuffle)), coupled, lambda group: ["Default"])
 
-    world.transitions = [placement for placement in
-                         sorted(result.placements,
-                                key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))]
+    world.transitions = sorted(result.placements, key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))

@@ -240,7 +240,7 @@ class MessengerWorld(World):
             dump(data, f)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.toml", show_entrance_names=True)
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.puml", show_entrance_names=True)
         slot_data = {
             "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
