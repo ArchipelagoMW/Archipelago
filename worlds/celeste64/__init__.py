@@ -80,5 +80,6 @@ class Celeste64World(World):
     def fill_slot_data(self):
         return {
             "death_link": self.options.death_link.value,
+            "death_link_amnesty": self.options.death_link_amnesty.value,
             "strawberries_required": self.options.strawberries_required.value
         }
