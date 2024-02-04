@@ -16,7 +16,7 @@ local allItems = {1, "Monster vial 1", 0x09798B, 2, "Monster vial 2", 0x09798C, 
 				10, "Dark shield", 0x097994, 11, "Goddess shield", 0x097995, 12, "Shaman shield", 0x097996, 13, "Medusa shield", 0x097997, 14, "Skull shield", 0x097998, 15, "Fire shield", 0x097999, 16, "Alucard shield", 0x09799A, 17, "Sword of dawn", 0x09799B,
 				18, "Basilard", 0x09799C, 19, "Short sword", 0x09799D, 20, "Combat knife", 0x09799E, 21, "Nunchaku", 0x09799F, 22, "Were bane", 0x0979A0, 23, "Rapier", 0x0979A1, 24, "Karma coin", 0x0979A2, 25, "Magic missile", 0x0979A3, 26, "Red rust", 0x0979A4,
 				27, "Takemitsu", 0x0979A5, 28, "Shotel", 0x0979A6, 29, "Orange", 0x0979A7, 30, "Apple", 0x0979A8, 31, "Banana", 0x0979A9, 32, "Grapes", 0x0979AA, 33, "Strawberry", 0x0979AB, 34, "Pineapple", 0x0979AC, 35, "Peanuts", 0x0979AD,
-				36, "Toadstool", 0x0979A6, 37, "Shiitake", 0x0979AF, 38, "Cheesecake", 0x0979B0, 39, "Shortcake", 0x0979B1, 40, "Tart", 0x0979B2, 41, "Parfait", 0x0979B3, 42, "Pudding", 0x0979B4,	43, "Ice cream", 0x0979B5, 44, "Frankfurter", 0x0979B6,
+				36, "Toadstool", 0x0979AE, 37, "Shiitake", 0x0979AF, 38, "Cheesecake", 0x0979B0, 39, "Shortcake", 0x0979B1, 40, "Tart", 0x0979B2, 41, "Parfait", 0x0979B3, 42, "Pudding", 0x0979B4,	43, "Ice cream", 0x0979B5, 44, "Frankfurter", 0x0979B6,
 				45, "Hamburger", 0x0979B7, 46, "Pizza", 0x0979B8, 47, "Cheese", 0x0979B9, 48, "Ham and eggs", 0x0979BA, 49, "Omelette", 0x0979BB, 50, "Morning set", 0x0979BC, 51, "Lunch A", 0x0979BD, 52, "Lunch B", 0x0979BE, 53, "Curry rice", 0x0979BF,
 				54, "Gyros plate", 0x0979C0, 55, "Spaghetti", 0x0979C1, 56, "Grape juice", 0x0979C2, 57, "Barley tea", 0x0979C3, 58, "Green tea", 0x0979C4, 59, "Natou", 0x0979C5, 60, "Ramen", 0x0979C6, 61, "Miso soup", 0x0979C7, 62, "Sushi", 0x0979C8,
 				63, "Pork bun", 0x0979C9, 64, "Red bean bun", 0x0979CA, 65, "Chinese bun", 0x0979CB, 66, "Dim sum set", 0x0979CC, 67, "Pot roast", 0x0979CD, 68, "Sirloin", 0x0979CE, 69, "Turkey", 0x0979CF, 70, "Meal ticket", 0x0979D0, 71, "Neutron bomb", 0x0979D1,
@@ -54,7 +54,7 @@ local dracula_dead = false
 local dracula_timer = 0
 local just_died = false
 local first_connect = true
-local last_status = 0  -- 1 game connect / 2 on ST0 / 4 on Alucard / 8 just left STO
+local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard / 20 just died
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
@@ -66,9 +66,9 @@ local SCRIPT_VERSION = 1
 local ItemsReceived = {}
 local MsgReceived = {}
 local last_item_processed = 1
+local last_processed_read = 1024
 local start_item_drawing = 0
 local delay_timer = 0
-local drawing = false
 local checked_locations = {}
 local all_location_table = {}
 local bosses = {}
@@ -81,6 +81,10 @@ local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
 local sotnSocket = nil
 local frame = 0
+
+-- TODO: I guess there is a bug when the client try to send an item with a pause screen active
+-- Display msg had some issues when items are sent on misplaced locations
+-- Looks like there is a bug when granting a item and you have one equipped
 
 function getCurrZone()
 	local z = mainmemory.read_u16_le(0x180000)
@@ -95,58 +99,16 @@ function getCurrZone()
 	end
 end
 
-function getExpectedHeart()
-	return mainmemory.read_u8(0x097be8) * 2 + 50
-end
-
-function getExpectedHp()
-	local level = mainmemory.read_u8(0x097be8)
-	local hp = 70
-	for i = 1, level, 1 do
-		if i < 10 then hp = hp + 1 end
-		if i < 20 then hp = hp + 3 end
-		if i < 30 then hp = hp + 6 end
-		if i < 40 then hp = hp + 10 end
-		if i < 50 then hp = hp + 20 end
-		if i < 60 then hp = hp + 30 end
-		if i < 70 then hp = hp + 40 end
-		if i < 80 then hp = hp + 50 end
-		if i < 90 then hp = hp + 100 end
-		if i < 100 then hp = hp + 200 end
-	end
-
-	return hp
-end
-
-function create_empty_inventory()
-	local size = table.getn(allItems)
-	for i = 1, size, 3 do
-		if allItems[i] <= 258 then
-			expected_inventory[allItems[i]] = 0
-		end
-	end
-end
-
-function populate_received_inventory()
-	for i = #ItemsReceived, 1, -1 do
-		if ItemsReceived[i] == 412 then	heart_vessels = heart_vessels + 1
-		elseif ItemsReceived[i] == 423 then life_vessels = life_vessels + 1
-		elseif ItemsReceived[1] >= 1 then
-			if ItemsReceived[i] >= 300 then expected_relics[i - 300 + 1] = 1
-			else
-				expected_inventory[ItemsReceived[i]] = expected_inventory[ItemsReceived[i]] + 1
-			end
-		end
-	end
-end
-
 function checkVictory(f)
 	if dracula_timer == 0 then
+		console.log("Dracula timer: " .. f)
 		dracula_timer = f
 	end
 	if dracula_timer > 0 and f - dracula_timer > 500 then -- Shaft/Dracula share hp. Give some time to Dracula HP is loaded on memory
 		local cur_hp = mainmemory.read_u16_le(0x076ed6)
+		console.log("Dracula hp: " .. cur_hp)
 		if cur_hp == 0 or cur_hp > 60000 then
+			console.log("Dracula dead: " .. cur_hp)
 			dracula_dead = true
 		end
 	end
@@ -167,7 +129,7 @@ function grant_item_byid(num_id)
 	if address ~= 0 then
 		if itemid >= 300 and itemid < 400 then
 			if mainmemory.read_u8(address) == 0 then
-				if item_id >= 318 and item_id <= 322 then mainmemory.write_u8(address, 1)
+				if itemid >= 318 and itemid <= 322 then mainmemory.write_u8(address, 1)
 				else mainmemory.write_u8(address, 3) end
 			end
 		elseif itemid > 400 then
@@ -198,159 +160,54 @@ end
 function organize_inventory(item_id)
 	max_index = 0
 	start_address = 0
-	item_start_address = 0
 	offset = 169
 	item_offset = 0
+	free_byte = 0x01
+
 
 	if item_id > 0 and item_id <= 168 then --hand
 		start_address = 0x097a8d
-		item_start_address = 0x09798b
 		offset = 0
 		max_index = 168
 	elseif (item_id > 168 and item_id <= 194) or item_id == 258 then --chest 258 Alucart mail
 		start_address = 0x097b36
-		item_start_address = 0x097a34
 		max_index = 27
 	elseif item_id > 195 and item_id <= 216 then --helm
 		start_address = 0x097b50
-		item_start_address = 0x097a4e
 		max_index = 21
-		item_offset = 0x1a
+		item_offset = 196
+		free_byte = 0x1b
 	elseif item_id > 217 and item_id <= 225 then --cloak
 		start_address = 0x097b66
-		item_start_address = 0x097a64
 		max_index = 8
-		item_offset = 0x30
+		item_offset = 218
+		free_byte = 0x31
 	elseif item_id > 225 and item_id <= 257 then --trinket
 		start_address = 0x097b6f
-		item_start_address = 0x097a6d
 		max_index = 30
-		item_offset = 0x39
+		item_offset = 226
+		free_byte = 0x3a
 	end
 
 	for i = 1, max_index, 1 do
 		address = start_address + i
-		byte = mainmemory.read_u8(address)
-		qty = mainmemory.read_u8(item_start_address + byte - 1 - item_offset)
-		if qty == 0 then
+		local_byte = mainmemory.read_u8(address)
+		if local_byte == free_byte then
+			console.log("Item: " .. item_id .. " Free: " .. free_byte .. " Change: " .. start_address + (item_id - item_offset) + 1)
 			mainmemory.write_u8(address, item_id - offset)
-			mainmemory.write_u8(start_address + item_id - offset - item_offset, byte)
+			mainmemory.write_u8(start_address + (item_id - item_offset), local_byte)
 			break
 		end
-	end
-end
-
-function find_last_location_checked()
-	local found = 0
-	-- Items received might be consumables and given again. Vessels might got wrong because of randomness of starting stats.
-	if last_status == 4 then
-		for i = #ItemsReceived, 1, -1 do
-			-- We might found 2. Let's assume it's done and break
-			if found >= 2 then
-				return
-			end
-			item = ItemsReceived[i]
-			if item <= 329 then
-				item_id, address = find_item_position(item)
-				item_in_possession = has_item(item_id, address)
-			end
-			if item >= 300 and item <= 329 then
-				if item_in_possession ~= 0 then
-					console.log("Found relic processed: " .. item .. " Has: " .. item_in_possession)
-					last_item_processed = i
-					found = 2
-				end
-			end
-			if expected_inventory[item] <= item_in_possession then
-				console.log("Found last processed: " .. item .. " Has: " .. item_in_possession .. " Expected: " .. expected_inventory[item])
-				last_item_processed = i
-				found = 2
-			else
-				-- We might have used some item, but still have some. Assume we might processed already
-				if item_in_possession ~= 0 then
-					console.log("Item: " .. item .. " has " .. item_in_possession .. " in possession")
-					last_item_processed = Ice
-					found = found + 1
-				end
-			end
-			-- Process vessels
-			-- Default: 70 HP, 20 MP, 50 Max Hearts
-			-- Hearts 50 - 60 +5 per vessel
-			if item == 412 then
-				local heart_expected = getExpectedHeart()
-				local hearts = heart_expected + (5 * heart_vessels)
-				local heart_max = mainmemory.read_u32_le(0x097bac)
-				if hearts >= heart_max or hearts + 10 >= hearts_max then
-					console("Heart looks like been processed")
-					last_item_processed = i
-					found = found + 1
-				end
-			end
-			-- HP 70 - 85
-			if item == 423 then
-				local hp_expected = getExpectedHp()
-				local hp = hp_expected + (5 * life_vessels)
-				local hp_max = mainmemory.read_u32_le(0x097ba4)
-				if hp >= hp_max or hp + 15 >= hp_max then
-					console.log("HP looks like been processed")
-					last_item_processed = i
-					found = found + 1
-				end
-			end
-		end
-	end
-end
-
-function find_item_position(item_id)
-	local size = table.getn(allItems)
-	for i = 1, size, 3 do
-		if allItems[i] == item_id then
-			return i, allItems[i+2]
-		end
-	end
-	console.log("Something went wrong!")
-	return 0
-end
-
-function has_item(item_id, item_address)
-	if item_id >= 300 then return mainmemory.read_u8(item_address)
-	else
-		local total_item = 0
-		-- Check if the item is equipped
-		if item_id > 0 or item_id <= 168 then
-			if mainmemory.read_u32_le(0x097c00) == item_id or mainmemory.read_u32_le(0x097c04) == item_id then total_item = total_item + 1 end
-			total_item = total_item + mainmemory.read_u8(address)
-		end
-		if (item_id > 168 and item_id <= 194) or item_id == 258 then
-			if mainmemory.read_u32_le(0x097c0c) + 169 == item_id then total_item = total_item + 1 end
-			total_item = total_item + mainmemory.read_u8(address)
-		end
-		if item_id > 195 and item_id <= 216 then
-			if mainmemory.read_u32_le(0x097c08) + 169 == item_id then total_item = total_item + 1 end
-			total_item = total_item + mainmemory.read_u8(address)
-		end
-		if item_id > 217 and item_id <= 225 then
-			if mainmemory.read_u32_le(0x097c10) + 169 == item_id then total_item = total_item + 1 end
-			total_item = total_item + mainmemory.read_u8(address)
-		end
-		if item_id > 225 and item_id <= 257 then
-			if mainmemory.read_u32_le(0x097c14) + 169 == item_id or mainmemory.read_u32_le(0x097c18) + 169 == item_id then total_item = total_item + 1 end
-			total_item = total_item + mainmemory.read_u8(address)
-		end
-		return total_item
+		free_byte = free_byte + 1
 	end
 end
 
 function on_loadstate()
-	find_last_location_checked()
+	-- find_last_location_checked()
 	all_location_table = checkAllLocations()
 	first_connect = false
 	just_died = false
 	dracula_timer = 0
-end
-
-function ltrim(s)
-  return s:match'^%s*(.*)'
 end
 
 function check_death()
@@ -358,45 +215,6 @@ function check_death()
 	if hp <= 0 then
 		just_died = true
 	end
-end
-
-function check_relics()
-	local flag = mainmemory.read_u32_be(0x097964)
-	relics_owned["Soul of Bat"] = bit.check(flag, 24)
-	relics_owned["Fire of Bat"] = bit.check(flag, 16)
-	relics_owned["Echo of Bat"] = bit.check(flag, 8)
-	relics_owned["Force of Echo"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x097968)
-	relics_owned["Soul of Wolf"] = bit.check(flag, 24)
-	relics_owned["Power of Wolf"] = bit.check(flag, 16)
-	relics_owned["Skill of Wolf"] = bit.check(flag, 8)
-	relics_owned["Form of Mist"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x09796c)
-	relics_owned["Power of Mist"] = bit.check(flag, 24)
-	relics_owned["Gas Cloud"] = bit.check(flag, 16)
-	relics_owned["Cube of Zoe"] = bit.check(flag, 8)
-	relics_owned["Spirit Orb"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x097970)
-	relics_owned["Gravity Boots"] = bit.check(flag, 24)
-	relics_owned["Leap Stone"] = bit.check(flag, 16)
-	relics_owned["Holy Symbol"] = bit.check(flag, 8)
-	relics_owned["Faerie Scroll"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x097974)
-	relics_owned["Jewel of Open"] = bit.check(flag, 24)
-	relics_owned["Merman Statue"] = bit.check(flag, 16)
-	relics_owned["Bat Card"] = bit.check(flag, 8)
-	relics_owned["Ghost Card"] = bit.check(flag, 0)
-	flag = mainmemory.read_u24_be(0x097978)
-	relics_owned["Faerie Card"] = bit.check(flag, 16)
-	relics_owned["Demon Card"] = bit.check(flag, 8)
-	relics_owned["Sword Card"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x09797c)
-	relics_owned["Heart of Vlad"] = bit.check(flag, 16)
-	relics_owned["Tooth of Vlad"] = bit.check(flag, 8)
-	relics_owned["Rib of Vlad"] = bit.check(flag, 0)
-	flag = mainmemory.read_u32_be(0x097980)
-	relics_owned["Ring of Vlad"] = bit.check(flag, 24)
-	relics_owned["Eye of Vlad"] = bit.check(flag, 16)
 end
 
 function processBlock(block)
@@ -454,9 +272,6 @@ function receive()
     retTable["scriptVersion"] = SCRIPT_VERSION
 	retTable["locations"] = all_location_table
 	retTable["bosses"] = bosses
-	if dracula_dead then
-		retTable["victory"] = 1
-	end
 
 
     msg = json.encode(retTable).."\n"
@@ -486,13 +301,23 @@ function checkARE()
 	else
 		bosses["Minotaurus/Werewolf"] = false
 	end
+	if cur_zone == "ARE" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x2e90 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 222)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Form of Mist"] = true end
+		end
+	end
 
 	return checks
 end
 
 function checkCAT()
 	local checks = {}
-	local flag = mainmemory.read_u32_le(0x03befc)
+	--local flag = mainmemory.read_u32_le(0x03befc)
+	local flag = mainmemory.read_u24_le(0x03befc)
 	checks["CAT - Cat-eye circl."] = bit.check(flag, 0)
 	checks["CAT - Icebrand"] = bit.check(flag, 1)
 	checks["CAT - Walk armor"] = bit.check(flag, 2)
@@ -524,7 +349,8 @@ end
 
 function checkCHI()
 	local checks = {}
-	local flag = mainmemory.read_u32_le(0x03bf02)
+	-- local flag = mainmemory.read_u32_le(0x03bf02)
+	local flag = mainmemory.read_u16_le(0x03bf02)
 	checks["CHI - Power of sire(Demon)"] = bit.check(flag, 0)
 	checks["CHI - Karma coin"] = bit.check(flag, 1)
 	checks["CHI - Ring of ares"] = bit.check(flag, 4)
@@ -541,6 +367,15 @@ function checkCHI()
 		bosses["Cerberos"] = true
 	else
 		bosses["Cerberos"] = false
+	end
+	if cur_zone == "CHI" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x19b8 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 88)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Demon Card"] = true end
+		end
 	end
 
 	return checks
@@ -586,11 +421,37 @@ function checkLIB()
 	checks["LIB - Potion"] = bit.check(flag, 8)
 	checks["LIB - Antivenom"] = bit.check(flag, 9)
 	checks["LIB - Topaz circlet"] = bit.check(flag, 10)
-	checks["LIB - Bump librarian"] = bit.check(mainmemory.readbyte(0x03be60), 0)
 	if mainmemory.read_u16_le(0x03ca6c) ~= 0 then
 		bosses["Lesser Demon"] = true
 	else
 		bosses["Lesser Demon"] = false
+	end
+	if cur_zone == "LIB" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x2ec4 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1051)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 919)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= 5 then checks["Soul of Bat"] = true end
+		end
+		if room == 0x2f0c then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1681)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Faerie Scroll"] = true end
+		end
+		if room == 0x2ee4 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 230)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Jewel of Open"] = true end
+		end
+		if room == 0x2efc then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 48)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Faerie Card"] = true end
+		end
 	end
 
 	return checks
@@ -614,6 +475,21 @@ function checkNO0()
 	checks["NO0 - Hammer(Spirit)"] = bit.check(flag, 12)
 	checks["NO0 - Str. potion"] = bit.check(flag, 13)
 	checks["NO0 - Holy glasses"] = bit.check(0x03bec4, 0)
+	if cur_zone == "NO0" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x27f4 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 131)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 1017)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Spirit Orb"] = true end
+		end
+		if room == 0x2884 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1170)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Gravity Boots"] = true end
+		end
+	end
 
 	return checks
 end
@@ -633,6 +509,15 @@ function checkNO1()
 		bosses["Doppleganger 10"] = true
 	else
 		bosses["Doppleganger 10"] = false
+	end
+	if cur_zone == "NO1" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x34f4 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 360)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 807)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Soul of Wolf"] = true end
+		end
 	end
 
 	return checks
@@ -656,6 +541,21 @@ function checkNO2()
 	else
 		bosses["Olrox"] = false
 	end
+	if cur_zone == "NO2" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x330c then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 130)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Echo of Bat"] = true end
+		end
+		if room == 0x3314 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 367)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Sword Card"] = true end
+		end
+	end
 
 	return checks
 end
@@ -674,6 +574,21 @@ function checkNO3()
 	checks["NO3 - Jewel sword"] = bit.check(flag, 9)
 	checks["NO3 - Pot Roast"] = bit.check(mainmemory.readbyte(0x03be1f), 0)
 	checks["NO3 - Turkey"] = bit.check(mainmemory.readbyte(0x03be24), 0)
+	if cur_zone == "NO3" or cur_zone == "NP3" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x3d40 or room == 0x3af8 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 270)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 103)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Cube of Zoe"] = true end
+		end
+		if room == 0x3cc8 or room == 0x3a80 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 245)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 183)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Power of Wolf"] = true end
+		end
+	end
 
 	return checks
 end
@@ -681,7 +596,8 @@ end
 function checkNO4()
 	local checks = {}
 	local flag = mainmemory.read_u32_le(0x03bef4)
-	local flag2 = mainmemory.read_u16_le(0x03bef8)
+	-- local flag2 = mainmemory.read_u16_le(0x03bef8)
+	local flag2 = mainmemory.read_u8(0x03bef8)
 	checks["NO4 - Heart Vessel(0)"] = bit.check(flag, 0)
 	checks["NO4 - Life Vessel(1)"] = bit.check(flag, 1)
 	checks["NO4 - Crystal cloak"] = bit.check(flag, 2)
@@ -725,6 +641,21 @@ function checkNO4()
 	else
 		bosses["Scylla"] = false
 	end
+	if cur_zone == "NO4" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x315c then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 141)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Holy Symbol"] = true end
+		end
+		if room == 0x319c then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 92)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Merman Statue"] = true end
+		end
+	end
 
 	return checks
 end
@@ -742,9 +673,26 @@ function checkNZ0()
 	checks["NZ0 - Basilard"] = bit.check(flag, 9)
 	checks["NZ0 - Potion"] = bit.check(flag, 10)
 	if mainmemory.read_u16_le(0x03ca40) ~= 0 then
+		checks["NZ0 - Slogra and Gaibon kill"] = true
 		bosses["Slogra and Gaibon"] = true
 	else
+		checks["NZ0 - Slogra and Gaibon kill"] = false
 		bosses["Slogra and Gaibon"] = false
+	end
+	if cur_zone == "NZ0" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x2770 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 120)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Skill of Wolf"] = true end
+		end
+		if room == 0x2730 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 114)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Bat Card"] = true end
+		end
 	end
 
 	return checks
@@ -773,6 +721,15 @@ function checkNZ1()
 	else
 		bosses["Karasuman"] = false
 	end
+	if cur_zone == "NZ1" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x23a0 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 198)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 183)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Fire of Bat"] = true end
+		end
+	end
 
 	return checks
 end
@@ -798,6 +755,24 @@ function checkTOP()
 	checks["TOP - Heart Vessel 1(Viewing room)"] = bit.check(flag, 15)
 	checks["TOP - Heart Vessel 2(Viewing room)"] = bit.check(flag, 16)
 	checks["TOP - Heart Vessel(Before Richter)"] = bit.check(flag, 18)
+	if cur_zone == "TOP" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x1b8c then
+			local xl = math.abs(mainmemory.read_u16_le(0x0973f0) - 424)
+			local yl = math.abs(mainmemory.read_u16_le(0x0973f4) - 1815)
+			local xm = math.abs(mainmemory.read_u16_le(0x0973f0) - 417)
+			local ym = math.abs(mainmemory.read_u16_le(0x0973f4) - 1207)
+			local o = 10
+			if xl >= 0 and xl <= o and yl >= 0 and yl <= o then checks["Leap Stone"] = true end
+			if xm >= 0 and xm <= o and ym >= 0 and ym <= o then checks["Power of Mist"] = true end
+		end
+		if room == 0x1b94 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 350)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 663)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Ghost Card"] = true end
+		end
+	end
 
 	return checks
 end
@@ -848,13 +823,22 @@ function checkRCAT()
 	else
 		bosses["Galamoth"] = false
 	end
+	if cur_zone == "RCAT" or cur_zone == "RBO8" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x2429 or room == 0x2490 then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 28)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 159)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Gas Cloud"] = true end
+		end
+	end
 
 	return checks
 end
 
 function checkRCEN()
 	local checks = {}
-	checks["RCEN - Kill Dracula"] = dracula_dead
+	bosses["Dracula"] = dracula_dead
 
 	return checks
 end
@@ -871,8 +855,10 @@ function checkRCHI()
 	checks["RCHI - Shiitake 2(7)"] = bit.check(flag, 7)
 	if mainmemory.read_u16_le(0x03ca58) ~= 0 then
 		bosses["Death"] = true
+		checks["Eye of Vlad"] = true
 	else
 		bosses["Death"] = false
+		checks["Eye of Vlad"] = false
 	end
 
 	return checks
@@ -899,8 +885,10 @@ function checkRDAI()
 	checks["RDAI - Heart Vessel(17)"] = bit.check(flag, 17)
 	if mainmemory.read_u16_le(0x03ca64) ~= 0 then
 		bosses["Medusa"] = true
+		checks["Heart of Vlad"] = true
 	else
 		bosses["Medusa"] = false
+		checks["Heart of Vlad"] = false
 	end
 
 	return checks
@@ -955,8 +943,10 @@ function checkRNO1()
 	checks["RNO1 - Dim Sum set"] = bit.check(mainmemory.readbyte(0x03be04), 0)
 	if mainmemory.read_u16_le(0x03ca68) ~= 0 then
 		bosses["Creature"] = true
+		checks["Tooth of Vlad"] = true
 	else
 		bosses["Creature"] = false
+		checks["Tooth of Vlad"] = false
 	end
 
 	return checks
@@ -979,8 +969,10 @@ function checkRNO2()
 	checks["RNO2 - Heart Vessel"] = bit.check(flag, 11)
 	if mainmemory.read_u16_le(0x03ca74) ~= 0 then
 		bosses["Akmodan II"] = true
+		checks["Rib of Vlad"] = true
 	else
 		bosses["Akmodan II"] = false
+		checks["Rib of Vlad"] = false
 	end
 
 	return checks
@@ -1039,6 +1031,15 @@ function checkRNO4()
 	else
 		bosses["Doppleganger40"] = false
 	end
+	if cur_zone == "RNO4" then
+		local room = mainmemory.read_u16_le(0x1375bc)
+		if room == 0x2c6c then
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 110)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
+			local o = 10
+			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Force of Echo"] = true end
+		end
+	end
 
 	return checks
 end
@@ -1085,8 +1086,10 @@ function checkRNZ1()
 	checks["RNZ1 - TNT"] = bit.check(mainmemory.readbyte(0x03be97), 3)
 	if mainmemory.read_u16_le(0x03ca78) ~= 0 then
 		bosses["Darkwing bat"] = true
+		checks["Ring of Vlad"] = true
 	else
 		bosses["Darkwing bat"] = false
+		checks["Ring of Vlad"] = false
 	end
 
 	return checks
@@ -1159,35 +1162,35 @@ function checkOneLocation()
 	local current_table = {}
 
 	-- Normal Castle
-	if cur_zone == "ARE" then current_table = checkARE() end
-	if cur_zone == "CAT" then current_table = checkCAT() end
-	if cur_zone == "CHI" then current_table = checkCHI() end
-	if cur_zone == "DAI" then current_table = checkDAI() end
+	if cur_zone == "ARE" or cur_zone == "BO2" then current_table = checkARE() end
+	if cur_zone == "CAT" or cur_zone == "BO1" then current_table = checkCAT() end
+	if cur_zone == "CHI" or cur_zone == "BO7" then current_table = checkCHI() end
+	if cur_zone == "DAI" or cur_zone == "BO5" then current_table = checkDAI() end
 	if cur_zone == "LIB" then current_table = checkLIB() end
-	if cur_zone == "NO0" then current_table = checkNO0() end
-	if cur_zone == "NO1" then current_table = checkNO1() end
-	if cur_zone == "NO2" then current_table = checkNO2() end
+	if cur_zone == "NO0" or cur_zone == "CEN" then current_table = checkNO0() end
+	if cur_zone == "NO1" or cur_zone == "BO4" then current_table = checkNO1() end
+	if cur_zone == "NO2" or cur_zone == "BO0" then current_table = checkNO2() end
 	if cur_zone == "NO3" then current_table = checkNO3() end
 	if cur_zone == "NP3" then current_table = checkNO3() end
-	if cur_zone == "NO4" then current_table = checkNO4() end
+	if cur_zone == "NO4" or cur_zone == "BO3" then current_table = checkNO4() end
 	if cur_zone == "BO3" then current_table = checkNO4() end
 	if cur_zone == "NZ0" then current_table = checkNZ0() end
 	if cur_zone == "NZ1" then current_table = checkNZ1() end
 	if cur_zone == "TOP" then current_table = checkTOP() end
 
 	-- Reverse Castle
-	if cur_zone == "RARE" then current_table = checkRARE() end
-	if cur_zone == "RCAT" then current_table = checkRCAT() end
-	if cur_zone == "RCEN" then current_table = checkRCEN() end
-	if cur_zone == "RCHI" then current_table = checkRCHI() end
-	if cur_zone == "RDAI" then current_table = checkRDAI() end
+	if cur_zone == "RARE" or cur_zone == "RBO0" then current_table = checkRARE() end
+	if cur_zone == "RCAT" or cur_zone == "RBO8" then current_table = checkRCAT() end
+	if cur_zone == "RCEN" or cur_zone == "RBO6" then current_table = checkRCEN() end
+	if cur_zone == "RCHI" or cur_zone == "RBO2" then current_table = checkRCHI() end
+	if cur_zone == "RDAI" or cur_zone == "RBO3" then current_table = checkRDAI() end
 	if cur_zone == "RLIB" then current_table = checkRLIB() end
 	if cur_zone == "RNO0" then current_table = checkRNO0() end
-	if cur_zone == "RNO1" then current_table = checkRNO1() end
-	if cur_zone == "RNO2" then current_table = checkRNO2() end
+	if cur_zone == "RNO1" or cur_zone == "RBO4" then current_table = checkRNO1() end
+	if cur_zone == "RNO2" or cur_zone == "RBO7" then current_table = checkRNO2() end
 	if cur_zone == "RNO3" then current_table = checkRNO3() end
-	if cur_zone == "RNO4" then current_table = checkRNO4() end
-	if cur_zone == "RNZ0" then current_table = checkRNZ0() end
+	if cur_zone == "RNO4" or cur_zone == "RBO5" then current_table = checkRNO4() end
+	if cur_zone == "RNZ0" or cur_zone == "RBO1" then current_table = checkRNZ0() end
 	if cur_zone == "RNZ1" then current_table = checkRNZ1() end
 	if cur_zone == "RTOP" then current_table = checkRTOP() end
 
@@ -1305,25 +1308,95 @@ function process_items(f)
 		start_item_drawing = f
 	end
 	if start_item_drawing ~= 0 then
-		if not drawing then
-			drawing = true
+		if f - start_item_drawing < 900 then
 			gui.drawText(0, 0, grant_item_byid(ItemsReceived[last_item_processed]), "red")
 			if last_item_processed + 1 <= table_size then gui.drawText(0, 10, grant_item_byid(ItemsReceived[last_item_processed + 1]), "blue") end
 			if last_item_processed + 2 <= table_size then gui.drawText(0, 20, grant_item_byid(ItemsReceived[last_item_processed + 2]), "red") end
 			if last_item_processed + 3 <= table_size then gui.drawText(0, 30, grant_item_byid(ItemsReceived[last_item_processed + 3]), "blue") end
 		else
-			if f - start_item_drawing >= 900 then
-				gui.clearGraphics()
-				drawing = false
-				start_item_drawing = 0
-				if table_size - last_item_processed <= 4 then
-					last_item_processed = last_item_processed + (table_size - last_item_processed) + 1
-				else
-					last_item_processed = last_item_processed + 4
-				end
+			gui.clearGraphics()
+			start_item_drawing = 0
+			if table_size - last_item_processed <= 4 then
+				last_item_processed = last_item_processed + (table_size - last_item_processed) + 1
+			else
+				last_item_processed = last_item_processed + 4
 			end
+			write_last_processed(last_item_processed)
 		end
 	end
+end
+
+function read_last_processed()
+	local first = mainmemory.read_u8(0x03bef3) -- 4 bits
+	local second = mainmemory.read_u8(0x03bf0c) -- 3 bits
+	local third = mainmemory.read_u8(0x03befe) -- 3 bits
+	local sum = 0
+	if bit.check(third, 5) then sum = 1 end
+	if bit.check(third, 6) then sum = sum + 2 end
+	if bit.check(third, 7) then sum = sum + 4 end
+	if bit.check(second, 5) then sum = sum + 8 end
+	if bit.check(second, 6) then sum = sum + 16 end
+	if bit.check(second, 7) then sum = sum + 32 end
+	if bit.check(first, 4) then sum = sum + 64 end
+	if bit.check(first, 5) then sum = sum + 128 end
+	if bit.check(first, 6) then sum = sum + 256 end
+	if bit.check(first, 7) then sum = sum + 512 end
+
+	return sum
+end
+
+function write_last_processed(l_processed)
+	local bits = {}
+	local num = l_processed
+	local first = mainmemory.read_u8(0x03bef3) -- 4 bits
+	local second = mainmemory.read_u8(0x03bf0c) -- 3 bits
+	local third = mainmemory.read_u8(0x03befe) -- 3 bits
+	local t_f = 0
+	local t_s = 0
+	local t_t = 0
+
+	if l_processed > 1023 then
+		console.log("Number to big to write on 10 bits!")
+		return
+	end
+
+	while num > 0 do
+		rest = math.fmod(num, 2)
+		bits[#bits+1] = rest
+		num = (num - rest) / 2
+	end
+
+	if bit.check(third, 0) then t_t = t_t + 1 end
+	if bit.check(third, 1) then t_t = t_t + 2 end
+	if bit.check(third, 2) then t_t = t_t + 4 end
+	if bit.check(third, 3)  then t_t = t_t + 8 end
+	if bit.check(third, 4) then t_t = t_t + 16 end
+
+	if bit.check(second, 0) then t_s = t_s + 1 end
+	if bit.check(second, 1) then t_s = t_s + 2 end
+	if bit.check(second, 2) then t_s = t_s + 4 end
+	if bit.check(second, 3)  then t_s = t_s + 8 end
+	if bit.check(second, 4) then t_s = t_s + 16 end
+
+	if bit.check(first, 0) then t_f = t_f + 1 end
+	if bit.check(first, 1) then t_f = t_f + 2 end
+	if bit.check(first, 2) then t_f = t_f + 4 end
+	if bit.check(first, 4) then t_f = t_f + 8 end
+
+	if bits[1] == 1 then t_t = t_t + 32	end
+	if bits[2] == 1 then t_t = t_t + 64 end
+	if bits[3] == 1 then t_t = t_t + 128 end
+	if bits[4] == 1 then t_s = t_s + 32 end
+	if bits[5] == 1 then t_s = t_s + 64 end
+	if bits[6] == 1 then t_s = t_s + 128 end
+	if bits[7] == 1 then t_f = t_f + 16 end
+	if bits[8] == 1 then t_f = t_f + 32 end
+	if bits[9] == 1 then t_f = t_f + 64 end
+	if bits[10] == 1 then t_f = t_f + 128 end
+
+	mainmemory.write_u8(0x03bef3, t_f)
+	mainmemory.write_u8(0x03bf0c, t_s)
+	mainmemory.write_u8(0x03befe, t_t)
 end
 
 function main()
@@ -1338,7 +1411,7 @@ function main()
     end
 
 	event.onloadstate(on_loadstate)
-	create_empty_inventory()
+	-- create_empty_inventory()
 
     while true do
         frame = frame + 1
@@ -1348,49 +1421,62 @@ function main()
         end
 		if (curstate == STATE_OK) or (curstate == STATE_INITIAL_CONNECTION_MADE) or (curstate == STATE_TENTATIVELY_CONNECTED) then
             if (frame % 5 == 0) then
-                receive()
+				receive()
 				getCurrZone()
 
-				if last_status == 1 or last_status == 2 then
-					if cur_zone ~= "STO" and cur_zone ~= "UNKNOWN" then
-						console.log("Just connect and not at ST0, loaded game. Starting timer to process items and patching received items.")
-						if next(ItemsReceived) ~= nil then last_item_processed = table.getn(ItemsReceived) end
-						last_status = 8
-						delay_timer = frame
-					else
-						last_status = 2
-					end
+				-- printing for testing reasons
+				gui.drawText(200, 0, mainmemory.read_u16_le(0x0973f0))
+				gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
+				gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
+				last_processed_read = read_last_processed()
+				gui.drawText(200, 30, read_last_processed())
+				gui.drawText(300, 0, last_status)
+				gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
+
+				if first_connect then
+					console.log("Just connect!")
+					first_connect = false
+					last_status = 1
 				end
 
-				if delay_timer ~= 0 and last_status == 8 then
-					if frame - delay_timer >= 600 then last_status = 4 end
+				if last_status == 1 then
+					if cur_zone ~= "UNKNOWN" then last_status = 2 end
 				end
-
-				if cur_zone == "RBO6" then
-					checkVictory(frame)
-				end
-				if just_died or first_connect then
-					if not just_died then
-						first_connect = false
-						last_status = 1
-						if cur_zone ~= "STO" and cur_zone ~= "UNKNOWN" then
-							last_status = 4
-						end
-					end
-					if last_status == 4 and cur_zone ~= "ST0" and cur_zone ~= "UNKNOWN" then
-						populate_received_inventory()
-						find_last_location_checked()
-						all_location_table = checkAllLocations()
-						first_connect = false
-						just_died = false
-						dracula_timer = 0
+				if last_status == 2 then
+					-- We are connected. At Richter?
+					if cur_zone == "ST0" then last_status = 4 end
+					-- At Alucard?
+					if cur_zone ~= "ST0" and cur_zone ~= "UNKNOWN" then
+						-- We just connected and already on Alucard. Loaded game?.
+						last_status = 10
+						checkAllLocations()
+						-- Do we have a last location flag on memory?
+						last_processed_read = read_last_processed()
+						if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
+						else last_item_processed = last_processed_read end
 					end
 				end
-
 				if last_status == 4 then
-					if last_item_processed == 1 and next(ItemsReceived) ~= nil then
-						populate_received_inventory()
-						find_last_location_checked()
+					-- We are at Richter. Game takes a bit to actually start, after defeating Dracula
+					if cur_zone ~= "ST0" then last_status = 8 end
+				end
+				if last_status == 8 then
+					-- Just changed to NO3
+					if delay_timer == 0 then delay_timer = frame end
+					-- Assume 60fps, give 15 seconds to load and Alucard enter the castle
+					if frame - delay_timer >= 900 then
+						last_status = 10
+						-- checkBosses()
+						-- fresh game. No item granted yet
+						last_item_processed = 1
+					end
+				end
+
+				if last_status == 10 then
+
+					if cur_zone == "RBO6" then
+						console.log("Checking victory")
+						checkVictory(frame)
 					end
 
 					if mainmemory.readbyte(0x09794c) == 2 then
@@ -1398,11 +1484,14 @@ function main()
 							process_items(frame)
 						end
 					end
+
+					if just_died then
+						console.log("We just died. TODO: Deal with items we need to receive again")
+					end
+
+					check_death()
+					checkOneLocation()
 				end
-
-
-				check_death()
-				checkOneLocation()
             end
         elseif (curstate == STATE_UNINITIALIZED) then
             if  (frame % 60 == 0) then
@@ -1428,4 +1517,6 @@ function main()
 end
 
 main()
+
+
 
