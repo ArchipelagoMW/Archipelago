@@ -871,8 +871,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     Example usage in Main code:
     from Utils import visualize_regions
-    for player in world.player_ids:
-        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    for player in multiworld.player_ids:
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
