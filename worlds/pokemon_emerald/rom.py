@@ -54,26 +54,26 @@ _LOOPING_MUSIC = [
     "MUS_RG_ENCOUNTER_DEOXYS", "MUS_RG_TRAINER_TOWER", "MUS_RG_SLOW_PALLET", "MUS_RG_TEACHY_TV_MENU"
 ]
 
-_FANFARES: List[Tuple[str, int]] = [
-    ("MUS_LEVEL_UP",             80),
-    ("MUS_OBTAIN_ITEM",         160),
-    ("MUS_EVOLVED",             220),
-    ("MUS_OBTAIN_TMHM",         220),
-    ("MUS_HEAL",                160),
-    ("MUS_OBTAIN_BADGE",        340),
-    ("MUS_MOVE_DELETED",        180),
-    ("MUS_OBTAIN_BERRY",        120),
-    ("MUS_AWAKEN_LEGEND",       710),
-    ("MUS_SLOTS_JACKPOT",       250),
-    ("MUS_SLOTS_WIN",           150),
-    ("MUS_TOO_BAD",             160),
-    ("MUS_RG_POKE_FLUTE",       450),
-    ("MUS_RG_OBTAIN_KEY_ITEM",  170),
-    ("MUS_RG_DEX_RATING",       196),
-    ("MUS_OBTAIN_B_POINTS",     313),
-    ("MUS_OBTAIN_SYMBOL",       318),
-    ("MUS_REGISTER_MATCH_CALL", 135),
-]
+_FANFARES: Dict[str, int] = {
+    "MUS_LEVEL_UP":             80,
+    "MUS_OBTAIN_ITEM":         160,
+    "MUS_EVOLVED":             220,
+    "MUS_OBTAIN_TMHM":         220,
+    "MUS_HEAL":                160,
+    "MUS_OBTAIN_BADGE":        340,
+    "MUS_MOVE_DELETED":        180,
+    "MUS_OBTAIN_BERRY":        120,
+    "MUS_AWAKEN_LEGEND":       710,
+    "MUS_SLOTS_JACKPOT":       250,
+    "MUS_SLOTS_WIN":           150,
+    "MUS_TOO_BAD":             160,
+    "MUS_RG_POKE_FLUTE":       450,
+    "MUS_RG_OBTAIN_KEY_ITEM":  170,
+    "MUS_RG_DEX_RATING":       196,
+    "MUS_OBTAIN_B_POINTS":     313,
+    "MUS_OBTAIN_SYMBOL":       318,
+    "MUS_REGISTER_MATCH_CALL": 135,
+}
 
 
 class PokemonEmeraldDeltaPatch(APDeltaPatch):
@@ -502,7 +502,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     _set_bytes_little_endian(patched_rom, options_address + 0x28, 1, 1 if world.options.dexsanity else 0)
 
     # Mark trainersanity as enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x28, 1, 1 if world.options.trainersanity else 0)
+    _set_bytes_little_endian(patched_rom, options_address + 0x29, 1, 1 if world.options.trainersanity else 0)
 
     # Set easter egg data
     _set_bytes_little_endian(patched_rom, options_address + 0x2B, 1, easter_egg[0])
@@ -525,6 +525,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Randomize music
     if world.options.music:
+        # The "randomized sound table" is a patchboard that redirects sounds just before they get played
         randomized_looping_music = copy.copy(_LOOPING_MUSIC)
         world.random.shuffle(randomized_looping_music)
         for original_music, randomized_music in zip(_LOOPING_MUSIC, randomized_looping_music):
@@ -537,20 +538,21 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Randomize fanfares
     if world.options.fanfares:
-        randomized_fanfares: List[Tuple[str, int]] = copy.copy(_FANFARES)
+        # Shuffle the lists, pair new tracks with original tracks, set the new track ids, and set new fanfare durations
+        randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
-        for i, randomized_fanfare in enumerate(randomized_fanfares):
+        for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
             _set_bytes_little_endian(
                 patched_rom,
-                data.rom_addresses["sFanfares"] + (i * 4) + 0,
+                data.rom_addresses["gRandomizedSoundTable"] + (data.constants[fanfare_pair[0]] * 2),
                 2,
-                data.constants[randomized_fanfare[0]]
+                data.constants[fanfare_pair[1]]
             )
             _set_bytes_little_endian(
                 patched_rom,
                 data.rom_addresses["sFanfares"] + (i * 4) + 2,
                 2,
-                randomized_fanfare[1]
+                _FANFARES[fanfare_pair[1]]
             )
 
     # Write Output

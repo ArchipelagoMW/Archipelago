@@ -173,7 +173,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
-        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is not None:
+        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
 
         from CommonClient import logger
