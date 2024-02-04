@@ -370,6 +370,65 @@ class PokemonEmeraldWorld(World):
         # Create auth
         self.auth = self.random.randbytes(16)
 
+        # Randomize types
+        if self.options.types == RandomizeTypes.option_shuffle:
+            type_map = list(range(18))
+            self.random.shuffle(type_map)
+
+            # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
+            # which forces ??? to always map to itself. There are no pokemon which have the ??? type
+            mystery_type_index = type_map.index(9)
+            type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
+
+            for species in self.modified_species:
+                if species is not None:
+                    species.types = (type_map[species.types[0]], type_map[species.types[1]])
+        elif self.options.types == RandomizeTypes.option_completely_random:
+            for species in self.modified_species:
+                if species is not None:
+                    new_type_1 = get_random_type(self.random)
+                    new_type_2 = new_type_1
+                    if species.types[0] != species.types[1]:
+                        while new_type_1 == new_type_2:
+                            new_type_2 = get_random_type(self.random)
+
+                    species.types = (new_type_1, new_type_2)
+        elif self.options.types == RandomizeTypes.option_follow_evolutions:
+            already_modified: Set[int] = set()
+
+            # Similar to follow evolutions for abilities, but only needs to loop through once.
+            # For every pokemon without a pre-evolution, generates a random mapping from old types to new types
+            # and then walks through the evolution tree applying that map. This means that evolutions that share
+            # types will have those types mapped to the same new types, and evolutions with new or diverging types
+            # will still have new or diverging types.
+            # Consider:
+            # - Charmeleon (Fire/Fire) -> Charizard (Fire/Flying)
+            # - Onyx (Rock/Ground) -> Steelix (Steel/Ground)
+            # - Nincada (Bug/Ground) -> Ninjask (Bug/Flying) && Shedinja (Bug/Ghost)
+            # - Azurill (Normal/Normal) -> Marill (Water/Water)
+            for species in self.modified_species:
+                if species is None:
+                    continue
+                if species.species_id in already_modified:
+                    continue
+                if species.pre_evolution is not None and species.pre_evolution not in already_modified:
+                    continue
+
+                type_map = list(range(18))
+                self.random.shuffle(type_map)
+
+                # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
+                # which forces ??? to always map to itself. There are no pokemon which have the ??? type
+                mystery_type_index = type_map.index(9)
+                type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
+
+                evolutions = [species]
+                while len(evolutions) > 0:
+                    evolution = evolutions.pop()
+                    evolution.types = (type_map[evolution.types[0]], type_map[evolution.types[1]])
+                    already_modified.add(evolution.species_id)
+                    evolutions += [self.modified_species[evo.species_id] for evo in evolution.evolutions]
+
         # Randomize wild encounters
         if self.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
             should_match_bst = self.options.wild_pokemon in {
@@ -709,65 +768,6 @@ class PokemonEmeraldWorld(World):
 
                     species.abilities = new_abilities
 
-        def randomize_types() -> None:
-            if self.options.types == RandomizeTypes.option_shuffle:
-                type_map = list(range(18))
-                self.random.shuffle(type_map)
-
-                # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
-                # which forces ??? to always map to itself. There are no pokemon which have the ??? type
-                mystery_type_index = type_map.index(9)
-                type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
-
-                for species in self.modified_species:
-                    if species is not None:
-                        species.types = (type_map[species.types[0]], type_map[species.types[1]])
-            elif self.options.types == RandomizeTypes.option_completely_random:
-                for species in self.modified_species:
-                    if species is not None:
-                        new_type_1 = get_random_type(self.random)
-                        new_type_2 = new_type_1
-                        if species.types[0] != species.types[1]:
-                            while new_type_1 == new_type_2:
-                                new_type_2 = get_random_type(self.random)
-
-                        species.types = (new_type_1, new_type_2)
-            elif self.options.types == RandomizeTypes.option_follow_evolutions:
-                already_modified: Set[int] = set()
-
-                # Similar to follow evolutions for abilities, but only needs to loop through once.
-                # For every pokemon without a pre-evolution, generates a random mapping from old types to new types
-                # and then walks through the evolution tree applying that map. This means that evolutions that share
-                # types will have those types mapped to the same new types, and evolutions with new or diverging types
-                # will still have new or diverging types.
-                # Consider:
-                # - Charmeleon (Fire/Fire) -> Charizard (Fire/Flying)
-                # - Onyx (Rock/Ground) -> Steelix (Steel/Ground)
-                # - Nincada (Bug/Ground) -> Ninjask (Bug/Flying) && Shedinja (Bug/Ghost)
-                # - Azurill (Normal/Normal) -> Marill (Water/Water)
-                for species in self.modified_species:
-                    if species is None:
-                        continue
-                    if species.species_id in already_modified:
-                        continue
-                    if species.pre_evolution is not None and species.pre_evolution not in already_modified:
-                        continue
-
-                    type_map = list(range(18))
-                    self.random.shuffle(type_map)
-
-                    # We never want to map to the ??? type, so swap whatever index maps to ??? with ???
-                    # which forces ??? to always map to itself. There are no pokemon which have the ??? type
-                    mystery_type_index = type_map.index(9)
-                    type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
-
-                    evolutions = [species]
-                    while len(evolutions) > 0:
-                        evolution = evolutions.pop()
-                        evolution.types = (type_map[evolution.types[0]], type_map[evolution.types[1]])
-                        already_modified.add(evolution.species_id)
-                        evolutions += [self.modified_species[evo.species_id] for evo in evolution.evolutions]
-
         def randomize_learnsets() -> None:
             type_bias = self.options.move_match_type_bias.value
             normal_bias = self.options.move_normal_type_bias.value
@@ -1066,9 +1066,6 @@ class PokemonEmeraldWorld(World):
         # Randomize species data
         if self.options.abilities != RandomizeAbilities.option_vanilla:
             randomize_abilities()
-
-        if self.options.types != RandomizeTypes.option_vanilla:
-            randomize_types()
 
         if self.options.level_up_moves != LevelUpMoves.option_vanilla:
             randomize_learnsets()
