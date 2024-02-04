@@ -95,8 +95,7 @@ class MessengerWorld(World):
     starting_portals: List[str]
     spoiler_portal_mapping: Dict[str, str]
     portal_mapping: List[int]
-    spoiler_entrances: Dict[str, str]
-    transitions: List[int]
+    transitions: List[Entrance]
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -221,10 +220,12 @@ class MessengerWorld(World):
             for portal, output in self.spoiler_portal_mapping.items():
                 spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here and it'll work fine lmao", self.player)
         if self.options.shuffle_transitions:
-            for entrance, exit_ in self.spoiler_entrances.items():
-                direction = "both" if (self.multiworld.get_entrance(f"{entrance} -> {exit_}", self.player)
-                                       .er_type == Entrance.EntranceType.TWO_WAY) else "lol lmao"
-                spoiler.set_entrance(entrance, exit_, direction, self.player)
+            for transition in self.transitions:
+                spoiler.set_entrance(
+                    transition.parent_region.name,
+                    transition.connected_region.name,
+                    "both" if transition.er_type == Entrance.EntranceType.TWO_WAY else "",
+                    self.player)
 
     def generate_output(self, output_directory: str) -> None:
         out_path = output_path(self.multiworld.get_out_file_name_base(self.player) + ".aptm")

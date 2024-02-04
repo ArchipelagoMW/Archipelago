@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from . import MessengerWorld
 
 
-def shuffle_entrances(world: "MessengerWorld") -> Dict[str, str]:
+def shuffle_entrances(world: "MessengerWorld") -> None:
     multiworld = world.multiworld
     player = world.player
     coupled = world.options.shuffle_transitions == ShuffleTransitions.option_coupled
@@ -38,12 +38,6 @@ def shuffle_entrances(world: "MessengerWorld") -> Dict[str, str]:
 
     result = randomize_entrances(world, list(set(regions_to_shuffle)), coupled, lambda group: ["Default"])
 
-    for placement in sorted(result.placements, key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name)):
-        parent = placement.parent_region
-        child = placement.connected_region
-        # recache the entrance with a new name
-        parent.exits.remove(placement)
-        placement.name = f"{parent.name} -> {child.name}"
-        parent.exits.append(placement)
-        world.spoiler_entrances[parent.name] = child.name
-        world.transitions.append(TRANSITIONS.index(child.name))
+    world.transitions = [placement for placement in
+                         sorted(result.placements,
+                                key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))]
