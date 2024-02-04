@@ -364,6 +364,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     #     /* 0x29 */ bool8 isTrainersanity;
     #     /* 0x2A */ bool8 isWarpRando;
     #     /* 0x2B */ u8 activeEasterEgg;
+    #     /* 0x2C */ bool8 normalizeEncounterRates;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -506,6 +507,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Set easter egg data
     _set_bytes_little_endian(patched_rom, options_address + 0x2B, 1, easter_egg[0])
+
+    # Set normalize encounter rates
+    _set_bytes_little_endian(patched_rom, options_address + 0x2C, 1, 1 if world.options.normalize_encounter_rates else 0)
 
     if easter_egg[0] == 2:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
