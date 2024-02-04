@@ -91,7 +91,7 @@ def launch_game(url: Optional[str] = None) -> None:
         get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
         assets = request_data(get_url)[0]["assets"]
         for asset in assets:
-            if "TheMessengerRandomizerModAP" in asset["name"]:
+            if "TheMessengerRandomizerAP" in asset["name"]:
                 release_url = asset["browser_download_url"]
                 break
         else:
@@ -115,7 +115,7 @@ def launch_game(url: Optional[str] = None) -> None:
                 if asset["label"]:
                     latest_version = asset["label"]
                     break
-                names = asset["name"].split("-")
+                names = asset["name"].strip(".zip").split("-")
                 if len(names) > 2:
                     if names[-1].isnumeric():
                         latest_version = names[-1]
@@ -131,6 +131,7 @@ def launch_game(url: Optional[str] = None) -> None:
         with open(toml_path, "r") as f:
             installed_version = f.read().splitlines()[1].strip("version = \"")
 
+        logging.info(f"Installed version: {installed_version}. Latest version: {latest_version}")
         if not installed_version.isnumeric():
             if installed_version[-1].isnumeric():
                 installed_version = installed_version[-1]
@@ -148,20 +149,22 @@ def launch_game(url: Optional[str] = None) -> None:
                                         "No Courier installation detected. Would you like to install now?")
         if not should_install:
             return
+        logging.info("Installing Courier")
         install_courier()
     if not mod_installed():
         should_install = askyesnocancel("Install Mod",
                                         "No randomizer mod detected. Would you like to install now?")
         if not should_install:
             return
+        logging.info("Installing Mod")
         install_mod()
     else:
         if available_mod_update():
             should_update = askyesnocancel("Update Mod",
                                            "Old mod version detected. Would you like to update now?")
             if should_update:
+                logging.info("Updating mod")
                 install_mod()
-    logging.info(url)
     if is_linux:
         if url:
             open_file(f"steam://rungameid/764790//{url}/")
