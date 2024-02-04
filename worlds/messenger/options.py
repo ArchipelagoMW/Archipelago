@@ -69,7 +69,6 @@ class ShufflePortals(Choice):
     option_shops = 1
     option_checkpoints = 2
     option_anywhere = 3
-    default = 0
 
 
 class ShuffleTransitions(Choice):
@@ -85,7 +84,6 @@ class ShuffleTransitions(Choice):
     alias_off = 0
     option_coupled = 1
     option_decoupled = 2
-    default = 1
 
 
 class Goal(Choice):
