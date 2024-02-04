@@ -60,11 +60,10 @@ for item, data in Items.get_full_item_list().items():
     if '(' in item:
         short_name = item[:item.find(' (')]
         # Ambiguous short-names are dropped
-        if short_name in bracketless_duplicates:
-            continue
-        item_name_groups[short_name] = [item]
-        # Short-name groups are unlisted
-        unlisted_item_name_groups.add(short_name)
+        if short_name not in bracketless_duplicates:
+            item_name_groups[short_name] = [item]
+            # Short-name groups are unlisted
+            unlisted_item_name_groups.add(short_name)
     # Items with a parent get assigned to their parent's group
     if data.parent_item:
         # The parent groups need a special name, otherwise they are ambiguous with the parent
