@@ -173,24 +173,26 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
+        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is not None:
+            return
+
         from CommonClient import logger
 
-        if ctx.slot_data is not None:
-            if ctx.slot_data["goal"] == Goal.option_champion:
-                self.goal_flag = IS_CHAMPION_FLAG
-            elif ctx.slot_data["goal"] == Goal.option_steven:
-                self.goal_flag = DEFEATED_STEVEN_FLAG
-            elif ctx.slot_data["goal"] == Goal.option_norman:
-                self.goal_flag = DEFEATED_NORMAN_FLAG
-            elif ctx.slot_data["goal"] == Goal.option_legendary_hunt:
-                self.goal_flag = None
+        if ctx.slot_data["goal"] == Goal.option_champion:
+            self.goal_flag = IS_CHAMPION_FLAG
+        elif ctx.slot_data["goal"] == Goal.option_steven:
+            self.goal_flag = DEFEATED_STEVEN_FLAG
+        elif ctx.slot_data["goal"] == Goal.option_norman:
+            self.goal_flag = DEFEATED_NORMAN_FLAG
+        elif ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+            self.goal_flag = None
 
-            if ctx.slot_data["remote_items"] == RemoteItems.option_true and not ctx.items_handling & 0b010:
-                ctx.items_handling = 0b011
-                Utils.async_start(ctx.send_msgs([{
-                    "cmd": "ConnectUpdate",
-                    "items_handling": ctx.items_handling
-                }]))
+        if ctx.slot_data["remote_items"] == RemoteItems.option_true and not ctx.items_handling & 0b010:
+            ctx.items_handling = 0b011
+            Utils.async_start(ctx.send_msgs([{
+                "cmd": "ConnectUpdate",
+                "items_handling": ctx.items_handling
+            }]))
 
         try:
             # Checks that the player is in the overworld
@@ -257,7 +259,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Read save block 2 address
             pokedex_caught_bytes = bytes(0)
-            if ctx.slot_data is not None and ctx.slot_data["dexsanity"] == Toggle.option_true:
+            if ctx.slot_data["dexsanity"] == Toggle.option_true:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
                     [(data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus")],
@@ -276,12 +278,11 @@ class PokemonEmeraldClient(BizHawkClient):
                     [(save_block_2_address + 0x28, 0x34, "System Bus")],
                     [overworld_guard, save_block_2_address_guard]
                 )
-                if read_result is None:  # Not in overworld, or save block moved
-                    return
-                pokedex_caught_bytes = read_result[0]
+                if read_result is not None:
+                    pokedex_caught_bytes = read_result[0]
 
-            # Wonder Trades (only when connected to the server)
-            if ctx.server is not None and not ctx.server.socket.closed and self.num_wonder_trade_communications < 100:
+            # Wonder Trades
+            if self.num_wonder_trade_communications < 100:
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
                     [
@@ -358,7 +359,7 @@ class PokemonEmeraldClient(BizHawkClient):
                             local_found_key_items[KEY_LOCATION_FLAG_MAP[flag_id]] = True
 
             # Check pokedex
-            if ctx.slot_data is not None and ctx.slot_data["dexsanity"] == Toggle.option_true:
+            if ctx.slot_data["dexsanity"] == Toggle.option_true:
                 for byte_i, byte in enumerate(pokedex_caught_bytes):
                     for i in range(8):
                         if byte & (1 << i) != 0:
@@ -368,7 +369,8 @@ class PokemonEmeraldClient(BizHawkClient):
                             if location_id in ctx.server_locations:
                                 local_checked_locations.add(location_id)
 
-            if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+            # Count legendary hunt flags
+            if ctx.slot_data["goal"] == Goal.option_legendary_hunt:
                 # If legendary hunt doesn't require catching, add defeated legendaries to caught_legendaries
                 if ctx.slot_data["legendary_hunt_catch"] == Toggle.option_false:
                     for legendary, is_defeated in defeated_legendaries.items():
@@ -431,7 +433,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 }])
                 self.local_found_key_items = local_found_key_items
 
-            if ctx.slot_data is not None and ctx.slot_data["goal"] == Goal.option_legendary_hunt:
+            if ctx.slot_data["goal"] == Goal.option_legendary_hunt:
                 if caught_legendaries != self.local_defeated_legendaries and ctx.slot is not None:
                     legendary_bitfield = 0
                     for i, legendary_name in enumerate(LEGENDARY_NAMES.values()):
