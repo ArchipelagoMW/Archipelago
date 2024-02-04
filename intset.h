@@ -81,10 +81,10 @@ static bool INTSET_FUNC(add)(INTSET_NAME *set, INTSET_TYPE val)
         return true; /* ok */
 
     bucket = set->buckets + ((size_t)val % set->bucket_count);
-    if (bucket->count == 0 && sizeof(INTSET_TYPE) <= sizeof(INTSET_TYPE*)) {
+    if (bucket->count == 0) {
         bucket->val = val;
         bucket->count = 1;
-    } else if (bucket->count == 1 && sizeof(INTSET_TYPE) <= sizeof(INTSET_TYPE*)) {
+    } else if (bucket->count == 1) {
         INTSET_TYPE old = bucket->val;
         bucket->data = (INTSET_TYPE*)malloc(2 * sizeof(INTSET_TYPE));
         if (!bucket->data) {
