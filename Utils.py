@@ -230,7 +230,6 @@ class UniqueKeyLoader(SafeLoader):
                 logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)
-
         return super().construct_mapping(node, deep)
 
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
