@@ -1,7 +1,7 @@
 import logging
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
-from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Tutorial
 from Options import Accessibility
 from Utils import visualize_regions, output_path
 from settings import FilePath, Group
@@ -10,7 +10,8 @@ from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
 from .connections import CONNECTIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded
+from .entrances import shuffle_entrances
+from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
 from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
@@ -94,6 +95,8 @@ class MessengerWorld(World):
     starting_portals: List[str]
     spoiler_portal_mapping: Dict[str, str]
     portal_mapping: List[int]
+    spoiler_entrances: Dict[str, str]
+    transitions: List[int]
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -113,6 +116,8 @@ class MessengerWorld(World):
                                  self.random.sample(PORTALS[3:], k=self.options.available_portals - 3)]
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
+        self.spoiler_entrances = {}
+        self.transitions = []
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -200,19 +205,26 @@ class MessengerWorld(World):
         add_closed_portal_reqs(self)
         # i need ER to happen after rules exist so i can validate it
         if self.options.shuffle_portals:
-            self.__class__.topology_present = True
             disconnect_portals(self)
             shuffle_portals(self)
+
+        if self.options.shuffle_transitions:
+            shuffle_entrances(self)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
             spoiler_handle.write(f"\nStarting Portals:\n")
             for portal in self.starting_portals:
                 spoiler_handle.write(f"{portal}\n")
+        spoiler = self.multiworld.spoiler
         if self.options.shuffle_portals:
-            spoiler_handle.write(f"\nPortal Warps:\n")
             for portal, output in self.spoiler_portal_mapping.items():
-                spoiler_handle.write(f"{portal + ' Portal:':33}{output}\n")
+                spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here and it'll work fine lmao", self.player)
+        if self.options.shuffle_transitions:
+            for entrance, exit_ in self.spoiler_entrances.items():
+                direction = "both" if (self.multiworld.get_entrance(f"{entrance} -> {exit_}", self.player)
+                                       .er_type == Entrance.EntranceType.TWO_WAY) else "lol lmao"
+                spoiler.set_entrance(entrance, exit_, direction, self.player)
 
     def generate_output(self, output_directory: str) -> None:
         out_path = output_path(self.multiworld.get_out_file_name_base(self.player) + ".aptm")

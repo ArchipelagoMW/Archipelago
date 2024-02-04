@@ -53,7 +53,7 @@ class AvailablePortals(Range):
     default = 6
 
 
-class ShufflePortals(TextChoice):
+class ShufflePortals(Choice):
     """
     Whether the portals lead to random places.
     Entering a portal from its vanilla area will always lead to HQ, and will unlock it if relevant.
@@ -70,6 +70,22 @@ class ShufflePortals(TextChoice):
     option_checkpoints = 2
     option_anywhere = 3
     default = 0
+
+
+class ShuffleTransitions(Choice):
+    """
+    Whether the transitions between the levels should be randomized.
+    
+    None: Level transitions lead where they should.
+    Coupled: Returning through a transition will take you from whence you came.
+    Decoupled: Any level transition can take you to any other level transition.
+    """
+    display_name = "Shuffle Level Transitions"
+    option_none = 0
+    alias_off = 0
+    option_coupled = 1
+    option_decoupled = 2
+    default = 1
 
 
 class Goal(Choice):
@@ -176,6 +192,7 @@ class MessengerOptions(PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
+    shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded

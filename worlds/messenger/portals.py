@@ -83,11 +83,11 @@ SHOP_POINTS = {
         "Tower Entrance",
     ],
     "Tower of Time": [
-        "Entrance",
+        "Final Chance",
         "Arcane Golem",
     ],
     "Cloud Ruins": [
-        "Entrance",
+        "Cloud Entrance",
         "Pillar Glide",
         "Crushers' Descent",
         "Seeing Spikes",
