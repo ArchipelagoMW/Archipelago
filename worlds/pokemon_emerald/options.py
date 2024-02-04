@@ -578,11 +578,11 @@ class BlindTrainers(Toggle):
     display_name = "Blind Trainers"
 
 
-class NerfSpinners(Toggle):
+class PurgeSpinners(Toggle):
     """
     Trainers will rotate in predictable patterns on a set interval instead of randomly and don't turn toward you when you run
     """
-    display_name = "Nerf Spinners"
+    display_name = "Purge Spinners"
 
 
 class MatchTrainerLevels(Toggle):
@@ -804,7 +804,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     guaranteed_catch: GuaranteedCatch
     exp_modifier: ExpModifier
     blind_trainers: BlindTrainers
-    nerf_spinners: NerfSpinners
+    purge_spinners: PurgeSpinners
     match_trainer_levels: MatchTrainerLevels
     match_trainer_levels_bonus: MatchTrainerLevelsBonus
     double_battle_chance: DoubleBattleChance

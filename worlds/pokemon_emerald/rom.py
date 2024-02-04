@@ -339,7 +339,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     #     /* 0x04 */ bool8 betterShopsEnabled;
     #     /* 0x05 */ bool8 reusableTms;
     #     /* 0x06 */ bool8 guaranteedCatch;
-    #     /* 0x07 */ bool8 nerfSpinners;
+    #     /* 0x07 */ bool8 purgeSpinners;
     #     /* 0x08 */ bool8 areTrainersBlind;
     #     /* 0x09 */ u16 expMultiplierNumerator;
     #     /* 0x0B */ u16 expMultiplierDenominator;
@@ -390,8 +390,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set guaranteed catch
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
 
-    # Set nerf spinners
-    _set_bytes_little_endian(patched_rom, options_address + 0x07, 1, 1 if world.options.nerf_spinners else 0)
+    # Set purge spinners
+    _set_bytes_little_endian(patched_rom, options_address + 0x07, 1, 1 if world.options.purge_spinners else 0)
 
     # Set blind trainers
     _set_bytes_little_endian(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
