@@ -895,7 +895,7 @@ Treehouse First Purple Bridge (Treehouse) - Treehouse Second Purple Bridge - 0x1
 158360 - 0x17D2D (First Purple Bridge 4) - 0x17CE4 - Stars & Dots
 158361 - 0x17D6C (First Purple Bridge 5) - 0x17D2D - Stars & Dots
 
-Treehouse Right Orange Bridge (Treehouse) - Treehouse Bridge Platform - 0x17DA2:
+Treehouse Right Orange Bridge (Treehouse) - Treehouse Drawbridge Platform - 0x17DA2:
 158391 - 0x17D88 (Right Orange Bridge 1) - True - Stars
 158392 - 0x17DB4 (Right Orange Bridge 2) - 0x17D88 - Stars
 158393 - 0x17D8C (Right Orange Bridge 3) - 0x17DB4 - Stars
@@ -909,7 +909,7 @@ Treehouse Right Orange Bridge (Treehouse) - Treehouse Bridge Platform - 0x17DA2:
 158401 - 0x17DB1 (Right Orange Bridge 11) - 0x17DB7 - Stars
 158402 - 0x17DA2 (Right Orange Bridge 12) - 0x17DB1 - Stars
 
-Treehouse Bridge Platform (Treehouse) - Main Island - 0x0C32D:
+Treehouse Drawbridge Platform (Treehouse) - Main Island - 0x0C32D:
 158404 - 0x037FF (Drawbridge Panel) - True - Stars
 Door - 0x0C32D (Drawbridge) - 0x037FF
 
