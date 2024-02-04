@@ -232,6 +232,7 @@ class UniqueKeyLoader(SafeLoader):
             mapping.add(key)
         return super().construct_mapping(node, deep)
 
+
 parse_yaml = functools.partial(load, Loader=UniqueKeyLoader)
 parse_yamls = functools.partial(load_all, Loader=UniqueKeyLoader)
 unsafe_parse_yaml = functools.partial(load, Loader=UnsafeLoader)
