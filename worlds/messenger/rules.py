@@ -479,7 +479,6 @@ class MessengerHardRules(MessengerRules):
 
 
 class MessengerOOBRules(MessengerRules):
-
     def __init__(self, world: "MessengerWorld") -> None:
         self.world = world
         self.player = world.player

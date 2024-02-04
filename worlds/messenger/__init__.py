@@ -234,7 +234,7 @@ class MessengerWorld(World):
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
-            "portal_exits": getattr(self, "portal_mapping", []),
+            "portal_exits": self.portal_mapping,
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data

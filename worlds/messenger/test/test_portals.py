@@ -1,6 +1,5 @@
 from BaseClasses import CollectionState
 from . import MessengerTestBase
-from .. import MessengerWorld
 from ..portals import PORTALS
 
 
