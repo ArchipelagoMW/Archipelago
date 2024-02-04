@@ -1,27 +1,27 @@
 from typing import Dict, Union
 from BaseClasses import MultiWorld
-from Options import Option, Toggle, Choice
+from Options import Option, Toggle, Choice, Range
 
 
 class OpenedNO4NO3(Toggle):
     """
         If true, the back door of Underground Caverns will be open
     """
-    display_name = "OpenedNO4NO3"
+    display_name = "Opened NO4 Backdoor"
 
 
 class OpenedDAIARE(Toggle):
     """
         If true, the back door of Colosseum will be open
     """
-    display_name = "OpenedDAIARE"
+    display_name = "Opened ARE Backdoor"
 
 
 class OpenedDAINO2(Toggle):
     """
         If true, the back door of Olrox's Quarters will be open
     """
-    display_name = "OpenedDAINO2"
+    display_name = "Opened NO2 Backdoor"
 
 
 class Difficult(Choice):
@@ -36,11 +36,20 @@ class Difficult(Choice):
     default = 1
 
 
+class BossesNeed(Range):
+    """Number of Triforce pieces required to complete the game."""
+    display_name = "Required Bosses Tokens"
+    range_start = 0
+    range_end = 19
+    default = 0
+
+
 sotn_option_definitions: Dict[str, type(Option)] = {
-    "OpenedNO4NO3": OpenedNO4NO3,
-    "OpenedDAIARE": OpenedDAIARE,
-    "OpenedDAINO2": OpenedDAINO2,
-    "Difficult": Difficult,
+    "opened_no4": OpenedNO4NO3,
+    "opened_are": OpenedDAIARE,
+    "opened_no2": OpenedDAINO2,
+    "difficult": Difficult,
+    "bosses_need": BossesNeed,
 }
 
 
