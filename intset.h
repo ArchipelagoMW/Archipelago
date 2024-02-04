@@ -42,6 +42,8 @@ static INTSET_NAME *INTSET_FUNC(new)(size_t buckets)
         buckets = 1;
     size_t size = sizeof(INTSET_NAME) + buckets * sizeof(INTSET_BUCKET);
     INTSET_NAME *set = (INTSET_NAME*)malloc(size);
+    if (!set)
+        return NULL;
     memset(set, 0, size);
     set->bucket_count = buckets;
     return set;
