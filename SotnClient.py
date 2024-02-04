@@ -7,17 +7,17 @@ import bsdiff4
 import subprocess
 import zipfile
 from asyncio import StreamReader, StreamWriter, CancelledError
-from typing import List
+from typing import NamedTuple, List
 
 
 import Utils
-from NetUtils import ClientStatus
+from NetUtils import ClientStatus, NetworkItem
 from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 from worlds import network_data_package, AutoWorldRegister
-from worlds.sotn.Items import base_item_id
-from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData
+from worlds.sotn.Items import base_item_id, ItemData, get_item_data, Type
+from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, get_location_data
 
 
 SYSTEM_MESSAGE_ID = 0
@@ -141,6 +141,8 @@ class SotnContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
+            self.bosses_dead = None
+            self.total_bosses_killed = 0
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -148,6 +150,28 @@ class SotnContext(CommonContext):
         elif cmd == "ReceivedItems":
             msg = f"{', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
+        elif cmd == "PrintJSON":
+            print(args)
+            if 'item' in args:
+                received: NamedTuple = args['item']
+                loc_data: LocationData = get_location_data(received.location)
+                item_data: ItemData = get_item_data(received.item)
+                print(f'{received.location} - {loc_data}')
+                print(f'{received.item} - {item_data}')
+                print(f'Player: {received.player} Slot: {self.slot}')
+
+                # TODO: Verify item range. Is our game item?
+                if base_item_id <= received.item <= base_item_id + 423:
+                    if loc_data.can_be_relic:
+                        # There is a item on a relic spot, send it to the player
+                        if item_data.type != Type.RELIC:
+                            print(f'Received 1 : {received}')
+                            self.items_received.append(received)
+                    else:
+                        # Normal location containing a relic
+                        if item_data.type == Type.RELIC:
+                            print(f'Received 2 : {received}')
+                            self.items_received.append(received)
 
     def run_gui(self):
         from kvui import GameManager
@@ -212,6 +236,7 @@ async def parse_locations(data: dict, ctx: SotnContext):
             ctx.checked_locations_sent = True
 
 
+# TODO: Find why AttributeError: 'list' object has no attribute 'items'
 async def parse_bosses(data: dict, ctx: SotnContext):
     bosses = data
 
