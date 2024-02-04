@@ -9,6 +9,10 @@ from .Locations import are_locations, cat_locations, chi_locations, dai_location
 
 
 def create_regions(multiworld: MultiWorld, player: int) -> None:
+    open_no4 = multiworld.opened_no4[player]
+    open_are = multiworld.opened_are[player]
+    open_no2 = multiworld.opened_no2[player]
+
     menu = Region("Menu", player, multiworld)
     multiworld.regions.append(menu)
     # TODO: Google a better way of doing this in python iterate over dicts with similar names and different sizes
@@ -125,9 +129,16 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
 
     menu.connect(no3)
     # Colosseum
-    are.connect(dai, "ARE->DAI", lambda state: (state.has("Form of mist", player) and
-                state.has("Power of mist", player)) or state.has("Gravity boots", player) or
-                state.has("Leap stone", player) or state.has("Soul of bat", player))
+    if not open_are:
+        are.connect(dai, "ARE->DAI", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Gravity boots", player) or
+                    state.has("Leap stone", player) or state.has("Soul of bat", player))
+    else:
+        # Could access normally or thru back door coming from NZ1 or NZ0
+        are.connect(dai, "ARE->DAI", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Gravity boots", player) or
+                    state.has("Leap stone", player) or state.has("Soul of bat", player) or
+                    state.has("Jewel of open", player))
     are.connect(no2)
     # Catacombs
     cat.connect(chi)
@@ -138,12 +149,25 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     dai.connect(nz0, "DAI->NZ0", lambda state: state.has("Jewel of open", player) or
                 state.has("Leap stone", player) or state.has("Soul of bat", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
-    dai.connect(are, "DAI->ARE", lambda state: (state.has("Form of mist", player) and
-                state.has("Power of mist", player)) or state.has("Gravity boots", player) or
-                state.has("Leap stone", player) or state.has("Soul of bat", player))
-    dai.connect(no2, "DAI->NO2", lambda state: (state.has("Form of mist", player) and
-                state.has("Power of mist", player)) or state.has("Soul of bat", player) or
-                state.has("Leap stone", player) or state.has("Gravity boots", player))
+    if not open_are:
+        dai.connect(are, "DAI->ARE", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Gravity boots", player) or
+                    state.has("Leap stone", player) or state.has("Soul of bat", player))
+    else:
+        dai.connect(are, "ARE->DAI", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Gravity boots", player) or
+                    state.has("Leap stone", player) or state.has("Soul of bat", player) or
+                    state.has("Jewel of open", player))
+    if not open_no2:
+        dai.connect(no2, "DAI->NO2", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Soul of bat", player) or
+                    state.has("Leap stone", player) or state.has("Gravity boots", player))
+    else:
+        dai.connect(no2, "DAI->NO2", lambda state: (state.has("Form of mist", player) and
+                    state.has("Power of mist", player)) or state.has("Soul of bat", player) or
+                    state.has("Leap stone", player) or state.has("Gravity boots", player) or
+                    state.has("Jewel of open", player))
+
     dai.connect(top)
     # Long Library
     lib.connect(no1)
@@ -167,12 +191,18 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                 state.has("Soul of bat", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
     # Castle Entrance
-    no3.connect(no4, "NO3->NO4", lambda state: (state.has("Jewel of open", player)))
+    if not open_no4:
+        no3.connect(no4, "NO3->NO4", lambda state: (state.has("Jewel of open", player)))
+    else:
+        no3.connect(no4)
     no3.connect(nz0)
     no3.connect(no0)
     # Underground Caverns
     no4.connect(no0, "NO4->NO0", lambda state: state.has("Jewel of open", player))
-    no4.connect(no3, "NO4->NO3", lambda state: (state.has("Jewel of open", player)))
+    if not open_no4:
+        no4.connect(no3, "NO4->NO3", lambda state: (state.has("Jewel of open", player)))
+    else:
+        no4.connect(no3)
     no4.connect(chi, "NO4->CHI", lambda state: state.has("Leap stone", player) or
                 state.has("Soul of bat", player) or (state.has("Form of mist", player) and
                                                      state.has("Power of mist", player)) or
