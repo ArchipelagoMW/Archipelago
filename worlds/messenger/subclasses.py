@@ -40,6 +40,11 @@ class MessengerRegion(Region):
 
         self.multiworld.regions.append(self)
 
+    def __lt__(self, other):
+        if isinstance(other, MessengerRegion):
+            return self.name < other.name
+        return self.name < other
+
 
 class MessengerLocation(Location):
     game = "The Messenger"

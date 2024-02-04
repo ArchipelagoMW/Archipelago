@@ -623,7 +623,7 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Searing Crags - Right": "Underworld - Left",
     "Glacial Peak - Bottom": "Searing Crags - Top",
     "Glacial Peak - Top": "Cloud Ruins - Left",
-    # "ToTHQ": "Tower of Time",
+    # "Tower HQ": "Tower of Time - Left",  # this entrance functions weird so skip for now
     "Underworld - Left": "Searing Crags - Right",
     "Dark Cave - Right": "Catacombs - Bottom",
     "Dark Cave - Left": "Riviere Turquoise - Right",
@@ -663,6 +663,7 @@ TRANSITIONS: List[str] = [
     "Searing Crags - Top",
     "Glacial Peak - Bottom",
     "Glacial Peak - Top",
+    "Tower HQ",
     "Tower of Time - Left",
     "Cloud Ruins - Left",
     "Underworld - Left",

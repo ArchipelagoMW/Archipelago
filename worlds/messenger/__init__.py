@@ -1,14 +1,14 @@
 import logging
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
 from Utils import visualize_regions, output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
 from .client_setup import launch_game
-from .connections import CONNECTIONS
+from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 from .entrances import shuffle_entrances
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
@@ -115,8 +115,16 @@ class MessengerWorld(World):
                                  self.random.sample(PORTALS[3:], k=self.options.available_portals - 3)]
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
-        self.spoiler_entrances = {}
         self.transitions = []
+
+    @classmethod
+    def stage_generate_early(cls, multiworld: MultiWorld):
+        if multiworld.players > 1:
+            return
+        out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
+        if "The Messenger\\Archipelago\\output" in out_path:
+            cls.out_path = out_path
+            cls.generate_output = generate_output
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -135,6 +143,9 @@ class MessengerWorld(World):
         for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
             region = self.multiworld.get_region(region_name, self.player)
             region.add_exits(REGION_CONNECTIONS[region.name])
+
+        if self.options.shuffle_transitions:
+            shuffle_entrances(self)
 
     def create_items(self) -> None:
         # create items that are always in the item pool
@@ -193,7 +204,6 @@ class MessengerWorld(World):
         self.multiworld.itempool += filler
 
     def set_rules(self) -> None:
-        # MessengerRules(self).set_messenger_rules()
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
@@ -201,14 +211,12 @@ class MessengerWorld(World):
             MessengerHardRules(self).set_messenger_rules()
         # else:
         #     MessengerOOBRules(self).set_messenger_rules()
+
         add_closed_portal_reqs(self)
-        # i need ER to happen after rules exist so i can validate it
+        # i need portal shuffle to happen after rules exist so i can validate it
         if self.options.shuffle_portals:
             disconnect_portals(self)
             shuffle_portals(self)
-
-        if self.options.shuffle_transitions:
-            shuffle_entrances(self)
 
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
@@ -227,20 +235,8 @@ class MessengerWorld(World):
                     "both" if transition.er_type == Entrance.EntranceType.TWO_WAY else "",
                     self.player)
 
-    def generate_output(self, output_directory: str) -> None:
-        out_path = output_path(self.multiworld.get_out_file_name_base(self.player) + ".aptm")
-        if self.multiworld.players > 1 or "The Messenger\\Archipelago\\output" not in out_path:
-            return
-        from json import dump
-        data = {
-            "slot_data": self.fill_slot_data(),
-            "loc_data": {loc.address: {loc.item.code: loc.item.name} for loc in self.multiworld.get_filled_locations() if loc.address},
-        }
-        with open(out_path, "w") as f:
-            dump(data, f)
-
     def fill_slot_data(self) -> Dict[str, Any]:
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.puml", show_entrance_names=True)
+        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.puml")
         slot_data = {
             "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
@@ -248,6 +244,9 @@ class MessengerWorld(World):
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
             "portal_exits": self.portal_mapping,
+            "transitions": [[TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.parent_region.name]),
+                             TRANSITIONS.index(transition.connected_region.name)]
+                            for transition in self.transitions],
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data
@@ -304,3 +303,16 @@ class MessengerWorld(World):
         if change and "Time Shard" in item.name:
             state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
         return change
+
+
+def generate_output(world: MessengerWorld, output_directory: str) -> None:
+    import orjson
+    data = {
+        "slot_data": world.fill_slot_data(),
+        "loc_data": {loc.address: {loc.item.code: loc.item.name} for loc in world.multiworld.get_filled_locations()
+                     if loc.address},
+    }
+
+    output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
+    with open(world.out_path, "wb") as f:
+        f.write(output)

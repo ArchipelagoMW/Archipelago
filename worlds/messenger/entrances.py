@@ -1,4 +1,4 @@
-from typing import Dict, List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
 from EntranceRando import randomize_entrances
@@ -36,6 +36,6 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
         disconnect_entrance()
         regions_to_shuffle += [parent_region, child_region]
 
-    result = randomize_entrances(world, list(set(regions_to_shuffle)), coupled, lambda group: ["Default"])
+    result = randomize_entrances(world, sorted(set(regions_to_shuffle)), coupled, lambda group: ["Default"])
 
     world.transitions = sorted(result.placements, key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))
