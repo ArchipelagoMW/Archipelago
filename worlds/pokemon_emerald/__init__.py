@@ -1153,8 +1153,11 @@ class PokemonEmeraldWorld(World):
             "free_fly_location",
             "remote_items",
             "dexsanity",
+            "trainersanity",
+            "modify_118",
         )
         slot_data["free_fly_location_id"] = self.free_fly_location_id
+        slot_data["hm_requirements"] = self.hm_requirements
         return slot_data
 
     def create_item(self, name: str) -> PokemonEmeraldItem:
