@@ -31,6 +31,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Autumn Hills - Left",
             "Autumn Hills - Hope Path Shop",
             "Autumn Hills - Lakeside Checkpoint",
+            "Autumn Hills - Key of Hope Checkpoint",
         ],
         "Hope Path Shop": [
             "Autumn Hills - Climbing Claws Shop",
@@ -320,6 +321,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
         "Searing Mega Shard Shop": [
             "Searing Crags - Falling Rocks Shop",
             "Searing Crags - Before Final Climb Shop",
+            "Searing Crags - Key of Strength Shop",
         ],
         "Before Final Climb Shop": [
             "Searing Crags - Raining Rocks Checkpoint",
@@ -357,10 +359,9 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
         "Top": [
             "Glacial Peak - Tower Entrance Shop",
             "Cloud Ruins - Left",
-            "Glacial Peak - Portal",
         ],
         "Portal": [
-            "Glacial Peak - Top",
+            "Glacial Peak - Tower Entrance Shop",
             "Tower HQ",
         ],
         "Ice Climbers' Shop": [
@@ -374,6 +375,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
         "Tower Entrance Shop": [
             "Glacial Peak - Top",
             "Glacial Peak - Free Climbing Checkpoint",
+            "Glacial Peak - Portal",
         ],
         "Projectile Spike Pit Checkpoint": [
             "Glacial Peak - Ice Climbers' Shop",

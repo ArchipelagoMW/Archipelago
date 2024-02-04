@@ -111,6 +111,8 @@ class MessengerWorld(World):
         self.starting_portals = [f"{portal} Portal"
                                  for portal in PORTALS[:3] +
                                  self.random.sample(PORTALS[3:], k=self.options.available_portals - 3)]
+        self.portal_mapping = []
+        self.spoiler_portal_mapping = {}
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -123,7 +125,7 @@ class MessengerWorld(World):
                        for reg_name in sub_region]:
             region_name = region.name.replace(f"{region.parent} - ", "")
             connection_data = CONNECTIONS[region.parent][region_name]
-            for exit_region in connection_data["exits"]:
+            for exit_region in connection_data:
                 region.connect(self.multiworld.get_region(exit_region, self.player))
         # all regions need to be created before i can do these connections so we create and connect the complex first
         for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
@@ -187,12 +189,12 @@ class MessengerWorld(World):
         self.multiworld.itempool += filler
 
     def set_rules(self) -> None:
-        MessengerRules(self).set_messenger_rules()
-        # logic = self.options.logic_level
-        # if logic == Logic.option_normal:
-        #     MessengerRules(self).set_messenger_rules()
-        # elif logic == Logic.option_hard:
-        #     MessengerHardRules(self).set_messenger_rules()
+        # MessengerRules(self).set_messenger_rules()
+        logic = self.options.logic_level
+        if logic == Logic.option_normal:
+            MessengerRules(self).set_messenger_rules()
+        else:
+            MessengerHardRules(self).set_messenger_rules()
         # else:
         #     MessengerOOBRules(self).set_messenger_rules()
         add_closed_portal_reqs(self)
@@ -232,7 +234,7 @@ class MessengerWorld(World):
             "max_price": self.total_shards,
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
-            "portal_exits": self.portal_mapping if self.portal_mapping else [],
+            "portal_exits": getattr(self, "portal_mapping", []),
             **self.options.as_dict("music_box", "death_link", "logic_level"),
         }
         return slot_data

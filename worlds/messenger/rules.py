@@ -45,6 +45,8 @@ class MessengerRules:
                 self.has_vertical,
             "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Hope Path Shop":
                 self.has_dart,
+            "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Key of Hope Checkpoint":
+                self.false,  # hard logic only
             "Autumn Hills - Hope Path Shop -> Autumn Hills - Hope Latch Checkpoint":
                 self.has_dart,
             "Autumn Hills - Hope Path Shop -> Autumn Hills - Climbing Claws Shop":
@@ -84,8 +86,12 @@ class MessengerRules:
             "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Emerald Golem Shop":
                 self.has_wingsuit,
             "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Crushing Pits Shop":
-                lambda state: (self.has_wingsuit(state) or self.can_dboost(state) or self.can_destroy_projectiles(state))
-                              and state.multiworld.get_region("Howling Grotto - Emerald Golem Shop", self.player).can_reach(state),
+                lambda state: (self.has_wingsuit(state) or self.can_dboost(
+                    state
+                ) or self.can_destroy_projectiles(state))
+                              and state.multiworld.get_region(
+                    "Howling Grotto - Emerald Golem Shop", self.player
+                ).can_reach(state),
             "Howling Grotto - Emerald Golem Shop -> Howling Grotto - Right":
                 self.has_wingsuit,
             # Searing Crags
@@ -107,22 +113,25 @@ class MessengerRules:
                                    or (self.has_wingsuit(state)
                                        and self.can_destroy_projectiles(state))),
             "Searing Crags - Falling Rocks Shop -> Searing Crags - Searing Mega Shard Shop":
-                self.has_dart,  # or strike for hard
+                self.has_dart,
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Before Final Climb Shop":
                 lambda state: self.has_dart(state) or self.can_destroy_projectiles(state),
             "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Falling Rocks Shop":
                 self.has_dart,
+            "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+                self.false,
             "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
-                self.has_dart,  # doable itemless for hard, but only 16-bit
+                self.has_dart,
             # Glacial Peak
-            "Glacial Peak - Portal -> Glacial Peak - Top":
+            "Glacial Peak - Portal -> Glacial Peak - Tower Entrance Shop":
                 self.has_vertical,
             "Glacial Peak - Left -> Elemental Skylands":  # if we can ever shuffle elemental skylands stuff around wingsuit isn't needed here.
                 lambda state: state.has("Magic Firefly", self.player)
-                              and state.multiworld.get_location("Quillshroom Marsh - Queen of Quills", self.player).can_reach(state)
+                              and state.multiworld.get_location("Quillshroom Marsh - Queen of Quills", self.player)
+                              .can_reach(state)
                               and self.has_wingsuit(state),
-            "Glacial Peak - Top -> Cloud Ruins - Left":
-                lambda state: self.has_vertical(state) and state.has("Ruxxtin's Amulet", self.player),
+            "Glacial Peak - Tower Entrance Shop -> Glacial Peak - Top":
+                lambda state: state.has("Ruxxtin's Amulet", self.player),
             "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
                 lambda state: self.has_dart(state) or (self.can_dboost(state) and self.has_wingsuit(state)),
             # Tower of Time
@@ -156,7 +165,7 @@ class MessengerRules:
             "Cloud Ruins - Sliding Spikes Shop -> Cloud Ruins - Seeing Spikes Shop":
                 self.has_wingsuit,
             "Cloud Ruins - Sliding Spikes Shop -> Cloud Ruins - Saw Pit Checkpoint":
-                self.has_vertical,  # nothing needed for hard
+                self.has_vertical,
             "Cloud Ruins - Final Flight Shop -> Cloud Ruins - Manfred's Shop":
                 lambda state: self.has_wingsuit(state) and self.has_dart(state),
             "Cloud Ruins - Manfred's Shop -> Cloud Ruins - Final Flight Shop":
@@ -187,11 +196,12 @@ class MessengerRules:
                 lambda state: state.has("Candle", self.player) and self.has_dart(state),
             # Riviere Turquoise
             "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
-                lambda state: self.has_dart(state) or (self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
+                lambda state: self.has_dart(state) or (
+                            self.has_wingsuit(state) and self.can_destroy_projectiles(state)),
             "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
-                lambda state: self.has_dart(state) and self.can_dboost(state),  # doable with only d-boosting but it's pretty hard so only for hard logic
+                lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
-                lambda state: False,  # doable with d-boosting but it's pretty hard so only for hard logic
+                lambda state: False,
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
                 self.has_tabi,
@@ -204,63 +214,96 @@ class MessengerRules:
             "Sunken Shrine - Tabi Gauntlet Shop -> Sunken Shrine - Sun Path Shop":
                 lambda state: self.can_dboost(state) or self.has_dart(state),
         }
-        
+
         self.location_rules = {
             # ninja village
-            "Ninja Village Seal - Tree House": self.has_dart,
+            "Ninja Village Seal - Tree House":
+                self.has_dart,
             "Ninja Village - Candle":
-                lambda state: state.multiworld.get_location("Searing Crags - Astral Tea Leaves", self.player).can_reach(state),
+                lambda state: state.multiworld.get_location("Searing Crags - Astral Tea Leaves", self.player).can_reach(
+                    state),
             # autumn hills
-            "Autumn Hills Seal - Spike Ball Darts": self.is_aerobatic,
-            "Autumn Hills Seal - Trip Saws": self.has_wingsuit,
+            "Autumn Hills Seal - Spike Ball Darts":
+                self.is_aerobatic,
+            "Autumn Hills Seal - Trip Saws":
+                self.has_wingsuit,
             # forlorn temple
-            "Forlorn Temple Seal - Rocket Maze": self.has_vertical,
+            "Forlorn Temple Seal - Rocket Maze":
+                self.has_vertical,
             # bamboo creek
-            "Bamboo Creek - Claustro": lambda state: self.has_wingsuit(state) and
-                                                     (self.has_dart(state) or self.can_dboost(state)),
-            "Above Entrance Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state),
-            "Bamboo Creek Seal - Spike Ball Pits": self.has_wingsuit,
+            "Bamboo Creek - Claustro":
+                lambda state: self.has_wingsuit(state) and (self.has_dart(state) or self.can_dboost(state)),
+            "Above Entrance Mega Shard":
+                lambda state: self.has_dart(state) or self.can_dboost(state),
+            "Bamboo Creek Seal - Spike Ball Pits":
+                self.has_wingsuit,
             # howling grotto
-            "Howling Grotto Seal - Windy Saws and Balls": self.has_wingsuit,
-            "Howling Grotto Seal - Crushing Pits": lambda state: self.has_wingsuit(state) and self.has_dart(state),
-            "Howling Grotto - Emerald Golem": self.has_wingsuit,
+            "Howling Grotto Seal - Windy Saws and Balls":
+                self.has_wingsuit,
+            "Howling Grotto Seal - Crushing Pits":
+                lambda state: self.has_wingsuit(state) and self.has_dart(state),
+            "Howling Grotto - Emerald Golem":
+                self.has_wingsuit,
             # searing crags
             "Searing Crags - Astral Tea Leaves":
                 lambda state: state.multiworld.get_location("Ninja Village - Astral Seed", self.player).can_reach(state),
-            "Searing Crags Seal - Triple Ball Spinner": self.can_dboost,
+            "Searing Crags Seal - Triple Ball Spinner":
+                self.can_dboost,
             "Searing Crags - Pyro":
                 self.has_tabi,
             # glacial peak
-            "Glacial Peak Seal - Ice Climbers": self.has_dart,
-            "Glacial Peak Seal - Projectile Spike Pit": self.can_destroy_projectiles,
+            "Glacial Peak Seal - Ice Climbers":
+                self.has_dart,
+            "Glacial Peak Seal - Projectile Spike Pit":
+                self.can_destroy_projectiles,
             # tower of time
-            "Tower of Time Seal - Time Waster": self.has_dart,
+            "Tower of Time Seal - Time Waster":
+                self.has_dart,
             # cloud ruins
-            "Time Warp Mega Shard": lambda state: self.has_vertical(state) or self.can_dboost(state),
-            "Cloud Ruins Seal - Ghost Pit": self.has_vertical,  # nothing needed for hard
-            "Cloud Ruins Seal - Toothbrush Alley": self.has_dart,  # nothing needed for hard
-            "Cloud Ruins Seal - Saw Pit": self.has_vertical,  # nothing for hard
+            "Time Warp Mega Shard":
+                lambda state: self.has_vertical(state) or self.can_dboost(state),
+            "Cloud Ruins Seal - Ghost Pit":
+                self.has_vertical,
+            "Cloud Ruins Seal - Toothbrush Alley":
+                self.has_dart,
+            "Cloud Ruins Seal - Saw Pit":
+                self.has_vertical,
             # underworld
-            "Underworld Seal - Sharp and Windy Climb": self.has_wingsuit,
-            "Underworld Seal - Fireball Wave": self.is_aerobatic,
-            "Underworld Seal - Rising Fanta": self.has_dart,
-            "Hot Tub Mega Shard": lambda state: self.has_tabi(state) or self.has_dart(state),
+            "Underworld Seal - Sharp and Windy Climb":
+                self.has_wingsuit,
+            "Underworld Seal - Fireball Wave":
+                self.is_aerobatic,
+            "Underworld Seal - Rising Fanta":
+                self.has_dart,
+            "Hot Tub Mega Shard":
+                lambda state: self.has_tabi(state) or self.has_dart(state),
             # sunken shrine
-            "Sunken Shrine - Key of Love": lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
-            "Sunken Shrine Seal - Waterfall Paradise": self.has_tabi,
-            "Sunken Shrine Seal - Tabi Gauntlet": self.has_tabi,
-            "Mega Shard of the Sun": self.has_tabi,
+            "Sunken Shrine - Key of Love":
+                lambda state: state.has_all({"Sun Crest", "Moon Crest"}, self.player),
+            "Sunken Shrine Seal - Waterfall Paradise":
+                self.has_tabi,
+            "Sunken Shrine Seal - Tabi Gauntlet":
+                self.has_tabi,
+            "Mega Shard of the Sun":
+                self.has_tabi,
             # riviere turquoise
-            "Riviere Turquoise Seal - Bounces and Balls": self.can_dboost,
-            "Riviere Turquoise Seal - Launch of Faith": lambda state: self.can_dboost(state) or self.has_dart(state),
+            "Riviere Turquoise Seal - Bounces and Balls":
+                self.can_dboost,
+            "Riviere Turquoise Seal - Launch of Faith":
+                lambda state: self.has_vertical(state),
             # elemental skylands
-            "Elemental Skylands - Key of Symbiosis": self.has_dart,
-            "Elemental Skylands Seal - Air": self.has_wingsuit,
-            "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) and
-                                                             state.has("Currents Master", self.player),
-            "Elemental Skylands Seal - Fire": lambda state: self.has_dart(state) and self.can_destroy_projectiles(state),
-            "Earth Mega Shard": self.has_dart,
-            "Water Mega Shard": self.has_dart,
+            "Elemental Skylands - Key of Symbiosis":
+                self.has_dart,
+            "Elemental Skylands Seal - Air":
+                self.has_wingsuit,
+            "Elemental Skylands Seal - Water":
+                lambda state: self.has_dart(state) and state.has("Currents Master", self.player),
+            "Elemental Skylands Seal - Fire":
+                lambda state: self.has_dart(state) and self.can_destroy_projectiles(state),
+            "Earth Mega Shard":
+                self.has_dart,
+            "Water Mega Shard":
+                self.has_dart,
         }
 
     def has_wingsuit(self, state: CollectionState) -> bool:
@@ -284,7 +327,7 @@ class MessengerRules:
     def can_dboost(self, state: CollectionState) -> bool:
         return state.has_any({"Path of Resilience", "Meditation"}, self.player) and \
             state.has("Second Wind", self.player)
-    
+
     def can_double_dboost(self, state: CollectionState) -> bool:
         return state.has_all({"Path of Resilience", "Meditation", "Second Wind"}, self.player)
 
@@ -294,6 +337,10 @@ class MessengerRules:
     def true(self, state: CollectionState) -> bool:
         """I know this is stupid, but it's easier to read in the dicts."""
         return True
+
+    def false(self, state: CollectionState) -> bool:
+        """It's a bit easier to just always create the connections that are only possible in hard or higher logic."""
+        return False
 
     def can_shop(self, state: CollectionState) -> bool:
         return state.has("Shards", self.player, self.maximum_price)
@@ -316,68 +363,123 @@ class MessengerRules:
 
 
 class MessengerHardRules(MessengerRules):
-    extra_rules: Dict[str, CollectionRule]
-
     def __init__(self, world: "MessengerWorld") -> None:
         super().__init__(world)
 
-        self.region_rules.update({
-            "Ninja Village": self.has_vertical,
-            "Autumn Hills": self.has_vertical,
-            "Catacombs": self.has_vertical,
-            "Bamboo Creek": self.has_vertical,
-            "Riviere Turquoise": self.true,
-            "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(PHOBEKINS, self.player),
-            "Searing Crags Upper": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
-                                                 or self.has_vertical(state),
-            "Glacial Peak": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
-                                          or self.has_vertical(state),
-            "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) or
-                                                self.has_windmill(state) or
-                                                self.has_dart(state),
-        })
+        self.connection_rules.update(
+            {
+                # Autumn Hills
+                "Autumn Hills - Portal -> Autumn Hills - Dimension Climb Shop":
+                    self.has_dart,
+                "Autumn Hills - Climbing Claws Shop -> Autumn Hills - Key of Hope Checkpoint":
+                    self.true,  # super easy normal clip - also possible with moderately difficult cloud stepping
+                # Howling Grotto
+                "Howling Grotto - Portal -> Howling Grotto - Crushing Pits Shop":
+                    self.true,
+                "Howling Grotto - Lost Woods Checkpoint -> Howling Grotto - Bottom":
+                    self.true,  # just memorize the pattern :)
+                "Howling Grotto - Crushing Pits Shop -> Howling Grotto - Portal":
+                    self.true,
+                "Howling Grotto - Breezy Crushers Checkpoint -> Howling Grotto - Emerald Golem Shop":
+                    lambda state: self.has_wingsuit(state) or  # there's a very easy normal clip here but it's 16-bit only
+                                  "Howling Grotto - Breezy Crushers Checkpoint" in self.world.spoiler_portal_mapping.values(),
+                # Searing Crags
+                "Searing Crags - Rope Dart Shop -> Searing Crags - Triple Ball Spinner Checkpoint":
+                    lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
+                # it's doable without anything but one jump is pretty hard and time warping is no longer reliable
+                "Searing Crags - Falling Rocks Shop -> Searing Crags - Searing Mega Shard Shop":
+                    lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
+                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Falling Rocks Shop":
+                    lambda state: self.has_dart(state) or
+                                  (self.can_destroy_projectiles(state) and
+                                   (self.has_wingsuit(state) or self.can_dboost(state))),
+                "Searing Crags - Searing Mega Shard Shop -> Searing Crags - Key of Strength Shop":
+                    lambda state: self.can_leash(state) or self.has_windmill(state),
+                "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
+                    self.true,
+                # Glacial Peak
+                "Glacial Peak - Left -> Elemental Skylands":
+                    lambda state: self.has_windmill(state) or
+                                  (state.has("Magic Firefly", self.player) and
+                                   state.multiworld.get_location(
+                                       "Quillshroom Marsh - Queen of Quills", self.player).can_reach(state)) or
+                                  (self.has_dart(state) and self.can_dboost(state)),
+                "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
+                    lambda state: self.has_vertical(state) or self.has_windmill(state),
+                # Cloud Ruins
+                "Cloud Ruins - Sliding Spikes Shop -> Cloud Ruins - Saw Pit Checkpoint":
+                    self.true,
+                # Riviere Turquoise
+                "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
+                    self.true,
+                "Riviere Turquoise - Launch of Faith Shop -> Riviere Turquoise - Flower Flight Checkpoint":
+                    self.can_dboost,
+                "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
+                    self.can_double_dboost,
+            }
+        )
 
-        self.location_rules.update({
-            "Howling Grotto Seal - Windy Saws and Balls": self.true,
-            "Searing Crags Seal - Triple Ball Spinner": self.true,
-            "Searing Crags Seal - Raining Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Searing Crags Seal - Rhythm Rocks": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Searing Crags - Power Thistle": lambda state: self.has_vertical(state) or self.can_destroy_projectiles(state),
-            "Glacial Peak Seal - Ice Climbers": lambda state: self.has_vertical(state) or self.can_dboost(state),
-            "Glacial Peak Seal - Projectile Spike Pit": self.true,
-            "Glacial Peak Seal - Glacial Air Swag": lambda state: self.has_windmill(state) or self.has_vertical(state),
-            "Glacial Peak Mega Shard": lambda state: self.has_windmill(state) or self.has_vertical(state),
-            "Cloud Ruins Seal - Ghost Pit": self.true,
-            "Bamboo Creek - Claustro": self.has_wingsuit,
-            "Tower of Time Seal - Lantern Climb": self.has_wingsuit,
-            "Elemental Skylands Seal - Water": lambda state: self.has_dart(state) or self.can_dboost(state)
-                                                             or self.has_windmill(state),
-            "Elemental Skylands Seal - Fire": lambda state: (self.has_dart(state) or self.can_dboost(state)
-                                                             or self.has_windmill(state)) and
-                                                            self.can_destroy_projectiles(state),
-            "Earth Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
-            "Water Mega Shard": lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
-        })
-
-        self.extra_rules = {
-            "Searing Crags - Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
-            "Elemental Skylands - Key of Symbiosis": lambda state: self.has_windmill(state) or self.can_dboost(state),
-            "Autumn Hills Seal - Spike Ball Darts": lambda state: self.has_dart(state) or self.has_windmill(state),
-            "Underworld Seal - Fireball Wave": self.has_windmill,
-        }
+        self.location_rules.update(
+            {
+                "Autumn Hills Seal - Spike Ball Darts":
+                    lambda state: self.has_vertical(state) and self.has_windmill(state) or self.is_aerobatic(state),
+                "Bamboo Creek - Claustro":
+                    self.has_wingsuit,
+                "Bamboo Creek Seal - Spike Ball Pits":
+                    self.true,
+                "Howling Grotto Seal - Windy Saws and Balls":
+                    self.true,
+                "Searing Crags Seal - Triple Ball Spinner":
+                    self.true,
+                "Glacial Peak Seal - Ice Climbers":
+                    lambda state: self.has_vertical(state) or self.can_dboost(state),
+                "Glacial Peak Seal - Projectile Spike Pit":
+                    lambda state: self.can_dboost(state) or self.can_destroy_projectiles(state),
+                "Glacial Peak Seal - Glacial Air Swag":
+                    lambda state: self.has_windmill(state) or self.has_vertical(state),
+                "Glacial Peak Mega Shard":
+                    lambda state: self.has_windmill(state) or self.has_vertical(state),
+                "Cloud Ruins Seal - Ghost Pit":
+                    self.true,
+                "Cloud Ruins Seal - Toothbrush Alley":
+                    self.true,
+                "Cloud Ruins Seal - Saw Pit":
+                    self.true,
+                "Underworld Seal - Fireball Wave":
+                    lambda state: self.is_aerobatic(state) or self.has_windmill(state),
+                "Riviere Turquoise Seal - Bounces and Balls":
+                    self.true,
+                "Riviere Turquoise Seal - Launch of Faith":
+                    lambda state: self.can_dboost(state) or self.has_vertical(state),
+                "Elemental Skylands - Key of Symbiosis":
+                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+                "Elemental Skylands Seal - Water":
+                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+                "Elemental Skylands Seal - Fire":
+                    lambda state: (self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state))
+                                  and self.can_destroy_projectiles(state),
+                "Earth Mega Shard":
+                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+                "Water Mega Shard":
+                    lambda state: self.has_dart(state) or self.can_dboost(state) or self.has_windmill(state),
+            }
+        )
 
     def has_windmill(self, state: CollectionState) -> bool:
         return state.has("Windmill Shuriken", self.player)
 
-    def set_messenger_rules(self) -> None:
-        super().set_messenger_rules()
-        for loc, rule in self.extra_rules.items():
-            if not self.world.options.shuffle_shards and "Shard" in loc:
-                continue
-            add_rule(self.world.multiworld.get_location(loc, self.player), rule, "or")
+    def can_dboost(self, state: CollectionState) -> bool:
+        return state.has("Second Wind", self.player)  # who really needs meditation
+    
+    def can_destroy_projectiles(self, state: CollectionState) -> bool:
+        return super().can_destroy_projectiles(state) or self.has_windmill(state)
+
+    def can_leash(self, state: CollectionState) -> bool:
+        return self.has_dart(state) and self.can_dboost(state)
 
 
 class MessengerOOBRules(MessengerRules):
+
     def __init__(self, world: "MessengerWorld") -> None:
         self.world = world
         self.player = world.player
@@ -385,7 +487,9 @@ class MessengerOOBRules(MessengerRules):
         self.required_seals = max(1, world.required_seals)
         self.region_rules = {
             "Elemental Skylands":
-                lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
+                lambda state: state.has_any(
+                    {"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player
+                ),
             "Music Box": lambda state: state.has_all(set(NOTES), self.player) or self.has_enough_seals(state),
         }
 
@@ -399,8 +503,10 @@ class MessengerOOBRules(MessengerRules):
                 lambda state: state.has_all({"Demon King Crown", "Magic Firefly"}, self.player),
             "Autumn Hills Seal - Spike Ball Darts": self.has_dart,
             "Ninja Village Seal - Tree House": self.has_dart,
-            "Underworld Seal - Fireball Wave": lambda state: state.has_any({"Wingsuit", "Windmill Shuriken"},
-                                                                           self.player),
+            "Underworld Seal - Fireball Wave": lambda state: state.has_any(
+                {"Wingsuit", "Windmill Shuriken"},
+                self.player
+            ),
             "Tower of Time Seal - Time Waster": self.has_dart,
         }
 

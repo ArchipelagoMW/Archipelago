@@ -2,13 +2,13 @@ import io
 import logging
 import os.path
 import subprocess
-import sys
 import urllib.request
 from pathlib import Path
 from shutil import which
 from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
 from zipfile import ZipFile
+from Utils import open_file
 
 import requests
 
@@ -81,14 +81,15 @@ def launch_game(url: Optional[str] = None) -> None:
     
         if courier_installed():
             messagebox("Success!", "Courier successfully installed!")
+            return
         messagebox("Failure", "Failed to install Courier", True)
         raise RuntimeError("Failed to install Courier")
 
     def install_mod() -> None:
         """Installs latest version of the mod"""
         # TODO: add /latest before actual PR since i want pre-releases for now
-        url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
-        assets = request_data(url)["assets"]
+        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
+        assets = request_data(get_url)[0]["assets"]
         for asset in assets:
             if "TheMessengerRandomizerModAP" in asset["name"]:
                 release_url = asset["browser_download_url"]
@@ -106,8 +107,8 @@ def launch_game(url: Optional[str] = None) -> None:
 
     def available_mod_update() -> bool:
         """Check if there's an available update"""
-        url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
-        assets = request_data(url)[0]["assets"]
+        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
+        assets = request_data(get_url)[0]["assets"]
         # TODO simplify once we're done with 0.13.0 alpha
         for asset in assets:
             if "TheMessengerRandomizerAP" in asset["name"]:
@@ -162,7 +163,10 @@ def launch_game(url: Optional[str] = None) -> None:
                 install_mod()
     logging.info(url)
     if is_linux:
-        os.startfile("steam://rungameid/764790")
+        if url:
+            open_file(f"steam://rungameid/764790//{url}/")
+        else:
+            open_file("steam://rungameid/764790")
     else:
         os.chdir(Path(MessengerWorld.settings.game_path).parent)
         if url:
