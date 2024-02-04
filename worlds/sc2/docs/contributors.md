@@ -21,7 +21,7 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * @NobleXenon
 * Severencir (@Severencir)
 * neocerber (@neocerber @MaxTousss)
-* Mati @Matiya-star
+* Mati (@Matiya-star)
 * Ixzine
 * sweetox
 * 8thDaughterOfFrost
