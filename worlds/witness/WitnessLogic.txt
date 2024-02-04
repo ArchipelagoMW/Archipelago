@@ -860,13 +860,13 @@ Treehouse Beach (Treehouse Beach) - Main Island - True:
 159201 - 0x0053E (Sand Shadow EP) - True - True
 159212 - 0x220BD (Both Orange Bridges EP) - 0x17DA2 & 0x17DDB - True
 
-Treehouse Entry Area (Treehouse) - Treehouse Between Doors - 0x0C309 - The Ocean - 0x17C95:
+Treehouse Entry Area (Treehouse) - Treehouse Between Entry Doors - 0x0C309 - The Ocean - 0x17C95:
 158343 - 0x17C95 (Boat Spawn) - True - Boat
 158344 - 0x0288C (First Door Panel) - True - Stars
 Door - 0x0C309 (First Door) - 0x0288C
 159210 - 0x33721 (Buoy EP) - 0x17C95 - True
 
-Treehouse Between Doors (Treehouse) - Treehouse Yellow Bridge - 0x0C310:
+Treehouse Between Entry Doors (Treehouse) - Treehouse Yellow Bridge - 0x0C310:
 158345 - 0x02886 (Second Door Panel) - True - Stars
 Door - 0x0C310 (Second Door) - 0x02886
 
