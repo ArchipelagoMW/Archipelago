@@ -1,0 +1,1815 @@
+
+{
+"item": "NATURE_ORB",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_FOREST_NIGHT",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "(EXPLOSIVES_ENEMY | BLOCK_CLIP)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_WEST_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_FOREST_NIGHT",
+"from_location": "FOREST_NIGHT_ATK_UP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_CAVE",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "HP_UP_CAVE",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "BLESSED",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "TOXIC_STRIKE",
+"from_location": "FOREST_NIGHT_TOXIC_STRIKE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PIKO_HAMMER",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_FOREST_CAVE",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "TOUGH_SKIN",
+"from_location": "SPECTRAL_WEST",
+"entry_prereq": "ASHURI_2 & TOWN_MAIN",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_CAVE",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "(EXPLOSIVES_ENEMY | ITM) & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"item": "HP_UP_NORTH_FOREST",
+"from_location": "FOREST_NORTH_HP_UP_ROOM",
+"entry_prereq": "
+    ((EXPLOSIVES_ENEMY & SLIDING_POWDER) | DOWNDRILL_SEMISOLID_CLIP)
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "WALL_JUMP",
+"from_location": "SPECTRAL_MID",
+"entry_prereq": "NONE",
+"exit_prereq": "RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | (ITM_HARD & (AIR_DASH | SLIDING_POWDER)) | (SPEED5 & ADV_STUPID)",
+}
+
+{
+"item": "REGEN_UP_MID_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "
+    (ITM_HARD & (WALL_JUMP_LV2 | WHIRL_BONK_CANCEL))
+    | AIR_JUMP
+    | ((RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL) & WALL_JUMP_LV2)
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_MID_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_MID_SPECTRAL",
+"from_location": "SPECTRAL_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CARROT_BOMB",
+"from_location": "FOREST_COCOA_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "DEF_TRADE",
+"from_location": "FOREST_START",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "LIGHT_ORB",
+"from_location": "FOREST_LIGHT_ORB_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_FOREST_POST_COCOA",
+"from_location": "FOREST_START",
+"entry_prereq": "PIKO_HAMMER",
+"exit_prereq": "PIKO_HAMMER | EXPLOSIVES_ENEMY",
+
+"alternate_entries": {
+    "FOREST_COCOA_ROOM": "EXPLOSIVES_ENEMY",
+    },
+}
+
+{
+"item": "CHARGE_RING",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ARM_STRENGTH",
+"from_location": "SPECTRAL_WARP",
+"entry_prereq": "AIR_JUMP",
+"exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_LEDGE": "
+        SLIDE_JUMP_BUNSTRIKE | AIR_DASH | AIR_JUMP | (ADV_VHARD & AMULET_FOOD)
+        ",
+    },
+}
+
+{
+"item": "REGEN_UP_EAST_FOREST",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "
+    (AIR_JUMP & (ITM_HARD | AIR_DASH | RABI_SLIPPERS))
+    | (RABI_SLIPPERS & AIR_DASH)
+",
+
+"alternate_exits": {
+    "FOREST_EAST_ABOVE_SPRING": "NONE",
+    },
+
+"alternate_entries": {
+    "FOREST_EAST_ABOVE_SPRING": "
+        (AIR_JUMP & AIR_DASH & ((ITM_HARD & RABI_SLIPPERS) | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+        | (WHIRL_BONK_CANCEL & AIR_DASH)
+        | (ADV_VHARD & WHIRL_BONK)
+        | (ADV_HARD & RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE & SPEED5)
+        // | (ADV_VHARD & HAMMER_ROLL & AIR_JUMP)
+    ",
+    },
+}
+
+{
+"item": "MANA_WAGER",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "
+    WHIRL_BONK
+    | (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD))
+    | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+    // 4 tile corner rwj, airdash, wallkick, amulet cancel
+    | (ADV_VHARD & AIR_DASH_LV3 & BUNNY_AMULET)
+    // slide bonk off big bunny
+    | (ADV_STUPID & SLIDING_POWDER & RABI_SLIPPERS)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_EAST_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_EAST_FOREST",
+"from_location": "FOREST_START",
+"entry_prereq": "(PIKO_HAMMER | EXPLOSIVES_ENEMY) & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "MP_UP_CICINI",
+"from_location": "SPECTRAL_WARP",
+"entry_prereq": "COCOA_1 & KOTRI_1 & CHAPTER_1",
+"exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_LEDGE": "
+        AIR_JUMP
+        | SLIDE_JUMP_BUNSTRIKE_CANCEL
+        | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+        | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
+        | (ADV_STUPID & PROLOGUE_TRIGGER & SPEED3)
+        ",
+    },
+}
+
+{
+"item": "MP_UP_NORTHEAST_FOREST",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "SURVIVAL",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HEALTH_WAGER",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+    (AIR_JUMP & AIR_DASH)
+    | (AIR_JUMP & ITM_HARD)
+    | (AIR_DASH_LV3 & (
+        ADV_VHARD | (ITM_HARD & (WALL_JUMP | BUNNY_AMULET))
+    ))
+    | (AIR_DASH & ADV_STUPID)
+    | (ADV_VHARD & BUNNY_STRIKE & BUNNY_AMULET)
+",
+"exit_prereq": "NONE",
+}
+
+
+{
+"item": "ATK_UP_BEACH_CAVE",
+"from_location": "BEACH_UNDERWATER_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_GRAVEYARD_WARP",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_GRAVEYARD",
+"from_location": "GRAVEYARD_TOP_OF_BRIDGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "SUNNY_BEAM",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_UPPER_GRAVEYARD",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+    // Getting onto the ledge
+    (AIR_JUMP | AIR_DASH | (ITM_HARD & (AMULET_FOOD | BUNNY_STRIKE)))
+    & (CARROT_BOMB | BLOCK_CLIP)
+",
+"exit_prereq": "AIR_JUMP | SLIDE_JUMP_BUNSTRIKE_CANCEL",
+
+"alternate_exits": {
+    "GRAVEYARD_MAIN": "NONE",
+    },
+}
+
+{
+"item": "AUTO_EARRINGS",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "AUTO_TRIGGER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HEALTH_PLUS",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_PYRAMID_DARK_ROOM",
+"from_location": "PYRAMID_SOUTHWEST_ROOM",
+"entry_prereq": "DARKNESS",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CRISIS_BOOST",
+"from_location": "GRAVEYARD_MAIN",
+"entry_prereq": "
+    (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD))
+    | (AIR_DASH & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL))
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_GRAVEYARD",
+"from_location": "GRAVEYARD_KOTRI",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_INNER_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_PYRAMID",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+// entry_prereq was changed to NONE as the bunny can blow it up for you.
+{
+"item": "ARMORED",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "NONE",
+//"entry_prereq": "BLOCK_CLIP | EXPLOSIVES | ITM",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CHAOS_ROD",
+"from_location": "PYRAMID_CHAOS_ROD_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY | BLOCK_CLIP",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "TOP_FORM",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_PYRAMID_ENTRANCE",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_HARD)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HITBOX_DOWN",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & CARROT_BOMB & IMPOSSIBLE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_PYRAMID_BOMBBLOCK_ROOM",
+"from_location": "PYRAMID_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "AIR_DASH",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "EXPLOSIVES",
+}
+
+{
+"item": "REGEN_UP_PYRAMID",
+"from_location": "PYRAMID_WARP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PURE_LOVE",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "MP_UP_BEACH_TUNNEL",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HOURGLASS",
+"from_location": "PYRAMID_HOURGLASS_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_UPPER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_SKY_ISLAND",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_BEACH_PILLAR",
+"from_location": "BEACH_FOREST_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "DEF_GROW",
+"from_location": "PARK_KOTRI",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_PARK",
+"from_location": "PARK_UPPER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_TRADE",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_PARK",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "RABI_SLIPPERS",
+"from_location": "PARK_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_PARK",
+"from_location": "PARK_UPPER",
+"entry_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "HEALTH_SURGE",
+"from_location": "SKY_BRIDGE_HEALTH_SURGE_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"item": "MP_UP_UPRPRC_HQ",
+"from_location": "UPRPRC_BASE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_PARK",
+"from_location": "PARK_MAIN",
+"entry_prereq": "RABI_SLIPPERS | SLIDING_POWDER | AIR_DASH | AIR_JUMP | (ITM & SPEED2) | (ADV_VHARD & AMULET_FOOD)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HEX_CANCEL",
+"from_location": "SKY_BRIDGE_SLIDE_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_SLIDE_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_SKY_BRIDGE",
+"from_location": "SKY_BRIDGE_REGEN_UP_LEDGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "LUCKY_SEVEN",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_VANILLA",
+"from_location": "SKY_BRIDGE_EAST",
+"entry_prereq": "
+    (CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_HARD)) &
+    SLIDING_POWDER
+",
+"exit_prereq": "IMPOSSIBLE",
+
+"alternate_exits": {
+    "SKY_BRIDGE_EAST_LOWER": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+},
+}
+
+{
+"item": "HAMMER_WAVE",
+"from_location": "RAVINE_UPPER_WEST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_WEST_RAVINE",
+"from_location": "RAVINE_UPPER_WEST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_SOUTH_RAVINE",
+"from_location": "RAVINE_LOWER",
+"entry_prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+"exit_prereq": "(SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+}
+
+{
+"item": "ATK_UP_NORTH_RAVINE",
+"from_location": "RAVINE_NORTH_ATTACK_UP_ROOM",
+"entry_prereq": "EXPLOSIVES | BLOCK_CLIP",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_MID_RAVINE",
+"from_location": "RAVINE_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_RAVINE",
+"from_location": "RAVINE_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_RAVINE",
+"from_location": "RAVINE_LOWER",
+// cramped 2 tile zip in and out
+"entry_prereq": "EXPLOSIVES | (ADV_STUPID & SLIDE_ZIP)",
+"exit_prereq": "EXPLOSIVES | (ADV_STUPID & SLIDE_ZIP)",
+}
+
+{
+"item": "MANA_SURGE",
+"from_location": "RAVINE_MANA_SURGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_PALACE",
+"from_location": "PALACE_LEVEL_5",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "WATER_ORB",
+"from_location": "PALACE_LEVEL_5",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_WEST_AQUARIUM",
+"from_location": "AQUARIUM_WEST",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MANA_PLUS",
+"from_location": "AQUARIUM_WEST",
+"entry_prereq": "DARKNESS",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_PALACE",
+"from_location": "PALACE_ATTACK_UP_TUNNEL",
+"entry_prereq": "FIRE_ORB",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_SNOWLAND",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL | BLOCK_CLIP)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_PALACE",
+"from_location": "PALACE_LEVEL_3",
+"entry_prereq": "
+    DARKNESS &
+    (
+        SLIDE_JUMP_BUNSTRIKE
+        | WHIRL_BONK
+        | AIR_DASH
+        | AIR_JUMP
+        // rwj left wall, wallkick overhang
+        | (RABI_SLIPPERS & ((ITM_HARD & SPEED2) | ADV_STUPID))
+        // wimpy right corner, bounce left wall, amulet (similar to spike barrier)
+        | (ADV_STUPID & AMULET_FOOD)
+    )
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "STAMINA_PLUS",
+"from_location": "PALACE_WARP_LEVEL_1_2",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_PALACE",
+"from_location": "PALACE_WARP_LEVEL_1_2",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "SELF_DEFENSE",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "SLIDING_POWDER & UNDERWATER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "HP_UP_UPPER_AQUARIUM",
+"from_location": "AQUARIUM_WATER_TOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "GOLD_CARROT",
+"from_location": "ICY_SUMMIT_UPPER",
+"entry_prereq": "
+    AIR_JUMP
+    | (WALL_JUMP_LV2 & (
+        WHIRL_BONK
+        | (AIR_DASH & HARD)
+        | SLIDE_JUMP_BUNSTRIKE
+        | (RABI_SLIPPERS & (
+            SLIDING_POWDER
+            | (SPEED1 & ITM_HARD)
+            | (AMULET_FOOD & ADV_STUPID)
+        ))
+    ))",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_UPPER_AQUARIUM",
+"from_location": "AQUARIUM_WATER_TOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_UPPER",
+"entry_prereq": "AIR_JUMP | AIR_DASH | (WHIRL_BONK & ADV_VHARD)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_UPPER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_MID_AQUARIUM",
+"from_location": "AQUARIUM_MID",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "ADV_STUPID | RABI_SLIPPERS | AIR_JUMP | WALL_JUMP | WHIRL_BONK | (SPEED1 & ITM_VHARD)",
+"exit_prereq": "NONE",
+
+"alternate_entries": {
+    "ICY_SUMMIT_UPPER": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+},
+}
+
+{
+"item": "MP_UP_SNOWLAND",
+"from_location": "SNOWLAND_MID",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "QUICK_BARRETTE",
+"from_location": "SNOWLAND_LAKE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_ICY_SUMMIT",
+"from_location": "ICY_SUMMIT_UPPER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "SUPER_CARROT",
+"from_location": "ICY_SUMMIT_UPPER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_SNOWLAND_WATER",
+"from_location": "SNOWLAND_LAKE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_AQUARIUM",
+"from_location": "AQUARIUM_BOMB_WALLED_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_SNOWLAND",
+"from_location": "SNOWLAND_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CARROT_BOOST",
+"from_location": "SNOWLAND_LAKE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_AQUARIUM",
+"from_location": "AQUARIUM_ORB_SLIDE_MAZE",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "PACK_UP_AQUARIUM",
+"from_location": "AQUARIUM_BOMB_WALLED_AREA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_NORTHWEST_RIVERBANK",
+"from_location": "RIVERBANK_LEVEL3",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_RIVERBANK",
+"from_location": "RIVERBANK_PACK_UP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_SOUTHWEST_RIVERBANK",
+"from_location": "RIVERBANK_UNDERGROUND",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_GROW",
+"from_location": "RIVERBANK_LEVEL2",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_SOUTH_RIVERBANK",
+"from_location": "RIVERBANK_UNDERGROUND",
+"entry_prereq": "DARKNESS & UNDERWATER & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_RIVERBANK_PIT",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "BUNNY_WHIRL",
+"from_location": "RIVERBANK_LOWER_LEFT",
+"entry_prereq": "
+    PIKO_HAMMER | (CARROT_SHOOTER & BOOST & ADV_HARD)
+    // slide zip from bomb block slide tunnel in room to the left
+    | SLIDE_ZIP
+",
+"exit_prereq": "BUNNY_WHIRL | AIR_DASH | (CARROT_SHOOTER_ENTRY & BOOST & ADV_HARD) | DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"item": "EXPLODE_SHOT",
+"from_location": "RIVERBANK_LEVEL3",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_MID_RIVERBANK",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+// only relevant if boost is not obtained
+"exit_prereq": "
+    EXPLOSIVES
+    | SLIDE_ZIP
+    | AIR_JUMP
+    | WALL_JUMP_LV2
+    | (SLIDE_JUMP_BUNSTRIKE_CANCEL & (RABI_SLIPPERS | SPEED1))
+    | (RABI_SLIPPERS & ADV_HARD & (SPEED2 | (SPEED1 & WALL_JUMP)))
+",
+}
+
+{
+"item": "ATK_UP_EAST_RIVERBANK",
+"from_location": "RIVERBANK_MAIN_LEVEL1",
+"entry_prereq": "
+    DOWNDRILL_SEMISOLID_CLIP
+    // A bit of a workaround. Assumption: You can walk from riverbank main to health room, unconstrained.
+    | (EXPLOSIVES & RIVERBANK_LOWER_HEALTH_UP_ROOM & SLIDING_POWDER)
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "SPIKE_BARRIER",
+"from_location": "EVERNIGHT_SPIKE_BARRIER_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "FRAME_CANCEL",
+"from_location": "RIVERBANK_LEVEL3",
+"entry_prereq": " EXPLOSIVES_ENEMY & (SLIDING_POWDER | HAMMER_ROLL_ZIP)",
+"exit_prereq": "(CARROT_BOMB_ENTRY | CARROT_SHOOTER_ENTRY) & SLIDING_POWDER",
+}
+
+{
+"item": "HP_UP_LAB_SLIDE_TUNNEL",
+"from_location": "LAB_WEST",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_LAB",
+"from_location": "LAB_WEST",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_RIVERBANK",
+"from_location": "RIVERBANK_LOWER_HEALTH_UP_ROOM",
+"entry_prereq": "EXPLOSIVES_ENEMY | BUNNY_WHIRL | AIR_DASH | BLOCK_CLIP | PIKO_HAMMER_LEVELED",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_WARP",
+"entry_prereq": "
+    DARKNESS & SLIDING_POWDER
+    & (
+        (AIR_JUMP & (RABI_SLIPPERS | AIR_DASH | ITM_HARD))
+        | WHIRL_BONK
+        | (RABI_SLIPPERS & AIR_DASH)
+        | (BUNNY_STRIKE & AIR_DASH & ITM_HARD)
+        | (ADV_STUPID & 3_AMULET_FOOD) // wimpy, bounce, spam amulet (same as spike barrier jump)
+    )
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_NORTHWEST",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_LAB_PIT",
+"from_location": "LAB_MID",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "SLIDING_POWDER",
+"from_location": "LAB_SLIDING_POWDER_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_EVERNIGHT_UPRPRC",
+"from_location": "EVERNIGHT_NORTHWEST",
+"entry_prereq": "SLIDING_POWDER & (EXPLOSIVES | DOWNDRILL_SEMISOLID_CLIP)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CASHBACK",
+"from_location": "EVERNIGHT_LOWER",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PLUS_NECKLACE",
+"from_location": "EVERNIGHT_WARP",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "WEAKEN",
+"from_location": "LAB_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_LAB_COMPUTER",
+"from_location": "LAB_EAST",
+"entry_prereq": "EXPLOSIVES | BLOCK_CLIP",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_SOUTH_EVERNIGHT",
+"from_location": "EVERNIGHT_LOWER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_NORTH_EVERNIGHT",
+"from_location": "EVERNIGHT_NORTHWEST",
+"entry_prereq": "
+    AIR_DASH | AIR_JUMP | SLIDE_JUMP_BUNSTRIKE
+    | (ADV_VHARD & RABI_SLIPPERS & AMULET_FOOD)
+    | (ADV_STUPID & WALL_JUMP_LV2 & MANY_AMULET_FOOD)
+    ",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_EVERNIGHT",
+"from_location": "EVERNIGHT_CORRIDOR_BELOW_SAYA",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ATK_UP_EAST_LAB",
+"from_location": "LAB_EAST",
+"entry_prereq": "EXPLOSIVES_ENEMY & (
+    AIR_JUMP
+    | AIR_DASH
+    | (RABI_SLIPPERS & ADV_VHARD)
+    | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+)",
+"exit_prereq": "NONE",
+
+"alternate_entries": {
+    "LAB_ENTRANCE": "EXPLOSIVES_ENEMY & HAMMER_ROLL_ZIP",
+},
+"alternate_exits": {
+    "LAB_EAST_PACK_UP_ROOM": "ADV & EXPLOSIVES_ENEMY & SLIDE_ZIP",
+},
+}
+
+{
+"item": "PACK_UP_LAB",
+"from_location": "LAB_EAST_PACK_UP_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HAMMER_ROLL",
+"from_location": "EVERNIGHT_EAST_OF_WARP",
+"entry_prereq": "BUNNY_WHIRL",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "RIBBON_BADGE",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "POST_IRISU & SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "ERINA_BADGE",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "POST_IRISU & SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "HP_UP_VOLCANIC",
+"from_location": "VOLCANIC_BEACH_ENTRANCE",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CARROT_SHOOTER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "FIRE_ORB",
+"from_location": "VOLCANIC_MAIN",
+// 1.8 requirements
+"entry_prereq": "FIRE_ORB | CARROT_BOMB | (CARROT_SHOOTER & (BOOST | CHARGE_RING))",
+"exit_prereq": "FIRE_ORB | (RABI_SLIPPERS & AIR_JUMP & WALL_JUMP_LV2)",
+// 1.75 requirements
+//"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & (BOOST | CHARGE_RING))",
+//"exit_prereq": "EXPLOSIVES_ENEMY | (RABI_SLIPPERS & AIR_JUMP & WALL_JUMP_LV2)",
+}
+
+{
+"item": "PACK_UP_VOLCANIC",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "REGEN_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "(CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_HARD)) & (AIR_JUMP | AIR_DASH | SLIDE_JUMP_BUNSTRIKE | ADV_STUPID)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "PACK_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "CYBER_FLOWER",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "AIR_JUMP",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "AIR_JUMP | AIR_DASH | BUNNY_STRIKE | DOWNDRILL_SEMISOLID_CLIP",
+}
+
+{
+"item": "HP_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "
+    (SLIDING_POWDER & (
+        CARROT_BOMB
+        // hammer roll zip oob, then almost blind 2 tile zip
+        | (ADV_STUPID & SLIDE_ZIP & HAMMER_ROLL_ZIP)
+    ))
+    & (
+        (AIR_JUMP & (RABI_SLIPPERS | ITM_HARD)) // 6tile airjump
+        | (AIR_DASH_LV3 & ITM_HARD) // 4tile walljump, some other strange jumps
+        | (AIR_DASH & ADV_VHARD) // (needs slide) 4tile walljump + weird jump at end
+        | (WALL_JUMP_LV2 & (
+            (RABI_SLIPPERS & ADV_VHARD) // buffered wall launch
+            | ADV_STUPID // (needs slide) two slide bonks, one buffered wall launch
+        ))
+        | (WHIRL_BONK & ITM_VHARD) // 3 buffered whirlbonks. last one is tight
+    )",
+"exit_prereq": "SLIDING_POWDER",
+}
+
+{
+"item": "ATK_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "CARROT_BOMB | (CARROT_SHOOTER & BOOST & ADV_HARD)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "MP_UP_CYBERSPACE",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+// EGGS
+
+{
+"item": "EGG_CAVE_COCOA",
+"from_location": "CAVE_COCOA",
+"entry_prereq": "ADV_STUPID | EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_CAVE_UNDER_HAMMER",
+"from_location": "CAVE_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_FOREST_NE_LEDGE",
+"from_location": "FOREST_UPPER_EAST_EGG_LEDGE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_FOREST_NE_PEDESTAL",
+"from_location": "FOREST_UPPER_EAST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_FORESTNIGHT_ARURAUNE",
+"from_location": "FOREST_NIGHT_WEST",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_FORESTNIGHT_EAST",
+"from_location": "FOREST_NIGHT_NORTH_EAST",
+"entry_prereq": "DARKNESS & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_RUMI",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SPECTRAL_SLIDE",
+"from_location": "SPECTRAL_WARP",
+"entry_prereq": "SLIDING_POWDER & COCOA_1 & KOTRI_1 & CHAPTER_1",
+"exit_prereq": "NONE",
+
+"alternate_entries": {
+    "SPECTRAL_CICINI_LEDGE": "SLIDING_POWDER & (
+            AIR_JUMP
+            | SLIDE_JUMP_BUNSTRIKE_CANCEL
+            | (ITM_HARD & (WALL_JUMP_LV2 | AIR_DASH))
+            | (RABI_SLIPPERS & (ADV_VHARD | (ADV_HARD & SPEED3)))
+            | (ADV_STUPID & SPEED3)
+        )
+        ",
+    },
+}
+
+{
+"item": "EGG_SPECTRAL_WEST",
+"from_location": "SPECTRAL_WEST_EGG_ROOM",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_BEACH_TO_AQUARIUM",
+"from_location": "BEACH_UNDERWATER_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_GRAVEYARD_NEAR_LIBRARY",
+"from_location": "GRAVEYARD_UPPER",
+"entry_prereq": "
+    AIR_JUMP
+    | AIR_DASH
+    | SLIDE_JUMP_BUNSTRIKE
+    | (SLIDING_POWDER & (RABI_SLIPPERS | (ADV_VHARD & SPEED5) | (ADV_STUPID & 2_AMULET_FOOD)))
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HALLOWEEN_CICINI_ROOM",
+"from_location": "HALLOWEEN_PUMPKIN_HALL",
+"entry_prereq": "
+    EXPLOSIVES & (
+        SLIDE_ZIP
+        | HAMMER_ROLL_ZIP
+        | (CARROT_SHOOTER & BOOST & SLIDING_POWDER)
+        | (TM_CHOCOLATE & TM_VANILLA & TM_CICINI & TM_SYARO & TM_LILITH & SLIDING_POWDER & BUNNY_WHIRL)
+    )
+",
+"exit_prereq": "EXPLOSIVES & SLIDING_POWDER"
+}
+
+{
+"item": "EGG_HALLOWEEN_LEFT_PILLAR",
+"from_location": "HALLOWEEN_EXIT",
+"entry_prereq": "AIR_JUMP | RABI_SLIPPERS | SLIDING_POWDER | BUNNY_WHIRL",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HALLOWEEN_MID",
+"from_location": "HALLOWEEN_FLOODED",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "HAMMER_ROLL_ZIP | SLIDING_POWDER",
+"alternate_exits": {
+    "HALLOWEEN_DARK_SHAFT": "EXPLOSIVES & SLIDING_POWDER",
+    },
+}
+
+{
+"item": "EGG_HALLOWEEN_NEAR_BOSS",
+"from_location": "HALLOWEEN_UPPER",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HALLOWEEN_PAST_PILLARS1",
+"from_location": "HALLOWEEN_PAST_PILLARS",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HALLOWEEN_PAST_PILLARS2",
+"from_location": "HALLOWEEN_PAST_PILLARS",
+"entry_prereq": "
+        (BUNNY_WHIRL & AIR_DASH_LV3 & (ADV_VHARD | AIR_JUMP))
+        | (BUNNY_WHIRL & AIR_JUMP & WALL_JUMP_LV2 & ADV)
+",
+"exit_prereq": "
+        (BUNNY_WHIRL & AIR_DASH_LV3 & (ADV_VHARD | AIR_JUMP))
+        | (BUNNY_WHIRL & AIR_JUMP & WALL_JUMP_LV2 & ADV)
+",
+"alternate_entries": {
+    "HALLOWEEN_PUMPKIN_HALL": "
+// Bunstrike out of a tunnel jump zip then either
+// amulet climb the right wall or use precise wall kicks to reach the egg
+        ADV_STUPID & SLIDE_ZIP & EXPLOSIVES_ENEMY & BUNNY_AMULET_LV2 &
+        BUNNY_STRIKE & AIR_JUMP & WALL_JUMP_LV2 & AIR_DASH
+    ",
+    },
+"alternate_exits": {
+    "BEACH_MAIN": "NONE",
+    },
+}
+
+{
+"item": "EGG_HALLOWEEN_RIGHT_PILLAR",
+"from_location": "HALLOWEEN_EXIT",
+"entry_prereq": "AIR_JUMP | RABI_SLIPPERS | SLIDING_POWDER | BUNNY_WHIRL",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HALLOWEEN_SW_SLIDE",
+"from_location": "HALLOWEEN_FLOODED",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "EXPLOSIVES & (SLIDING_POWDER | (HAMMER_ROLL_ZIP & WATER_ORB))"
+}
+
+{
+"item": "EGG_HALLOWEEN_WARP_ZONE",
+"from_location": "HALLOWEEN_UPPER",
+"entry_prereq": "
+    WHIRL_BONK
+    | (AIR_JUMP & (AIR_DASH | ADV_STUPID))
+    | (ADV_STUPID & AIR_DASH & WALL_JUMP_LV2 & BUNNY_AMULET_LV2 & (
+        SLIDE_JUMP_BUNSTRIKE_CANCEL
+        | (RABI_SLIPPERS & SLIDING_POWDER)
+        // probably speed something
+    ) )
+",
+"exit_prereq": "
+    ADV_STUPID
+    | RABI_SLIPPERS
+    | AIR_JUMP
+    | WALL_JUMP
+    | WHIRL_BONK
+    | (ADV_HARD & SLIDING_POWDER)
+",
+}
+
+{
+"item": "EGG_HALLOWEEN_WEST",
+"from_location": "HALLOWEEN_DARK_SHAFT",
+"entry_prereq": "
+    //SLIDING_POWDER & DARKNESS & (FIRE_ORB | (ADV_HARD & RIBBON)) &
+    SLIDING_POWDER & DARKNESS & (FIRE_ORB | ADV_HARD) &
+    (BUNNY_WHIRL | (
+        CARROT_SHOOTER
+        & BOOST_MANY
+        & (CARROT_BOMB | PIKO_HAMMER)
+        & ADV_STUPID
+    ))
+",
+"exit_prereq": "SLIDING_POWDER | HAMMER_ROLL_ZIP",
+}
+
+{
+"item": "EGG_LIBRARY",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PYRAMID_LOWER",
+"from_location": "PYRAMID_LOWER",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PYRAMID_BEACH",
+"from_location": "BEACH_MAIN",
+"entry_prereq": "(ADV_STUPID & AMULET_FOOD) | EXPLOSIVES | AIR_JUMP | AIR_DASH",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SKY_TOWN",
+"from_location": "SKY_ISLAND_MAIN",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PARK_SPIKES",
+"from_location": "PARK_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PARK_GREEN_KOTRI",
+"from_location": "PARK_KOTRI",
+"entry_prereq": "
+    WHIRL_BONK | AIR_JUMP | AIR_DASH
+    | (RABI_SLIPPERS & SLIDE_JUMP_BUNSTRIKE)
+    | (ADV_VHARD & (
+        (RABI_SLIPPERS & AMULET_FOOD)
+        | SLIDING_POWDER // slide bonk off stone
+    ))
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_UPRPRC_BASE",
+"from_location": "UPRPRC_BASE",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SKY_BRIDGE_WARP",
+"from_location": "SKY_BRIDGE_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SKY_BRIDGE_BY_VANILLA",
+"from_location": "SKY_BRIDGE_EAST",
+"entry_prereq": "CARROT_BOMB",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_RAVINE_ABOVE_CHOCOLATE",
+"from_location": "RAVINE_UPPER_WEST",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_RAVINE_MID",
+"from_location": "RAVINE_UPPER_EAST",
+"entry_prereq": "EXPLOSIVES & SLIDING_POWDER",
+"exit_prereq": "CARROT_BOMB | SLIDE_ZIP",
+}
+
+{
+"item": "EGG_SNOWLAND_TO_EVERNIGHT",
+"from_location": "SNOWLAND_WEST",
+"entry_prereq": "EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PALACE_BRIDGE",
+"from_location": "PALACE_LEVEL_4",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_AQUARIUM",
+"from_location": "AQUARIUM_WEST",
+"entry_prereq": "DARKNESS | SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PALACE_WALL",
+"from_location": "PALACE_LEVEL_3",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SNOWLAND_WARP",
+"from_location": "SNOWLAND_CHRISTMAS_TREE",
+"entry_prereq": "RABI_SLIPPERS | AIR_JUMP | AIR_DASH | ADV_HARD",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_ICY_SUMMIT_NIXIE",
+"from_location": "ICY_SUMMIT_NIXIE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_ICY_SUMMIT_WARP",
+"from_location": "ICY_SUMMIT_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SNOWLAND_LAKE",
+"from_location": "SNOWLAND_LAKE",
+"entry_prereq": "
+    AIR_JUMP | WATER_ORB | WHIRL_BONK | WALL_JUMP_LV2
+    | (WALL_JUMP & (RABI_SLIPPERS | (AIR_DASH & ITM_HARD)))
+    | (ADV_STUPID & MANY_AMULET_FOOD)
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_RIVERBANK_SPIDER_SPIKE",
+"from_location": "RIVERBANK_LEVEL3",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_RIVERBANK_WALL",
+"from_location": "RIVERBANK_LEVEL2",
+"entry_prereq": "
+    WHIRL_BONK | AIR_JUMP | AIR_DASH | SLIDING_POWDER
+    | (ADV_VHARD & RABI_SLIPPERS & AMULET_FOOD)
+    | (ADV_STUPID & WALL_JUMP_LV2 & 2_AMULET_FOOD)
+    ",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_LAB",
+"from_location": "LAB_MID",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_EVERNIGHT_MID",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_EVERNIGHT_SAYA",
+"from_location": "EVERNIGHT_SAYA",
+"entry_prereq": "
+    ADV_STUPID // softlock potential. get item via saya blocks
+    | AIR_JUMP
+    | SLIDE_JUMP_BUNSTRIKE
+    | WHIRL_BONK
+    | (RABI_SLIPPERS & (
+        AIR_DASH_LV3
+        | (AIR_DASH & ((SPEED2 & ITM_HARD) | (SPEED1 & ADV_VHARD)))
+      ))
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_TOWN",
+"from_location": "TOWN_MAIN",
+"entry_prereq": "AIR_JUMP & (RABI_SLIPPERS | SLIDE_JUMP_BUNSTRIKE_CANCEL)",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PLURK_EAST",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PLURK_CAVE",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_PLURK_CATS",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "PLURKWOOD",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_VOLCANIC_BOMB_BUNNIES",
+"from_location": "VOLCANIC_BEACH_ENTRANCE",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_MEMORIES_SYSINT",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_MEMORIES_RAVINE",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_VOLCANIC_FIRE_ORB",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "EXPLOSIVES_ENEMY",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_VOLCANIC_NE",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "
+    AIR_JUMP | AIR_DASH | BUNNY_STRIKE |
+    // 0% ADV_STUPID jump: walljump off left wall, damage boost off dog, wallkick off left wall, amulet
+    (ADV_STUPID & AMULET_FOOD) |
+    WHIRL_BONK |
+    (SLIDING_POWDER & (RABI_SLIPPERS | WALL_JUMP | ITM_HARD)) |
+    (RABI_SLIPPERS & WALL_JUMP)
+",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_VOLCANIC_BIG_DROP",
+"from_location": "VOLCANIC_MAIN",
+"entry_prereq": "ITM | AIR_JUMP | AIR_DASH",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_CRESPIRIT",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HOSPITAL_WALL",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION & POST_GAME & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_HOSPITAL_BOX",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "WARP_DESTINATION & POST_GAME & EXPLOSIVES",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SYSINT1",
+"from_location": "SYSTEM_INTERIOR_MAIN",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "EGG_SYSINT2",
+"from_location": "UNREACHABLE_LOCATION",
+"entry_prereq": "POST_GAME & IMPOSSIBLE",
+"exit_prereq": "NONE",
+}
+
+// Shufflable Gift Items
+{
+"item": "SPEED_BOOST",
+"from_location": "TOWN_SHOP",
+"entry_prereq": "NONE",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "BUNNY_STRIKE",
+"from_location": "TOWN_SHOP",
+"entry_prereq": "SLIDING_POWDER",
+"exit_prereq": "NONE",
+}
+
+{
+"item": "P_HAIRPIN",
+"from_location": "PLURKWOOD_MAIN",
+"entry_prereq": "BOSS_KEKE_BUNNY",
+"exit_prereq": "NONE",
+}
