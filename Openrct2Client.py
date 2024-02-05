@@ -92,13 +92,13 @@ class OpenRCT2Socket:
                     self.initial_connection = False
                 self.connected_to_game.set()
                 newgame.setblocking(0)
-                # try:
-                #     while self.package_queue:
-                #         self._send(self.package_queue[0])
-                #         self.package_queue.pop(0)
-                #         time.sleep(0.1)
-                # except Exception as e:
-                #     print("Error in connect game: " + e)
+                try:
+                    while self.package_queue:
+                        self._send(self.package_queue[0])
+                        self.package_queue.pop(0)
+                        await time.sleep(0.1)
+                except Exception as e:
+                    print("Error in connect game: " + e)
         except socket.timeout as e:
             #print('error connecting to game', e)
             pass
