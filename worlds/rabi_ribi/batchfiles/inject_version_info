@@ -1,0 +1,29 @@
+f = open('version_info.txt')
+lines = f.read().split('\n')
+f.close()
+
+branch_name = lines[0].strip() # used for rabiribi-randomizer-ui build
+repo_branch = lines[1].strip() # used for rabiribi-randomizer build
+revision_number = lines[2].strip()
+commit_hash = lines[3].strip()
+
+if branch_name == 'HEAD': branch_name = repo_branch
+
+if branch_name == 'master': branch_name = 'M'
+elif branch_name == 'dev': branch_name = 'D'
+else: branch_name = branch_name + '-'
+
+VERSION_STRING = 'RRRV2-Revision #%s%s (commit %s)' % (branch_name, revision_number, commit_hash)
+
+f = open('versioncheck.py')
+data = f.read()
+data = data.replace('{PLACEHOLDER_VERSION}', VERSION_STRING)
+f.close()
+
+f = open('versioncheck.py', 'w+')
+f.write(data)
+f.close()
+
+import os
+message = '%s: %s' % (branch_name, VERSION_STRING)
+os.system('appveyor AddMessage "%s"' % message)
