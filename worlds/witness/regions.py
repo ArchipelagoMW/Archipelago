@@ -68,6 +68,8 @@ class WitnessRegions:
 
         connection.access_rule = self.make_lambda(final_requirement, world)
 
+        source_region.connect()
+
         source_region.exits.append(connection)
         connection.connect(target_region)
 
