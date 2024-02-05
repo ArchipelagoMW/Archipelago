@@ -352,7 +352,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Glacial Peak - Ice Climbers' Shop",
         ],
         "Left": [
-            "Elemental Skylands",
+            "Elemental Skylands - Air Shmup",
             "Glacial Peak - Projectile Spike Pit Checkpoint",
             "Glacial Peak - Glacial Mega Shard Shop",
         ],
@@ -545,6 +545,52 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Riviere Turquoise - Launch of Faith Shop",
         ],
     },
+    "Elemental Skylands": {
+        "Air Shmup": [
+            "Elemental Skylands - Air Intro Shop",
+        ],
+        "Air Intro Shop": [
+            "Elemental Skylands - Air Seal Checkpoint",
+            "Elemental Skylands - Air Generator Shop",
+        ],
+        "Air Seal Checkpoint": [
+            "Elemental Skylands - Air Intro Shop",
+            "Elemental Skylands - Air Generator Shop",
+        ],
+        "Air Generator Shop": [
+            "Elemental Skylands - Earth Shmup",
+        ],
+        "Earth Shmup": [
+            "Elemental Skylands - Earth Intro Shop",
+        ],
+        "Earth Intro Shop": [
+            "Elemental Skylands - Earth Generator Shop",
+        ],
+        "Earth Generator Shop": [
+            "Elemental Skylands - Fire Shmup",
+        ],
+        "Fire Shmup": [
+            "Elemental Skylands - Fire Intro Shop",
+        ],
+        "Fire Intro Shop": [
+            "Elemental Skylands - Fire Generator Shop",
+        ],
+        "Fire Generator Shop": [
+            "Elemental Skylands - Water Shmup",
+        ],
+        "Water Shmup": [
+            "Elemental Skylands - Water Intro Shop",
+        ],
+        "Water Intro Shop": [
+            "Elemental Skylands - Water Generator Shop",
+        ],
+        "Water Generator Shop": [
+            "Elemental Skylands - Right",
+        ],
+        "Right": [
+            "Glacial Peak - Left",
+        ],
+    },
     "Sunken Shrine": {
         "Left": [
             "Howling Grotto - Bottom",
@@ -623,7 +669,10 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Searing Crags - Right": "Underworld - Left",
     "Glacial Peak - Bottom": "Searing Crags - Top",
     "Glacial Peak - Top": "Cloud Ruins - Left",
-    # "Tower HQ": "Tower of Time - Left",  # this entrance functions weird so skip for now
+    "Glacial Peak - Left": "Elemental Skylands - Air Shmup",
+    # "Elemental Skylands - Right": "Glacial Peak - Left",
+    "Tower HQ": "Tower of Time - Left",  # this entrance functions weird so skip for now
+    "Artificer": "Corrupted Future",
     "Underworld - Left": "Searing Crags - Right",
     "Dark Cave - Right": "Catacombs - Bottom",
     "Dark Cave - Left": "Riviere Turquoise - Right",
@@ -663,8 +712,12 @@ TRANSITIONS: List[str] = [
     "Searing Crags - Top",
     "Glacial Peak - Bottom",
     "Glacial Peak - Top",
+    "Glacial Peak - Left",
+    "Elemental Skylands - Air Shmup",
+    "Elemental Skylands - Right",
     "Tower HQ",
     "Tower of Time - Left",
+    "Corrupted Future",
     "Cloud Ruins - Left",
     "Underworld - Left",
 ]

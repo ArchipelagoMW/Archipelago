@@ -184,10 +184,16 @@ LOCATIONS: Dict[str, List[str]] = {
     "Sunken Shrine - Moon Crest Checkpoint": [
         "Sunken Shrine - Moon Crest",
     ],
-    "Elemental Skylands": [
+    "Elemental Skylands - Air Seal Checkpoint": [
         "Elemental Skylands Seal - Air",
+    ],
+    "Elemental Skylands - Water Intro Shop": [
         "Elemental Skylands Seal - Water",
+    ],
+    "Elemental Skylands - Fire Intro Shop": [
         "Elemental Skylands Seal - Fire",
+    ],
+    "Elemental Skylands - Right": [
         "Elemental Skylands - Key of Symbiosis",
     ],
     "Corrupted Future": ["Corrupted Future - Key of Courage"],
@@ -346,6 +352,22 @@ SUB_REGIONS: Dict[str, List[str]] = {
         "Butterfly Matriarch Shop",
         "Flower Flight Checkpoint",
     ],
+    "Elemental Skylands": [
+        "Air Shmup",
+        "Air Intro Shop",
+        "Air Seal Checkpoint",
+        "Air Generator Shop",
+        "Earth Shmup",
+        "Earth Intro Shop",
+        "Earth Generator Shop",
+        "Fire Shmup",
+        "Fire Intro Shop",
+        "Fire Generator Shop",
+        "Water Shmup",
+        "Water Intro Shop",
+        "Water Generator Shop",
+        "Right",
+    ],
     "Sunken Shrine": [
         "Left",
         "Portal",
@@ -387,7 +409,8 @@ MEGA_SHARDS: Dict[str, List[str]] = {
     "Sunken Shrine - Sun Crest Checkpoint": ["Mega Shard of the Sun"],
     "Riviere Turquoise - Waterfall Shop": ["Waterfall Mega Shard"],
     "Riviere Turquoise - Restock Shop": ["Quick Restock Mega Shard 1", "Quick Restock Mega Shard 2"],
-    "Elemental Skylands": ["Earth Mega Shard", "Water Mega Shard"],
+    "Elemental Skylands - Earth Intro Shop": ["Earth Mega Shard"],
+    "Elemental Skylands - Water Generator Shop": ["Water Mega Shard"],
 }
 
 
@@ -412,13 +435,12 @@ REGION_CONNECTIONS: Dict[str, Dict[str, str]] = {
 """Vanilla layout mapping with all Tower HQ portals open. format is source[exit_region][entrance_name]"""
 
 
-# regions that don't have sub-regions and their exits
+# regions that don't have sub-regions
 LEVELS: List[str] = [
     "Menu",
     "Tower HQ",
     "The Shop",
     "The Craftsman's Corner",
-    "Elemental Skylands",
     "Corrupted Future",
     "Music Box",
 ]

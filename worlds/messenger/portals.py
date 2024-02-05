@@ -1,4 +1,4 @@
-from typing import Dict, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
 from .options import ShufflePortals
@@ -30,6 +30,7 @@ REGION_ORDER = [
     "Cloud Ruins",
     "Underworld",
     "Riviere Turquoise",
+    "Elemental Skylands",
     "Sunken Shrine",
 ]
 
@@ -109,6 +110,16 @@ SHOP_POINTS = {
         "Restock",
         "Butterfly Matriarch",
     ],
+    "Elemental Skylands": [
+        "Air Intro",
+        "Air Generator",
+        "Earth Intro",
+        "Earth Generator",
+        "Fire Intro",
+        "Fire Generator",
+        "Water Intro",
+        "Water Generator",
+    ],
     "Sunken Shrine": [
         "Above Portal",
         "Lifeguard",
@@ -179,6 +190,9 @@ CHECKPOINTS = {
     ],
     "Riviere Turquoise": [
         "Flower Flight",
+    ],
+    "Elemental Skylands": [
+        "Air Seal",
     ],
     "Sunken Shrine": [
         "Lightfoot Tabi",

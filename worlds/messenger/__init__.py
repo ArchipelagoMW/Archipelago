@@ -3,7 +3,7 @@ from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
-from Utils import visualize_regions, output_path
+from Utils import output_path
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
@@ -230,13 +230,14 @@ class MessengerWorld(World):
         if self.options.shuffle_transitions:
             for transition in self.transitions:
                 spoiler.set_entrance(
-                    transition.parent_region.name,
+                    transition.name if transition.name == "Artificer's Portal" else transition.parent_region.name,
                     transition.connected_region.name,
-                    "both" if transition.er_type == Entrance.EntranceType.TWO_WAY else "",
+                    "both" if transition.er_type == Entrance.EntranceType.TWO_WAY
+                              and self.options.shuffle_transitions == ShuffleTransitions.option_coupled
+                    else "",
                     self.player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        # visualize_regions(self.multiworld.get_region("Menu", self.player), "output.puml")
         slot_data = {
             "shop": {SHOP_ITEMS[item].internal_name: price for item, price in self.shop_prices.items()},
             "figures": {FIGURINES[item].internal_name: price for item, price in self.figurine_prices.items()},
@@ -244,7 +245,8 @@ class MessengerWorld(World):
             "required_seals": self.required_seals,
             "starting_portals": self.starting_portals,
             "portal_exits": self.portal_mapping,
-            "transitions": [[TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.parent_region.name]),
+            "transitions": [[TRANSITIONS.index("Corrupted Future") if transition.name == "Artificer's Portal"
+                             else TRANSITIONS.index(RANDOMIZED_CONNECTIONS[transition.parent_region.name]),
                              TRANSITIONS.index(transition.connected_region.name)]
                             for transition in self.transitions],
             **self.options.as_dict("music_box", "death_link", "logic_level"),

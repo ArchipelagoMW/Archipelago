@@ -24,7 +24,7 @@ class Logic(Choice):
     display_name = "Logic Level"
     option_normal = 0
     option_hard = 1
-    option_oob = 2
+    alias_oob = 1
     alias_challenging = 1
 
 

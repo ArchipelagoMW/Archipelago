@@ -30,7 +30,10 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
     regions_to_shuffle: List[Region] = []
     for parent, child in RANDOMIZED_CONNECTIONS.items():
 
-        entrance = multiworld.get_entrance(f"{parent} -> {child}", player)
+        if child == "Corrupted Future":
+            entrance = multiworld.get_entrance("Artificer's Portal", player)
+        else:
+            entrance = multiworld.get_entrance(f"{parent} -> {child}", player)
         parent_region = entrance.parent_region
         child_region = entrance.connected_region
         disconnect_entrance()

@@ -125,11 +125,10 @@ class MessengerRules:
             # Glacial Peak
             "Glacial Peak - Portal -> Glacial Peak - Tower Entrance Shop":
                 self.has_vertical,
-            "Glacial Peak - Left -> Elemental Skylands":  # if we can ever shuffle elemental skylands stuff around wingsuit isn't needed here.
+            "Glacial Peak - Left -> Elemental Skylands - Air Shmup":
                 lambda state: state.has("Magic Firefly", self.player)
                               and state.multiworld.get_location("Quillshroom Marsh - Queen of Quills", self.player)
-                              .can_reach(state)
-                              and self.has_wingsuit(state),
+                              .can_reach(state),
             "Glacial Peak - Tower Entrance Shop -> Glacial Peak - Top":
                 lambda state: state.has("Ruxxtin's Amulet", self.player),
             "Glacial Peak - Projectile Spike Pit Checkpoint -> Glacial Peak - Left":
@@ -202,6 +201,11 @@ class MessengerRules:
                 lambda state: self.has_dart(state) and self.can_dboost(state),
             "Riviere Turquoise - Flower Flight Checkpoint -> Riviere Turquoise - Waterfall Shop":
                 lambda state: False,
+            # Elemental Skylands
+            "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Seal Checkpoint":
+                self.has_wingsuit,
+            "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
+                self.has_wingsuit,
             # Sunken Shrine
             "Sunken Shrine - Portal -> Sunken Shrine - Sun Path Shop":
                 self.has_tabi,
@@ -398,7 +402,7 @@ class MessengerHardRules(MessengerRules):
                 "Searing Crags - Before Final Climb Shop -> Searing Crags - Colossuses Shop":
                     self.true,
                 # Glacial Peak
-                "Glacial Peak - Left -> Elemental Skylands":
+                "Glacial Peak - Left -> Elemental Skylands - Air Shmup":
                     lambda state: self.has_windmill(state) or
                                   (state.has("Magic Firefly", self.player) and
                                    state.multiworld.get_location(
@@ -408,6 +412,9 @@ class MessengerHardRules(MessengerRules):
                     lambda state: self.has_vertical(state) or self.has_windmill(state),
                 # Cloud Ruins
                 "Cloud Ruins - Sliding Spikes Shop -> Cloud Ruins - Saw Pit Checkpoint":
+                    self.true,
+                # Elemental Skylands
+                "Elemental Skylands - Air Intro Shop -> Elemental Skylands - Air Generator Shop":
                     self.true,
                 # Riviere Turquoise
                 "Riviere Turquoise - Waterfall Shop -> Riviere Turquoise - Flower Flight Checkpoint":
