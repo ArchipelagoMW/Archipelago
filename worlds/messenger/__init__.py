@@ -1,7 +1,7 @@
 import logging
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
 from Options import Accessibility
 from Utils import output_path
 from settings import FilePath, Group
@@ -121,10 +121,7 @@ class MessengerWorld(World):
     def stage_generate_early(cls, multiworld: MultiWorld):
         if multiworld.players > 1:
             return
-        out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
-        if "The Messenger\\Archipelago\\output" in out_path:
-            cls.out_path = out_path
-            cls.generate_output = generate_output
+        cls.generate_output = generate_output
 
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
@@ -227,8 +224,11 @@ class MessengerWorld(World):
         if self.options.shuffle_portals:
             for portal, output in self.spoiler_portal_mapping.items():
                 spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here and it'll work fine lmao", self.player)
+
         if self.options.shuffle_transitions:
             for transition in self.transitions:
+                if (transition.connected_region.name, "both", self.player) in spoiler.entrances:
+                    continue
                 spoiler.set_entrance(
                     transition.name if transition.name == "Artificer's Portal" else transition.parent_region.name,
                     transition.connected_region.name,
@@ -236,6 +236,43 @@ class MessengerWorld(World):
                               and self.options.shuffle_transitions == ShuffleTransitions.option_coupled
                     else "",
                     self.player)
+
+    # def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
+    #     if not self.options.shuffle_transitions:
+    #         return
+    # 
+    #     region_data = {}
+    #     for region in self.multiworld.get_regions(self.player):
+    #         checked_entrances = set()
+    #         
+    #         def check_entrance(entry: Entrance):
+    #             if entry in self.transitions or entry.parent_region.name == "Tower HQ":
+    #                 return True
+    #             for entrance in entry.parent_region.entrances:
+    #                 if entrance not in checked_entrances:
+    #                     checked_entrances.add(entrance)
+    #                     ret = check_entrance(entrance)
+    #                     if ret is True:
+    #                         return entrance.name if entrance.parent_region.name == "Tower HQ" else entrance.parent_region.name
+    #                     elif ret is not None:
+    #                         return ret
+    #             return None
+    #         if region.name in {"Tower HQ", "The Shop", "The Craftsman's Corner"}
+    #             continue
+    #         region_data[region.name] = check_entrance(region.)
+    #     def is_main_entrance(entry: Entrance) -> bool:
+    #         return entry in self.transitions or entry.parent_region.name == "Tower HQ"
+    # 
+    #     for loc in self.multiworld.get_locations(self.player):
+    #         if not loc.address or loc.parent_region.name in {"Tower HQ", "The Shop", "The Craftsman's Corner"}:
+    #             continue
+    #         hint_text = ""
+    #         region = loc.parent_region
+    #         while not hint_text.startswith("Tower HQ"):
+    #             self.po
+    #             hint_text = f"{region.name} -> {hint_text}" if hint_text else region.name
+    # 
+    #         hint_data[self.player] = {loc.address: hint_text}
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
@@ -308,6 +345,9 @@ class MessengerWorld(World):
 
 
 def generate_output(world: MessengerWorld, output_directory: str) -> None:
+    out_path = output_path(world.multiworld.get_out_file_name_base(1) + ".aptm")
+    if "The Messenger\\Archipelago\\output" in out_path:
+        out_path = out_path
     import orjson
     data = {
         "slot_data": world.fill_slot_data(),
@@ -316,5 +356,5 @@ def generate_output(world: MessengerWorld, output_directory: str) -> None:
     }
 
     output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
-    with open(world.out_path, "wb") as f:
+    with open(out_path, "wb") as f:
         f.write(output)

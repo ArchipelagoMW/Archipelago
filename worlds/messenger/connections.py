@@ -671,7 +671,7 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Glacial Peak - Top": "Cloud Ruins - Left",
     "Glacial Peak - Left": "Elemental Skylands - Air Shmup",
     # "Elemental Skylands - Right": "Glacial Peak - Left",
-    "Tower HQ": "Tower of Time - Left",  # this entrance functions weird so skip for now
+    "Tower HQ": "Tower of Time - Left",
     "Artificer": "Corrupted Future",
     "Underworld - Left": "Searing Crags - Right",
     "Dark Cave - Right": "Catacombs - Bottom",

@@ -2,9 +2,8 @@ from functools import cached_property
 from typing import Optional, TYPE_CHECKING
 
 from BaseClasses import CollectionState, Item, ItemClassification, Location, Region
-from .constants import NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
-from .regions import MEGA_SHARDS, LOCATIONS
-from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS
+from .regions import LOCATIONS, MEGA_SHARDS
+from .shop import FIGURINES, SHOP_ITEMS
 
 if TYPE_CHECKING:
     from . import MessengerWorld
