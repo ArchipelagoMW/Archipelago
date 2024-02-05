@@ -283,7 +283,7 @@ def set_rules(multiworld: MultiWorld, player: int, goal: str, atlantica: bool, r
    #multiworld.get_location("Traverse Town Fire Event"                                                     , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Traverse Town Blue Trinity Event"                                             , player).access_rule = lambda state: has_item(state, player, "")
    #multiworld.get_location("Traverse Town Earthshine Event"                                               , player).access_rule = lambda state: has_item(state, player, "")
-    multiworld.get_location("Traverse Town Oathkeeper Event"                                               , player).access_rule = lambda state: has_emblems(state, player)
+    multiworld.get_location("Traverse Town Oathkeeper Event"                                               , player).access_rule = lambda state: has_emblems(state, player) and has_item(state, player,"Hollow Bastion") and has_x_worlds(state, player, 5)
     multiworld.get_location("Deep Jungle White Fang Event"                                                 , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Deep Jungle Cure Event"                                                       , player).access_rule = lambda state: has_slides(state, player)
     multiworld.get_location("Deep Jungle Jungle King Event"                                                , player).access_rule = lambda state: has_slides(state, player)
