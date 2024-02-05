@@ -1116,6 +1116,14 @@ class PokemonEmeraldWorld(World):
                     for encounter in map.land_encounters.slots:
                         species_maps[encounter].add(map.name[4:])
 
+                if map.water_encounters is not None:
+                    for encounter in map.water_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+                if map.fishing_encounters is not None:
+                    for encounter in map.fishing_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
             new_hint_data = {
                 self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
                 for species, maps in species_maps.items()
