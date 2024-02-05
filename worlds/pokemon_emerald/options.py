@@ -100,14 +100,16 @@ class RandomizeNpcGifts(Toggle):
 
 class RandomizeBerryTrees(Toggle):
     """
-    Adds berry trees to the pool as Sitrus berries
+    Adds berry trees to the pool. Empty soil patches are converted to locations and contribute Sitrus Berries to the pool.
     """
     display_name = "Randomize Berry Trees"
 
 
 class Dexsanity(Toggle):
     """
-    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc...)
+    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc...).
+
+    Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
     """
     display_name = "Dexsanity"
 
@@ -596,7 +598,7 @@ class PurgeSpinners(Toggle):
 
 class MatchTrainerLevels(Toggle):
     """
-    When you start a battle with a trainer, your party's levels will be automatically set to match that trainer.
+    When you start a battle with a trainer, your party's levels will be automatically set to match that trainer's highest level pokemon.
 
     The experience you receive will match your party's average actual level, and will only be awarded when you win the battle.
 
