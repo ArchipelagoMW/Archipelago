@@ -2350,7 +2350,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             if rock_tunnel_entrances and logic.rock_tunnel(state, player):
                 entrances += rock_tunnel_entrances
-                if multiworld.entrance_shuffle[player] == "decoupled":
+                if multiworld.door_shuffle[player] == "decoupled":
                     dc_destinations += rock_tunnel_entrances
                 rock_tunnel_entrances = None
 
@@ -2367,21 +2367,30 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
                 # entrances list is empty while it's being sorted, must pass a copy to iterate through
                 entrances_copy = entrances.copy()
-                if multiworld.door_shuffle[player] == "decoupled":
-                    entrances.sort(key=lambda e: e not in reachable_entrances)
-                    dc_destinations.sort(key=lambda e: e in reachable_entrances)
-                elif len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity" else 8) and len(
-                        entrances) <= (starting_entrances - 3):
-                    entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
-                                   dead_end(entrances_copy, e, dead_end_cache) else 1)
+
+                if (len(reachable_entrances) > (1 if multiworld.door_shuffle[player] in ("insanity", "decoupled") else 8)
+                        and len(entrances) <= (starting_entrances - 3)):
+                    if multiworld.door_shuffle[player] == "decoupled":
+                        entrances.sort(key=lambda e: e not in reachable_entrances)
+                        # don't bother checking if it's a dead end if it's reachable
+                        dc_destinations.sort(key=lambda e: e not in reachable_entrances
+                                             and dead_end(entrances_copy, e, dead_end_cache))
+                    else:
+                        entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
+                                       dead_end(entrances_copy, e, dead_end_cache) else 1)
                 else:
-                    entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
-                                   dead_end(entrances_copy, e, dead_end_cache) else 2)
+                    if multiworld.door_shuffle[player] == "decoupled":
+                        entrances.sort(key=lambda e: e not in reachable_entrances)
+                        dc_destinations.sort(key=lambda e: 0 if e not in reachable_entrances else 1 if
+                                             dead_end(entrances_copy, e, dead_end_cache) else 2)
+                    else:
+                        entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
+                                       dead_end(entrances_copy, e, dead_end_cache) else 2)
                 if multiworld.door_shuffle[player] == "full":
                     outdoor = outdoor_map(entrances[0].parent_region.name)
                     if len(entrances) < 48 and not outdoor:
-                        # Prevent a situation where the only remaining outdoor entrances are ones that cannot be reached
-                        # except by connecting directly to it.
+                        # Try to prevent a situation where the only remaining outdoor entrances are ones that cannot be
+                        # reached except by connecting directly to it.
                         entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
 
                     entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
@@ -2390,9 +2399,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                         "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle")
             if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
                     <= (starting_entrances - 3)):
-                entrance_b = dc_destinations.pop(0)
-            elif multiworld.door_shuffle[player] == "decoupled":
                 entrance_b = dc_destinations.pop()
+            elif multiworld.door_shuffle[player] == "decoupled":
+                entrance_b = dc_destinations.pop(0)
             else:
                 entrance_b = entrances.pop()
             entrance_a = entrances.pop(0)
