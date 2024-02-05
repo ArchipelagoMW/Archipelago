@@ -671,7 +671,7 @@ def _init() -> None:
         ("SPECIES_NATU", "Natu", 177),
         ("SPECIES_XATU", "Xatu", 178),
         ("SPECIES_MAREEP", "Mareep", 179),
-        ("SPECIES_FLAAFFY", "Flaafy", 180),
+        ("SPECIES_FLAAFFY", "Flaaffy", 180),
         ("SPECIES_AMPHAROS", "Ampharos", 181),
         ("SPECIES_BELLOSSOM", "Bellossom", 182),
         ("SPECIES_MARILL", "Marill", 183),
