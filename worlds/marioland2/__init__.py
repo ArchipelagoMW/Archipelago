@@ -40,6 +40,10 @@ class MarioLand2WebWorld(WebWorld):
 
 
 class MarioLand2World(World):
+    """Super Mario Land 2 is a classic platformer that follows Mario on a quest to reclaim his castle from the
+    villainous Wario. This iconic game features 32 levels, unique power-ups, and introduces Wario as Mario's
+    arch-rival."""  # -ChatGPT
+
     game = "Super Mario Land 2"
 
     settings_key = "sml2_options"
