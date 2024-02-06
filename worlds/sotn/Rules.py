@@ -15,14 +15,16 @@ def set_rules(world: MultiWorld, player: int) -> None:
     for name, data in location_table.items():
         if data.no_offset:
             # Forbid progression_items and vessel on no offsets despawn locations
+            location = world.get_location(name, player)
+            for pu in vessel_table.items():
+                forbid_item(location, pu[0], player)
+            # Holy glasses can have progression items
             if name != "NO0 - Holy glasses":
-                location = world.get_location(name, player)
                 forbid_item(location, "Gold ring", player)
                 forbid_item(location, "Silver ring", player)
                 forbid_item(location, "Holy glasses", player)
                 forbid_item(location, "Spike breaker", player)
-                for pu in vessel_table.items():
-                    forbid_item(location, pu[0], player)
+
 
     location = world.get_location("Soul of Bat", player)
     set_rule(location, lambda state: state.has("Form of mist", player) and (state.has("Leap stone", player) or
@@ -1008,29 +1010,43 @@ def set_rules(world: MultiWorld, player: int) -> None:
              state.has("Demon card", player))
 
     set_rule(world.get_location("RCAT - Resist thunder", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Resist fire", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Karma coin(4)(Spike breaker)", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Karma coin(5)(Spike breaker)", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Red bean bun", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Elixir", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
 
     set_rule(world.get_location("RCAT - Library card", player), lambda state:
-             state.has("Spike Breaker", player) or (state.has("Soul of bat", player) and
-                                                    state.has("Echo of bat", player)))
+             state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
+                                                      state.has("Gravity boots", player))))
