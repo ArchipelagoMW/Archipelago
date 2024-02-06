@@ -240,6 +240,20 @@ class Animalsanity(Toggle):
     display_name = "Animalsanity"
 
 
+class ItemBoxsanity(Choice):
+    """
+    Determines whether collecting Item Boxes grants checks
+    None: No Item Boxes grant checks
+    Extra Lives: Extra Life Boxes grant checks (94 Locations)
+    All: All Item Boxes grant checks (493 Locations Total)
+    """
+    display_name = "Itemboxsanity"
+    option_none = 0
+    option_extra_lives = 1
+    option_all = 2
+    default = 0
+
+
 class KartRaceChecks(Choice):
     """
     Determines whether Kart Race Mode grants checks
@@ -794,6 +808,7 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "beetlesanity": Beetlesanity,
     "omosanity": Omosanity,
     "animalsanity": Animalsanity,
+    "itemboxsanity": ItemBoxsanity,
     "kart_race_checks": KartRaceChecks,
 
     "logic_difficulty": LogicDifficulty,

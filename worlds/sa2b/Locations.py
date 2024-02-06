@@ -1216,6 +1216,613 @@ animal_location_table = {
     LocationName.sky_rail_animal_20: 0xFF0D7A,
 }
 
+lifebox_location_table = {
+    LocationName.city_escape_lifebox_1: 0xFF1400,
+    LocationName.wild_canyon_lifebox_1: 0xFF1401,
+    LocationName.prison_lane_lifebox_1: 0xFF1402,
+    LocationName.metal_harbor_lifebox_1: 0xFF1403,
+    LocationName.green_forest_lifebox_1: 0xFF1404,
+    LocationName.pumpkin_hill_lifebox_1: 0xFF1405,
+    LocationName.mission_street_lifebox_1: 0xFF1406,
+    LocationName.aquatic_mine_lifebox_1: 0xFF1407,
+    LocationName.hidden_base_lifebox_1: 0xFF1409,
+    LocationName.pyramid_cave_lifebox_1: 0xFF140A,
+    LocationName.death_chamber_lifebox_1: 0xFF140B,
+    LocationName.eternal_engine_lifebox_1: 0xFF140C,
+    LocationName.meteor_herd_lifebox_1: 0xFF140D,
+    LocationName.crazy_gadget_lifebox_1: 0xFF140E,
+    LocationName.final_rush_lifebox_1: 0xFF140F,
+
+    LocationName.iron_gate_lifebox_1: 0xFF1410,
+    LocationName.dry_lagoon_lifebox_1: 0xFF1411,
+    LocationName.sand_ocean_lifebox_1: 0xFF1412,
+    LocationName.radical_highway_lifebox_1: 0xFF1413,
+    LocationName.egg_quarters_lifebox_1: 0xFF1414,
+    LocationName.lost_colony_lifebox_1: 0xFF1415,
+    LocationName.weapons_bed_lifebox_1: 0xFF1416,
+    LocationName.security_hall_lifebox_1: 0xFF1417,
+    LocationName.white_jungle_lifebox_1: 0xFF1418,
+    LocationName.sky_rail_lifebox_1: 0xFF141A,
+    LocationName.mad_space_lifebox_1: 0xFF141B,
+    LocationName.final_chase_lifebox_1: 0xFF141D,
+
+    LocationName.cannon_core_lifebox_1: 0xFF141E,
+
+    LocationName.city_escape_lifebox_2: 0xFF1420,
+    LocationName.wild_canyon_lifebox_2: 0xFF1421,
+    LocationName.prison_lane_lifebox_2: 0xFF1422,
+    LocationName.metal_harbor_lifebox_2: 0xFF1423,
+    LocationName.green_forest_lifebox_2: 0xFF1424,
+    LocationName.mission_street_lifebox_2: 0xFF1426,
+    LocationName.pyramid_cave_lifebox_2: 0xFF142A,
+    LocationName.death_chamber_lifebox_2: 0xFF142B,
+    LocationName.eternal_engine_lifebox_2: 0xFF142C,
+    LocationName.meteor_herd_lifebox_2: 0xFF142D,
+    LocationName.crazy_gadget_lifebox_2: 0xFF142E,
+    LocationName.final_rush_lifebox_2: 0xFF142F,
+
+    LocationName.iron_gate_lifebox_2: 0xFF1430,
+    LocationName.dry_lagoon_lifebox_2: 0xFF1431,
+    LocationName.sand_ocean_lifebox_2: 0xFF1432,
+    LocationName.radical_highway_lifebox_2: 0xFF1433,
+    LocationName.egg_quarters_lifebox_2: 0xFF1434,
+    LocationName.white_jungle_lifebox_2: 0xFF1438,
+    LocationName.sky_rail_lifebox_2: 0xFF143A,
+    LocationName.mad_space_lifebox_2: 0xFF143B,
+    LocationName.final_chase_lifebox_2: 0xFF143D,
+
+    LocationName.metal_harbor_lifebox_3: 0xFF1443,
+    LocationName.green_forest_lifebox_3: 0xFF1444,
+    LocationName.pyramid_cave_lifebox_3: 0xFF144A,
+    LocationName.meteor_herd_lifebox_3: 0xFF144D,
+    LocationName.crazy_gadget_lifebox_3: 0xFF144E,
+    LocationName.final_rush_lifebox_3: 0xFF144F,
+
+    LocationName.iron_gate_lifebox_3: 0xFF1450,
+    LocationName.dry_lagoon_lifebox_3: 0xFF1451,
+    LocationName.sand_ocean_lifebox_3: 0xFF1452,
+    LocationName.sky_rail_lifebox_3: 0xFF145A,
+    LocationName.mad_space_lifebox_3: 0xFF145B,
+    LocationName.final_chase_lifebox_3: 0xFF145D,
+
+    LocationName.green_forest_lifebox_4: 0xFF1464,
+    LocationName.pyramid_cave_lifebox_4: 0xFF146A,
+    LocationName.meteor_herd_lifebox_4: 0xFF146D,
+    LocationName.crazy_gadget_lifebox_4: 0xFF146E,
+    LocationName.final_rush_lifebox_4: 0xFF146F,
+
+    LocationName.iron_gate_lifebox_4: 0xFF1470,
+    LocationName.dry_lagoon_lifebox_4: 0xFF1471,
+    LocationName.sky_rail_lifebox_4: 0xFF147A,
+    LocationName.mad_space_lifebox_4: 0xFF147B,
+    LocationName.final_chase_lifebox_4: 0xFF147D,
+
+    LocationName.pyramid_cave_lifebox_5: 0xFF148A,
+    LocationName.meteor_herd_lifebox_5: 0xFF148D,
+    LocationName.final_rush_lifebox_5: 0xFF148F,
+
+    LocationName.sky_rail_lifebox_5: 0xFF149A,
+    LocationName.final_chase_lifebox_5: 0xFF149D,
+
+    LocationName.pyramid_cave_lifebox_6: 0xFF14AA,
+    LocationName.final_rush_lifebox_6: 0xFF14AF,
+
+    LocationName.sky_rail_lifebox_6: 0xFF14BA,
+    LocationName.final_chase_lifebox_6: 0xFF14BD,
+
+    LocationName.pyramid_cave_lifebox_7: 0xFF14CA,
+    LocationName.final_rush_lifebox_7: 0xFF14CF,
+
+    LocationName.sky_rail_lifebox_7: 0xFF14DA,
+    LocationName.final_chase_lifebox_7: 0xFF14DD,
+
+    LocationName.final_rush_lifebox_8: 0xFF14EF,
+
+    LocationName.sky_rail_lifebox_8: 0xFF14FA,
+    LocationName.final_chase_lifebox_8: 0xFF14FD,
+
+    LocationName.final_rush_lifebox_9: 0xFF150F,
+
+    LocationName.sky_rail_lifebox_9: 0xFF151A,
+    LocationName.final_chase_lifebox_9: 0xFF151D,
+
+    LocationName.final_rush_lifebox_10: 0xFF152F,
+
+    LocationName.final_rush_lifebox_11: 0xFF154F,
+
+    LocationName.final_rush_lifebox_12: 0xFF156F,
+
+    LocationName.final_rush_lifebox_13: 0xFF158F,
+}
+
+itembox_location_table = {
+    LocationName.city_escape_itembox_1: 0xFF1600,
+    LocationName.wild_canyon_itembox_1: 0xFF1601,
+    LocationName.prison_lane_itembox_1: 0xFF1602,
+    LocationName.metal_harbor_itembox_1: 0xFF1603,
+    LocationName.green_forest_itembox_1: 0xFF1604,
+    LocationName.pumpkin_hill_itembox_1: 0xFF1605,
+    LocationName.mission_street_itembox_1: 0xFF1606,
+    LocationName.aquatic_mine_itembox_1: 0xFF1607,
+    LocationName.hidden_base_itembox_1: 0xFF1609,
+    LocationName.pyramid_cave_itembox_1: 0xFF160A,
+    LocationName.death_chamber_itembox_1: 0xFF160B,
+    LocationName.eternal_engine_itembox_1: 0xFF160C,
+    LocationName.meteor_herd_itembox_1: 0xFF160D,
+    LocationName.crazy_gadget_itembox_1: 0xFF160E,
+    LocationName.final_rush_itembox_1: 0xFF160F,
+
+    LocationName.iron_gate_itembox_1: 0xFF1610,
+    LocationName.dry_lagoon_itembox_1: 0xFF1611,
+    LocationName.sand_ocean_itembox_1: 0xFF1612,
+    LocationName.radical_highway_itembox_1: 0xFF1613,
+    LocationName.egg_quarters_itembox_1: 0xFF1614,
+    LocationName.lost_colony_itembox_1: 0xFF1615,
+    LocationName.weapons_bed_itembox_1: 0xFF1616,
+    LocationName.security_hall_itembox_1: 0xFF1617,
+    LocationName.white_jungle_itembox_1: 0xFF1618,
+    LocationName.sky_rail_itembox_1: 0xFF161A,
+    LocationName.mad_space_itembox_1: 0xFF161B,
+    LocationName.cosmic_wall_itembox_1: 0xFF161C,
+    LocationName.final_chase_itembox_1: 0xFF161D,
+
+    LocationName.cannon_core_itembox_1: 0xFF161E,
+    LocationName.green_hill_itembox_1: 0xFF161F,
+
+    LocationName.city_escape_itembox_2: 0xFF1620,
+    LocationName.wild_canyon_itembox_2: 0xFF1621,
+    LocationName.prison_lane_itembox_2: 0xFF1622,
+    LocationName.metal_harbor_itembox_2: 0xFF1623,
+    LocationName.green_forest_itembox_2: 0xFF1624,
+    LocationName.pumpkin_hill_itembox_2: 0xFF1625,
+    LocationName.mission_street_itembox_2: 0xFF1626,
+    LocationName.aquatic_mine_itembox_2: 0xFF1627,
+    LocationName.hidden_base_itembox_2: 0xFF1629,
+    LocationName.pyramid_cave_itembox_2: 0xFF162A,
+    LocationName.death_chamber_itembox_2: 0xFF162B,
+    LocationName.eternal_engine_itembox_2: 0xFF162C,
+    LocationName.meteor_herd_itembox_2: 0xFF162D,
+    LocationName.crazy_gadget_itembox_2: 0xFF162E,
+    LocationName.final_rush_itembox_2: 0xFF162F,
+
+    LocationName.iron_gate_itembox_2: 0xFF1630,
+    LocationName.dry_lagoon_itembox_2: 0xFF1631,
+    LocationName.sand_ocean_itembox_2: 0xFF1632,
+    LocationName.radical_highway_itembox_2: 0xFF1633,
+    LocationName.egg_quarters_itembox_2: 0xFF1634,
+    LocationName.lost_colony_itembox_2: 0xFF1635,
+    LocationName.weapons_bed_itembox_2: 0xFF1636,
+    LocationName.security_hall_itembox_2: 0xFF1637,
+    LocationName.white_jungle_itembox_2: 0xFF1638,
+    LocationName.sky_rail_itembox_2: 0xFF163A,
+    LocationName.mad_space_itembox_2: 0xFF163B,
+    LocationName.cosmic_wall_itembox_2: 0xFF163C,
+    LocationName.final_chase_itembox_2: 0xFF163D,
+
+    LocationName.cannon_core_itembox_2: 0xFF163E,
+    LocationName.green_hill_itembox_2: 0xFF163F,
+
+    LocationName.city_escape_itembox_3: 0xFF1640,
+    LocationName.wild_canyon_itembox_3: 0xFF1641,
+    LocationName.prison_lane_itembox_3: 0xFF1642,
+    LocationName.metal_harbor_itembox_3: 0xFF1643,
+    LocationName.green_forest_itembox_3: 0xFF1644,
+    LocationName.pumpkin_hill_itembox_3: 0xFF1645,
+    LocationName.mission_street_itembox_3: 0xFF1646,
+    LocationName.aquatic_mine_itembox_3: 0xFF1647,
+    LocationName.hidden_base_itembox_3: 0xFF1649,
+    LocationName.pyramid_cave_itembox_3: 0xFF164A,
+    LocationName.death_chamber_itembox_3: 0xFF164B,
+    LocationName.eternal_engine_itembox_3: 0xFF164C,
+    LocationName.meteor_herd_itembox_3: 0xFF164D,
+    LocationName.crazy_gadget_itembox_3: 0xFF164E,
+    LocationName.final_rush_itembox_3: 0xFF164F,
+
+    LocationName.iron_gate_itembox_3: 0xFF1650,
+    LocationName.dry_lagoon_itembox_3: 0xFF1651,
+    LocationName.sand_ocean_itembox_3: 0xFF1652,
+    LocationName.radical_highway_itembox_3: 0xFF1653,
+    LocationName.egg_quarters_itembox_3: 0xFF1654,
+    LocationName.lost_colony_itembox_3: 0xFF1655,
+    LocationName.weapons_bed_itembox_3: 0xFF1656,
+    LocationName.security_hall_itembox_3: 0xFF1657,
+    LocationName.white_jungle_itembox_3: 0xFF1658,
+    LocationName.sky_rail_itembox_3: 0xFF165A,
+    LocationName.mad_space_itembox_3: 0xFF165B,
+    LocationName.cosmic_wall_itembox_3: 0xFF165C,
+    LocationName.final_chase_itembox_3: 0xFF165D,
+
+    LocationName.cannon_core_itembox_3: 0xFF165E,
+    LocationName.green_hill_itembox_3: 0xFF165F,
+
+    LocationName.city_escape_itembox_4: 0xFF1660,
+    LocationName.wild_canyon_itembox_4: 0xFF1661,
+    LocationName.prison_lane_itembox_4: 0xFF1662,
+    LocationName.metal_harbor_itembox_4: 0xFF1663,
+    LocationName.green_forest_itembox_4: 0xFF1664,
+    LocationName.pumpkin_hill_itembox_4: 0xFF1665,
+    LocationName.mission_street_itembox_4: 0xFF1666,
+    LocationName.aquatic_mine_itembox_4: 0xFF1667,
+    LocationName.hidden_base_itembox_4: 0xFF1669,
+    LocationName.pyramid_cave_itembox_4: 0xFF166A,
+    LocationName.death_chamber_itembox_4: 0xFF166B,
+    LocationName.eternal_engine_itembox_4: 0xFF166C,
+    LocationName.meteor_herd_itembox_4: 0xFF166D,
+    LocationName.crazy_gadget_itembox_4: 0xFF166E,
+    LocationName.final_rush_itembox_4: 0xFF166F,
+
+    LocationName.iron_gate_itembox_4: 0xFF1670,
+    LocationName.dry_lagoon_itembox_4: 0xFF1671,
+    LocationName.sand_ocean_itembox_4: 0xFF1672,
+    LocationName.radical_highway_itembox_4: 0xFF1673,
+    LocationName.egg_quarters_itembox_4: 0xFF1674,
+    LocationName.lost_colony_itembox_4: 0xFF1675,
+    LocationName.weapons_bed_itembox_4: 0xFF1676,
+    LocationName.security_hall_itembox_4: 0xFF1677,
+    LocationName.white_jungle_itembox_4: 0xFF1678,
+    LocationName.sky_rail_itembox_4: 0xFF167A,
+    LocationName.mad_space_itembox_4: 0xFF167B,
+    LocationName.cosmic_wall_itembox_4: 0xFF167C,
+    LocationName.final_chase_itembox_4: 0xFF167D,
+
+    LocationName.cannon_core_itembox_4: 0xFF167E,
+    LocationName.green_hill_itembox_4: 0xFF167F,
+
+    LocationName.city_escape_itembox_5: 0xFF1680,
+    LocationName.wild_canyon_itembox_5: 0xFF1681,
+    LocationName.prison_lane_itembox_5: 0xFF1682,
+    LocationName.metal_harbor_itembox_5: 0xFF1683,
+    LocationName.green_forest_itembox_5: 0xFF1684,
+    LocationName.pumpkin_hill_itembox_5: 0xFF1685,
+    LocationName.mission_street_itembox_5: 0xFF1686,
+    LocationName.aquatic_mine_itembox_5: 0xFF1687,
+    LocationName.hidden_base_itembox_5: 0xFF1689,
+    LocationName.pyramid_cave_itembox_5: 0xFF168A,
+    LocationName.death_chamber_itembox_5: 0xFF168B,
+    LocationName.eternal_engine_itembox_5: 0xFF168C,
+    LocationName.meteor_herd_itembox_5: 0xFF168D,
+    LocationName.crazy_gadget_itembox_5: 0xFF168E,
+    LocationName.final_rush_itembox_5: 0xFF168F,
+
+    LocationName.iron_gate_itembox_5: 0xFF1690,
+    LocationName.dry_lagoon_itembox_5: 0xFF1691,
+    LocationName.sand_ocean_itembox_5: 0xFF1692,
+    LocationName.radical_highway_itembox_5: 0xFF1693,
+    LocationName.egg_quarters_itembox_5: 0xFF1694,
+    LocationName.lost_colony_itembox_5: 0xFF1695,
+    LocationName.weapons_bed_itembox_5: 0xFF1696,
+    LocationName.security_hall_itembox_5: 0xFF1697,
+    LocationName.white_jungle_itembox_5: 0xFF1698,
+    LocationName.sky_rail_itembox_5: 0xFF169A,
+    LocationName.mad_space_itembox_5: 0xFF169B,
+    LocationName.cosmic_wall_itembox_5: 0xFF169C,
+    LocationName.final_chase_itembox_5: 0xFF169D,
+
+    LocationName.cannon_core_itembox_5: 0xFF169E,
+    LocationName.green_hill_itembox_5: 0xFF169F,
+
+    LocationName.city_escape_itembox_6: 0xFF16A0,
+    LocationName.wild_canyon_itembox_6: 0xFF16A1,
+    LocationName.prison_lane_itembox_6: 0xFF16A2,
+    LocationName.green_forest_itembox_6: 0xFF16A4,
+    LocationName.pumpkin_hill_itembox_6: 0xFF16A5,
+    LocationName.mission_street_itembox_6: 0xFF16A6,
+    LocationName.aquatic_mine_itembox_6: 0xFF16A7,
+    LocationName.pyramid_cave_itembox_6: 0xFF16AA,
+    LocationName.death_chamber_itembox_6: 0xFF16AB,
+    LocationName.eternal_engine_itembox_6: 0xFF16AC,
+    LocationName.meteor_herd_itembox_6: 0xFF16AD,
+    LocationName.crazy_gadget_itembox_6: 0xFF16AE,
+    LocationName.final_rush_itembox_6: 0xFF16AF,
+
+    LocationName.iron_gate_itembox_6: 0xFF16B0,
+    LocationName.dry_lagoon_itembox_6: 0xFF16B1,
+    LocationName.sand_ocean_itembox_6: 0xFF16B2,
+    LocationName.radical_highway_itembox_6: 0xFF16B3,
+    LocationName.egg_quarters_itembox_6: 0xFF16B4,
+    LocationName.lost_colony_itembox_6: 0xFF16B5,
+    LocationName.weapons_bed_itembox_6: 0xFF16B6,
+    LocationName.security_hall_itembox_6: 0xFF16B7,
+    LocationName.white_jungle_itembox_6: 0xFF16B8,
+    LocationName.sky_rail_itembox_6: 0xFF16BA,
+    LocationName.mad_space_itembox_6: 0xFF16BB,
+    LocationName.cosmic_wall_itembox_6: 0xFF16BC,
+    LocationName.final_chase_itembox_6: 0xFF16BD,
+
+    LocationName.cannon_core_itembox_6: 0xFF16BE,
+    LocationName.green_hill_itembox_6: 0xFF16BF,
+
+    LocationName.city_escape_itembox_7: 0xFF16C0,
+    LocationName.wild_canyon_itembox_7: 0xFF16C1,
+    LocationName.green_forest_itembox_7: 0xFF16C4,
+    LocationName.pumpkin_hill_itembox_7: 0xFF16C5,
+    LocationName.pyramid_cave_itembox_7: 0xFF16CA,
+    LocationName.death_chamber_itembox_7: 0xFF16CB,
+    LocationName.eternal_engine_itembox_7: 0xFF16CC,
+    LocationName.meteor_herd_itembox_7: 0xFF16CD,
+    LocationName.crazy_gadget_itembox_7: 0xFF16CE,
+    LocationName.final_rush_itembox_7: 0xFF16CF,
+
+    LocationName.iron_gate_itembox_7: 0xFF16D0,
+    LocationName.sand_ocean_itembox_7: 0xFF16D2,
+    LocationName.radical_highway_itembox_7: 0xFF16D3,
+    LocationName.egg_quarters_itembox_7: 0xFF16D4,
+    LocationName.lost_colony_itembox_7: 0xFF16D5,
+    LocationName.weapons_bed_itembox_7: 0xFF16D6,
+    LocationName.security_hall_itembox_7: 0xFF16D7,
+    LocationName.white_jungle_itembox_7: 0xFF16D8,
+    LocationName.sky_rail_itembox_7: 0xFF16DA,
+    LocationName.mad_space_itembox_7: 0xFF16DB,
+    LocationName.cosmic_wall_itembox_7: 0xFF16DC,
+    LocationName.final_chase_itembox_7: 0xFF16DD,
+
+    LocationName.cannon_core_itembox_7: 0xFF16DE,
+    LocationName.green_hill_itembox_7: 0xFF16DF,
+
+    LocationName.city_escape_itembox_8: 0xFF16E0,
+    LocationName.wild_canyon_itembox_8: 0xFF16E1,
+    LocationName.green_forest_itembox_8: 0xFF16E4,
+    LocationName.pumpkin_hill_itembox_8: 0xFF16E5,
+    LocationName.pyramid_cave_itembox_8: 0xFF16EA,
+    LocationName.death_chamber_itembox_8: 0xFF16EB,
+    LocationName.eternal_engine_itembox_8: 0xFF16EC,
+    LocationName.meteor_herd_itembox_8: 0xFF16ED,
+    LocationName.crazy_gadget_itembox_8: 0xFF16EE,
+    LocationName.final_rush_itembox_8: 0xFF16EF,
+
+    LocationName.iron_gate_itembox_8: 0xFF16F0,
+    LocationName.sand_ocean_itembox_8: 0xFF16F2,
+    LocationName.egg_quarters_itembox_8: 0xFF16F4,
+    LocationName.lost_colony_itembox_8: 0xFF16F5,
+    LocationName.security_hall_itembox_8: 0xFF16F7,
+    LocationName.white_jungle_itembox_8: 0xFF16F8,
+    LocationName.sky_rail_itembox_8: 0xFF16FA,
+    LocationName.mad_space_itembox_8: 0xFF16FB,
+    LocationName.cosmic_wall_itembox_8: 0xFF16FC,
+    LocationName.final_chase_itembox_8: 0xFF16FD,
+
+    LocationName.cannon_core_itembox_8: 0xFF16FE,
+    LocationName.green_hill_itembox_8: 0xFF16FF,
+    
+    LocationName.city_escape_itembox_9: 0xFF1700,
+    LocationName.green_forest_itembox_9: 0xFF1704,
+    LocationName.pumpkin_hill_itembox_9: 0xFF1705,
+    LocationName.pyramid_cave_itembox_9: 0xFF170A,
+    LocationName.death_chamber_itembox_9: 0xFF170B,
+    LocationName.eternal_engine_itembox_9: 0xFF170C,
+    LocationName.meteor_herd_itembox_9: 0xFF170D,
+    LocationName.crazy_gadget_itembox_9: 0xFF170E,
+    LocationName.final_rush_itembox_9: 0xFF170F,
+
+    LocationName.iron_gate_itembox_9: 0xFF1710,
+    LocationName.sand_ocean_itembox_9: 0xFF1712,
+    LocationName.egg_quarters_itembox_9: 0xFF1714,
+    LocationName.lost_colony_itembox_9: 0xFF1715,
+    LocationName.security_hall_itembox_9: 0xFF1717,
+    LocationName.sky_rail_itembox_9: 0xFF171A,
+    LocationName.mad_space_itembox_9: 0xFF171B,
+    LocationName.cosmic_wall_itembox_9: 0xFF171C,
+    LocationName.final_chase_itembox_9: 0xFF171D,
+
+    LocationName.cannon_core_itembox_9: 0xFF171E,
+    LocationName.green_hill_itembox_9: 0xFF171F,
+
+    LocationName.green_forest_itembox_10: 0xFF1724,
+    LocationName.pumpkin_hill_itembox_10: 0xFF1725,
+    LocationName.pyramid_cave_itembox_10: 0xFF172A,
+    LocationName.death_chamber_itembox_10: 0xFF172B,
+    LocationName.eternal_engine_itembox_10: 0xFF172C,
+    LocationName.meteor_herd_itembox_10: 0xFF172D,
+    LocationName.crazy_gadget_itembox_10: 0xFF172E,
+    LocationName.final_rush_itembox_10: 0xFF172F,
+
+    LocationName.iron_gate_itembox_10: 0xFF1730,
+    LocationName.sand_ocean_itembox_10: 0xFF1732,
+    LocationName.egg_quarters_itembox_10: 0xFF1734,
+    LocationName.security_hall_itembox_10: 0xFF1737,
+    LocationName.sky_rail_itembox_10: 0xFF173A,
+    LocationName.mad_space_itembox_10: 0xFF173B,
+    LocationName.cosmic_wall_itembox_10: 0xFF173C,
+    LocationName.final_chase_itembox_10: 0xFF173D,
+
+    LocationName.cannon_core_itembox_10: 0xFF173E,
+    LocationName.green_hill_itembox_10: 0xFF173F,
+
+    LocationName.green_forest_itembox_11: 0xFF1744,
+    LocationName.pyramid_cave_itembox_11: 0xFF174A,
+    LocationName.eternal_engine_itembox_11: 0xFF174C,
+    LocationName.meteor_herd_itembox_11: 0xFF174D,
+    LocationName.crazy_gadget_itembox_11: 0xFF174E,
+    LocationName.final_rush_itembox_11: 0xFF174F,
+
+    LocationName.iron_gate_itembox_11: 0xFF1750,
+    LocationName.egg_quarters_itembox_11: 0xFF1754,
+    LocationName.security_hall_itembox_11: 0xFF1757,
+    LocationName.sky_rail_itembox_11: 0xFF175A,
+    LocationName.mad_space_itembox_11: 0xFF175B,
+    LocationName.cosmic_wall_itembox_11: 0xFF175C,
+    LocationName.final_chase_itembox_11: 0xFF175D,
+
+    LocationName.cannon_core_itembox_11: 0xFF175E,
+    LocationName.green_hill_itembox_11: 0xFF175F,
+
+    LocationName.green_forest_itembox_12: 0xFF1764,
+    LocationName.pyramid_cave_itembox_12: 0xFF176A,
+    LocationName.eternal_engine_itembox_12: 0xFF176C,
+    LocationName.meteor_herd_itembox_12: 0xFF176D,
+    LocationName.crazy_gadget_itembox_12: 0xFF176E,
+    LocationName.final_rush_itembox_12: 0xFF176F,
+
+    LocationName.iron_gate_itembox_12: 0xFF1770,
+    LocationName.security_hall_itembox_12: 0xFF1777,
+    LocationName.sky_rail_itembox_12: 0xFF177A,
+    LocationName.mad_space_itembox_12: 0xFF177B,
+    LocationName.cosmic_wall_itembox_12: 0xFF177C,
+    LocationName.final_chase_itembox_12: 0xFF177D,
+
+    LocationName.cannon_core_itembox_12: 0xFF177E,
+
+    LocationName.green_forest_itembox_13: 0xFF1784,
+    LocationName.pyramid_cave_itembox_13: 0xFF178A,
+    LocationName.eternal_engine_itembox_13: 0xFF178C,
+    LocationName.crazy_gadget_itembox_13: 0xFF178E,
+    LocationName.final_rush_itembox_13: 0xFF178F,
+
+    LocationName.iron_gate_itembox_13: 0xFF1790,
+    LocationName.security_hall_itembox_13: 0xFF1797,
+    LocationName.sky_rail_itembox_13: 0xFF179A,
+    LocationName.mad_space_itembox_13: 0xFF179B,
+    LocationName.cosmic_wall_itembox_13: 0xFF179C,
+    LocationName.final_chase_itembox_13: 0xFF179D,
+
+    LocationName.pyramid_cave_itembox_14: 0xFF17AA,
+    LocationName.eternal_engine_itembox_14: 0xFF17AC,
+    LocationName.crazy_gadget_itembox_14: 0xFF17AE,
+    LocationName.final_rush_itembox_14: 0xFF17AF,
+
+    LocationName.iron_gate_itembox_14: 0xFF17B0,
+    LocationName.security_hall_itembox_14: 0xFF17B7,
+    LocationName.sky_rail_itembox_14: 0xFF17BA,
+    LocationName.mad_space_itembox_14: 0xFF17BB,
+    LocationName.cosmic_wall_itembox_14: 0xFF17BC,
+    LocationName.final_chase_itembox_14: 0xFF17BD,
+
+    LocationName.pyramid_cave_itembox_15: 0xFF17CA,
+    LocationName.final_rush_itembox_15: 0xFF17CF,
+
+    LocationName.iron_gate_itembox_15: 0xFF17D0,
+    LocationName.security_hall_itembox_15: 0xFF17D7,
+    LocationName.sky_rail_itembox_15: 0xFF17DA,
+    LocationName.mad_space_itembox_15: 0xFF17DB,
+    LocationName.cosmic_wall_itembox_15: 0xFF17DC,
+    LocationName.final_chase_itembox_15: 0xFF17DD,
+
+    LocationName.final_rush_itembox_16: 0xFF17EF,
+
+    LocationName.iron_gate_itembox_16: 0xFF17F0,
+    LocationName.security_hall_itembox_16: 0xFF17F7,
+    LocationName.sky_rail_itembox_16: 0xFF17FA,
+    LocationName.mad_space_itembox_16: 0xFF17FB,
+    LocationName.cosmic_wall_itembox_16: 0xFF17FC,
+    LocationName.final_chase_itembox_16: 0xFF17FD,
+
+    LocationName.final_rush_itembox_17: 0xFF180F,
+
+    LocationName.security_hall_itembox_17: 0xFF1817,
+    LocationName.sky_rail_itembox_17: 0xFF181A,
+    LocationName.mad_space_itembox_17: 0xFF181B,
+    LocationName.cosmic_wall_itembox_17: 0xFF181C,
+    LocationName.final_chase_itembox_17: 0xFF181D,
+
+    LocationName.final_rush_itembox_18: 0xFF182F,
+
+    LocationName.security_hall_itembox_18: 0xFF1837,
+    LocationName.sky_rail_itembox_18: 0xFF183A,
+    LocationName.mad_space_itembox_18: 0xFF183B,
+    LocationName.cosmic_wall_itembox_18: 0xFF183C,
+    LocationName.final_chase_itembox_18: 0xFF183D,
+
+    LocationName.final_rush_itembox_19: 0xFF184F,
+
+    LocationName.security_hall_itembox_19: 0xFF1857,
+    LocationName.sky_rail_itembox_19: 0xFF185A,
+    LocationName.mad_space_itembox_19: 0xFF185B,
+    LocationName.cosmic_wall_itembox_19: 0xFF185C,
+    LocationName.final_chase_itembox_19: 0xFF185D,
+
+    LocationName.final_rush_itembox_20: 0xFF186F,
+
+    LocationName.security_hall_itembox_20: 0xFF1877,
+    LocationName.sky_rail_itembox_20: 0xFF187A,
+    LocationName.mad_space_itembox_20: 0xFF187B,
+    LocationName.cosmic_wall_itembox_20: 0xFF187C,
+    LocationName.final_chase_itembox_20: 0xFF187D,
+
+    LocationName.final_rush_itembox_21: 0xFF188F,
+
+    LocationName.security_hall_itembox_21: 0xFF1897,
+    LocationName.sky_rail_itembox_21: 0xFF189A,
+    LocationName.cosmic_wall_itembox_21: 0xFF189C,
+    LocationName.final_chase_itembox_21: 0xFF189D,
+
+    LocationName.final_rush_itembox_22: 0xFF18AF,
+
+    LocationName.security_hall_itembox_22: 0xFF18B7,
+    LocationName.sky_rail_itembox_22: 0xFF18BA,
+    LocationName.cosmic_wall_itembox_22: 0xFF18BC,
+    LocationName.final_chase_itembox_22: 0xFF18BD,
+
+    LocationName.final_rush_itembox_23: 0xFF18CF,
+
+    LocationName.security_hall_itembox_23: 0xFF18D7,
+    LocationName.sky_rail_itembox_23: 0xFF18DA,
+    LocationName.cosmic_wall_itembox_23: 0xFF18DC,
+    LocationName.final_chase_itembox_23: 0xFF18DD,
+
+    LocationName.final_rush_itembox_24: 0xFF18EF,
+
+    LocationName.security_hall_itembox_24: 0xFF18F7,
+    LocationName.cosmic_wall_itembox_24: 0xFF18FC,
+    LocationName.final_chase_itembox_24: 0xFF18FD,
+
+    LocationName.final_rush_itembox_25: 0xFF190F,
+
+    LocationName.cosmic_wall_itembox_25: 0xFF191C,
+    LocationName.final_chase_itembox_25: 0xFF191D,
+
+    LocationName.final_rush_itembox_26: 0xFF192F,
+
+    LocationName.cosmic_wall_itembox_26: 0xFF193C,
+    LocationName.final_chase_itembox_26: 0xFF193D,
+
+    LocationName.final_rush_itembox_27: 0xFF194F,
+
+    LocationName.cosmic_wall_itembox_27: 0xFF195C,
+    LocationName.final_chase_itembox_27: 0xFF195D,
+
+    LocationName.final_rush_itembox_28: 0xFF196F,
+
+    LocationName.final_chase_itembox_28: 0xFF197D,
+
+    LocationName.final_rush_itembox_29: 0xFF198F,
+
+    LocationName.final_chase_itembox_29: 0xFF199D,
+
+    LocationName.final_rush_itembox_30: 0xFF19AF,
+
+    LocationName.final_chase_itembox_30: 0xFF19BD,
+
+    LocationName.final_rush_itembox_31: 0xFF19CF,
+
+    LocationName.final_chase_itembox_31: 0xFF19DD,
+
+    LocationName.final_rush_itembox_32: 0xFF19EF,
+
+    LocationName.final_chase_itembox_32: 0xFF19FD,
+
+    LocationName.final_rush_itembox_33: 0xFF1A0F,
+
+    LocationName.final_chase_itembox_33: 0xFF1A1D,
+
+    LocationName.final_rush_itembox_34: 0xFF1A2F,
+
+    LocationName.final_chase_itembox_34: 0xFF1A3D,
+
+    LocationName.final_rush_itembox_35: 0xFF1A4F,
+
+    LocationName.final_chase_itembox_35: 0xFF1A5D,
+
+    LocationName.final_rush_itembox_36: 0xFF1A6F,
+
+    LocationName.final_rush_itembox_37: 0xFF1A8F,
+
+    LocationName.final_rush_itembox_38: 0xFF1AAF,
+
+    LocationName.final_rush_itembox_39: 0xFF1ACF,
+
+    LocationName.final_rush_itembox_40: 0xFF1AEF,
+}
+
 boss_gate_location_table = {
     LocationName.gate_1_boss: 0xFF0100,
     LocationName.gate_2_boss: 0xFF0101,
@@ -1580,6 +2187,8 @@ all_locations = {
     **beetle_location_table,
     **omochao_location_table,
     **animal_location_table,
+    **lifebox_location_table,
+    **itembox_location_table,
     **chao_race_beginner_location_table,
     **chao_karate_beginner_location_table,
     **chao_race_intermediate_location_table,
@@ -1692,6 +2301,16 @@ def setup_locations(world: World, player: int, mission_map: typing.Dict[int, int
 
         if world.options.animalsanity:
             location_table.update({**animal_location_table})
+
+        if world.options.itemboxsanity.value == 1:
+            location_table.update({**lifebox_location_table})
+        elif world.options.itemboxsanity.value == 2:
+            location_table.update({**lifebox_location_table})
+            location_table.update({**itembox_location_table})
+
+        print(len(lifebox_location_table))
+        print(len(itembox_location_table))
+
 
         if world.options.kart_race_checks == 2:
             location_table.update({**kart_race_beginner_location_table})
