@@ -18,18 +18,21 @@ from .Rom import get_base_rom_path, get_base_rom_bytes, write_char, write_short,
 components.append(Component('SOTN Client', 'SotnClient', file_identifier=SuffixIdentifier('.apsotn')))
 
 
-# Problem found on last play
-# Merman Statue was a Dynamite instead of heart. Lootable, no problems
-# Faerie Card. bugged graphic softlock on touch
-# Power of mist bugged graphic. Softlock on proximity 0x0016 seems to work. Check on next play
-# Force of echo was a toadstool instead of heart - no biggie
-# Looks like getting 2 misplaced relics too fast won't send it. Implement a received queue?
-# Holy glasses check seems bugged. Added "CEN" to checkNO0, test next play
+# -- Problem found on last play --
+# Merman Statue was a Dynamite instead of heart. Lootable, (NO PROBLEM)
+# Faerie Card. bugged graphic softlock on touch. Changed to sword card(FIXED)
+# Power of mist bugged graphic. Softlock on proximity 0x0016 seems to work. (FIXED)
+# Force of echo was a toadstool instead of heart (NO PROBLEM)
+# Looks like getting 2 misplaced relics too fast won't send it(During draw). Implement a received queue?
+# Holy glasses check seems bugged. (FIXED)
 # Relics of Vlad did not change. Probably due loc.item.name instead of just loc.name. Test on next play
 # Added another address to Rib of Vlad on boss area. Need more testing
 # Added another address to Eye of Vlad on boss area. Need more testing
 # Added another address to Tooth of Vlad on boss area. Need more testing
+# Those extra address looks like it's only when replacing with item NEED MORE TESTING
 # Something is wrong with CHI - Turkey(Demon)
+# We can enter CEN with just rings, but we can't leave without some kinda of flying or a library card(Maybe get 1 free)
+# TODO: Test killing bosses with no relics of vlad
 
 class SotnSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
@@ -239,67 +242,6 @@ class SotnWorld(World):
         self.multiworld.get_location("RNZ1 - Darkwing bat kill", self.player).place_locked_item(
             self.create_event("Boss token"))
 
-    """def pre_fill(self) -> None:
-        from Fill import fill_restrictive
-        attempts = 5
-        world = self.multiworld
-        player = self.player
-        difficult = self.multiworld.Difficult[self.player]
-        all_state = world.get_all_state(use_cache=True)
-        relics = [self.create_item(name) for name in relic_table]
-        if difficult == 0:
-            for _ in range(3):
-                relics.append(self.create_item("Sword card"))
-        if difficult == 1:
-            for _ in range(6):
-                relics.append(self.create_item("Sword card"))
-        if difficult == 2:
-            for _ in range(10):
-                relics.append(self.create_item("Sword card"))
-        if difficult == 3:
-            for _ in range(12):
-                relics.append(self.create_item("Sword card"))
-
-        relic_locations = [world.get_location('Soul of Bat', player),
-                           world.get_location('Fire of Bat', player),
-                           world.get_location('Echo of Bat', player),
-                           world.get_location('Force of Echo', player),
-                           world.get_location('Soul of Wolf', player),
-                           world.get_location('Power of Wolf', player),
-                           world.get_location('Skill of Wolf', player),
-                           world.get_location('Form of Mist', player),
-                           world.get_location('Power of Mist', player),
-                           world.get_location('Gas Cloud', player),
-                           world.get_location('Cube of Zoe', player),
-                           world.get_location('Spirit Orb', player),
-                           world.get_location('Gravity Boots', player),
-                           world.get_location('Leap Stone', player),
-                           world.get_location('Holy Symbol', player),
-                           world.get_location('Faerie Scroll', player),
-                           world.get_location('Jewel of Open', player),
-                           world.get_location('Merman Statue', player),
-                           world.get_location('Bat Card', player),
-                           world.get_location('Ghost Card', player),
-                           world.get_location('Faerie Card', player),
-                           world.get_location('Demon Card', player),
-                           world.get_location('Sword Card', player),
-                           world.get_location('Heart of Vlad', player),
-                           world.get_location('Tooth of Vlad', player),
-                           world.get_location('Rib of Vlad', player),
-                           world.get_location('Ring of Vlad', player),
-                           world.get_location('Eye of Vlad', player),
-                           ]
-        placed_relics = {loc.item.name for loc in relic_locations if loc.item}
-        unplaced_relics = [relic for relic in relics if relic.name not in placed_relics]
-        empty_relic_locations = [loc for loc in relic_locations if not loc.item]
-        for attempt in range(attempts):
-            relicpool = unplaced_relics.copy()
-            relic_locs = empty_relic_locations.copy()
-            world.random.shuffle(relic_locs)
-            fill_restrictive(world, all_state, relic_locs, relicpool, True, lock=True,
-                             name="SOTN Relics placement")
-            self.added_relics = relicpool.copy()"""
-
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
 
@@ -313,7 +255,7 @@ class SotnWorld(World):
         are = self.options.opened_are
         no2 = self.options.opened_no2
 
-        relics_vlad = ["Heart of vlad", "Tooth of vlad", "Rib of vlad", "Ring of vlad", "Eye of vlad"]
+        relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
         for loc in self.multiworld.get_locations(self.player):
             if loc.item and loc.item.player == self.player:
@@ -335,14 +277,14 @@ class SotnWorld(World):
                                     write_short(patched_rom, address, item_data.get_item_id())
                                 else:
                                     # Skill of wolf, bat card, Faerie card and Gas cloud
-                                    # can't be item.Replace with sword card instead
+                                    # can't be item. Replace with sword card instead
                                     if (loc.name == "Skill of Wolf" or loc.name == "Bat Card" or
                                             loc.name == "Faerie Card" or loc.name == "Gas Cloud"):
                                         write_short(patched_rom, address, 0x0016)
                                     elif loc.name in relics_vlad:
                                         write_short(patched_rom, address, 0x0016)
                                     elif loc.name == "Jewel of Open":
-                                        write_short(patched_rom, address, 0xFFFF)
+                                        write_short(patched_rom, address, 0x0016)
                                     else:
                                         write_short(patched_rom, address - 4, 0x000c)
                                         write_short(patched_rom, address, loc_data.get_delete())
