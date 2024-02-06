@@ -218,7 +218,7 @@ cdef class LocationStore:
                             yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
         elif slot_count:
             # generic implementation with lookup in set
-            receivers = ap_player_set_new(min(1000, slot_count))
+            receivers = ap_player_set_new(min(1023, slot_count))  # limit top level struct to 16KB
             if not receivers:
                 raise MemoryError()
             for receiver in slots:
