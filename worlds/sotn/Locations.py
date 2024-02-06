@@ -348,7 +348,7 @@ chi_locations = {
     "CHI - Peanuts 2(Demon)": LocationData("Abandoned Mine", 10, [0x45e9610]),
     "CHI - Peanuts 3(Demon)": LocationData("Abandoned Mine", 11, [0x45e9612]),
     "CHI - Peanuts 4(Demon)": LocationData("Abandoned Mine", 12, [0x45e9614]),
-    "CHI - Turkey(Demon)": LocationData("Abandoned Mine", 3040, [0x45e9602], True),
+    "CHI - Turkey(Demon)": LocationData("Abandoned Mine", 3040, [0x45e9602]),
     "CHI - Cerberos kill": LocationData("Abandoned Mine", None),
     "Demon Card": LocationData("Abandoned Mine", 3042, [0x45ea956+8, 0x45eacda+8], False,
                                True, 0x000d),
@@ -427,8 +427,8 @@ rchi_locations = {
     "RCHI - Shiitake 1(6)": LocationData("Cave", 6, [0x4da5140]),
     "RCHI - Shiitake 2(7)": LocationData("Cave", 7, [0x4da5142]),
     "RCHI - Death kill": LocationData("Cave", None),
-    "Eye of Vlad": LocationData("Cave", 3211, [0x4da65ea+8, 0x4da6a4a+8, 0x6622610+21],
-                                False, True)
+    "Eye of Vlad": LocationData("Cave", 3211, [0x4da65ea+8, 0x4da6a4a+8],
+                                False, True, 0x0016)
 }
 
 rdai_locations = {
@@ -450,7 +450,7 @@ rdai_locations = {
     "RDAI - Heart Vessel(17)": LocationData("Anti-Chapel", 17, [0x4e322d6]),
     "RDAI - Medusa kill": LocationData("Anti-Chapel", None),
     "Heart of Vlad": LocationData("Anti-Chapel", 3221, [0x4e335ac+8, 0x4e34048+8], False,
-                                  True),
+                                  True, 0x0016),
 }
 
 rlib_locations = {
@@ -492,7 +492,8 @@ rno1_locations = {
     "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3240, [0x507d08c], True),
     "RNO1 - Creature kill": LocationData("Reverse Outer Wall", None),
     "Tooth of Vlad": LocationData("Reverse Outer Wall", 3242,
-                                  [0x5051d4a+8, 0x5052566+8, 0x67d160c+18], False, True),
+                                  [0x5051d4a+8, 0x5052566+8], False, True,
+                                  0x0016),
 }
 
 rno2_locations = {
@@ -510,7 +511,8 @@ rno2_locations = {
     "RNO2 - Heart Vessel": LocationData("Death Wing's Lair", 11, [0x50f87ce]),
     "RNO2 - Akmodan II kill": LocationData("Death Wing's Lair", None),
     "Rib of Vlad": LocationData("Death Wing's Lair", 3261,
-                                [0x50fa90c+8, 0x50fb220+8,0x69d2af8+19], False, True),
+                                [0x50fa90c+8, 0x50fb220+8], False, True,
+                                0x0016),
 }
 
 rno3_locations = {
@@ -592,7 +594,8 @@ rnz1_locations = {
     "RNZ1 - TNT": LocationData("Reverse Clock Tower", 3303, [0x59bc358], True),
     "RNZ1 - Darkwing bat kill": LocationData("Reverse Clock Tower", None),
     "Ring of Vlad": LocationData("Reverse Clock Tower", 3305,
-                                 [0x059e8074, 0x059ee2e4, 0x059bdb30], False, True),
+                                 [0x059e8074, 0x059ee2e4, 0x059bdb30], False, True,
+                                 0x0016),
 }
 
 rtop_locations = {
