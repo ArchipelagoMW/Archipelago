@@ -125,7 +125,7 @@ class SotnContext(CommonContext):
         self.client_compatibility_mode = 0
         self.items_handling = 0b101
         self.checked_locations_sent: bool = False
-        self.local_item_locations = {}
+        self.misplaced_items = []
         self.username = "Lockmau"
 
     async def server_auth(self, password_requested: bool = False):
@@ -143,6 +143,7 @@ class SotnContext(CommonContext):
             self.locations_array = None
             self.bosses_dead = None
             self.total_bosses_killed = 0
+            self.misplaced_items = []
         elif cmd == 'Print':
             msg = args['text']
             if ': !' not in msg:
@@ -160,18 +161,26 @@ class SotnContext(CommonContext):
                 print(f'{received.item} - {item_data}')
                 print(f'Player: {received.player} Slot: {self.slot}')
 
-                # TODO: Verify item range. Is our game item?
+                # TODO: Have to check relics replaced with sword card for items
                 if base_item_id <= received.item <= base_item_id + 423:
                     if loc_data.can_be_relic:
                         # There is a item on a relic spot, send it to the player
                         if item_data.type != Type.RELIC:
                             print(f'Received 1 : {received}')
-                            self.items_received.append(received)
+                            # self.items_received.append(received)
+                            self.misplaced_items.append(received.item - base_item_id)
                     else:
                         # Normal location containing a relic
                         if item_data.type == Type.RELIC:
                             print(f'Received 2 : {received}')
-                            self.items_received.append(received)
+                            # self.items_received.append(received)
+                            self.misplaced_items.append(received.item - base_item_id)
+                        if received.location == 127083080:
+                            # Holy glasses, send a library card, so player won't get stuck
+                            self.misplaced_items.append(166)
+        elif cmd == "RoomInfo":
+            self.seed_name = args['seed_name']
+            print(f"Recebeu: {self.seed_name}")
 
     def run_gui(self):
         from kvui import GameManager
@@ -203,6 +212,9 @@ def get_payload(ctx: SotnContext):
             "items": items,
             "messages": {f'{key[0]}:{key[1]}': value for key, value in ctx.messages.items()
                          if key[0] > current_time - 10},
+            "player": ctx.username,
+            "seed_name": ctx.seed_name,
+            "misplaced": [i for i in ctx.misplaced_items]
         }
     )
 
@@ -282,24 +294,6 @@ async def psx_sync_task(ctx: SotnContext):
                             logger.info(msg, extra={'compact_gui': True})
                             ctx.gui_error('Error', msg)
                             error_status = CONNECTION_RESET_STATUS
-                        if ctx.seed_name and bytes(ctx.seed_name, encoding='ASCII') != ctx.seed_name_from_data:
-                            msg = "The server is running a different multiworld than your client is. " \
-                                  "(invalid seed_name)"
-                            logger.info(msg, extra={'compact_gui': True})
-                            ctx.gui_error('Error', msg)
-                            error_status = CONNECTION_RESET_STATUS
-                        if 'romhash' in data_decoded:
-                            if ctx.rom_hash.upper() != data_decoded['romhash'].upper():
-                                msg = "The rom hash does not match the client rom hash data"
-                                print("got " + data_decoded['romhash'])
-                                print("expected " + str(ctx.rom_hash))
-                                logger.info(msg, extra={'compact_gui': True})
-                                ctx.gui_error('Error', msg)
-                                error_status = CONNECTION_RESET_STATUS
-                                if ctx.auth is None:
-                                    ctx.auth = ctx.player_names
-                            if ctx.awaiting_rom:
-                                await ctx.server_auth(False)
                         if 'locations' in data_decoded and ctx.game and ctx.psx_status == CONNECTION_CONNECTED_STATUS \
                                 and not error_status and ctx.auth:
                             # Not just a keep alive ping, parse
@@ -372,26 +366,6 @@ async def psx_sync_task(ctx: SotnContext):
         except CancelledError:
             pass
     print("exiting PSX sync task")
-
-
-def send_checked_locations_if_needed(sotn_context):
-    if not sotn_context.checked_locations_sent and sotn_context.checked_locations is not None:
-        if len(sotn_context.checked_locations) == 0:
-            return
-        checked_short_ids = []
-        for location in sotn_context.checked_locations:
-            checked_short_ids.append(location - base_location_id)
-        print("Sending checked locations")
-        payload = json.dumps(
-            {
-                "checked_locations": checked_short_ids,
-            }
-        )
-        msg = payload.encode()
-        (reader, writer) = sotn_context.psx_streams
-        writer.write(msg)
-        writer.write(b'\n')
-        sotn_context.checked_locations_sent = True
 
 
 if __name__ == '__main__':
