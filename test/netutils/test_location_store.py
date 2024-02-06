@@ -86,11 +86,14 @@ class Base:
 
         def test_find_item(self) -> None:
             self.assertEqual(sorted(self.store.find_item(set(), 99)), [])
+            self.assertEqual(sorted(self.store.find_item({7, 8, 9}, 99)), [])
             self.assertEqual(sorted(self.store.find_item({3}, 1)), [])
             self.assertEqual(sorted(self.store.find_item({5}, 99)), [])
             self.assertEqual(sorted(self.store.find_item({3}, 99)),
                              [(4, 9, 99, 3, 0)])
             self.assertEqual(sorted(self.store.find_item({3, 4}, 99)),
+                             [(3, 9, 99, 4, 0), (4, 9, 99, 3, 0)])
+            self.assertEqual(sorted(self.store.find_item({2, 3, 4, 5}, 99)),
                              [(3, 9, 99, 4, 0), (4, 9, 99, 3, 0)])
 
         def test_get_for_player(self) -> None:
