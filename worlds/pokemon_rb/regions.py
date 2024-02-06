@@ -1905,7 +1905,7 @@ def create_regions(self):
                 name="Town Map Fly Location")
 
     cache = multiworld.regions.entrance_cache[self.player].copy()
-    if multiworld.badgesanity[player]:
+    if multiworld.badgesanity[player] or multiworld.door_shuffle[player] in ("off", "simple"):
         badges = None
         badge_locs = None
     else:
@@ -1919,9 +1919,9 @@ def create_regions(self):
         ]]
     for attempt in range(10):
         try:
-            door_shuffle(self, multiworld, player, badges.copy(), badge_locs)
+            door_shuffle(self, multiworld, player, badges, badge_locs)
         except DoorShuffleException as e:
-            if True: #attempt == 9: #TODO
+            if attempt == 9:
                 raise e
             for region in self.multiworld.get_regions(player):
                 for entrance in reversed(region.exits):
@@ -2354,57 +2354,77 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     dc_destinations += rock_tunnel_entrances
                 rock_tunnel_entrances = None
 
+            multiworld.random.shuffle(entrances)
+
+            if multiworld.door_shuffle[player] == "decoupled":
+                multiworld.random.shuffle(dc_destinations)
+            else:
+                entrances.sort(key=lambda e: e.name not in entrance_only)
+
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
                                    entrance.parent_region.can_reach(state)]
             if not reachable_entrances:
                 raise DoorShuffleException("Ran out of reachable entrances in Pokemon Red and Blue door shuffle")
-            multiworld.random.shuffle(entrances)
+
+            dead_end_cache = {}
+
+            entrance_a = reachable_entrances.pop(0)
+            entrances.remove(entrance_a)
+
+            entrances.sort(key=lambda e: e in reachable_entrances)
+
+            is_outdoor_map = outdoor_map(entrance_a.parent_region.name)
 
             if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
-                entrances.sort(key=lambda e: e.name not in entrance_only)
 
-                dead_end_cache = {}
-
-                # entrances list is empty while it's being sorted, must pass a copy to iterate through
-                entrances_copy = entrances.copy()
-
+                find_dead_end = False
                 if (len(reachable_entrances) > (1 if multiworld.door_shuffle[player] in ("insanity", "decoupled") else 8)
                         and len(entrances) <= (starting_entrances - 3)):
-                    if multiworld.door_shuffle[player] == "decoupled":
-                        entrances.sort(key=lambda e: e not in reachable_entrances)
-                        # don't bother checking if it's a dead end if it's reachable
-                        dc_destinations.sort(key=lambda e: e not in reachable_entrances
-                                             and dead_end(entrances_copy, e, dead_end_cache))
-                    else:
-                        entrances.sort(key=lambda e: 0 if e in reachable_entrances else 2 if
-                                       dead_end(entrances_copy, e, dead_end_cache) else 1)
-                else:
-                    if multiworld.door_shuffle[player] == "decoupled":
-                        entrances.sort(key=lambda e: e not in reachable_entrances)
-                        dc_destinations.sort(key=lambda e: 0 if e not in reachable_entrances else 1 if
-                                             dead_end(entrances_copy, e, dead_end_cache) else 2)
-                    else:
-                        entrances.sort(key=lambda e: 0 if e in reachable_entrances else 1 if
-                                       dead_end(entrances_copy, e, dead_end_cache) else 2)
-                if multiworld.door_shuffle[player] == "full":
-                    outdoor = outdoor_map(entrances[0].parent_region.name)
-                    if len(entrances) < 48 and not outdoor:
-                        # Try to prevent a situation where the only remaining outdoor entrances are ones that cannot be
-                        # reached except by connecting directly to it.
-                        entrances.sort(key=lambda e: e.name in unreachable_outdoor_entrances)
+                    find_dead_end = True
 
-                    entrances.sort(key=lambda e: outdoor_map(e.parent_region.name) != outdoor)
-                if entrances[0] not in reachable_entrances:
-                    raise DoorShuffleException(
-                        "Ran out of valid reachable entrances in Pokemon Red and Blue door shuffle")
-            if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
-                    <= (starting_entrances - 3)):
-                entrance_b = dc_destinations.pop()
-            elif multiworld.door_shuffle[player] == "decoupled":
-                entrance_b = dc_destinations.pop(0)
+                if multiworld.door_shuffle[player] == "full" and len(entrances) < 48 and not is_outdoor_map:
+                    # Try to prevent a situation where the only remaining outdoor entrances are ones that cannot be
+                    # reached except by connecting directly to it.
+                    entrances.sort(key=lambda e: e.name not in unreachable_outdoor_entrances)
+                    if entrances[0].name in unreachable_outdoor_entrances and len([entrance for entrance
+                            in reachable_entrances if not outdoor_map(entrance.parent_region.name)]) > 1:
+                        find_dead_end = True
+
+                if multiworld.door_shuffle[player] == "decoupled":
+                    destinations = dc_destinations
+                elif multiworld.door_shuffle[player] == "full":
+                    destinations = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name) is
+                                    not is_outdoor_map]
+                    if not destinations:
+                        raise DoorShuffleException("Ran out of connectable destinations in Pokemon Red and Blue door shuffle")
+                else:
+                    destinations = entrances
+
+                for entrance in destinations:
+                    if entrance != entrance_a and dead_end(entrances, entrance, dead_end_cache) is find_dead_end:
+                        entrance_b = entrance
+                        destinations.remove(entrance)
+                        break
+                else:
+                    entrance_b = destinations.pop(0)
+
+                if multiworld.door_shuffle[player] == "full":
+                    # on Full, the destinations variable does not point to the entrances list, so we need to remove
+                    # from that list here.
+                    entrances.remove(entrance_b)
             else:
-                entrance_b = entrances.pop()
-            entrance_a = entrances.pop(0)
+                if multiworld.door_shuffle[player] == "decoupled":
+                    entrance_b = dc_destinations.pop(0)
+                else:
+                    entrance_b = entrances.pop(0)
+            # if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
+            #         <= (starting_entrances - 3)):
+            #     entrance_b = dc_destinations.pop()
+            # elif multiworld.door_shuffle[player] == "decoupled":
+            #     entrance_b = dc_destinations.pop(0)
+            # else:
+            #     entrance_b = entrances.pop()
+            # entrance_a = entrances.pop(0)
             entrance_a.connect(entrance_b)
             if multiworld.door_shuffle[player] != "decoupled":
                 entrance_b.connect(entrance_a)
@@ -2479,7 +2499,8 @@ class PokemonRBWarp(Entrance):
                  or "Rocket Hideout" in self.parent_region.name)
                 and not state.has("Lift Key", self.player)):
             return False
-        if "Rock Tunnel" in self.parent_region.name or "Rock Tunnel" in self.connected_region.name:
+        if ("Rock Tunnel 1F" in self.parent_region.name or "Rock Tunnel B1F" in self.parent_region.name
+                or "Rock Tunnel 1F" in self.connected_region.name or "Rock Tunnel B1F" in self.connected_region.name):
             return logic.rock_tunnel(state, self.player)
         return True
 
