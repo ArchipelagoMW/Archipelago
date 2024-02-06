@@ -1,4 +1,5 @@
 # Tests for _speedups.LocationStore and NetUtils._LocationStore
+import os
 import typing
 import unittest
 import warnings
@@ -6,6 +7,8 @@ from NetUtils import LocationStore, _LocationStore
 
 State = typing.Dict[typing.Tuple[int, int], typing.Set[int]]
 RawLocations = typing.Dict[int, typing.Dict[int, typing.Tuple[int, int, int]]]
+
+ci = bool(os.environ.get("CI"))  # always set in GitHub actions
 
 sample_data: RawLocations = {
     1: {
@@ -199,18 +202,20 @@ class TestPurePythonLocationStoreConstructor(Base.TestLocationStoreConstructor):
         super().setUp()
 
 
-@unittest.skipIf(LocationStore is _LocationStore, "_speedups not available")
+@unittest.skipIf(LocationStore is _LocationStore and not ci, "_speedups not available")
 class TestSpeedupsLocationStore(Base.TestLocationStore):
     """Run base method tests for cython implementation."""
     def setUp(self) -> None:
+        self.assertFalse(LocationStore is _LocationStore, "Failed to load _speedups")
         self.store = LocationStore(sample_data)
         super().setUp()
 
 
-@unittest.skipIf(LocationStore is _LocationStore, "_speedups not available")
+@unittest.skipIf(LocationStore is _LocationStore and not ci, "_speedups not available")
 class TestSpeedupsLocationStoreConstructor(Base.TestLocationStoreConstructor):
     """Run base constructor tests and tests the additional constraints for cython implementation."""
     def setUp(self) -> None:
+        self.assertFalse(LocationStore is _LocationStore, "Failed to load _speedups")
         self.type = LocationStore
         super().setUp()
 
