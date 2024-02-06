@@ -27,6 +27,9 @@ sample_data: RawLocations = {
     3: {
         9: (99, 4, 0),
     },
+    5: {
+        9: (99, 5, 0),
+    }
 }
 
 empty_state: State = {
@@ -48,14 +51,14 @@ class Base:
         store: typing.Union[LocationStore, _LocationStore]
 
         def test_len(self) -> None:
-            self.assertEqual(len(self.store), 4)
+            self.assertEqual(len(self.store), 5)
             self.assertEqual(len(self.store[1]), 3)
 
         def test_key_error(self) -> None:
             with self.assertRaises(KeyError):
                 _ = self.store[0]
             with self.assertRaises(KeyError):
-                _ = self.store[5]
+                _ = self.store[6]
             locations = self.store[1]  # no Exception
             with self.assertRaises(KeyError):
                 _ = locations[7]
@@ -74,7 +77,7 @@ class Base:
             self.assertEqual(self.store[1].get(10, (None, None, None)), (None, None, None))
 
         def test_iter(self) -> None:
-            self.assertEqual(sorted(self.store), [1, 2, 3, 4])
+            self.assertEqual(sorted(self.store), [1, 2, 3, 4, 5])
             self.assertEqual(len(self.store), len(sample_data))
             self.assertEqual(list(self.store[1]), [11, 12, 13])
             self.assertEqual(len(self.store[1]), len(sample_data[1]))
@@ -88,16 +91,26 @@ class Base:
             self.assertEqual(sorted(self.store[1].items())[0][1], self.store[1][11])
 
         def test_find_item(self) -> None:
+            # empty player set
             self.assertEqual(sorted(self.store.find_item(set(), 99)), [])
+            # no such player, single
+            self.assertEqual(sorted(self.store.find_item({6}, 99)), [])
+            # no such player, set
             self.assertEqual(sorted(self.store.find_item({7, 8, 9}, 99)), [])
+            # no such item
             self.assertEqual(sorted(self.store.find_item({3}, 1)), [])
-            self.assertEqual(sorted(self.store.find_item({5}, 99)), [])
+            # valid matches
             self.assertEqual(sorted(self.store.find_item({3}, 99)),
                              [(4, 9, 99, 3, 0)])
             self.assertEqual(sorted(self.store.find_item({3, 4}, 99)),
                              [(3, 9, 99, 4, 0), (4, 9, 99, 3, 0)])
-            self.assertEqual(sorted(self.store.find_item({2, 3, 4, 5}, 99)),
+            self.assertEqual(sorted(self.store.find_item({2, 3, 4}, 99)),
                              [(3, 9, 99, 4, 0), (4, 9, 99, 3, 0)])
+            # test hash collision in set
+            self.assertEqual(sorted(self.store.find_item({3, 5}, 99)),
+                             [(4, 9, 99, 3, 0), (5, 9, 99, 5, 0)])
+            self.assertEqual(sorted(self.store.find_item(set(range(2048)), 13)),
+                             [(1, 13, 13, 1, 0)])
 
         def test_get_for_player(self) -> None:
             self.assertEqual(self.store.get_for_player(3), {4: {9}})
