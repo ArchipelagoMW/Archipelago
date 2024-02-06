@@ -19,7 +19,9 @@ prompt where you can read information about your run and write any command to in
 
 This client has only been tested with the Official Steam version of the game at version 1.15. It does not matter which DLCs are installed. However, you will have to downpatch your Dark Souls III installation from current patch.
 
-## Downpatching Dark Souls III
+## Installation
+### Windows
+#### Downpatching Dark Souls III
 
 To downpatch DS3 for use with Archipelago, use the following instructions from the speedsouls wiki database. 
 
@@ -36,10 +38,17 @@ To downpatch DS3 for use with Archipelago, use the following instructions from t
 11. If you did all these steps correctly, you should be able to confirm your game version in the upper left corner after launching Dark Souls III.
 
 
-## Installing the Archipelago mod
+#### Installing the Archipelago mod
 
 Get the dinput8.dll from the [Dark Souls III AP Client](https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/releases) and 
 add it at the root folder of your game (e.g. "SteamLibrary\steamapps\common\DARK SOULS III\Game")
+
+### Linux
+Installation on Linux is a fair bit easier! (Note that you do need to have DS3 installed for this)  
+* Set the game to "Only update this game when I launch it"
+* Run `download_depot 374320 374321 4471176929659548333` in the console tab of `steam -console`
+* Move the downloaded .exe and the dinput8.dll into your steam library directory, under `[...]/common/DARK\ SOULS\ III/Game`
+* Set the launch options to `WINEDLLOVERRIDES="dinput8=n,b" %command%`  
 
 ## Joining a MultiWorld Game
 
