@@ -1,9 +1,10 @@
 import logging
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
 from Utils import output_path
+from NetUtils import NetworkItem
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
@@ -350,9 +351,10 @@ def generate_output(world: MessengerWorld, output_directory: str) -> None:
         out_path = out_path
     import orjson
     data = {
+        "name": world.multiworld.get_player_name(world.player),
         "slot_data": world.fill_slot_data(),
-        "loc_data": {loc.address: {loc.item.code: loc.item.name} for loc in world.multiworld.get_filled_locations()
-                     if loc.address},
+        "loc_data": {loc.address: [loc.item.code, loc.address, loc.player, loc.item.flags]
+                     for loc in world.multiworld.get_filled_locations() if loc.address},
     }
 
     output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
