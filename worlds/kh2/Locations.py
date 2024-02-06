@@ -1356,5 +1356,5 @@ exclusion_table = {
 location_groups: typing.Dict[str, list]
 location_groups = {
     Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
-    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs
+    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and "Event" not in Region_Locs[0]
 }
