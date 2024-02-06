@@ -353,7 +353,7 @@ def generate_output(world: MessengerWorld, output_directory: str) -> None:
     data = {
         "name": world.multiworld.get_player_name(world.player),
         "slot_data": world.fill_slot_data(),
-        "loc_data": {loc.address: [loc.item.code, loc.address, loc.player, loc.item.flags]
+        "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
                      for loc in world.multiworld.get_filled_locations() if loc.address},
     }
 
