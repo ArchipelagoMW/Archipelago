@@ -5,6 +5,10 @@
 The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
 configuration file.
 
+## Is a tracker available for this game?
+
+Yes! You can download the latest PopTracker pack for Zork Grand Inquisitor [here](https://github.com/SerpentAI/ZorkGrandInquisitorAPTracker/releases/latest).
+
 ## What does randomization do to this game?
 
 A majority of inventory items you can normally pick up are completely removed from the game (e.g. the lantern won't be 
@@ -12,17 +16,17 @@ in the crate, the mead won't be at the fish market, etc.). Instead, these items 
 This means that you can expect to access areas and be in a position to solve certain puzzles in a completely different 
 order than you normally would.
 
-Subway and teleporter destinations are initially locked and need to be unlocked by receiving the corresponding item in 
-the multiworld. This alone enables creative routing in a game that would otherwise be rather linear. The Crossroads 
-destination is always unlocked for both the subway and teleporter to prevent softlocks.
+Subway, teleporter and totemizer destinations are initially locked and need to be unlocked by receiving the 
+corresponding item in the multiworld. This alone enables creative routing in a game that would otherwise be rather 
+linear. The Crossroads destination is always unlocked for both the subway and teleporter to prevent softlocks. Until you
+receive your first totemizer destination, it will be locked to Newark, New Jersey. 
 
-Inventory items necessary to complete time tunnels are revealed (and can be picked up) instead of directly inserted into
-the player's inventory. This is to prevent issues because they are only meant to be held by totemized characters.
+Important hotspots are also randomized. This means that you will be unable to interact with certain objects until you 
+receive the corresponding item in the multiworld. This can be a bit confusing at first, but it adds depth to the
+randomization and makes the game more interesting to play.
 
-The blank spell scroll crate in the Spell Lab has been locked and requires an item to open it.
-
-As long as the rope is still attached to the well, you can travel back to the surface without dying by looking inside
-the bucket.
+You can travel back to the surface without dying by looking inside the bucket. This will work as long as the rope is
+still attached to the well.
 
 ## What item types are distributed in the multiworld?
 
@@ -32,8 +36,8 @@ the bucket.
 - Totems
 - Subway destinations
 - Teleporter destinations
-- Time tunnel item reveals (e.g. Playing cards in Past Port Foozle, Torches and Grue Eggs in White House, etc.)
-- Spell Lab blank spell scroll crate unlock
+- Totemizer destinations
+- Hotspots
 
 ## When the player receives an item, what happens?
 
@@ -43,14 +47,19 @@ the bucket.
 - **Totems**: Appears on the inventory screen.
 - **Subway destinations**: The destination button on the subway map becomes functional.
 - **Teleporter destinations**: The destination can show up on the teleporter screen.
-- **Time tunnel item reveals**: All items inside the time tunnel are revealed at once and can be picked up.
-- **Spell Lab blank spell scroll crate unlock**: The crate is unlocked and blank scrolls can be picked up.
+- **Totemizer destinations**: The destination button on the panel becomes functional.
+- **Hotspots**: The hotspot becomes interactable.
 
 ## What is considered a location check in Zork Grand Inquisitor?
 
 - Solving puzzles
 - Accessing certain areas for the first time
+- Triggering certain interactions, even if they aren't puzzles per se
 - Dying in unique ways (Optional; Deathsanity option)
+
+## The location check names are fun but don't always convey well what's needed to unlock them. Is there a guide?
+
+Yes! You can find a complete guide for the location checks [here](https://gist.github.com/nbrochu/f7bed7a1fef4e2beb67ad6ddbf18b970).
 
 ## What is the victory condition?
 
@@ -59,21 +68,30 @@ Victory is achieved when the 3 artifacts of magic are retrieved and placed insid
 ## Can I use the save system without a problem?
 
 Absolutely! The save system is fully supported (and its use is in fact strongly encouraged!). You can save and load your 
-game as you normally would and the client will automatically sync your items with what you should have in that game 
-state.
+game as you normally would and the client will automatically sync your items and hotspots with what you should have in 
+that game state. 
+
+Depending on the way your game unfolds, it's possible that a few location checks may become missable. This is a great 
+scenario to leverage the save system in. Just get in the habit of saving when you are about do something irreversible so
+you can always go back to a previous state if you need to.
 
 ## Unique Local Commands
 The following commands are only available when using the Zork Grand Inquisitor Client to play the game with Archipelago.
 
 - `/zork` Attempts to attach to a running instance of Zork Grand Inquisitor. If successful, the client will then be able 
    to read and control the state of the game.
+- `/brog` Lists received items for Brog.
+- `/griff` Lists received items for Griff.
+- `/lucy` Lists received items for Lucy.
+- `/hotspots` Lists received hotspots.
 
 ## Known issues
 
-- Puzzles that yield an inventory item on the same screen when solved (fairly uncommon) will sometimes show that 
-  inventory item even though it can't be picked up or interacted with. This is just a visual glitch. It happens because 
-  even though the game state says the item isn't there, the screen isn't redrawn after the puzzle is solved.
-- Time tunnel items will keep reappearing after you pick them up when the screen is redrawn. Mildly annoying, but 
-  doesn't affect gameplay at all. Just don't pick them up again.
+- You will get a second rope right after using GLORF (one in your inventory and one on your cursor). This is a harmless
+  side effect that will go away after you store it in your inventory as duplicates are actively removed.
+- After climbing up to the Monastery for the first time, a rope will forever remain in place in the vent. When you come
+  back to the Monastery, you will be able to climb up without needing to combine the sword and rope again. However, when
+  arriving at the top, you will receive a duplicate sword on a rope. This is a harmless side effect that will go away
+  after you store it in your inventory as duplicates are actively removed.
 - Since the client is reading and manipulating the game's memory, rare game crashes can happen. If you encounter one, 
   simply restart the game, load your latest save and use the `/zork` command again in the client. Nothing will be lost.
