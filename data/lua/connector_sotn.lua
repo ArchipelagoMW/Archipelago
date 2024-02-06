@@ -54,7 +54,11 @@ local dracula_dead = false
 local dracula_timer = 0
 local just_died = false
 local first_connect = true
+local got_data = true
 local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard / 20 just died
+
+local player_name = ""
+local seed = ""
 
 local STATE_OK = "Ok"
 local STATE_TENTATIVELY_CONNECTED = "Tentatively Connected"
@@ -68,14 +72,23 @@ local MsgReceived = {}
 local last_item_processed = 1
 local last_processed_read = 1024
 local start_item_drawing = 0
+local misplaced_drawing = 0
 local delay_timer = 0
 local checked_locations = {}
 local all_location_table = {}
 local bosses = {}
-local expected_inventory = {}
-local expected_relics = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
-local life_vessels = 0
-local heart_vessels = 0
+local misplaced_items = {}
+local misplaced_read = {}
+local last_misplaced_save = 0
+local last_misplaced_processed = 0
+local item1 = ""
+local item2 = ""
+local item3 = ""
+local item4 = ""
+local m_item1 = ""
+local m_item2 = ""
+local m_item3 = ""
+local m_item4 = ""
 
 local prevstate = ""
 local curstate =  STATE_UNINITIALIZED
@@ -85,6 +98,7 @@ local frame = 0
 -- TODO: I guess there is a bug when the client try to send an item with a pause screen active
 -- Display msg had some issues when items are sent on misplaced locations
 -- Looks like there is a bug when granting a item and you have one equipped
+-- While drawing the misplaced received. grant misplaced stop working
 
 function getCurrZone()
 	local z = mainmemory.read_u16_le(0x180000)
@@ -101,26 +115,30 @@ end
 
 function checkVictory(f)
 	if dracula_timer == 0 then
-		console.log("Dracula timer: " .. f)
 		dracula_timer = f
 	end
 	if dracula_timer > 0 and f - dracula_timer > 500 then -- Shaft/Dracula share hp. Give some time to Dracula HP is loaded on memory
 		local cur_hp = mainmemory.read_u16_le(0x076ed6)
-		console.log("Dracula hp: " .. cur_hp)
 		if cur_hp == 0 or cur_hp > 60000 then
-			console.log("Dracula dead: " .. cur_hp)
 			dracula_dead = true
 		end
 	end
 end
 
 function grant_item_byid(num_id)
-	if num_id == nil then console.log("Error num_id " .. num_id) end
+	if num_id == nil then
+		console.log("Error num_id is nil")
+		return
+	end
 	size = table.getn(allItems)
-	local address, itemqty = 0, 0
-	local itemid = num_id
+	local address = 0
+	local itemqty = 0
+	local itemid = 0
+	if type(num_id) == "string" then itemid = tonumber(num_id)
+	else itemid = num_id end
+
 	for i = 1, size, 3 do
-		if allItems[i] == num_id then
+		if allItems[i] == itemid then
 			address = allItems[i+2]
 			name = allItems[i+1]
 			break
@@ -148,10 +166,10 @@ function grant_item_byid(num_id)
 			if itemqty == 1 then
 				organize_inventory(itemid)
 			end
-		mainmemory.write_u8(address, itemqty)
+			mainmemory.write_u8(address, itemqty)
 		end
 	else
-		if item_id ~= nil then console.log("Item " .. num_id .. " not found!")
+		if itemid ~= nil then console.log("Item " .. num_id .. " not found!")
 		else console.log("Item nil not found!") end
 	end
 	return name
@@ -193,7 +211,6 @@ function organize_inventory(item_id)
 		address = start_address + i
 		local_byte = mainmemory.read_u8(address)
 		if local_byte == free_byte then
-			console.log("Item: " .. item_id .. " Free: " .. free_byte .. " Change: " .. start_address + (item_id - item_offset) + 1)
 			mainmemory.write_u8(address, item_id - offset)
 			mainmemory.write_u8(start_address + (item_id - item_offset), local_byte)
 			break
@@ -203,11 +220,11 @@ function organize_inventory(item_id)
 end
 
 function on_loadstate()
-	-- find_last_location_checked()
 	all_location_table = checkAllLocations()
 	first_connect = false
 	just_died = false
 	dracula_timer = 0
+	console.log("Load stated. TODO")
 end
 
 function check_death()
@@ -223,24 +240,47 @@ function processBlock(block)
     end
     local block_identified = 0
     local msgBlock = block['messages']
-    if msgBlock ~= nil then
+    if msgBlock ~= nil and next(msgBlock) ~= nil then
         block_identified = 1
         for i, v in pairs(msgBlock) do
 			table.insert(MsgReceived, v)
         end
     end
     local itemsBlock = block["items"]
-    if itemsBlock ~= nil then
+    if itemsBlock ~= nil and next(itemsBlock) ~= nil then
         block_identified = 1
 	    ItemsReceived = itemsBlock
     end
 	local checkedLocationsBlock = block["checked_locations"]
-	if checkedLocationsBlock ~= nil then
+	if checkedLocationsBlock ~= nil and next(checkedLocationsBlock) ~= nil then
         block_identified = 1
 		for i, v in pairs(checkedLocationsBlock) do
 			table.insert(checked_locations, v)
 		end
     end
+	local misplacedBlock = block["misplaced"]
+	if misplacedBlock ~= nil and next(misplacedBlock) ~= nil then
+		block_identified = 1
+		local item = 0
+		local item_exist = false
+		-- We received an item. Check if the last one on misplaced_items is the same and add it.
+		if misplacedBlock[#misplacedBlock] ~= misplaced_items[#misplaced_items] then
+			local received = tonumber(misplacedBlock[#misplacedBlock])
+			table.insert(misplaced_items, received)
+			console.log("New misplaced item received: " .. received)
+		end
+	end
+	local playerBlock = block["player"]
+	if playerBlock ~= nil then
+		block_identified = 1
+		player_name = tostring(playerBlock)
+	end
+	local seedBlock = block["seed_name"]
+	if seedBlock ~= nil then
+		block_identified = 1
+		seed = tostring(seedBlock)
+	end
+
     if( block_identified == 0 ) then
         print("unidentified block")
         print(block)
@@ -474,7 +514,7 @@ function checkNO0()
 	checks["NO0 - Attack potion(Jewel)"] = bit.check(flag, 11)
 	checks["NO0 - Hammer(Spirit)"] = bit.check(flag, 12)
 	checks["NO0 - Str. potion"] = bit.check(flag, 13)
-	checks["NO0 - Holy glasses"] = bit.check(0x03bec4, 0)
+	checks["NO0 - Holy glasses"] = bit.check(mainmemory.read_u8(0x03bec4), 0)
 	if cur_zone == "NO0" then
 		local room = mainmemory.read_u16_le(0x1375bc)
 		if room == 0x27f4 then
@@ -563,6 +603,7 @@ end
 function checkNO3()
 	local checks = {}
 	local flag = mainmemory.read_u16_le(0x03bef2)
+
 	checks["NO3 - Heart Vessel (Above Death)"] = bit.check(flag, 0)
 	checks["NO3 - Life Vessel (Bellow shield potion)"] = bit.check(flag, 1)
 	checks["NO3 - Life Apple (Hidden room)"] = bit.check(flag, 2)
@@ -673,6 +714,7 @@ function checkNZ0()
 	checks["NZ0 - Basilard"] = bit.check(flag, 9)
 	checks["NZ0 - Potion"] = bit.check(flag, 10)
 	if mainmemory.read_u16_le(0x03ca40) ~= 0 then
+		-- That doens't trigger Boss Token
 		checks["NZ0 - Slogra and Gaibon kill"] = true
 		bosses["Slogra and Gaibon"] = true
 	else
@@ -1306,16 +1348,24 @@ function process_items(f)
 	local table_size = table.getn(ItemsReceived)
 	if start_item_drawing == 0 and table_size >= last_item_processed then
 		start_item_drawing = f
+		item1 = grant_item_byid(ItemsReceived[last_item_processed])
+		if last_item_processed + 1 <= table_size then item2 = grant_item_byid(ItemsReceived[last_item_processed + 1]) end
+		if last_item_processed + 2 <= table_size then item3 = grant_item_byid(ItemsReceived[last_item_processed + 2]) end
+		if last_item_processed + 3 <= table_size then item4 = grant_item_byid(ItemsReceived[last_item_processed + 3]) end
 	end
 	if start_item_drawing ~= 0 then
 		if f - start_item_drawing < 900 then
-			gui.drawText(0, 0, grant_item_byid(ItemsReceived[last_item_processed]), "red")
-			if last_item_processed + 1 <= table_size then gui.drawText(0, 10, grant_item_byid(ItemsReceived[last_item_processed + 1]), "blue") end
-			if last_item_processed + 2 <= table_size then gui.drawText(0, 20, grant_item_byid(ItemsReceived[last_item_processed + 2]), "red") end
-			if last_item_processed + 3 <= table_size then gui.drawText(0, 30, grant_item_byid(ItemsReceived[last_item_processed + 3]), "blue") end
+			gui.drawText(0, 0, item1, "red")
+			if item2 ~= "" then gui.drawText(0, 10, item2, "blue") end
+			if item3 ~= "" then gui.drawText(0, 20, item3, "red") end
+			if item4 ~= "" then gui.drawText(0, 30, item4, "blue") end
 		else
 			gui.clearGraphics()
 			start_item_drawing = 0
+			item1 = ""
+			item2 = ""
+			item3 = ""
+			item4 = ""
 			if table_size - last_item_processed <= 4 then
 				last_item_processed = last_item_processed + (table_size - last_item_processed) + 1
 			else
@@ -1399,6 +1449,140 @@ function write_last_processed(l_processed)
 	mainmemory.write_u8(0x03befe, t_t)
 end
 
+function file_exists()
+	if seed == "" or player_name == "" then return end
+	local filename = seed .. "_" .. player_name .. ".txt"
+	local f = io.open(filename, "r")
+	if f ~= nil then
+		for line in io.lines(filename) do
+			print("Added line: " .. line)
+			table.insert(misplaced_read, line)
+		end
+		io.close(f)
+		last_misplaced_save = table.getn(misplaced_read)
+		console.log("Save file found on file_exists!")
+		return true
+	else
+		return false
+	end
+end
+
+function handle_misplaced(f)
+	if seed == "" or player_name == "" then return end
+	local filename = seed .. "_" .. player_name .. ".txt"
+	local added = 0
+
+	if next(misplaced_read) == nil then
+		local file, err = io.open(filename, "w")
+		for k, v in ipairs(misplaced_items) do
+			print("Added: ", v)
+			file:write(v, "\n")
+		end
+		last_misplaced_save = table.getn(misplaced_items)
+		file:close()
+	else
+		-- There are a save file
+		local size = table.getn(misplaced_items)
+		local size_r = table.getn(misplaced_read)
+
+		if size > size_r then
+			-- We have more items than saved on file. Update
+			local file, err = io.open(filename, "a")
+
+			for i = last_misplaced_save + 1, size, 1 do
+				console.log("Appended: ", misplaced_items[i])
+				file:write(misplaced_items[i], "\n")
+				added = added + 1
+			end
+			last_misplaced_save = last_misplaced_save + added
+			file:close()
+		end
+	end
+
+	process_misplaced(f)
+end
+
+function process_misplaced(f)
+	-- Misplaced items doesn't persist thru connections on the server so we handle it separately and for now we assume the player didn't die or loadstate
+	-- I have no ideia how to handle those. So far we gonna give whaever is on the save file everytime this function is called
+	-- Graphics might be clear before timer
+	local table_size = table.getn(misplaced_items)
+	local table_size_r = table.getn(misplaced_read)
+
+	if table_size == 0 and table_size_r > 0 then
+		-- We have misplaced_read but no misplaced_items Due fresh connect? Add to the table
+		for k, v in ipairs(misplaced_read) do
+			print("Added misplaced: " .. v)
+			table.insert(misplaced_items, v)
+		end
+		table_size = table.getn(misplaced_items)
+		-- Try to find a relic received on misplaced table
+		local ret_pos = check_for_misplaced_relic()
+		if ret_pos ~= 0 then last_misplaced_processed = ret_pos + 1 end
+	end
+
+	if misplaced_drawing == 0 and table_size >= last_misplaced_processed then
+		misplaced_drawing = f
+		m_item1 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed)])
+		if last_misplaced_processed + 1 <= table_size then m_item2 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed) + 1]) end
+		if last_misplaced_processed + 2 <= table_size then m_item3 = grant_item_byid(misplaced_items[last_misplaced_processed + 2]) end
+		if last_misplaced_processed + 3 <= table_size then m_item4 = grant_item_byid(misplaced_items[last_misplaced_processed + 3]) end
+	end
+	if misplaced_drawing ~= 0 then
+		if f - misplaced_drawing < 900 then
+			gui.drawText(0, 40, m_item1, "red")
+			if m_item2 ~= "" then gui.drawText(0, 50, m_item2, "red") end
+			if m_item3 ~= "" then gui.drawText(0, 60, m_item3, "red") end
+			if m_item4 ~= "" then gui.drawText(0, 70, m_item4, "red") end
+		else
+			gui.clearGraphics()
+			misplaced_drawing = 0
+			m_item1 = ""
+			m_item2 = ""
+			m_item3 = ""
+			m_item4 = ""
+			if table_size - last_misplaced_processed <= 4 then
+				last_misplaced_processed = last_misplaced_processed + (table_size - last_misplaced_processed) + 1
+			else
+				last_misplaced_processed = last_misplaced_processed + 4
+			end
+		end
+	end
+end
+
+function check_for_misplaced_relic()
+	for i = #misplaced_items, 1, -1 do
+		local item = tonumber(misplaced_items[i])
+		if item >= 300 and item <= 329 then
+			if has_relic(item) then
+				console.log("Found misplaced relic")
+				return i
+			end
+		end
+	end
+	return 0
+end
+
+function has_relic(relic_id)
+	local relic_name
+	local relic_address
+
+	relic_name, relic_address = find_item(relic_id)
+	if mainmemory.read_u8(relic_address) > 0 then return true
+	else return false end
+end
+
+function find_item(item_id)
+	local size = table.getn(allItems)
+	for i = 1, size, 3 do
+		if allItems[i] == item_id then
+			return allItems[i+1], allItems[i+2]
+		end
+	end
+	console.log("Something went wrong!")
+	return 0
+end
+
 function main()
     if not checkBizHawkVersion() then
         return
@@ -1411,7 +1595,6 @@ function main()
     end
 
 	event.onloadstate(on_loadstate)
-	-- create_empty_inventory()
 
     while true do
         frame = frame + 1
@@ -1429,9 +1612,11 @@ function main()
 				gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
 				gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
 				last_processed_read = read_last_processed()
-				gui.drawText(200, 30, read_last_processed())
+				gui.drawText(200, 30, player_name)
+				gui.drawText(200, 40, seed)
 				gui.drawText(300, 0, last_status)
 				gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
+
 
 				if first_connect then
 					console.log("Just connect!")
@@ -1450,6 +1635,12 @@ function main()
 						-- We just connected and already on Alucard. Loaded game?.
 						last_status = 10
 						checkAllLocations()
+						checkBosses()
+						misplaced_items = {}
+						misplaced_read = {}
+						last_misplaced_save = 0
+						last_misplaced_processed = 0
+						file_exists()
 						-- Do we have a last location flag on memory?
 						last_processed_read = read_last_processed()
 						if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
@@ -1466,16 +1657,31 @@ function main()
 					-- Assume 60fps, give 15 seconds to load and Alucard enter the castle
 					if frame - delay_timer >= 900 then
 						last_status = 10
-						-- checkBosses()
+						checkBosses()
+						misplaced_items = {}
+						misplaced_read = {}
+						last_misplaced_save = 0
+						last_misplaced_processed = 0
 						-- fresh game. No item granted yet
 						last_item_processed = 1
+						file_exists()
 					end
 				end
 
 				if last_status == 10 then
 
+					if got_data and seed ~= "" and player_name ~= "" then
+						console.log("Got seed and player names")
+						if got_data then
+							if file_exists() then
+								-- We just started and have misplaced_items give it to player
+								process_misplaced(frame)
+							end
+							got_data = false
+						end
+					end
+
 					if cur_zone == "RBO6" then
-						console.log("Checking victory")
 						checkVictory(frame)
 					end
 
@@ -1483,10 +1689,20 @@ function main()
 						if next(ItemsReceived) ~= nil then
 							process_items(frame)
 						end
+						if next(misplaced_items) ~= nil then
+							handle_misplaced(frame)
+						end
+					end
+
+					if next(misplaced_items) ~= nil then
+						if last_misplaced_save < table.getn(misplaced_items) then
+							handle_misplaced(frame)
+						end
 					end
 
 					if just_died then
 						console.log("We just died. TODO: Deal with items we need to receive again")
+						just_died = false
 					end
 
 					check_death()
