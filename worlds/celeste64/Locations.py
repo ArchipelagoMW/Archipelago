@@ -8,7 +8,7 @@ celeste_64_base_id: int = 0xCA0000
 
 
 class Celeste64Location(Location):
-    game = "Clique"
+    game = "Celeste 64"
 
 
 class Celeste64LocationData(NamedTuple):
