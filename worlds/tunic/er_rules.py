@@ -444,6 +444,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Monastery Entry"])
 
+    regions["Quarry Monastery Entry"].connect(
+        connecting_region=regions["Quarry Back"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Quarry Back"].connect(
+        connecting_region=regions["Quarry Monastery Entry"],
+        rule=lambda state: state.has(laurels, player))
+
     regions["Monastery Rope"].connect(
         connecting_region=regions["Quarry Back"])
 
