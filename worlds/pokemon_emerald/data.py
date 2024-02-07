@@ -928,6 +928,33 @@ def _init() -> None:
             for evolution in species.evolutions:
                 data.species[evolution.species_id].pre_evolution = species.species_id
 
+    # Replace default item for dex entry locations based on evo stage of species
+    evo_stage_to_ball_map = {
+        0: data.constants["ITEM_POKE_BALL"],
+        1: data.constants["ITEM_GREAT_BALL"],
+        2: data.constants["ITEM_ULTRA_BALL"]
+    }
+    for species in data.species:
+        if species is None:
+            continue
+
+        evo_stage = 0
+        pre_evolution = species.pre_evolution
+        while pre_evolution is not None:
+            evo_stage += 1
+            pre_evolution = data.species[pre_evolution].pre_evolution
+
+        dex_location_name = f"POKEDEX_REWARD_{str(species.national_dex_number).zfill(3)}"
+        data.locations[dex_location_name] = LocationData(
+            data.locations[dex_location_name].name,
+            data.locations[dex_location_name].label,
+            data.locations[dex_location_name].parent_region,
+            evo_stage_to_ball_map[evo_stage],
+            data.locations[dex_location_name].address,
+            data.locations[dex_location_name].flag,
+            data.locations[dex_location_name].tags
+        )
+
     # Create legendary encounter data
     for legendary_encounter_json in extracted_data["legendary_encounters"]:
         data.legendary_encounters.append(MiscPokemonData(
