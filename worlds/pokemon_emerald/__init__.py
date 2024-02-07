@@ -303,7 +303,7 @@ class PokemonEmeraldWorld(World):
         item_locations = [location for location in item_locations if len(filter_tags & location.tags) == 0]
         default_itempool = [self.create_item_by_code(location.default_item_code) for location in item_locations]
 
-        # Take the itempool as is
+        # Take the itempool as-is
         if self.options.item_pool_type == ItemPoolType.option_shuffled:
             self.multiworld.itempool += default_itempool
 
@@ -347,6 +347,7 @@ class PokemonEmeraldWorld(World):
             def refresh_tm_choices() -> None:
                 fill_item_candidates_by_category["TM"] = all_tm_choices.copy()
                 self.random.shuffle(fill_item_candidates_by_category["TM"])
+            refresh_tm_choices()
 
             # Create items
             for item in default_itempool:
