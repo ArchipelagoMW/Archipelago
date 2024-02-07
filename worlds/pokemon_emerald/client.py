@@ -124,6 +124,10 @@ class PokemonEmeraldClient(BizHawkClient):
 
     num_wonder_trade_communications: int
 
+    death_counter: Optional[int]
+    previous_death_link: float
+    ignore_next_death_link: bool
+
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = set()
@@ -136,6 +140,9 @@ class PokemonEmeraldClient(BizHawkClient):
         self.wonder_trade_cooldown = 5000
         self.wonder_trade_cooldown_timer = 0
         self.num_wonder_trade_communications = 0
+        self.death_counter = None
+        self.previous_death_link = 0
+        self.ignore_next_death_link = False
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
@@ -164,6 +171,10 @@ class PokemonEmeraldClient(BizHawkClient):
         ctx.items_handling = 0b001
         ctx.want_slot_data = True
         ctx.watcher_timeout = 0.125
+
+        self.death_counter = None
+        self.previous_death_link = 0
+        self.ignore_next_death_link = False
 
         return True
 
@@ -198,21 +209,59 @@ class PokemonEmeraldClient(BizHawkClient):
             # Checks that the player is in the overworld
             overworld_guard = (data.ram_addresses["gMain"] + 4, (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"), "System Bus")
 
-            # Read save block 1 address
-            read_result = await bizhawk.guarded_read(
+            # Read save block addresses
+            read_result = await bizhawk.read(
                 ctx.bizhawk_ctx,
-                [(data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus")],
-                [overworld_guard]
+                [
+                    (data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus"),
+                    (data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus")
+                ]
             )
-            if read_result is None:  # Not in overworld
-                return
 
-            # Checks that the save block hasn't moved
+            # Checks that the save blocks haven't moved
             save_block_1_address_guard = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
+            save_block_2_address_guard = (data.ram_addresses["gSaveBlock2Ptr"], read_result[1], "System Bus")
 
             save_block_1_address = int.from_bytes(read_result[0], "little")
+            save_block_2_address = int.from_bytes(read_result[1], "little")
 
-            # Handle giving the player items
+            # Death Link
+            if ctx.slot_data.get("death_link", Toggle.option_false) == Toggle.option_true:
+                if "DeathLink" not in ctx.tags:
+                    await ctx.update_death_link(True)
+                    self.previous_death_link = ctx.last_death_link
+
+                read_result = await bizhawk.guarded_read(
+                    ctx.bizhawk_ctx, [
+                        (save_block_1_address + 0x177C + (52 * 4), 4, "System Bus"),           # White out stat
+                        (save_block_2_address + 0xAC, 4, "System Bus"),                        # Encryption key
+                    ],
+                    [save_block_1_address_guard, save_block_2_address_guard]
+                )
+                if read_result is None:  # Save block moved
+                    return
+
+                if self.previous_death_link != ctx.last_death_link:
+                    self.previous_death_link = ctx.last_death_link
+                    if self.ignore_next_death_link:
+                        self.ignore_next_death_link = False
+                    else:
+                        await bizhawk.write(
+                            ctx.bizhawk_ctx,
+                            [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
+                        )
+
+                times_whited_out = int.from_bytes(read_result[0], "little") ^ int.from_bytes(read_result[1], "little")
+
+                if self.death_counter is None:
+                    self.death_counter = times_whited_out
+                elif times_whited_out > self.death_counter:
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
+                                         f"{ctx.player_names[ctx.slot]} whited out!")
+                    self.ignore_next_death_link = True
+                    self.death_counter = times_whited_out
+
+            # Give player items
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
                 [
@@ -257,21 +306,9 @@ class PokemonEmeraldClient(BizHawkClient):
             if read_result is not None:
                 flag_bytes += read_result[0]
 
-            # Read save block 2 address
+            # Read pokedex flags
             pokedex_caught_bytes = bytes(0)
             if ctx.slot_data["dexsanity"] == Toggle.option_true:
-                read_result = await bizhawk.guarded_read(
-                    ctx.bizhawk_ctx,
-                    [(data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus")],
-                    [overworld_guard]
-                )
-                if read_result is None:  # Not in overworld
-                    return
-
-                save_block_2_address_guard = (data.ram_addresses["gSaveBlock2Ptr"], read_result[0], "System Bus")
-
-                save_block_2_address = int.from_bytes(read_result[0], "little")
-
                 # Read pokedex flags
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
