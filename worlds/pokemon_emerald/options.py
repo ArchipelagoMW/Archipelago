@@ -107,9 +107,11 @@ class RandomizeBerryTrees(Toggle):
 
 class Dexsanity(Toggle):
     """
-    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc...).
+    Adding a "caught" pokedex entry gives you an item (catching, evolving, trading, etc.).
 
     Defeating gym leaders provides dex info, allowing you to see where on the map you can catch species you need.
+
+    Each pokedex entry adds a Poke Ball, Great Ball, or Ultra Ball to the pool.
     """
     display_name = "Dexsanity"
 
@@ -117,6 +119,8 @@ class Dexsanity(Toggle):
 class Trainersanity(Toggle):
     """
     Defeating a trainer for the first time gives you an item. Trainers are no longer missable.
+
+    Trainers no longer give you money for winning. Each trainer adds a valuable item (nugget, stardust, etc.) to the pool.
     """
     display_name = "Trainersanity"
 
@@ -127,7 +131,7 @@ class ItemPoolType(Choice):
 
     Shuffled: Item pool consists of shuffled vanilla items
     Diverse Balanced: Item pool consists of random items approximately proportioned
-    according to what they're replacing (i.e. more pokeballs, fewer X items, etc...)
+    according to what they're replacing (i.e. more pokeballs, fewer X items, etc.)
     Diverse: Item pool consists of uniformly random (non-unique) items
     """
     display_name = "Item Pool Type"
@@ -359,7 +363,7 @@ class ForceFullyEvolved(Range):
 
 class RandomizeLegendaryEncounters(Choice):
     """
-    Randomizes legendary encounters (Rayquaza, Regice, Latias, etc...). The roamer will always be Latios during legendary hunts.
+    Randomizes legendary encounters (Rayquaza, Regice, Latias, etc.). The roamer will always be Latios during legendary hunts.
 
     Vanilla: Legendary encounters are unchanged
     Shuffle: Legendary encounters are shuffled between each other
@@ -574,7 +578,7 @@ class ExpModifier(Range):
     100 is default
     50 is half
     200 is double
-    etc...
+    etc.
     """
     display_name = "Exp Modifier"
     range_start = 0
@@ -747,7 +751,7 @@ class RandomizeMusic(Toggle):
 
 class RandomizeFanfares(Toggle):
     """
-    Shuffles fanfares for item pickups, healing at the pokecenter, etc...
+    Shuffles fanfares for item pickups, healing at the pokecenter, etc.
     """
     display_name = "Randomize Fanfares"
 

@@ -36,7 +36,7 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
 
         Each in-game map may have a non-physical Region for encountering wild pokemon in each of the three categories
         land, water, and fishing. Region data defines whether a given region includes places where those encounters can
-        be accessed (i.e. whether the region has tall grass, a river bank, is on water, etc...).
+        be accessed (i.e. whether the region has tall grass, a river bank, is on water, etc.).
 
         These regions are created lazily and dynamically so as not to bother with unused maps.
         """

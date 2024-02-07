@@ -11,7 +11,7 @@ be pretty clear how the data works by taking a quick look through the files. But
 A `Map`, which you will see referenced in `parent_map` attribute in the region JSON, is an id from the source code.
 `Map`s are sets of tiles, encounters, warps, events, and so on. Route 103, Littleroot Town, the Oldale Town Mart, the
 second floor of Devon Corp, and each level of Victory Road are all examples of `Map`s. You transition between `Map`s by
-stepping on a warp (warp pads, doorways, etc...) or walking over a border between `Map`s in the overworld. Some warps
+stepping on a warp (warp pads, doorways, etc.) or walking over a border between `Map`s in the overworld. Some warps
 don't go to a different `Map`.
 
 Regions usually describe physical areas which are subsets of a `Map`. Every `Map` must have one or more defined regions.
