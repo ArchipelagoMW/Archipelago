@@ -32,17 +32,13 @@ class WitnessRegions:
         return _meets_item_requirements(item_requirement, world)
 
     def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: FrozenSet[FrozenSet[str]],
-                            regions_by_name: Dict[str, Region], backwards: bool = False):
+                            regions_by_name: Dict[str, Region]):
         """
         connect two regions and set the corresponding requirement
         """
 
         # Remove any possibilities where being in the target region would be required anyway.
         real_requirement = frozenset({option for option in req if target not in option})
-
-        # There are some connections that should only be done one way. If this is a backwards connection, check for that
-        if backwards:
-            real_requirement = frozenset({option for option in real_requirement if "TrueOneWay" not in option})
 
         # Dissolve any "True" or "TrueOneWay"
         real_requirement = frozenset({option - {"True", "TrueOneWay"} for option in real_requirement})
@@ -57,8 +53,7 @@ class WitnessRegions:
         source_region = regions_by_name[source]
         target_region = regions_by_name[target]
 
-        backwards = " Backwards" if backwards else ""
-        connection_name = source + " to " + target + backwards
+        connection_name = source + " to " + target
 
         connection = Entrance(
             world.player,
