@@ -114,26 +114,25 @@ def get_random_species(
     ]
 
     if species_type is not None:
-        filtered_candidates = [species for species in filtered_candidates if species_type in species.types]
+        type_filtered_candidates = [species for species in filtered_candidates if species_type in species.types]
+
+        if len(type_filtered_candidates) == 0:
+            # Try again but don't filter by type
+            return get_random_species(random, candidates, nearby_bst, None, blacklist)
 
     if nearby_bst is not None:
-        def has_nearby_bst(species: SpeciesData, max_percent_different: int) -> bool:
-            return abs(sum(species.base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100)
-
+        # Sort by difference in bst, then chop off the tail of the list that's more than
+        # 10% different. If that leaves the list empty, increase threshold to 20%, then 30%, etc.
+        filtered_candidates.sort(key=lambda species: abs(sum(species.base_stats) - nearby_bst))
+        cutoff_index = 0
         max_percent_different = 10
-        bst_filtered_candidates = [species for species in filtered_candidates if has_nearby_bst(species, max_percent_different)]
-        while len(bst_filtered_candidates) == 0:
+        while cutoff_index == 0 and max_percent_different < 10000:
+            while cutoff_index < len(filtered_candidates) and abs(sum(filtered_candidates[cutoff_index].base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100):
+                cutoff_index += 1
             max_percent_different += 10
-            bst_filtered_candidates = [
-                species
-                for species in filtered_candidates
-                if has_nearby_bst(species, max_percent_different)
-            ]
+        max_percent_different = 10
 
-        filtered_candidates = bst_filtered_candidates
-
-    if len(filtered_candidates) == 0:
-        return get_random_species(random, candidates, nearby_bst, species_type, LEGENDARY_POKEMON)
+        filtered_candidates = filtered_candidates[:cutoff_index + 1]
 
     return random.choice(filtered_candidates)
 
