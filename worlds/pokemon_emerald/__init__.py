@@ -141,8 +141,8 @@ class PokemonEmeraldWorld(World):
         if self.options.goal == Goal.option_legendary_hunt:
             # Prevent turning off all legendary encounters
             if len(self.options.allowed_legendary_hunt_encounters.value) == 0:
-                raise ValueError("Pokemon Emerald: Player %s (%s) needs to allow at least one legendary encounter "
-                                 "when goal is legendary hunt.")
+                raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) "
+                                 "needs to allow at least one legendary encounter when goal is legendary hunt.")
 
             # Prevent setting the number of required legendaries higher than the number of enabled legendaries
             if self.options.legendary_hunt_count.value > len(self.options.allowed_legendary_hunt_encounters.value):
@@ -153,8 +153,8 @@ class PokemonEmeraldWorld(World):
 
         # Require random wild encounters if dexsanity is enabled
         if self.options.dexsanity and self.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
-            raise ValueError("Pokemon Emerald: Player %s (%s) must not leave wild encounters vanilla if enabling "
-                             "dexsanity.")
+            raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
+                             "not leave wild encounters vanilla if enabling dexsanity.")
 
         # Disallow blacklisting wild legendaries if dexsanity is enabled
         if self.options.dexsanity and not self.options.allow_wild_legendaries:
