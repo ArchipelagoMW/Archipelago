@@ -18,6 +18,12 @@
 {% block body %}
     {% include 'header/grassHeader.html' %}
     <div id="weighted-options" class="markdown" data-game="{{ game }}">
+        <noscript>
+            <div class="js-warning-banner">
+                This page requires Javascript to function properly.
+            </div>
+        </noscript>
+
         <div id="user-message"></div>
         <h1>Weighted Options</h1>
         <p>Weighted options allow you to choose how likely a particular option&apos;s value is to be used in game
@@ -35,120 +41,130 @@
             <input id="player-name" placeholder="Player Name" data-key="name" maxlength="16" />
         </p>
 
-        <div id="game-choice">
-            <h2>Game Select</h2>
-            <p class="option-description">Choose which games you may be required to play.</p>
-            <p class="hint-text">
-                If a game&apos;s value is greater than zero, you may click its name to jump to that section.
-            </p>
-            <table>
-                <tbody>
-                    {% for world_name, world in worlds|dictsort %}
-                        {% if not world.hidden and world.web.options_page == True %}
-                            <tr>
-                                <td class="td-left"><label for="game-{{ world_name }}">{{ world_name }}</label></td>
-                                <td class="td-middle"><input type="range" id="game-{{ world_name }}" name="game-{{ world_name }}" value="0" /></td>
-                                <td class="td-right"><span id="game-{{ world_name }}">0</span></td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <div id="games-wrapper">
-            {% for world_name, world in worlds|dictsort %}
-                {% if not world.hidden and world.web.options_page == True %}
-                    <div class="world-container">
-                        <h2 class="world-name">
-                            <label for="{{ world_name }}-world">
-                                <span class="world-collapse-arrow">▶</span>
-                                {{ world_name }}
-                            </label>
-                            <input
-                                type="checkbox"
-                                id="{{ world_name }}-world"
-                                class="collapse-toggle invisible"
-                            />
-                        </h2>
-                        {% for group_name, option_group in option_groups_by_world[world_name].items() %}
-                            <div class="options-container">
-                                <h3 class="group-name">
-                                    <label for="{{ world_name }}-{{ group_name }}">
-                                        <span class="group-collapse-arrow">▶</span>
-                                        {{ group_name }}
-                                    </label>
-                                    <input
-                                        type="checkbox"
-                                        id="{{ world_name }}-{{ group_name }}"
-                                        class="collapse-toggle invisible"
-                                    />
-                                </h3>
-                                <div class="options-wrapper">
-                                    {% for option_name, option in option_group.items() %}
-                                        <div class="option-wrapper">
-                                            <h4>{{ option.display_name|default(option_name) }}</h4>
-                                            <div class="option-description">
-                                                {{ option.__doc__ }}
-                                            </div>
-                                            {% if issubclass(option, Options.Toggle) %}
-                                                {{ inputs.Toggle(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.DefaultOnToggle) %}
-                                                {{ inputs.DefaultOnToggle(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.PlandoBosses) %}
-                                                {{ inputs.PlandoBosses(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.TextChoice) %}
-                                                {{ inputs.TextChoice(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.Choice) %}
-                                                {{ inputs.Choice(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.NamedRange) %}
-                                                {{ inputs.NamedRange(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.Range) %}
-                                                {{ inputs.Range(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.FreeText) %}
-                                                {{ inputs.FreeText(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
-                                                {{ inputs.ItemDict(world_name, option_name, option, world) }}
-
-                                            {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
-                                                {{ inputs.OptionList(world_name, option_name, option) }}
-
-                                            {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
-                                                {{ inputs.LocationSet(world_name, option_name, option, world) }}
-
-                                            {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
-                                                {{ inputs.ItemSet(world_name, option_name, option, world) }}
-
-                                            {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
-                                                {{ inputs.OptionSet(world_name, option_name, option) }}
-
-                                            {% else %}
-                                                <div class="unsupported-option">
-                                                    This option is not supported. Please edit your .yaml file manually.
-                                                </div>
-
-                                            {% endif %}
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
+        <form action="" method="post" id="weighted-options-form">
+            <div id="game-choice">
+                <h2>Game Select</h2>
+                <p class="option-description">Choose which games you may be required to play.</p>
+                <p class="hint-text">
+                    If a game&apos;s value is greater than zero, you may click its name to jump to that section.
+                </p>
+                <table>
+                    <tbody>
+                        {% for world_name, world in worlds|dictsort %}
+                            {% if not world.hidden and world.web.options_page == True %}
+                                <tr>
+                                    <td class="td-left">
+                                        <label for="game||{{ world_name }}">{{ world_name }}</label>
+                                    </td>
+                                    <td class="td-middle">
+                                        <input type="range" id="game||{{ world_name }}" name="game||{{ world_name }}" value="0" />
+                                    </td>
+                                    <td class="td-right">
+                                        <span id="game||{{ world_name }}-value">0</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
+                    </tbody>
+                </table>
+            </div>
 
-        <div id="weighted-options-button-row">
-            <button id="export-options">Export Options</button>
-            <button id="generate-game">Generate Game</button>
-        </div>
+            <div id="games-wrapper">
+                {% for world_name, world in worlds|dictsort %}
+                    {% if not world.hidden and world.web.options_page == True %}
+                        <div class="world-container">
+                            <h2 class="world-name">
+                                <label for="{{ world_name }}">
+                                    <span class="world-collapse-arrow">▶</span>
+                                    {{ world_name }}
+                                </label>
+                                <input
+                                    type="checkbox"
+                                    id="{{ world_name }}"
+                                    class="collapse-toggle invisible world-collapse"
+                                    data-world-name="{{ world_name }}"
+                                />
+                            </h2>
+                            {% for group_name, option_group in option_groups_by_world[world_name].items() %}
+                                <div class="options-container">
+                                    <h3 class="group-name">
+                                        <label for="{{ world_name }}-{{ group_name }}">
+                                            <span class="group-collapse-arrow">▶</span>
+                                            {{ group_name }}
+                                        </label>
+                                        <input
+                                            type="checkbox"
+                                            id="{{ world_name }}-{{ group_name }}"
+                                            class="collapse-toggle invisible group-collapse"
+                                            data-world-name="{{ world_name }}"
+                                        />
+                                    </h3>
+                                    <div class="options-wrapper">
+                                        {% for option_name, option in option_group.items() %}
+                                            <div class="option-wrapper">
+                                                <h4>{{ option.display_name|default(option_name) }}</h4>
+                                                <div class="option-description">
+                                                    {{ option.__doc__ }}
+                                                </div>
+                                                {% if issubclass(option, Options.Toggle) %}
+                                                    {{ inputs.Toggle(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.DefaultOnToggle) %}
+                                                    {{ inputs.DefaultOnToggle(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.PlandoBosses) %}
+                                                    {{ inputs.PlandoBosses(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.TextChoice) %}
+                                                    {{ inputs.TextChoice(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.Choice) %}
+                                                    {{ inputs.Choice(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.NamedRange) %}
+                                                    {{ inputs.NamedRange(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.Range) %}
+                                                    {{ inputs.Range(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.FreeText) %}
+                                                    {{ inputs.FreeText(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.ItemDict) and option.verify_item_name %}
+                                                    {{ inputs.ItemDict(world_name, option_name, option, world) }}
+
+                                                {% elif issubclass(option, Options.OptionList) and option.valid_keys %}
+                                                    {{ inputs.OptionList(world_name, option_name, option) }}
+
+                                                {% elif issubclass(option, Options.LocationSet) and option.verify_location_name %}
+                                                    {{ inputs.LocationSet(world_name, option_name, option, world) }}
+
+                                                {% elif issubclass(option, Options.ItemSet) and option.verify_item_name %}
+                                                    {{ inputs.ItemSet(world_name, option_name, option, world) }}
+
+                                                {% elif issubclass(option, Options.OptionSet) and option.valid_keys %}
+                                                    {{ inputs.OptionSet(world_name, option_name, option) }}
+
+                                                {% else %}
+                                                    <div class="unsupported-option">
+                                                        This option is not supported. Please edit your .yaml file manually.
+                                                    </div>
+
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <div id="weighted-options-button-row">
+                <button id="export-options">Export Options</button>
+                <button id="generate-game">Generate Game</button>
+            </div>
+        </form>
     </div>
 {% endblock %}

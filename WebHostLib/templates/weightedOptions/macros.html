@@ -228,11 +228,13 @@
             />
         </td>
         <td class="td-right">
-            {% if option.default == value %}
-                25
-            {% else %}
-                0
-            {% endif %}
+            <span id="{{ world_name }}||{{ option_name }}||{{ value }}-value">
+                {% if option.default == value %}
+                    25
+                {% else %}
+                    0
+                {% endif %}
+            </span>
         </td>
         {% if can_delete %}
             <td>

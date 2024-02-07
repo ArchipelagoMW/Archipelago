@@ -14,6 +14,16 @@ html{
     padding: 1rem;
     color: #eeffeb;
 
+    .js-warning-banner{
+        width: calc(100% - 1rem);
+        padding: 0.5rem;
+        border-radius: 4px;
+        background-color: #f3f309;
+        color: #000000;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
     h3{
         cursor: unset;
 
