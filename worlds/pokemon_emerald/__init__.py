@@ -231,6 +231,8 @@ class PokemonEmeraldWorld(World):
                 "Littleroot Town - Eon Ticket from Norman",
                 "Littleroot Town - Mystic Ticket from Norman",
                 "Littleroot Town - Old Sea Map from Norman",
+                "Ever Grande City - Champion Wallace",
+                "Meteor Falls 1F - Rival Steven",
                 "Trick House Puzzle 8 - Item"
             ])
 
@@ -244,6 +246,10 @@ class PokemonEmeraldWorld(World):
                     "Safari Zone SE - Hidden Item in South Grass 2",
                     "Safari Zone SE - Item in Grass"
                 ])
+        elif self.options.goal == Goal.option_steven:
+            exclude_locations([
+                "Meteor Falls 1F - Rival Steven",
+            ])
         elif self.options.goal == Goal.option_norman:
             # If the player sets their options such that Surf or the Balance
             # Badge is vanilla, a very large number of locations become
