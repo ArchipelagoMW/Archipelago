@@ -25,13 +25,11 @@ components.append(Component('SOTN Client', 'SotnClient', file_identifier=SuffixI
 # Force of echo was a toadstool instead of heart (NO PROBLEM)
 # Looks like getting 2 misplaced relics too fast won't send it(During draw). Implement a received queue?
 # Holy glasses check seems bugged. (FIXED)
-# Relics of Vlad did not change. Probably due loc.item.name instead of just loc.name. Test on next play
-# Added another address to Rib of Vlad on boss area. Need more testing
-# Added another address to Eye of Vlad on boss area. Need more testing
-# Added another address to Tooth of Vlad on boss area. Need more testing
 # Those extra address looks like it's only when replacing with item NEED MORE TESTING
 # Something is wrong with CHI - Turkey(Demon)
 # We can enter CEN with just rings, but we can't leave without some kinda of flying or a library card(Maybe get 1 free)
+# Faerie Scroll Now make icon softlock on touch
+# Tooth, Rib, Eye, Heart of Vlad still spawning on RBO4
 # TODO: Test killing bosses with no relics of vlad
 
 class SotnSettings(settings.Group):
@@ -254,6 +252,7 @@ class SotnWorld(World):
         no4 = self.options.opened_no4
         are = self.options.opened_are
         no2 = self.options.opened_no2
+        bosses = self.options.bosses_need
 
         relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -353,5 +352,13 @@ class SotnWorld(World):
         if no2:
             write_word(patched_rom, 0x46c0968, 0x1400000b)
         # Changing ROM name prevent "replay game", had to watch all cinematics and dialogs
+        # Write bosses need it on index 12 of RNO0
+        write_short(patched_rom, 0x4f85afc, bosses)
+        """
+        The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
+        branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
+        """
+        write_word(patched_rom, 0x4fcf7b4, 0x10000118)
+
         write_to_file(patched_rom)
 
