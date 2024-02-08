@@ -6,6 +6,6 @@ class OoTMMRegionData(NamedTuple):
 
 
 region_data_table: Dict[str, OoTMMRegionData] = {
-    "Menu": OoTMMRegionData(["The Button Realm"]),
-    "The Button Realm": OoTMMRegionData(),
+    "Menu": OoTMMRegionData(["OoTMM"]),
+    "OoTMM": OoTMMRegionData(),
 }

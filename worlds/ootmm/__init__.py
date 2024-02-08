@@ -50,7 +50,8 @@ class OoTMMWorld(World):
         item_pool: List[OoTMMItem] = []
         for name, item in item_data_table.items():
             if item.code and item.can_create(self.multiworld, self.player):
-                item_pool.append(self.create_item(name))
+                for i in range (item.count): 
+                    item_pool.append(self.create_item(name))
 
         self.multiworld.itempool += item_pool
 
