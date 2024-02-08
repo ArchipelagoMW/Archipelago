@@ -50,12 +50,18 @@ local allItems = {1, "Monster vial 1", 0x09798B, 2, "Monster vial 2", 0x09798C, 
 }
 
 local cur_zone = "ST0"
+local cur_zoneid = 1
+local last_zone = "ST0"
+local last_zoneid = 1
 local dracula_dead = false
 local dracula_timer = 0
+local bosses_dead = 0
 local just_died = false
 local first_connect = true
 local got_data = true
 local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard / 20 just died
+local goal_met = false
+
 
 local player_name = ""
 local seed = ""
@@ -103,10 +109,14 @@ local frame = 0
 function getCurrZone()
 	local z = mainmemory.read_u16_le(0x180000)
 	local size = table.getn(zones)
-	cur_zone = "UNKNOWN"
+
+	if z == zones[cur_zoneid] then return end
 
 	for i = 1, size, 2 do
 		if zones[i] == z then
+			last_zoneid = cur_zoneid
+			last_zone = cur_zone
+			cur_zoneid = i
 			cur_zone = zones[i + 1]
 			break
 		end
@@ -968,6 +978,17 @@ function checkRNO0()
 	checks["RNO0 - Iron ball"] = bit.check(flag, 10)
 	checks["RNO0 - Heart Refresh(Inside clock)"] = bit.check(flag, 11)
 
+	if cur_zone == "RNO0" and last_zone ~= "RNO0" then
+		last_zone = cur_zone
+		last_zoneid = cur_zoneid
+		goal = mainmemory.read_u8(0x180f98)
+		checkBosses()
+		if bosses_dead >= goal then
+			console.log("Goal met! Dracula is acessible")
+			goal_met = true
+		end
+	end
+
 	return checks
 end
 
@@ -1247,98 +1268,118 @@ function checkOneLocation()
 end
 
 function checkBosses()
+	bosses_dead = 0
 	if mainmemory.read_u16_le(0x03ca78) ~= 0 then
 		bosses["Darkwing bat"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Darkwing bat"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca48) ~= 0 then
 		bosses["Beezelbub"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Beezelbub"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca70) ~= 0 then
 		bosses["Doppleganger40"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Doppleganger40"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca74) ~= 0 then
 		bosses["Akmodan II"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Akmodan II"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca68) ~= 0 then
 		bosses["Creature"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Creature"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca64) ~= 0 then
 		bosses["Medusa"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Medusa"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca58) ~= 0 then
 		bosses["Death"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Death"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca7c) ~= 0 then
 		bosses["Galamoth"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Galamoth"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca54) ~= 0 then
 		bosses["Fake Trevor/Grant/Sypha"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Fake Trevor/Grant/Sypha"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca50) ~= 0 then
 		bosses["Karasuman"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Karasuman"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca40) ~= 0 then
 		bosses["Slogra and Gaibon"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Slogra and Gaibon"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca3c) ~= 0 then
 		bosses["Scylla"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Scylla"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca2c) ~= 0 then
 		bosses["Olrox"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Olrox"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca30) ~= 0 then
 		bosses["Doppleganger 10"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Doppleganger 10"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca6c) ~= 0 then
 		bosses["Lesser Demon"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Lesser Demon"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca44) ~= 0 then
 		bosses["Hippogryph"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Hippogryph"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca5c) ~= 0 then
 		bosses["Cerberos"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Cerberos"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca34) ~= 0 then
 		bosses["Legion"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Legion"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca38) ~= 0 then
 		bosses["Minotaurus/Werewolf"] = true
+		bosses_dead = bosses_dead + 1
 	else
 		bosses["Minotaurus/Werewolf"] = false
 	end
@@ -1455,7 +1496,6 @@ function file_exists()
 	local f = io.open(filename, "r")
 	if f ~= nil then
 		for line in io.lines(filename) do
-			print("Added line: " .. line)
 			table.insert(misplaced_read, line)
 		end
 		io.close(f)
@@ -1475,8 +1515,9 @@ function handle_misplaced(f)
 	if next(misplaced_read) == nil then
 		local file, err = io.open(filename, "w")
 		for k, v in ipairs(misplaced_items) do
-			print("Added: ", v)
 			file:write(v, "\n")
+			-- First misplaced. Add to the list to prevent entering the loop endless
+			table.insert(misplaced_read, v)
 		end
 		last_misplaced_save = table.getn(misplaced_items)
 		file:close()
@@ -1512,7 +1553,6 @@ function process_misplaced(f)
 	if table_size == 0 and table_size_r > 0 then
 		-- We have misplaced_read but no misplaced_items Due fresh connect? Add to the table
 		for k, v in ipairs(misplaced_read) do
-			print("Added misplaced: " .. v)
 			table.insert(misplaced_items, v)
 		end
 		table_size = table.getn(misplaced_items)
@@ -1553,7 +1593,8 @@ end
 function check_for_misplaced_relic()
 	for i = #misplaced_items, 1, -1 do
 		local item = tonumber(misplaced_items[i])
-		if item >= 300 and item <= 329 then
+		-- It's better to keep sword card out
+		if item >= 300 and item <= 329 and item ~= 322 then
 			if has_relic(item) then
 				console.log("Found misplaced relic")
 				return i
@@ -1612,8 +1653,7 @@ function main()
 				gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
 				gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
 				last_processed_read = read_last_processed()
-				gui.drawText(200, 30, player_name)
-				gui.drawText(200, 40, seed)
+				gui.drawText(200, 30, bosses_dead)
 				gui.drawText(300, 0, last_status)
 				gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
 
@@ -1665,6 +1705,7 @@ function main()
 						-- fresh game. No item granted yet
 						last_item_processed = 1
 						file_exists()
+						delay_timer = 0
 					end
 				end
 
@@ -1703,6 +1744,14 @@ function main()
 					if just_died then
 						console.log("We just died. TODO: Deal with items we need to receive again")
 						just_died = false
+					end
+
+					if goal_met and cur_zone == "RNO0" then
+						if delay_timer == 0 then delay_timer = frame end
+						if delay_timer ~=0 and frame - delay_timer >= 900 then
+							-- Give some time to zone load before patching
+							memory.write_s32_le(0x801c132c, 0x14400118, "System Bus")
+						end
 					end
 
 					check_death()
