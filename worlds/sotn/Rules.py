@@ -995,6 +995,12 @@ def set_rules(world: MultiWorld, player: int) -> None:
     set_rule(world.get_location("RNO4 - Bat Pentagram", player), lambda state:
              state.has("Leap stone", player) or state.has("Soul of bat", player))
 
+    set_rule(world.get_location("RNO4 - Potion(Underwater)", player), lambda state:
+             state.has("Gravity boots", player))
+
+    set_rule(world.get_location("RNO4 - Life Vessel(Underwater)", player), lambda state:
+             state.has("Gravity boots", player))
+
     set_rule(world.get_location("RNO4 - Osafune katana", player), lambda state:
              state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
                                                   (state.has("Leap stone", player) or
