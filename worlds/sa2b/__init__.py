@@ -96,6 +96,7 @@ class SA2BWorld(World):
             "GoldBeetles": self.options.beetlesanity.value,
             "OmochaoChecks": self.options.omosanity.value,
             "AnimalChecks": self.options.animalsanity.value,
+            "ItemBoxChecks": self.options.itemboxsanity.value,
             "KartRaceChecks": self.options.kart_race_checks.value,
             "ChaoStadiumChecks": self.options.chao_stadium_checks.value,
             "ChaoRaceDifficulty": self.options.chao_race_difficulty.value,

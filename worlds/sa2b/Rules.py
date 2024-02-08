@@ -1581,6 +1581,8 @@ def set_mission_upgrade_rules_standard(multiworld: MultiWorld, world: World, pla
 
         add_rule(multiworld.get_location(LocationName.metal_harbor_itembox_5, player),
                  lambda state: state.has(ItemName.sonic_light_shoes, player))
+        add_rule(multiworld.get_location(LocationName.green_forest_itembox_5, player),
+                 lambda state: state.has(ItemName.sonic_bounce_bracelet, player))
         add_rule(multiworld.get_location(LocationName.mission_street_itembox_5, player),
                  lambda state: state.has(ItemName.tails_booster, player))
         add_rule(multiworld.get_location(LocationName.hidden_base_itembox_5, player),
