@@ -130,7 +130,6 @@ def get_random_species(
             while cutoff_index < len(filtered_candidates) and abs(sum(filtered_candidates[cutoff_index].base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100):
                 cutoff_index += 1
             max_percent_different += 10
-        max_percent_different = 10
 
         filtered_candidates = filtered_candidates[:cutoff_index + 1]
 

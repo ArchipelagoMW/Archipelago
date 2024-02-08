@@ -5,7 +5,7 @@ from collections import Counter
 import copy
 import logging
 import os
-from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, Union
+from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar, TextIO, Union
 
 from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
@@ -1117,6 +1117,33 @@ class PokemonEmeraldWorld(World):
         del self.modified_misc_pokemon
         del self.modified_starters
         del self.modified_species
+
+    def write_spoiler(self, spoiler_handle: TextIO):
+        if self.options.dexsanity:
+            from collections import defaultdict
+
+            spoiler_handle.write(f"\n\nWild Pokemon ({self.multiworld.player_name[self.player]}):\n\n")
+
+            species_maps = defaultdict(set)
+            for map in self.modified_maps.values():
+                if map.land_encounters is not None:
+                    for encounter in map.land_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+                if map.water_encounters is not None:
+                    for encounter in map.water_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+                if map.fishing_encounters is not None:
+                    for encounter in map.fishing_encounters.slots:
+                        species_maps[encounter].add(map.name[4:])
+
+            lines = [f"\t{emerald_data.species[species].label}: {', '.join(maps)}\n"
+                     for species, maps in species_maps.items()]
+            lines.sort()
+            for line in lines:
+                spoiler_handle.write(line)
+
         del self.modified_maps
 
     def extend_hint_information(self, hint_data):
