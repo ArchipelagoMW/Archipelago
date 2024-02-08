@@ -1,44 +1,102 @@
-import settings
-import typing
-from .options import OoTMMOptions  # the options we defined earlier
-from .items import OoTMMItems  # data used below to add items to the World
-from .locations import OoTMMLocations  # same as above
-from worlds.AutoWorld import World
-from BaseClasses import Region, Location, Entrance, Item, RegionType, ItemClassification
+from typing import List
+
+from BaseClasses import Region, Tutorial
+from worlds.AutoWorld import WebWorld, World
+from .Items import OoTMMItem, item_data_table, item_table
+from .Locations import OoTMMLocation, location_data_table, location_table, locked_locations
+from .Options import ootmm_options
+from .Regions import region_data_table
+from .Rules import get_button_rule
 
 
+class OoTMMWebWorld(WebWorld):
+    theme = "partyTime"
+    
+    setup_en = Tutorial(
+        tutorial_name="Start Guide",
+        description="A guide to playing OoTMM.",
+        language="English",
+        file_name="guide_en.md",
+        link="guide/en",
+        authors=["Fletch & Iryoku"]
+    )
 
-
-class OoTMMSettings(settings.Group):
-    class RomFile(settings.SNESRomPath):
-        """Insert help text for host.yaml here."""
-
-    rom_file: RomFile = RomFile("MyGame.sfc")
+    setup_de = Tutorial(
+        tutorial_name="Anleitung zum Anfangen",
+        description="Eine Anleitung um OoTMM zu spielen.",
+        language="Deutsch",
+        file_name="guide_de.md",
+        link="guide/de",
+        authors=["Held_der_Zeit"]
+    )
+    
+    tutorials = [setup_en, setup_de]
 
 
 class OoTMMWorld(World):
-    """man fight bigger hunky man (ganondorf) and save world oh and also mask man and gets transformed into a beast (not a furry one tho)."""
-    game = "Ocarina of Time & Majora's Mask"  # name of the game/world
-    options_dataclass = OoTMMOptions  # options the player can set
-    options: OoTMMOptions  # typing hints for option results
-    settings: typing.ClassVar[OoTMMSettings]  # will be automatically assigned from type hint
-    topology_present = True  # show path to required location checks in spoiler
+    """The greatest game of all time."""
 
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
-    base_id = 3621000
-    # instead of dynamic numbering, IDs could be part of data
+    game = "Ocarina of Time & Majora's Mask"
+    data_version = 3
+    web = OoTMMWebWorld()
+    option_definitions = ootmm_options
+    location_name_to_id = location_table
+    item_name_to_id = item_table
 
-    # The following two dicts are required for the generation to know which
-    # items exist. They could be generated from json or something else. They can
-    # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for
-                       id, name in enumerate(OoTMMItems, base_id)}
-    location_name_to_id = {name: id for
-                           id, name in enumerate(OoTMMLocations, base_id)}
+    def create_item(self, name: str) -> OoTMMItem:
+        return OoTMMItem(name, item_data_table[name].type, item_data_table[name].code, self.player)
 
-    # Items can be grouped using their names to allow easy checking if any item
-    # from that group has been collected. Group names can also be used for !hint
-    # item_name_groups = {
-    #     "weapons": {"sword", "lance"},
-    # }
+    def create_items(self) -> None:
+        item_pool: List[OoTMMItem] = []
+        for name, item in item_data_table.items():
+            if item.code and item.can_create(self.multiworld, self.player):
+                item_pool.append(self.create_item(name))
+
+        self.multiworld.itempool += item_pool
+
+    def create_regions(self) -> None:
+        # Create regions.
+        for region_name in region_data_table.keys():
+            region = Region(region_name, self.player, self.multiworld)
+            self.multiworld.regions.append(region)
+
+        # Create locations.
+        for region_name, region_data in region_data_table.items():
+            region = self.multiworld.get_region(region_name, self.player)
+            region.add_locations({
+                location_name: location_data.address for location_name, location_data in location_data_table.items()
+                if location_data.region == region_name and location_data.can_create(self.multiworld, self.player)
+            }, OoTMMLocation)
+            region.add_exits(region_data_table[region_name].connecting_regions)
+
+        # Place locked locations.
+        for location_name, location_data in locked_locations.items():
+            # Ignore locations we never created.
+            if not location_data.can_create(self.multiworld, self.player):
+                continue
+
+            locked_item = self.create_item(location_data_table[location_name].locked_item)
+            self.multiworld.get_location(location_name, self.player).place_locked_item(locked_item)
+
+        # Set priority location for the Big Red Button!
+        # self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
+
+    # def get_filler_item_name(self) -> str:
+    #     return "A Cool Filler Item (No Satisfaction Guaranteed)"
+
+    # def set_rules(self) -> None:
+    #     button_rule = get_button_rule(self.multiworld, self.player)
+    #     self.multiworld.get_location("The Big Red Button", self.player).access_rule = button_rule
+    #     self.multiworld.get_location("In the Player's Mind", self.player).access_rule = button_rule
+
+    #     # Do not allow button activations on buttons.
+    #     self.multiworld.get_location("The Big Red Button", self.player).item_rule =\
+    #         lambda item: item.name != "Button Activation"
+
+    #     # Completion condition.
+    #     self.multiworld.completion_condition[self.player] = lambda state: state.has("The Urge to Push", self.player)
+
+    def fill_slot_data(self):
+        return {
+            "color": getattr(self.multiworld, "color")[self.player].current_key
+        }
