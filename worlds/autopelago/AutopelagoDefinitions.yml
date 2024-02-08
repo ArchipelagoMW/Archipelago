@@ -1,0 +1,491 @@
+# This file exists in both the client and the server projects.
+# Please make sure that it matches in both places.
+
+# one item MUST be called 'goal'
+items:
+  goal: 'Lockheed SR-71 Blackbird'
+  masterful_longsword: 'Masterful Longsword'
+
+  # if you want to add something extra onto an item, you have to do it like:
+  a_cookie:
+    name: 'A Cookie'
+    flavor_text: 'We all know what happens when you give a MOUSE a cookie...'
+
+  bribe: 'Bribe'
+  red_matador_cape: 'Red Matador\'s Cape'
+  premium_can_of_prawn_food: 'Premium Can of Prawn Food'
+
+  normal_rat:
+    name: 'Normal Rat'
+    rat_count: 1
+
+  rat_pack:
+    name: 'Rat Pack'
+    rat_count: 5
+
+  # these aren't actually special in any way except that putting them under the
+  # 'rats' section will automatically give them a rat_count of 1. you COULD set
+  # rat_count to something else to override that if you wanted
+  rats:
+    pack_rat: 'Pack Rat'
+    pizza_rat: 'Pizza Rat'
+    chef_rat: 'Chef Rat'
+    ninja_rat: 'Ninja Rat'
+    gym_rat: 'Gym Rat'
+    computer_rat: 'Computer Rat'
+    pie_rat: 'Pie Rat'
+    ziggu_rat: 'Ziggu Rat'
+    acro_rat: 'Acro Rat'
+    lab_rat: 'Lab Rat'
+
+    soc_rat_es:
+      name: 'Soc-Rat-es'
+      flavor_text: 'I am not an Athenian or a Greek, but a rat.'
+
+  # TODO: for now, I'm just listing non-'key' items by category the same as how
+  # they are in the file that I'm replacing with this, but we really ought to
+  # have a way to specify the auras that they grant in this file...
+  useful_nonprogression:
+    - 'Refreshing Glass of Lemonade'
+    - 'Bag of Powdered Sugar'
+    - 'Organic Apple Core'
+    - 'An Entire Roast Chicken'
+    - 'Plate of Spaghetti'
+    - 'Freshly Baked Bread'
+    - 'Taco Salad that is Only Tacos'
+    - 'Subscription to the Cheese of the Month Club'
+    - 'Soup with a Hair in it'
+    - 'Can of Spam'
+    - 'Fruit Rollup'
+    - 'Fresh-baked Apple Pie'
+    - 'Dark Blue Ghost'
+    - 'Mundane Pickle'
+    - 'Finest Potion'
+    - 'Extra Crunchy Peanutbutter'
+    - 'Cheesnado'
+    - 'Bowl of Cereal'
+    - 'Cake'
+    - 'Dungeon Bread'
+    - 'Gallon of Diet Soda'
+    - 'Apple wearing Jeans'
+    - 'Macaroni and Cheese'
+    - 'Pint of Ice Cream'
+    - 'Protein Shake'
+    - 'Tray of Lasagna'
+    - 'Best Burgers in Town'
+    - 'Pack of Pickled Peppers'
+    - 'Sword made out of Chocolate'
+    - 'Lovely Bunch of Coconuts'
+    - 'Faux Dalmation-Skin Coat'
+    - 'Bedazzled Cowboy Boots'
+    - 'Fancy Rat-sized Tophat'
+    - 'Tin-Foil Hat'
+    - 'Backwards Cap'
+    - 'Fake Moustache'
+    - 'Pair of 3D Glasses'
+    - 'Comfy Shorts'
+    - 'Jetpack'
+    - 'Plague Doctor\'s Mask'
+    - '5th Ace'
+    - 'Get Out of Jail Free Card'
+    - 'Winning Lottery Ticket'
+    - 'Holographic Draw Four Card'
+    - 'Letter from a Secret Admirer'
+    - 'Line-shaped Tetris Block'
+    - 'Inspiring Montage'
+    - game_specific:
+        'Pokemon Red and Blue':
+          - 'Very Common Candy'
+          - 'Icy Blue Feather'
+          - 'Burning Orange Feather'
+          - 'Charged Yellow Feather'
+
+        'Ocarina of Time':
+          - 'Silver Skulltula Token'
+          - 'Pickled Cucco Feet'
+
+        'Stardew Valley':
+          - 'Prismatic Chard'
+          - 'Cheese Seeds'
+
+  trap:
+    - 'Half of a Worm'
+    - 'Extra-welldone Steak'
+    - 'Your Friendly Neighborhood Tapeworm'
+    - 'Honey Roasted Packing Peanuts'
+    - 'Rat Poison'
+    - 'Poisonous Mushroom'
+    - 'Too Much Eggnog'
+    - 'Peanut Boulder and Jelly Sandwich'
+    - 'Forgotten Moldy Fruitbasket'
+    - 'Pie with a Bird Hiding Inside'
+    - 'Expired Health Potion'
+    - 'Gas Station Sushi'
+    - 'Carbon Monoxide'
+    - 'Circus Flea'
+    - 'Game Bug'
+    - 'Too Many Crabs'
+    - 'Ticket for the Off-broadway Musical Rats'
+    - 'Polybius Arcade Cabinet'
+    - 'An Illusion'
+    - 'Cartoonishly Large Bomb'
+    - 'Hungry Hippopotamus'
+    - 'Malfunctioning Boomerang'
+    - 'Song that Never Ends'
+    - 'Bubble Wrap'
+    - 'Box of Fireworks'
+    - 'Cabin Fever'
+    - 'Self-destruct Button'
+    - 'Train with a Scary Face'
+    - 'Greater White Shark'
+    - 'Rude Internet Comment'
+    - 'Extra Premium Currency best value'
+    - 'Distracting Squirrel'
+    - 'Itchy Iron Wool Sweater'
+    - 'Mail-in Rebate for 11 cents'
+    - 'Spicy Magazine'
+    - 'Wooden Splinters'
+    - 'Box Set of a Canceled TV Show'
+    - 'Burning Phone'
+    - 'One-way Ticket to Ohio'
+    - 'Deceased Pet Rock'
+    - 'Cursed Slab'
+    - game_specific:
+        'Pokemon Red and Blue':
+          - 'Item-Hider'
+
+        'Ocarina of Time':
+          - 'Overly-Talkative Fairy in a Bottle'
+
+        'Stardew Valley':
+          - 'Rotten Parsnip'
+
+  filler:
+    - 'Empty Snail Shell'
+    - 'Loose Screw'
+    - 'Set of Car Keys'
+    - 'Not Very Sharp Tool'
+    - 'Busted Flute'
+    - 'Beartrap'
+    - 'Unmagic 8-ball'
+    - 'Carpentry for Ants'
+    - 'Partially Used Blockbuster Gift Card'
+    - 'Year-supply of Calanders'
+    - 'Human-sized Skateboard'
+    - 'Loose Staples'
+    - 'Old Boot'
+    - 'Clump of Hair'
+    - 'Collectable Plate'
+    - 'Roll of Toilet Paper'
+    - 'Misplaced Pixel'
+    - 'Lost Puzzle Piece'
+    - 'Cubic Piece of Dirt'
+    - 'Plank of Wood'
+    - 'Scented Candle'
+    - 'Broken Pottery'
+    - 'World\'s Smallest Violin'
+    - 'Crumpled Paper Airplane'
+    - 'Half-eaten Pencil'
+    - 'Headlight Fluid'
+    - 'Help I\'m Trapped in This Game and this is the only Way i Know how to Contact you Please get Me Out'
+    - 'Broken Fishing Rod'
+    - 'Toy Boat Toy Boat Toy Boat'
+    - 'Twenty Matches'
+    - 'Cracked Monopoly Board'
+    - 'AAAAAA battery'
+    - 'Cat-shaped Wall Clock'
+    - 'Printer Driver Disc'
+    - 'Off-brand Soda Can'
+
+  uncategorized:
+    - 'Set of Three Seashells'
+    - 'Chewed Bar of Soap'
+    - 'Generic Green Slime'
+    - 'Handful of Loose Marbles'
+    - 'Discarded Video Game Cartridge'
+    - 'Packet of Ketchup'
+    - 'Suprisingly Tiny Knife'
+    - 'Lit Candle'
+    - 'Hilarious Mushroom'
+    - 'The Hit Boardgame Mousetrap'
+    - 'Michelin Star'
+    - 'Blue-eyes White Alligator Trading Card'
+    - 'Rusty Pocketwatch'
+    - 'Damp Pineapple'
+    - 'Right Sock'
+    - 'Microplastic Pile'
+    - 'Foreign Coin'
+    - 'USB Containing Government Secrets'
+    - 'Monkey\'s Paw'
+    - 'Smelly Vintage T-Shirt'
+    - 'McRib'
+    - 'Phylactery'
+    - 'Cool Ninja Weapons'
+    - 'Shrimp in a Bottle'
+    - 'Bowl of Computer Chips'
+    - 'Golden Ticket'
+    - 'Enchanted Guitar Pick'
+    - 'Copy of E.T. the Extraterrestrial for Atari 2600'
+    - '3 Dollar Bill'
+    - 'Hallpass'
+    - 'Limited Edition Vintage Superhero Lunch Box Complete with Thermos'
+    - 'Sweet Roadtrip Mixtape'
+    - 'HD Photo of Bigfoot'
+    - 'Lost Ctrl Key'
+    - 'Not a Doll, but an Action Figure'
+    - 'Bright Idea'
+    - 'Small chain of Islands'
+    - 'Pluto'
+    - 'Autographed Copy of the Bible'
+    - 'School Photo'
+    - 'Sack with a Dollar Sign Painted on it'
+    - 'Overdue Library Book'
+    - 'Statue of David\'s Dog'
+    - 'Yesterday\'s Horoscope'
+    - 'Actual Lava Lamp'
+    - 'Proof that Aliens Exist'
+    - 'Oxford Comma'
+    - 'Bottled Toilet Water'
+    - 'Beanie Baby in a Pot of Chili'
+    - 'Radio Controlled Car'
+    - 'Dihydrogen Monoxide'
+    - 'Rubber Duck'
+    - '98 Red Balloons'
+    - 'Red Balloon'
+    - 'My Little Capybara'
+    - 'The Titanic'
+    - 'Canned Soup'
+    - 'Left Sock'
+    - 'Nintendo 65'
+    - 'Fake Dog Poop'
+    - 'Real Dog Poop'
+    - 'Elephant in the Room'
+    - '5g Wireless Tachnology'
+    - 'Helical Fossil'
+    - 'Theodore Roosevelt Plushie'
+    - '4th-Dimensional Hypercube'
+    - 'Bag of Wires You Might Need One of These Days'
+    - 'Naughty Coal'
+    - 'RGB Lighting'
+    - 'Rave Reviews'
+    - 'Aggressive Post-it Notes'
+    - 'Chaotic Emerald'
+    - 'Mushroom Princess'
+    - 'Pinball Wizard\'s Spellbook'
+    - 'Novelty Keychain'
+    - 'Spare Axel'
+    - 'Brand New Car'
+    - 'Little White Lie'
+    - 'Coffee Mug Full of Pencils'
+    - 'Elevator Music'
+    - 'Radical Rock'
+    - 'Sizzlin Scissors'
+    - 'Just Paper'
+    - 'Annoying Fairy'
+    - 'Trash Can Lid'
+    - 'Crystal Skull'
+    - 'Scary Babydoll'
+    - 'Hairless Yak'
+    - 'Squeaky Mallet'
+    - 'Starting Equipment'
+    - 'Someone Else\'s Shoes'
+    - 'Pocket'
+    - 'Spilled Bag of Rice'
+    - 'Magic Bathmat'
+    - 'Probably Decomissioned Warhead'
+    - 'Waldo\'s Home Address'
+    - 'Player 2'
+    - 'Frog-shapped Chair'
+    - 'Evil Plans'
+    - 'Cardboard Box'
+    - 'Stapler in Jello'
+    - 'Radioactive Green Ooze'
+    - '5 Elemental-themed Rings'
+    - 'Wardrobe of Alternate Dimensions'
+    - 'Lawn Flamingo'
+    - 'Withered Bonsi Tree'
+    - 'Sassy Robot Companion'
+    - 'Defeated Punching Bag'
+    - '3 Easy Payments of 19.95'
+    - 'Bag of Normal Beans'
+    - 'Bottle of Spilled Milk'
+    - 'The Krebs Cycle'
+    - 'Ring of Visibility'
+    - 'Just Some Sludge'
+    - 'Sticky Video Game Controller'
+    - 'Bomb-proof Refrigerator'
+    - 'Lice-filled Wig'
+    - 'Drawing of a Cool S'
+    - 'Handful of Glitter'
+    - 'Forklift Driver Certification'
+    - 'Neat Rock'
+    - 'Dijkstra\'s Algorithm'
+    - 'Fire Destinguisher'
+    - 'Censor Bar'
+    - 'Greasy Paper Bag'
+    - 'Extended Warranty'
+    - 'Legally Distinct Red Laser Sword'
+    - 'Weapons-grade Folding Chair'
+    - 'Whatever a Credenza Is'
+    - 'Corpse-pokin\' Stick'
+    - 'CD containing \'Sounds of the Sewer\''
+    - 'Squeeky Vent Flap'
+    - 'Rule stating that Rats Cannot Play Basketball'
+    - game_specific:
+        'Pokemon Red and Blue':
+          - 'Oak\'s Other Parcel'
+          - 'Silph Scoop'
+          - 'Mustard Ball'
+          - 'HM02.5 Walk'
+          - 'Team Rocket Membership Card'
+          - 'Vermillion City Truck Keys'
+
+        'Ocarina of Time':
+          - 'Broken Boss Key'
+          - 'Jabu Jabu\'s Missing Kidney'
+          - 'Lite Brite Arrow'
+          - 'Song of Thyme'
+          - 'Ganondorf\'s Tennis Racket'
+          - 'Goron Rock Candy'
+
+        'Stardew Valley':
+          - 'JojaMart Sale Coupon'
+          - 'Pickled Dust Sprite'
+          - 'Rotten Walnut'
+          - 'Abigail\'s Birth Certificate'
+          - 'Mayor\'s Tax Returns'
+
+# one location MUST be called 'goal'. ability_check_with_dc is intended to make
+# intuitive sense to those who are familiar with the basic concept outlined on:
+# https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
+# game "feel" more "difficult" as the "player" enters the later stages.
+locations:
+  goal:
+    name: 'Captured Goldfish'
+    requires:
+      ability_check_with_dc: 20
+      locations:
+        - bowling_ball_door
+      items:
+        - masterful_longsword
+
+  bowling_ball_door:
+    name: 'Bowling Ball Door'
+    requires:
+      ability_check_with_dc: 17
+      rat_count: 20
+      locations:
+        - or:
+          - restaurant
+          - pirate_bake_sale
+
+  restaurant:
+    name: 'Restaurant'
+    requires:
+      ability_check_with_dc: 14
+      locations:
+        - minotaur
+      items:
+        - a_cookie
+
+  pirate_bake_sale:
+    name: 'Pirate Bake Sale'
+    requires:
+      ability_check_with_dc: 14
+      locations:
+        - prawn_stars
+      items:
+        - bribe
+
+  minotaur:
+    name: 'Minotaur'
+    requires:
+      ability_check_with_dc: 12
+      locations:
+        - basketball
+      items:
+        - red_matador_cape
+
+  prawn_stars:
+    name: 'Prawn Stars'
+    requires:
+      ability_check_with_dc: 12
+      locations:
+        - basketball
+      items:
+        - premium_can_of_prawn_food
+
+  basketball:
+    name: 'Basketball'
+    requires:
+      ability_check_with_dc: 11
+      rat_count: 5
+
+  filler_groups:
+    - before: goal
+      count: 20
+      ability_check_dc: 18
+
+    - after: restaurant
+      count: 10
+      ability_check_dc: 16
+
+    - after: pirate_bake_sale
+      count: 10
+      ability_check_dc: 16
+
+    - before: restaurant
+      count: 10
+      ability_check_dc: 14
+
+    - before: pirate_bake_sale
+      count: 10
+      ability_check_dc: 14
+
+    - before: minotaur
+      count: 10
+      ability_check_dc: 12
+
+    - before: prawn_stars
+      count: 10
+      ability_check_dc: 12
+
+    - before: basketball
+      count: 40
+      ability_check_dc: 10
+
+# travel distances are relative to the distance from the special start location
+# to its single successor, i.e., a value of 1 means that the distance is equal
+# to the 'distance' from the menu screen to the first real location. everything
+# else with a direct connection in the logic is treated like 0 unless it has an
+# override below. do not list distances between things that aren't directly
+# connected in the logic. distances are treated as symmetrical unless specific
+# reverse-direction overrides are given.
+relative_travel_distances:
+  - from: basketball
+    to: minotaur.before
+    d: 1
+
+  - from: basketball
+    to: prawn_stars.before
+    d: 1
+
+  - from: minotaur
+    to: restaurant.before
+    d: 1
+
+  - from: prawn_stars
+    to: pirate_bake_sale.before
+    d: 1
+
+  - from: restaurant
+    to: restaurant.after
+    d: 1
+
+  - from: pirate_bake_sale
+    to: pirate_bake_sale.after
+    d: 1
+
+  - from: bowling_ball_door
+    to: goal.before
+    d: 1
