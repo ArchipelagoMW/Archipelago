@@ -27,6 +27,7 @@ class Group(enum.Enum):
     Trap = enum.auto()
     Twice = enum.auto()
     Piece = enum.auto()
+    Deprecated = enum.auto()
 
 
 
