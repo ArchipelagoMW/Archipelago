@@ -441,7 +441,7 @@ def set_completion_condition(world_options, player, world):
 def self_basic_coinsanity_piece_rules(player, world):
     for i in range(1,8251):
 
-        item_coin = f"DLC Quest: {i / 10} Coin Piece"
+        item_coin = f"DLC Quest: {i} Coin Piece"
         set_rule(world.get_location(item_coin, player),
                  has_enough_coin(player, math.ceil(i / 10)))
 
@@ -482,7 +482,7 @@ def self_basic_coinsanity_piece_rules(player, world):
 def self_lfod_coinsanity_piece_rules(player, world):
     for i in range(1, 8891):
 
-        item_coin_freemium = f"Live Freemium or Die: {i / 10} Coin Piece"
+        item_coin_freemium = f"Live Freemium or Die: {i} Coin Piece"
         set_rule(world.get_location(item_coin_freemium, player),
                  has_enough_coin_freemium(player, math.ceil(i / 10)))
 

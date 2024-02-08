@@ -49,7 +49,7 @@ class CoinSanityRange(NamedRange):
         "normal": 20,
         "high": 50,
     }
-    if datetime.datetime.today().month == 4:
+    if datetime.datetime.today().month == 2:
         if datetime.datetime.today().day == 1:
             special_range_names["surprise"] =-1
         else:

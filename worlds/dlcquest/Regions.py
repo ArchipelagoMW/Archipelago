@@ -198,6 +198,6 @@ def create_coinsanity_piece_locations(player: int, region: Region, total_coin: i
 
     pieces_needed = total_coin * 10
     for i in range(1, pieces_needed + 1):
-        number_piece = i / 10
+        number_piece = i
         item_piece = f"{campaign_prefix}: {number_piece} Coin Piece"
         region.locations += [DLCQuestLocation(player, item_piece, location_table[item_piece], region)]
