@@ -37,7 +37,7 @@ class Difficult(Choice):
 
 
 class BossesNeed(Range):
-    """Number of Triforce pieces required to complete the game."""
+    """Bosses required to beat Dracula."""
     display_name = "Required Bosses Tokens"
     range_start = 0
     range_end = 19
