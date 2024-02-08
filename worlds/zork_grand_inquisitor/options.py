@@ -15,10 +15,10 @@ class Goal(Choice):
     option_three_artifacts: int = 0
 
 
-class EarlyRopeAndLantern(DefaultOnToggle):
-    """If true, the rope and lantern will be found in early locations for a smoother early game"""
+class QuickPortFoozle(DefaultOnToggle):
+    """If true, the items needed to go down the well will be found in early locations for a smoother early game"""
 
-    display_name: str = "Early Rope & Lantern"
+    display_name: str = "Quick Port Foozle"
 
 
 class Deathsanity(Toggle):
@@ -30,5 +30,5 @@ class Deathsanity(Toggle):
 @dataclass
 class ZorkGrandInquisitorOptions(PerGameCommonOptions):
     goal: Goal
-    early_rope_and_lantern: EarlyRopeAndLantern
+    quick_port_foozle: QuickPortFoozle
     deathsanity: Deathsanity

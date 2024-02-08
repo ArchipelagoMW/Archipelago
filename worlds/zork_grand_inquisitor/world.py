@@ -157,9 +157,12 @@ class ZorkGrandInquisitorWorld(World):
 
         self.multiworld.itempool += item_pool
 
-        if self.options.early_rope_and_lantern.value == 1:
+        if self.options.quick_port_foozle.value == 1:
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
+            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_WELL.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
+            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_JACKS_DOOR.value] = 1
+            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_GRAND_INQUISITOR_DOLL.value] = 1
 
     def create_item(self, name: str) -> ZorkGrandInquisitorItem:
         data: ZorkGrandInquisitorItemData = item_data[self.item_name_to_item[name]]
@@ -177,7 +180,7 @@ class ZorkGrandInquisitorWorld(World):
     def fill_slot_data(self) -> Dict[str, Any]:
         return self.options.as_dict(
             "goal",
-            "early_rope_and_lantern",
+            "quick_port_foozle",
             "deathsanity",
         )
 
