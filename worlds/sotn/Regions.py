@@ -220,7 +220,9 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
                 state.has("Soul of bat", player) or state.has("Gravity boots", player) or
                 (state.has("Form of mist", player) and state.has("Power of mist", player)))
     # Castle Keep
-    top.connect(nz1)
+    top.connect(nz1, "TOP->NZ1", lambda state: state.has("Leap stone", player) or
+                state.has("Soul of bat", player) or state.has("Gravity boots", player) or
+                (state.has("Form of mist", player) and state.has("Power of mist", player)))
     top.connect(dai)
     top.connect(rtop, "TOP->RTOP", lambda state: state.has("Holy glasses", player) and
                 (state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
