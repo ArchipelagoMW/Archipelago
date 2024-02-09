@@ -7,20 +7,6 @@ from ..generic.Rules import set_rule, add_rule
 from .Options import CMOptions
 
 
-def total_piece_material(state: CollectionState, player: int) -> int:
-    return state.prog_items[player]["Material"]
-
-
-def has_piece_material(state: CollectionState, player: int, amount: int) -> bool:
-    return total_piece_material(state, player) >= amount
-
-
-def has_chessmen(state: CollectionState, player: int, amount: int) -> bool:
-    cmoptions: CMOptions = state.multiworld.worlds[player].options  # this is safe. trust me I'm a doctor
-    return (state.count_group("Chessmen", player) + ceil(
-        state.count("Progressive Pocket", player) / cmoptions.pocket_limit_by_pocket)) >= amount
-
-
 def has_french_move(state: CollectionState, player: int) -> bool:
     return state.count("Progressive Pawn", player) > 6  # and self.has("Play En Passant", player)
 
@@ -89,11 +75,13 @@ def set_rules(multiworld: MultiWorld, player: int):
     # AI avoids making trades except where it wins material or secures victory, so require that much material
     for name, item in checksmate.Locations.location_table.items():
         set_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.material_expectations: has_piece_material(state, player, v))
+                 lambda state, v=item.material_expectations: state.prog_items[player]["Material"] >= v)
     # player must have (a king plus) that many chessmen to capture any given number of chessmen
     for name, item in checksmate.Locations.location_table.items():
         add_rule(multiworld.get_location(name, player),
-                 lambda state, v=item.chessmen_expectations: has_chessmen(state, player, v))
+                 lambda state, v=item.chessmen_expectations: (state.count_group("Chessmen", player) + ceil(
+                     state.count("Progressive Pocket", player) /
+                     state.multiworld.worlds[player].options.pocket_limit_by_pocket)) >= v)
 
     for i in range(1, 7):
         add_rule(multiworld.get_location("Capture " + str(i + 1) + " Pieces", player),
