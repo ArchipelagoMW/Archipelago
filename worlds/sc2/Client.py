@@ -781,7 +781,7 @@ API2_TO_API3_COMPAT_ITEMS: typing.Set[CompatItemHolder] = {
 
 
 def compat_item_to_network_items(compat_item: CompatItemHolder) -> typing.List[NetworkItem]:
-    item_id = get_full_item_list()[compat_item].code
+    item_id = get_full_item_list()[compat_item.name].code
     network_item = NetworkItem(item_id, 0, 0, 0)
     return compat_item.quantity * [network_item]
 
