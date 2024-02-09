@@ -246,7 +246,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                      ItemNames.AVENGER, ItemNames.IMMORTAL, ItemNames.ANNIHILATOR, ItemNames.VANGUARD})
             if first_mission == SC2Mission.SUDDEN_STRIKE.mission_name:
                 # Special case - cliffjumpers
-                basic_units = {ItemNames.REAPER, ItemNames.GOLIATH, ItemNames.SIEGE_TANK, ItemNames.VIKING}
+                basic_units = {ItemNames.REAPER, ItemNames.GOLIATH, ItemNames.SIEGE_TANK, ItemNames.VIKING, ItemNames.BANSHEE}
             local_basic_unit = sorted(item for item in basic_units if item not in non_local_items and item not in excluded_items)
             if not local_basic_unit:
                 # Drop non_local_items constraint
