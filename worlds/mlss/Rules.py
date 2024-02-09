@@ -5,16 +5,19 @@ from .Locations import all_locations, hidden
 from . import StateLogic
 
 
-def set_rules(world: World, excluded):
+def set_rules(world: "World", excluded):
     for location in all_locations:
         if "Digspot" in location.name:
-            if (world.options.skip_minecart and "Minecart" in location.name) or (world.options.castle_skip and "Bowser" in location.name):
+            if (world.options.skip_minecart and "Minecart" in location.name) or (
+                    world.options.castle_skip and "Bowser" in location.name):
                 continue
             if world.options.chuckle_beans == 0 or world.options.chuckle_beans == 1 and location.id in hidden:
                 continue
-            add_rule(world.multiworld.get_location(location.name, world.player), lambda state: StateLogic.canDig(state, world.player))
+            add_rule(world.multiworld.get_location(location.name, world.player),
+                     lambda state: StateLogic.canDig(state, world.player))
         if "Beanstone" in location.name:
-            add_rule(world.multiworld.get_location(location.name, world.player), lambda state: StateLogic.canDig(state, world.player))
+            add_rule(world.multiworld.get_location(location.name, world.player),
+                     lambda state: StateLogic.canDig(state, world.player))
         if "Shop" in location.name and "Coffee" not in location.name and location.name not in excluded:
             forbid_item(world.multiworld.get_location(location.name, world.player), "Hammers", world.player)
         if location.itemType != 0 and location.name not in excluded:
@@ -54,7 +57,8 @@ def set_rules(world: World, excluded):
         add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSRoom1Digspot2, world.player),
                  lambda state: StateLogic.ultra(state, world.player) and StateLogic.thunder(state, world.player))
 
-    forbid_item(world.multiworld.get_location(LocationName.SSChuckolaMembershipCard, world.player), "Nuts", world.player)  # Bandaid Fix
+    forbid_item(world.multiworld.get_location(LocationName.SSChuckolaMembershipCard, world.player), "Nuts",
+                world.player)  # Bandaid Fix
 
     add_rule(world.multiworld.get_location(LocationName.HoohooVillageHammerHouseBlock, world.player),
              lambda state: StateLogic.hammers(state, world.player))
@@ -90,14 +94,18 @@ def set_rules(world: World, excluded):
              lambda state: StateLogic.ultra(state, world.player) and StateLogic.thunder(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSRoom2Block1, world.player),
              lambda state: StateLogic.canDig(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock1, world.player),
-             lambda state: StateLogic.canMini(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock2, world.player),
-             lambda state: StateLogic.canMini(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock3, world.player),
-             lambda state: StateLogic.canMini(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock4, world.player),
-             lambda state: StateLogic.canMini(state, world.player))
+    add_rule(
+        world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock1, world.player),
+        lambda state: StateLogic.canMini(state, world.player))
+    add_rule(
+        world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock2, world.player),
+        lambda state: StateLogic.canMini(state, world.player))
+    add_rule(
+        world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock3, world.player),
+        lambda state: StateLogic.canMini(state, world.player))
+    add_rule(
+        world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleSecretAreaBlock4, world.player),
+        lambda state: StateLogic.canMini(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.WoohooHooniversityMiniMarioPuzzleBlock, world.player),
              lambda state: StateLogic.canMini(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSecretScroll1, world.player),
@@ -115,7 +123,9 @@ def set_rules(world: World, excluded):
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSuperHammerUpgrade, world.player),
              lambda state: StateLogic.thunder(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsUltraHammerUpgrade, world.player),
-             lambda state: StateLogic.thunder(state, world.player) and StateLogic.pieces(state, world.player) and StateLogic.castleTown(state, world.player) and StateLogic.rose(state, world.player))
+             lambda state: StateLogic.thunder(state, world.player) and StateLogic.pieces(state,
+                                                                                         world.player) and StateLogic.castleTown(
+                 state, world.player) and StateLogic.rose(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.BeanbeanOutskirtsSoloLuigiCaveMole, world.player),
              lambda state: StateLogic.canDig(state, world.player))
     add_rule(world.multiworld.get_location(LocationName.ChucklehuckWoodsRedChuckolaFruit, world.player),
@@ -271,8 +281,19 @@ def set_rules(world: World, excluded):
                  lambda state: StateLogic.ultra(state, world.player))
         add_rule(world.multiworld.get_location("S.S Chuckola Storage Room Coin Block 1", world.player),
                  lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player))
+        add_rule(world.multiworld.get_location("Gwarhar Lagoon First Underwater Area Room 2 Coin Block", world.player),
+                 lambda state: StateLogic.canDash(state, world.player) and (StateLogic.membership(state, world.player) or StateLogic.surfable(state, world.player)))
         add_rule(world.multiworld.get_location("S.S Chuckola Storage Room Coin Block 2", world.player),
                  lambda state: StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player))
         add_rule(world.multiworld.get_location("Jokes End Second Floor West Room Coin Block", world.player),
-                 lambda state: StateLogic.ultra(state, world.player) and StateLogic.fire(state, world.player) and (StateLogic.membership(state, world.player) or (StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player))))
-
+                 lambda state: StateLogic.ultra(state, world.player) and StateLogic.fire(state, world.player)
+                 and (StateLogic.membership(state, world.player)
+                 or (StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player))))
+        add_rule(world.multiworld.get_location("Jokes End North of Bridge Room Coin Block", world.player),
+                 lambda state: StateLogic.ultra(state, world.player) and StateLogic.fire(state, world.player)
+                 and StateLogic.canDig(state, world.player)
+                 and (StateLogic.membership(state, world.player)
+                 or StateLogic.canMini(state, world.player)))
+        if not world.options.difficult_logic:
+            add_rule(world.multiworld.get_location("Jokes End North of Bridge Room Coin Block", world.player),
+                     lambda state: StateLogic.canCrash(state, world.player))

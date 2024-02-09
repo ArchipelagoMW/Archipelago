@@ -1,11 +1,8 @@
 import io
 import os
 import pkgutil
-
 import bsdiff4
 
-import Utils
-import settings
 from BaseClasses import Item, Location
 from worlds.AutoWorld import World
 from settings import get_settings
@@ -58,21 +55,11 @@ cpants = [
 def get_base_rom_as_bytes() -> bytes:
     with open(get_settings().mlss_options.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
-
     return base_rom_bytes
 
 
-def get_base_rom_path(file_name: str = "") -> str:
-    options: settings.Settings = settings.get_settings()
-    if not file_name:
-        file_name = options["mlss_options"]["rom_file"]
-    if not os.path.exists(file_name):
-        file_name = Utils.user_path(file_name)
-    return file_name
-
-
 class MLSSDeltaPatch(APDeltaPatch):
-    game = "Mario & Luigi: Superstar Saga"
+    game = "Mario & Luigi Superstar Saga"
     hash = "4b1a5897d89d9e74ec7f630eefdfd435"
     patch_file_ending = ".apmlss"
     result_file_ending = ".gba"
@@ -85,7 +72,7 @@ class MLSSDeltaPatch(APDeltaPatch):
 class Rom:
     hash = "4b1a5897d89d9e74ec7f630eefdfd435"
 
-    def __init__(self, world: World):
+    def __init__(self, world: "World"):
         content = get_base_rom_as_bytes()
         patched = self.apply_delta(content)
         self.random = world.multiworld.per_slot_randoms[world.player]

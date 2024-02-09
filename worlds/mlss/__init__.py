@@ -1,6 +1,5 @@
 import typing
 import settings
-from typing import Dict, Any
 from BaseClasses import Tutorial, ItemClassification
 from worlds.AutoWorld import WebWorld, World
 from .Locations import all_locations, location_table, bowsers, bowsersMini, event, hidden, coins
@@ -8,6 +7,9 @@ from .Options import MLSSOptions
 from .Items import MLSSItem, itemList, item_frequencies, item_table
 from .Names.LocationName import LocationName
 from .Client import MLSSClient
+from .Regions import create_regions, connect_regions
+from .Rom import MLSSDeltaPatch, Rom
+from .Rules import set_rules
 
 
 class MLSSWebWorld(WebWorld):
@@ -71,7 +73,6 @@ class MLSSWorld(World):
             self.excluded_locations += [location.name for location in all_locations if location in coins]
 
     def create_regions(self) -> None:
-        from .Regions import create_regions, connect_regions
         create_regions(self, self.excluded_locations)
         connect_regions(self)
 
@@ -157,7 +158,7 @@ class MLSSWorld(World):
         if self.options.chuckle_beans == 0:
             remaining -= 186
         if self.options.chuckle_beans == 1:
-            remaining -= 58
+            remaining -= 59
         if not self.options.coins:
             remaining -= len(coins)
         for i in range(remaining):
@@ -167,7 +168,6 @@ class MLSSWorld(World):
             filler_items.remove(filler_item_name)
 
     def set_rules(self) -> None:
-        from .Rules import set_rules
         set_rules(self, self.excluded_locations)
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.can_reach("PostJokes", "Region", self.player)
@@ -177,7 +177,6 @@ class MLSSWorld(World):
         return MLSSItem(item.itemName, item.progression, item.code, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        from .Rom import Rom
         rom = Rom(self)
 
         for location_name in location_table.keys():

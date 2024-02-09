@@ -97,4 +97,4 @@ def castleTown(state, player):
 
 
 def fungitown(state, player):
-    return castleTown(state, player) and thunder(state, player) and rose(state, player)
+    return castleTown(state, player) and thunder(state, player) and rose(state, player) and (super(state, player) or canDash(state, player))

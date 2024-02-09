@@ -1,14 +1,9 @@
-import time
-from typing import TYPE_CHECKING, Optional, Dict, Set, List
+from typing import TYPE_CHECKING, Optional, Set
 import struct
-from BaseClasses import MultiWorld
 from NetUtils import ClientStatus
 from .Locations import roomCount, nonBlock, beanstones, roomException, shop, badge, pants, eReward
-from .Items import items_by_id, ItemData
-from collections import defaultdict
-import sys
-import logging
-import math
+from .Items import items_by_id
+
 import asyncio
 
 import worlds._bizhawk as bizhawk
@@ -78,11 +73,10 @@ class MLSSClient(BizHawkClient):
 
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.player_name
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
-        from CommonClient import logger
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x4564, 59, "EWRAM"),
                                                               (0x2330, 2, "IWRAM"), (0x3FE0, 1, "IWRAM"), (0x304A, 1, "EWRAM"),
@@ -103,7 +97,6 @@ class MLSSClient(BizHawkClient):
                 return
 
             locs_to_send = set()
-            location = 0
 
             # Checking shop purchases
             if is_buy:
@@ -117,15 +110,16 @@ class MLSSClient(BizHawkClient):
                         location = pants[shop_address][shop_scroll]
                 if location in ctx.server_locations:
                     locs_to_send.add(location)
+
             # Loop for recieving items. Item is written as an ID into 0x3057.
             # ASM read the ID in a loop and give the player the item before resetting the RAM address to 0x0.
             # If RAM address isn't 0x0 yet break out and try again later to give the rest of the items
             for i in range(len(ctx.items_received) - received_index):
                 item_data = items_by_id[ctx.items_received[received_index + i].item]
-                await asyncio.sleep(.05)
                 b = await bizhawk.read(ctx.bizhawk_ctx, [(0x3057, 1, "EWRAM")])
                 if b[0][0] == 0:
                     await bizhawk.write(ctx.bizhawk_ctx, [(0x3057, [id_to_RAM(item_data.itemID)], "EWRAM"), (0x4808, [(received_index + i + 1) // 0x100, (received_index + i + 1) % 0x100], "EWRAM")])
+                    await asyncio.sleep(.05)
                 else:
                     break
 
