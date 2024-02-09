@@ -156,7 +156,7 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if not location.event])
 
-        created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options,
+        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
                                      self.multiworld.random)
 
         self.multiworld.itempool += created_items
@@ -289,6 +289,12 @@ class StardewValleyWorld(World):
             #     self.all_progression_items[item.name] = 0
             # self.all_progression_items[item.name] += 1
         return StardewItem(item.name, override_classification, item.code, self.player)
+
+    def delete_item(self, item: Item):
+        if item.classification & ItemClassification.progression:
+            self.total_progression_items -= 1
+            # if item.name in self.all_progression_items:
+            #     self.all_progression_items[item.name] -= 1
 
     def create_starting_item(self, item: Union[str, ItemData]) -> StardewItem:
         if isinstance(item, str):
