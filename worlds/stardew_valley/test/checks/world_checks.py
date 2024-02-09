@@ -48,7 +48,20 @@ def assert_can_reach_everything(tester: unittest.TestCase, multiworld: MultiWorl
 
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
     assert_same_number_items_locations(tester, multiworld)
-    for item in multiworld.get_items():
+    non_event_items = [item for item in multiworld.get_items() if item.code]
+    for item in non_event_items:
         multiworld.state.collect(item)
     assert_can_win(tester, multiworld)
     assert_can_reach_everything(tester, multiworld)
+
+
+def basic_checks_with_subtests(tester: unittest.TestCase, multiworld: MultiWorld):
+    with tester.subTest("same_number_items_locations"):
+        assert_same_number_items_locations(tester, multiworld)
+    non_event_items = [item for item in multiworld.get_items() if item.code]
+    for item in non_event_items:
+        multiworld.state.collect(item)
+    with tester.subTest("can_win"):
+        assert_can_win(tester, multiworld)
+    with tester.subTest("can_reach_everything"):
+        assert_can_reach_everything(tester, multiworld)

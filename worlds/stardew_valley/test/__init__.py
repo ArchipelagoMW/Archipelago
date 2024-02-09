@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 from argparse import Namespace
@@ -250,12 +251,15 @@ pre_generated_worlds = {}
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[Tuple[str, Any]], MultiWorld] = {}, _steps=gen_steps) -> MultiWorld:  # noqa
+def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[str, MultiWorld] = {}, _steps=gen_steps) -> MultiWorld:  # noqa
     if test_options is None:
         test_options = {}
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    frozen_options = frozenset(test_options.items()).union({seed})
+    options_with_seed = dict()
+    options_with_seed.update(test_options)
+    options_with_seed.update({"seed": seed})
+    frozen_options = json.dumps(options_with_seed)
     if frozen_options in _cache:
         return _cache[frozen_options]
 
@@ -267,6 +271,10 @@ def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[FrozenSet[T
         value = option(test_options[name]) if name in test_options else option.from_any(option.default)
         setattr(args, name, {1: value})
     multiworld.set_options(args)
+    if "start_inventory" in test_options:
+        for item, amount in test_options["start_inventory"].items():
+            for _ in range(amount):
+                multiworld.push_precollected(multiworld.create_item(item, 1))
     for step in _steps:
         call_all(multiworld, step)
 
