@@ -1,8 +1,10 @@
+import random
 import sys
 import typing
 import unittest
 from argparse import Namespace
 
+from Generate import get_seed_name
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
@@ -152,6 +154,8 @@ class WorldTestBase(unittest.TestCase):
         self.multiworld.player_name = {1: "Tester"}
         self.multiworld.set_seed(seed)
         self.multiworld.state = CollectionState(self.multiworld)
+        random.seed(self.multiworld.seed)
+        self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
@@ -281,7 +285,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
-            excluded = self.multiworld.exclude_locations[1].value
+            excluded = self.multiworld.worlds[1].options.exclude_locations.value
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
                 if location.name not in excluded:

@@ -8,6 +8,7 @@ from .Options import MuseDashOptions
 from .Items import MuseDashSongItem, MuseDashFixedItem
 from .Locations import MuseDashLocation
 from .MuseDashCollection import MuseDashCollections
+from .Presets import MuseDashPresets
 
 
 class MuseDashWebWorld(WebWorld):
@@ -33,6 +34,7 @@ class MuseDashWebWorld(WebWorld):
     )
 
     tutorials = [setup_en, setup_es]
+    options_presets = MuseDashPresets
 
 
 class MuseDashWorld(World):
@@ -326,5 +328,6 @@ class MuseDashWorld(World):
             "victoryLocation": self.victory_song_name,
             "deathLink": self.options.death_link.value,
             "musicSheetWinCount": self.get_music_sheet_win_count(),
-            "gradeNeeded": self.options.grade_needed.value
+            "gradeNeeded": self.options.grade_needed.value,
+            "hasFiller": True,
         }

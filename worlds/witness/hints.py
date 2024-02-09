@@ -69,6 +69,15 @@ joke_hints = [
     "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
     "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
     "Have you tried Blasphemous?\nYou haven't? Blasphemy!\n...Sorry. You should try it, though!",
+    "Have you tried Doom II?\nGot a good game on your hands? Just make it bigger and better.",
+    "Have you tried Lingo?\nIt's an open world puzzle game. It features panels with non-verbally explained mechanics.\nIf you like this game, you'll like Lingo too.",
+    "(Middle Yellow)\nYOU AILED OVERNIGHT\nH--- --- ----- -----?",
+    "Have you tried Bumper Stickers?\nMaybe after spending so much time on this island, you are longing for a simpler puzzle game.",
+    "Have you tried Pokemon Emerald?\nI'm going to say it: 10/10, just the right amount of water.",
+    "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
+    "Have you tried Final Fantasy Mystic Quest?\nApparently, it was made in an attempt to simplify Final Fantasy for the western market.\nThey were right, I suck at RPGs.",
+    "Have you tried Shivers?\nWitness 2 should totally feature a haunted Museum.",
+    "Have you tried Heretic?\nWait, there is a Doom Engine game where you can look UP AND DOWN???",
     
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
@@ -112,12 +121,50 @@ joke_hints = [
     "Have you found a red page yet? No? Then have you found a blue page?",
     "And here we see the Witness player, seeking answers where there are none-\nDid someone turn on the loudspeaker?",
 
-    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi,"
-    "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch.",
+    "Be quiet. I can't hear the elevator.",
+    "Witness me.\n- The famous last words of John Witness.",
+    "It's okay, I always have to skip the Rotated Shaper puzzles too.",
+    "Alan please add hint.",
+    "Rumor has it there's an audio log with a hint nearby.",
+    "In the future, war will break out between obelisk_sides and individual EP players.\nWhich side are you on?",
+    "Droplets: Low, High, Mid.\nAmbience: Mid, Low, Mid, High.",
+    "Name a better game involving lines. I'll wait.",
+    "\"You have to draw a line in the sand.\"\n- Arin \"Egoraptor\" Hanson",
+    "Have you tried?\nThe puzzles tend to get easier if you do.",
+    "Sorry, I accidentally left my phone in the Jungle.\nAnd also all my fragile dishes.",
+    "Winner of the \"Most Irrelevant PR in AP History\" award!",
+    "I bet you wish this was a real hint :)",
+    "\"This hint is an impostor.\"- Junk hint submitted by T1mshady.\n...wait, I'm not supposed to say that part?",
+    "Wouldn't you like to know, weather buoy?",
+    "Give me a few minutes, I should have better material by then.",
+    "Just pet the doggy! You know you want to!!!",
+    "ceci n'est pas une metroidvania",
+    "HINT is MELT\nYOU is HOT",
+    "Who's that behind you?",
+    ":3",
+    "^v ^^v> >>^>v\n^^v>v ^v>> v>^> v>v^",
+    "Statement #0162601, regarding a strange island that--\nOh, wait, sorry. I'm not supposed to be here.",
+    "Hollow Bastion has 6 progression items.\nOr maybe it doesn't.\nI wouldn't know.",
+    "Set your hint count lower so I can tell you more jokes next time.",
+    "A non-edge start point is similar to a cat.\nIt must be either inside or outside, it can't be both.",
+    "What if we kissed on the Bunker Laser Platform?\nJk... unless?",
+    "You don't have Boat? Invisible boat time!\nYou do have boat? Boat clipping time!",
+    "Cet indice est en français. Nous nous excusons de tout inconvénients engendrés par cela.",
+    "How many of you have personally witnessed a total solar eclipse?",
+    "In the Treehouse area, you will find 69 progression items.\nNice.\n(Source: Just trust me)",
+    "Lingo\nLingoing\nLingone",
+    "The name of the captain was Albert Einstein.",
+    "Panel impossible Sigma plz fix",
+    "Welcome Back! (:",
+    "R R R U L L U L U R U R D R D R U U",
+    "Have you tried checking your tracker?",
+    
+    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady,"
+    "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid.",
 ]
 
 
-def get_always_hint_items(world: "WitnessWorld"):
+def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     always = [
         "Boat",
         "Caves Shortcuts",
@@ -143,17 +190,27 @@ def get_always_hint_items(world: "WitnessWorld"):
     return always
 
 
-def get_always_hint_locations(_: "WitnessWorld"):
-    return {
+def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
+    always = [
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
         "Theater Eclipse EP",
         "Shipwreck Couch EP",
         "Mountainside Cloud Cycle EP",
-    }
+    ]
+
+    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
+    if world.options.EP_difficulty == "eclipse":
+        always.append("Town Obelisk Side 6")  # Eclipse EP
+
+    if world.options.EP_difficulty != "normal":
+        always.append("Treehouse Obelisk Side 4")  # Couch EP
+        always.append("River Obelisk Side 1")  # Cloud Cycle EP. Needs to be changed to "Mountainside Obelisk" soon
+
+    return always
 
 
-def get_priority_hint_items(world: "WitnessWorld"):
+def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     priority = {
         "Caves Mountain Shortcut (Door)",
         "Caves Swamp Shortcut (Door)",
@@ -173,9 +230,8 @@ def get_priority_hint_items(world: "WitnessWorld"):
             "Eraser",
             "Black/White Squares",
             "Colored Squares",
-            "Colored Dots",
             "Sound Dots",
-            "Symmetry"
+            "Progressive Symmetry"
         ]
 
         priority.update(world.random.sample(symbols, 5))
@@ -202,11 +258,11 @@ def get_priority_hint_items(world: "WitnessWorld"):
             lasers.append("Desert Laser")
             priority.update(world.random.sample(lasers, 6))
 
-    return priority
+    return sorted(priority)
 
 
-def get_priority_hint_locations(_: "WitnessWorld"):
-    return {
+def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
+    priority = [
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",
         "Town RGB Room Left",
@@ -220,7 +276,14 @@ def get_priority_hint_locations(_: "WitnessWorld"):
         "Tunnels Theater Flowers EP",
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
-    }
+    ]
+    
+    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
+    if world.options.EP_difficulty != "normal":
+        priority.append("Town Obelisk Side 6")  # Theater Flowers EP
+        priority.append("Treehouse Obelisk Side 4")  # Shipwreck Green EP
+
+    return priority
 
 
 def make_hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]):
@@ -321,8 +384,8 @@ def make_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item]
     remaining_hints = hint_amount - len(hints)
     priority_hint_amount = int(max(0.0, min(len(priority_hint_pairs) / 2, remaining_hints / 2)))
 
-    prog_items_in_this_world = sorted(list(prog_items_in_this_world))
-    locations_in_this_world = sorted(list(loc_in_this_world))
+    prog_items_in_this_world = sorted(prog_items_in_this_world)
+    locations_in_this_world = sorted(loc_in_this_world)
 
     world.random.shuffle(prog_items_in_this_world)
     world.random.shuffle(locations_in_this_world)

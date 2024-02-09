@@ -83,6 +83,9 @@ you until these have ended.
 
 ## Unique Local Commands
 
-The following command is only available when using the PokemonClient to play with Archipelago.
+You can use `/bank` commands to deposit and withdraw money from the server's EnergyLink storage. This can be accessed by
+any players playing games that use the EnergyLink feature.
 
-- `/gb` Check Gameboy Connection State
+- `/bank` - check the amount of money available on the server.
+- `/bank withdraw #` - withdraw money from the server.
+- `/bank deposit #` - deposit money into the server. 25% of the amount will be lost to taxation.
