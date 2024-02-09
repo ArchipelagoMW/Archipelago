@@ -256,7 +256,9 @@ def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[str, MultiW
         test_options = {}
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    if "start_inventory" not in test_options:
+    should_cache = "start_inventory" not in test_options
+    frozen_options = frozenset({})
+    if should_cache:
         frozen_options = frozenset(test_options.items()).union({seed})
         if frozen_options in _cache:
             return _cache[frozen_options]
@@ -276,7 +278,8 @@ def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[str, MultiW
     for step in _steps:
         call_all(multiworld, step)
 
-    _cache[frozen_options] = multiworld
+    if should_cache:
+        _cache[frozen_options] = multiworld
 
     return multiworld
 
