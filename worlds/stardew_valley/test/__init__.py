@@ -256,12 +256,10 @@ def setup_solo_multiworld(test_options=None, seed=None, _cache: Dict[str, MultiW
         test_options = {}
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    options_with_seed = dict()
-    options_with_seed.update(test_options)
-    options_with_seed.update({"seed": seed})
-    frozen_options = json.dumps(options_with_seed)
-    if frozen_options in _cache:
-        return _cache[frozen_options]
+    if "start_inventory" not in test_options:
+        frozen_options = frozenset(test_options.items()).union({seed})
+        if frozen_options in _cache:
+            return _cache[frozen_options]
 
     multiworld = setup_base_solo_multiworld(StardewValleyWorld, ())
     multiworld.set_seed(seed)
