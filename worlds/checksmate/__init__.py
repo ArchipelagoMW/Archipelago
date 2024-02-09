@@ -146,8 +146,8 @@ class CMWorld(World):
 
         # TODO: limit total material
         # items = [[self.create_item(item) for _ in range(item_data.quantity)]
-        #                             for item, item_data in progression_items]0
-        excluded_items = get_excluded_items(self.multiworld, self.player)
+        #                             for item, item_data in progression_items]
+        excluded_items = self.get_excluded_items()
         self.items_used[self.player] = {}
         self.items_remaining[self.player] = {}
 
@@ -156,7 +156,7 @@ class CMWorld(World):
             if item_name not in self.items_used[self.player]:
                 self.items_used[self.player][item_name] = 0
             self.items_used[self.player][item_name] += excluded_items[item_name]
-        starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations)
+        starter_items = self.assign_starter_items(excluded_items, self.locked_locations)
         for item in starter_items:
             self.consume_item(item.name, {})
 
@@ -461,6 +461,50 @@ class CMWorld(World):
     def piece_limit_of(self, chosen_item: str):
         return piece_type_limit_options[chosen_item](self.options).value
 
+    def get_excluded_items(self) -> Dict[str, int]:
+        excluded_items: Dict[str, int] = {}
+
+        for item in self.multiworld.precollected_items[self.player]:
+            if item.name not in excluded_items:
+                excluded_items[item.name] = 0
+            excluded_items[item.name] += 1
+
+        # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
+
+        # excluded_items.update(excluded_items_option[player].value)
+
+        return excluded_items
+
+    def assign_starter_items(self, excluded_items: Dict[str, int],
+                             locked_locations: List[str]) -> List[Item]:
+        multiworld = self.multiworld
+        player = self.player
+        cmoptions: CMOptions = self.options
+        non_local_items = multiworld.non_local_items[player].value
+        early_material_option = cmoptions.early_material.value
+        if early_material_option > 0:
+            early_units = []
+            if early_material_option == 1 or early_material_option > 4:
+                early_units.append("Progressive Pawn")
+            if early_material_option == 2 or early_material_option > 3:
+                early_units.append("Progressive Minor Piece")
+            if early_material_option > 2:
+                early_units.append("Progressive Major Piece")
+            local_basic_unit = sorted(item for item in early_units if
+                                      item not in non_local_items and (
+                                              item not in excluded_items or
+                                              excluded_items[item] < item_table[item].quantity))
+            if not local_basic_unit:
+                raise Exception("At least one early chessman must be local")
+
+            item = create_item_with_correct_settings(player, multiworld.per_slot_randoms[player].choice(local_basic_unit))
+            multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
+            locked_locations.append("King to E2/E7 Early")
+
+            return [item]
+        else:
+            return []
+
     def collect(self, state: CollectionState, item: Item) -> bool:
         material = 0
         item_count = state.prog_items[self.player][item.name]
@@ -551,46 +595,3 @@ def chessmen_count(items: list[CMItem], pocket_limit: int) -> int:
     return len([item for item in items if item.name in item_name_groups["Chessmen"]]) + \
         math.ceil(len([item for item in items if item.name == "Progressive Pocket"]) / pocket_limit)
 
-
-def get_excluded_items(multiworld: MultiWorld, player: int) -> Dict[str, int]:
-    excluded_items: Dict[str, int] = {}
-
-    for item in multiworld.precollected_items[player]:
-        if item.name not in excluded_items:
-            excluded_items[item.name] = 0
-        excluded_items[item.name] += 1
-
-    # excluded_items_option = getattr(multiworld, 'excluded_items', {player: []})
-
-    # excluded_items.update(excluded_items_option[player].value)
-
-    return excluded_items
-
-
-def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Dict[str, int],
-                         locked_locations: List[str]) -> List[Item]:
-    non_local_items = multiworld.non_local_items[player].value
-    cmoptions: CMOptions = multiworld.worlds[player].options
-    early_material_option = cmoptions.early_material.value
-    if early_material_option > 0:
-        early_units = []
-        if early_material_option == 1 or early_material_option > 4:
-            early_units.append("Progressive Pawn")
-        if early_material_option == 2 or early_material_option > 3:
-            early_units.append("Progressive Minor Piece")
-        if early_material_option > 2:
-            early_units.append("Progressive Major Piece")
-        local_basic_unit = sorted(item for item in early_units if
-                                  item not in non_local_items and (
-                                          item not in excluded_items or
-                                          excluded_items[item] < item_table[item].quantity))
-        if not local_basic_unit:
-            raise Exception("At least one early chessman must be local")
-
-        item = create_item_with_correct_settings(player, multiworld.per_slot_randoms[player].choice(local_basic_unit))
-        multiworld.get_location("King to E2/E7 Early", player).place_locked_item(item)
-        locked_locations.append("King to E2/E7 Early")
-
-        return [item]
-    else:
-        return []

@@ -81,6 +81,8 @@ def has_enemy(state: CollectionState, location_name: str, player: int) -> bool:
 
 
 def set_rules(multiworld: MultiWorld, player: int):
+    # TODO: cannot import partially initialized CMWorld, is there a simpler way to access params?
+
     # TODO: handle other goals
     multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
