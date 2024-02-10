@@ -20,9 +20,9 @@ from .regions import create_regions
 from .rules import set_rules
 from .stardew_rule import True_, StardewRule, HasProgressionPercent
 from .strings.ap_names.event_names import Event
+from .strings.entrance_names import Entrance as EntranceName
 from .strings.goal_names import Goal as GoalName
 from .strings.region_names import Region as RegionName
-from .strings.entrance_names import Entrance as EntranceName
 
 client_version = 0
 
@@ -86,6 +86,7 @@ class StardewValleyWorld(World):
     modified_bundles: List[BundleRoom]
     randomized_entrances: Dict[str, str]
     total_progression_items: int
+
     # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
 
     def __init__(self, world: MultiWorld, player: int):
@@ -129,17 +130,6 @@ class StardewValleyWorld(World):
 
         create_locations(add_location, self.modified_bundles, self.options, self.multiworld.random)
         self.multiworld.regions.extend(world_regions.values())
-
-        self.register_indirect_connections(world_regions, world_entrances)
-
-    def register_indirect_connections(self, world_regions, world_entrances):
-        if self.options.exclude_ginger_island == ExcludeGingerIsland.option_true:
-            return
-        walnut_room = world_regions[RegionName.qi_walnut_room]
-        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_20])
-        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_60])
-        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.dig_to_dangerous_mines_100])
-        self.multiworld.register_indirect_condition(walnut_room, world_entrances[EntranceName.enter_dangerous_skull_cavern])
 
     def create_items(self):
         self.precollect_starting_season()

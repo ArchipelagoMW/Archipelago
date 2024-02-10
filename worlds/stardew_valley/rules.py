@@ -11,13 +11,14 @@ from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, s
 from .data.recipe_data import all_cooking_recipes_by_name
 from .locations import LocationTags
 from .logic.logic import StardewLogic
-from .logic.tool_logic import tool_upgrade_prices
 from .logic.time_logic import MAX_MONTHS
+from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, Friendsanity
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
-from .stardew_rule import And
+from .stardew_rule import And, StardewRule
+from .stardew_rule.indirect_connection import look_for_indirect_connection
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem, SVERunes
 from .strings.ap_names.transport_names import Transportation
@@ -211,7 +212,8 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_hut, (logic.has(ArtisanGood.void_mayonnaise) | logic.mod.magic.can_blink()))
-    set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair, (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
+    set_entrance_rule(multiworld, player, Entrance.enter_mutant_bug_lair,
+                      (logic.received(Event.start_dark_talisman_quest) & logic.relationship.can_meet(NPC.krobus)) | logic.mod.magic.can_blink())
     set_entrance_rule(multiworld, player, Entrance.enter_casino, logic.quest.has_club_card())
 
     set_bedroom_entrance_rules(logic, multiworld, player, world_options)
@@ -229,7 +231,8 @@ def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewVa
     set_entrance_rule(multiworld, player, Entrance.dig_to_dangerous_mines_20, dangerous_mine_rule)
     set_entrance_rule(multiworld, player, Entrance.dig_to_dangerous_mines_60, dangerous_mine_rule)
     set_entrance_rule(multiworld, player, Entrance.dig_to_dangerous_mines_100, dangerous_mine_rule)
-    set_entrance_rule(multiworld, player, Entrance.enter_dangerous_skull_cavern, (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
+    set_entrance_rule(multiworld, player, Entrance.enter_dangerous_skull_cavern,
+                      (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
 
 
 def set_farm_buildings_entrance_rules(logic, multiworld, player, world_options):
@@ -891,7 +894,8 @@ def set_sve_ginger_island_rules(logic: StardewLogic, multiworld: MultiWorld, pla
         return
     set_entrance_rule(multiworld, player, SVEEntrance.summit_to_highlands, logic.received(SVEQuestItem.marlon_boat_paddle))
     set_entrance_rule(multiworld, player, SVEEntrance.wizard_to_fable_reef, logic.received(SVEQuestItem.fable_reef_portal))
-    set_entrance_rule(multiworld, player, SVEEntrance.highlands_to_cave, logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
+    set_entrance_rule(multiworld, player, SVEEntrance.highlands_to_cave,
+                      logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron) & logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
 
 
 def set_boarding_house_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
@@ -900,7 +904,12 @@ def set_boarding_house_rules(logic: StardewLogic, multiworld: MultiWorld, player
     set_entrance_rule(multiworld, player, BoardingHouseEntrance.the_lost_valley_to_lost_valley_ruins, logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
 
 
-def set_entrance_rule(multiworld, player, entrance: str, rule: CollectionRule):
+def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
+    potentially_required_regions = look_for_indirect_connection(rule)
+    if potentially_required_regions:
+        for region in potentially_required_regions:
+            multiworld.register_indirect_condition(region, entrance)
+
     MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
 
 
