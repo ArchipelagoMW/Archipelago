@@ -908,7 +908,7 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
     potentially_required_regions = look_for_indirect_connection(rule)
     if potentially_required_regions:
         for region in potentially_required_regions:
-            multiworld.register_indirect_condition(region, entrance)
+            multiworld.register_indirect_condition(multiworld.get_region(region, player), multiworld.get_entrance(entrance, player))
 
     MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
 
