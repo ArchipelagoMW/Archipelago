@@ -508,6 +508,7 @@ class WitnessPlayerLogic:
         )
         mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
         remote_doors = doors >= 2
+        door_panels = doors == "panels" or doors == "mixed"
 
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
@@ -515,6 +516,8 @@ class WitnessPlayerLogic:
             "0x03750": eps_shuffled,  # Monastery Garden Entry Door
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
+            "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
+            "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
             "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
@@ -530,6 +533,7 @@ class WitnessPlayerLogic:
             "0x01BEA": difficulty == "none" and eps_shuffled,  # Keep PP2
             "0x0A0C9": eps_shuffled or discards_shuffled or disable_non_randomized,  # Cargo Box Entry Door
             "0x09EEB": discards_shuffled or mountain_upper_included,  # Mountain Floor 2 Elevator Control Panel
+            "0x09EDD": mountain_upper_included,  # Mountain Floor 2 Exit Door
             "0x17CAB": symbols_shuffled or not disable_non_randomized or "0x17CAB" not in self.DOOR_ITEMS_BY_ID,
             # Jungle Popup Wall Panel
         }
