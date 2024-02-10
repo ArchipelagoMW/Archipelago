@@ -125,7 +125,7 @@ class Scenario(IntEnum):
     future_first_encounters = 119
     mythological_animatronic_film_set = 120
     jurassic_safari = 121
-    roaring_twenties_schnider_cup = 122
+    roaring_twenties_schneider_cup = 122
     future_future_world = 123
     mythological_cradle_of_civilization = 124
     prehistoric_stone_age = 125
@@ -394,7 +394,7 @@ class Scenario(Choice):
     option_future_first_encounters = Scenario.future_first_encounters.value
     option_mythological_animatronic_film_set = Scenario.mythological_animatronic_film_set.value
     option_jurassic_safari = Scenario.jurassic_safari.value
-    option_roaring_twenties_schnider_cup = Scenario.roaring_twenties_schnider_cup.value
+    option_roaring_twenties_schneider_cup = Scenario.roaring_twenties_schneider_cup.value
     option_future_future_world = Scenario.future_future_world.value
     option_mythological_cradle_of_civilization = Scenario.mythological_cradle_of_civilization.value
     option_prehistoric_stone_age = Scenario.prehistoric_stone_age.value
