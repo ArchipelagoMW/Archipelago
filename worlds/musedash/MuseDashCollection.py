@@ -34,7 +34,7 @@ class MuseDashCollections:
         "Rush-Hour",
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
-        "umpopoff"
+        "umpopoff",
     ]
 
     album_items: Dict[str, AlbumData] = {}
