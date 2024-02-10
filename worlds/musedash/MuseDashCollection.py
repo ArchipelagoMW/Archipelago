@@ -27,7 +27,7 @@ class MuseDashCollections:
         # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
         "Miku in Museland", # Paid DLC not included in Muse Plus
         "Rin Len's Mirrorland", # Paid DLC not included in Muse Plus
-        "MSR Anthology", # Part of Muse Plus. Goes away 20th Jan 2024.
+        "MSR Anthology", # Now no longer available.
     ]
 
     DIFF_OVERRIDES: List[str] = [
