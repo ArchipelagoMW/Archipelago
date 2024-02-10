@@ -101,7 +101,7 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
                      lambda state: logic.terran_early_tech(state)),
         LocationData("The Outlaws", "The Outlaws: Bunker", SC2WOL_LOC_ID_OFFSET + 203, LocationType.VANILLA,
                      lambda state: logic.terran_early_tech(state)),
-        LocationData("The Outlaws", "The Outlaws: Close Resource Cache Area", SC2WOL_LOC_ID_OFFSET + 204, LocationType.EXTRA),
+        LocationData("The Outlaws", "The Outlaws: Close Resource Pickups", SC2WOL_LOC_ID_OFFSET + 204, LocationType.EXTRA),
         LocationData("Zero Hour", "Zero Hour: Victory", SC2WOL_LOC_ID_OFFSET + 300, LocationType.VICTORY,
                      lambda state: logic.terran_common_unit(state) and
                                    logic.terran_defense_rating(state, True) >= 2 and
