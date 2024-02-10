@@ -10,8 +10,6 @@ from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 
 class YuGiOh2006Client(BizHawkClient):
@@ -27,7 +25,7 @@ class YuGiOh2006Client(BizHawkClient):
         self.local_checked_locations = set()
         self.rom_slot_name = None
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
@@ -39,8 +37,7 @@ class YuGiOh2006Client(BizHawkClient):
             # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
             # validating a ROM where there's no slot name to read.
             try:
-                slot_name_bytes = \
-                (await bizhawk.read(ctx.bizhawk_ctx, [(0x30, 32, "ROM")]))[0]
+                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(0x30, 32, "ROM")]))[0]
                 self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
             except UnicodeDecodeError:
                 logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
@@ -55,36 +52,42 @@ class YuGiOh2006Client(BizHawkClient):
         ctx.want_slot_data = True
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.rom_slot_name
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         try:
             read_state = await bizhawk.read(ctx.bizhawk_ctx,
                                             [(0x0, 8, "EWRAM"),
-                                            (0x52e8, 32, "EWRAM"),
-                                            (0x5308, 32, "EWRAM"),
-                                            (0x5325, 1, "EWRAM"),
-                                            (0x6c38, 4, "EWRAM")])
-            game_state = bytes([byte for byte in read_state[0] if byte != 0]).decode("utf-8")
+                                             (0x52e8, 32, "EWRAM"),
+                                             (0x5308, 32, "EWRAM"),
+                                             (0x5325, 1, "EWRAM"),
+                                             (0x6c38, 4, "EWRAM")])
+            game_state = bytes([byte for byte in read_state[0]]).decode("utf-8")
             locations = read_state[1]
             items = read_state[2]
             amount_items = int.from_bytes(read_state[3], "little")
             money = int.from_bytes(read_state[4], "little")
 
             # make sure save was created
-            if game_state != 'YWCT2006':
+            if game_state != "YWCT2006":
                 return
-            await bizhawk.write(ctx.bizhawk_ctx, [(0x5308, parse_items(bytearray(items), ctx.items_received), "EWRAM")])
+            local_items = bytearray(items)
+            await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                        [(0x5308, parse_items(bytearray(items), ctx.items_received), "EWRAM")],
+                                        [(0x5308, local_items, "EWRAM")])
             money_received = 0
             for item in ctx.items_received:
                 if item.item == item_to_index["5000DP"] + 5730000:
                     money_received += 1
             if money_received > amount_items:
-                await bizhawk.write(ctx.bizhawk_ctx,
-                                [(0x6c38, (money + (money_received - amount_items) * 5000).to_bytes(4, "little"),
-                                  "EWRAM"),
-                                 (0x5325, money_received.to_bytes(4, "little"), "EWRAM")])
+                await bizhawk.guarded_write(ctx.bizhawk_ctx,
+                                            [(0x6c38,
+                                              (money + (money_received - amount_items) * 5000).to_bytes(4, "little"),
+                                              "EWRAM"),
+                                             (0x5325, money_received.to_bytes(4, "little"), "EWRAM")],
+                                            [(0x6c38, money.to_bytes(2, "little"), "EWRAM"),
+                                             (0x5325, amount_items.to_bytes(2, "little"), "EWRAM")])
 
             locs_to_send = set()
 
@@ -109,8 +112,8 @@ class YuGiOh2006Client(BizHawkClient):
                         "locations": list(locs_to_send)
                     }])
 
-                # Send game clear if we're in either any ending cutscene or the credits state.
-            if not ctx.finished_game and bytearray(locations)[18] & (1 << 5) != 0:
+            # Send game clear if we're in either any ending cutscene or the credits state.
+            if not ctx.finished_game and locations[18] & (1 << 5) != 0:
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
                     "status": ClientStatus.CLIENT_GOAL
@@ -121,8 +124,9 @@ class YuGiOh2006Client(BizHawkClient):
             pass
 
 
-def parse_items(localItems, items: List[NetworkItem]):
-    array = localItems
+# Parses bit-map for local items and adds the received items to that bit-map
+def parse_items(local_items: bytearray, items: List[NetworkItem]) -> bytearray:
+    array = local_items
     for item in items:
         index = item.item - 5730001
         if index != 254:
@@ -130,5 +134,3 @@ def parse_items(localItems, items: List[NetworkItem]):
             bit = index % 8
             array[byte] = array[byte] | (1 << bit)
     return array
-
-
