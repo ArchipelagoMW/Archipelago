@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
+from typing import Collection
 
 from .ability_logic import AbilityLogicMixin
 from .action_logic import ActionLogicMixin
@@ -83,10 +83,6 @@ from ..strings.tool_names import Tool, ToolMaterial
 from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
 
-MISSING_ITEM = "THIS ITEM IS MISSING"
-
-fishing_regions = [Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west]
-
 
 @dataclass(frozen=False, repr=False)
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
@@ -97,10 +93,11 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin):
     player: int
     options: StardewValleyOptions
+    regions: Collection[str]
 
-    def __init__(self, player: int, options: StardewValleyOptions):
+    def __init__(self, player: int, options: StardewValleyOptions, regions: Collection[str]):
         self.registry = LogicRegistry()
-        super().__init__(player, self.registry, options, self)
+        super().__init__(player, self.registry, options, regions, self)
 
         self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})

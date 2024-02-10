@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import logging
 from abc import ABC, abstractmethod
 from collections import deque
 from functools import cached_property
@@ -14,7 +13,6 @@ from .literal import true_, false_, LiteralStardewRule
 from .protocol import StardewRule
 
 MISSING_ITEM = "THIS ITEM IS MISSING"
-logger = logging.getLogger(__name__)
 
 
 class BaseStardewRule(StardewRule, ABC):

@@ -98,11 +98,6 @@ class StardewValleyWorld(World):
     def generate_early(self):
         self.force_change_options_if_incompatible()
 
-        self.logic = StardewLogic(self.player, self.options)
-        self.modified_bundles = get_all_bundles(self.multiworld.random,
-                                                self.logic,
-                                                self.options)
-
     def force_change_options_if_incompatible(self):
         goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
         goal_is_perfection = self.options.goal == Goal.option_perfection
@@ -122,6 +117,11 @@ class StardewValleyWorld(World):
             return region
 
         world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
+
+        self.logic = StardewLogic(self.player, self.options, world_regions.keys())
+        self.modified_bundles = get_all_bundles(self.multiworld.random,
+                                                self.logic,
+                                                self.options)
 
         def add_location(name: str, code: Optional[int], region: str):
             region = world_regions[region]
