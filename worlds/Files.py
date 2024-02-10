@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import json
 import zipfile
 import os
@@ -15,7 +16,7 @@ del threading
 del os
 
 
-class AutoPatchRegister(type):
+class AutoPatchRegister(abc.ABCMeta):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
 
@@ -112,14 +113,25 @@ class APContainer:
         }
 
 
-class APDeltaPatch(APContainer, metaclass=AutoPatchRegister):
-    """An APContainer that additionally has delta.bsdiff4
+class APPatch(APContainer, abc.ABC, metaclass=AutoPatchRegister):
+    """
+    An abstract `APContainer` that defines the requirements for an object
+    to be used by the `Patch.create_rom_file` function.
+    """
+    result_file_ending: str = ".sfc"
+
+    @abc.abstractmethod
+    def patch(self, target: str) -> None:
+        """ create the output file with the file name `target` """
+
+
+class APDeltaPatch(APPatch):
+    """An APPatch that additionally has delta.bsdiff4
     containing a delta patch to get the desired file, often a rom."""
 
     hash: Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
-    result_file_ending: str = ".sfc"
     source_data: bytes
 
     def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:
