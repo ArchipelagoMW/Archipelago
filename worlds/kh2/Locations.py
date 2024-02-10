@@ -1,19 +1,9 @@
 import typing
 
 from BaseClasses import Location
-from .Names import LocationName, ItemName
-
-
-class KH2Location(Location):
-    game: str = "Kingdom Hearts 2"
-
-
-class LocationData(typing.NamedTuple):
-    locid: int
-    yml: str
-    charName: str = "Sora"
-    charNumber: int = 1
-
+from .Names import LocationName, ItemName, RegionName
+from .Subclasses import LocationData
+from .Regions import KH2REGIONS
 
 # data's addrcheck sys3 addr obtained roomid bit index is eventid
 LoD_Checks = {
@@ -541,7 +531,7 @@ TWTNW_Checks = {
     LocationName.Xemnas1:                               LocationData(26, "Double Get Bonus"),
     LocationName.Xemnas1GetBonus:                       LocationData(26, "Second Get Bonus"),
     LocationName.Xemnas1SecretAnsemReport13:            LocationData(537, "Chest"),
-    LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
+    # LocationName.FinalXemnas:                           LocationData(71, "Get Bonus"),
     LocationName.XemnasDataPowerBoost:                  LocationData(554, "Chest"),
 }
 
@@ -806,74 +796,75 @@ Atlantica_Checks = {
 }
 
 event_location_to_item = {
-    LocationName.HostileProgramEventLocation:        ItemName.HostileProgramEvent,
-    LocationName.McpEventLocation:                   ItemName.McpEvent,
+    LocationName.HostileProgramEventLocation:    ItemName.HostileProgramEvent,
+    LocationName.McpEventLocation:               ItemName.McpEvent,
     # LocationName.ASLarxeneEventLocation:             ItemName.ASLarxeneEvent,
-    LocationName.DataLarxeneEventLocation:           ItemName.DataLarxeneEvent,
-    LocationName.BarbosaEventLocation:               ItemName.BarbosaEvent,
-    LocationName.GrimReaper1EventLocation:           ItemName.GrimReaper1Event,
-    LocationName.GrimReaper2EventLocation:           ItemName.GrimReaper2Event,
-    LocationName.DataLuxordEventLocation:            ItemName.DataLuxordEvent,
-    LocationName.DataAxelEventLocation:              ItemName.DataAxelEvent,
-    LocationName.CerberusEventLocation:              ItemName.CerberusEvent,
-    LocationName.OlympusPeteEventLocation:           ItemName.OlympusPeteEvent,
-    LocationName.HydraEventLocation:                 ItemName.HydraEvent,
+    LocationName.DataLarxeneEventLocation:       ItemName.DataLarxeneEvent,
+    LocationName.BarbosaEventLocation:           ItemName.BarbosaEvent,
+    LocationName.GrimReaper1EventLocation:       ItemName.GrimReaper1Event,
+    LocationName.GrimReaper2EventLocation:       ItemName.GrimReaper2Event,
+    LocationName.DataLuxordEventLocation:        ItemName.DataLuxordEvent,
+    LocationName.DataAxelEventLocation:          ItemName.DataAxelEvent,
+    LocationName.CerberusEventLocation:          ItemName.CerberusEvent,
+    LocationName.OlympusPeteEventLocation:       ItemName.OlympusPeteEvent,
+    LocationName.HydraEventLocation:             ItemName.HydraEvent,
     LocationName.OcPainAndPanicCupEventLocation: ItemName.OcPainAndPanicCupEvent,
-    LocationName.OcCerberusCupEventLocation:       ItemName.OcCerberusCupEvent,
-    LocationName.HadesEventLocation:                 ItemName.HadesEvent,
+    LocationName.OcCerberusCupEventLocation:     ItemName.OcCerberusCupEvent,
+    LocationName.HadesEventLocation:             ItemName.HadesEvent,
     # LocationName.ASZexionEventLocation:              ItemName.ASZexionEvent,
-    LocationName.DataZexionEventLocation:            ItemName.DataZexionEvent,
-    LocationName.Oc2TitanCupEventLocation:         ItemName.Oc2TitanCupEvent,
-    LocationName.Oc2GofCupEventLocation:           ItemName.Oc2GofCupEvent,
+    LocationName.DataZexionEventLocation:        ItemName.DataZexionEvent,
+    LocationName.Oc2TitanCupEventLocation:       ItemName.Oc2TitanCupEvent,
+    LocationName.Oc2GofCupEventLocation:         ItemName.Oc2GofCupEvent,
     # LocationName.Oc2CupsEventLocation:               ItemName.Oc2CupsEventLocation,
-    LocationName.HadesCupEventLocations:             ItemName.HadesCupEvents,
-    LocationName.PrisonKeeperEventLocation:          ItemName.PrisonKeeperEvent,
-    LocationName.OogieBoogieEventLocation:           ItemName.OogieBoogieEvent,
-    LocationName.ExperimentEventLocation:            ItemName.ExperimentEvent,
+    LocationName.HadesCupEventLocations:         ItemName.HadesCupEvents,
+    LocationName.PrisonKeeperEventLocation:      ItemName.PrisonKeeperEvent,
+    LocationName.OogieBoogieEventLocation:       ItemName.OogieBoogieEvent,
+    LocationName.ExperimentEventLocation:        ItemName.ExperimentEvent,
     # LocationName.ASVexenEventLocation:               ItemName.ASVexenEvent,
-    LocationName.DataVexenEventLocation:             ItemName.DataVexenEvent,
-    LocationName.ShanYuEventLocation:                ItemName.ShanYuEvent,
-    LocationName.AnsemRikuEventLocation:             ItemName.AnsemRikuEvent,
-    LocationName.StormRiderEventLocation:            ItemName.StormRiderEvent,
-    LocationName.DataXigbarEventLocation:            ItemName.DataXigbarEvent,
-    LocationName.RoxasEventLocation:                 ItemName.RoxasEvent,
-    LocationName.XigbarEventLocation:                ItemName.XigbarEvent,
-    LocationName.LuxordEventLocation:                ItemName.LuxordEvent,
-    LocationName.SaixEventLocation:                  ItemName.SaixEvent,
-    LocationName.XemnasEventLocation:                ItemName.XemnasEvent,
-    LocationName.ArmoredXemnasEventLocation:         ItemName.ArmoredXemnasEvent,
-    LocationName.ArmoredXemnas2EventLocation:        ItemName.ArmoredXemnas2Event,
+    LocationName.DataVexenEventLocation:         ItemName.DataVexenEvent,
+    LocationName.ShanYuEventLocation:            ItemName.ShanYuEvent,
+    LocationName.AnsemRikuEventLocation:         ItemName.AnsemRikuEvent,
+    LocationName.StormRiderEventLocation:        ItemName.StormRiderEvent,
+    LocationName.DataXigbarEventLocation:        ItemName.DataXigbarEvent,
+    LocationName.RoxasEventLocation:             ItemName.RoxasEvent,
+    LocationName.XigbarEventLocation:            ItemName.XigbarEvent,
+    LocationName.LuxordEventLocation:            ItemName.LuxordEvent,
+    LocationName.SaixEventLocation:              ItemName.SaixEvent,
+    LocationName.XemnasEventLocation:            ItemName.XemnasEvent,
+    LocationName.ArmoredXemnasEventLocation:     ItemName.ArmoredXemnasEvent,
+    LocationName.ArmoredXemnas2EventLocation:    ItemName.ArmoredXemnas2Event,
     # LocationName.FinalXemnasEventLocation:           ItemName.FinalXemnasEvent,
-    LocationName.DataXemnasEventLocation:            ItemName.DataXemnasEvent,
-    LocationName.ThresholderEventLocation:           ItemName.ThresholderEvent,
-    LocationName.BeastEventLocation:                 ItemName.BeastEvent,
-    LocationName.DarkThornEventLocation:             ItemName.DarkThornEvent,
-    LocationName.XaldinEventLocation:                ItemName.XaldinEvent,
-    LocationName.DataXaldinEventLocation:            ItemName.DataXaldinEvent,
-    LocationName.TwinLordsEventLocation:             ItemName.TwinLordsEvent,
-    LocationName.GenieJafarEventLocation:            ItemName.GenieJafarEvent,
+    LocationName.DataXemnasEventLocation:        ItemName.DataXemnasEvent,
+    LocationName.ThresholderEventLocation:       ItemName.ThresholderEvent,
+    LocationName.BeastEventLocation:             ItemName.BeastEvent,
+    LocationName.DarkThornEventLocation:         ItemName.DarkThornEvent,
+    LocationName.XaldinEventLocation:            ItemName.XaldinEvent,
+    LocationName.DataXaldinEventLocation:        ItemName.DataXaldinEvent,
+    LocationName.TwinLordsEventLocation:         ItemName.TwinLordsEvent,
+    LocationName.GenieJafarEventLocation:        ItemName.GenieJafarEvent,
     # LocationName.ASLexaeusEventLocation:             ItemName.ASLexaeusEvent,
-    LocationName.DataLexaeusEventLocation:           ItemName.DataLexaeusEvent,
-    LocationName.ScarEventLocation:                  ItemName.ScarEvent,
-    LocationName.GroundShakerEventLocation:          ItemName.GroundShakerEvent,
-    LocationName.DataSaixEventLocation:              ItemName.DataSaixEvent,
-    LocationName.HBDemyxEventLocation:               ItemName.HBDemyxEvent,
-    LocationName.ThousandHeartlessEventLocation:     ItemName.ThousandHeartlessEvent,
-    LocationName.Mushroom13EventLocation:            ItemName.Mushroom13Event,
-    LocationName.SephiEventLocation:                 ItemName.SephiEvent,
-    LocationName.DataDemyxEventLocation:             ItemName.DataDemyxEvent,
-    LocationName.CorFirstFightEventLocation:         ItemName.CorFirstFightEvent,
-    LocationName.CorSecondFightEventLocation:        ItemName.CorSecondFightEvent,
-    LocationName.TransportEventLocation:             ItemName.TransportEvent,
-    LocationName.OldPeteEventLocation:               ItemName.OldPeteEvent,
-    LocationName.FuturePeteEventLocation:            ItemName.FuturePeteEvent,
+    LocationName.DataLexaeusEventLocation:       ItemName.DataLexaeusEvent,
+    LocationName.ScarEventLocation:              ItemName.ScarEvent,
+    LocationName.GroundShakerEventLocation:      ItemName.GroundShakerEvent,
+    LocationName.DataSaixEventLocation:          ItemName.DataSaixEvent,
+    LocationName.HBDemyxEventLocation:           ItemName.HBDemyxEvent,
+    LocationName.ThousandHeartlessEventLocation: ItemName.ThousandHeartlessEvent,
+    LocationName.Mushroom13EventLocation:        ItemName.Mushroom13Event,
+    LocationName.SephiEventLocation:             ItemName.SephiEvent,
+    LocationName.DataDemyxEventLocation:         ItemName.DataDemyxEvent,
+    LocationName.CorFirstFightEventLocation:     ItemName.CorFirstFightEvent,
+    LocationName.CorSecondFightEventLocation:    ItemName.CorSecondFightEvent,
+    LocationName.TransportEventLocation:         ItemName.TransportEvent,
+    LocationName.OldPeteEventLocation:           ItemName.OldPeteEvent,
+    LocationName.FuturePeteEventLocation:        ItemName.FuturePeteEvent,
     # LocationName.ASMarluxiaEventLocation:            ItemName.ASMarluxiaEvent,
-    LocationName.DataMarluxiaEventLocation:          ItemName.DataMarluxiaEvent,
-    LocationName.TerraEventLocation:                 ItemName.TerraEvent,
-    LocationName.TwilightThornEventLocation:         ItemName.TwilightThornEvent,
-    LocationName.Axel1EventLocation:                 ItemName.Axel1Event,
-    LocationName.Axel2EventLocation:                 ItemName.Axel2Event,
-    LocationName.DataRoxasEventLocation:             ItemName.DataRoxasEvent,
+    LocationName.DataMarluxiaEventLocation:      ItemName.DataMarluxiaEvent,
+    LocationName.TerraEventLocation:             ItemName.TerraEvent,
+    LocationName.TwilightThornEventLocation:     ItemName.TwilightThornEvent,
+    LocationName.Axel1EventLocation:             ItemName.Axel1Event,
+    LocationName.Axel2EventLocation:             ItemName.Axel2Event,
+    LocationName.DataRoxasEventLocation:         ItemName.DataRoxasEvent,
+    LocationName.FinalXemnasEventLocation:       ItemName.Victory,
 }
 all_weapon_slot = {
     LocationName.FAKESlot,
@@ -1360,4 +1351,10 @@ exclusion_table = {
     "Chests":        {
         location for location, data in all_locations.items() if location not in event_location_to_item.keys() and location not in popups_set and location != LocationName.StationofSerenityPotion and data.yml == "Chest"
     }
+}
+
+location_groups: typing.Dict[str, list]
+location_groups = {
+    Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
+    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and "Event" not in Region_Locs[0]
 }

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool
 
 
 class ShuffleDoors(Choice):
@@ -21,6 +21,13 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
+class ProgressiveColorful(DefaultOnToggle):
+    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    If off, there is an item for each room of The Colorful, meaning that random rooms in the middle of the sequence can open up without giving you access to them.
+    If on, there are ten progressive items, which open up the sequence from White forward."""
+    display_name = "Progressive Colorful"
+
+
 class LocationChecks(Choice):
     """On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for
     achievement panels and a small handful of other panels.
@@ -32,7 +39,7 @@ class LocationChecks(Choice):
     option_insanity = 2
 
 
-class ShuffleColors(Toggle):
+class ShuffleColors(DefaultOnToggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
     You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
     display_name = "Shuffle Colors"
@@ -117,6 +124,7 @@ class DeathLink(Toggle):
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
     progressive_orange_tower: ProgressiveOrangeTower
+    progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
@@ -128,3 +136,4 @@ class LingoOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

@@ -80,7 +80,8 @@ class SMZ3World(World):
     locationNamesGT: Set[str] = {loc.Name for loc in GanonsTower(None, None).Locations}
 
     # first added for 0.2.6
-    required_client_version = (0, 2, 6)
+    # optimized message queues for 0.4.4
+    required_client_version = (0, 4, 4)
 
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()

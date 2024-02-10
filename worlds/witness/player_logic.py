@@ -70,15 +70,19 @@ class WitnessPlayerLogic:
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
-            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved...
-            if panel_hex != "0x28A0D":
-                return frozenset(all_options)
-            # ...except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
+            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
+            # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
             # In the future, it would be wise to make a distinction between "power dependencies" and other dependencies.
-            if any("0x28998" in option for option in these_panels):
-                return frozenset(all_options)
+            if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
+                these_items = all_options
 
-            these_items = all_options
+            # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
+            elif panel_hex == "0x1C349":
+                these_items = all_options
+
+            # For any other door entity, we just return a set with the item that opens it & disregard power dependencies
+            else:
+                return frozenset(all_options)
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
@@ -99,7 +103,8 @@ class WitnessPlayerLogic:
 
                 if option_entity in self.EVENT_NAMES_BY_HEX:
                     new_items = frozenset({frozenset([option_entity])})
-                elif option_entity in {"7 Lasers", "11 Lasers", "PP2 Weirdness", "Theater to Tunnels"}:
+                elif option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
+                                       "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
                 else:
                     new_items = self.reduce_req_within_region(option_entity)
@@ -318,7 +323,10 @@ class WitnessPlayerLogic:
         elif victory == 3:
             self.VICTORY_LOCATION = "0xFFF00"
 
-        if chal_lasers <= 7:
+        # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
+        # (challenge_lasers <= 7), you can now solve it without opening Mountain Entry first.
+        # Furthermore, if the user sets mountain_lasers > 7, the box is rotated to not require Mountain Entry either.
+        if chal_lasers <= 7 or mnt_lasers > 7:
             adjustment_linesets_in_order.append([
                 "Requirement Changes:",
                 "0xFFF00 - 11 Lasers - True",
@@ -371,7 +379,7 @@ class WitnessPlayerLogic:
         if lasers:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
-        if world.options.shuffle_EPs:
+        if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
 
@@ -485,7 +493,7 @@ class WitnessPlayerLogic:
         self.EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
         for event_hex, event_name in self.EVENT_NAMES_BY_HEX.items():
-            if event_hex in self.COMPLETELY_DISABLED_ENTITIES:
+            if event_hex in self.COMPLETELY_DISABLED_ENTITIES or event_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
                 continue
             self.EVENT_PANELS.add(event_hex)
 

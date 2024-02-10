@@ -3,10 +3,13 @@ from . import LingoTestBase
 
 class TestRequiredRoomLogic(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_pilgrim_first(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("The Seeker", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Pilgrim Antechamber", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Pilgrim Room", "Region", self.player))
@@ -27,6 +30,8 @@ class TestRequiredRoomLogic(LingoTestBase):
         self.assertTrue(self.can_reach_location("The Seeker - Achievement"))
 
     def test_hidden_first(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("The Seeker", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Pilgrim Room", "Region", self.player))
         self.assertFalse(self.can_reach_location("The Seeker - Achievement"))
@@ -49,10 +54,13 @@ class TestRequiredRoomLogic(LingoTestBase):
 
 class TestRequiredDoorLogic(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_through_rhyme(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.can_reach_location("Rhyme Room - Circle/Looped Square Wall"))
 
         self.collect_by_name("Starting Room - Rhyme Room Entrance")
@@ -62,6 +70,8 @@ class TestRequiredDoorLogic(LingoTestBase):
         self.assertTrue(self.can_reach_location("Rhyme Room - Circle/Looped Square Wall"))
 
     def test_through_hidden(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.can_reach_location("Rhyme Room - Circle/Looped Square Wall"))
 
         self.collect_by_name("Starting Room - Rhyme Room Entrance")
@@ -76,10 +86,13 @@ class TestRequiredDoorLogic(LingoTestBase):
 
 class TestSimpleDoors(LingoTestBase):
     options = {
-        "shuffle_doors": "simple"
+        "shuffle_doors": "simple",
+        "shuffle_colors": "false",
     }
 
     def test_requirement(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Outside The Wanderer", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
 

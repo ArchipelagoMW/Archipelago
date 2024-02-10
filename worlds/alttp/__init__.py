@@ -289,12 +289,17 @@ class ALTTPWorld(World):
         self.waterfall_fairy_bottle_fill = self.random.choice(bottle_options)
         self.pyramid_fairy_bottle_fill = self.random.choice(bottle_options)
 
-        if multiworld.mode[player] == 'standard' \
-                and multiworld.smallkey_shuffle[player] \
-                and multiworld.smallkey_shuffle[player] != smallkey_shuffle.option_universal \
-                and multiworld.smallkey_shuffle[player] != smallkey_shuffle.option_own_dungeons \
-                and multiworld.smallkey_shuffle[player] != smallkey_shuffle.option_start_with:
-            self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+        if multiworld.mode[player] == 'standard':
+            if multiworld.smallkey_shuffle[player]:
+                if (multiworld.smallkey_shuffle[player] not in
+                   (smallkey_shuffle.option_universal, smallkey_shuffle.option_own_dungeons,
+                    smallkey_shuffle.option_start_with)):
+                    self.multiworld.local_early_items[self.player]["Small Key (Hyrule Castle)"] = 1
+                self.multiworld.local_items[self.player].value.add("Small Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Small Key (Hyrule Castle)")
+            if multiworld.bigkey_shuffle[player]:
+                self.multiworld.local_items[self.player].value.add("Big Key (Hyrule Castle)")
+                self.multiworld.non_local_items[self.player].value.discard("Big Key (Hyrule Castle)")
 
         # system for sharing ER layouts
         self.er_seed = str(multiworld.random.randint(0, 2 ** 64))
