@@ -57,6 +57,7 @@ class TunicWorld(World):
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
+    tunic_region_dict: Dict[str, Region]
 
     def generate_early(self) -> None:
         if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
@@ -150,6 +151,7 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        self.tunic_region_dict = {}
         if self.options.entrance_rando:
             portal_pairs, portal_hints = create_er_regions(self)
             for portal1, portal2 in portal_pairs.items():
@@ -158,19 +160,20 @@ class TunicWorld(World):
 
         else:
             for region_name in tunic_regions:
-                region = Region(region_name, self.player, self.multiworld)
-                self.multiworld.regions.append(region)
-
-            for region_name, exits in tunic_regions.items():
-                region = self.multiworld.get_region(region_name, self.player)
-                region.add_exits(exits)
+                self.tunic_region_dict[region_name] = Region(region_name, self.player, self.multiworld)
 
             for location_name, location_id in self.location_name_to_id.items():
-                region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                region = self.tunic_region_dict[location_table[location_name].region]
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
 
-            victory_region = self.multiworld.get_region("Spirit Arena", self.player)
+            for region in self.tunic_region_dict.values():
+                self.multiworld.regions.append(region)
+
+            for region_name, exits in tunic_regions.items():
+                self.tunic_region_dict[region_name].add_exits(exits)
+
+            victory_region = self.tunic_region_dict["Spirit Arena"]
             victory_location = TunicLocation(self.player, "The Heir", None, victory_region)
             victory_location.place_locked_item(TunicItem("Victory", ItemClassification.progression, None, self.player))
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
