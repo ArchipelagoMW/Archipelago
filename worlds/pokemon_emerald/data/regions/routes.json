@@ -1287,7 +1287,9 @@
     "has_grass": false,
     "has_water": false,
     "has_fishing": false,
-    "locations": [],
+    "locations": [
+      "NPC_GIFT_RECEIVED_SOOT_SACK"
+    ],
     "events": [],
     "exits": [],
     "warps": [
@@ -1319,7 +1321,8 @@
       "TRAINER_BERNIE_1_REWARD",
       "TRAINER_LUCAS_1_REWARD",
       "TRAINER_ANGELINA_REWARD",
-      "TRAINER_LENNY_REWARD"
+      "TRAINER_LENNY_REWARD",
+      "TRAINER_TYRA_AND_IVY_REWARD"
     ],
     "events": [],
     "exits": [
@@ -2363,7 +2366,8 @@
       "BERRY_TREE_79",
       "TRAINER_JAZMYN_REWARD",
       "TRAINER_DAVIS_REWARD",
-      "TRAINER_VIOLET_REWARD"
+      "TRAINER_VIOLET_REWARD",
+      "TRAINER_MIU_AND_YUKI_REWARD"
     ],
     "events": [],
     "exits": [

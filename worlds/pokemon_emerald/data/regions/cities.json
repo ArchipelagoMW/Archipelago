@@ -2885,7 +2885,8 @@
     "has_fishing": false,
     "locations": [
       "NPC_GIFT_RECEIVED_TM_CALM_MIND",
-      "BADGE_7"
+      "BADGE_7",
+      "TRAINER_TATE_AND_LIZA_1_REWARD"
     ],
     "events": [
       "EVENT_DEFEAT_TATE_AND_LIZA"

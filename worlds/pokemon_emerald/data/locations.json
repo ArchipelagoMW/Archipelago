@@ -1338,6 +1338,10 @@
     "label": "Route 109 - Soft Sand from Tuber",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_RECEIVED_SOOT_SACK": {
+    "label": "Route 113 - Soot Sack from Glass Blower",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_SOOTHE_BELL": {
     "label": "Slateport City - Soothe Bell from Woman in Fan Club",
     "tags": ["NpcGift"]
@@ -4869,6 +4873,10 @@
     "label": "Victory Road B1F - Cooltrainer Mitchell",
     "tags": ["Trainer"]
   },
+  "TRAINER_MIU_AND_YUKI_REWARD": {
+    "label": "Route 123 - Twins Miu and Yuki",
+    "tags": ["Trainer"]
+  },
   "TRAINER_MOLLIE_REWARD": {
     "label": "Route 133 - Expert Mollie",
     "tags": ["Trainer"]
@@ -5185,8 +5193,16 @@
     "label": "Mt Pyre 4F - Hex Maniac Tasha",
     "tags": ["Trainer"]
   },
+  "TRAINER_TATE_AND_LIZA_1_REWARD": {
+    "label": "Mossdeep Gym - Leader Tate and Liza",
+    "tags": ["Trainer"]
+  },
   "TRAINER_TAYLOR_REWARD": {
     "label": "Route 119 - Bug Maniac Taylor",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TYRA_AND_IVY_REWARD": {
+    "label": "Route 114 - Sr. and Jr. Tyra and Ivy",
     "tags": ["Trainer"]
   },
   "TRAINER_THALIA_1_REWARD": {
