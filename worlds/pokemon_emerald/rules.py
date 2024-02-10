@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Callable, Dict
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .data import data
+from .data import NUM_REAL_SPECIES, data
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
 from .pokemon import national_id_to_species_id_map
 
@@ -1521,7 +1521,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
 
     # Pokedex Rewards
     if world.options.dexsanity:
-        for i in range(386):
+        for i in range(NUM_REAL_SPECIES):
             species = data.species[national_id_to_species_id_map[i + 1]]
             set_rule(
                 get_location(f"Pokedex - {species.label}"),

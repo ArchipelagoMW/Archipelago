@@ -293,11 +293,16 @@ class RandomizeWildPokemon(Choice):
     option_completely_random = 4
 
 
-class AllowWildLegendaries(DefaultOnToggle):
+class WildEncounterBlacklist(OptionSet):
     """
-    Wild encounters can be replaced by legendaries. Only applied if Randomize Wild Pokemon is not Vanilla.
+    Prevents listed species from appearing in the wild when wild encounters are randomized.
+
+    May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
+
+    Use "_Legendaries" as a shortcut for legendary pokemon.
     """
-    display_name = "Allow Wild Legendaries"
+    display_name = "Wild Encounter Blacklist"
+    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
 
 
 class RandomizeStarters(Choice):
@@ -319,11 +324,16 @@ class RandomizeStarters(Choice):
     option_completely_random = 4
 
 
-class AllowStarterLegendaries(DefaultOnToggle):
+class StarterBlacklist(OptionSet):
     """
-    Starters can be replaced by legendaries. Only applied if Randomize Starters is not Vanilla.
+    Prevents listed species from appearing as starters when starters are randomized.
+
+    May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
+
+    Use "_Legendaries" as a shortcut for legendary pokemon.
     """
-    display_name = "Allow Starter Legendaries"
+    display_name = "Starter Blacklist"
+    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
 
 
 class RandomizeTrainerParties(Choice):
@@ -345,11 +355,17 @@ class RandomizeTrainerParties(Choice):
     option_completely_random = 4
 
 
-class AllowTrainerLegendaries(DefaultOnToggle):
+class TrainerPartyBlacklist(OptionSet):
     """
-    Enemy trainer pokemon can be replaced by legendaries. Only applied if Randomize Trainer Parties is not Vanilla.
+    Prevents listed species from appearing in opponent trainers' parties if opponent parties are randomized.
+
+    May be overridden if enforcing other restrictions in combination with this blacklist is impossible.
+
+    Use "_Legendaries" as a shortcut for legendary pokemon.
     """
-    display_name = "Allow Trainer Legendaries"
+    display_name = "Trainer Party Blacklist"
+    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
+
 
 class ForceFullyEvolved(Range):
     """
@@ -793,11 +809,11 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     allowed_legendary_hunt_encounters: AllowedLegendaryHuntEncounters
 
     wild_pokemon: RandomizeWildPokemon
-    allow_wild_legendaries: AllowWildLegendaries
+    wild_encounter_blacklist: WildEncounterBlacklist
     starters: RandomizeStarters
-    allow_starter_legendaries: AllowStarterLegendaries
+    starter_blacklist: StarterBlacklist
     trainer_parties: RandomizeTrainerParties
-    allow_trainer_legendaries: AllowTrainerLegendaries
+    trainer_party_blacklist: TrainerPartyBlacklist
     force_fully_evolved: ForceFullyEvolved
     legendary_encounters: RandomizeLegendaryEncounters
     misc_pokemon: RandomizeMiscPokemon

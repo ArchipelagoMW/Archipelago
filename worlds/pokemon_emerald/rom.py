@@ -11,10 +11,10 @@ import bsdiff4
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 
-from .data import PokemonEmeraldData, TrainerPokemonDataTypeEnum, BASE_OFFSET, data
+from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
-from .pokemon import get_random_species, get_random_move
+from .pokemon import get_random_move
 from .util import encode_string, get_easter_egg
 
 if TYPE_CHECKING:
@@ -373,7 +373,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         patched_rom,
         options_address + 0x00,
         2,
-        get_random_species(world.random, data.species).species_id
+        world.random.choice([species.species_id for species in data.species if species is not None])
     )
 
     # Set hold A to advance text

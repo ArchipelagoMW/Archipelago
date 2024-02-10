@@ -15,17 +15,17 @@ from worlds.AutoWorld import WebWorld, World
 
 from .client import PokemonEmeraldClient  # Unused, but required to register with BizHawkClient
 from .data import (SpeciesData, MapData, EncounterTableData, LearnsetMove, TrainerPokemonData, MiscPokemonData,
-                   TrainerData, POSTGAME_MAPS, data as emerald_data)
+                   TrainerData, POSTGAME_MAPS, NUM_REAL_SPECIES, data as emerald_data)
 from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_map, get_item_classification,
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
                         create_locations_with_tags)
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
-                      HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement, ReceiveItemMessages,
+                      HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement,
                       PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon)
-from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_species, get_random_move,
-                      get_random_damaging_move, get_random_type)
+from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_move,
+                      get_random_damaging_move, get_random_type, get_species_id_by_label)
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
@@ -85,6 +85,9 @@ class PokemonEmeraldWorld(World):
     hm_shuffle_info: Optional[List[Tuple[PokemonEmeraldLocation, PokemonEmeraldItem]]]
     free_fly_location_id: int
     blacklisted_moves: Set[int]
+    blacklisted_wilds: Set[int]
+    blacklisted_starters: Set[int]
+    blacklisted_opponent_pokemon: Set[int]
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
@@ -101,6 +104,9 @@ class PokemonEmeraldWorld(World):
         self.hm_shuffle_info = None
         self.free_fly_location_id = 0
         self.blacklisted_moves = set()
+        self.blacklisted_wilds = set()
+        self.blacklisted_starters = set()
+        self.blacklisted_opponent_pokemon = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
 
@@ -132,6 +138,30 @@ class PokemonEmeraldWorld(World):
 
         self.blacklisted_moves = {emerald_data.move_labels[label] for label in self.options.move_blacklist.value}
 
+        self.blacklisted_wilds = {
+            get_species_id_by_label(species_name)
+            for species_name in self.options.wild_encounter_blacklist.value
+            if species_name != "_Legendaries"
+        }
+        if "_Legendaries" in self.options.wild_encounter_blacklist.value:
+            self.blacklisted_wilds |= LEGENDARY_POKEMON
+
+        self.blacklisted_starters = {
+            get_species_id_by_label(species_name)
+            for species_name in self.options.starter_blacklist.value
+            if species_name != "_Legendaries"
+        }
+        if "_Legendaries" in self.options.starter_blacklist.value:
+            self.blacklisted_starters |= LEGENDARY_POKEMON
+
+        self.blacklisted_opponent_pokemon = {
+            get_species_id_by_label(species_name)
+            for species_name in self.options.trainer_party_blacklist.value
+            if species_name != "_Legendaries"
+        }
+        if "_Legendaries" in self.options.starter_blacklist.value:
+            self.blacklisted_opponent_pokemon |= LEGENDARY_POKEMON
+
         # In race mode we don't patch any item location information into the ROM
         if self.multiworld.is_race and not self.options.remote_items:
             logging.warning("Pokemon Emerald: Forcing Player %s (%s) to use remote items due to race mode.",
@@ -155,12 +185,6 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity and self.options.wild_pokemon == RandomizeWildPokemon.option_vanilla:
             raise ValueError(f"Pokemon Emerald: Player {self.player} ({self.multiworld.player_name[self.player]}) must "
                              "not leave wild encounters vanilla if enabling dexsanity.")
-
-        # Disallow blacklisting wild legendaries if dexsanity is enabled
-        if self.options.dexsanity and not self.options.allow_wild_legendaries:
-            logging.warning("Pokemon Emerald: Forcing Player %s (%s) allow wild legendaries for dexsanity.",
-                            self.player, self.multiworld.player_name[self.player])
-            self.options.allow_wild_legendaries.value = Toggle.option_true
 
         # If badges or HMs are vanilla, Norman locks you from using Surf,
         # which means you're not guaranteed to be able to reach Fortree Gym,
@@ -444,6 +468,8 @@ class PokemonEmeraldWorld(World):
 
         # Randomize wild encounters
         if self.options.wild_pokemon != RandomizeWildPokemon.option_vanilla:
+            from collections import defaultdict
+
             should_match_bst = self.options.wild_pokemon in {
                 RandomizeWildPokemon.option_match_base_stats,
                 RandomizeWildPokemon.option_match_base_stats_and_type
@@ -454,16 +480,7 @@ class PokemonEmeraldWorld(World):
             }
             catch_em_all = self.options.dexsanity == Toggle.option_true
 
-            # If doing legendary hunt, blacklist Latios from wild encounters so
-            # it can be tracked as the roamer. Otherwise it may be impossible
-            # to tell whether a highlighted route is the roamer or a wild
-            # encounter.
-            wild_encounter_blacklist: Set[int] = set()
             catch_em_all_placed = set()
-            if self.options.goal == Goal.option_legendary_hunt:
-                wild_encounter_blacklist.add(emerald_data.constants["SPECIES_LATIOS"])
-            if not self.options.allow_wild_legendaries:
-                wild_encounter_blacklist |= LEGENDARY_POKEMON
 
             priority_species = [emerald_data.constants["SPECIES_WAILORD"], emerald_data.constants["SPECIES_RELICANTH"]]
 
@@ -471,7 +488,9 @@ class PokemonEmeraldWorld(World):
             map_names = list(self.modified_maps.keys())
             self.random.shuffle(map_names)
             for map_name in map_names:
+                placed_priority_species = False
                 map_data = self.modified_maps[map_name]
+
                 new_encounters: List[Optional[EncounterTableData]] = [None, None, None]
                 old_encounters = [map_data.land_encounters, map_data.water_encounters, map_data.fishing_encounters]
 
@@ -483,24 +502,68 @@ class PokemonEmeraldWorld(World):
                         species_old_to_new_map: Dict[int, int] = {}
                         for species_id in table.slots:
                             if species_id not in species_old_to_new_map:
-                                original_species = emerald_data.species[species_id]
-                                target_bst = sum(original_species.base_stats) if should_match_bst else None
-                                target_type = self.random.choice(original_species.types) if should_match_type else None
-
-                                merged_blacklist = set(species_old_to_new_map.values()) | wild_encounter_blacklist
-                                if catch_em_all and len(catch_em_all_placed) < 386:
-                                    merged_blacklist |= catch_em_all_placed
-
-                                if len(priority_species) > 0:
+                                if not placed_priority_species and len(priority_species) > 0:
                                     new_species_id = priority_species.pop()
+                                    placed_priority_species = True
                                 else:
-                                    new_species_id = get_random_species(
-                                        self.random,
-                                        self.modified_species,
-                                        target_bst,
-                                        target_type,
-                                        merged_blacklist
-                                    ).species_id
+                                    original_species = emerald_data.species[species_id]
+
+                                    # Construct progressive tiers of blacklists that can be peeled back if they
+                                    # collectively cover too much of the pokedex. A lower index in `blacklists`
+                                    # indicates a more important set of species to avoid. Entries at `0` will
+                                    # always be blacklisted.
+                                    blacklists: Dict[int, List[Set[int]]] = defaultdict(list)
+
+                                    # Blacklist pokemon already on this table
+                                    blacklists[0].append(set(species_old_to_new_map.values()))
+
+                                    # If doing legendary hunt, blacklist Latios from wild encounters so
+                                    # it can be tracked as the roamer. Otherwise it may be impossible
+                                    # to tell whether a highlighted route is the roamer or a wild
+                                    # encounter.
+                                    if self.options.goal == Goal.option_legendary_hunt:
+                                        blacklists[0].append({emerald_data.constants["SPECIES_LATIOS"]})
+
+                                    # If dexsanity/catch 'em all mode, blacklist already placed species
+                                    # until every species has been placed once
+                                    if catch_em_all and len(catch_em_all_placed) < NUM_REAL_SPECIES:
+                                        blacklists[1].append(catch_em_all_placed)
+
+                                    # Blacklist from player options
+                                    blacklists[2].append(self.blacklisted_wilds)
+
+                                    # Type matching blacklist
+                                    if should_match_type:
+                                        blacklists[3].append({
+                                            species.species_id
+                                            for species in self.modified_species
+                                            if species is not None and not bool(set(species.types) & set(original_species.types))
+                                        })
+
+                                    merged_blacklist: Set[int] = set()
+                                    for max_priority in reversed(sorted(blacklists.keys())):
+                                        merged_blacklist = set()
+                                        for priority in blacklists.keys():
+                                            if priority < max_priority:
+                                                for blacklist in blacklists[priority]:
+                                                    merged_blacklist |= blacklist
+
+                                        if len(merged_blacklist) < NUM_REAL_SPECIES:
+                                            break
+                                    else:
+                                        raise RuntimeError("This should never happen")
+
+                                    candidates = [
+                                        species
+                                        for species in self.modified_species
+                                        if species is not None and species.species_id not in merged_blacklist
+                                    ]
+
+                                    if should_match_bst:
+                                        candidates = self.filter_species_by_nearby_bst(candidates,
+                                                                                       sum(original_species.base_stats))
+
+                                    new_species_id = self.random.choice(candidates).species_id
                                 species_old_to_new_map[species_id] = new_species_id
 
                                 if catch_em_all and map_data.name not in POSTGAME_MAPS:
@@ -872,11 +935,19 @@ class PokemonEmeraldWorld(World):
 
                 for encounter in emerald_data.legendary_encounters:
                     original_species = self.modified_species[encounter.species_id]
-                    target_bst = sum(original_species.base_stats) if should_match_bst else None
-                    target_type = self.random.choice(original_species.types) if should_match_type else None
+
+                    candidates = [species for species in self.modified_species if species is not None]
+                    if should_match_type:
+                        candidates = [
+                            species
+                            for species in candidates
+                            if bool(set(species.types) & set(original_species.types))
+                        ]
+                    if should_match_bst:
+                        candidates = self.filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
 
                     self.modified_legendary_encounters.append(MiscPokemonData(
-                        get_random_species(self.random, self.modified_species, target_bst, target_type).species_id,
+                        self.random.choice(candidates).species_id,
                         encounter.address
                     ))
 
@@ -904,15 +975,25 @@ class PokemonEmeraldWorld(World):
 
                 for encounter in emerald_data.misc_pokemon:
                     original_species = self.modified_species[encounter.species_id]
-                    target_bst = sum(original_species.base_stats) if should_match_bst else None
-                    target_type = self.random.choice(original_species.types) if should_match_type else None
+
+                    candidates = [species for species in self.modified_species if species is not None]
+                    if should_match_type:
+                        candidates = [
+                            species
+                            for species in candidates
+                            if bool(set(species.types) & set(original_species.types))
+                        ]
+                    if should_match_bst:
+                        candidates = self.filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
 
                     self.modified_misc_pokemon.append(MiscPokemonData(
-                        get_random_species(self.random, self.modified_species, target_bst, target_type).species_id,
+                        self.random.choice(candidates).species_id,
                         encounter.address
                     ))
 
         def randomize_opponent_parties() -> None:
+            from collections import defaultdict
+
             should_match_bst = self.options.trainer_parties in {
                 RandomizeTrainerParties.option_match_base_stats,
                 RandomizeTrainerParties.option_match_base_stats_and_type
@@ -928,22 +1009,51 @@ class PokemonEmeraldWorld(World):
                 new_party = []
                 for pokemon in trainer.party.pokemon:
                     original_species = emerald_data.species[pokemon.species_id]
-                    target_bst = sum(original_species.base_stats) if should_match_bst else None
-                    target_type = self.random.choice(original_species.types) if should_match_type else None
 
-                    blacklist = set()
-                    if not self.options.allow_trainer_legendaries:
-                        blacklist |= LEGENDARY_POKEMON
+                    # Construct progressive tiers of blacklists that can be peeled back if they
+                    # collectively cover too much of the pokedex. A lower index in `blacklists`
+                    # indicates a more important set of species to avoid. Entries at `0` will
+                    # always be blacklisted.
+                    blacklists: Dict[int, List[Set[int]]] = defaultdict(list)
+
+                    # Blacklist unevolved species
                     if pokemon.level >= self.options.force_fully_evolved:
-                        blacklist |= UNEVOLVED_POKEMON
+                        blacklists[0].append(UNEVOLVED_POKEMON)
 
-                    new_species = get_random_species(
-                        self.random,
-                        self.modified_species,
-                        target_bst,
-                        target_type,
-                        blacklist
-                    )
+                    # Blacklist from player options
+                    blacklists[2].append(self.blacklisted_opponent_pokemon)
+
+                    # Type matching blacklist
+                    if should_match_type:
+                        blacklists[3].append({
+                            species.species_id
+                            for species in self.modified_species
+                            if species is not None and not bool(set(species.types) & set(original_species.types))
+                        })
+
+                    merged_blacklist: Set[int] = set()
+                    for max_priority in reversed(sorted(blacklists.keys())):
+                        merged_blacklist = set()
+                        for priority in blacklists.keys():
+                            if priority < max_priority:
+                                for blacklist in blacklists[priority]:
+                                    merged_blacklist |= blacklist
+
+                        if len(merged_blacklist) < NUM_REAL_SPECIES:
+                            break
+                    else:
+                        raise RuntimeError("This should never happen")
+
+                    candidates = [
+                        species
+                        for species in self.modified_species
+                        if species is not None and species.species_id not in merged_blacklist
+                    ]
+
+                    if should_match_bst:
+                        candidates = self.filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
+
+                    new_species = self.random.choice(candidates)
 
                     if new_species.species_id not in per_species_tmhm_moves:
                         per_species_tmhm_moves[new_species.species_id] = list({
@@ -975,43 +1085,49 @@ class PokemonEmeraldWorld(World):
                 trainer.party.pokemon = new_party
 
         def randomize_starters() -> None:
-            match_bst = self.options.starters in {
+            should_match_bst = self.options.starters in {
                 RandomizeStarters.option_match_base_stats,
                 RandomizeStarters.option_match_base_stats_and_type
             }
-            match_type = self.options.starters in {
+            should_match_type = self.options.starters in {
                 RandomizeStarters.option_match_type,
                 RandomizeStarters.option_match_base_stats_and_type
             }
-            allow_legendaries = self.options.allow_starter_legendaries == Toggle.option_true
 
-            starter_bsts = (
-                sum(emerald_data.species[emerald_data.starters[0]].base_stats) if match_bst else None,
-                sum(emerald_data.species[emerald_data.starters[1]].base_stats) if match_bst else None,
-                sum(emerald_data.species[emerald_data.starters[2]].base_stats) if match_bst else None
-            )
-
-            starter_types = (
-                self.random.choice(emerald_data.species[emerald_data.starters[0]].types) if match_type else None,
-                self.random.choice(emerald_data.species[emerald_data.starters[1]].types) if match_type else None,
-                self.random.choice(emerald_data.species[emerald_data.starters[2]].types) if match_type else None
-            )
-
-            starter_1 = get_random_species(self.random, self.modified_species, starter_bsts[0], starter_types[0],
-                                           LEGENDARY_POKEMON if allow_legendaries else set())
-            starter_2 = get_random_species(self.random, self.modified_species, starter_bsts[1], starter_types[1],
-                                           LEGENDARY_POKEMON | {starter_1.species_id} if allow_legendaries else set())
-            starter_3 = get_random_species(self.random, self.modified_species, starter_bsts[2], starter_types[2],
-                                           LEGENDARY_POKEMON | {starter_1.species_id, starter_2.species_id} if allow_legendaries else set())
-            new_starters = (starter_1, starter_2, starter_3)
+            new_starters: List[SpeciesData] = []
 
             easter_egg_type, easter_egg_value = get_easter_egg(self.options.easter_egg.value)
             if easter_egg_type == 1:
-                new_starters = (
+                new_starters = [
                     self.modified_species[easter_egg_value],
                     self.modified_species[easter_egg_value],
                     self.modified_species[easter_egg_value],
-                )
+                ]
+            else:
+                for i, starter_id in enumerate(emerald_data.starters):
+                    original_starter = emerald_data.species[starter_id]
+                    type_blacklist = {
+                        species.species_id
+                        for species in self.modified_species
+                        if species is not None and not bool(set(species.types) & set(original_starter.types))
+                    } if should_match_type else set()
+
+                    merged_blacklist = set(s.species_id for s in new_starters) | self.blacklisted_starters | type_blacklist
+                    if len(merged_blacklist) == NUM_REAL_SPECIES:
+                        merged_blacklist = set(s.species_id for s in new_starters) | self.blacklisted_starters
+                    if len(merged_blacklist) == NUM_REAL_SPECIES:
+                        merged_blacklist = set(s.species_id for s in new_starters)
+
+                    candidates = [
+                        species
+                        for species in self.modified_species
+                        if species is not None and species.species_id not in merged_blacklist
+                    ]
+
+                    if should_match_bst:
+                        candidates = self.filter_species_by_nearby_bst(candidates, sum(original_starter.base_stats))
+
+                    new_starters.append(self.random.choice(candidates))
 
             self.modified_starters = (
                 new_starters[0].species_id,
@@ -1227,3 +1343,16 @@ class PokemonEmeraldWorld(World):
             None,
             self.player
         )
+
+    def filter_species_by_nearby_bst(self, species: List[SpeciesData], target_bst: int) -> List[SpeciesData]:
+        # Sort by difference in bst, then chop off the tail of the list that's more than
+        # 10% different. If that leaves the list empty, increase threshold to 20%, then 30%, etc.
+        species = sorted(species, key=lambda species: abs(sum(species.base_stats) - target_bst))
+        cutoff_index = 0
+        max_percent_different = 10
+        while cutoff_index == 0 and max_percent_different < 10000:
+            while cutoff_index < len(species) and abs(sum(species[cutoff_index].base_stats) - target_bst) < target_bst * (max_percent_different / 100):
+                cutoff_index += 1
+            max_percent_different += 10
+
+        return species[:cutoff_index + 1]

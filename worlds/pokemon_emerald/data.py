@@ -33,6 +33,8 @@ POSTGAME_MAPS = {
 }
 """These maps have encounters and are locked behind beating the champion. Those encounter slots should be ignored for logical access to a species."""
 
+NUM_REAL_SPECIES = 386
+
 
 class Warp:
     """

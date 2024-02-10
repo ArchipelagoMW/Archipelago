@@ -1,6 +1,7 @@
 """
 Functions related to pokemon species and moves
 """
+import functools
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
 from .data import SpeciesData, data
@@ -101,39 +102,9 @@ UNEVOLVED_POKEMON = {species.species_id for species in data.species if species i
 national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}
 
 
-def get_random_species(
-        random: "Random",
-        candidates: List[Optional[SpeciesData]],
-        nearby_bst: Optional[int] = None,
-        species_type: Optional[int] = None,
-        blacklist: Set[int] = set()) -> SpeciesData:
-    filtered_candidates: List[SpeciesData] = [
-        species
-        for species in candidates
-        if species is not None and species.species_id not in blacklist
-    ]
-
-    if species_type is not None:
-        type_filtered_candidates = [species for species in filtered_candidates if species_type in species.types]
-
-        if len(type_filtered_candidates) == 0:
-            # Try again but don't filter by type
-            return get_random_species(random, candidates, nearby_bst, None, blacklist)
-
-    if nearby_bst is not None:
-        # Sort by difference in bst, then chop off the tail of the list that's more than
-        # 10% different. If that leaves the list empty, increase threshold to 20%, then 30%, etc.
-        filtered_candidates.sort(key=lambda species: abs(sum(species.base_stats) - nearby_bst))
-        cutoff_index = 0
-        max_percent_different = 10
-        while cutoff_index == 0 and max_percent_different < 10000:
-            while cutoff_index < len(filtered_candidates) and abs(sum(filtered_candidates[cutoff_index].base_stats) - nearby_bst) < nearby_bst * (max_percent_different / 100):
-                cutoff_index += 1
-            max_percent_different += 10
-
-        filtered_candidates = filtered_candidates[:cutoff_index + 1]
-
-    return random.choice(filtered_candidates)
+@functools.lru_cache(maxsize=386)
+def get_species_id_by_label(label: str) -> int:
+    return next(species.species_id for species in data.species if species is not None and species.label == label)
 
 
 def get_random_type(random: "Random") -> int:
