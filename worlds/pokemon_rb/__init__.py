@@ -281,18 +281,20 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.itempool.remove(badge)
                     progitempool.remove(badge)
                 for _ in range(5):
-                    badgelocs = [self.multiworld.get_location(loc, self.player) for loc in [
-                        "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
-                        "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
-                        "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
-                        "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"]]
+                    badgelocs = [
+                        self.multiworld.get_location(loc, self.player) for loc in [
+                            "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize",
+                            "Vermilion Gym - Lt. Surge Prize", "Celadon Gym - Erika Prize",
+                            "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
+                            "Cinnabar Gym - Blaine Prize", "Viridian Gym - Giovanni Prize"
+                        ] if self.multiworld.get_location(loc, self.player).item is None]
                     state = self.multiworld.get_all_state(False)
                     self.multiworld.random.shuffle(badges)
                     self.multiworld.random.shuffle(badgelocs)
                     badgelocs_copy = badgelocs.copy()
                     # allow_partial so that unplaced badges aren't lost, for debugging purposes
                     fill_restrictive(self.multiworld, state, badgelocs_copy, badges, True, True, allow_partial=True)
-                    if badges:
+                    if len(badges) > 8 - len(badgelocs):
                         for location in badgelocs:
                             if location.item:
                                 badges.append(location.item)
@@ -302,6 +304,7 @@ class PokemonRedBlueWorld(World):
                         for location in badgelocs:
                             if location.item:
                                 fill_locations.remove(location)
+                        progitempool += badges
                         break
                 else:
                     raise FillError(f"Failed to place badges for player {self.player}")
@@ -350,7 +353,9 @@ class PokemonRedBlueWorld(World):
                 location.show_in_spoiler = False
 
         def intervene(move, test_state):
-            if self.multiworld.randomize_wild_pokemon[self.player]:
+            move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
+            viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
+            if self.multiworld.randomize_wild_pokemon[self.player] and viable_mons:
                 accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if
                                     loc.type == "Wild Encounter"]
 
@@ -360,8 +365,6 @@ class PokemonRedBlueWorld(World):
                         zones.add(loc.name.split(" - ")[0])
                     return len(zones)
 
-                move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
-                viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
                 placed_mons = [slot.item.name for slot in accessible_slots]
 
                 if self.multiworld.area_1_to_1_mapping[self.player]:
