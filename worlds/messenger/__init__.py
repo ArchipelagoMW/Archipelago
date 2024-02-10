@@ -4,7 +4,6 @@ from typing import Any, ClassVar, Dict, List, Optional, TextIO
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
 from Options import Accessibility
 from Utils import output_path
-from NetUtils import NetworkItem
 from settings import FilePath, Group
 from worlds.AutoWorld import WebWorld, World
 from worlds.LauncherComponents import Component, Type, components
@@ -75,10 +74,10 @@ class MessengerWorld(World):
                                "Money Wrench",
                            ], base_offset)}
     item_name_groups = {
-        "Notes":    set(NOTES),
-        "Keys":     set(NOTES),
-        "Crest":    {"Sun Crest", "Moon Crest"},
-        "Phobe":    set(PHOBEKINS),
+        "Notes": set(NOTES),
+        "Keys": set(NOTES),
+        "Crest": {"Sun Crest", "Moon Crest"},
+        "Phobe": set(PHOBEKINS),
         "Phobekin": set(PHOBEKINS),
     }
 
@@ -97,6 +96,7 @@ class MessengerWorld(World):
     spoiler_portal_mapping: Dict[str, str]
     portal_mapping: List[int]
     transitions: List[Entrance]
+    reachable_locs: int = 0
 
     def generate_early(self) -> None:
         if self.options.goal == Goal.option_power_seal_hunt:
@@ -142,9 +142,6 @@ class MessengerWorld(World):
             region = self.multiworld.get_region(region_name, self.player)
             region.add_exits(REGION_CONNECTIONS[region.name])
 
-        if self.options.shuffle_transitions:
-            shuffle_entrances(self)
-
     def create_items(self) -> None:
         # create items that are always in the item pool
         main_movement_items = ["Rope Dart", "Wingsuit"]
@@ -181,8 +178,10 @@ class MessengerWorld(World):
             total_seals = min(len(self.multiworld.get_unfilled_locations(self.player)) - len(itempool),
                               self.options.total_seals.value)
             if total_seals < self.total_seals:
-                logging.warning(f"Not enough locations for total seals setting "
-                                f"({self.options.total_seals}). Adjusting to {total_seals}")
+                logging.warning(
+                    f"Not enough locations for total seals setting "
+                    f"({self.options.total_seals}). Adjusting to {total_seals}"
+                )
                 self.total_seals = total_seals
             self.required_seals = int(self.options.percent_seals_required.value / 100 * self.total_seals)
 
@@ -216,15 +215,25 @@ class MessengerWorld(World):
             disconnect_portals(self)
             shuffle_portals(self)
 
+        if self.options.shuffle_transitions:
+            shuffle_entrances(self)
+
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
         if self.options.available_portals < 6:
-            spoiler_handle.write(f"\nStarting Portals:\n")
+            spoiler_handle.write(f"\nStarting Portals:\n\n")
             for portal in self.starting_portals:
                 spoiler_handle.write(f"{portal}\n")
         spoiler = self.multiworld.spoiler
         if self.options.shuffle_portals:
-            for portal, output in self.spoiler_portal_mapping.items():
-                spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here and it'll work fine lmao", self.player)
+            # sort the portals as they appear left to right in-game
+            portal_info = sorted(
+                self.spoiler_portal_mapping.items(),
+                key=lambda portal:
+                ["Autumn Hills", "Riviere Turquoise",
+                 "Howling Grotto", "Sunken Shrine",
+                 "Searing Crags", "Glacial Peak"].index(portal[0]))
+            for portal, output in portal_info:
+                spoiler.set_entrance(f"{portal} Portal", output, "I can write anything I want here lmao", self.player)
 
         if self.options.shuffle_transitions:
             for transition in self.transitions:
@@ -347,8 +356,8 @@ class MessengerWorld(World):
 
 def generate_output(world: MessengerWorld, output_directory: str) -> None:
     out_path = output_path(world.multiworld.get_out_file_name_base(1) + ".aptm")
-    if "The Messenger\\Archipelago\\output" in out_path:
-        out_path = out_path
+    if "The Messenger\\Archipelago\\output" not in out_path:
+        return
     import orjson
     data = {
         "name": world.multiworld.get_player_name(world.player),

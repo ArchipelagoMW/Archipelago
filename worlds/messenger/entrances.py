@@ -36,6 +36,7 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
             entrance = multiworld.get_entrance(f"{parent} -> {child}", player)
         parent_region = entrance.parent_region
         child_region = entrance.connected_region
+        entrance.world = world
         disconnect_entrance()
         regions_to_shuffle += [parent_region, child_region]
 
