@@ -328,7 +328,7 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     checksum = 0
     for i in range(4):
         for j in range(6):
-            checksum += int.from_bytes(substructs[i][j * 2 : (j + 1) * 2], 'little')
+            checksum += int.from_bytes(substructs[i][j * 2 : (j + 1) * 2], "little")
     checksum &= 0xFFFF
     for i, byte in enumerate(checksum.to_bytes(2, "little")):
         pokemon_data[28 + i] = byte

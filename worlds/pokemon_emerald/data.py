@@ -5,7 +5,6 @@ defined data (like location labels or usable pokemon species), some cleanup
 and sorting, and Warp methods.
 """
 from dataclasses import dataclass
-import copy
 from enum import IntEnum
 import orjson
 from typing import Dict, List, NamedTuple, Optional, Set, FrozenSet, Tuple, Any, Union
@@ -72,14 +71,14 @@ class Warp:
 
         return f"{self.source_map}:{source_ids_string}/{self.dest_map}:{dest_ids_string}{'!' if self.is_one_way else ''}"
 
-    def connects_to(self, other: 'Warp') -> bool:
+    def connects_to(self, other: "Warp") -> bool:
         """
         Returns true if this warp sends the player to `other`
         """
         return self.dest_map == other.source_map and set(self.dest_ids) <= set(other.source_ids)
 
     @staticmethod
-    def decode(encoded_string: str) -> 'Warp':
+    def decode(encoded_string: str) -> "Warp":
         """
         Create a Warp object from an encoded string
         """
@@ -329,7 +328,7 @@ class PokemonEmeraldData:
 
 
 def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
-    return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode('utf-8-sig'))
+    return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode("utf-8-sig"))
 
 
 data = PokemonEmeraldData()
