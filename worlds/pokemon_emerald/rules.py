@@ -1394,20 +1394,18 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         get_location("EVENT_ENCOUNTER_RAYQUAZA"),
         lambda state: state.has("EVENT_RAYQUAZA_STOPS_FIGHT", world.player)
     )
-    # Sky Pillar does not require the mach bike until Rayquaza returns, which means the top
-    # is only logically locked behind the mach bike after the top has been reached already
-    # set_rule(
-    #     get_entrance("REGION_SKY_PILLAR_2F/RIGHT -> REGION_SKY_PILLAR_2F/LEFT"),
-    #     lambda state: has_mach_bike(state)
-    # )
-    # set_rule(
-    #     get_entrance("REGION_SKY_PILLAR_2F/LEFT -> REGION_SKY_PILLAR_2F/RIGHT"),
-    #     lambda state: has_mach_bike(state)
-    # )
-    # set_rule(
-    #     get_entrance("REGION_SKY_PILLAR_4F/MAIN -> REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER"),
-    #     lambda state: has_mach_bike(state)
-    # )
+    set_rule(
+        get_entrance("REGION_SKY_PILLAR_2F/RIGHT -> REGION_SKY_PILLAR_2F/LEFT"),
+        has_mach_bike
+    )
+    set_rule(
+        get_entrance("REGION_SKY_PILLAR_2F/LEFT -> REGION_SKY_PILLAR_2F/RIGHT"),
+        has_mach_bike
+    )
+    set_rule(
+        get_entrance("REGION_SKY_PILLAR_4F/MAIN -> REGION_SKY_PILLAR_4F/ABOVE_3F_TOP_CENTER"),
+        has_mach_bike
+    )
 
     # Route 134
     set_rule(
