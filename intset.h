@@ -1,5 +1,6 @@
-// A specialized unordered_set implementation for literals, where bucket_count
-// is defined at initialization rather than increased automatically.
+/* A specialized unordered_set implementation for literals, where bucket_count
+ * is defined at initialization rather than increased automatically.
+ */
 #include <stddef.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@
 #error "Please #define INTSET_TYPE ... before including intset.h"
 #endif
 
-// macros to generate unique names from INTSET_NAME
+/* macros to generate unique names from INTSET_NAME */
 #ifndef INTSET_CONCAT
 #define INTSET_CONCAT_(a, b) a ## b
 #define INTSET_CONCAT(a, b) INTSET_CONCAT_(a, b)
