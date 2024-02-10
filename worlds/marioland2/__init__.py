@@ -207,7 +207,6 @@ class MarioLand2World(World):
             "Macro Zone 1 - The Ant Monsters Secret Exit": lambda state: (has_pipe_down(state, self.player)
                 or state.has("Macro Zone 1 - The Ant Monsters Midway Bell", self.player))
                 and state.has("Fire Flower", self.player) and has_pipe_up(state, self.player),
-            "Macro Zone - Secret Course": lambda state: state.has_any(["Mushroom", "Fire Flower"], self.player),
             "Macro Zone 2 - In the Syrup Sea": lambda state: (has_pipe_down(state, self.player) or state.has(
                 "Macro Zone 2 - In the Syrup Sea Midway Bell", self.player))
                 and state.has("Swim", self.player) and has_pipe_up(state, self.player),
