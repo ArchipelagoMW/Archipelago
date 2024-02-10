@@ -76,7 +76,6 @@ static bool INTSET_FUNC(contains)(INTSET_NAME *set, INTSET_TYPE val)
 static bool INTSET_FUNC(add)(INTSET_NAME *set, INTSET_TYPE val)
 {
     INTSET_BUCKET* bucket;
-    size_t new_bucket_size;
 
     if (INTSET_FUNC(contains)(set, val))
         return true; /* ok */
@@ -89,19 +88,21 @@ static bool INTSET_FUNC(add)(INTSET_NAME *set, INTSET_TYPE val)
         INTSET_TYPE old = bucket->val;
         bucket->data = (INTSET_TYPE*)malloc(2 * sizeof(INTSET_TYPE));
         if (!bucket->data) {
-            bucket->count = 0;
+            bucket->val = old;
             return false; /* error */
         }
         bucket->data[0] = old;
         bucket->data[1] = val;
         bucket->count = 2;
     } else {
+        size_t new_bucket_size;
+        INTSET_TYPE* new_bucket_data;
+
         new_bucket_size = (bucket->count + 1) * sizeof(INTSET_TYPE);
-        bucket->data = (INTSET_TYPE*)realloc(bucket->data, new_bucket_size);
-        if (!bucket->data) {
-            bucket->count = 0;
+        new_bucket_data = (INTSET_TYPE*)realloc(bucket->data, new_bucket_size);
+        if (!new_bucket_data)
             return false; /* error */
-        }
+        bucket->data = new_bucket_data;
         bucket->data[bucket->count++] = val;
     }
     return true; /* success */
