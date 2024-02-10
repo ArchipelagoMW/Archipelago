@@ -112,8 +112,7 @@ class MarioLand2Client(BizHawkClient):
 
         new_lives = int(lives)
         energy_link_add = None
-        # TODO: temporary check to ensure energy_link key for backwards compatibility
-        if ctx.slot_data and "energy_link" in ctx.slot_data and ctx.slot_data["energy_link"]:
+        if ctx.slot_data and ctx.slot_data["energy_link"]:
             if new_lives == 0:
                 if (f"EnergyLink{ctx.team}" in ctx.stored_data
                         and ctx.stored_data[f"EnergyLink{ctx.team}"]
