@@ -459,8 +459,8 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
     return hints
 
 
-def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int]]:
-    return [(x, -1) for x in world.random.sample(joke_hints, amount)]
+def generate_joke_hints(world: "WitnessWorld", amount: int) -> List[Tuple[str, int, int]]:
+    return [(x, -1, -1) for x in world.random.sample(joke_hints, amount)]
 
 
 def choose_areas(world: "WitnessWorld", amount: int, locations_per_area: Dict[str, List[Location]],

@@ -279,9 +279,9 @@ class WitnessWorld(World):
         hint_amount = self.options.hint_amount.value
 
         credits_hint = (
-            "This Randomizer is brought to you by",
-            "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1
+            "This Randomizer is brought to you by\n"
+            "NewSoupVi, Jarno, blastron,\n",
+            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
         )
 
         audio_logs = get_audio_logs().copy()
@@ -305,11 +305,12 @@ class WitnessWorld(World):
                     hint = generated_hints.pop(0)
 
                     location = hint.location
-                    location_id = location.address if location and location.item.player == self.player else -1
+                    location_id = location.address if location else -1
+                    player = location.player if location else self.player
 
                     for _ in range(0, duplicates):
                         audio_log = audio_logs.pop()
-                        self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, location_id)
+                        self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, location_id, player)
 
         if audio_logs:
             audio_log = audio_logs.pop()
