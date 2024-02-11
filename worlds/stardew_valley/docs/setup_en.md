@@ -84,4 +84,4 @@ See the [Supported mods documentation](https://github.com/agilbert1412/StardewAr
 
 ### Multiplayer
 
-You cannot play an Archipelago Slot in multiplayer at the moment. There are no short-terms plans to support that feature.
+You cannot play an Archipelago Slot in multiplayer at the moment. There are no short-term plans to support that feature.

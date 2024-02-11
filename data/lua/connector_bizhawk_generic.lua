@@ -456,6 +456,7 @@ function send_receive ()
                         failed_guard_response = response
                     end
                 else
+                    if type(response) ~= "string" then response = "Unknown error" end
                     res[i] = {type = "ERROR", err = response}
                 end
             end

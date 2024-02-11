@@ -16,6 +16,7 @@ The [player options page for this game](../player-options) contains all the opti
 - Popups
 - Get Bonuses
 - Form Levels
+- Summon Levels
 - Sora's Levels
 - Keyblade Stats
 - Keyblade Abilities
@@ -23,7 +24,7 @@ The [player options page for this game](../player-options) contains all the opti
 <h2 style="text-transform:none";>What Kingdom Hearts 2 items can appear in other players' worlds?</h2>
 
 
-Every item in the game except for party members' abilities.
+Every item in the game except for abilities on weapons.
 
 <h2 style="text-transform:none";>What is The Garden of Assemblage "GoA"?</h2>
 
@@ -73,6 +74,8 @@ The list of possible locations that can contain a bounty:
 
 - Each of the 13 Data Fights
 - Max level (7) for each Drive Form
+- Max level (7) of Summons
+- Last song of Atlantica
 - Sephiroth
 - Lingering Will
 - Starry Hill
@@ -87,6 +90,7 @@ With the help of Shananas, Num, and ZakTheRobot we have many QoL features such a
 
 - Faster Wardrobe.
 - Faster Water Jafar Chase.
+- Faster Bulky Vendors
 - Carpet Skip.
 - Start with Lion Dash.
 - Faster Urns.

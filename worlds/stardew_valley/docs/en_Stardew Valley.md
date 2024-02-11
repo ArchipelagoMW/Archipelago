@@ -124,6 +124,6 @@ List of supported mods:
 
 ## Multiplayer
 
-You cannot play an Archipelago Slot in multiplayer at the moment. There is no short-terms plans to support that feature.
+You cannot play an Archipelago Slot in multiplayer at the moment. There are no short-term plans to support that feature.
 
 You can, however, send Stardew Valley objects as gifts from one Stardew Player to another Stardew player, using in-game Joja Prime delivery, for a fee. This exclusive feature can be turned off if you don't want to send and receive gifts.

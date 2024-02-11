@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Donkey Kong Country 3 Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 
 
 - Hardware or software capable of loading and playing SNES ROM files
@@ -23,9 +23,10 @@
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the SNI Client.
-2. During setup, you will be asked to locate your base ROM file. This is your Donkey Kong Country 3 ROM file.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.
+   This is your Donkey Kong Country 3 ROM file. This only needs to be done once.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
