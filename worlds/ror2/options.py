@@ -151,7 +151,7 @@ class DLC_SOTV(Toggle):
     display_name = "Enable DLC - SOTV"
 
 
-class RequireStages(Toggle):
+class RequireStages(DefaultOnToggle):
     """Add Stage items to the pool to block access to the next set of environments."""
     display_name = "Require Stages"
 
