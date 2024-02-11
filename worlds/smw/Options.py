@@ -182,7 +182,8 @@ class DisplayReceivedItemPopups(Choice):
     option_none = 0
     option_all = 1
     option_progression = 2
-    default = 2
+    option_progression_minus_yoshi_eggs = 3
+    default = 3
 
 
 class JunkFillPercentage(Range):

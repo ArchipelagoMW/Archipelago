@@ -263,7 +263,7 @@ class SMWSNIClient(SNIClient):
             if active_boss[0] != 0x00:
                 return
 
-            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((next_trap.flags & 1) != 0)):
+            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((next_trap.flags & 1) != 0)) or (ctx.receive_option == 3 and ((item.flags & 1) != 0 and item.item != 0xBC0002)):
                 self.add_message_to_queue(message)
 
 
@@ -498,7 +498,7 @@ class SMWSNIClient(SNIClient):
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
-            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)):
+            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)) or (ctx.receive_option == 3 and ((item.flags & 1) != 0 and item.item != 0xBC0002)):
                 if item.item != 0xBC0012 and item.item not in trap_rom_data:
                     # Don't send messages for Boss Tokens
                     item_name = ctx.item_names[item.item]
