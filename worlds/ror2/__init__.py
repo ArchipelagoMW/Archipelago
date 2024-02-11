@@ -90,14 +90,18 @@ class RiskOfRainWorld(World):
         environments_pool = {}
         # only mess with the environments if they are set as items
         if self.options.goal == "explore":
-            if not self.options.require_stages and not self.options.progressive_stages:
-                self.multiworld.push_precollected(self.multiworld.create_item("Stage 1", self.player))
-                self.multiworld.push_precollected(self.multiworld.create_item("Stage 2", self.player))
-                self.multiworld.push_precollected(self.multiworld.create_item("Stage 3", self.player))
-                self.multiworld.push_precollected(self.multiworld.create_item("Stage 4", self.player))
-            elif not self.options.require_stages and self.options.progressive_stages:
-                for _ in range(4):
-                    self.multiworld.push_precollected(self.multiworld.create_item("Progressive Stage", self.player))
+
+            # check to see if the user doesn't want to use stages, and to figure out what type of stages are being used.
+            if not self.options.require_stages:
+                if not self.options.progressive_stages:
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 1", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 2", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 3", self.player))
+                    self.multiworld.push_precollected(self.multiworld.create_item("Stage 4", self.player))
+                else:
+                    for _ in range(4):
+                        self.multiworld.push_precollected(self.multiworld.create_item("Progressive Stage", self.player))
+
             # figure out all available ordered stages for each tier
             environment_available_orderedstages_table = environment_vanilla_orderedstages_table
             if self.options.dlc_sotv:
@@ -128,11 +132,12 @@ class RiskOfRainWorld(World):
             total_locations = self.options.total_locations.value
         else:
             # explore mode
-            # Add Stage items for logic gates
-            if self.options.require_stages and not self.options.progressive_stages:
-                itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"]
-            elif self.options.require_stages and self.options.progressive_stages:
-                itempool += ["Progressive Stage"] * 4
+
+            # Add Stage items to the pool
+            if self.options.require_stages:
+                itempool += ["Stage 1", "Stage 2", "Stage 3", "Stage 4"] if not self.options.progressive_stages else \
+                    ["Progressive Stage"] * 4
+
             total_locations = len(
                 get_locations(
                     chests=self.options.chests_per_stage.value,
