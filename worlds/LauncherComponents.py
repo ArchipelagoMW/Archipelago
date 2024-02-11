@@ -56,10 +56,10 @@ class Component:
 
 processes = weakref.WeakSet()
 
-def launch_subprocess(func: Callable, name: str = None):
+def launch_subprocess(func: Callable, name: str = None, *args):
     global processes
     import multiprocessing
-    process = multiprocessing.Process(target=func, name=name)
+    process = multiprocessing.Process(target=func, name=name, args=args)
     process.start()
     processes.add(process)
 
@@ -79,7 +79,7 @@ class SuffixIdentifier:
 
 def launch_textclient(*args):
     import CommonClient
-    launch_subprocess(CommonClient.run_as_textclient(*args), name="TextClient")
+    launch_subprocess(CommonClient.run_as_textclient, "TextClient", *args)
 
 
 components: List[Component] = [
