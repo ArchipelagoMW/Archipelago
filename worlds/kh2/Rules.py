@@ -83,6 +83,8 @@ class KH2Rules:
         return state.has(ItemName.TornPages, self.player, amount)
 
     def level_locking_unlock(self, state: CollectionState, amount):
+        if self.world.options.Promise_Charm and state.has(ItemName.PromiseCharm, self.player):
+            return True
         return amount <= sum([state.count(item_name, self.player) for item_name in visit_locking_dict["2VisitLocking"]])
 
     def summon_levels_unlocked(self, state: CollectionState, amount) -> bool:
@@ -270,7 +272,7 @@ class KH2WorldRules(KH2Rules):
                 add_item_rule(location, lambda item: item.player == self.player and item.name in SupportAbility_Table.keys())
 
     def set_kh2_goal(self):
-        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
+        final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnasEventLocation, self.player)
         if self.multiworld.Goal[self.player] == "three_proofs":
             final_xemnas_location.access_rule = lambda state: self.kh2_has_all(three_proofs, state)
             if self.multiworld.FinalXemnas[self.player]:

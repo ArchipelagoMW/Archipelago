@@ -1,8 +1,8 @@
 from dataclasses import dataclass, fields
 from typing import Any, cast, Dict, Iterator, List, Tuple, Protocol
 
-from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, PerGameCommonOptions, ProgressionBalancing, \
-    Range, Toggle
+from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Option, PerGameCommonOptions, \
+    ProgressionBalancing, Range, Toggle
 
 
 # typing boilerplate
@@ -294,5 +294,7 @@ class SoEOptions(PerGameCommonOptions):
         for field in fields(self):
             option = getattr(self, field.name)
             if isinstance(option, (EvermizerFlag, EvermizerFlags)):
-                flags += getattr(self, field.name).to_flag()
+                assert isinstance(option, Option)
+                # noinspection PyUnresolvedReferences
+                flags += option.to_flag()
         return flags
