@@ -1118,7 +1118,13 @@
         id: Cross Room/Panel_north_missing
         colors: green
         tag: forbid
-        required_room: Outside The Bold
+        required_panel:
+          - room: Outside The Bold
+            panel: MOUTH
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
       DIAMONDS:
         id: Cross Room/Panel_diamonds_missing
         colors: green
@@ -4414,9 +4420,14 @@
         colors: blue
         tag: forbid
         required_panel:
-          room: The Bearer (West)
-          panel: SMILE
-        required_room: Outside The Bold
+          - room: The Bearer (West)
+            panel: SMILE
+          - room: Outside The Bold
+            panel: MOUTH
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
   Cross Tower (South):
     entrances: # No roof access
       The Bearer (North):

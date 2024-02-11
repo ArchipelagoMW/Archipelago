@@ -509,9 +509,9 @@ class WitnessPlayerLocations:
         if world.options.shuffle_vault_boxes:
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
-        if world.options.shuffle_EPs == 1:
+        if world.options.shuffle_EPs == "individual":
             self.PANEL_TYPES_TO_SHUFFLE.add("EP")
-        elif world.options.shuffle_EPs == 2:
+        elif world.options.shuffle_EPs == "obelisk_sides":
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
             for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:
