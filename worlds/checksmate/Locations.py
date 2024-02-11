@@ -52,8 +52,8 @@ location_table = {
     "Capture 4 Pawns": CMLocationData(4_902_022, 1440, 3),
     "Capture 5 Pawns": CMLocationData(4_902_023, 1920, 4),
     "Capture 6 Pawns": CMLocationData(4_902_024, 2375, 5),
-    "Capture 7 Pawns": CMLocationData(4_902_025, 2825, 6),
-    "Capture 8 Pawns": CMLocationData(4_902_026, 3275, 7),
+    "Capture 7 Pawns": CMLocationData(4_902_025, 2855, 6),
+    "Capture 8 Pawns": CMLocationData(4_902_026, 3345, 7),
     # Specific pieces should not be guaranteed to be accessible early, so we add +4 material (1piece+1pawn more)
     "Capture 2 Pieces": CMLocationData(4_902_027, 1300, 1),
     "Capture 3 Pieces": CMLocationData(4_902_028, 1900, 2),

@@ -119,6 +119,7 @@ class CMWorld(World):
         potential_pockets = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2]
         self.random.shuffle(potential_pockets)
         cursed_knowledge["pocket_order"] = potential_pockets
+        cursed_knowledge["total_queens"] = self.items_used[self.player].get("Progressive Major To Queen", 0)
         if self.player in self.armies:
             cursed_knowledge["army"] = self.armies[self.player]
         # See Archipelago.APChessV.ApmwConfig#Instantiate to observe requested parameters
