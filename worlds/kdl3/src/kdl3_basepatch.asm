@@ -3,21 +3,22 @@ fullsa1rom
 !GAME_STATUS = $36D0
 
 ; SNES hardware registers
-!VMADDL = $2116
-!VMDATAL = $2118
-!MDMAEN = $420B
-!DMAP0 = $4300
-!BBAD0 = $4301
-!A1T0L = $4302
-!A1B0 = $4304
-!DAS0L = $4305
+!VMADDL = $002116
+!VMDATAL = $002118
+!MDMAEN = $00420B
+!DMAP0 = $004300
+!BBAD0 = $004301
+!A1T0L = $004302
+!A1B0 = $004304
+!DAS0L = $004305
 
 org $008033
     JSL WriteBWRAM
     NOP #5
 
 org $00A245
-  BRA $00A254
+HSVPatch:
+  BRA .Jump
   PHX
   LDA $6CA0,X
   TAX
@@ -25,6 +26,7 @@ org $00A245
   JSR $A25B
   PLX
   INX
+  .Jump:
   JSL HeartStarVisual
 
 
@@ -95,7 +97,8 @@ org $06801E
     JSL ConsumableSet
     LSR
     CMP #$0005
-    BCS $068026
+    .This:
+    BCS .This
     ASL
     TAX
     JMP ($002D,X)
@@ -126,7 +129,7 @@ org $09A0AE
     db $90
 
 org $0A87E8
-    JSL CopyAbilityOverride
+    JSL CopyAbilityAnimalOverride
     NOP #2
 
 org $12B238
@@ -139,14 +142,18 @@ org $14A3EB
     JSL StarsSet
     NOP #3
 
+org $15BC13
+    JML GiftGiving
+    NOP
+
 org $0799A0
 CopyAbilityOverride:
-    LDA $54F3
+    LDA $54F3, Y
     PHA
     ASL
     TAX
     PLA
-    CMP $7F50, X
+    CMP $8020, X
     NOP #2
     BEQ .StoreAbilityK
     LDA #$0000
@@ -154,11 +161,12 @@ CopyAbilityOverride:
     STA $54A9, Y
     RTL
     NOP #4
+CopyAbilityAnimalOverride:
     PHA
     ASL
-    TAX
+    TAY
     PLA
-    CMP $7F50, Y
+    CMP $8020, Y
     NOP
     BEQ .StoreAbilityA
     LDA #$0000
@@ -189,9 +197,9 @@ HeartStarCheck:
     BEQ .ZeroGoal ; we are
     LDA #$0001
     LDX $3617 ; current save
-    STA $53DD ; boss butch
-    STA $53DF ; MG5
-    STA $53E1 ; Jumping
+    STA $53DD, X ; boss butch
+    STA $53DF, X ; MG5
+    STA $53E1, X ; Jumping
     BRA .PullX
     .ZeroGoal:
     LDA #$0001
@@ -240,7 +248,8 @@ MainLoopHook:
     LDA $8080
     CMP #$0000 ; did we get a gooey trap
     BEQ .Slowness ; branch if we did not
-    JSL $07A180 ; spawn gooey
+    LDA #$0800 ; A button press
+    STA $60C1 ; write to controller mirror
     STZ $8080
     .Slowness:
     LDA $8082 ; slowness
@@ -285,7 +294,7 @@ HeartStarGraphicFix:
     .EndLoop
     ASL
     TAX
-    LDA $079D080, X ; table of original stage number
+    LDA $07D080, X ; table of original stage number
     CMP #$0003 ; is the current stage a minigame stage?
     BEQ .ReturnTrue ; branch if so
     CLC
@@ -371,7 +380,7 @@ ParseItemQueue:
     CMP #$0004
     BCS .StarBit
     CMP #$0002
-    BCS .Not1UP:
+    BCS .Not1UP
     LDA $39CF
     INC
     STA $39CF
@@ -410,7 +419,9 @@ ParseItemQueue:
     STA $39D7
     .PlayPositive:
     LDA #$0026
+    .PlaySFXLong
     BRA .PlaySFX
+    .ApplyNegative:
     CPY #$0005
     BCC .PlayNone
     LDA $8080,Y
@@ -418,10 +429,10 @@ ParseItemQueue:
     LDA #$0384
     STA $8080,Y
     LDA #$00A7
-    BRA .PlaySFX
+    BRA .PlaySFXLong
     .PlayNone:
     LDA #$0000
-    BRA .PlaySFX
+    BRA .PlaySFXLong
 
 org $079D00
 AnimalFriendSpawn:
@@ -437,8 +448,8 @@ AnimalFriendSpawn:
     CMP $8000, Y ; do we have this animal friend
     BEQ .Return ; we have this animal friend
     INX
-    PLY
     .Return:
+    PLY
     LDA #$9999
     RTL
 
@@ -549,13 +560,13 @@ org $079F80
 FinalIcebergFix:
     PHX
     PHY
-    LDA #0000
+    LDA #$0000
     LDX $363F
     LDY $3641
     .LoopLevel:
     CPX #$0000
     BEQ .LoopStage
-    INC #6
+    INC #7
     DEX
     BRA .LoopLevel ; return to loop head
     .LoopStage:
@@ -607,16 +618,17 @@ StrictBosses:
 org $07A030
 NintenHalken:
     LDX #$0005
-    .LoopHead
-    LDA $A405, X ; loop head (halken)
+    .Halken:
+    LDA $00A405, X ; loop head (halken)
     STA $4080F0, X
     DEX
-    BPL .LoopHead ; branch if more letters to copy
+    BPL .Halken ; branch if more letters to copy
     LDX #$0005
-    LDA $A40B, X ; loop head (ninten)
+    .Ninten:
+    LDA $00A40B, X ; loop head (ninten)
     STA $408FF0, X
     DEX
-    BPL .LoopHead ; branch if more letters to copy
+    BPL .Ninten ; branch if more letters to copy
     REP #$20
     LDA #$0001
     RTL
@@ -632,7 +644,7 @@ StageCompleteSet:
     CPX #$0000
     BEQ .StageStart
     DEX
-    INC #6
+    INC #7
     BRA .LoopLevel ; return to loop head
     .StageStart:
     LDX $53D3 ; current stage
@@ -760,7 +772,7 @@ HeartStarVisual:
     LDA $408070
     LDX #$0000
     .LoopHead:
-    CMP $000A
+    CMP #$000A
     BCC .LoopEnd
     SEC
     SBC #$000A
@@ -810,21 +822,25 @@ LoadFont:
     LDA #$7000
     STA $2116
     LDX #$0000
+    .LoopHead:
     CPX #$0140
-    BEQ $07A325
+    BEQ .LoopEnd
     LDA $D92F50, X
     STA $2118
     INX
     INX
-    BRA $07A315
+    BRA .LoopHead
+    .LoopEnd:
     LDX #$0000
+    .2LoopHead:
     CPX #$0020
-    BEQ $07A338
+    BEQ .2LoopEnd
     LDA $D92E10, X
     STA $2118
     INX
     INX
-    BRA $07A328
+    BRA .2LoopHead
+    .2LoopEnd:
     PHY
     LDA $07D012
     ASL
@@ -832,30 +848,34 @@ LoadFont:
     LDA $07E000, X
     TAX
     LDY #$0000
+    .3LoopHead:
     CPY #$0020
-    BEQ $07A359
+    BEQ .3LoopEnd
     LDA $D93170, X
     STA $2118
     INX
     INX
     INY
     INY
-    BRA $07A347
+    BRA .3LoopHead
+    .3LoopEnd:
     LDA $07D00C
     ASL
     TAX
     LDA $07E010, X
     TAX
     LDY #$0000
+    .4LoopHead:
     CPY #$0020
-    BEQ $07A379
+    BEQ .4LoopEnd
     LDA $D93170, X
     STA $2118
     INX
     INX
     INY
     INY
-    BRA $07A367
+    BRA .4LoopHead
+    .4LoopEnd:
     PLY
     PLB
     PLX
@@ -874,19 +894,23 @@ HeartStarVisual2:
     LDA $4053CF
     ASL
     TAX
+    .LoopHead:
     LDA $409000, X
     CMP #$FFFF
-    BNE $07A3A3
+    BNE .LoopEnd
     DEX
     DEX
-    BRA $07A396
+    BRA .LoopHead
+    .LoopEnd:
     LDX #$0000
+    .2LoopHead:
     CMP #$000A
-    BCC $07A3A9
+    BCC .2LoopEnd
     SEC
     SBC #$000A
     INX
-    BRA $07A39D ; return to loop head
+    BRA .2LoopHead ; return to loop head
+    .2LoopEnd:
     PHX
     TAX
     PLA
@@ -940,22 +964,26 @@ HeartStarVisual2:
     SBC #$3040
     LSR
     LSR
+    .3LoopHead:
     CMP #$0004
-    BCC $07A415
+    BCC .3LoopEnd
     DEC #4
-    BRA $07A40A ; return to loop head
+    BRA .3LoopHead ; return to loop head
+    .3LoopEnd:
     STA $3240
     LDA #$0004
     SEC
     SBC $3240
     TAX
     LDA #$00FF
+    .4LoopHead:
     CPX #$0000
-    BEQ $07A42D
+    BEQ .4LoopEnd
     LSR
     LSR
     DEX
-    BRA $07A423
+    BRA .4LoopHead
+    .4LoopEnd:
     LDY $3002
     AND $0000, Y
     STA $0000, Y
@@ -976,12 +1004,14 @@ HeartStarSelectFix:
     LDA $9020, X
     DEC
     TAX
+    .LoopHead:
     CMP #$0006
-    BMI $07A495
+    BMI .LoopEnd
     INX
     SEC
     SBC #$0006
-    BRA $07A489
+    BRA .LoopHead
+    .LoopEnd:
     LDA $53A7, X
     PLX
     AND #$00FF
@@ -994,6 +1024,22 @@ HeartStarCutsceneFix:
     DEC
     STA $5AC3
     RTL
+
+org $07A510
+GiftGiving:
+    CMP #$0008
+    .This:
+    BCS .This  ; this intentionally safe-crashes the game if hit
+    PHX
+    LDX $901C
+    BEQ .Return
+    PLX
+    STA $8086
+    LDA #$0026
+    JML $CABC99
+    .Return:
+    PLX
+    JML $CABC18
 
 org $07A550
 PauseMenu:
@@ -1017,37 +1063,41 @@ PauseMenu:
     STA !MDMAEN
     REP #$20
     LDY #$0000
+    .LoopHead:
     INY ; loop head
     CPY #$0009
-    BPL $07A5AC
+    BPL .LoopEnd
     TYA
     ASL
     TAX
     LDA $8020, X
-    BEQ $07A58B ; return to loop head
+    BEQ .LoopHead ; return to loop head
     TYA
     CLC
     ADC #$31E2
     STA !VMADDL
     LDA $07E020, X
     STA !VMDATAL
-    BRA $07A58B ; return to loop head
+    BRA .LoopHead ; return to loop head
+    .LoopEnd:
     LDY #$FFFF
+    .2LoopHead:
     INY ; loop head
     CPY #$0007
-    BPL $07A5D0
+    BPL .2LoopEnd
     TYA
     ASL
     TAX
     LDA $8000, X
-    BEQ $07A5AF ; return to loop head
+    BEQ .2LoopHead ; return to loop head
     TYA
     CLC
     ADC #$3203
     STA !VMADDL
     LDA $07E040, X
     STA !VMDATAL
-    BRA $07A5AF ; return to loop head
+    BRA .2LoopHead ; return to loop head
+    .2LoopEnd:
     PLY
     PLX
     RTL
@@ -1063,17 +1113,20 @@ StarsSet:
     LDY $53D3
     LDA #$0000
     DEY
+    .LoopLevel:
     CPX #$0000
-    BEQ $07A61D
+    BEQ .LoopStage
     CLC
     ADC #$0007
     DEX
-    BRA $07A611
+    BRA .LoopLevel
+    .LoopStage:
     CPY #$0000
-    BEQ $07A626
+    BEQ .LoopEnd
     INC
     DEY
-    BRA $07A61D
+    BRA .LoopStage
+    .LoopEnd:
     ASL
     TAX
     LDA $07D020, X
@@ -1086,11 +1139,13 @@ StarsSet:
     ASL
     TAX
     PLA
+    .2LoopHead:
     CMP #$0000
-    BEQ $07A63E
+    BEQ .2LoopEnd
     INX
     DEC
-    BRA $07A635
+    BRA .2LoopHead
+    .2LoopEnd:
     LDA $B000, X
     ORA #$0001
     STA $B000, X
