@@ -724,10 +724,11 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
 
     # Everything related to the Countdown counter
     if options.countdown.value:
-        rom.write_int32(0xBFD03C, 0x080FF5BF)  # J 0x803FD6FC
+        rom.write_int32(0xBFD03C, 0x080FF9DC)  # J 0x803FE770
         rom.write_int32(0xD5D48, 0x080FF4EC)  # J 0x803FD3B0
         rom.write_int32s(0xBFD3B0, patches.countdown_number_displayer)
-        rom.write_int32s(0xBFD6DC, patches.countdown_number_updater)
+        rom.write_int32s(0xBFD6DC, patches.countdown_number_manager)
+        rom.write_int32s(0xBFE770, patches.countdown_demo_hider)
         rom.write_int32(0xBFCE2C, 0x080FF5D2)  # J 0x803FD748
         rom.write_int32s(0xBB168, [0x080FF5F4,  # J 0x803FD7D0
                                    0x8E020028])  # LW	V0, 0x0028 (S0)

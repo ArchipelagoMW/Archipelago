@@ -262,21 +262,22 @@ warp_menu_opener = [
     0x3C08800D,  # LUI   T0, 0x800D
     0x85095E20,  # LH    T1, 0x5E20 (T0)
     0x24083010,  # ADDIU T0, R0, 0x3010
-    0x15090010,  # BNE   T0, T1, [forward 0x10]
+    0x15090011,  # BNE   T0, T1, [forward 0x11]
     0x3C088035,  # LUI   T0, 0x8035
     0x9108F7D8,  # LBU   T0, 0xF7D8 (T0)
     0x24090020,  # ADDIU T1, R0, 0x0020
-    0x1109000C,  # BEQ   T0, T1, [forward 0x0C]
+    0x1109000D,  # BEQ   T0, T1, [forward 0x0D]
     0x3C088039,  # LUI   T0, 0x8039
     0x91099BFA,  # LBU   T1, 0x9BFA (T0)
     0x31290001,  # ANDI  T1, T1, 0x0001
-    0x15200008,  # BNEZ  T1, [forward 0x08]
+    0x15200009,  # BNEZ  T1,     [forward 0x09]
     0x8D099EE0,  # LW    T1, 0x9EE0
     0x3C0A001B,  # LUI   T2, 0x001B
     0x254A0003,  # ADDIU T2, T2, 0x0003
-    0x112A0004,  # BEQ   T1, T2, [forward 0x04]
-    0x2408FFFC,  # ADDIU T0, R0, 0xFFFC
+    0x112A0005,  # BEQ   T1, T2, [forward 0x05]
     0x3C098034,  # LUI   T1, 0x8034
+    0xA1009BE1,  # SB    R0, 0x9BE1 (T0)
+    0x2408FFFC,  # ADDIU T0, R0, 0xFFFC
     0x0804DA70,  # J     0x80136960
     0xAD282084,  # SW    T0, 0x2084 (T1)
     0x0804DA70,  # J     0x80136960
@@ -1895,8 +1896,8 @@ countdown_number_displayer = [
     0x00000000
 ]
 
-countdown_number_updater = [
-    # Updates the Countdown number every frame. Which number in the save file it refers to depends on the map ID.
+countdown_number_manager = [
+    # Tables and code for managing things about the Countdown number at the appropriate times.
     0x00010102,  # Map ID offset table start
     0x02020D03,
     0x04050505,
@@ -1905,13 +1906,13 @@ countdown_number_updater = [
     0x0C0C000B,
     0x0C050D0A,
     0x00000000,  # Table end
-    0x3C088039,  # LUI   T0, 0x8039
-    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
-    0x3C098040,  # LUI   T1, 0x8040
-    0x01284821,  # ADDU  T1, T1, T0
-    0x0C0FF507,  # JAL   0x803FD41C
-    0x9124D6DC,  # LBU   A0, 0xD6DC (T1)
-    0x080FF411,  # J     0x803FD044
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
     0x00000000,
     0x00000001,  # Major identifiers table start
     0x01000000,
@@ -1924,6 +1925,7 @@ countdown_number_updater = [
     0x01010101,
     0x01010000,
     0x00000000,  # Table end
+    # Decrements the counter upon picking up an item if the counter should be decremented.
     0x90E80039,  # LBU   T0, 0x0039 (A3)
     0x240B0011,  # ADDIU T3, R0, 0x0011
     0x110B0002,  # BEQ   T0, T3, [forward 0x02]
@@ -1944,6 +1946,7 @@ countdown_number_updater = [
     0xA1099CA4,  # SB    T1, 0x9CA4 (T0)
     0x03E00008,  # JR    RA
     0x00000000,  # NOP
+    # Moves the number to/from its pause menu position when pausing/un-pausing.
     0x3C088040,  # LUI   T0, 0x8040
     0x8D08D6D4,  # LW    T0, 0xD6D4
     0x11000009,  # BEQZ  T0,     [forward 0x09]
@@ -1958,6 +1961,7 @@ countdown_number_updater = [
     0xAD0A0014,  # SW    T2, 0x0014 (T0)
     0x03E00008,  # JR    RA
     0x00000000,  # NOP
+    # Hides the number when going into a cutscene or the Options menu.
     0x3C048040,  # LUI   A0, 0x8040
     0x8C84D6D4,  # LW    A0, 0xD6D4 (A0)
     0x0C0FF59F,  # JAL   0x803FD67C
@@ -1965,6 +1969,7 @@ countdown_number_updater = [
     0x0804DFE0,  # J     0x80137FB0
     0x3C048000,  # LUI   A0, 0x8000
     0x00000000,  # NOP
+    # Un-hides the number when leaving a cutscene or the Options menu.
     0x3C048040,  # LUI   A0, 0x8040
     0x8C84D6D4,  # LW    A0, 0xD6D4 (A0)
     0x0C0FF59F,  # JAL   0x803FD67C
@@ -2721,4 +2726,25 @@ countdown_extra_safety_check = [
     0x556C0001,  # BNEL  T3, T4, [forward 0x01]
     0xA1099CA4,  # SB    T1, 0x9CA4 (T0)
     0x03E00008   # JR    RA
+]
+
+countdown_demo_hider = [
+    # Hides the Countdown number if we are not in the Gameplay state (state 2), which would happen if we were in the
+    # Demo state (state 9). This is to ensure the demo maps' number is not peep-able before starting a run proper, for
+    # the sake of preventing a marginal unfair advantage. Otherwise, updates the number once per frame.
+    0x3C088039,  # LUI   T0, 0x8039
+    0x91089EE1,  # LBU   T0, 0x9EE1 (T0)
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDU  T1, T1, T0
+    0x0C0FF507,  # JAL   0x803FD41C
+    0x9124D6DC,  # LBU   A0, 0xD6DC (T1)
+    0x3C088034,  # LUI   T0, 0x8034
+    0x91092087,  # LBU   T0, 0x2087 (T0)
+    0x240A0002,  # ADDIU T2, R0, 0x0002
+    0x112A0003,  # BEQ   T1, T2, [forward 0x03]
+    0x3C048040,  # LUI   A0, 0x8040
+    0x8C84D6D4,  # LW    A0, 0xD6D4 (A0)
+    0x0C0FF59F,  # JAL   0x803FD67C
+    0x24050000,  # ADDIU A1, R0, 0x0000
+    0x080FF411,  # J     0x803FD044
 ]
