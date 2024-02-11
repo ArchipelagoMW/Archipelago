@@ -1,7 +1,7 @@
 name: Label Pull Request
 on:
   pull_request_target:
-    types: ['opened', 'reopened', 'edited', 'ready_for_review', 'converted_to_draft']
+    types: ['opened', 'reopened', 'edited', 'ready_for_review', 'converted_to_draft', 'closed']
 permissions:
   contents: read
   pull-requests: write
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/labeler@v5
   peer_review:
-    name: 'Apply peer review tag'
+    name: 'Apply peer review label'
     if: >-
       (github.event.action == 'opened' || github.event.action == 'reopened' || 
       github.event.action == 'ready_for_review') && !github.event.pull_request.draft
@@ -27,8 +27,8 @@ jobs:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   unblock_draft_prs:
-    name: 'Remove waiting-on labels for drafts'
-    if: github.event.action == 'converted_to_draft'
+    name: 'Remove waiting-on labels'
+    if: github.event.action == 'converted_to_draft' || github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: 'Remove labels'
