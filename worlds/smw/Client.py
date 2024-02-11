@@ -458,7 +458,6 @@ class SMWSNIClient(SNIClient):
             ctx.current_sublevel_value = current_sublevel_value
 
             # Send level id data to tracker
-            print("Sending Msg ", f"smw_curlevelid_{ctx.team}_{ctx.slot}")
             await ctx.send_msgs(
                 [
                     {

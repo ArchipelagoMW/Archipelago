@@ -161,7 +161,6 @@ class SMWWorld(World):
             extra_egg_count = total_egg_count - self.required_egg_count
             removed_egg_count = math.floor(extra_egg_count * (self.options.junk_fill_percentage.value / 100.0))
             self.actual_egg_count = total_egg_count - removed_egg_count
-            print(self.required_egg_count, " / ", self.actual_egg_count)
 
             itempool += [self.create_item(ItemName.yoshi_egg) for _ in range(self.actual_egg_count)]
 
