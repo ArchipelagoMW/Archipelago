@@ -28,7 +28,6 @@ class MessengerEntrance(Entrance):
         self.connected_region = None
         return world.reachable_locs >= 5 and super().can_connect_to(other, state)
 
-
 class MessengerRegion(Region):
     parent: str
     entrance_type = MessengerEntrance
@@ -59,11 +58,6 @@ class MessengerRegion(Region):
         self.add_locations(loc_dict, MessengerLocation)
 
         self.multiworld.regions.append(self)
-
-    def __lt__(self, other):
-        if isinstance(other, MessengerRegion):
-            return self.name < other.name
-        return self.name < other
 
 
 class MessengerLocation(Location):

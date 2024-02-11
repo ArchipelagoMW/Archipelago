@@ -166,6 +166,7 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
         ],
         "Top Left": [
             "Bamboo Creek - Abandoned Shop",
+            "Forlorn Temple - Right",
         ],
         "Right": [
             "Howling Grotto - Left",
@@ -176,7 +177,6 @@ CONNECTIONS: Dict[str, Dict[str, List[str]]] = {
             "Bamboo Creek - Abandoned Shop",
         ],
         "Abandoned Shop": [
-            "Bamboo Creek - Top Left",
             "Bamboo Creek - Spike Crushers Shop",
             "Bamboo Creek - Spike Doors Checkpoint",
         ],
@@ -655,6 +655,7 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Catacombs - Right": "Bamboo Creek - Bottom Left",
     "Bamboo Creek - Bottom Left": "Catacombs - Right",
     "Bamboo Creek - Right": "Howling Grotto - Left",
+    "Bamboo Creek - Top Left": "Forlorn Temple - Right",
     "Howling Grotto - Left": "Bamboo Creek - Right",
     "Howling Grotto - Top": "Quillshroom Marsh - Bottom Left",
     "Howling Grotto - Right": "Quillshroom Marsh - Top Left",
@@ -670,7 +671,8 @@ RANDOMIZED_CONNECTIONS: Dict[str, str] = {
     "Glacial Peak - Bottom": "Searing Crags - Top",
     "Glacial Peak - Top": "Cloud Ruins - Left",
     "Glacial Peak - Left": "Elemental Skylands - Air Shmup",
-    # "Elemental Skylands - Right": "Glacial Peak - Left",
+    "Cloud Ruins - Left": "Glacial Peak - Top",
+    "Elemental Skylands - Right": "Glacial Peak - Left",
     "Tower HQ": "Tower of Time - Left",
     "Artificer": "Corrupted Future",
     "Underworld - Left": "Searing Crags - Right",

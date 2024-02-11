@@ -1,3 +1,4 @@
+import logging
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
@@ -6,7 +7,7 @@ from .connections import RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .options import ShuffleTransitions
 
 if TYPE_CHECKING:
-    from . import MessengerWorld
+    from . import MessengerRegion, MessengerWorld
 
 
 def shuffle_entrances(world: "MessengerWorld") -> None:
@@ -18,7 +19,8 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
         child_region.entrances.remove(entrance)
         entrance.connected_region = None
 
-        er_type = Entrance.EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else Entrance.EntranceType.ONE_WAY
+        er_type = Entrance.EntranceType.ONE_WAY if child == "Glacial Peak - Left" else \
+            Entrance.EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else Entrance.EntranceType.ONE_WAY
         if er_type == Entrance.EntranceType.TWO_WAY:
             mock_entrance = parent_region.create_er_target(entrance.name)
         else:
@@ -27,7 +29,7 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
         entrance.er_type = er_type
         mock_entrance.er_type = er_type
 
-    regions_to_shuffle: List[Region] = []
+    regions_to_shuffle: List[MessengerRegion] = []
     for parent, child in RANDOMIZED_CONNECTIONS.items():
 
         if child == "Corrupted Future":
@@ -40,6 +42,6 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
         disconnect_entrance()
         regions_to_shuffle += [parent_region, child_region]
 
-    result = randomize_entrances(world, sorted(set(regions_to_shuffle)), coupled, lambda group: ["Default"])
+    result = randomize_entrances(world, set(regions_to_shuffle), coupled, lambda group: ["Default"])
 
     world.transitions = sorted(result.placements, key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))
