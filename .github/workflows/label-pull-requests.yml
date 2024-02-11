@@ -1,7 +1,7 @@
 name: Label Pull Request
 on:
   pull_request_target:
-    types: ['opened', 'reopened', 'edited', 'ready_for_review', 'converted_to_draft', 'closed']
+    types: ['opened', 'reopened', 'synchronize', 'ready_for_review', 'converted_to_draft', 'closed']
 permissions:
   contents: read
   pull-requests: write
@@ -9,7 +9,7 @@ permissions:
 jobs:
   labeler:
     name: 'Apply content-based labels'
-    if: github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'edited'
+    if: github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
