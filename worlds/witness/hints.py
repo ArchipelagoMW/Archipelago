@@ -176,15 +176,15 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     wincon = world.options.victory_condition
 
     if discards:
-        if difficulty == 1:
+        if difficulty == "sigma_expert":
             always.append("Arrows")
         else:
             always.append("Triangles")
 
-    if wincon == 0:
+    if wincon == "elevator":
         always += ["Mountain Bottom Floor Final Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
-    if wincon == 1:
+    if wincon == "challenge":
         always += ["Challenge Entry (Panel)", "Caves Panels"]
 
     return always

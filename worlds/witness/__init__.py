@@ -161,7 +161,7 @@ class WitnessWorld(World):
         early_items = [item for item in self.items.get_early_items() if item in self.items.get_mandatory_items()]
         if early_items:
             random_early_item = self.random.choice(early_items)
-            if self.options.puzzle_randomization == 1:
+            if self.options.puzzle_randomization == "sigma_expert":
                 # In Expert, only tag the item as early, rather than forcing it onto the gate.
                 self.multiworld.local_early_items[self.player][random_early_item] = 1
             else:
@@ -184,7 +184,7 @@ class WitnessWorld(World):
         # Adjust the needed size for sphere 1 based on how restrictive the settings are in terms of items
 
         needed_size = 3
-        needed_size += self.options.puzzle_randomization == 1
+        needed_size += self.options.puzzle_randomization == "sigma_expert"
         needed_size += self.options.shuffle_symbols
         needed_size += self.options.shuffle_doors > 0
 
@@ -284,7 +284,7 @@ class WitnessWorld(World):
 
         audio_logs = get_audio_logs().copy()
 
-        if hint_amount != 0:
+        if hint_amount:
             generated_hints = make_hints(self, hint_amount, self.own_itempool)
 
             self.random.shuffle(audio_logs)
