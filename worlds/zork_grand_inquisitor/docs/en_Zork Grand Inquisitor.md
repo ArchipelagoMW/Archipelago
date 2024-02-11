@@ -2,7 +2,7 @@
 
 ## Where is the settings page?
 
-The [player settings page for this game](../player-settings) contains all the options you need to configure and export a
+The [player options page for this game](../player-options) contains all the options you need to configure and export a
 configuration file.
 
 ## Is a tracker available for this game?
