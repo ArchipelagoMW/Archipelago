@@ -93,7 +93,7 @@ def create_trap_items(world, world_options: Options.DLCQuestOptions, trap_needed
     traps = []
     for i in range(trap_needed):
         trap = random.choice(items_by_group[Group.Trap])
-        traps.append(world.create_item(trap))
+        traps.append(world.create_item(trap, ItemClassification.trap))
 
     return traps
 
@@ -151,7 +151,7 @@ def create_coin(world_options, created_items, world, total_coins, required_coins
             for i in range(coin_bundle_required):
                 created_items.append(world.create_item(item))
             for i in range(coin_bundle_useful):
-                created_items.append(DLCQuestItem(item.name, ItemClassification.useful, item.code, world.player))
+                created_items.append(world.create_item(item, ItemClassification.useful))
 
 
 def create_coin_piece(created_items, world, total_coins, required_coins, group):
@@ -160,4 +160,4 @@ def create_coin_piece(created_items, world, total_coins, required_coins, group):
             for i in range(required_coins*10):
                 created_items.append(world.create_item(item))
             for i in range((total_coins - required_coins) * 10):
-                created_items.append(DLCQuestItem(item.name, ItemClassification.useful, item.code, world.player))
+                created_items.append(world.create_item(item, ItemClassification.useful))

@@ -27,7 +27,7 @@ id,name,classification,groups
 25,Canadian Dialog Pack,filler,"DLC,Freemium"
 26,DLC NPC Pack,progression,"DLC,Freemium"
 27,Cut Content Pack,progression,"DLC,Freemium"
-28,Name Change Pack,progression,"DLC,Freemium"
+28,Name Change Pack,progression,"DLC,Freemium,Trap"
 29,Pickaxe,progression,"Deprecated"
 30,Season Pass,progression,"DLC,Freemium"
 31,High Definition Next Gen Pack,filler,"DLC,Freemium"
@@ -46,7 +46,6 @@ id,name,classification,groups
 44,Zombie Sheep,trap,Trap
 45,Temporary Spike,trap,Trap
 46,Loading Screen,trap,Trap
-47,Name Change,trap,Trap
 48,DLC Quest: Progressive Weapon,progression,"Item,Twice,DLCQuest"
 49,Live Freemium or Die: Progressive Weapon,progression,"Item,Twice,Freemium"
 50,DLC Quest: Coin Piece,progression,"Piece,DLCQuest"
