@@ -228,7 +228,7 @@ class WitnessPlayerItems:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
             if self._world.options.shuffle_discarded_panels:
-                if self._world.options.puzzle_randomization == 1:
+                if self._world.options.puzzle_randomization == "sigma_expert":
                     output.add("Arrows")
                 else:
                     output.add("Triangles")

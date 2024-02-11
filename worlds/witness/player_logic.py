@@ -253,51 +253,101 @@ class WitnessPlayerLogic:
                 line = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[line]["checkName"]
             self.ADDED_CHECKS.add(line)
 
-    def make_options_adjustments(self, world: "WitnessWorld"):
-        """Makes logic adjustments based on options"""
-        adjustment_linesets_in_order = []
+    @staticmethod
+    def handle_postgame(world: "WitnessWorld"):
+        # In shuffle_postgame, panels that become accessible "after or at the same time as the goal" are disabled.
+        # This has a lot of complicated considerations, which I'll try my best to explain.
+        postgame_adjustments = []
 
-        # Postgame
-
-        doors = world.options.shuffle_doors >= 2
-        lasers = world.options.shuffle_lasers
-        early_caves = world.options.early_caves > 0
+        # Make some quick references to some options
+        doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region accessibility implications.
+        early_caves = world.options.early_caves
         victory = world.options.victory_condition
         mnt_lasers = world.options.mountain_lasers
         chal_lasers = world.options.challenge_lasers
 
-        mountain_enterable_from_top = victory == 0 or victory == 1 or (victory == 3 and chal_lasers > mnt_lasers)
+        # Goal is "short box" but short box requires more lasers than long box
+        reverse_shortbox_goal = victory == "mountain_box_short" and mnt_lasers > chal_lasers
 
+        # Goal is "short box", and long box requires at least as many lasers as short box (as god intended)
+        proper_shortbox_goal = victory == "mountain_box_short" and chal_lasers >= mnt_lasers
+
+        # Goal is "long box", but short box requires at least as many lasers than long box.
+        reverse_longbox_goal = victory == "mountain_box_long" and mnt_lasers >= chal_lasers
+
+        # If goal is shortbox or "reverse longbox", you will never enter the mountain from the top before winning.
+        mountain_enterable_from_top = not (victory == "mountain_box_short" or reverse_longbox_goal)
+
+        # Caves & Challenge should never have anything if doors are vanilla - definitionally "post-game"
+        # This is technically imprecise, but it matches player expectations better.
+        if not (early_caves or doors):
+            postgame_adjustments.append(get_caves_exclusion_list())
+            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
+
+            # If Challenge is the goal, some panels on the way need to be left on, as well as Challenge Vault box itself
+            if not victory == "challenge":
+                postgame_adjustments.append(get_path_to_challenge_exclusion_list())
+                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
+
+        # Challenge can only have something if the goal is not challenge or longbox itself.
+        # In case of shortbox, it'd have to be a "reverse shortbox" situation where shortbox requires *more* lasers.
+        # In that case, it'd also have to be a doors mode, but that's already covered by the previous block.
+        if not (victory == "elevator" or reverse_shortbox_goal):
+            postgame_adjustments.append(get_beyond_challenge_exclusion_list())
+            if not victory == "challenge":
+                postgame_adjustments.append(get_challenge_vault_box_exclusion_list())
+
+        # Mountain can't be reached if the goal is shortbox (or "reverse long box")
+        if not mountain_enterable_from_top:
+            postgame_adjustments.append(get_mountain_upper_exclusion_list())
+
+            # Same goes for lower mountain, but that one *can* be reached in remote doors modes.
+            if not doors:
+                postgame_adjustments.append(get_mountain_lower_exclusion_list())
+
+        # The Mountain Bottom Floor Discard is a bit complicated, so we handle it separately. ("it" == the Discard)
+        # In Elevator Goal, it is definitionally in the post-game, unless remote doors is played.
+        # In Challenge Goal, it is before the Challenge, so it is not post-game.
+        # In Short Box Goal, you can win before turning it on, UNLESS Short Box requires MORE lasers than long box.
+        # In Long Box Goal, it is always in the post-game because solving long box is what turns it on.
+        if not ((victory == "elevator" and doors) or victory == "challenge" or (reverse_shortbox_goal and doors)):
+            # We now know Bottom Floor Discard is in the post-game.
+            # This has different consequences depending on whether remote doors is being played.
+            # If doors are vanilla, Bottom Floor Discard locks a door to an area, which has to be disabled as well.
+            if doors:
+                postgame_adjustments.append(get_bottom_floor_discard_exclusion_list())
+            else:
+                postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+
+        # In Challenge goal + early_caves + vanilla doors, you could find something important on Bottom Floor Discard,
+        # including the Caves Shortcuts themselves if playing "early_caves: start_inventory".
+        # This is another thing that was deemed "unfun" more than fitting the actual definition of post-game.
+        if victory == "challenge" and early_caves and not doors:
+            postgame_adjustments.append(get_bottom_floor_discard_nondoors_exclusion_list())
+
+        # If we have a proper short box goal, long box will never be activated first.
+        if proper_shortbox_goal:
+            postgame_adjustments.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
+
+        return postgame_adjustments
+
+    def make_options_adjustments(self, world: "WitnessWorld"):
+        """Makes logic adjustments based on options"""
+        adjustment_linesets_in_order = []
+
+        # Make condensed references to some options
+
+        doors = world.options.shuffle_doors >= 2  # "Panels" mode has no overarching region accessibility implications.
+        lasers = world.options.shuffle_lasers
+        victory = world.options.victory_condition
+        mnt_lasers = world.options.mountain_lasers
+        chal_lasers = world.options.challenge_lasers
+
+        # Exclude panels from the post-game if shuffle_postgame is false.
         if not world.options.shuffle_postgame:
-            if not (early_caves or doors):
-                adjustment_linesets_in_order.append(get_caves_exclusion_list())
-                if not victory == 1:
-                    adjustment_linesets_in_order.append(get_path_to_challenge_exclusion_list())
-                    adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
-                    adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
-
-            if not ((doors or early_caves) and (victory == 0 or (victory == 2 and mnt_lasers > chal_lasers))):
-                adjustment_linesets_in_order.append(get_beyond_challenge_exclusion_list())
-                if not victory == 1:
-                    adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
-
-            if not (doors or mountain_enterable_from_top):
-                adjustment_linesets_in_order.append(get_mountain_lower_exclusion_list())
-
-            if not mountain_enterable_from_top:
-                adjustment_linesets_in_order.append(get_mountain_upper_exclusion_list())
-
-            if not ((victory == 0 and doors) or victory == 1 or (victory == 2 and mnt_lasers > chal_lasers and doors)):
-                if doors:
-                    adjustment_linesets_in_order.append(get_bottom_floor_discard_exclusion_list())
-                else:
-                    adjustment_linesets_in_order.append(get_bottom_floor_discard_nondoors_exclusion_list())
-
-            if victory == 2 and chal_lasers >= mnt_lasers:
-                adjustment_linesets_in_order.append(["Disabled Locations:", "0xFFF00 (Mountain Box Long)"])
+            adjustment_linesets_in_order += self.handle_postgame(world)
 
         # Exclude Discards / Vaults
-
         if not world.options.shuffle_discarded_panels:
             # In disable_non_randomized, the discards are needed for alternate activation triggers, UNLESS both
             # (remote) doors and lasers are shuffled.
@@ -309,18 +359,18 @@ class WitnessPlayerLogic:
 
         if not world.options.shuffle_vault_boxes:
             adjustment_linesets_in_order.append(get_vault_exclusion_list())
-            if not victory == 1:
+            if not victory == "challenge":
                 adjustment_linesets_in_order.append(get_challenge_vault_box_exclusion_list())
 
         # Victory Condition
 
-        if victory == 0:
+        if victory == "elevator":
             self.VICTORY_LOCATION = "0x3D9A9"
-        elif victory == 1:
+        elif victory == "challenge":
             self.VICTORY_LOCATION = "0x0356B"
-        elif victory == 2:
+        elif victory == "mountain_box_short":
             self.VICTORY_LOCATION = "0x09F7F"
-        elif victory == 3:
+        elif victory == "mountain_box_long":
             self.VICTORY_LOCATION = "0xFFF00"
 
         # Long box can usually only be solved by opening Mountain Entry. However, if it requires 7 lasers or less
@@ -338,36 +388,36 @@ class WitnessPlayerLogic:
         if world.options.shuffle_symbols:
             adjustment_linesets_in_order.append(get_symbol_shuffle_list())
 
-        if world.options.EP_difficulty == 0:
+        if world.options.EP_difficulty == "normal":
             adjustment_linesets_in_order.append(get_ep_easy())
-        elif world.options.EP_difficulty == 1:
+        elif world.options.EP_difficulty == "tedious":
             adjustment_linesets_in_order.append(get_ep_no_eclipse())
 
-        if world.options.door_groupings == 1:
-            if world.options.shuffle_doors == 1:
+        if world.options.door_groupings == "regional":
+            if world.options.shuffle_doors == "panels":
                 adjustment_linesets_in_order.append(get_simple_panels())
-            elif world.options.shuffle_doors == 2:
+            elif world.options.shuffle_doors == "doors":
                 adjustment_linesets_in_order.append(get_simple_doors())
-            elif world.options.shuffle_doors == 3:
+            elif world.options.shuffle_doors == "mixed":
                 adjustment_linesets_in_order.append(get_simple_doors())
                 adjustment_linesets_in_order.append(get_simple_additional_panels())
         else:
-            if world.options.shuffle_doors == 1:
+            if world.options.shuffle_doors == "panels":
                 adjustment_linesets_in_order.append(get_complex_door_panels())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
-            elif world.options.shuffle_doors == 2:
+            elif world.options.shuffle_doors == "doors":
                 adjustment_linesets_in_order.append(get_complex_doors())
-            elif world.options.shuffle_doors == 3:
+            elif world.options.shuffle_doors == "mixed":
                 adjustment_linesets_in_order.append(get_complex_doors())
                 adjustment_linesets_in_order.append(get_complex_additional_panels())
 
         if world.options.shuffle_boat:
             adjustment_linesets_in_order.append(get_boat())
 
-        if world.options.early_caves == 2:
+        if world.options.early_caves == "starting_inventory":
             adjustment_linesets_in_order.append(get_early_caves_start_list())
 
-        if world.options.early_caves == 1 and not doors:
+        if world.options.early_caves == "add_to_pool" and not doors:
             adjustment_linesets_in_order.append(get_early_caves_list())
 
         if world.options.elevators_come_to_you:
@@ -391,10 +441,8 @@ class WitnessPlayerLogic:
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
-        if world.options.shuffle_EPs == 0:
+        if not world.options.shuffle_EPs:
             adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
-
-        yaml_disabled_eps = []
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
@@ -402,13 +450,11 @@ class WitnessPlayerLogic:
 
             loc_obj = self.REFERENCE_LOGIC.ENTITIES_BY_NAME[yaml_disabled_location]
 
-            if loc_obj["entityType"] == "EP" and world.options.shuffle_EPs != 0:
-                yaml_disabled_eps.append(loc_obj["entity_hex"])
+            if loc_obj["entityType"] == "EP":
+                self.COMPLETELY_DISABLED_ENTITIES.add(loc_obj["entity_hex"])
 
-            if loc_obj["entityType"] in {"EP", "General", "Vault", "Discard"}:
+            elif loc_obj["entityType"] in {"General", "Vault", "Discard"}:
                 self.EXCLUDED_LOCATIONS.add(loc_obj["entity_hex"])
-
-        adjustment_linesets_in_order.append(["Disabled Locations:"] + yaml_disabled_eps)
 
         for adjustment_lineset in adjustment_linesets_in_order:
             current_adjustment_type = None
@@ -519,13 +565,13 @@ class WitnessPlayerLogic:
         self.DOOR_ITEMS_BY_ID: Dict[str, List[str]] = {}
         self.STARTING_INVENTORY = set()
 
-        self.DIFFICULTY = world.options.puzzle_randomization.value
+        self.DIFFICULTY = world.options.puzzle_randomization
 
-        if self.DIFFICULTY == 0:
+        if self.DIFFICULTY == "sigma_normal":
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_normal
-        elif self.DIFFICULTY == 1:
+        elif self.DIFFICULTY == "sigma_expert":
             self.REFERENCE_LOGIC = StaticWitnessLogic.sigma_expert
-        elif self.DIFFICULTY == 2:
+        elif self.DIFFICULTY == "none":
             self.REFERENCE_LOGIC = StaticWitnessLogic.vanilla
 
         self.CONNECTIONS_BY_REGION_NAME = copy.copy(self.REFERENCE_LOGIC.STATIC_CONNECTIONS_BY_REGION_NAME)

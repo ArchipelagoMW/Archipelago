@@ -134,13 +134,13 @@ class WitnessRegions:
         world.multiworld.regions += final_regions_list
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
-        difficulty = world.options.puzzle_randomization.value
+        difficulty = world.options.puzzle_randomization
 
-        if difficulty == 0:
+        if difficulty == "sigma_normal":
             self.reference_logic = StaticWitnessLogic.sigma_normal
-        elif difficulty == 1:
+        elif difficulty == "sigma_expert":
             self.reference_logic = StaticWitnessLogic.sigma_expert
-        elif difficulty == 2:
+        elif difficulty == "none":
             self.reference_logic = StaticWitnessLogic.vanilla
 
         self.locat = locat
