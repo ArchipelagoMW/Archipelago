@@ -122,8 +122,7 @@ def _timed_call(method: Callable[..., Any], *args: Any,
     start = time.perf_counter()
     ret = method(*args)
     taken = time.perf_counter() - start
-    # TODO - change this condition back or gate it behind debug level or something for production use
-    if taken > 0.0:
+    if taken > 1.0:
         if player and multiworld:
             perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__} for player {player}, "
                              f"named {multiworld.player_name[player]}.")

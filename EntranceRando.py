@@ -9,6 +9,10 @@ from BaseClasses import CollectionState, Entrance, Region
 from worlds.AutoWorld import World
 
 
+class EntranceRandomizationError(RuntimeError):
+    pass
+
+
 class EntranceLookup:
     class GroupLookup:
         _lookup: Dict[str, List[Entrance]]
@@ -159,26 +163,71 @@ class ERPlacementState:
         self._connect_one_way(source_exit, target_entrance)
         # if we're doing coupled randomization place the reverse transition as well.
         if self.coupled and source_exit.er_type == Entrance.EntranceType.TWO_WAY:
-            # TODO - better exceptions here - maybe a custom Error class?
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
                     if reverse_entrance.parent_region:
-                        raise RuntimeError("This is very bad")
+                        raise EntranceRandomizationError(
+                            f"Could not perform coupling on {source_exit.name} -> {target_entrance.name} "
+                            f"because the reverse entrance is already parented to "
+                            f"{reverse_entrance.parent_region.name}.")
                     break
             else:
-                raise RuntimeError(f"Two way exit {source_exit.name} had no corresponding entrance in "
-                                   f"{source_exit.parent_region.name}")
+                raise EntranceRandomizationError(f"Two way exit {source_exit.name} had no corresponding entrance in "
+                                                 f"{source_exit.parent_region.name}")
             for reverse_exit in target_region.exits:
                 if reverse_exit.name == target_entrance.name:
                     if reverse_exit.connected_region:
-                        raise RuntimeError("this is very bad")
+                        raise EntranceRandomizationError(
+                            f"Could not perform coupling on {source_exit.name} -> {target_entrance.name} "
+                            f"because the reverse exit is already connected to "
+                            f"{reverse_exit.connected_region.name}.")
                     break
             else:
-                raise RuntimeError(f"Two way entrance {target_entrance.name} had no corresponding exit in "
-                                   f"{target_region.name}")
+                raise EntranceRandomizationError(f"Two way entrance {target_entrance.name} had no corresponding exit "
+                                                 f"in {target_region.name}.")
             self._connect_one_way(reverse_exit, reverse_entrance)
             return target_entrance, reverse_entrance
         return target_entrance,
+
+
+def disconnect_entrances_for_randomization(
+        world: World,
+        entrances_to_split: Iterable[Union[str, Entrance]]
+) -> None:
+    """
+    Given entrances in a "vanilla" region graph, splits those entrances in such a way that will prepare them
+    for randomization in randomize_entrances. Specifically that means the entrance will be disconnected from its
+    connected region and a corresponding ER target will be created in a way that can respect coupled randomization
+    requirements for 2 way transitions.
+    
+    Preconditions:
+    1. Every provided entrance has both a parent and child region (ie, it is fully connected)
+    2. Every provided entrance has already been labeled with the appropriate entrance type
+
+    :param world: The world owning the entrances
+    :param entrances_to_split: The entrances which will be disconnected in preparation for randomization.
+                               Can be Entrance objects, names of entrances, or any mix of the 2
+    """
+
+    for entrance in entrances_to_split:
+        if isinstance(entrance, str):
+            entrance = world.multiworld.get_entrance(entrance, world.player)
+        child_region = entrance.connected_region
+        parent_region = entrance.parent_region
+
+        # disconnect the edge
+        child_region.entrances.remove(entrance)
+        entrance.connected_region = None
+
+        # create the needed ER target
+        if entrance.er_type == Entrance.EntranceType.TWO_WAY:
+            # for 2-ways, create a target in the parent region with a matching name to support coupling.
+            # targets in the child region will be created when the other direction edge is disconnected
+            target = parent_region.create_er_target(entrance.name)
+        else:
+            # for 1-ways, the child region needs a target and coupling/naming is not a concern
+            target = child_region.create_er_target(child_region.name)
+        target.er_type = entrance.er_type
 
 
 def randomize_entrances(
@@ -192,13 +241,27 @@ def randomize_entrances(
     Randomizes Entrances for a single world in the multiworld.
 
     Depending on how your world is configured, this may be called as early as create_regions or
-    need to be called as late as pre_fill. In general, earlier is better, ie the best time to
+    need to be called as late as pre_fill. In general, earlier is better; the best time to
     randomize entrances is as soon as the preconditions are fulfilled.
 
     Preconditions:
     1. All of your Regions and all of their exits have been created.
     2. Placeholder entrances have been created as the targets of randomization
-       (each exit will be randomly paired to an entrance). <explain methods to do this>
+       (each exit will be randomly paired to an entrance). There are 2 primary ways to do this:
+       * Pre-place your unrandomized region graph, then use disconnect_entrances_for_randomization
+         to prepare them, or
+       * Manually prepare your entrances for randomization. Exits to be randomized should be created
+         and left without a connected region. There should be an equal number of matching dummy
+         entrances of each entrance type in the region graph which do not have a parent; these can
+         easily be created with region.create_er_target(). If you plan to use coupled randomization, the names
+         of these placeholder entrances matter and should exactly match the name of the corresponding exit in
+         that region. For example, given regions R1 and R2 connected R1 --[E1]-> R2 and R2 --[E2]-> R1 when
+         unrandomized, then the expected inputs to coupled ER would be the following (the names of the ER targets
+         for one-way transitions do not matter):
+            * R1 --[E1]-> None
+            * None --[E1]-> R1
+            * R2 --[E2]-> None
+            * None --[E2]-> R2
     3. All entrances and exits have been correctly labeled as 1 way or 2 way.
     4. Your Menu region is connected to your starting region.
     5. All the region connections you don't want to randomize are connected; usually this
@@ -243,8 +306,9 @@ def randomize_entrances(
             if "Default" not in target_groups:
                 target_groups.append("Default")
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
-                # TODO - requiring new regions is a proxy for requiring new entrances to be unlocked, which is
-                #        not quite full fidelity so we may need to revisit this in the future
+                # requiring a new region is a proxy for enforcing new entrances are added, thus growing the search
+                # space. this is not quite a full fidelity conversion, but doesn't seem to cause issues enough
+                # to do more complex checks
                 region_requirement_satisfied = (not require_new_regions
                                                 or target_entrance.connected_region not in er_state.placed_regions)
                 if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, er_state):
@@ -262,11 +326,12 @@ def randomize_entrances(
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return False
 
-            raise RuntimeError(f"None of the available entrances are valid targets for the available exits.\n"
-                               f"Available entrances: {lookup}\n"
-                               f"Available exits: {placeable_exits}")
+            raise EntranceRandomizationError(
+                f"None of the available entrances are valid targets for the available exits.\n"
+                f"Available entrances: {lookup}\n"
+                f"Available exits: {placeable_exits}")
 
-    for region in regions:
+    for region in sorted(regions, key=lambda r: r.name):
         for entrance in region.entrances:
             if not entrance.parent_region:
                 entrance_lookup.add(entrance)
@@ -282,8 +347,6 @@ def randomize_entrances(
     while entrance_lookup.dead_ends:
         if not find_pairing(True, True):
             break
-    # TODO - stages 3 and 4 should ideally run "together"; i.e. without respect to dead-endedness
-    #        as we are just trying to tie off loose ends rather than get you somewhere new
     # stage 3 - connect any dangling entrances that remain
     while entrance_lookup.others:
         find_pairing(False, False)
@@ -291,9 +354,9 @@ def randomize_entrances(
     while entrance_lookup.dead_ends:
         find_pairing(True, False)
 
-    # TODO - gate this behind some condition or debug level or something for production use
     running_time = time.perf_counter() - start_time
-    logging.info(f"Completed entrance randomization for player {world.player} with "
-                 f"name {world.multiworld.player_name[world.player]} in {running_time:.4f} seconds")
+    if running_time > 1.0:
+        logging.info(f"Took {running_time:.4f} seconds during entrance randomization for player {world.player},"
+                     f"named {world.multiworld.player_name[world.player]}")
 
     return er_state
