@@ -5,7 +5,7 @@ The [player options page for Adventure](../player-options) contains all the opti
 
 ## What does randomization do to this game?
 Adventure items may be distributed into additional locations not possible in the vanilla Adventure randomizer.  All
-Adventure items are added to the multiworld item pool.  Depending on the options, dragon locations may be randomized,
+Adventure items are added to the multiworld item pool.  Depending on the `dragon_rando_type` value, dragon locations may be randomized,
 slaying dragons may award items, difficulty switches may require items to unlock, and limited use 'freeincarnates'
 can allow reincarnation without resurrecting dragons.  Dragon speeds may also be randomized, and items may exist
 to reduce their speeds.
