@@ -1,32 +1,31 @@
 'is: documentation':
-  - all:
-    - changed-files:
-        - all-globs-to-any-file: '**/docs/**'
-        - all-globs-to-any-file: '**/README.md'
+- changed-files:
+  - all-globs-to-any-file: '**/docs/**'
+  - all-globs-to-any-file: '**/README.md'
 
 'affects: webhost':
-  - changed-files:
-      - any-glob-to-any-file:
-          - 'WebHost.py'
-          - 'WebHostLib/**/*'
+- changed-files:
+  - any-glob-to-any-file:
+    - 'WebHost.py'
+    - 'WebHostLib/**/*'
 
 'affects: core':
-  - changed-files:
-      - all-globs-to-any-file:
-          - '!*Client.py'
-          - '!README.md'
-          - '!LICENSE'
-          - '!*.yml'
-          - '!.gitignore'
-          - '!**/docs/**'
-          - '!typings/kivy/**'
-          - '!test/**'
-          - '!data/**'
-          - '!.run/**'
-          - '!.github/**'
-          - '!worlds_disabled/**'
-          - '!worlds/**'
-          - '!WebHost.py'
-          - '!WebHostLib/**'
-      - any-glob-to-any-file:
-          - 'worlds/generic/**/*.py'
+- changed-files:
+  - all-globs-to-any-file:
+    - '!*Client.py'
+    - '!README.md'
+    - '!LICENSE'
+    - '!*.yml'
+    - '!.gitignore'
+    - '!**/docs/**'
+    - '!typings/kivy/**'
+    - '!test/**'
+    - '!data/**'
+    - '!.run/**'
+    - '!.github/**'
+    - '!worlds_disabled/**'
+    - '!worlds/**'
+    - '!WebHost.py'
+    - '!WebHostLib/**'
+  - any-glob-to-any-file:
+    - 'worlds/generic/**/*.py'
