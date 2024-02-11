@@ -79,8 +79,8 @@ class AutoWorldRegister(type):
         if "options_dataclass" not in dct and "option_definitions" in dct:
             # TODO - switch to deprecate after a version
             if __debug__:
-                from warnings import warn
-                warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
+                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
+                                "Please use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
@@ -122,8 +122,7 @@ def _timed_call(method: Callable[..., Any], *args: Any,
     start = time.perf_counter()
     ret = method(*args)
     taken = time.perf_counter() - start
-    # TODO - change this condition back or gate it behind debug level or something for production use
-    if taken > 0.0:
+    if taken > 1.0:
         if player and multiworld:
             perf_logger.info(f"Took {taken:.4f} seconds in {method.__qualname__} for player {player}, "
                              f"named {multiworld.player_name[player]}.")
@@ -329,7 +328,7 @@ class World(metaclass=AutoWorldRegister):
 
     def create_items(self) -> None:
         """
-        Method for creating and submitting items to the itempool. Items and Regions should *not* be created and submitted
+        Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
         to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
         """
         pass

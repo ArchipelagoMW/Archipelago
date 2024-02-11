@@ -1,5 +1,5 @@
-from typing import Dict
-from Options import AssembleOptions, Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool
+from Options import Choice, DeathLink, DefaultOnToggle, Range, StartInventoryPool, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class PathOption(Choice):
@@ -99,16 +99,16 @@ class ShopPrice(Choice):
     default = 100
 
 
-noita_options: Dict[str, AssembleOptions] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "death_link": DeathLink,
-    "bad_effects": Traps,
-    "victory_condition": VictoryCondition,
-    "path_option": PathOption,
-    "hidden_chests": HiddenChests,
-    "pedestal_checks": PedestalChecks,
-    "orbs_as_checks": OrbsAsChecks,
-    "bosses_as_checks": BossesAsChecks,
-    "extra_orbs": ExtraOrbs,
-    "shop_price": ShopPrice,
-}
+@dataclass
+class NoitaOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    death_link: DeathLink
+    bad_effects: Traps
+    victory_condition: VictoryCondition
+    path_option: PathOption
+    hidden_chests: HiddenChests
+    pedestal_checks: PedestalChecks
+    orbs_as_checks: OrbsAsChecks
+    bosses_as_checks: BossesAsChecks
+    extra_orbs: ExtraOrbs
+    shop_price: ShopPrice

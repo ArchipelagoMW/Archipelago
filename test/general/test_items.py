@@ -1,5 +1,6 @@
 import unittest
-from worlds.AutoWorld import AutoWorldRegister
+
+from worlds.AutoWorld import AutoWorldRegister, call_all
 from . import setup_solo_multiworld
 
 
@@ -42,18 +43,18 @@ class TestBase(unittest.TestCase):
                     with self.subTest(group_name, group_name=group_name):
                         self.assertNotIn(group_name, world_type.item_name_to_id)
 
-    def test_item_count_greater_equal_locations(self):
-        """Test that by the pre_fill step under default settings, each game submits items >= locations"""
+    def test_item_count_equal_locations(self):
+        """Test that by the pre_fill step under default settings, each game submits items == locations"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
                 multiworld = setup_solo_multiworld(world_type)
-                self.assertGreaterEqual(
+                self.assertEqual(
                     len(multiworld.itempool),
                     len(multiworld.get_unfilled_locations()),
-                    f"{game_name} Item count MUST meet or exceed the number of locations",
+                    f"{game_name} Item count MUST match the number of locations",
                 )
 
-    def testItemsInDatapackage(self):
+    def test_items_in_datapackage(self):
         """Test that any created items in the itempool are in the datapackage"""
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest("Game", game=game_name):
@@ -69,3 +70,20 @@ class TestBase(unittest.TestCase):
                 with self.subTest("Name should be valid", game=game_name, item=name):
                     self.assertIn(name, valid_names,
                                   "All item descriptions must match defined item names")
+
+    def test_itempool_not_modified(self):
+        """Test that worlds don't modify the itempool after `create_items`"""
+        gen_steps = ("generate_early", "create_regions", "create_items")
+        additional_steps = ("set_rules", "generate_basic", "pre_fill")
+        excluded_games = ("Links Awakening DX", "Ocarina of Time", "SMZ3")
+        worlds_to_test = {game: world
+                          for game, world in AutoWorldRegister.world_types.items() if game not in excluded_games}
+        for game_name, world_type in worlds_to_test.items():
+            with self.subTest("Game", game=game_name):
+                multiworld = setup_solo_multiworld(world_type, gen_steps)
+                created_items = multiworld.itempool.copy()
+                for step in additional_steps:
+                    with self.subTest("step", step=step):
+                        call_all(multiworld, step)
+                        self.assertEqual(created_items, multiworld.itempool,
+                                         f"{game_name} modified the itempool during {step}")

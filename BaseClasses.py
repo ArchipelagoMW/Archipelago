@@ -850,21 +850,26 @@ class Entrance:
     def can_connect_to(self, other: Entrance, state: "ERPlacementState") -> bool:
         """
         Determines whether a given Entrance is a valid target transition, that is, whether
-        the entrance randomizer is allowed to pair this Entrance to that Entrance.
+        the entrance randomizer is allowed to pair this Entrance to that Entrance. By default,
+        only allows connection between entrances of the same type (one ways only go to one ways,
+        two ways always go to two ways) and prevents connecting an exit to itself in coupled mode.
+
+        Generally it is a good idea use call super().can_connect_to as one condition in any custom
+        implementations unless you specifically want to avoid the above behaviors.
 
         :param other: The proposed Entrance to connect to
         :param state: The current (partial) state of the ongoing entrance randomization
-        :param group_one_ways: Whether to enforce that one-ways are paired together.
         """
-        # todo - consider allowing self-loops. currently they cause problems in coupled
+        # the implementation of coupled causes issues for self-loops since the reverse entrance will be the
+        # same as the forward entrance. In uncoupled they are ok.
         return self.er_type == other.er_type and (not state.coupled or self.name != other.name)
 
     def __repr__(self):
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
 
 class Region:
@@ -1090,8 +1095,8 @@ class Location:
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
     def __hash__(self):
         return hash((self.name, self.player))
@@ -1106,9 +1111,6 @@ class Location:
 
     @property
     def hint_text(self) -> str:
-        hint_text = getattr(self, "_hint_text", None)
-        if hint_text:
-            return hint_text
         return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
@@ -1228,7 +1230,7 @@ class Spoiler:
                 {"player": player, "entrance": entrance, "exit": exit_, "direction": direction}
 
     def create_playthrough(self, create_paths: bool = True) -> None:
-        """Destructive to the world while it is run, damage gets repaired afterwards."""
+        """Destructive to the multiworld while it is run, damage gets repaired afterwards."""
         from itertools import chain
         # get locations containing progress items
         multiworld = self.multiworld
