@@ -890,6 +890,7 @@ special_zone_blocksanity_names = [
     LocationName.special_zone_8_coin_block_22,
     LocationName.special_zone_8_coin_block_23,
     LocationName.special_zone_8_powerup_block_2,
+    LocationName.special_zone_8_flying_block_1,
     LocationName.special_zone_7_powerup_block_1,
     LocationName.special_zone_7_yoshi_block_1,
     LocationName.special_zone_7_coin_block_1,
