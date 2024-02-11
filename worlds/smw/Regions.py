@@ -800,7 +800,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.forest_secret_region, LocationName.forest_secret_dragon)
         add_location_to_region(multiworld, player, active_locations, LocationName.forest_castle_region, LocationName.forest_castle_dragon)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_dragon,
-                               lambda state: state.has(ItemName.mario_swim, player))
+                               lambda state: state.has(ItemName.p_switch, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_dragon,
                                lambda state: (state.has(ItemName.blue_switch_palace, player) and
                                               (state.has(ItemName.p_switch, player) or
@@ -811,8 +811,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                                lambda state: (state.has(ItemName.p_switch, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_dragon,
-                               lambda state: (state.has(ItemName.mario_swim, player) or
-                                              (state.has(ItemName.mario_carry, player) and state.has(ItemName.p_switch, player))))
+                               lambda state: (state.has(ItemName.mario_carry, player) and state.has(ItemName.p_switch, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship_dragon,
                                lambda state: (state.has(ItemName.mario_swim, player) and
                                               state.has(ItemName.super_star_active, player) and
@@ -849,8 +848,9 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
 
     if world.options.moon_checks:
         add_location_to_region(multiworld, player, active_locations, LocationName.yoshis_island_1_region, LocationName.yoshis_island_1_moon,
-                               lambda state: (state.has(ItemName.mario_run, player) and
-                                              state.has(ItemName.progressive_powerup, player, 3)))
+                               lambda state: ((state.has(ItemName.mario_run, player) and
+                                              state.has(ItemName.progressive_powerup, player, 3)) or
+                                              state.has(ItemName.yoshi_activate, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.donut_plains_4_region, LocationName.donut_plains_4_moon,
                                lambda state: (state.has(ItemName.mario_run, player) and
                                               state.has(ItemName.progressive_powerup, player, 3)))
@@ -864,8 +864,9 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_moon,
                                lambda state: state.has(ItemName.p_switch, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_moon,
-                               lambda state: (state.has(ItemName.mario_run, player) and
-                                              state.has(ItemName.progressive_powerup, player, 3)))
+                               lambda state: ((state.has(ItemName.mario_run, player) and
+                                              state.has(ItemName.progressive_powerup, player, 3)) or 
+                                              state.has(ItemName.yoshi_activate, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_moon)
 
     if world.options.hidden_1up_checks:
@@ -887,9 +888,12 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                                               state.has(ItemName.yoshi_activate, player) or
                                              (state.has(ItemName.mario_run, player, player) and
                                               state.has(ItemName.progressive_powerup, player, 3))))
-        add_location_to_region(multiworld, player, active_locations, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_hidden_1up)
+        add_location_to_region(multiworld, player, active_locations, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_hidden_1up,
+                               lambda state: (state.has(ItemName.mario_carry, player) or
+                                              state.has(ItemName.yoshi_activate, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_hidden_1up)
-        add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_castle_region, LocationName.chocolate_castle_hidden_1up)
+        add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_castle_region, LocationName.chocolate_castle_hidden_1up,
+                               lambda state: (state.has(ItemName.progressive_powerup, player, 1)))
         add_location_to_region(multiworld, player, active_locations, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_hidden_1up)
         add_location_to_region(multiworld, player, active_locations, LocationName.valley_castle_region, LocationName.valley_castle_hidden_1up)
         add_location_to_region(multiworld, player, active_locations, LocationName.special_zone_1_region, LocationName.special_zone_1_hidden_1up,
@@ -1107,11 +1111,11 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship_star_block_1,
                         lambda state: state.has(ItemName.mario_swim, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_castle_region, LocationName.chocolate_castle_yellow_block_1,
-                        lambda state: state.has(ItemName.yellow_switch_palace, player))
+                        lambda state: (state.has(ItemName.progressive_powerup, player, 1) and state.has(ItemName.yellow_switch_palace, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_castle_region, LocationName.chocolate_castle_yellow_block_2,
-                        lambda state: state.has(ItemName.yellow_switch_palace, player))
+                        lambda state: (state.has(ItemName.progressive_powerup, player, 1) and state.has(ItemName.yellow_switch_palace, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_castle_region, LocationName.chocolate_castle_green_block_1,
-                        lambda state: state.has(ItemName.green_switch_palace, player))
+                        lambda state: (state.has(ItemName.progressive_powerup, player, 1) and state.has(ItemName.yellow_switch_palace, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_fortress_region, LocationName.chocolate_fortress_powerup_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_fortress_region, LocationName.chocolate_fortress_powerup_block_2)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_fortress_region, LocationName.chocolate_fortress_coin_block_1)
@@ -1123,7 +1127,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_life_block_1,
                         lambda state:( (state.has(ItemName.mario_carry, player)) or  (state.has(ItemName.progressive_powerup, player, 3))))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_yellow_block_1,
-                        lambda state: (state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.p_switch, player)))
+                        lambda state: (state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.p_switch, player) and state.has(ItemName.mario_carry, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_yellow_block_1,
                         lambda state: (state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.blue_switch_palace, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_blue_pow_block_1)
@@ -1161,7 +1165,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_yoshi_block_1,
                         lambda state: state.has(ItemName.p_switch, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_green_block_1,
-                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.blue_switch_palace, player))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3))) or  ((state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.blue_switch_palace, player))) or  ((state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))))
+                        lambda state:( ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.blue_switch_palace, player) and state.has(ItemName.p_switch, player))) or  ((state.has(ItemName.green_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3) and state.has(ItemName.p_switch, player))) or  ((state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.blue_switch_palace, player) and state.has(ItemName.p_switch, player))) or  ((state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3) and state.has(ItemName.p_switch, player)))))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_life_block_1,
                         lambda state: state.has(ItemName.p_switch, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_powerup_block_1)
@@ -1372,7 +1376,8 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                         lambda state: (state.has(ItemName.yellow_switch_palace, player) and state.has(ItemName.progressive_powerup, player, 3)))
         add_location_to_region(multiworld, player, active_locations, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_vine_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_secret_region, LocationName.chocolate_secret_powerup_block_1)
-        add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_secret_region, LocationName.chocolate_secret_powerup_block_2)
+        add_location_to_region(multiworld, player, active_locations, LocationName.chocolate_secret_region, LocationName.chocolate_secret_powerup_block_2,
+                        lambda state: state.has(ItemName.mario_run, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_coin_block_1,
                         lambda state: state.has(ItemName.mario_swim, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_powerup_block_1,
@@ -1737,7 +1742,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_2_region, LocationName.star_road_2_star_block_1,
                         lambda state: state.has(ItemName.mario_swim, player))
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_3_region, LocationName.star_road_3_key_block_1,
-                        lambda state: state.has(ItemName.mario_carry, player))
+                        lambda state:( (state.has(ItemName.mario_carry, player)) or  (state.has(ItemName.progressive_powerup, player, 2))))
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_4_region, LocationName.star_road_4_powerup_block_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_4_region, LocationName.star_road_4_green_block_1,
                         lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player)))
@@ -1840,7 +1845,6 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                         lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and state.has(ItemName.special_world_clear, player)))
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_5_region, LocationName.star_road_5_green_block_20,
                         lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and state.has(ItemName.special_world_clear, player)))
-
 
 def connect_regions(multiworld: MultiWorld, player: int, world: World, level_to_tile_dict):
     names: typing.Dict[str, int] = {}

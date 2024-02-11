@@ -486,7 +486,10 @@ class SMWSNIClient(SNIClient):
             return
 
         recv_count = await snes_read(ctx, SMW_RECV_PROGRESS_ADDR, 2)
-        recv_index = recv_count[0]+(recv_count[1]<<8)
+        if recv_count is None:
+            # Add a small failsafe in case we get a None. Other SNI games do this...
+            return
+        recv_index = recv_count[0] | (recv_count[1] << 8)
 
         if recv_index < len(ctx.items_received):
             item = ctx.items_received[recv_index]
