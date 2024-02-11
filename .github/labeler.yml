@@ -1,7 +1,6 @@
 'is: documentation':
 - changed-files:
-  - any-glob-to-all-files:
-    - '{**/docs/**,**/README.md}'
+  - any-glob-to-all-files: '{**/docs/**,**/README.md}'
 
 'affects: webhost':
 - changed-files:
