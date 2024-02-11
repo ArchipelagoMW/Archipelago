@@ -111,9 +111,10 @@ class MessengerWorld(World):
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
+        starting_portals = ["Autumn Hills", "Howling Grotto", "Glacial Peak", "Riviere Turquoise", "Sunken Shrine", "Searing Crags"]
         self.starting_portals = [f"{portal} Portal"
-                                 for portal in PORTALS[:3] +
-                                 self.random.sample(PORTALS[3:], k=self.options.available_portals - 3)]
+                                 for portal in starting_portals[:3] +
+                                 self.random.sample(starting_portals[3:], k=self.options.available_portals - 3)]
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
         self.transitions = []

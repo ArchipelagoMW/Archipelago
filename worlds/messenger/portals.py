@@ -9,11 +9,11 @@ if TYPE_CHECKING:
 
 PORTALS = [
     "Autumn Hills",
-    "Howling Grotto",
-    "Glacial Peak",
     "Riviere Turquoise",
+    "Howling Grotto",
     "Sunken Shrine",
     "Searing Crags",
+    "Glacial Peak",
 ]
 
 
