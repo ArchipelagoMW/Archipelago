@@ -1,6 +1,6 @@
 from pathlib import Path
 import settings
-from typing import ClassVar
+from typing import Any, ClassVar, Mapping
 
 from BaseClasses import Item, Tutorial
 from worlds.AutoWorld import WebWorld, World
@@ -160,6 +160,15 @@ class WL4World(World):
         finally:
             if rompath.exists():
                 rompath.unlink()
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        return self.options.as_dict(
+            'difficulty',
+            'logic',
+            'required_jewels',
+            'open_doors',
+            'portal',
+        )
 
     def create_item(self, name: str, force_non_progression=False) -> Item:
         return WL4Item.from_name(name, self.player, force_non_progression)
