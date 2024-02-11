@@ -390,6 +390,13 @@ class VirtualConsoleChanges(Choice):
     option_both = 3
     default = 1
 
+class Gifting(Toggle):
+    """
+    When enabled, the goal game item will be sent to other compatible games as a gift,
+    and you can receive gifts from other players. This can be enabled during gameplay
+    using the client.
+    """
+    display_name = "Gifting"
 
 @dataclass
 class KDL3Options(PerGameCommonOptions):
@@ -416,6 +423,7 @@ class KDL3Options(PerGameCommonOptions):
     boss_requirement_random: BossRequirementRandom
     consumables: ConsumableChecks
     starsanity: StarChecks
+    gifting: Gifting
     kirby_flavor_preset: KirbyFlavorPreset
     kirby_flavor: KirbyFlavor
     gooey_flavor_preset: GooeyFlavorPreset
