@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/labeler@v5
+        with:
+          sync-labels: true
   peer_review:
     name: 'Apply peer review label'
     if: >-
