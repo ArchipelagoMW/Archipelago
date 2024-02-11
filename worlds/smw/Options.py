@@ -304,7 +304,7 @@ class SFXShuffle(Choice):
     """
     Shuffles almost every instance of sound effect playback
     Archipelago elements that play sound effects aren't randomized
-    None: No Music is shuffled
+    None: No SFX are shuffled
     Full: Each individual SFX call has a random SFX
     Singularity: The entire game uses one SFX for every SFX call
     """
