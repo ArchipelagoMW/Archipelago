@@ -5,7 +5,7 @@ import time
 from collections import deque
 from typing import Callable, Dict, Iterable, List, Tuple, Union, Set
 
-from BaseClasses import CollectionState, Entrance, Region
+from BaseClasses import CollectionState, Entrance, Region, EntranceType
 from worlds.AutoWorld import World
 
 
@@ -163,7 +163,7 @@ class ERPlacementState:
 
         self._connect_one_way(source_exit, target_entrance)
         # if we're doing coupled randomization place the reverse transition as well.
-        if self.coupled and source_exit.er_type == Entrance.EntranceType.TWO_WAY:
+        if self.coupled and source_exit.er_type == EntranceType.TWO_WAY:
             for reverse_entrance in source_region.entrances:
                 if reverse_entrance.name == source_exit.name:
                     if reverse_entrance.parent_region:
@@ -221,7 +221,7 @@ def disconnect_entrances_for_randomization(
         entrance.connected_region = None
 
         # create the needed ER target
-        if entrance.er_type == Entrance.EntranceType.TWO_WAY:
+        if entrance.er_type == EntranceType.TWO_WAY:
             # for 2-ways, create a target in the parent region with a matching name to support coupling.
             # targets in the child region will be created when the other direction edge is disconnected
             target = parent_region.create_er_target(entrance.name)

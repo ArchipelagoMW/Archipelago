@@ -796,10 +796,12 @@ class CollectionState():
             self.stale[item.player] = True
 
 
+class EntranceType(IntEnum):
+    ONE_WAY = 1
+    TWO_WAY = 2
+
+
 class Entrance:
-    class EntranceType(IntEnum):
-        ONE_WAY = 1
-        TWO_WAY = 2
 
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     hide_path: bool = False
