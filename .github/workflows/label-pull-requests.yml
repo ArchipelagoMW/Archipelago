@@ -30,10 +30,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Remove labels'
-        run: >-
-          gh pr edit "$PR_URL" --remove-label 'waiting-on: peer-review'
-            --remove-label 'waiting-on: core-review'
-            --remove-label 'waiting-on: world-maintainer'
+        run: |-
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: peer-review' \
+            --remove-label 'waiting-on: core-review' \
+            --remove-label 'waiting-on: world-maintainer' \
             --remove-label 'waiting-on: author'
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
