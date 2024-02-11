@@ -78,7 +78,7 @@ LEVEL_CLEAR_FLAGS = [
     None,
     None,
     None,
-    'Spoiled Rotten'
+    'Spoiled Rotten',
     'Palm Tree Paradise',
     'Wildflower Fields',
     'Mystic Lake',
@@ -88,17 +88,17 @@ LEVEL_CLEAR_FLAGS = [
     'The Toxic Landfill',
     '40 Below Fridge',
     'Pinball Zone',
-    'Cuckoo Condor'
+    'Cuckoo Condor',
     'Toy Block Tower',
     'The Big Board',
     'Doodle Woods',
     'Domino Row',
-    'Aerodent'
+    'Aerodent',
     'Crescent Moon Village',
     'Arabian Night',
     'Fiery Cavern',
     'Hotel Horror',
-    'Catbat'
+    'Catbat',
     'Golden Passage',
     None,
     None,
@@ -153,6 +153,7 @@ class WL4Client(BizHawkClient):
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = []
+        self.local_set_events = {}
 
     async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -262,9 +263,12 @@ class WL4Client(BizHawkClient):
                     location_id = location_name_to_id[location]
                     if status_bits & bit and location_id in client_ctx.server_locations:
                         locations.append(location_id)
+
+            for level in range(5):
+                keyzer_bit = item_status[passage * 6 + level] & (1 << 5)
                 level_name = LEVEL_CLEAR_FLAGS[passage * 5 + level]
                 if level_name:
-                    level_clear = bool((status_bits >> 5) & 1)
+                    level_clear = bool(keyzer_bit)
                     events[level_name] = level_clear
 
         if item_status[Passage.GOLDEN * 6 + 4] & 0x10:
