@@ -1,8 +1,8 @@
 'is: documentation':
-  - changed-files:
-      - any-glob-to-all-files:
-          - '**/docs/**'
-          - '**/README.md'
+  - all:
+    - changed-files:
+        - all-globs-to-any-file: '**/docs/**'
+        - all-globs-to-any-file: '**/README.md'
 
 'affects: webhost':
   - changed-files:
@@ -26,5 +26,7 @@
           - '!.github/**'
           - '!worlds_disabled/**'
           - '!worlds/**'
+          - '!WebHost.py'
+          - '!WebHostLib/**'
       - any-glob-to-any-file:
           - 'worlds/generic/**/*.py'
