@@ -484,7 +484,7 @@ Hand in Hand|66-1|Miku in Museland|False|1|3|6|
 Cynical Night Plan|66-2|Miku in Museland|False|4|6|8|
 God-ish|66-3|Miku in Museland|False|4|7|10|
 Darling Dance|66-4|Miku in Museland|False|4|7|9|
-Hatsune Creation Myth|66-5|Miku in Museland|False|6|8|10|
+Hatsune Creation Myth|66-5|Miku in Museland|False|6|8|10|11
 The Vampire|66-6|Miku in Museland|False|4|6|9|
 Future Eve|66-7|Miku in Museland|False|4|8|11|
 Unknown Mother Goose|66-8|Miku in Museland|False|4|8|10|
@@ -510,3 +510,23 @@ Shuki*RaiRai|69-2|Touhou Mugakudan -3-|False|5|7|9|
 HELLOHELL|69-3|Touhou Mugakudan -3-|False|4|7|10|
 Calamity Fortune|69-4|Touhou Mugakudan -3-|True|6|8|10|11
 Tsurupettan|69-5|Touhou Mugakudan -3-|True|2|5|8|
+Twilight Poems|43-44|MD Plus Project|True|3|6|8|
+All My Friends feat. RANASOL|43-45|MD Plus Project|True|4|7|9|
+Heartache|43-46|MD Plus Project|True|5|7|10|
+Blue Lemonade|43-47|MD Plus Project|True|3|6|8|
+Haunted Dance|43-48|MD Plus Project|False|6|9|11|
+Hey Vincent.|43-49|MD Plus Project|True|6|8|10|
+Meteor feat. TEA|43-50|MD Plus Project|True|3|6|9|
+Narcissism Angel|43-51|MD Plus Project|True|1|3|6|
+AlterLuna|43-52|MD Plus Project|True|6|8|11|
+Niki Tousen|43-53|MD Plus Project|True|6|8|10|11
+Rettou Joutou|70-0|Rin Len's Mirrorland|False|4|7|9|
+Telecaster B-Boy|70-1|Rin Len's Mirrorland|False|5|7|10|
+Iya Iya Iya|70-2|Rin Len's Mirrorland|False|2|4|7|
+Nee Nee Nee|70-3|Rin Len's Mirrorland|False|4|6|8|
+Chaotic Love Revolution|70-4|Rin Len's Mirrorland|False|4|6|8|
+Dance of the Corpses|70-5|Rin Len's Mirrorland|False|2|5|8|
+Bitter Choco Decoration|70-6|Rin Len's Mirrorland|False|3|6|9|
+Dance Robot Dance|70-7|Rin Len's Mirrorland|False|4|7|10|
+Sweet Devil|70-8|Rin Len's Mirrorland|False|5|7|9|
+Someday'z Coming|70-9|Rin Len's Mirrorland|False|5|7|9|

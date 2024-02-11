@@ -201,11 +201,10 @@ location_region_mapping: Dict[str, Dict[str, LocationData]] = {
 }
 
 
-# Iterating the hidden chest and pedestal locations here to avoid clutter above
-def generate_location_entries(locname: str, locinfo: LocationData) -> Dict[str, int]:
-    if locinfo.ltype in ["chest", "pedestal"]:
-        return {f"{locname} {i + 1}": locinfo.id + i for i in range(20)}
-    return {locname: locinfo.id}
+def make_location_range(location_name: str, base_id: int, amt: int) -> Dict[str, int]:
+    if amt == 1:
+        return {location_name: base_id}
+    return {f"{location_name} {i+1}": base_id + i for i in range(amt)}
 
 
 location_name_groups: Dict[str, Set[str]] = {"shop": set(), "orb": set(), "boss": set(), "chest": set(),
@@ -215,9 +214,11 @@ location_name_to_id: Dict[str, int] = {}
 
 for location_group in location_region_mapping.values():
     for locname, locinfo in location_group.items():
-        location_name_to_id.update(generate_location_entries(locname, locinfo))
-        if locinfo.ltype in ["chest", "pedestal"]:
-            for i in range(20):
-                location_name_groups[locinfo.ltype].add(f"{locname} {i + 1}")
-        else:
-            location_name_groups[locinfo.ltype].add(locname)
+        # Iterating the hidden chest and pedestal locations here to avoid clutter above
+        amount = 20 if locinfo.ltype in ["chest", "pedestal"] else 1
+        entries = make_location_range(locname, locinfo.id, amount)
+
+        location_name_to_id.update(entries)
+        location_name_groups[locinfo.ltype].update(entries.keys())
+
+shop_locations = {name for name in location_name_to_id.keys() if "Shop Item" in name}
