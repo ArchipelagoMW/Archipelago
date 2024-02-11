@@ -9,14 +9,14 @@ permissions:
 jobs:
   labeler:
     name: 'Apply content-based labels'
-    if: contains(['opened', 'edited'], github.event.action)
+    if: github.event.action == 'opened' || github.event.action == 'edited'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/labeler@v5
   peer_review:
     name: 'Apply peer review tag'
-    if: contains(['opened', 'ready_for_review'], github.event.action) && !github.event.pull_request.draft
+    if: (github.event.action == 'opened' || github.event.action == 'ready_for_review') && !github.event.pull_request.draft
     runs-on: ubuntu-latest
     steps:
       - name: 'Add label'
