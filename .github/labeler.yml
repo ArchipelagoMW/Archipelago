@@ -5,9 +5,8 @@
 
 'affects: webhost':
 - changed-files:
-  - any-glob-to-any-file:
-    - 'WebHost.py'
-    - 'WebHostLib/**/*'
+  - all-globs-to-any-file: 'WebHost.py'
+  - all-globs-to-any-file: 'WebHostLib/**/*'
 
 'affects: core':
 - changed-files:
