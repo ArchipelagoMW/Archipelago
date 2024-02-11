@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Union, Optional
+from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional
 from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
 from . import StaticWitnessLogic
 from .utils import weighted_sample

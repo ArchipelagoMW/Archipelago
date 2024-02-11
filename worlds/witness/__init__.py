@@ -3,7 +3,7 @@ Archipelago init file for The Witness
 """
 import dataclasses
 
-from typing import Dict, Optional, List, Tuple, Set
+from typing import Dict, Optional
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
