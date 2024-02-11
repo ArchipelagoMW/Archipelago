@@ -1,0 +1,30 @@
+'is: documentation':
+  - changed-files:
+      - any-glob-to-all-files:
+          - '**/docs/**'
+          - '**/README.md'
+
+'affects: webhost':
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'WebHost.py'
+          - 'WebHostLib/**/*'
+
+'affects: core':
+  - changed-files:
+      - all-globs-to-any-file:
+          - '!*Client.py'
+          - '!README.md'
+          - '!LICENSE'
+          - '!*.yml'
+          - '!.gitignore'
+          - '!docs/**'
+          - '!typings/kivy/**'
+          - '!test/**'
+          - '!data/**'
+          - '!.run/**'
+          - '!.github/**'
+          - '!worlds_disabled/**'
+          - '!worlds/**'
+      - any-glob-to-any-file:
+          - 'worlds/generic/**'
