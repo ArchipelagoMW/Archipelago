@@ -1,7 +1,8 @@
 'is: documentation':
 - changed-files:
-  - all-globs-to-any-file: '**/docs/**'
-  - all-globs-to-any-file: '**/README.md'
+  - any-glob-to-all-files:
+    - '**/docs/**'
+    - '**/README.md'
 
 'affects: webhost':
 - changed-files:
