@@ -131,6 +131,7 @@ class ERPlacementState:
 
     def find_placeable_exits(self) -> List[Entrance]:
         blocked_connections = self.collection_state.blocked_connections[self.world.player]
+        blocked_connections = sorted(blocked_connections, key=lambda x: x.name)
         placeable_randomized_exits = [connection for connection in blocked_connections
                                       if not connection.connected_region
                                       and connection.is_valid_source_transition(self)]
