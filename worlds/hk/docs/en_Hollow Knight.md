@@ -20,3 +20,7 @@ When the Hollow Knight player picks up an item from a location and it is an item
 player's recent items display as an item being sent to another player. If the item is for another Hollow Knight player
 then the sprite will be that of the item's original sprite. If the item belongs to a player that is not playing Hollow
 Knight then the sprite will be the Archipelago logo.
+
+## Why are grubs so cute?
+
+It is one of the world's great mysteries
