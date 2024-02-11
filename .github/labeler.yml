@@ -1,6 +1,6 @@
 'is: documentation':
 - changed-files:
-  - any-glob-to-all-files: '{**/docs/**,**/README.md}'
+  - all-globs-to-all-files: '{**/docs/**,**/README.md}'
 
 'affects: webhost':
 - changed-files:
@@ -25,5 +25,6 @@
     - '!worlds/**'
     - '!WebHost.py'
     - '!WebHostLib/**'
-  - any-glob-to-any-file:
+  - any-glob-to-any-file: # exceptions to the above rules of "stuff that isn't core"
     - 'worlds/generic/**/*.py'
+    - 'CommonClient.py'
