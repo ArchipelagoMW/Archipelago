@@ -309,6 +309,12 @@ class KDL3World(World):
         if self.stage_shuffle_enabled:
             regions = {LocationName.level_names[level]: level for level in LocationName.level_names}
             level_hint_data = {}
-            for location in [location for location in self.multiworld.get_locations(self.player) if location.address]:
-                level_hint_data[location.address] = f"{regions[location.parent_region.level]} {location.parent_region.stage if location.parent_region.stage < 7 else 'Boss'}"
+            for level in regions:
+                for stage in range(7):
+                    stage_name = self.multiworld.get_location(self.location_id_to_name[self.player_levels[level][stage]],
+                                                              self.player).name.replace(" - Complete", "")
+                    stage_regions = [room for room in self.rooms if stage_name in room.name]
+                    for region in stage_regions:
+                        for location in region.locations:
+                            level_hint_data[location.address] = f"{regions[level]} {stage if stage < 7 else 'Boss'}"
             hint_data[self.player] = level_hint_data
