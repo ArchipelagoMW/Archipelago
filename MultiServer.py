@@ -2078,8 +2078,8 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
             if full_name.isnumeric():
                 location, usable, response = int(full_name), True, None
-            elif self.ctx.location_names_for_game(game) is not None:
-                location, usable, response = get_intended_text(full_name, self.ctx.location_names_for_game(game))
+            elif self.ctx.all_location_and_group_names:
+                location, usable, response = get_intended_text(full_name, self.ctx.all_location_and_group_names[game])
             else:
                 self.output("Can't look up location for unknown game. Hint for ID instead.")
                 return False
@@ -2087,6 +2087,11 @@ class ServerCommandProcessor(CommonCommandProcessor):
             if usable:
                 if isinstance(location, int):
                     hints = collect_hint_location_id(self.ctx, team, slot, location)
+                elif game in self.ctx.location_name_groups and location in self.ctx.location_name_groups[game]:
+                    hints = []
+                    for loc_name_from_group in self.ctx.location_name_groups[game][location]:
+                        if loc_name_from_group in self.ctx.location_names_for_game(game):
+                            hints.extend(collect_hint_location_name(self.ctx, team, slot, loc_name_from_group))
                 else:
                     hints = collect_hint_location_name(self.ctx, team, slot, location)
                 if hints:
