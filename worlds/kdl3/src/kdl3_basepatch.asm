@@ -95,21 +95,6 @@ org $049CD7
 
 org $06801E
     JSL ConsumableSet
-    LSR
-    CMP #$0005
-    .This:
-    BCS .This
-    ASL
-    TAX
-    JMP ($002D,X)
-    db $37, $00, $37, $00, $7E, $00, $94, $00
-    db $37, $00
-    LDA #$0026
-    JSL $00D927
-    LDY $D2
-    RTL
-    NOP #10
-
 
 org $068518
     JSL CopyAbilityOverride
@@ -218,16 +203,25 @@ HeartStarCheck:
 
 org $079A80
 OpenWorldUnlock:
+    PHX
+    LDX $900E ; Are we on open world?
+    BNE .Open ; Branch if we are
+    LDA #$0001
+    .Open:
     STA $5AC1 ;(cutscene)
     STA $53CD ;(unlocked stages)
     INC
     STA $5AB9 ;(currently selectable stages)
+    CPX #$0001
+    BNE .Return ; Return if we aren't on open world
     LDA #$0001
     STA $5A9D
     STA $5A9F
     STA $5AA1
     STA $5AA3
     STA $5AA5
+    .Return:
+    PLX
     RTL
 
 org $079B00
@@ -592,9 +586,11 @@ FinalIcebergFix:
 org $07A000
 StrictBosses:
     PHX
+    LDA $901E ; Do we have strict bosses enabled?
+    BEQ .ReturnTrue ; Return True if we don't, always unlock the boss in this case
     LDA $53CB ; unlocked level
     CMP #$0005 ; have we unlocked level 5?
-    BCS .ReturnTrue ; we don't need to do anything if so
+    BCS .ReturnFalse ; we don't need to do anything if so
     NOP #5 ;unsure when these got here
     LDX $53CB
     DEX
@@ -603,11 +599,11 @@ StrictBosses:
     TAX
     LDA $8070 ; current heart stars
     CMP $07D000, X ; do we have enough HS to purify?
-    BCS .ReturnFalse ; branch if we do not
-    .ReturnTrue:
+    BCS .ReturnTrue ; branch if we do
+    .ReturnFalse:
     SEC
     BRA .Return
-    .ReturnFalse:
+    .ReturnTrue:
     CLC
     .Return:
     PLX
@@ -676,6 +672,8 @@ org $07A100
 OpenWorldBossUnlock:
     PHX
     PHY
+    LDA $900E ; Are we on open world?
+    BEQ .ReturnTrue ; Return true if we aren't, always unlock boss
     LDA $53CD
     CMP #$0006
     BNE .ReturnFalse ; return if we aren't on stage 6
@@ -721,6 +719,7 @@ OpenWorldBossUnlock:
     SEC
     SBC $9016
     BCC .ReturnFalse
+    .ReturnTrue
     LDA $53CD
     INC
     STA $53CD
@@ -1142,6 +1141,8 @@ StarsSet:
     PHA
     PHX
     PHY
+    LDX $901A
+    BEQ .ApplyStar
     AND #$00FF
     PHA
     LDX $53CF
@@ -1184,12 +1185,20 @@ StarsSet:
     LDA $B000, X
     ORA #$0001
     STA $B000, X
+    .Return:
     PLY
     PLX
     PLA
     XBA
     AND #$00FF
     RTL
+    .ApplyStar:
+    LDA $39D7
+    INC
+    ORA #$8000
+    STA $39D7
+    BRA .Return
+
 
 org $07C000
     db "KDL3_BASEPATCH_ARCHI"

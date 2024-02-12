@@ -17,7 +17,7 @@ from .ClientAddrs import consumable_addrs, star_addrs
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from SNIClient import SNIClientCommandProcessor, SNIContext
+    from SNIClient import SNIClientCommandProcessor
 
 snes_logger = logging.getLogger("SNES")
 
@@ -146,10 +146,6 @@ class KDL3SNIClient(SNIClient):
         death_link = await snes_read(ctx, KDL3_DEATH_LINK_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
-        self.giftbox_key = f"Giftbox;{ctx.team};{ctx.slot}"
-        self.motherbox_key = f"Giftboxes;{ctx.team}"
-        enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
-        await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key, bool(enable_gifting[0]))
         return True
 
     async def pop_item(self, ctx, in_stage):
@@ -179,8 +175,9 @@ class KDL3SNIClient(SNIClient):
             if "Candy" in traits or "Invincible" in traits:
                 # apply invincibility candy
                 self.item_queue.append(0x43)
-            elif "Tomato" in traits:
+            elif "Tomato" in traits or "tomato" in gift["Name"].lower():
                 # apply maxim tomato
+                # only want tomatos here, no other vegetable is that good
                 self.item_queue.append(0x42)
             elif "Life" in traits:
                 # Apply 1-Up
@@ -213,7 +210,7 @@ class KDL3SNIClient(SNIClient):
                                    if trait["Trait"] in ["Consumable", "Food", "Drink", "Heal", "Health"]))
                     quality = min(10, quality * 2)
                 else:
-                    # it's not really edible, but he'll eat it anyways
+                    # it's not really edible, but he'll eat it anyway
                     quality = self.client_random.choices(range(0, 2), {0: 75, 1: 25})[0]
                 kirby_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
                 gooey_hp = await snes_read(ctx, KDL3_KIRBY_HP + 2, 1)
@@ -230,7 +227,7 @@ class KDL3SNIClient(SNIClient):
         else:
             gift_base = kdl3_trap_gifts[self.client_random.randint(0, 3)]
         most_applicable = -1
-        most_applicable_slot = -1
+        most_applicable_slot = ctx.slot
         for slot, info in ctx.stored_data[self.motherbox_key].items():
             if int(slot) == ctx.slot and len(ctx.stored_data[self.motherbox_key]) > 1:
                 continue
@@ -238,11 +235,14 @@ class KDL3SNIClient(SNIClient):
             if desire > most_applicable:
                 most_applicable = desire
                 most_applicable_slot = int(slot)
+            elif most_applicable_slot == ctx.slot and info["AcceptsAnyGift"]:
+                # only send to ourselves if no one else will take it
+                most_applicable_slot = int(slot)
         # print(most_applicable, most_applicable_slot)
-        Uuid = uuid.uuid4().hex
+        UUID = uuid.uuid4().hex
         item = {
             **gift_base,
-            "ID": Uuid,
+            "ID": UUID,
             "Sender": ctx.player_names[ctx.slot],
             "Receiver": ctx.player_names[most_applicable_slot],
             "SenderTeam": ctx.team,
@@ -252,7 +252,7 @@ class KDL3SNIClient(SNIClient):
         }
         # print(item)
         await update_object(ctx, f"Giftbox;{ctx.team};{most_applicable_slot}", {
-            Uuid: item,
+            UUID: item,
         })
 
     async def game_watcher(self, ctx) -> None:
@@ -269,6 +269,11 @@ class KDL3SNIClient(SNIClient):
                 return
             if not ctx.server:
                 return
+            if not self.initialize_gifting:
+                self.giftbox_key = f"Giftbox;{ctx.team};{ctx.slot}"
+                self.motherbox_key = f"Giftboxes;{ctx.team}"
+                enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
+                await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key, bool(enable_gifting[0]))
             # can't check debug anymore, without going and copying the value. might be important later.
             if self.levels is None:
                 self.levels = dict()
@@ -282,7 +287,8 @@ class KDL3SNIClient(SNIClient):
             if self.stars is None:
                 stars = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
                 self.stars = stars[0] == 0x01
-            is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)  # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
+            is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)
+            # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
             if is_demo[0] > 0x00:
                 return
             current_save = await snes_read(ctx, KDL3_GAME_SAVE, 1)
@@ -331,7 +337,7 @@ class KDL3SNIClient(SNIClient):
 
             # handle gifts here
             gifting_status = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
-            if ctx.gifting:
+            if hasattr(ctx, "gifting") and ctx.gifting:
                 if gifting_status[0]:
                     gift = await snes_read(ctx, KDL3_GIFTING_SEND, 0x01)
                     if gift[0]:

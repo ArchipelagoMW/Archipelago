@@ -335,11 +335,16 @@ def write_heart_star_sprites(rom: RomData):
     rom.write_bytes(0x3F0EBF, [0x00, 0xD0, 0x39])
 
 
-def write_consumable_sprites(rom: RomData):
+def write_consumable_sprites(rom: RomData, consumables, stars):
     compressed = rom.read_bytes(consumable_address, consumable_size)
     decompressed = hal_decompress(compressed)
-    patch = get_data(__name__, os.path.join("data", "APConsumable.bsdiff4"))
-    patched = bytearray(bsdiff4.patch(decompressed, patch))
+    patched = bytearray(decompressed)
+    if consumables:
+        patch = get_data(__name__, os.path.join("data", "APConsumable.bsdiff4"))
+        patched = bytearray(bsdiff4.patch(bytes(patched), patch))
+    if stars:
+        patch = get_data(__name__, os.path.join("data", "APStars.bsdiff4"))
+        patched = bytearray(bsdiff4.patch(bytes(patched), patch))
     patched[0:0] = [0xE3, 0xFF]
     patched.append(0xFF)
     rom.write_bytes(0x1CD500, patched)
@@ -373,8 +378,7 @@ class KDL3DeltaPatch(APDeltaPatch):
                 rom.write_bytes(addr, level_sprite)
             rom.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
                                      0x50, 0xC4, 0x39])
-        if rom.read_bytes(0x3D018, 1)[0] > 0:
-            write_consumable_sprites(rom)
+        write_consumable_sprites(rom, rom.read_byte(0x3D018) > 0, rom.read_byte(0x3D01A) > 0)
         rom_name = rom.read_bytes(0x3C000, 21)
         rom.write_bytes(0x7FC0, rom_name)
         rom.write_crc()
@@ -396,6 +400,18 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
         # This has further checks present for bosses already, so we just
         # need to handle regular stages
         # write check for boss to be unlocked
+
+    if world.options.consumables:
+        # reroute maxim tomatoes to use the 1-UP function, then null out the function
+        rom.write_bytes(0x3002F, [0x37, 0x00])
+        rom.write_bytes(0x30037, [0xA9, 0x26, 0x00,  # LDA #$0026
+                                  0x22, 0x27, 0xD9, 0x00,  # JSL $00D927
+                                  0xA4, 0xD2,  # LDY $D2
+                                  0x6B,  # RTL
+                                  0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,  # NOP #10
+                                  ])
+
+    # stars handling is built into the rom, so no changes there
 
     rooms = world.rooms
     if world.options.music_shuffle > 0:
@@ -457,6 +473,7 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
                                          boss_requirements[3], boss_requirements[4]))
     rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if world.options.goal_speed == 1 else 0xFFFF))
     rom.write_byte(0x3D00C, world.options.goal_speed.value)
+    rom.write_byte(0x3D00E, world.options.open_world.value)
     rom.write_byte(0x3D010, world.options.death_link.value)
     rom.write_byte(0x3D012, world.options.goal.value)
     rom.write_byte(0x3D014, world.options.stage_shuffle.value)
@@ -464,7 +481,8 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     rom.write_byte(0x3D018, world.options.consumables.value)
     rom.write_byte(0x3D01A, world.options.starsanity.value)
     rom.write_byte(0x3D01C, world.options.gifting.value if world.multiworld.players > 1 else 0)
-    # don't write gifting for solo game
+    rom.write_byte(0x3D01E, world.options.strict_bosses.value)
+    # don't write gifting for solo game, since there's no one to send anything to
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):
