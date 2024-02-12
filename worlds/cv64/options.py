@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions
+from Options import Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions, StartInventoryPool
 
 
 class CharacterStages(Choice):
@@ -473,3 +473,4 @@ class CV64Options(PerGameCommonOptions):
     window_color_b: WindowColorB
     window_color_a: WindowColorA
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

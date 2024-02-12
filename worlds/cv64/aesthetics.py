@@ -555,29 +555,34 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_sta
     return loading_zone_bytes
 
 
-def get_start_inventory_data(options: CV64Options, start_inventory: dict) -> Dict[int, int]:
+def get_start_inventory_data(options: CV64Options, start_inventory: dict, start_inventory_from_pool: dict) \
+        -> Dict[int, int]:
     """Calculate and return the starting inventory values. Not every Item goes into the menu inventory, so everything
     has to be handled appropriately."""
     start_inventory_data = {0xBFD867: 0,  # Jewels
                             0xBFD87B: 0,  # PowerUps
-                            0xBFE514: 0,  # Money
                             0xBFD883: 0,  # Sub-weapon
                             0xBFD88B: 0}  # Ice Traps
 
     inventory_items_array = [0 for _ in range(35)]
+    total_money = 0
 
     items_max = 10
+
+    # Combine both start inventories into one dict
+    total_start_inventory = {item: start_inventory.get(item, 0) + start_inventory_from_pool.get(item, 0)
+                             for item in set(start_inventory).union(start_inventory_from_pool)}
 
     # Raise the items max if increase item limit is enabled.
     if options.increase_item_limit.value:
         items_max = 100
 
-    for item in start_inventory:
+    for item in total_start_inventory:
         inventory_offset = get_item_info(item, "inventory offset")
         sub_equip_id = get_item_info(item, "sub equip id")
         # Starting inventory items
         if inventory_offset is not None:
-            inventory_items_array[inventory_offset] = start_inventory[item]
+            inventory_items_array[inventory_offset] = total_start_inventory[item]
             if inventory_items_array[inventory_offset] > items_max and "Special" not in item:
                 inventory_items_array[inventory_offset] = items_max
             if item == iname.permaup:
@@ -588,31 +593,39 @@ def get_start_inventory_data(options: CV64Options, start_inventory: dict) -> Dic
             start_inventory_data[0xBFD883] = sub_equip_id
         # Starting PowerUps
         elif item == iname.powerup:
-            start_inventory_data[0xBFD87B] += start_inventory[item]
+            start_inventory_data[0xBFD87B] += total_start_inventory[item]
             if start_inventory_data[0xBFD87B] > 2:
                 start_inventory_data[0xBFD87B] = 2
         # Starting Gold
         elif "GOLD" in item:
-            start_inventory_data[0xBFE514] += int(item[0:4]) * start_inventory[item]
-            if start_inventory_data[0xBFE514] > 99999:
-                start_inventory_data[0xBFE514] = 99999
+            total_money += int(item[0:4]) * total_start_inventory[item]
+            if total_money > 99999:
+                total_money = 99999
         # Starting Jewels
         elif "jewel" in item:
             if "L" in item:
-                start_inventory_data[0xBFD867] += 10 * start_inventory[item]
+                start_inventory_data[0xBFD867] += 10 * total_start_inventory[item]
             else:
-                start_inventory_data[0xBFD867] += 5 * start_inventory[item]
+                start_inventory_data[0xBFD867] += 5 * total_start_inventory[item]
             if start_inventory_data[0xBFD867] > 99:
                 start_inventory_data[0xBFD867] = 99
         # Starting Ice Traps
         else:
-            start_inventory_data[0xBFD88B] += start_inventory[item]
+            start_inventory_data[0xBFD88B] += total_start_inventory[item]
             if start_inventory_data[0xBFD88B] > 0xFF:
                 start_inventory_data[0xBFD88B] = 0xFF
 
-    # Convert the inventory items into data
+    # Convert the inventory items into data.
     for i in range(len(inventory_items_array)):
         start_inventory_data[0xBFE518 + i] = inventory_items_array[i]
+
+    # Convert the starting money into data. Which offset it starts from depends on how many bytes it takes up.
+    if total_money <= 0xFF:
+        start_inventory_data[0xBFE517] = total_money
+    elif total_money <= 0xFFFF:
+        start_inventory_data[0xBFE516] = total_money
+    else:
+        start_inventory_data[0xBFE515] = total_money
 
     return start_inventory_data
 

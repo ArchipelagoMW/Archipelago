@@ -261,7 +261,7 @@ class CV64World(World):
             if self.options.countdown.value:
                 offset_data.update(get_countdown_numbers(self.options, active_locations))
             # Start Inventory
-            offset_data.update(get_start_inventory_data(self.options, self.options.start_inventory.value))
+            offset_data.update(get_start_inventory_data(self.options, self.options.start_inventory.value, self.options.start_inventory_from_pool.value))
 
             cv64_rom = LocalRom(get_base_rom_path())
 
