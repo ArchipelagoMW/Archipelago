@@ -315,6 +315,6 @@ class KDL3World(World):
                                                               self.player).name.replace(" - Complete", "")
                     stage_regions = [room for room in self.rooms if stage_name in room.name]
                     for region in stage_regions:
-                        for location in region.locations:
-                            level_hint_data[location.address] = f"{regions[level]} {stage if stage < 7 else 'Boss'}"
+                        for location in [location for location in region.locations if location.address]:
+                            level_hint_data[location.address] = f"{regions[level]} {stage + 1 if stage < 6 else 'Boss'}"
             hint_data[self.player] = level_hint_data
