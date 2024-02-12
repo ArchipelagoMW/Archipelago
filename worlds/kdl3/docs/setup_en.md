@@ -2,7 +2,7 @@
 
 ## Required Software
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). Make sure to check the box for `SNI Client - Kirby's Dream Land 3 Patch Setup`
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
         - snes9x-emunwa from: [snes9x-emunwa Releases Page](https://github.com/Skarsnik/snes9x-emunwa/releases)
@@ -16,9 +16,9 @@
 
 ## Installation Procedures
 
-1. Download and install SNIClient from the link above, making sure to install the most recent version.
+1. Download and install Archipelago from the link above, making sure to install the most recent version.
    **The installer file is located in the assets section at the bottom of the version information**.
-    - During setup, you will be asked to locate your base ROM file. This is your Kirby's Dream Land 3 ROM file.
+    - During generation/patching, you will be asked to locate your base ROM file. This is your Kirby's Dream Land 3 ROM file.
 
 2. If you are using an emulator, you should assign your SNI-compatible emulator as your default program for launching ROM
    files.
@@ -102,9 +102,9 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 5. Select the `Connector.lua` file you downloaded above
     - Look in the Archipelago folder for `/SNI/lua/Connector.lua`
 
-##### bsnes-plus-nwa
+##### bsnes-plus-nwa and snes9x-nwa
 
-This should automatically connect to SNI. If this is its first time launching, you may be prompted to allow it to
+These should automatically connect to SNI. If this is the first time launching, you may be prompted to allow it to
 communicate through the Windows Firewall.
 
 #### With hardware
