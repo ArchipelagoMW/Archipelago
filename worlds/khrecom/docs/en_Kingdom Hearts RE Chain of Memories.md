@@ -11,7 +11,9 @@ The Kingdom Hearts RE Chain of Memories Randomizer will remove cards you pick up
 
 The entire castle is open from the start after completing Traverse Town.  Floors you haven't unlocked are assigned Traverse Town, otherwise they will be assigned normally.
 
-Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan).  These are tracked in your journal.
+Your goal is find all 8 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan, Pluto).  These are tracked in your journal.
+
+When you find 8 friend cards, Castle Oblivion is assigned to Floor 13, allowing the player to defeat Final Marluxia.
 
 ## What items and locations get shuffled?
 

@@ -3,35 +3,35 @@
 ##Setting up the required mods
 1. Install OpenKH and the LUA Backend.
 
-    Download the latest release of OpenKH here: https://github.com/OpenKH/OpenKh/releases/tag/latest
+    Download the latest release of OpenKH [here](https://github.com/OpenKH/OpenKh/releases/tag/latest)
     
     Extract the files to a directory of your choosing.
     
-    Open OpenKh.Tools.ModsManager.exe and run first time set up.
+    Open `OpenKh.Tools.ModsManager.exe` and run first time set up.
     
-    When prompted for game edition, choose PC Release via Epic Games Store and navigate to your KH_1.5_2.5 in the path box and click "Next"
+    When prompted for game edition, choose PC Release via Epic Games Store and navigate to your `KH_1.5_2.5` folder in the path box and click `Next`
     
-    When prompted, install Panacea, then click "Next"
+    When prompted, install Panacea, then click `Next`
     
-    When prompted, check ReCoM plus any other AP game you play (KH2) and click "Install and configure LUA backend", then click "Next".
+    When prompted, check ReCoM and click `Install and configure LUA backend`, then click `Next`.
     
-    Ensure that "Launch via Epic Games" is checked and click "Next"
+    Ensure that `Launch via Epic Games` is checked and click `Next`
     
-    Extract game data for ReCoM and any other AP game you play (KH2), then click "Next".
+    You may skip extracting game data for ReCoM by checking `Skip Game Extraction` and clicking `Next`.
     
-    Click "Finish"
+    Click `Finish`.
     
-2. Open "OpenKh.Tools.ModsManager.exe"
+2. Open `OpenKh.Tools.ModsManager.exe`.
 
-3. Click the drop down menu at the top-right and choose "Re:Chain of Memories"
+3. Click the drop down menu at the top-right and choose `Re:Chain of Memories`
 
 4. Click `Mods>Install a New Mod`
 
-5. In "Add a new mod from GitHub" paste `gaithern/KH-RECOM-AP-LUA`
+5. In `Add a new mod from GitHub` paste `gaithern/KH-RECOM-AP-LUA`
 
 6. Click Install
 
-7. Navigate to Mod Loader and click "Build Only"
+7. Navigate to Mod Loader and click `Build Only`
 
 
 ## Configuring your YAML file
@@ -50,7 +50,7 @@ you can customize your settings by visiting the [Kingdom Hearts RE Chain of Memo
 
 On the title screen, confirm that the LUA backend is working and that your LUA script is running by pressing F2.
 
-This should open the LUA console.  If you see a message stating `KHRECOM AP Running...` the lua script is running properly.
+This should open the LUA console.  If you see a message stating `[recomAPConnector.lua] RE:CoM detected, running script` the lua script is running properly.
 
 ## Connect to the MultiServer
 
