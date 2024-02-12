@@ -463,7 +463,8 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     rom.write_byte(0x3D016, world.options.ow_boss_requirement.value)
     rom.write_byte(0x3D018, world.options.consumables.value)
     rom.write_byte(0x3D01A, world.options.starsanity.value)
-    rom.write_byte(0x3D01C, world.options.gifting)
+    rom.write_byte(0x3D01C, world.options.gifting.value if world.multiworld.players > 1 else 0)
+    # don't write gifting for solo game
 
     for level in shuffled_levels:
         for i in range(len(shuffled_levels[level])):

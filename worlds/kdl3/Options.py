@@ -390,6 +390,7 @@ class VirtualConsoleChanges(Choice):
     option_both = 3
     default = 1
 
+
 class Gifting(Toggle):
     """
     When enabled, the goal game item will be sent to other compatible games as a gift,

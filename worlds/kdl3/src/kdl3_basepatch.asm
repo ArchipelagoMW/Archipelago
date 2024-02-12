@@ -248,8 +248,8 @@ MainLoopHook:
     LDA $8080
     CMP #$0000 ; did we get a gooey trap
     BEQ .Slowness ; branch if we did not
-    LDA #$0800 ; A button press
-    STA $60C1 ; write to controller mirror
+    LDA #$0080 ; A button press
+    STA $60C7 ; write to controller mirror
     STZ $8080
     .Slowness:
     LDA $8082 ; slowness
@@ -423,7 +423,7 @@ ParseItemQueue:
     BRA .PlaySFX
     .ApplyNegative:
     CPY #$0005
-    BCC .PlayNone
+    BCS .PlayNone
     LDA $8080,Y
     BNE .Return
     LDA #$0384
