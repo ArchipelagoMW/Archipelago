@@ -11,9 +11,11 @@ The Kingdom Hearts Chain of Memories Randomizer will remove cards you pick up in
 
 The entire castle is open from the start after completing Traverse Town.  Floors you haven't unlocked are assigned Traverse Town, otherwise they will be assigned normally.
 
-You start with Key of Beginnings, Key of Guidance, and Key to Truth for Floor 1 in your inventory.
+For each floor you have unlocked, you automatically have Key of Beginnings, Key of Guidance, and Key to Truth for that floor.
 
-Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan).
+Key to Rewards for each floor is shuffled into the item pool.
+
+Your goal is find all 7 friend cards (Aladdin, Ariel, Beast, Donald, Goofy, Jack, Peter Pan), which assigns Castle Oblivion to the 13th floor and allows the player to defeat Final Marluxia.
 
 ## What items and locations get shuffled?
 
@@ -27,7 +29,7 @@ Card packs are the other way to receive cards in the randomizer and include a pr
 
 ###Locations
 
-Journal entries are locations, including story, heartless, and battle card entries (discluding enemy cards).
+Journal entries are locations.  These journal entries include story, heartless, and battle card entries (excluding enemy cards).
 
 
 ## Which items can be in another player's world?
