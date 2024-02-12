@@ -149,7 +149,7 @@ class MLSSWorld(World):
         remaining = len(all_locations) - len(required_items) - len(event) - 3
         if self.options.castle_skip:
             remaining -= (len(bowsers) + len(bowsersMini))
-        if self.options.skip_minecart:
+        if self.options.skip_minecart and self.options.chuckle_beans == 2:
             remaining -= 1
         if self.options.disable_surf:
             remaining -= 1
