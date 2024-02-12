@@ -248,8 +248,7 @@ MainLoopHook:
     LDA $8080
     CMP #$0000 ; did we get a gooey trap
     BEQ .Slowness ; branch if we did not
-    LDA #$0080 ; A button press
-    STA $60C7 ; write to controller mirror
+    JSL GooeySpawn
     STZ $8080
     .Slowness:
     LDA $8082 ; slowness
@@ -733,6 +732,42 @@ OpenWorldBossUnlock:
     PLY
     PLX
     RTL
+
+org $07A180
+GooeySpawn:
+    PHY 
+    PHX 
+    LDX #$0000
+    LDY #$0000
+    STA $5543
+    LDA $1922,Y
+    STA $C0
+    LDA $19A2,Y
+    STA $C2
+    LDA #$0008
+    STA $C4
+    LDA #$0002
+    STA $352A
+    LDA #$0003
+    JSL $00F54F
+    STX $5541
+    LDA #$FFFF
+    STA $0622,X
+    JSL $00BAEF
+    JSL $C4883C
+    LDX $39D1
+    CPX #$0001
+    BEQ .Return
+    LDA #$FFFF
+    CPX #$0002
+    BEQ .Call
+    DEC 
+    .Call:
+    JSL $C43C22
+    .Return:
+    PLX 
+    PLY 
+    RTL 
 
 org $07A200
 SpeedTrap:
