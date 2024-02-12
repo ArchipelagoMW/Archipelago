@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_nmg, \
+from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
     dependent_regions, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
 
@@ -28,8 +28,8 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
         if hint_string == "":
             hint_string = portal.name
 
-        if logic_rules:
-            hallways = hallway_helper_nmg
+        if logic_rules == "unrestricted":
+            hallways = hallway_helper_ur
         else:
             hallways = hallway_helper
 
