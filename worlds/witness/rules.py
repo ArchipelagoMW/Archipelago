@@ -170,7 +170,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
         return lambda state: _can_do_expert_pp2(state, world)
     elif item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
-    if item in player_logic.EVENT_PANELS:
+    if item in player_logic.USED_EVENT_NAMES_BY_HEX:
         return _can_solve_panel(item, world, player, player_logic, locat)
 
     prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
