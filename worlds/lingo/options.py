@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions
+from Options import Toggle, Choice, DefaultOnToggle, Range, PerGameCommonOptions, StartInventoryPool
 
 
 class ShuffleDoors(Choice):
@@ -21,6 +21,13 @@ class ProgressiveOrangeTower(DefaultOnToggle):
     display_name = "Progressive Orange Tower"
 
 
+class ProgressiveColorful(DefaultOnToggle):
+    """When "Shuffle Doors" is on "complex", this setting governs the manner in which The Colorful opens up.
+    If off, there is an item for each room of The Colorful, meaning that random rooms in the middle of the sequence can open up without giving you access to them.
+    If on, there are ten progressive items, which open up the sequence from White forward."""
+    display_name = "Progressive Colorful"
+
+
 class LocationChecks(Choice):
     """On "normal", there will be a location check for each panel set that would ordinarily open a door, as well as for
     achievement panels and a small handful of other panels.
@@ -32,7 +39,7 @@ class LocationChecks(Choice):
     option_insanity = 2
 
 
-class ShuffleColors(Toggle):
+class ShuffleColors(DefaultOnToggle):
     """If on, an item is added to the pool for every puzzle color (besides White).
     You will need to unlock the requisite colors in order to be able to solve puzzles of that color."""
     display_name = "Shuffle Colors"
@@ -52,7 +59,10 @@ class ShufflePaintings(Toggle):
 
 
 class VictoryCondition(Choice):
-    """Change the victory condition."""
+    """Change the victory condition.
+    On "the_end", the goal is to solve THE END at the top of the tower.
+    On "the_master", the goal is to solve THE MASTER at the top of the tower, after getting the number of achievements specified in the Mastery Achievements option.
+    On "level_2", the goal is to solve LEVEL 2 in the second room, after solving the number of panels specified in the Level 2 Requirement option."""
     display_name = "Victory Condition"
     option_the_end = 0
     option_the_master = 1
@@ -75,9 +85,10 @@ class Level2Requirement(Range):
     """The number of panel solves required to unlock LEVEL 2.
     In the base game, 223 are needed.
     Note that this count includes ANOTHER TRY.
+    When set to 1, the panel hunt is disabled, and you can access LEVEL 2 for free.
     """
     display_name = "Level 2 Requirement"
-    range_start = 2
+    range_start = 1
     range_end = 800
     default = 223
 
@@ -113,6 +124,7 @@ class DeathLink(Toggle):
 class LingoOptions(PerGameCommonOptions):
     shuffle_doors: ShuffleDoors
     progressive_orange_tower: ProgressiveOrangeTower
+    progressive_colorful: ProgressiveColorful
     location_checks: LocationChecks
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
@@ -124,3 +136,4 @@ class LingoOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     puzzle_skip_percentage: PuzzleSkipPercentage
     death_link: DeathLink
+    start_inventory_from_pool: StartInventoryPool

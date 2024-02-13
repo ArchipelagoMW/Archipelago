@@ -2,6 +2,7 @@ import typing
 import copy
 
 from BaseClasses import MultiWorld
+from worlds.AutoWorld import World
 
 
 mission_orders: typing.List[typing.List[int]] = [
@@ -193,10 +194,10 @@ stage_name_prefixes: typing.List[str] = [
     "Cannon's Core - ",
 ]
 
-def get_mission_count_table(multiworld: MultiWorld, player: int):
+def get_mission_count_table(multiworld: MultiWorld, world: World, player: int):
     mission_count_table: typing.Dict[int, int] = {}
 
-    if multiworld.goal[player] == 3:
+    if world.options.goal == 3:
         for level in range(31):
             mission_count_table[level] = 0
     else:
@@ -207,26 +208,26 @@ def get_mission_count_table(multiworld: MultiWorld, player: int):
         cannons_core_active_missions = 1
 
         for i in range(2,6):
-            if getattr(multiworld, "speed_mission_" + str(i), None)[player]:
+            if getattr(world.options, "speed_mission_" + str(i), None):
                 speed_active_missions += 1
 
-            if getattr(multiworld, "mech_mission_" + str(i), None)[player]:
+            if getattr(world.options, "mech_mission_" + str(i), None):
                 mech_active_missions += 1
 
-            if getattr(multiworld, "hunt_mission_" + str(i), None)[player]:
+            if getattr(world.options, "hunt_mission_" + str(i), None):
                 hunt_active_missions += 1
 
-            if getattr(multiworld, "kart_mission_" + str(i), None)[player]:
+            if getattr(world.options, "kart_mission_" + str(i), None):
                 kart_active_missions += 1
 
-            if getattr(multiworld, "cannons_core_mission_" + str(i), None)[player]:
+            if getattr(world.options, "cannons_core_mission_" + str(i), None):
                 cannons_core_active_missions += 1
 
-        speed_active_missions        = min(speed_active_missions, multiworld.speed_mission_count[player].value)
-        mech_active_missions         = min(mech_active_missions, multiworld.mech_mission_count[player].value)
-        hunt_active_missions         = min(hunt_active_missions, multiworld.hunt_mission_count[player].value)
-        kart_active_missions         = min(kart_active_missions, multiworld.kart_mission_count[player].value)
-        cannons_core_active_missions = min(cannons_core_active_missions, multiworld.cannons_core_mission_count[player].value)
+        speed_active_missions        = min(speed_active_missions, world.options.speed_mission_count.value)
+        mech_active_missions         = min(mech_active_missions, world.options.mech_mission_count.value)
+        hunt_active_missions         = min(hunt_active_missions, world.options.hunt_mission_count.value)
+        kart_active_missions         = min(kart_active_missions, world.options.kart_mission_count.value)
+        cannons_core_active_missions = min(cannons_core_active_missions, world.options.cannons_core_mission_count.value)
 
         active_missions: typing.List[typing.List[int]] = [
             speed_active_missions,
@@ -244,10 +245,10 @@ def get_mission_count_table(multiworld: MultiWorld, player: int):
     return mission_count_table
 
 
-def get_mission_table(multiworld: MultiWorld, player: int):
+def get_mission_table(multiworld: MultiWorld, world: World, player: int):
     mission_table: typing.Dict[int, int] = {}
 
-    if multiworld.goal[player] == 3:
+    if world.options.goal == 3:
         for level in range(31):
             mission_table[level] = 0
     else:
@@ -259,19 +260,19 @@ def get_mission_table(multiworld: MultiWorld, player: int):
 
         # Add included missions
         for i in range(2,6):
-            if getattr(multiworld, "speed_mission_" + str(i), None)[player]:
+            if getattr(world.options, "speed_mission_" + str(i), None):
                 speed_active_missions.append(i)
 
-            if getattr(multiworld, "mech_mission_" + str(i), None)[player]:
+            if getattr(world.options, "mech_mission_" + str(i), None):
                 mech_active_missions.append(i)
 
-            if getattr(multiworld, "hunt_mission_" + str(i), None)[player]:
+            if getattr(world.options, "hunt_mission_" + str(i), None):
                 hunt_active_missions.append(i)
 
-            if getattr(multiworld, "kart_mission_" + str(i), None)[player]:
+            if getattr(world.options, "kart_mission_" + str(i), None):
                 kart_active_missions.append(i)
 
-            if getattr(multiworld, "cannons_core_mission_" + str(i), None)[player]:
+            if getattr(world.options, "cannons_core_mission_" + str(i), None):
                 cannons_core_active_missions.append(i)
 
         active_missions: typing.List[typing.List[int]] = [
@@ -292,10 +293,10 @@ def get_mission_table(multiworld: MultiWorld, player: int):
             first_mission = 1
             first_mission_options = [1, 2, 3]
 
-            if not multiworld.animalsanity[player]:
+            if not world.options.animalsanity:
                 first_mission_options.append(4)
 
-            if multiworld.mission_shuffle[player]:
+            if world.options.mission_shuffle:
                 first_mission = multiworld.random.choice([mission for mission in level_active_missions if mission in first_mission_options])
 
             level_active_missions.remove(first_mission)
@@ -305,7 +306,7 @@ def get_mission_table(multiworld: MultiWorld, player: int):
                 if mission not in level_chosen_missions:
                     level_chosen_missions.append(mission)
 
-            if multiworld.mission_shuffle[player]:
+            if world.options.mission_shuffle:
                 multiworld.random.shuffle(level_chosen_missions)
 
             level_chosen_missions.insert(0, first_mission)

@@ -1,26 +1,31 @@
-from typing import Callable, Dict, TYPE_CHECKING
+from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, set_rule
+from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
 from .constants import NOTES, PHOBEKINS
-from .options import Goal, MessengerAccessibility
-from .subclasses import MessengerShopLocation
+from .options import MessengerAccessibility
 
 if TYPE_CHECKING:
     from . import MessengerWorld
-else:
-    MessengerWorld = object
 
 
 class MessengerRules:
     player: int
-    world: MessengerWorld
-    region_rules: Dict[str, Callable[[CollectionState], bool]]
-    location_rules: Dict[str, Callable[[CollectionState], bool]]
+    world: "MessengerWorld"
+    region_rules: Dict[str, CollectionRule]
+    location_rules: Dict[str, CollectionRule]
+    maximum_price: int
+    required_seals: int
 
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         self.player = world.player
         self.world = world
+
+        # these locations are at the top of the shop tree, and the entire shop tree needs to be purchased
+        maximum_price = (world.multiworld.get_location("The Shop - Demon's Bane", self.player).cost +
+                         world.multiworld.get_location("The Shop - Focused Power Sense", self.player).cost)
+        self.maximum_price = min(maximum_price, world.total_shards)
+        self.required_seals = max(1, world.required_seals)
 
         self.region_rules = {
             "Ninja Village": self.has_wingsuit,
@@ -37,7 +42,9 @@ class MessengerRules:
             "Forlorn Temple": lambda state: state.has_all({"Wingsuit", *PHOBEKINS}, self.player) and self.can_dboost(state),
             "Glacial Peak": self.has_vertical,
             "Elemental Skylands": lambda state: state.has("Magic Firefly", self.player) and self.has_wingsuit(state),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player) and self.has_dart(state),
+            "Music Box": lambda state: (state.has_all(NOTES, self.player)
+                                        or self.has_enough_seals(state)) and self.has_dart(state),
+            "The Craftsman's Corner": lambda state: state.has("Money Wrench", self.player) and self.can_shop(state),
         }
 
         self.location_rules = {
@@ -56,7 +63,10 @@ class MessengerRules:
             "Searing Crags Seal - Triple Ball Spinner": self.has_vertical,
             "Searing Crags - Astral Tea Leaves":
                 lambda state: state.can_reach("Ninja Village - Astral Seed", "Location", self.player),
-            "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player)
+                                                             and (self.has_dart(state)
+                                                                  or (self.has_wingsuit(state)
+                                                                      and self.can_destroy_projectiles(state))),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
             "Glacial Peak Seal - Projectile Spike Pit": self.can_destroy_projectiles,
@@ -92,8 +102,6 @@ class MessengerRules:
             # corrupted future
             "Corrupted Future - Key of Courage": lambda state: state.has_all({"Demon King Crown", "Magic Firefly"},
                                                                              self.player),
-            # the shop
-            "Shop Chest": self.has_enough_seals,
             # tower hq
             "Money Wrench": self.can_shop,
         }
@@ -111,7 +119,7 @@ class MessengerRules:
         return self.has_wingsuit(state) or self.has_dart(state)
 
     def has_enough_seals(self, state: CollectionState) -> bool:
-        return not self.world.required_seals or state.has("Power Seal", self.player, self.world.required_seals)
+        return state.has("Power Seal", self.player, self.required_seals)
 
     def can_destroy_projectiles(self, state: CollectionState) -> bool:
         return state.has("Strike of the Ninja", self.player)
@@ -128,9 +136,7 @@ class MessengerRules:
         return True
 
     def can_shop(self, state: CollectionState) -> bool:
-        prices = self.world.shop_prices
-        most_expensive_loc = max(prices, key=prices.get)
-        return state.can_reach(f"The Shop - {most_expensive_loc}", "Location", self.player)
+        return state.has("Shards", self.player, self.maximum_price)
 
     def set_messenger_rules(self) -> None:
         multiworld = self.world.multiworld
@@ -142,22 +148,16 @@ class MessengerRules:
             for loc in region.locations:
                 if loc.name in self.location_rules:
                     loc.access_rule = self.location_rules[loc.name]
-            if region.name == "The Shop":
-                for loc in [location for location in region.locations if isinstance(location, MessengerShopLocation)]:
-                    loc.access_rule = loc.can_afford
-        if self.world.options.goal == Goal.option_power_seal_hunt:
-            set_rule(multiworld.get_entrance("Tower HQ -> Music Box", self.player),
-                     lambda state: state.has("Shop Chest", self.player))
 
         multiworld.completion_condition[self.player] = lambda state: state.has("Rescue Phantom", self.player)
-        if multiworld.accessibility[self.player] > MessengerAccessibility.option_locations:
+        if multiworld.accessibility[self.player]:  # not locations accessibility
             set_self_locking_items(self.world, self.player)
 
 
 class MessengerHardRules(MessengerRules):
-    extra_rules: Dict[str, Callable[[CollectionState], bool]]
+    extra_rules: Dict[str, CollectionRule]
 
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         super().__init__(world)
 
         self.region_rules.update({
@@ -166,7 +166,7 @@ class MessengerHardRules(MessengerRules):
             "Catacombs": self.has_vertical,
             "Bamboo Creek": self.has_vertical,
             "Riviere Turquoise": self.true,
-            "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(set(PHOBEKINS), self.player),
+            "Forlorn Temple": lambda state: self.has_vertical(state) and state.has_all(PHOBEKINS, self.player),
             "Searing Crags Upper": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
                                                  or self.has_vertical(state),
             "Glacial Peak": lambda state: self.can_destroy_projectiles(state) or self.has_windmill(state)
@@ -201,8 +201,7 @@ class MessengerHardRules(MessengerRules):
         self.extra_rules = {
             "Searing Crags - Key of Strength": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Elemental Skylands - Key of Symbiosis": lambda state: self.has_windmill(state) or self.can_dboost(state),
-            "Autumn Hills Seal - Spike Ball Darts": lambda state: (self.has_dart(state) and self.has_windmill(state))
-                                                                  or self.has_wingsuit(state),
+            "Autumn Hills Seal - Spike Ball Darts": lambda state: self.has_dart(state) or self.has_windmill(state),
             "Underworld Seal - Fireball Wave": self.has_windmill,
         }
 
@@ -220,14 +219,15 @@ class MessengerHardRules(MessengerRules):
 
 
 class MessengerOOBRules(MessengerRules):
-    def __init__(self, world: MessengerWorld) -> None:
+    def __init__(self, world: "MessengerWorld") -> None:
         self.world = world
         self.player = world.player
 
+        self.required_seals = max(1, world.required_seals)
         self.region_rules = {
             "Elemental Skylands":
                 lambda state: state.has_any({"Windmill Shuriken", "Wingsuit", "Rope Dart", "Magic Firefly"}, self.player),
-            "Music Box": lambda state: state.has_all(set(NOTES), self.player)
+            "Music Box": lambda state: state.has_all(set(NOTES), self.player) or self.has_enough_seals(state),
         }
 
         self.location_rules = {
@@ -243,16 +243,14 @@ class MessengerOOBRules(MessengerRules):
             "Underworld Seal - Fireball Wave": lambda state: state.has_any({"Wingsuit", "Windmill Shuriken"},
                                                                            self.player),
             "Tower of Time Seal - Time Waster": self.has_dart,
-            "Shop Chest": self.has_enough_seals
         }
 
     def set_messenger_rules(self) -> None:
         super().set_messenger_rules()
-        self.world.multiworld.completion_condition[self.player] = lambda state: True
         self.world.options.accessibility.value = MessengerAccessibility.option_minimal
 
 
-def set_self_locking_items(world: MessengerWorld, player: int) -> None:
+def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     multiworld = world.multiworld
 
     # do the ones for seal shuffle on and off first
