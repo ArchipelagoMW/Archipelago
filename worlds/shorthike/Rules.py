@@ -16,9 +16,6 @@ def create_rules(self, location_table):
 
         min_feathers = get_min_feathers(self, loc["minGoldenFeathers"], loc["minGoldenFeathersEasy"])
 
-        print (loc["name"])
-        print (min_feathers)
-
         # Minimum Feather Rules
         if options.buckets > 0 and loc["minGoldenFeathersBucket"] < min_feathers:
             add_rule(multiworld.get_location(loc["name"], player),
