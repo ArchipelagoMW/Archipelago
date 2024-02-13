@@ -8,8 +8,6 @@ from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
-else:
-    BizHawkClientContext = object
 
 
 class Castlevania64Client(BizHawkClient):
@@ -18,7 +16,7 @@ class Castlevania64Client(BizHawkClient):
     patch_suffix = ".apcv64"
     self_induced_death = False
     received_deathlinks = 0
-    death_link = False
+    currently_shopping = False
     local_checked_locations: Set[int]
     rom_slot_name: Optional[str]
 
@@ -27,7 +25,7 @@ class Castlevania64Client(BizHawkClient):
         self.local_checked_locations = set()
         self.rom_slot_name = None
 
-    async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
+    async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
@@ -55,43 +53,53 @@ class Castlevania64Client(BizHawkClient):
         ctx.watcher_timeout = 0.125
         return True
 
-    async def set_auth(self, ctx: BizHawkClientContext) -> None:
+    async def set_auth(self, ctx: "BizHawkClientContext") -> None:
         ctx.auth = self.rom_slot_name
 
-    def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
+        # Send a LocationScout for the Renon shop
+
+    def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Bounced":
             if "tags" in args:
                 if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
                     self.received_deathlinks += 1
 
-    async def game_watcher(self, ctx: BizHawkClientContext) -> None:
+    async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
 
         try:
             read_state = await bizhawk.read(ctx.bizhawk_ctx, [(0x342084, 4, "RDRAM"),
                                                               (0x389BDE, 6, "RDRAM"),
                                                               (0x389BE4, 224, "RDRAM"),
-                                                              (0x389EFB, 1, "RDRAM")])
+                                                              (0x389EFB, 1, "RDRAM"),
+                                                              (0x389EEF, 1, "RDRAM")])
 
             game_state = int.from_bytes(read_state[0], "big")
             save_struct = read_state[2]
             written_deathlinks = int.from_bytes(bytearray(read_state[1][4:6]), "big")
             deathlink_induced_death = int.from_bytes(bytearray(read_state[1][0:1]), "big")
             cutscene_value = int.from_bytes(read_state[3], "big")
+            current_menu = int.from_bytes(read_state[4], "big")
             num_received_items = int.from_bytes(bytearray(save_struct[0xDA:0xDC]), "big")
 
             # Make sure we are in the Gameplay or Credits states before detecting sent locations and/or DeathLinks.
             # If we are in any other state, such as the Game Over state, set currently_dead to false, so we can once
             # again send a DeathLink once we are back in the Gameplay state.
-            if game_state not in [0x00000002 or 0x0000000B]:
+            if game_state not in [0x00000002, 0x0000000B]:
                 self.self_induced_death = False
                 return
 
-            # Enable DeathLink if it's on in our slot_data
+            # Enable DeathLink if it's on in our slot_data.
             if ctx.slot_data is not None:
-                if ctx.slot_data["death_link"]:
-                    if not self.death_link:
-                        self.death_link = True
-                        await ctx.update_death_link(self.death_link)
+                if ctx.slot_data["death_link"] and "DeathLink" not in ctx.tags:
+                    await ctx.update_death_link(True)
+
+                # Scout the Renon shop locations if shopsanity is in our slot_data.
+                if ctx.slot_data["shopsanity"] and ctx.locations_info == {}:
+                    await ctx.send_msgs([{
+                            "cmd": "LocationScouts",
+                            "locations": [base_id + i for i in range(0x1C8, 0x1CF)],
+                            "create_as_hint": 0
+                        }])
 
             # Send a DeathLink if we died on our own independently of receiving another one.
             if "DeathLink" in ctx.tags and save_struct[0xA4] & 0x80 and not self.self_induced_death and not \
@@ -124,7 +132,7 @@ class Castlevania64Client(BizHawkClient):
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names[next_item.item]}\n"
                                                               f"from {ctx.player_names[next_item.player]}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
-                                                [(0x389BE1, (next_item.item & 0xFF).to_bytes(1, "big"), "RDRAM"),
+                                                [(0x389BE1, [next_item.item & 0xFF], "RDRAM"),
                                                  (0x18C0A8, text_color + cv64_string_to_bytes(received_text, False),
                                                   "RDRAM"),
                                                  (0x18C1A7, [num_lines], "RDRAM")],
@@ -155,6 +163,20 @@ class Castlevania64Client(BizHawkClient):
                         "cmd": "LocationChecks",
                         "locations": list(locs_to_send)
                     }])
+
+            # Check the menu value to see if we are in Renon's shop, and set currently_shopping to True if we are.
+            if current_menu == 0xA:
+                self.currently_shopping = True
+
+            # If we are currently shopping, and the current menu value is 0 (meaning we just left the shop), hint the
+            # un-bought shop locations that have progression.
+            if current_menu == 0 and self.currently_shopping:
+                await ctx.send_msgs([{
+                    "cmd": "LocationScouts",
+                    "locations": [loc for loc, n_item in ctx.locations_info.items() if n_item.flags & 0b001],
+                    "create_as_hint": 2
+                }])
+                self.currently_shopping = False
 
             # Send game clear if we're in either any ending cutscene or the credits state.
             if not ctx.finished_game and (0x26 <= int(cutscene_value) <= 0x2E or game_state == 0x0000000B):
