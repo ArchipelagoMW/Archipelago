@@ -150,10 +150,6 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
 
-    # Exclude Primal Form item if option is not set
-    if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item:
-        excluded_items.add(ItemNames.KERRIGAN_PRIMAL_FORM)
-
     # Ensure no item is both guaranteed and excluded
     invalid_items = excluded_items.intersection(locked_items)
     invalid_count = len(invalid_items)
@@ -178,13 +174,18 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
     # Nova gear exclusion if NCO not in campaigns
     if SC2Campaign.NCO not in enabled_campaigns:
-        excluded_items = excluded_items.update(nova_equipment)
+        excluded_items = excluded_items.union(nova_equipment)
 
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
+    # Exclude Primal Form item if option is not set or Kerrigan is unavailable
+    if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item or \
+        (kerrigan_presence in {KerriganPresence.option_not_present, KerriganPresence.option_not_present_and_no_passives}):
+        excluded_items.add(ItemNames.KERRIGAN_PRIMAL_FORM)
+
     # no Kerrigan & remove all passives => remove all abilities
     if kerrigan_presence == KerriganPresence.option_not_present_and_no_passives:
         for tier in range(7):
-            smart_exclude(kerrigan_actives[tier].update(kerrigan_passives[tier]), 0)
+            smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 0)
     else:
         # no Kerrigan, but keep non-Kerrigan passives
         if kerrigan_presence == KerriganPresence.option_not_present:
