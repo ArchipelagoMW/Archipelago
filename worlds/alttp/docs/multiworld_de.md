@@ -67,7 +67,7 @@ Wenn du eine Option nicht gewählt haben möchtest, setze ihren Wert einfach auf
 
 ### Überprüfung deiner YAML-Datei
 
-Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/mysterycheck) Seite
+Wenn man sichergehen will, ob die YAML-Datei funktioniert, kann man dies bei der [YAML Validator](/check) Seite
 tun.
 
 ## ein Einzelspielerspiel erstellen

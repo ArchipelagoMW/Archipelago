@@ -5,7 +5,7 @@ from .Items import item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions, sm64courses, sm64entrances_s, sm64_internalloc_to_string, sm64_internalloc_to_regionid
+from .Regions import create_regions, sm64_level_to_entrances
 from BaseClasses import Item, Tutorial, ItemClassification
 from ..AutoWorld import World, WebWorld
 
@@ -55,8 +55,8 @@ class SM64World(World):
             # Write area_connections to spoiler log
             for entrance, destination in self.area_connections.items():
                 self.multiworld.spoiler.set_entrance(
-                    sm64_internalloc_to_string[entrance] + " Entrance",
-                    sm64_internalloc_to_string[destination],
+                    sm64_level_to_entrances[entrance] + " Entrance",
+                    sm64_level_to_entrances[destination],
                     'entrance', self.player)
 
     def create_item(self, name: str) -> Item:
@@ -154,6 +154,7 @@ class SM64World(World):
             "MIPS2Cost": self.multiworld.MIPS2Cost[self.player].value,
             "StarsToFinish": self.multiworld.StarsToFinish[self.player].value,
             "DeathLink": self.multiworld.death_link[self.player].value,
+            "CompletionType" : self.multiworld.CompletionType[self.player].value,
         }
 
     def generate_output(self, output_directory: str):
@@ -181,8 +182,7 @@ class SM64World(World):
         if self.topology_present:
             er_hint_data = {}
             for entrance, destination in self.area_connections.items():
-                regionid = sm64_internalloc_to_regionid[destination]
-                region = self.multiworld.get_region(sm64courses[regionid], self.player)
+                region = self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)
                 for location in region.locations:
-                    er_hint_data[location.address] = sm64_internalloc_to_string[entrance]
+                    er_hint_data[location.address] = sm64_level_to_entrances[entrance]
             multidata['er_hint_data'][self.player] = er_hint_data

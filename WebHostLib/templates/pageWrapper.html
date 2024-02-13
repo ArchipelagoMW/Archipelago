@@ -16,7 +16,7 @@
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div>
-            {% for message in messages %}
+            {% for message in messages | unique %}
                 <div class="user-message">{{ message }}</div>
             {% endfor %}
         </div>

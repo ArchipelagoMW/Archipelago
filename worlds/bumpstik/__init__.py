@@ -108,7 +108,7 @@ class BumpStikWorld(World):
                 item_pool += self._create_item_in_quantities(
                     name, frequencies[i])
 
-        item_delta = len(location_table) - len(item_pool) - 1
+        item_delta = len(location_table) - len(item_pool)
         if item_delta > 0:
             item_pool += self._create_item_in_quantities(
                 "Score Bonus", item_delta)
@@ -116,13 +116,16 @@ class BumpStikWorld(World):
         self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        forbid_item(self.multiworld.get_location("Bonus Booster 5", self.player),
-                    "Booster Bumper", self.player)
-
-    def generate_basic(self):
-        self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).place_locked_item(
-            self.create_item(self.get_filler_item_name()))
-
+        for x in range(1, 32):
+            self.multiworld.get_location(f"Treasure Bumper {x + 1}", self.player).access_rule = \
+                lambda state, x = x: state.has("Treasure Bumper", self.player, x)
+        for x in range(1, 5):
+            self.multiworld.get_location(f"Bonus Booster {x + 1}", self.player).access_rule = \
+                lambda state, x = x: state.has("Booster Bumper", self.player, x)
+        self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).access_rule = \
+            lambda state: state.has("Hazard Bumper", self.player, 25)
+            
         self.multiworld.completion_condition[self.player] = \
             lambda state: state.has("Booster Bumper", self.player, 5) and \
             state.has("Treasure Bumper", self.player, 32)
+

@@ -8,7 +8,7 @@ from .data import all_fish, FishItem, all_purchasable_seeds, SeedItem, all_crops
 from .data.bundle_data import BundleItem
 from .data.crops_data import crops_by_name
 from .data.fish_data import island_fish
-from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, dwarf_scrolls, all_museum_minerals
+from .data.museum_data import all_museum_items, MuseumItem, all_museum_artifacts, all_museum_minerals
 from .data.recipe_data import all_cooking_recipes, CookingRecipe, RecipeSource, FriendshipSource, QueenOfSauceSource, \
     StarterSource, ShopSource, SkillSource
 from .data.villagers_data import all_villagers_by_name, Villager
@@ -927,7 +927,7 @@ class StardewLogic:
         return region_rule & ((tool_rule & foraging_rule) | magic_rule)
 
     def has_max_buffs(self) -> StardewRule:
-        return self.received(Buff.movement, self.options.number_of_movement_buffs.value) & self.received(Buff.luck, self.options.number_of_luck_buffs.value)
+        return self.received(Buff.movement, self.options.movement_buff_number.value) & self.received(Buff.luck, self.options.luck_buff_number.value)
 
     def get_weapon_rule_for_floor_tier(self, tier: int):
         if tier >= 4:
@@ -1283,8 +1283,6 @@ class StardewLogic:
         return self.has_lived_months(8)
 
     def can_speak_dwarf(self) -> StardewRule:
-        if self.options.museumsanity == Museumsanity.option_none:
-            return And([self.can_donate_museum_item(item) for item in dwarf_scrolls])
         return self.received("Dwarvish Translation Guide")
 
     def can_donate_museum_item(self, item: MuseumItem) -> StardewRule:
@@ -1370,13 +1368,10 @@ class StardewLogic:
         return self.received("Month End", number)
 
     def has_rusty_key(self) -> StardewRule:
-        if self.options.museumsanity == Museumsanity.option_none:
-            required_donations = 80  # It's 60, but without a metal detector I'd rather overshoot so players don't get screwed by RNG
-            return self.has([item.name for item in all_museum_items], required_donations) & self.can_reach_region(Region.museum)
         return self.received(Wallet.rusty_key)
 
     def can_win_egg_hunt(self) -> StardewRule:
-        number_of_movement_buffs = self.options.number_of_movement_buffs.value
+        number_of_movement_buffs = self.options.movement_buff_number.value
         if self.options.festival_locations == FestivalLocations.option_hard or number_of_movement_buffs < 2:
             return True_()
         return self.received(Buff.movement, number_of_movement_buffs // 2)
@@ -1541,6 +1536,7 @@ class StardewLogic:
         reach_west = self.can_reach_region(Region.island_west)
         reach_hut = self.can_reach_region(Region.leo_hut)
         reach_southeast = self.can_reach_region(Region.island_south_east)
+        reach_field_office = self.can_reach_region(Region.field_office)
         reach_pirate_cove = self.can_reach_region(Region.pirate_cove)
         reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
         reach_volcano_regions = [self.can_reach_region(Region.volcano),
@@ -1549,12 +1545,12 @@ class StardewLogic:
                                  self.can_reach_region(Region.volcano_floor_10)]
         reach_volcano = Or(reach_volcano_regions)
         reach_all_volcano = And(reach_volcano_regions)
-        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano]
+        reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano, reach_field_office]
         reach_caves = And(self.can_reach_region(Region.qi_walnut_room), self.can_reach_region(Region.dig_site),
                           self.can_reach_region(Region.gourmand_frog_cave),
                           self.can_reach_region(Region.colored_crystals_cave),
                           self.can_reach_region(Region.shipwreck), self.has(Weapon.any_slingshot))
-        reach_entire_island = And(reach_outside_areas, reach_all_volcano,
+        reach_entire_island = And(reach_outside_areas, reach_field_office, reach_all_volcano,
                                   reach_caves, reach_southeast, reach_pirate_cove)
         if number <= 5:
             return Or(reach_south, reach_north, reach_west, reach_volcano)
@@ -1568,7 +1564,8 @@ class StardewLogic:
             return reach_entire_island
         gems = [Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz]
         return reach_entire_island & self.has(Fruit.banana) & self.has(gems) & self.can_mine_perfectly() & \
-               self.can_fish_perfectly() & self.has(Craftable.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic)
+               self.can_fish_perfectly() & self.has(Craftable.flute_block) & self.has(Seed.melon) & self.has(Seed.wheat) & self.has(Seed.garlic) & \
+               self.can_complete_field_office()
 
     def has_everything(self, all_progression_items: Set[str]) -> StardewRule:
         all_regions = [region.name for region in vanilla_regions]

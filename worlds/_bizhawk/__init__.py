@@ -9,26 +9,18 @@ import asyncio
 import base64
 import enum
 import json
+import sys
 import typing
 
 
-BIZHAWK_SOCKET_PORT = 43055
-EXPECTED_SCRIPT_VERSION = 1
+BIZHAWK_SOCKET_PORT_RANGE_START = 43055
+BIZHAWK_SOCKET_PORT_RANGE_SIZE = 5
 
 
 class ConnectionStatus(enum.IntEnum):
     NOT_CONNECTED = 1
     TENTATIVE = 2
     CONNECTED = 3
-
-
-class BizHawkContext:
-    streams: typing.Optional[typing.Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
-    connection_status: ConnectionStatus
-
-    def __init__(self) -> None:
-        self.streams = None
-        self.connection_status = ConnectionStatus.NOT_CONNECTED
 
 
 class NotConnectedError(Exception):
@@ -51,16 +43,71 @@ class SyncError(Exception):
     pass
 
 
+class BizHawkContext:
+    streams: typing.Optional[typing.Tuple[asyncio.StreamReader, asyncio.StreamWriter]]
+    connection_status: ConnectionStatus
+    _lock: asyncio.Lock
+    _port: typing.Optional[int]
+
+    def __init__(self) -> None:
+        self.streams = None
+        self.connection_status = ConnectionStatus.NOT_CONNECTED
+        self._lock = asyncio.Lock()
+        self._port = None
+
+    async def _send_message(self, message: str):
+        async with self._lock:
+            if self.streams is None:
+                raise NotConnectedError("You tried to send a request before a connection to BizHawk was made")
+
+            try:
+                reader, writer = self.streams
+                writer.write(message.encode("utf-8") + b"\n")
+                await asyncio.wait_for(writer.drain(), timeout=5)
+
+                res = await asyncio.wait_for(reader.readline(), timeout=5)
+
+                if res == b"":
+                    writer.close()
+                    self.streams = None
+                    self.connection_status = ConnectionStatus.NOT_CONNECTED
+                    raise RequestFailedError("Connection closed")
+
+                if self.connection_status == ConnectionStatus.TENTATIVE:
+                    self.connection_status = ConnectionStatus.CONNECTED
+
+                return res.decode("utf-8")
+            except asyncio.TimeoutError as exc:
+                writer.close()
+                self.streams = None
+                self.connection_status = ConnectionStatus.NOT_CONNECTED
+                raise RequestFailedError("Connection timed out") from exc
+            except ConnectionResetError as exc:
+                writer.close()
+                self.streams = None
+                self.connection_status = ConnectionStatus.NOT_CONNECTED
+                raise RequestFailedError("Connection reset") from exc
+
+
 async def connect(ctx: BizHawkContext) -> bool:
-    """Attempts to establish a connection with the connector script. Returns True if successful."""
-    try:
-        ctx.streams = await asyncio.open_connection("localhost", BIZHAWK_SOCKET_PORT)
-        ctx.connection_status = ConnectionStatus.TENTATIVE
-        return True
-    except (TimeoutError, ConnectionRefusedError):
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        return False
+    """Attempts to establish a connection with a connector script. Returns True if successful."""
+    rotation_steps = 0 if ctx._port is None else ctx._port - BIZHAWK_SOCKET_PORT_RANGE_START
+    ports = [*range(BIZHAWK_SOCKET_PORT_RANGE_START, BIZHAWK_SOCKET_PORT_RANGE_START + BIZHAWK_SOCKET_PORT_RANGE_SIZE)]
+    ports = ports[rotation_steps:] + ports[:rotation_steps]
+
+    for port in ports:
+        try:
+            ctx.streams = await asyncio.open_connection("127.0.0.1", port)
+            ctx.connection_status = ConnectionStatus.TENTATIVE
+            ctx._port = port
+            return True
+        except (TimeoutError, ConnectionRefusedError):
+            continue
+    
+    # No ports worked
+    ctx.streams = None
+    ctx.connection_status = ConnectionStatus.NOT_CONNECTED
+    return False
 
 
 def disconnect(ctx: BizHawkContext) -> None:
@@ -72,74 +119,27 @@ def disconnect(ctx: BizHawkContext) -> None:
 
 
 async def get_script_version(ctx: BizHawkContext) -> int:
-    if ctx.streams is None:
-        raise NotConnectedError("You tried to send a request before a connection to BizHawk was made")
-
-    try:
-        reader, writer = ctx.streams
-        writer.write("VERSION".encode("ascii") + b"\n")
-        await asyncio.wait_for(writer.drain(), timeout=5)
-
-        version = await asyncio.wait_for(reader.readline(), timeout=5)
-
-        if version == b"":
-            writer.close()
-            ctx.streams = None
-            ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-            raise RequestFailedError("Connection closed")
-
-        return int(version.decode("ascii"))
-    except asyncio.TimeoutError as exc:
-        writer.close()
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        raise RequestFailedError("Connection timed out") from exc
-    except ConnectionResetError as exc:
-        writer.close()
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        raise RequestFailedError("Connection reset") from exc
+    return int(await ctx._send_message("VERSION"))
 
 
 async def send_requests(ctx: BizHawkContext, req_list: typing.List[typing.Dict[str, typing.Any]]) -> typing.List[typing.Dict[str, typing.Any]]:
     """Sends a list of requests to the BizHawk connector and returns their responses.
 
     It's likely you want to use the wrapper functions instead of this."""
-    if ctx.streams is None:
-        raise NotConnectedError("You tried to send a request before a connection to BizHawk was made")
+    responses = json.loads(await ctx._send_message(json.dumps(req_list)))
+    errors: typing.List[ConnectorError] = []
 
-    try:
-        reader, writer = ctx.streams
-        writer.write(json.dumps(req_list).encode("utf-8") + b"\n")
-        await asyncio.wait_for(writer.drain(), timeout=5)
+    for response in responses:
+        if response["type"] == "ERROR":
+            errors.append(ConnectorError(response["err"]))
 
-        res = await asyncio.wait_for(reader.readline(), timeout=5)
+    if errors:
+        if sys.version_info >= (3, 11, 0):
+            raise ExceptionGroup("Connector script returned errors", errors)  # noqa
+        else:
+            raise errors[0]
 
-        if res == b"":
-            writer.close()
-            ctx.streams = None
-            ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-            raise RequestFailedError("Connection closed")
-
-        if ctx.connection_status == ConnectionStatus.TENTATIVE:
-            ctx.connection_status = ConnectionStatus.CONNECTED
-
-        ret = json.loads(res.decode("utf-8"))
-        for response in ret:
-            if response["type"] == "ERROR":
-                raise ConnectorError(response["err"])
-
-        return ret
-    except asyncio.TimeoutError as exc:
-        writer.close()
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        raise RequestFailedError("Connection timed out") from exc
-    except ConnectionResetError as exc:
-        writer.close()
-        ctx.streams = None
-        ctx.connection_status = ConnectionStatus.NOT_CONNECTED
-        raise RequestFailedError("Connection reset") from exc
+    return responses
 
 
 async def ping(ctx: BizHawkContext) -> None:
@@ -259,7 +259,7 @@ async def guarded_read(ctx: BizHawkContext, read_list: typing.List[typing.Tuple[
                 return None
         else:
             if item["type"] != "READ_RESPONSE":
-                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type READ_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
             ret.append(base64.b64decode(item["value"]))
 
@@ -311,7 +311,7 @@ async def guarded_write(ctx: BizHawkContext, write_list: typing.List[typing.Tupl
                 return False
         else:
             if item["type"] != "WRITE_RESPONSE":
-                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {res['type']}")
+                raise SyncError(f"Expected response of type WRITE_RESPONSE or GUARD_RESPONSE but got {item['type']}")
 
     return True
 

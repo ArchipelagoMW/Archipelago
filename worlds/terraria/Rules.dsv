@@ -305,7 +305,7 @@ Hydraulic Volt Crusher;             Calamity;                                   
 Life Fruit;                         ;                                           (@mech_boss(1) & Wall of Flesh) | (@calamity & (Living Shard | Wall of Flesh));
 Get a Life;                         Achievement;                                Life Fruit;
 Topped Off;                         Achievement;                                Life Fruit;
-Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & (@mech_boss(1) | #Old One's Army Tier 3);
+Old One's Army Tier 2;              Location | Item;                            #Old One's Army Tier 1 & ((Wall of Flesh & @mech_boss(1)) | #Old One's Army Tier 3);
 
 // Brimstone Elemental
 Infernal Suevite;                   Calamity;                                   @pickaxe(150) | Brimstone Elemental;
@@ -410,7 +410,7 @@ Scoria Bar;                         Calamity;                                   
 Seismic Hampick;                    Calamity | Pickaxe(210) | Hammer(95);       Hardmode Anvil & Scoria Bar;
 Life Alloy;                         Calamity;                                   (Hardmode Anvil & Cryonic Bar & Perennial Bar & Scoria Bar) | Necromantic Geode;
 Advanced Display;                   Calamity;                                   Hardmode Anvil & Mysterious Circuitry & Dubious Plating & Life Alloy & Long Ranged Sensor Array;
-Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Golem;
+Old One's Army Tier 3;              Location | Item;                            #Old One's Army Tier 1 & Wall of Flesh & Golem;
 
 // Martian Madness
 Martian Madness;                    Location | Item;                            Wall of Flesh & Golem;

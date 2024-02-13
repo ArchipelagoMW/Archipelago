@@ -264,7 +264,8 @@ def fill_dungeons_restrictive(multiworld: MultiWorld):
 
                         if loc in all_state_base.events:
                             all_state_base.events.remove(loc)
-            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True)
+            fill_restrictive(multiworld, all_state_base, locations, in_dungeon_items, True, True, allow_excluded=True,
+                             name="LttP Dungeon Items")
 
 
 dungeon_music_addresses = {'Eastern Palace - Prize': [0x1559A],

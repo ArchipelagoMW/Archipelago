@@ -2,10 +2,17 @@ from __future__ import annotations
 
 import json
 import zipfile
+import os
+import threading
 
 from typing import ClassVar, Dict, Tuple, Any, Optional, Union, BinaryIO
 
 import bsdiff4
+
+semaphore = threading.Semaphore(os.cpu_count() or 4)
+
+del threading
+del os
 
 
 class AutoPatchRegister(type):
@@ -57,11 +64,12 @@ class APContainer:
         zip_file = file if file else self.path
         if not zip_file:
             raise FileNotFoundError(f"Cannot write {self.__class__.__name__} due to no path provided.")
-        with zipfile.ZipFile(zip_file, "w", self.compression_method, True, self.compression_level) \
-                as zf:
-            if file:
-                self.path = zf.filename
-            self.write_contents(zf)
+        with semaphore:  # TODO: remove semaphore once generate_output has a thread limit
+            with zipfile.ZipFile(
+                    zip_file, "w", self.compression_method, True, self.compression_level) as zf:
+                if file:
+                    self.path = zf.filename
+                self.write_contents(zf)
 
     def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         manifest = self.get_manifest()

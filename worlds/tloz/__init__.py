@@ -13,7 +13,7 @@ from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_loca
 from .Items import item_table, item_prices, item_game_ids
 from .Locations import location_table, level_locations, major_locations, shop_locations, all_level_locations, \
     standard_level_locations, shop_price_location_ids, secret_money_ids, location_ids, food_locations
-from .Options import tloz_options
+from .Options import TlozOptions
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
@@ -63,7 +63,8 @@ class TLoZWorld(World):
     This randomizer shuffles all the items in the game around, leading to a new adventure
     every time.
     """
-    option_definitions = tloz_options
+    options_dataclass = TlozOptions
+    options: TlozOptions
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
@@ -132,7 +133,7 @@ class TLoZWorld(World):
 
         for i, level in enumerate(level_locations):
             for location in level:
-                if self.multiworld.ExpandedPool[self.player] or "Drop" not in location:
+                if self.options.ExpandedPool or "Drop" not in location:
                     self.levels[i + 1].locations.append(
                         self.create_location(location, self.location_name_to_id[location], self.levels[i + 1]))
 
@@ -144,7 +145,7 @@ class TLoZWorld(World):
             self.levels[level].locations.append(boss_event)
 
         for location in major_locations:
-            if self.multiworld.ExpandedPool[self.player] or "Take Any" not in location:
+            if self.options.ExpandedPool or "Take Any" not in location:
                 overworld.locations.append(
                     self.create_location(location, self.location_name_to_id[location], overworld))
 
@@ -200,15 +201,17 @@ class TLoZWorld(World):
         for i in range(0, 0x7F):
             item = rom_data[first_quest_dungeon_items_early + i]
             if item & 0b00100000:
-                rom_data[first_quest_dungeon_items_early + i] = item & 0b11011111
-                rom_data[first_quest_dungeon_items_early + i] = item | 0b01000000
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_early + i] = item
             if item & 0b00011111 == 0b00000011: # Change all Item 03s to Item 3F, the proper "nothing"
                 rom_data[first_quest_dungeon_items_early + i] = item | 0b00111111
 
             item = rom_data[first_quest_dungeon_items_late + i]
             if item & 0b00100000:
-                rom_data[first_quest_dungeon_items_late + i] = item & 0b11011111
-                rom_data[first_quest_dungeon_items_late + i] = item | 0b01000000
+                item = item & 0b11011111
+                item = item | 0b01000000
+                rom_data[first_quest_dungeon_items_late + i] = item
             if item & 0b00011111 == 0b00000011:
                 rom_data[first_quest_dungeon_items_late + i] = item | 0b00111111
         return rom_data
@@ -309,7 +312,7 @@ class TLoZWorld(World):
         return self.multiworld.random.choice(self.filler_items)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        if self.multiworld.ExpandedPool[self.player]:
+        if self.options.ExpandedPool:
             take_any_left = self.multiworld.get_location("Take Any Item Left", self.player).item
             take_any_middle = self.multiworld.get_location("Take Any Item Middle", self.player).item
             take_any_right = self.multiworld.get_location("Take Any Item Right", self.player).item

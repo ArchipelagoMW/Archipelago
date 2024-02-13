@@ -1,23 +1,17 @@
+import unittest
 from typing import List, Union
 
 from BaseClasses import MultiWorld
-from worlds.stardew_valley.mods.mod_data import ModNames
+from worlds.stardew_valley.mods.mod_data import all_mods
 from worlds.stardew_valley.test import setup_solo_multiworld
-from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestBase
+from worlds.stardew_valley.test.TestOptions import basic_checks, SVTestCase
 from worlds.stardew_valley.items import item_table
 from worlds.stardew_valley.locations import location_table
 from worlds.stardew_valley.options import Mods
 from .option_names import options_to_include
 
-all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
-                      ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,
-                      ModNames.cooking_skill, ModNames.binning_skill, ModNames.juna,
-                      ModNames.jasper, ModNames.alec, ModNames.yoba, ModNames.eugene,
-                      ModNames.wellwick, ModNames.ginger, ModNames.shiko, ModNames.delores,
-                      ModNames.ayeisha, ModNames.riley, ModNames.skull_cavern_elevator})
 
-
-def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase, multiworld: MultiWorld):
+def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.TestCase, multiworld: MultiWorld):
     if isinstance(chosen_mods, str):
         chosen_mods = [chosen_mods]
     for multiworld_item in multiworld.get_items():
@@ -30,7 +24,7 @@ def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: SVTestBase
         tester.assertTrue(location.mod_name is None or location.mod_name in chosen_mods)
 
 
-class TestGenerateModsOptions(SVTestBase):
+class TestGenerateModsOptions(SVTestCase):
 
     def test_given_mod_pairs_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
