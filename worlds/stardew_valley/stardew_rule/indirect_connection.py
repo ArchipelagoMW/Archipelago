@@ -1,7 +1,7 @@
 from functools import singledispatch
 from typing import Set
 
-from worlds.stardew_valley.stardew_rule import StardewRule, Reach, Count, AggregatingStardewRule, Has
+from . import StardewRule, Reach, Count, AggregatingStardewRule, Has
 
 
 def look_for_indirect_connection(rule: StardewRule) -> Set[str]:
