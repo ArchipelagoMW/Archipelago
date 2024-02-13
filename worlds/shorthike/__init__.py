@@ -5,7 +5,7 @@ from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
-from .Rules import create_rules, get_feather_state
+from .Rules import create_rules, get_min_feathers
 from .Options import ShortHikeOptions
 
 class ShortHikeWeb(WebWorld):
@@ -48,14 +48,14 @@ class ShortHikeWorld(World):
     def set_rules(self):
         create_rules()
 
+    def get_filler_item_name(self) -> str:
+        return "13 Coins"
+
     def create_item(self, name: str) -> "ShortHikeItem":
         item_id: int = self.item_name_to_id[name]
         id = item_id - base_id - 1
 
         return ShortHikeItem(name, item_table[id]["classification"], item_id, player=self.player)
-
-    def create_event(self, event: str):
-        return ShortHikeItem(event, ItemClassification.progression_skip_balancing, None, self.player)
 
     def create_items(self) -> None:
         skipped_items = []
@@ -83,7 +83,7 @@ class ShortHikeWorld(World):
                 feather_count = 12
 
         junk = 45 - self.options.silver_feathers - feather_count - self.options.buckets + additional_junk
-        self.multiworld.itempool += [self.create_item("13 Coins") for _ in range(junk)]
+        self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
         self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count - counter["Golden Feather"])]
         self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers - counter["Silver Feather"])]
         self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets - counter["Bucket"])]
@@ -103,23 +103,26 @@ class ShortHikeWorld(World):
 
         if self.options.goal == 0:
             # Nap
-            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+            self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
+                or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
         elif self.options.goal == 1:
             # Photo
-            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 12, 12, 12, state)
+            self.multiworld.completion_condition[self.player] = lambda state: state.has("Golden Feather", self.player, 12)
         elif self.options.goal == 2:
             # Races
-            self.multiworld.completion_condition[self.player] = lambda state: get_feather_state(self, 6, 8, 7, state)
+            self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
+                or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
         elif self.options.goal == 3:
             # Help Everyone
-            self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 12, 12, 12, state)
+            self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, 12)
                 and state.has("Toy Shovel", self.player) and state.has("Camping Permit", self.player)
                 and state.has("Motorboat Key", self.player) and state.has("Headband", self.player)
                 and state.has("Wristwatch", self.player) and state.has("Seashell", self.player, 15)
                 and state.has("Shell Necklace", self.player))
         elif self.options.goal == 4:
             # Fishmonger
-            self.multiworld.completion_condition[self.player] = lambda state: (get_feather_state(self, 6, 8, 7, state)
+            self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
+                or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7))
                 and state.has("Fishing Rod", self.player))
 
     def set_rules(self):

@@ -2,11 +2,11 @@
 
 ## What does randomization do to this game?
 
-All items that can be obtained from chests and NPCs are randomized.
-Additionally, all items on the ground are replaced with chests and are randomized.
+All items that can be obtained from chests, the ground, and NPCs are randomized.
 
 ## What does another world's item look like in A Short Hike?
 
+All items are replaced with chests that can contain items from other worlds.
 Items will appear with the Archipelago logo next to them when obtained.
 
 ## Which characters need to be helped for the Help Everyone goal?
@@ -23,3 +23,8 @@ To achieve the Help Everyone goal, the following characters will need to be help
 - Collect 15 Shells for the Kid
 - Give the Shell Necklace to Aunt May
 - Help the Fox Climb the Mountain
+
+## Can I have more than one save at a time?
+
+No, unfortunately only one save slot is available for use in A Short Hike.
+Starting a new save will erase the old one _permanently_.

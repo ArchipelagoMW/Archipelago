@@ -420,7 +420,7 @@ location_table: List[LocationInfo] = [
         "id": base_id + 69,
         "inGameId": "PickUps.24",
         "needsShovel": False, "purchase": False, "chestAngle": 150,
-		"minGoldenFeathers": 3, "minGoldenFeathersEasy": 5, "minGoldenFeathersBucket": 5},
+		"minGoldenFeathers": 5, "minGoldenFeathersEasy": 7, "minGoldenFeathersBucket": 7},
     {"name": "Wristwatch Trade",
         "id": base_id + 70,
         "inGameId": "Goat_StandingNPC[0]",

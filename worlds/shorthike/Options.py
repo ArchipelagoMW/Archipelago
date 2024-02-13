@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from Options import Choice, PerGameCommonOptions, Range, Toggle
+from Options import Choice, PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 class Goal(Choice):
     """Choose the end goal.
@@ -45,8 +45,8 @@ class Buckets(Range):
 
 class GoldenFeatherProgression(Choice):
     """Determines which locations are considered in logic based on the required amount of golden feathers to reach them.
-    Easy: Locations will be considered inaccessible until the player has enough golden feathers to easily reach them
-    Normal: Locations will be considered inaccessible until the player has the minimum possible number of golden feathers to reach them
+    Easy: Locations will be considered inaccessible until the player has enough golden feathers to easily reach them. A minimum of 10 golden feathers is recommended for this setting.
+    Normal: Locations will be considered inaccessible until the player has the minimum possible number of golden feathers to reach them. A minimum of 7 golden feathers is recommended for this setting.
     Hard: Removes the requirement of golden feathers for progression entirely and glitches may need to be used to progress"""
     display_name = "Golden Feather Progression"
     option_easy = 0
@@ -56,6 +56,7 @@ class GoldenFeatherProgression(Choice):
 
 @dataclass
 class ShortHikeOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
     goal: Goal
     coins_in_shops: CoinsInShops
     golden_feathers: GoldenFeathers
