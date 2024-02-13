@@ -6,6 +6,7 @@ import traceback
 import typing
 import urllib
 import time
+# import CommonClient
 from CommonClient import CommonContext, get_base_parser, server_loop
 import Utils
 import socket
@@ -255,18 +256,42 @@ class OpenRCT2Context(CommonContext):
         self.ui = TextManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
 
-async def main(args):
-    ctx = OpenRCT2Context(args.connect, args.password)
-    ctx.auth = args.name
-    ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+# Replacing this with code from Serpent.ai to make a .apworld
+# async def main(args): 
+#     ctx = OpenRCT2Context(args.connect, args.password)
+#     ctx.auth = args.name
+#     ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
 
-    if gui_enabled:
-        ctx.run_gui()
-    ctx.run_cli()
+#     if gui_enabled:
+#         ctx.run_gui()
+#     ctx.run_cli()
 
-    await ctx.exit_event.wait()
-    await ctx.shutdown()
-    
+#     await ctx.exit_event.wait()
+#     await ctx.shutdown()
+
+def main():
+    Utils.init_logging("OpenRCT2Client", exception_logger="Client")
+
+    async def _main():
+        ctx = OpenRCT2Context(None, None)
+        ctx.server_task = asyncio.create_task(server_loop(ctx), name="server loop")
+
+        if gui_enabled:
+            ctx.run_gui()
+
+        ctx.run_cli()
+
+        await ctx.exit_event.wait()
+        await ctx.shutdown()
+
+    import colorama
+
+    colorama.init()
+
+    asyncio.run(_main())
+
+    colorama.deinit()
+
 def run_as_textclient():
     import colorama
 

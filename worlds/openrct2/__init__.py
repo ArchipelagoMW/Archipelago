@@ -4,6 +4,8 @@ import logging
 import json
 import random
 import math
+import worlds.LauncherComponents as LauncherComponents
+
 from .Options import *
 from .Constants import *
 from .Items import *
@@ -15,6 +17,19 @@ from worlds.generic.Rules import add_rule, set_rule, forbid_item
 from ..AutoWorld import World, WebWorld
 from NetUtils import SlotType
 
+
+def launch_client() -> None: #Shoutout to Serpent.ai for the launcher code!
+    from .Client import main
+    LauncherComponents.launch_subprocess(main, name="OpenRCT2Client")
+
+
+LauncherComponents.components.append(
+    LauncherComponents.Component(
+        "OpenRCT2 Client",
+        func=launch_client,
+        component_type=LauncherComponents.Type.CLIENT
+    )
+)
 
 class OpenRCT2WebWorld(WebWorld):
     tutorials = []
