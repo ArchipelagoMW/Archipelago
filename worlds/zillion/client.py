@@ -16,7 +16,7 @@ from zilliandomizer.utils.loc_name_maps import id_to_loc
 from zilliandomizer.options import Chars
 from zilliandomizer.patch import RescueInfo
 
-from .id_maps import make_id_to_others
+from .id_maps import loc_name_to_id, make_id_to_others
 from .config import base_id, zillion_map
 
 
@@ -323,6 +323,7 @@ class ZillionContext(CommonContext):
             elif isinstance(event_from_game, events.WinEventFromGame):
                 if not self.finished_game:
                     async_start(self.send_msgs([
+                        {"cmd": 'LocationChecks', "locations": [loc_name_to_id["J-6 bottom far left"]]},
                         {"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}
                     ]))
                     self.finished_game = True

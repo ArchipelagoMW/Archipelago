@@ -460,7 +460,7 @@ class CommonContext:
                 else:
                     self.update_game(cached_game)
         if needed_updates:
-            await self.send_msgs([{"cmd": "GetDataPackage", "games": list(needed_updates)}])
+            await self.send_msgs([{"cmd": "GetDataPackage", "games": [game_name]} for game_name in needed_updates])
 
     def update_game(self, game_package: dict):
         for item_name, item_id in game_package["item_name_to_id"].items():
@@ -477,6 +477,7 @@ class CommonContext:
         current_cache = Utils.persistent_load().get("datapackage", {}).get("games", {})
         current_cache.update(data_package["games"])
         Utils.persistent_store("datapackage", "games", current_cache)
+        logger.info(f"Got new ID/Name DataPackage for {', '.join(data_package['games'])}")
         for game, game_data in data_package["games"].items():
             Utils.store_data_package_for_checksum(game, game_data)
 
@@ -727,7 +728,6 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
             await ctx.server_auth(args['password'])
 
     elif cmd == 'DataPackage':
-        logger.info("Got new ID/Name DataPackage")
         ctx.consume_network_data_package(args['data'])
 
     elif cmd == 'ConnectionRefused':
