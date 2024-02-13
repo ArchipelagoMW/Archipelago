@@ -17,6 +17,10 @@ class TravelingMerchantLogic(BaseLogic[Union[TravelingMerchantLogicMixin, Receiv
     def has_days(self, number_days: int = 1):
         if number_days <= 0:
             return True_()
-        tier = min(7, max(1, number_days))
+
         traveling_merchant_days = tuple(f"Traveling Merchant: {day}" for day in Weekday.all_days)
+        if number_days == 1:
+            return self.logic.received_any(*traveling_merchant_days)
+
+        tier = min(7, max(1, number_days))
         return self.logic.received_n(*traveling_merchant_days, count=tier)
