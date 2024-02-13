@@ -178,13 +178,13 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
     # Nova gear exclusion if NCO not in campaigns
     if SC2Campaign.NCO not in enabled_campaigns:
-        excluded_items = excluded_items.union(nova_equipment)
+        excluded_items = excluded_items.update(nova_equipment)
 
     kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
     # no Kerrigan & remove all passives => remove all abilities
     if kerrigan_presence == KerriganPresence.option_not_present_and_no_passives:
         for tier in range(7):
-            smart_exclude(kerrigan_actives[tier].union(kerrigan_passives[tier]), 0)
+            smart_exclude(kerrigan_actives[tier].update(kerrigan_passives[tier]), 0)
     else:
         # no Kerrigan, but keep non-Kerrigan passives
         if kerrigan_presence == KerriganPresence.option_not_present:
@@ -195,11 +195,11 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     # SOA exclusion, other cases are handled by generic race logic
     if (soa_presence == SpearOfAdunPresence.option_lotv_protoss and SC2Campaign.LOTV not in enabled_campaigns) \
             or soa_presence == SpearOfAdunPresence.option_not_present:
-        excluded_items.union(spear_of_adun_calldowns)
-    if soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss \
-            and SC2Campaign.LOTV not in enabled_campaigns \
+        excluded_items.update(spear_of_adun_calldowns)
+    if (soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_lotv_protoss \
+            and SC2Campaign.LOTV not in enabled_campaigns) \
             or soa_autocast_presence == SpearOfAdunAutonomouslyCastAbilityPresence.option_not_present:
-        excluded_items.union(spear_of_adun_castable_passives)
+        excluded_items.update(spear_of_adun_castable_passives)
 
     return excluded_items
 
