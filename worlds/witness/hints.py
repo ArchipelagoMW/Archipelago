@@ -431,7 +431,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
     while len(hints) < hint_amount:
         if not prog_items_in_this_world and not locations_in_this_world and not hints_to_use_first:
             player_name = world.multiworld.get_player_name(world.player)
-            f"Ran out of items/locations to hint for player {player_name}."
+            logging.warning(f"Ran out of items/locations to hint for player {player_name}.")
             break
         if hints_to_use_first:
             location_hint = hints_to_use_first.pop()
