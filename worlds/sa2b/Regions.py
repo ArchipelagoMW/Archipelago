@@ -911,7 +911,6 @@ def create_regions(multiworld: MultiWorld, world: World, player: int, active_loc
         LocationName.death_chamber_animal_9,
         LocationName.death_chamber_animal_10,
         LocationName.death_chamber_lifebox_1, 
-        LocationName.death_chamber_lifebox_2, 
         LocationName.death_chamber_itembox_1, 
         LocationName.death_chamber_itembox_2, 
         LocationName.death_chamber_itembox_3, 

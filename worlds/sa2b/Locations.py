@@ -1255,7 +1255,6 @@ lifebox_location_table = {
     LocationName.green_forest_lifebox_2: 0xFF1424,
     LocationName.mission_street_lifebox_2: 0xFF1426,
     LocationName.pyramid_cave_lifebox_2: 0xFF142A,
-    LocationName.death_chamber_lifebox_2: 0xFF142B,
     LocationName.eternal_engine_lifebox_2: 0xFF142C,
     LocationName.meteor_herd_lifebox_2: 0xFF142D,
     LocationName.crazy_gadget_lifebox_2: 0xFF142E,
