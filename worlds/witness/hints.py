@@ -542,7 +542,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
 
     total_progression = non_local_progression + local_progression
 
-    player_count = len(world.multiworld.player_ids)
+    player_count = world.multiworld.players
 
     area_progression_word = "Both" if total_progression == 2 else "All"
 
