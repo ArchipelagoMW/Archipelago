@@ -1,36 +1,23 @@
 from itertools import combinations
-from typing import Dict
 
-from Options import NamedRange
-from .option_names import options_to_include
+from .option_names import all_option_choices
 from .. import setup_solo_multiworld, SVTestCase
 from ..assertion.world_assert import WorldAssertMixin
 from ... import options
-
-
-def get_option_choices(option) -> Dict[str, int]:
-    if issubclass(option, NamedRange):
-        return option.special_range_names
-    elif option.options:
-        return option.options
-    return {}
 
 
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
-        option_choices = [(option, value)
-                          for option in options_to_include
-                          if option.options
-                          for value in option.options]
-        for (option1, option1_choice), (option2, option2_choice) in combinations(option_choices, 2):
+
+        for (option1, option1_choice), (option2, option2_choice) in combinations(all_option_choices, 2):
             if option1 is option2:
                 continue
 
             world_options = {
-                option1.internal_name: option1_choice,
-                option2.internal_name: option2_choice
+                option1: option1_choice,
+                option2: option2_choice
             }
 
             with self.solo_world_sub_test(f"{option1.internal_name}: {option1_choice}, {option2.internal_name}: {option2_choice}",

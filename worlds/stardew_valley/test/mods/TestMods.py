@@ -142,6 +142,7 @@ class TestModTraps(SVTestCase):
         for value in options.TrapItems.options:
             if value == "no_traps":
                 continue
+
             world_options = allsanity_options_without_mods()
             world_options.update({options.TrapItems.internal_name: options.TrapItems.options[value], options.Mods: "Magic"})
             multi_world = setup_solo_multiworld(world_options)

@@ -2,9 +2,10 @@ import os
 import unittest
 from argparse import Namespace
 from contextlib import contextmanager
-from typing import Dict, ClassVar, Iterable, Hashable, Tuple, Optional, List
+from typing import Dict, ClassVar, Iterable, Hashable, Tuple, Optional, List, Union, Any
 
 from BaseClasses import MultiWorld, CollectionState, get_seed, Location
+from Options import VerifyKeys
 from Utils import cache_argsless
 from test.bases import WorldTestBase
 from test.general import gen_steps, setup_solo_multiworld as setup_base_solo_multiworld
@@ -12,7 +13,7 @@ from worlds.AutoWorld import call_all
 from .assertion import RuleAssertMixin
 from .. import StardewValleyWorld, options
 from ..mods.mod_data import all_mods
-from ..options import StardewValleyOptions
+from ..options import StardewValleyOptions, StardewValleyOption
 
 DEFAULT_TEST_SEED = get_seed()
 
@@ -74,7 +75,7 @@ def get_minsanity_options():
         options.NumberOfLuckBuffs.internal_name: 0,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.TrapItems.internal_name: options.TrapItems.option_no_traps,
-        options.Mods.internal_name: (),
+        options.Mods.internal_name: frozenset(),
     }
 
 
@@ -212,7 +213,13 @@ class SVTestCase(unittest.TestCase):
             cls.skip_long_tests = not bool(os.environ[long_tests_key])
 
     @contextmanager
-    def solo_world_sub_test(self, msg: Optional[str] = None, /, world_options=None, *, seed=DEFAULT_TEST_SEED, world_caching=True, dirty_state=False,
+    def solo_world_sub_test(self, msg: Optional[str] = None,
+                            /,
+                            world_options: Optional[Dict[Union[str, StardewValleyOption], Any]] = None,
+                            *,
+                            seed=DEFAULT_TEST_SEED,
+                            world_caching=True,
+                            dirty_state=False,
                             **kwargs) -> Tuple[MultiWorld, StardewValleyWorld]:
         if msg is not None:
             msg += " "
@@ -278,15 +285,28 @@ pre_generated_worlds = {}
 
 
 # Mostly a copy of test.general.setup_solo_multiworld, I just don't want to change the core.
-def setup_solo_multiworld(test_options=None, seed=DEFAULT_TEST_SEED, _cache: Dict[Hashable, MultiWorld] = {}, _steps=gen_steps) -> MultiWorld:  # noqa
-    if test_options is None:
-        test_options = {}
+def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOption], str]] = None,
+                          seed=DEFAULT_TEST_SEED,
+                          _cache: Dict[Hashable, MultiWorld] = {},  # noqa
+                          _steps=gen_steps) -> MultiWorld:
+    # Now the option class is allowed as key.
+    parsed_options = {}
+
+    if test_options:
+        for option, value in test_options.items():
+            if hasattr(option, "internal_name"):
+                assert option.internal_name not in test_options, "Defined two times by class and internal_name"
+                parsed_options[option.internal_name] = value
+            else:
+                assert option in StardewValleyOptions.type_hints, \
+                    f"All keys of world_options must be a possible Stardew Valley option, {option} is not."
+                parsed_options[option] = value
 
     # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    should_cache = "start_inventory" not in test_options
+    should_cache = "start_inventory" not in parsed_options
     frozen_options = frozenset({})
     if should_cache:
-        frozen_options = frozenset(test_options.items()).union({seed})
+        frozen_options = frozenset(parsed_options.items()).union({seed})
         if frozen_options in _cache:
             cached_multi_world = _cache[frozen_options]
             print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}]")
@@ -298,12 +318,17 @@ def setup_solo_multiworld(test_options=None, seed=DEFAULT_TEST_SEED, _cache: Dic
 
     args = Namespace()
     for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        value = option.from_any(test_options.get(name, option.default))
+        value = option.from_any(parsed_options.get(name, option.default))
+
+        if issubclass(option, VerifyKeys):
+            # Values should already be verified, but just in case...
+            option.verify_keys(value.value)
+
         setattr(args, name, {1: value})
     multiworld.set_options(args)
 
-    if "start_inventory" in test_options:
-        for item, amount in test_options["start_inventory"].items():
+    if "start_inventory" in parsed_options:
+        for item, amount in parsed_options["start_inventory"].items():
             for _ in range(amount):
                 multiworld.push_precollected(multiworld.create_item(item, 1))
 
@@ -320,7 +345,7 @@ def complete_options_with_default(options_to_complete=None) -> StardewValleyOpti
     if options_to_complete is None:
         options_to_complete = {}
 
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
+    for name, option in StardewValleyOptions.type_hints.items():
         options_to_complete[name] = option.from_any(options_to_complete.get(name, option.default))
 
     return StardewValleyOptions(**options_to_complete)

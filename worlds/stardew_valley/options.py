@@ -1,8 +1,12 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Protocol, ClassVar
 
-from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink, Option
+from Options import Range, NamedRange, Toggle, Choice, OptionSet, PerGameCommonOptions, DeathLink
 from .mods.mod_data import ModNames
+
+
+class StardewValleyOption(Protocol):
+    internal_name: ClassVar[str]
 
 
 class Goal(Choice):
