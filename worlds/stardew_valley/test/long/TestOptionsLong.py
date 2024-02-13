@@ -3,10 +3,9 @@ from typing import Dict
 
 from Options import NamedRange
 from .option_names import options_to_include
-from ..checks.world_checks import basic_checks
-from .. import setup_solo_multiworld, SVTestCase, SVTestBase
-from ... import Goal
-from ...options import EntranceRandomization, SpecialOrderLocations, Monstersanity
+from .. import setup_solo_multiworld, SVTestCase
+from ..assertion.world_assert import WorldAssertMixin
+from ... import options
 
 
 def get_option_choices(option) -> Dict[str, int]:
@@ -17,7 +16,7 @@ def get_option_choices(option) -> Dict[str, int]:
     return {}
 
 
-class TestGenerateDynamicOptions(SVTestCase):
+class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
             return
@@ -36,20 +35,20 @@ class TestGenerateDynamicOptions(SVTestCase):
                             choices = {option1.internal_name: option1_choices[key1],
                                        option2.internal_name: option2_choices[key2]}
                             multiworld = setup_solo_multiworld(choices, seed)
-                            basic_checks(self, multiworld)
+                            self.assert_basic_checks(multiworld)
 
 
-class TestDynamicOptionDebug(SVTestCase):
+class TestDynamicOptionDebug(WorldAssertMixin, SVTestCase):
 
     def test_option_pair_debug(self):
-        options = {
-            SpecialOrderLocations.internal_name: SpecialOrderLocations.option_board_qi,
-            Monstersanity.internal_name: Monstersanity.option_one_per_monster,
+        option_dict = {
+            options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_board_qi,
+            options.Monstersanity.internal_name: options.Monstersanity.option_one_per_monster,
         }
         for i in range(1):
             # seed = int(random() * pow(10, 18) - 1)
             seed = 823942126251776128
             with self.subTest(f"Seed: {seed}"):
                 print(f"Seed: {seed}")
-                multiworld = setup_solo_multiworld(options, seed)
-                basic_checks(self, multiworld)
+                multiworld = setup_solo_multiworld(option_dict, seed)
+                self.assert_basic_checks(multiworld)

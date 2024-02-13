@@ -3,7 +3,6 @@ from typing import Iterable, Union, List, Tuple, Hashable
 
 from BaseClasses import ItemClassification, CollectionState
 from .base import BaseStardewRule, CombinableStardewRule
-from .explanation import RuleExplanation, ExplainableRule
 from .protocol import StardewRule
 from ..items import item_table
 
@@ -46,9 +45,6 @@ class TotalReceived(BaseStardewRule):
 
     def __repr__(self):
         return f"Received {self.count} {self.items}"
-
-    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
-        return RuleExplanation(self, state, expected, [Received(i, self.player, 1) for i in self.items])
 
 
 @dataclass(frozen=True)
@@ -103,29 +99,6 @@ class Reach(BaseStardewRule):
 
     def get_difficulty(self):
         return 1
-
-    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
-        access_rules = None
-        if self.resolution_hint == 'Location':
-            spot = state.multiworld.get_location(self.spot, self.player)
-
-            if isinstance(spot.access_rule, ExplainableRule):
-                access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", self.player)]
-
-        elif self.resolution_hint == 'Entrance':
-            spot = state.multiworld.get_entrance(self.spot, self.player)
-
-            if isinstance(spot.access_rule, ExplainableRule):
-                access_rules = [spot.access_rule, Reach(spot.parent_region.name, "Region", self.player)]
-
-        else:
-            spot = state.multiworld.get_region(self.spot, self.player)
-            access_rules = [*(Reach(e.name, "Entrance", self.player) for e in spot.entrances)]
-
-        if not access_rules:
-            return RuleExplanation(self, state, expected)
-
-        return RuleExplanation(self, state, expected, access_rules)
 
 
 @dataclass(frozen=True)

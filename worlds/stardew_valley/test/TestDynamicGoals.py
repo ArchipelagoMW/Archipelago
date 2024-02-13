@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 from . import SVTestBase
-from .checks.world_checks import can_reach_victory
+from .assertion import WorldAssertMixin
 from .. import options, StardewItem
 from ..strings.ap_names.ap_weapon_names import APWeapon
 from ..strings.ap_names.transport_names import Transportation
@@ -47,72 +47,56 @@ def create_and_collect_fishing_access_items(tester: SVTestBase) -> List[Tuple[St
     return items
 
 
-def assert_item_was_necessary_for_victory(tester: SVTestBase, item: StardewItem):
-    tester.assertTrue(*can_reach_victory(tester.multiworld))
-    tester.multiworld.state.remove(item)
-    tester.assertFalse(*can_reach_victory(tester.multiworld))
-    tester.multiworld.state.collect(item, event=False)
-    tester.assertTrue(*can_reach_victory(tester.multiworld))
-
-
-def assert_item_was_not_necessary_for_victory(tester: SVTestBase, item: StardewItem):
-    tester.assertTrue(*can_reach_victory(tester.multiworld))
-    tester.multiworld.state.remove(item)
-    tester.assertTrue(*can_reach_victory(tester.multiworld))
-    tester.multiworld.state.collect(item, event=False)
-    tester.assertTrue(*can_reach_victory(tester.multiworld))
-
-
-class TestMasterAnglerNoFishsanity(SVTestBase):
+class TestMasterAnglerNoFishsanity(WorldAssertMixin, SVTestBase):
     options = {options.Goal.internal_name: options.Goal.option_master_angler,
                options.Fishsanity.internal_name: options.Fishsanity.option_none,
                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
 
     def test_need_all_fish_to_win(self):
         collect_fishing_abilities(self)
-        self.assertFalse(*can_reach_victory(self.multiworld))
+        self.assert_cannot_reach_victory(self.multiworld)
         critical_items = create_and_collect_fishing_access_items(self)
-        self.assertTrue(*can_reach_victory(self.multiworld))
+        self.assert_can_reach_victory(self.multiworld)
         for item, fish in critical_items:
             with self.subTest(f"Needed: {fish}"):
-                assert_item_was_necessary_for_victory(self, item)
+                self.assert_item_was_necessary_for_victory(item, self.multiworld)
 
 
-class TestMasterAnglerNoFishsanityNoGingerIsland(SVTestBase):
+class TestMasterAnglerNoFishsanityNoGingerIsland(WorldAssertMixin, SVTestBase):
     options = {options.Goal.internal_name: options.Goal.option_master_angler,
                options.Fishsanity.internal_name: options.Fishsanity.option_none,
                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true}
 
     def test_need_fish_to_win(self):
         collect_fishing_abilities(self)
-        self.assertFalse(*can_reach_victory(self.multiworld))
+        self.assert_cannot_reach_victory(self.multiworld)
         items = create_and_collect_fishing_access_items(self)
-        self.assertTrue(*can_reach_victory(self.multiworld))
+        self.assert_can_reach_victory(self.multiworld)
         unecessary_items = [(item, fish) for (item, fish) in items if fish in [Fish.lionfish, Fish.stingray]]
         necessary_items = [(item, fish) for (item, fish) in items if (item, fish) not in unecessary_items]
         for item, fish in necessary_items:
             with self.subTest(f"Needed: {fish}"):
-                assert_item_was_necessary_for_victory(self, item)
+                self.assert_item_was_necessary_for_victory(item, self.multiworld)
         for item, fish in unecessary_items:
             with self.subTest(f"Not Needed: {fish}"):
-                assert_item_was_not_necessary_for_victory(self, item)
+                self.assert_item_was_not_necessary_for_victory(item, self.multiworld)
 
 
-class TestMasterAnglerFishsanityNoHardFish(SVTestBase):
+class TestMasterAnglerFishsanityNoHardFish(WorldAssertMixin, SVTestBase):
     options = {options.Goal.internal_name: options.Goal.option_master_angler,
                options.Fishsanity.internal_name: options.Fishsanity.option_exclude_hard_fish,
                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
 
     def test_need_fish_to_win(self):
         collect_fishing_abilities(self)
-        self.assertFalse(*can_reach_victory(self.multiworld))
+        self.assert_cannot_reach_victory(self.multiworld)
         items = create_and_collect_fishing_access_items(self)
-        self.assertTrue(*can_reach_victory(self.multiworld))
+        self.assert_can_reach_victory(self.multiworld)
         unecessary_items = [(item, fish) for (item, fish) in items if fish in [Fish.void_salmon, Fish.stingray, Fish.lava_eel]]
         necessary_items = [(item, fish) for (item, fish) in items if (item, fish) not in unecessary_items]
         for item, fish in necessary_items:
             with self.subTest(f"Needed: {fish}"):
-                assert_item_was_necessary_for_victory(self, item)
+                self.assert_item_was_necessary_for_victory(item, self.multiworld)
         for item, fish in unecessary_items:
             with self.subTest(f"Not Needed: {fish}"):
-                assert_item_was_not_necessary_for_victory(self, item)
+                self.assert_item_was_not_necessary_for_victory(item, self.multiworld)

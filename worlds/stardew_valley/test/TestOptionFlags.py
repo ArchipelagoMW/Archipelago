@@ -1,5 +1,5 @@
 from . import SVTestBase
-from .checks.option_checks import get_stardew_world
+from .assertion import get_stardew_world
 from .. import BuildingProgression
 from ..options import ToolProgression
 

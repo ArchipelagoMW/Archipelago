@@ -3,12 +3,9 @@ from typing import Dict
 
 from BaseClasses import MultiWorld
 from Options import NamedRange, Range
-from .. import setup_solo_multiworld, SVTestCase
-from ..checks.goal_checks import assert_goal_world_is_valid
-from ..checks.option_checks import assert_can_reach_island_if_should, assert_cropsanity_same_number_items_and_locations, \
-    assert_festivals_give_access_to_deluxe_scarecrow, assert_has_festival_recipes
-from ..checks.world_checks import assert_same_number_items_locations, assert_victory_exists
 from .option_names import options_to_include
+from .. import setup_solo_multiworld, SVTestCase
+from ..assertion import GoalAssertMixin, OptionAssertMixin, WorldAssertMixin
 
 
 def get_option_choices(option) -> Dict[str, int]:
@@ -57,44 +54,35 @@ def get_number_log_steps(number_worlds: int) -> int:
     return 100
 
 
-def generate_and_check_many_worlds(tester: SVTestCase, number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
-    num_steps = get_number_log_steps(number_worlds)
-    log_step = number_worlds / num_steps
-    multiworlds = dict()
-    print(f"Generating {number_worlds} Solo Multiworlds [Start Seed: {start_index}] for Stardew Valley...")
-    for world_number in range(0, number_worlds + 1):
-        world_id = world_number + start_index
-        with tester.subTest(f"Multiworld: {world_id}"):
-            multiworld = generate_random_multiworld(world_id)
-            multiworlds[world_id] = multiworld
-            check_multiworld_is_valid(tester, world_id, multiworld)
-        if world_number > 0 and world_number % log_step == 0:
-            print(f"Generated and Verified {world_number}/{number_worlds} worlds [{(world_number * 100) // number_worlds}%]")
-    print(f"Finished generating and verifying {number_worlds} Solo Multiworlds for Stardew Valley")
-    return multiworlds
-
-
-def check_every_multiworld_is_valid(tester: SVTestCase, multiworlds: Dict[int, MultiWorld]):
-    for multiworld_id in multiworlds:
-        multiworld = multiworlds[multiworld_id]
-        with tester.subTest(f"Checking validity of world {multiworld_id}"):
-            check_multiworld_is_valid(tester, multiworld_id, multiworld)
-
-
-def check_multiworld_is_valid(tester: SVTestCase, multiworld_id: int, multiworld: MultiWorld):
-    assert_victory_exists(tester, multiworld)
-    assert_same_number_items_locations(tester, multiworld)
-    assert_goal_world_is_valid(tester, multiworld)
-    assert_can_reach_island_if_should(tester, multiworld)
-    assert_cropsanity_same_number_items_and_locations(tester, multiworld)
-    assert_festivals_give_access_to_deluxe_scarecrow(tester, multiworld)
-    assert_has_festival_recipes(tester, multiworld)
-
-
-class TestGenerateManyWorlds(SVTestCase):
+class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixin, SVTestCase):
     def test_generate_many_worlds_then_check_results(self):
         if self.skip_long_tests:
             return
         number_worlds = 10 if self.skip_long_tests else 1000
         start_index = random.Random().randint(0, 9999999999)
-        multiworlds = generate_and_check_many_worlds(self, number_worlds, start_index)
+        multiworlds = self.generate_and_check_many_worlds(number_worlds, start_index)
+
+    def generate_and_check_many_worlds(self, number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
+        num_steps = get_number_log_steps(number_worlds)
+        log_step = number_worlds / num_steps
+        multiworlds = dict()
+        print(f"Generating {number_worlds} Solo Multiworlds [Start Seed: {start_index}] for Stardew Valley...")
+        for world_number in range(0, number_worlds + 1):
+            world_id = world_number + start_index
+            with self.subTest(f"Multiworld: {world_id}"):
+                multiworld = generate_random_multiworld(world_id)
+                multiworlds[world_id] = multiworld
+                self.assert_multiworld_is_valid(multiworld)
+            if world_number > 0 and world_number % log_step == 0:
+                print(f"Generated and Verified {world_number}/{number_worlds} worlds [{(world_number * 100) // number_worlds}%]")
+        print(f"Finished generating and verifying {number_worlds} Solo Multiworlds for Stardew Valley")
+        return multiworlds
+
+    def assert_multiworld_is_valid(self, multiworld: MultiWorld):
+        self.assert_victory_exists(multiworld)
+        self.assert_same_number_items_locations(multiworld)
+        self.assert_goal_world_is_valid(multiworld)
+        self.assert_can_reach_island_if_should(multiworld)
+        self.assert_cropsanity_same_number_items_and_locations(multiworld)
+        self.assert_festivals_give_access_to_deluxe_scarecrow(multiworld)
+        self.assert_has_festival_recipes(multiworld)

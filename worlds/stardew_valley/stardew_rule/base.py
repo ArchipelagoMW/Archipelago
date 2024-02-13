@@ -8,7 +8,6 @@ from threading import Lock
 from typing import Iterable, Dict, List, Union, Sized, Hashable, Callable, Tuple, Set, Optional
 
 from BaseClasses import CollectionState
-from .explanation import RuleExplanation
 from .literal import true_, false_, LiteralStardewRule
 from .protocol import StardewRule
 
@@ -298,9 +297,6 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
     def __hash__(self):
         return hash((id(self.combinable_rules), self.simplification_state.original_simplifiable_rules))
 
-    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
-        return RuleExplanation(self, state, expected, self.original_rules)
-
 
 class Or(AggregatingStardewRule):
     identity = false_
@@ -389,9 +385,6 @@ class Count(BaseStardewRule):
     def rules_count(self):
         return len(self.rules)
 
-    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
-        return RuleExplanation(self, state, expected, self.rules)
-
     def get_difficulty(self):
         self.rules = sorted(self.rules, key=lambda x: x.get_difficulty())
         # In an optimal situation, all the simplest rules will be true. Since the rules are sorted, we know that the most difficult rule we might have to do
@@ -416,9 +409,6 @@ class Has(BaseStardewRule):
 
     def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
         return self.other_rules[self.item].evaluate_while_simplifying(state)
-
-    def explain(self, state: CollectionState, expected=True) -> RuleExplanation:
-        return RuleExplanation(self, state, expected, [self.other_rules[self.item]])
 
     def get_difficulty(self):
         return self.other_rules[self.item].get_difficulty() + 1

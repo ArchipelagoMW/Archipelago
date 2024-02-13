@@ -41,7 +41,6 @@ from .strings.tool_names import Tool, ToolMaterial
 from .strings.tv_channel_names import Channel
 from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
-from ..generic.Rules import CollectionRule
 
 
 def set_rules(world):
@@ -913,13 +912,13 @@ def set_entrance_rule(multiworld, player, entrance: str, rule: StardewRule):
     MultiWorldRules.set_rule(multiworld.get_entrance(entrance, player), rule)
 
 
-def set_island_entrance_rule(multiworld, player, entrance: str, rule: CollectionRule, world_options: StardewValleyOptions):
+def set_island_entrance_rule(multiworld, player, entrance: str, rule: StardewRule, world_options: StardewValleyOptions):
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
     set_entrance_rule(multiworld, player, entrance, rule)
 
 
-def set_many_island_entrances_rules(multiworld, player, entrance_rules: Dict[str, CollectionRule], world_options: StardewValleyOptions):
+def set_many_island_entrances_rules(multiworld, player, entrance_rules: Dict[str, StardewRule], world_options: StardewValleyOptions):
     if world_options.exclude_ginger_island == ExcludeGingerIsland.option_true:
         return
     for entrance, rule in entrance_rules.items():

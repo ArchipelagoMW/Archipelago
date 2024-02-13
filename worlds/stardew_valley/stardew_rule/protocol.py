@@ -4,11 +4,10 @@ from abc import abstractmethod
 from typing import Protocol, Tuple, runtime_checkable
 
 from BaseClasses import CollectionState
-from .explanation import ExplainableRule
 
 
 @runtime_checkable
-class StardewRule(ExplainableRule, Protocol):
+class StardewRule(Protocol):
 
     @abstractmethod
     def __call__(self, state: CollectionState) -> bool:

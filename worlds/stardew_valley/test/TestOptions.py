@@ -1,12 +1,10 @@
 import itertools
-import unittest
 from random import random
 from typing import Dict
 
-from BaseClasses import MultiWorld
 from Options import NamedRange
 from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
-from .checks.world_checks import basic_checks
+from .assertion import WorldAssertMixin
 from .. import items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
@@ -19,15 +17,6 @@ SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 
 
-def check_no_ginger_island(tester: unittest.TestCase, multiworld: MultiWorld):
-    ginger_island_items = [item_data.name for item_data in items_by_group[Group.GINGER_ISLAND]]
-    ginger_island_locations = [location_data.name for location_data in locations_by_tag[LocationTags.GINGER_ISLAND]]
-    for item in multiworld.get_items():
-        tester.assertNotIn(item.name, ginger_island_items)
-    for location in multiworld.get_locations():
-        tester.assertNotIn(location.name, ginger_island_locations)
-
-
 def get_option_choices(option) -> Dict[str, int]:
     if issubclass(option, NamedRange):
         return option.special_range_names
@@ -36,7 +25,7 @@ def get_option_choices(option) -> Dict[str, int]:
     return {}
 
 
-class TestGenerateDynamicOptions(SVTestCase):
+class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
     def test_given_special_range_when_generate_then_basic_checks(self):
         options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
@@ -46,7 +35,7 @@ class TestGenerateDynamicOptions(SVTestCase):
                 with self.subTest(f"{option_name}: {value}"):
                     choices = {option_name: option.special_range_names[value]}
                     multiworld = setup_solo_multiworld(choices)
-                    basic_checks(self, multiworld)
+                    self.assert_basic_checks(multiworld)
 
     def test_given_choice_when_generate_then_basic_checks(self):
         options = StardewValleyWorld.options_dataclass.type_hints
@@ -58,7 +47,7 @@ class TestGenerateDynamicOptions(SVTestCase):
                 with self.subTest(f"{option_name}: {value} [Seed: {seed}]"):
                     world_options = {option_name: option.options[value]}
                     multiworld = setup_solo_multiworld(world_options, seed)
-                    basic_checks(self, multiworld)
+                    self.assert_basic_checks(multiworld)
 
 
 class TestGoal(SVTestCase):
@@ -135,7 +124,7 @@ class TestToolProgression(SVTestCase):
         self.assertIn("Purchase Iridium Rod", locations)
 
 
-class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
+class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase):
     def test_given_special_range_when_generate_exclude_ginger_island(self):
         options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
@@ -146,7 +135,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
                     multiworld = setup_solo_multiworld(
                         {ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true,
                          option_name: option.special_range_names[value]})
-                    check_no_ginger_island(self, multiworld)
+                    self.assert_no_ginger_island_content(multiworld)
 
     def test_given_choice_when_generate_exclude_ginger_island(self):
         options = StardewValleyWorld.options_dataclass.type_hints
@@ -163,8 +152,8 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
                     stardew_world: StardewValleyWorld = multiworld.worlds[self.player]
                     if stardew_world.options.exclude_ginger_island != ExcludeGingerIsland.option_true:
                         continue
-                    basic_checks(self, multiworld)
-                    check_no_ginger_island(self, multiworld)
+                    self.assert_basic_checks(multiworld)
+                    self.assert_no_ginger_island_content(multiworld)
 
     def test_given_island_related_goal_then_override_exclude_ginger_island(self):
         island_goals = [value for value in Goal.options if value in ["walnut_hunter", "perfection"]]
@@ -177,7 +166,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
                          island_option.internal_name: island_option.options[value]})
                     stardew_world: StardewValleyWorld = multiworld.worlds[self.player]
                     self.assertEqual(stardew_world.options.exclude_ginger_island, island_option.option_false)
-                    basic_checks(self, multiworld)
+                    self.assert_basic_checks(multiworld)
 
 
 class TestTraps(SVTestCase):
