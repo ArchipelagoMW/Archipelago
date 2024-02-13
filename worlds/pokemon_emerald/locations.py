@@ -114,8 +114,10 @@ LOCATION_GROUPS = {
         "Littleroot Town - S.S. Ticket from Norman",
         "SS Tidal - Hidden Item in Lower Deck Trash Can",
         "SS Tidal - TM49 from Thief",
+        "Safari Zone NE - Item on Ledge",
         "Safari Zone NE - Hidden Item North",
         "Safari Zone NE - Hidden Item East",
+        "Safari Zone SE - Item in Grass",
         "Safari Zone SE - Hidden Item in South Grass 1",
         "Safari Zone SE - Hidden Item in South Grass 2",
     }
