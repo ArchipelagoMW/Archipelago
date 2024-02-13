@@ -278,10 +278,10 @@
         tag: forbid
         check: True
         achievement: The Seeker
-      BEAR:
+      BEAR (1):
         id: Heteronym Room/Panel_bear_bear
         tag: midwhite
-      MINE:
+      MINE (1):
         id: Heteronym Room/Panel_mine_mine
         tag: double midwhite
         subtag: left
@@ -297,7 +297,7 @@
       DOES:
         id: Heteronym Room/Panel_does_does
         tag: midwhite
-      MOBILE:
+      MOBILE (1):
         id: Heteronym Room/Panel_mobile_mobile
         tag: double midwhite
         subtag: left
@@ -738,7 +738,7 @@
         panels:
           - TURN
           - room: Orange Tower Fourth Floor
-            panel: RUNT
+            panel: RUNT (1)
       Words Sword Door:
         id:
           - Shuffle Room Area Doors/Door_words_shuffle_3
@@ -1576,11 +1576,11 @@
         required_door:
           door: Stairs
         achievement: The Observant
-      BACK:
+      FOUR (1):
         id: Look Room/Panel_four_back
         colors: green
         tag: forbid
-      SIDE:
+      FOUR (2):
         id: Look Room/Panel_four_side
         colors: green
         tag: forbid
@@ -1590,87 +1590,87 @@
         hunt: True
         required_door:
           door: Backside Door
-      STAIRS:
+      SIX:
         id: Look Room/Panel_six_stairs
         colors: green
         tag: forbid
-      WAYS:
+      FOUR (3):
         id: Look Room/Panel_four_ways
         colors: green
         tag: forbid
-      "ON":
+      TWO (1):
         id: Look Room/Panel_two_on
         colors: green
         tag: forbid
-      UP:
+      TWO (2):
         id: Look Room/Panel_two_up
         colors: green
         tag: forbid
-      SWIMS:
+      FIVE:
         id: Look Room/Panel_five_swims
         colors: green
         tag: forbid
-      UPSTAIRS:
+      BELOW (1):
         id: Look Room/Panel_eight_upstairs
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      TOIL:
+      BLUE:
         id: Look Room/Panel_blue_toil
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      STOP:
+      BELOW (2):
         id: Look Room/Panel_four_stop
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      TOP:
+      MINT (1):
         id: Look Room/Panel_aqua_top
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      HI:
+      ESACREWOL:
         id: Look Room/Panel_blue_hi
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      HI (2):
+      EULB:
         id: Look Room/Panel_blue_hi2
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      "31":
+      NUMBERS (1):
         id: Look Room/Panel_numbers_31
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      "52":
+      NUMBERS (2):
         id: Look Room/Panel_numbers_52
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      OIL:
+      MINT (2):
         id: Look Room/Panel_aqua_oil
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      BACKSIDE (GREEN):
+      GREEN (1):
         id: Look Room/Panel_eight_backside
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      SIDEWAYS:
+      GREEN (2):
         id: Look Room/Panel_eight_sideways
         colors: green
         tag: forbid
@@ -1681,13 +1681,13 @@
         id: Maze Area Doors/Door_backside
         group: Backside Doors
         panels:
-          - BACK
-          - SIDE
+          - FOUR (1)
+          - FOUR (2)
       Stairs:
         id: Maze Area Doors/Door_stairs
         group: Observant Doors
         panels:
-          - STAIRS
+          - SIX
   The Incomparable:
     entrances:
       The Observant: True # Assuming that access to The Observant includes access to the right entrance
@@ -2017,7 +2017,7 @@
       Courtyard: True
       Roof: True # through the sunwarp
     panels:
-      RUNT:
+      RUNT (1):
         id: Shuffle Room/Panel_turn_runt2
         colors: yellow
         tag: midyellow
@@ -2868,11 +2868,11 @@
         id: Rhyme Room/Panel_locked_knocked
         colors: purple
         tag: midpurp
-      PAST:
+      PAST (1):
         id: Shuffle Room/Panel_past_present
         colors: brown
         tag: botbrown
-      FUTURE:
+      FUTURE (1):
         id: Shuffle Room/Panel_future_present
         colors:
           - brown
@@ -6834,15 +6834,15 @@
         id: Panel Room/Panel_room_floor_5
         colors: gray
         tag: forbid
-      FLOOR (7):
+      FLOOR (6):
         id: Panel Room/Panel_room_floor_7
         colors: gray
         tag: forbid
-      FLOOR (8):
+      FLOOR (7):
         id: Panel Room/Panel_room_floor_8
         colors: gray
         tag: forbid
-      FLOOR (9):
+      FLOOR (8):
         id: Panel Room/Panel_room_floor_9
         colors: gray
         tag: forbid
@@ -7678,7 +7678,7 @@
         id: Challenge Room/Panel_double_anagram_5
         colors: yellow
         tag: midyellow
-      FACTS:
+      FACTS (Chain):
         id: Challenge Room/Panel_facts
         colors:
           - red
@@ -7688,18 +7688,18 @@
         id: Challenge Room/Panel_facts2
         colors: red
         tag: forbid
-      FACTS (3):
+      FACTS (2):
         id: Challenge Room/Panel_facts3
         tag: forbid
-      FACTS (4):
+      FACTS (3):
         id: Challenge Room/Panel_facts4
         colors: blue
         tag: forbid
-      FACTS (5):
+      FACTS (4):
         id: Challenge Room/Panel_facts5
         colors: blue
         tag: forbid
-      FACTS (6):
+      FACTS (5):
         id: Challenge Room/Panel_facts6
         colors: blue
         tag: forbid

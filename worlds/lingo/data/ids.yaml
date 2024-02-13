@@ -31,12 +31,12 @@ panels:
     LIES: 444408
   The Seeker:
     Achievement: 444409
-    BEAR: 444410
-    MINE: 444411
+    BEAR (1): 444410
+    MINE (1): 444411
     MINE (2): 444412
     BOW: 444413
     DOES: 444414
-    MOBILE: 444415
+    MOBILE (1): 444415
     MOBILE (2): 444416
     DESERT: 444417
     DESSERT: 444418
@@ -209,25 +209,25 @@ panels:
     EVEN: 444564
   The Observant:
     Achievement: 444565
-    BACK: 444566
-    SIDE: 444567
+    FOUR (1): 444566
+    FOUR (2): 444567
     BACKSIDE: 444568
-    STAIRS: 444569
-    WAYS: 444570
-    'ON': 444571
-    UP: 444572
-    SWIMS: 444573
-    UPSTAIRS: 444574
-    TOIL: 444575
-    STOP: 444576
-    TOP: 444577
-    HI: 444578
-    HI (2): 444579
-    '31': 444580
-    '52': 444581
-    OIL: 444582
-    BACKSIDE (GREEN): 444583
-    SIDEWAYS: 444584
+    SIX: 444569
+    FOUR (3): 444570
+    TWO (1): 444571
+    TWO (2): 444572
+    FIVE: 444573
+    BELOW (1): 444574
+    BLUE: 444575
+    BELOW (2): 444576
+    MINT (1): 444577
+    ESACREWOL: 444578
+    EULB: 444579
+    NUMBERS (1): 444580
+    NUMBERS (2): 444581
+    MINT (2): 444582
+    GREEN (1): 444583
+    GREEN (2): 444584
   The Incomparable:
     Achievement: 444585
     A (One): 444586
@@ -255,7 +255,7 @@ panels:
     RED: 444605
     DEER + WREN: 444606
   Orange Tower Fourth Floor:
-    RUNT: 444607
+    RUNT (1): 444607
     RUNT (2): 444608
     LEARNS + UNSEW: 444609
     HOT CRUSTS: 444610
@@ -347,8 +347,8 @@ panels:
     ORANGE: 444663
     UNCOVER: 444664
     OXEN: 444665
-    PAST: 444668
-    FUTURE: 444669
+    PAST (1): 444668
+    FUTURE (1): 444669
     FUTURE (2): 444670
     PAST (2): 444671
     PRESENT: 444672
@@ -798,9 +798,9 @@ panels:
     FLOOR (3): 445041
     FLOOR (4): 445042
     FLOOR (5): 445043
-    FLOOR (7): 445044
-    FLOOR (8): 445045
-    FLOOR (9): 445046
+    FLOOR (6): 445044
+    FLOOR (7): 445045
+    FLOOR (8): 445046
     CEILING (1): 445048
     CEILING (2): 445049
     CEILING (3): 445050
@@ -951,12 +951,12 @@ panels:
     DUCK LOGO: 445193
     AVIAN GREEN: 445194
     FEVER TEAR: 445195
-    FACTS: 445196
+    FACTS (Chain): 445196
     FACTS (1): 445197
-    FACTS (3): 445198
-    FACTS (4): 445199
-    FACTS (5): 445200
-    FACTS (6): 445201
+    FACTS (2): 445198
+    FACTS (3): 445199
+    FACTS (4): 445200
+    FACTS (5): 445201
     LAPEL SHEEP: 445202
 doors:
   Starting Room:
