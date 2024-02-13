@@ -10,7 +10,7 @@ from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
 from .Items import ItemFactory, GetBeemizerItem, trap_replaceable, item_name_groups
-from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, LTTPBosses
+from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, TriforcePiecesMode
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 from .Regions import key_drop_data
 
@@ -682,11 +682,22 @@ def get_pool_core(world, player: int):
         clock_mode = 'countdown-ohko'
     additional_pieces_to_place = 0
     if 'triforce_hunt' in goal:
-        pieces_in_core = min(extraitems, world.triforce_pieces_available[player])
-        additional_pieces_to_place = world.triforce_pieces_available[player] - pieces_in_core
+
+        if world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_extra:
+            triforce_pieces = world.triforce_pieces_available[player].value + world.triforce_pieces_extra[player].value
+        elif world.triforce_pieces_mode[player].value == TriforcePiecesMode.option_percentage:
+            percentage = float(max(100, world.triforce_pieces_percentage[player].value)) / 100
+            triforce_pieces = int(round(world.triforce_pieces_required[player].value * percentage, 0))
+        else:  # available
+            triforce_pieces = world.triforce_pieces_available[player].value
+
+        triforce_pieces = max(triforce_pieces, world.triforce_pieces_required[player].value)
+
+        pieces_in_core = min(extraitems, triforce_pieces)
+        additional_pieces_to_place = triforce_pieces - pieces_in_core
         pool.extend(["Triforce Piece"] * pieces_in_core)
         extraitems -= pieces_in_core
-        treasure_hunt_count = world.triforce_pieces_required[player]
+        treasure_hunt_count = world.triforce_pieces_required[player].value
         treasure_hunt_icon = 'Triforce Piece'
 
     for extra in diff.extras:

@@ -346,9 +346,6 @@ class ALTTPWorld(World):
         player = self.player
         world = self.multiworld
 
-        world.triforce_pieces_available[player] = max(world.triforce_pieces_available[player],
-                                                      world.triforce_pieces_required[player])
-
         if world.mode[player] != 'inverted':
             create_regions(world, player)
         else:

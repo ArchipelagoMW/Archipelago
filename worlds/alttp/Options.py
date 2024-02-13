@@ -132,7 +132,7 @@ class TriforcePiecesRequired(Range):
 
 class TriforcePiecesExtra(Range):
     """Set to how many extra triforces pieces are available to collect in the world."""
-    display_name = "Triforce Pieces Required"
+    display_name = "Triforce Pieces Extra"
     range_start = 0
     range_end = 89
     default = 10
