@@ -689,7 +689,7 @@ class SA2BWorld(World):
         exit_choice = self.random.choice(valid_kindergarten_exits)
         exit_room = exit_to_room_map[exit_choice]
         all_exits_copy.remove(exit_choice)
-        multi_rooms_copy.remove(exit_room)
+        multi_rooms_copy.remove(exit_room) # TODO: Remove this line to fix Neutral Garden Loop?
 
         destination = 0x06
         single_rooms_copy.remove(destination)
