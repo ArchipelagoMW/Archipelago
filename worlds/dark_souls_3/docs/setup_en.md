@@ -21,7 +21,20 @@ This client has only been tested with the Official Steam version of the game at 
 
 ## Downpatching Dark Souls III
 
-Follow instructions from the [speedsouls wiki](https://wiki.speedsouls.com/darksouls3:Downpatching) to download version 1.15. Your download command, including the correct depot and manifest ids, will be "download_depot 374320 374321 4471176929659548333"
+To downpatch DS3 for use with Archipelago, use the following instructions from the speedsouls wiki database. 
+
+1. Launch Steam (in online mode).
+2. Press the Windows Key + R. This will open the Run window.
+3. Open the Steam console by typing the following string: steam://open/console , Steam should now open in Console Mode.
+4. Insert the string of the depot you wish to download. For the AP supported v1.15, you will want to use: download_depot 374320 374321 4471176929659548333.
+5. Steam will now download the depot. Note: There is no progress bar of the download in Steam, but it is still downloading in the background.
+6. Turn off auto-updates in Steam by right-clicking Dark Souls III in your library > Properties > Updates > set "Automatic Updates" to "Only update this game when I launch it" (or change the value for AutoUpdateBehavior to 1 in "\Steam\steamapps\appmanifest_374320.acf").
+7. Back up your existing game folder in "\Steam\steamapps\common\DARK SOULS III".
+8. Return back to Steam console. Once the download is complete, it should say so along with the temporary local directory in which the depot has been stored. This is usually something like "\Steam\steamapps\content\app_XXXXXX\depot_XXXXXX". Back up this game folder as well.
+9. Delete your existing game folder in "\Steam\steamapps\common\DARK SOULS III", then replace it with your game folder in "\Steam\steamapps\content\app_XXXXXX\depot_XXXXXX".
+10. Back up and delete your save file "DS30000.sl2" in AppData. AppData is hidden by default. To locate it, press Windows Key + R, type %appdata% and hit enter or: open File Explorer > View > Hidden Items and follow "C:\Users\your username\AppData\Roaming\DarkSoulsIII\numbers".
+11. If you did all these steps correctly, you should be able to confirm your game version in the upper left corner after launching Dark Souls III.
+
 
 ## Installing the Archipelago mod
 

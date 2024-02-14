@@ -97,7 +97,7 @@ async def connect(ctx: BizHawkContext) -> bool:
 
     for port in ports:
         try:
-            ctx.streams = await asyncio.open_connection("localhost", port)
+            ctx.streams = await asyncio.open_connection("127.0.0.1", port)
             ctx.connection_status = ConnectionStatus.TENTATIVE
             ctx._port = port
             return True

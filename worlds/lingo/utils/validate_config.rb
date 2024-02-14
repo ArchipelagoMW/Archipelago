@@ -40,7 +40,7 @@ mentioned_panels = Set[]
 door_groups = {}
 
 directives = Set["entrances", "panels", "doors", "paintings", "progression"]
-panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting"]
+panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
