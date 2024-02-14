@@ -1736,7 +1736,7 @@ item_table = {
     ItemNames.SOA_DEPLOY_FENIX: ItemData(708 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 7, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
     ItemNames.SOA_PURIFIER_BEAM: ItemData(709 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 8, SC2Race.PROTOSS, origin={"lotv"}),
     ItemNames.SOA_TIME_STOP: ItemData(710 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 9, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}),
-    ItemNames.SOA_SOLAR_BOBMARDMENT: ItemData(711 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 10, SC2Race.PROTOSS, origin={"lotv"}),
+    ItemNames.SOA_SOLAR_BOMBARDMENT: ItemData(711 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 10, SC2Race.PROTOSS, origin={"lotv"}),
 
     # Generic Protoss Upgrades
     ItemNames.MATRIX_OVERLOAD: ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 0, SC2Race.PROTOSS, origin={"lotv"}, description=r"All friendly units gain 25% movement speed and 15% attack speed within a Pylon's power field and for 15 seconds after leaving it."),
@@ -1928,7 +1928,7 @@ second_pass_placeable_items: typing.Tuple[str, ...] = (
     ItemNames.SOA_DEPLOY_FENIX,
     ItemNames.SOA_PURIFIER_BEAM,
     ItemNames.SOA_TIME_STOP,
-    ItemNames.SOA_SOLAR_BOBMARDMENT,
+    ItemNames.SOA_SOLAR_BOMBARDMENT,
     # Protoss generic upgrades
     ItemNames.MATRIX_OVERLOAD,
     ItemNames.QUATRO,
@@ -2043,7 +2043,7 @@ spear_of_adun_calldowns = {
     ItemNames.SOA_DEPLOY_FENIX,
     ItemNames.SOA_PURIFIER_BEAM,
     ItemNames.SOA_TIME_STOP,
-    ItemNames.SOA_SOLAR_BOBMARDMENT
+    ItemNames.SOA_SOLAR_BOMBARDMENT
 }
 
 spear_of_adun_castable_passives = {

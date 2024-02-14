@@ -631,7 +631,7 @@ SOA_SHIELD_OVERCHARGE       = "Shield Overcharge (Spear of Adun Calldown)"
 SOA_DEPLOY_FENIX            = "Deploy Fenix (Spear of Adun Calldown)"
 SOA_PURIFIER_BEAM           = "Purifier Beam (Spear of Adun Calldown)"
 SOA_TIME_STOP               = "Time Stop (Spear of Adun Calldown)"
-SOA_SOLAR_BOBMARDMENT       = "Solar Bombardment (Spear of Adun Calldown)"
+SOA_SOLAR_BOMBARDMENT       = "Solar Bombardment (Spear of Adun Calldown)"
 
 # Generic upgrades
 MATRIX_OVERLOAD             = "Matrix Overload"
