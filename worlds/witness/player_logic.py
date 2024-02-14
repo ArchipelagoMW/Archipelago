@@ -26,7 +26,6 @@ from .utils import *
 if TYPE_CHECKING:
     from . import WitnessWorld
 
-debug = False
 
 class WitnessPlayerLogic:
     """WITNESS LOGIC CLASS"""
@@ -312,10 +311,10 @@ class WitnessPlayerLogic:
 
         mbfd_extra_exclusions = (
             # Progressive Dots 2 behind 11 lasers in an Elevator seed with vanilla doors = :(
-            victory == "elevator" and not remote_doors
+                victory == "elevator" and not remote_doors
 
-            # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
-            or victory == "challenge" and early_caves and not remote_doors
+                # Caves Shortcuts / Challenge Entry (Panel) on MBFD in a Challenge seed with vanilla doors = :(
+                or victory == "challenge" and early_caves and not remote_doors
         )
 
         if mbfd_extra_exclusions:
@@ -560,16 +559,6 @@ class WitnessPlayerLogic:
             # Disable the newly determined unreachable entities.
             self.COMPLETELY_DISABLED_ENTITIES.update(newly_discovered_disabled_entities)
 
-            if debug:
-                e_str = '"' + ', '.join(
-                    StaticWitnessLogic.ENTITIES_BY_HEX[e_hex]["checkName"] for e_hex in newly_discovered_disabled_entities
-                ) + '"'
-                reg_str = '"' + ', '.join(new_unreachable_regions) + '"'
-                if newly_discovered_disabled_entities:
-                    print(f"Locations {e_str} have been determined to be unreachable.")
-                if new_unreachable_regions:
-                    print(f"Regions {reg_str} have been determined to be unreachable.")
-
     def make_dependency_reduced_checklist(self, allow_victory: bool):
         """
         Every entity has a requirement. This requirement may involve other entities.
@@ -639,10 +628,24 @@ class WitnessPlayerLogic:
             if new_connections:
                 self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
+    def finalize_items(self):
+        """
+        Finalise which items are used in the world, and handle their progressive versions.
+        """
+        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
+            if item not in self.THEORETICAL_ITEMS:
+                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
+                child_items = cast(ProgressiveItemDefinition,
+                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
+                multi_list = [child_item for child_item in child_items
+                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
+                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
+                self.MULTI_LISTS[progressive_item_name] = multi_list
+            else:
+                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
+
     def solvability_guaranteed(self, entity_hex: str):
-        """
-        Helper function for whether an entity should be considered solvable.
-        """
         return not (
             entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
             or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
@@ -650,9 +653,7 @@ class WitnessPlayerLogic:
         )
 
     def determine_unrequired_entities(self, world: "WitnessWorld"):
-        """
-        Figure out which major items are actually useless in this world's settings.
-        """
+        """Figure out which major items are actually useless in this world's settings"""
 
         # Gather quick references to relevant options
         eps_shuffled = world.options.shuffle_EPs
@@ -675,6 +676,7 @@ class WitnessPlayerLogic:
         )
         mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
         remote_doors = doors >= 2
+        door_panels = doors == "panels" or doors == "mixed"
 
         # It is easier to think about when these items *are* required, so we make that dict first
         # If the entity is disabled anyway, we don't need to consider that case
@@ -682,8 +684,10 @@ class WitnessPlayerLogic:
             "0x03750": eps_shuffled,  # Monastery Garden Entry Door
             "0x275FA": eps_shuffled,  # Boathouse Hook Control
             "0x17D02": eps_shuffled,  # Windmill Turn Control
+            "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
+            "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
             "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
-            "0x17E2B": come_to_you and not boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
             "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
             "0x17CAA": remote_doors,  # Jungle Monastery Garden Shortcut Panel
             "0x0364E": False,  # Monastery Laser Shortcut Door
@@ -697,30 +701,15 @@ class WitnessPlayerLogic:
             "0x01BEA": difficulty == "none" and eps_shuffled,  # Keep PP2
             "0x0A0C9": eps_shuffled or discards_shuffled or disable_non_randomized,  # Cargo Box Entry Door
             "0x09EEB": discards_shuffled or mountain_upper_included,  # Mountain Floor 2 Elevator Control Panel
-            "0x17CAB": symbols_shuffled or not disable_non_randomized,  # Jungle Popup Wall Panel
+            "0x09EDD": mountain_upper_included,  # Mountain Floor 2 Exit Door
+            "0x17CAB": symbols_shuffled or not disable_non_randomized or "0x17CAB" not in self.DOOR_ITEMS_BY_ID,
+            # Jungle Popup Wall Panel
         }
 
         # Now, return the keys of the dict entries where the result is False to get unrequired major items
         self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY |= {
             item_name for item_name, is_required in is_item_required_dict.items() if not is_required
         }
-
-    def finalize_items(self):
-        """
-        Finalise which items are used in the world, and handle their progressive versions.
-        """
-        for item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI:
-            if item not in self.THEORETICAL_ITEMS:
-                progressive_item_name = StaticWitnessLogic.get_parent_progressive_item(item)
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(progressive_item_name)
-                child_items = cast(ProgressiveItemDefinition,
-                                   StaticWitnessLogic.all_items[progressive_item_name]).child_item_names
-                multi_list = [child_item for child_item in child_items
-                              if child_item in self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI]
-                self.MULTI_AMOUNTS[item] = multi_list.index(item) + 1
-                self.MULTI_LISTS[progressive_item_name] = multi_list
-            else:
-                self.PROG_ITEMS_ACTUALLY_IN_THE_GAME.add(item)
 
     def make_event_item_pair(self, panel: str):
         """
