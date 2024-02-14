@@ -113,6 +113,11 @@ class MultiWorld():
             for region in regions:
                 self.region_cache[region.player][region.name] = region
 
+        def add_group(self, new_id: int):
+            self.region_cache[new_id] = {}
+            self.entrance_cache[new_id] = {}
+            self.location_cache[new_id] = {}
+
         def __iter__(self) -> Iterator[Region]:
             for regions in self.region_cache.values():
                 yield from regions.values()
@@ -220,6 +225,7 @@ class MultiWorld():
                 return group_id, group
         new_id: int = self.players + len(self.groups) + 1
 
+        self.regions.add_group(new_id)
         self.game[new_id] = game
         self.player_types[new_id] = NetUtils.SlotType.group
         world_type = AutoWorld.AutoWorldRegister.world_types[game]
@@ -246,15 +252,20 @@ class MultiWorld():
                                  range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
+        # TODO - remove this section once all worlds use options dataclasses
+        all_keys: Set[str] = {key for player in self.player_ids for key in
+                              AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
+        for option_key in all_keys:
+            option = Utils.DeprecateDict(f"Getting options from multiworld is now deprecated. "
+                                         f"Please use `self.options.{option_key}` instead.")
+            option.update(getattr(args, option_key, {}))
+            setattr(self, option_key, option)
+
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
             self.worlds[player].random = self.per_slot_randoms[player]
-            for option_key in world_type.options_dataclass.type_hints:
-                option_values = getattr(args, option_key, {})
-                setattr(self, option_key, option_values)
-                # TODO - remove this loop once all worlds use options dataclasses
-            options_dataclass: typing.Type[Options.PerGameCommonOptions] = self.worlds[player].options_dataclass
+            options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
 
@@ -485,7 +496,7 @@ class MultiWorld():
         else:
             return all((self.has_beaten_game(state, p) for p in range(1, self.players + 1)))
 
-    def can_beat_game(self, starting_state: Optional[CollectionState] = None):
+    def can_beat_game(self, starting_state: Optional[CollectionState] = None) -> bool:
         if starting_state:
             if self.has_beaten_game(starting_state):
                 return True
@@ -498,7 +509,7 @@ class MultiWorld():
                           and location.item.advancement and location not in state.locations_checked}
 
         while prog_locations:
-            sphere = set()
+            sphere: Set[Location] = set()
             # build up spheres of collection radius.
             # Everything in each sphere is independent from each other in dependencies and only depends on lower spheres
             for location in prog_locations:
@@ -518,7 +529,14 @@ class MultiWorld():
 
         return False
 
-    def get_spheres(self) -> List[List[Location]]:
+    def get_spheres(self) -> Iterator[Set[Location]]:
+        """
+        yields a set of locations for each logical sphere
+
+        If there are unreachable locations, the last sphere of reachable
+        locations is followed by an empty set, and then a set of all of the
+        unreachable locations.
+        """
         spheres = getattr(self, "_spheres", [])
         if spheres:
             return spheres
@@ -526,7 +544,7 @@ class MultiWorld():
         locations = set(self.get_filled_locations())
 
         while locations:
-            sphere = set()
+            sphere: Set[Location] = set()
 
             for location in locations:
                 if location.can_reach(state):
@@ -558,9 +576,10 @@ class MultiWorld():
 
         def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["minimal"]:
-                return False
-            return True
+            if location.player in players["locations"] or (location.item and location.item.player not in
+                                                           players["minimal"]):
+                return True
+            return False
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
@@ -609,7 +628,7 @@ PathValue = Tuple[str, Optional["PathValue"]]
 
 
 class CollectionState():
-    prog_items: typing.Counter[Tuple[str, int]]
+    prog_items: Dict[int, Counter[str]]
     multiworld: MultiWorld
     reachable_regions: Dict[int, Set[Region]]
     blocked_connections: Dict[int, Set[Entrance]]
@@ -621,7 +640,7 @@ class CollectionState():
     additional_copy_functions: List[Callable[[CollectionState, CollectionState], CollectionState]] = []
 
     def __init__(self, parent: MultiWorld):
-        self.prog_items = Counter()
+        self.prog_items = {player: Counter() for player in parent.get_all_ids()}
         self.multiworld = parent
         self.reachable_regions = {player: set() for player in parent.get_all_ids()}
         self.blocked_connections = {player: set() for player in parent.get_all_ids()}
@@ -637,39 +656,39 @@ class CollectionState():
 
     def update_reachable_regions(self, player: int):
         self.stale[player] = False
-        rrp = self.reachable_regions[player]
-        bc = self.blocked_connections[player]
+        reachable_regions = self.reachable_regions[player]
+        blocked_connections = self.blocked_connections[player]
         queue = deque(self.blocked_connections[player])
-        start = self.multiworld.get_region('Menu', player)
+        start = self.multiworld.get_region("Menu", player)
 
         # init on first call - this can't be done on construction since the regions don't exist yet
-        if start not in rrp:
-            rrp.add(start)
-            bc.update(start.exits)
+        if start not in reachable_regions:
+            reachable_regions.add(start)
+            blocked_connections.update(start.exits)
             queue.extend(start.exits)
 
         # run BFS on all connections, and keep track of those blocked by missing items
         while queue:
             connection = queue.popleft()
             new_region = connection.connected_region
-            if new_region in rrp:
-                bc.remove(connection)
+            if new_region in reachable_regions:
+                blocked_connections.remove(connection)
             elif connection.can_reach(self):
                 assert new_region, f"tried to search through an Entrance \"{connection}\" with no Region"
-                rrp.add(new_region)
-                bc.remove(connection)
-                bc.update(new_region.exits)
+                reachable_regions.add(new_region)
+                blocked_connections.remove(connection)
+                blocked_connections.update(new_region.exits)
                 queue.extend(new_region.exits)
                 self.path[new_region] = (new_region.name, self.path.get(connection, None))
 
                 # Retry connections if the new region can unblock them
                 for new_entrance in self.multiworld.indirect_connections.get(new_region, set()):
-                    if new_entrance in bc and new_entrance not in queue:
+                    if new_entrance in blocked_connections and new_entrance not in queue:
                         queue.append(new_entrance)
 
     def copy(self) -> CollectionState:
         ret = CollectionState(self.multiworld)
-        ret.prog_items = self.prog_items.copy()
+        ret.prog_items = copy.deepcopy(self.prog_items)
         ret.reachable_regions = {player: copy.copy(self.reachable_regions[player]) for player in
                                  self.reachable_regions}
         ret.blocked_connections = {player: copy.copy(self.blocked_connections[player]) for player in
@@ -712,37 +731,43 @@ class CollectionState():
                 assert isinstance(event.item, Item), "tried to collect Event with no Item"
                 self.collect(event.item, True, event)
 
+    # item name related
     def has(self, item: str, player: int, count: int = 1) -> bool:
-        return self.prog_items[item, player] >= count
+        return self.prog_items[player][item] >= count
 
-    def has_all(self, items: Set[str], player: int) -> bool:
+    def has_all(self, items: Iterable[str], player: int) -> bool:
         """Returns True if each item name of items is in state at least once."""
-        return all(self.prog_items[item, player] for item in items)
+        return all(self.prog_items[player][item] for item in items)
 
-    def has_any(self, items: Set[str], player: int) -> bool:
+    def has_any(self, items: Iterable[str], player: int) -> bool:
         """Returns True if at least one item name of items is in state at least once."""
-        return any(self.prog_items[item, player] for item in items)
+        return any(self.prog_items[player][item] for item in items)
 
     def count(self, item: str, player: int) -> int:
-        return self.prog_items[item, player]
+        return self.prog_items[player][item]
 
+    def item_count(self, item: str, player: int) -> int:
+        Utils.deprecate("Use count instead.")
+        return self.count(item, player)
+
+    # item name group related
     def has_group(self, item_name_group: str, player: int, count: int = 1) -> bool:
         found: int = 0
+        player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[item_name, player]
+            found += player_prog_items[item_name]
             if found >= count:
                 return True
         return False
 
     def count_group(self, item_name_group: str, player: int) -> int:
         found: int = 0
+        player_prog_items = self.prog_items[player]
         for item_name in self.multiworld.worlds[player].item_name_groups[item_name_group]:
-            found += self.prog_items[item_name, player]
+            found += player_prog_items[item_name]
         return found
 
-    def item_count(self, item: str, player: int) -> int:
-        return self.prog_items[item, player]
-
+    # Item related
     def collect(self, item: Item, event: bool = False, location: Optional[Location] = None) -> bool:
         if location:
             self.locations_checked.add(location)
@@ -750,7 +775,7 @@ class CollectionState():
         changed = self.multiworld.worlds[item.player].collect(self, item)
 
         if not changed and event:
-            self.prog_items[item.name, item.player] += 1
+            self.prog_items[item.player][item.name] += 1
             changed = True
 
         self.stale[item.player] = True
@@ -803,8 +828,8 @@ class Entrance:
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
 
 class Region:
@@ -1020,8 +1045,8 @@ class Location:
         return self.__str__()
 
     def __str__(self):
-        world = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
-        return world.get_name_string_for_object(self) if world else f'{self.name} (Player {self.player})'
+        multiworld = self.parent_region.multiworld if self.parent_region and self.parent_region.multiworld else None
+        return multiworld.get_name_string_for_object(self) if multiworld else f'{self.name} (Player {self.player})'
 
     def __hash__(self):
         return hash((self.name, self.player))
@@ -1036,9 +1061,6 @@ class Location:
 
     @property
     def hint_text(self) -> str:
-        hint_text = getattr(self, "_hint_text", None)
-        if hint_text:
-            return hint_text
         return "at " + self.name.replace("_", " ").replace("-", " ")
 
 
@@ -1158,7 +1180,7 @@ class Spoiler:
                 {"player": player, "entrance": entrance, "exit": exit_, "direction": direction}
 
     def create_playthrough(self, create_paths: bool = True) -> None:
-        """Destructive to the world while it is run, damage gets repaired afterwards."""
+        """Destructive to the multiworld while it is run, damage gets repaired afterwards."""
         from itertools import chain
         # get locations containing progress items
         multiworld = self.multiworld

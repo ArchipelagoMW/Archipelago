@@ -11,7 +11,6 @@ As we are using BizHawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for BizHawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Pokemon Client` during installation).
 - Pokémon Red and/or Blue ROM files. The Archipelago community cannot provide these.
 
 ## Optional Software
@@ -71,27 +70,40 @@ And the following special characters (these each count as one character):
 
 ## Joining a MultiWorld Game
 
-### Obtain your Pokémon patch file
+### Generating and Patching a Game
 
-When you join a multiworld game, you will be asked to provide your YAML file to whoever is hosting. Once that is done,
-the host will provide you with either a link to download your data file, or with a zip file containing everyone's data
-files. Your data file should have a `.apred` or `.apblue` extension.
+1. Create your settings file (YAML).
+2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
+This will generate an output file for you. Your patch file will have a `.apred` or `.apblue` file extension.
+3. Open `ArchipelagoLauncher.exe`
+4. Select "Open Patch" on the left side and select your patch file.
+5. If this is your first time patching, you will be prompted to locate your vanilla ROM.
+6. A patched `.gb` file will be created in the same place as the patch file.
+7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
+BizHawk install.
 
-Double-click on your patch file to start your client and start the ROM patch process. Once the process is finished
-(this can take a while), the client and the emulator will be started automatically (if you associated the extension
-to the emulator as recommended).
+If you're playing a single-player seed and you don't care about autotracking or hints, you can stop here, close the
+client, and load the patched ROM in any emulator. However, for multiworlds and other Archipelago features, continue
+below using BizHawk as your emulator.
 
 ### Connect to the Multiserver
 
-Once both the client and the emulator are started, you must connect them. Navigate to your Archipelago install folder,
-then to `data/lua`, and drag+drop the `connector_pkmn_rb.lua` script onto the main EmuHawk window. (You could instead
-open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `connector_pkmn_rb.lua` with the file
-picker.)
+By default, opening a patch file will do steps 1-5 below for you automatically. Even so, keep them in your memory just
+in case you have to close and reopen a window mid-game for some reason.
+
+1. Pokémon Red and Blue use Archipelago's BizHawk Client. If the client isn't still open from when you patched your
+game, you can re-open it from the launcher.
+2. Ensure EmuHawk is running the patched ROM.
+3. In EmuHawk, go to `Tools > Lua Console`. This window must stay open while playing.
+4. In the Lua Console window, go to `Script > Open Script…`.
+5. Navigate to your Archipelago install folder and open `data/lua/connector_bizhawk_generic.lua`.
+6. The emulator may freeze every few seconds until it manages to connect to the client. This is expected. The BizHawk
+Client window should indicate that it connected and recognized Pokémon Red/Blue.
+7. To connect the client to the server, enter your room's address and port (e.g. `archipelago.gg:38281`) into the
+top text field of the client and click Connect.
 
 To connect the client to the multiserver simply put `<address>:<port>` on the textfield on top and press enter (if the
 server uses password, type in the bottom textfield `/connect <address>:<port> [password]`)
-
-Now you are ready to start your adventure in Kanto.
 
 ## Auto-Tracking
 
@@ -102,4 +114,5 @@ Pokémon Red and Blue has a fully functional map tracker that supports auto-trac
 3. Click on the "AP" symbol at the top.
 4. Enter the AP address, slot name and password. 
 
-The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It will hide checks & adjust logic accordingly.
+The rest should take care of itself! Items and checks will be marked automatically, and it even knows your settings - It
+will hide checks & adjust logic accordingly.

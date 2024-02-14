@@ -1,5 +1,4 @@
 import typing
-import random
 
 from .Locations import location_table, lookup_name_to_id as locations_lookup_name_to_id
 from .Items import (createResourcePackName, item_table, progressive_table, progressive_item_list,
@@ -100,7 +99,7 @@ class RaftWorld(World):
                         extraItemNamePool.append(item["name"])
             
             if (len(extraItemNamePool) > 0):
-                for randomItem in random.choices(extraItemNamePool, k=extras):
+                for randomItem in self.random.choices(extraItemNamePool, k=extras):
                     raft_item = self.create_item_replaceAsNecessary(randomItem)
                     pool.append(raft_item)
 
@@ -194,7 +193,7 @@ class RaftWorld(World):
             previousLocation = "RadioTower"
             while (len(availableLocationList) > 0):
                 if (len(availableLocationList) > 1):
-                    currentLocation = availableLocationList[random.randint(0, len(availableLocationList) - 2)]
+                    currentLocation = availableLocationList[self.random.randint(0, len(availableLocationList) - 2)]
                 else:
                     currentLocation = availableLocationList[0] # Utopia (only one left in list)
                 availableLocationList.remove(currentLocation)
@@ -212,7 +211,7 @@ class RaftWorld(World):
     def setLocationItemFromRegion(self, region: str, itemName: str):
         itemToUse = next(filter(lambda itm: itm.name == itemName, self.multiworld.raft_frequencyItemsPerPlayer[self.player]))
         self.multiworld.raft_frequencyItemsPerPlayer[self.player].remove(itemToUse)
-        location = random.choice(list(loc for loc in location_table if loc["region"] == region))
+        location = self.random.choice(list(loc for loc in location_table if loc["region"] == region))
         self.multiworld.get_location(location["name"], self.player).place_locked_item(itemToUse)
     
     def fill_slot_data(self):

@@ -3,7 +3,7 @@ from typing import Union
 from BaseClasses import Tutorial, CollectionState
 from worlds.AutoWorld import WebWorld, World
 from . import Options
-from .Items import DLCQuestItem, ItemData, create_items, item_table
+from .Items import DLCQuestItem, ItemData, create_items, item_table, items_by_group, Group
 from .Locations import DLCQuestLocation, location_table
 from .Options import DLCQuestOptions
 from .Regions import create_regions
@@ -13,14 +13,23 @@ client_version = 0
 
 
 class DLCqwebworld(WebWorld):
-    tutorials = [Tutorial(
+    setup_en = Tutorial(
         "Multiworld Setup Tutorial",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["axe_y"]
-    )]
+    )
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer DLCQuest sur votre PC.",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
+    )
+    tutorials = [setup_en, setup_fr]
 
 
 class DLCqworld(World):
@@ -60,7 +69,9 @@ class DLCqworld(World):
         created_items = create_items(self, self.options, locations_count + len(items_to_exclude), self.multiworld.random)
 
         self.multiworld.itempool += created_items
-        self.multiworld.early_items[self.player]["Movement Pack"] = 1
+
+        if self.options.campaign == Options.Campaign.option_basic or self.options.campaign == Options.Campaign.option_both:
+            self.multiworld.early_items[self.player]["Movement Pack"] = 1
 
         for item in items_to_exclude:
             if item in self.multiworld.itempool:
@@ -77,6 +88,10 @@ class DLCqworld(World):
 
         return DLCQuestItem(item.name, item.classification, item.code, self.player)
 
+    def get_filler_item_name(self) -> str:
+        trap = self.multiworld.random.choice(items_by_group[Group.Trap])
+        return trap.name
+
     def fill_slot_data(self):
         options_dict = self.options.as_dict(
             "death_link", "ending_choice", "campaign", "coinsanity", "item_shuffle"
@@ -92,7 +107,7 @@ class DLCqworld(World):
         if change:
             suffix = item.coin_suffix
             if suffix:
-                state.prog_items[suffix,  self.player] += item.coins
+                state.prog_items[self.player][suffix] += item.coins
         return change
 
     def remove(self, state: CollectionState, item: DLCQuestItem) -> bool:
@@ -100,5 +115,5 @@ class DLCqworld(World):
         if change:
             suffix = item.coin_suffix
             if suffix:
-                state.prog_items[suffix,  self.player] -= item.coins
+                state.prog_items[self.player][suffix] -= item.coins
         return change

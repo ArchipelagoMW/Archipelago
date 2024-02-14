@@ -31,6 +31,8 @@ highly recommended to use utility mods and features to speed up gameplay, such a
     - (Can be used to break progression)
 - Reduced Grinding
 - Upgraded Research
+    - (WARNING: Do not use without Journey mode)
+    - (NOTE: If items you pick up aren't showing up in your inventory, check your research menu. This mod automatically researches certain items.)
 
 ## Configuring your YAML File
 
