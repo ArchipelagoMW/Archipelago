@@ -103,12 +103,10 @@ class RiskOfRainWorld(World):
             if self.options.dlc_sotv:
                 environment_offset_table = shift_by_offset(environment_sotv_table, environment_offset)
                 environments_pool = {**environments_pool, **environment_offset_table}
-            environments_to_precollect = 5 if self.options.begin_with_loop else 1
-            # percollect environments for each stage (or just stage 1)
-            for i in range(environments_to_precollect):
-                unlock = self.random.choices(list(environment_available_orderedstages_table[i].keys()), k=1)
-                self.multiworld.push_precollected(self.create_item(unlock[0]))
-                environments_pool.pop(unlock[0])
+            # percollect starting environment for stage 1
+            unlock = self.random.choices(list(environment_available_orderedstages_table[0].keys()), k=1)
+            self.multiworld.push_precollected(self.create_item(unlock[0]))
+            environments_pool.pop(unlock[0])
 
         # Generate item pool
         itempool: List[str] = ["Beads of Fealty", "Radar Scanner"]

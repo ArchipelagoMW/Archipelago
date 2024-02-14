@@ -6,11 +6,11 @@ from NetUtils import ClientStatus
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import read, write, guarded_write
 
-from worlds.pokemon_rb.locations import location_data
+from .locations import location_data
 
 logger = logging.getLogger("Client")
 
-BANK_EXCHANGE_RATE = 100000000
+BANK_EXCHANGE_RATE = 50000000
 
 DATA_LOCATIONS = {
     "ItemIndex": (0x1A6E, 0x02),

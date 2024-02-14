@@ -456,6 +456,7 @@ function send_receive ()
                         failed_guard_response = response
                     end
                 else
+                    if type(response) ~= "string" then response = "Unknown error" end
                     res[i] = {type = "ERROR", err = response}
                 end
             end
@@ -585,7 +586,7 @@ else
     -- misaligned, so for GB and GBC we explicitly set the callback on
     -- vblank instead.
     -- https://github.com/TASEmulators/BizHawk/issues/3711
-    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" then
+    if emu.getsystemid() == "GB" or emu.getsystemid() == "GBC" or emu.getsystemid() == "SGB" then
         event.onmemoryexecute(tick, 0x40, "tick", "System Bus")
     else
         event.onframeend(tick)
