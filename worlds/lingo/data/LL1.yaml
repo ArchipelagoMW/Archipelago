@@ -1166,7 +1166,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: PURPLE
       Hallway Door:
         id: Red Blue Purple Room Area Doors/Door_room_2
@@ -1957,7 +1957,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: RED
       Rhyme Room Entrance:
         id: Double Room Area Doors/Door_room_entry_stairs2
@@ -1975,9 +1975,9 @@
           - Color Arrow Room Doors/Door_orange_hider_1
           - Color Arrow Room Doors/Door_orange_hider_2
           - Color Arrow Room Doors/Door_orange_hider_3
-        location_name: Color Hunt - RED and YELLOW
-        group: Champion's Rest - Color Barriers
-        item_name: Champion's Rest - Orange Barrier
+        location_name: Color Barriers - RED and YELLOW
+        group: Color Hunt Barriers
+        item_name: Color Hunt - Orange Barrier
         panels:
           - RED
           - room: Directional Gallery
@@ -2382,7 +2382,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: GREEN
     paintings:
       - id: flower_painting_7
@@ -2893,14 +2893,14 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: BLUE
       Orange Barrier:
         id: Color Arrow Room Doors/Door_orange_3
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: ORANGE
       Initiated Entrance:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked
@@ -2912,9 +2912,9 @@
       # containing region.
       Green Barrier:
         id: Color Arrow Room Doors/Door_green_hider_1
-        location_name: Color Hunt - BLUE and YELLOW
-        item_name: Champion's Rest - Green Barrier
-        group: Champion's Rest - Color Barriers
+        location_name: Color Barriers - BLUE and YELLOW
+        item_name: Color Hunt - Green Barrier
+        group: Color Hunt Barriers
         panels:
           - BLUE
           - room: Directional Gallery
@@ -2924,9 +2924,9 @@
           - Color Arrow Room Doors/Door_purple_hider_1
           - Color Arrow Room Doors/Door_purple_hider_2
           - Color Arrow Room Doors/Door_purple_hider_3
-        location_name: Color Hunt - RED and BLUE
-        item_name: Champion's Rest - Purple Barrier
-        group: Champion's Rest - Color Barriers
+        location_name: Color Barriers - RED and BLUE
+        item_name: Color Hunt - Purple Barrier
+        group: Color Hunt Barriers
         panels:
           - BLUE
           - room: Orange Tower Third Floor
@@ -2936,7 +2936,7 @@
           - Color Arrow Room Doors/Door_all_hider_1
           - Color Arrow Room Doors/Door_all_hider_2
           - Color Arrow Room Doors/Door_all_hider_3
-        location_name: Color Hunt - GREEN, ORANGE and PURPLE
+        location_name: Color Barriers - GREEN, ORANGE and PURPLE
         item_name: Champion's Rest - Entrance
         panels:
           - ORANGE
@@ -3176,8 +3176,8 @@
   Outside The Bold:
     entrances:
       Color Hallways: True
-      Champion's Rest:
-        room: Champion's Rest
+      Color Hunt:
+        room: Color Hunt
         door: Shortcut to The Steady
       The Bearer:
         room: The Bearer
@@ -4002,7 +4002,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: YELLOW
     paintings:
       - id: smile_painting_7
@@ -4020,12 +4020,15 @@
         orientation: south
       - id: cherry_painting
         orientation: east
-  Champion's Rest:
+  Color Hunt:
     entrances:
       Outside The Bold:
         door: Shortcut to The Steady
       Orange Tower Fourth Floor: True # sunwarp
       Roof: True # through ceiling of sunwarp
+      Champion's Rest:
+        room: Outside The Initiated
+        door: Entrance
     panels:
       EXIT:
         id: Rock Room/Panel_red_red
@@ -4066,41 +4069,6 @@
         required_door:
           room: Orange Tower Third Floor
           door: Orange Barrier
-      YOU:
-        id: Color Arrow Room/Panel_you
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-        check: True
-        colors: gray
-        tag: forbid
-      ME:
-        id: Color Arrow Room/Panel_me
-        colors: gray
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET BLUE:
-        # Pretend this and the other two are white, because they are snipes.
-        # TODO: Extract them and randomize them?
-        id: Color Arrow Room/Panel_secret_blue
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET YELLOW:
-        id: Color Arrow Room/Panel_secret_yellow
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET RED:
-        id: Color Arrow Room/Panel_secret_red
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
     doors:
       Shortcut to The Steady:
         id: Rock Room Doors/Door_hint
@@ -4115,12 +4083,35 @@
         required_door:
           room: Outside The Initiated
           door: Entrance
+  Champion's Rest:
+    entrances:
+      Color Hunt:
+        room: Outside The Initiated
+        door: Entrance
+    panels:
+      YOU:
+        id: Color Arrow Room/Panel_you
+        check: True
+        colors: gray
+        tag: forbid
+      ME:
+        id: Color Arrow Room/Panel_me
+        colors: gray
+        tag: forbid
+      SECRET BLUE:
+        # Pretend this and the other two are white, because they are snipes.
+        # TODO: Extract them and randomize them?
+        id: Color Arrow Room/Panel_secret_blue
+        tag: forbid
+      SECRET YELLOW:
+        id: Color Arrow Room/Panel_secret_yellow
+        tag: forbid
+      SECRET RED:
+        id: Color Arrow Room/Panel_secret_red
+        tag: forbid
+    paintings:
       - id: colors_painting
         orientation: south
-        enter_only: True
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
   The Bearer:
     entrances:
       Outside The Bold:
@@ -6193,6 +6184,7 @@
       Exit:
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
+        item_name: Orange Tower Fifth Floor - Quadruple Intersection
         panels:
           - ONE ROAD MANY TURNS
     paintings:
@@ -6212,7 +6204,6 @@
         - Third Floor
         - Fourth Floor
         - Fifth Floor
-        - Exit
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
