@@ -8,7 +8,7 @@ class TestFragmentGoal(SoETestBase):
         "required_fragments": 20,
     }
 
-    def testFragments(self):
+    def test_fragments(self) -> None:
         self.collect_by_name(["Gladiator Sword", "Diamond Eye", "Wheel", "Gauge"])
         self.assertBeatable(False)  # 0 fragments
         fragments = self.get_items_by_name("Energy Core Fragment")
@@ -24,11 +24,11 @@ class TestFragmentGoal(SoETestBase):
         self.assertEqual(self.count("Energy Core Fragment"), 21)
         self.assertBeatable(True)
 
-    def testNoWeapon(self):
+    def test_no_weapon(self) -> None:
         self.collect_by_name(["Diamond Eye", "Wheel", "Gauge", "Energy Core Fragment"])
         self.assertBeatable(False)
 
-    def testNoRocket(self):
+    def test_no_rocket(self) -> None:
         self.collect_by_name(["Gladiator Sword", "Diamond Eye", "Wheel", "Energy Core Fragment"])
         self.assertBeatable(False)
 
@@ -38,16 +38,16 @@ class TestShuffleGoal(SoETestBase):
         "energy_core": "shuffle",
     }
 
-    def testCore(self):
+    def test_core(self) -> None:
         self.collect_by_name(["Gladiator Sword", "Diamond Eye", "Wheel", "Gauge"])
         self.assertBeatable(False)
         self.collect_by_name(["Energy Core"])
         self.assertBeatable(True)
 
-    def testNoWeapon(self):
+    def test_no_weapon(self) -> None:
         self.collect_by_name(["Diamond Eye", "Wheel", "Gauge", "Energy Core"])
         self.assertBeatable(False)
 
-    def testNoRocket(self):
+    def test_no_rocket(self) -> None:
         self.collect_by_name(["Gladiator Sword", "Diamond Eye", "Wheel", "Energy Core"])
         self.assertBeatable(False)

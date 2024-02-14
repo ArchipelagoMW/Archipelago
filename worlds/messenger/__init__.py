@@ -62,7 +62,7 @@ class MessengerWorld(World):
                                "Money Wrench",
                            ], base_offset)}
 
-    required_client_version = (0, 4, 1)
+    required_client_version = (0, 4, 2)
 
     web = MessengerWeb()
 

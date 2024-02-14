@@ -2,7 +2,7 @@ from __future__ import annotations
 import typing
 import datetime
 
-from Options import Choice, OptionDict, OptionSet, ItemDict, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
+from Options import Choice, OptionDict, OptionSet, Option, DefaultOnToggle, Range, DeathLink, Toggle, \
     StartInventoryPool
 from schema import Schema, Optional, And, Or
 
@@ -207,11 +207,10 @@ class RecipeIngredientsOffset(Range):
     range_end = 5
 
 
-class FactorioStartItems(ItemDict):
+class FactorioStartItems(OptionDict):
     """Mapping of Factorio internal item-name to amount granted on start."""
     display_name = "Starting Items"
-    verify_item_name = False
-    default = {"burner-mining-drill": 19, "stone-furnace": 19}
+    default = {"burner-mining-drill": 4, "stone-furnace": 4,  "raw-fish": 50}
 
 
 class FactorioFreeSampleBlacklist(OptionSet):

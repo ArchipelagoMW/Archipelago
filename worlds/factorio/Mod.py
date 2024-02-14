@@ -5,7 +5,7 @@ import os
 import shutil
 import threading
 import zipfile
-from typing import Optional, TYPE_CHECKING, Any, List, Callable, Tuple
+from typing import Optional, TYPE_CHECKING, Any, List, Callable, Tuple, Union
 
 import jinja2
 
@@ -63,7 +63,7 @@ recipe_time_ranges = {
 class FactorioModFile(worlds.Files.APContainer):
     game = "Factorio"
     compression_method = zipfile.ZIP_DEFLATED  # Factorio can't load LZMA archives
-    writing_tasks: List[Callable[[], Tuple[str, str]]]
+    writing_tasks: List[Callable[[], Tuple[str, Union[str, bytes]]]]
 
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
@@ -164,9 +164,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     template_data["free_sample_blacklist"].update({item: 1 for item in multiworld.free_sample_blacklist[player].value})
     template_data["free_sample_blacklist"].update({item: 0 for item in multiworld.free_sample_whitelist[player].value})
 
-    mod_dir = os.path.join(output_directory, versioned_mod_name)
-
-    zf_path = os.path.join(mod_dir + ".zip")
+    zf_path = os.path.join(output_directory, versioned_mod_name + ".zip")
     mod = FactorioModFile(zf_path, player=player, player_name=multiworld.player_name[player])
 
     if world.zip_path:
@@ -177,7 +175,13 @@ def generate_mod(world: "Factorio", output_directory: str):
                     mod.writing_tasks.append(lambda arcpath=versioned_mod_name+"/"+path_part, content=zf.read(file):
                                              (arcpath, content))
     else:
-        shutil.copytree(os.path.join(os.path.dirname(__file__), "data", "mod"), mod_dir, dirs_exist_ok=True)
+        basepath = os.path.join(os.path.dirname(__file__), "data", "mod")
+        for dirpath, dirnames, filenames in os.walk(basepath):
+            base_arc_path = (versioned_mod_name+"/"+os.path.relpath(dirpath, basepath)).rstrip("/.\\")
+            for filename in filenames:
+                mod.writing_tasks.append(lambda arcpath=base_arc_path+"/"+filename,
+                                                file_path=os.path.join(dirpath, filename):
+                                         (arcpath, open(file_path, "rb").read()))
 
     mod.writing_tasks.append(lambda: (versioned_mod_name + "/data.lua",
                                       data_template.render(**template_data)))
@@ -197,5 +201,3 @@ def generate_mod(world: "Factorio", output_directory: str):
 
     # write the mod file
     mod.write()
-    # clean up
-    shutil.rmtree(mod_dir)
