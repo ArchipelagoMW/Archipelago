@@ -1,3 +1,4 @@
+import random
 from argparse import Namespace
 from typing import Optional, Type, Tuple
 
@@ -20,11 +21,16 @@ def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_
     multiworld = MultiWorld(1)
     multiworld.game[1] = world_type.game
     multiworld.player_name = {1: "Tester"}
-    multiworld.set_seed(seed)
+    # option resolution uses global random
+    random.seed(seed)
     multiworld.state = CollectionState(multiworld)
     args = Namespace()
     for name, option in world_type.options_dataclass.type_hints.items():
         setattr(args, name, {1: option.from_any(option.default)})
+    # set the seed after resolving options to mimic normal generation
+    multiworld.set_seed(seed)
+    # reinitialize global random since it's unsafe for worlds to use
+    random.seed(None)
     multiworld.set_options(args)
     for step in steps:
         call_all(multiworld, step)
