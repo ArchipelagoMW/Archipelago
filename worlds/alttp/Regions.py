@@ -466,10 +466,10 @@ old_location_address_to_new_location_address = {
 
 
 key_drop_data = {
-    'Hyrule Castle - Map Guard Key Drop': [0x140036, 0x140037, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
-    'Hyrule Castle - Boomerang Guard Key Drop': [0x140033, 0x140034, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
+    'Hyrule Castle - First Guard Key Drop': [0x140036, 0x140037, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
+    'Hyrule Castle - Inner Guard Key Drop': [0x140033, 0x140034, 'in Hyrule Castle', 'Small Key (Hyrule Castle)'],
     'Sewers - Key Rat Key Drop': [0x14000c, 0x14000d, 'in the sewers', 'Small Key (Hyrule Castle)'],
-    'Hyrule Castle - Big Key Drop': [0x14003c, 0x14003d, 'in Hyrule Castle', 'Big Key (Hyrule Castle)'],
+    'Hyrule Castle - Prison Key Drop': [0x14003c, 0x14003d, 'in Hyrule Castle', 'Big Key (Hyrule Castle)'],
     'Eastern Palace - Dark Square Pot Key': [0x14005a, 0x14005b, 'in Eastern Palace', 'Small Key (Eastern Palace)'],
     'Eastern Palace - Dark Eyegore Key Drop': [0x140048, 0x140049, 'in Eastern Palace', 'Small Key (Eastern Palace)'],
     'Desert Palace - Desert Tiles 1 Pot Key': [0x140030, 0x140031, 'in Desert Palace', 'Small Key (Desert Palace)'],
