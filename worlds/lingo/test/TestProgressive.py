@@ -142,7 +142,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
-        self.collect(progressive_gallery_room[4])
+        self.collect_by_name("Orange Tower Fifth Floor - Quadruple Intersection")
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
