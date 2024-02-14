@@ -520,17 +520,8 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
     any local lasers to be found in this area.
     """
 
-    local_progression = sum(
-        item.player == world.player
-        and item.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-        for item in corresponding_items
-    )
-
-    non_local_progression = sum(
-        item.player != world.player
-        and item.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
-        for item in corresponding_items
-    )
+    local_progression = sum(item.player == world.player and item.advancement for item in corresponding_items)
+    non_local_progression = sum(item.player != world.player and item.advancement for item in corresponding_items)
 
     laser_names = {"Symmetry Laser", "Desert Laser", "Quarry Laser", "Shadows Laser", "Town Laser", "Monastery Laser",
                    "Jungle Laser", "Bunker Laser", "Swamp Laser", "Treehouse Laser", "Keep Laser", }
