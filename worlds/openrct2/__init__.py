@@ -494,11 +494,17 @@ class OpenRCT2World(World):
 
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
-        elligible_rides = [index for index, item in enumerate(logic_table) if
+        elligible_rides = [item for index, item in enumerate(logic_table) if
                            item in item_info["rides"] and item not in item_info["non_starters"]]
+        elligible_rides = list(dict.fromkeys(elligible_rides))
+        random.shuffle(elligible_rides)
         if self.multiworld.required_unique_rides[self.player].value:
-            self.unique_rides = [logic_table[i] for i in
-                                elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
+            count = 0
+            while count < self.multiworld.required_unique_rides[self.player].value:
+                self.unique_rides.append(elligible_rides[count])
+                count += 1
+            # self.unique_rides = [elligible_rides[i] for i in
+            #                     elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
         print("Here's the eligible rides:")
         print(elligible_rides)
         print("Here's what was chosen:")
