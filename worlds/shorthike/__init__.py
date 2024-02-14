@@ -55,18 +55,8 @@ class ShortHikeWorld(World):
         return ShortHikeItem(name, item_table[id]["classification"], item_id, player=self.player)
 
     def create_items(self) -> None:
-        skipped_items = []
-        additional_junk = 0
-
-        for item, count in self.options.start_inventory.items():
-            for _ in range(count):
-                skipped_items.append(item)
-                additional_junk += 1
-
-        counter = Counter(skipped_items)
-
         for item in item_table:
-            count = item["count"] - counter[item["name"]]
+            count = item["count"]
             
             if count <= 0:
                 continue
@@ -79,11 +69,11 @@ class ShortHikeWorld(World):
             if feather_count < 12:
                 feather_count = 12
 
-        junk = 45 - self.options.silver_feathers - feather_count - self.options.buckets + additional_junk
+        junk = 45 - self.options.silver_feathers - feather_count - self.options.buckets
         self.multiworld.itempool += [self.create_item(self.get_filler_item_name()) for _ in range(junk)]
-        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count - counter["Golden Feather"])]
-        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers - counter["Silver Feather"])]
-        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets - counter["Bucket"])]
+        self.multiworld.itempool += [self.create_item("Golden Feather") for _ in range(feather_count)]
+        self.multiworld.itempool += [self.create_item("Silver Feather") for _ in range(self.options.silver_feathers)]
+        self.multiworld.itempool += [self.create_item("Bucket") for _ in range(self.options.buckets)]
 
     def create_regions(self) -> None:
         menu_region = Region("Menu", self.player, self.multiworld)
