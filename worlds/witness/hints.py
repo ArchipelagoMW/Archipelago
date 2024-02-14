@@ -426,6 +426,7 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
 
     hints = []
 
+    # This is a way to reverse a Dict[a,List[b]] to a Dict[b,a]
     area_reverse_lookup = {v: k for k, l in unhinted_locations_for_hinted_areas.items() for v in l}
 
     while len(hints) < hint_amount:
