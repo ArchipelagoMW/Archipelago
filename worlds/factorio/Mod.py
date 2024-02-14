@@ -177,7 +177,7 @@ def generate_mod(world: "Factorio", output_directory: str):
     else:
         basepath = os.path.join(os.path.dirname(__file__), "data", "mod")
         for dirpath, dirnames, filenames in os.walk(basepath):
-            base_arc_path = versioned_mod_name+"/"+os.path.relpath(dirpath, basepath)
+            base_arc_path = (versioned_mod_name+"/"+os.path.relpath(dirpath, basepath)).rstrip("/.\\")
             for filename in filenames:
                 mod.writing_tasks.append(lambda arcpath=base_arc_path+"/"+filename,
                                                 file_path=os.path.join(dirpath, filename):
