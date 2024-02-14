@@ -200,7 +200,6 @@ def create_regions(world: MultiWorld, player: int):
         create_locs(thi_large_top, "THI: 100 Coins")
 
     regFloor3 = create_region("Third Floor", player, world)
-    world.regions.append(regFloor3)
 
     regTTC = create_region("Tick Tock Clock", player, world)
     create_locs(regTTC, "TTC: Stop Time for Red Coins")
