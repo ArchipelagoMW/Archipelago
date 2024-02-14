@@ -463,7 +463,7 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
             players = set([item.player for item in progitempool])
             for player in sorted(players):
                 items = [item for item in progitempool if item.player == player]
-                world.worlds[player].fill_error(items, [])
+                multiworld.worlds[player].fill_error(items, [])
             raise FillError(
                 f'Not enough locations for progress items. There are {len(progitempool)} more items than locations')
         accessibility_corrections(multiworld, multiworld.state, defaultlocations)
