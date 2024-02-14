@@ -173,7 +173,7 @@ def get_random_move(
 
     # We're either matching types or failed to pick a move above
     if type_target is None:
-        possible_moves = [i for i in range(data.constants["MOVE_COUNT"]) if i not in expanded_blacklist]
+        possible_moves = [i for i in range(data.constants["MOVES_COUNT"]) if i not in expanded_blacklist]
     else:
         possible_moves = [move for move in _moves_by_type[type_target[0]] if move not in expanded_blacklist] + \
                             [move for move in _moves_by_type[type_target[1]] if move not in expanded_blacklist]

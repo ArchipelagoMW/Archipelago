@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from itertools import accumulate, chain, combinations
 from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, ItemDict, OptionDict, PerGameCommonOptions, Range, \
-    SpecialRange, TextChoice, Toggle
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, NamedRange, OptionDict, PerGameCommonOptions, Range, \
+    TextChoice, Toggle
 from .Enemies import enemy_name_to_sprite
 from .Items import ItemType, l2ac_item_table
 
@@ -121,6 +121,7 @@ class BlueChestCount(Range):
     range_start = 10
     range_end = 100
     default = 25
+    overall_max = range_end + 7 + 6  # Have to account for capsule monster and party member items
 
 
 class Boss(RandomGroupsChoice):
@@ -254,7 +255,7 @@ class CapsuleCravingsJPStyle(Toggle):
     display_name = "Capsule cravings JP style"
 
 
-class CapsuleStartingForm(SpecialRange):
+class CapsuleStartingForm(NamedRange):
     """The starting form of your capsule monsters.
 
     Supported values: 1 – 4, m
@@ -265,7 +266,6 @@ class CapsuleStartingForm(SpecialRange):
     range_start = 1
     range_end = 5
     default = 1
-    special_range_cutoff = 1
     special_range_names = {
         "default": 1,
         "m": 5,
@@ -279,7 +279,7 @@ class CapsuleStartingForm(SpecialRange):
             return self.value - 1
 
 
-class CapsuleStartingLevel(LevelMixin, SpecialRange):
+class CapsuleStartingLevel(LevelMixin, NamedRange):
     """The starting level of your capsule monsters.
 
     Can be set to the special value party_starting_level to make it the same value as the party_starting_level option.
@@ -288,10 +288,9 @@ class CapsuleStartingLevel(LevelMixin, SpecialRange):
     """
 
     display_name = "Capsule monster starting level"
-    range_start = 0
+    range_start = 1
     range_end = 99
     default = 1
-    special_range_cutoff = 1
     special_range_names = {
         "default": 1,
         "party_starting_level": 0,
@@ -684,7 +683,7 @@ class RunSpeed(Choice):
     default = option_disabled
 
 
-class ShopInterval(SpecialRange):
+class ShopInterval(NamedRange):
     """Place shops after a certain number of floors.
 
     E.g., if you set this to 5, then you will be given the opportunity to shop after completing B5, B10, B15, etc.,
@@ -697,10 +696,9 @@ class ShopInterval(SpecialRange):
     """
 
     display_name = "Shop interval"
-    range_start = 0
+    range_start = 1
     range_end = 10
     default = 0
-    special_range_cutoff = 1
     special_range_names = {
         "disabled": 0,
     }

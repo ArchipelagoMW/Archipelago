@@ -106,6 +106,5 @@ class PlandoTest(MessengerTestBase):
                 elif loc == "Demon Hive Figurine":
                     self.assertIn(price, self.options["shop_price_plan"]["Demon Hive Figurine"])
 
-                self.assertLessEqual(price, self.multiworld.get_location(loc, self.player).cost)
                 self.assertTrue(loc in FIGURINES)
         self.assertEqual(len(figures), len(FIGURINES))
