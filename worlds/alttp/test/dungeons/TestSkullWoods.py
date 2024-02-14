@@ -10,9 +10,9 @@ class TestSkullWoods(TestDungeon):
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
             ["Skull Woods - Big Chest", True, ['Big Key (Skull Woods)']],
 
-            ["Skull Woods - Compass Chest", True, []],
+            ["Skull Woods - Pit Trap Chest", True, []],
 
-            ["Skull Woods - Map Chest", True, []],
+            ["Skull Woods - Chest Near Front Door", True, []],
 
             ["Skull Woods - Pot Prison", True, []],
 
@@ -25,11 +25,11 @@ class TestSkullWoods(TestDungeon):
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Never in logic']],
 
-            ["Skull Woods - Compass Chest", False, []],
-            ["Skull Woods - Compass Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
-            ["Skull Woods - Compass Chest", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
+            ["Skull Woods - Pit Trap Chest", False, []],
+            ["Skull Woods - Pit Trap Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
+            ["Skull Woods - Pit Trap Chest", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
 
-            ["Skull Woods - Map Chest", True, []],
+            ["Skull Woods - Chest Near Front Door", True, []],
 
             ["Skull Woods - Pot Prison", False, []],
             ["Skull Woods - Pot Prison", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
@@ -47,11 +47,11 @@ class TestSkullWoods(TestDungeon):
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Never in logic']],
 
-            ["Skull Woods - Compass Chest", True, []],
+            ["Skull Woods - Pit Trap Chest", True, []],
 
-            ["Skull Woods - Map Chest", False, []],
-            ["Skull Woods - Map Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
-            ["Skull Woods - Map Chest", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
+            ["Skull Woods - Chest Near Front Door", False, []],
+            ["Skull Woods - Chest Near Front Door", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
+            ["Skull Woods - Chest Near Front Door", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
 
             ["Skull Woods - Pot Prison", True, []],
 
@@ -66,11 +66,11 @@ class TestSkullWoods(TestDungeon):
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
             ["Skull Woods - Big Chest", True, ['Big Key (Skull Woods)']],
 
-            ["Skull Woods - Compass Chest", False, []],
-            ["Skull Woods - Compass Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
-            ["Skull Woods - Compass Chest", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
+            ["Skull Woods - Pit Trap Chest", False, []],
+            ["Skull Woods - Pit Trap Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
+            ["Skull Woods - Pit Trap Chest", True, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)']],
 
-            ["Skull Woods - Map Chest", True, []],
+            ["Skull Woods - Chest Near Front Door", True, []],
 
             ["Skull Woods - Pot Prison", False, []],
             ["Skull Woods - Pot Prison", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],
@@ -84,7 +84,7 @@ class TestSkullWoods(TestDungeon):
     def testSkullWoodsMiddle(self):
         self.starting_regions = ['Skull Woods Second Section']
         self.remove_exits = ['Skull Woods Second Section Exit (East)', 'Skull Woods Second Section Exit (West)']
-        self.run_tests([["Skull Woods - Big Key Chest", True, []]])
+        self.run_tests([["Skull Woods - Middle Section Chest", True, []]])
 
     def testSkullWoodsBack(self):
         self.starting_regions = ['Skull Woods Final Section (Entrance)']
