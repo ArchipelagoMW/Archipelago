@@ -549,7 +549,7 @@ class WitnessPlayerLocations:
         )
 
         event_locations = {
-            p for p in player_logic.EVENT_PANELS
+            p for p in player_logic.USED_EVENT_NAMES_BY_HEX
         }
 
         self.EVENT_LOCATION_TABLE = {
