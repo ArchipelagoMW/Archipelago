@@ -85,10 +85,8 @@ class DKC3World(World):
 
     def fill_slot_data(self) -> dict:
         slot_data = self._get_slot_data()
-        for option_name in (attr.name for attr in dataclasses.fields(DKC3Options)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = option.value
+        slot_data.update(self.options.as_dict([attr.name for attr in dataclasses.fields(DKC3Options)
+                            if attr not in dataclasses.fields(PerGameCommonOptions)])
 
         return slot_data
 
