@@ -287,10 +287,7 @@ class WitnessWorld(World):
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
-            area_weight, location_weight = self.options.area_hint_percentage, 100 - self.options.area_hint_percentage
-
-            hint_type_amounts = build_weighted_int_list([area_weight / 100, location_weight / 100], hint_amount)
-            area_hints = hint_type_amounts[0]
+            area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
             generated_hints = create_all_hints(self, hint_amount, area_hints)
 
