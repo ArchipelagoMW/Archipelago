@@ -783,6 +783,7 @@ def get_nonnative_item_sprite(code: int) -> int:
 
 def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     local_random = world.per_slot_randoms[player]
+    local_world = world.worlds[player]
 
     # patch items
 
@@ -1190,12 +1191,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     ])
 
     # set Fountain bottle exchange items
-    if world.difficulty[player] in ['hard', 'expert']:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x48][local_random.randint(0, 5)])
-    else:
-        rom.write_byte(0x348FF, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
-        rom.write_byte(0x3493B, [0x16, 0x2B, 0x2C, 0x2D, 0x3C, 0x3D, 0x48][local_random.randint(0, 6)])
+    rom.write_byte(0x348FF, item_table[local_world.waterfall_fairy_bottle_fill].item_code)
+    rom.write_byte(0x3493B, item_table[local_world.pyramid_fairy_bottle_fill].item_code)
 
     # enable Fat Fairy Chests
     rom.write_bytes(0x1FC16, [0xB1, 0xC6, 0xF9, 0xC9, 0xC6, 0xF9])
