@@ -489,7 +489,7 @@ panels:
     WINDWARD: 444803
     LIGHT: 444804
     REWIND: 444805
-  Champion's Rest:
+  Color Hunt:
     EXIT: 444806
     HUES: 444807
     RED: 444808
@@ -498,6 +498,7 @@ panels:
     GREEN: 444811
     PURPLE: 444812
     ORANGE: 444813
+  Champion's Rest:
     YOU: 444814
     ME: 444815
     SECRET BLUE: 444816
@@ -1286,7 +1287,7 @@ doors:
       location: 445246
     Yellow Barrier:
       item: 444538
-  Champion's Rest:
+  Color Hunt:
     Shortcut to The Steady:
       item: 444539
       location: 444806
@@ -1442,7 +1443,6 @@ door_groups:
   Fearless Doors: 444469
   Backside Doors: 444473
   Orange Tower First Floor - Shortcuts: 444484
-  Champion's Rest - Color Barriers: 444489
   Welcome Back Doors: 444492
   Colorful Doors: 444498
   Directional Gallery Doors: 444531
