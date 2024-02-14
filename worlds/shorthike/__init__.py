@@ -1,6 +1,6 @@
 from collections import Counter
 from typing import ClassVar, Dict, Any, Type
-from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
+from BaseClasses import Region, Location, Item, Tutorial
 from Options import PerGameCommonOptions
 from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
@@ -26,7 +26,7 @@ class ShortHikeWorld(World):
     and take in the beautiful world around you.
     """
 
-    game: str = "A Short Hike"
+    game = "A Short Hike"
     web = ShortHikeWeb()
     data_version = 2
 
@@ -45,9 +45,6 @@ class ShortHikeWorld(World):
     def __init__(self, multiworld, player):
         super(ShortHikeWorld, self).__init__(multiworld, player)
 
-    def set_rules(self):
-        create_rules()
-
     def get_filler_item_name(self) -> str:
         return "13 Coins"
 
@@ -61,7 +58,7 @@ class ShortHikeWorld(World):
         skipped_items = []
         additional_junk = 0
 
-        for item, count in self.multiworld.start_inventory[self.player].value.items():
+        for item, count in self.options.start_inventory.items():
             for _ in range(count):
                 skipped_items.append(item)
                 additional_junk += 1
@@ -129,7 +126,6 @@ class ShortHikeWorld(World):
         create_rules(self, location_table)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        slot_data: Dict[str, Any] = {}
         locations: Dict[int, Any] = {}
 
         multiworld = self.multiworld
@@ -137,7 +133,7 @@ class ShortHikeWorld(World):
         options = self.options
 
         for loc in multiworld.get_filled_locations(player):
-            if loc.item.code == None:
+            if loc.item.code is None:
                 continue
             else:
                 data = {
