@@ -8,6 +8,8 @@ class TestProgressiveOrangeTower(LingoTestBase):
     }
 
     def test_from_welcome_back(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower First Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Second Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
@@ -83,6 +85,8 @@ class TestProgressiveOrangeTower(LingoTestBase):
         self.assertTrue(self.multiworld.state.can_reach("Orange Tower Seventh Floor", "Region", self.player))
 
     def test_from_hub_room(self) -> None:
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower First Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Second Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))

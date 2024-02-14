@@ -6,7 +6,6 @@ from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
     RoomAndPanel
-from .testing import LingoTestOptions
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -84,7 +83,8 @@ class LingoPlayerLogic:
 
     def handle_non_grouped_door(self, room_name: str, door_data: Door, world: "LingoWorld"):
         if room_name in PROGRESSION_BY_ROOM and door_data.name in PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not world.options.progressive_orange_tower:
+            if (room_name == "Orange Tower" and not world.options.progressive_orange_tower)\
+                    or (room_name == "The Colorful" and not world.options.progressive_colorful):
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
             else:
                 progressive_item_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
@@ -224,7 +224,7 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
-                and not early_color_hallways and LingoTestOptions.disable_forced_good_item is False:
+                and not early_color_hallways:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
             # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
