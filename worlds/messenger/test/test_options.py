@@ -1,5 +1,3 @@
-from typing import cast
-
 from BaseClasses import CollectionState
 from Fill import distribute_items_restrictive
 from . import MessengerTestBase

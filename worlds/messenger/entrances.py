@@ -1,7 +1,6 @@
-import logging
 from typing import List, TYPE_CHECKING
 
-from BaseClasses import Entrance, Region
+from BaseClasses import Entrance
 from EntranceRando import randomize_entrances
 from .connections import RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .options import ShuffleTransitions

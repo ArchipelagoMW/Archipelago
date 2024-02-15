@@ -4,7 +4,7 @@ from typing import Dict
 from schema import And, Optional, Or, Schema
 
 from Options import Accessibility, Choice, DeathLink, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, TextChoice, Toggle
+    StartInventoryPool, Toggle
 
 
 class MessengerAccessibility(Accessibility):
@@ -18,8 +18,7 @@ class Logic(Choice):
     The level of logic to use when determining what locations in your world are accessible.
 
     Normal: can require damage boosts, but otherwise approachable for someone who has beaten the game.
-    Hard: has leashing, normal clips, time warps and turtle boosting in logic.
-    OoB: places everything with the minimum amount of rules possible. Expect to do OoB. Not guaranteed completable.
+    Hard: expects more knowledge and tighter execution. has leashing, normal clips and much tighter d-boosting in logic.
     """
     display_name = "Logic Level"
     option_normal = 0

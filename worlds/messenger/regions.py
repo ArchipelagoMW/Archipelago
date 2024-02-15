@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List
 
 
 LOCATIONS: Dict[str, List[str]] = {
