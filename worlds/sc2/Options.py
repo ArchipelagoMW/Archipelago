@@ -883,8 +883,10 @@ def get_excluded_missions(multiworld: MultiWorld, player: int) -> Set[SC2Mission
                     )
             )
     ):
-        excluded_missions.union([mission for mission in SC2Mission if
-                                 mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE])
+        excluded_missions = excluded_missions.union(
+            [mission for mission in SC2Mission if
+             mission.pool == MissionPools.VERY_HARD and mission.campaign != SC2Campaign.EPILOGUE]
+        )
     # Omitting No-Build missions if not shuffling no-build
     if not shuffle_no_build:
         excluded_missions = excluded_missions.union(get_no_build_missions())
