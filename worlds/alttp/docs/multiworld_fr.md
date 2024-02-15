@@ -2,7 +2,7 @@
 
 ## Logiciels requis
 
-- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). N'oubliez pas de cocher `SNI Client - A Link to the Past Patch Setup` lors de l'installation.
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
 - [SNI](https://github.com/alttpo/sni/releases). Inclus avec l'installation d'Archipelago ci-dessus.
    - SNI n'est pas compatible avec (Q)Usb2Snes.
 - Une solution logicielle ou matérielle capable de charger et de lancer des fichiers ROM de SNES
@@ -17,11 +17,11 @@
 
 ## Procédure d'installation
 
-1. Téléchargez et installez SNIClient depuis le lien ci-dessus, en prenant soin d'installer la version la plus récente
-   **Le fichier se situe dans la section "assets" en bas des informations de version**.
-   - Durant la préparation, il vous sera demandé votre fichier ROM de base. Il s'agit de votre fichier ROM Link to the Past japonais. 
+1. Téléchargez et installez [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). **L'installeur se situe dans la section "assets" en bas des informations de version**.
+   
+2. Si c'est la première fois que vous faites une génération locale ou un patch, il vous sera demandé votre fichier ROM de base. Il s'agit de votre fichier ROM Link to the Past japonais. Cet étape n'a besoin d'être faite qu'une seule fois.
 
-2. Si vous utilisez un émulateur, il est recommandé d'assigner votre émulateur capable d'éxécuter des scripts Lua comme
+3. Si vous utilisez un émulateur, il est recommandé d'assigner votre émulateur capable d'éxécuter des scripts Lua comme
    programme par défaut pour ouvrir vos ROMs.
     1. Extrayez votre dossier d'émulateur sur votre Bureau, ou à un endroit dont vous vous souviendrez.
     2. Faites un clic droit sur un fichier ROM et sélectionnez **Ouvrir avec...**
@@ -66,7 +66,7 @@ lua que vous utilisez dans votre explorateur de fichiers et copiez le `socket.dl
     - (≥ 2.9) `Config` 〉 `Preferred Cores` 〉 `SNES` 〉 `BSNESv115+`  
    Une fois le cœur changé, rechargez le avec Ctrl+R (par défaut).
 2. Chargez votre ROM si ce n'est pas déjà fait.
-3. Glissez déposez le fichier `Connector.lua` que vous avez téléchargé ci-dessus sur la fenêtre principale EmuHawk.
+3. Glissez et déposez le fichier `Connector.lua` que vous avez téléchargé ci-dessus sur la fenêtre principale EmuHawk.
     - Recherchez `/SNI/lua/` dans votre fichier Archipelago. 
     - Vous pouvez aussi ouvrir la console Lua manuellement, cliquez sur `Script` 〉 `Open Script`, et naviguez sur `Connecteur.lua`
       avec le sélecteur de fichiers.
@@ -109,6 +109,6 @@ l'interface Web.
 
 ### Jouer au jeu
 
-Une fois que l'interface Web affiche que la SNES et le serveur sont connectés, vous êtes prêt à jouer. Félicitations
-pour avoir rejoint un multiworld ! Vous pouvez exécuter différentes commandes dans votre client. Pour plus d'informations sur
-ces commandes, vous pouvez utiliser `/help` pour les commandes locales et `!help` pour les commandes serveur.
+Une fois que l'interface Web affiche que la SNES et le serveur sont connectés, vous êtes prêt à jouer. Félicitations,
+vous venez de rejoindre un multiworld ! Vous pouvez exécuter différentes commandes dans votre client. Pour plus d'informations
+sur ces commandes, vous pouvez utiliser `/help` pour les commandes locales et `!help` pour les commandes serveur.
