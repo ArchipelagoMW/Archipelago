@@ -100,9 +100,9 @@ class LingoWorld(World):
         item = ALL_ITEM_TABLE[name]
 
         classification = item.classification
-        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
+        if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0 \
                 and not item.has_doors and all(painting_id not in self.player_logic.painting_mapping
-                                                    for painting_id in item.painting_ids)\
+                                               for painting_id in item.painting_ids) \
                 and "pilgrim_painting2" not in item.painting_ids:
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
             # go nowhere, then this item should not be progression. The Pilgrim Room painting is special and needs to be
