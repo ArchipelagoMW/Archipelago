@@ -421,7 +421,7 @@ REGION_CONNECTIONS: Dict[str, Dict[str, str]] = {
         "Howling Grotto - Portal": "ToTHQ Howling Grotto Portal",
         "Searing Crags - Portal": "ToTHQ Searing Crags Portal",
         "Glacial Peak - Portal": "ToTHQ Glacial Peak Portal",
-        "Tower of Time - Left": "Tower HQ -> Tower of Time - Left",
+        "Tower of Time - Left": "Artificer's Challenge",
         "Riviere Turquoise - Portal": "ToTHQ Riviere Turquoise Portal",
         "Sunken Shrine - Portal": "ToTHQ Sunken Shrine Portal",
         "Corrupted Future": "Artificer's Portal",

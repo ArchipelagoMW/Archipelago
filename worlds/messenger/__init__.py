@@ -243,7 +243,7 @@ class MessengerWorld(World):
                         (transition.connected_region.name, "both", self.player) in spoiler.entrances):
                     continue
                 spoiler.set_entrance(
-                    transition.name if transition.name == "Artificer's Portal" else transition.parent_region.name,
+                    transition.name if "->" not in transition.name else transition.parent_region.name,
                     transition.connected_region.name,
                     "both" if transition.er_type == Entrance.EntranceType.TWO_WAY
                               and self.options.shuffle_transitions == ShuffleTransitions.option_coupled

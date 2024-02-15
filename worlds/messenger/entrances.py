@@ -34,6 +34,8 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
 
         if child == "Corrupted Future":
             entrance = multiworld.get_entrance("Artificer's Portal", player)
+        elif child == "Tower of Time - Left":
+            entrance = multiworld.get_entrance("Artificer's Challenge", player)
         else:
             entrance = multiworld.get_entrance(f"{parent} -> {child}", player)
         parent_region = entrance.parent_region
