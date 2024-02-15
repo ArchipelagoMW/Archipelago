@@ -45,3 +45,10 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
     result = randomize_entrances(world, set(regions_to_shuffle), coupled, lambda group: ["Default"])
 
     world.transitions = sorted(result.placements, key=lambda entrance: TRANSITIONS.index(entrance.parent_region.name))
+
+    for transition in world.transitions:
+        if "->" not in transition.name:
+            continue
+        transition.parent_region.exits.remove(transition)
+        transition.name = f"{transition.parent_region} -> {transition.connected_region}"
+        transition.parent_region.exits.append(transition)

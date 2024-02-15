@@ -1,4 +1,5 @@
 import logging
+from collections import deque
 from typing import Any, ClassVar, Dict, List, Optional, TextIO
 
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, MultiWorld, Tutorial
@@ -16,7 +17,7 @@ from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffl
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
-from .subclasses import MessengerItem, MessengerRegion
+from .subclasses import MessengerEntrance, MessengerItem, MessengerRegion, MessengerShopLocation
 
 components.append(
     Component("The Messenger", component_type=Type.CLIENT, func=launch_game, game_name="The Messenger", supports_uri=True)
@@ -249,42 +250,35 @@ class MessengerWorld(World):
                     else "",
                     self.player)
 
-    # def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
-    #     if not self.options.shuffle_transitions:
-    #         return
-    # 
-    #     region_data = {}
-    #     for region in self.multiworld.get_regions(self.player):
-    #         checked_entrances = set()
-    #         
-    #         def check_entrance(entry: Entrance):
-    #             if entry in self.transitions or entry.parent_region.name == "Tower HQ":
-    #                 return True
-    #             for entrance in entry.parent_region.entrances:
-    #                 if entrance not in checked_entrances:
-    #                     checked_entrances.add(entrance)
-    #                     ret = check_entrance(entrance)
-    #                     if ret is True:
-    #                         return entrance.name if entrance.parent_region.name == "Tower HQ" else entrance.parent_region.name
-    #                     elif ret is not None:
-    #                         return ret
-    #             return None
-    #         if region.name in {"Tower HQ", "The Shop", "The Craftsman's Corner"}
-    #             continue
-    #         region_data[region.name] = check_entrance(region.)
-    #     def is_main_entrance(entry: Entrance) -> bool:
-    #         return entry in self.transitions or entry.parent_region.name == "Tower HQ"
-    # 
-    #     for loc in self.multiworld.get_locations(self.player):
-    #         if not loc.address or loc.parent_region.name in {"Tower HQ", "The Shop", "The Craftsman's Corner"}:
-    #             continue
-    #         hint_text = ""
-    #         region = loc.parent_region
-    #         while not hint_text.startswith("Tower HQ"):
-    #             self.po
-    #             hint_text = f"{region.name} -> {hint_text}" if hint_text else region.name
-    # 
-    #         hint_data[self.player] = {loc.address: hint_text}
+    def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]) -> None:
+        if not self.options.shuffle_transitions:
+            return
+
+        hint_data.update({self.player: {}})
+
+        all_state = self.multiworld.get_all_state(True)
+        # sometimes some of my regions aren't in path for some reason?
+        all_state.update_reachable_regions(self.player)
+        paths = all_state.path
+        start = self.multiworld.get_region("Tower HQ", self.player)
+        start_connections = [entrance.name for entrance in start.exits if entrance not in {"Home", "Shrink Down"}]
+        transition_names = [transition.name for transition in self.transitions] + start_connections
+        for loc in self.multiworld.get_locations(self.player):
+            if (loc.parent_region.name in {"Tower HQ", "The Shop", "Music Box", "The Craftsman's Corner"}
+                    or loc.address is None):
+                continue
+            path_to_loc = []
+            name, connection = paths[loc.parent_region]
+            while connection != ("Menu", None):
+                name, connection = connection
+                if name in transition_names:
+                    path_to_loc.append(name)
+
+            text = ""
+            for transition in reversed(path_to_loc):
+                text += f"{transition} => "
+            text = text.rstrip("=> ")
+            hint_data[self.player][loc.address] = text
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data = {
