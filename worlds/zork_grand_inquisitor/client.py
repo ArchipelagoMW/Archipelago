@@ -1,5 +1,4 @@
 import asyncio
-import argparse
 
 import CommonClient
 import NetUtils
