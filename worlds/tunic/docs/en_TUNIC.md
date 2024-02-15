@@ -14,8 +14,10 @@ It is recommended that you achieve both endings in the vanilla game before playi
 In the TUNIC Randomizer, every item in the game is randomized. All chests, key item pickups, instruction manual pages, hero relics,
 and other unique items are shuffled.<br>
 
-Ability shuffling is an option available from the options page to shuffle certain abilities (prayer, holy cross, and the ice rod combo),
+Ability shuffling is an option available from the options page to shuffle certain abilities (prayer, holy cross, and the icebolt combo),
 preventing them from being used until they are unlocked.<br>
+
+Entrances can also be randomized, shuffling the connections between every door, teleporter, etc. in the game.
 
 Enemy randomization and other options are also available and can be turned on in the client mod.
 
@@ -49,7 +51,7 @@ There is also a [standalone item tracker](https://github.com/radicoon/tunic-rand
 - The Cathedral is accessible during the day by using the Hero's Laurels to reach the Overworld fuse near the Swamp entrance.
 - The Secret Legend chest at the Cathedral can be obtained during the day by opening the Holy Cross door from the outside.
 
-For Entrance Rando specifically:
+For the Entrance Randomizer:
 - Activating a fuse to turn on a yellow teleporter pad also activates its counterpart in the Far Shore.
 - The West Garden fuse can be activated from below.
 - You can pray at the tree at the exterior of the Library.
@@ -58,7 +60,7 @@ For Entrance Rando specifically:
 - The elevator in Cathedral is immediately usable without activating the fuse. Activating the fuse does nothing.
 
 ## What item groups are there?
-Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, ice rod, and progressive sword.
+Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, icebolt, and progressive sword.
 
 ## What location groups are there?
 Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), and shop. Additionally, for checks that do not fall into the above categories, the name of the region is the name of the location group.
