@@ -114,7 +114,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
                         location.item = None
                         placed_item.location = None
-                        swap_state = sweep_from_pool(base_state, [placed_item] if unsafe else [],
+                        swap_state = sweep_from_pool(base_state, [placed_item, *item_pool] if unsafe else item_pool,
                                                      multiworld.get_filled_locations(item.player)
                                                      if single_player_placement else None)
                         # unsafe means swap_state assumes we can somehow collect placed_item before item_to_place
