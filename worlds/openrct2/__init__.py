@@ -85,54 +85,29 @@ class OpenRCT2World(World):
                       self.multiworld.forbid_tree_removal[self.player].value]
         # Grabs options for item generation
         scenario = self.multiworld.scenario[self.player].value
+        new_scenario = ""
         # If the scenario is random, pick which random scenario it will be
         if scenario == 143:  # RCT1
-            new_scenario = random.randint(0, 21)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["rct1"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 144:  # Corkscrew Follies
-            new_scenario = random.randint(22, 51)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["corkscrew_follies"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 145:  # Loopy Landscapes
-            new_scenario = random.randint(52, 81)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["loopy_landscapes"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 146:  # RCT2
-            new_scenario = random.randint(82, 107)
-            if new_scenario > 96:  # Throw extras in to capture the real parks later in the list
-                new_scenario += 35
-                if new_scenario == 136:  # Except ignore Fort Anachronism
-                    new_scenario = 142
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["rct2"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 147:  # Wacky Worlds
-            new_scenario = random.randint(97, 113)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["wacky_worlds"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 148:  # Time Twister
-            new_scenario = random.randint(114, 127)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["time_twister"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 149:  # Random RCT1 + Expansions
-            new_scenario = random.randint(0, 84)
-            if new_scenario == 82:  # Include the out of place numbers in the IntEnum
-                new_scenario = 128
-            elif new_scenario == 83:
-                new_scenario = 129
-            elif new_scenario == 84:
-                new_scenario = 130
-            elif new_scenario == 85:
-                new_scenario = 136
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["rct1_plus_expansions"] if scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 150:  # Random RCT2 + Expansions
-            new_scenario = random.randint(82, 142)
-            while new_scenario == 128 or new_scenario == 129 or \
-                    new_scenario == 130 or new_scenario == 136:  # Should have restructured the list, too late now! :D
-                new_scenario = random.randint(82, 142)
-            scenario = new_scenario
-            self.multiworld.scenario[self.player].value = new_scenario
+            elligible_scenarios = [scenario for scenario in scenario_info["rct2_plus_expansions"] if scenario not in scenario_info["unreasonable_scenarios"]]
+        #Finish assigning the scenario
+        new_scenario = str(random.choice(elligible_scenarios))
+        scenario = getattr(Scenario,new_scenario)
+        self.multiworld.scenario[self.player].value = scenario # Uses the Scenario IntEnum from Options
+
 
         monopoly_mode = self.multiworld.monopoly_mode[self.player].value
         include_gamespeed_items = self.multiworld.include_gamespeed_items[self.player].value

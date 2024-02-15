@@ -259,8 +259,9 @@ class LocationBalancing(Choice):
     option_full = LocationBalancingMode.full.value
     default = LocationBalancingMode.compromise.value
 
-class Scenario(Choice):
-    """Choose which scenario you'd like to play! Future updates will allow custom scenarios.
+class ChosenScenario(Choice):
+    """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
+    Future updates will allow custom scenarios.
     """
     auto_display_name = True
     display_name = "Scenario"
@@ -680,7 +681,7 @@ openRCT2_options = {
     "location_balancing": LocationBalancing,
     "difficulty": Difficulty,
     "scenario_length": Scenario_Length,
-    "scenario": Scenario,
+    "scenario": ChosenScenario,
     "filler": Filler,
 
     # deathlink
