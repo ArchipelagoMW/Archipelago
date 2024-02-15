@@ -90,9 +90,9 @@ def launch_game(url: Optional[str] = None) -> None:
     def install_mod() -> None:
         """Installs latest version of the mod"""
         get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
-        release_url = request_data(get_url)["assets"]["browser_download_url"]
+        release_url = request_data(get_url)["assets"][0]["browser_download_url"]
 
-        mod_folder = os.path.join(folder, "Mods", "TheMessengerRandomizerAP")
+        mod_folder = os.path.join(folder, "Mods")
         os.makedirs(mod_folder, exist_ok=True)
         with urllib.request.urlopen(release_url) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
