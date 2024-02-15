@@ -9,6 +9,8 @@
 
 ## Installation
 
+Read changes to the base game on the [Game Info Page](/games/The%20Messenger/info/en)
+
 ### Automated Installation
 
 1. Download and install the latest [Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
@@ -58,5 +60,5 @@ At any point while playing, it is completely safe to quit. Returning to the titl
 disconnect you from the server. To reconnect to an in progress MultiWorld, simply load the correct save file for that
 MultiWorld.
 
-If the reconnection fails, the message on screen will state you are disconnected. If this happens, a connect button will
-be added to the in game `Archipelago Options` menu. 
+If the reconnection fails, the message on screen will state you are disconnected. If this happens, the game will attempt
+to reconnect in the background. An option will also be added to the in game menu to change the port, if necessary.
