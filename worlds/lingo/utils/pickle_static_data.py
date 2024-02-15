@@ -421,9 +421,9 @@ def process_room(room_name, room_data):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        ll1_path = "worlds/lingo/data/LL1.yaml"
-        ids_path = "worlds/lingo/data/ids.yaml"
-        output_path = "worlds/lingo/data/generated.dat"
+        ll1_path = os.path.join("worlds", "lingo", "data", "LL1.yaml")
+        ids_path = os.path.join("worlds", "lingo", "data", "ids.yaml")
+        output_path = os.path.join("worlds", "lingo", "data", "generated.dat")
     elif len(sys.argv) != 4:
         print("")
         print("Usage: python3 -m worlds.lingo.utils.pickle_static_data [args]")
