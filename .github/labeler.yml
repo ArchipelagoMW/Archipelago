@@ -27,4 +27,7 @@
     - '!WebHostLib/**'
   - any-glob-to-any-file: # exceptions to the above rules of "stuff that isn't core"
     - 'worlds/generic/**/*.py'
+    - 'worlds/Files.py'
+    - 'worlds/AutoWorld.py'
+    - 'worlds/__init__.py'
     - 'CommonClient.py'
