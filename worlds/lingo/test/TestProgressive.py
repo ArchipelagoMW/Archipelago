@@ -7,6 +7,8 @@ class TestComplexProgressiveHallwayRoom(LingoTestBase):
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -58,6 +60,8 @@ class TestSimpleHallwayRoom(LingoTestBase):
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Outside The Agreeable", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (2)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Hallway Room (3)", "Region", self.player))
@@ -81,10 +85,13 @@ class TestSimpleHallwayRoom(LingoTestBase):
 
 class TestProgressiveArtGallery(LingoTestBase):
     options = {
-        "shuffle_doors": "complex"
+        "shuffle_doors": "complex",
+        "shuffle_colors": "false",
     }
 
     def test_item(self):
+        self.remove_forced_good_item()
+
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))
@@ -135,7 +142,7 @@ class TestProgressiveArtGallery(LingoTestBase):
         self.assertTrue(self.can_reach_location("Art Gallery - ONE ROAD MANY TURNS"))
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Fifth Floor", "Region", self.player))
 
-        self.collect(progressive_gallery_room[4])
+        self.collect_by_name("Orange Tower Fifth Floor - Quadruple Intersection")
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Second Floor)", "Region", self.player))
         self.assertTrue(self.multiworld.state.can_reach("Art Gallery (Third Floor)", "Region", self.player))

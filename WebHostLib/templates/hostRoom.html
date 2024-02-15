@@ -3,6 +3,16 @@
 {% block head %}
     <title>Multiworld {{ room.id|suuid }}</title>
     {% if should_refresh %}<meta http-equiv="refresh" content="2">{% endif %}
+    <meta name="og:site_name" content="Archipelago">
+    <meta property="og:title" content="Multiworld {{ room.id|suuid }}">
+    <meta property="og:type" content="website" />
+    {% if room.seed.slots|length < 2 %}
+    <meta property="og:description" content="{{ room.seed.slots|length }} Player World
+    {% if room.last_port != -1 %}running on {{ config['HOST_ADDRESS'] }} with port {{ room.last_port }}{% endif %}">
+    {% else %}
+    <meta property="og:description" content="{{ room.seed.slots|length }} Players Multiworld
+    {% if room.last_port != -1 %}running on {{ config['HOST_ADDRESS'] }} with port {{ room.last_port }}{% endif %}">
+    {% endif %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/hostRoom.css") }}"/>
 {% endblock %}
 

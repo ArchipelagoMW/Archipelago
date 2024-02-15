@@ -246,7 +246,8 @@ class Factorio(World):
                 location.access_rule = lambda state, ingredient=ingredient, custom_recipe=custom_recipe: \
                     (ingredient not in technology_table or state.has(ingredient, player)) and \
                     all(state.has(technology.name, player) for sub_ingredient in custom_recipe.ingredients
-                        for technology in required_technologies[sub_ingredient])
+                        for technology in required_technologies[sub_ingredient]) and \
+                    all(state.has(technology.name, player) for technology in required_technologies[custom_recipe.crafting_machine])
             else:
                 location.access_rule = lambda state, ingredient=ingredient: \
                     all(state.has(technology.name, player) for technology in required_technologies[ingredient])
