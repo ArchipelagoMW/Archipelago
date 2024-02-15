@@ -189,7 +189,7 @@ class MessengerOptions(PerGameCommonOptions):
     early_meditation: EarlyMed
     available_portals: AvailablePortals
     shuffle_portals: ShufflePortals
-    shuffle_transitions: ShuffleTransitions
+    # shuffle_transitions: ShuffleTransitions
     goal: Goal
     music_box: MusicBox
     notes_needed: NotesNeeded

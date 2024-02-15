@@ -22,7 +22,7 @@ def launch_game(url: Optional[str] = None) -> None:
 
     def courier_installed() -> bool:
         """Check if Courier is installed"""
-        return os.path.exists(os.path.join(folder, "miniinstaller-log.txt"))
+        return os.path.exists(os.path.join(folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.Courier.mm.dll"))
 
     def mod_installed() -> bool:
         """Check if the mod is installed"""
@@ -49,7 +49,8 @@ def launch_game(url: Optional[str] = None) -> None:
     
         with urllib.request.urlopen(latest_download) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
-                zf.extractall(folder)
+                for member in zf.infolist():
+                    zf.extract(member, path=folder)
     
         working_directory = os.getcwd()
         os.chdir(folder)
@@ -59,12 +60,13 @@ def launch_game(url: Optional[str] = None) -> None:
             if not mono_exe:
                 # download and use mono kickstart
                 # this allows steam deck support
-                mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/main.zip"
+                mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/master.zip"
                 target = os.path.join(folder, "monoKickstart")
                 with urllib.request.urlopen(mono_kick_url) as download:
                     with ZipFile(io.BytesIO(download.read()), "r") as zf:
                         os.makedirs(target, exist_ok=True)
-                        zf.extractall(target)
+                        for member in zf.infolist():
+                            zf.extract(member, path=target)
                 installer = subprocess.Popen([os.path.join(target, "precompiled"),
                                               os.path.join(folder, "MiniInstaller.exe")], shell=False)
             else:
@@ -87,60 +89,30 @@ def launch_game(url: Optional[str] = None) -> None:
 
     def install_mod() -> None:
         """Installs latest version of the mod"""
-        # TODO: add /latest before actual PR since i want pre-releases for now
-        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
-        assets = request_data(get_url)[0]["assets"]
-        for asset in assets:
-            if "TheMessengerRandomizerAP" in asset["name"]:
-                release_url = asset["browser_download_url"]
-                break
-        else:
-            messagebox("Failure!", "something went wrong while trying to get latest mod version")
-            logging.error(assets)
-            return
+        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
+        release_url = request_data(get_url)["assets"]["browser_download_url"]
 
+        mod_folder = os.path.join(folder, "Mods", "TheMessengerRandomizerAP")
+        os.makedirs(mod_folder, exist_ok=True)
         with urllib.request.urlopen(release_url) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
-                zf.extractall(folder)
+                for member in zf.infolist():
+                    zf.extract(member, path=mod_folder)
 
         messagebox("Success!", "Latest mod successfully installed!")
 
     def available_mod_update() -> bool:
         """Check if there's an available update"""
-        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases"
-        assets = request_data(get_url)[0]["assets"]
-        # TODO simplify once we're done with 0.13.0 alpha
-        for asset in assets:
-            if "TheMessengerRandomizerAP" in asset["name"]:
-                if asset["label"]:
-                    latest_version = asset["label"]
-                    break
-                names = asset["name"].strip(".zip").split("-")
-                if len(names) > 2:
-                    if names[-1].isnumeric():
-                        latest_version = names[-1]
-                        break
-                    latest_version = 1
-                    break
-                latest_version = names[1]
-                break
-        else:
-            return False
+        get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
+        latest_version: str = request_data(get_url)["tag_name"].lstrip("v")
 
         toml_path = os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
         with open(toml_path, "r") as f:
             installed_version = f.read().splitlines()[1].strip("version = \"")
 
         logging.info(f"Installed version: {installed_version}. Latest version: {latest_version}")
-        if not installed_version.isnumeric():
-            if installed_version[-1].isnumeric():
-                installed_version = installed_version[-1]
-            else:
-                installed_version = 1
-            return int(latest_version) > int(installed_version)
-        elif int(latest_version) >= 1:
-            return True
-        return tuplize_version(latest_version) > tuplize_version(installed_version)
+        # one of the alpha builds
+        return not latest_version.isnumeric() or tuplize_version(latest_version) > tuplize_version(installed_version)
 
     from . import MessengerWorld
     folder = os.path.dirname(MessengerWorld.settings.game_path)

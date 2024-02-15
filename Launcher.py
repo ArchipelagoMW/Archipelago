@@ -16,11 +16,10 @@ import multiprocessing
 import shlex
 import subprocess
 import sys
-import urllib.parse
 import webbrowser
 from os.path import isfile
 from shutil import which
-from typing import Sequence, Tuple, Union, Optional
+from typing import Sequence, Union, Optional
 
 import Utils
 import settings
@@ -108,24 +107,9 @@ components.extend([
 ])
 
 
-def identify(path: Union[None, str]) -> Tuple[Union[None, str], Union[None, Component]]:
+def identify(path: Union[None, str]):
     if path is None:
         return None, None
-    if path.startswith("archipelago://"):
-        logging.info("found uri")
-        queries = urllib.parse.parse_qs(path)
-        if "game" in queries:
-            game = urllib.parse.parse_qs(path)["game"][0]
-        else:  # TODO around 0.5.0 - this is for pre this change webhost uri's
-            game = "Archipelago"
-        logging.info(game)
-        for component in components:
-            if component.supports_uri and component.game_name == game:
-                return path, component
-            elif component.display_name == "Text Client":
-                # fallback
-                text_client_component = component
-        return path, text_client_component
     for component in components:
         if component.handles_file(path):
             return path, component
@@ -269,15 +253,6 @@ def run_component(component: Component, *args):
         logging.warning(f"Component {component} does not appear to be executable.")
 
 
-def find_component(game: str) -> Component:
-    for component in components:
-        if component.game_name and component.game_name == game:
-            return component
-        elif component.display_name == "Text Client":
-            text_client_component = component
-    return text_client_component
-
-
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):
     if isinstance(args, argparse.Namespace):
         args = {k: v for k, v in args._get_kwargs()}
@@ -293,12 +268,11 @@ def main(args: Optional[Union[argparse.Namespace, dict]] = None):
         if not component:
             logging.warning(f"Could not identify Component responsible for {args['Patch|Game|Component']}")
 
-    
     if args["update_settings"]:
         update_settings()
-    if "file" in args:
+    if 'file' in args:
         run_component(args["component"], args["file"], *args["args"])
-    elif "component" in args:
+    elif 'component' in args:
         run_component(args["component"], *args["args"])
     elif not args["update_settings"]:
         run_gui()
