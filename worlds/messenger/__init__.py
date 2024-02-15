@@ -80,6 +80,36 @@ class MessengerWorld(World):
         "Phobe": set(PHOBEKINS),
         "Phobekin": set(PHOBEKINS),
     }
+    location_name_groups = {
+        "Notes": {
+            "Autumn Hills - Key of Hope",
+            "Searing Crags - Key of Strength",
+            "Underworld - Key of Chaos",
+            "Sunken Shrine - Key of Love",
+            "Elemental Skylands - Key of Symbiosis",
+            "Corrupted Future - Key of Courage",
+        },
+        "Keys": {
+            "Autumn Hills - Key of Hope",
+            "Searing Crags - Key of Strength",
+            "Underworld - Key of Chaos",
+            "Sunken Shrine - Key of Love",
+            "Elemental Skylands - Key of Symbiosis",
+            "Corrupted Future - Key of Courage",
+        },
+        "Phobe": {
+            "Catacombs - Necro",
+            "Bamboo Creek - Claustro",
+            "Searing Crags - Pyro",
+            "Cloud Ruins - Acro",
+        },
+        "Phobekin": {
+            "Catacombs - Necro",
+            "Bamboo Creek - Claustro",
+            "Searing Crags - Pyro",
+            "Cloud Ruins - Acro",
+        },
+    }
 
     required_client_version = (0, 4, 3)
 
