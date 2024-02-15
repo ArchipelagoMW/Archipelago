@@ -1,6 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, Set
 from worlds.lingo.datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
 
+import hashlib
 import pickle
 import sys
 import Utils
@@ -26,6 +27,19 @@ DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_ITEM_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
+
+
+def hash_file(path):
+    md5 = hashlib.md5()
+    
+    with open(path, 'rb') as f:
+        while True:
+            data = f.read(65536)
+            if not data:
+                break
+            md5.update(data)
+    
+    return md5.hexdigest()
 
 
 def load_static_data(ll1_path, ids_path):
@@ -426,7 +440,13 @@ if __name__ == '__main__':
         
     load_static_data(ll1_path, ids_path)
     
+    hashes = {
+        "LL1.yaml": hash_file(ll1_path),
+        "ids.yaml": hash_file(ids_path),
+    }
+    
     pickdata = {
+        "HASHES": hashes,
         "PAINTINGS": PAINTINGS,
         "ALL_ROOMS": ALL_ROOMS,
         "DOORS_BY_ROOM": DOORS_BY_ROOM,
