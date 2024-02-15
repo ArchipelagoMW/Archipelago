@@ -11,7 +11,7 @@ class TestDatafile(unittest.TestCase):
 
         assert (
             ll1_file_hash == HASHES["LL1.yaml"]
-        ), "LL1.yaml hash does not match generated.dat. Please regenerate using 'python -m worlds.lingo.pickle_static_data'"
+        ), "LL1.yaml hash does not match generated.dat. Please regenerate using 'python -m worlds.lingo.utils.pickle_static_data'"
         assert (
             ids_file_hash == HASHES["ids.yaml"]
-        ), "ids.yaml hash does not match generated.dat. Please regenerate using 'python -m worlds.lingo.pickle_static_data'"
+        ), "ids.yaml hash does not match generated.dat. Please regenerate using 'python -m worlds.lingo.utils.pickle_static_data'"
