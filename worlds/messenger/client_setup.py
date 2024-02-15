@@ -62,13 +62,14 @@ def launch_game(url: Optional[str] = None) -> None:
                 # this allows steam deck support
                 mono_kick_url = "https://github.com/flibitijibibo/MonoKickstart/archive/refs/heads/master.zip"
                 target = os.path.join(folder, "monoKickstart")
+                os.makedirs(target, exist_ok=True)
                 with urllib.request.urlopen(mono_kick_url) as download:
                     with ZipFile(io.BytesIO(download.read()), "r") as zf:
-                        os.makedirs(target, exist_ok=True)
                         for member in zf.infolist():
                             zf.extract(member, path=target)
                 installer = subprocess.Popen([os.path.join(target, "precompiled"),
                                               os.path.join(folder, "MiniInstaller.exe")], shell=False)
+                os.remove(target)
             else:
                 installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
         else:
