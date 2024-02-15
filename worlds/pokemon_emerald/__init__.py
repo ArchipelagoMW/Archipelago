@@ -279,6 +279,7 @@ class PokemonEmeraldWorld(World):
             def refresh_tm_choices() -> None:
                 fill_item_candidates_by_category["TM"] = all_tm_choices.copy()
                 self.random.shuffle(fill_item_candidates_by_category["TM"])
+            refresh_tm_choices()
 
             # Create items
             for item in default_itempool:
