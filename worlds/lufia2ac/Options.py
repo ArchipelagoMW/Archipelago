@@ -1,13 +1,16 @@
 from __future__ import annotations
 
+import functools
+import numbers
 import random
 from dataclasses import dataclass
 from itertools import accumulate, chain, combinations
 from typing import Any, cast, Dict, Iterator, List, Mapping, Optional, Set, Tuple, Type, TYPE_CHECKING, Union
 
-from Options import AssembleOptions, Choice, DeathLink, ItemDict, PerGameCommonOptions, Range, SpecialRange, \
+from Options import AssembleOptions, Choice, DeathLink, ItemDict, NamedRange, OptionDict, PerGameCommonOptions, Range, \
     TextChoice, Toggle
 from .Enemies import enemy_name_to_sprite
+from .Items import ItemType, l2ac_item_table
 
 if TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -118,6 +121,7 @@ class BlueChestCount(Range):
     range_start = 10
     range_end = 100
     default = 25
+    overall_max = range_end + 7 + 6  # Have to account for capsule monster and party member items
 
 
 class Boss(RandomGroupsChoice):
@@ -251,7 +255,7 @@ class CapsuleCravingsJPStyle(Toggle):
     display_name = "Capsule cravings JP style"
 
 
-class CapsuleStartingForm(SpecialRange):
+class CapsuleStartingForm(NamedRange):
     """The starting form of your capsule monsters.
 
     Supported values: 1 – 4, m
@@ -262,7 +266,6 @@ class CapsuleStartingForm(SpecialRange):
     range_start = 1
     range_end = 5
     default = 1
-    special_range_cutoff = 1
     special_range_names = {
         "default": 1,
         "m": 5,
@@ -276,7 +279,7 @@ class CapsuleStartingForm(SpecialRange):
             return self.value - 1
 
 
-class CapsuleStartingLevel(LevelMixin, SpecialRange):
+class CapsuleStartingLevel(LevelMixin, NamedRange):
     """The starting level of your capsule monsters.
 
     Can be set to the special value party_starting_level to make it the same value as the party_starting_level option.
@@ -285,10 +288,9 @@ class CapsuleStartingLevel(LevelMixin, SpecialRange):
     """
 
     display_name = "Capsule monster starting level"
-    range_start = 0
+    range_start = 1
     range_end = 99
     default = 1
-    special_range_cutoff = 1
     special_range_names = {
         "default": 1,
         "party_starting_level": 0,
@@ -558,6 +560,25 @@ class Goal(Choice):
     default = option_boss
 
 
+class GoldModifier(Range):
+    """Percentage modifier for gold gained from enemies.
+
+    Supported values: 25 – 400
+    Default value: 100 (same as in an unmodified game)
+    """
+
+    display_name = "Gold modifier"
+    range_start = 25
+    range_end = 400
+    default = 100
+
+    def __call__(self, gold: bytes) -> bytes:
+        try:
+            return (int.from_bytes(gold, "little") * self.value // 100).to_bytes(2, "little")
+        except OverflowError:
+            return b"\xFF\xFF"
+
+
 class HealingFloorChance(Range):
     """The chance of a floor having a healing tile hidden under a bush.
 
@@ -662,6 +683,104 @@ class RunSpeed(Choice):
     default = option_disabled
 
 
+class ShopInterval(NamedRange):
+    """Place shops after a certain number of floors.
+
+    E.g., if you set this to 5, then you will be given the opportunity to shop after completing B5, B10, B15, etc.,
+    whereas if you set it to 1, then there will be a shop after every single completed floor.
+    Shops will offer a random selection of wares; on deeper floors, more expensive items might appear.
+    You can customize the stock that can appear in shops using the shop_inventory option.
+    You can control how much gold you will be obtaining from enemies using the gold_multiplier option.
+    Supported values: disabled, 1 – 10
+    Default value: disabled (same as in an unmodified game)
+    """
+
+    display_name = "Shop interval"
+    range_start = 1
+    range_end = 10
+    default = 0
+    special_range_names = {
+        "disabled": 0,
+    }
+
+
+class ShopInventory(OptionDict):
+    """Determine the item types that can appear in shops.
+
+    The value of this option should be a mapping of item categories (or individual items) to weights (non-negative
+    integers), which are used as relative probabilities when it comes to including these things in shops. (The actual
+    contents of the generated shops are selected randomly and are subject to additional constraints such as more
+    expensive things being allowed only on later floors.)
+    Supported keys:
+    non_restorative — a selection of mostly non-restorative red chest consumables
+    restorative — all HP- or MP-restoring red chest consumables
+    blue_chest — all blue chest items
+    spell — all red chest spells
+    gear — all red chest armors, shields, headgear, rings, and rocks (this respects the gear_variety_after_b9 option,
+        meaning that you will not encounter any shields, headgear, rings, or rocks in shops from B10 onward unless you
+        also enabled that option)
+    weapon — all red chest weapons
+    Additionally, you can also add extra weights for any specific cave item. If you want your shops to have a
+    higher than normal chance of selling a Dekar blade, you can, e.g., add "Dekar blade: 5".
+    You can even forego the predefined categories entirely and design a custom shop pool from scratch by providing
+    separate weights for each item you want to include.
+    (Spells, however, cannot be weighted individually and are only available as part of the "spell" category.)
+    Default value: {spell: 30, gear: 45, weapon: 82}
+    """
+
+    display_name = "Shop inventory"
+    _special_keys = {"non_restorative", "restorative", "blue_chest", "spell", "gear", "weapon"}
+    valid_keys = _special_keys | {item for item, data in l2ac_item_table.items()
+                                  if data.type in {ItemType.BLUE_CHEST, ItemType.ENEMY_DROP, ItemType.ENTRANCE_CHEST,
+                                                   ItemType.RED_CHEST, ItemType.RED_CHEST_PATCH}}
+    default: Dict[str, int] = {
+        "spell": 30,
+        "gear": 45,
+        "weapon": 82,
+    }
+    value: Dict[str, int]
+
+    def verify(self, world: Type[World], player_name: str, plando_options: PlandoOptions) -> None:
+        super().verify(world, player_name, plando_options)
+        for item, weight in self.value.items():
+            if not isinstance(weight, numbers.Integral) or weight < 0:
+                raise Exception(f"Weight for item \"{item}\" from option {self} must be a non-negative integer, "
+                                f"but was \"{weight}\".")
+
+    @property
+    def total(self) -> int:
+        return sum(self.value.values())
+
+    @property
+    def non_restorative(self) -> int:
+        return self.value.get("non_restorative", 0)
+
+    @property
+    def restorative(self) -> int:
+        return self.value.get("restorative", 0)
+
+    @property
+    def blue_chest(self) -> int:
+        return self.value.get("blue_chest", 0)
+
+    @property
+    def spell(self) -> int:
+        return self.value.get("spell", 0)
+
+    @property
+    def gear(self) -> int:
+        return self.value.get("gear", 0)
+
+    @property
+    def weapon(self) -> int:
+        return self.value.get("weapon", 0)
+
+    @functools.cached_property
+    def custom(self) -> Dict[int, int]:
+        return {l2ac_item_table[item].code & 0x01FF: weight for item, weight in self.value.items()
+                if item not in self._special_keys}
+
+
 class ShuffleCapsuleMonsters(Toggle):
     """Shuffle the capsule monsters into the multiworld.
 
@@ -717,6 +836,7 @@ class L2ACOptions(PerGameCommonOptions):
     final_floor: FinalFloor
     gear_variety_after_b9: GearVarietyAfterB9
     goal: Goal
+    gold_modifier: GoldModifier
     healing_floor_chance: HealingFloorChance
     initial_floor: InitialFloor
     iris_floor_chance: IrisFloorChance
@@ -724,5 +844,7 @@ class L2ACOptions(PerGameCommonOptions):
     master_hp: MasterHp
     party_starting_level: PartyStartingLevel
     run_speed: RunSpeed
+    shop_interval: ShopInterval
+    shop_inventory: ShopInventory
     shuffle_capsule_monsters: ShuffleCapsuleMonsters
     shuffle_party_members: ShufflePartyMembers

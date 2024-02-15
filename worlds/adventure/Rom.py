@@ -6,9 +6,8 @@ from typing import Optional, Any
 
 import Utils
 from .Locations import AdventureLocation, LocationData
-from Utils import OptionsType
+from settings import get_settings
 from worlds.Files import APDeltaPatch, AutoPatchRegister, APContainer
-from itertools import chain
 
 import bsdiff4
 
@@ -313,9 +312,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: OptionsType = Utils.get_options()
     if not file_name:
-        file_name = options["adventure_options"]["rom_file"]
+        file_name = get_settings()["adventure_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name

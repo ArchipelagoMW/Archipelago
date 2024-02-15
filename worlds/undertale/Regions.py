@@ -24,6 +24,7 @@ undertale_regions = [
     ("True Lab", []),
     ("Core", ["Core Exit"]),
     ("New Home", ["New Home Exit"]),
+    ("Last Corridor", ["Last Corridor Exit"]),
     ("Barrier", []),
 ]
 
@@ -40,7 +41,8 @@ mandatory_connections = [
     ("News Show Entrance", "News Show"),
     ("Lab Elevator", "True Lab"),
     ("Core Exit", "New Home"),
-    ("New Home Exit", "Barrier"),
+    ("New Home Exit", "Last Corridor"),
+    ("Last Corridor Exit", "Barrier"),
     ("Snowdin Hub", "Snowdin Forest"),
     ("Waterfall Hub", "Waterfall"),
     ("Hotland Hub", "Hotland"),

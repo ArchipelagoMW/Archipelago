@@ -82,7 +82,7 @@ debe tener al menos un valor mayor que cero, si no la generación fallará.
 ### Verificando tu archivo YAML
 
 Si quieres validar que tu fichero YAML para asegurarte que funciona correctamente, puedes hacerlo en la pagina
-[YAML Validator](/mysterycheck).
+[YAML Validator](/check).
 
 ## Generar una partida para un jugador
 

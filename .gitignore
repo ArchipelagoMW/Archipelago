@@ -9,12 +9,14 @@
 *.apmc
 *.apz5
 *.aptloz
+*.apemerald
 *.pyc
 *.pyd
 *.sfc
 *.z64
 *.n64
 *.nes
+*.smc
 *.sms
 *.gb
 *.gbc

@@ -1,5 +1,5 @@
 from BaseClasses import CollectionState, ItemClassification
-from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import mandatory_connections, connect_simple
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory

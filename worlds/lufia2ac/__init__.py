@@ -9,14 +9,14 @@ from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, 
 from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.generic.Rules import add_rule, CollectionRule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation
 from .Options import CapsuleStartingLevel, DefaultParty, EnemyFloorNumbers, EnemyMovementPatterns, EnemySprites, \
-    ExpModifier, Goal, L2ACOptions
+    Goal, L2ACOptions
 from .Rom import get_base_rom_bytes, get_base_rom_path, L2ACDeltaPatch
-from .Utils import constrained_choices, constrained_shuffle
+from .Utils import constrained_choices, constrained_shuffle, weighted_sample
 from .basepatch import apply_basepatch
 
 CHESTS_PER_SPHERE: int = 5
@@ -66,7 +66,7 @@ class L2ACWorld(World):
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
     data_version: ClassVar[int] = 2
-    required_client_version: Tuple[int, int, int] = (0, 4, 2)
+    required_client_version: Tuple[int, int, int] = (0, 4, 4)
 
     # L2ACWorld specific properties
     rom_name: bytearray
@@ -117,6 +117,7 @@ class L2ACWorld(World):
                 L2ACLocation(self.player, f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", None, ancient_dungeon)
             chest_access.place_locked_item(
                 L2ACItem("Progressive chest access", ItemClassification.progression, None, self.player))
+            chest_access.show_in_spoiler = False
             ancient_dungeon.locations.append(chest_access)
         for iris in self.item_name_groups["Iris treasures"]:
             treasure_name: str = f"Iris treasure {self.item_name_to_id[iris] - self.item_name_to_id['Iris sword'] + 1}"
@@ -153,23 +154,23 @@ class L2ACWorld(World):
             self.multiworld.itempool.append(self.create_item(item_name))
 
     def set_rules(self) -> None:
-        for i in range(1, self.o.blue_chest_count):
-            if i % CHESTS_PER_SPHERE == 0:
-                set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
-                         lambda state, j=i: state.has("Progressive chest access", self.player, j // CHESTS_PER_SPHERE))
-                set_rule(self.multiworld.get_location(f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", self.player),
-                         lambda state, j=i: state.can_reach(f"Blue chest {j}", "Location", self.player))
-            else:
-                set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
-                         lambda state, j=i: state.can_reach(f"Blue chest {j}", "Location", self.player))
+        max_sphere: int = (self.o.blue_chest_count - 1) // CHESTS_PER_SPHERE + 1
+        rule_for_sphere: Dict[int, CollectionRule] = \
+            {sphere: lambda state, s=sphere: state.has("Progressive chest access", self.player, s - 1)
+             for sphere in range(2, max_sphere + 1)}
 
-        set_rule(self.multiworld.get_entrance("FinalFloorEntrance", self.player),
-                 lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
+        for i in range(CHESTS_PER_SPHERE * 2, self.o.blue_chest_count, CHESTS_PER_SPHERE):
+            set_rule(self.multiworld.get_location(f"Chest access {i + 1}-{i + CHESTS_PER_SPHERE}", self.player),
+                     rule_for_sphere[i // CHESTS_PER_SPHERE])
+        for i in range(CHESTS_PER_SPHERE, self.o.blue_chest_count):
+            set_rule(self.multiworld.get_location(f"Blue chest {i + 1}", self.player),
+                     rule_for_sphere[i // CHESTS_PER_SPHERE + 1])
+
+        set_rule(self.multiworld.get_entrance("FinalFloorEntrance", self.player), rule_for_sphere[max_sphere])
         for i in range(9):
-            set_rule(self.multiworld.get_location(f"Iris treasure {i + 1}", self.player),
-                     lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
-        set_rule(self.multiworld.get_location("Boss", self.player),
-                 lambda state: state.can_reach(f"Blue chest {self.o.blue_chest_count}", "Location", self.player))
+            set_rule(self.multiworld.get_location(f"Iris treasure {i + 1}", self.player), rule_for_sphere[max_sphere])
+        set_rule(self.multiworld.get_location("Boss", self.player), rule_for_sphere[max_sphere])
+
         if self.o.shuffle_capsule_monsters:
             add_rule(self.multiworld.get_location("Boss", self.player), lambda state: state.has("DARBI", self.player))
         if self.o.shuffle_party_members:
@@ -222,6 +223,7 @@ class L2ACWorld(World):
             rom_bytearray[0x09D59B:0x09D59B + 256] = self.get_node_connection_table()
             rom_bytearray[0x0B05C0:0x0B05C0 + 18843] = self.get_enemy_stats()
             rom_bytearray[0x0B4F02:0x0B4F02 + 2] = self.o.master_hp.value.to_bytes(2, "little")
+            rom_bytearray[0x0BEE9F:0x0BEE9F + 1948] = self.get_shops()
             rom_bytearray[0x280010:0x280010 + 2] = self.o.blue_chest_count.value.to_bytes(2, "little")
             rom_bytearray[0x280012:0x280012 + 3] = self.o.capsule_starting_level.xp.to_bytes(3, "little")
             rom_bytearray[0x280015:0x280015 + 1] = self.o.initial_floor.value.to_bytes(1, "little")
@@ -229,6 +231,7 @@ class L2ACWorld(World):
             rom_bytearray[0x280017:0x280017 + 1] = self.o.iris_treasures_required.value.to_bytes(1, "little")
             rom_bytearray[0x280018:0x280018 + 1] = self.o.shuffle_party_members.unlock.to_bytes(1, "little")
             rom_bytearray[0x280019:0x280019 + 1] = self.o.shuffle_capsule_monsters.unlock.to_bytes(1, "little")
+            rom_bytearray[0x28001A:0x28001A + 1] = self.o.shop_interval.value.to_bytes(1, "little")
             rom_bytearray[0x280030:0x280030 + 1] = self.o.goal.value.to_bytes(1, "little")
             rom_bytearray[0x28003D:0x28003D + 1] = self.o.death_link.value.to_bytes(1, "little")
             rom_bytearray[0x281200:0x281200 + 470] = self.get_capsule_cravings_table()
@@ -357,7 +360,7 @@ class L2ACWorld(World):
     def get_enemy_stats(self) -> bytes:
         rom: bytes = get_base_rom_bytes()
 
-        if self.o.exp_modifier == ExpModifier.default:
+        if self.o.exp_modifier == 100 and self.o.gold_modifier == 100:
             return rom[0x0B05C0:0x0B05C0 + 18843]
 
         number_of_enemies: int = 224
@@ -366,6 +369,7 @@ class L2ACWorld(World):
         for enemy_id in range(number_of_enemies):
             pointer: int = int.from_bytes(enemy_stats[2 * enemy_id:2 * enemy_id + 2], "little")
             enemy_stats[pointer + 29:pointer + 31] = self.o.exp_modifier(enemy_stats[pointer + 29:pointer + 31])
+            enemy_stats[pointer + 31:pointer + 33] = self.o.gold_modifier(enemy_stats[pointer + 31:pointer + 33])
         return enemy_stats
 
     def get_goal_text_bytes(self) -> bytes:
@@ -382,6 +386,90 @@ class L2ACWorld(World):
         assert len(goal_text) <= 4 and all(len(line) <= 28 for line in goal_text), goal_text
         goal_text_bytes = bytes((0x08, *b"\x03".join(line.encode("ascii") for line in goal_text), 0x00))
         return goal_text_bytes + b"\x00" * (147 - len(goal_text_bytes))
+
+    def get_shops(self) -> bytes:
+        rom: bytes = get_base_rom_bytes()
+
+        if not self.o.shop_interval:
+            return rom[0x0BEE9F:0x0BEE9F + 1948]
+
+        non_restorative_ids = {int.from_bytes(rom[0x0A713D + 2 * i:0x0A713D + 2 * i + 2], "little") for i in range(31)}
+        restorative_ids = {int.from_bytes(rom[0x08FFDC + 2 * i:0x08FFDC + 2 * i + 2], "little") for i in range(9)}
+        blue_ids = {int.from_bytes(rom[0x0A6EA0 + 2 * i:0x0A6EA0 + 2 * i + 2], "little") for i in range(41)}
+        number_of_spells: int = 35
+        number_of_items: int = 467
+        spells_offset: int = 0x0AFA5B
+        items_offset: int = 0x0B4F69
+        non_restorative_list: List[List[int]] = [list() for _ in range(99)]
+        restorative_list: List[List[int]] = [list() for _ in range(99)]
+        blue_list: List[List[int]] = [list() for _ in range(99)]
+        spell_list: List[List[int]] = [list() for _ in range(99)]
+        gear_list: List[List[int]] = [list() for _ in range(99)]
+        weapon_list: List[List[int]] = [list() for _ in range(99)]
+        custom_list: List[List[int]] = [list() for _ in range(99)]
+
+        for spell_id in range(number_of_spells):
+            pointer: int = int.from_bytes(rom[spells_offset + 2 * spell_id:spells_offset + 2 * spell_id + 2], "little")
+            value: int = int.from_bytes(rom[spells_offset + pointer + 15:spells_offset + pointer + 17], "little")
+            for f in range(value // 1000, 99):
+                spell_list[f].append(spell_id)
+        for item_id in range(number_of_items):
+            pointer = int.from_bytes(rom[items_offset + 2 * item_id:items_offset + 2 * item_id + 2], "little")
+            buckets: List[List[List[int]]] = list()
+            if item_id in non_restorative_ids:
+                buckets.append(non_restorative_list)
+            if item_id in restorative_ids:
+                buckets.append(restorative_list)
+            if item_id in blue_ids:
+                buckets.append(blue_list)
+            if not rom[items_offset + pointer] & 0x20 and not rom[items_offset + pointer + 1] & 0x20:
+                category: int = rom[items_offset + pointer + 7]
+                if category >= 0x02:
+                    buckets.append(gear_list)
+                elif category == 0x01:
+                    buckets.append(weapon_list)
+            if item_id in self.o.shop_inventory.custom:
+                buckets.append(custom_list)
+            value = int.from_bytes(rom[items_offset + pointer + 5:items_offset + pointer + 7], "little")
+            for bucket in buckets:
+                for f in range(value // 1000, 99):
+                    bucket[f].append(item_id)
+
+        if not self.o.gear_variety_after_b9:
+            for f in range(99):
+                del gear_list[f][len(gear_list[f]) % 128:]
+
+        def create_shop(floor: int) -> Tuple[int, ...]:
+            if self.random.randrange(self.o.shop_inventory.total) < self.o.shop_inventory.spell:
+                return create_spell_shop(floor)
+            else:
+                return create_item_shop(floor)
+
+        def create_spell_shop(floor: int) -> Tuple[int, ...]:
+            spells = self.random.sample(spell_list[floor], 3)
+            return 0x03, 0x20, 0x00, *spells, 0xFF
+
+        def create_item_shop(floor: int) -> Tuple[int, ...]:
+            population = non_restorative_list[floor] + restorative_list[floor] + blue_list[floor] \
+                         + gear_list[floor] + weapon_list[floor] + custom_list[floor]
+            weights = itertools.chain(*([weight / len_] * len_ if (len_ := len(list_)) else [] for weight, list_ in
+                                        [(self.o.shop_inventory.non_restorative, non_restorative_list[floor]),
+                                         (self.o.shop_inventory.restorative, restorative_list[floor]),
+                                         (self.o.shop_inventory.blue_chest, blue_list[floor]),
+                                         (self.o.shop_inventory.gear, gear_list[floor]),
+                                         (self.o.shop_inventory.weapon, weapon_list[floor])]),
+                                      (self.o.shop_inventory.custom[item] for item in custom_list[floor]))
+            items = weighted_sample(population, weights, 5, random=self.random)
+            return 0x01, 0x04, 0x00, *(b for item in items for b in item.to_bytes(2, "little")), 0x00, 0x00
+
+        shops = [create_shop(floor)
+                 for floor in range(self.o.shop_interval, 99, self.o.shop_interval)
+                 for _ in range(self.o.shop_interval)]
+        shop_pointers = itertools.accumulate((len(shop) for shop in shops[:-1]), initial=2 * len(shops))
+        shop_bytes = bytes(itertools.chain(*(p.to_bytes(2, "little") for p in shop_pointers), *shops))
+
+        assert len(shop_bytes) <= 1948, shop_bytes
+        return shop_bytes.ljust(1948, b"\x00")
 
     @staticmethod
     def get_node_connection_table() -> bytes:

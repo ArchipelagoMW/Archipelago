@@ -3,7 +3,7 @@ import os
 from typing import Optional
 
 import Utils
-from Utils import OptionsType
+from settings import get_settings
 from worlds.Files import APDeltaPatch
 
 L2USHASH: str = "6efc477d6203ed2b3b9133c1cd9e9c5d"
@@ -35,9 +35,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: OptionsType = Utils.get_options()
     if not file_name:
-        file_name = options["lufia2ac_options"]["rom_file"]
+        file_name = get_settings()["lufia2ac_options"]["rom_file"]
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
