@@ -28,12 +28,12 @@ DOOR_GROUP_ITEM_IDS: Dict[str, int] = {}
 PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 
-def load_static_data():
+def load_static_data(ll1_path, ids_path):
     global PAINTING_EXITS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, \
         DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
 
     # Load in all item and location IDs. These are broken up into groups based on the type of item/location.
-    with open(sys.argv[2], "r") as file:
+    with open(ids_path, "r") as file:
         config = Utils.parse_yaml(file)
 
         if "special_items" in config:
@@ -68,7 +68,7 @@ def load_static_data():
                 PROGRESSIVE_ITEM_IDS[item_name] = item_id
 
     # Process the main world file.
-    with open(sys.argv[1], "r") as file:
+    with open(ll1_path, "r") as file:
         config = Utils.parse_yaml(file)
 
         for room_name, room_data in config.items():
@@ -406,7 +406,11 @@ def process_room(room_name, room_data):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    if len(sys.argv) == 1:
+        ll1_path = "worlds/lingo/data/LL1.yaml"
+        ids_path = "worlds/lingo/data/ids.yaml"
+        output_path = "worlds/lingo/data/generated.dat"
+    elif len(sys.argv) != 4:
         print("")
         print("Usage: python3 -m worlds.lingo.utils.pickle_static_data [args]")
         print("Arguments:")
@@ -415,8 +419,12 @@ if __name__ == '__main__':
         print(" - Path to output file")
         
         exit()
+    else:
+        ll1_path = argv[1]
+        ids_path = argv[2]
+        output_path = argv[3]
         
-    load_static_data()
+    load_static_data(ll1_path, ids_path)
     
     pickdata = {
         "PAINTINGS": PAINTINGS,
@@ -438,5 +446,5 @@ if __name__ == '__main__':
         "PROGRESSIVE_ITEM_IDS": PROGRESSIVE_ITEM_IDS,
     }
     
-    with open(sys.argv[3], "wb") as file:
+    with open(output_path, "wb") as file:
         pickle.dump(pickdata, file)
