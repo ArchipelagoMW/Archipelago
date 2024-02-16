@@ -179,8 +179,7 @@ class TrapPercentage(Range):
 
 class TrapWeights(OptionDict):
     """Specify how many of your traps will be of each type.
-    If you set all trap weights to 0, you will get no traps, even if "Trap Percentage" is set to a number higher than
-    0."""
+    If you delete or set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
 
     display_name = "Trap Weights"
     schema = Schema({
