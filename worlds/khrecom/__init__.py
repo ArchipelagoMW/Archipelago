@@ -8,7 +8,6 @@ from .Options import KHRECOMOptions
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-import random
 
 
 
@@ -52,9 +51,9 @@ class KHRECOMWorld(World):
         self.multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
         self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
         starting_locations = get_locations_by_category("Starting")
-        starting_locations = random.sample(list(starting_locations.keys()),4)
+        starting_locations = self.random.sample(list(starting_locations.keys()),4)
         starting_worlds = get_items_by_category("World Unlocks", [])
-        starting_worlds = random.sample(list(starting_worlds.keys()),3)
+        starting_worlds = self.random.sample(list(starting_worlds.keys()),3)
         i = 0
         while i < 4:
             if i < 3:
@@ -105,7 +104,7 @@ class KHRECOMWorld(World):
             fillers.update(get_items_by_category("Days Enemy Cards", disclude))
         fillers.update(get_items_by_category("Sets", disclude))
         weights = [data.weight for data in fillers.values()]
-        return self.multiworld.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
+        return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
         
     def create_item(self, name: str) -> KHRECOMItem:
         data = item_table[name]
