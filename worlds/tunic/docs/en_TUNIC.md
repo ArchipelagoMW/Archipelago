@@ -22,7 +22,7 @@ Entrances can also be randomized, shuffling the connections between every door, 
 Enemy randomization and other options are also available and can be turned on in the client mod.
 
 ## What is the goal of TUNIC when randomized?
-The standard goal is the same as the vanilla game, which is to find the three hexagon keys, at which point you may either Take Your
+The standard goal is the same as the vanilla game. Find the three hexagon keys, then Take Your
 Rightful Place or seek another path and Share Your Wisdom.
 
 Alternatively, Hexagon Quest is a mode that shuffles a certain number of Gold Questagons into the item pool, with the goal 
