@@ -74,16 +74,20 @@ local STATE_UNINITIALIZED = "Uninitialized"
 local SCRIPT_VERSION = 1
 
 local ItemsReceived = {}
+local ItemsReceivedQueue = {}
 local MsgReceived = {}
 local last_item_processed = 1
 local last_processed_read = 1024
+local num_item_processed = 0
 local start_item_drawing = 0
 local misplaced_drawing = 0
+local num_misplaced_processed = 0
 local delay_timer = 0
 local checked_locations = {}
 local all_location_table = {}
 local bosses = {}
 local misplaced_items = {}
+local misplaced_items_queue = {}
 local misplaced_read = {}
 local last_misplaced_save = 0
 local last_misplaced_processed = 0
@@ -104,7 +108,7 @@ local frame = 0
 -- TODO: I guess there is a bug when the client try to send an item with a pause screen active
 -- Display msg had some issues when items are sent on misplaced locations
 -- Looks like there is a bug when granting a item and you have one equipped
--- While drawing the misplaced received. grant misplaced stop working
+-- While drawing the misplaced received. grant misplaced stop working. Maybe implement a queue
 
 function getCurrZone()
 	local z = mainmemory.read_u16_le(0x180000)
@@ -188,44 +192,56 @@ end
 function organize_inventory(item_id)
 	max_index = 0
 	start_address = 0
-	offset = 169
 	item_offset = 0
-	free_byte = 0x01
-
+	start_byte = 0x00
 
 	if item_id > 0 and item_id <= 168 then --hand
 		start_address = 0x097a8d
-		offset = 0
+		qty_start_address = 0x09798a
 		max_index = 168
 	elseif (item_id > 168 and item_id <= 194) or item_id == 258 then --chest 258 Alucart mail
 		start_address = 0x097b36
+		qty_start_address = 0x097a33
 		max_index = 27
+		item_offset = 169
 	elseif item_id > 195 and item_id <= 216 then --helm
 		start_address = 0x097b50
+		qty_start_address = 0x097a4d
 		max_index = 21
-		item_offset = 196
-		free_byte = 0x1b
+		item_offset = 195
+		start_byte = 0x1a
 	elseif item_id > 217 and item_id <= 225 then --cloak
 		start_address = 0x097b66
+		qty_start_address = 0x097a63
 		max_index = 8
-		item_offset = 218
-		free_byte = 0x31
-	elseif item_id > 225 and item_id <= 257 then --trinket
+		item_offset = 217
+		start_byte = 0x30
+	elseif item_id > 226 and item_id <= 257 then --trinket
 		start_address = 0x097b6f
-		max_index = 30
+		qty_start_address = 0x097a6c
+		max_index = 31
 		item_offset = 226
-		free_byte = 0x3a
+		start_byte = 0x39
 	end
 
+	-- Find the first empty slot
 	for i = 1, max_index, 1 do
 		address = start_address + i
-		local_byte = mainmemory.read_u8(address)
-		if local_byte == free_byte then
-			mainmemory.write_u8(address, item_id - offset)
-			mainmemory.write_u8(start_address + (item_id - item_offset), local_byte)
+		old_byte = mainmemory.read_u8(address)
+		qty_address = qty_start_address + old_byte - start_byte
+
+		if mainmemory.read_u8(qty_address) == 0 then
+			new_value = item_id - item_offset + start_byte
+			for j = i, max_index, 1 do
+				new_address = start_address + j
+				if mainmemory.read_u8(new_address) == new_value then
+					mainmemory.write_u8(address, new_value)
+					mainmemory.write_u8(new_address, old_byte)
+					break
+				end
+			end
 			break
 		end
-		free_byte = free_byte + 1
 	end
 end
 
@@ -239,7 +255,7 @@ end
 
 function check_death()
 	hp = mainmemory.read_u32_le(0x097ba0)
-	if hp <= 0 then
+	if not just_died and hp <= 0 then
 		just_died = true
 	end
 end
@@ -259,14 +275,16 @@ function processBlock(block)
     local itemsBlock = block["items"]
     if itemsBlock ~= nil and next(itemsBlock) ~= nil then
         block_identified = 1
-	    ItemsReceived = itemsBlock
+		if start_item_drawing ~= 0 or misplaced_drawing ~= 0 then
+			ItemsReceivedQueue = itemsBlock
+		else
+			ItemsReceived = itemsBlock
+		end
     end
 	local checkedLocationsBlock = block["checked_locations"]
 	if checkedLocationsBlock ~= nil and next(checkedLocationsBlock) ~= nil then
         block_identified = 1
-		for i, v in pairs(checkedLocationsBlock) do
-			table.insert(checked_locations, v)
-		end
+		checked_locations = checkedLocationsBlock
     end
 	local misplacedBlock = block["misplaced"]
 	if misplacedBlock ~= nil and next(misplacedBlock) ~= nil then
@@ -276,8 +294,13 @@ function processBlock(block)
 		-- We received an item. Check if the last one on misplaced_items is the same and add it.
 		if misplacedBlock[#misplacedBlock] ~= misplaced_items[#misplaced_items] then
 			local received = tonumber(misplacedBlock[#misplacedBlock])
-			table.insert(misplaced_items, received)
-			console.log("New misplaced item received: " .. received)
+			if start_item_drawing ~= 0 or misplaced_drawing ~= 0 then
+				if misplace_items_queue[#misplaced_items_queue] ~= received then
+					table.insert(misplaced_items_queue, received)
+				end
+			else
+				table.insert(misplaced_items, received)
+			end
 		end
 	end
 	local playerBlock = block["player"]
@@ -487,7 +510,7 @@ function checkLIB()
 		if room == 0x2f0c then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1681)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
-			local o = 10
+			local o = 80 -- Increased offset
 			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Faerie Scroll"] = true end
 		end
 		if room == 0x2ee4 then
@@ -528,8 +551,8 @@ function checkNO0()
 	if cur_zone == "NO0" then
 		local room = mainmemory.read_u16_le(0x1375bc)
 		if room == 0x27f4 then
-			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 131)
-			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 1017)
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 130)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 1080)
 			local o = 10
 			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Spirit Orb"] = true end
 		end
@@ -636,8 +659,10 @@ function checkNO3()
 		if room == 0x3cc8 or room == 0x3a80 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 245)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 183)
+			-- NP3 seens a bit offset
+			local x2 = math.abs(mainmemory.read_u16_le(0x0973f0) - 270)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Power of Wolf"] = true end
+			if (x >= 0 and x <= o and y >= 0 and y <= o) or (x2 >= 0 and x2 <= o and y >= 0 and y <= o) then checks["Power of Wolf"] = true end
 		end
 	end
 
@@ -736,13 +761,13 @@ function checkNZ0()
 		if room == 0x2770 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 120)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
-			local o = 10
+			local o = 25
 			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Skill of Wolf"] = true end
 		end
 		if room == 0x2730 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 114)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
-			local o = 10
+			local o = 25
 			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Bat Card"] = true end
 		end
 	end
@@ -878,8 +903,8 @@ function checkRCAT()
 	if cur_zone == "RCAT" or cur_zone == "RBO8" then
 		local room = mainmemory.read_u16_le(0x1375bc)
 		if room == 0x2429 or room == 0x2490 then
-			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 28)
-			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 159)
+			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 38)
+			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 173)
 			local o = 10
 			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Gas Cloud"] = true end
 		end
@@ -981,10 +1006,10 @@ function checkRNO0()
 	if cur_zone == "RNO0" and last_zone ~= "RNO0" then
 		last_zone = cur_zone
 		last_zoneid = cur_zoneid
-		goal = mainmemory.read_u8(0x180f98)
+		-- goal = mainmemory.read_u8(0x180f98) on index 12
+		goal = mainmemory.read_u8(0x180f8b) -- index -1
 		checkBosses()
 		if bosses_dead >= goal then
-			console.log("Goal met! Dracula is acessible")
 			goal_met = true
 		end
 	end
@@ -1144,7 +1169,7 @@ function checkRNZ1()
 	checks["RNZ1 - Heart Vessel"] = bit.check(flag, 10)
 	checks["RNZ1 - Moon rod"] = bit.check(flag, 11)
 	checks["RNZ1 - Bwaka knife"] = bit.check(mainmemory.readbyte(0x03be97), 2)
-	checks["RNZ1 - Pot roast"] = bit.check(mainmemory.readbyte(0x03be97), 0)
+	checks["RNZ1 - Turkey"] = bit.check(mainmemory.readbyte(0x03be97), 0)
 	checks["RNZ1 - Shuriken"] = bit.check(mainmemory.readbyte(0x03be97), 1)
 	checks["RNZ1 - TNT"] = bit.check(mainmemory.readbyte(0x03be97), 3)
 	if mainmemory.read_u16_le(0x03ca78) ~= 0 then
@@ -1390,9 +1415,19 @@ function process_items(f)
 	if start_item_drawing == 0 and table_size >= last_item_processed then
 		start_item_drawing = f
 		item1 = grant_item_byid(ItemsReceived[last_item_processed])
-		if last_item_processed + 1 <= table_size then item2 = grant_item_byid(ItemsReceived[last_item_processed + 1]) end
-		if last_item_processed + 2 <= table_size then item3 = grant_item_byid(ItemsReceived[last_item_processed + 2]) end
-		if last_item_processed + 3 <= table_size then item4 = grant_item_byid(ItemsReceived[last_item_processed + 3]) end
+		num_item_processed = 1
+		if last_item_processed + 1 <= table_size then
+			item2 = grant_item_byid(ItemsReceived[last_item_processed + 1])
+			num_item_processed = num_item_processed + 1
+		end
+		if last_item_processed + 2 <= table_size then
+			item3 = grant_item_byid(ItemsReceived[last_item_processed + 2])
+			num_item_processed = num_item_processed + 1
+		end
+		if last_item_processed + 3 <= table_size then
+			item4 = grant_item_byid(ItemsReceived[last_item_processed + 3])
+			num_item_processed = num_item_processed + 1
+		end
 	end
 	if start_item_drawing ~= 0 then
 		if f - start_item_drawing < 900 then
@@ -1407,11 +1442,9 @@ function process_items(f)
 			item2 = ""
 			item3 = ""
 			item4 = ""
-			if table_size - last_item_processed <= 4 then
-				last_item_processed = last_item_processed + (table_size - last_item_processed) + 1
-			else
-				last_item_processed = last_item_processed + 4
-			end
+			last_item_processed = last_item_processed + num_item_processed
+			num_item_processed = 0
+
 			write_last_processed(last_item_processed)
 		end
 	end
@@ -1531,7 +1564,6 @@ function handle_misplaced(f)
 			local file, err = io.open(filename, "a")
 
 			for i = last_misplaced_save + 1, size, 1 do
-				console.log("Appended: ", misplaced_items[i])
 				file:write(misplaced_items[i], "\n")
 				added = added + 1
 			end
@@ -1555,7 +1587,6 @@ function process_misplaced(f)
 		for k, v in ipairs(misplaced_read) do
 			table.insert(misplaced_items, v)
 		end
-		table_size = table.getn(misplaced_items)
 		-- Try to find a relic received on misplaced table
 		local ret_pos = check_for_misplaced_relic()
 		if ret_pos ~= 0 then last_misplaced_processed = ret_pos + 1 end
@@ -1564,9 +1595,19 @@ function process_misplaced(f)
 	if misplaced_drawing == 0 and table_size >= last_misplaced_processed then
 		misplaced_drawing = f
 		m_item1 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed)])
-		if last_misplaced_processed + 1 <= table_size then m_item2 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed) + 1]) end
-		if last_misplaced_processed + 2 <= table_size then m_item3 = grant_item_byid(misplaced_items[last_misplaced_processed + 2]) end
-		if last_misplaced_processed + 3 <= table_size then m_item4 = grant_item_byid(misplaced_items[last_misplaced_processed + 3]) end
+		num_misplaced_processed = 1
+		if last_misplaced_processed + 1 <= table_size then
+			m_item2 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed) + 1])
+			num_misplaced_processed = num_misplaced_processed +1
+		end
+		if last_misplaced_processed + 2 <= table_size then
+			m_item3 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed) + 2])
+			num_misplaced_processed = num_misplaced_processed +1
+		end
+		if last_misplaced_processed + 3 <= table_size then
+			m_item4 = grant_item_byid(misplaced_items[tonumber(last_misplaced_processed) + 3])
+			num_misplaced_processed = num_misplaced_processed +1
+		end
 	end
 	if misplaced_drawing ~= 0 then
 		if f - misplaced_drawing < 900 then
@@ -1581,11 +1622,8 @@ function process_misplaced(f)
 			m_item2 = ""
 			m_item3 = ""
 			m_item4 = ""
-			if table_size - last_misplaced_processed <= 4 then
-				last_misplaced_processed = last_misplaced_processed + (table_size - last_misplaced_processed) + 1
-			else
-				last_misplaced_processed = last_misplaced_processed + 4
-			end
+			last_misplaced_processed = last_misplaced_processed + num_misplaced_processed
+			num_misplaced_processed = 0
 		end
 	end
 end
@@ -1649,13 +1687,13 @@ function main()
 				getCurrZone()
 
 				-- printing for testing reasons
-				gui.drawText(200, 0, mainmemory.read_u16_le(0x0973f0))
-				gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
-				gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
-				last_processed_read = read_last_processed()
-				gui.drawText(200, 30, bosses_dead)
-				gui.drawText(300, 0, last_status)
-				gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
+				--gui.drawText(200, 0, mainmemory.read_u16_le(0x0973f0))
+				--gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
+				--gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
+				--last_processed_read = read_last_processed()
+				--gui.drawText(200, 30, bosses_dead)
+				--gui.drawText(300, 0, last_status)
+				--gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
 
 
 				if first_connect then
@@ -1712,7 +1750,7 @@ function main()
 				if last_status == 10 then
 
 					if got_data and seed ~= "" and player_name ~= "" then
-						console.log("Got seed and player names")
+						console.log("Got seed and player name")
 						if got_data then
 							if file_exists() then
 								-- We just started and have misplaced_items give it to player
@@ -1733,11 +1771,17 @@ function main()
 						if next(misplaced_items) ~= nil then
 							handle_misplaced(frame)
 						end
-					end
-
-					if next(misplaced_items) ~= nil then
-						if last_misplaced_save < table.getn(misplaced_items) then
-							handle_misplaced(frame)
+						if next(ItemsReceivedQueue) ~= nil and start_item_drawing == 0 and misplaced_drawing == 0 then
+							for k, v in ipairs(ItemsReceivedQueue) do
+								table.insert(ItemsReceived, v)
+								table.remove(ItemsReceivedQueue, k)
+							end
+						end
+						if next(misplaced_items_queue) ~= nil and start_item_drawing == 0 and misplaced_drawing == 0 then
+							for k, v in ipairs(misplaced_items_queue) do
+								table.insert(misplaced_items, v)
+								table.remove(misplaced_items_queue, k)
+							end
 						end
 					end
 
