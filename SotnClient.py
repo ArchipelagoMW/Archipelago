@@ -16,7 +16,7 @@ from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 from worlds import network_data_package, AutoWorldRegister
-from worlds.sotn.Items import base_item_id, ItemData, get_item_data, Type
+from worlds.sotn.Items import base_item_id, ItemData, get_item_data, IType
 from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, get_location_data
 
 
@@ -112,7 +112,7 @@ class SotnContext(CommonContext):
     lua_connector_port: int = 17242  # No idea why this number?
 
     def __init__(self, server_address, password):
-        super().__init__(server_address, password)
+        super(SotnContext, self).__init__(server_address, password)
         self.psx_streams: (StreamReader, StreamWriter) = None
         self.psx_sync_task = None
         self.messages = {}
@@ -126,7 +126,7 @@ class SotnContext(CommonContext):
         self.items_handling = 0b101
         self.checked_locations_sent: bool = False
         self.misplaced_items = []
-        self.username = "Lockmau"
+        # self.username = "Lockmau"
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -152,44 +152,53 @@ class SotnContext(CommonContext):
             msg = f"{', '.join([self.item_names[item.item] for item in args['items']])}"
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "PrintJSON":
-            print(args)
             if 'item' in args:
                 received: NamedTuple = args['item']
                 loc_data: LocationData = get_location_data(received.location)
                 item_data: ItemData = get_item_data(received.item)
-                print(f'{received.location} - {loc_data}')
-                print(f'{received.item} - {item_data}')
-                print(f'Player: {received.player} Slot: {self.slot}')
 
-                # TODO: Have to check relics replaced with sword card for items
+                if received.location == 127083080 or received.location == 127020003:
+                    # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
+                    self.misplaced_items.append(166)
+
                 if base_item_id <= received.item <= base_item_id + 423:
-                    if loc_data.can_be_relic:
-                        # There is a item on a relic spot, send it to the player
-                        if item_data.type != Type.RELIC:
-                            print(f'Received 1 : {received}')
-                            # self.items_received.append(received)
-                            self.misplaced_items.append(received.item - base_item_id)
-                    else:
-                        # Normal location containing a relic
-                        if item_data.type == Type.RELIC:
-                            print(f'Received 2 : {received}')
-                            # self.items_received.append(received)
-                            self.misplaced_items.append(received.item - base_item_id)
-                        if received.location == 127083080:
-                            # Holy glasses, send a library card, so player won't get stuck
-                            self.misplaced_items.append(166)
+                    if loc_data is not None:
+                        if loc_data.can_be_relic:
+                            # There is a item on a relic spot, send it to the player
+                            if item_data.type != IType.RELIC:
+                                self.misplaced_items.append(received.item - base_item_id)
+                        else:
+                            # Normal location containing a relic
+                            if item_data.type == IType.RELIC:
+                                self.misplaced_items.append(received.item - base_item_id)
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
-            print(f"Recebeu: {self.seed_name}")
 
     def run_gui(self):
-        from kvui import GameManager
+        import webbrowser
+        from kvui import GameManager, Button
 
         class SotnManager(GameManager):
             logging_pairs = [
                 ("Client", "Archipelago")
             ]
             base_title = "Archipelago Sotn Client"
+
+            def build(self):
+                b = super().build()
+
+                button1 = Button(text="1", size=(30, 30), size_hint_x=None,
+                                on_press=lambda _:
+                                webbrowser.open('https://shrines.rpgclassics.com/psx/castlevsn/map.shtml'))
+                self.connect_layout.add_widget(button1)
+
+                button2 = Button(text="2", size=(30, 30), size_hint_x=None,
+                                 on_press=lambda _:
+                                 webbrowser.open('https://www.deviantart.com/kamenriderninja/art/'
+                                                 'Castlevania-Symphony-of-the-Night-Map-340872423'))
+                self.connect_layout.add_widget(button2)
+
+                return b
 
         self.ui = SotnManager(self)
         self.ui_task = asyncio.create_task(self.ui.async_run(), name="UI")
@@ -268,7 +277,7 @@ async def parse_bosses(data: dict, ctx: SotnContext):
                     logger.info(msg)
     ctx.bosses_dead = bosses
     if "Dracula" in bosses:
-        if bosses["Dracula"] and ctx.total_bosses_killed >= 20:
+        if bosses["Dracula"]:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
@@ -367,7 +376,7 @@ async def psx_sync_task(ctx: SotnContext):
             pass
     print("exiting PSX sync task")
 
-
+# Todo: Test changes in here to launch from the ArchipelagoLaucher, imports should also be update for apworld
 if __name__ == '__main__':
 
     Utils.init_logging("SotnClient")
