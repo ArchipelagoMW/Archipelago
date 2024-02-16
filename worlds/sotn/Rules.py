@@ -25,7 +25,10 @@ def set_rules(world: MultiWorld, player: int) -> None:
                 forbid_item(location, "Holy glasses", player)
                 forbid_item(location, "Spike breaker", player)
 
-
+    # Vessels can be on gold ring, but cause some weird visual glitches
+    location = world.get_location("NO4 - Gold Ring", player)
+    for pu in vessel_table.items():
+        forbid_item(location, pu[0], player)
     location = world.get_location("Soul of Bat", player)
     set_rule(location, lambda state: state.has("Form of mist", player) and (state.has("Leap stone", player) or
              state.has("Soul of bat", player) or state.has("Gravity boots", player) or
