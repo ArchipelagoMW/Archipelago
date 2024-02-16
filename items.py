@@ -16,7 +16,7 @@ from .types import Box, ItemFlag, ItemType, Passage
 # Wario abilities:  | 0   1   0   0   0 |  ability  |
 #
 # Junk items:       | 1   0   0   0 |     type      |
-# AP item:          | 1   1   1   1   0   0   0   0 |
+# AP item:          | 1   1   1   1   0 |   class   |
 #
 # For jewel pieces:
 #  - passage = 0-5 for entry/emerald/ruby/topaz/sapphire/golden
@@ -40,6 +40,8 @@ from .types import Box, ItemFlag, ItemType, Passage
 #  - 2 = Single heart recovery
 #  - 3 = Single heart damage
 #  - 4 = Minigame coin
+#
+# For AP item, classifications are as reported by ItemClassification.as_flag()
 
 
 def ap_id_from_wl4_data(data: ItemData) -> int:

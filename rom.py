@@ -112,7 +112,7 @@ def fill_items(rom: LocalRom, world: WL4World):
         if location.native_item:
             itemid = itemid - ap_id_offset
         else:
-            itemid = 0xF0
+            itemid = 0xF0 | location.item.classification.as_flag()
         itemname = location.item.name
 
         if playerid == world.player:
