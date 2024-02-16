@@ -30,14 +30,12 @@ PROGRESSIVE_ITEM_IDS: Dict[str, int] = {}
 
 
 def hash_file(path):
-    md5 = hashlib.md5()
+    md5 = hashlib.md5(usedforsecurity=False)
     
     with open(path, 'rb') as f:
-        while True:
-            data = f.read(65536)
-            if not data:
-                break
-            md5.update(data)
+        content = f.read()
+        content = content.replace(b'\r\n', b'\n')
+        md5.update(content)
     
     return md5.hexdigest()
 
