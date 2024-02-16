@@ -1455,16 +1455,6 @@ unreachable_outdoor_entrances = [
 ]
 
 
-# When searching for exits in full door shuffle, it checks that you can find an exit from a particular door,
-# but you need to be able to reach that door from the exit, so we avoid searching through one-way drops.
-# The Seafoam Islands drops should not be an issue since the top floor, where the drops start, has exits.
-non_search_drops =[
-    "Pokemon Mansion 3F-SE to Pokemon Mansion 2F",
-    "Pokemon Mansion 3F-SE to Pokemon Mansion 1F-SE",
-    "Victory Road 3F-S to Victory Road 2F-C"
-]
-
-
 def create_region(multiworld: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     ret = PokemonRBRegion(name, player, multiworld)
     for location in locations_per_region.get(name, []):
@@ -2307,14 +2297,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             def search_for_exit(entrance, region, checked_regions):
                 checked_regions.add(region)
-                for entrance_candidate in [e for e in region.exits if
-                                           e is not entrance and e.name not in non_search_drops]:
-                    if (not entrance_candidate.connected_region) and entrance_candidate in entrances:
-                        return entrance_candidate
-                    elif (entrance_candidate.connected_region
-                            and entrance_candidate.connected_region not in checked_regions):
-                        found_exit = search_for_exit(entrance_candidate, entrance_candidate.connected_region,
-                                                     checked_regions)
+                for exit_candidate in region.exits:
+                    if ((not exit_candidate.connected_region)
+                            and exit_candidate in entrances and exit_candidate is not entrance):
+                        return exit_candidate
+                for entrance_candidate in region.entrances:
+                    if entrance_candidate.parent_region not in checked_regions:
+                        found_exit = search_for_exit(entrance, entrance_candidate.parent_region, checked_regions)
                         if found_exit is not None:
                             return found_exit
                 return None
@@ -2341,10 +2330,10 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             multiworld.random.shuffle(entrances)
             for entrance in reversed(entrances):
                 if not outdoor_map(entrance.parent_region.name):
-                    loop_out = search_for_exit(entrance, entrance.parent_region, set())
-                    if loop_out is None:
+                    found_exit = search_for_exit(entrance, entrance.parent_region, set())
+                    if found_exit is None:
                         continue
-                    loop_out_interiors.append([loop_out, entrance])
+                    loop_out_interiors.append([found_exit, entrance])
                     entrances.remove(entrance)
 
                     if len(loop_out_interiors) == 2:
