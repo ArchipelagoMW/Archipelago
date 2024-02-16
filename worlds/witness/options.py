@@ -179,11 +179,12 @@ class TrapPercentage(Range):
 
 class TrapWeights(OptionDict):
     """Specify how many of your traps will be of each type.
-    If you delete or set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
+    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright).
+    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
 
     display_name = "Trap Weights"
     schema = Schema({
-        Optional(trap_name): And(int, lambda n: n >= 0)
+        trap_name: And(int, lambda n: n >= 0)
         for trap_name, item_definition in StaticWitnessLogic.all_items.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     })
