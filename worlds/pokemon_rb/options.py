@@ -317,28 +317,37 @@ class TownMapFlyLocation(Toggle):
 class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
-    Full: Any outdoor entrance may lead to any interior.
-    Insanity: All rooms in the game are shuffled."""
+    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
+    named Full.
+    Full: Exterior to interior doors are shuffled, and interior to interior doors are shuffled, separately.
+    Insanity: All rooms in the game are shuffled.
+    Decoupled: Doors may be decoupled from each other, so that leaving through an exit may not return you to the
+    door you entered from."""
     display_name = "Door Shuffle"
     option_off = 0
     option_simple = 1
-    option_full = 2
-    option_insanity = 3
-    option_decoupled = 4
+    option_interiors = 2
+    option_full = 3
+    option_insanity = 4
+    option_decoupled = 5
     default = 0
 
 
-class WarpTileShuffle(Toggle):
-    """Shuffle the warp tiles in Silph Co and Sabrina's Gym among themselves, separately.
-    On Insanity, turning this off means they are mixed into the general door shuffle instead of only being shuffled
-    among themselves."""
+class WarpTileShuffle(Choice):
+    """Vanilla: The warp tiles in Silph Co and Sabrina's Gym are not changed.
+    Shuffle: The warp tile destinations are shuffled among themselves.
+    Mixed: The warp tiles are mixed into the pool of available doors for Full, Insanity, and Decoupled. Same as Shuffle
+    for any other door shuffle option."""
     display_name = "Warp Tile Shuffle"
     default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_mixed = 2
 
 
 class RandomizeRockTunnel(Toggle):
     """Randomize the layout of Rock Tunnel.
-    If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
+    If Insanity or Decoupled Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 

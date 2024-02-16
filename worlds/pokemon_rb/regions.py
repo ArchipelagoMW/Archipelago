@@ -1302,14 +1302,7 @@ mandatory_connections = {
     pair("Safari Zone North", "Safari Zone West-NW"),
     pair("Safari Zone West", "Safari Zone Center-NW"),
 }
-insanity_mandatory_connections = {
-    # pair("Seafoam Islands B1F-NE", "Seafoam Islands 1F"),
-    # pair("Seafoam Islands 1F", "Seafoam Islands B1F"),
-    # pair("Seafoam Islands B2F-NW", "Seafoam Islands B1F"),
-    # pair("Seafoam Islands B3F-SE", "Seafoam Islands B2F-SE"),
-    # pair("Seafoam Islands B3F-NE", "Seafoam Islands B2F-NE"),
-    # pair("Seafoam Islands B4F", "Seafoam Islands B3F-NE"),
-    # pair("Seafoam Islands B4F", "Seafoam Islands B3F"),
+full_mandatory_connections = {
     pair("Player's House 1F", "Player's House 2F"),
     pair("Indigo Plateau Lorelei's Room", "Indigo Plateau Lobby-N"),
     pair("Indigo Plateau Bruno's Room", "Indigo Plateau Lorelei's Room"),
@@ -1462,6 +1455,16 @@ unreachable_outdoor_entrances = [
 ]
 
 
+# When searching for exits in full door shuffle, it checks that you can find an exit from a particular door,
+# but you need to be able to reach that door from the exit, so we avoid searching through one-way drops.
+# The Seafoam Islands drops should not be an issue since the top floor, where the drops start, has exits.
+non_search_drops =[
+    "Pokemon Mansion 3F-SE to Pokemon Mansion 2F",
+    "Pokemon Mansion 3F-SE to Pokemon Mansion 1F-SE",
+    "Victory Road 3F-S to Victory Road 2F-C"
+]
+
+
 def create_region(multiworld: MultiWorld, player: int, name: str, locations_per_region=None, exits=None):
     ret = PokemonRBRegion(name, player, multiworld)
     for location in locations_per_region.get(name, []):
@@ -1496,7 +1499,6 @@ def create_regions(self):
         start_inventory["Exp. All"] = 1
         self.multiworld.push_precollected(self.create_item("Exp. All"))
 
-    # locations = [location for location in location_data if location.type in ("Item", "Trainer Parties")]
     self.item_pool = []
     combined_traps = (self.multiworld.poison_trap_weight[self.player].value
                       + self.multiworld.fire_trap_weight[self.player].value
@@ -1556,7 +1558,6 @@ def create_regions(self):
                 if event:
                     location_object.place_locked_item(item)
                     if location.type == "Trainer Parties":
-                        # loc.item.classification = ItemClassification.filler
                         location_object.party_data = deepcopy(location.party_data)
                 else:
                     self.item_pool.append(item)
@@ -1860,7 +1861,6 @@ def create_regions(self):
         logic.has_badges(state, self.multiworld.cerulean_cave_badges_condition[player].value, player) and
         logic.has_key_items(state, self.multiworld.cerulean_cave_key_items_condition[player].total, player) and logic.can_surf(state, player))
 
-
     # access to any part of a city will enable flying to the Pokemon Center
     connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: logic.can_fly(state, player), one_way=True)
     connect(multiworld, player, "Cerulean City-Badge House Backyard", "Cerulean City", lambda state: logic.can_fly(state, player), one_way=True)
@@ -1875,7 +1875,6 @@ def create_regions(self):
     connect(multiworld, player, "Vermilion City-Dock", "Vermilion City", lambda state: logic.can_fly(state, player), one_way=True, name="Vermilion City-Dock to Vermilion City (Fly)")
     connect(multiworld, player, "Cinnabar Island-G", "Cinnabar Island", lambda state: logic.can_fly(state, player), one_way=True, name="Cinnabar Island-G to Cinnabar Island (Fly)")
     connect(multiworld, player, "Cinnabar Island-M", "Cinnabar Island", lambda state: logic.can_fly(state, player), one_way=True, name="Cinnabar Island-M to Cinnabar Island (Fly)")
-
 
     # drops
     connect(multiworld, player, "Seafoam Islands 1F", "Seafoam Islands B1F", one_way=True, name="Seafoam Islands 1F to Seafoam Islands B1F (Drop)")
@@ -1937,13 +1936,16 @@ def create_regions(self):
 
 def door_shuffle(world, multiworld, player, badges, badge_locs):
     entrances = []
+    full_interiors = []
     for region_name, region_entrances in warp_data.items():
+        region = multiworld.get_region(region_name, player)
         for entrance_data in region_entrances:
-            region = multiworld.get_region(region_name, player)
             shuffle = True
-            if not outdoor_map(region.name) and not outdoor_map(entrance_data['to']['map']) and \
-                    multiworld.door_shuffle[player] not in ("insanity", "decoupled"):
-                shuffle = False
+            interior = False
+            if not outdoor_map(region.name) and not outdoor_map(entrance_data['to']['map']):
+                if multiworld.door_shuffle[player] not in ("full", "insanity", "decoupled"):
+                    shuffle = False
+                interior = True
             if multiworld.door_shuffle[player] == "simple":
                 if sorted([entrance_data['to']['map'], region.name]) == ["Celadon Game Corner-Hidden Stairs",
                                                                          "Rocket Hideout B1F"]:
@@ -1955,9 +1957,12 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 shuffle = False
             if (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
                     entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
-                if multiworld.warp_tile_shuffle[player] or multiworld.door_shuffle[player] in ("insanity",
-                                                                                               "decoupled"):
+                if multiworld.warp_tile_shuffle[player]:
                     shuffle = True
+                    if multiworld.warp_tile_shuffle[player] == "mixed" and multiworld.door_shuffle[player] == "full":
+                        interior = True
+                    else:
+                        interior = False
                 else:
                     shuffle = False
             elif not multiworld.door_shuffle[player]:
@@ -1967,12 +1972,12 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                          entrance_data else entrance_data["name"], region, entrance_data["id"],
                                          entrance_data["address"], entrance_data["flags"] if "flags" in
                                          entrance_data else "")
-                # if "Rock Tunnel" in region_name:
-                #     entrance.access_rule = lambda state: logic.rock_tunnel(state, player)
-                entrances.append(entrance)
+                if interior and multiworld.door_shuffle[player] == "full":
+                    full_interiors.append(entrance)
+                else:
+                    entrances.append(entrance)
                 region.exits.append(entrance)
             else:
-                # connect(multiworld, player, region.name, entrance_data['to']['map'], one_way=True)
                 if "Rock Tunnel" in region.name:
                     connect(multiworld, player, region.name, entrance_data["to"]["map"],
                             lambda state: logic.rock_tunnel(state, player), one_way=True)
@@ -1981,6 +1986,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                             name=entrance_data["name"] if "name" in entrance_data else None)
 
     forced_connections = set()
+    one_way_forced_connections = set()
 
     if multiworld.door_shuffle[player]:
         forced_connections.update(mandatory_connections.copy())
@@ -1992,8 +1998,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             usable_safe_rooms += pokemarts
             if multiworld.key_items_only[player]:
                 usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
-        if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
-            forced_connections.update(insanity_mandatory_connections)
+        if multiworld.door_shuffle[player] in ("full", "insanity", "decoupled"):
+            forced_connections.update(full_mandatory_connections)
             r = multiworld.random.randint(0, 3)
             if r == 2:
                 forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
@@ -2001,6 +2007,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
                                         multiworld.random.choice(mansion_stair_destinations + mansion_dead_ends
                                                                  + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
+                if multiworld.door_shuffle[player] == "full":
+                    forced_connections.add(("Pokemon Mansion 1F to Pokemon Mansion 2F",
+                                            "Pokemon Mansion 3F to Pokemon Mansion 2F"))
             elif r == 3:
                 dead_end = multiworld.random.randint(0, 1)
                 forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
@@ -2019,7 +2028,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                         multiworld.random.choice(mansion_stair_destinations
                                                                  + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
 
-            usable_safe_rooms += insanity_safe_rooms
+            if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
+                usable_safe_rooms += insanity_safe_rooms
 
         safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
         pallet_safe_room = safe_rooms_sample[-1]
@@ -2027,9 +2037,21 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         for a, b in zip(multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
                                                   "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
                                                   "Player's House 1F to Pallet Town", pallet_safe_room]):
-            forced_connections.add((a, b))
+            one_way_forced_connections.add((a, b))
+
+        if multiworld.door_shuffle[player] == "decoupled":
+            for a, b in zip(["Oak's Lab to Pallet Town", "Player's House 1F to Pallet Town", pallet_safe_room],
+                            multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
+                                                      "Pallet Town to Rival's House"], 3)):
+                one_way_forced_connections.add((a, b))
+
         for a, b in zip(safari_zone_houses, safe_rooms_sample):
-            forced_connections.add((a, b))
+            one_way_forced_connections.add((a, b))
+        if multiworld.door_shuffle[player] == "decoupled":
+            for a, b in zip(multiworld.random.sample(safe_rooms_sample[:-1], len(safe_rooms_sample) - 1),
+                            safari_zone_houses):
+                one_way_forced_connections.add((a, b))
+
         if multiworld.door_shuffle[player] == "simple":
             # force Indigo Plateau Lobby to vanilla location on simple, otherwise shuffle with Pokemon Centers.
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances[0:-1], 11), pokemon_centers[0:-1]):
@@ -2046,15 +2068,30 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             # warping outside an entrance that isn't the Pokemon Center, just always put Pokemon Centers at Pokemon
             # Center entrances
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
-                forced_connections.add((a, b))
+                if multiworld.random.randint(0, 1):
+                    one_way_forced_connections.add((a, b))
+                else:
+                    forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
             if multiworld.key_items_only[player]:
-                forced_connections.add((multiworld.random.choice(initial_doors), "Viridian Pokemart to Viridian City"))
-            elif "Pokemart" not in pallet_safe_room:
-                forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
-                    [mart for mart in pokemarts if mart not in safe_rooms_sample])))
+                if multiworld.random.randint(0, 1):
+                    one_way_forced_connections.add((multiworld.random.choice(initial_doors),
+                                                    "Viridian Pokemart to Viridian City"))
+                else:
+                    forced_connections.add((multiworld.random.choice(initial_doors),
+                                            "Viridian Pokemart to Viridian City"))
 
-    if multiworld.warp_tile_shuffle[player]:
+            elif "Pokemart" not in pallet_safe_room:
+                if multiworld.random.randint(0, 1):
+                    one_way_forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
+                        [mart for mart in pokemarts if mart not in safe_rooms_sample])))
+                else:
+                    forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
+                        [mart for mart in pokemarts if mart not in safe_rooms_sample])))
+
+    if multiworld.warp_tile_shuffle[player] == "shuffle" or (multiworld.warp_tile_shuffle[player] == "mixed"
+                                                             and multiworld.door_shuffle[player]
+                                                             in ("off", "simple", "interiors")):
         warps = multiworld.random.sample(silph_co_warps, len(silph_co_warps))
         # The only warp tiles never reachable from the stairs/elevators are the two 7F-NW warps (where the rival is)
         # and the final 11F-W warp. As long as the two 7F-NW warps aren't connected to each other, everything should
@@ -2087,13 +2124,38 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         while warps:
             forced_connections.add((warps.pop(), warps.pop(),))
 
+    dc_destinations = None
+    if multiworld.door_shuffle[player] == "decoupled":
+        dc_destinations = entrances.copy()
+        for pair in one_way_forced_connections:
+            entrance_a = multiworld.get_entrance(pair[0], player)
+            entrance_b = multiworld.get_entrance(pair[1], player)
+            entrance_a.connect(entrance_b)
+            entrances.remove(entrance_a)
+            dc_destinations.remove(entrance_b)
+    else:
+        forced_connections.update(one_way_forced_connections)
+
     for pair in forced_connections:
         entrance_a = multiworld.get_entrance(pair[0], player)
         entrance_b = multiworld.get_entrance(pair[1], player)
         entrance_a.connect(entrance_b)
         entrance_b.connect(entrance_a)
-        entrances.remove(entrance_a)
-        entrances.remove(entrance_b)
+        if entrance_a in entrances:
+            entrances.remove(entrance_a)
+        elif entrance_a in full_interiors:
+            full_interiors.remove(entrance_a)
+        else:
+            breakpoint()
+        if entrance_b in entrances:
+            entrances.remove(entrance_b)
+        elif entrance_b in full_interiors:
+            full_interiors.remove(entrance_b)
+        else:
+            breakpoint()
+        if multiworld.door_shuffle[player] == "decoupled":
+            dc_destinations.remove(entrance_a)
+            dc_destinations.remove(entrance_b)
 
     if multiworld.door_shuffle[player] == "simple":
         def connect_connecting_interiors(interior_exits, exterior_entrances):
@@ -2101,7 +2163,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 for a, b in zip(interior, exterior):
                     entrance_a = multiworld.get_entrance(a, player)
                     if b is None:
-                        #entrance_b = multiworld.get_entrance(entrances[0], player)
+                        # entrance_b = multiworld.get_entrance(entrances[0], player)
                         # should just be able to use the entrance_b from the previous link?
                         pass
                     else:
@@ -2241,6 +2303,59 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             entrance_b.connect(entrance_a)
     elif multiworld.door_shuffle[player]:
         if multiworld.door_shuffle[player] == "full":
+            multiworld.random.shuffle(full_interiors)
+
+            def search_for_exit(entrance, region, checked_regions):
+                checked_regions.add(region)
+                for entrance_candidate in [e for e in region.exits if
+                                           e is not entrance and e.name not in non_search_drops]:
+                    if (not entrance_candidate.connected_region) and entrance_candidate in entrances:
+                        return entrance_candidate
+                    elif (entrance_candidate.connected_region
+                            and entrance_candidate.connected_region not in checked_regions):
+                        found_exit = search_for_exit(entrance_candidate, entrance_candidate.connected_region,
+                                                     checked_regions)
+                        if found_exit is not None:
+                            return found_exit
+                return None
+
+            while True:
+                for entrance_a in full_interiors:
+                    if search_for_exit(entrance_a, entrance_a.parent_region, set()) is None:
+                        for entrance_b in full_interiors:
+                            if search_for_exit(entrance_b, entrance_b.parent_region, set()):
+                                entrance_a.connect(entrance_b)
+                                entrance_b.connect(entrance_a)
+                                # Yes, it removes from full_interiors while iterating through it, but it immediately
+                                # breaks out, from both loops.
+                                full_interiors.remove(entrance_a)
+                                full_interiors.remove(entrance_b)
+                                break
+                        else:
+                            raise DoorShuffleException("No non-dead end interior sections found in Pokemon Red and Blue door shuffle.")
+                        break
+                else:
+                    break
+
+            loop_out_interiors = []
+            multiworld.random.shuffle(entrances)
+            for entrance in reversed(entrances):
+                if not outdoor_map(entrance.parent_region.name):
+                    loop_out = search_for_exit(entrance, entrance.parent_region, set())
+                    if loop_out is None:
+                        continue
+                    loop_out_interiors.append([loop_out, entrance])
+                    entrances.remove(entrance)
+
+                    if len(loop_out_interiors) == 2:
+                        break
+
+            for entrance_a, entrance_b in zip(full_interiors[:len(full_interiors) // 2],
+                                              full_interiors[len(full_interiors) // 2:]):
+                entrance_a.connect(entrance_b)
+                entrance_b.connect(entrance_a)
+
+        elif multiworld.door_shuffle[player] == "interiors":
             loop_out_interiors = [[multiworld.get_entrance(e[0], player), multiworld.get_entrance(e[1], player)] for e
                                   in multiworld.random.sample(unsafe_connecting_interior_dungeons
                                                               + safe_connecting_interior_dungeons, 2)]
@@ -2295,20 +2410,21 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         event_locations = multiworld.get_filled_locations(player)
 
-        def adds_reachable_entrances(entrances_copy, item, dead_end_cache):
-            ret = dead_end_cache.get(item.name)
-            if (ret != None):
-                return ret
+        def adds_reachable_entrances(entrances_copy, item):
 
             state_copy = state.copy()
             state_copy.collect(item, True)
             state.sweep_for_events(locations=event_locations)
-            ret = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
-                      entrance.parent_region.can_reach(state_copy)]) > len(reachable_entrances)
-            dead_end_cache[item.name] = ret
-            return ret
+            new_reachable_entrances = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
+                                           entrance.parent_region.can_reach(state_copy)])
+            return new_reachable_entrances > len(reachable_entrances)
 
-        def dead_end(entrances_copy, e, dead_end_cache):
+        def dead_end(entrances_copy, e):
+            if e.can_reach(state):
+                return True
+            elif multiworld.door_shuffle[player] == "decoupled":
+                # Any unreachable exit in decoupled is not a dead end
+                return False
             region = e.parent_region
             check_warps = set()
             checked_regions = {region}
@@ -2316,7 +2432,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             check_warps.remove(e)
             for location in region.locations:
                 if location.item and location.item.name in relevant_events and \
-                                 adds_reachable_entrances(entrances_copy, location.item, dead_end_cache):
+                                 adds_reachable_entrances(entrances_copy, location.item):
                     return False
             while check_warps:
                 warp = check_warps.pop()
@@ -2333,16 +2449,16 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                                 check_warps.update(warp.connected_region.exits)
                                 for location in warp.connected_region.locations:
                                     if (location.item and location.item.name in relevant_events and
-                                            adds_reachable_entrances(entrances_copy, location.item, dead_end_cache)):
+                                            adds_reachable_entrances(entrances_copy, location.item)):
                                         return False
             return True
 
         starting_entrances = len(entrances)
-        rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name]
+        rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name and
+                                 "Rock Tunnel Pokemon Center" not in entrance.name]
         entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
-        dc_destinations = None
         if multiworld.door_shuffle[player] == "decoupled":
-            dc_destinations = entrances.copy()
+            dc_destinations = [entrance for entrance in dc_destinations if entrance not in rock_tunnel_entrances]
 
         while entrances:
             state.update_reachable_regions(player)
@@ -2366,23 +2482,30 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             if not reachable_entrances:
                 raise DoorShuffleException("Ran out of reachable entrances in Pokemon Red and Blue door shuffle")
 
-            dead_end_cache = {}
-
             entrance_a = reachable_entrances.pop(0)
             entrances.remove(entrance_a)
 
-            entrances.sort(key=lambda e: e in reachable_entrances)
-
             is_outdoor_map = outdoor_map(entrance_a.parent_region.name)
 
-            if multiworld.door_shuffle[player] == "full" or len(entrances) != len(reachable_entrances):
+            if multiworld.door_shuffle[player] in ("interiors", "full") or len(entrances) != len(reachable_entrances):
+                if multiworld.door_shuffle[player] == "decoupled":
+                    # This sort is to try to prevent, for example, Silph Co Elevator connecting to Silph Co Elevator,
+                    # where the different doors are all in their own subregions.
+                    # There may be subregions that are not connected directly, like with Mt Moon B1F-C.
+                    # By excepting non-reachable entrances from this sort, it leaves a possibility of connecting to such
+                    # subregions.
+                    entrances.sort(key=lambda e: e.parent_region.name.split("-")[0]
+                                   == entrance_a.parent_region.name.split("-")[0] and e in reachable_entrances)
+                else:
+                    entrances.sort(key=lambda e: e in reachable_entrances)
 
                 find_dead_end = False
                 if (len(reachable_entrances) > (1 if multiworld.door_shuffle[player] in ("insanity", "decoupled") else 8)
                         and len(entrances) <= (starting_entrances - 3)):
                     find_dead_end = True
 
-                if multiworld.door_shuffle[player] == "full" and len(entrances) < 48 and not is_outdoor_map:
+                if (multiworld.door_shuffle[player] in ("interiors", "full") and len(entrances) < 48
+                        and not is_outdoor_map):
                     # Try to prevent a situation where the only remaining outdoor entrances are ones that cannot be
                     # reached except by connecting directly to it.
                     entrances.sort(key=lambda e: e.name not in unreachable_outdoor_entrances)
@@ -2392,7 +2515,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
                 if multiworld.door_shuffle[player] == "decoupled":
                     destinations = dc_destinations
-                elif multiworld.door_shuffle[player] == "full":
+                elif multiworld.door_shuffle[player] in ("interiors", "full"):
                     destinations = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name) is
                                     not is_outdoor_map]
                     if not destinations:
@@ -2401,35 +2524,34 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     destinations = entrances
 
                 for entrance in destinations:
-                    if entrance != entrance_a and dead_end(entrances, entrance, dead_end_cache) is find_dead_end:
+                    if entrance != entrance_a and dead_end(entrances, entrance) is find_dead_end:
                         entrance_b = entrance
                         destinations.remove(entrance)
                         break
                 else:
                     entrance_b = destinations.pop(0)
 
-                if multiworld.door_shuffle[player] == "full":
-                    # on Full, the destinations variable does not point to the entrances list, so we need to remove
-                    # from that list here.
+                if multiworld.door_shuffle[player] in ("interiors", "full"):
+                    # on Interiors/Full, the destinations variable does not point to the entrances list, so we need to
+                    # remove from that list here.
                     entrances.remove(entrance_b)
             else:
+                # Everything is reachable. Just start connecting the rest of the doors at random.
                 if multiworld.door_shuffle[player] == "decoupled":
                     entrance_b = dc_destinations.pop(0)
                 else:
                     entrance_b = entrances.pop(0)
-            # if (multiworld.door_shuffle[player] == "decoupled" and len(reachable_entrances) > 8 and len(entrances)
-            #         <= (starting_entrances - 3)):
-            #     entrance_b = dc_destinations.pop()
-            # elif multiworld.door_shuffle[player] == "decoupled":
-            #     entrance_b = dc_destinations.pop(0)
-            # else:
-            #     entrance_b = entrances.pop()
-            # entrance_a = entrances.pop(0)
+
             entrance_a.connect(entrance_b)
-            if multiworld.door_shuffle[player] != "decoupled":
+            if multiworld.door_shuffle[player] == "decoupled":
+                if entrance_b in entrances and entrance_a in dc_destinations and len(reachable_entrances) > 1:
+                    entrance_b.connect(entrance_a)
+                    entrances.remove(entrance_b)
+                    dc_destinations.remove(entrance_a)
+            else:
                 entrance_b.connect(entrance_a)
 
-        if multiworld.door_shuffle[player] == "full":
+        if multiworld.door_shuffle[player] in ("interiors", "full"):
             for pair in loop_out_interiors:
                 pair[1].connected_region = pair[0].connected_region
                 pair[1].parent_region.entrances.append(pair[0])
