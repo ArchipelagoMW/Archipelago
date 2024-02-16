@@ -228,7 +228,7 @@ class SplitCardKey(Choice):
 
 class AllElevatorsLocked(Toggle):
     """Adds requirements to the Celadon Department Store elevator and Silph Co elevators to have the Lift Key.
-    No logical implications normally, but may have a significant impact on Insanity or Decoupled Door Shuffle."""
+    No logical implications normally, but may have a significant impact on some Door Shuffle options."""
     display_name = "All Elevators Locked"
     default = 1
 
@@ -319,8 +319,8 @@ class DoorShuffle(Choice):
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
     Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
     named Full.
-    Full: Exterior to interior doors are shuffled, and interior to interior doors are shuffled, separately.
-    Insanity: All rooms in the game are shuffled.
+    Full: Exterior to interior entrances are shuffled, and interior to interior doors are shuffled, separately.
+    Insanity: All doors in the game are shuffled.
     Decoupled: Doors may be decoupled from each other, so that leaving through an exit may not return you to the
     door you entered from."""
     display_name = "Door Shuffle"
@@ -346,8 +346,8 @@ class WarpTileShuffle(Choice):
 
 
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel.
-    If Insanity or Decoupled Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
+    """Randomize the layout of Rock Tunnel. If Full, Insanity, or Decoupled Door Shuffle is on, this will cause only the
+    main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 
