@@ -205,6 +205,7 @@ extra_groups: Dict[str, Set[str]] = {
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
     "icebolt": {"Pages 52-53 (Icebolt)"},
+    "ice rod": {"Pages 52-53 (Icebolt)"},
     "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
     "progressive sword": {"Sword Upgrade"},
     "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
