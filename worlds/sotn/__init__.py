@@ -1,36 +1,33 @@
 
 from typing import ClassVar, Dict, Tuple, List
 
-import settings, typing, random
+import settings, typing, random, os
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
 from worlds.LauncherComponents import Component, components, SuffixIdentifier
 from Options import AssembleOptions
 
 
-from .Items import item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, Type, vanilla_list
+from .Items import item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, IType, vanilla_list
 from .Locations import location_table, SotnLocation
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import sotn_option_definitions
-from .Rom import get_base_rom_path, get_base_rom_bytes, write_char, write_short, write_word, write_to_file, SOTNDeltaPatch
+from .Rom import (get_base_rom_path, get_base_rom_bytes, write_char, write_short, write_word, write_to_file,
+                  SOTNDeltaPatch, write_seed, patch_rom)
 
+
+# Todo: Test changes in here to launch from the ArchipelagoLaucher
 components.append(Component('SOTN Client', 'SotnClient', file_identifier=SuffixIdentifier('.apsotn')))
 
 
 # -- Problem found on last play --
-# Merman Statue was a Dynamite instead of heart. Lootable, (NO PROBLEM)
-# Faerie Card. bugged graphic softlock on touch. Changed to sword card(FIXED)
-# Power of mist bugged graphic. Softlock on proximity 0x0016 seems to work. (FIXED)
-# Force of echo was a toadstool instead of heart (NO PROBLEM)
-# Looks like getting 2 misplaced relics too fast won't send it(During draw). Implement a received queue?
-# Holy glasses check seems bugged. (FIXED)
-# Those extra address looks like it's only when replacing with item NEED MORE TESTING
-# Something is wrong with CHI - Turkey(Demon)
-# We can enter CEN with just rings, but we can't leave without some kinda of flying or a library card(Maybe get 1 free)
-# Faerie Scroll Now make icon softlock on touch
-# Tooth, Rib, Eye, Heart of Vlad still spawning on RBO4
-# TODO: Test killing bosses with no relics of vlad
+# Getting Error num_id is nil in lua after receiving a misplaced, just once
+# Maybe Succubus be a boss?
+# Better distribution of vanilla items based on type
+# Find a better id to relics placehold
+# Faerie scroll place holder missing
+# TODO: Improve skill of wolf and bat card check
 
 class SotnSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
@@ -247,118 +244,15 @@ class SotnWorld(World):
         set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        print("Inside Output")
-        patched_rom = bytearray(get_base_rom_bytes())
-        no4 = self.options.opened_no4
-        are = self.options.opened_are
-        no2 = self.options.opened_no2
-        bosses = self.options.bosses_need
+        rom_path = patch_rom(self)
 
-        relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
+        """print(f"patching: {rom_path}")
+        patch = SOTNDeltaPatch(rom_path[0:-4] + SOTNDeltaPatch.patch_file_ending, player=player,
+                               player_name=multiworld.player_name[player], patched_path=rom_path)
 
-        for loc in self.multiworld.get_locations(self.player):
-            if loc.item and loc.item.player == self.player:
-                if loc.item.name == "Victory" or loc.item.name == "Boss token":
-                    continue
-                item_data = item_table[loc.item.name]
-                loc_data = location_table[loc.name]
-                if loc_data.rom_address:
-                    for address in loc_data.rom_address:
-                        if loc_data.no_offset:
-                            if item_data.type == Type.RELIC:
-                                write_short(patched_rom, address, 0x0000)
-                            else:
-                                write_short(patched_rom, address, item_data.get_item_id_no_offset())
-                        else:
-                            if loc_data.can_be_relic:
-                                # Probably relics of Vlad need to be removed
-                                if item_data.type == Type.RELIC:
-                                    write_short(patched_rom, address, item_data.get_item_id())
-                                else:
-                                    # Skill of wolf, bat card, Faerie card and Gas cloud
-                                    # can't be item. Replace with sword card instead
-                                    if (loc.name == "Skill of Wolf" or loc.name == "Bat Card" or
-                                            loc.name == "Faerie Card" or loc.name == "Gas Cloud"):
-                                        write_short(patched_rom, address, 0x0016)
-                                    elif loc.name in relics_vlad:
-                                        write_short(patched_rom, address, 0x0016)
-                                    elif loc.name == "Jewel of Open":
-                                        write_short(patched_rom, address, 0x0016)
-                                    else:
-                                        write_short(patched_rom, address - 4, 0x000c)
-                                        write_short(patched_rom, address, loc_data.get_delete())
-                            else:
-                                if item_data.type == Type.RELIC:
-                                    write_short(patched_rom, address, 0x0007)
-                                else:
-                                    write_short(patched_rom, address, item_data.get_item_id())
-            elif loc.item and loc.item.player != self.player:
-                loc_data = location_table[loc.name]
-                if loc_data.rom_address:
-                    for address in loc_data.rom_address:
-                        if loc_data.no_offset:
-                            write_short(patched_rom, address, 0x0000)
-                        else:
-                            if loc_data.can_be_relic:
-                                if (loc.name == "Skill of Wolf" or loc.name == "Bat Card" or loc.name == "Faerie Card"
-                                        or loc.name == "Gas Cloud"):
-                                    write_short(patched_rom, address, 0x0016)
-                                elif loc.name in relics_vlad:
-                                    write_short(patched_rom, address, 0x0016)
-                                else:
-                                    write_short(patched_rom, address - 4, 0x000c)
-                                    write_short(patched_rom, address, loc_data.get_delete())
-                            else:
-                                write_short(patched_rom, address, 0x0004)
+        patch.write()"""
 
-        # TODO: Move patch instructions to Rom.py. Actually all of this should be on Rom.py
-        # Fix softlock when using gold & silver ring
-        offset = 0x492df64
-        offset = write_word(patched_rom, offset, 0xa0202ee8)
-        offset = write_word(patched_rom, offset, 0x080735cc)
-        offset = write_word(patched_rom, offset, 0x00000000)
-        write_word(patched_rom, 0x4952454, 0x0806b647)
-        write_word(patched_rom, 0x4952474, 0x0806b647)
 
-        # Patch Alchemy Laboratory cutscene
-        write_short(patched_rom, 0x054f0f44 + 2, 0x1000)
 
-        # Patch Clock Room cutscene
-        write_char(patched_rom, 0x0aeaa0, 0x00)
-        write_char(patched_rom, 0x119af4, 0x00)
 
-        outfile_name = self.multiworld.get_out_file_name_base(self.player)
-        outfile_name += ".bin"
-
-        """
-        The flag that get set on NO4 switch: 0x03be1c and the instruction is jz, r2, 80181230 on 0x5430404 we patched
-        to jne r0, r0 so it never branch.
-        
-        The flag that get set on ARE switch: 0x03be9d and the instruction is jz, r2, 801b6f84 on 0x440110c we patched
-        to jne r0, r0 so it never branch.
-        
-        The flag that get set on NO2 switch: 0x03be4c and the instruction is jz, r2, 801c1028 on 0x46c0968 we patched
-        to jne r0, r0 so it never branch.
-        """
-        #  NO3 and NP3 doesn't share instruction.
-        if no4:
-            # Open NO4 too soon, make death skippable. Keep close till visit Alchemy Laboratory
-            # write_word(patched_rom, 0x4ba8798, 0x14000005)
-            write_word(patched_rom, 0x5430404, 0x14000005)
-
-        if are:
-            write_word(patched_rom, 0x440110c, 0x14000066)
-
-        if no2:
-            write_word(patched_rom, 0x46c0968, 0x1400000b)
-        # Changing ROM name prevent "replay game", had to watch all cinematics and dialogs
-        # Write bosses need it on index 12 of RNO0
-        write_short(patched_rom, 0x4f85afc, bosses)
-        """
-        The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
-        branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
-        """
-        write_word(patched_rom, 0x4fcf7b4, 0x10000118)
-
-        write_to_file(patched_rom)
 
