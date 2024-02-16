@@ -259,7 +259,7 @@ class LocationBalancing(Choice):
     option_full = LocationBalancingMode.full.value
     default = LocationBalancingMode.compromise.value
 
-class ChosenScenario(Choice):
+class SelectedScenario(Choice):
     """Choose which scenario you'd like to play! Random won't choose scenarios that are unreasonably difficult/tedious.
     Future updates will allow custom scenarios.
     """
@@ -433,7 +433,7 @@ class DeathLink(Choice):
     option_enabled = DeathLinkMode.enabled.value
     default = DeathLinkMode.enabled.value
 
-class Visibility(Choice):
+class SelectedVisibility(Choice):
     """Choose how much the unlock shop displays. 
 
     "Nothing" tells you nothing about the item you'll purchase. 
@@ -449,7 +449,7 @@ class Visibility(Choice):
     option_full = Visibility.full.value
     default = Visibility.recipient.value
 
-class Difficulty(Choice):
+class SelectedDifficulty(Choice):
     """Choose a difficulty for the randomization. This will affect things such as ride multipliers and interest rates for loans.
     """
     auto_display_name = True
@@ -461,7 +461,7 @@ class Difficulty(Choice):
     option_extreme = Difficulty.extreme.value
     default = Difficulty.medium.value
 
-class Preferred_Intensity(Choice):
+class SelectedIntensity(Choice):
     """Choose a prefered intensity for your guests. Less intense will limit guests to a maximum of 4 intensity, and more intense will limit guests
     to a minimum of 8 intensity in most circumstances. Normal is reccommended for most players.
     """
@@ -470,7 +470,7 @@ class Preferred_Intensity(Choice):
     option_more_intense = Preferred_Intensity.more_intense.value
     default = Preferred_Intensity.normal.value
 
-class Randomization_Range(Choice):
+class SelectedRandomizationRange(Choice):
     """Choose the spread for randomized values.
     """
     auto_display_name = True
@@ -481,7 +481,7 @@ class Randomization_Range(Choice):
     option_extreme = Randomization_Range.extreme.value
     default = Randomization_Range.medium.value
 
-class Scenario_Length(Choice):
+class SelectedScenarioLength(Choice):
     """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
     Synchronus Short: Around 2 hours to complete.
     Synchronus Long: Around 4 hours to complete.
@@ -496,7 +496,7 @@ class Scenario_Length(Choice):
     option_marathon = Scenario_Length.marathon.value
     default = Scenario_Length.synchronous_short.value
 
-class Stat_ReRolls(Choice):
+class SelectedStatReRolls(Choice):
     """How often to rerandomize the stats for ride types. Build the Theme Park of Theseus!
     """
     auto_display_name = True
@@ -509,7 +509,7 @@ class Stat_ReRolls(Choice):
     option_extremely_frequent = Stat_ReRolls.extremely_frequent.value
     default = Stat_ReRolls.infrequent.value
 
-class Difficult_Guest_Generation(Choice):
+class SelectedDifficultGuestGeneration(Choice):
     """Makes guests harder to generate. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Difficult Guest Generation"
     option_off = Difficult_Guest_Generation.off.value
@@ -517,7 +517,7 @@ class Difficult_Guest_Generation(Choice):
     option_on = Difficult_Guest_Generation.on.value
     default = Difficult_Guest_Generation.unlockable.value
 
-class Difficult_Park_Rating(Choice):
+class SelectedDifficultParkRating(Choice):
     """Makes park rating harder to improve. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Difficult Park Rating"
     option_off = Difficult_Park_Rating.off.value
@@ -525,7 +525,7 @@ class Difficult_Park_Rating(Choice):
     option_on = Difficult_Park_Rating.on.value
     default = Difficult_Park_Rating.unlockable.value
 
-class Forbid_High_Construction(Choice):
+class SelectedForbidHighConstruction(Choice):
     """Limits building to tree height. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid High Construction"
     option_off = Forbid_High_Construction.off.value
@@ -533,7 +533,7 @@ class Forbid_High_Construction(Choice):
     option_on = Forbid_High_Construction.on.value
     default = Forbid_High_Construction.unlockable.value
 
-class Forbid_Landscape_Changes(Choice):
+class SelectedForbidLandscapeChanges(Choice):
     """Forbids the landscape from being altered. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Landscape Changes"
     option_off = Forbid_Landscape_Changes.off.value
@@ -541,7 +541,7 @@ class Forbid_Landscape_Changes(Choice):
     option_on = Forbid_Landscape_Changes.on.value
     default = Forbid_Landscape_Changes.unlockable.value
 
-class Forbid_Marketing_Campaigns(Choice):
+class SelectedForbidMarketingCampaigns(Choice):
     """Forbids marketing campaigns. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Marketing Campaigns"
     option_off = Forbid_Marketing_Campaigns.off.value
@@ -549,7 +549,7 @@ class Forbid_Marketing_Campaigns(Choice):
     option_on = Forbid_Marketing_Campaigns.on.value
     default = Forbid_Marketing_Campaigns.unlockable.value
 
-class Forbid_Tree_Removal(Choice):
+class SelectedForbidTreeRemoval(Choice):
     """Forbids removing trees. Unlockable puts an item in generation that disables the rule when found."""
     display_name = "Forbid Tree Removal"
     option_off = Forbid_Tree_Removal.off.value
@@ -679,9 +679,9 @@ class Filler(Range):
 openRCT2_options = {
     # generator options
     "location_balancing": LocationBalancing,
-    "difficulty": Difficulty,
-    "scenario_length": Scenario_Length,
-    "scenario": ChosenScenario,
+    "difficulty": SelectedDifficulty,
+    "scenario_length": SelectedScenarioLength,
+    "scenario": SelectedScenario,
     "filler": Filler,
 
     # deathlink
@@ -693,11 +693,11 @@ openRCT2_options = {
     "spam_traps": Spam_Traps,
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
-    "randomization_range": Randomization_Range,
-    "stat_rerolls": Stat_ReRolls,
+    "randomization_range": SelectedRandomizationRange,
+    "stat_rerolls": SelectedStatReRolls,
     "randomize_park_values": Randomize_Park_Values,
-    "visibility": Visibility,
-    "preferred_intensity": Preferred_Intensity,
+    "visibility": SelectedVisibility,
+    "preferred_intensity": SelectedIntensity,
     # "include_guest_objective": Include_Guest_Objective,
     "guest_objective": Guest_Objective,
     # "include_park_value_objective": Include_Park_Value_Objective,
@@ -714,12 +714,12 @@ openRCT2_options = {
     "monopoly_mode": Monopoly_Mode,
     "include_gamespeed_items": Include_Gamespeed_Items,
     # park rules. Depending on the option, these may affect which items are created
-    "difficult_guest_generation": Difficult_Guest_Generation,
-    "difficult_park_rating": Difficult_Park_Rating,
-    "forbid_high_construction": Forbid_High_Construction,
-    "forbid_landscape_changes": Forbid_Landscape_Changes,
-    "forbid_marketing_campaigns": Forbid_Marketing_Campaigns,
-    "forbid_tree_removal": Forbid_Tree_Removal
+    "difficult_guest_generation": SelectedDifficultGuestGeneration,
+    "difficult_park_rating": SelectedDifficultParkRating,
+    "forbid_high_construction": SelectedForbidHighConstruction,
+    "forbid_landscape_changes": SelectedForbidLandscapeChanges,
+    "forbid_marketing_campaigns": SelectedForbidMarketingCampaigns,
+    "forbid_tree_removal": SelectedForbidTreeRemoval
 }
 
 OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})
