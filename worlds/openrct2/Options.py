@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import TypedDict
-from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet
+from Options import DefaultOnToggle, Toggle, Range, Choice, OptionSet, PerGameCommonOptions
+from dataclasses import dataclass
 
 class Scenario(IntEnum):
     forest_frontiers = 0
@@ -675,51 +676,51 @@ class Filler(Range):
     range_end = 50
     default = 10
 
-
-openRCT2_options = {
+@dataclass
+class openRCT2Options(PerGameCommonOptions):
     # generator options
-    "location_balancing": LocationBalancing,
-    "difficulty": SelectedDifficulty,
-    "scenario_length": SelectedScenarioLength,
-    "scenario": SelectedScenario,
-    "filler": Filler,
+    location_balancing: LocationBalancing
+    difficulty: SelectedDifficulty
+    scenario_length: SelectedScenarioLength
+    scenario: SelectedScenario
+    filler: Filler
 
     # deathlink
-    "deathlink": DeathLink,
+    deathlink: DeathLink
 
     # traps
-    "furry_convention_traps": Furry_Convention_Traps,
-    "bathroom_traps": Bathroom_Traps,
-    "spam_traps": Spam_Traps,
+    furry_convention_traps: Furry_Convention_Traps
+    bathroom_traps: Bathroom_Traps
+    spam_traps: Spam_Traps
 
     # in-game options. All Archipelago needs to do with these is pass them to OpenRCT2. The game will handle the rest
-    "randomization_range": SelectedRandomizationRange,
-    "stat_rerolls": SelectedStatReRolls,
-    "randomize_park_values": Randomize_Park_Values,
-    "visibility": SelectedVisibility,
-    "preferred_intensity": SelectedIntensity,
-    # "include_guest_objective": Include_Guest_Objective,
-    "guest_objective": Guest_Objective,
-    # "include_park_value_objective": Include_Park_Value_Objective,
-    "park_value_objective": Park_Value_Objective,
-    # "include_roller_coaster_objective": Include_Roller_Coaster_Objective,
-    "roller_coaster_objective": Roller_Coaster_Objective,
-    "roller_coaster_excitement": Roller_Coaster_Excitement,
-    "roller_coaster_intensity": Roller_Coaster_Intensity,
-    "roller_coaster_nausea": Roller_Coaster_Nausea,
-    "required_unique_rides": Required_Unique_Rides,
-    # "include_park_rating_objective": Include_Park_Rating_Objective,
-    "park_rating_objective": Park_Rating_Objective,
-    "pay_off_loan": Pay_Off_Loan,
-    "monopoly_mode": Monopoly_Mode,
-    "include_gamespeed_items": Include_Gamespeed_Items,
+    randomization_range: SelectedRandomizationRange
+    stat_rerolls: SelectedStatReRolls
+    randomize_park_values: Randomize_Park_Values
+    visibility: SelectedVisibility
+    preferred_intensity: SelectedIntensity
+    # include_guest_objective: Include_Guest_Objective
+    guest_objective: Guest_Objective
+    # include_park_value_objective: Include_Park_Value_Objective
+    park_value_objective: Park_Value_Objective
+    # include_roller_coaster_objective: Include_Roller_Coaster_Objective
+    roller_coaster_objective: Roller_Coaster_Objective
+    roller_coaster_excitement: Roller_Coaster_Excitement
+    roller_coaster_intensity: Roller_Coaster_Intensity
+    roller_coaster_nausea: Roller_Coaster_Nausea
+    required_unique_rides: Required_Unique_Rides
+    # include_park_rating_objective: Include_Park_Rating_Objective
+    park_rating_objective: Park_Rating_Objective
+    pay_off_loan: Pay_Off_Loan
+    monopoly_mode: Monopoly_Mode
+    include_gamespeed_items: Include_Gamespeed_Items
     # park rules. Depending on the option, these may affect which items are created
-    "difficult_guest_generation": SelectedDifficultGuestGeneration,
-    "difficult_park_rating": SelectedDifficultParkRating,
-    "forbid_high_construction": SelectedForbidHighConstruction,
-    "forbid_landscape_changes": SelectedForbidLandscapeChanges,
-    "forbid_marketing_campaigns": SelectedForbidMarketingCampaigns,
-    "forbid_tree_removal": SelectedForbidTreeRemoval
-}
+    difficult_guest_generation: SelectedDifficultGuestGeneration
+    difficult_park_rating: SelectedDifficultParkRating
+    forbid_high_construction: SelectedForbidHighConstruction
+    forbid_landscape_changes: SelectedForbidLandscapeChanges
+    forbid_marketing_campaigns: SelectedForbidMarketingCampaigns
+    forbid_tree_removal: SelectedForbidTreeRemoval
 
-OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})
+
+# OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})

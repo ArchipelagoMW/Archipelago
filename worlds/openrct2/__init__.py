@@ -48,7 +48,9 @@ class OpenRCT2World(World):
 
     game = "OpenRCT2"
 
-    option_definitions = openRCT2_options  # options the player can set
+    # option_definitions = openRCT2_options  # options the player can set
+    options_dataclass = openRCT2Options
+    options: openRCT2Options
     topology_present = True  # show path to required location checks in spoiler
     item_name_to_id = {name: id for id, name in enumerate(item_info["all_items"], base_id)}
     location_name_to_id = {name: id for id, name in enumerate(location_info["all_locations"], base_id)}
@@ -77,15 +79,17 @@ class OpenRCT2World(World):
     # items one level lower on the tree. We then will set rules in create_regions that reflect our table.
 
     def generate_early(self) -> None:
-        self.rules = [self.multiworld.difficult_guest_generation[self.player].value,
-                      self.multiworld.difficult_park_rating[self.player].value,
-                      self.multiworld.forbid_high_construction[self.player].value,
-                      self.multiworld.forbid_landscape_changes[self.player].value,
-                      self.multiworld.forbid_marketing_campaigns[self.player].value,
-                      self.multiworld.forbid_tree_removal[self.player].value]
+        self.rules = [self.options.difficult_guest_generation,
+                      self.options.difficult_park_rating,
+                      self.options.forbid_high_construction,
+                      self.options.forbid_landscape_changes,
+                      self.options.forbid_marketing_campaigns,
+                      self.options.forbid_tree_removal]
         # Grabs options for item generation
-        scenario = self.multiworld.scenario[self.player].value
+        scenario = self.options.scenario
+        print(scenario)
         new_scenario = ""
+        elligible_scenarios = []
         # If the scenario is random, pick which random scenario it will be
         if scenario == 143:  # RCT1
             elligible_scenarios = [scenario for scenario in scenario_info["rct1"] if scenario not in scenario_info["unreasonable_scenarios"]]
@@ -104,23 +108,24 @@ class OpenRCT2World(World):
         elif scenario == 150:  # Random RCT2 + Expansions
             elligible_scenarios = [scenario for scenario in scenario_info["rct2_plus_expansions"] if scenario not in scenario_info["unreasonable_scenarios"]]
         #Finish assigning the scenario
-        new_scenario = str(random.choice(elligible_scenarios))
-        scenario = getattr(Scenario,new_scenario)
-        self.multiworld.scenario[self.player].value = scenario # Uses the Scenario IntEnum from Options
+        if elligible_scenarios:
+            new_scenario = str(random.choice(elligible_scenarios))#Pick the Scenario
+            scenario = SelectedScenario(getattr(Scenario,new_scenario))#Reassign the scenario option to the randomly selected choice
+            self.options.scenario = scenario
 
 
-        monopoly_mode = self.multiworld.monopoly_mode[self.player].value
-        include_gamespeed_items = self.multiworld.include_gamespeed_items[self.player].value
-        furry_convention_traps = self.multiworld.furry_convention_traps[self.player].value
-        spam_traps = self.multiworld.spam_traps[self.player].value
-        bathroom_traps = self.multiworld.bathroom_traps[self.player].value
-        filler = self.multiworld.filler[self.player].value
-        rules = [self.multiworld.difficult_guest_generation[self.player].value,
-                 self.multiworld.difficult_park_rating[self.player].value,
-                 self.multiworld.forbid_high_construction[self.player].value,
-                 self.multiworld.forbid_landscape_changes[self.player].value,
-                 self.multiworld.forbid_marketing_campaigns[self.player].value,
-                 self.multiworld.forbid_tree_removal[self.player].value]
+        monopoly_mode = self.options.monopoly_mode
+        include_gamespeed_items = self.options.include_gamespeed_items
+        furry_convention_traps = self.options.furry_convention_traps
+        spam_traps = self.options.spam_traps
+        bathroom_traps = self.options.bathroom_traps
+        filler = self.options.filler
+        rules = [self.options.difficult_guest_generation,
+                 self.options.difficult_park_rating,
+                 self.options.forbid_high_construction,
+                 self.options.forbid_landscape_changes,
+                 self.options.forbid_marketing_campaigns,
+                 self.options.forbid_tree_removal]
         items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, 
                                    spam_traps, bathroom_traps, filler)
 
@@ -261,7 +266,7 @@ class OpenRCT2World(World):
         # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
 
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
-        if not self.multiworld.include_gamespeed_items[self.player].value:# If the user doesn't want to unlock speed, give it to em for free
+        if not self.options.include_gamespeed_items:# If the user doesn't want to unlock speed, give it to em for free
             count = 0
             while count < 4:
                 self.multiworld.push_precollected(self.create_item("Progressive Speed"))
@@ -291,7 +296,7 @@ class OpenRCT2World(World):
                          lambda state, prereq=item: state.has(prereq, self.player))
                 # Only add rules if there's an item to be unlocked in the first place
                 if (item in item_info["requires_height"]) and (
-                        self.multiworld.forbid_high_construction[self.player].value == 1):
+                        self.options.forbid_high_construction == 1):
                     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
                              lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
@@ -325,8 +330,8 @@ class OpenRCT2World(World):
                 print("Added rule: \nHave: " + str(
                     category) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
 
-        difficulty = self.multiworld.difficulty[self.player].value
-        length = self.multiworld.scenario_length[self.player].value
+        difficulty = self.options.difficulty
+        length = self.options.scenario_length
         length_modifier = 0
         difficulty_modifier = 0
         difficulty_minimum = 0
@@ -454,9 +459,9 @@ class OpenRCT2World(World):
             self.location_prices.append(unlock)
             # Handle unlocked rides
             if item in item_info["rides"]:  # Don't put items in that require an impossible rule
-                if not (self.multiworld.forbid_high_construction[self.player].value == 2 and item in item_info[
+                if not (self.options.forbid_high_construction == 2 and item in item_info[
                         "requires_height"]):
-                    if not (self.multiworld.forbid_landscape_changes[self.player].value == 2 and item in item_info[
+                    if not (self.options.forbid_landscape_changes == 2 and item in item_info[
                             "requires_landscaping"]):
                         queued_prereqs.append(item)
             if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
@@ -473,9 +478,9 @@ class OpenRCT2World(World):
                            item in item_info["rides"] and item not in item_info["non_starters"]]
         elligible_rides = list(dict.fromkeys(elligible_rides))
         random.shuffle(elligible_rides)
-        if self.multiworld.required_unique_rides[self.player].value:
+        if self.options.required_unique_rides:
             count = 0
-            while count < self.multiworld.required_unique_rides[self.player].value:
+            while count < self.options.required_unique_rides:
                 self.unique_rides.append(elligible_rides[count])
                 count += 1
             # self.unique_rides = [elligible_rides[i] for i in
@@ -498,15 +503,15 @@ class OpenRCT2World(World):
         # archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false],
         # RideIncome: [0, false], ShopIncome: [8000, false], ParkRating: [700, false], LoanPaidOff: [true, false],
         # Monopoly: [true, false]};
-        guests = self.multiworld.guest_objective[self.player].value
-        park_value = self.multiworld.park_value_objective[self.player].value
-        roller_coasters = self.multiworld.roller_coaster_objective[self.player].value
-        excitement = self.multiworld.roller_coaster_excitement[self.player].value
-        intensity = self.multiworld.roller_coaster_intensity[self.player].value
-        nausea = self.multiworld.roller_coaster_nausea[self.player].value
-        park_rating = self.multiworld.park_rating_objective[self.player].value
-        pay_off_loan = self.multiworld.pay_off_loan[self.player].value
-        monopoly = self.multiworld.monopoly_mode[self.player].value
+        guests = self.options.guest_objective
+        park_value = self.options.park_value_objective
+        roller_coasters = self.options.roller_coaster_objective
+        excitement = self.options.roller_coaster_excitement
+        intensity = self.options.roller_coaster_intensity
+        nausea = self.options.roller_coaster_nausea
+        park_rating = self.options.park_rating_objective
+        pay_off_loan = self.options.pay_off_loan
+        monopoly = self.options.monopoly_mode
         unique_rides = self.unique_rides
         objectives = {"Guests": [guests, False], "ParkValue": [park_value, False],
                       "RollerCoasters": [roller_coasters, excitement, intensity, nausea, 0, False],
@@ -540,16 +545,16 @@ class OpenRCT2World(World):
         print("Here's the final unlock shop:")
         print(self.location_prices)
         return {
-            "difficulty": self.multiworld.difficulty[self.player].value,
-            "scenario_length": self.multiworld.scenario_length[self.player].value,
-            "scenario": self.multiworld.scenario[self.player].value,
-            "death_link": self.multiworld.deathlink[self.player].value,
-            "randomization_range": self.multiworld.randomization_range[self.player].value,
-            "stat_rerolls": self.multiworld.stat_rerolls[self.player].value,
-            "randomize_park_values": self.multiworld.randomize_park_values[self.player].value,
-            "visibility": self.multiworld.visibility[self.player].value,
+            "difficulty": self.options.difficulty,
+            "scenario_length": self.options.scenario_length,
+            # "scenario": self.options.scenario,
+            "death_link": self.options.deathlink,
+            "randomization_range": self.options.randomization_range,
+            "stat_rerolls": self.options.stat_rerolls,
+            "randomize_park_values": self.options.randomize_park_values,
+            "visibility": self.options.visibility,
             "rules": self.rules,
-            "preferred_intensity": self.multiworld.preferred_intensity[self.player].value,
+            "preferred_intensity": self.options.preferred_intensity,
             "objectives": objectives,
             "location_prices": self.location_prices
         }
