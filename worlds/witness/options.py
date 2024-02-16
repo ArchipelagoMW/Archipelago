@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from schema import Schema, And
+from schema import Schema, And, Optional
 
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
 
@@ -178,11 +178,13 @@ class TrapPercentage(Range):
 
 
 class TrapWeights(OptionDict):
-    """Specify how many of your traps will be of each type."""
+    """Specify how many of your traps will be of each type.
+    If you set all trap weights to 0, you will get no traps, even if "Trap Percentage" is set to a number higher than
+    0."""
 
     display_name = "Trap Weights"
     schema = Schema({
-        trap_name: And(int, lambda n: n >= 0)
+        Optional(trap_name): And(int, lambda n: n >= 0)
         for trap_name, item_definition in StaticWitnessLogic.all_items.items()
         if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
     })
