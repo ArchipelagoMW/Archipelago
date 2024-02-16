@@ -48,7 +48,7 @@ There is also a [standalone item tracker](https://github.com/radicoon/tunic-rand
 
 There is an [entrance tracker](https://scipiowright.gitlab.io/tunic-tracker/) for the entrance randomizer. This is a manual tracker that runs in your browser. This tracker was created by ScipioWright, and is a fork of the Pokémon Tracker by [Sergi "Sekii" Santana](https://gitlab.com/Sekii/pokemon-tracker).
 
-You can also use the Universal Tracker to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the Future-Game-Design channel. It was created by Faris and Qwint.
+You can also use the Universal Tracker (by Faris and qwint) to find a complete list of what checks are in logic with your current items. You can find it on the Archipelago Discord, in its post in the future-game-design channel. This tracker is an extension of the regular Archipelago Text Client.
 
 ## What should I know regarding logic?
 - Nighttime is not considered in logic. Every check in the game is obtainable during the day.
