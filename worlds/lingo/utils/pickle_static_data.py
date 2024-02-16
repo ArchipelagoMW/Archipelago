@@ -2,6 +2,7 @@ from typing import Dict, List, NamedTuple, Optional, Set
 from worlds.lingo.datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
 
 import hashlib
+import os
 import pickle
 import sys
 import Utils
@@ -432,9 +433,9 @@ if __name__ == '__main__':
         
         exit()
     else:
-        ll1_path = argv[1]
-        ids_path = argv[2]
-        output_path = argv[3]
+        ll1_path = sys.argv[1]
+        ids_path = sys.argv[2]
+        output_path = sys.argv[3]
         
     load_static_data(ll1_path, ids_path)
     
