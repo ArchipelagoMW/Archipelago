@@ -91,7 +91,17 @@ def launch_game(url: Optional[str] = None) -> None:
     def install_mod() -> None:
         """Installs latest version of the mod"""
         get_url = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
-        release_url = request_data(get_url)["assets"][0]["browser_download_url"]
+        assets = request_data(get_url)["assets"]
+        if len(assets) == 1:
+            release_url = request_data(get_url)["assets"][0]["browser_download_url"]
+        else:
+            for asset in assets:
+                if "TheMessengerRandomizerAP" in asset["name"]:
+                    release_url = asset["browser_download_url"]
+                    break
+            else:
+                messagebox("Failure", "Failed to find latest mod download", True)
+                raise RuntimeError("Failed to install Mod")
 
         mod_folder = os.path.join(folder, "Mods")
         os.makedirs(mod_folder, exist_ok=True)
