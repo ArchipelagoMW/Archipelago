@@ -141,7 +141,7 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 46-47": TunicItemData(ItemClassification.useful, 1, 125, "pages"),
     "Pages 48-49": TunicItemData(ItemClassification.useful, 1, 126, "pages"),
     "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "pages"),
-    "Pages 52-53 (Ice Rod)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
+    "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
 }
 
@@ -176,7 +176,7 @@ slot_data_item_names = [
     "Hero Relic - MP",
     "Pages 24-25 (Prayer)",
     "Pages 42-43 (Holy Cross)",
-    "Pages 52-53 (Ice Rod)",
+    "Pages 52-53 (Icebolt)",
     "Red Questagon",
     "Green Questagon",
     "Blue Questagon",
@@ -204,10 +204,11 @@ extra_groups: Dict[str, Set[str]] = {
     "magic rod": {"Magic Wand"},
     "holy cross": {"Pages 42-43 (Holy Cross)"},
     "prayer": {"Pages 24-25 (Prayer)"},
-    "ice rod": {"Pages 52-53 (Ice Rod)"},
+    "icebolt": {"Pages 52-53 (Icebolt)"},
+    "ice rod": {"Pages 52-53 (Icebolt)"},
     "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
     "progressive sword": {"Sword Upgrade"},
-    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Ice Rod)"},
+    "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
     "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"}
 }
 
