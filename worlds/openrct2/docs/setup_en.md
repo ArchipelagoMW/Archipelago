@@ -29,7 +29,7 @@ Once OpenRCT2 is up and running, you'll need to install the [Roller Coaster Tyco
 
 ## Generate a MultiWorld Game
 
-1. Visit the [Player Settings](../../../../games/OpenRCT2/player-settings) page and configure the game-specific settings to taste
+1. Visit the [Player Settings](../../../../games/OpenRCT2/player-settings) page and configure the game-specific settings to taste.
 
 *By default, these settings will only use levels from Roller Coaster Tycoon 2. If you own Roller Coaster Tycoon 1 or any of the expansion packs for either game, you may select the scenario for use in your game of Archipelago.
 
@@ -45,7 +45,7 @@ Once OpenRCT2 is up and running, you'll need to install the [Roller Coaster Tyco
 
 3. Launch the Archipelago client from the Archipelago program.
 
-4. Click the "Archipelago" button on the menu that pops up in your scenario. Once the client is launched, they should automatically connect and you can connect to the server. Type your server address and port in the "Connect" box at the top, and you'll be able to select the "Start Game!" button. If the randomizer menu doesn't appear at the start of the scenario, select the "RCTRando Options" menu item from the map tab and ensure the "Enable Randomizer" box is checked.
+4. Click the "Archipelago" button on the menu that pops up in your scenario. Once the client is launched, they should automatically connect and you can connect to the server. Type your server address and port in the "Connect" box at the top of the client, put in the name for your slot, and you'll be able to select the "Start Game!" button. If the randomizer menu doesn't appear at the start of the scenario, select the "RCTRando Options" menu item from the map tab and ensure the "Enable Randomizer" box is checked.
 
 5. Begin your game of Archipelago! All your locations/checks/goals can be found in the "Archipelago Checks!" menu under the map tab.
 

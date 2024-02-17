@@ -13,10 +13,11 @@ Players may choose their own goal, multiple goals, or leave it up to the randomi
 
 ## Items
 
-Rides, scenery, rules, and a variety of new items have been placed in the unlock shop. 
+Rides, scenery, rules, and a variety of new items have been placed in the unlock shop or around the multiworld. 
 
 
 ### Custom Goals
+
 The Archipelago plugin allows players to create their own custom scenario objectives. These can be stacked for added challenge. The goals are:
 
 Guests: Requires a minimum guest count in your park to win.
@@ -26,6 +27,3 @@ Roller Coasters: Requires a minimum number of roller coasters to win. Additional
 Pay off loan: Requires the loan to be paid off to win.
 Unique Rides: A new objective. A list of unlockable rides will be given to you. At least 1 of each must be built to win. (Rides count as built once they have posted stats)
 Monopoly Mode: A new objective. (Nearly) Every unowned tile in the park will be purchasable. (Tiles with paths will have construction rights instead) Once you own the entire map, you win! 40 more items will be added to the item pool, 20 land purchase discounts and 20 construction rights discounts. Each one will reduce the cost of their respective tiles by $10, down to the price of free.
-
-### Randomization Options
-

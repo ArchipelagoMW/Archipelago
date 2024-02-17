@@ -1,18 +1,26 @@
 ### Helpful Commands
 
-Commands are split into two types: client commands and server commands. Client commands are commands which are executed
-by the client and do not affect the Archipelago remote session. Server commands are commands which are executed by the
+Commands are split into two types: game commands and server commands. Game commands are commands which are executed
+by the game and do not affect the Archipelago remote session. Server commands are commands which are executed by the
 Archipelago server and affect the Archipelago session or otherwise provide feedback from the server.
 
 OpenRCT2 commands are started with two exclamation points: `!!`. They must be run from within the game, in the chat window
 of the unlock shop. Remote commands are always submitted to the server prepended with an exclamation point: `!`.
 
+### Game Commands
+
+Game commands may only be executed from within OpenRCT2, by typing the following from the unlock shop, including the 
+exclamation points: `!!`.
+
+- `!!help` Prints the help menu.
+- `!!toggleDeathLink` Enables/Disables Deathlink in game
+- `!!setMaxSpeed x` Sets the maximum speed the game will allow, from 1 to 5.
+- `!!resendChecks` Resends all the purchased checks, in case the connector is bad at its job.
+
 #### Remote Commands
 
-Remote commands may be executed by any client which allows for sending text chat to the Archipelago server. If your
-client does not allow for sending chat then you may connect to your game slot with the TextClient which comes with the
-Archipelago installation. In order to execute the command you need to merely send a text message with the command,
-including the exclamation point.
+Remote commands may be executed by any client which allows for sending text chat to the Archipelago server.
+ In order to execute the command you need to merely send a text message with the command, including the exclamation point.
 
 - `!help` Returns a listing of available remote commands.
 - `!license` Returns the software licensing information.
