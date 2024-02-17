@@ -1293,7 +1293,7 @@ def pair(a, b):
     return (f"{a} to {b}", f"{b} to {a}")
 
 
-mandatory_connections = {
+safari_zone_connections = {
     pair("Safari Zone Center-S", "Safari Zone Gate-N"),
     pair("Safari Zone East", "Safari Zone North"),
     pair("Safari Zone East", "Safari Zone Center-S"),
@@ -1302,6 +1302,7 @@ mandatory_connections = {
     pair("Safari Zone North", "Safari Zone West-NW"),
     pair("Safari Zone West", "Safari Zone Center-NW"),
 }
+
 full_mandatory_connections = {
     pair("Player's House 1F", "Player's House 2F"),
     pair("Indigo Plateau Lorelei's Room", "Indigo Plateau Lobby-N"),
@@ -1979,7 +1980,26 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
     one_way_forced_connections = set()
 
     if multiworld.door_shuffle[player]:
-        forced_connections.update(mandatory_connections.copy())
+        if multiworld.door_shuffle[player] in ("full", "insanity", "decoupled"):
+            safari_zone_doors = [door for pair in safari_zone_connections for door in pair]
+            safari_zone_doors.sort()
+            order = ["Center", "East", "North", "West"]
+            multiworld.random.shuffle(order)
+            usable_doors = ["Safari Zone Gate-N to Safari Zone Center-S"]
+            for section in order:
+                section_doors = [door for door in safari_zone_doors if door.startswith(f"Safari Zone {section}")]
+                connect_door_a = multiworld.random.choice(usable_doors)
+                connect_door_b = multiworld.random.choice(section_doors)
+                usable_doors.remove(connect_door_a)
+                section_doors.remove(connect_door_b)
+                forced_connections.add((connect_door_a, connect_door_b))
+                usable_doors += section_doors
+                multiworld.random.shuffle(usable_doors)
+            while usable_doors:
+                forced_connections.add((usable_doors.pop(), usable_doors.pop()))
+        else:
+            forced_connections.update(safari_zone_connections)
+
         usable_safe_rooms = safe_rooms.copy()
 
         if multiworld.door_shuffle[player] == "simple":
