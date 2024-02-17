@@ -2078,25 +2078,14 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             # warping outside an entrance that isn't the Pokemon Center, just always put Pokemon Centers at Pokemon
             # Center entrances
             for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
-                if multiworld.random.randint(0, 1):
-                    one_way_forced_connections.add((a, b))
-                else:
-                    forced_connections.add((a, b))
+                one_way_forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
             if multiworld.key_items_only[player]:
-                if multiworld.random.randint(0, 1):
-                    one_way_forced_connections.add((multiworld.random.choice(initial_doors),
-                                                    "Viridian Pokemart to Viridian City"))
-                else:
-                    forced_connections.add((multiworld.random.choice(initial_doors),
-                                            "Viridian Pokemart to Viridian City"))
+                one_way_forced_connections.add((multiworld.random.choice(initial_doors),
+                                                "Viridian Pokemart to Viridian City"))
 
             elif "Pokemart" not in pallet_safe_room:
-                if multiworld.random.randint(0, 1):
-                    one_way_forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
-                        [mart for mart in pokemarts if mart not in safe_rooms_sample])))
-                else:
-                    forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
+                one_way_forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
                         [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
     if multiworld.warp_tile_shuffle[player] == "shuffle" or (multiworld.warp_tile_shuffle[player] == "mixed"
@@ -2552,12 +2541,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     entrance_b = entrances.pop(0)
 
             entrance_a.connect(entrance_b)
-            if multiworld.door_shuffle[player] == "decoupled":
-                if entrance_b in entrances and entrance_a in dc_destinations and len(reachable_entrances) > 1:
-                    entrance_b.connect(entrance_a)
-                    entrances.remove(entrance_b)
-                    dc_destinations.remove(entrance_a)
-            else:
+            if multiworld.door_shuffle[player] != "decoupled":
                 entrance_b.connect(entrance_a)
 
         if multiworld.door_shuffle[player] in ("interiors", "full"):
