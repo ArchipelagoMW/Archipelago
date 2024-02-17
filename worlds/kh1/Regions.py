@@ -168,7 +168,8 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Right Blue Trinity Chest"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Left Blue Trinity Chest"),
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates White Trinity Chest"),
-   #regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Blizzara Chest"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Blizzara Chest"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Coliseum Gates Blizzaga Chest"),
     regions["Monstro"].locations.append("Monstro Mouth Boat Deck Chest"),
     regions["Monstro"].locations.append("Monstro Mouth High Platform Boat Side Chest"),
     regions["Monstro"].locations.append("Monstro Mouth High Platform Across from Boat Chest"),
@@ -335,16 +336,16 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
     
     regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Ansem's Report 1")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
+   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
     if atlantica or goal == "atlantica":
         regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
+   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
     regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Ansem's Report 5")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 6")
+   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 6")
     regions["Halloween Town"].locations.append("Halloween Town Defeat Oogie Boogie Ansem's Report 7")
     regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
     regions["Neverland"].locations.append("Neverland Defeat Hook Ansem's Report 9")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
+   #regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
    #regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
     if goal == "sephiroth":
         regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
