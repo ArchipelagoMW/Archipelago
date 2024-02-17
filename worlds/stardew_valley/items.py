@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -231,7 +231,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory(CommunityUpgrade.fruit_bats))
     items.append(item_factory(CommunityUpgrade.mushroom_boxes))
     items.append(item_factory("Beach Bridge"))
-    create_tv_channels(item_factory, items)
+    create_tv_channels(item_factory, options, items)
     create_special_quest_rewards(item_factory, options, items)
     create_stardrops(item_factory, options, items)
     create_museum_items(item_factory, options, items)
@@ -558,8 +558,11 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: S
     items.extend(qi_gem_items)
 
 
-def create_tv_channels(item_factory: StardewItemFactory, items: List[Item]):
-    items.extend([item_factory(item) for item in items_by_group[Group.TV_CHANNEL]])
+def create_tv_channels(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    channels = [channel for channel in items_by_group[Group.TV_CHANNEL]]
+    if options.entrance_randomization == EntranceRandomization.option_disabled:
+        channels = [channel for channel in channels if channel.name != "The Gateway Gazette"]
+    items.extend([item_factory(item) for item in channels])
 
 
 def create_crafting_recipes(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):

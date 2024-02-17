@@ -18,7 +18,7 @@ class Goal(Choice):
     Protector of the Valley: Complete all the monster slayer goals. Adapts to Monstersanity
     Full Shipment: Ship every item in the collection tab. Adapts to Shipsanity
     Gourmet Chef: Cook every recipe. Adapts to Cooksanity
-    Craft Master: Craft every item. Adapts to Craftsanity
+    Craft Master: Craft every item.
     Legend: Earn 10 000 000g
     Mystery of the Stardrops: Find every stardrop
     Allsanity: Complete every check in your slot
