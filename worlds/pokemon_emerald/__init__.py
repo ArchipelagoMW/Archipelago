@@ -109,6 +109,10 @@ class PokemonEmeraldWorld(World):
         self.blacklisted_opponent_pokemon = set()
         self.modified_maps = copy.deepcopy(emerald_data.maps)
         self.modified_species = copy.deepcopy(emerald_data.species)
+        self.modified_tmhm_moves = []
+        self.modified_starters = emerald_data.starters
+        self.modified_trainers = []
+        self.modified_legendary_encounters = []
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -936,12 +940,12 @@ class PokemonEmeraldWorld(World):
                 shuffled_species = [encounter.species_id for encounter in emerald_data.legendary_encounters]
                 self.random.shuffle(shuffled_species)
 
-                self.modified_legendary_encounters = []
                 for i, encounter in enumerate(emerald_data.legendary_encounters):
                     self.modified_legendary_encounters.append(MiscPokemonData(
                         shuffled_species[i],
                         encounter.address
                     ))
+
             else:
                 should_match_bst = self.options.legendary_encounters in {
                     RandomizeLegendaryEncounters.option_match_base_stats,
