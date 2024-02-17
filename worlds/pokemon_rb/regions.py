@@ -2145,13 +2145,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         elif entrance_a in full_interiors:
             full_interiors.remove(entrance_a)
         else:
-            breakpoint()
+            raise DoorShuffleException("Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
         if entrance_b in entrances:
             entrances.remove(entrance_b)
         elif entrance_b in full_interiors:
             full_interiors.remove(entrance_b)
         else:
-            breakpoint()
+            raise DoorShuffleException("Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
         if multiworld.door_shuffle[player] == "decoupled":
             dc_destinations.remove(entrance_a)
             dc_destinations.remove(entrance_b)
