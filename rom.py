@@ -15,7 +15,7 @@ from Patch import APDeltaPatch
 from .data import ap_id_offset, data_path, Domain, encode_str, get_symbol
 from .items import WL4Item, filter_items
 from .types import ItemType, Passage
-from .options import Difficulty, MusicShuffle, OpenDoors, WarioVoiceShuffle
+from .options import Difficulty, Goal, MusicShuffle, OpenDoors, WarioVoiceShuffle
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -160,7 +160,7 @@ def create_starting_inventory(rom: LocalRom, world: WL4World):
 
     if world.options.open_doors != OpenDoors.option_off:
         set_keyzer(Passage.ENTRY, 0)
-        for passage, level in itertools.product(range(1, 5), range(4)):
+        for passage, level in itertools.product(range(1, 5), range(5)):
             set_keyzer(passage, level)
 
     if world.options.open_doors.value == OpenDoors.option_open:
@@ -194,6 +194,13 @@ def give_item(rom: LocalRom, item: WL4Item):
         count = rom.read_byte(address)
         count += 1
         rom.write_byte(address, count)
+    elif item.type == ItemType.TREASURE:
+        treasure_type = item.code - (ap_id_offset + 0x70)
+        address = level_to_start_inventory_address(treasure_type / 3, 4)
+        flag = 1 << (treasure_type % 3)
+        status = rom.read_byte(address)
+        status |= flag
+        rom.write_byte(address, status)
 
 
 def level_to_start_inventory_address(passage: Passage, level: int):
@@ -360,6 +367,17 @@ def patch_rom(rom: LocalRom, world: WL4World):
 
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
+
+    if (world.options.goal == Goal.option_golden_treasure_hunt):
+        # BossSave() - Set check locations on boss kill times
+        rom.write_halfword(0x80813F0, 0x7848) # ldrb r0, [r1, #1]
+        rom.write_halfword(0x80813F6, 0x7048) # strb r0, [r1, #1]
+        rom.write_halfword(0x8081410, 0x7848) # ldrb r0, [r1, #1]
+        rom.write_halfword(0x8081416, 0x7048) # strb r0, [r1, #1]
+        rom.write_halfword(0x8081430, 0x7848) # ldrb r0, [r1, #1]
+        rom.write_halfword(0x8081436, 0x7048) # strb r0, [r1, #1]
+        # SelectBossDoorInit01() - Ignore boss cleared flag
+        rom.write_halfword(0x8086408, 0x2000) # mov r0, #0
 
     set_difficulty_level(rom, world.options.difficulty)
 

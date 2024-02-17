@@ -3,6 +3,26 @@ from dataclasses import dataclass
 from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
 
 
+class Goal(Choice):
+    '''
+    TODO
+    '''
+    display_name = 'Goal'
+    option_defeat_golden_diva = 0
+    option_golden_treasure_hunt = 1
+    default = option_defeat_golden_diva
+
+
+class GoldenTreasureCount(Range):
+    '''
+    Number of treasures required to win in Golden Treasure Hunt.
+    '''
+    display_name = 'Golden Treasure Count'
+    range_start = 1
+    range_end = 12
+    default = 6  # Minimum for a good ending
+
+
 class Difficulty(Choice):
     '''
     The game's difficulty level.
@@ -130,6 +150,8 @@ class WarioVoiceShuffle(Toggle):
 
 @dataclass
 class WL4Options(PerGameCommonOptions):
+    goal: Goal
+    golden_treasure_count: GoldenTreasureCount
     difficulty: Difficulty
     logic: Logic
     pool_jewels: PoolJewels

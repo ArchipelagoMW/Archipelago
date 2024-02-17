@@ -53,7 +53,8 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
         return basic_region(f'{passage.short_name()} Minigame Shop')
 
     def boss_region(passage: Passage, boss_name: str):
-        return basic_region(f'{passage.long_name()} Boss', [boss_name])
+        return basic_region(f'{passage.long_name()} Boss',
+                            [boss_name, *(f'{boss_name} - 0:{time}' for time in ('15', '35', '55'))])
 
     menu_region = basic_region('Menu')
 

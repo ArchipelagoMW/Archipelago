@@ -8,11 +8,11 @@ from worlds.AutoWorld import WebWorld, World
 from .client import WL4Client
 from .items import WL4Item, ap_id_from_wl4_data, filter_item_names, filter_items, item_table
 from .locations import location_name_to_id
-from .options import GoldenJewels, PoolJewels, WL4Options
+from .options import Goal, GoldenJewels, PoolJewels, WL4Options
 from .regions import connect_regions, create_regions
 from .rom import LocalRom, WL4DeltaPatch, get_base_rom_path, patch_rom
 from .rules import set_access_rules
-from .types import ItemType, Passage
+from .types import ItemType, LocationType, Passage
 
 
 class WL4Settings(settings.Group):
@@ -88,10 +88,13 @@ class WL4World(World):
 
     def create_items(self):
         difficulty = self.options.difficulty
+        treasure_hunt = self.options.goal == Goal.option_golden_treasure_hunt
+
         gem_pieces = 18 * 4
         cds = 16
         full_health_items = (9, 7, 6)[difficulty.value]
-        total_required_locations = gem_pieces + cds + full_health_items
+        treasures = 12 * treasure_hunt
+        total_required_locations = gem_pieces + cds + full_health_items + treasures
 
         itempool = []
 
@@ -129,6 +132,10 @@ class WL4World(World):
         for _ in range(full_health_items):
             itempool.append(self.create_item('Full Health Item'))
 
+        if (treasure_hunt):
+            for name in filter_item_names(type=ItemType.TREASURE):
+                itempool.append(self.create_item(name))
+
         junk_count = total_required_locations - len(itempool)
         junk_item_pool = tuple(filter_item_names(type=ItemType.ITEM))
         for _ in range(junk_count):
@@ -163,6 +170,7 @@ class WL4World(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
+            'goal',
             'difficulty',
             'logic',
             'required_jewels',
@@ -174,9 +182,15 @@ class WL4World(World):
         return WL4Item.from_name(name, self.player, force_non_progression)
 
     def set_rules(self):
-        self.multiworld.completion_condition[self.player] = (
-            lambda state: state.has('Escape the Pyramid', self.player))
+        if self.options.goal == Goal.option_defeat_golden_diva:
+            condition = lambda state: state.has('Escape the Pyramid', self.player)
+        if self.options.goal == Goal.option_golden_treasure_hunt:
+            condition = rules.has_treasures().apply_world(self)
+        self.multiworld.completion_condition[self.player] = condition
 
     def setup_locations(self):
-        return {name for name in location_name_to_id
-                if self.options.difficulty in locations.location_table[name].difficulties}
+        checks = filter(lambda p: self.options.difficulty in p[1].difficulties,
+                                  locations.location_table.items())
+        if (self.options.goal != Goal.option_golden_treasure_hunt):
+            checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
+        return {name for name, _ in checks}
