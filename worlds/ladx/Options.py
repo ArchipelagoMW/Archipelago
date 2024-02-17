@@ -191,6 +191,7 @@ class ShuffleInstruments(DungeonItemShuffle):
     """
     display_name = "Shuffle Instruments"
     ladxr_item = "INSTRUMENT"
+    default = 100
     option_vanilla = 100
     alias_false = 100
 
