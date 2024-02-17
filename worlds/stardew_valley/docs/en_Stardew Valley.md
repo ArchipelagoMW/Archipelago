@@ -31,7 +31,7 @@ The player can choose from a number of goals, using their YAML settings.
 - Finish 100% of your randomizer slot with Allsanity: Complete every check in your slot
 - Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
-The following goals [Community Center Master Angler, Protector of the Valley, Full Shipment and Gourmet Chef] will adapt to other settings in your slots, and are therefore customizable in duration and difficulty. For example, if you set "Fishsanity" to "Exclude Legendaries", and pick the Master Angler goal, you will not need to catch the legendaries to complete the goal.
+The following goals [Community Center, Master Angler, Protector of the Valley, Full Shipment and Gourmet Chef] will adapt to other settings in your slots, and are therefore customizable in duration and difficulty. For example, if you set "Fishsanity" to "Exclude Legendaries", and pick the Master Angler goal, you will not need to catch the legendaries to complete the goal.
 
 ## What are location checks in Stardew Valley?
 
