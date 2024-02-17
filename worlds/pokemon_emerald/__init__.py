@@ -23,7 +23,7 @@ from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement,
-                      PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon)
+                      PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon, DarkCavesRequireFlash)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_move,
                       get_random_damaging_move, get_random_type, get_species_id_by_label)
 from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
@@ -689,11 +689,9 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important badges later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
-            # In the case of vanilla HMs, navigating Granite Cave is required to access more than 2 gyms,
-            # so Knuckle Badge deserves highest priority if Flash is logically required.
             badge_locations, badge_items = [list(l) for l in zip(*self.badge_shuffle_info)]
             badge_priority = {
-                "Knuckle Badge": 0 if (self.options.hms == RandomizeHms.option_vanilla and self.options.require_flash) else 3,
+                "Knuckle Badge": 3,
                 "Balance Badge": 1,
                 "Dynamo Badge": 1,
                 "Mind Badge": 2,
@@ -702,6 +700,11 @@ class PokemonEmeraldWorld(World):
                 "Stone Badge": 4,
                 "Feather Badge": 5
             }
+            # In the case of vanilla HMs, navigating Granite Cave is required to access more than 2 gyms,
+            # so Knuckle Badge deserves highest priority if Flash is logically required.
+            if self.options.hms == RandomizeHms.option_vanilla and \
+                    self.options.require_flash in (DarkCavesRequireFlash.option_both, DarkCavesRequireFlash.option_only_granite_cave):
+                badge_priority["Knuckle Badge"] = 0
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
 
             # Un-exclude badge locations, since we need to put progression items on them
@@ -745,11 +748,9 @@ class PokemonEmeraldWorld(World):
 
             # Sort order makes `fill_restrictive` try to place important HMs later, which
             # makes it less likely to have to swap at all, and more likely for swaps to work.
-            # In the case of vanilla badges, navigating Granite Cave is required to access more than 2 gyms,
-            # so Flash deserves highest priority if it's logically required.
             hm_locations, hm_items = [list(l) for l in zip(*self.hm_shuffle_info)]
             hm_priority = {
-                "HM05 Flash": 0 if (self.options.badges == RandomizeBadges.option_vanilla and self.options.require_flash) else 3,
+                "HM05 Flash": 3,
                 "HM03 Surf": 1,
                 "HM06 Rock Smash": 1,
                 "HM08 Dive": 2,
@@ -758,6 +759,11 @@ class PokemonEmeraldWorld(World):
                 "HM01 Cut": 4,
                 "HM02 Fly": 5
             }
+            # In the case of vanilla badges, navigating Granite Cave is required to access more than 2 gyms,
+            # so Flash deserves highest priority if it's logically required.
+            if self.options.badges == RandomizeBadges.option_vanilla and \
+                    self.options.require_flash in (DarkCavesRequireFlash.option_both, DarkCavesRequireFlash.option_only_granite_cave):
+                hm_priority["HM05 Flash"] = 0
             hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
 
             # Un-exclude HM locations, since we need to put progression items on them
