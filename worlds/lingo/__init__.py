@@ -96,12 +96,12 @@ class LingoWorld(World):
                     raise Exception("Sum of trap weights must be at least one.")
 
                 trap_counts = {name: int(weight * traps / total_weight) for name, weight in trap_weights.items()}
-                i = 0
-                while sum(trap_counts.values()) < traps:
-                    trap_name = TRAP_ITEMS[i]
-                    if trap_weights[trap_name] > 0:
-                        trap_counts[trap_name] += 1
-                    i = (i + 1) % len(TRAP_ITEMS)
+                
+                trap_difference = traps - sum(trap_counts.values())
+                if trap_difference > 0:
+                    allowed_traps = [name for name in TRAP_ITEMS if trap_weights[name] > 0]
+                    for i in range(0, trap_difference):
+                        trap_counts[allowed_traps[i % len(allowed_traps)]] += 1
 
                 for name, count in trap_counts.items():
                     for i in range(0, count):
