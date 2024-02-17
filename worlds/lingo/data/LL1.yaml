@@ -4265,6 +4265,7 @@
     doors:
       Entrance:
         id: Red Blue Purple Room Area Doors/Door_middle_middle
+        item_group: Achievement Room Entrances
         panels:
           - MIDDLE
       Backside Door:
@@ -6260,6 +6261,7 @@
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
         item_name: Orange Tower Fifth Floor - Quadruple Intersection
+        item_group: Achievement Room Entrances
         panels:
           - ORDER
     paintings:
