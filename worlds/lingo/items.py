@@ -1,12 +1,8 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from .options import ShuffleDoors
 from .static_logic import DOORS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, \
     get_door_item_id, get_progressive_item_id, get_special_item_id
-
-if TYPE_CHECKING:
-    from . import LingoWorld
 
 
 class ItemData(NamedTuple):
@@ -19,20 +15,6 @@ class ItemData(NamedTuple):
     door_ids: List[str]
     painting_ids: List[str]
 
-    def should_include(self, world: "LingoWorld") -> bool:
-        if self.mode == "colors":
-            return world.options.shuffle_colors > 0
-        elif self.mode == "doors":
-            return world.options.shuffle_doors != ShuffleDoors.option_none
-        elif self.mode == "complex door":
-            return world.options.shuffle_doors == ShuffleDoors.option_complex
-        elif self.mode == "door group":
-            return world.options.shuffle_doors == ShuffleDoors.option_simple
-        elif self.mode == "special":
-            return False
-        else:
-            return True
-
 
 class LingoItem(Item):
     """
@@ -42,6 +24,8 @@ class LingoItem(Item):
 
 
 ALL_ITEM_TABLE: Dict[str, ItemData] = {}
+
+TRAP_ITEMS: List[str] = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
 
 
 def load_item_data():
@@ -80,9 +64,7 @@ def load_item_data():
         "The Feeling of Being Lost": ItemClassification.filler,
         "Wanderlust":                ItemClassification.filler,
         "Empty White Hallways":      ItemClassification.filler,
-        "Slowness Trap":             ItemClassification.trap,
-        "Iceland Trap":              ItemClassification.trap,
-        "Atbash Trap":               ItemClassification.trap,
+        **{trap_name: ItemClassification.trap for trap_name in TRAP_ITEMS},
         "Puzzle Skip":               ItemClassification.useful,
     }
 

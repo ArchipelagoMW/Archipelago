@@ -5,7 +5,7 @@ from logging import warning
 
 from BaseClasses import Item, ItemClassification, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .items import ALL_ITEM_TABLE, LingoItem
+from .items import ALL_ITEM_TABLE, LingoItem, TRAP_ITEMS
 from .locations import ALL_LOCATION_TABLE
 from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
@@ -89,10 +89,23 @@ class LingoWorld(World):
                     pool.append(self.create_item("Puzzle Skip"))
 
             if traps:
-                traps_list = ["Slowness Trap", "Iceland Trap", "Atbash Trap"]
+                trap_weights = {name: self.options.trap_weights.get(name, 0) for name in TRAP_ITEMS}
+                total_weight = sum(trap_weights.values())
 
-                for i in range(0, traps):
-                    pool.append(self.create_item(traps_list[i % len(traps_list)]))
+                if total_weight == 0:
+                    raise Exception("Sum of trap weights must be at least one.")
+
+                trap_counts = {name: int(weight * traps / total_weight) for name, weight in trap_weights.items()}
+                i = 0
+                while sum(trap_counts.values()) < traps:
+                    trap_name = TRAP_ITEMS[i]
+                    if trap_weights[trap_name] > 0:
+                        trap_counts[trap_name] += 1
+                    i += 1
+
+                for name, count in trap_counts.items():
+                    for i in range(0, count):
+                        pool.append(self.create_item(name))
 
         self.multiworld.itempool += pool
 
