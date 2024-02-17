@@ -1,24 +1,17 @@
-from typing import NamedTuple, Union
-from enum import IntEnum
-import logging
-import json
-import random
 import math
-import worlds.LauncherComponents as LauncherComponents
 
-from .Options import *
+import worlds.LauncherComponents as LauncherComponents
+from BaseClasses import ItemClassification, Region
+from worlds.generic.Rules import add_rule
+
 from .Constants import *
 from .Items import *
 from .Locations import *
-
-from BaseClasses import Item, Tutorial, ItemClassification, Region, Entrance
-from worlds.generic.Rules import add_rule, set_rule, forbid_item
-
+from .Options import *
 from ..AutoWorld import World, WebWorld
-from NetUtils import SlotType
 
 
-def launch_client() -> None: #Shoutout to Serpent.ai for the launcher code!
+def launch_client() -> None:  # Shoutout to Serpent.ai for the launcher code!
     from .Client import main
     LauncherComponents.launch_subprocess(main, name="OpenRCT2Client")
 
@@ -31,12 +24,27 @@ LauncherComponents.components.append(
     )
 )
 
+
 class OpenRCT2WebWorld(WebWorld):
     tutorials = []
 
 
-class OpenRCT2Location(Location):
-    game = "OpenRCT2"
+def get_previous_region_from_OpenRCT2_location(location_number: int):
+    # print("Getting previous region from location: " + str(location_number))
+    if location_number == 0:
+        # print("OpenRCT2_Level_0")
+        return "OpenRCT2_Level_0"
+    elif location_number == 1 or location_number == 2:
+        # print("OpenRCT2_Level_0")
+        return "OpenRCT2_Level_0"
+    elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
+        # print("OpenRCT2_Level_1")
+        return "OpenRCT2_Level_1"
+    else:
+        divider = location_number - 6
+        region = math.ceil(divider / 8) + 1
+        # print("OpenRCT2_Level_" + str(region))
+        return "OpenRCT2_Level_" + str(region)
 
 
 class OpenRCT2World(World):
@@ -88,31 +96,38 @@ class OpenRCT2World(World):
         # Grabs options for item generation
         scenario = self.options.scenario
         print(scenario)
-        new_scenario = ""
-        elligible_scenarios = []
+        eligible_scenarios = []
         # If the scenario is random, pick which random scenario it will be
         if scenario == 143:  # RCT1
-            elligible_scenarios = [scenario for scenario in scenario_info["rct1"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["rct1"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 144:  # Corkscrew Follies
-            elligible_scenarios = [scenario for scenario in scenario_info["corkscrew_follies"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["corkscrew_follies"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 145:  # Loopy Landscapes
-            elligible_scenarios = [scenario for scenario in scenario_info["loopy_landscapes"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["loopy_landscapes"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 146:  # RCT2
-            elligible_scenarios = [scenario for scenario in scenario_info["rct2"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["rct2"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 147:  # Wacky Worlds
-            elligible_scenarios = [scenario for scenario in scenario_info["wacky_worlds"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["wacky_worlds"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 148:  # Time Twister
-            elligible_scenarios = [scenario for scenario in scenario_info["time_twister"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["time_twister"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 149:  # Random RCT1 + Expansions
-            elligible_scenarios = [scenario for scenario in scenario_info["rct1_plus_expansions"] if scenario not in scenario_info["unreasonable_scenarios"]]
+            eligible_scenarios = [scenario for scenario in scenario_info["rct1_plus_expansions"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
         elif scenario == 150:  # Random RCT2 + Expansions
-            elligible_scenarios = [scenario for scenario in scenario_info["rct2_plus_expansions"] if scenario not in scenario_info["unreasonable_scenarios"]]
-        #Finish assigning the scenario
-        if elligible_scenarios:
-            new_scenario = str(random.choice(elligible_scenarios))#Pick the Scenario
-            scenario = SelectedScenario(getattr(Scenario,new_scenario))#Reassign the scenario option to the randomly selected choice
+            eligible_scenarios = [scenario for scenario in scenario_info["rct2_plus_expansions"] if
+                                  scenario not in scenario_info["unreasonable_scenarios"]]
+        # Finish assigning the scenario
+        if eligible_scenarios:
+            new_scenario = str(random.choice(eligible_scenarios))  # Pick the Scenario
+            scenario = SelectedScenario(
+                getattr(Scenario, new_scenario))  # Reassign the scenario option to the randomly selected choice
             self.options.scenario = scenario
-
 
         monopoly_mode = self.options.monopoly_mode.value
         include_gamespeed_items = self.options.include_gamespeed_items.value
@@ -126,7 +141,7 @@ class OpenRCT2World(World):
                  self.options.forbid_landscape_changes.value,
                  self.options.forbid_marketing_campaigns.value,
                  self.options.forbid_tree_removal.value]
-        items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, 
+        items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps,
                                    spam_traps, bathroom_traps, filler)
 
         self.item_table = items[0]
@@ -168,11 +183,11 @@ class OpenRCT2World(World):
         # random.shuffle(logic_table)
         # print(logic_table)
 
-        def locations_to_region(location, ending_location, region):
+        def locations_to_region(location, ending_location, chosen_region):
             locations = []
             while location < ending_location + 1:
                 locations.append(OpenRCT2Location(self.player, "OpenRCT2_" + str(location),
-                                                  self.location_name_to_id["OpenRCT2_" + str(location)], region))
+                                                  self.location_name_to_id["OpenRCT2_" + str(location)], chosen_region))
                 location += 1
             return locations
 
@@ -237,16 +252,20 @@ class OpenRCT2World(World):
             elif count == 4:  # 23 total items, we want 15 rides and now toilets
                 num_rides = 15
                 add_rule(region.exits[0], lambda state: state.has("Toilets", self.player, 1))
-            elif count == 5:  # 31 total items, we want 20 rides and some rules if applicable
-                num_rides = 20
+            elif count == 5:  # 31 total items, we want 18 rides and some rules if applicable
+                num_rides = 18
                 if self.rules[2] == 1:  # If high construction can be disabled
                     add_rule(region.exits[0], lambda state: state.has("Allow High Construction", self.player, 1))
                 if self.rules[3] == 1:  # landscape
                     add_rule(region.exits[0], lambda state: state.has("Allow Landscape Changes", self.player, 1))
                 if self.rules[5] == 1:  # tree removal
                     add_rule(region.exits[0], lambda state: state.has("Allow Tree Removal", self.player, 1))
-                # add_rule(region.exits[0], lambda state: state.has("Cash Machine", self.player, 1))
-                # add_rule(region.exits[0], lambda state: state.has("First Aid", self.player, 1))
+                if "Cash Machine" in logic_table:
+                    print("$$$$$")
+                    add_rule(region.exits[0], lambda state: state.has("Cash Machine", self.player, 1))
+                if "First Aid" in logic_table:
+                    print("Puke puke puke puke puke")
+                    add_rule(region.exits[0], lambda state: state.has("First Aid", self.player, 1))
             add_rule(region.exits[0], lambda state: state.has_group("rides", self.player, num_rides))
             count += 1
         final_region = self.multiworld.get_region("OpenRCT2_Level_" + str(current_level), self.player)
@@ -266,7 +285,8 @@ class OpenRCT2World(World):
         # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
 
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
-        if not self.options.include_gamespeed_items.value:# If the user doesn't want to unlock speed, give it to em for free
+        # If the user doesn't want to buy speed, give it to em for free
+        if not self.options.include_gamespeed_items.value:
             count = 0
             while count < 4:
                 self.multiworld.push_precollected(self.create_item("Progressive Speed"))
@@ -289,46 +309,52 @@ class OpenRCT2World(World):
         random.shuffle(logic_table)
         print(logic_table)
 
-        def set_openRCT2_rule(rule_type, item, location_number):
+        def set_openRCT2_rule(rule_type, selected_item, location_number):
             if rule_type == "ride":
-                add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                     self.player).entrances[0],
-                         lambda state, prereq=item: state.has(prereq, self.player))
+                         lambda state, selected_prereq=selected_item: state.has(selected_prereq, self.player))
                 # Only add rules if there's an item to be unlocked in the first place
-                if (item in item_info["requires_height"]) and (
+                if (selected_item in item_info["requires_height"]) and (
                         self.options.forbid_high_construction.value == 1):
-                    add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                    add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
-                             lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
+                             lambda state, selected_prereq="Allow High Construction": state.has(selected_prereq,
+                                                                                                self.player))
                     print(
-                        "Added rule: \nHave: Allow High Construction\nLocation: " + self.get_previous_region_from_OpenRCT2_location(
-                            location_number))
-                if (item in item_info["requires_landscaping"]) and self.multiworld.forbid_landscape_changes[
-                    self.player].value == 1:
-                    add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                        "Added rule: \nHave: Allow High Construction\nLocation: " +
+                        get_previous_region_from_OpenRCT2_location(location_number))
+                if (selected_item in item_info["requires_landscaping"]) and self.multiworld.forbid_landscape_changes[
+                        self.player].value == 1:
+                    add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
-                             lambda state, prereq="Allow Landscape Changes": state.has(prereq, self.player))
+                             lambda state, selected_prereq="Allow Landscape Changes":
+                             state.has(selected_prereq, self.player))
                     print(
-                        "Added rule: \nHave: Allow Landscape Changes\nLocation: " + self.get_previous_region_from_OpenRCT2_location(
-                            location_number))
-                print(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                        "Added rule: \nHave: Allow Landscape Changes\nLocation: " +
+                        get_previous_region_from_OpenRCT2_location(location_number))
+                print(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                  self.player).entrances)
                 print("Added rule: \nHave: " + str(
-                    chosen_prereq) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+                    chosen_prereq) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
             else:
-                add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                add_rule(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                     self.player).entrances[0],
-                         # self.multiworld.get_location("OpenRCT2_" + str(number), self.player).parent_region.entrances[0],
-                         lambda state, prereq=item: state.has_group(prereq, self.player))
-                # TODO: Check if every item in the category has a rule requirement, and if so, force the rule to appear before the location
+                         # self.multiworld.get_location("OpenRCT2_" +
+                         # str(number), self.player).parent_region.entrances[0],
+                         lambda state, selected_prereq=selected_item: state.has_group(selected_prereq, self.player))
+                # TODO: Check if every item in the category has a rule requirement,
+                #  and if so, force the rule to appear before the location
                 # if item_info[item].issubset(item_info["requires_height"]):
-                #     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number), self.player).entrances[0],
+                #     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                #     self.player).entrances[0],
                 #      lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
-                #     print("Added rule: \nHave: Allow High Construction\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
-                print(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
+                #     print("Added rule: \nHave: Allow High Construction\nLocation: " +
+                #     self.get_previous_region_from_OpenRCT2_location(location_number))
+                print(self.multiworld.get_region(get_previous_region_from_OpenRCT2_location(number),
                                                  self.player).entrances)
                 print("Added rule: \nHave: " + str(
-                    category) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
+                    category) + "\nLocation: " + get_previous_region_from_OpenRCT2_location(location_number))
 
         difficulty = self.options.difficulty.value
         length = self.options.scenario_length.value
@@ -356,10 +382,10 @@ class OpenRCT2World(World):
             difficulty_minimum = 6
             difficulty_maximum = 9
 
-        if length == 0:  # speedrun
+        if length == 0:  # sync short
             length_modifier = .2
             final_price = 100000
-        if length == 1:  # normal
+        if length == 1:  # sync long
             length_modifier = .4
             final_price = 250000
         if length == 2:  # lengthy
@@ -375,7 +401,6 @@ class OpenRCT2World(World):
         queued_prereqs = []
         prereq_counter = 0
         total_price = base_price * len(logic_table)
-        average_price = final_price / len(logic_table)
         if final_price < total_price:  # If everything being $500 is too expensive,
             base_price = final_price / len(logic_table)  # Make everything cheaper
         print("This is the base price: " + str(base_price))
@@ -384,7 +409,6 @@ class OpenRCT2World(World):
         increment = remaining_amount / (len(logic_table) * (len(logic_table) + 1) / 2)
         print("This is the increment: " + str(increment))
         print("with this many items: " + str(len(logic_table)))
-        current_price = base_price
         for number, item in enumerate(logic_table):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
 
@@ -402,8 +426,11 @@ class OpenRCT2World(World):
                     unlock["Lives"] = random.randint(50, 1000)
 
             # Handles the selection of a prerequisite and associated stats
-            if number > 15 and unlock["Lives"] == 0:  # We'll never have a prereq on the first 15 items or on blood prices
-                if (random.random() < length_modifier) or (len(logic_table) * .85 < number):  # Determines if we have a prereq
+
+            # We'll never have a prereq on the first 15 items or on blood prices
+            if number > 15 and unlock["Lives"] == 0:
+                if (random.random() < length_modifier) or (
+                        len(logic_table) * .85 < number):  # Determines if we have a prereq
                     if random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
                         chosen_prereq = random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)
@@ -420,10 +447,9 @@ class OpenRCT2World(World):
                             if random.random() < .5:
                                 nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
-                                [random.randint(1, 3), chosen_prereq, excitement, intensity, nausea,0]
-                        elif chosen_prereq in item_info["transport_rides"]:
-                            unlock["RidePrereq"] = [random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
-                        elif chosen_prereq in item_info["water_rides"]:
+                                [random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, 0]
+                        elif (chosen_prereq in item_info["tracked_rides"]
+                              and (self.options.scenario_length.value == 0 or self.optios.scenario_length.value == 1)):
                             unlock["RidePrereq"] = [random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
@@ -441,12 +467,12 @@ class OpenRCT2World(World):
                             intensity = 0
                             nausea = 0
                             # 3 coin flips to determine what, if any, stat prereqs will be used
-                            if random.random() < .5: excitement = round(
-                                random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5: intensity = round(
-                                random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5: nausea = round(
-                                random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
+                            if random.random() < .5:
+                                excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5:
+                                intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if random.random() < .5:
+                                nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
                                 [random.randint(1, 4), category, excitement, intensity, nausea, 0]
                         elif category == "transport_rides":
@@ -474,24 +500,24 @@ class OpenRCT2World(World):
 
         # Okay, here's where we're going to take the last eligible rides in the logic table
         # and make them required for completion, if that's required.
-        elligible_rides = [item for index, item in enumerate(logic_table) if
-                           item in item_info["rides"] and item not in item_info["non_starters"]]
-        elligible_rides = list(dict.fromkeys(elligible_rides))
-        random.shuffle(elligible_rides)
+        eligible_rides = [item for index, item in enumerate(logic_table) if
+                          item in item_info["rides"] and item not in item_info["non_starters"]]
+        eligible_rides = list(dict.fromkeys(eligible_rides))
+        random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
             count = 0
             while count < self.options.required_unique_rides.value:
-                self.unique_rides.append(elligible_rides[count])
+                self.unique_rides.append(eligible_rides[count])
                 count += 1
-            # self.unique_rides = [elligible_rides[i] for i in
-            #                     elligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
+            # self.unique_rides = [eligible_rides[i] for i in
+            #                     eligible_rides[-self.multiworld.required_unique_rides[self.player].value:]]
         print("Here's the eligible rides:")
-        print(elligible_rides)
+        print(eligible_rides)
         print("Here's what was chosen:")
         print(self.unique_rides)
         for ride in self.unique_rides:
             add_rule(self.multiworld.get_region("Victory", self.player).entrances[0],
-                     lambda state, prereq=ride: state.has(prereq, self.player))
+                     lambda state, selected_prereq=ride: state.has(selected_prereq, self.player))
 
     def generate_basic(self) -> None:
         # place "Victory" at the end of the unlock tree and set collection as win condition
@@ -567,20 +593,3 @@ class OpenRCT2World(World):
         if item in item_info["trap_items"]:
             classification = ItemClassification.trap
         return OpenRCT2Item(item, classification, self.item_name_to_id[item], self.player)
-
-    def get_previous_region_from_OpenRCT2_location(self, location_number: int):
-        # print("Getting previous region from location: " + str(location_number))
-        if location_number == 0:
-            # print("OpenRCT2_Level_0")
-            return "OpenRCT2_Level_0"
-        elif location_number == 1 or location_number == 2:
-            # print("OpenRCT2_Level_0")
-            return "OpenRCT2_Level_0"
-        elif location_number == 3 or location_number == 4 or location_number == 5 or location_number == 6:
-            # print("OpenRCT2_Level_1")
-            return "OpenRCT2_Level_1"
-        else:
-            divider = location_number - 6
-            region = math.ceil(divider / 8) + 1
-            # print("OpenRCT2_Level_" + str(region))
-            return "OpenRCT2_Level_" + str(region)
