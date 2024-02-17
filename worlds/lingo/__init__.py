@@ -101,7 +101,7 @@ class LingoWorld(World):
                     trap_name = TRAP_ITEMS[i]
                     if trap_weights[trap_name] > 0:
                         trap_counts[trap_name] += 1
-                    i += 1
+                    i = (i + 1) % len(TRAP_ITEMS)
 
                 for name, count in trap_counts.items():
                     for i in range(0, count):
