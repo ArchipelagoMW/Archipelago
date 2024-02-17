@@ -79,12 +79,12 @@ class OpenRCT2World(World):
     # items one level lower on the tree. We then will set rules in create_regions that reflect our table.
 
     def generate_early(self) -> None:
-        self.rules = [self.options.difficult_guest_generation,
-                      self.options.difficult_park_rating,
-                      self.options.forbid_high_construction,
-                      self.options.forbid_landscape_changes,
-                      self.options.forbid_marketing_campaigns,
-                      self.options.forbid_tree_removal]
+        self.rules = [self.options.difficult_guest_generation.value,
+                      self.options.difficult_park_rating.value,
+                      self.options.forbid_high_construction.value,
+                      self.options.forbid_landscape_changes.value,
+                      self.options.forbid_marketing_campaigns.value,
+                      self.options.forbid_tree_removal.value]
         # Grabs options for item generation
         scenario = self.options.scenario
         print(scenario)
@@ -114,18 +114,18 @@ class OpenRCT2World(World):
             self.options.scenario = scenario
 
 
-        monopoly_mode = self.options.monopoly_mode
-        include_gamespeed_items = self.options.include_gamespeed_items
-        furry_convention_traps = self.options.furry_convention_traps
-        spam_traps = self.options.spam_traps
-        bathroom_traps = self.options.bathroom_traps
-        filler = self.options.filler
-        rules = [self.options.difficult_guest_generation,
-                 self.options.difficult_park_rating,
-                 self.options.forbid_high_construction,
-                 self.options.forbid_landscape_changes,
-                 self.options.forbid_marketing_campaigns,
-                 self.options.forbid_tree_removal]
+        monopoly_mode = self.options.monopoly_mode.value
+        include_gamespeed_items = self.options.include_gamespeed_items.value
+        furry_convention_traps = self.options.furry_convention_traps.value
+        spam_traps = self.options.spam_traps.value
+        bathroom_traps = self.options.bathroom_traps.value
+        filler = self.options.filler.value
+        rules = [self.options.difficult_guest_generation.value,
+                 self.options.difficult_park_rating.value,
+                 self.options.forbid_high_construction.value,
+                 self.options.forbid_landscape_changes.value,
+                 self.options.forbid_marketing_campaigns.value,
+                 self.options.forbid_tree_removal.value]
         items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, 
                                    spam_traps, bathroom_traps, filler)
 
@@ -266,7 +266,7 @@ class OpenRCT2World(World):
         # self.multiworld.precollected_items[self.player].append(self.create_item(self.starting_ride))
 
         self.multiworld.push_precollected(self.create_item(self.starting_ride))
-        if not self.options.include_gamespeed_items:# If the user doesn't want to unlock speed, give it to em for free
+        if not self.options.include_gamespeed_items.value:# If the user doesn't want to unlock speed, give it to em for free
             count = 0
             while count < 4:
                 self.multiworld.push_precollected(self.create_item("Progressive Speed"))
@@ -296,7 +296,7 @@ class OpenRCT2World(World):
                          lambda state, prereq=item: state.has(prereq, self.player))
                 # Only add rules if there's an item to be unlocked in the first place
                 if (item in item_info["requires_height"]) and (
-                        self.options.forbid_high_construction == 1):
+                        self.options.forbid_high_construction.value == 1):
                     add_rule(self.multiworld.get_region(self.get_previous_region_from_OpenRCT2_location(number),
                                                         self.player).entrances[0],
                              lambda state, prereq="Allow High Construction": state.has(prereq, self.player))
@@ -330,8 +330,8 @@ class OpenRCT2World(World):
                 print("Added rule: \nHave: " + str(
                     category) + "\nLocation: " + self.get_previous_region_from_OpenRCT2_location(location_number))
 
-        difficulty = self.options.difficulty
-        length = self.options.scenario_length
+        difficulty = self.options.difficulty.value
+        length = self.options.scenario_length.value
         length_modifier = 0
         difficulty_modifier = 0
         difficulty_minimum = 0
@@ -459,9 +459,9 @@ class OpenRCT2World(World):
             self.location_prices.append(unlock)
             # Handle unlocked rides
             if item in item_info["rides"]:  # Don't put items in that require an impossible rule
-                if not (self.options.forbid_high_construction == 2 and item in item_info[
+                if not (self.options.forbid_high_construction.value == 2 and item in item_info[
                         "requires_height"]):
-                    if not (self.options.forbid_landscape_changes == 2 and item in item_info[
+                    if not (self.options.forbid_landscape_changes.value == 2 and item in item_info[
                             "requires_landscaping"]):
                         queued_prereqs.append(item)
             if prereq_counter == 0 or prereq_counter == 2 or prereq_counter % 8 == 6:
@@ -478,9 +478,9 @@ class OpenRCT2World(World):
                            item in item_info["rides"] and item not in item_info["non_starters"]]
         elligible_rides = list(dict.fromkeys(elligible_rides))
         random.shuffle(elligible_rides)
-        if self.options.required_unique_rides:
+        if self.options.required_unique_rides.value:
             count = 0
-            while count < self.options.required_unique_rides:
+            while count < self.options.required_unique_rides.value:
                 self.unique_rides.append(elligible_rides[count])
                 count += 1
             # self.unique_rides = [elligible_rides[i] for i in
@@ -503,15 +503,15 @@ class OpenRCT2World(World):
         # archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false],
         # RideIncome: [0, false], ShopIncome: [8000, false], ParkRating: [700, false], LoanPaidOff: [true, false],
         # Monopoly: [true, false]};
-        guests = self.options.guest_objective
-        park_value = self.options.park_value_objective
-        roller_coasters = self.options.roller_coaster_objective
-        excitement = self.options.roller_coaster_excitement
-        intensity = self.options.roller_coaster_intensity
-        nausea = self.options.roller_coaster_nausea
-        park_rating = self.options.park_rating_objective
-        pay_off_loan = self.options.pay_off_loan
-        monopoly = self.options.monopoly_mode
+        guests = self.options.guest_objective.value
+        park_value = self.options.park_value_objective.value
+        roller_coasters = self.options.roller_coaster_objective.value
+        excitement = self.options.roller_coaster_excitement.value
+        intensity = self.options.roller_coaster_intensity.value
+        nausea = self.options.roller_coaster_nausea.value
+        park_rating = self.options.park_rating_objective.value
+        pay_off_loan = self.options.pay_off_loan.value
+        monopoly = self.options.monopoly_mode.value
         unique_rides = self.unique_rides
         objectives = {"Guests": [guests, False], "ParkValue": [park_value, False],
                       "RollerCoasters": [roller_coasters, excitement, intensity, nausea, 0, False],
@@ -543,18 +543,17 @@ class OpenRCT2World(World):
         # from Utils import visualize_regions
         # visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml")
         print("Here's the final unlock shop:")
-        print(self.location_prices)
         return {
-            "difficulty": self.options.difficulty,
-            "scenario_length": self.options.scenario_length,
-            # "scenario": self.options.scenario,
-            "death_link": self.options.deathlink,
-            "randomization_range": self.options.randomization_range,
-            "stat_rerolls": self.options.stat_rerolls,
-            "randomize_park_values": self.options.randomize_park_values,
-            "visibility": self.options.visibility,
+            "difficulty": self.options.difficulty.value,
+            "scenario_length": self.options.scenario_length.value,
+            "scenario": self.options.scenario.value,
+            "death_link": self.options.deathlink.value,
+            "randomization_range": self.options.randomization_range.value,
+            "stat_rerolls": self.options.stat_rerolls.value,
+            "randomize_park_values": self.options.randomize_park_values.value,
+            "visibility": self.options.visibility.value,
             "rules": self.rules,
-            "preferred_intensity": self.options.preferred_intensity,
+            "preferred_intensity": self.options.preferred_intensity.value,
             "objectives": objectives,
             "location_prices": self.location_prices
         }
