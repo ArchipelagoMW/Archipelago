@@ -26,8 +26,8 @@ The player can choose from a number of goals, using their YAML settings.
 - Complete a [Full Shipment](https://stardewvalleywiki.com/Shipping#Collection) by shipping every item in your slot
 - Become a [Gourmet Chef](https://stardewvalleywiki.com/Cooking) by cooking every recipe in your slot
 - Become a [Craft Master](https://stardewvalleywiki.com/Crafting) by crafting every item
-- Earn the title of [Legend](https://stardewvalleywiki.com/Gold) by earn 10 000 000g 
-- Solve the [Mystery of the Stardrops](https://stardewvalleywiki.com/Stardrop) by find every stardrop 
+- Earn the title of [Legend](https://stardewvalleywiki.com/Gold) by earning 10 000 000g 
+- Solve the [Mystery of the Stardrops](https://stardewvalleywiki.com/Stardrop) by finding every stardrop 
 - Finish 100% of your randomizer slot with Allsanity: Complete every check in your slot
 - Achieve [Perfection](https://stardewvalleywiki.com/Perfection) in your save file
 
