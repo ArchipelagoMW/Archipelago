@@ -1,7 +1,7 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table
+from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table, SupportAbility_Table
 from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
 from .Names import LocationName, ItemName, RegionName
 from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
@@ -224,7 +224,7 @@ class KH2WorldRules(KH2Rules):
             RegionName.Pl2:                lambda state: self.pl_unlocked(state, 2),
 
             RegionName.Ag:                 lambda state: self.ag_unlocked(state, 1),
-            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement,ItemName.BlizzardElement,ItemName.ThunderElement],state),
+            RegionName.Ag2:                lambda state: self.ag_unlocked(state, 2) and self.kh2_has_all([ItemName.FireElement, ItemName.BlizzardElement, ItemName.ThunderElement], state),
 
             RegionName.Bc:                 lambda state: self.bc_unlocked(state, 1),
             RegionName.Bc2:                lambda state: self.bc_unlocked(state, 2),
@@ -266,6 +266,8 @@ class KH2WorldRules(KH2Rules):
                 add_item_rule(location, lambda item: item.player == self.player and item.name in GoofyAbility_Table.keys())
             elif location.name in Donald_Checks:
                 add_item_rule(location, lambda item: item.player == self.player and item.name in DonaldAbility_Table.keys())
+            else:
+                add_item_rule(location, lambda item: item.player == self.player and item.name in SupportAbility_Table.keys())
 
     def set_kh2_goal(self):
         final_xemnas_location = self.multiworld.get_location(LocationName.FinalXemnas, self.player)
@@ -417,7 +419,7 @@ class KH2FightRules(KH2Rules):
             RegionName.DataLexaeus:       lambda state: self.get_data_lexaeus_rules(state),
             RegionName.OldPete:           lambda state: self.get_old_pete_rules(),
             RegionName.FuturePete:        lambda state: self.get_future_pete_rules(state),
-            RegionName.Terra:             lambda state: self.get_terra_rules(state),
+            RegionName.Terra:             lambda state: self.get_terra_rules(state) and state.has(ItemName.ProofofConnection, self.player),
             RegionName.DataMarluxia:      lambda state: self.get_data_marluxia_rules(state),
             RegionName.Barbosa:           lambda state: self.get_barbosa_rules(state),
             RegionName.GrimReaper1:       lambda state: self.get_grim_reaper1_rules(),
