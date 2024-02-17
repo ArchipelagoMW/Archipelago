@@ -666,6 +666,7 @@ class PokemonEmeraldWorld(World):
             for location in self.multiworld.get_locations(self.player):
                 if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
+                    location.progress_type = LocationProgressType.DEFAULT
                     location.address = None
 
         if self.options.badges == RandomizeBadges.option_vanilla:
