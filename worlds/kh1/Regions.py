@@ -262,46 +262,46 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Monstro"].locations.append("Monstro Chamber 6 White Trinity Chest"),
    #regions["Awakening"].locations.append("Awakening Chest"), missable
    
-    regions["Traverse Town"].locations.append("Traverse Town Dodge Roll Event"),
-    regions["Traverse Town"].locations.append("Traverse Town Fire Event"),
-    regions["Traverse Town"].locations.append("Traverse Town Blue Trinity Event"),
-    regions["Traverse Town"].locations.append("Traverse Town Earthshine Event"),
-    regions["Traverse Town"].locations.append("Traverse Town Oathkeeper Event"),
-    regions["Deep Jungle"].locations.append("Deep Jungle White Fang Event"),
-    regions["Deep Jungle"].locations.append("Deep Jungle Cure Event"),
-    regions["Deep Jungle"].locations.append("Deep Jungle Jungle King Event"),
-    regions["Deep Jungle"].locations.append("Deep Jungle Red Trinity Event"),
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Thunder Event"),
-    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Sonic Blade Event"),
-    regions["Wonderland"].locations.append("Wonderland Blizzard Event"),
-    regions["Wonderland"].locations.append("Wonderland Ifrit's Horn Event"),
-    regions["Agrabah"].locations.append("Agrabah Ray of Light Event"),
-    regions["Agrabah"].locations.append("Agrabah Blizzard Event"),
-    regions["Agrabah"].locations.append("Agrabah Fire Event"),
-    regions["Agrabah"].locations.append("Agrabah Genie Event"),
-    regions["Agrabah"].locations.append("Agrabah Three Wishes Event"),
-    regions["Agrabah"].locations.append("Agrabah Green Trinity Event"),
-    regions["Monstro"].locations.append("Monstro Goofy Cheer Event"),
-    regions["Monstro"].locations.append("Monstro Stop Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Dodge Roll Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Fire Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Guard Armor Blue Trinity Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Leon Secret Waterway Earthshine Event"),
+    regions["Traverse Town"].locations.append("Traverse Town Kairi Secret Waterway Oathkeeper Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Defeat Sabor White Fang Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Defeat Clayton Cure Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Jungle King Event"),
+    regions["Deep Jungle"].locations.append("Deep Jungle Seal Keyhole Red Trinity Event"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Clear Phil's Training Thunder Event"),
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Cloud Sonic Blade Event"),
+    regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Blizzard Event"),
+    regions["Wonderland"].locations.append("Wonderland Defeat Trickmaster Ifrit's Horn Event"),
+    regions["Agrabah"].locations.append("Agrabah Defeat Pot Centipede Ray of Light Event"),
+    regions["Agrabah"].locations.append("Agrabah Defeat Jafar Blizzard Event"),
+    regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Fire Event"),
+    regions["Agrabah"].locations.append("Agrabah Seal Keyhole Genie Event"),
+    regions["Agrabah"].locations.append("Agrabah Seal Keyhole Three Wishes Event"),
+    regions["Agrabah"].locations.append("Agrabah Seal Keyhole Green Trinity Event"),
+    regions["Monstro"].locations.append("Monstro Defeat Parasite Cage I Goofy Cheer Event"),
+    regions["Monstro"].locations.append("Monstro Defeat Parasite Cage II Stop Event"),
     if atlantica or goal == "atlantica":
-        regions["Atlantica"].locations.append("Atlantica Mermaid Kick Event")
-        regions["Atlantica"].locations.append("Atlantica Thunder Event")
-        regions["Atlantica"].locations.append("Atlantica Crabclaw Event")
-    regions["Halloween Town"].locations.append("Halloween Town Holy Circlet Event")
-    regions["Halloween Town"].locations.append("Halloween Town Gravity Event")
-    regions["Halloween Town"].locations.append("Halloween Town Pumpkinhead Event")
-    regions["Neverland"].locations.append("Neverland Raven's Claw Event")
-    regions["Neverland"].locations.append("Neverland Cure Event")
-    regions["Neverland"].locations.append("Neverland Fairy Harp Event")
-    regions["Neverland"].locations.append("Neverland Tinker Bell Event")
-    regions["Neverland"].locations.append("Neverland Glide Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion White Trinity Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Donald Cheer Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Fireglow Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Ragnarok Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Omega Arts Event")
-    regions["Hollow Bastion"].locations.append("Hollow Bastion Fire Event")
-    regions["End of the World"].locations.append("End of the World Superglide Event")
+        regions["Atlantica"].locations.append("Atlantica Defeat Ursula I Mermaid Kick Event")
+        regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Thunder Event")
+        regions["Atlantica"].locations.append("Atlantica Seal Keyhole Crabclaw Event")
+    regions["Halloween Town"].locations.append("Halloween Town Defeat Oogie Boogie Holy Circlet Event")
+    regions["Halloween Town"].locations.append("Halloween Town Defeat Oogie's Manor Gravity Event")
+    regions["Halloween Town"].locations.append("Halloween Town Seal Keyhole Pumpkinhead Event")
+    regions["Neverland"].locations.append("Neverland Defeat Anti Sora Raven's Claw Event")
+    regions["Neverland"].locations.append("Neverland Encounter Hook Cure Event")
+    regions["Neverland"].locations.append("Neverland Seal Keyhole Fairy Harp Event")
+    regions["Neverland"].locations.append("Neverland Seal Keyhole Tinker Bell Event")
+    regions["Neverland"].locations.append("Neverland Seal Keyhole Glide Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku I White Trinity Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Donald Cheer Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Dragon Maleficent Fireglow Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Riku II Ragnarok Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Behemoth Omega Arts Event")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak to Princesses Fire Event")
+    regions["End of the World"].locations.append("End of the World Defeat Chernabog Superglide Event")
     
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 01 Event")
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 02 Event")
@@ -314,7 +314,7 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 09 Event")
     regions["Traverse Town"].locations.append("Traverse Town Mail Postcard 10 Event")
     
-    regions["Traverse Town"].locations.append("Traverse Town Aero Event")
+    regions["Traverse Town"].locations.append("Traverse Town Defeat Opposite Armor Aero Event")
     
     if atlantica or goal == "atlantica":
         regions["Atlantica"].locations.append("Atlantica Undersea Gorge Blizzard Clam")
@@ -334,22 +334,22 @@ def create_regions(multiworld: MultiWorld, player: int, goal: str, atlantica: bo
         regions["Atlantica"].locations.append("Atlantica Undersea Garden Clam")
         regions["Atlantica"].locations.append("Atlantica Undersea Cave Clam")
     
-    regions["Agrabah"].locations.append("Ansem's Report 1")
-    regions["Hollow Bastion"].locations.append("Ansem's Report 2")
+    regions["Agrabah"].locations.append("Agrabah Defeat Jafar Genie Ansem's Report 1")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 2")
     if atlantica or goal == "atlantica":
-        regions["Atlantica"].locations.append("Ansem's Report 3")
-    regions["Hollow Bastion"].locations.append("Ansem's Report 4")
-    regions["Hollow Bastion"].locations.append("Ansem's Report 5")
-    regions["Hollow Bastion"].locations.append("Ansem's Report 6")
-    regions["Halloween Town"].locations.append("Ansem's Report 7")
-    regions["Olympus Coliseum"].locations.append("Ansem's Report 8")
-    regions["Neverland"].locations.append("Ansem's Report 9")
-    regions["Hollow Bastion"].locations.append("Ansem's Report 10")
-   #regions["Agrabah"].locations.append("Ansem's Report 11")
+        regions["Atlantica"].locations.append("Atlantica Defeat Ursula II Ansem's Report 3")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 4")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Maleficent Ansem's Report 5")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 6")
+    regions["Halloween Town"].locations.append("Halloween Town Defeat Oogie Boogie Ansem's Report 7")
+    regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Hades Ansem's Report 8")
+    regions["Neverland"].locations.append("Neverland Defeat Hook Ansem's Report 9")
+    regions["Hollow Bastion"].locations.append("Hollow Bastion Speak with Aerith Ansem's Report 10")
+   #regions["Agrabah"].locations.append("Agrabah Defeat Kurt Zisa Ansem's Report 11")
     if goal == "sephiroth":
-        regions["Olympus Coliseum"].locations.append("Ansem's Report 12")
+        regions["Olympus Coliseum"].locations.append("Olympus Coliseum Defeat Sephiroth Ansem's Report 12")
     if goal == "unknown":
-        regions["Hollow Bastion"].locations.append("Ansem's Report 13")
+        regions["Hollow Bastion"].locations.append("Hollow Bastion Defeat Unknown Ansem's Report 13")
    
     for i in range(levels):
         regions["Levels"].locations.append("Level " + str(i+1).rjust(3,'0'))
