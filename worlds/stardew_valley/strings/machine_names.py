@@ -7,6 +7,7 @@ class Machine:
     coffee_maker = "Coffee Maker"
     crab_pot = "Crab Pot"
     crystalarium = "Crystalarium"
+    enricher = "Enricher"
     furnace = "Furnace"
     geode_crusher = "Geode Crusher"
     heavy_tapper = "Heavy Tapper"
@@ -17,6 +18,7 @@ class Machine:
     oil_maker = "Oil Maker"
     ostrich_incubator = "Ostrich Incubator"
     preserves_jar = "Preserves Jar"
+    pressure_nozzle = "Pressure Nozzle"
     recycling_machine = "Recycling Machine"
     seed_maker = "Seed Maker"
     slime_egg_press = "Slime Egg-Press"
@@ -24,6 +26,4 @@ class Machine:
     solar_panel = "Solar Panel"
     tapper = "Tapper"
     worm_bin = "Worm Bin"
-    enricher = "Enricher"
-    pressure_nozzle = "Pressure Nozzle"
 

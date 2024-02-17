@@ -12,7 +12,9 @@ from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from ..data import CropItem, SeedItem
 from ..options import Cropsanity, ExcludeGingerIsland
 from ..stardew_rule import StardewRule, True_, False_
+from ..strings.craftable_names import Craftable
 from ..strings.forageable_names import Forageable
+from ..strings.machine_names import Machine
 from ..strings.metal_names import Fossil
 from ..strings.region_names import Region
 from ..strings.seed_names import Seed
@@ -34,6 +36,8 @@ class CropLogic(BaseLogic[Union[HasLogicMixin, ReceivedLogicMixin, RegionLogicMi
         farm_rule = self.logic.region.can_reach(Region.farm) & season_rule
         tool_rule = self.logic.tool.has_tool(Tool.hoe) & self.logic.tool.has_tool(Tool.watering_can)
         region_rule = farm_rule | self.logic.region.can_reach(Region.greenhouse) | self.logic.crop.has_island_farm()
+        if crop.name == Forageable.cactus_fruit:
+            region_rule = self.logic.region.can_reach(Region.greenhouse) | self.logic.has(Craftable.garden_pot)
         return seed_rule & region_rule & tool_rule
 
     def can_plant_and_grow_item(self, seasons: Union[str, Iterable[str]]) -> StardewRule:
