@@ -3,9 +3,10 @@ import logging
 import random
 import time
 from collections import deque
-from typing import Callable, Dict, Iterable, List, Tuple, Union, Set
+from typing import Callable, Dict, Iterable, List, Tuple, Union, Set, Optional
 
 from BaseClasses import CollectionState, Entrance, Region, EntranceType
+from Options import Accessibility
 from worlds.AutoWorld import World
 
 
@@ -129,12 +130,12 @@ class ERPlacementState:
     def placed_regions(self) -> Set[Region]:
         return self.collection_state.reachable_regions[self.world.player]
 
-    def find_placeable_exits(self) -> List[Entrance]:
+    def find_placeable_exits(self, check_validity: bool) -> List[Entrance]:
         blocked_connections = self.collection_state.blocked_connections[self.world.player]
         blocked_connections = sorted(blocked_connections, key=lambda x: x.name)
         placeable_randomized_exits = [connection for connection in blocked_connections
                                       if not connection.connected_region
-                                      and connection.is_valid_source_transition(self)]
+                                      and (not check_validity or connection.is_valid_source_transition(self))]
         self.world.random.shuffle(placeable_randomized_exits)
         return placeable_randomized_exits
 
@@ -191,49 +192,42 @@ class ERPlacementState:
         return target_entrance,
 
 
-def disconnect_entrances_for_randomization(
-        world: World,
-        entrances_to_split: Iterable[Union[str, Entrance]]
-) -> None:
+def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[str] = None) -> None:
     """
-    Given entrances in a "vanilla" region graph, splits those entrances in such a way that will prepare them
-    for randomization in randomize_entrances. Specifically that means the entrance will be disconnected from its
+    Given an entrance in a "vanilla" region graph, splits that entrance to prepare it for randomization
+    in randomize_entrances. Specifically that means the entrance will be disconnected from its
     connected region and a corresponding ER target will be created in a way that can respect coupled randomization
-    requirements for 2 way transitions.
+    requirements for 2 way transitions (assuming that this is called on both sides of the vanilla 2 way).
     
     Preconditions:
-    1. Every provided entrance has both a parent and child region (ie, it is fully connected)
-    2. Every provided entrance has already been labeled with the appropriate entrance type
+    1. The entrance has both a parent and child region (ie, it is fully connected)
+    2. The entrance has already been labeled with the appropriate entrance type
 
-    :param world: The world owning the entrances
-    :param entrances_to_split: The entrances which will be disconnected in preparation for randomization.
-                               Can be Entrance objects, names of entrances, or any mix of the 2
+    :param entrance: The entrance which will be disconnected in preparation for randomization.
+    :param target_group: The group to assign to the created ER target. If not specified, the group from
+                         the original entrance will be copied.
     """
+    child_region = entrance.connected_region
+    parent_region = entrance.parent_region
 
-    for entrance in entrances_to_split:
-        if isinstance(entrance, str):
-            entrance = world.multiworld.get_entrance(entrance, world.player)
-        child_region = entrance.connected_region
-        parent_region = entrance.parent_region
+    # disconnect the edge
+    child_region.entrances.remove(entrance)
+    entrance.connected_region = None
 
-        # disconnect the edge
-        child_region.entrances.remove(entrance)
-        entrance.connected_region = None
-
-        # create the needed ER target
-        if entrance.er_type == EntranceType.TWO_WAY:
-            # for 2-ways, create a target in the parent region with a matching name to support coupling.
-            # targets in the child region will be created when the other direction edge is disconnected
-            target = parent_region.create_er_target(entrance.name)
-        else:
-            # for 1-ways, the child region needs a target and coupling/naming is not a concern
-            target = child_region.create_er_target(child_region.name)
-        target.er_type = entrance.er_type
+    # create the needed ER target
+    if entrance.er_type == EntranceType.TWO_WAY:
+        # for 2-ways, create a target in the parent region with a matching name to support coupling.
+        # targets in the child region will be created when the other direction edge is disconnected
+        target = parent_region.create_er_target(entrance.name)
+    else:
+        # for 1-ways, the child region needs a target and coupling/naming is not a concern
+        target = child_region.create_er_target(child_region.name)
+    target.er_type = entrance.er_type
+    target.er_group = target_group or entrance.er_group
 
 
 def randomize_entrances(
         world: World,
-        regions: Iterable[Region],
         coupled: bool,
         get_target_groups: Callable[[str], List[str]],
         preserve_group_order: bool = False
@@ -281,7 +275,6 @@ def randomize_entrances(
     2. All placeholder entrances to regions will have been removed.
 
     :param world: Your World instance
-    :param regions: Regions with no connected entrances that you would like to be randomly connected
     :param coupled: Whether connected entrances should be coupled to go in both directions
     :param get_target_groups: Method to call that returns the groups that a specific group type is allowed to connect to
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
@@ -289,6 +282,8 @@ def randomize_entrances(
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
     entrance_lookup = EntranceLookup(world.random)
+    # similar to fill, skip validity checks on entrances if the game is beatable on minimal accessibility
+    perform_validity_check = True
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance):
         removed_entrances = er_state.connect(source_exit, target_entrance)
@@ -299,7 +294,8 @@ def randomize_entrances(
         er_state.collection_state.update_reachable_regions(world.player)
 
     def find_pairing(dead_end: bool, require_new_regions: bool) -> bool:
-        placeable_exits = er_state.find_placeable_exits()
+        nonlocal perform_validity_check
+        placeable_exits = er_state.find_placeable_exits(perform_validity_check)
         for source_exit in placeable_exits:
             target_groups = get_target_groups(source_exit.er_group)
             # anything can connect to the default group - if people don't like it the fix is to
@@ -327,15 +323,32 @@ def randomize_entrances(
                 if all(e.connected_region in er_state.placed_regions for e in lookup):
                     return False
 
+            # if we're on minimal accessibility and can guarantee the game is beatable,
+            # we can prevent a failure by bypassing future validity checks. this check may be
+            # expensive; fortunately we only have to do it once
+            if perform_validity_check and world.options.accessibility == Accessibility.option_minimal \
+                    and world.multiworld.has_beaten_game(er_state.collection_state, world.player):
+                # ensure that we have enough locations to place our progression
+                accessible_location_count = 0
+                prog_item_count = len(er_state.collection_state.prog_items[world.player])
+                for region in er_state.placed_regions:
+                    for loc in region.locations:
+                        if loc.can_reach(er_state.collection_state):
+                            accessible_location_count += 1
+                            if accessible_location_count >= prog_item_count:
+                                perform_validity_check = False
+                                # pretend that this was successful to retry the current stage
+                                return True
+
             raise EntranceRandomizationError(
                 f"None of the available entrances are valid targets for the available exits.\n"
                 f"Available entrances: {lookup}\n"
                 f"Available exits: {placeable_exits}")
 
-    for region in sorted(regions, key=lambda r: r.name):
-        for entrance in region.entrances:
-            if not entrance.parent_region:
-                entrance_lookup.add(entrance)
+    er_targets = (entrance for region in world.multiworld.get_regions(world.player)
+                  for entrance in region.entrances if not entrance.parent_region)
+    for entrance in er_targets:
+        entrance_lookup.add(entrance)
 
     # place the menu region and connected start region(s)
     er_state.collection_state.update_reachable_regions(world.player)
