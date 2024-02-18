@@ -330,6 +330,7 @@ class PokemonEmeraldWorld(World):
             for location in locations:
                 if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
+                    location.progress_type = LocationProgressType.DEFAULT
                     location.address = None
 
         if self.options.badges == RandomizeBadges.option_vanilla:
@@ -365,6 +366,12 @@ class PokemonEmeraldWorld(World):
                 "Feather Badge": 5
             }
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
+
+            # Un-exclude badge locations, since we need to put progression items on them
+            for location in badge_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
 
             collection_state = self.multiworld.get_all_state(False)
             if self.hm_shuffle_info is not None:
@@ -409,6 +416,12 @@ class PokemonEmeraldWorld(World):
                 "HM02 Fly": 5
             }
             hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
+
+            # Un-exclude HM locations, since we need to put progression items on them
+            for location in hm_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
 
             collection_state = self.multiworld.get_all_state(False)
 
