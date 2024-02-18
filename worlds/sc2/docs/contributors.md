@@ -31,6 +31,8 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * Sheen
 * ProfBytes
 * IncoherentOrange
+* eudaimonistic
+* Figment
 
 ## Older versions
 Not all contributors to older versions of Archipelago Starcraft 2 are known.
