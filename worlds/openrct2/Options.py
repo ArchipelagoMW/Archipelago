@@ -184,10 +184,11 @@ class Preferred_Intensity(IntEnum):
     more_intense = 2
 
 class Randomization_Range(IntEnum):
-    low = 0
-    medium = 1
-    high = 2
-    extreme = 3
+    none = 0
+    low = 1
+    medium = 2
+    high = 3
+    extreme = 4
 
 class Scenario_Length(IntEnum):
     synchronous_short = 0
@@ -476,6 +477,7 @@ class SelectedRandomizationRange(Choice):
     """
     auto_display_name = True
     display_name = "Randomization Range"
+    option_none = Randomization_Range.none.value
     option_low = Randomization_Range.low.value
     option_medium = Randomization_Range.medium.value
     option_high = Randomization_Range.high.value
