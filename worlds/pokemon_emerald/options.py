@@ -772,6 +772,20 @@ class RandomizeFanfares(Toggle):
     display_name = "Randomize Fanfares"
 
 
+class WonderTrading(DefaultOnToggle):
+    """
+    Allows participation in wonder trading with other players in your current multiworld. Speak with the center receptionist on the second floor of any pokecenter.
+
+    Wonder trading NEVER affects logic.
+
+    Certain aspects of a pokemon species are per-game, not per-pokemon.
+    As a result, some things are not retained during a trade, including type, ability, level up learnset, and so on.
+    Receiving a pokemon this way does not mark it as found in your pokedex.
+    Trade evolutions do not evolve this way; they remain changed to level ups and item use.
+    """
+    display_name = "Wonder Trading"
+
+
 class EasterEgg(FreeText):
     """
     Enter certain phrases and something special might happen.
@@ -858,4 +872,5 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
 
     death_link: DeathLink
 
+    enable_wonder_trading: WonderTrading
     easter_egg: EasterEgg
