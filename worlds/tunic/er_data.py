@@ -730,7 +730,7 @@ for p1, p2 in hallways_ur.items():
 
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information
-dependent_regions: Dict[Tuple[str, ...], List[str]] = {
+dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
     ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
      "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
      "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal"):

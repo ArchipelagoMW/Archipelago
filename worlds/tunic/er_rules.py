@@ -16,7 +16,7 @@ fairies = "Fairy"
 coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
-ice_rod = "Pages 52-53 (Ice Rod)"
+icebolt = "Pages 52-53 (Icebolt)"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -377,13 +377,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through the big gold door, can do it both ways
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
-        name="Fortress Gold Door",
+        name="Fortress to Gold Door",
         rule=lambda state: state.has_all({"Activate Eastern Vault West Fuses",
                                           "Activate Eastern Vault East Fuse"}, player)
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Eastern Vault Fortress Gold Door"].connect(
         connecting_region=regions["Eastern Vault Fortress"],
-        name="Fortress Gold Door",
+        name="Gold Door to Fortress",
         rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks))
 
     regions["Fortress Grave Path"].connect(
@@ -443,6 +443,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: state.has(fire_wand, player) or has_sword(state, player))
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Monastery Entry"])
+
+    regions["Quarry Monastery Entry"].connect(
+        connecting_region=regions["Quarry Back"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Quarry Back"].connect(
+        connecting_region=regions["Quarry Monastery Entry"],
+        rule=lambda state: state.has(laurels, player))
 
     regions["Monastery Rope"].connect(
         connecting_region=regions["Quarry Back"])
@@ -877,7 +884,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
             state.has_all({grapple, ice_dagger, fire_wand}, player) and
-            has_ability(state, player, ice_rod, options, ability_unlocks)))
+            has_ability(state, player, icebolt, options, ability_unlocks)))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
