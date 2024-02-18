@@ -153,11 +153,11 @@ class ERPlacementState:
             self,
             source_exit: Entrance,
             target_entrance: Entrance
-    ) -> Union[Tuple[Entrance], Tuple[Entrance, Entrance]]:
+    ) -> Tuple[Iterable[Entrance], Iterable[Entrance]]:
         """
         Connects a source exit to a target entrance in the graph, accounting for coupling
 
-        :returns: The dummy entrance(s) which were removed from the graph
+        :returns: The newly placed exits and the dummy entrance(s) which were removed from the graph
         """
         source_region = source_exit.parent_region
         target_region = target_entrance.connected_region
@@ -188,8 +188,8 @@ class ERPlacementState:
                 raise EntranceRandomizationError(f"Two way entrance {target_entrance.name} had no corresponding exit "
                                                  f"in {target_region.name}.")
             self._connect_one_way(reverse_exit, reverse_entrance)
-            return target_entrance, reverse_entrance
-        return target_entrance,
+            return (source_exit, reverse_exit), (target_entrance, reverse_entrance)
+        return (source_exit,), (target_entrance,)
 
 
 def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[str] = None) -> None:
@@ -230,7 +230,8 @@ def randomize_entrances(
         world: World,
         coupled: bool,
         get_target_groups: Callable[[str], List[str]],
-        preserve_group_order: bool = False
+        preserve_group_order: bool = False,
+        on_connect: Optional[Callable[[ERPlacementState, Iterable[Entrance]], None]] = None
 ) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld.
@@ -278,6 +279,8 @@ def randomize_entrances(
     :param coupled: Whether connected entrances should be coupled to go in both directions
     :param get_target_groups: Method to call that returns the groups that a specific group type is allowed to connect to
     :param preserve_group_order: Whether the order of groupings should be preserved for the returned target_groups
+    :param on_connect: A callback function which allows specifying side effects after a placement is completed
+                       successfully and the underlying collection state has been updated.
     """
     start_time = time.perf_counter()
     er_state = ERPlacementState(world, coupled)
@@ -286,12 +289,14 @@ def randomize_entrances(
     perform_validity_check = True
 
     def do_placement(source_exit: Entrance, target_entrance: Entrance):
-        removed_entrances = er_state.connect(source_exit, target_entrance)
+        placed_exits, removed_entrances = er_state.connect(source_exit, target_entrance)
         # remove the placed targets from consideration
         for entrance in removed_entrances:
             entrance_lookup.remove(entrance)
         # propagate new connections
         er_state.collection_state.update_reachable_regions(world.player)
+        if on_connect:
+            on_connect(er_state, placed_exits)
 
     def find_pairing(dead_end: bool, require_new_regions: bool) -> bool:
         nonlocal perform_validity_check
