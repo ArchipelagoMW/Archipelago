@@ -16,7 +16,7 @@ fairies = "Fairy"
 coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
-ice_rod = "Pages 52-53 (Ice Rod)"
+icebolt = "Pages 52-53 (Icebolt)"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -33,7 +33,7 @@ def randomize_ability_unlocks(random: Random, options: TunicOptions) -> Dict[str
         hexagon_goal = options.hexagon_goal.value
         # Set ability unlocks to 25, 50, and 75% of goal amount
         ability_requirement = [hexagon_goal // 4, hexagon_goal // 2, hexagon_goal * 3 // 4]
-    abilities = [prayer, holy_cross, ice_rod]
+    abilities = [prayer, holy_cross, icebolt]
     random.shuffle(abilities)
     return dict(zip(abilities, ability_requirement))
 
@@ -65,7 +65,7 @@ def has_ice_grapple_logic(long_range: bool, state: CollectionState, player: int,
         return state.has_all({ice_dagger, grapple}, player)
     else:
         return state.has_all({ice_dagger, fire_wand, grapple}, player) and \
-            has_ability(state, player, ice_rod, options, ability_unlocks)
+            has_ability(state, player, icebolt, options, ability_unlocks)
 
 
 def can_ladder_storage(state: CollectionState, player: int, options: TunicOptions) -> bool:
@@ -130,8 +130,7 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
     multiworld.get_entrance("Quarry -> Lower Quarry", player).access_rule = \
         lambda state: has_mask(state, player, options)
     multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = \
-        lambda state: (state.has(grapple, player) and has_ability(state, player, prayer, options, ability_unlocks)) \
-        or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
+        lambda state: state.has(grapple, player) and has_ability(state, player, prayer, options, ability_unlocks)
     multiworld.get_entrance("Quarry -> Rooted Ziggurat", player).access_rule = \
         lambda state: has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = \
@@ -252,7 +251,7 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player),
              lambda state: state.has_all({grapple, ice_dagger, fire_wand}, player)
-             and has_ability(state, player, ice_rod, options, ability_unlocks))
+             and has_ability(state, player, icebolt, options, ability_unlocks))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
