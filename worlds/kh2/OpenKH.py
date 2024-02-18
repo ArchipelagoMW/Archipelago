@@ -54,13 +54,13 @@ def patch_kh2(self, output_directory):
     formexp = None
     formName = None
     levelsetting = list()
-    #formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
+    # formDict = {1: "Valor", 2: "Wisdom", 3: "Limit", 4: "Master", 5: "Final"}
     formDictExp = {
-        "Valor": self.multiworld.Valor_Form_EXP[self.player].value,
+        "Valor":  self.multiworld.Valor_Form_EXP[self.player].value,
         "Wisdom": self.multiworld.Wisdom_Form_EXP[self.player].value,
-        "Limit": self.multiworld.Limit_Form_EXP[self.player].value,
+        "Limit":  self.multiworld.Limit_Form_EXP[self.player].value,
         "Master": self.multiworld.Master_Form_EXP[self.player].value,
-        "Final": self.multiworld.Final_Form_EXP[self.player].value
+        "Final":  self.multiworld.Final_Form_EXP[self.player].value
     }
     for form_name, form_exp in formDictExp.items():
         data = all_locations[LocationName.Valorlvl2]
@@ -409,6 +409,16 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.multiworld.LevelDepth[self.player].current_option_name}"
         }
     ]
+    self.fight_and_form_text = [
+        {
+            'id': 15121,  # poster name
+            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}",
+        },
+        {
+            'id': 15122,
+            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}. Auto Logic is {self.options.AutoFormLogic.current_option_name}"
+        }
+    ]
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     openkhmod = {
@@ -419,7 +429,7 @@ def patch_kh2(self, output_directory):
         "FmlvList.yml": yaml.dump(self.formattedFmlv, line_break="\n"),
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
-        "sys.yml":      yaml.dump(self.level_depth_text, line_break="\n"),
+        "sys.yml":      yaml.dump(self.level_depth_text + self.fight_and_form_text, line_break="\n"),
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
