@@ -458,7 +458,7 @@ class GameController:
                         else:
                             self._write_game_flags_value_for(11878, 0)
                 elif hotspot_item == ZorkGrandInquisitorItems.HOTSPOT_DIRT_MOUND:
-                    if self.game_state_manager.game_location == "uw1e":
+                    if self.game_state_manager.game_location == "te5e":
                         if self._read_game_state_value_for(11747) == 0:
                             self._write_game_flags_value_for(11751, 0)
                         else:
