@@ -838,6 +838,10 @@ class GameController:
         if self._player_is_at("ej10"):
             self.game_state_manager.set_game_location("uc10", 1200)
 
+        if self._read_game_state_value_for(9) == 224:
+            self._write_game_state_value_for(9, 0)
+            self.game_state_manager.set_game_location("uc10", 1200)
+
     def _check_for_victory(self) -> None:
         if self.option_goal == ZorkGrandInquisitorGoals.THREE_ARTIFACTS:
             coconut_is_placed = self._read_game_state_value_for(2200) == 1

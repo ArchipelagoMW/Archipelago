@@ -28,6 +28,8 @@ randomization and makes the game more interesting to play.
 You can travel back to the surface without dying by looking inside the bucket. This will work as long as the rope is
 still attached to the well.
 
+Attempting to cast VOXAM will teleport you back to the Crossroads. Fast Travel!
+
 ## What item types are distributed in the multiworld?
 
 - Inventory items

@@ -656,7 +656,7 @@ item_data: Dict[ZorkGrandInquisitorItems, ZorkGrandInquisitorItemData] = {
     ZorkGrandInquisitorItems.SPELL_VOXAM: ZorkGrandInquisitorItemData(
         statemap_keys=(191,),
         archipelago_id=ITEM_OFFSET + 200 + 7,
-        classification=ItemClassification.filler,
+        classification=ItemClassification.useful,
         tags=(ZorkGrandInquisitorTags.SPELL,),
     ),
     # Subway Destinations
