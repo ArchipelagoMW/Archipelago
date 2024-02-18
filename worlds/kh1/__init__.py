@@ -145,6 +145,15 @@ class KH1World(World):
     def fill_slot_data(self) -> dict:
         slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)/16
                     ,"Required Reports": min(int(self.options.required_reports), int(self.options.reports_in_pool))}
+        if self.options.randomize_keyblade_stats:
+            min_str_bonus = min(self.options.keyblade_min_str, self.options.keyblade_max_str)
+            max_str_bonus = max(self.options.keyblade_min_str, self.options.keyblade_max_str)
+            min_mp_bonus = min(self.options.keyblade_min_mp, self.options.keyblade_max_mp)
+            max_mp_bonus = max(self.options.keyblade_min_mp, self.options.keyblade_max_mp)
+            slot_data["Keyblade Stats"] = ""
+            for i in range(22):
+                slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"] + str(int(self.random.randrange(min_str_bonus,max_str_bonus))) + "," + str(int(self.random.randrange(min_mp_bonus,max_mp_bonus))) + ","
+            slot_data["Keyblade Stats"] = slot_data["Keyblade Stats"][:-1]
         return slot_data
     
     def create_item(self, name: str) -> KH1Item:

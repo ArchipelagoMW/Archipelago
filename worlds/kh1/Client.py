@@ -114,6 +114,11 @@ class KH1Context(CommonContext):
             with open(os.path.join(self.game_communication_path, "required_reports.cfg"), 'w') as f:
                 f.write(str(reports_required))
                 f.close()
+            if "Keyblade Stats" in list(args['slot_data'].keys()):
+                keyblade_stats = args['slot_data']["Keyblade Stats"]
+                with open(os.path.join(self.game_communication_path, "keyblade_stats.cfg"), 'w') as f:
+                    f.write(str(keyblade_stats))
+                    f.close()
             #End Handle Slot Data
 
         if cmd in {"ReceivedItems"}:

@@ -120,6 +120,48 @@ class ReportsInPool(Range):
     range_start = 1
     range_end = 13
 
+class RandomizeKeybladeStats(DefaultOnToggle):
+    """
+    Determines whether Keyblade stats should be randomized
+    """
+    display_name = "Randomize Keyblade Stats"
+
+class KeybladeMinStrength(Range):
+    """
+    Determines the lowest STR bonus a keyblade can have
+    """
+    display_name = "Keyblade Minimum STR Bonus"
+    default = 3
+    range_start = 1
+    range_end = 19
+
+class KeybladeMaxStrength(Range):
+    """
+    Determines the maximum STR bonus a keyblade can have
+    """
+    display_name = "Keyblade Maximum STR Bonus"
+    default = 14
+    range_start = 2
+    range_end = 20
+
+class KeybladeMinMP(Range):
+    """
+    Determines the minimum MP bonus a keyblade can have
+    """
+    display_name = "Keyblade Maximum MP Bonus"
+    default = 0
+    range_start = 0
+    range_end = 4
+
+class KeybladeMaxMP(Range):
+    """
+    Determines the minimum MP bonus a keyblade can have
+    """
+    display_name = "Keyblade Maximum MP Bonus"
+    default = 3
+    range_start = 1
+    range_end = 5
+
 @dataclass
 class KH1Options(PerGameCommonOptions):
     goal: Goal
@@ -134,3 +176,8 @@ class KH1Options(PerGameCommonOptions):
     exp_multiplier: EXPMultiplier
     required_reports: RequiredReports
     reports_in_pool: ReportsInPool
+    randomize_keyblade_stats: RandomizeKeybladeStats
+    keyblade_max_str: KeybladeMaxStrength
+    keyblade_min_str: KeybladeMinStrength
+    keyblade_max_mp: KeybladeMaxMP
+    keyblade_min_mp: KeybladeMinMP
