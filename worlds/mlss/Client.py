@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Optional, Set
 import struct
+
 from NetUtils import ClientStatus
 from .Locations import roomCount, nonBlock, beanstones, roomException, shop, badge, pants, eReward
 from .Items import items_by_id
@@ -83,7 +84,7 @@ class MLSSClient(BizHawkClient):
                                                               (0x304B, 1, "EWRAM"), (0x304C, 4, "EWRAM"), (0x4800, 6, "EWRAM"),
                                                               (0x4808, 2, "EWRAM"), (0x4407, 1, "EWRAM"), (0x2339, 1, "IWRAM")])
             flags = read_state[0]
-            room = (read_state[1][1] << 8) + read_state[1][0]
+            current_room = int.from_bytes(read_state[1], 'little')
             shop_init = read_state[2][0]
             shop_scroll = read_state[3][0] & 0x1F
             is_buy = (read_state[4][0] != 0)
@@ -148,8 +149,8 @@ class MLSSClient(BizHawkClient):
                     return
                 if flag_byte & mask != 0:
                     if location in roomException:
-                        if roomException[location] != room:
-                            if (location == 0xDA0001 or location == 0x2578e7) and room == 0x79:
+                        if roomException[location] != current_room:
+                            if (location == 0xDA0001 or location == 0x2578e7) and current_room == 0x79:
                                 exception = False
                             else:
                                 exception = True
@@ -204,7 +205,7 @@ class MLSSClient(BizHawkClient):
                 "key": f"mlss_room_{ctx.team}_{ctx.slot}",
                 "default": 0,
                 "want_reply": False,
-                "operations": [{"operation": "replace", "value": room}]
+                "operations": [{"operation": "replace", "value": current_room}]
             }])
 
             # Send locations if there are any to send.

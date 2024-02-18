@@ -1,6 +1,7 @@
 import io
 import os
 import pkgutil
+import typing
 import bsdiff4
 
 from BaseClasses import Item, Location
@@ -10,6 +11,9 @@ from worlds.Files import APDeltaPatch
 from .Enemies import enemies, bosses, EnemyRandomize, Enemy, EnemyGroup
 from .Items import item_table
 from .Locations import shop, badge, pants
+
+if typing.TYPE_CHECKING:
+    from . import MLSSWorld
 
 
 class Color:
@@ -72,7 +76,7 @@ class MLSSDeltaPatch(APDeltaPatch):
 class Rom:
     hash = "4b1a5897d89d9e74ec7f630eefdfd435"
 
-    def __init__(self, world: "World"):
+    def __init__(self, world: "MLSSWorld"):
         content = get_base_rom_as_bytes()
         patched = self.apply_delta(content)
         self.random = world.multiworld.per_slot_randoms[world.player]

@@ -1,6 +1,5 @@
 import typing
 
-from worlds.AutoWorld import World
 from BaseClasses import Region, Entrance
 from .Locations import MLSSLocation, mainArea, chucklehuck, castleTown, startingFlag, chuckolatorFlag, piranhaFlag, \
     kidnappedFlag, beanstarFlag, birdoFlag, surfable, hooniversity, gwarharEntrance, gwarharMain, \
@@ -8,8 +7,11 @@ from .Locations import MLSSLocation, mainArea, chucklehuck, castleTown, starting
     bowsers, bowsersMini, jokesEntrance, jokesMain, theater, booStatue, oasis, postJokes, baseUltraRocks, event, coins
 from . import StateLogic
 
+if typing.TYPE_CHECKING:
+    from . import MLSSWorld
 
-def create_regions(world: "World", excluded: typing.List[str]):
+
+def create_regions(world: "MLSSWorld", excluded: typing.List[str]):
     menu_region = Region("Menu", world.player, world.multiworld)
     world.multiworld.regions.append(menu_region)
 
@@ -50,7 +52,7 @@ def create_regions(world: "World", excluded: typing.List[str]):
         create_region(world, "Bowser's Castle Mini", bowsersMini, excluded)
 
 
-def connect_regions(world: "World"):
+def connect_regions(world: "MLSSWorld"):
     names: typing.Dict[str, int] = {}
 
     connect(world, names, "Menu", "Main Area")
@@ -95,7 +97,7 @@ def connect_regions(world: "World"):
         connect(world, names, "JokesEntrance", "JokesMain", lambda state: StateLogic.canCrash(state, world.player) and StateLogic.canDig(state, world.player))
 
 
-def create_region(world: World, name, locations, excluded):
+def create_region(world: "MLSSWorld", name, locations, excluded):
     ret = Region(name, world.player, world.multiworld)
     for location in locations:
         loc = MLSSLocation(world.player, location.name, location.id, ret)
@@ -105,7 +107,7 @@ def create_region(world: World, name, locations, excluded):
     world.multiworld.regions.append(ret)
 
 
-def connect(world: "World", used_names: typing.Dict[str, int], source: str, target: str,
+def connect(world: "MLSSWorld", used_names: typing.Dict[str, int], source: str, target: str,
             rule: typing.Optional[typing.Callable] = None):
     source_region = world.multiworld.get_region(source, world.player)
     target_region = world.multiworld.get_region(target, world.player)

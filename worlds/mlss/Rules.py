@@ -1,11 +1,16 @@
+import typing
+
 from worlds.generic.Rules import add_rule, forbid_item
 from worlds.AutoWorld import World
 from .Names.LocationName import LocationName
 from .Locations import all_locations, hidden
 from . import StateLogic
 
+if typing.TYPE_CHECKING:
+    from . import MLSSWorld
 
-def set_rules(world: "World", excluded):
+
+def set_rules(world: "MLSSWorld", excluded):
     for location in all_locations:
         if "Digspot" in location.name:
             if (world.options.skip_minecart and "Minecart" in location.name) or (
