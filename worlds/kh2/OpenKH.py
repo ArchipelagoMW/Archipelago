@@ -417,8 +417,24 @@ def patch_kh2(self, output_directory):
         {
             'id': 15122,
             'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}. Auto Logic is {self.options.AutoFormLogic.current_option_name}"
-        }
+        },
+
     ]
+    self.cups_text = [
+        {
+            'id': 4043,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4044,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+        {
+            'id': 4045,
+            'en': f"CupsToggle: {self.options.Cups.current_option_name}"
+        },
+    ]
+
     mod_dir = os.path.join(output_directory, mod_name + "_" + Utils.__version__)
 
     openkhmod = {
@@ -430,6 +446,7 @@ def patch_kh2(self, output_directory):
         "mod.yml":      yaml.dump(self.mod_yml, line_break="\n"),
         "po.yml":       yaml.dump(self.pooh_text, line_break="\n"),
         "sys.yml":      yaml.dump(self.level_depth_text + self.fight_and_form_text, line_break="\n"),
+        "he.yml":       yaml.dump(self.cups_text, line_break="\n")
     }
 
     mod = KH2Container(openkhmod, mod_dir, output_directory, self.player,
