@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Optional, Set
 from .locations import base_id
-from .text import cv64_text_wrap, cv64_string_to_bytes
+from .text import cv64_text_wrap, cv64_string_to_bytearray
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
@@ -122,18 +122,18 @@ class Castlevania64Client(BizHawkClient):
                 if num_received_items < len(ctx.items_received):
                     next_item = ctx.items_received[num_received_items]
                     if next_item.flags & 0b001:
-                        text_color = [0xA2, 0x0C]
+                        text_color = bytearray([0xA2, 0x0C])
                     elif next_item.flags & 0b010:
-                        text_color = [0xA2, 0x0A]
+                        text_color = bytearray([0xA2, 0x0A])
                     elif next_item.flags & 0b100:
-                        text_color = [0xA2, 0x0B]
+                        text_color = bytearray([0xA2, 0x0B])
                     else:
-                        text_color = [0xA2, 0x02]
+                        text_color = bytearray([0xA2, 0x02])
                     received_text, num_lines = cv64_text_wrap(f"{ctx.item_names[next_item.item]}\n"
                                                               f"from {ctx.player_names[next_item.player]}", 96)
                     await bizhawk.guarded_write(ctx.bizhawk_ctx,
                                                 [(0x389BE1, [next_item.item & 0xFF], "RDRAM"),
-                                                 (0x18C0A8, text_color + cv64_string_to_bytes(received_text, False),
+                                                 (0x18C0A8, text_color + cv64_string_to_bytearray(received_text, False),
                                                   "RDRAM"),
                                                  (0x18C1A7, [num_lines], "RDRAM")],
                                                 [(0x389BE1, [0x00], "RDRAM"),   # Remote item reward buffer

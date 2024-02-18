@@ -3,21 +3,56 @@ from .options import CV64Options
 from .regions import get_region_info
 from .locations import get_location_info
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 if TYPE_CHECKING:
     from . import CV64World
 
+
+# # #    KEY    # # #
+# "start region" = The Region that the start of the stage is in. Used for connecting the previous stage's end and
+#                  alternate end (if it exists) Entrances to the start of the next one.
+# "start map id" = The map ID that the start of the stage is in.
+# "start spawn id" = The player spawn location ID for the start of the stage. This and "start map id" are both written
+#                    to the previous stage's end loading zone to make it send the player to the next stage in the
+#                    world's determined stage order.
+# "mid region" = The Region that the stage's middle warp point is in. Used for connecting the warp Entrances after the
+#                starting stage to where they should be connecting to.
+# "mid map id" = The map ID that the stage's middle warp point is in.
+# "mid spawn id" = The player spawn location ID for the stage's middle warp point. This and "mid map id" are both
+#                  written to the warp menu code to make it send the player to where it should be sending them.
+# "end region" = The Region that the end of the stage is in. Used for connecting the next stage's beginning Entrance
+#                (if it exists) to the end of the previous one.
+# "end map id" = The map ID that the end of the stage is in.
+# "end spawn id" = The player spawn location ID for the end of the stage. This and "end map id" are both written to the
+#                  next stage's beginning loading zone (if it exists) to make it send the player to the previous stage
+#                  in the world's determined stage order.
+# startzone map offset = The offset in the ROM to overwrite to change where the start of the stage leads.
+# startzone spawn offset = The offset in the ROM to overwrite to change what spawn location in the previous map the
+#                          start of the stage puts the player at.
+# endzone map offset = The offset in the ROM to overwrite to change where the end of the stage leads.
+# endzone spawn offset = The offset in the ROM to overwrite to change what spawn location in the next map the end of
+#                        the stage puts the player at.
+# altzone map offset = The offset in the ROM to overwrite to change where the alternate end of the stage leads
+#                      (if it exists).
+# altzone spawn offset = The offset in the ROM to overwrite to change what spawn location in the next map the alternate
+#                        end of the stage puts the player at.
+# character = What character that stage is exclusively meant for normally. Used in determining what stages to leave out
+#             depending on what character stage setting was chosen in the player options.
+# save number offsets = The offsets to overwrite to change what stage number is displayed on the save file when saving
+#                       at the stage's White Jewels.
+# regions = All Regions that make up the stage. If the stage is in the world's active stages, its Regions and their
+#           corresponding Locations and Entrances will all be created.
 stage_info = {
     "Forest of Silence": {
         "start region": rname.forest_start, "start map id": 0x00, "start spawn id": 0x00,
         "mid region": rname.forest_mid, "mid map id": 0x00, "mid spawn id": 0x04,
         "end region": rname.forest_end, "end map id": 0x00, "end spawn id": 0x01,
         "endzone map offset": 0xB6302F, "endzone spawn offset": 0xB6302B,
-        "save number offsets": [0x1049C5, 0x1049CD, 0x1049D5],
-        "regions": [rname.forest_start,
+        "save number offsets": (0x1049C5, 0x1049CD, 0x1049D5),
+        "regions": (rname.forest_start,
                     rname.forest_mid,
-                    rname.forest_end]
+                    rname.forest_end)
     },
 
     "Castle Wall": {
@@ -25,10 +60,10 @@ stage_info = {
         "mid region": rname.cw_start, "mid map id": 0x02, "mid spawn id": 0x07,
         "end region": rname.cw_exit, "end map id": 0x02, "end spawn id": 0x10,
         "endzone map offset": 0x109A5F, "endzone spawn offset": 0x109A61,
-        "save number offsets": [0x1049DD, 0x1049E5, 0x1049ED],
-        "regions": [rname.cw_start,
+        "save number offsets": (0x1049DD, 0x1049E5, 0x1049ED),
+        "regions": (rname.cw_start,
                     rname.cw_exit,
-                    rname.cw_ltower]
+                    rname.cw_ltower)
     },
 
     "Villa": {
@@ -37,14 +72,14 @@ stage_info = {
         "end region": rname.villa_crypt, "end map id": 0x1A, "end spawn id": 0x03,
         "endzone map offset": 0xD9DA3, "endzone spawn offset": 0x109E81,
         "altzone map offset": 0xD9DAB, "altzone spawn offset": 0x109E81,
-        "save number offsets": [0x1049F5, 0x1049FD, 0x104A05, 0x104A0D],
-        "regions": [rname.villa_start,
+        "save number offsets": (0x1049F5, 0x1049FD, 0x104A05, 0x104A0D),
+        "regions": (rname.villa_start,
                     rname.villa_main,
                     rname.villa_storeroom,
                     rname.villa_archives,
                     rname.villa_maze,
                     rname.villa_servants,
-                    rname.villa_crypt]
+                    rname.villa_crypt)
     },
 
     "Tunnel": {
@@ -52,9 +87,9 @@ stage_info = {
         "mid region": rname.tunnel_end, "mid map id": 0x07, "mid spawn id": 0x03,
         "end region": rname.tunnel_end, "end map id": 0x07, "end spawn id": 0x11,
         "endzone map offset": 0x109B4F, "endzone spawn offset": 0x109B51, "character": "Reinhardt",
-        "save number offsets": [0x104A15, 0x104A1D, 0x104A25, 0x104A2D],
-        "regions": [rname.tunnel_start,
-                    rname.tunnel_end]
+        "save number offsets": (0x104A15, 0x104A1D, 0x104A25, 0x104A2D),
+        "regions": (rname.tunnel_start,
+                    rname.tunnel_end)
     },
 
     "Underground Waterway": {
@@ -62,9 +97,9 @@ stage_info = {
         "mid region": rname.uw_main, "mid map id": 0x08, "mid spawn id": 0x03,
         "end region": rname.uw_end, "end map id": 0x08, "end spawn id": 0x01,
         "endzone map offset": 0x109B67, "endzone spawn offset": 0x109B69, "character": "Carrie",
-        "save number offsets": [0x104A35, 0x104A3D],
-        "regions": [rname.uw_main,
-                    rname.uw_end]
+        "save number offsets": (0x104A35, 0x104A3D),
+        "regions": (rname.uw_main,
+                    rname.uw_end)
     },
 
     "Castle Center": {
@@ -73,12 +108,12 @@ stage_info = {
         "end region": rname.cc_elev_top, "end map id": 0x0F, "end spawn id": 0x02,
         "endzone map offset": 0x109CB7, "endzone spawn offset": 0x109CB9,
         "altzone map offset": 0x109CCF, "altzone spawn offset": 0x109CD1,
-        "save number offsets": [0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75],
-        "regions": [rname.cc_main,
+        "save number offsets": (0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75),
+        "regions": (rname.cc_main,
                     rname.cc_torture_chamber,
                     rname.cc_library,
                     rname.cc_crystal,
-                    rname.cc_elev_top]
+                    rname.cc_elev_top)
     },
 
     "Duel Tower": {
@@ -87,8 +122,8 @@ stage_info = {
         "mid region": rname.dt_main, "mid map id": 0x13, "mid spawn id": 0x15,
         "end region": rname.dt_main, "end map id": 0x13, "end spawn id": 0x01,
         "endzone map offset": 0x109D8F, "endzone spawn offset": 0x109D91, "character": "Reinhardt",
-        "save number offsets": [0x104ACD],
-        "regions": {rname.dt_main}
+        "save number offsets": (0x104ACD,),
+        "regions": (rname.dt_main,)
     },
 
     "Tower of Execution": {
@@ -97,9 +132,9 @@ stage_info = {
         "mid region": rname.toe_main, "mid map id": 0x10, "mid spawn id": 0x02,
         "end region": rname.toe_main, "end map id": 0x10, "end spawn id": 0x12,
         "endzone map offset": 0x109CFF, "endzone spawn offset": 0x109D01, "character": "Reinhardt",
-        "save number offsets": [0x104A7D, 0x104A85],
-        "regions": [rname.toe_main,
-                    rname.toe_ledge]
+        "save number offsets": (0x104A7D, 0x104A85),
+        "regions": (rname.toe_main,
+                    rname.toe_ledge)
     },
 
     "Tower of Science": {
@@ -108,11 +143,11 @@ stage_info = {
         "mid region": rname.tosci_conveyors, "mid map id": 0x12, "mid spawn id": 0x03,
         "end region": rname.tosci_conveyors, "end map id": 0x12, "end spawn id": 0x04,
         "endzone map offset": 0x109D5F, "endzone spawn offset": 0x109D61, "character": "Carrie",
-        "save number offsets": [0x104A95, 0x104A9D, 0x104AA5],
-        "regions": [rname.tosci_start,
+        "save number offsets": (0x104A95, 0x104A9D, 0x104AA5),
+        "regions": (rname.tosci_start,
                     rname.tosci_three_doors,
                     rname.tosci_conveyors,
-                    rname.tosci_key3]
+                    rname.tosci_key3)
     },
 
     "Tower of Sorcery": {
@@ -121,8 +156,8 @@ stage_info = {
         "mid region": rname.tosor_main, "mid map id": 0x11, "mid spawn id": 0x01,
         "end region": rname.tosor_main, "end map id": 0x11, "end spawn id": 0x13,
         "endzone map offset": 0x109D2F, "endzone spawn offset": 0x109D31, "character": "Carrie",
-        "save number offsets": [0x104A8D],
-        "regions": [rname.tosor_main]
+        "save number offsets": (0x104A8D,),
+        "regions": (rname.tosor_main,)
     },
 
     "Room of Clocks": {
@@ -130,34 +165,41 @@ stage_info = {
         "mid region": rname.roc_main, "mid map id": 0x1B, "mid spawn id": 0x02,
         "end region": rname.roc_main, "end map id": 0x1B, "end spawn id": 0x14,
         "endzone map offset": 0x109EAF, "endzone spawn offset": 0x109EB1,
-        "save number offsets": [0x104AC5],
-        "regions": [rname.roc_main]
+        "save number offsets": (0x104AC5,),
+        "regions": (rname.roc_main,)
     },
 
     "Clock Tower": {
         "start region": rname.ct_start, "start map id": 0x17, "start spawn id": 0x00,
         "mid region": rname.ct_middle, "mid map id": 0x17, "mid spawn id": 0x02,
         "end region": rname.ct_end, "end map id": 0x17, "end spawn id": 0x03,
-        "endzone map offset": 0x109D5F, "endzone spawn offset": 0x109D61,
-        "save number offsets": [0x104AB5, 0x104ABD],
-        "regions": {rname.ct_start,
+        "endzone map offset": 0x109E37, "endzone spawn offset": 0x109E39,
+        "save number offsets": (0x104AB5, 0x104ABD),
+        "regions": (rname.ct_start,
                     rname.ct_middle,
-                    rname.ct_end}
+                    rname.ct_end)
     },
 
     "Castle Keep": {
         "start region": rname.ck_main, "start map id": 0x14, "start spawn id": 0x02,
         "mid region": rname.ck_main, "mid map id": 0x14, "mid spawn id": 0x03,
         "end region": rname.ck_drac_chamber,
-        "save number offsets": [0x104AAD],
-        "regions": {rname.ck_main}
+        "save number offsets": (0x104AAD,),
+        "regions": (rname.ck_main,)
     },
 }
 
-vanilla_stage_order = ["Forest of Silence", "Castle Wall", "Villa", "Tunnel", "Underground Waterway", "Castle Center",
+vanilla_stage_order = ("Forest of Silence", "Castle Wall", "Villa", "Tunnel", "Underground Waterway", "Castle Center",
                        "Duel Tower", "Tower of Execution", "Tower of Science", "Tower of Sorcery", "Room of Clocks",
-                       "Clock Tower", "Castle Keep"]
+                       "Clock Tower", "Castle Keep")
 
+# # #    KEY    # # #
+# "prev" = The previous stage in the line.
+# "next" = The next stage in the line.
+# "alt" = The alternate next stage in the line (if one exists).
+# "position" = The stage's number in the order of stages.
+# "path" = Character indicating whether the stage is on the main path or an alternate path, similar to Rondo of Blood.
+#          Used in writing the randomized stage order to the spoiler.
 vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.castle_wall,
                                                  "alt": None, "position": 1, "path": " "},
                        rname.castle_wall: {"prev": None, "next": rname.villa,
@@ -186,13 +228,13 @@ vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.cas
                                            "alt": None, "position": 10, "path": " "}}
 
 
-def get_stage_info(stage: str, info: str):
+def get_stage_info(stage: str, info: str) -> str | int | Tuple[int | str, ...] | None:
     if info in stage_info[stage]:
         return stage_info[stage][info]
     return None
 
 
-def get_locations_from_stage(stage: str) -> list:
+def get_locations_from_stage(stage: str) -> List[str]:
     overall_locations = []
     for region in get_stage_info(stage, "regions"):
         stage_locations = get_region_info(region, "locations")
@@ -206,17 +248,11 @@ def get_locations_from_stage(stage: str) -> list:
     return final_locations
 
 
-def get_warp_destination_region(active_warp_list: list, index: int) -> str:
-    if index == 0:
-        return stage_info[active_warp_list[index]].start_region_name
-    return stage_info[active_warp_list[index]].mid_region_name
-
-
 def verify_character_stage(world: "CV64World", stage: str) -> bool:
     # Verify a character stage is in the world if the given stage is a character stage.
     stage_char = get_stage_info(stage, "character")
     return stage_char is None or (world.reinhardt_stages and stage_char == "Reinhardt") or \
-           (world.carrie_stages and stage_char == "Carrie")
+        (world.carrie_stages and stage_char == "Carrie")
 
 
 def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
@@ -243,7 +279,9 @@ def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
     return exits
 
 
-def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_value: int, active_stage_exits: dict):
+def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_stage_value: int,
+                   active_stage_exits: Dict[str, Dict[str, str | int | None]]) \
+        -> Tuple[Dict[str, Dict[str, str | int | None]], str, List[str]]:
     """Woah, this is a lot! I should probably summarize what's happening in here, huh?
 
     So, in the vanilla game, all the stages are basically laid out on a linear "timeline" with some stages being
@@ -283,7 +321,7 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_v
     """
 
     # Verify the starting stage is valid. If it isn't, or if the mystery setting is being used, pick a stage at random.
-    if starting_stage_value < len(vanilla_stage_order)-1 and vanilla_stage_order[starting_stage_value] not in \
+    if starting_stage_value < len(vanilla_stage_order) - 1 and vanilla_stage_order[starting_stage_value] not in \
             stage_1_blacklist and verify_character_stage(world, vanilla_stage_order[starting_stage_value]):
         starting_stage = vanilla_stage_order[starting_stage_value]
     else:
@@ -291,7 +329,7 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_v
         for stage in vanilla_stage_order:
             if stage in active_stage_exits and stage != rname.castle_keep:
                 possible_stages.append(stage)
-        starting_stage = possible_stages[world.random.randrange(0, len(possible_stages) - 1)]
+        starting_stage = possible_stages[world.random.randrange(0, len(possible_stages))]
 
     remaining_stage_pool = [stage for stage in active_stage_exits]
     remaining_stage_pool.remove(rname.castle_keep)
@@ -335,7 +373,7 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_v
             if i == 0:
                 new_stage_order.append(starting_stage)
             else:
-                new_stage_order.append(remaining_stage_pool[world.random.randrange(0, len(remaining_stage_pool))])
+                new_stage_order.append(world.random.choice(remaining_stage_pool))
                 remaining_stage_pool.remove(new_stage_order[i])
 
         # If we're looking at an alternate stage slot, put the stage in one of these lists to indicate it as such
@@ -405,7 +443,7 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: list, starting_stage_v
     return active_stage_exits, starting_stage, new_stage_order
 
 
-def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: list) -> list:
+def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: List[str]) -> List[str]:
     # Create a list of warps from the active stage list. They are in a random order by default and will never
     # include the starting stage.
     possible_warps = [stage for stage in active_stage_list]
@@ -424,7 +462,7 @@ def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: 
         active_warp_list = new_list
     elif options.warp_order.value == options.warp_order.option_vanilla_stage_order:
         # Arrange the warps to be in the vanilla game's stage order
-        new_list = vanilla_stage_order.copy()
+        new_list = list(vanilla_stage_order)
         for warp in vanilla_stage_order:
             if warp not in active_warp_list:
                 new_list.remove(warp)
@@ -436,7 +474,7 @@ def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: 
     return active_warp_list
 
 
-def get_region_names(active_stage_exits: dict) -> list:
+def get_region_names(active_stage_exits: Dict[str, Dict[str, str | int | None]]) -> List[str]:
     region_names = []
     for stage in active_stage_exits:
         stage_regions = get_stage_info(stage, "regions")

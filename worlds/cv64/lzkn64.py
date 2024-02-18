@@ -20,7 +20,7 @@ RLE_SIZE    = 0x101
 
 
 # Compresses the data in the buffer specified in the arguments.
-def compress_buffer(file_buffer):
+def compress_buffer(file_buffer: bytearray) -> bytearray:
     # Size of the buffer to compress
     buffer_size = len(file_buffer) - 1
 
@@ -210,7 +210,7 @@ def compress_buffer(file_buffer):
 
 
 # Decompresses the data in the buffer specified in the arguments.
-def decompress_buffer(file_buffer):
+def decompress_buffer(file_buffer: bytearray) -> bytearray:
     # Position of the current read location in the buffer.
     buffer_position = 4
 

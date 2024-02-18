@@ -1,4 +1,4 @@
-from BaseClasses import ItemClassification, Location
+from BaseClasses import ItemClassification, Location, Item
 from .data import iname, rname
 from .options import CV64Options
 from .stages import vanilla_stage_order, get_stage_info
@@ -6,55 +6,55 @@ from .locations import get_location_info, base_id
 from .regions import get_region_info
 from .items import get_item_info, item_info
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 if TYPE_CHECKING:
     from . import CV64World
 
 rom_sub_weapon_offsets = {
-    0x10C6EB: [0x10, rname.forest_of_silence],  # Forest
-    0x10C6F3: [0x0F, rname.forest_of_silence],
-    0x10C6FB: [0x0E, rname.forest_of_silence],
-    0x10C703: [0x0D, rname.forest_of_silence],
+    0x10C6EB: (0x10, rname.forest_of_silence),  # Forest
+    0x10C6F3: (0x0F, rname.forest_of_silence),
+    0x10C6FB: (0x0E, rname.forest_of_silence),
+    0x10C703: (0x0D, rname.forest_of_silence),
 
-    0x10C81F: [0x0F, rname.castle_wall],  # Castle Wall
-    0x10C827: [0x10, rname.castle_wall],
-    0x10C82F: [0x0E, rname.castle_wall],
-    0x7F9A0F: [0x0D, rname.castle_wall],
+    0x10C81F: (0x0F, rname.castle_wall),  # Castle Wall
+    0x10C827: (0x10, rname.castle_wall),
+    0x10C82F: (0x0E, rname.castle_wall),
+    0x7F9A0F: (0x0D, rname.castle_wall),
 
-    0x83A5D9: [0x0E, rname.villa],  # Villa
-    0x83A5E5: [0x0D, rname.villa],
-    0x83A5F1: [0x0F, rname.villa],
-    0xBFC903: [0x10, rname.villa],
-    0x10C987: [0x10, rname.villa],
-    0x10C98F: [0x0D, rname.villa],
-    0x10C997: [0x0F, rname.villa],
-    0x10CF73: [0x10, rname.villa],
+    0x83A5D9: (0x0E, rname.villa),  # Villa
+    0x83A5E5: (0x0D, rname.villa),
+    0x83A5F1: (0x0F, rname.villa),
+    0xBFC903: (0x10, rname.villa),
+    0x10C987: (0x10, rname.villa),
+    0x10C98F: (0x0D, rname.villa),
+    0x10C997: (0x0F, rname.villa),
+    0x10CF73: (0x10, rname.villa),
 
-    0x10CA57: [0x0D, rname.tunnel],  # Tunnel
-    0x10CA5F: [0x0E, rname.tunnel],
-    0x10CA67: [0x10, rname.tunnel],
-    0x10CA6F: [0x0D, rname.tunnel],
-    0x10CA77: [0x0F, rname.tunnel],
-    0x10CA7F: [0x0E, rname.tunnel],
+    0x10CA57: (0x0D, rname.tunnel),  # Tunnel
+    0x10CA5F: (0x0E, rname.tunnel),
+    0x10CA67: (0x10, rname.tunnel),
+    0x10CA6F: (0x0D, rname.tunnel),
+    0x10CA77: (0x0F, rname.tunnel),
+    0x10CA7F: (0x0E, rname.tunnel),
 
-    0x10CBC7: [0x0E, rname.castle_center],  # Castle Center
-    0x10CC0F: [0x0D, rname.castle_center],
-    0x10CC5B: [0x0F, rname.castle_center],
+    0x10CBC7: (0x0E, rname.castle_center),  # Castle Center
+    0x10CC0F: (0x0D, rname.castle_center),
+    0x10CC5B: (0x0F, rname.castle_center),
 
-    0x10CD3F: [0x0E, rname.tower_of_execution],  # Character towers
-    0x10CD65: [0x0D, rname.tower_of_execution],
-    0x10CE2B: [0x0E, rname.tower_of_science],
-    0x10CE83: [0x10, rname.duel_tower],
+    0x10CD3F: (0x0E, rname.tower_of_execution),  # Character towers
+    0x10CD65: (0x0D, rname.tower_of_execution),
+    0x10CE2B: (0x0E, rname.tower_of_science),
+    0x10CE83: (0x10, rname.duel_tower),
 
-    0x10CF8B: [0x0F, rname.room_of_clocks],  # Room of Clocks
-    0x10CF93: [0x0D, rname.room_of_clocks],
+    0x10CF8B: (0x0F, rname.room_of_clocks),  # Room of Clocks
+    0x10CF93: (0x0D, rname.room_of_clocks),
 
-    0x99BC5A: [0x0D, rname.clock_tower],  # Clock Tower
-    0x10CECB: [0x10, rname.clock_tower],
-    0x10CED3: [0x0F, rname.clock_tower],
-    0x10CEDB: [0x0E, rname.clock_tower],
-    0x10CEE3: [0x0D, rname.clock_tower],
+    0x99BC5A: (0x0D, rname.clock_tower),  # Clock Tower
+    0x10CECB: (0x10, rname.clock_tower),
+    0x10CED3: (0x0F, rname.clock_tower),
+    0x10CEDB: (0x0E, rname.clock_tower),
+    0x10CEE3: (0x0D, rname.clock_tower),
 }
 
 rom_sub_weapon_flags = {
@@ -295,15 +295,15 @@ def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
 
 def randomize_music(world: "CV64World", options: CV64Options) -> Dict[int, int]:
     """Generates randomized or disabled data for all the music in the game."""
-    music_list = [0] * 0x7A
+    music_array = bytearray(0x7A)
     for number in music_sfx_ids:
-        music_list[number] = number
+        music_array[number] = number
     if options.background_music.value == options.background_music.option_randomized:
         looping_songs = []
         non_looping_songs = []
         fade_in_songs = {}
         # Create shuffle-able lists of all the looping, non-looping, and fade-in track IDs
-        for i in range(0x10, len(music_list)):
+        for i in range(0x10, len(music_array)):
             if i not in rom_looping_music_fade_ins.keys() and i not in rom_looping_music_fade_ins.values() and \
                     i != 0x72:  # Credits song is blacklisted
                 non_looping_songs.append(i)
@@ -328,20 +328,20 @@ def randomize_music(world: "CV64World", options: CV64Options) -> Dict[int, int]:
                         looping_songs[vanilla_song]]
                 else:
                     fade_in_songs[rom_looping_music_fade_ins[vanilla_song]] = looping_songs[vanilla_song]
-        # Build the new music list
-        for i in range(0x10, len(music_list)):
+        # Build the new music array
+        for i in range(0x10, len(music_array)):
             if i in looping_songs.keys():
-                music_list[i] = looping_songs[i]
+                music_array[i] = looping_songs[i]
             elif i in non_looping_songs.keys():
-                music_list[i] = non_looping_songs[i]
+                music_array[i] = non_looping_songs[i]
             else:
-                music_list[i] = fade_in_songs[i]
-    del (music_list[0x00: 0x10])
+                music_array[i] = fade_in_songs[i]
+    del (music_array[0x00: 0x10])
 
-    # Convert the music list into a data dict
+    # Convert the music array into a data dict
     music_offsets = {}
-    for i in range(len(music_list)):
-        music_offsets[0xBFCD30 + i] = music_list[i]
+    for i in range(len(music_array)):
+        music_offsets[0xBFCD30 + i] = music_array[i]
 
     return music_offsets
 
@@ -362,7 +362,7 @@ def randomize_shop_prices(world: "CV64World", min_price: int, max_price: int) ->
     return price_dict
 
 
-def get_countdown_numbers(options: CV64Options, active_locations):
+def get_countdown_numbers(options: CV64Options, active_locations: List[Location]) -> Dict[int, int]:
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
     increase a number.
 
@@ -371,8 +371,9 @@ def get_countdown_numbers(options: CV64Options, active_locations):
     If the parent region is not part of any stage (as is the case for Renon's shop), skip the location entirely."""
     countdown_list = [0 for _ in range(15)]
     for loc in active_locations:
-        if options.countdown.value == options.countdown.option_all_locations or \
-                (options.countdown.value == options.countdown.option_majors and loc.item.advancement):
+        if loc.address is not None and (options.countdown.value == options.countdown.option_all_locations or
+                                        (options.countdown.value == options.countdown.option_majors
+                                         and loc.item.advancement)):
 
             countdown_number = get_location_info(loc.name, "countdown")
 
@@ -392,7 +393,8 @@ def get_countdown_numbers(options: CV64Options, active_locations):
     return countdown_dict
 
 
-def get_location_data(world: "CV64World", options: CV64Options, active_locations):
+def get_location_data(world: "CV64World", options: CV64Options, active_locations: List[Location]) \
+        -> Tuple[Dict[int, int], List[str], List[bytearray], List[List[int | str | None]]]:
     """Gets ALL the item data to go into the ROM. Item data consists of two bytes: the first dictates the appearance of
     the item, the second determines what the item actually is when picked up. All items from other worlds will be AP
     items that do nothing when picked up other than set their flag, and their appearance will depend on whether it's
@@ -456,12 +458,18 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
         if loc.item.game == "Castlevania 64" and loc.item.code == 0x10C + base_id:
             location_bytes[get_location_info(loc.name, "offset") - 1] = 0x0B
 
-        # If it's an Ice Trap, change it's model to one of the appearances we determiend before.
+        # If it's an Ice Trap, change its model to one of the appearances we determined before.
+        # Unless it's an NPC item, in which case use the Ice Trap's regular ID so that it won't decrement the majors
+        # Countdown due to how I set up the NPC items to work.
         if loc.item.game == "Castlevania 64" and loc.item.code == 0x12 + base_id:
-            location_bytes[get_location_info(loc.name, "offset") - 1] = \
-                get_item_info(world.random.choice(trap_appearances), "code")
-            if location_bytes[get_location_info(loc.name, "offset") - 1] == 0x10C:
-                location_bytes[get_location_info(loc.name, "offset") - 1] = 0x0B
+            if loc_type == "npc":
+                location_bytes[get_location_info(loc.name, "offset") - 1] = 0x12
+            else:
+                location_bytes[get_location_info(loc.name, "offset") - 1] = \
+                    get_item_info(world.random.choice(trap_appearances), "code")
+                # If we chose a PermaUp as our trap appearance, change it to its actual in-game ID of 0x0B.
+                if location_bytes[get_location_info(loc.name, "offset") - 1] == 0x10C:
+                    location_bytes[get_location_info(loc.name, "offset") - 1] = 0x0B
 
         # Apply the invisibility variable depending on the "invisible items" setting.
         if (options.invisible_items.value == 0 and loc_type == "inv") or \
@@ -513,7 +521,8 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
     return location_bytes, shop_name_list, shop_colors_list, shop_desc_list
 
 
-def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_stage_exits: dict) -> Dict[int, int]:
+def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
+                           active_stage_exits: Dict[str, Dict[str, str | int | None]]) -> Dict[int, int]:
     """Figure out all the bytes for loading zones and map transitions based on which stages are where in the exit data.
     The same data was used earlier in figuring out the logic. Map transitions consist of two major components: which map
     to send the player to, and which spot within the map to spawn the player at."""
@@ -557,8 +566,7 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str, active_sta
     return loading_zone_bytes
 
 
-def get_start_inventory_data(options: CV64Options, start_inventory: dict, start_inventory_from_pool: dict) \
-        -> Dict[int, int]:
+def get_start_inventory_data(player: int, options: CV64Options, precollected_items: List[Item]) -> Dict[int, int]:
     """Calculate and return the starting inventory values. Not every Item goes into the menu inventory, so everything
     has to be handled appropriately."""
     start_inventory_data = {0xBFD867: 0,  # Jewels
@@ -571,51 +579,48 @@ def get_start_inventory_data(options: CV64Options, start_inventory: dict, start_
 
     items_max = 10
 
-    # Combine both start inventories into one dict
-    total_start_inventory = {item: start_inventory.get(item, 0) + start_inventory_from_pool.get(item, 0)
-                             for item in set(start_inventory).union(start_inventory_from_pool)}
-
     # Raise the items max if increase item limit is enabled.
     if options.increase_item_limit.value:
         items_max = 100
 
-    for item in total_start_inventory:
-        inventory_offset = get_item_info(item, "inventory offset")
-        sub_equip_id = get_item_info(item, "sub equip id")
-        # Starting inventory items
-        if inventory_offset is not None:
-            inventory_items_array[inventory_offset] = total_start_inventory[item]
-            if inventory_items_array[inventory_offset] > items_max and "Special" not in item:
-                inventory_items_array[inventory_offset] = items_max
-            if item == iname.permaup:
-                if inventory_items_array[inventory_offset] > 2:
-                    inventory_items_array[inventory_offset] = 2
-        # Starting sub-weapon
-        elif sub_equip_id is not None:
-            start_inventory_data[0xBFD883] = sub_equip_id
-        # Starting PowerUps
-        elif item == iname.powerup:
-            start_inventory_data[0xBFD87B] += total_start_inventory[item]
-            if start_inventory_data[0xBFD87B] > 2:
-                start_inventory_data[0xBFD87B] = 2
-        # Starting Gold
-        elif "GOLD" in item:
-            total_money += int(item[0:4]) * total_start_inventory[item]
-            if total_money > 99999:
-                total_money = 99999
-        # Starting Jewels
-        elif "jewel" in item:
-            if "L" in item:
-                start_inventory_data[0xBFD867] += 10 * total_start_inventory[item]
+    for item in precollected_items:
+        if item.player == player:
+            inventory_offset = get_item_info(item.name, "inventory offset")
+            sub_equip_id = get_item_info(item.name, "sub equip id")
+            # Starting inventory items
+            if inventory_offset is not None:
+                inventory_items_array[inventory_offset] += 1
+                if inventory_items_array[inventory_offset] > items_max and "Special" not in item.name:
+                    inventory_items_array[inventory_offset] = items_max
+                if item.name == iname.permaup:
+                    if inventory_items_array[inventory_offset] > 2:
+                        inventory_items_array[inventory_offset] = 2
+            # Starting sub-weapon
+            elif sub_equip_id is not None:
+                start_inventory_data[0xBFD883] = sub_equip_id
+            # Starting PowerUps
+            elif item.name == iname.powerup:
+                start_inventory_data[0xBFD87B] += 1
+                if start_inventory_data[0xBFD87B] > 2:
+                    start_inventory_data[0xBFD87B] = 2
+            # Starting Gold
+            elif "GOLD" in item.name:
+                total_money += int(item.name[0:4])
+                if total_money > 99999:
+                    total_money = 99999
+            # Starting Jewels
+            elif "jewel" in item.name:
+                if "L" in item.name:
+                    start_inventory_data[0xBFD867] += 10
+                else:
+                    start_inventory_data[0xBFD867] += 5
+                if start_inventory_data[0xBFD867] > 99:
+                    start_inventory_data[0xBFD867] = 99
+            # Starting Ice Traps
             else:
-                start_inventory_data[0xBFD867] += 5 * total_start_inventory[item]
-            if start_inventory_data[0xBFD867] > 99:
-                start_inventory_data[0xBFD867] = 99
-        # Starting Ice Traps
-        else:
-            start_inventory_data[0xBFD88B] += total_start_inventory[item]
-            if start_inventory_data[0xBFD88B] > 0xFF:
-                start_inventory_data[0xBFD88B] = 0xFF
+                start_inventory_data[0xBFD88B] += 1
+                if start_inventory_data[0xBFD88B] > 0xFF:
+                    start_inventory_data[0xBFD88B] = 0xFF
 
     # Convert the inventory items into data.
     for i in range(len(inventory_items_array)):
@@ -632,12 +637,12 @@ def get_start_inventory_data(options: CV64Options, start_inventory: dict, start_
     return start_inventory_data
 
 
-def get_item_text_color(loc: Location) -> list:
+def get_item_text_color(loc: Location) -> bytearray:
     if loc.item.advancement:
-        return [0xA2, 0x0C]
+        return bytearray([0xA2, 0x0C])
     elif loc.item.classification == ItemClassification.useful:
-        return [0xA2, 0x0A]
+        return bytearray([0xA2, 0x0A])
     elif loc.item.classification == ItemClassification.trap:
-        return [0xA2, 0x0B]
+        return bytearray([0xA2, 0x0B])
     else:
-        return [0xA2, 0x02]
+        return bytearray([0xA2, 0x02])

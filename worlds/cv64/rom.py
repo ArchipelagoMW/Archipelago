@@ -1,6 +1,9 @@
+
 import Utils
 
+from BaseClasses import MultiWorld, Location
 from worlds.Files import APDeltaPatch
+from typing import List, Dict
 
 import hashlib
 import os
@@ -9,24 +12,26 @@ import pkgutil
 from . import lzkn64
 from .data import patches
 from .stages import get_stage_info
-from .text import cv64_string_to_bytes, cv64_text_truncate, cv64_text_wrap
+from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
 from .aesthetics import renon_item_dialogue, get_item_text_color
 from .options import CV64Options
 from .locations import get_location_info
 from settings import get_settings
 
-CV64US10HASH = '1cc5cf3b4d29d8c3ade957648b529dc1'
+CV64US10HASH = "1cc5cf3b4d29d8c3ade957648b529dc1"
 ROM_PLAYER_LIMIT = 65535
 
 warp_map_offsets = [0xADF67, 0xADF77, 0xADF87, 0xADF97, 0xADFA7, 0xADFBB, 0xADFCB, 0xADFDF]
 
 
-class LocalRom(object):
+class LocalRom:
+    orig_buffer: None
+    buffer: bytearray
 
     def __init__(self, file):
         self.orig_buffer = None
 
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = bytearray(stream.read())
 
     def read_bit(self, address: int, bit_number: int) -> bool:
@@ -36,51 +41,49 @@ class LocalRom(object):
     def read_byte(self, address: int) -> int:
         return self.buffer[address]
 
-    def read_bytes(self, startaddress: int, length: int) -> bytes:
-        return self.buffer[startaddress:startaddress + length]
+    def read_bytes(self, start_address: int, length: int) -> bytearray:
+        return self.buffer[start_address:start_address + length]
 
-    def write_byte(self, address: int, value: int):
+    def write_byte(self, address: int, value: int) -> None:
         self.buffer[address] = value
 
-    def write_bytes(self, startaddress: int, values: list):
-        self.buffer[startaddress:startaddress + len(values)] = values
+    def write_bytes(self, start_address: int, values: List[int] | bytearray | bytes) -> None:
+        self.buffer[start_address:start_address + len(values)] = values
 
-    def write_int16(self, address, value: int):
+    def write_int16(self, address: int, value: int) -> None:
         value = value & 0xFFFF
         self.write_bytes(address, [(value >> 8) & 0xFF, value & 0xFF])
 
-    def write_int16s(self, startaddress, values: list):
+    def write_int16s(self, start_address: int, values: List[int]) -> None:
         for i, value in enumerate(values):
-            self.write_int16(startaddress + (i * 2), value)
+            self.write_int16(start_address + (i * 2), value)
 
-    def write_int24(self, address, value: int):
+    def write_int24(self, address: int, value: int) -> None:
         value = value & 0xFFFFFF
         self.write_bytes(address, [(value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
 
-    def write_int24s(self, startaddress, values: list):
+    def write_int24s(self, start_address: int, values: List[int]) -> None:
         for i, value in enumerate(values):
-            self.write_int24(startaddress + (i * 3), value)
+            self.write_int24(start_address + (i * 3), value)
 
-    def write_int32(self, address, value: int):
+    def write_int32(self, address, value: int) -> None:
         value = value & 0xFFFFFFFF
         self.write_bytes(address, [(value >> 24) & 0xFF, (value >> 16) & 0xFF, (value >> 8) & 0xFF, value & 0xFF])
 
-    def write_int32s(self, startaddress, values: list):
+    def write_int32s(self, start_address: int, values: list) -> None:
         for i, value in enumerate(values):
-            self.write_int32(startaddress + (i * 4), value)
+            self.write_int32(start_address + (i * 4), value)
 
-    def write_to_file(self, file):
-        with open(file, 'wb') as outfile:
+    def write_to_file(self, filepath: str) -> None:
+        with open(filepath, "wb") as outfile:
             outfile.write(self.buffer)
 
-    def read_from_file(self, file):
-        with open(file, 'rb') as stream:
-            self.buffer = bytearray(stream.read())
 
-
-def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active_stage_exits, s1s_per_warp,
-              active_warp_list, required_s2s, total_s2s, shop_name_list, shop_desc_list, shop_colors_list, slot_name,
-              active_locations):
+def patch_rom(multiworld: MultiWorld, options: CV64Options, rom: LocalRom, player: int, offset_data: Dict[int, int],
+              active_stage_exits: Dict[str, Dict[str, str | int | None]], s1s_per_warp: int,
+              active_warp_list: List[str], required_s2s: int, total_s2s: int, shop_name_list: List[str],
+              shop_desc_list: List[List[int | str | None]], shop_colors_list: List[bytearray], slot_name: bytes,
+              active_locations: List[Location]) -> None:
     w1 = str(s1s_per_warp).zfill(2)
     w2 = str(s1s_per_warp * 2).zfill(2)
     w3 = str(s1s_per_warp * 3).zfill(2)
@@ -173,7 +176,8 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     rom.write_int32s(0xBFC5B4, patches.give_powerup_stopper)
 
     # Rename the Wooden Stake and Rose to "You are a FOOL!"
-    rom.write_bytes(0xEFE34, [0xFF, 0xFF, 0xA2, 0x0B] + cv64_string_to_bytes("You are a FOOL!", append_end=False))
+    rom.write_bytes(0xEFE34,
+                    bytearray([0xFF, 0xFF, 0xA2, 0x0B]) + cv64_string_to_bytearray("You are a FOOL!", append_end=False))
     # Capitalize the "k" in "Archives key" to be consistent with...literally every other key name!
     rom.write_byte(0xEFF21, 0x2D)
 
@@ -194,10 +198,10 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     rom.write_int32(0xB5DF3E, 0x24030001)  # ADDIU  V1, R0, 0x0001
 
     # Custom message if you try checking the downstairs CC crack before removing the seal.
-    rom.write_bytes(0xBFDBAC, cv64_string_to_bytes("The Furious Nerd Curse\n"
-                                                   "prevents you from setting\n"
-                                                   "anything until the seal\n"
-                                                   "is removed!", True))
+    rom.write_bytes(0xBFDBAC, cv64_string_to_bytearray("The Furious Nerd Curse\n"
+                                                       "prevents you from setting\n"
+                                                       "anything until the seal\n"
+                                                       "is removed!", True))
 
     rom.write_int32s(0xBFDD20, patches.special_descriptions_redirector)
 
@@ -217,14 +221,14 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
                                0x2404019E])  # ADDIU A0, R0, 0x019E
 
     # Change the Stage Select menu's text to reflect its new purpose
-    rom.write_bytes(0xEFAD0, cv64_string_to_bytes(f"Where to...?\t{active_warp_list[0]}\t"
-                                                  f"`{w1} {active_warp_list[1]}\t"
-                                                  f"`{w2} {active_warp_list[2]}\t"
-                                                  f"`{w3} {active_warp_list[3]}\t"
-                                                  f"`{w4} {active_warp_list[4]}\t"
-                                                  f"`{w5} {active_warp_list[5]}\t"
-                                                  f"`{w6} {active_warp_list[6]}\t"
-                                                  f"`{w7} {active_warp_list[7]}"))
+    rom.write_bytes(0xEFAD0, cv64_string_to_bytearray(f"Where to...?\t{active_warp_list[0]}\t"
+                                                      f"`{w1} {active_warp_list[1]}\t"
+                                                      f"`{w2} {active_warp_list[2]}\t"
+                                                      f"`{w3} {active_warp_list[3]}\t"
+                                                      f"`{w4} {active_warp_list[4]}\t"
+                                                      f"`{w5} {active_warp_list[5]}\t"
+                                                      f"`{w6} {active_warp_list[6]}\t"
+                                                      f"`{w7} {active_warp_list[7]}"))
 
     # Lizard-man save proofing
     rom.write_int32(0xA99AC, 0x080FF0B8)  # J 0x803FC2E0
@@ -423,10 +427,10 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     if options.draculas_condition.value == options.draculas_condition.option_crystal:
         rom.write_int32(0x6C8A54, 0x0C0FF0C1)  # JAL 0x803FC304
         rom.write_int32s(0xBFC304, patches.crystal_special2_giver)
-        rom.write_bytes(0xBFCC6E, cv64_string_to_bytes(f"It won't budge!\n"
-                                                       f"You'll need the power\n"
-                                                       f"of the basement crystal\n"
-                                                       f"to undo the seal.", True))
+        rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
+                                                           f"You'll need the power\n"
+                                                           f"of the basement crystal\n"
+                                                           f"to undo the seal.", True))
         special2_name = "Crystal "
         special2_text = "The crystal is on!\n" \
                         "Time to teach the old man\n" \
@@ -435,20 +439,20 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
         rom.write_int32(0xBBD50, 0x080FF18C)  # J	0x803FC630
         rom.write_int32s(0xBFC630, patches.boss_special2_giver)
         rom.write_int32s(0xBFC55C, patches.werebull_flag_unsetter_special2_electric_boogaloo)
-        rom.write_bytes(0xBFCC6E, cv64_string_to_bytes(f"It won't budge!\n"
-                                                       f"You'll need to defeat\n"
-                                                       f"{required_s2s} powerful monsters\n"
-                                                       f"to undo the seal.", True))
+        rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
+                                                           f"You'll need to defeat\n"
+                                                           f"{required_s2s} powerful monsters\n"
+                                                           f"to undo the seal.", True))
         special2_name = "Trophy  "
         special2_text = f"Proof you killed a powerful\n" \
                         f"Night Creature. Earn {required_s2s}/{total_s2s}\n" \
                         f"to battle Dracula."
     elif options.draculas_condition.value == options.draculas_condition.option_specials:
         special2_name = "Special2"
-        rom.write_bytes(0xBFCC6E, cv64_string_to_bytes(f"It won't budge!\n"
-                                                       f"You'll need to find\n"
-                                                       f"{required_s2s} Special2 jewels\n"
-                                                       f"to undo the seal.", True))
+        rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
+                                                           f"You'll need to find\n"
+                                                           f"{required_s2s} Special2 jewels\n"
+                                                           f"to undo the seal.", True))
         special2_text = f"Need {required_s2s}/{total_s2s} to kill Dracula.\n" \
                         f"Looking closely, you see...\n" \
                         f"a piece of him within?"
@@ -459,13 +463,12 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
                         "how did you get a Special2!?"
     rom.write_byte(0xADE8F, required_s2s)
     # Change the Special2 name depending on the setting.
-    rom.write_bytes(0xEFD4E, cv64_string_to_bytes(special2_name))
+    rom.write_bytes(0xEFD4E, cv64_string_to_bytearray(special2_name))
     # Change the Special1 and 2 menu descriptions to tell you how many you need to unlock a warp and fight Dracula
     # respectively.
-    special_text_bytes = cv64_string_to_bytes(f"{s1s_per_warp} per warp unlock.\n"
-                                              f"{options.total_special1s.value} exist in total.\n"
-                                              f"Z + R + START to warp.") + \
-                         cv64_string_to_bytes(special2_text)
+    special_text_bytes = cv64_string_to_bytearray(f"{s1s_per_warp} per warp unlock.\n"
+                                                  f"{options.total_special1s.value} exist in total.\n"
+                                                  f"Z + R + START to warp.") + cv64_string_to_bytearray(special2_text)
     rom.write_bytes(0xBFE53C, special_text_bytes)
 
     # On-the-fly TLB script modifier
@@ -585,6 +588,10 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
         rom.write_byte(0x109FB7, 0x90)
         rom.write_byte(0x109FC3, 0x90)
 
+    # Un-nerf Actrise when playing as Reinhardt.
+    # This is likely a leftover TGS demo feature in which players could battle Actrise as Reinhardt.
+    rom.write_int32(0xB318B4, 0x240E0001)  # ADDIU	T6, R0, 0x0001
+
     # Tunnel gondola skip
     if options.skip_gondolas.value:
         rom.write_int32(0x6C5F58, 0x080FF7D0)  # J 0x803FDF40
@@ -645,7 +652,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
         rom.write_byte(0x391C7, 0x00)  # Prevent PowerUps from dropping from regular enemies
         rom.write_byte(0xEDEDF, 0x03)  # Make any vanishing PowerUps that do show up L jewels instead
         # Rename the PowerUp to "PermaUp"
-        rom.write_bytes(0xEFDEE, cv64_string_to_bytes("PermaUp"))
+        rom.write_bytes(0xEFDEE, cv64_string_to_bytearray("PermaUp"))
         # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
         if not options.multi_hit_breakables.value:
             rom.write_byte(0x10C7A1, 0x03)
@@ -765,7 +772,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
 
     # Everything related to shopsanity
     if options.shopsanity.value:
-        rom.write_bytes(0x103868, cv64_string_to_bytes("Not obtained. "))
+        rom.write_bytes(0x103868, cv64_string_to_bytearray("Not obtained. "))
         rom.write_int32s(0xBFD8D0, patches.shopsanity_stuff)
         rom.write_int32(0xBD828, 0x0C0FF643)  # JAL	0x803FD90C
         rom.write_int32(0xBD5B8, 0x0C0FF651)  # JAL	0x803FD944
@@ -777,13 +784,14 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
         shopsanity_name_text = []
         shopsanity_desc_text = []
         for i in range(len(shop_name_list)):
-            shopsanity_name_text += [0xA0, i] + shop_colors_list[i] + cv64_string_to_bytes(cv64_text_truncate(
-                shop_name_list[i], 74))
+            shopsanity_name_text += bytearray([0xA0, i]) + shop_colors_list[i] + \
+                                    cv64_string_to_bytearray(cv64_text_truncate(shop_name_list[i], 74))
 
             shopsanity_desc_text += [0xA0, i]
             if shop_desc_list[i][1] is not None:
-                shopsanity_desc_text += cv64_string_to_bytes("For " + shop_desc_list[i][1] + ".\n", append_end=False)
-            shopsanity_desc_text += cv64_string_to_bytes(renon_item_dialogue[shop_desc_list[i][0]])
+                shopsanity_desc_text += cv64_string_to_bytearray("For " + shop_desc_list[i][1] + ".\n",
+                                                                 append_end=False)
+            shopsanity_desc_text += cv64_string_to_bytearray(renon_item_dialogue[shop_desc_list[i][0]])
         rom.write_bytes(0x1AD00, shopsanity_name_text)
         rom.write_bytes(0x1A800, shopsanity_desc_text)
 
@@ -859,7 +867,7 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
             inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
             wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + multiworld.get_player_name(
                 loc.item.player), 96)
-            rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytes(wrapped_name))
+            rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytearray(wrapped_name))
             rom.write_byte(inject_address + 255, num_lines)
 
     # Everything relating to loading the other game items text
@@ -870,6 +878,15 @@ def patch_rom(multiworld, options: CV64Options, rom, player, offset_data, active
     rom.write_int32s(0xBFE23C, patches.multiworld_item_name_loader)
     rom.write_bytes(0x10F188, [0x00 for _ in range(264)])
     rom.write_bytes(0x10F298, [0x00 for _ in range(264)])
+
+    # When the game normally JALs to the item prepare textbox function after the player picks up an item, set the
+    # "no receiving" timer to ensure the item textbox doesn't freak out if you pick something up while there's a queue
+    # of unreceived items.
+    rom.write_int32(0xA8D94, 0x0C0FF9F0)  # JAL	0x803FE7C0
+    rom.write_int32s(0xBFE7C0, [0x3C088039,   # LUI   T0, 0x8039
+                                0x24090020,   # ADDIU T1, R0, 0x0020
+                                0x0804EDCE,   # J     0x8013B738
+                                0xA1099BE0])  # SB    T1, 0x9BE0 (T0)
 
 
 class CV64DeltaPatch(APDeltaPatch):

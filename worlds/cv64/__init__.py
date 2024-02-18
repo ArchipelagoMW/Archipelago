@@ -1,23 +1,22 @@
 import os
 import typing
-import base64
-import threading
 import settings
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
 from .locations import CV64Location, get_location_info, verify_locations, get_location_names_to_ids, base_id
-from .entrances import verify_entrances, get_warp_entrances, get_drac_rule
+from .entrances import verify_entrances, get_warp_entrances
 from .options import CV64Options
-from .stages import get_stage_info, get_locations_from_stage, get_normal_stage_exits, vanilla_stage_order, \
+from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_stage_order, \
     shuffle_stages, generate_warps, get_region_names
 from .regions import get_region_info
-from .data import iname, lname, rname, ename
+from .rules import CV64Rules
+from .data import iname, rname, ename
 from ..AutoWorld import WebWorld, World
-from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags,\
-    randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes,\
+from .aesthetics import randomize_lighting, shuffle_sub_weapons, rom_empty_breakables_flags, rom_sub_weapon_flags, \
+    randomize_music, get_start_inventory_data, get_location_data, randomize_shop_prices, get_loading_zone_bytes, \
     get_countdown_numbers
-from .rom import LocalRom, patch_rom, get_base_rom_path, get_item_text_color, CV64DeltaPatch
+from .rom import LocalRom, patch_rom, get_base_rom_path, CV64DeltaPatch
 from .client import Castlevania64Client
 
 
@@ -61,28 +60,28 @@ class CV64World(World):
     settings: typing.ClassVar[CV64Settings]
     topology_present = True
     data_version = 1
-    remote_items = False
 
     item_name_to_id = get_item_names_to_ids()
     location_name_to_id = get_location_names_to_ids()
 
-    active_warp_list: typing.List[str]
-    active_stage_list: typing.List[str]
-    active_stage_exits: typing.Dict[str, typing.Dict]
-    reinhardt_stages: bool = True
-    carrie_stages: bool = True
-    branching_stages: bool = False
-    starting_stage: str
-
-    total_s1s: int = 0
-    s1s_per_warp: int = 0
-    total_s2s: int = 0
-    required_s2s: int = 0
     web = CV64Web()
 
-    def __init__(self, world: MultiWorld, player: int):
-        self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int) -> None:
+        self.active_stage_exits: typing.Dict[str, typing.Dict] = {}
+        self.active_stage_list: typing.List[str] = []
+        self.active_warp_list: typing.List[str] = []
+        self.reinhardt_stages: bool = True
+        self.carrie_stages: bool = True
+        self.branching_stages: bool = False
+        self.starting_stage: str = rname.forest_of_silence
+
+        self.total_s1s: int = 0
+        self.s1s_per_warp: int = 0
+        self.total_s2s: int = 0
+        self.required_s2s: int = 0
+        self.drac_condition: int = 0
+
+        super().__init__(multiworld, player)
 
     @classmethod
     def stage_assert_generate(cls, world) -> None:
@@ -95,6 +94,7 @@ class CV64World(World):
         self.s1s_per_warp = self.options.special1s_per_warp.value
         self.total_s2s = self.options.total_special2s.value
         self.required_s2s = int(self.options.percent_special2s_required.value / 100 * self.total_s2s)
+        self.drac_condition = self.options.draculas_condition.value
 
         # If there are more S1s needed to unlock the whole warp menu than there are S1s in total, drop S1s per warp to
         # something manageable.
@@ -123,7 +123,6 @@ class CV64World(World):
                 shuffle_stages(self, stage_1_blacklist, self.options.starting_stage.value, self.active_stage_exits)
         else:
             self.active_stage_list = [stage for stage in vanilla_stage_order if stage in self.active_stage_exits]
-            self.starting_stage = rname.forest_of_silence
 
         # Create a list of warps from the active stage list. They are in a random order by default and will never
         # include the starting stage.
@@ -150,9 +149,18 @@ class CV64World(World):
             if reg_locs is not None:
                 active_regions[reg_name].add_locations(verify_locations(self.options, reg_locs), CV64Location)
 
-        # Set up the regions correctly
+        # Set up the regions correctly.
         for region in active_regions:
             self.multiworld.regions.append(active_regions[region])
+
+        # Add the warp Entrances to Menu.
+        active_regions["Menu"].add_exits(get_warp_entrances(self.active_warp_list))
+
+        # Add the Entrances to the stage regions.
+        for reg_name in active_regions:
+            reg_ents = get_region_info(reg_name, "entrances")
+            if reg_ents is not None:
+                active_regions[reg_name].add_exits(verify_entrances(self.options, reg_ents, self.active_stage_exits))
 
     def create_item(self, name: str, force_classification=None) -> Item:
         if force_classification is not None:
@@ -178,11 +186,14 @@ class CV64World(World):
                                              for _ in range(item_counts[classification][item])]
 
     def set_rules(self) -> None:
-        active_regions = self.multiworld.get_regions(self.player)
+        active_regions = list(self.multiworld.get_regions(self.player))
 
         # Set the required Special2s to the number of available bosses or crystal events returned if Special2s
         # are not the goal.
-        if self.options.draculas_condition != self.options.draculas_condition.option_specials:
+        if self.options.draculas_condition == self.options.draculas_condition.option_crystal:
+            self.total_s2s = 1
+            self.required_s2s = 1
+        elif self.options.draculas_condition != self.options.draculas_condition.option_specials:
             self.total_s2s = 0
             self.required_s2s = 0
 
@@ -192,32 +203,22 @@ class CV64World(World):
                 if loc.address is None:
                     event_item = get_location_info(loc.name, "event")
                     loc.place_locked_item(self.create_item(event_item, "progression"))
-                    if event_item != iname.victory:
+                    # If we're looking at a boss kill trophy, increment the total S2s and, if we're not already at the
+                    # set number of required bosses, the total required number. This way, we can prevent gen failures
+                    # should the player set more bosses required than there are total.
+                    if event_item == iname.trophy:
                         self.total_s2s += 1
                         if self.required_s2s < self.options.bosses_required.value:
                             self.required_s2s += 1
 
-            # Set up and connect the region's entrances.
-            connections = {}
-            rules = {}
-            if region.name == "Menu":
-                connections, rules = get_warp_entrances(self.options, self.active_warp_list, self.player)
-            else:
-                entrance_names = get_region_info(region.name, "entrances")
-                if entrance_names is not None:
-                    connections, rules = verify_entrances(self.options, entrance_names, self.active_stage_exits,
-                                                          self.player)
-            if region.name == rname.ck_main:
-                connections.update({rname.ck_drac_chamber: ename.ck_drac_door})
-                drac_rule = get_drac_rule(self.options, self.player, self.required_s2s)
-                if drac_rule is not None:
-                    rules.update(drac_rule)
-            region.add_exits(connections, rules)
-
-        # Set the completion condition
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(iname.victory, self.player)
+        # Set up the rules properly.
+        CV64Rules(self).set_cv64_rules()
 
     def pre_fill(self) -> None:
+        # If we need more Special1s to warp out of Sphere 1 than there are locations available, then AP's fill
+        # algorithm may try placing the Special1s anyway despite placing the stage's single key always being an option.
+        # To get around this problem in the fill algorithm, the keys will be forced early in these situations to ensure
+        # the algorithm will pick them over the Special1s.
         if self.starting_stage == rname.tower_of_science:
             if self.s1s_per_warp > 3:
                 self.multiworld.local_early_items[self.player][iname.science_key2] = 1
@@ -231,61 +232,54 @@ class CV64World(World):
                 self.multiworld.local_early_items[self.player][iname.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
-        try:
-            active_locations = self.multiworld.get_locations(self.player)
+        active_locations = list(self.multiworld.get_locations(self.player))
 
-            # Location data and shop names, descriptions, and colors
-            offset_data, shop_name_list, shop_colors_list, shop_desc_list = \
-                get_location_data(self, self.options, active_locations)
-            # Shop prices
-            if self.options.shop_prices.value:
-                offset_data.update(randomize_shop_prices(self, self.options.minimum_gold_price.value,
-                                                         self.options.maximum_gold_price.value))
-            # Map lighting
-            if self.options.map_lighting.value:
-                offset_data.update(randomize_lighting(self))
-            # Sub-weapons
-            if self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_own_pool:
-                offset_data.update(shuffle_sub_weapons(self))
-            elif self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_anywhere:
-                offset_data.update(rom_sub_weapon_flags)
-            # Empty breakables
-            if self.options.empty_breakables.value:
-                offset_data.update(rom_empty_breakables_flags)
-            # Music
-            if self.options.background_music.value:
-                offset_data.update(randomize_music(self, self.options))
-            # Loading zones
-            offset_data.update(get_loading_zone_bytes(self.options, self.starting_stage, self.active_stage_exits))
-            # Countdown
-            if self.options.countdown.value:
-                offset_data.update(get_countdown_numbers(self.options, active_locations))
-            # Start Inventory
-            offset_data.update(get_start_inventory_data(self.options, self.options.start_inventory.value, self.options.start_inventory_from_pool.value))
+        # Location data and shop names, descriptions, and colors
+        offset_data, shop_name_list, shop_colors_list, shop_desc_list = \
+            get_location_data(self, self.options, active_locations)
+        # Shop prices
+        if self.options.shop_prices.value:
+            offset_data.update(randomize_shop_prices(self, self.options.minimum_gold_price.value,
+                                                     self.options.maximum_gold_price.value))
+        # Map lighting
+        if self.options.map_lighting.value:
+            offset_data.update(randomize_lighting(self))
+        # Sub-weapons
+        if self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_own_pool:
+            offset_data.update(shuffle_sub_weapons(self))
+        elif self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_anywhere:
+            offset_data.update(rom_sub_weapon_flags)
+        # Empty breakables
+        if self.options.empty_breakables.value:
+            offset_data.update(rom_empty_breakables_flags)
+        # Music
+        if self.options.background_music.value:
+            offset_data.update(randomize_music(self, self.options))
+        # Loading zones
+        offset_data.update(get_loading_zone_bytes(self.options, self.starting_stage, self.active_stage_exits))
+        # Countdown
+        if self.options.countdown.value:
+            offset_data.update(get_countdown_numbers(self.options, active_locations))
+        # Start Inventory
+        offset_data.update(get_start_inventory_data(self.player, self.options,
+                                                    self.multiworld.precollected_items[self.player]))
 
-            cv64_rom = LocalRom(get_base_rom_path())
+        cv64_rom = LocalRom(get_base_rom_path())
 
-            slot_name = self.multiworld.player_name[self.player].encode("utf-8")
+        slot_name = self.multiworld.player_name[self.player].encode("utf-8")
 
-            rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
+        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
 
-            patch_rom(self.multiworld, self.options, cv64_rom, self.player, offset_data, self.active_stage_exits,
-                      self.s1s_per_warp, self.active_warp_list, self.required_s2s, self.total_s2s, shop_name_list,
-                      shop_desc_list, shop_colors_list, slot_name, active_locations)
+        patch_rom(self.multiworld, self.options, cv64_rom, self.player, offset_data, self.active_stage_exits,
+                  self.s1s_per_warp, self.active_warp_list, self.required_s2s, self.total_s2s, shop_name_list,
+                  shop_desc_list, shop_colors_list, slot_name, active_locations)
 
-            cv64_rom.write_to_file(rompath)
+        cv64_rom.write_to_file(rompath)
 
-            patch = CV64DeltaPatch(os.path.splitext(rompath)[0] + CV64DeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=rompath)
-            patch.write()
-        except:
-            print(f"D'oh, something went wrong in CV64's generate_output for player "
-                  f"{self.multiworld.player_name[self.player]}!")
-            raise
-        finally:
-            if os.path.exists(rompath):
-                os.unlink(rompath)
-            self.rom_name_available_event.set()  # make sure threading continues and errors are collected
+        patch = CV64DeltaPatch(os.path.splitext(rompath)[0] + CV64DeltaPatch.patch_file_ending, player=self.player,
+                               player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+        patch.write()
+        os.unlink(rompath)
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         # Write the stage order to the spoiler log
@@ -304,15 +298,6 @@ class CV64World(World):
         return {"death_link": self.options.death_link.value,
                 "shopsanity": self.options.shopsanity.value}
 
-    def modify_multidata(self, multidata: dict):
-        # wait for self.rom_name to be available.
-        self.rom_name_available_event.wait()
-        rom_name = getattr(self, "rom_name", None)
-        # we skip in case of error, so that the original error in the output thread is the one that gets raised
-        if rom_name:
-            new_name = base64.b64encode(bytes(self.rom_name)).decode()
-            multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
-
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_item_names)
 
@@ -320,7 +305,7 @@ class CV64World(World):
         # Attach each location's stage's position to its hint information if Stage Shuffle is on.
         if self.options.stage_shuffle.value:
             stage_pos_data = {}
-            for loc in self.multiworld.get_locations(self.player):
+            for loc in list(self.multiworld.get_locations(self.player)):
                 stage = get_region_info(loc.parent_region.name, "stage")
                 if stage is not None and loc.address is not None:
                     num = str(self.active_stage_exits[stage]["position"]).zfill(2)

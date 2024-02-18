@@ -1,9 +1,9 @@
-from BaseClasses import Item
+from BaseClasses import Item, Location
 from .data import iname
 from .locations import base_id, get_location_info
 from .options import CV64Options
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING, Dict, List
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -15,7 +15,17 @@ class CV64Item(Item):
     game: str = "Castlevania 64"
 
 
-# The inventory array starts at 0x80389C4B. "inventory offset" and "sub equip id" are used for start inventory purposes.
+# # #    KEY    # # #
+# "code" = The unique part of the Item's AP code attribute, as well as the value to call the in-game "prepare item
+#          textbox" function with to give the Item in-game. Add this + base_id to get the actual AP code.
+# "default classification" = The AP Item Classification that gets assigned to instances of that Item in create_item
+#                            by default, unless I deliberately override it (as is the case for some Special1s).
+# "inventory offset" = What offset from the start of the in-game inventory array (beginning at 0x80389C4B) stores the
+#                      current count for that Item. Used for start inventory purposes.
+# "pickup actor id" = The ID for the Item's in-game Item pickup actor. If it's not in the Item's data dict, it's the
+#                     same as the Item's code. This is what gets written in the ROM to replace non-NPC/shop items.
+# "sub equip id" = For sub-weapons specifically, this is the number to put in the game's "current sub-weapon" value to
+#                  indicate the player currently having that weapon. Used for start inventory purposes.
 item_info = {
     # White jewel
     iname.red_jewel_s:        {"code": 0x02,  "default classification": "filler"},
@@ -88,7 +98,7 @@ filler_item_names = [iname.red_jewel_s, iname.red_jewel_l, iname.five_hundred_go
                      iname.one_hundred_gold]
 
 
-def get_item_info(item: str, info: str):
+def get_item_info(item: str, info: str) -> str | int | None:
     if info in item_info[item]:
         return item_info[item][info]
     return None
@@ -98,7 +108,8 @@ def get_item_names_to_ids() -> Dict[str, int]:
     return {name: get_item_info(name, "code")+base_id for name in item_info if get_item_info(name, "code") is not None}
 
 
-def get_item_counts(world: "CV64World", options: CV64Options, active_locations) -> Dict[str, Dict[str, int]]:
+def get_item_counts(world: "CV64World", options: CV64Options, active_locations: List[Location]) \
+        -> Dict[str, Dict[str, int]]:
     item_counts = {
         "progression": {},
         "progression_skip_balancing": {},
