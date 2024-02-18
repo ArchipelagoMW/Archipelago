@@ -3,11 +3,13 @@ from typing import Optional, TYPE_CHECKING
 import hashlib
 import Utils
 import os
-from BaseClasses import MultiWorld
+
+import settings
 from worlds.Files import APDeltaPatch
 from . import Names
 from .Text import MM2TextEntry
-from .Color import get_colors_for_item
+from .Color import get_colors_for_item, write_palette_shuffle
+from .Rules import weapon_damage
 
 if TYPE_CHECKING:
     from . import MM2World
@@ -16,6 +18,17 @@ MM2LCHASH = "19de63834393b5988d41441f83a36df5"
 PROTEUSHASH = "9ff045a3ca30018b6e874c749abb3ec4"
 MM2NESHASH = "302761a666ac89c21f185052d02127d3"
 MM2VCHASH = "77b51417eb66e8119c85689a093be857"
+
+picopico_weakness_ptrs = {
+    0: 0x3EA02,
+    1: 0x3EA7E,
+    2: 0x3EAF6,
+    3: 0x3EB6E,
+    4: 0x3EBE6,
+    5: 0x3EC5E,
+    6: 0x3ECD6,
+    7: 0x3ED4E,
+}
 
 
 class RomData:
@@ -89,17 +102,27 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
     # Deathlink and Soft-reset Kill
     rom.write_bytes(0x3C11E, [0x27, 0xF5])
     rom.write_bytes(0x38188, [0x20, 0x8F, 0xF3, 0xEA, ])
+    rom.write_bytes(0x3822D, [0x20, 0x8F, 0xF3, 0xEA, ])
     rom.write_bytes(0x3E5BC, [0x85, 0x8F, 0xEA, ])  # null deathlink on death
+    rom.write_bytes(0x3F381, [
+        0xA9, 0x10,  # LDA #$10
+        0x8D, 0x00, 0x20,  # STA PpuControl_2000
+        0xA9, 0x06,  # LDA #$06
+        0x8D, 0x01, 0x20,  # STA PpuMask_2001
+        0x4C, 0xBE, 0xC1,  # JMP $C1BE
+        0xEA,
+        0xEA,
+    ])
     rom.write_bytes(0x3F39F, [0xA5, 0x23,
                               0xC9, 0x0F,
                               0xD0, 0x03,
-                              0x4C, 0xA8, 0xE5,
+                              0x4C, 0x71, 0xF3,
                               0x4C, 0x1A, 0xF5,
                               0x60, ])
     rom.write_bytes(0x3F52A, [0xA5, 0x8F,
                               0xC9, 0x01,
                               0xD0, 0x03,
-                              0x4C, 0xA8, 0xE5,
+                              0x4C, 0x0B, 0xC1,
                               0x4C, 0xBB, 0xF3,
                               0x60, ])
     rom.write_bytes(0x3F537, [0x20, 0x51, 0xC0,
@@ -186,19 +209,28 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
         else:
             rom.write_bytes(color_address + (i * 2), colors)
 
-
-
+    write_palette_shuffle(world, rom)
 
     if world.options.quickswap:
         rom.write_bytes(0x3F533, [0x4C, 0xAC, 0xF3, ])  # add jump to check for holding select
         rom.write_bytes(0x3F3BC, [0xA5, 0x27,
                                   0x29, 0x04,
                                   0xF0, 0x09,
-                                  0xA6, 0xA9,
-                                  0xD0, 0x02,
-                                  0xA2, 0x00,
-                                  0x4C, 0xC0, 0xF3,
+                                  0x4C, 0xE1, 0xF5,
                                   ])
+        rom.write_bytes(0x3F5F1, [
+            0xA2, 0x0F,  # LDX #$0F
+            0xBD, 0x20, 0x04,  # LDA $0420, X
+            0x30, 0x0E,  # BMI $F5F6 # Branch if spawned
+            0xCA,  # DEX
+            0xE0, 0x01,  # CPX #$01
+            0xD0, 0xF6,  # BNE $F5E3 # branch loop head
+            0xA6, 0xA9,  # LDX $A9
+            0xD0, 0x02,  # BNE $F5F3
+            0xA2, 0x00,  # LDX #$00
+            0x4C, 0xC0, 0xF3,  # JMP $F3C0
+            0x60,  # RTS
+        ])
         rom.write_bytes(0x3F3D0, [
             0x98,
             0x48,
@@ -432,9 +464,6 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
                                   0x60,
                                   ])
 
-    # weapon palette randomization
-    # 0xD304 palettes start
-
     from Utils import __version__
     rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
@@ -473,7 +502,7 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    options: Utils.OptionsType = Utils.get_options()
+    options: settings.Settings = settings.get_settings()
     if not file_name:
         file_name = options["mm2_options"]["rom_file"]
     if not os.path.exists(file_name):

@@ -123,6 +123,10 @@ class MM2World(World):
             for item in required_items:
                 add_rule(entrance, lambda state, required_item=item: state.has(required_item, self.player))
             stage.add_locations(locations)
+            for location in stage.get_locations():
+                if location.address is None and location.name is not Names.dr_wily:
+                    location.place_locked_item(MM2Item(location.name, ItemClassification.progression,
+                                                       None, self.player))
             if self.options.consumables:
                 if region in Locations.consumables:
                     stage.add_locations(Locations.consumables[region], MM2Location)

@@ -52,9 +52,10 @@ class PaletteShuffle(TextChoice):
     Randomized: Random (usually good) palettes are generated for each robot master.
     Singularity: one palette is generated and used for all robot masters.
     Supports custom palettes using HTML named colors in the
-    following format: Mega Man-Lavender|Violet;random
+    following format: Mega Buster-Lavender|Violet;randomized
     The first value is the character whose palette you'd like to define, then separated by - is a set of 2 colors for
-    that character. Separate every character as well as the remaining shuffle with a semicolon.
+    that character. separate every color with a pipe, and separate every character as well as the remaining shuffle with
+    a semicolon.
     """
     display_name = "Palette Shuffle"
     option_none = 0
@@ -84,6 +85,12 @@ class PaletteShuffle(TextChoice):
     """
 
 
+class StrictWeaknesses(Toggle):
+    """Only your starting Robot Master will take damage from the Mega Buster, the rest must be defeated with weapons.
+    Weapons that only do 1 damage to bosses no longer deal damage (aside from Alien)."""
+    display_name = "Strict Weaknesses"
+
+
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
@@ -93,3 +100,4 @@ class MM2Options(PerGameCommonOptions):
     enable_lasers: EnableLasers
     quickswap: Quickswap
     palette_shuffle: PaletteShuffle
+    strict_weakness: StrictWeaknesses

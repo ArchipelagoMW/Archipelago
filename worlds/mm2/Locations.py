@@ -52,22 +52,27 @@ crash_man_locations = {
 
 wily_1_locations = {
     wily_1: 0x880009,
+    wily_stage_1: None
 }
 
 wily_2_locations = {
-    wily_2: 0x88000A
+    wily_2: 0x88000A,
+    wily_stage_2: None
 }
 
 wily_3_locations = {
-    wily_3: 0x88000B
+    wily_3: 0x88000B,
+    wily_stage_3: None
 }
 
 wily_4_locations = {
-    wily_4: 0x88000C
+    wily_4: 0x88000C,
+    wily_stage_4: None
 }
 
 wily_5_locations = {
-    wily_5: 0x88000D
+    wily_5: 0x88000D,
+    wily_stage_5: None
 }
 
 wily_6_locations = {
@@ -143,11 +148,11 @@ mm2_regions: Dict[str, Tuple[List[str], Dict[str, int], Optional[str]]] = {
     "Metal Man Stage": ([metal_man_stage], metal_man_locations, None),
     "Crash Man Stage": ([crash_man_stage], crash_man_locations, None),
     "Wily Stage 1": ([item_1, item_2, item_3], wily_1_locations, None),
-    "Wily Stage 2": ([], wily_2_locations, "Wily Stage 1"),
-    "Wily Stage 3": ([], wily_3_locations, "Wily Stage 2"),
-    "Wily Stage 4": ([], wily_4_locations, "Wily Stage 3"),
-    "Wily Stage 5": ([crash_bomber], wily_5_locations, "Wily Stage 4"),
-    "Wily Stage 6": ([bubble_lead, atomic_fire], wily_6_locations, "Wily Stage 5")
+    "Wily Stage 2": ([wily_stage_1], wily_2_locations, "Wily Stage 1"),
+    "Wily Stage 3": ([wily_stage_2], wily_3_locations, "Wily Stage 2"),
+    "Wily Stage 4": ([wily_stage_3], wily_4_locations, "Wily Stage 3"),
+    "Wily Stage 5": ([wily_stage_4], wily_5_locations, "Wily Stage 4"),
+    "Wily Stage 6": ([wily_stage_5], wily_6_locations, "Wily Stage 5")
 }
 
 location_table: Dict[str, Optional[int]] = {

@@ -56,6 +56,13 @@ wily_4 = "Boobeam Trap - Defeated"
 wily_5 = "Wily Machine 2 - Defeated"
 dr_wily = "Dr. Wily (Alien) - Defeated"
 
+# Wily Stage Event Items
+wily_stage_1 = "Wily Stage 1 - Completed"
+wily_stage_2 = "Wily Stage 2 - Completed"
+wily_stage_3 = "Wily Stage 3 - Completed"
+wily_stage_4 = "Wily Stage 4 - Completed"
+wily_stage_5 = "Wily Stage 5 - Completed"
+
 # Consumable Locations
 heat_man_c1 = "Heat Man Stage - 1-Up"  # 3, requires Yoku jumps or Item 2
 flash_man_c1 = "Flash Man Stage - Health Energy 1"  # 0
