@@ -256,6 +256,22 @@ map_ids = {
     "Indigo Plateau Agatha's Room": 0xF7,
 }
 
+town_map_coords = {
+    "Route 2-SW": ("Viridian Forest South Gate to Route 2-SW", 2, 4, (3,), "Viridian Forest", 4), #ViridianForestName
+    "Route 2-NE": ("Diglett's Cave Route 2 to Route 2-NE", 3, 4, (48,), "Diglett's Cave", 5), #DiglettsCaveName
+    "Route 4-W": ("Mt Moon 1F to Route 4-W", 6, 2, (5,), "Mt Moon 1F", 8), #MountMoonName
+    "Cerulean City-Cave": ("Cerulean Cave 1F-SE to Cerulean City-Cave", 9, 1, (54,), "Cerulean Cave 1F", 11), #CeruleanCaveName
+    "Vermilion City-Dock": ("Vermilion Dock to Vermilion City-Dock", 9, 10, (19,), "S.S. Anne 1F", 17), #SSAnneName
+    "Route 10-N": ("Rock Tunnel 1F-NE to Route 10-N", 14, 3, (13, 57), "Rock Tunnel Pokemon Center", 19), #RockTunnelName
+    "Lavender Town": ("Pokemon Tower 1F to Lavender Town", 15, 5, (27,), "Pokemon Tower 2F", 22), #PokemonTowerName
+    "Celadon Game Corner-Hidden Stairs": ("Rocket Hideout B1F to Celadon Game Corner-Hidden Stairs", 7, 5, (50,), "Rocket Hideout B1F", 26), #RocketHQName
+    "Saffron City-Silph": ("Silph Co 1F to Saffron City-Silph", 10, 5, (51, 58), "Silph Co 2F", 28), #SilphCoName
+    "Route 20-IE": ("Seafoam Islands 1F to Route 20-IE", 5, 15, (32,), "Seafoam Islands B1F", 40), #SeafoamIslandsName
+    "Cinnabar Island-M": ("Pokemon Mansion 1F to Cinnabar Island-M", 2, 15, (35, 52), "Pokemon Mansion 1F", 43), #PokemonMansionName
+    "Route 23-C": ("Victory Road 1F-S to Route 23-C", 0, 4, (20, 45, 49), "Victory Road 1F", 47), #VictoryRoadName
+    "Route 10-P": ("Power Plant to Route 10-P", 15, 4, (14,), "Power Plant", 49), #PowerPlantName
+}
+
 warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishing': [], 'Fossil Level': [],
              'Pokedex': [], 'Fossil': [], 'Celadon City': [
         {'name': 'Celadon City to Celadon Department Store 1F W', 'address': 'Warps_CeladonCity', 'id': 0,
@@ -1946,7 +1962,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             if (multiworld.randomize_rock_tunnel[player] and "Rock Tunnel" in region.name and "Rock Tunnel" in
                     entrance_data['to']['map']):
                 shuffle = False
-            if (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
+            elif (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
                     entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
                 if multiworld.warp_tile_shuffle[player]:
                     shuffle = True

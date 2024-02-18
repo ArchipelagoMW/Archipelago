@@ -9,8 +9,9 @@ from .items import item_table
 from .pokemon import set_mon_palettes
 from .rock_tunnel import randomize_rock_tunnel
 from .rom_addresses import rom_addresses
-from .regions import PokemonRBWarp, map_ids
+from .regions import PokemonRBWarp, map_ids, town_map_coords
 from . import poke_data
+
 
 def write_quizzes(self, data, random):
 
@@ -239,6 +240,14 @@ def generate_output(self, output_directory: str):
                     connected_map_name = entrance.connected_region.name.split("-")[0]
                     data[address] = 0 if "Elevator" in connected_map_name else warp_to_ids[i]
                     data[address + 1] = map_ids[connected_map_name]
+
+    if self.multiworld.door_shuffle[self.player] == "simple":
+        for (entrance, _, _, map_coords_entries, map_name, _) in town_map_coords.values():
+            destination = self.multiworld.get_entrance(entrance, self.player).connected_region.name
+            (_, x, y, _, _, map_order_entry) = town_map_coords[destination]
+            for map_coord_entry in map_coords_entries:
+                data[rom_addresses["Town_Map_Coords"] + (map_coord_entry * 4) + 1] = (y << 4) | x
+            data[rom_addresses["Town_Map_Order"] + map_order_entry] = map_ids[map_name]
 
     if not self.multiworld.key_items_only[self.player]:
         for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",

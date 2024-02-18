@@ -317,6 +317,7 @@ class TownMapFlyLocation(Toggle):
 class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
+    On Simple only, the Town Map will be updated to show the new locations for each dungeon.
     Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
     named Full.
     Full: Exterior to interior entrances are shuffled, and interior to interior doors are shuffled, separately.
