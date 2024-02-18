@@ -6,7 +6,7 @@ from .locations import get_location_info, base_id
 from .regions import get_region_info
 from .items import get_item_info, item_info
 
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -394,7 +394,7 @@ def get_countdown_numbers(options: CV64Options, active_locations: List[Location]
 
 
 def get_location_data(world: "CV64World", options: CV64Options, active_locations: List[Location]) \
-        -> Tuple[Dict[int, int], List[str], List[bytearray], List[List[int | str | None]]]:
+        -> Tuple[Dict[int, int], List[str], List[bytearray], List[List[Union[int, str, None]]]]:
     """Gets ALL the item data to go into the ROM. Item data consists of two bytes: the first dictates the appearance of
     the item, the second determines what the item actually is when picked up. All items from other worlds will be AP
     items that do nothing when picked up other than set their flag, and their appearance will depend on whether it's
@@ -522,7 +522,7 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
 
 
 def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
-                           active_stage_exits: Dict[str, Dict[str, str | int | None]]) -> Dict[int, int]:
+                           active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[int, int]:
     """Figure out all the bytes for loading zones and map transitions based on which stages are where in the exit data.
     The same data was used earlier in figuring out the logic. Map transitions consist of two major components: which map
     to send the player to, and which spot within the map to spawn the player at."""

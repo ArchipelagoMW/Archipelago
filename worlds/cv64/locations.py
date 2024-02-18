@@ -2,7 +2,7 @@ from BaseClasses import Location
 from .data import lname, iname
 from .options import CV64Options
 
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Optional, Union, Any
 
 base_id = 0xC64000
 
@@ -660,7 +660,7 @@ add_conds = {"carrie":  ("carrie_logic", True, True),
              "vincent": ("vincent_fight_condition", 0, False)}
 
 
-def get_location_info(location: str, info: str) -> int | str | Tuple[str, ...] | None:
+def get_location_info(location: str, info: str) -> Union[int, str, Tuple[str, Any], None]:
     if info in location_info[location]:
         return location_info[location][info]
     return None
@@ -671,7 +671,7 @@ def get_location_names_to_ids() -> Dict[str, int]:
             is not None}
 
 
-def verify_locations(options: CV64Options, locations: Tuple[str]) -> Dict[str, int | None]:
+def verify_locations(options: CV64Options, locations: Tuple[str]) -> Dict[str, Optional[int]]:
 
     verified_locations = {}
 

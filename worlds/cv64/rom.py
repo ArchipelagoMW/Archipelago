@@ -3,7 +3,7 @@ import Utils
 
 from BaseClasses import MultiWorld, Location
 from worlds.Files import APDeltaPatch
-from typing import List, Dict
+from typing import List, Dict, Union
 
 import hashlib
 import os
@@ -28,7 +28,7 @@ class LocalRom:
     orig_buffer: None
     buffer: bytearray
 
-    def __init__(self, file):
+    def __init__(self, file: str) -> None:
         self.orig_buffer = None
 
         with open(file, "rb") as stream:
@@ -47,7 +47,7 @@ class LocalRom:
     def write_byte(self, address: int, value: int) -> None:
         self.buffer[address] = value
 
-    def write_bytes(self, start_address: int, values: List[int] | bytearray | bytes) -> None:
+    def write_bytes(self, start_address: int, values: Union[List[int], bytearray, bytes]) -> None:
         self.buffer[start_address:start_address + len(values)] = values
 
     def write_int16(self, address: int, value: int) -> None:
@@ -80,9 +80,9 @@ class LocalRom:
 
 
 def patch_rom(multiworld: MultiWorld, options: CV64Options, rom: LocalRom, player: int, offset_data: Dict[int, int],
-              active_stage_exits: Dict[str, Dict[str, str | int | None]], s1s_per_warp: int,
+              active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]], s1s_per_warp: int,
               active_warp_list: List[str], required_s2s: int, total_s2s: int, shop_name_list: List[str],
-              shop_desc_list: List[List[int | str | None]], shop_colors_list: List[bytearray], slot_name: bytes,
+              shop_desc_list: List[List[Union[int, str, None]]], shop_colors_list: List[bytearray], slot_name: bytes,
               active_locations: List[Location]) -> None:
     w1 = str(s1s_per_warp).zfill(2)
     w2 = str(s1s_per_warp * 2).zfill(2)

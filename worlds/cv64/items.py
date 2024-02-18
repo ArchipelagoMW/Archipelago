@@ -3,7 +3,7 @@ from .data import iname
 from .locations import base_id, get_location_info
 from .options import CV64Options
 
-from typing import TYPE_CHECKING, Dict, List
+from typing import TYPE_CHECKING, Dict, List, Union
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -98,7 +98,7 @@ filler_item_names = [iname.red_jewel_s, iname.red_jewel_l, iname.five_hundred_go
                      iname.one_hundred_gold]
 
 
-def get_item_info(item: str, info: str) -> str | int | None:
+def get_item_info(item: str, info: str) -> Union[str, int, None]:
     if info in item_info[item]:
         return item_info[item][info]
     return None

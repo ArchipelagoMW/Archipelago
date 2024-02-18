@@ -1,5 +1,5 @@
 from .data import lname, rname, ename
-from typing import Tuple
+from typing import Tuple, Union, Any
 
 
 # # #    KEY    # # #
@@ -513,7 +513,7 @@ region_info = {
 }
 
 
-def get_region_info(region: str, info: str) -> str | Tuple[str, ...] | None:
+def get_region_info(region: str, info: str) -> Union[str, Tuple[str, Any], None]:
     if info in region_info[region]:
         return region_info[region][info]
     return None

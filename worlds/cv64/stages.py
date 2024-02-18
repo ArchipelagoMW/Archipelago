@@ -3,7 +3,7 @@ from .options import CV64Options
 from .regions import get_region_info
 from .locations import get_location_info
 
-from typing import TYPE_CHECKING, Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union, Any
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -228,7 +228,7 @@ vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.cas
                                            "alt": None, "position": 10, "path": " "}}
 
 
-def get_stage_info(stage: str, info: str) -> str | int | Tuple[int | str, ...] | None:
+def get_stage_info(stage: str, info: str) -> Union[str, int, Tuple[int, str, Any], None]:
     if info in stage_info[stage]:
         return stage_info[stage][info]
     return None
@@ -280,8 +280,8 @@ def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
 
 
 def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_stage_value: int,
-                   active_stage_exits: Dict[str, Dict[str, str | int | None]]) \
-        -> Tuple[Dict[str, Dict[str, str | int | None]], str, List[str]]:
+                   active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) \
+        -> Tuple[Dict[str, Dict[str, Union[str, int, None]]], str, List[str]]:
     """Woah, this is a lot! I should probably summarize what's happening in here, huh?
 
     So, in the vanilla game, all the stages are basically laid out on a linear "timeline" with some stages being
@@ -474,7 +474,7 @@ def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: 
     return active_warp_list
 
 
-def get_region_names(active_stage_exits: Dict[str, Dict[str, str | int | None]]) -> List[str]:
+def get_region_names(active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) -> List[str]:
     region_names = []
     for stage in active_stage_exits:
         stage_regions = get_stage_info(stage, "regions")
