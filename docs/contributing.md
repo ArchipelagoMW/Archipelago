@@ -19,8 +19,10 @@ You can turn them on here:
 
 * **When reviewing PRs, please leave a message what was done.**
 We don't have full test coverage, so manual testing can help.
-For reviews of PRs that could affect multiple worlds, it is helpful to state which games or settings were rolled.
-The original author may not have been able to test all worlds, or didn't know it would affect another world.
+For code changes that could affect multiple worlds or that could have changes in unexpected code paths, manual testing
+or checking if all code paths are covered by automated tests is desired. The original author may not have been able
+to test all possibly affected worlds, or didn't know it would affect another world. In such cases, it is helpful to
+state which games or settings were rolled, if any.
 Please also tell us if you looked at code, just did functional testing, did both or neither.
 If the PR depends on other PRs to be tested, please state what you merged into what for testing.
 We cannot determine what "LGTM" means without additional context, so this should not be the norm.
