@@ -34,6 +34,7 @@ class MuseDashCollections:
         "Rush-Hour",
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
+        "umpopoff"
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -81,11 +82,22 @@ class MuseDashCollections:
             steamer_mode = sections[3] == "True"
 
             if song_name in self.DIFF_OVERRIDES:
-                # Note: These difficulties may not actually be representative of these songs.
-                # The game does not provide these difficulties so they have to be filled in.
-                diff_of_easy = 4
-                diff_of_hard = 7
-                diff_of_master = 10
+                # These songs use non-standard difficulty values. Which are being overriden with standard values.
+                # But also avoid filling any missing difficulties (i.e. 0s) with a difficulty value.
+                if sections[4] != '0':
+                    diff_of_easy = 4
+                else:
+                    diff_of_easy = None
+
+                if sections[5] != '0':
+                    diff_of_hard = 7
+                else:
+                    diff_of_hard = None
+
+                if sections[6] != '0':
+                    diff_of_master = 10
+                else:
+                    diff_of_master = None
             else:
                 diff_of_easy = self.parse_song_difficulty(sections[4])
                 diff_of_hard = self.parse_song_difficulty(sections[5])
