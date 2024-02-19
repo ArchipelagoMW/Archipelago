@@ -21,6 +21,9 @@ class EntranceLookup:
         def __init__(self):
             self._lookup = {}
 
+        def __len__(self):
+            return sum(map(len, self._lookup.values()))
+
         def __bool__(self):
             return bool(self._lookup)
 
@@ -111,6 +114,9 @@ class EntranceLookup:
             self._random.shuffle(ret)
         return ret
 
+    def __len__(self):
+        return len(self.dead_ends) + len(self.others)
+
 
 class ERPlacementState:
     placements: List[Entrance]
@@ -131,11 +137,16 @@ class ERPlacementState:
         return self.collection_state.reachable_regions[self.world.player]
 
     def find_placeable_exits(self, check_validity: bool) -> List[Entrance]:
-        blocked_connections = self.collection_state.blocked_connections[self.world.player]
-        blocked_connections = sorted(blocked_connections, key=lambda x: x.name)
-        placeable_randomized_exits = [connection for connection in blocked_connections
-                                      if not connection.connected_region
-                                      and (not check_validity or connection.is_valid_source_transition(self))]
+        if check_validity:
+            blocked_connections = self.collection_state.blocked_connections[self.world.player]
+            blocked_connections = sorted(blocked_connections, key=lambda x: x.name)
+            placeable_randomized_exits = [connection for connection in blocked_connections
+                                          if not connection.connected_region
+                                          and connection.is_valid_source_transition(self)]
+        else:
+            # this is on a beaten minimal attempt, so any exit anywhere is fair game
+            placeable_randomized_exits = [ex for region in self.world.multiworld.get_regions(self.world.player)
+                                          for ex in region.exits if not ex.connected_region]
         self.world.random.shuffle(placeable_randomized_exits)
         return placeable_randomized_exits
 
@@ -310,14 +321,15 @@ def randomize_entrances(
             for target_entrance in entrance_lookup.get_targets(target_groups, dead_end, preserve_group_order):
                 # requiring a new region is a proxy for enforcing new entrances are added, thus growing the search
                 # space. this is not quite a full fidelity conversion, but doesn't seem to cause issues enough
-                # to do more complex checks
-                region_requirement_satisfied = (not require_new_regions
+                # to do more complex checks.
+                # the new region requirement can be ignored on a beaten minimal, islands are no issue there
+                region_requirement_satisfied = (not perform_validity_check or not require_new_regions
                                                 or target_entrance.connected_region not in er_state.placed_regions)
                 if region_requirement_satisfied and source_exit.can_connect_to(target_entrance, er_state):
                     do_placement(source_exit, target_entrance)
                     return True
         else:
-            # no source exits had any valid target so this stage is deadlocked. swap may be implemented if early
+            # no source exits had any valid target so this stage is deadlocked. retries may be implemented if early
             # deadlocking is a frequent issue.
             lookup = entrance_lookup.dead_ends if dead_end else entrance_lookup.others
 
@@ -345,13 +357,25 @@ def randomize_entrances(
                                 # pretend that this was successful to retry the current stage
                                 return True
 
+            unplaced_entrances = [entrance for region in world.multiworld.get_regions(world.player)
+                                  for entrance in region.entrances if not entrance.parent_region]
+            unplaced_exits = [exit_ for region in world.multiworld.get_regions(world.player)
+                              for exit_ in region.exits if not exit_.connected_region]
+            entrance_kind = "dead ends" if dead_end else "non-dead ends"
+            region_access_requirement = "requires" if require_new_regions else "does not require"
             raise EntranceRandomizationError(
                 f"None of the available entrances are valid targets for the available exits.\n"
-                f"Available entrances: {lookup}\n"
-                f"Available exits: {placeable_exits}")
+                f"Randomization stage is placing {entrance_kind} and {region_access_requirement} "
+                f"new region access by default\n"
+                f"Placeable entrances: {lookup}\n"
+                f"Placeable exits: {placeable_exits}\n"
+                f"All unplaced entrances: {unplaced_entrances}\n"
+                f"All unplaced exits: {unplaced_exits}")
 
     er_targets = (entrance for region in world.multiworld.get_regions(world.player)
                   for entrance in region.entrances if not entrance.parent_region)
+    exits = [ex for region in world.multiworld.get_regions(world.player)
+             for ex in region.exits if not ex.connected_region]
     for entrance in er_targets:
         entrance_lookup.add(entrance)
 
