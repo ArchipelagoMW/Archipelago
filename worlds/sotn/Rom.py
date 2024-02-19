@@ -94,13 +94,13 @@ def patch_rom(world: World) -> str:
                             if item_data.type == IType.RELIC:
                                 write_short(patched_rom, address, item_data.get_item_id())
                             else:
-                                # Skill of wolf, bat card can't be item. Replace with sword card instead
+                                # Skill of wolf, bat card can't be item. Replace with ghost card instead
                                 if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
-                                    write_short(patched_rom, address, 0x0016)
+                                    write_short(patched_rom, address, 0x0013)
                                 elif loc.name in relics_vlad:
-                                    write_short(patched_rom, address, 0x0016)
+                                    write_short(patched_rom, address, 0x0013)
                                 elif loc.name == "Jewel of Open":
-                                    write_short(patched_rom, address, 0x0016)
+                                    write_short(patched_rom, address, 0x0013)
                                 else:
                                     write_short(patched_rom, address - 4, 0x000c)
                                     write_word(patched_rom, address - 2, loc_data.get_delete())
@@ -118,9 +118,9 @@ def patch_rom(world: World) -> str:
                     else:
                         if loc_data.can_be_relic:
                             if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
-                                write_short(patched_rom, address, 0x0016)
+                                write_short(patched_rom, address, 0x0013)
                             elif loc.name in relics_vlad:
-                                write_short(patched_rom, address, 0x0016)
+                                write_short(patched_rom, address, 0x0013)
                             else:
                                 write_short(patched_rom, address - 4, 0x000c)
                                 write_word(patched_rom, address - 2, loc_data.get_delete())
@@ -223,10 +223,10 @@ def write_to_file(buffer, filename=""):
         outfile.write(buffer)
 
     if platform == "win32":
-        print("ERROR RECALC")
+        print("ERROR RECALC started. Please wait")
         subprocess.call(["error_recalc", f"{filename}"])
     else:
-        print("ERROR RECALC FAILED!")
+        print("ERROR RECALC FAILED!!!")
 
     """print("bsdiff started")
     bsdiff4.file_diff("C:\\Python_projects\\APSOTN\\Castlevania - Symphony of the Night (USA) (Track 1).bin",
