@@ -1574,7 +1574,7 @@ def create_regions(self):
                         + [item.name for item in self.multiworld.precollected_items[self.player] if
                            item.advancement]
     self.total_key_items = len(
-        # The stonesanity items are not checekd for here and instead just always added as the `+ 4`
+        # The stonesanity items are not checked for here and instead just always added as the `+ 4`
         # They will always exist, but if stonesanity is off, then only as events.
         # We don't want to just add 4 if stonesanity is off while still putting them in this list in case
         # the player puts stones in their start inventory, in which case they would be double-counted here.
@@ -1934,9 +1934,10 @@ def create_regions(self):
                     if isinstance(entrance, PokemonRBWarp):
                         region.exits.remove(entrance)
             multiworld.regions.entrance_cache[self.player] = cache
-            for loc in badge_locs:
-                loc.item = None
-                loc.locked = False
+            if badge_locs:
+                for loc in badge_locs:
+                    loc.item = None
+                    loc.locked = False
         else:
             break
 
@@ -2424,6 +2425,11 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         event_locations = multiworld.get_filled_locations(player)
 
+        def has_flash_badge():
+            return (state.has("Boulder Badge", player)
+                    or state.has(multiworld.worlds[player].extra_badges.get("Flash"), player)
+                    or not multiworld.badges_needed_for_hm_moves[player])
+
         def adds_reachable_entrances(entrances_copy, item):
 
             state_copy = state.copy()
@@ -2452,12 +2458,12 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 warp = check_warps.pop()
                 warp = warp
                 if warp not in reachable_entrances:
-                    if "Rock Tunnel" not in warp.name or logic.rock_tunnel(state, player):
+                    if "Rock Tunnel" not in warp.name or has_flash_badge():
                         # confirm warp is in entrances list to ensure it's not a loop-out interior
                         if warp.connected_region is None and warp in entrances_copy:
                             return False
                         elif (isinstance(warp, PokemonRBWarp) and ("Rock Tunnel" not in warp.name or
-                                logic.rock_tunnel(state, player))) or warp.access_rule(state):
+                                has_flash_badge())) or warp.access_rule(state):
                             if warp.connected_region and warp.connected_region not in checked_regions:
                                 checked_regions.add(warp.connected_region)
                                 check_warps.update(warp.connected_region.exits)
@@ -2468,21 +2474,17 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             return True
 
         starting_entrances = len(entrances)
-        rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name and
-                                 "Rock Tunnel Pokemon Center" not in entrance.name]
-        entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
-        if multiworld.door_shuffle[player] == "decoupled":
-            dc_destinations = [entrance for entrance in dc_destinations if entrance not in rock_tunnel_entrances]
+        rock_tunnel_entrances = None
+        if not has_flash_badge():
+            rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name and
+                                     "Rock Tunnel Pokemon Center" not in entrance.name]
+            entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
+            if multiworld.door_shuffle[player] == "decoupled":
+                dc_destinations = [entrance for entrance in dc_destinations if entrance not in rock_tunnel_entrances]
 
         while entrances:
             state.update_reachable_regions(player)
             state.sweep_for_events(locations=event_locations)
-
-            if rock_tunnel_entrances and logic.rock_tunnel(state, player):
-                entrances += rock_tunnel_entrances
-                if multiworld.door_shuffle[player] == "decoupled":
-                    dc_destinations += rock_tunnel_entrances
-                rock_tunnel_entrances = None
 
             multiworld.random.shuffle(entrances)
 
@@ -2492,7 +2494,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
-                                   entrance.parent_region.can_reach(state)]
+                                   entrance.parent_region.can_reach(state) or ("Rock Tunnel" in entrance.name and
+                                   "Rock Tunnel Pokemon Center" not in entrance.name)]
             if not reachable_entrances:
                 raise DoorShuffleException("Ran out of reachable entrances in Pokemon Red and Blue door shuffle")
 
@@ -2559,6 +2562,12 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             entrance_a.connect(entrance_b)
             if multiworld.door_shuffle[player] != "decoupled":
                 entrance_b.connect(entrance_a)
+
+            if rock_tunnel_entrances and has_flash_badge():
+                entrances += rock_tunnel_entrances
+                if multiworld.door_shuffle[player] == "decoupled":
+                    dc_destinations += rock_tunnel_entrances
+                rock_tunnel_entrances = None
 
         if multiworld.door_shuffle[player] in ("interiors", "full"):
             for pair in loop_out_interiors:
