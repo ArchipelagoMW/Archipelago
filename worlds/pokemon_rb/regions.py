@@ -2486,7 +2486,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             return True
 
         starting_entrances = len(entrances)
-        rock_tunnel_entrances = None
 
         while entrances:
             state.update_reachable_regions(player)
@@ -2567,12 +2566,6 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             entrance_a.connect(entrance_b)
             if multiworld.door_shuffle[player] != "decoupled":
                 entrance_b.connect(entrance_a)
-
-            if rock_tunnel_entrances and has_flash_badge():
-                entrances += rock_tunnel_entrances
-                if multiworld.door_shuffle[player] == "decoupled":
-                    dc_destinations += rock_tunnel_entrances
-                rock_tunnel_entrances = None
 
         if multiworld.door_shuffle[player] in ("interiors", "full"):
             for pair in loop_out_interiors:
