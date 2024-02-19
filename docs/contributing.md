@@ -17,6 +17,14 @@ It is recommended that automated github actions are turned on in your fork to ha
 You can turn them on here:  
 ![Github actions example](./img/github-actions-example.png)
 
+* **When reviewing PRs, please leave a message what was done.**
+We don't have full test coverage, so manual testing can help.
+For reviews of PRs that could affect multiple worlds, it is helpful to state which games or settings were rolled.
+The original author may not have been able to test all worlds, or didn't know it would affect another world.
+Please also tell us if you looked at code, just did functional testing, did both or neither.
+If the PR depends on other PRs to be tested, please state what you merged into what for testing.
+In very few cases, besides the final appoval, we can guess what "LGTM" means, so this should not be the norm.
+
 Other than these requests, we tend to judge code on a case by case basis. 
 
 For contribution to the website, please refer to the [WebHost README](/WebHostLib/README.md).
