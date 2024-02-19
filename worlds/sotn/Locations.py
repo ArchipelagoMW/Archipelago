@@ -95,6 +95,9 @@ class LocationData:
     def get_delete(self):
         return self.delete
 
+    def get_zone(self):
+        return self.zone
+
 
 # Bosses, Relics and despawn item 3{zone}{n++}
 no3_locations = {
@@ -660,6 +663,12 @@ location_table = {
 
 
 def get_location_data(location_id: int) -> LocationData:
+    """ Try that
+    try:
+        l_id = int(str(location_id)[5:])
+    except:
+        return None
+    """
     l_id = int(str(location_id)[5:])
     for k, v in location_table.items():
         data: LocationData = v
