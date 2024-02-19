@@ -425,7 +425,7 @@ class PokemonRedBlueWorld(World):
             # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
             # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
             # considered in door shuffle.
-            elif ((not logic.can_learn_hm(test_state, "Fly", self.player)) and logic.can_learn_hm(test_state, "Fly", self.player)
+            elif ((not logic.can_learn_hm(test_state, "Fly", self.player))
                     and self.multiworld.door_shuffle[self.player] not in
                     ("off", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
                 intervene_move = "Fly"
