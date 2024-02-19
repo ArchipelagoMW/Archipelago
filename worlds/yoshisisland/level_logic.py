@@ -162,7 +162,7 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Egg Plant'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Fire Melon'}, self.player)
+            return state.has_all({'Egg Plant'}, self.player)
         else:
             return (state.has('Egg Capacity Upgrade', self.player, 5) or state.has('Egg Plant', self.player))
 

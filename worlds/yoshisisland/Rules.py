@@ -23,7 +23,7 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Stars", player), lambda state: state.has_all({'Spring Ball'}, player) and (logic.has_midring(state) or state.has('Key', player)))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Level Clear", player), lambda state: logic._14CanFightBoss(state))
-    set_rule(multiworld.get_location("Burt The Bashful Defeated", player), lambda state: state.has_all({'Egg Plant'}, self.player))
+    set_rule(multiworld.get_location("Burt The Bashful Defeated", player), lambda state: state.has_all({'Egg Plant'}, player))
 
     set_rule(multiworld.get_location("Hop! Hop! Donut Lifts: Stars", player), lambda state: logic.has_midring(state) or logic.cansee_clouds(state))
 
