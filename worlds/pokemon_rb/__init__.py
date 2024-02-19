@@ -416,8 +416,10 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.victory_road_condition[self.player])
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
                 intervene_move = "Cut"
-            elif ((not logic.can_learn_hm(test_state, "Flash", self.player)) and
-                  self.multiworld.dark_rock_tunnel_logic[self.player]):
+            elif ((not logic.can_learn_hm(test_state, "Flash", self.player))
+                   and self.multiworld.dark_rock_tunnel_logic[self.player]
+                   and (self.multiworld.accessibility[self.player] != "minimal"
+                        or self.multiworld.door_shuffle[self.player])):
                 intervene_move = "Flash"
             # If no Pokémon can learn Fly, then during door shuffle it would simply not treat the free fly maps
             # as reachable, and if on no door shuffle or simple, fly is simply never necessary.

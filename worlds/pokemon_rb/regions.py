@@ -262,7 +262,7 @@ town_map_coords = {
     "Route 4-W": ("Mt Moon 1F to Route 4-W", 6, 2, (5,), "Mt Moon 1F", 8), #MountMoonName
     "Cerulean City-Cave": ("Cerulean Cave 1F-SE to Cerulean City-Cave", 9, 1, (54,), "Cerulean Cave 1F", 11), #CeruleanCaveName
     "Vermilion City-Dock": ("Vermilion Dock to Vermilion City-Dock", 9, 10, (19,), "S.S. Anne 1F", 17), #SSAnneName
-    "Route 10-N": ("Rock Tunnel 1F-NE to Route 10-N", 14, 3, (13, 57), "Rock Tunnel Pokemon Center", 19), #RockTunnelName
+    "Route 10-N": ("Rock Tunnel 1F-NE 1 to Route 10-N", 14, 3, (13, 57), "Rock Tunnel Pokemon Center", 19), #RockTunnelName
     "Lavender Town": ("Pokemon Tower 1F to Lavender Town", 15, 5, (27,), "Pokemon Tower 2F", 22), #PokemonTowerName
     "Celadon Game Corner-Hidden Stairs": ("Rocket Hideout B1F to Celadon Game Corner-Hidden Stairs", 7, 5, (50,), "Rocket Hideout B1F", 26), #RocketHQName
     "Saffron City-Silph": ("Silph Co 1F to Saffron City-Silph", 10, 5, (51, 58), "Silph Co 2F", 28), #SilphCoName
@@ -477,15 +477,21 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_PokemonMansion3F', 'id': 0, 'to': {'map': 'Pokemon Mansion 2F', 'id': 1}}],
              'Pokemon Mansion B1F': [
                  {'address': 'Warps_PokemonMansionB1F', 'id': 0, 'to': {'map': 'Pokemon Mansion 1F-SE', 'id': 5}}],
-             'Rock Tunnel 1F-NE': [{'address': 'Warps_RockTunnel1F', 'id': 0, 'to': {'map': 'Route 10-N', 'id': 1}},
-                                   {'address': 'Warps_RockTunnel1F', 'id': 4,
-                                    'to': {'map': 'Rock Tunnel B1F-E', 'id': 0}}], 'Rock Tunnel 1F-NW': [
-        {'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F-E', 'id': 1}},
-        {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F-W', 'id': 2}}],
-             'Rock Tunnel 1F-S': [{'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}},
+             'Rock Tunnel 1F-NE 1': [{'address': 'Warps_RockTunnel1F', 'id': 0, 'to': {'map': 'Route 10-N', 'id': 1}}],
+             'Rock Tunnel 1F-NE 2':
+                                   [{'address': 'Warps_RockTunnel1F', 'id': 4,
+                                    'to': {'map': 'Rock Tunnel B1F-E 1', 'id': 0}}], 'Rock Tunnel 1F-NW 1': [
+        {'address': 'Warps_RockTunnel1F', 'id': 5, 'to': {'map': 'Rock Tunnel B1F-E 2', 'id': 1}}],
+             'Rock Tunnel 1F-NW 2': [
+        {'address': 'Warps_RockTunnel1F', 'id': 6, 'to': {'map': 'Rock Tunnel B1F-W 1', 'id': 2}}],
+             'Rock Tunnel 1F-S 1': [{'address': 'Warps_RockTunnel1F', 'id': 2, 'to': {'map': 'Route 10-S', 'id': 2}}],
+             'Rock Tunnel 1F-S 2': [
                                   {'address': 'Warps_RockTunnel1F', 'id': 7,
-                                   'to': {'map': 'Rock Tunnel B1F-W', 'id': 3}}], 'Rock Tunnel 1F-Wild': [],
-             'Rock Tunnel B1F-Wild': [], 'Seafoam Islands 1F': [
+                                   'to': {'map': 'Rock Tunnel B1F-W 2', 'id': 3}}], 'Rock Tunnel 1F-Wild': [],
+             'Rock Tunnel B1F-Wild': [],
+             'Rock Tunnel 1F-NE': [], 'Rock Tunnel 1F-NW': [], 'Rock Tunnel 1F-S': [], 'Rock Tunnel B1F-E': [],
+             'Rock Tunnel B1F-W': [],
+             'Seafoam Islands 1F': [
         {'address': 'Warps_SeafoamIslands1F', 'id': (2, 3), 'to': {'map': 'Route 20-IE', 'id': 1}},
         {'address': 'Warps_SeafoamIslands1F', 'id': 4, 'to': {'map': 'Seafoam Islands B1F', 'id': 1}},
         {'address': 'Warps_SeafoamIslands1F', 'id': 5, 'to': {'map': 'Seafoam Islands B1F-NE', 'id': 6}}],
@@ -585,12 +591,14 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                  {'address': 'Warps_CeruleanCave2F', 'id': 3, 'to': {'map': 'Cerulean Cave 1F-N', 'id': 5}}],
              'Cerulean Cave B1F': [
                  {'address': 'Warps_CeruleanCaveB1F', 'id': 0, 'to': {'map': 'Cerulean Cave 1F-NW', 'id': 8}}],
-             'Cerulean Cave B1F-E': [], 'Rock Tunnel B1F-E': [
-        {'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F-NE', 'id': 4}},
-        {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NW', 'id': 5}}],
-             'Rock Tunnel B1F-W': [
-                 {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-NW', 'id': 6}},
-                 {'address': 'Warps_RockTunnelB1F', 'id': 3, 'to': {'map': 'Rock Tunnel 1F-S', 'id': 7}}],
+             'Cerulean Cave B1F-E': [], 'Rock Tunnel B1F-E 1': [
+        {'address': 'Warps_RockTunnelB1F', 'id': 0, 'to': {'map': 'Rock Tunnel 1F-NE 2', 'id': 4}}],
+             'Rock Tunnel B1F-E 2': [
+        {'address': 'Warps_RockTunnelB1F', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NW 1', 'id': 5}}],
+             'Rock Tunnel B1F-W 1': [
+                 {'address': 'Warps_RockTunnelB1F', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-NW 2', 'id': 6}}],
+             'Rock Tunnel B1F-W 2': [
+                 {'address': 'Warps_RockTunnelB1F', 'id': 3, 'to': {'map': 'Rock Tunnel 1F-S 2', 'id': 7}}],
              'Seafoam Islands B1F': [
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 0, 'to': {'map': 'Seafoam Islands B2F-NW', 'id': 0}},
                  {'address': 'Warps_SeafoamIslandsB1F', 'id': 1, 'to': {'map': 'Seafoam Islands 1F', 'id': 4}},
@@ -854,8 +862,8 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
                          {'address': 'Warps_Route8', 'id': 4, 'to': {'map': 'Underground Path Route 8', 'id': 0}}],
              'Route 8-Grass': [],
              'Route 10-N': [{'address': 'Warps_Route10', 'id': 0, 'to': {'map': 'Rock Tunnel Pokemon Center', 'id': 0}},
-                            {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NE', 'id': 0}}],
-             'Route 10-S': [{'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-S', 'id': 2}}],
+                            {'address': 'Warps_Route10', 'id': 1, 'to': {'map': 'Rock Tunnel 1F-NE 1', 'id': 0}}],
+             'Route 10-S': [{'address': 'Warps_Route10', 'id': 2, 'to': {'map': 'Rock Tunnel 1F-S 1', 'id': 2}}],
              'Route 10-P': [{'address': 'Warps_Route10', 'id': 3, 'to': {'map': 'Power Plant', 'id': 0}}],
              'Route 10-C': [],
              'Route 11': [{'address': 'Warps_Route11', 'id': 4, 'to': {'map': "Diglett's Cave Route 11", 'id': 0}}],
@@ -1348,7 +1356,7 @@ safe_connecting_interior_dungeons = [
 
 unsafe_connecting_interior_dungeons = [
     ["Seafoam Islands 1F to Route 20-IE", "Seafoam Islands 1F-SE to Route 20-IW"],
-    ["Rock Tunnel 1F-NE to Route 10-N", "Rock Tunnel 1F-S to Route 10-S"],
+    ["Rock Tunnel 1F-NE 1 to Route 10-N", "Rock Tunnel 1F-S 1 to Route 10-S"],
     ["Victory Road 1F-S to Route 23-C", "Victory Road 2F-E to Route 23-N"],
 ]
 
@@ -1367,7 +1375,7 @@ connecting_interior_dungeon_entrances = [
     ["Route 2-NE to Diglett's Cave Route 2", "Route 11 to Diglett's Cave Route 11"],
     ['Route 20-IE to Seafoam Islands 1F', 'Route 20-IW to Seafoam Islands 1F-SE'],
     ['Route 4-W to Mt Moon 1F', 'Route 4-C to Mt Moon B1F-NE'],
-    ['Route 10-N to Rock Tunnel 1F-NE', 'Route 10-S to Rock Tunnel 1F-S'],
+    ['Route 10-N to Rock Tunnel 1F-NE 1', 'Route 10-S to Rock Tunnel 1F-S 1'],
     ['Route 23-C to Victory Road 1F-S', 'Route 23-N to Victory Road 2F-E'],
 ]
 
@@ -1812,6 +1820,16 @@ def create_regions(self):
     connect(multiworld, player, "Pokemon Mansion 2F-E", "Pokemon Mansion 2F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F-SE", "Pokemon Mansion 1F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 1F", "Pokemon Mansion 1F-Wild", one_way=True)
+    connect(multiworld, player, "Rock Tunnel 1F-S 1", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel 1F-S 2", "Rock Tunnel 1F-S", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NW 1", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NW 2", "Rock Tunnel 1F-NW", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NE 1", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel 1F-NE 2", "Rock Tunnel 1F-NE", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel B1F-W 1", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel B1F-W 2", "Rock Tunnel B1F-W", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel B1F-E 1", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, player))
+    connect(multiworld, player, "Rock Tunnel B1F-E 2", "Rock Tunnel B1F-E", lambda state: logic.rock_tunnel(state, player))
     connect(multiworld, player, "Rock Tunnel 1F-S", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, player), one_way=True)
     connect(multiworld, player, "Rock Tunnel 1F-NW", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, player), one_way=True)
     connect(multiworld, player, "Rock Tunnel 1F-NE", "Rock Tunnel 1F-Wild", lambda state: logic.rock_tunnel(state, player), one_way=True)
@@ -1986,12 +2004,8 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     entrances.append(entrance)
                 region.exits.append(entrance)
             else:
-                if "Rock Tunnel" in region.name:
-                    connect(multiworld, player, region.name, entrance_data["to"]["map"],
-                            lambda state: logic.rock_tunnel(state, player), one_way=True)
-                else:
-                    connect(multiworld, player, region.name, entrance_data["to"]["map"], one_way=True,
-                            name=entrance_data["name"] if "name" in entrance_data else None)
+                connect(multiworld, player, region.name, entrance_data["to"]["map"], one_way=True,
+                        name=entrance_data["name"] if "name" in entrance_data else None)
 
     forced_connections = set()
     one_way_forced_connections = set()
@@ -2295,7 +2309,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
                     and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
                     and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
-                    and (not multiworld.tea[player])                       # not traversable backwards
+                    and (not multiworld.tea[player])                                         # not traversable backwards
                     and multiworld.route_3_condition[player] == "defeat_brock"
                     and multiworld.worlds[player].fly_map != "Cerulean City"
                     and multiworld.worlds[player].town_map_fly_map != "Cerulean City"):
@@ -2458,29 +2472,21 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 warp = check_warps.pop()
                 warp = warp
                 if warp not in reachable_entrances:
-                    if "Rock Tunnel" not in warp.name or has_flash_badge():
-                        # confirm warp is in entrances list to ensure it's not a loop-out interior
-                        if warp.connected_region is None and warp in entrances_copy:
-                            return False
-                        elif (isinstance(warp, PokemonRBWarp) and ("Rock Tunnel" not in warp.name or
-                                has_flash_badge())) or warp.access_rule(state):
-                            if warp.connected_region and warp.connected_region not in checked_regions:
-                                checked_regions.add(warp.connected_region)
-                                check_warps.update(warp.connected_region.exits)
-                                for location in warp.connected_region.locations:
-                                    if (location.item and location.item.name in relevant_events and
-                                            adds_reachable_entrances(entrances_copy, location.item)):
-                                        return False
+                    # confirm warp is in entrances list to ensure it's not a loop-out interior
+                    if warp.connected_region is None and warp in entrances_copy:
+                        return False
+                    elif isinstance(warp, PokemonRBWarp) or warp.access_rule(state):
+                        if warp.connected_region and warp.connected_region not in checked_regions:
+                            checked_regions.add(warp.connected_region)
+                            check_warps.update(warp.connected_region.exits)
+                            for location in warp.connected_region.locations:
+                                if (location.item and location.item.name in relevant_events and
+                                        adds_reachable_entrances(entrances_copy, location.item)):
+                                    return False
             return True
 
         starting_entrances = len(entrances)
         rock_tunnel_entrances = None
-        if not has_flash_badge():
-            rock_tunnel_entrances = [entrance for entrance in entrances if "Rock Tunnel" in entrance.name and
-                                     "Rock Tunnel Pokemon Center" not in entrance.name]
-            entrances = [entrance for entrance in entrances if entrance not in rock_tunnel_entrances]
-            if multiworld.door_shuffle[player] == "decoupled":
-                dc_destinations = [entrance for entrance in dc_destinations if entrance not in rock_tunnel_entrances]
 
         while entrances:
             state.update_reachable_regions(player)
@@ -2494,8 +2500,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
             reachable_entrances = [entrance for entrance in entrances if entrance in reachable_entrances or
-                                   entrance.parent_region.can_reach(state) or ("Rock Tunnel" in entrance.name and
-                                   "Rock Tunnel Pokemon Center" not in entrance.name)]
+                                   entrance.parent_region.can_reach(state)]
             if not reachable_entrances:
                 raise DoorShuffleException("Ran out of reachable entrances in Pokemon Red and Blue door shuffle")
 
@@ -2639,9 +2644,6 @@ class PokemonRBWarp(Entrance):
                  or "Rocket Hideout" in self.parent_region.name)
                 and not state.has("Lift Key", self.player)):
             return False
-        if ("Rock Tunnel 1F" in self.parent_region.name or "Rock Tunnel B1F" in self.parent_region.name
-                or "Rock Tunnel 1F" in self.connected_region.name or "Rock Tunnel B1F" in self.connected_region.name):
-            return logic.rock_tunnel(state, self.player)
         return True
 
 
