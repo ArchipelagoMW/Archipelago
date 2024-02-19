@@ -1,6 +1,6 @@
-from typing import NamedTuple, Callable, List, Optional, Tuple
+from typing import NamedTuple, List, Optional, Tuple
 
-from BaseClasses import CollectionState, MultiWorld
+from BaseClasses import MultiWorld
 from worlds.yugioh06 import tier_1_opponents, item_to_index
 from worlds.yugioh06.Locations import special
 

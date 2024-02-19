@@ -4,7 +4,7 @@ from .Fusions import count_has_materials
 
 def set_rules(world):
     player = world.player
-    world = world.multiworld
+    multiworld = world.multiworld
 
     location_rules = {
         # Campaign
@@ -438,13 +438,13 @@ def set_rules(world):
                           state.has_all(["Reinforcement of the Army", "Mystic Tomato"], player) and
                           state.yugioh06_difficulty(player, 3)
     }
-    world.completion_condition[player] = lambda state: state.has("Goal", player)
+    multiworld.completion_condition[player] = lambda state: state.has("Goal", player)
 
-    for loc in world.get_locations(player):
+    for loc in multiworld.get_locations(player):
         if loc.name in location_rules:
             add_rule(loc, location_rules[loc.name])
         if loc.name in access_rules:
-            add_rule(world.get_entrance(loc.name, player), access_rules[loc.name])
+            add_rule(multiworld.get_entrance(loc.name, player), access_rules[loc.name])
 
 
 def only_light(state, player):
