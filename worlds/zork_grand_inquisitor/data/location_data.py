@@ -225,6 +225,8 @@ location_data: Dict[
         tags=(ZorkGrandInquisitorTags.CORE,),
         requirements=(
             ZorkGrandInquisitorEvents.ZORK_ROCKS_ACTIVATED,
+            ZorkGrandInquisitorItems.SPELL_IGRAM,
+            ZorkGrandInquisitorItems.HOTSPOT_PURPLE_WORDS,
             ZorkGrandInquisitorItems.HOTSPOT_DENTED_LOCKER,
         ),
     ),

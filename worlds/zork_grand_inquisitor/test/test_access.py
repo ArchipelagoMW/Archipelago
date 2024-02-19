@@ -2323,8 +2323,9 @@ class AccessTestLocations(ZorkGrandInquisitorTestBase):
 
     def test_access_locations_requiring_hotspot_purple_words(self) -> None:
         locations: List[str] = [
-            ZorkGrandInquisitorLocations.DEATH_STEPPED_INTO_THE_INFINITE.value,
             ZorkGrandInquisitorLocations.A_SMALLWAY.value,
+            ZorkGrandInquisitorLocations.CRISIS_AVERTED.value,
+            ZorkGrandInquisitorLocations.DEATH_STEPPED_INTO_THE_INFINITE.value,
         ]
 
         self.assertAccessDependency(
@@ -2700,6 +2701,7 @@ class AccessTestLocations(ZorkGrandInquisitorTestBase):
     def test_access_locations_requiring_spell_igram(self) -> None:
         locations: List[str] = [
             ZorkGrandInquisitorLocations.A_SMALLWAY.value,
+            ZorkGrandInquisitorLocations.CRISIS_AVERTED.value,
             ZorkGrandInquisitorLocations.DEATH_STEPPED_INTO_THE_INFINITE.value,
             ZorkGrandInquisitorLocations.FAT_LOT_OF_GOOD_THATLL_DO_YA.value,
             ZorkGrandInquisitorLocations.INVISIBLE_FLOWERS.value,
