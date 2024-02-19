@@ -1,4 +1,4 @@
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import Item, ItemClassification, Tutorial, Location
 from .Items import item_table, create_item, relic_groups, act_contracts, create_itempool
 from .Regions import create_regions, randomize_act_entrances, chapter_act_info, create_events, get_shuffled_region
 from .Locations import location_table, contract_locations, is_location_valid, get_location_names, TASKSANITY_START_ID, \
@@ -228,6 +228,13 @@ class HatInTimeWorld(World):
                 shuffled_dws = self.get_dw_shuffle()
                 for i in range(len(shuffled_dws)):
                     slot_data[f"dw_{i}"] = dw_classes[shuffled_dws[i]]
+
+        shop_item_names: Dict[str, str] = {}
+        for name in self.shop_locs:
+            loc: Location = self.multiworld.get_location(name, self.player)
+            shop_item_names.setdefault(str(loc.address), loc.item.name)
+
+        slot_data["ShopItemNames"] = shop_item_names
 
         for name, value in self.options.as_dict(*self.options_dataclass.type_hints).items():
             if name in slot_data_options:

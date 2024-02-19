@@ -566,7 +566,13 @@ class DWExcludeAnnoyingBonuses(Toggle):
     - Zero Jumps
     - Bird Sanctuary
     - Wound-Up Windmill
-    - Seal the Deal"""
+	- Vault Codes in the Wind
+    - Boss Rush
+    - Camera Tourist
+    - The Mustache Gauntlet
+    - Rift Collapse: Deep Sea
+    - Cruisin' for a Bruisin'
+	- Seal the Deal"""
     display_name = "Exclude Annoying Death Wish Full Completions"
     default = 1
 

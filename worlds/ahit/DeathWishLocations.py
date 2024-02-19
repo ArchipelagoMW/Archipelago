@@ -81,11 +81,17 @@ annoying_bonuses = [
     "So You're Back From Outer Space",
     "Encore! Encore!",
     "Snatcher's Hit List",
+	"Vault Codes in the Wind",
     "10 Seconds until Self-Destruct",
     "Killing Two Birds",
     "Zero Jumps",
+	"Boss Rush",
     "Bird Sanctuary",
+	"The Mustache Gauntlet",
     "Wound-Up Windmill",
+	"Camera Tourist",
+	"Rift Collapse: Deep Sea",
+	"Cruisin' for a Bruisin'",
     "Seal the Deal",
 ]
 
