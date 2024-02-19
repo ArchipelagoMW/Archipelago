@@ -61,6 +61,5 @@ class KHRECOMOptions(PerGameCommonOptions):
     enemy_cards: EnemyCards
     days_items: DaysItems
     days_locations: DaysLocations
-    starting_cp: StartingCP
     checks_behind_leon: ChecksBehindLeon
     exp_multiplier: EXPMultiplier
