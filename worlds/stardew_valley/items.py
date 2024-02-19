@@ -13,7 +13,7 @@ from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Friendsanity, Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
-    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization
+    Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
@@ -218,6 +218,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
     items.append(item_factory(CommunityUpgrade.movie_theater))  # It is a community reward, but we need two of them
+    items.append(item_factory(Wallet.metal_detector))  # Always offer at least one metal detector
 
     create_backpack_items(item_factory, options, items)
     create_weapons(item_factory, options, items)
@@ -248,9 +249,12 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     create_walnut_purchase_rewards(item_factory, options, items)
     create_crafting_recipes(item_factory, options, items)
     create_cooking_recipes(item_factory, options, items)
-    create_magic_mod_spells(item_factory, options, items)
+    create_shipsanity_items(item_factory, options, items)
+    create_goal_items(item_factory, options, items)
     items.append(item_factory("Golden Egg"))
+    create_magic_mod_spells(item_factory, options, items)
     create_deepwoods_pendants(item_factory, options, items)
+    create_archaeology_items(item_factory, options, items)
 
     return items
 
@@ -396,7 +400,7 @@ def create_museum_items(item_factory: StardewItemFactory, options: StardewValley
         return
     items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 10)
     items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
-    items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
+    items.append(item_factory(Wallet.metal_detector))
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random: Random):
@@ -593,6 +597,30 @@ def create_cooking_recipes(item_factory: StardewItemFactory, options: StardewVal
 
     filtered_chefsanity_recipes = remove_excluded_items(list(chefsanity_recipes_by_name.values()), options)
     items.extend([item_factory(item) for item in filtered_chefsanity_recipes])
+
+
+def create_shipsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    shipsanity = options.shipsanity
+    if shipsanity != Shipsanity.option_everything:
+        return
+
+    items.append(item_factory(Wallet.metal_detector))
+
+
+def create_goal_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    goal = options.goal
+    if goal != Goal.option_perfection and goal != Goal.option_complete_collection:
+        return
+
+    items.append(item_factory(Wallet.metal_detector))
+
+
+def create_archaeology_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+    mods = options.mods
+    if ModNames.archaeology not in mods:
+        return
+
+    items.append(item_factory(Wallet.metal_detector))
 
 
 def create_filler_festival_rewards(item_factory: StardewItemFactory, options: StardewValleyOptions) -> List[Item]:

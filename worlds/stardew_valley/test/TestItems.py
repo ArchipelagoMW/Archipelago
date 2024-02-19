@@ -6,10 +6,11 @@ import random
 from typing import Set
 
 from BaseClasses import ItemClassification, MultiWorld
-from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, SVTestBase
+from . import setup_solo_multiworld, SVTestCase, allsanity_options_without_mods, SVTestBase, get_minsanity_options
 from .. import ItemData, StardewValleyWorld
 from ..items import Group, item_table
-from ..options import Friendsanity, SeasonRandomization
+from ..options import Friendsanity, SeasonRandomization, Museumsanity, Shipsanity, Goal
+from ..strings.wallet_item_names import Wallet
 
 all_seasons = ["Spring", "Summer", "Fall", "Winter"]
 all_farms = ["Standard Farm", "Riverland Farm", "Forest Farm", "Hill-top Farm", "Wilderness Farm", "Four Corners Farm", "Beach Farm"]
@@ -90,3 +91,62 @@ class TestItems(SVTestCase):
             starting_farm = multiworld.worlds[1].fill_slot_data()["farm_type"]
             starting_farms_rolled.add(starting_farm)
         self.assertEqual(len(starting_farms_rolled), 7)
+
+
+class TestMetalDetectors(SVTestCase):
+    def test_minsanity_1_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 1)
+
+    def test_museumsanity_2_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Museumsanity.internal_name] = Museumsanity.option_all
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 2)
+
+    def test_shipsanity_full_shipment_1_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Shipsanity.internal_name] = Shipsanity.option_full_shipment
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 1)
+
+    def test_shipsanity_everything_2_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Shipsanity.internal_name] = Shipsanity.option_everything
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 2)
+
+    def test_complete_collection_2_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Goal.internal_name] = Goal.option_complete_collection
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 2)
+
+    def test_perfection_2_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Goal.internal_name] = Goal.option_perfection
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 2)
+
+    def test_maxsanity_4_metal_detector(self):
+        options = dict()
+        options.update(get_minsanity_options())
+        options[Museumsanity.internal_name] = Museumsanity.option_all
+        options[Shipsanity.internal_name] = Shipsanity.option_everything
+        options[Goal.internal_name] = Goal.option_perfection
+        multiworld = setup_solo_multiworld(options)
+        items = [item.name for item in multiworld.get_items() if item.name == Wallet.metal_detector]
+        self.assertEquals(len(items), 4)
