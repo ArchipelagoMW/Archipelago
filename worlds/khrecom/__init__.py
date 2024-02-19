@@ -121,5 +121,5 @@ class KHRECOMWorld(World):
         create_regions(self.multiworld, self.player, self.options.days_locations, self.options.checks_behind_leon)
     
     def fill_slot_data(self) -> dict:
-        slot_data = {"Starting CP": int(self.options.starting_cp)}
+        slot_data = {"EXP Multiplier":      int(self.options.exp_multiplier)}
         return slot_data

@@ -84,12 +84,12 @@ class KHRECOMContext(CommonContext):
                 filename = f"send{ss}"
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
-            if "Starting CP" in list(args['slot_data'].keys()):
-                starting_cp = args['slot_data']["Starting CP"]
+            if "EXP Multiplier" in list(args['slot_data'].keys()):
+                exp_multiplier = args['slot_data']["XP Multiplier"]
             else:
-                starting_cp = 275
-            with open(os.path.join(self.game_communication_path, "startcp.cfg"), 'w') as f:
-                f.write(str(starting_cp))
+                exp_multiplier = 1
+            with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
+                f.write(str(exp_multiplier))
                 f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
