@@ -520,13 +520,6 @@ class DeadEnd(IntEnum):
     # there's no dead ends that are only in unrestricted
 
 
-class Hint(IntEnum):
-    none = 0  # big areas, empty hallways, etc.
-    region = 1  # at least one of the portals must not be a dead end
-    scene = 2  # multiple regions in the scene, so using region could mean no valid hints
-    special = 3  # for if there's a weird case of specific regions being viable
-
-
 # key is the AP region name. "Fake" in region info just means the mod won't receive that info at all
 tunic_er_regions: Dict[str, RegionInfo] = {
     "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
@@ -536,7 +529,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
     "Overworld Special Shop Entry": RegionInfo("Overworld Redux"),  # special shop entry spot
     "Overworld West Garden Laurels Entry": RegionInfo("Overworld Redux"),  # west garden laurels entry
-    "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux", hint=Hint.region),
+    "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux"),
     "Overworld Well to Furnace Rail": RegionInfo("Overworld Redux"),  # the tiny rail passageway
     "Overworld Ruined Passage Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Old House Door": RegionInfo("Overworld Redux"),  # the too-small space between the door and the portal
@@ -545,7 +538,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Town Portal": RegionInfo("Overworld Redux"),
     "Overworld Spawn Portal": RegionInfo("Overworld Redux"),
-    "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
     "Old House Front": RegionInfo("Overworld Interiors"),  # part with the bedroom
@@ -553,21 +546,21 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Furnace Fuse": RegionInfo("Furnace"),  # top of the furnace
     "Furnace Ladder Area": RegionInfo("Furnace"),  # the two portals accessible by the ladder
     "Furnace Walking Path": RegionInfo("Furnace"),  # dark tomb to west garden
-    "Secret Gathering Place": RegionInfo("Waterfall", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Changing Room": RegionInfo("Changing Room", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Patrol Cave": RegionInfo("PatrolCave", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Ruined Shop": RegionInfo("Ruined Shop", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Ruined Passage": RegionInfo("Ruins Passage", hint=Hint.region),
-    "Special Shop": RegionInfo("ShopSpecial", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Caustic Light Cave": RegionInfo("Overworld Cave", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Maze Cave": RegionInfo("Maze Room", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Cube Cave": RegionInfo("CubeRoom", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Southeast Cross Room": RegionInfo("EastFiligreeCache", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Fountain Cross Room": RegionInfo("Town_FiligreeRoom", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hourglass Cave": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Sealed Temple": RegionInfo("Temple", hint=Hint.scene),
-    "Sealed Temple Rafters": RegionInfo("Temple", hint=Hint.scene),
-    "Forest Belltower Upper": RegionInfo("Forest Belltower", hint=Hint.region),
+    "Secret Gathering Place": RegionInfo("Waterfall", dead_end=DeadEnd.all_cats),
+    "Changing Room": RegionInfo("Changing Room", dead_end=DeadEnd.all_cats),
+    "Patrol Cave": RegionInfo("PatrolCave", dead_end=DeadEnd.all_cats),
+    "Ruined Shop": RegionInfo("Ruined Shop", dead_end=DeadEnd.all_cats),
+    "Ruined Passage": RegionInfo("Ruins Passage"),
+    "Special Shop": RegionInfo("ShopSpecial", dead_end=DeadEnd.all_cats),
+    "Caustic Light Cave": RegionInfo("Overworld Cave", dead_end=DeadEnd.all_cats),
+    "Maze Cave": RegionInfo("Maze Room", dead_end=DeadEnd.all_cats),
+    "Cube Cave": RegionInfo("CubeRoom", dead_end=DeadEnd.all_cats),
+    "Southeast Cross Room": RegionInfo("EastFiligreeCache", dead_end=DeadEnd.all_cats),
+    "Fountain Cross Room": RegionInfo("Town_FiligreeRoom", dead_end=DeadEnd.all_cats),
+    "Hourglass Cave": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats),
+    "Sealed Temple": RegionInfo("Temple"),
+    "Sealed Temple Rafters": RegionInfo("Temple"),
+    "Forest Belltower Upper": RegionInfo("Forest Belltower"),
     "Forest Belltower Main": RegionInfo("Forest Belltower"),
     "Forest Belltower Lower": RegionInfo("Forest Belltower"),
     "East Forest": RegionInfo("East Forest Redux"),
@@ -590,9 +583,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Beneath the Well Main": RegionInfo("Sewer"),
     "Beneath the Well Back": RegionInfo("Sewer"),
     "West Garden": RegionInfo("Archipelagos Redux"),
-    "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
-    "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted, hint=Hint.special),
+    "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Laurels Exit": RegionInfo("Archipelagos Redux"),
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
     "West Garden Hero's Grave": RegionInfo("Archipelagos Redux"),
@@ -601,8 +594,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
     "Ruined Atoll Portal": RegionInfo("Atoll Redux"),
     "Frog's Domain Entry": RegionInfo("Frog Stairs"),
-    "Frog's Domain": RegionInfo("frog cave main", hint=Hint.region),
-    "Frog's Domain Back": RegionInfo("frog cave main", hint=Hint.scene),
+    "Frog's Domain": RegionInfo("frog cave main"),
+    "Frog's Domain Back": RegionInfo("frog cave main"),
     "Library Exterior Tree": RegionInfo("Library Exterior"),
     "Library Exterior Ladder": RegionInfo("Library Exterior"),
     "Library Hall": RegionInfo("Library Hall"),
@@ -611,28 +604,28 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
     "Library Portal": RegionInfo("Library Lab"),
-    "Library Arena": RegionInfo("Library Arena", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Library Arena": RegionInfo("Library Arena", dead_end=DeadEnd.all_cats),
     "Fortress Exterior from East Forest": RegionInfo("Fortress Courtyard"),
     "Fortress Exterior from Overworld": RegionInfo("Fortress Courtyard"),
     "Fortress Exterior near cave": RegionInfo("Fortress Courtyard"),  # where the shop and beneath the earth entry are
     "Fortress Courtyard": RegionInfo("Fortress Courtyard"),
     "Fortress Courtyard Upper": RegionInfo("Fortress Courtyard"),
-    "Beneath the Vault Front": RegionInfo("Fortress Basement", hint=Hint.scene),  # the vanilla entry point
-    "Beneath the Vault Back": RegionInfo("Fortress Basement", hint=Hint.scene),  # the vanilla exit point
+    "Beneath the Vault Front": RegionInfo("Fortress Basement"),  # the vanilla entry point
+    "Beneath the Vault Back": RegionInfo("Fortress Basement"),  # the vanilla exit point
     "Eastern Vault Fortress": RegionInfo("Fortress Main"),
     "Eastern Vault Fortress Gold Door": RegionInfo("Fortress Main"),
     "Fortress East Shortcut Upper": RegionInfo("Fortress East"),
     "Fortress East Shortcut Lower": RegionInfo("Fortress East"),
     "Fortress Grave Path": RegionInfo("Fortress Reliquary"),
-    "Fortress Grave Path Upper": RegionInfo("Fortress Reliquary", dead_end=DeadEnd.restricted, hint=Hint.region),
+    "Fortress Grave Path Upper": RegionInfo("Fortress Reliquary", dead_end=DeadEnd.restricted),
     "Fortress Grave Path Dusty Entrance": RegionInfo("Fortress Reliquary"),
     "Fortress Hero's Grave": RegionInfo("Fortress Reliquary"),
-    "Fortress Leaf Piles": RegionInfo("Dusty", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Fortress Leaf Piles": RegionInfo("Dusty", dead_end=DeadEnd.all_cats),
     "Fortress Arena": RegionInfo("Fortress Arena"),
     "Fortress Arena Portal": RegionInfo("Fortress Arena"),
     "Lower Mountain": RegionInfo("Mountain"),
     "Lower Mountain Stairs": RegionInfo("Mountain"),
-    "Top of the Mountain": RegionInfo("Mountaintop", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Top of the Mountain": RegionInfo("Mountaintop", dead_end=DeadEnd.all_cats),
     "Quarry Connector": RegionInfo("Darkwoods Tunnel"),
     "Quarry Entry": RegionInfo("Quarry Redux"),
     "Quarry": RegionInfo("Quarry Redux"),
@@ -663,7 +656,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Swamp Hero's Grave": RegionInfo("Swamp Redux 2"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
     "Cathedral": RegionInfo("Cathedral Redux"),
-    "Cathedral Secret Legend Room": RegionInfo("Cathedral Redux", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Cathedral Secret Legend Room": RegionInfo("Cathedral Redux", dead_end=DeadEnd.all_cats),
     "Cathedral Gauntlet Checkpoint": RegionInfo("Cathedral Arena"),
     "Cathedral Gauntlet": RegionInfo("Cathedral Arena"),
     "Cathedral Gauntlet Exit": RegionInfo("Cathedral Arena"),
@@ -674,12 +667,12 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Far Shore to Fortress": RegionInfo("Transit"),
     "Far Shore to Library": RegionInfo("Transit"),
     "Far Shore to West Garden": RegionInfo("Transit"),
-    "Hero Relic - Fortress": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hero Relic - Quarry": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hero Relic - West Garden": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hero Relic - East Forest": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hero Relic - Library": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hero Relic - Swamp": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Hero Relic - Fortress": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
+    "Hero Relic - Quarry": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
+    "Hero Relic - West Garden": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
+    "Hero Relic - East Forest": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
+    "Hero Relic - Library": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
+    "Hero Relic - Swamp": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
     "Purgatory": RegionInfo("Purgatory"),
     "Shop Entrance 1": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Shop Entrance 2": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
@@ -688,45 +681,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Shop Entrance 5": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Shop Entrance 6": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats, hint=Hint.region),
+    "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats),
     "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats)
 }
-
-
-# so we can just loop over this instead of doing some complicated thing to deal with hallways in the hints
-hallways: Dict[str, str] = {
-    "Overworld Redux, Furnace_gyro_west": "Overworld Redux, Archipelagos Redux_lower",
-    "Overworld Redux, Furnace_gyro_upper_north": "Overworld Redux, Sewer_west_aqueduct",
-    "Ruins Passage, Overworld Redux_east": "Ruins Passage, Overworld Redux_west",
-    "East Forest Redux Interior, East Forest Redux_upper": "East Forest Redux Interior, East Forest Redux_lower",
-    "Forest Boss Room, East Forest Redux Laddercave_": "Forest Boss Room, Forest Belltower_",
-    "Library Exterior, Atoll Redux_": "Library Exterior, Library Hall_",
-    "Library Rotunda, Library Lab_": "Library Rotunda, Library Hall_",
-    "Darkwoods Tunnel, Quarry Redux_": "Darkwoods Tunnel, Overworld Redux_",
-    "ziggurat2020_0, Quarry Redux_": "ziggurat2020_0, ziggurat2020_1_",
-    "Purgatory, Purgatory_bottom": "Purgatory, Purgatory_top",
-}
-hallway_helper: Dict[str, str] = {}
-for p1, p2 in hallways.items():
-    hallway_helper[p1] = p2
-    hallway_helper[p2] = p1
-
-# so we can just loop over this instead of doing some complicated thing to deal with hallways in the hints
-hallways_ur: Dict[str, str] = {
-    "Ruins Passage, Overworld Redux_east": "Ruins Passage, Overworld Redux_west",
-    "East Forest Redux Interior, East Forest Redux_upper": "East Forest Redux Interior, East Forest Redux_lower",
-    "Forest Boss Room, East Forest Redux Laddercave_": "Forest Boss Room, Forest Belltower_",
-    "Library Exterior, Atoll Redux_": "Library Exterior, Library Hall_",
-    "Library Rotunda, Library Lab_": "Library Rotunda, Library Hall_",
-    "Darkwoods Tunnel, Quarry Redux_": "Darkwoods Tunnel, Overworld Redux_",
-    "ziggurat2020_0, Quarry Redux_": "ziggurat2020_0, ziggurat2020_1_",
-    "Purgatory, Purgatory_bottom": "Purgatory, Purgatory_top",
-}
-hallway_helper_ur: Dict[str, str] = {}
-for p1, p2 in hallways_ur.items():
-    hallway_helper_ur[p1] = p2
-    hallway_helper_ur[p2] = p1
-
 
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information

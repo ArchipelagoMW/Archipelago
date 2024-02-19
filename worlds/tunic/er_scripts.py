@@ -1,7 +1,7 @@
 from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
-from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
+from .er_data import Portal, tunic_er_regions, portal_mapping, \
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
 from worlds.generic import PlandoConnection
@@ -18,118 +18,23 @@ class TunicERLocation(Location):
     game: str = "TUNIC"
 
 
-def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[int, str]]:
+def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
     portal_pairs: Dict[Portal, Portal] = pair_portals(world)
-    logic_rules = world.options.logic_rules
 
     # output the entrances to the spoiler log here for convenience
     for portal1, portal2 in portal_pairs.items():
         world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
 
-    # check if a portal leads to a hallway. if it does, update the hint text accordingly
-    def hint_helper(portal: Portal, hint_string: str = "") -> str:
-        # start by setting it as the name of the portal, for the case we're not using the hallway helper
-        if hint_string == "":
-            hint_string = portal.name
-
-        # unrestricted has fewer hallways, like the well rail
-        if logic_rules == "unrestricted":
-            hallways = hallway_helper_ur
-        else:
-            hallways = hallway_helper
-
-        if portal.scene_destination() in hallways:
-            # if we have a hallway, we want the region rather than the portal name
-            if hint_string == portal.name:
-                hint_string = portal.region
-                # library exterior is two regions, we just want to fix up the name
-                if hint_string in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                    hint_string = "Library Exterior"
-
-            # search through the list for the other end of the hallway
-            for portala, portalb in portal_pairs.items():
-                if portala.scene_destination() == hallways[portal.scene_destination()]:
-                    # if we find that we have a chain of hallways, do recursion
-                    if portalb.scene_destination() in hallways:
-                        hint_region = portalb.region
-                        if hint_region in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                            hint_region = "Library Exterior"
-                        hint_string = hint_region + " then " + hint_string
-                        hint_string = hint_helper(portalb, hint_string)
-                    else:
-                        # if we didn't find a chain, get the portal name for the end of the chain
-                        hint_string = portalb.name + " then " + hint_string
-                        return hint_string
-                # and then the same thing for the other portal, since we have to check each separately
-                if portalb.scene_destination() == hallways[portal.scene_destination()]:
-                    if portala.scene_destination() in hallways:
-                        hint_region = portala.region
-                        if hint_region in {"Library Exterior Tree", "Library Exterior Ladder"}:
-                            hint_region = "Library Exterior"
-                        hint_string = hint_region + " then " + hint_string
-                        hint_string = hint_helper(portala, hint_string)
-                    else:
-                        hint_string = portala.name + " then " + hint_string
-                        return hint_string
-        return hint_string
-
-    # create our regions, give them hint text if they're in a spot where it makes sense to
-    # we're limiting which ones get hints so that it still gets that ER feel with a little less BS
     for region_name, region_data in tunic_er_regions.items():
-        hint_text = "error"
-        if region_data.hint == 1:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.region == region_name:
-                    hint_text = hint_helper(portal2)
-                    break
-                if portal2.region == region_name:
-                    hint_text = hint_helper(portal1)
-                    break
-            regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        elif region_data.hint == 2:
-            for portal1, portal2 in portal_pairs.items():
-                if portal1.scene() == tunic_er_regions[region_name].game_scene:
-                    hint_text = hint_helper(portal2)
-                    break
-                if portal2.scene() == tunic_er_regions[region_name].game_scene:
-                    hint_text = hint_helper(portal1)
-                    break
-            regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        elif region_data.hint == 3:
-            # west garden portal item is at a dead end in restricted, otherwise just in west garden
-            if region_name == "West Garden Portal Item":
-                if world.options.logic_rules:
-                    for portal1, portal2 in portal_pairs.items():
-                        if portal1.scene() == "Archipelagos Redux":
-                            hint_text = hint_helper(portal2)
-                            break
-                        if portal2.scene() == "Archipelagos Redux":
-                            hint_text = hint_helper(portal1)
-                            break
-                    regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-                else:
-                    for portal1, portal2 in portal_pairs.items():
-                        if portal1.region == "West Garden Portal":
-                            hint_text = hint_helper(portal2)
-                            break
-                        if portal2.region == "West Garden Portal":
-                            hint_text = hint_helper(portal1)
-                            break
-                    regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
-        else:
-            regions[region_name] = Region(region_name, world.player, world.multiworld)
+        regions[region_name] = Region(region_name, world.player, world.multiworld)
 
     set_er_region_rules(world, world.ability_unlocks, regions, portal_pairs)
 
-    er_hint_data: Dict[int, str] = {}
     for location_name, location_id in world.location_name_to_id.items():
         region = regions[location_table[location_name].er_region]
         location = TunicERLocation(world.player, location_name, location_id, region)
         region.locations.append(location)
-        if region.name == region.hint_text:
-            continue
-        er_hint_data[location.address] = region.hint_text
     
     create_randomized_entrances(portal_pairs, regions)
 
@@ -144,9 +49,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
     world.multiworld.completion_condition[world.player] = lambda state: state.has("Victory", world.player)
     victory_region.locations.append(victory_location)
 
-    portals_and_hints = (portal_pairs, er_hint_data)
-
-    return portals_and_hints
+    return portal_pairs
 
 
 tunic_events: Dict[str, str] = {
@@ -379,10 +282,10 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
-        region1.connect(region2, f"{portal1.name} -> {portal2.name}")
+        region1.connect(region2, f"{portal1.name}")
         # prevent the logic from thinking you can get to any shop-connected region from the shop
         if portal2.name != "Shop":
-            region2.connect(region1, f"{portal2.name} -> {portal1.name}")
+            region2.connect(region1, f"{portal2.name}")
 
 
 # loop through the static connections, return regions you can reach from this region
