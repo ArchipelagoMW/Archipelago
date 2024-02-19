@@ -295,7 +295,7 @@ function processBlock(block)
 		if misplacedBlock[#misplacedBlock] ~= misplaced_items[#misplaced_items] then
 			local received = tonumber(misplacedBlock[#misplacedBlock])
 			if start_item_drawing ~= 0 or misplaced_drawing ~= 0 then
-				if misplace_items_queue[#misplaced_items_queue] ~= received then
+				if misplaced_items_queue[#misplaced_items_queue] ~= received then
 					table.insert(misplaced_items_queue, received)
 				end
 			else
@@ -315,8 +315,8 @@ function processBlock(block)
 	end
 
     if( block_identified == 0 ) then
-        print("unidentified block")
-        print(block)
+        -- print("unidentified block")
+        -- print(block)
     end
 end
 
@@ -987,7 +987,7 @@ function checkRLIB()
 	return checks
 end
 
-function checkRNO0()
+function checkRNO0(f)
 	local checks = {}
 	local flag = mainmemory.read_u16_le(0x03bf13)
 	checks["RNO0 - Library card"] = bit.check(flag, 0)
@@ -1003,14 +1003,27 @@ function checkRNO0()
 	checks["RNO0 - Iron ball"] = bit.check(flag, 10)
 	checks["RNO0 - Heart Refresh(Inside clock)"] = bit.check(flag, 11)
 
+	if last_zone == cur_zone then
+		if delay_timer == 0 then delay_timer = f end
+		if delay_timer ~=0 and f - delay_timer >= 900 then
+			-- Give some time to zone load before patching
+			memory.write_u32_le(0x801c132c, 0x14400118, "System Bus")
+		end
+	end
+	gui.drawText(0, client.bufferheight() - 20, bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b))
+	gui.drawText(0, client.bufferheight() - 30, memory.read_u32_le(0x801c132c, "System Bus"))
+
 	if cur_zone == "RNO0" and last_zone ~= "RNO0" then
-		last_zone = cur_zone
-		last_zoneid = cur_zoneid
-		-- goal = mainmemory.read_u8(0x180f98) on index 12
-		goal = mainmemory.read_u8(0x180f8b) -- index -1
-		checkBosses()
-		if bosses_dead >= goal then
-			goal_met = true
+		if delay_timer == 0 then delay_timer = f end
+		if delay_timer ~=0 and f - delay_timer >= 900 then
+			checkBosses()
+			local goal = mainmemory.read_u8(0x180f8b)
+			-- goal = mainmemory.read_u8(0x180f98) on index 12
+			if bosses_dead >= goal then
+				last_zone = cur_zone
+				last_zoneid = cur_zoneid
+				delay_timer = 0
+			end
 		end
 	end
 
@@ -1246,8 +1259,10 @@ function checkAllLocations()
 	return location_checks
 end
 
-function checkOneLocation()
+function checkOneLocation(f)
 	local current_table = {}
+
+	if last_zone == "RNO0" and cur_zone ~= "RNO0" then gui.clearGraphics() end
 
 	-- Normal Castle
 	if cur_zone == "ARE" or cur_zone == "BO2" then current_table = checkARE() end
@@ -1273,7 +1288,7 @@ function checkOneLocation()
 	if cur_zone == "RCHI" or cur_zone == "RBO2" then current_table = checkRCHI() end
 	if cur_zone == "RDAI" or cur_zone == "RBO3" then current_table = checkRDAI() end
 	if cur_zone == "RLIB" then current_table = checkRLIB() end
-	if cur_zone == "RNO0" then current_table = checkRNO0() end
+	if cur_zone == "RNO0" then current_table = checkRNO0(f) end
 	if cur_zone == "RNO1" or cur_zone == "RBO4" then current_table = checkRNO1() end
 	if cur_zone == "RNO2" or cur_zone == "RBO7" then current_table = checkRNO2() end
 	if cur_zone == "RNO3" then current_table = checkRNO3() end
@@ -1707,7 +1722,10 @@ function main()
 				end
 				if last_status == 2 then
 					-- We are connected. At Richter?
-					if cur_zone == "ST0" then last_status = 4 end
+					if cur_zone == "ST0" then
+						last_status = 4
+						console.log("At Richter!")
+					end
 					-- At Alucard?
 					if cur_zone ~= "ST0" and cur_zone ~= "UNKNOWN" then
 						-- We just connected and already on Alucard. Loaded game?.
@@ -1723,11 +1741,16 @@ function main()
 						last_processed_read = read_last_processed()
 						if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
 						else last_item_processed = last_processed_read end
+						console.log("Loaded game, last processed: " .. last_item_processed)
+						gui.clearGraphics()
 					end
 				end
 				if last_status == 4 then
 					-- We are at Richter. Game takes a bit to actually start, after defeating Dracula
-					if cur_zone ~= "ST0" then last_status = 8 end
+					if cur_zone ~= "ST0" then
+						last_status = 8
+						console.log("Prologue done")
+					end
 				end
 				if last_status == 8 then
 					-- Just changed to NO3
@@ -1742,6 +1765,7 @@ function main()
 						last_misplaced_processed = 0
 						-- fresh game. No item granted yet
 						last_item_processed = 1
+						console.log("Fresh game")
 						file_exists()
 						delay_timer = 0
 					end
@@ -1790,16 +1814,10 @@ function main()
 						just_died = false
 					end
 
-					if goal_met and cur_zone == "RNO0" then
-						if delay_timer == 0 then delay_timer = frame end
-						if delay_timer ~=0 and frame - delay_timer >= 900 then
-							-- Give some time to zone load before patching
-							memory.write_s32_le(0x801c132c, 0x14400118, "System Bus")
-						end
-					end
+
 
 					check_death()
-					checkOneLocation()
+					checkOneLocation(frame)
 				end
             end
         elseif (curstate == STATE_UNINITIALIZED) then
