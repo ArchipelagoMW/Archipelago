@@ -194,7 +194,7 @@ def set_rules(world):
         "LD15 DEF 1500 or less forbidden":
             lambda state: state.yugioh06_difficulty(player, 3),
         "LD16 Effect Monsters forbidden":
-            lambda state: state.yugioh06_difficulty(player, 4),
+            lambda state: only_normal(state, player) and state.yugioh06_difficulty(player, 4),
         "LD17 Spells forbidden":
             lambda state: state.yugioh06_difficulty(player, 3),
         "LD18 Attacks forbidden":
@@ -269,7 +269,7 @@ def set_rules(world):
         "TD02 Deflected Damage":
             lambda state: state.has("Fairy Box", player) and state.yugioh06_difficulty(player, 1),
         "TD03 Normal Summon":
-            lambda state: only_normal(state, player) and state.yugioh06_difficulty(player, 3),
+            lambda state: state.yugioh06_difficulty(player, 3),
         "TD04 Ritual Summon":
             lambda state: state.yugioh06_difficulty(player, 3) and
                           state.has_all(["Contract with the Abyss",
@@ -539,7 +539,7 @@ def only_earth(state, player):
 def only_water(state, player):
     return state.yugioh06_has_individual([
         "Gagagigo",
-        "Familiar-Possessed - Eri",
+        "Familiar-Possessed - Eria",
         "7 Colored Fish",
         "Sea Serpent Warrior of Darkness",
         "Abyss Soldier"
@@ -558,7 +558,7 @@ def only_water(state, player):
 def only_fire(state, player):
     return state.yugioh06_has_individual([
         "Blazing Inpachi",
-        "Familia-Possesed - Hiita",
+        "Familiar-Possessed - Hiita",
         "Great Angus",
         "Fire Beaters"
     ], player) >= 2 and state.yugioh06_has_individual([
@@ -576,7 +576,7 @@ def only_wind(state, player):
         "Luster Dragon",
         "Slate Warrior",
         "Spear Dragon",
-        "Familiar-Possed - Wyn",
+        "Familiar-Possessed - Wynn",
         "Harpie's Brother",
         "Nin-Ken Dog",
         "Cyber Harpie Lady",
@@ -625,7 +625,7 @@ def only_warrior(state, player):
         "Dark Blade",
         "Blindly Loyal Goblin",
         "D.D. Survivor",
-        "Gearfried the Iron knight",
+        "Gearfried the Iron Knight",
         "Ninja Grandmaster Sasuke",
         "Warrior Beaters",
         "Warrior Lady of the Wasteland",
@@ -675,16 +675,16 @@ def only_dragon(state, player):
         "Cave Dragon"
         "Armed Dragon LV3",
         "Masked Dragon",
-        "Twin-Headed Behemotha",
+        "Twin-Headed Behemoth",
         "Element Dragon",
         "Troop Dragon",
         "Horus the Black Flame Dragon LV4",
         "Stamping Destruction"
     ], player) + (state.yugioh06_has_individual([
         "Luster Dragon #2",
-        "Armed Dragon Lv5",
+        "Armed Dragon LV5",
         "Kaiser Glider",
-        "Horus the Black Flame Dragon Lv6"
+        "Horus the Black Flame Dragon LV6"
     ], player) >= 1)) >= 7
 
 
@@ -756,13 +756,13 @@ def only_normal(state, player):
         "Vorse Raider",
         "Blazing Inpachi",
         "Gagagigo",
-        "Mechanical Chaser",
+        "Mechanicalchaser",
         "7 Colored Fish",
         "Dark Blade",
         "Dunames Dark Witch",
         "Giant Red Snake",
         "Gil Garth",
-        "Great Agnus",
+        "Great Angus",
         "Harpie's Brother",
         "La Jinn the Mystical Genie of the Lamp",
         "Neo Bug",
@@ -839,7 +839,7 @@ def pacman_deck(state, player):
 def quick_plays(state, player):
     return state.yugioh06_has_individual(["Collapse",
                                           "Emergency Provisions",
-                                          "Enemy controller",
+                                          "Enemy Controller",
                                           "Graceful Dice",
                                           "Mystik Wok",
                                           "Offerings to the Doomed",
