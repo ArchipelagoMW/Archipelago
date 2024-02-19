@@ -103,7 +103,7 @@ def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> boo
 
 
 def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
-    return can_use_bombs(state, player) or state.has("Pegasus Boots", player)
+    return state.has("Pegasus Boots", player) or can_use_bombs(state, player)
 
 
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
