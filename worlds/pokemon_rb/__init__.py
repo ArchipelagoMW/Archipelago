@@ -195,11 +195,11 @@ class PokemonRedBlueWorld(World):
                 normals -= subtract_amounts[2]
                 while super_effectives + not_very_effectives + normals > 225 - immunities:
                     r = self.multiworld.random.randint(0, 2)
-                    if r == 0:
+                    if r == 0 and super_effectives:
                         super_effectives -= 1
-                    elif r == 1:
+                    elif r == 1 and not_very_effectives:
                         not_very_effectives -= 1
-                    else:
+                    elif normals:
                         normals -= 1
             chart = []
             for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
