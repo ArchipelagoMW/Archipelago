@@ -30,16 +30,49 @@ weapons_to_name = {
 }
 
 
+def can_defeat_enough_rbms(required: int, weapon_damage: typing.Dict[int, typing.List[int]]):
+    can_defeat = 0
+    for boss in range(8):
+        if any(weapon_damage[weapon][boss] > 0 for weapon in weapon_damage):
+            can_defeat += 1
+    return can_defeat >= required
+
+
 def set_rules(world: "MM2World") -> None:
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
+    if world.options.random_weakness:
+        world.weapon_damage = {i: [] for i in range(8)}
+        for boss in range(13):
+            for weapon in world.weapon_damage:
+                world.weapon_damage[weapon].append(int(14*world.random.expovariate(1.0)))
+            if not any([world.weapon_damage[weapon][boss] > 4 for weapon in world.weapon_damage]):
+                # failsafe, there should be at least one defined weakness
+                weapon = world.random.choice(list(world.weapon_damage.keys()))
+                world.weapon_damage[weapon][boss] = world.random.randint(4, 14) # Force weakness
+        # handle atomic fire
+        if world.options.strict_weakness:
+            for boss in range(13):
+                if world.weapon_damage[1][boss] >= 4:
+                    # Atomic Fire can only shoot two fully powered shots
+                    # So we need to be able to kill the boss in 2 hits
+                    world.weapon_damage[1][boss] = 14
+        # handle the alien
+        boss = 13
+        for weapon in world.weapon_damage:
+            world.weapon_damage[weapon].append(-1)
+        weapon = world.random.choice(list(world.weapon_damage.keys()))
+        world.weapon_damage[weapon][boss] = 1 if weapon != 1 else 6
+
     if world.options.strict_weakness:
         for weapon in weapon_damage:
-            for i in range(14):
-                if weapon == 0 or 4 > weapon_damage[weapon][i] > 0:
-                    weapon_damage[weapon][i] = 0
+            for i in range(13):
+                if i == 8 and not world.options.random_weakness:
+                    continue
+                if weapon == 0 or 4 > world.weapon_damage[weapon][i] > 0:
+                    world.weapon_damage[weapon][i] = 0
         starting = world.options.starting_robot_master.value
-        weapon_damage[0][starting] = 1
+        world.weapon_damage[0][starting] = 1
 
     for i, boss in zip(range(14), [
         heat_man_locations,
@@ -57,16 +90,18 @@ def set_rules(world: "MM2World") -> None:
         wily_5_locations,
         wily_6_locations
     ]):
-        if weapon_damage[0][i] > 0:
+        if world.weapon_damage[0][i] > 0:
             continue  # this can always be in logic
         if i == 11:
             continue  # Boobeam Trap is handled after
         weapons = []
         for weapon in range(1, 8):
-            if weapon_damage[weapon][i] > 0:
+            if world.weapon_damage[weapon][i] > 0:
+                if weapon == 1 and world.weapon_damage[weapon][i] < 14:
+                    continue  # Atomic Fire can only be considered logical for bosses it can kill in 2 hits
                 weapons.append(weapons_to_name[weapon])
         if not weapons:
-            raise Exception(f"Attempted to have boss {boss} with no weakness!")
+            raise Exception(f"Attempted to have boss {i} with no weakness!")
         for location in boss:
             add_rule(world.multiworld.get_location(location, world.player),
                      lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
@@ -76,6 +111,12 @@ def set_rules(world: "MM2World") -> None:
              lambda state: state.has(Names.crash_bomber, world.player))
     add_rule(world.multiworld.get_location(Names.wily_stage_4, world.player),
              lambda state: state.has(Names.crash_bomber, world.player))
+
+    # Need to defeat x amount of robot masters for Wily 5
+    add_rule(world.multiworld.get_location(Names.wily_5, world.player),
+             lambda state: can_defeat_enough_rbms(world.options.wily_5_requirement.value, world.weapon_damage))
+    add_rule(world.multiworld.get_location(Names.wily_stage_5, world.player),
+             lambda state: can_defeat_enough_rbms(world.options.wily_5_requirement.value, world.weapon_damage))
 
     if not world.options.yoku_jumps:
         add_rule(world.multiworld.get_entrance("To Heat Man Stage", world.player),

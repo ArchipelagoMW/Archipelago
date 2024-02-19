@@ -191,26 +191,26 @@ def write_palette_shuffle(world: "MM2World", rom: "RomData"):
                 logging.warning(f"Player {world.multiworld.get_player_name(world.player)} provided improper color set {color_set}")
 
         # Now we handle the real values
-        if palette_shuffle != 0:
-            if palette_shuffle > 1:
-                if palette_shuffle == 3:
-                    # singularity
-                    colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
-                    for character in palette_pointers:
-                        if character not in palettes_to_write:
-                            palettes_to_write[character] = colors
-                else:
-                    for character in palette_pointers:
-                        if character not in palettes_to_write:
-                            colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
-                            palettes_to_write[character] = colors
-            else:
-                colors = list(MM2_COLORS.values())
-                colors.append((0x2C, 0x11))  # Mega Buster
-                world.random.shuffle(colors)
+    if palette_shuffle != 0:
+        if palette_shuffle > 1:
+            if palette_shuffle == 3:
+                # singularity
+                colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
                 for character in palette_pointers:
                     if character not in palettes_to_write:
-                        palettes_to_write[character] = colors.pop()
+                        palettes_to_write[character] = colors
+            else:
+                for character in palette_pointers:
+                    if character not in palettes_to_write:
+                        colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
+                        palettes_to_write[character] = colors
+        else:
+            colors = list(MM2_COLORS.values())
+            colors.append((0x2C, 0x11))  # Mega Buster
+            world.random.shuffle(colors)
+            for character in palette_pointers:
+                if character not in palettes_to_write:
+                    palettes_to_write[character] = colors.pop()
 
         for character in palettes_to_write:
             for pointer in palette_pointers[character]:

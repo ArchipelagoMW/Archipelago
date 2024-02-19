@@ -13,7 +13,7 @@ from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extr
     MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
-from .Rules import set_rules
+from .Rules import set_rules, weapon_damage
 import os
 import threading
 import base64
@@ -97,6 +97,7 @@ class MM2World(World):
     def __init__(self, world: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(world, player)
+        self.weapon_damage = weapon_damage.copy()
 
     @classmethod
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -186,7 +187,7 @@ class MM2World(World):
             player = self.player
 
             rom = RomData(get_base_rom_bytes())
-            patch_rom(self, self.player, rom)
+            patch_rom(self, rom)
 
             rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.nes")
             rom.write_to_file(rompath)

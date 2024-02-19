@@ -9,7 +9,6 @@ from worlds.Files import APDeltaPatch
 from . import Names
 from .Text import MM2TextEntry
 from .Color import get_colors_for_item, write_palette_shuffle
-from .Rules import weapon_damage
 
 if TYPE_CHECKING:
     from . import MM2World
@@ -20,14 +19,14 @@ MM2NESHASH = "302761a666ac89c21f185052d02127d3"
 MM2VCHASH = "77b51417eb66e8119c85689a093be857"
 
 picopico_weakness_ptrs = {
-    0: 0x3EA02,
-    1: 0x3EA7E,
-    2: 0x3EAF6,
-    3: 0x3EB6E,
-    4: 0x3EBE6,
-    5: 0x3EC5E,
-    6: 0x3ECD6,
-    7: 0x3ED4E,
+    0: 0x3EA12,
+    1: 0x3EA8E,
+    2: 0x3EB06,
+    3: 0x3EB7E,
+    4: 0x3EBF6,
+    5: 0x3EC6E,
+    6: 0x3ECE6,
+    7: 0x3ED5E,
 }
 
 
@@ -53,7 +52,7 @@ class RomData:
             outfile.write(self.file)
 
 
-def patch_rom(world: "MM2World", player: int, rom: RomData):
+def patch_rom(world: "MM2World", rom: RomData):
     rom.write_byte(0x3403C, 0x8A)  # Read for setting robot master face tiles
     rom.write_byte(0x34083, 0x8A)  # Read for setting robot master face sprites
     rom.write_bytes(0x340DD, [0x9B, 0xC9, 0x07])  # Dr. Wily checking for Items
@@ -102,7 +101,7 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
     # Deathlink and Soft-reset Kill
     rom.write_bytes(0x3C11E, [0x27, 0xF5])
     rom.write_bytes(0x38188, [0x20, 0x8F, 0xF3, 0xEA, ])
-    rom.write_bytes(0x3822D, [0x20, 0x8F, 0xF3, 0xEA, ])
+    rom.write_bytes(0x3823D, [0x20, 0x8F, 0xF3, 0xEA, ])
     rom.write_bytes(0x3E5BC, [0x85, 0x8F, 0xEA, ])  # null deathlink on death
     rom.write_bytes(0x3F381, [
         0xA9, 0x10,  # LDA #$10
@@ -169,15 +168,15 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
         Names.air_shooter_get,
         Names.leaf_shield_get,
         Names.bubble_lead_get,
-        Names.time_stopper_get,
         Names.quick_boomerang_get,
+        Names.time_stopper_get,
         Names.metal_blade_get,
         Names.crash_bomber_get,
         Names.item_1_get,
         Names.item_2_get,
         Names.item_3_get
     ]):
-        item = world.multiworld.get_location(location, player).item
+        item = world.multiworld.get_location(location, world.player).item
         if len(item.name) <= 14:
             # we want to just place it in the center
             first_str = ""
@@ -205,11 +204,27 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
 
         colors = get_colors_for_item(item.name)
         if i > 7:
-            rom.write_bytes(color_address + 27 + ((i - 7) * 2), colors)
+            rom.write_bytes(color_address + 27 + ((i - 8) * 2), colors)
         else:
             rom.write_bytes(color_address + (i * 2), colors)
 
     write_palette_shuffle(world, rom)
+
+    if world.options.strict_weakness or world.options.random_weakness:
+        # we need to write boss weaknesses
+        output = bytearray()
+        for weapon in world.weapon_damage:
+            weapon_damage = [world.weapon_damage[weapon][i]
+                             if world.weapon_damage[weapon][i] >= 0
+                             else 256 + world.weapon_damage[weapon][i]
+                             for i in range(14)]
+            output.extend(weapon_damage)
+        rom.write_bytes(0x2E952, bytes(output))
+        for weapon in picopico_weakness_ptrs:
+            damage = world.weapon_damage[weapon][9]
+            if damage < 0:
+                damage = 256 + damage
+            rom.write_byte(picopico_weakness_ptrs[weapon], damage)
 
     if world.options.quickswap:
         rom.write_bytes(0x3F533, [0x4C, 0xAC, 0xF3, ])  # add jump to check for holding select
@@ -465,7 +480,7 @@ def patch_rom(world: "MM2World", player: int, rom: RomData):
                                   ])
 
     from Utils import __version__
-    rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'MM2{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3FFC0, rom.name)
 

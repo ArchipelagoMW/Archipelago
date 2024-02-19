@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, PerGameCommonOptions
+from Options import Choice, Toggle, DeathLink, DefaultOnToggle, TextChoice, Range, PerGameCommonOptions
+
 
 class StartingRobotMaster(Choice):
     """
@@ -91,6 +92,18 @@ class StrictWeaknesses(Toggle):
     display_name = "Strict Weaknesses"
 
 
+class RandomWeaknesses(Toggle):
+    """Randomize boss weaknesses."""
+    display_name = "Random Weaknesses"
+
+
+class Wily5Requirement(Range):
+    """Change the amount of Robot Masters that are required to be defeated for
+    the teleporter to the Wily Machine to appear."""
+    default = 8
+    range_start = 1
+    range_end = 8
+
 @dataclass
 class MM2Options(PerGameCommonOptions):
     death_link: DeathLink
@@ -101,3 +114,5 @@ class MM2Options(PerGameCommonOptions):
     quickswap: Quickswap
     palette_shuffle: PaletteShuffle
     strict_weakness: StrictWeaknesses
+    random_weakness: RandomWeaknesses
+    wily_5_requirement: Wily5Requirement
