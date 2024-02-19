@@ -417,6 +417,7 @@ def set_rules(world: PokemonCrystalWorld) -> None:
              lambda state: state.has("EVENT_FOUGHT_SNORLAX", world.player))
 
     # Route 28
+    set_rule(get_location("Route 28 - Steel Wing from Celebrity in House"), can_cut)
     if hidden():
         set_rule(get_location("Route 28 - Hidden Item Behind Cut Tree"), can_cut)
 

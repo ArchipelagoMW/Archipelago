@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 else:
     BizHawkClientContext = object
 
-EXPECTED_ROM_VERSION = 1
+EXPECTED_ROM_VERSION = 2
 
 
 class PokemonCrystalClient(BizHawkClient):
