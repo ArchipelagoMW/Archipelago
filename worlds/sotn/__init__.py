@@ -4,7 +4,7 @@ from typing import ClassVar, Dict, Tuple, List
 import settings, typing, random, os
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
-from worlds.LauncherComponents import Component, components, SuffixIdentifier
+from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch_subprocess, Type
 from Options import AssembleOptions
 
 
@@ -17,17 +17,24 @@ from .Rom import (get_base_rom_path, get_base_rom_bytes, write_char, write_short
                   SOTNDeltaPatch, write_seed, patch_rom)
 
 
-# Todo: Test changes in here to launch from the ArchipelagoLaucher
-components.append(Component('SOTN Client', 'SotnClient', file_identifier=SuffixIdentifier('.apsotn')))
+def run_client():
+    print('Running SOTN Client')
+    from SotnClient import main
+    # from .SotnClient import main for release
+    launch_subprocess(main, name="SotnClient")
+
+
+components.append(Component('SOTN Client', 'SotnClient', func=run_client,
+                            component_type=Type.CLIENT, file_identifier=SuffixIdentifier('.apsotn')))
 
 
 # -- Problem found on last play --
 # Getting Error num_id is nil in lua after receiving a misplaced, just once
 # Maybe Succubus be a boss?
 # Better distribution of vanilla items based on type
-# Find a better id to relics placehold
 # Faerie scroll place holder missing
 # TODO: Improve skill of wolf and bat card check
+# Alucart Mail not sorting when received
 
 class SotnSettings(settings.Group):
     class DisplayMsgs(settings.Bool):
@@ -90,6 +97,7 @@ class SotnWorld(World):
 
     def create_items(self) -> None:
         itempool: typing.List[SotnItem] = []
+        # TODO: Learn about item weights for difficult
         difficult = self.multiworld.difficult[self.player]
         added_items = 0
         # Last generate 278 Items 386 Locations with all relics
