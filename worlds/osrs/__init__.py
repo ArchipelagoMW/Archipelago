@@ -25,7 +25,8 @@ class OSRSWeb(WebWorld):
 
 class OSRSWorld(World):
     game = "Old School Runescape"
-    option_definitions = OSRSOptions
+    options_dataclass = OSRSOptions
+    options: OSRSOptions
     topology_present = True
     web = OSRSWeb()
     base_id = 0x070000
@@ -69,8 +70,8 @@ class OSRSWorld(World):
         self.item_rows_by_name = {it_row.name: it_row for it_row in self.item_rows}
 
         rnd = self.multiworld.per_slot_randoms[self.player]
-        starting_area = self.multiworld.starting_area[self.player]
-        self.allow_brutal_grinds = self.multiworld.brutal_grinds[self.player]
+        starting_area = self.options.starting_area
+        self.allow_brutal_grinds = self.options.brutal_grinds
 
         if starting_area.value == StartingArea.option_any_bank:
             random_bank = rnd.randint(0, len(starting_area_dict) - 1)
@@ -180,112 +181,112 @@ class OSRSWorld(World):
 
         # Start with the minimum general tasks
         general_tasks = [task for task in self.locations_by_category["General"]]
-        if not self.multiworld.progressive_tasks[self.player]:
+        if not self.options.progressive_tasks:
             rnd.shuffle(general_tasks)
         else:
             general_tasks.reverse()
-        for i in range(0, self.multiworld.minimum_general_tasks[self.player]):
+        for i in range(0, self.options.minimum_general_tasks):
             task = general_tasks.pop()
             self.add_location(task)
             locations_added += 1
 
-        general_weight = self.multiworld.general_task_weight[self.player] if len(general_tasks) > 0 else 0
+        general_weight = self.options.general_task_weight if len(general_tasks) > 0 else 0
         combat_tasks = [task for task in self.locations_by_category["Combat"]
-                        if task.skills[0].level <= int(self.multiworld.max_combat_level[self.player])]
-        #if not self.multiworld.progressive_tasks[self.player]:
+                        if task.skills[0].level <= int(self.options.max_combat_level)]
+        #if not self.options.progressive_tasks:
         rnd.shuffle(combat_tasks)
-        combat_tasks = combat_tasks[0:self.multiworld.max_combat_tasks[self.player]]
-        combat_weight = self.multiworld.combat_task_weight[self.player] if len(combat_tasks) > 0 else 0
+        combat_tasks = combat_tasks[0:self.options.max_combat_tasks]
+        combat_weight = self.options.combat_task_weight if len(combat_tasks) > 0 else 0
 
         prayer_tasks = [task for task in self.locations_by_category["Prayer"]
-                        if task.skills[0].level <= int(self.multiworld.max_prayer_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                        if task.skills[0].level <= int(self.options.max_prayer_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(prayer_tasks)
         else:
             prayer_tasks.reverse()
-        prayer_tasks = prayer_tasks[0:self.multiworld.max_prayer_tasks[self.player]]
-        prayer_weight = self.multiworld.prayer_task_weight[self.player] if len(prayer_tasks) > 0 else 0
+        prayer_tasks = prayer_tasks[0:self.options.max_prayer_tasks]
+        prayer_weight = self.options.prayer_task_weight if len(prayer_tasks) > 0 else 0
 
         magic_tasks = [task for task in self.locations_by_category["Magic"]
-                       if task.skills[0].level <= int(self.multiworld.max_magic_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                       if task.skills[0].level <= int(self.options.max_magic_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(magic_tasks)
         else:
             magic_tasks.reverse()
-        magic_tasks = magic_tasks[0:self.multiworld.max_magic_tasks[self.player]]
-        magic_weight = self.multiworld.magic_task_weight[self.player] if len(magic_tasks) > 0 else 0
+        magic_tasks = magic_tasks[0:self.options.max_magic_tasks]
+        magic_weight = self.options.magic_task_weight if len(magic_tasks) > 0 else 0
 
         runecraft_tasks = [task for task in self.locations_by_category["Runecraft"]
-                           if task.skills[0].level <= int(self.multiworld.max_runecraft_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                           if task.skills[0].level <= int(self.options.max_runecraft_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(runecraft_tasks)
         else:
             runecraft_tasks.reverse()
-        runecraft_tasks = runecraft_tasks[0:self.multiworld.max_runecraft_tasks[self.player]]
-        runecraft_weight = self.multiworld.runecraft_task_weight[self.player] if len(runecraft_tasks) > 0 else 0
+        runecraft_tasks = runecraft_tasks[0:self.options.max_runecraft_tasks]
+        runecraft_weight = self.options.runecraft_task_weight if len(runecraft_tasks) > 0 else 0
 
         crafting_tasks = [task for task in self.locations_by_category["Crafting"]
-                          if task.skills[0].level <= int(self.multiworld.max_crafting_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                          if task.skills[0].level <= int(self.options.max_crafting_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(crafting_tasks)
         else:
             crafting_tasks.reverse()
-        crafting_tasks = crafting_tasks[0:self.multiworld.max_crafting_tasks[self.player]]
-        crafting_weight = self.multiworld.crafting_task_weight[self.player] if len(crafting_tasks) > 0 else 0
+        crafting_tasks = crafting_tasks[0:self.options.max_crafting_tasks]
+        crafting_weight = self.options.crafting_task_weight if len(crafting_tasks) > 0 else 0
 
         mining_tasks = [task for task in self.locations_by_category["Mining"]
-                        if task.skills[0].level <= int(self.multiworld.max_mining_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                        if task.skills[0].level <= int(self.options.max_mining_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(mining_tasks)
         else:
             mining_tasks.reverse()
-        mining_tasks = mining_tasks[0:self.multiworld.max_mining_tasks[self.player]]
-        mining_weight = self.multiworld.mining_task_weight[self.player] if len(mining_tasks) > 0 else 0
+        mining_tasks = mining_tasks[0:self.options.max_mining_tasks]
+        mining_weight = self.options.mining_task_weight if len(mining_tasks) > 0 else 0
 
         smithing_tasks = [task for task in self.locations_by_category["Smithing"]
-                          if task.skills[0].level <= int(self.multiworld.max_smithing_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                          if task.skills[0].level <= int(self.options.max_smithing_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(smithing_tasks)
         else:
             smithing_tasks.reverse()
-        smithing_tasks = smithing_tasks[0:self.multiworld.max_smithing_tasks[self.player]]
-        smithing_weight = self.multiworld.smithing_task_weight[self.player] if len(smithing_tasks) > 0 else 0
+        smithing_tasks = smithing_tasks[0:self.options.max_smithing_tasks]
+        smithing_weight = self.options.smithing_task_weight if len(smithing_tasks) > 0 else 0
 
         fishing_tasks = [task for task in self.locations_by_category["Fishing"]
-                         if task.skills[0].level <= int(self.multiworld.max_fishing_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                         if task.skills[0].level <= int(self.options.max_fishing_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(fishing_tasks)
         else:
             fishing_tasks.reverse()
-        fishing_tasks = fishing_tasks[0:self.multiworld.max_fishing_tasks[self.player]]
-        fishing_weight = self.multiworld.fishing_task_weight[self.player] if len(fishing_tasks) > 0 else 0
+        fishing_tasks = fishing_tasks[0:self.options.max_fishing_tasks]
+        fishing_weight = self.options.fishing_task_weight if len(fishing_tasks) > 0 else 0
 
         cooking_tasks = [task for task in self.locations_by_category["Cooking"]
-                         if task.skills[0].level <= int(self.multiworld.max_cooking_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                         if task.skills[0].level <= int(self.options.max_cooking_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(cooking_tasks)
         else:
             cooking_tasks.reverse()
-        cooking_tasks = cooking_tasks[0:self.multiworld.max_cooking_tasks[self.player]]
-        cooking_weight = self.multiworld.cooking_task_weight[self.player] if len(cooking_tasks) > 0 else 0
+        cooking_tasks = cooking_tasks[0:self.options.max_cooking_tasks]
+        cooking_weight = self.options.cooking_task_weight if len(cooking_tasks) > 0 else 0
 
         firemaking_tasks = [task for task in self.locations_by_category["Firemaking"]
-                            if task.skills[0].level <= int(self.multiworld.max_firemaking_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                            if task.skills[0].level <= int(self.options.max_firemaking_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(firemaking_tasks)
         else:
             firemaking_tasks.reverse()
-        firemaking_tasks = firemaking_tasks[0:self.multiworld.max_firemaking_tasks[self.player]]
-        firemaking_weight = self.multiworld.firemaking_task_weight[self.player] if len(firemaking_tasks) > 0 else 0
+        firemaking_tasks = firemaking_tasks[0:self.options.max_firemaking_tasks]
+        firemaking_weight = self.options.firemaking_task_weight if len(firemaking_tasks) > 0 else 0
 
         woodcutting_tasks = [task for task in self.locations_by_category["Woodcutting"]
-                             if task.skills[0].level <= int(self.multiworld.max_woodcutting_level[self.player])]
-        if not self.multiworld.progressive_tasks[self.player]:
+                             if task.skills[0].level <= int(self.options.max_woodcutting_level)]
+        if not self.options.progressive_tasks:
             rnd.shuffle(woodcutting_tasks)
         else:
             woodcutting_tasks.reverse()
-        woodcutting_tasks = woodcutting_tasks[0:self.multiworld.max_woodcutting_tasks[self.player]]
-        woodcutting_weight = self.multiworld.woodcutting_task_weight[self.player] if len(woodcutting_tasks) > 0 else 0
+        woodcutting_tasks = woodcutting_tasks[0:self.options.max_woodcutting_tasks]
+        woodcutting_weight = self.options.woodcutting_task_weight if len(woodcutting_tasks) > 0 else 0
 
         all_tasks = [
             combat_tasks,

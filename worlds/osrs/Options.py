@@ -1,4 +1,6 @@
-from Options import Choice, Toggle, Range
+from dataclasses import dataclass
+
+from Options import Choice, Toggle, Range, PerGameCommonOptions
 
 MAX_COMBAT_TASKS = 20
 MAX_PRAYER_TASKS = 3
@@ -430,43 +432,43 @@ class GeneralTaskWeight(Range):
     default = 50
 
 
-OSRSOptions = {
-    "starting_area": StartingArea,
-    "brutal_grinds": BrutalGrinds,
-    "progressive_tasks": ProgressiveTasks,
-    "max_combat_level": MaxCombatLevel,
-    "max_combat_tasks": MaxCombatTasks,
-    "combat_task_weight": CombatTaskWeight,
-    "max_prayer_level": MaxPrayerLevel,
-    "max_prayer_tasks": MaxPrayerTasks,
-    "prayer_task_weight": PrayerTaskWeight,
-    "max_magic_level": MaxMagicLevel,
-    "max_magic_tasks": MaxMagicTasks,
-    "magic_task_weight": MagicTaskWeight,
-    "max_runecraft_level": MaxRunecraftLevel,
-    "max_runecraft_tasks": MaxRunecraftTasks,
-    "runecraft_task_weight": RunecraftTaskWeight,
-    "max_crafting_level": MaxCraftingLevel,
-    "max_crafting_tasks": MaxCraftingTasks,
-    "crafting_task_weight": CraftingTaskWeight,
-    "max_mining_level": MaxMiningLevel,
-    "max_mining_tasks": MaxMiningTasks,
-    "mining_task_weight": MiningTaskWeight,
-    "max_smithing_level": MaxSmithingLevel,
-    "max_smithing_tasks": MaxSmithingTasks,
-    "smithing_task_weight": SmithingTaskWeight,
-    "max_fishing_level": MaxFishingLevel,
-    "max_fishing_tasks": MaxFishingTasks,
-    "fishing_task_weight": FishingTaskWeight,
-    "max_cooking_level": MaxCookingLevel,
-    "max_cooking_tasks": MaxCookingTasks,
-    "cooking_task_weight": CookingTaskWeight,
-    "max_firemaking_level": MaxFiremakingLevel,
-    "max_firemaking_tasks": MaxFiremakingTasks,
-    "firemaking_task_weight": FiremakingTaskWeight,
-    "max_woodcutting_level": MaxWoodcuttingLevel,
-    "max_woodcutting_tasks": MaxWoodcuttingTasks,
-    "woodcutting_task_weight": WoodcuttingTaskWeight,
-    "minimum_general_tasks": MinimumGeneralTasks,
-    "general_task_weight": GeneralTaskWeight,
-}
+@dataclass
+class OSRSOptions(PerGameCommonOptions):
+    starting_area: StartingArea
+    brutal_grinds: BrutalGrinds
+    progressive_tasks: ProgressiveTasks
+    max_combat_level: MaxCombatLevel
+    max_combat_tasks: MaxCombatTasks
+    combat_task_weight: CombatTaskWeight
+    max_prayer_level: MaxPrayerLevel
+    max_prayer_tasks: MaxPrayerTasks
+    prayer_task_weight: PrayerTaskWeight
+    max_magic_level: MaxMagicLevel
+    max_magic_tasks: MaxMagicTasks
+    magic_task_weight: MagicTaskWeight
+    max_runecraft_level: MaxRunecraftLevel
+    max_runecraft_tasks: MaxRunecraftTasks
+    runecraft_task_weight: RunecraftTaskWeight
+    max_crafting_level: MaxCraftingLevel
+    max_crafting_tasks: MaxCraftingTasks
+    crafting_task_weight: CraftingTaskWeight
+    max_mining_level: MaxMiningLevel
+    max_mining_tasks: MaxMiningTasks
+    mining_task_weight: MiningTaskWeight
+    max_smithing_level: MaxSmithingLevel
+    max_smithing_tasks: MaxSmithingTasks
+    smithing_task_weight: SmithingTaskWeight
+    max_fishing_level: MaxFishingLevel
+    max_fishing_tasks: MaxFishingTasks
+    fishing_task_weight: FishingTaskWeight
+    max_cooking_level: MaxCookingLevel
+    max_cooking_tasks: MaxCookingTasks
+    cooking_task_weight: CookingTaskWeight
+    max_firemaking_level: MaxFiremakingLevel
+    max_firemaking_tasks: MaxFiremakingTasks
+    firemaking_task_weight: FiremakingTaskWeight
+    max_woodcutting_level: MaxWoodcuttingLevel
+    max_woodcutting_tasks: MaxWoodcuttingTasks
+    woodcutting_task_weight: WoodcuttingTaskWeight
+    minimum_general_tasks: MinimumGeneralTasks
+    general_task_weight: GeneralTaskWeight
