@@ -2509,19 +2509,10 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             is_outdoor_map = outdoor_map(entrance_a.parent_region.name)
 
             if multiworld.door_shuffle[player] in ("interiors", "full") or len(entrances) != len(reachable_entrances):
-                if multiworld.door_shuffle[player] == "decoupled":
-                    # This sort is to try to prevent, for example, Silph Co Elevator connecting to Silph Co Elevator,
-                    # where the different doors are all in their own subregions.
-                    # There may be subregions that are not connected directly, like with Mt Moon B1F-C.
-                    # By excepting non-reachable entrances from this sort, it leaves a possibility of connecting to such
-                    # subregions.
-                    entrances.sort(key=lambda e: e.parent_region.name.split("-")[0]
-                                   == entrance_a.parent_region.name.split("-")[0] and e in reachable_entrances)
-                else:
-                    entrances.sort(key=lambda e: e in reachable_entrances)
 
                 find_dead_end = False
-                if (len(reachable_entrances) > (1 if multiworld.door_shuffle[player] in ("insanity", "decoupled") else 8)
+                if (len(reachable_entrances) > (1 if multiworld.door_shuffle[player] == "insanity"
+                        else 2 if multiworld.door_shuffle[player] == "decoupled" else 8)
                         and len(entrances) <= (starting_entrances - 3)):
                     find_dead_end = True
 
@@ -2533,6 +2524,17 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     if entrances[0].name in unreachable_outdoor_entrances and len([entrance for entrance
                             in reachable_entrances if not outdoor_map(entrance.parent_region.name)]) > 1:
                         find_dead_end = True
+
+                if multiworld.door_shuffle[player] == "decoupled":
+                    # This sort is to try to prevent, for example, Silph Co Elevator connecting to Silph Co Elevator,
+                    # where the different doors are all in their own subregions.
+                    # There may be subregions that are not connected directly, like with Mt Moon B1F-C.
+                    # By excepting non-reachable entrances from this sort, it leaves a possibility of connecting to such
+                    # subregions.
+                    dc_destinations.sort(key=lambda e: e.parent_region.name.split("-")[0]
+                                         == entrance_a.parent_region.name.split("-")[0] and e in reachable_entrances)
+                else:
+                    entrances.sort(key=lambda e: e in reachable_entrances)
 
                 if multiworld.door_shuffle[player] == "decoupled":
                     destinations = dc_destinations
