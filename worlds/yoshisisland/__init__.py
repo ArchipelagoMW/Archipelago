@@ -1,17 +1,14 @@
 import os
 import typing
 import threading
-import dataclasses
 
-from typing import Dict, List, Set, TextIO
+from typing import List, Set, TextIO
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from Options import PerGameCommonOptions
-import Patch
 import settings
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
 from .Locations import get_locations
-from .Regions import create_regions
+from .Regions import init_areas
 from .Options import YoshisIslandOptions
 from .setup_game import setup_gamevars
 from .Client import YISNIClient
@@ -46,14 +43,14 @@ class YIWorld(World):
     """Yoshi's Island is a 2D platforming game.
         During a delivery, Bowser's evil ward, Kamek, attacked the stork, kidnapping Luigi and dropping Mario onto Yoshi's Island.
         As Yoshi, you must run, jump, and throw eggs to escort the baby Mario across the island to defeat Bowser and reunite the two brothers with their parents."""
-    game: str = "Yoshi's Island"
+    game = "Yoshi's Island"
     option_definitions = YoshisIslandOptions
     data_version = 1
     required_client_version = (0, 3, 5)
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location.name: location.code for
-                           location in get_locations(None, None, None, None, None)}
+                           location in get_locations(None)}
     item_name_groups = get_item_names_per_category()
 
     web = YIWeb()
@@ -182,10 +179,7 @@ class YIWorld(World):
         return item
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, get_locations
-                    (self.multiworld, self.player, self.boss_ap_loc, self.luigi_pieces, self),
-                    self.location_cache, self, self.boss_ap_loc, 
-                    self.level_location_list, self.luigi_pieces)
+        init_areas(self, get_locations(self))
 
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.options.trap_percent.value
@@ -203,17 +197,17 @@ class YIWorld(World):
         else:
             set_hard_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
-        self.multiworld.get_location("Burt The Bashful Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Salvo The Slime Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Bigger Boo Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Roger The Ghost Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Prince Froggy Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Naval Piranha Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Marching Milde Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Hookbill The Koopa Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Sluggy The Unshaven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Raphael The Raven Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
-        self.multiworld.get_location("Tap-Tap The Red Nose Defeated", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Burt The Bashful's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Salvo The Slime's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Bigger Boo's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Roger The Ghost's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Prince Froggy's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Naval Piranha's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Marching Milde's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Hookbill The Koopa's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Sluggy The Unshaven's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Raphael The Raven's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
+        self.multiworld.get_location("Tap-Tap The Red Nose's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
 
         if self.options.goal.value == 1:
             self.multiworld.get_location("Reconstituted Luigi", self.player).place_locked_item(self.create_item("Saved Baby Luigi"))

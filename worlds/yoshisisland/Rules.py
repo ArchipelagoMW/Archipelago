@@ -1,4 +1,3 @@
-from BaseClasses import MultiWorld
 from .level_logic import YoshiLogic
 from worlds.generic.Rules import set_rule
 
@@ -6,7 +5,7 @@ from worlds.generic.Rules import set_rule
 
 logic: YoshiLogic
 def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
-    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
+    logic = YoshiLogic(world)
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Red Coins", player), lambda state: state.has_all({'Dashed Stairs', 'Beanstalk'}, player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Flowers", player), lambda state: state.has_all({'Dashed Stairs', 'Beanstalk'}, player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Stars", player), lambda state: state.has_all({'Tulip', 'Beanstalk', 'Dashed Stairs'}, player))
@@ -23,6 +22,8 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Red Coins", player), lambda state: state.has_all({'Spring Ball'}, player))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Stars", player), lambda state: state.has_all({'Spring Ball'}, player) and (logic.has_midring(state) or state.has('Key', player)))
+    set_rule(multiworld.get_location("Burt The Bashful's Fort: Level Clear", player), lambda state: logic._14CanFightBoss(state))
+    set_rule(multiworld.get_location("Burt The Bashful Defeated", player), lambda state: state.has_all({'Egg Plant'}, self.player))
 
     set_rule(multiworld.get_location("Hop! Hop! Donut Lifts: Stars", player), lambda state: logic.has_midring(state) or logic.cansee_clouds(state))
 
@@ -32,7 +33,7 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Level Clear", player), lambda state: state.has_all({'Large Spring Ball', 'Beanstalk'}, player))
 
     set_rule(multiworld.get_location("Touch Fuzzy Get Dizzy: Red Coins", player), lambda state: state.has_all({'Flashing Eggs', 'Spring Ball', 'Chomp Rock', 'Beanstalk'}, player))
-    set_rule(multiworld.get_location("Touch Fuzzy Get Dizzy: Stars", player), lambda state: lambda state: logic.has_midring(state) or (logic.cansee_clouds and state.has_all({'Spring Ball', 'Chomp Rock', 'Beanstalk'}, player)))
+    set_rule(multiworld.get_location("Touch Fuzzy Get Dizzy: Stars", player), lambda state: logic.has_midring(state) or (logic.cansee_clouds and state.has_all({'Spring Ball', 'Chomp Rock', 'Beanstalk'}, player)))
 
     set_rule(multiworld.get_location("Salvo The Slime's Castle: Red Coins", player), lambda state: state.has_all({'Platform Ghost'}, player))
     set_rule(multiworld.get_location("Salvo The Slime's Castle: Flowers", player), lambda state: state.has_all({'Platform Ghost'}, player))
@@ -234,7 +235,7 @@ def set_easy_extra_rules(world, multiworld, player: int, logic):
 
         
 def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
-    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
+    logic = YoshiLogic(world)
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Red Coins", player), lambda state: state.has('Dashed Stairs', player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Flowers", player), lambda state: state.has('Dashed Stairs', player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Stars", player), lambda state: state.has_any({'Tulip', 'Dashed Stairs'}, player))
@@ -246,6 +247,8 @@ def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Red Coins", player), lambda state: state.has_all({'Spring Ball'}, player))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Stars", player), lambda state: state.has_all({'Spring Ball'}, player))
+    set_rule(multiworld.get_location("Burt The Bashful's Fort: Level Clear", player), lambda state: logic._14CanFightBoss(state))
+    
 
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Red Coins", player), lambda state: state.has_all({'Large Spring Ball', 'Flashing Eggs', 'Mole Tank Morph', '! Switch'}, player))
     set_rule(multiworld.get_location("Shy-Guys On Stilts: Flowers", player), lambda state: state.has_all({'Large Spring Ball'}, player))
@@ -433,7 +436,7 @@ def set_normal_extra_rules(world, multiworld, player: int, logic):
     set_rule(multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 1) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
 
 def set_hard_rules(world, multiworld, player: int, boss_order, luigi_pieces):
-    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
+    logic = YoshiLogic(world)
 
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Red Coins", player), lambda state: state.has_all({'Spring Ball'}, player))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))

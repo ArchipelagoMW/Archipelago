@@ -3,17 +3,17 @@ from BaseClasses import MultiWorld, CollectionState
 
 class YoshiLogic:
     player: int
-    game_logic: tuple
+    game_logic: str
     midring_start: bool
     clouds_always_visible: bool
     consumable_logic: bool
     luigi_pieces: int
 
 
-    def __init__(self, multiworld: MultiWorld, player: int, boss_order: Optional[list], luigi_pieces: int, world):
-        self.player = player
-        self.boss_order = boss_order
-        self.luigi_pieces = luigi_pieces
+    def __init__(self, world):
+        self.player = world.player
+        self.boss_order = world.boss_order
+        self.luigi_pieces = world.luigi_pieces
 
         if world:
             if world.options.stage_logic.value == 0:
@@ -162,7 +162,7 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Egg Plant'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has_all({'Fire Melon'}, self.player)
         else:
             return (state.has('Egg Capacity Upgrade', self.player, 5) or state.has('Egg Plant', self.player))
 

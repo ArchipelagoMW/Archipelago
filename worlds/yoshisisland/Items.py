@@ -1,9 +1,9 @@
-from typing import Dict, Set, Tuple, NamedTuple
+from typing import Dict, Set, Tuple, NamedTuple, Optional
 
 class ItemData(NamedTuple):
     category: str
     code: int
-    amount: int = 1
+    amount: Optional[int] = 1
     progression: bool = False
     progression_skip_balancing: bool = False
     useful: bool = False

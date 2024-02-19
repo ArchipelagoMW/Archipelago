@@ -13,8 +13,13 @@ def __init__(self, player: int, name: str = " ", address: int = None, parent=Non
     self.LevelID = LevelID
 
 
-def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location], world, boss_order: list, level_location_list: list, luigi_pieces: int):
-    logic = YoshiLogic(multiworld, player, boss_order, luigi_pieces, world)
+def init_areas(world, locations: Tuple[LocationData, ...]):
+    multiworld = world.multiworld
+    player = world.player
+    location_cache = world.location_cache
+    boss_order = world.boss_order
+    luigi_pieces = world.luigi_pieces
+    logic = YoshiLogic(world)
 
     locations_per_region = get_locations_per_region(locations)
 
