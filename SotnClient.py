@@ -153,24 +153,36 @@ class SotnContext(CommonContext):
             self._set_message(msg, SYSTEM_MESSAGE_ID)
         elif cmd == "PrintJSON":
             if 'item' in args:
+                message_type: NamedTuple = args['type']
                 received: NamedTuple = args['item']
-                loc_data: LocationData = get_location_data(received.location)
-                item_data: ItemData = get_item_data(received.item)
 
-                if received.location == 127083080 or received.location == 127020003:
-                    # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
-                    self.misplaced_items.append(166)
 
-                if base_item_id <= received.item <= base_item_id + 423:
-                    if loc_data is not None:
-                        if loc_data.can_be_relic:
-                            # There is a item on a relic spot, send it to the player
-                            if item_data.type != IType.RELIC:
-                                self.misplaced_items.append(received.item - base_item_id)
+
+                if message_type != "Hint":
+                    # Check if it's our item first
+                    if base_item_id <= received.item <= base_item_id + 423:
+                        # Check if the item came from offworld
+                        if base_location_id <= received.location <= base_location_id + 310024:
+                            loc_data: LocationData = get_location_data(received.location)
                         else:
-                            # Normal location containing a relic
-                            if item_data.type == IType.RELIC:
-                                self.misplaced_items.append(received.item - base_item_id)
+                            loc_data = None
+
+                        item_data: ItemData = get_item_data(received.item)
+
+
+                        if received.location == 127083080 or received.location == 127020003:
+                            # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
+                            self.misplaced_items.append(166)
+
+                        if loc_data is not None:
+                            if loc_data.can_be_relic:
+                                # There is a item on a relic spot, send it to the player
+                                if item_data.type != IType.RELIC:
+                                    self.misplaced_items.append(received.item - base_item_id)
+                            else:
+                                # Normal location containing a relic
+                                if item_data.type == IType.RELIC:
+                                    self.misplaced_items.append(received.item - base_item_id)
         elif cmd == "RoomInfo":
             self.seed_name = args['seed_name']
 
@@ -376,8 +388,8 @@ async def psx_sync_task(ctx: SotnContext):
             pass
     print("exiting PSX sync task")
 
-# Todo: Test changes in here to launch from the ArchipelagoLaucher, imports should also be update for apworld
-if __name__ == '__main__':
+
+def main():
 
     Utils.init_logging("SotnClient")
 
@@ -415,3 +427,7 @@ if __name__ == '__main__':
 
     asyncio.run(main())
     colorama.deinit()
+
+
+if __name__ == '__main__':
+    main()
