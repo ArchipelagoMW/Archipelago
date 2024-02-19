@@ -23,7 +23,7 @@ For reviews of PRs that could affect multiple worlds, it is helpful to state whi
 The original author may not have been able to test all worlds, or didn't know it would affect another world.
 Please also tell us if you looked at code, just did functional testing, did both or neither.
 If the PR depends on other PRs to be tested, please state what you merged into what for testing.
-In very few cases, besides the final appoval, we can guess what "LGTM" means, so this should not be the norm.
+We cannot determine what "LGTM" means without additional context, so this should not be the norm.
 
 Other than these requests, we tend to judge code on a case by case basis. 
 
