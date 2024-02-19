@@ -3,38 +3,13 @@ import unittest
 
 import Options
 from Options import Accessibility
+from test.general import generate_multiworld, generate_items, generate_locations
 from worlds.AutoWorld import World
 from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
     ItemClassification, CollectionState
 from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
-
-
-def generate_multiworld(players: int = 1) -> MultiWorld:
-    multiworld = MultiWorld(players)
-    multiworld.player_name = {}
-    multiworld.state = CollectionState(multiworld)
-    for i in range(players):
-        player_id = i+1
-        world = World(multiworld, player_id)
-        multiworld.game[player_id] = f"Game {player_id}"
-        multiworld.worlds[player_id] = world
-        multiworld.player_name[player_id] = "Test Player " + str(player_id)
-        region = Region("Menu", player_id, multiworld, "Menu Region Hint")
-        multiworld.regions.append(region)
-        for option_key, option in Options.PerGameCommonOptions.type_hints.items():
-            if hasattr(multiworld, option_key):
-                getattr(multiworld, option_key).setdefault(player_id, option.from_any(getattr(option, "default")))
-            else:
-                setattr(multiworld, option_key, {player_id: option.from_any(getattr(option, "default"))})
-        # TODO - remove this loop once all worlds use options dataclasses
-        world.options = world.options_dataclass(**{option_key: getattr(multiworld, option_key)[player_id]
-                                                   for option_key in world.options_dataclass.type_hints})
-
-    multiworld.set_seed(0)
-
-    return multiworld
 
 
 class PlayerDefinition(object):
@@ -103,28 +78,6 @@ def generate_player_data(multiworld: MultiWorld, player_id: int, location_count:
     multiworld.itempool += basic_items
 
     return PlayerDefinition(multiworld, player_id, menu, locations, prog_items, basic_items)
-
-
-def generate_locations(count: int, player_id: int, address: int = None, region: Region = None, tag: str = "") -> List[Location]:
-    locations = []
-    prefix = "player" + str(player_id) + tag + "_location"
-    for i in range(count):
-        name = prefix + str(i)
-        location = Location(player_id, name, address, region)
-        locations.append(location)
-        region.locations.append(location)
-    return locations
-
-
-def generate_items(count: int, player_id: int, advancement: bool = False, code: int = None) -> List[Item]:
-    items = []
-    item_type = "prog" if advancement else ""
-    for i in range(count):
-        name = "player" + str(player_id) + "_" + item_type + "item" + str(i)
-        items.append(Item(name,
-                          ItemClassification.progression if advancement else ItemClassification.filler,
-                          code, player_id))
-    return items
 
 
 def names(objs: list) -> Iterable[str]:

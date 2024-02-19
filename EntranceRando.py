@@ -372,10 +372,13 @@ def randomize_entrances(
                 f"All unplaced entrances: {unplaced_entrances}\n"
                 f"All unplaced exits: {unplaced_exits}")
 
-    er_targets = (entrance for region in world.multiworld.get_regions(world.player)
-                  for entrance in region.entrances if not entrance.parent_region)
+    er_targets = [entrance for region in world.multiworld.get_regions(world.player)
+                  for entrance in region.entrances if not entrance.parent_region]
     exits = [ex for region in world.multiworld.get_regions(world.player)
              for ex in region.exits if not ex.connected_region]
+    if len(er_targets) != len(exits):
+        raise EntranceRandomizationError(f"Unable to randomize entrances due to a mismatched count of "
+                                         f"entrances ({len(er_targets)}) and exits ({len(exits)}.")
     for entrance in er_targets:
         entrance_lookup.add(entrance)
 
