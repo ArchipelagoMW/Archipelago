@@ -94,7 +94,8 @@ class OpenRCT2World(World):
                       self.options.forbid_marketing_campaigns.value,
                       self.options.forbid_tree_removal.value]
         # Grabs options for item generation
-        scenario = self.options.scenario
+        scenario = self.options.scenario.value
+        print("dog)")
         print(scenario)
         eligible_scenarios = []
         # If the scenario is random, pick which random scenario it will be
@@ -125,9 +126,8 @@ class OpenRCT2World(World):
         # Finish assigning the scenario
         if eligible_scenarios:
             new_scenario = str(random.choice(eligible_scenarios))  # Pick the Scenario
-            scenario = SelectedScenario(
-                getattr(Scenario, new_scenario))  # Reassign the scenario option to the randomly selected choice
-            self.options.scenario = scenario
+            scenario = Scenario[new_scenario].value  # Reassign the scenario option to the randomly selected choice
+            self.options.scenario.value = scenario
 
         monopoly_mode = self.options.monopoly_mode.value
         include_gamespeed_items = self.options.include_gamespeed_items.value
