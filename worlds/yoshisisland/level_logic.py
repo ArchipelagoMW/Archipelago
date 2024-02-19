@@ -1,5 +1,4 @@
-from typing import Optional
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import CollectionState
 
 class YoshiLogic:
     player: int

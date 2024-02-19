@@ -191,11 +191,11 @@ class YIWorld(World):
 
     def set_rules(self):
         if self.options.stage_logic == 0:
-            set_easy_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
+            set_easy_rules(self)
         elif self.options.stage_logic == 1:
-            set_normal_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
+            set_normal_rules(self)
         else:
-            set_hard_rules(self, self.multiworld, self.player, self.boss_order, self.luigi_pieces)
+            set_hard_rules(self)
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
         self.multiworld.get_location("Burt The Bashful's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))

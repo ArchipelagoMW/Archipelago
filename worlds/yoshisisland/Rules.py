@@ -4,8 +4,11 @@ from worlds.generic.Rules import set_rule
 
 
 logic: YoshiLogic
-def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
+def set_easy_rules(world):
     logic = YoshiLogic(world)
+    multiworld = world.multiworld
+    player = world.player
+
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Red Coins", player), lambda state: state.has_all({'Dashed Stairs', 'Beanstalk'}, player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Flowers", player), lambda state: state.has_all({'Dashed Stairs', 'Beanstalk'}, player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Stars", player), lambda state: state.has_all({'Tulip', 'Beanstalk', 'Dashed Stairs'}, player))
@@ -22,8 +25,6 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Red Coins", player), lambda state: state.has_all({'Spring Ball'}, player))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Stars", player), lambda state: state.has_all({'Spring Ball'}, player) and (logic.has_midring(state) or state.has('Key', player)))
-    set_rule(multiworld.get_location("Burt The Bashful's Fort: Level Clear", player), lambda state: logic._14CanFightBoss(state))
-    set_rule(multiworld.get_location("Burt The Bashful Defeated", player), lambda state: state.has_all({'Egg Plant'}, player))
 
     set_rule(multiworld.get_location("Hop! Hop! Donut Lifts: Stars", player), lambda state: logic.has_midring(state) or logic.cansee_clouds(state))
 
@@ -204,10 +205,10 @@ def set_easy_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68CollectibleRoute(state))
     set_rule(multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68Route(state))
 
-    set_easy_extra_rules(world, world.multiworld, world.player, logic)
+    set_easy_extra_rules(world, multiworld, player, logic)
 
-def set_easy_extra_rules(world, multiworld, player: int, logic):
-    if world.options.extras_enabled != 1:
+def set_easy_extra_rules(world, multiworld, player, logic):
+    if not world.options.extras_enabled:
         return
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Flowers", player), lambda state: state.has_all({'Poochy'}, player))
@@ -234,8 +235,11 @@ def set_easy_extra_rules(world, multiworld, player: int, logic):
     set_rule(multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 2) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
 
         
-def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
+def set_normal_rules(world):
     logic = YoshiLogic(world)
+    multiworld = world.multiworld
+    player = world.player
+
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Red Coins", player), lambda state: state.has('Dashed Stairs', player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Flowers", player), lambda state: state.has('Dashed Stairs', player))
     set_rule(multiworld.get_location("Make Eggs, Throw Eggs: Stars", player), lambda state: state.has_any({'Tulip', 'Dashed Stairs'}, player))
@@ -406,10 +410,10 @@ def set_normal_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68CollectibleRoute(state))
     set_rule(multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68Route(state))
 
-    set_normal_extra_rules(world, world.multiworld, world.player, logic)
+    set_normal_extra_rules(world, multiworld, player, logic)
 
-def set_normal_extra_rules(world, multiworld, player: int, logic):
-    if world.options.extras_enabled != 1:
+def set_normal_extra_rules(world, multiworld, player, logic):
+    if not world.options.extras_enabled:
         return
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Flowers", player), lambda state: state.has_all({'Poochy'}, player))
@@ -435,8 +439,10 @@ def set_normal_extra_rules(world, multiworld, player: int, logic):
     set_rule(multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: logic.has_midring(state) or state.has(('Large Spring Ball'), player))
     set_rule(multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 1) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
 
-def set_hard_rules(world, multiworld, player: int, boss_order, luigi_pieces):
+def set_hard_rules(world):
     logic = YoshiLogic(world)
+    multiworld = world.multiworld
+    player = world.player
 
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Red Coins", player), lambda state: state.has_all({'Spring Ball'}, player))
     set_rule(multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({'Spring Ball', 'Key'}, player) and (state.has('Egg Capacity Upgrade', player, 3) or logic.combat_item(state)))
@@ -567,10 +573,10 @@ def set_hard_rules(world, multiworld, player: int, boss_order, luigi_pieces):
     set_rule(multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph'}, player) and logic._68CollectibleRoute(state))
     set_rule(multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph'}, player) and logic._68Route(state))
 
-    set_hard_extra_rules(world, world.multiworld, world.player, logic)
+    set_hard_extra_rules(world, multiworld, player, logic)
 
-def set_hard_extra_rules(world, multiworld, player: int, logic):
-    if world.options.extras_enabled != 1:
+def set_hard_extra_rules(world, multiworld, player, logic):
+    if not world.options.extras_enabled:
         return
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
     set_rule(multiworld.get_location("Poochy Ain't Stupid: Flowers", player), lambda state: state.has_all({'Poochy'}, player))

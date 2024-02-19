@@ -17,8 +17,6 @@ def init_areas(world, locations: Tuple[LocationData, ...]):
     multiworld = world.multiworld
     player = world.player
     location_cache = world.location_cache
-    boss_order = world.boss_order
-    luigi_pieces = world.luigi_pieces
     logic = YoshiLogic(world)
 
     locations_per_region = get_locations_per_region(locations)
