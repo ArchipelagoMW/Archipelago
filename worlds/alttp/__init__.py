@@ -329,8 +329,7 @@ class ALTTPWorld(World):
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
-                    if multiworld.master_keys[player] and (not world.key_drop_shuffle[player]) \
-                            and dungeon_item == "smallkey_shuffle":
+                    if multiworld.master_keys[player] and dungeon_item == "small_key_shuffle":
                         # The Ice Palace small key cannot be made reachable in the Ice Palace under these conditions
                         self.dungeon_local_item_names.remove("Small Key (Ice Palace)")
                         self.dungeon_specific_item_names.remove("Small Key (Ice Palace)")
@@ -791,7 +790,7 @@ class ALTTPWorld(World):
             slot_options = ["crystals_needed_for_gt", "crystals_needed_for_ganon", "open_pyramid",
                             "big_key_shuffle", "small_key_shuffle", "compass_shuffle", "map_shuffle",
                             "progressive", "swordless", "retro_bow", "retro_caves", "shop_item_slots",
-                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "key_drop_shuffle", "bombless_start",
+                            "boss_shuffle", "pot_shuffle", "enemy_shuffle", "bombless_start",
                             "randomize_shop_inventories", "shuffle_shop_inventories", "shuffle_capacity_upgrades",
                             "entrance_shuffle", "dark_room_logic", "goal", "mode",
                             "triforce_pieces_mode", "triforce_pieces_percentage", "triforce_pieces_required",
@@ -821,10 +820,10 @@ class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
         if self.multiworld.glitches_required[player] == 'no_logic':
             return True
-        if self.multiworld.smallkey_shuffle[player] == small_key_shuffle.option_universal:
+        if self.multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             if self.multiworld.master_keys[player]:
                 return self.has("Small Key (Universal)", player)
             return can_buy_unlimited(self, 'Small Key (Universal)', player)
         if self.multiworld.master_keys[player]:
             return self.has(item, player)
-        return self.prog_items[item, player] >= count
+        return self.has(item, player, count)

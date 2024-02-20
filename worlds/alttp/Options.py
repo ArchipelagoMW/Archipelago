@@ -43,8 +43,7 @@ class Goal(Choice):
     Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
     Local Triforce Hunt: Collect Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
     Ganon Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then kill Ganon
-    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon
-    Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
+    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon"""
     display_name = "Goal"
     default = 0
     option_ganon = 0
@@ -211,18 +210,9 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
-class key_drop_shuffle(Toggle):
-    """Shuffle keys found in pots and dropped from killed enemies,
-    respects the small key and big key shuffle options."""
-    display_name = "Key Drop Shuffle"
-
-
-
 class MasterSmallKeys(Toggle):
     """Each dungeon only has one Small Key, which is not consumed upon opening doors.
-    If Universal Small Keys is on, there will be a single universal Small Key.
-    If Key Drop Shuffle is off, key drop keys will be turned into Small Hearts. If Small Key Shuffle is also set to
-    Original Dungeons, the Ice Palace small key will not be confined to the Ice Palace."""
+    If Universal Small Keys is on, there will be a single universal Small Key."""
     display_name = "Master Keys"
     default = False
 
@@ -751,7 +741,6 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "entrance_shuffle_seed": EntranceShuffleSeed,
     "big_key_shuffle": big_key_shuffle,
     "small_key_shuffle": small_key_shuffle,
-    "key_drop_shuffle": key_drop_shuffle,
     "master_keys": MasterSmallKeys,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,

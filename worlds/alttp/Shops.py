@@ -322,7 +322,8 @@ def set_up_shops(multiworld, player: int):
             slots = [0, 1, 2]
             multiworld.random.shuffle(slots)
             slots = iter(slots)
-            if multiworld.smallkey_shuffle[player] == small_key_shuffle.option_universal and not world.master_keys[player]:
+            if (multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal
+                    and not multiworld.master_keys[player]):
                 shop.add_inventory(next(slots), 'Small Key (Universal)', 100)
             if multiworld.retro_bow[player]:
                 shop.push_inventory(next(slots), 'Single Arrow', 80)
