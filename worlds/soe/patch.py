@@ -1,5 +1,5 @@
 import os
-from typing import Optional
+from typing import BinaryIO, Optional
 
 import Utils
 from worlds.Files import APDeltaPatch
@@ -30,7 +30,7 @@ def get_base_rom_path(file_name: Optional[str] = None) -> str:
     return file_name
 
 
-def read_rom(stream, strip_header=True) -> bytes:
+def read_rom(stream: BinaryIO, strip_header: bool = True) -> bytes:
     """Reads rom into bytearray and optionally strips off any smc header"""
     data = stream.read()
     if strip_header and len(data) % 0x400 == 0x200:
@@ -40,5 +40,5 @@ def read_rom(stream, strip_header=True) -> bytes:
 
 if __name__ == '__main__':
     import sys
-    print('Please use ../../Patch.py', file=sys.stderr)
+    print('Please use ../../patch.py', file=sys.stderr)
     sys.exit(1)
