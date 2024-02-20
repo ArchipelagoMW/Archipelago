@@ -178,7 +178,7 @@ class WitnessPlayerItems:
         trap_weight = self._world.options.trap_percentage / 100
         trap_items = {name: self._world.options.trap_weights.get(name, 0)
                       for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.TRAP
-                      if isinstance(data.definition, WeightedItemDefinition)}
+                      and isinstance(data.definition, WeightedItemDefinition)}
 
         if not sum(trap_items.values()):
             trap_weight = 0
