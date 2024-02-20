@@ -2,7 +2,7 @@ import hashlib
 import os
 
 import Utils
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 from settings import get_settings
 
 MD5Europe = '020411d3b08f5639eb8cb878283f84bf'

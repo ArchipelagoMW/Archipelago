@@ -56,7 +56,7 @@ class Yugioh06World(World):
     game = "Yu-Gi-Oh! 2006"
     data_version = 1
     web = Yugioh06Web()
-    options = Yugioh06Options
+    options: Yugioh06Options
     options_dataclass = Yugioh06Options
     settings_key = "yugioh06_settings"
     settings: ClassVar[Yugioh2006Setting]

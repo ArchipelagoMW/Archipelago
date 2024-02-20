@@ -49,7 +49,7 @@ class YuGiOh2006Client(BizHawkClient):
 
         ctx.game = self.game
         ctx.items_handling = 0b001
-        ctx.want_slot_data = True
+        ctx.want_slot_data = False
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
@@ -63,7 +63,7 @@ class YuGiOh2006Client(BizHawkClient):
                                              (0x5308, 32, "EWRAM"),
                                              (0x5325, 1, "EWRAM"),
                                              (0x6c38, 4, "EWRAM")])
-            game_state = bytes([byte for byte in read_state[0]]).decode("utf-8")
+            game_state = read_state[0].decode("utf-8")
             locations = read_state[1]
             items = read_state[2]
             amount_items = int.from_bytes(read_state[3], "little")
