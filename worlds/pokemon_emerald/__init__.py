@@ -1289,25 +1289,37 @@ class PokemonEmeraldWorld(World):
         if self.options.dexsanity:
             from collections import defaultdict
 
+            slot_to_rod = {
+                0: "_OLD_ROD",
+                1: "_OLD_ROD",
+                2: "_GOOD_ROD",
+                3: "_GOOD_ROD",
+                4: "_GOOD_ROD",
+                5: "_SUPER_ROD",
+                6: "_SUPER_ROD",
+                7: "_SUPER_ROD",
+                8: "_SUPER_ROD",
+                9: "_SUPER_ROD"
+            }
+
             species_maps = defaultdict(set)
             for map in self.modified_maps.values():
                 if map.land_encounters is not None:
                     for encounter in map.land_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                        species_maps[encounter].add(map.name[4:] + "_GRASS")
 
                 if map.water_encounters is not None:
                     for encounter in map.water_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                        species_maps[encounter].add(map.name[4:] + "_WATER")
 
                 if map.fishing_encounters is not None:
-                    for encounter in map.fishing_encounters.slots:
-                        species_maps[encounter].add(map.name[4:])
+                    for slot, encounter in enumerate(map.fishing_encounters.slots):
+                        species_maps[encounter].add(map.name[4:] + slot_to_rod[slot])
 
-            new_hint_data = {
+            hint_data[self.player] = {
                 self.location_name_to_id[f"Pokedex - {emerald_data.species[species].label}"]: ", ".join(maps)
                 for species, maps in species_maps.items()
             }
-            hint_data[self.player] = new_hint_data
 
     def modify_multidata(self, multidata: Dict[str, Any]):
         import base64
