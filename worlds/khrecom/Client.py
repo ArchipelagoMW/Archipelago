@@ -85,11 +85,18 @@ class KHRECOMContext(CommonContext):
                 with open(os.path.join(self.game_communication_path, filename), 'w') as f:
                     f.close()
             if "EXP Multiplier" in list(args['slot_data'].keys()):
-                exp_multiplier = args['slot_data']["XP Multiplier"]
+                exp_multiplier = args['slot_data']["EXP Multiplier"]
             else:
                 exp_multiplier = 1
             with open(os.path.join(self.game_communication_path, "xpmult.cfg"), 'w') as f:
                 f.write(str(exp_multiplier))
+                f.close()
+            if "World Order" in list(args['slot_data'].keys()):
+                world_order = args['slot_data']["World Order"]
+            else:
+                world_order = "2,3,4,5,6,7,8,9,10"
+            with open(os.path.join(self.game_communication_path, "worldorder.cfg"), 'w') as f:
+                f.write(str(world_order))
                 f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]

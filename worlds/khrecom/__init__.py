@@ -45,10 +45,12 @@ class KHRECOMWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
+    
+    world_order = []
 
     def create_items(self):
         item_pool: List[KHRECOMItem] = []
-        self.multiworld.get_location("Destiny Islands Post Floor (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
+        self.multiworld.get_location("12F Exit Hall Larxene II (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
         self.multiworld.get_location("Final Marluxia", self.player).place_locked_item(self.create_item("Victory"))
         starting_locations = get_locations_by_category("Starting")
         starting_locations = self.random.sample(list(starting_locations.keys()),4)
@@ -115,11 +117,23 @@ class KHRECOMWorld(World):
         return KHRECOMItem(name, data.classification, data.code, self.player)
 
     def set_rules(self):
-        set_rules(self.multiworld, self.player, self.options.days_locations)
+        set_rules(self.multiworld, self.player, self.options)
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player, self.options.days_locations, self.options.checks_behind_leon)
+        create_regions(self.multiworld, self.player, self.options)
     
     def fill_slot_data(self) -> dict:
-        slot_data = {"EXP Multiplier":      int(self.options.exp_multiplier)}
+        self.decide_world_order()
+        world_order_string = ""
+        for world_id in self.world_order:
+            world_order_string = world_order_string + str(world_id) + ","
+        world_order_string = world_order_string[:-1]
+        slot_data = {"EXP Multiplier":      int(self.options.exp_multiplier)
+                    ,"World Order": world_order_string}
         return slot_data
+    
+    def decide_world_order(self):
+        if len(self.world_order) == 0:
+            possible_world_assignments = [2,3,4,5,6,7,8,9,10]
+            self.random.shuffle(possible_world_assignments)
+            self.world_order = possible_world_assignments

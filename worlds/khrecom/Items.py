@@ -185,7 +185,7 @@ item_table: Dict[str, KHRECOMItemData] = {
     "Card Set Soul Eater 1-3":           KHRECOMItemData("Days Sets",        code = 268_1391, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Soul Eater 4-6":           KHRECOMItemData("Days Sets",        code = 268_1392, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Soul Eater 7-9":           KHRECOMItemData("Days Sets",        code = 268_1393, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
-    "Card Set Star Seeker 0":            KHRECOMItemData("Days Sets",        code = 268_1394, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
+    "Card Set Soul Eater 0":             KHRECOMItemData("Days Sets",        code = 268_1394, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Star Seeker 1-3":          KHRECOMItemData("Days Sets",        code = 268_1401, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Star Seeker 4-6":          KHRECOMItemData("Days Sets",        code = 268_1402, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),
     "Card Set Star Seeker 7-9":          KHRECOMItemData("Days Sets",        code = 268_1403, classification = ItemClassification.filler,      max_quantity = 1, weight = 10),

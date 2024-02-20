@@ -44,6 +44,24 @@ class ChecksBehindLeon(Toggle):
     """
     display_name = "Checks Behind Leon"
 
+class ChecksBehindMinigames(Toggle):
+    """
+    Toggle whether to include checks behind 100 Acre Woods Minigames.
+    """
+    display_name = "Checks Behind Minigames"
+    
+class ChecksBehindSleights(Toggle):
+    """
+    Toggle whether to include checks behind Sleights.
+    """
+    display_name = "Checks Behind Sleights"
+
+class ChecksBehindSleightsLevels(Toggle):
+    """
+    Toggle whether to include checks behind Sleights received from Leveling Up.
+    """
+    display_name = "Checks Behind Level Up Sleights"
+
 class EXPMultiplier(Range):
     """
     Multiplier to apply to XP received.
@@ -63,3 +81,6 @@ class KHRECOMOptions(PerGameCommonOptions):
     days_locations: DaysLocations
     checks_behind_leon: ChecksBehindLeon
     exp_multiplier: EXPMultiplier
+    minigames: ChecksBehindMinigames
+    sleights: ChecksBehindSleights
+    levels: ChecksBehindSleightsLevels
