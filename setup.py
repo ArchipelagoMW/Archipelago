@@ -396,8 +396,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-        # TODO: fix LttP options one day
-        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:

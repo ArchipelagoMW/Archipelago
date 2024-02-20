@@ -1,10 +1,18 @@
 import typing
 
 from BaseClasses import MultiWorld
-from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses
+from Options import Choice, Range, Option, Toggle, DefaultOnToggle, DeathLink, StartInventoryPool, PlandoBosses,\
+    FreeText
 
 
-class Logic(Choice):
+class GlitchesRequired(Choice):
+    """Determine the logic required to complete the seed
+    None: No glitches required
+    Minor Glitches: Puts fake flipper, waterwalk, super bunny shenanigans, and etc into logic
+    Overworld Glitches: Assumes the player has knowledge of both overworld major glitches (boots clips, mirror clips) and minor glitches
+    Hybrid Major Glitches: In addition to overworld glitches, also requires underworld clips between dungeons.
+    No Logic: Your own items are placed with no regard to any logic; such as your Fire Rod can be on your Trinexx."""
+    display_name = "Glitches Required"
     option_no_glitches = 0
     option_minor_glitches = 1
     option_overworld_glitches = 2
@@ -12,20 +20,122 @@ class Logic(Choice):
     option_no_logic = 4
     alias_owg = 2
     alias_hmg = 3
+    alias_none = 0
 
 
-class Objective(Choice):
-    option_crystals = 0
-    # option_pendants = 1
-    option_triforce_pieces = 2
-    option_pedestal = 3
-    option_bingo = 4
+class DarkRoomLogic(Choice):
+    """Logic for unlit dark rooms. Lamp: require the Lamp for these rooms to be considered accessible.
+    Torches: in addition to lamp, allow the fire rod and presence of easily accessible torches for access.
+    None: all dark rooms are always considered doable, meaning this may force completion of rooms in complete darkness."""
+    display_name = "Dark Room Logic"
+    option_lamp = 0
+    option_torches = 1
+    option_none = 2
+    default = 0
 
 
 class Goal(Choice):
-    option_kill_ganon = 0
-    option_kill_ganon_and_gt_agahnim = 1
-    option_hand_in = 2
+    """Ganon: Climb GT, defeat Agahnim 2, and then kill Ganon
+    Crystals: Only killing Ganon is required. However, items may still be placed in GT
+    Bosses: Defeat the boss of all dungeons, including Agahnim's tower and GT (Aga 2)
+    Pedestal: Pull the Triforce from the Master Sword pedestal
+    Ganon Pedestal: Pull the Master Sword pedestal, then kill Ganon
+    Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
+    Local Triforce Hunt: Collect Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
+    Ganon Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then kill Ganon
+    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon
+    Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
+    display_name = "Goal"
+    default = 0
+    option_ganon = 0
+    option_crystals = 1
+    option_bosses = 2
+    option_pedestal = 3
+    option_ganon_pedestal = 4
+    option_triforce_hunt = 5
+    option_local_triforce_hunt = 6
+    option_ganon_triforce_hunt = 7
+    option_local_ganon_triforce_hunt = 8
+
+
+class EntranceShuffle(Choice):
+    """Dungeons Simple: Shuffle just dungeons amongst each other, swapping dungeons entirely, so Hyrule Castle is always 1 dungeon.
+    Dungeons Full: Shuffle any dungeon entrance with any dungeon interior, so Hyrule Castle can be 4 different dungeons, but keep dungeons to a specific world.
+    Dungeons Crossed: like dungeons_full, but allow cross-world traversal through a dungeon. Warning: May force repeated dungeon traversal.
+    Simple: Entrances are grouped together before being randomized. Interiors with two entrances are grouped shuffled together with each other,
+    and Death Mountain entrances are shuffled only on Death Mountain. Dungeons are swapped entirely.
+    Restricted: Like Simple, but single entrance interiors, multi entrance interiors, and Death Mountain interior entrances are all shuffled with each other.
+    Full: Like Restricted, but all Dungeon entrances are shuffled with all non-Dungeon entrances.
+    Crossed: Like Full, but interiors with multiple entrances are no longer confined to the same world, which may allow crossing worlds.
+    Insanity: Like Crossed, but entrances and exits may be decoupled from each other, so that leaving through an exit may not return you to the entrance you entered from."""
+    display_name = "Entrance Shuffle"
+    default = 0
+    alias_none = 0
+    option_vanilla = 0
+    option_dungeons_simple = 1
+    option_dungeons_full = 2
+    option_dungeons_crossed = 3
+    option_simple = 4
+    option_restricted = 5
+    option_full = 6
+    option_crossed = 7
+    option_insanity = 8
+    alias_dungeonssimple = 1
+    alias_dungeonsfull = 2
+    alias_dungeonscrossed = 3
+
+
+class EntranceShuffleSeed(FreeText):
+    """You can specify a number to use as an entrance shuffle seed, or a group name. Everyone with the same group name
+    will get the same entrance shuffle result as long as their Entrance Shuffle, Mode, Retro Caves, and Glitches
+    Required options are the same."""
+    default = "random"
+    display_name = "Entrance Shuffle Seed"
+
+
+class TriforcePiecesMode(Choice):
+    """Determine how to calculate the extra available triforce pieces.
+    Extra: available = triforce_pieces_extra + triforce_pieces_required
+    Percentage: available = (triforce_pieces_percentage /100) * triforce_pieces_required
+    Available: available = triforce_pieces_available"""
+    display_name = "Triforce Pieces Mode"
+    default = 2
+    option_extra = 0
+    option_percentage = 1
+    option_available = 2
+
+
+class TriforcePiecesPercentage(Range):
+    """Set to how many triforce pieces according to a percentage of the required ones, are available to collect in the world."""
+    display_name = "Triforce Pieces Percentage"
+    range_start = 100
+    range_end = 1000
+    default = 150
+
+
+class TriforcePiecesAvailable(Range):
+    """Set to how many triforces pieces are available to collect in the world. Default is 30. Max is 90, Min is 1"""
+    display_name = "Triforce Pieces Available"
+    range_start = 1
+    range_end = 90
+    default = 30
+
+
+class TriforcePiecesRequired(Range):
+    """Set to how many out of X triforce pieces you need to win the game in a triforce hunt.
+    Default is 20. Max is 90, Min is 1."""
+    display_name = "Triforce Pieces Required"
+    range_start = 1
+    range_end = 90
+    default = 20
+
+
+class TriforcePiecesExtra(Range):
+    """Set to how many extra triforces pieces are available to collect in the world."""
+    display_name = "Triforce Pieces Extra"
+    range_start = 0
+    range_end = 89
+    default = 10
 
 
 class OpenPyramid(Choice):
@@ -44,10 +154,10 @@ class OpenPyramid(Choice):
 
     def to_bool(self, world: MultiWorld, player: int) -> bool:
         if self.value == self.option_goal:
-            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'}
+            return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'}
         elif self.value == self.option_auto:
-            return world.goal[player] in {'crystals', 'ganontriforcehunt', 'localganontriforcehunt', 'ganonpedestal'} \
-            and (world.shuffle[player] in {'vanilla', 'dungeonssimple', 'dungeonsfull', 'dungeonscrossed'} or not
+            return world.goal[player] in {'crystals', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'ganon_pedestal'} \
+            and (world.entrance_shuffle[player] in {'vanilla', 'dungeons_simple', 'dungeons_full', 'dungeons_crossed'} or not
                  world.shuffle_ganon)
         elif self.value == self.option_open:
             return True
@@ -76,13 +186,13 @@ class DungeonItem(Choice):
         return self.value in {1, 2, 3, 4}
 
 
-class bigkey_shuffle(DungeonItem):
+class big_key_shuffle(DungeonItem):
     """Big Key Placement"""
     item_name_group = "Big Keys"
     display_name = "Big Key Shuffle"
 
 
-class smallkey_shuffle(DungeonItem):
+class small_key_shuffle(DungeonItem):
     """Small Key Placement"""
     option_universal = 5
     item_name_group = "Small Keys"
@@ -105,6 +215,149 @@ class key_drop_shuffle(Toggle):
     """Shuffle keys found in pots and dropped from killed enemies,
     respects the small key and big key shuffle options."""
     display_name = "Key Drop Shuffle"
+
+
+
+class DungeonCounters(Choice):
+    """On: Always display amount of items checked in a dungeon. Pickup: Show when compass is picked up.
+    Default: Show when compass is picked up if the compass itself is shuffled. Off: Never show item count in dungeons."""
+    display_name = "Dungeon Counters"
+    default = 1
+    option_on = 0
+    option_pickup = 1
+    option_default = 2
+    option_off = 4
+
+
+class Mode(Choice):
+    """Standard: Begin the game by rescuing Zelda from her cell and escorting her to the Sanctuary
+    Open: Begin the game from your choice of Link's House or the Sanctuary
+    Inverted: Begin in the Dark World. The Moon Pearl is required to avoid bunny-state in Light World, and the Light World game map is altered"""
+    option_standard = 0
+    option_open = 1
+    option_inverted = 2
+    default = 1
+    display_name = "Mode"
+
+
+class ItemPool(Choice):
+    """Easy: Doubled upgrades, progressives, and etc. Normal:  Item availability remains unchanged from vanilla game.
+    Hard: Reduced upgrade availability (max: 14 hearts, blue mail, tempered sword, fire shield, no silvers unless swordless).
+    Expert: Minimum upgrade availability (max: 8 hearts, green mail, master sword, fighter shield, no silvers unless swordless)."""
+    display_name = "Item Pool"
+    default = 1
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_expert = 3
+
+
+class ItemFunctionality(Choice):
+    """Easy: Allow Hammer to damage ganon, Allow Hammer tablet collection, Allow swordless medallion use everywhere.
+    Normal: Vanilla item functionality
+    Hard: Reduced helpfulness of items (potions less effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs do not stun, silvers disabled outside ganon)
+    Expert: Vastly reduces the helpfulness of items (potions barely effective, can't catch faeries, cape uses double magic, byrna does not grant invulnerability, boomerangs and hookshot do not stun, silvers disabled outside ganon)"""
+    display_name = "Item Functionality"
+    default = 1
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    option_expert = 3
+
+
+class EnemyHealth(Choice):
+    """Default: Vanilla enemy HP. Easy: Enemies have reduced health. Hard: Enemies have increased health.
+    Expert: Enemies have greatly increased health."""
+    display_name = "Enemy Health"
+    default = 1
+    option_easy = 0
+    option_default = 1
+    option_hard = 2
+    option_expert = 3
+
+
+class EnemyDamage(Choice):
+    """Default: Vanilla enemy damage. Shuffled: 0 # Enemies deal 0 to 4 hearts and armor helps.
+    Chaos: Enemies deal 0 to 8 hearts and armor just reshuffles the damage."""
+    display_name = "Enemy Damage"
+    default = 0
+    option_default = 0
+    option_shuffled = 2
+    option_chaos = 3
+
+
+class ShufflePrizes(Choice):
+    """Shuffle "general" prize packs, as in enemy, tree pull, dig etc.; "bonk" prizes; or both."""
+    display_name = "Shuffle Prizes"
+    default = 1
+    option_off = 0
+    option_general = 1
+    option_bonk = 2
+    option_both = 3
+
+
+class Medallion(Choice):
+    default = "random"
+    option_ether = 0
+    option_bombos = 1
+    option_quake = 2
+
+
+class MiseryMireMedallion(Medallion):
+    """Required medallion to open Misery Mire front entrance."""
+    display_name = "Misery Mire Medallion"
+
+
+class TurtleRockMedallion(Medallion):
+    """Required medallion to open Turtle Rock front entrance."""
+    display_name = "Turtle Rock Medallion"
+
+
+class Timer(Choice):
+    """None: No timer will be displayed. OHKO: Timer always at zero. Permanent OHKO.
+    Timed: Starts with clock at zero. Green clocks subtract 4 minutes (total 20). Blue clocks subtract 2 minutes (total 10). Red clocks add two minutes (total 10). Winner is the player with the lowest time at the end.
+    Timed OHKO: Starts the clock at ten minutes. Green clocks add five minutes (total 25). As long as the clock as at zero, Link will die in one hit.
+    Timed Countdown: Starts the clock with forty minutes. Same clocks as timed mode, but if the clock hits zero you lose. You can still keep playing, though.
+    Display: Displays a timer, but otherwise does not affect gameplay or the item pool."""
+    display_name = "Timer"
+    option_none = 0
+    option_timed = 1
+    option_timed_ohko = 2
+    option_ohko = 3
+    option_timed_countdown = 4
+    option_display = 5
+    default = 0
+
+
+class CountdownStartTime(Range):
+    """For Timed OHKO and Timed Countdown timer modes, the amount of time in minutes to start with."""
+    display_name = "Countdown Start Time"
+    range_start = 0
+    range_end = 480
+    default = 10
+
+
+class ClockTime(Range):
+    range_start = -60
+    range_end = 60
+
+
+class RedClockTime(ClockTime):
+    """For all timer modes, the amount of time in minutes to gain or lose when picking up a red clock."""
+    display_name = "Red Clock Time"
+    default = -2
+
+
+class BlueClockTime(ClockTime):
+    """For all timer modes, the amount of time in minutes to gain or lose when picking up a blue clock."""
+    display_name = "Blue Clock Time"
+    default = 2
+
+
+class GreenClockTime(ClockTime):
+    """For all timer modes, the amount of time in minutes to gain or lose when picking up a green clock."""
+    display_name = "Green Clock Time"
+    default = 4
 
 
 class Crystals(Range):
@@ -137,18 +390,52 @@ class ShopItemSlots(Range):
     range_end = 30
 
 
+class RandomizeShopInventories(Choice):
+    """Generate new default inventories for overworld/underworld shops, and unique shops; or each shop independently"""
+    display_name = "Randomize Shop Inventories"
+    default = 0
+    option_default = 0
+    option_randomize_by_shop_type = 1
+    option_randomize_each = 2
+
+
+class ShuffleShopInventories(Toggle):
+    """Shuffle default inventories of the shops around"""
+    display_name = "Shuffle Shop Inventories"
+
+
+class RandomizeShopPrices(Toggle):
+    """Randomize the prices of the items in shop inventories"""
+    display_name = "Randomize Shop Prices"
+
+
+class RandomizeCostTypes(Toggle):
+    """Prices of the items in shop inventories may cost hearts, arrow, or bombs instead of rupees"""
+    display_name = "Randomize Cost Types"
+
+
 class ShopPriceModifier(Range):
     """Percentage modifier for shuffled item prices in shops"""
-    display_name = "Shop Price Cost Percent"
+    display_name = "Shop Price Modifier"
     range_start = 0
     default = 100
     range_end = 400
 
 
-class WorldState(Choice):
-    option_standard = 1
-    option_open = 0
-    option_inverted = 2
+class IncludeWitchHut(Toggle):
+    """Consider witch's hut like any other shop and shuffle/randomize it too"""
+    display_name = "Include Witch's Hut"
+
+
+class ShuffleCapacityUpgrades(Choice):
+    """Shuffle capacity upgrades into the item pool (and allow them to traverse the multiworld).
+    On Combined will shuffle only a single bomb upgrade and arrow upgrade each which bring you to the maximum capacity."""
+    display_name = "Shuffle Capacity Upgrades"
+    option_off = 0
+    option_on = 1
+    option_on_combined = 2
+    alias_false = 0
+    alias_true = 1
 
 
 class LTTPBosses(PlandoBosses):
@@ -234,6 +521,11 @@ class Swordless(Toggle):
     Ether and Bombos Tablet can be activated with Hammer
     (and Book)."""
     display_name = "Swordless"
+
+
+class BomblessStart(Toggle):
+    """Start with a max of 0 bombs available, requiring Bomb Upgrade items in order to use bombs"""
+    display_name = "Bombless Start"
 
 
 # Might be a decent idea to split "Bow" into its own option with choices of
@@ -433,29 +725,66 @@ class AllowCollect(Toggle):
 
 
 alttp_options: typing.Dict[str, type(Option)] = {
+    "start_inventory_from_pool": StartInventoryPool,
+    "goal": Goal,
+    "mode": Mode,
+    "glitches_required": GlitchesRequired,
+    "dark_room_logic": DarkRoomLogic,
+    "open_pyramid": OpenPyramid,
     "crystals_needed_for_gt": CrystalsTower,
     "crystals_needed_for_ganon": CrystalsGanon,
-    "open_pyramid": OpenPyramid,
-    "bigkey_shuffle": bigkey_shuffle,
-    "smallkey_shuffle": smallkey_shuffle,
+    "triforce_pieces_mode": TriforcePiecesMode,
+    "triforce_pieces_percentage": TriforcePiecesPercentage,
+    "triforce_pieces_required": TriforcePiecesRequired,
+    "triforce_pieces_available": TriforcePiecesAvailable,
+    "triforce_pieces_extra": TriforcePiecesExtra,
+    "entrance_shuffle": EntranceShuffle,
+    "entrance_shuffle_seed": EntranceShuffleSeed,
+    "big_key_shuffle": big_key_shuffle,
+    "small_key_shuffle": small_key_shuffle,
     "key_drop_shuffle": key_drop_shuffle,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
+    "restrict_dungeon_item_on_boss": RestrictBossItem,
+    "item_pool": ItemPool,
+    "item_functionality": ItemFunctionality,
+    "enemy_health": EnemyHealth,
+    "enemy_damage": EnemyDamage,
     "progressive": Progressive,
     "swordless": Swordless,
+    "dungeon_counters": DungeonCounters,
     "retro_bow": RetroBow,
     "retro_caves": RetroCaves,
     "hints": Hints,
     "scams": Scams,
-    "restrict_dungeon_item_on_boss": RestrictBossItem,
     "boss_shuffle": LTTPBosses,
     "pot_shuffle": PotShuffle,
     "enemy_shuffle": EnemyShuffle,
     "killable_thieves": KillableThieves,
     "bush_shuffle": BushShuffle,
     "shop_item_slots": ShopItemSlots,
+    "randomize_shop_inventories": RandomizeShopInventories,
+    "shuffle_shop_inventories": ShuffleShopInventories,
+    "include_witch_hut": IncludeWitchHut,
+    "randomize_shop_prices": RandomizeShopPrices,
+    "randomize_cost_types": RandomizeCostTypes,
     "shop_price_modifier": ShopPriceModifier,
+    "shuffle_capacity_upgrades": ShuffleCapacityUpgrades,
+    "bombless_start": BomblessStart,
+    "shuffle_prizes": ShufflePrizes,
     "tile_shuffle": TileShuffle,
+    "misery_mire_medallion": MiseryMireMedallion,
+    "turtle_rock_medallion": TurtleRockMedallion,
+    "glitch_boots": GlitchBoots,
+    "beemizer_total_chance": BeemizerTotalChance,
+    "beemizer_trap_chance": BeemizerTrapChance,
+    "timer": Timer,
+    "countdown_start_time": CountdownStartTime,
+    "red_clock_time": RedClockTime,
+    "blue_clock_time": BlueClockTime,
+    "green_clock_time": GreenClockTime,
+    "death_link": DeathLink,
+    "allow_collect": AllowCollect,
     "ow_palettes": OWPalette,
     "uw_palettes": UWPalette,
     "hud_palettes": HUDPalette,
@@ -469,10 +798,4 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "music": Music,
     "reduceflashing": ReduceFlashing,
     "triforcehud": TriforceHud,
-    "glitch_boots": GlitchBoots,
-    "beemizer_total_chance": BeemizerTotalChance,
-    "beemizer_trap_chance": BeemizerTrapChance,
-    "death_link": DeathLink,
-    "allow_collect": AllowCollect,
-    "start_inventory_from_pool": StartInventoryPool,
 }
