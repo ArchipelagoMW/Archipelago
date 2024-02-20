@@ -14,7 +14,7 @@ client_version = 0
 
 class DLCqwebworld(WebWorld):
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
         "English",
         "setup_en.md",

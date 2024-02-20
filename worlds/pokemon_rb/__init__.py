@@ -46,7 +46,7 @@ class PokemonSettings(settings.Group):
 class PokemonWebWorld(WebWorld):
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Pokemon Red and Blue with Archipelago.",
+        "A guide to playing Pokémon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
