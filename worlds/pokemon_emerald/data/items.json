@@ -526,10 +526,12 @@
     "classification": "FILLER",
     "tags": ["Vitamin"]
   },
+
+
   "ITEM_RARE_CANDY": {
     "label": "Rare Candy",
     "classification": "USEFUL",
-    "tags": ["Vitamin"]
+    "tags": ["Candy"]
   },
 
 
