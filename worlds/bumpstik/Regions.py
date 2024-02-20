@@ -17,19 +17,21 @@ def create_regions(world: MultiWorld, player: int):
         "Level 1": level2_locs + ["Bonus Booster 2"] + [f"Treasure Bumper {i + 9}" for i in range(8)],
         "Level 2": level3_locs + ["Bonus Booster 3"] + [f"Treasure Bumper {i + 17}" for i in range(8)],
         "Level 3": level4_locs + [f"Bonus Booster {i + 4}" for i in range(2)] +
-                   [f"Treasure Bumper {i + 25}" for i in range(8)],
+                                 [f"Treasure Bumper {i + 25}" for i in range(8)],
         "Level 4": level5_locs
     }
 
     entrance_map = {
+        # Give the player some wiggle room on treasure bumpers, by requiring 1 more to
+        # logically access each level than the game actually needs to unlock that level
         "Level 1": lambda state:
-        state.has("Booster Bumper", player, 1) and state.has("Treasure Bumper", player, 8),
+        state.has("Booster Bumper", player, 1) and state.has("Treasure Bumper", player, 9),
         "Level 2": lambda state:
-        state.has("Booster Bumper", player, 2) and state.has("Treasure Bumper", player, 16),
+        state.has("Booster Bumper", player, 2) and state.has("Treasure Bumper", player, 17),
         "Level 3": lambda state:
-        state.has("Booster Bumper", player, 3) and state.has("Treasure Bumper", player, 24),
+        state.has("Booster Bumper", player, 3) and state.has("Treasure Bumper", player, 25),
         "Level 4": lambda state:
-        state.has("Booster Bumper", player, 5) and state.has("Treasure Bumper", player, 32)
+        state.has("Booster Bumper", player, 5) and state.has("Treasure Bumper", player, 33)
     }
 
     for x, region_name in enumerate(region_map):
