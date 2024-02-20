@@ -344,6 +344,11 @@ def generate_itempool(world):
     if treasure_hunt_icon is not None:
         multiworld.treasure_hunt_icon[player] = treasure_hunt_icon
 
+    if multiworld.master_keys[player]:
+        items_to_add = 16 + (32 if multiworld.key_drop_shuffle[player] else 0)
+        # add replacement items for the keys removed from the dungeon item pool
+        multiworld.itempool += [ItemFactory(GetBeemizerItem(multiworld, player, world.get_filler_item_name()), player) for _ in range(items_to_add)]
+
     dungeon_items = [item for item in get_dungeon_item_pool_player(world)
                      if item.name not in multiworld.worlds[player].dungeon_local_item_names]
 
@@ -364,11 +369,17 @@ def generate_itempool(world):
                     world.dungeons[dungeon].small_keys.remove(drop_item)
                 elif world.dungeons[dungeon].big_key is not None and world.dungeons[dungeon].big_key == drop_item:
                     world.dungeons[dungeon].big_key = None
-
+        if not multiworld.key_drop_shuffle[player]:
+            # key drop item was removed from the pool because key drop shuffle is off
+            # and it will now place the removed key into its original location
             loc = multiworld.get_location(key_loc, player)
             loc.place_locked_item(drop_item)
             loc.address = None
-        elif "Small" in key_data[3] and multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
+        elif multiworld.goal[player] == 'ice_rod_hunt':
+            # key drop item removed because of ice_rod_hunt
+            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Nothing'), player))
+            multiworld.push_precollected(drop_item)
+        elif "Small" in key_data[3] and multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
             multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
@@ -718,26 +729,37 @@ def get_pool_core(world, player: int):
         replace = {'Single Arrow', 'Arrows (10)', 'Arrow Upgrade (+5)', 'Arrow Upgrade (+10)', 'Arrow Upgrade (50)'}
         pool = ['Rupees (5)' if item in replace else item for item in pool]
     if world.small_key_shuffle[player] == small_key_shuffle.option_universal:
-        pool.extend(diff.universal_keys)
-        if mode == 'standard':
-            if world.key_drop_shuffle[player]:
+        if world.master_keys[player]:
+            pool.extend([world.worlds[player].get_filler_item_name() for _ in range(len(diff.universal_keys) - 1)])
+            if mode == 'standard':
+                # This is a silly choice of options, but if they really want...
                 key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
                 key_location = world.random.choice(key_locations)
                 key_locations.remove(key_location)
                 place_item(key_location, "Small Key (Universal)")
-                key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
-                                  'Hyrule Castle - Map Chest']
-                key_location = world.random.choice(key_locations)
-                key_locations.remove(key_location)
-                place_item(key_location, "Small Key (Universal)")
-                key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
-                key_location = world.random.choice(key_locations)
-                key_locations.remove(key_location)
-                place_item(key_location, "Small Key (Universal)")
-                key_locations += ['Sewers - Key Rat Key Drop']
-                key_location = world.random.choice(key_locations)
-                place_item(key_location, "Small Key (Universal)")
-                pool = pool[:-3]
+            else:
+                pool.append("Small Key (Universal)")
+        else:
+            pool.extend(diff.universal_keys)
+            if mode == 'standard':
+                if world.key_drop_shuffle[player]:
+                    key_locations = ['Secret Passage', 'Hyrule Castle - Map Guard Key Drop']
+                    key_location = world.random.choice(key_locations)
+                    key_locations.remove(key_location)
+                    place_item(key_location, "Small Key (Universal)")
+                    key_locations += ['Hyrule Castle - Boomerang Guard Key Drop', 'Hyrule Castle - Boomerang Chest',
+                                      'Hyrule Castle - Map Chest']
+                    key_location = world.random.choice(key_locations)
+                    key_locations.remove(key_location)
+                    place_item(key_location, "Small Key (Universal)")
+                    key_locations += ['Hyrule Castle - Big Key Drop', 'Hyrule Castle - Zelda\'s Chest', 'Sewers - Dark Cross']
+                    key_location = world.random.choice(key_locations)
+                    key_locations.remove(key_location)
+                    place_item(key_location, "Small Key (Universal)")
+                    key_locations += ['Sewers - Key Rat Key Drop']
+                    key_location = world.random.choice(key_locations)
+                    place_item(key_location, "Small Key (Universal)")
+                    pool = pool[:-3]
 
     return (pool, placed_items, precollected_items, clock_mode, treasure_hunt_count, treasure_hunt_icon,
             additional_pieces_to_place)

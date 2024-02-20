@@ -329,6 +329,11 @@ class ALTTPWorld(World):
                 self.dungeon_local_item_names |= self.item_name_groups[option.item_name_group]
                 if option == "original_dungeon":
                     self.dungeon_specific_item_names |= self.item_name_groups[option.item_name_group]
+                    if multiworld.master_keys[player] and (not world.key_drop_shuffle[player]) \
+                            and dungeon_item == "smallkey_shuffle":
+                        # The Ice Palace small key cannot be made reachable in the Ice Palace under these conditions
+                        self.dungeon_local_item_names.remove("Small Key (Ice Palace)")
+                        self.dungeon_specific_item_names.remove("Small Key (Ice Palace)")
 
         multiworld.difficulty_requirements[player] = difficulties[multiworld.item_pool[player].current_key]
 
@@ -816,6 +821,10 @@ class ALttPLogic(LogicMixin):
     def _lttp_has_key(self, item, player, count: int = 1):
         if self.multiworld.glitches_required[player] == 'no_logic':
             return True
-        if self.multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
+        if self.multiworld.smallkey_shuffle[player] == small_key_shuffle.option_universal:
+            if self.multiworld.master_keys[player]:
+                return self.has("Small Key (Universal)", player)
             return can_buy_unlimited(self, 'Small Key (Universal)', player)
-        return self.prog_items[player][item] >= count
+        if self.multiworld.master_keys[player]:
+            return self.has(item, player)
+        return self.prog_items[item, player] >= count

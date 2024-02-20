@@ -218,6 +218,15 @@ class key_drop_shuffle(Toggle):
 
 
 
+class MasterSmallKeys(Toggle):
+    """Each dungeon only has one Small Key, which is not consumed upon opening doors.
+    If Universal Small Keys is on, there will be a single universal Small Key.
+    If Key Drop Shuffle is off, key drop keys will be turned into Small Hearts. If Small Key Shuffle is also set to
+    Original Dungeons, the Ice Palace small key will not be confined to the Ice Palace."""
+    display_name = "Master Keys"
+    default = False
+
+
 class DungeonCounters(Choice):
     """On: Always display amount of items checked in a dungeon. Pickup: Show when compass is picked up.
     Default: Show when compass is picked up if the compass itself is shuffled. Off: Never show item count in dungeons."""
@@ -743,6 +752,7 @@ alttp_options: typing.Dict[str, type(Option)] = {
     "big_key_shuffle": big_key_shuffle,
     "small_key_shuffle": small_key_shuffle,
     "key_drop_shuffle": key_drop_shuffle,
+    "master_keys": MasterSmallKeys,
     "compass_shuffle": compass_shuffle,
     "map_shuffle": map_shuffle,
     "restrict_dungeon_item_on_boss": RestrictBossItem,

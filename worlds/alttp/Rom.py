@@ -4,7 +4,7 @@ import Utils
 import worlds.Files
 
 LTTPJPN10HASH: str = "03a63945398191337e896e5771f77173"
-RANDOMIZERBASEHASH: str = "35d010bc148e0ea0ee68e81e330223f1"
+RANDOMIZERBASEHASH: str = "31242256e4ed87f7db76d948d878bf55"
 ROM_PLAYER_LIMIT: int = 255
 
 import io
@@ -932,7 +932,10 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         gt_bigkey_top, gt_bigkey_bottom = credits_digit(5)
         rom.write_byte(0x118B6A, gt_bigkey_top)
         rom.write_byte(0x118B88, gt_bigkey_bottom)
-
+    elif world.master_keys[player]:
+        rom.write_byte(0x140000, 1)  # enable key drop shuffle
+        # for key_data in key_drop_data:
+        #     rom.write_byte(key_data[1], 0x42)
 
 
     # collection rate address: 238C37
@@ -1510,6 +1513,9 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x18004D, ((0x01 if 'arrows' in world.escape_assist[player] else 0x00) |
                               (0x02 if 'bombs' in world.escape_assist[player] else 0x00) |
                               (0x04 if 'magic' in world.escape_assist[player] else 0x00)))  # Escape assist
+
+    if world.master_keys[player] :
+        rom.write_byte(0x186FFE, 0x01)
 
     if world.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
         rom.write_byte(0x18003E, 0x01)  # make ganon invincible
