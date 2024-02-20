@@ -366,6 +366,37 @@ def patch_kh2(self, output_directory):
                     }
                 ]
             },
+            {
+                'name':   'msg/us/he.bar',
+                'multi':  [
+                    {
+                        'name': 'msg/fr/he.bar'
+                    },
+                    {
+                        'name': 'msg/gr/he.bar'
+                    },
+                    {
+                        'name': 'msg/it/he.bar'
+                    },
+                    {
+                        'name': 'msg/sp/he.bar'
+                    }
+                ],
+                'method': 'binarc',
+                'source': [
+                    {
+                        'name':   'he',
+                        'type':   'list',
+                        'method': 'kh2msg',
+                        'source': [
+                            {
+                                'name':     'he.yml',
+                                'language': 'en'
+                            }
+                        ]
+                    }
+                ]
+            },
         ],
         'title':  'Randomizer Seed'
     }
