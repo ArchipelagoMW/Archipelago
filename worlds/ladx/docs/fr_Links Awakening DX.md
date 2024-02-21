@@ -7,7 +7,7 @@ La [page des paramètres du joueur pour ce jeu](../player-settings) contient tou
 ## Quel est l'effet de la randomisation sur ce jeu ?
 
 Les objets que le joueur devrait normalement obtenir tout au long du jeu ont été changés de place. 
-La logique est conservée, de sorte qu'il sera toujours possible de terminer le jeu, mais en conséquence, il se peut que le joueur soit obligé d'accéder à certaines zones plus rapidement qu'il ne l'aurait fait dans le jeu d'origine.
+La logique est conservée, de sorte qu'il sera toujours possible de terminer le jeu, mais par conséquent, il se peut que le joueur soit obligé d'accéder à certaines zones plus rapidement qu'il ne l'aurait fait dans le jeu d'origine.
 
 ## Quels sont les objets qui peuvent se trouver dans le monde d'un autre joueur ?
 
