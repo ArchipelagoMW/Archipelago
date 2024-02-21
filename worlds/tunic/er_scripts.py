@@ -282,10 +282,10 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
-        region1.connect(region2, portal1.name)
+        region1.connect(connecting_region=region2, name=portal1.name)
         # prevent the logic from thinking you can get to any shop-connected region from the shop
         if portal2.name != "Shop":
-            region2.connect(region1, portal2.name)
+            region2.connect(connecting_region=region1, name=portal2.name)
 
 
 # loop through the static connections, return regions you can reach from this region
