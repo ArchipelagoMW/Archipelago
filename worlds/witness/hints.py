@@ -183,7 +183,8 @@ class WitnessLocationHint:
 @dataclass
 class WitnessWordedHint:
     wording: str
-    location: Optional[Location]
+    location: Optional[Location] = None
+    area: Optional[str] = None
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
@@ -608,7 +609,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     for hinted_area in hinted_areas:
         hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None))
+        hints.append(WitnessWordedHint(hint_string, None, hinted_area))
 
     if len(hinted_areas) < amount:
         player_name = world.multiworld.get_player_name(world.player)

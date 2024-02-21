@@ -302,7 +302,7 @@ class WitnessWorld(World):
                     hint = generated_hints.pop(0)
 
                     location = hint.location
-                    location_address = location.address if location else -1
+                    location_address = location.address if location else (hint.area if hint.area else None)
                     player = location.player if location else self.player
 
                     for _ in range(0, duplicates):
