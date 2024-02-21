@@ -910,6 +910,8 @@ class Accessibility(Choice):
     option_full = 0
     option_minimal = 2
     alias_none = 2
+    alias_locations = 0
+    alias_items = 0
     default = 0
 
 
