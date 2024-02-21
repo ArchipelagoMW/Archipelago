@@ -504,7 +504,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # unrestricted: use ladder storage to get to the front, get hit by one of the many enemies
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: state.has(laurels, player) or can_ladder_storage(state, player, options))
+        rule=lambda state: (state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks)
+                            and has_sword(state, player)) or can_ladder_storage(state, player, options))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
