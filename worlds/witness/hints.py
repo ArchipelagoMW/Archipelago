@@ -609,7 +609,7 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     for hinted_area in hinted_areas:
         hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None, hinted_area))
+        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}"))
 
     if len(hinted_areas) < amount:
         player_name = world.multiworld.get_player_name(world.player)
