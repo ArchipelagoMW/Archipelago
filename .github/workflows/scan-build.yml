@@ -12,6 +12,7 @@ on:
       - '**.hpp'
       - '**.pyx'
       - 'setup.py'
+      - 'requirements.txt'
       - '.github/workflows/scan-build.yml'
   pull_request:
     paths:
@@ -24,6 +25,7 @@ on:
       - '**.hpp'
       - '**.pyx'
       - 'setup.py'
+      - 'requirements.txt'
       - '.github/workflows/scan-build.yml'
 
 jobs:
