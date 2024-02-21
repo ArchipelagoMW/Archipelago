@@ -48,6 +48,7 @@ cdef struct IndexEntry:
     size_t count
 
 
+@cython.auto_pickle(False)
 cdef class LocationStore:
     """Compact store for locations and their items in a MultiServer"""
     # The original implementation uses Dict[int, Dict[int, Tuple(int, int, int]]
@@ -269,6 +270,7 @@ cdef class LocationStore:
                        entry.location not in checked])
 
 
+@cython.auto_pickle(False)
 @cython.internal  # unsafe. disable direct import
 cdef class PlayerLocationProxy:
     cdef LocationStore _store
