@@ -20,11 +20,11 @@ def create_rules(self, location_table):
 
             if options.buckets > 0 and loc["minGoldenFeathersBucket"] < min_feathers:
                 add_rule(multiworld.get_location(loc["name"], player),
-                    lambda state: state.has("Golden Feather", player, min_feathers)
+                    lambda state, loc=loc, min_feathers=min_feathers: state.has("Golden Feather", player, min_feathers)
                         or (state.has("Bucket", player) and state.has("Golden Feather", player, loc["minGoldenFeathersBucket"])))
             elif min_feathers > 0:
                 add_rule(multiworld.get_location(loc["name"], player),
-                    lambda state: state.has("Golden Feather", player, min_feathers))
+                    lambda state, min_feathers=min_feathers: state.has("Golden Feather", player, min_feathers))
     add_rule(multiworld.get_location("Shovel Kid Trade", player),
         lambda state: state.has("Toy Shovel", player))
     add_rule(multiworld.get_location("Sand Castle Golden Feather", player),
