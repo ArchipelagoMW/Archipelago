@@ -16,7 +16,7 @@ certains objets à votre propre monde.
 
 ## À quoi ressemble un objet d'un autre monde dans Link's Awakening ?
 
-Le jeu essaiera de choisir un sprite approprié pour l'objet (une épée LttP sera une épée !) - il se peut cependant que ce soit un peu bizarre (un paquet de missiles peut être une simple flèche).
+Le jeu essaiera de choisir un **sprite** approprié pour l'objet (une épée LttP sera une épée !) - il se peut cependant que ce soit un peu bizarre (un paquet de missiles peut être une simple flèche).
 
 S'il n'y a pas de sprite approprié, une lettre sera affichée.
 
