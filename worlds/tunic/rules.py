@@ -131,8 +131,6 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
         lambda state: has_mask(state, player, options)
     multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = \
         lambda state: state.has(grapple, player) and has_ability(state, player, prayer, options, ability_unlocks)
-    multiworld.get_entrance("Quarry -> Rooted Ziggurat", player).access_rule = \
-        lambda state: has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = \
         lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks) \
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
