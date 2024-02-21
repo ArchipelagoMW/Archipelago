@@ -2439,21 +2439,16 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         event_locations = multiworld.get_filled_locations(player)
 
-        def has_flash_badge():
-            return (state.has("Boulder Badge", player)
-                    or state.has(multiworld.worlds[player].extra_badges.get("Flash"), player)
-                    or not multiworld.badges_needed_for_hm_moves[player])
-
-        def adds_reachable_entrances(entrances_copy, item):
+        def adds_reachable_entrances(item):
 
             state_copy = state.copy()
             state_copy.collect(item, True)
             state.sweep_for_events(locations=event_locations)
-            new_reachable_entrances = len([entrance for entrance in entrances_copy if entrance in reachable_entrances or
+            new_reachable_entrances = len([entrance for entrance in entrances if entrance in reachable_entrances or
                                            entrance.parent_region.can_reach(state_copy)])
             return new_reachable_entrances > len(reachable_entrances)
 
-        def dead_end(entrances_copy, e):
+        def dead_end(e):
             if e.can_reach(state):
                 return True
             elif multiworld.door_shuffle[player] == "decoupled":
@@ -2466,14 +2461,14 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             check_warps.remove(e)
             for location in region.locations:
                 if location.item and location.item.name in relevant_events and \
-                                 adds_reachable_entrances(entrances_copy, location.item):
+                                 adds_reachable_entrances(location.item):
                     return False
             while check_warps:
                 warp = check_warps.pop()
                 warp = warp
                 if warp not in reachable_entrances:
                     # confirm warp is in entrances list to ensure it's not a loop-out interior
-                    if warp.connected_region is None and warp in entrances_copy:
+                    if warp.connected_region is None and warp in entrances:
                         return False
                     elif isinstance(warp, PokemonRBWarp) or warp.access_rule(state):
                         if warp.connected_region and warp.connected_region not in checked_regions:
@@ -2481,7 +2476,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                             check_warps.update(warp.connected_region.exits)
                             for location in warp.connected_region.locations:
                                 if (location.item and location.item.name in relevant_events and
-                                        adds_reachable_entrances(entrances_copy, location.item)):
+                                        adds_reachable_entrances(location.item)):
                                     return False
             return True
 
@@ -2547,7 +2542,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     destinations = entrances
 
                 for entrance in destinations:
-                    if entrance != entrance_a and dead_end(entrances, entrance) is find_dead_end:
+                    if entrance != entrance_a and dead_end(entrance) is find_dead_end:
                         entrance_b = entrance
                         destinations.remove(entrance)
                         break
