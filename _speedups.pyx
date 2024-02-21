@@ -48,6 +48,7 @@ cdef struct IndexEntry:
     size_t count
 
 
+@cython.auto_pickle(False)
 cdef class LocationStore:
     """Compact store for locations and their items in a MultiServer"""
     # The original implementation uses Dict[int, Dict[int, Tuple(int, int, int]]
@@ -77,18 +78,6 @@ cdef class LocationStore:
         size += sum(sizeof(proxy) for proxy in self._proxies)
         size += sizeof(self._raw_proxies[0]) * self.sender_index_size
         return size
-
-    def __cinit__(self, locations_dict: Dict[int, Dict[int, Sequence[int]]]) -> None:
-        self._mem = None
-        self._keys = None
-        self._items = None
-        self._proxies = None
-        self._len = 0
-        self.entries = NULL
-        self.entry_count = 0
-        self.sender_index = NULL
-        self.sender_index_size = 0
-        self._raw_proxies = NULL
 
     def __init__(self, locations_dict: Dict[int, Dict[int, Sequence[int]]]) -> None:
         self._mem = Pool()
@@ -281,6 +270,7 @@ cdef class LocationStore:
                        entry.location not in checked])
 
 
+@cython.auto_pickle(False)
 @cython.internal  # unsafe. disable direct import
 cdef class PlayerLocationProxy:
     cdef LocationStore _store
