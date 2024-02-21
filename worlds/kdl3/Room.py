@@ -80,7 +80,8 @@ class KDL3Room(Region):
                                 self.entity_load.append([2, 22])
                 if load_len < len(self.entity_load):
                     rom.write_bytes(self.pointer + 88 + (load_len * 2), bytes(self.entity_load[load_len]))
-                    rom.write_bytes(self.pointer + 104 + (load_len * 2), bytes(struct.pack("H", self.consumable_pointer)))
+                    rom.write_bytes(self.pointer + 104 + (load_len * 2),
+                                    bytes(struct.pack("H", self.consumable_pointer)))
                 if is_progression:
                     if [1, 22] in self.entity_load:
                         vtype = 1

@@ -268,12 +268,7 @@ class KDL3World(World):
             player = self.player
 
             rom = RomData(get_base_rom_path())
-            patch_rom(self, self.multiworld, self.player, rom, self.required_heart_stars,
-                      self.boss_requirements,
-                      self.player_levels,
-                      self.boss_butch_bosses,
-                      self.copy_abilities,
-                      self.random)
+            patch_rom(self, rom)
 
             rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
             rom.write_to_file(rom_path)

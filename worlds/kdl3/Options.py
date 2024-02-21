@@ -1,9 +1,8 @@
 import random
 from dataclasses import dataclass
 
-from Options import Option, DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
+from Options import DeathLink, Choice, Toggle, OptionDict, Range, PlandoBosses, DefaultOnToggle, \
     PerGameCommonOptions
-import typing
 from .Names import LocationName
 
 
@@ -398,6 +397,7 @@ class Gifting(Toggle):
     using the client.
     """
     display_name = "Gifting"
+
 
 @dataclass
 class KDL3Options(PerGameCommonOptions):

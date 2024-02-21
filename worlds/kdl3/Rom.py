@@ -1,15 +1,13 @@
 import typing
 from pkgutil import get_data
-from random import Random
 
 import Utils
-from typing import Optional, Dict, List, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 import hashlib
 import os
 import struct
 
 import settings
-from BaseClasses import MultiWorld
 from worlds.Files import APDeltaPatch
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
@@ -335,7 +333,7 @@ def write_heart_star_sprites(rom: RomData):
     rom.write_bytes(0x3F0EBF, [0x00, 0xD0, 0x39])
 
 
-def write_consumable_sprites(rom: RomData, consumables, stars):
+def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool):
     compressed = rom.read_bytes(consumable_address, consumable_size)
     decompressed = hal_decompress(compressed)
     patched = bytearray(decompressed)
@@ -385,9 +383,7 @@ class KDL3DeltaPatch(APDeltaPatch):
         rom.write_to_file(target)
 
 
-def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomData, heart_stars_required: int,
-              boss_requirements: Dict[int, int], shuffled_levels: Dict[int, List[int]], bb_boss_enabled: List[bool],
-              copy_abilities: Dict[str, str], slot_random: Random):
+def patch_rom(world: "KDL3World", rom: RomData):
     rom.apply_patch(get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
     tiles = get_data(__name__, os.path.join("data", "APPauseIcons.dat"))
     rom.write_bytes(0x3F000, tiles)
@@ -417,12 +413,12 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     if world.options.music_shuffle > 0:
         if world.options.music_shuffle == 1:
             shuffled_music = music_choices.copy()
-            slot_random.shuffle(shuffled_music)
+            world.random.shuffle(shuffled_music)
             music_map = dict(zip(music_choices, shuffled_music))
             # Avoid putting star twinkle in the pool
-            music_map[5] = slot_random.choice(music_choices)
+            music_map[5] = world.random.choice(music_choices)
             # Heart Star music doesn't work on regular stages
-            music_map[8] = slot_random.choice(music_choices)
+            music_map[8] = world.random.choice(music_choices)
             for room in rooms:
                 room.music = music_map[room.music]
             for room in room_pointers:
@@ -439,17 +435,17 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
             rom.write_byte(0x4A38D, music_map[0x1D])
         elif world.options.music_shuffle == 2:
             for room in rooms:
-                room.music = slot_random.choice(music_choices)
+                room.music = world.random.choice(music_choices)
             for room in room_pointers:
-                rom.write_byte(room + 2, slot_random.choice(music_choices))
+                rom.write_byte(room + 2, world.random.choice(music_choices))
             for i in range(5):
                 # level themes
-                rom.write_byte(0x133F2 + i, slot_random.choice(music_choices))
+                rom.write_byte(0x133F2 + i, world.random.choice(music_choices))
             # Zero
-            rom.write_byte(0x9AE79, slot_random.choice(music_choices))
+            rom.write_byte(0x9AE79, world.random.choice(music_choices))
             # Heart Star success and fail
-            rom.write_byte(0x4A388, slot_random.choice(music_choices))
-            rom.write_byte(0x4A38D, slot_random.choice(music_choices))
+            rom.write_byte(0x4A388, world.random.choice(music_choices))
+            rom.write_byte(0x4A38D, world.random.choice(music_choices))
 
     for room in rooms:
         room.patch(rom)
@@ -469,9 +465,10 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
         rom.write_bytes(0x2C8217, [0xFF, 0x1E, ])
 
     # boss requirements
-    rom.write_bytes(0x3D000, struct.pack("HHHHH", boss_requirements[0], boss_requirements[1], boss_requirements[2],
-                                         boss_requirements[3], boss_requirements[4]))
-    rom.write_bytes(0x3D00A, struct.pack("H", heart_stars_required if world.options.goal_speed == 1 else 0xFFFF))
+    rom.write_bytes(0x3D000, struct.pack("HHHHH", world.boss_requirements[0], world.boss_requirements[1],
+                                         world.boss_requirements[2], world.boss_requirements[3],
+                                         world.boss_requirements[4]))
+    rom.write_bytes(0x3D00A, struct.pack("H", world.required_heart_stars if world.options.goal_speed == 1 else 0xFFFF))
     rom.write_byte(0x3D00C, world.options.goal_speed.value)
     rom.write_byte(0x3D00E, world.options.open_world.value)
     rom.write_byte(0x3D010, world.options.death_link.value)
@@ -484,59 +481,60 @@ def patch_rom(world: "KDL3World", multiworld: MultiWorld, player: int, rom: RomD
     rom.write_byte(0x3D01E, world.options.strict_bosses.value)
     # don't write gifting for solo game, since there's no one to send anything to
 
-    for level in shuffled_levels:
-        for i in range(len(shuffled_levels[level])):
+    for level in world.player_levels:
+        for i in range(len(world.player_levels[level])):
             rom.write_bytes(0x3F002E + ((level - 1) * 14) + (i * 2),
-                            struct.pack("H", level_pointers[shuffled_levels[level][i]]))
+                            struct.pack("H", level_pointers[world.player_levels[level][i]]))
             rom.write_bytes(0x3D020 + (level - 1) * 14 + (i * 2),
-                            struct.pack("H", shuffled_levels[level][i] & 0x00FFFF))
+                            struct.pack("H", world.player_levels[level][i] & 0x00FFFF))
             if (i == 0) or (i > 0 and i % 6 != 0):
                 rom.write_bytes(0x3D080 + (level - 1) * 12 + (i * 2),
-                                struct.pack("H", (shuffled_levels[level][i] & 0x00FFFF) % 6))
+                                struct.pack("H", (world.player_levels[level][i] & 0x00FFFF) % 6))
 
     for i in range(6):
-        if bb_boss_enabled[i]:
+        if world.boss_butch_bosses[i]:
             rom.write_bytes(0x3F0000 + (level_pointers[0x770200 + i]), struct.pack("I", bb_bosses[0x770200 + i]))
 
     # copy ability shuffle
     if world.options.copy_ability_randomization.value > 0:
-        for enemy in copy_abilities:
+        for enemy in world.copy_abilities:
             if enemy in miniboss_remap:
                 rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1),
-                                struct.pack("H", ability_remap[copy_abilities[enemy]]))
+                                struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
             else:
                 rom.write_bytes(0xB3CAC + (enemy_remap[enemy] << 1),
-                                struct.pack("H", ability_remap[copy_abilities[enemy]]))
+                                struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
         # following only needs done on non-door rando
         # incredibly lucky this follows the same order (including 5E == star block)
-        rom.write_byte(0x2F77EA, 0x5E + (ability_remap[copy_abilities["Sparky"]] << 1))
-        rom.write_byte(0x2F7811, 0x5E + (ability_remap[copy_abilities["Sparky"]] << 1))
-        rom.write_byte(0x2F9BC4, 0x5E + (ability_remap[copy_abilities["Blocky"]] << 1))
-        rom.write_byte(0x2F9BEB, 0x5E + (ability_remap[copy_abilities["Blocky"]] << 1))
-        rom.write_byte(0x2FAC06, 0x5E + (ability_remap[copy_abilities["Jumper Shoot"]] << 1))
-        rom.write_byte(0x2FAC2D, 0x5E + (ability_remap[copy_abilities["Jumper Shoot"]] << 1))
-        rom.write_byte(0x2F9E7B, 0x5E + (ability_remap[copy_abilities["Yuki"]] << 1))
-        rom.write_byte(0x2F9EA2, 0x5E + (ability_remap[copy_abilities["Yuki"]] << 1))
-        rom.write_byte(0x2FA951, 0x5E + (ability_remap[copy_abilities["Sir Kibble"]] << 1))
-        rom.write_byte(0x2FA978, 0x5E + (ability_remap[copy_abilities["Sir Kibble"]] << 1))
-        rom.write_byte(0x2FA132, 0x5E + (ability_remap[copy_abilities["Haboki"]] << 1))
-        rom.write_byte(0x2FA159, 0x5E + (ability_remap[copy_abilities["Haboki"]] << 1))
-        rom.write_byte(0x2FA3E8, 0x5E + (ability_remap[copy_abilities["Boboo"]] << 1))
-        rom.write_byte(0x2FA40F, 0x5E + (ability_remap[copy_abilities["Boboo"]] << 1))
-        rom.write_byte(0x2F90E2, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
-        rom.write_byte(0x2F9109, 0x5E + (ability_remap[copy_abilities["Captain Stitch"]] << 1))
+        rom.write_byte(0x2F77EA, 0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1))
+        rom.write_byte(0x2F7811, 0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1))
+        rom.write_byte(0x2F9BC4, 0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1))
+        rom.write_byte(0x2F9BEB, 0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1))
+        rom.write_byte(0x2FAC06, 0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1))
+        rom.write_byte(0x2FAC2D, 0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1))
+        rom.write_byte(0x2F9E7B, 0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1))
+        rom.write_byte(0x2F9EA2, 0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1))
+        rom.write_byte(0x2FA951, 0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1))
+        rom.write_byte(0x2FA978, 0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1))
+        rom.write_byte(0x2FA132, 0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1))
+        rom.write_byte(0x2FA159, 0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1))
+        rom.write_byte(0x2FA3E8, 0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1))
+        rom.write_byte(0x2FA40F, 0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1))
+        rom.write_byte(0x2F90E2, 0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1))
+        rom.write_byte(0x2F9109, 0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1))
 
         if world.options.copy_ability_randomization == 2:
             for enemy in enemy_remap:
                 # we just won't include it for minibosses
-                rom.write_bytes(0xB3E40 + (enemy_remap[enemy] << 1), struct.pack("h", slot_random.randint(-1, 2)))
+                rom.write_bytes(0xB3E40 + (enemy_remap[enemy] << 1), struct.pack("h", world.random.randint(-1, 2)))
 
     # write jumping goal
     rom.write_bytes(0x94F8, struct.pack("H", world.options.jumping_target))
     rom.write_bytes(0x944E, struct.pack("H", world.options.jumping_target))
 
     from Utils import __version__
-    rom.name = bytearray(f'KDL3{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(
+        f'KDL3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x3C000, rom.name)
     rom.write_byte(0x3C020, world.options.game_language.value)

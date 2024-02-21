@@ -5,23 +5,23 @@ def hal_decompress(comp: bytes) -> bytes:
     """
     inpos = 0
 
-    input = 0
+    inval = 0
     output = bytearray()
-    while input != 0xFF:
+    while inval != 0xFF:
         remaining = 65536 - inpos
         if remaining < 1:
             return bytes()
-        input = comp[inpos]
+        inval = comp[inpos]
         inpos += 1
-        if input == 0xFF:
+        if inval == 0xFF:
             break
-        if (input & 0xE0) == 0xE0:
-            command = (input >> 2) & 0x07
-            length = (((input & 0x03) << 8) | comp[inpos]) + 1
+        if (inval & 0xE0) == 0xE0:
+            command = (inval >> 2) & 0x07
+            length = (((inval & 0x03) << 8) | comp[inpos]) + 1
             inpos += 1
         else:
-            command = input >> 5
-            length = (input & 0x1F) + 1
+            command = inval >> 5
+            length = (inval & 0x1F) + 1
         if (command == 2 and ((len(output) + 2*length) > 65536)) or (len(output) + length) > 65536:
             return bytes()
         if command == 0:

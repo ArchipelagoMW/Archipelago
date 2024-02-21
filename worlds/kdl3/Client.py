@@ -239,10 +239,10 @@ class KDL3SNIClient(SNIClient):
                 # only send to ourselves if no one else will take it
                 most_applicable_slot = int(slot)
         # print(most_applicable, most_applicable_slot)
-        UUID = uuid.uuid4().hex
+        item_uuid = uuid.uuid4().hex
         item = {
             **gift_base,
-            "ID": UUID,
+            "ID": item_uuid,
             "Sender": ctx.player_names[ctx.slot],
             "Receiver": ctx.player_names[most_applicable_slot],
             "SenderTeam": ctx.team,
@@ -251,7 +251,7 @@ class KDL3SNIClient(SNIClient):
         }
         # print(item)
         await update_object(ctx, f"Giftbox;{ctx.team};{most_applicable_slot}", {
-            UUID: item,
+            item_uuid: item,
         })
 
     async def game_watcher(self, ctx) -> None:
