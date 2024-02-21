@@ -2,8 +2,9 @@ from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
-    dependent_regions, dependent_regions_nmg, dependent_regions_ur
+    dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
+from worlds.generic import PlandoConnection
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -22,12 +23,17 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
     portal_pairs: Dict[Portal, Portal] = pair_portals(world)
     logic_rules = world.options.logic_rules
 
+    # output the entrances to the spoiler log here for convenience
+    for portal1, portal2 in portal_pairs.items():
+        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+
     # check if a portal leads to a hallway. if it does, update the hint text accordingly
     def hint_helper(portal: Portal, hint_string: str = "") -> str:
         # start by setting it as the name of the portal, for the case we're not using the hallway helper
         if hint_string == "":
             hint_string = portal.name
 
+        # unrestricted has fewer hallways, like the well rail
         if logic_rules == "unrestricted":
             hallways = hallway_helper_ur
         else:
@@ -69,6 +75,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
         return hint_string
 
     # create our regions, give them hint text if they're in a spot where it makes sense to
+    # we're limiting which ones get hints so that it still gets that ER feel with a little less BS
     for region_name, region_data in tunic_er_regions.items():
         hint_text = "error"
         if region_data.hint == 1:
@@ -90,7 +97,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
                     break
             regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
         elif region_data.hint == 3:
-            # only the west garden portal item for now
+            # west garden portal item is at a dead end in restricted, otherwise just in west garden
             if region_name == "West Garden Portal Item":
                 if world.options.logic_rules:
                     for portal1, portal2 in portal_pairs.items():
@@ -178,8 +185,16 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
+    plando_connections: List[PlandoConnection] = []
     fixed_shop = False
     logic_rules = world.options.logic_rules.value
+
+    if not logic_rules:
+        dependent_regions = dependent_regions_restricted
+    elif logic_rules == 1:
+        dependent_regions = dependent_regions_nmg
+    else:
+        dependent_regions = dependent_regions_ur
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
@@ -200,8 +215,46 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
+    # universal tracker support stuff, don't need to care about region dependency
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        if "TUNIC" in world.multiworld.re_gen_passthrough:
+            # universal tracker stuff, won't do anything in normal gen
+            for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
+                portal_name1 = ""
+                portal_name2 = ""
+
+                # skip this if 10 fairies laurels location is on, it can be handled normally
+                if portal1 == "Overworld Redux, Waterfall_" and portal2 == "Waterfall, Overworld Redux_" \
+                        and world.options.laurels_location == "10_fairies":
+                    continue
+
+                for portal in portal_mapping:
+                    if portal.scene_destination() == portal1:
+                        portal_name1 = portal.name
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                    if portal.scene_destination() == portal2:
+                        portal_name2 = portal.name
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                # shops have special handling
+                if not portal_name2 and portal2 == "Shop, Previous Region_":
+                    portal_name2 = "Shop Portal"
+                plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+
+    if plando_connections:
+        portal_pairs, dependent_regions, dead_ends, two_plus = \
+            create_plando_connections(plando_connections, dependent_regions, dead_ends, two_plus)
+
+        # if we have plando connections, our connected regions may change somewhat
+        while True:
+            test1 = len(connected_regions)
+            for region in connected_regions.copy():
+                connected_regions.update(add_dependent_regions(region, logic_rules))
+            test2 = len(connected_regions)
+            if test1 == test2:
+                break
+    
     # need to plando fairy cave, or it could end up laurels locked
-    # fix this later to be random? probably not?
+    # fix this later to be random after adding some item logic to dependent regions
     if world.options.laurels_location == "10_fairies":
         portal1 = None
         portal2 = None
@@ -217,7 +270,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         two_plus.remove(portal1)
         dead_ends.remove(portal2)
 
-    if world.options.fixed_shop:
+    if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         fixed_shop = True
         portal1 = None
         for portal in two_plus:
@@ -283,6 +336,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         shop_count = 1
         shop_scenes.add("Overworld Redux")
 
+    # for universal tracker, we want to skip shop gen
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        if "TUNIC" in world.multiworld.re_gen_passthrough:
+            shop_count = 0
+    
     for i in range(shop_count):
         portal1 = None
         for portal in two_plus:
@@ -311,10 +369,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs[portal1] = portal2
 
     if len(two_plus) == 1:
-        raise Exception("two plus had an odd number of portals, investigate this")
-
-    for portal1, portal2 in portal_pairs.items():
-        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        raise Exception("two plus had an odd number of portals, investigate this. last portal is " + two_plus[0].name)
 
     return portal_pairs
 
@@ -331,10 +386,11 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
 
 
 # loop through the static connections, return regions you can reach from this region
+# todo: refactor to take region_name and dependent_regions
 def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
     region_set = set()
     if not logic_rules:
-        regions_to_add = dependent_regions
+        regions_to_add = dependent_regions_restricted
     elif logic_rules == 1:
         regions_to_add = dependent_regions_nmg
     else:
@@ -451,3 +507,65 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # false means you're good to place the portal
     return False
+
+
+# this is for making the connections themselves
+def create_plando_connections(plando_connections: List[PlandoConnection],
+                              dependent_regions: Dict[Tuple[str, ...], List[str]], dead_ends: List[Portal],
+                              two_plus: List[Portal]) \
+        -> Tuple[Dict[Portal, Portal], Dict[Tuple[str, ...], List[str]], List[Portal], List[Portal]]:
+
+    portal_pairs: Dict[Portal, Portal] = {}
+    shop_num = 1
+    for connection in plando_connections:
+        p_entrance = connection.entrance
+        p_exit = connection.exit
+
+        portal1 = None
+        portal2 = None
+
+        # search two_plus for both at once
+        for portal in two_plus:
+            if p_entrance == portal.name:
+                portal1 = portal
+            if p_exit == portal.name:
+                portal2 = portal
+
+        # search dead_ends individually since we can't really remove items from two_plus during the loop
+        if not portal1:
+            for portal in dead_ends:
+                if p_entrance == portal.name:
+                    portal1 = portal
+                    break
+            dead_ends.remove(portal1)
+        else:
+            two_plus.remove(portal1)
+
+        if not portal2:
+            for portal in dead_ends:
+                if p_exit == portal.name:
+                    portal2 = portal
+                    break
+            if p_exit == "Shop Portal":
+                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region_")
+                shop_num += 1
+            else:
+                dead_ends.remove(portal2)
+        else:
+            two_plus.remove(portal2)
+
+        if not portal1:
+            raise Exception("could not find entrance named " + p_entrance + " for Tunic player's plando")
+        if not portal2:
+            raise Exception("could not find entrance named " + p_exit + " for Tunic player's plando")
+
+        portal_pairs[portal1] = portal2
+
+        # update dependent regions based on the plando'd connections, to make sure the portals connect well, logically
+        for origins, destinations in dependent_regions.items():
+            if portal1.region in origins:
+                destinations.append(portal2.region)
+            if portal2.region in origins:
+                destinations.append(portal1.region)
+            
+    return portal_pairs, dependent_regions, dead_ends, two_plus

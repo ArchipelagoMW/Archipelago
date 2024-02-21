@@ -103,16 +103,16 @@ class TestGanonsTower(TestDungeon):
             ["Ganons Tower - East Warp Room - Bottom Right", True, ['Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Fire Rod', 'Cane of Somaria']],
 
             ["Ganons Tower - Ice Armos Room - Middle", False, []],
-            ["Ganons Tower - Ice Armos Room - Middle", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
-            ["Ganons Tower - Ice Armos Room - Middle", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
+            ["Ganons Tower - Ice Armos Room - Middle", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
+            ["Ganons Tower - Ice Armos Room - Middle", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
 
             ["Ganons Tower - Ice Armos Room - Left", False, []],
-            ["Ganons Tower - Ice Armos Room - Left", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
-            ["Ganons Tower - Ice Armos Room - Left", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
+            ["Ganons Tower - Ice Armos Room - Left", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
+            ["Ganons Tower - Ice Armos Room - Left", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
 
             ["Ganons Tower - Ice Armos Room - Right", False, []],
-            ["Ganons Tower - Ice Armos Room - Right", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
-            ["Ganons Tower - Ice Armos Room - Right", True, ['Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
+            ["Ganons Tower - Ice Armos Room - Right", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Cane of Somaria', 'Fire Rod']],
+            ["Ganons Tower - Ice Armos Room - Right", True, ['Bomb Upgrade (+5)', 'Progressive Bow', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Small Key (Ganons Tower)', 'Hookshot', 'Hammer']],
 
             ["Ganons Tower - Mini Helmasaur Room - Left", False, []],
             ["Ganons Tower - Mini Helmasaur Room - Left", False, [], ['Progressive Bow']],
