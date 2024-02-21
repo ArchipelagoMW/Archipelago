@@ -175,7 +175,7 @@ class KDL3SNIClient(SNIClient):
             if "Candy" in traits or "Invincible" in traits:
                 # apply invincibility candy
                 self.item_queue.append(0x43)
-            elif "Tomato" in traits or "tomato" in gift["Name"].lower():
+            elif "Tomato" in traits or "tomato" in gift["ItemName"].lower():
                 # apply maxim tomato
                 # only want tomatos here, no other vegetable is that good
                 self.item_queue.append(0x42)
@@ -183,7 +183,7 @@ class KDL3SNIClient(SNIClient):
                 # Apply 1-Up
                 self.item_queue.append(0x41)
             elif "Currency" in traits or "Star" in traits:
-                value = gift["Item"]["Value"]
+                value = gift["ItemValue"]
                 if value >= 50000:
                     self.item_queue.append(0x46)
                 elif value >= 30000:
@@ -247,8 +247,7 @@ class KDL3SNIClient(SNIClient):
             "Receiver": ctx.player_names[most_applicable_slot],
             "SenderTeam": ctx.team,
             "ReceiverTeam": ctx.team,  # for the moment
-            "IsRefund": False,
-            "GiftValue": gift_base["Item"]["Value"] * gift_base["Item"]["Amount"]
+            "IsRefund": False
         }
         # print(item)
         await update_object(ctx, f"Giftbox;{ctx.team};{most_applicable_slot}", {
@@ -274,6 +273,7 @@ class KDL3SNIClient(SNIClient):
                 self.motherbox_key = f"Giftboxes;{ctx.team}"
                 enable_gifting = await snes_read(ctx, KDL3_GIFTING_FLAG, 0x01)
                 await initialize_giftboxes(ctx, self.giftbox_key, self.motherbox_key, bool(enable_gifting[0]))
+                self.initialize_gifting = True
             # can't check debug anymore, without going and copying the value. might be important later.
             if self.levels is None:
                 self.levels = dict()

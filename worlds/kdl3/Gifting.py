@@ -33,10 +33,10 @@ async def pop_object(ctx, key: str, value: str):
 async def initialize_giftboxes(ctx, giftbox_key: str, motherbox_key: str, is_open: bool):
     ctx.set_notify(motherbox_key, giftbox_key)
     await update_object(ctx, f"Giftboxes;{ctx.team}", {f"{ctx.slot}":
-          {
+        {
             "IsOpen": is_open,
             **kdl3_gifting_options
-          }})
+        }})
     ctx.gifting = is_open
 
 
@@ -46,16 +46,15 @@ kdl3_gifting_options = {
         "Consumable", "Food", "Drink", "Candy", "Tomato",
         "Invincible", "Life", "Heal", "Health", "Trap",
         "Goo", "Gel", "Slow", "Slowness", "Eject", "Removal"
-    ]
+    ],
+    "MinimumGiftVersion": 2,
 }
 
 kdl3_gifts = {
     1: {
-        "Item": {
-            "Name": "1-Up",
-            "Amount": 1,
-            "Value": 400000
-        },
+        "ItemName": "1-Up",
+        "Amount": 1,
+        "ItemValue": 400000,
         "Traits": [
             {
                 "Trait": "Consumable",
@@ -70,11 +69,9 @@ kdl3_gifts = {
         ]
     },
     2: {
-        "Item": {
-            "Name": "Maxim Tomato",
-            "Amount": 1,
-            "Value": 500000
-        },
+        "ItemName": "Maxim Tomato",
+        "Amount": 1,
+        "ItemValue": 500000,
         "Traits": [
             {
                 "Trait": "Consumable",
@@ -104,11 +101,9 @@ kdl3_gifts = {
         ]
     },
     3: {
-        "Item": {
-            "Name": "Energy Drink",
-            "Amount": 1,
-            "Value": 100000
-        },
+        "ItemName": "Energy Drink",
+        "Amount": 1,
+        "ItemValue": 100000,
         "Traits": [
             {
                 "Trait": "Consumable",
@@ -128,11 +123,9 @@ kdl3_gifts = {
         ]
     },
     5: {
-        "Item": {
-            "Name": "Small Star Piece",
-            "Amount": 1,
-            "Value": 10000
-        },
+        "ItemName": "Small Star Piece",
+        "Amount": 1,
+        "ItemValue": 10000,
         "Traits": [
             {
                 "Trait": "Currency",
@@ -152,11 +145,9 @@ kdl3_gifts = {
         ]
     },
     6: {
-        "Item": {
-            "Name": "Medium Star Piece",
-            "Amount": 1,
-            "Value": 30000
-        },
+        "ItemName": "Medium Star Piece",
+        "Amount": 1,
+        "ItemValue": 30000,
         "Traits": [
             {
                 "Trait": "Currency",
@@ -176,11 +167,9 @@ kdl3_gifts = {
         ]
     },
     7: {
-        "Item": {
-            "Name": "Large Star Piece",
-            "Amount": 1,
-            "Value": 50000
-        },
+        "ItemName": "Large Star Piece",
+        "Amount": 1,
+        "ItemValue": 50000,
         "Traits": [
             {
                 "Trait": "Currency",
@@ -203,11 +192,9 @@ kdl3_gifts = {
 
 kdl3_trap_gifts = {
     0: {
-        "Item": {
-            "Name": "Gooey Bag",
-            "Amount": 1,
-            "Value": 10000
-        },
+        "ItemName": "Gooey Bag",
+        "Amount": 1,
+        "ItemValue": 10000,
         "Traits": [
             {
                 "Trait": "Trap",
@@ -227,11 +214,9 @@ kdl3_trap_gifts = {
         ]
     },
     1: {
-        "Item": {
-            "Name": "Slowness",
-            "Amount": 1,
-            "Value": 10000
-        },
+        "ItemName": "Slowness",
+        "Amount": 1,
+        "ItemValue": 10000,
         "Traits": [
             {
                 "Trait": "Trap",
@@ -251,11 +236,9 @@ kdl3_trap_gifts = {
         ]
     },
     2: {
-        "Item": {
-            "Name": "Eject Ability",
-            "Amount": 1,
-            "Value": 10000
-        },
+        "ItemName": "Eject Ability",
+        "Amount": 1,
+        "ItemValue": 10000,
         "Traits": [
             {
                 "Trait": "Trap",
@@ -275,11 +258,9 @@ kdl3_trap_gifts = {
         ]
     },
     3: {
-        "Item": {
-            "Name": "Bad Meal",
-            "Amount": 1,
-            "Value": 10000
-        },
+        "ItemName": "Bad Meal",
+        "Amount": 1,
+        "ItemValue": 10000,
         "Traits": [
             {
                 "Trait": "Trap",
