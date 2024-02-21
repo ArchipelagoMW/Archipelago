@@ -639,164 +639,212 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     return portal1.region
             raise Exception("no matches found in get_paired_region")
 
+        # convenience helper
+        def get_portal_name(portal_sd: str) -> str:
+            for portal1, portal2 in portal_pairs.items():
+                if portal1.scene_destination() == portal_sd:
+                    return portal1.name
+                if portal2.scene_destination() == portal_sd:
+                    return portal2.name
+
         # The upper Swamp entrance
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Swamp Redux 2_wall")],
+            name=get_portal_name("Overworld Redux, Swamp Redux 2_wall" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Western Furnace entrance, next to the sign that leads to West Garden
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Furnace_gyro_west")],
+            name=get_portal_name("Overworld Redux, Furnace_gyro_west" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Upper West Garden entry, by the belltower
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Archipelagos Redux_upper")],
+            name=get_portal_name("Overworld Redux, Archipelagos Redux_upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # West Garden entry by the Furnace
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Archipelagos Redux_lower")],
+            name=get_portal_name("Overworld Redux, Archipelagos Redux_lower" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # West Garden laurels entrance, by the beach
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Archipelagos Redux_lowest")],
+            name=get_portal_name("Overworld Redux, Archipelagos Redux_lowest" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Well rail, west side. Can ls in town, get extra height by going over the portal pad
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Sewer_west_aqueduct")],
+            name=get_portal_name("Overworld Redux, Sewer_west_aqueduct" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Well rail, east side. Need some height from the temple stairs
         regions["Overworld"].connect(
             regions[get_paired_region("Overworld Redux, Furnace_gyro_upper_north")],
+            name=get_portal_name("Overworld Redux, Furnace_gyro_upper_north" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Furnace ladder to the fuse entrance
         regions["Furnace Ladder Area"].connect(
             regions[get_paired_region("Furnace, Overworld Redux_gyro_upper_north")],
+            name=get_portal_name("Furnace, Overworld Redux_gyro_upper_north" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Furnace ladder to Dark Tomb
         regions["Furnace Ladder Area"].connect(
             regions[get_paired_region("Furnace, Crypt Redux_")],
+            name=get_portal_name("Furnace, Crypt Redux_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Furnace ladder to the West Garden connector
         regions["Furnace Ladder Area"].connect(
             regions[get_paired_region("Furnace, Overworld Redux_gyro_west")],
+            name=get_portal_name("Furnace, Overworld Redux_gyro_west" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # West Garden exit after Garden Knight
         regions["West Garden"].connect(
             regions[get_paired_region("Archipelagos Redux, Overworld Redux_upper")],
+            name=get_portal_name("Archipelagos Redux, Overworld Redux_upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # West Garden laurels exit
         regions["West Garden"].connect(
             regions[get_paired_region("Archipelagos Redux, Overworld Redux_lowest")],
+            name=get_portal_name("Archipelagos Redux, Overworld Redux_lowest" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Frog mouth entrance
         regions["Ruined Atoll"].connect(
             regions[get_paired_region("Atoll Redux, Frog Stairs_mouth")],
+            name=get_portal_name("Atoll Redux, Frog Stairs_mouth" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Entrance by the dancing fox holy cross spot
         regions["East Forest"].connect(
             regions[get_paired_region("East Forest Redux, East Forest Redux Laddercave_upper")],
+            name=get_portal_name("East Forest Redux, East Forest Redux Laddercave_upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # From the west side of guard house 1 to the east side
         regions["Guard House 1 West"].connect(
             regions[get_paired_region("East Forest Redux Laddercave, East Forest Redux_gate")],
+            name=get_portal_name("East Forest Redux Laddercave, East Forest Redux_gate" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Guard House 1 West"].connect(
             regions[get_paired_region("East Forest Redux Laddercave, Forest Boss Room_")],
+            name=get_portal_name("East Forest Redux Laddercave, Forest Boss Room_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Upper exit from the Forest Grave Path, use ls at the ladder by the gate switch
         regions["Forest Grave Path Main"].connect(
             regions[get_paired_region("Sword Access, East Forest Redux_upper")],
+            name=get_portal_name("Sword Access, East Forest Redux_upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Fortress exterior shop, ls at the ladder by the telescope
         regions["Fortress Exterior from Overworld"].connect(
             regions[get_paired_region("Fortress Courtyard, Shop_")],
+            name=get_portal_name("Fortress Courtyard, Shop_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
         regions["Fortress Exterior from Overworld"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Main_Big Door")],
+            name=get_portal_name("Fortress Courtyard, Fortress Main_Big Door" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from Overworld"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Lower")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Lower" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Upper exits from the courtyard. Use the ramp in the courtyard, then the blocks north of the first fuse
         regions["Fortress Exterior from Overworld"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Upper")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from Overworld"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress East_")],
+            name=get_portal_name("Fortress Courtyard, Fortress East_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # same as above, except from the east side of the area
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Overworld Redux_")],
+            name=get_portal_name("Fortress Courtyard, Overworld Redux_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Shop_")],
+            name=get_portal_name("Fortress Courtyard, Shop_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Main_Big Door")],
+            name=get_portal_name("Fortress Courtyard, Fortress Main_Big Door" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Lower")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Lower" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Upper")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior from East Forest"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress East_")],
+            name=get_portal_name("Fortress Courtyard, Fortress East_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # same as above, except from the Beneath the Vault entrance ladder
         regions["Fortress Exterior near cave"].connect(
             regions[get_paired_region("Fortress Courtyard, Overworld Redux_")],
+            name=get_portal_name("Fortress Courtyard, Overworld Redux_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior near cave"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Main_Big Door")],
+            name=get_portal_name("Fortress Courtyard, Fortress Main_Big Door" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior near cave"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Lower")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Lower" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior near cave"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress Reliquary_Upper")],
+            name=get_portal_name("Fortress Courtyard, Fortress Reliquary_Upper" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Fortress Exterior near cave"].connect(
             regions[get_paired_region("Fortress Courtyard, Fortress East_")],
+            name=get_portal_name("Fortress Courtyard, Fortress East_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # ls at the ladder, need to gain a little height to get up the stairs
         regions["Lower Mountain"].connect(
             regions[get_paired_region("Mountain, Mountaintop_")],
+            name=get_portal_name("Mountain, Mountaintop_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Where the rope is behind Monastery. Connecting here since, if you have this region, you don't need a sword
         regions["Quarry Monastery Entry"].connect(
             regions[get_paired_region("Quarry Redux, Monastery_back")],
+            name=get_portal_name("Quarry Redux, Monastery_back" + " (LS)"),
             rule=lambda state: has_stick(state, player))
 
         # Swamp to Gauntlet
         regions["Swamp"].connect(
             regions[get_paired_region("Swamp Redux 2, Cathedral Arena_")],
+            name=get_portal_name("Swamp Redux 2, Cathedral Arena_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Swamp to Overworld upper
         regions["Swamp"].connect(
             regions[get_paired_region("Swamp Redux 2, Overworld Redux_wall")],
+            name=get_portal_name("Swamp Redux 2, Overworld Redux_wall" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Ladder by the hero grave
         regions["Back of Swamp"].connect(
             regions[get_paired_region("Swamp Redux 2, Overworld Redux_conduit")],
+            name=get_portal_name("Swamp Redux 2, Overworld Redux_conduit" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         regions["Back of Swamp"].connect(
             regions[get_paired_region("Swamp Redux 2, Shop_")],
+            name=get_portal_name("Swamp Redux 2, Shop_" + " (LS)"),
             rule=lambda state: has_stick(state, player))
         # Need to put the cathedral HC code mid-flight
         regions["Back of Swamp"].connect(
             regions[get_paired_region("Swamp Redux 2, Cathedral Redux_secret")],
+            name=get_portal_name("Swamp Redux 2, Cathedral Redux_secret" + " (LS)"),
             rule=lambda state: has_stick(state, player)
             and has_ability(state, player, holy_cross, options, ability_unlocks))
 
