@@ -221,16 +221,17 @@ cdef class LocationStore:
             receivers = ap_player_set_new(min(1023, slot_count))  # limit top level struct to 16KB
             if not receivers:
                 raise MemoryError()
-            for receiver in slots:
-                if not ap_player_set_add(receivers, receiver):
-                    ap_player_set_free(receivers)
-                    raise MemoryError()
-            with nogil:
-                for entry in self.entries[:self.entry_count]:
-                    if entry.item == item and ap_player_set_contains(receivers, entry.receiver):
-                        with gil:
-                            yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
-            ap_player_set_free(receivers)
+            try:
+                for receiver in slots:
+                    if not ap_player_set_add(receivers, receiver):
+                        raise MemoryError()
+                with nogil:
+                    for entry in self.entries[:self.entry_count]:
+                        if entry.item == item and ap_player_set_contains(receivers, entry.receiver):
+                            with gil:
+                                yield entry.sender, entry.location, entry.item, entry.receiver, entry.flags
+            finally:
+                ap_player_set_free(receivers)
 
     def get_for_player(self, slot: int) -> Dict[int, Set[int]]:
         cdef ap_player_t receiver = slot
