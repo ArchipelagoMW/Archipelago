@@ -313,7 +313,7 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
     set_rule(multiworld.get_location("Quarry - [West] Upper Area Bombable Wall", player),
              lambda state: has_mask(state, player, options))
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or (state.has(orb, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
