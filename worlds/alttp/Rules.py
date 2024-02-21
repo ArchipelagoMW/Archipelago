@@ -334,9 +334,9 @@ def global_rules(world, player):
     # You can always kill the Stalfos' with the pots on easy/normal
     if world.enemy_health[player] in ("hard", "expert") or world.enemy_shuffle[player]:
         stalfos_rule = lambda state: can_kill_most_things(state, player, 4)
-        for location in ['Eastern Palace - Compass Chest', 'Eastern Palace - Big Chest',
+        for location in ['Eastern Palace - Skeleton Ambush Chest', 'Eastern Palace - Big Chest',
                          'Eastern Palace - Dark Square Pot Key', 'Eastern Palace - Dark Eyegore Key Drop',
-                         'Eastern Palace - Big Key Chest', 'Eastern Palace - Boss', 'Eastern Palace - Prize']:
+                         'Eastern Palace - Antifairy Chest', 'Eastern Palace - Boss', 'Eastern Palace - Prize']:
             add_rule(world.get_location(location, player), stalfos_rule)
 
     set_rule(world.get_location('Desert Palace - Big Chest', player), lambda state: state.has('Big Key (Desert Palace)', player))
@@ -369,7 +369,7 @@ def global_rules(world, player):
 
     set_rule(world.get_entrance('Swamp Palace Moat', player), lambda state: state.has('Flippers', player) and state.has('Open Floodgate', player))
     set_rule(world.get_entrance('Swamp Palace Small Key Door', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player))
-    set_rule(world.get_location('Swamp Palace - Map Chest', player), lambda state: can_use_bombs(state, player))
+    set_rule(world.get_location('Swamp Palace - Bomb Wall', player), lambda state: can_use_bombs(state, player))
     set_rule(world.get_location('Swamp Palace - Trench 1 Pot Key', player), lambda state: state._lttp_has_key('Small Key (Swamp Palace)', player, 2))
     set_rule(world.get_entrance('Swamp Palace (Center)', player), lambda state: state.has('Hammer', player) and state._lttp_has_key('Small Key (Swamp Palace)', player, 3))
     set_rule(world.get_location('Swamp Palace - Hookshot Pot Key', player), lambda state: state.has('Hookshot', player))
@@ -418,7 +418,7 @@ def global_rules(world, player):
     add_rule(world.get_location('Skull Woods - Boss', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 5))
 
     set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
-    set_rule(world.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
+    set_rule(world.get_location('Ice Palace - Pengator Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
     if not world.enemy_shuffle[player]:
         # Stalfos Knights can be killed by damaging them repeatedly with boomerang, swords, etc. if bombs are
@@ -560,11 +560,11 @@ def global_rules(world, player):
     set_rule(world.get_location('Ganons Tower - Big Chest', player), lambda state: state.has('Big Key (Ganons Tower)', player))
 
     set_rule(world.get_location('Ganons Tower - Ice Armos Room - Left', player),
-             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Room - Left', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
+             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Ice Armos Room - Left', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
     set_rule(world.get_location('Ganons Tower - Ice Armos Room - Middle', player),
-             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Chest', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
+             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Ice Armos Room - Middle', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
     set_rule(world.get_location('Ganons Tower - Ice Armos Room - Right', player),
-             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Big Key Room - Right', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
+             lambda state: can_use_bombs(state, player) and state.multiworld.get_location('Ganons Tower - Ice Armos Room - Right', player).parent_region.dungeon.bosses['bottom'].can_defeat(state))
     if world.enemy_shuffle[player]:
         set_rule(world.get_entrance('Ganons Tower Big Key Door', player),
                  lambda state: state.has('Big Key (Ganons Tower)', player))
@@ -1002,7 +1002,7 @@ def add_conditional_lamps(world, player):
 
 def open_rules(world, player):
 
-    set_rule(world.get_location('Hyrule Castle - Map Guard Key Drop', player),
+    set_rule(world.get_location('Hyrule Castle - First Guard Key Drop', player),
              lambda state: can_kill_most_things(state, player, 1))
 
     def basement_key_rule(state):
@@ -1030,7 +1030,7 @@ def swordless_rules(world, player):
     set_rule(world.get_entrance('Skull Woods Torch Room', player), lambda state: state._lttp_has_key('Small Key (Skull Woods)', player, 3) and state.has('Fire Rod', player))  # no curtain
 
     set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: state.has('Fire Rod', player) or state.has('Bombos', player))
-    set_rule(world.get_location('Ice Palace - Compass Chest', player), lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
+    set_rule(world.get_location('Ice Palace - Pengator Chest', player), lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: (state.has('Fire Rod', player) or state.has('Bombos', player)) and state._lttp_has_key('Small Key (Ice Palace)', player))
 
     set_rule(world.get_entrance('Ganon Drop', player), lambda state: state.has('Hammer', player))  # need to damage ganon to get tiles to drop
