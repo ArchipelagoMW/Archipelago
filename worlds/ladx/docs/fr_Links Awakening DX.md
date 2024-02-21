@@ -18,7 +18,7 @@ certains objets à votre propre monde.
 
 Le jeu essaiera de choisir un **sprite** approprié pour l'objet (une épée LttP sera une épée !) - il se peut cependant que ce soit un peu bizarre (un paquet de missiles peut être une simple flèche).
 
-S'il n'y a pas de sprite approprié, une lettre sera affichée.
+S'il n'y a pas de **sprite** approprié, une lettre sera affichée.
 
 ## Que se passe-t-il lorsque le joueur reçoit un objet ?
 
@@ -31,13 +31,13 @@ Ce n'est pas une question - mais je vous suggère de cliquer sur l'icône du cor
 
 ## Sur quoi est basé ce randomiseur ?
 
-Ce randomiseur est basé sur (forké à partir de) le merveilleux travail que daid a fait sur LADXR - https://github.com/daid/LADXR
+Ce randomiseur est basé sur le merveilleux travail que daid a fait sur LADXR - https://github.com/daid/LADXR
 
-Le code de l'autotracker pour la communication avec le tracker magpie est directement copié du repo de kbranch - https://github.com/kbranch/Magpie/tree/master/autotracking
+Le code de l'autotracker pour la communication avec le tracker magpie est directement copié du github de kbranch - https://github.com/kbranch/Magpie/tree/master/autotracking
 
 ### Graphiques
 
-Les images de sprites suivantes ont été incluses avec l'autorisation de leurs auteurs respectifs :
+Les images de **sprite** suivantes ont été incluses avec l'autorisation de leurs auteurs respectifs :
 
 * Par Madam Materia (https://www.twitch.tv/isabelle_zephyr)
   * Matty_LA
@@ -54,7 +54,7 @@ Graphisme de l'écran de titre par toomanyteeth✨ (https://instagram.com/tooman
 ## Quelques conseils de LADXR...
 
 <h3>Emplacements</h3>
-<p>Les coffres et les clés de donjons sont toujours randomisés. De même, les 3 chansons (Marin, Mambo et Manu) vous donnent un objet si vous leur présentez l'Ocarina. La récompense de 20 seashell du manoir est également aléatoire, mais pas les récompenses de 5 et 10 seashell car elles peuvent être manquées.</p>
+<p>Les coffres et les clés de donjons sont toujours randomisés. De même, les 3 chansons (Marin, Mambo et Manu) vous donnent un objet en présentant l'Ocarina. La récompense de 20 seashell du manoir est également aléatoire, mais pas les récompenses de 5 et 10 seashell car elles peuvent être manquées.</p>
 <p>La moblin cave avec Bowwow contient un coffre à la place. Le Color Dungeon donne 2 objets à la fin au lieu d'un choix de tunique. Les autres emplacements d'objets sont : Le toadstool, la récompense pour avoir livré le toadstool, hidden seashells, heart pieces, heart containers, golden leaves, les 3 Mad Batters (améliorations de capacité), la shovel/bow dans la boutique, la tombe du rooster's, et tous les emplacements des clés (tail,slime,angler,face,bird) .</p>
 <p>Enfin, les nouveaux joueurs oublient souvent les endroits suivants : le heart piece caché dans l'eau du  chateau, le heart piece caché dans la bomb cave (écran avant le trade honey), les bonk seashells (courir avec les bottes de pégase contre l'arbre devant Tail Cave, et l'arbre à droite de Mabe Village, à côté de la cabine téléphonique), et l'item du Maître Stalfos dans D5.</p>
 
