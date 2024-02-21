@@ -13,7 +13,7 @@ zones plus tôt que dans le jeu original.
 
 ## Quels sont les objets et endroits mélangés ?
 
-Tous les objets principaux, les collectibles et munitions peuvent être mélangés, et toutes les zones du jeu qui
+Tous les objets principaux, les collectibles et munitions peuvent être mélangés, et tous les endroits qui
 pourraient contenir un de ces objets peuvent avoir leur contenu modifié.
 
 ## Quels objets peuvent être dans le monde d'un autre joueur ?

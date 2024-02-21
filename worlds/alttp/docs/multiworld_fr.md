@@ -17,7 +17,7 @@
 
 ## Procédure d'installation
 
-1. Téléchargez et installez [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). **L'installeur se situe dans la section "assets" en bas des informations de version**.
+1. Téléchargez et installez [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases). **L'installateur se situe dans la section "assets" en bas des informations de version**.
    
 2. Si c'est la première fois que vous faites une génération locale ou un patch, il vous sera demandé votre fichier ROM de base. Il s'agit de votre fichier ROM Link to the Past japonais. Cet étape n'a besoin d'être faite qu'une seule fois.
 
