@@ -40,7 +40,7 @@ class SoulBlazerWorld(World):
 
     # ID of first item and location, could be hard-coded but code may be easier
     # to read with this as a property.
-    base_id = 1234
+    base_id = 374518970000
     # Instead of dynamic numbering, IDs could be part of data.
 
     # The following two dicts are required for the generation to know which
