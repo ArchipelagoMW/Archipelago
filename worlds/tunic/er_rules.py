@@ -640,6 +640,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     return portal2.name, portal1.region
             raise Exception("no matches found in get_paired_region")
 
+        # List of regions, and the portal you can get to using ladder storage there
         ls_dict: List[Tuple[str, str]] = [
             # The upper Swamp entrance
             ("Overworld", "Overworld Redux, Swamp Redux 2_wall"),
@@ -723,6 +724,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         ]
         for region_name, scene_dest in ls_dict:
             portal_name, paired_region = get_portal_info(scene_dest)
+            # this is the only exception, requiring holy cross as well
             if portal_name == "Swamp to Cathedral Secret Legend Room Entrance":
                 regions[region_name].connect(
                     regions[paired_region],
