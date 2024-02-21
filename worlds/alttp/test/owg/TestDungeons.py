@@ -6,13 +6,14 @@ class TestDungeons(TestVanillaOWG):
     def testFirstDungeonChests(self):
         self.run_location_tests([
             ["Hyrule Castle - Map Chest", True, []],
-            ["Hyrule Castle - Map Guard Key Drop", True, []],
+            ["Hyrule Castle - Map Guard Key Drop", False, []],
+            ["Hyrule Castle - Map Guard Key Drop", True, ['Progressive Sword']],
 
             ["Sanctuary", True, []],
 
             ["Sewers - Secret Room - Left", False, []],
-            ["Sewers - Secret Room - Left", True, ['Progressive Glove']],
-            ["Sewers - Secret Room - Left", True, ['Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Pegasus Boots', 'Progressive Glove']],
+            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Bomb Upgrade (+5)', 'Lamp', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", True, []],
 
@@ -41,10 +42,9 @@ class TestDungeons(TestVanillaOWG):
 
             ["Castle Tower - Room 03", False, []],
             ["Castle Tower - Room 03", False, ['Progressive Sword'], ['Progressive Sword', 'Cape', 'Beat Agahnim 1']],
-            ["Castle Tower - Room 03", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
             ["Castle Tower - Room 03", True, ['Progressive Sword', 'Progressive Sword']],
-            ["Castle Tower - Room 03", True, ['Cape', 'Progressive Bow']],
-            ["Castle Tower - Room 03", True, ['Beat Agahnim 1', 'Fire Rod']],
+            ["Castle Tower - Room 03", True, ['Progressive Sword', 'Cape']],
+            ["Castle Tower - Room 03", True, ['Progressive Sword', 'Beat Agahnim 1']],
 
             ["Palace of Darkness - Shooter Room", False, []],
             ["Palace of Darkness - Shooter Room", False, [], ['Moon Pearl']],
@@ -69,9 +69,10 @@ class TestDungeons(TestVanillaOWG):
 
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
             #todo: Bomb Jump in logic?
             #["Skull Woods - Big Chest", True, ['Magic Mirror', 'Pegasus Boots', 'Big Key (Skull Woods)']],
-            ["Skull Woods - Big Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots', 'Big Key (Skull Woods)']],
 
             ["Skull Woods - Big Key Chest", False, []],
             ["Skull Woods - Big Key Chest", True, ['Magic Mirror', 'Pegasus Boots']],
@@ -111,8 +112,8 @@ class TestDungeons(TestVanillaOWG):
             ["Turtle Rock - Chain Chomps", False, []],
             #todo: does clip require sword?
             #["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots']],
-            ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots', 'Progressive Sword']],
-            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror']],
+            ["Turtle Rock - Chain Chomps", True, ['Moon Pearl', 'Pegasus Boots', 'Progressive Sword', 'Progressive Sword']],
+            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror', 'Progressive Bow']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
             ["Turtle Rock - Crystaroller Room", False, [], ['Big Key (Turtle Rock)']],
