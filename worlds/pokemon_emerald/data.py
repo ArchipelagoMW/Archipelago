@@ -105,6 +105,7 @@ class Warp:
 class ItemData(NamedTuple):
     label: str
     item_id: int
+    modern_id: Optional[int]
     classification: ItemClassification
     tags: FrozenSet[str]
 
@@ -485,6 +486,7 @@ def _init() -> None:
         data.items[data.constants[item_constant_name]] = ItemData(
             attributes["label"],
             data.constants[item_constant_name],
+            attributes["modern_id"],
             item_classification,
             frozenset(attributes["tags"])
         )
