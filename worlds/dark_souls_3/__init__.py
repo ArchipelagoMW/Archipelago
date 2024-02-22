@@ -446,7 +446,7 @@ class DarkSouls3World(World):
                           state.has("Cinders of a Lord - Lothric Prince", self.player))
 
         if self.options.late_basin_of_vows:
-            self._add_entrance_rule("Lothric Castle", "Small Lothric Banner")
+            self._add_entrance_rule("Lothric Castle", lambda state: state.can_reach("Go To Road of Sacrifices", "Entrance", self.player))
 
         # DLC Access Rules Below
         if self.options.enable_dlc:
@@ -468,6 +468,7 @@ class DarkSouls3World(World):
         self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
                                 "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring - Siegward's cell", "Old Cell Key")
+        self._add_location_rule("ID: Titanite Slab - Siegward", "Old Cell Key")
         self._add_location_rule(
             "UG: Hornet Ring - environs, right of main path after killing FK boss",
             "Small Lothric Banner"
@@ -554,7 +555,7 @@ class DarkSouls3World(World):
         for (soul, soul_name, items) in transpositions:
             self._add_location_rule([
                 f"FS: {item} - Ludleth for {soul_name}" for item in items
-            ], lambda state: (
+            ], lambda state, soul=soul: (
                 state.has(soul, self.player) and state.has("Transposing Kiln", self.player)
             ))
 
@@ -569,7 +570,7 @@ class DarkSouls3World(World):
             "FS: Hawkwood's Swordgrass - Andre after gesture in AP summit"
         ], "Twinkling Dragon Torso Stone")
 
-        # Shop unlocks:
+        # Shop unlocks
         shop_unlocks = {
             "Cornyx": [
                 (
@@ -680,6 +681,8 @@ class DarkSouls3World(World):
             "ID: Prisoner Chief's Ashes - B2 near, locked cell by stairs",
             "Jailer's Key Ring"
         )
+        
+        # Cornyx
         self._add_location_rule([
             "US: Old Sage's Blindfold - kill Cornyx", "US: Cornyx's Garb - kill Cornyx",
             "US: Cornyx's Wrap - kill Cornyx", "US: Cornyx's Skirt - kill Cornyx"
@@ -687,6 +690,63 @@ class DarkSouls3World(World):
             state.has("Great Swamp Pyromancy Tome", self.player)
             and state.has("Carthus Pyromancy Tome", self.player)
             and state.has("Izalith Pyromancy Tome", self.player)
+        ))
+
+        # Irina
+        self._add_location_rule([
+            "US: Tower Key - kill Irina"
+        ], lambda state: (
+            state.has("Braille Divine Tome of Carim", self.player)
+            and state.has("Braille Divine Tome of Lothric", self.player)
+        ))
+
+        # Orbeck
+        self._add_location_rule([
+            "FS: Morion Blade - Yuria for Orbeck's Ashes",
+            "FS: Clandestine Coat - shop with Orbeck's Ashes"
+        ], lambda state: (
+            state.has("Golden Scroll", self.player)
+            and state.has("Logan's Scroll", self.player)
+            and state.has("Crystal Scroll", self.player)
+            and state.has("Sage's Scroll", self.player)
+        ))
+
+        # Karla
+        self._add_location_rule([
+            "FS: Karla's Trousers - kill Karla",
+            "FS: Karla's Pointed Hat - kill Karla",
+            "FS: Karla's Gloves - kill Karla",
+            "FS: Karla's Coat - kill Karla"
+        ], lambda state: (
+            state.has("Deep Braille Divine Tome", self.player)
+            and state.has("Londor Braille Divine Tome", self.player)
+            and state.has("Quelana Pyromancy Tome", self.player)
+            and state.has("Grave Warden Pyromancy Tome", self.player)
+        ))
+
+        # Patches
+        self._add_location_rule([
+            "CD: Winged Spear - kill Patches"
+        ], lambda state: (
+            state.has("Small Doll", self.player)
+            and state.has("Basin of Vows", self.player)
+            and state.has("Loretta's Bone", self.player)
+            and state.has("Tower Key", self.player)
+            and state.has("Cell Key", self.player)
+        ))
+
+        self._add_location_rule([
+            "FS: Rusted Gold Coin - don't forgive Patches"
+        ], lambda state: (
+            state.has("Tower Key", self.player)
+        ))
+
+        # Leonhard
+        self._add_location_rule([
+            "CD: Black Eye Orb - Rosaria from Leonhard's quest"
+        ], lambda state: (
+            state.has("Pale Tongue", self.player)
+            and state.has("Lift Chamber Key", self.player)
         ))
 
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
@@ -708,7 +768,7 @@ class DarkSouls3World(World):
         # Lump Soul of the Dancer in with LC for locations that should not be reachable
         # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
         if self.options.late_basin_of_vows:
-            self._add_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
+            self._add_location_rule("HWL: Soul of the Dancer", lambda state: state.can_reach("Go To Road of Sacrifices", "Entrance", self.player))
             # This isn't really necessary, but it ensures that the game logic knows players will
             # want to do Lothric Castle after at least being _able_ to access Catacombs. This is
             # useful for smooth item placement.
