@@ -19,7 +19,7 @@ class CV64Location(Location):
 #                 determine the World's Item counts by checking what Locations are active.
 # "hard item" = The Item normally there in Hard Mode in the PAL version of CV64 specifically. Used instead of the
 #               normal Item when the hard Item pool is enabled if it's in the Location's data dict.
-# "add conds" = A tuple of player options conditions that must be satisfied for the Location to be added. Can be of
+# "add conds" = A list of player options conditions that must be satisfied for the Location to be added. Can be of
 #               varying length depending on how many conditions need to be satisfied. In the add_conds dict's tuples,
 #               the first element is the name of the option, the second is the option value to check for, and the third
 #               is a boolean for whether we are evaluating for the option value or not.

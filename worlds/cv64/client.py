@@ -1,9 +1,10 @@
-from typing import TYPE_CHECKING, Optional, Set
+from typing import TYPE_CHECKING, Set
 from .locations import base_id
 from .text import cv64_text_wrap, cv64_string_to_bytearray
 
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
+import base64
 from worlds._bizhawk.client import BizHawkClient
 
 if TYPE_CHECKING:
@@ -18,29 +19,27 @@ class Castlevania64Client(BizHawkClient):
     received_deathlinks = 0
     currently_shopping = False
     local_checked_locations: Set[int]
-    rom_slot_name: Optional[str]
 
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = set()
-        self.rom_slot_name = None
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from CommonClient import logger
 
         try:
-            # Check if ROM is some version of Castlevania 64
-            game_name = ((await bizhawk.read(ctx.bizhawk_ctx, [(0x20, 0x14, "ROM")]))[0]).decode("ascii")
-            if game_name != "CASTLEVANIA         ":
+            # Check ROM name/patch version
+            game_names = await bizhawk.read(ctx.bizhawk_ctx, [(0x20, 0x14, "ROM"), (0xBFBFD0, 12, "ROM")])
+            if game_names[0].decode("ascii") != "CASTLEVANIA         ":
                 return False
-            
-            # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
-            # validating a ROM where there's no slot name to read.
-            try:
-                slot_name_bytes = (await bizhawk.read(ctx.bizhawk_ctx, [(0xBFBFE0, 0x10, "ROM")]))[0]
-                self.rom_slot_name = bytes([byte for byte in slot_name_bytes if byte != 0]).decode("utf-8")
-            except UnicodeDecodeError:
-                logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+            if game_names[1] == b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00':
+                logger.info("ERROR: You appear to be running an unpatched version of Castlevania 64. "
+                            "You need to generate a patch file and use it to create a patched ROM.")
+                return False
+            if game_names[1].decode("ascii") != "ARCHIPELAGO1":
+                logger.info("ERROR: The patch file used to create this ROM is not compatible with "
+                            "this client. Double check your client version against the version being "
+                            "used by the generator.")
                 return False
         except UnicodeDecodeError:
             return False
@@ -54,9 +53,8 @@ class Castlevania64Client(BizHawkClient):
         return True
 
     async def set_auth(self, ctx: "BizHawkClientContext") -> None:
-        ctx.auth = self.rom_slot_name
-
-        # Send a LocationScout for the Renon shop
+        auth_raw = (await bizhawk.read(ctx.bizhawk_ctx, [(0xBFBFE0, 16, "ROM")]))[0]
+        ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
         if cmd == "Bounced":
@@ -71,7 +69,8 @@ class Castlevania64Client(BizHawkClient):
                                                               (0x389BDE, 6, "RDRAM"),
                                                               (0x389BE4, 224, "RDRAM"),
                                                               (0x389EFB, 1, "RDRAM"),
-                                                              (0x389EEF, 1, "RDRAM")])
+                                                              (0x389EEF, 1, "RDRAM"),
+                                                              (0xBFBFDE, 2, "ROM")])
 
             game_state = int.from_bytes(read_state[0], "big")
             save_struct = read_state[2]
@@ -80,6 +79,7 @@ class Castlevania64Client(BizHawkClient):
             cutscene_value = int.from_bytes(read_state[3], "big")
             current_menu = int.from_bytes(read_state[4], "big")
             num_received_items = int.from_bytes(bytearray(save_struct[0xDA:0xDC]), "big")
+            rom_flags = int.from_bytes(read_state[5], "big")
 
             # Make sure we are in the Gameplay or Credits states before detecting sent locations and/or DeathLinks.
             # If we are in any other state, such as the Game Over state, set currently_dead to false, so we can once
@@ -88,18 +88,17 @@ class Castlevania64Client(BizHawkClient):
                 self.self_induced_death = False
                 return
 
-            # Enable DeathLink if it's on in our slot_data.
-            if ctx.slot_data is not None:
-                if ctx.slot_data["death_link"] and "DeathLink" not in ctx.tags:
-                    await ctx.update_death_link(True)
+            # Enable DeathLink if the bit for it is set in our ROM flags.
+            if "DeathLink" not in ctx.tags and rom_flags & 0x0100:
+                await ctx.update_death_link(True)
 
-                # Scout the Renon shop locations if shopsanity is in our slot_data.
-                if ctx.slot_data["shopsanity"] and ctx.locations_info == {}:
-                    await ctx.send_msgs([{
-                            "cmd": "LocationScouts",
-                            "locations": [base_id + i for i in range(0x1C8, 0x1CF)],
-                            "create_as_hint": 0
-                        }])
+            # Scout the Renon shop locations if shopsanity is in our slot_data.
+            if rom_flags & 0x0001 and ctx.locations_info == {}:
+                await ctx.send_msgs([{
+                        "cmd": "LocationScouts",
+                        "locations": [base_id + i for i in range(0x1C8, 0x1CF)],
+                        "create_as_hint": 0
+                    }])
 
             # Send a DeathLink if we died on our own independently of receiving another one.
             if "DeathLink" in ctx.tags and save_struct[0xA4] & 0x80 and not self.self_induced_death and not \

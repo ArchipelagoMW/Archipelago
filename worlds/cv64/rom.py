@@ -82,7 +82,7 @@ class LocalRom:
 
 
 def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], shop_name_list: List[str],
-              shop_desc_list: List[List[Union[int, str, None]]], shop_colors_list: List[bytearray], slot_name: bytes,
+              shop_desc_list: List[List[Union[int, str, None]]], shop_colors_list: List[bytearray],
               active_locations: Iterable[Location]) -> None:
 
     multiworld = world.multiworld
@@ -384,6 +384,10 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Make received DeathLinks blow you to smithereens instead of kill you normally.
     if options.death_link.value == options.death_link.option_explosive:
+        rom.write_byte(0xBFBFDE, 0x01)
+
+    # Set the DeathLink ROM flag if it's on at all.
+    if options.death_link.value != options.death_link.option_off:
         rom.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
         rom.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
 
@@ -774,6 +778,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Everything related to shopsanity
     if options.shopsanity.value:
+        rom.write_byte(0xBFBFDF, 0x01)
         rom.write_bytes(0x103868, cv64_string_to_bytearray("Not obtained. "))
         rom.write_int32s(0xBFD8D0, patches.shopsanity_stuff)
         rom.write_int32(0xBD828, 0x0C0FF643)  # JAL	0x803FD90C
@@ -850,8 +855,10 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32(0xEE5BC, 0x3FF00000)
     rom.write_int32(0xEE5CC, 0x3FA00000)
 
-    # Write the slot name
-    rom.write_bytes(0xBFBFE0, slot_name)
+    # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
+    rom.write_bytes(0xBFBFD0, "ARCHIPELAGO1".encode("utf-8"))
+    # Write the slot authentication
+    rom.write_bytes(0xBFBFE0, world.auth)
 
     # Write the specified window colors
     rom.write_byte(0xAEC23, options.window_color_r.value << 4)

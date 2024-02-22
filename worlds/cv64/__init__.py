@@ -1,6 +1,7 @@
 import os
 import typing
 import settings
+import base64
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
@@ -64,22 +65,38 @@ class CV64World(World):
     item_name_to_id = get_item_names_to_ids()
     location_name_to_id = get_location_names_to_ids()
 
+    active_stage_exits: typing.Dict[str, typing.Dict]
+    active_stage_list: typing.List[str]
+    active_warp_list: typing.List[str]
+    reinhardt_stages: bool
+    carrie_stages: bool
+    branching_stages: bool
+    starting_stage: str
+
+    total_s1s: int
+    s1s_per_warp: int
+    total_s2s: int
+    required_s2s: int
+    drac_condition: int
+
+    auth: bytes
+
     web = CV64Web()
 
     def __init__(self, multiworld: MultiWorld, player: int) -> None:
-        self.active_stage_exits: typing.Dict[str, typing.Dict] = {}
-        self.active_stage_list: typing.List[str] = []
-        self.active_warp_list: typing.List[str] = []
-        self.reinhardt_stages: bool = True
-        self.carrie_stages: bool = True
-        self.branching_stages: bool = False
-        self.starting_stage: str = rname.forest_of_silence
+        self.active_stage_exits = {}
+        self.active_stage_list = []
+        self.active_warp_list = []
+        self.reinhardt_stages = True
+        self.carrie_stages = True
+        self.branching_stages = False
+        self.starting_stage = rname.forest_of_silence
 
-        self.total_s1s: int = 0
-        self.s1s_per_warp: int = 0
-        self.total_s2s: int = 0
-        self.required_s2s: int = 0
-        self.drac_condition: int = 0
+        self.total_s1s = 0
+        self.s1s_per_warp = 0
+        self.total_s2s = 0
+        self.required_s2s = 0
+        self.drac_condition = 0
 
         super().__init__(multiworld, player)
 
@@ -90,6 +107,9 @@ class CV64World(World):
             raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
+        # Generate the player's unique authentication
+        self.auth = self.random.randbytes(16)
+
         self.total_s1s = self.options.total_special1s.value
         self.s1s_per_warp = self.options.special1s_per_warp.value
         self.total_s2s = self.options.total_special2s.value
@@ -265,12 +285,9 @@ class CV64World(World):
 
         cv64_rom = LocalRom(get_base_rom_path())
 
-        slot_name = self.multiworld.player_name[self.player].encode("utf-8")
-
         rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
 
-        patch_rom(self, cv64_rom, offset_data, shop_name_list, shop_desc_list, shop_colors_list, slot_name,
-                  active_locations)
+        patch_rom(self, cv64_rom, offset_data, shop_name_list, shop_desc_list, shop_colors_list, active_locations)
 
         cv64_rom.write_to_file(rompath)
 
@@ -278,23 +295,6 @@ class CV64World(World):
                                player_name=self.multiworld.player_name[self.player], patched_path=rompath)
         patch.write()
         os.unlink(rompath)
-
-    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
-        # Write the stage order to the spoiler log
-        spoiler_handle.write(f"\nCastlevania 64 stage & warp orders for {self.multiworld.player_name[self.player]}:\n")
-        for stage in self.active_stage_list:
-            num = str(self.active_stage_exits[stage]["position"]).zfill(2)
-            path = self.active_stage_exits[stage]["path"]
-            spoiler_handle.writelines(f"Stage {num}{path}:\t{stage}\n")
-
-        # Write the warp order to the spoiler log
-        spoiler_handle.writelines(f"\nStart :\t{self.active_stage_list[0]}\n")
-        for i in range(1, len(self.active_warp_list)):
-            spoiler_handle.writelines(f"Warp {i}:\t{self.active_warp_list[i]}\n")
-
-    def fill_slot_data(self) -> typing.Dict[str, typing.Any]:
-        return {"death_link": self.options.death_link.value,
-                "shopsanity": self.options.shopsanity.value}
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_item_names)
@@ -312,3 +312,20 @@ class CV64World(World):
                     if path != " ":
                         stage_pos_data[loc.address] += path
             hint_data[self.player] = stage_pos_data
+
+    def modify_multidata(self, multidata: typing.Dict[str, typing.Any]):
+        multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = \
+            multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
+        # Write the stage order to the spoiler log
+        spoiler_handle.write(f"\nCastlevania 64 stage & warp orders for {self.multiworld.player_name[self.player]}:\n")
+        for stage in self.active_stage_list:
+            num = str(self.active_stage_exits[stage]["position"]).zfill(2)
+            path = self.active_stage_exits[stage]["path"]
+            spoiler_handle.writelines(f"Stage {num}{path}:\t{stage}\n")
+
+        # Write the warp order to the spoiler log
+        spoiler_handle.writelines(f"\nStart :\t{self.active_stage_list[0]}\n")
+        for i in range(1, len(self.active_warp_list)):
+            spoiler_handle.writelines(f"Warp {i}:\t{self.active_warp_list[i]}\n")
