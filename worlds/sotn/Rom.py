@@ -65,6 +65,20 @@ def write_word(buffer, address: int, value):
     return address + 4
 
 
+def replace_shop_text(buffer, new_text):
+    start_address = 0x047d5650
+
+    for c in new_text:
+        if c == " ":
+            write_char(buffer, start_address, 0x00)
+        else:
+            write_char(buffer, start_address, ord(c) - 0x20)
+        start_address += 1
+
+    write_char(buffer, start_address, 0xff)
+    write_char(buffer, start_address + 1, 0x00)
+
+
 def patch_rom(world: World) -> str:
     player = world.player
     patched_rom = bytearray(get_base_rom_bytes())
@@ -90,16 +104,21 @@ def patch_rom(world: World) -> str:
                             write_short(patched_rom, address, item_data.get_item_id_no_offset())
                     else:
                         if loc_data.can_be_relic:
-                            # Probably relics of Vlad need to be removed
                             if item_data.type == IType.RELIC:
                                 write_short(patched_rom, address, item_data.get_item_id())
+                                if loc.name == "Jewel of Open":
+                                    replace_shop_text(patched_rom, loc.item.name)
+                                    # Fix shop menu check
+                                    write_char(patched_rom, 0x047dbde0, item_data.get_item_id() + 0x64)
                             else:
                                 # Skill of wolf, bat card can't be item. Replace with ghost card instead
                                 if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
                                     write_short(patched_rom, address, 0x0013)
-                                elif loc.name in relics_vlad:
-                                    write_short(patched_rom, address, 0x0013)
                                 elif loc.name == "Jewel of Open":
+                                    replace_shop_text(patched_rom, "Ghost Card")
+                                    write_short(patched_rom, address, 0x0013)
+                                    write_char(patched_rom, 0x047dbde0, 0x77)
+                                elif loc.name in relics_vlad:
                                     write_short(patched_rom, address, 0x0013)
                                 else:
                                     write_short(patched_rom, address - 4, 0x000c)
@@ -119,6 +138,9 @@ def patch_rom(world: World) -> str:
                         if loc_data.can_be_relic:
                             if loc.name == "Skill of Wolf" or loc.name == "Bat Card":
                                 write_short(patched_rom, address, 0x0013)
+                            if loc.name == "Jewel of Open":
+                                write_short(patched_rom, address, 0x0013)
+                                replace_shop_text(patched_rom, "Ghost Card")
                             elif loc.name in relics_vlad:
                                 write_short(patched_rom, address, 0x0013)
                             else:
@@ -140,6 +162,9 @@ def patch_rom(world: World) -> str:
     # Patch Clock Room cutscene
     write_char(patched_rom, 0x0aeaa0, 0x00)
     write_char(patched_rom, 0x119af4, 0x00)
+
+    # patchPowerOfSireFlashing Patches researched by MottZilla.
+    write_word(patched_rom, 0x00136580, 0x03e00008)
 
     # outfile_name = world.multiworld.get_out_file_name_base(world.player)
     # outfile_name += ".bin"
