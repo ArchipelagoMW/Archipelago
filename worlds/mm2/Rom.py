@@ -121,7 +121,7 @@ def patch_rom(world: "MM2World", rom: RomData):
     rom.write_bytes(0x3F52A, [0xA5, 0x8F,
                               0xC9, 0x01,
                               0xD0, 0x03,
-                              0x4C, 0x0B, 0xC1,
+                              0x4C, 0xA8, 0xE5,
                               0x4C, 0xBB, 0xF3,
                               0x60, ])
     rom.write_bytes(0x3F537, [0x20, 0x51, 0xC0,
@@ -134,6 +134,27 @@ def patch_rom(world: "MM2World", rom: RomData):
                                   0x60,
                                   0xEA,
                                   0xEA, ])
+
+    # Wily 5 Requirement
+    rom.write_bytes(0x3843F, [
+        0x4C, 0xF7, 0xF5,  # JMP $F5F7
+        0xEA  # NOP
+    ])
+    rom.write_bytes(0x3F607, [
+        0xE6, 0x99,  # INC $99
+        0xA5, 0x99,  # LDA $99
+        0xC9, 0x08,  # CMP $08 ; This is our check for the requirement
+        0xB0, 0x03,  # BCS $F602 ; Branch if we meet it
+        0x4C, 0x50, 0x84,  # JMP $8450
+        0xA9, 0xFF,  # LDA #$FF
+        0x85, 0xBC,  # STA $BC
+        0x4C, 0x33, 0x84,  # JMP $8433
+    ])
+    rom.write_byte(0x3F60C, world.options.wily_5_requirement.value)
+    rom.write_bytes(0x381F0, [  # This spawns the actual teleport object, while the earlier branch spawns the visual
+        0xC9, world.options.wily_5_requirement.value,  # LDA our requirement
+        0x90, 0x15  # BCC $81F9
+    ])
 
     # text writing
     # write our font

@@ -95,14 +95,14 @@ palette_pointers: Dict[str, List[int]] = {
     "Item 1":  [0x3D338],
     "Item 2":  [0x3D33C],
     "Item 3": [0x3D340],
-    "Heat Man": [0x34B6, 0x344E7],
-    "Air Man": [0x74B6, 0x344EF],
-    "Wood Man": [0xB4EC, 0x344F7],
-    "Bubble Man": [0xF4B6, 0x344FF],
-    "Quick Man": [0x134C8, 0x34507],
-    "Flash Man": [0x174B6, 0x3450F],
-    "Metal Man": [0x1B4A4, 0x34517],
-    "Crash Man": [0x1F4EC, 0x3451F],
+    "Heat Man": [0x34B6, 0x344F7],
+    "Air Man": [0x74B6, 0x344FF],
+    "Wood Man": [0xB4EC, 0x34507],
+    "Bubble Man": [0xF4B6, 0x3450F],
+    "Quick Man": [0x134C8, 0x34517],
+    "Flash Man": [0x174B6, 0x3451F],
+    "Metal Man": [0x1B4A4, 0x34527],
+    "Crash Man": [0x1F4EC, 0x3452F],
 }
 
 
@@ -127,9 +127,9 @@ def extrapolate_color(color: int):
 def validate_colors(color_1: int, color_2: int):
     # Black should be reserved for outlines, a gray should suffice
     if color_1 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
-        color_1 = 0x1F
+        color_1 = 0x10
     if color_2 in [0x0D, 0x0E, 0x0F, 0x1E, 0x2E, 0x3E, 0x1F, 0x2F, 0x3F]:
-        color_2 = 0x1F
+        color_2 = 0x10
 
     # one final check, make sure we don't have two matching
     if color_1 == color_2:
