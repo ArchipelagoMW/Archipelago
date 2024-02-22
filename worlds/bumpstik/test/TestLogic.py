@@ -3,8 +3,8 @@ from . import BumpStikTestBase
 
 class TestRuleLogic(BumpStikTestBase):
     def testLogic(self):
-        for x in range(1, 34):
-            if x == 33:
+        for x in range(1, 33):
+            if x == 32:
                 self.assertFalse(self.can_reach_location("Level 5 - Cleared all Hazards"))
 
             self.collect(self.get_item_by_name("Treasure Bumper"))
@@ -29,15 +29,12 @@ class TestRuleLogic(BumpStikTestBase):
                     if y < bb_count:
                         self.collect(self.get_item_by_name("Booster Bumper"))
 
+            self.assertTrue(self.can_reach_location(f"Treasure Bumper {x}"),
+                            f"Treasure Bumper {x} check not reachable with {self.count('Treasure Bumper')} Treasure Bumpers")
+
             if x < 32:
                 self.assertFalse(self.can_reach_location(f"Treasure Bumper {x + 1}"))
             elif x == 32:
-                self.assertFalse(self.can_reach_location("Level 5 - 50,000+ Total Points"))
-
-            if x < 33:
-                self.assertTrue(self.can_reach_location(f"Treasure Bumper {x}"),
-                                f"Treasure Bumper {x} check not reachable with {self.count('Treasure Bumper')} Treasure Bumpers")
-            elif x == 33:
                 self.assertTrue(self.can_reach_location("Level 5 - 50,000+ Total Points"))
                 self.assertFalse(self.can_reach_location("Level 5 - Cleared all Hazards"))
                 self.collect(self.get_items_by_name("Hazard Bumper"))
