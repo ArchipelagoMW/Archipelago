@@ -185,6 +185,7 @@ class WitnessWordedHint:
     wording: str
     location: Optional[Location] = None
     area: Optional[str] = None
+    area_amount: Optional[int] = None
 
 
 def get_always_hint_items(world: "WitnessWorld") -> List[str]:
@@ -515,7 +516,7 @@ def get_hintable_areas(world: "WitnessWorld") -> Tuple[Dict[str, List[Location]]
     return locations_per_area, items_per_area
 
 
-def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items: List[Item]) -> str:
+def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items: List[Item]) -> Tuple[str, int]:
     """
     Word the hint for an area using natural sounding language.
     This takes into account how much progression there is, how much of it is local/non-local, and whether there are
@@ -595,7 +596,7 @@ def word_area_hint(world: "WitnessWorld", hinted_area: str, corresponding_items:
             elif local_lasers:
                 hint_string += f"\n{local_lasers} of them are lasers."
 
-    return hint_string
+    return hint_string, total_progression
 
 
 def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations: Set[Location]
@@ -607,9 +608,9 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     hints = []
 
     for hinted_area in hinted_areas:
-        hint_string = word_area_hint(world, hinted_area, items_per_area[hinted_area])
+        hint_string, prog_amount = word_area_hint(world, hinted_area, items_per_area[hinted_area])
 
-        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}"))
+        hints.append(WitnessWordedHint(hint_string, None, f"hinted_area:{hinted_area}", prog_amount))
 
     if len(hinted_areas) < amount:
         player_name = world.multiworld.get_player_name(world.player)

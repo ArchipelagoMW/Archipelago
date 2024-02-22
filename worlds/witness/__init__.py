@@ -291,23 +291,25 @@ class WitnessWorld(World):
 
             generated_hints = create_all_hints(self, hint_amount, area_hints)
 
-            generated_hint_amount = len(generated_hints)
+            self.random.shuffle(audio_logs)
 
-            if generated_hint_amount:
-                self.random.shuffle(audio_logs)
+            duplicates = min(3, len(audio_logs) // hint_amount)
 
-                duplicates = min(3, len(audio_logs) // hint_amount)
+            for _ in range(0, len(generated_hints)):
+                hint = generated_hints.pop(0)
 
-                for _ in range(0, len(generated_hints)):
-                    hint = generated_hints.pop(0)
+                location = hint.location
+                area_amount = hint.area_amount
 
-                    location = hint.location
-                    location_address = location.address if location else (hint.area if hint.area else None)
-                    player = location.player if location else self.player
+                # None if junk hint, address if location hint, area string if area hint
+                arg_1 = location.address if location else (hint.area if hint.area else None)
 
-                    for _ in range(0, duplicates):
-                        audio_log = audio_logs.pop()
-                        self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, location_address, player)
+                # self.player if junk hint, player if location hint, progression amount if area hint
+                arg_2 = area_amount if area_amount is not None else (location.player if location else self.player)
+
+                for _ in range(0, duplicates):
+                    audio_log = audio_logs.pop()
+                    self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, arg_1, arg_2)
 
         if audio_logs:
             audio_log = audio_logs.pop()
