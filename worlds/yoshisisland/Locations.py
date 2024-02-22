@@ -15,7 +15,7 @@ def get_locations(world) -> Tuple[LocationData, ...]:
     if world:
         logic = YoshiLogic(world)
 
-    location_table: Tuple(LocationData, ...) = [
+    location_table: Tuple[LocationData, ...] = (
 
     LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, 0x00),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Flowers', 0x305021, 0x00),
@@ -277,7 +277,7 @@ def get_locations(world) -> Tuple[LocationData, ...]:
     LocationData("6-8", "King Bowser's Castle: Red Coins", 0x3050DD, 0x43),
     LocationData("6-8", "King Bowser's Castle: Flowers", 0x3050DE, 0x43),
     LocationData("6-8", "King Bowser's Castle: Stars", 0x3050DF, 0x43)
-    ]
+    )
 
     if not world or world.options.extras_enabled.value == 1:
         location_table += ( 
