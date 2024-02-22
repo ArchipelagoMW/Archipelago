@@ -102,6 +102,17 @@ def set_rules(world: MultiWorld, player: int) -> None:
              state.has("Gravity boots", player) or state.has("Soul of bat", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
+    if are:
+        set_rule(world.get_location("ARE - Minotaurus/Werewolf kill", player), lambda state:
+                 (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                 state.has("Gravity boots", player) or state.has("Leap stone", player) or
+                 state.has("Soul of bat", player) or state.has("Jewel of open", player))
+    else:
+        set_rule(world.get_location("ARE - Minotaurus/Werewolf kill", player), lambda state:
+                 (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                 state.has("Gravity boots", player) or state.has("Leap stone", player) or
+                 state.has("Soul of bat", player))
+
     # CAT - Catacombs worst case scenario player can get here with only jewel, soul and power of wolf
     # Spike breaker locations
     set_rule(world.get_location("CAT - Library card(Spike breaker)", player), lambda state:
@@ -210,11 +221,18 @@ def set_rules(world: MultiWorld, player: int) -> None:
 
     set_rule(world.get_location("DAI - Ankh of life(Stairs)", player), lambda
              state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+             state.has("Leap stone", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
     set_rule(world.get_location("DAI - Mystic pendant", player), lambda
              state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+             state.has("Leap stone", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
+
+    set_rule(world.get_location("DAI - Hippogryph kill", player), lambda
+             state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player) or
+              state.has("Leap stone", player)))
 
     # LIB - Long Library
     # Upper part of LIB(Faerie card) can be access with leap stone + kick and jump from an enemy
@@ -298,6 +316,7 @@ def set_rules(world: MultiWorld, player: int) -> None:
     set_rule(world.get_location("NO0 - Attack potion(Jewel)", player), lambda state:
              state.has("Jewel of open", player))
 
+    # TODO: We can get stopwatch from RNO0. Maybe add to rhe rule
     set_rule(world.get_location("NO0 - Heart Vessel(Right clock)", player), lambda state:
              state.has("Cube of zoe", player) and (state.has("Leap stone", player) or
                                                    state.has("Soul of bat", player) or
@@ -425,6 +444,9 @@ def set_rules(world: MultiWorld, player: int) -> None:
         set_rule(world.get_location("NO3 - Life Vessel (UC exit)", player), lambda state:
                  state.has("Jewel of open", player))
 
+        set_rule(world.get_location("NO4 - Scylla kill", player), lambda state:
+                 state.has("Jewel of open", player))
+
         # NO4 - Underground Caverns need only Jewel
         set_rule(world.get_location("NO4 - Zircon", player), lambda state: state.has("Soul of bat", player) or
                  state.has("Leap stone", player) or (state.has("Gravity boots", player) and
@@ -537,6 +559,13 @@ def set_rules(world: MultiWorld, player: int) -> None:
                  state.has("Holy symbol", player))
     else:
         # With backdoor open, every item beyond waterfall need some kinda of flying
+        set_rule(world.get_location("NO4 - Scylla kill", player), lambda state:
+                 state.has("Soul of bat", player) or
+                 (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                 (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                          state.has("Soul of wolf", player) or
+                                                          state.has("Form of mist", player))))
+
         set_rule(world.get_location("NO4 - Toadstool(Waterfall)", player), lambda state:
                  state.has("Leap stone", player) or state.has("Soul of bat", player) or
                  state.has("Gravity boots", player) or
@@ -1001,8 +1030,8 @@ def set_rules(world: MultiWorld, player: int) -> None:
     set_rule(world.get_location("RNO4 - Potion(Underwater)", player), lambda state:
              state.has("Gravity boots", player))
 
-    set_rule(world.get_location("RNO4 - Life Vessel(Underwater)", player), lambda state:
-             state.has("Gravity boots", player))
+    set_rule(world.get_location("RNO4 - Heart Vessel(Air pocket)", player), lambda state:
+             state.has("Gravity boots", player) and state.has("Holy symbol", player))
 
     set_rule(world.get_location("RNO4 - Osafune katana", player), lambda state:
              state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
@@ -1059,3 +1088,4 @@ def set_rules(world: MultiWorld, player: int) -> None:
              (state.has("Form of mist", player) and state.has("Power of mist", player)) or
              (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
                                                       state.has("Gravity boots", player))))
+
