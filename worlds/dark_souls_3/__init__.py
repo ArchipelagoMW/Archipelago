@@ -569,7 +569,7 @@ class DarkSouls3World(World):
             "FS: Hawkwood's Swordgrass - Andre after gesture in AP summit"
         ], "Twinkling Dragon Torso Stone")
 
-        # Shop unlocks
+        # Shop unlocks:
         shop_unlocks = {
             "Cornyx": [
                 (
