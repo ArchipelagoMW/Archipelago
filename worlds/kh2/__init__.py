@@ -1,7 +1,7 @@
 import logging
 from typing import List
 
-from BaseClasses import Tutorial, ItemClassification
+from BaseClasses import Tutorial, ItemClassification, Item, Location
 from Fill import fill_restrictive
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
 from worlds.AutoWorld import World, WebWorld
@@ -225,6 +225,12 @@ class KH2World(World):
         if not self.options.AntiForm:
             del self.item_quantity_dict[ItemName.AntiForm]
 
+        if not self.options.PuzzlePiecesLocationToggle:
+            self.total_locations -= 144
+
+        elif not self.options.AtlanticaToggle:
+            self.total_locations -= 3
+
         self.set_excluded_locations()
 
         if self.options.Goal not in ["hitlist", "three_proofs"]:
@@ -303,6 +309,9 @@ class KH2World(World):
         fight_rules.set_kh2_fight_rules()
         universal_logic.set_kh2_rules()
         form_logic.set_kh2_form_rules()
+        if self.options.PuzzlePiecesLocationToggle:
+            puzzle_piece_logic = Rules.KH2PuzzlePiecesRules(self)
+            puzzle_piece_logic.set_kh2_puzzle_pieces_rules()
 
     def generate_output(self, output_directory: str):
         """
