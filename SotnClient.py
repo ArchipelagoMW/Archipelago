@@ -1,24 +1,18 @@
 import asyncio
-import hashlib
 import json
 import time
-import os
-import bsdiff4
-import subprocess
-import zipfile
 from asyncio import StreamReader, StreamWriter, CancelledError
-from typing import NamedTuple, List
-
+from typing import NamedTuple
 
 import Utils
-from NetUtils import ClientStatus, NetworkItem
-from Utils import async_start
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
+from NetUtils import ClientStatus
+from Utils import async_start
 from worlds import network_data_package, AutoWorldRegister
 from worlds.sotn.Items import base_item_id, ItemData, get_item_data, IType
-from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, get_location_data
-
+from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, \
+    get_location_data
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -45,7 +39,7 @@ Payload: client -> lua
     items: list,
 }
 """
-# TODO: lua script has_item will not work with more than one of the same item
+
 sotn_loc_name_to_id = network_data_package["games"]["Symphony of the Night"]["location_name_to_id"]
 
 
@@ -101,7 +95,7 @@ class SotnCommandProcessor(ClientCommandProcessor):
 
         for key, value in zones_dict.items():
             zd: ZoneData = value
-            if zd.abrev == "WRP" or zd.abrev == "RWRP" or zd.abrev == "ST0" or "BO" in zd.abrev:
+            if zd.abrev == "WRP" or zd.abrev == "RWRP" or zd.abrev == "ST0" or zd.abrev == "DRE" or "BO" in zd.abrev:
                 continue
             self.output(f'{zd.abrev} - {zd.name}')
 
@@ -117,8 +111,6 @@ class SotnContext(CommonContext):
         self.psx_sync_task = None
         self.messages = {}
         self.locations_array = None
-        self.bosses_dead = None
-        self.total_bosses_killed = 0
         self.psx_status = CONNECTION_INITIAL_STATUS
         self.awaiting_rom = False
         self.display_msgs = True
@@ -141,8 +133,6 @@ class SotnContext(CommonContext):
     def on_package(self, cmd: str, args: dict):
         if cmd == 'Connected':
             self.locations_array = None
-            self.bosses_dead = None
-            self.total_bosses_killed = 0
             self.misplaced_items = []
         elif cmd == 'Print':
             msg = args['text']
@@ -168,7 +158,6 @@ class SotnContext(CommonContext):
                             loc_data = None
 
                         item_data: ItemData = get_item_data(received.item)
-
 
                         if received.location == 127083080 or received.location == 127020003:
                             # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
@@ -247,7 +236,7 @@ async def parse_locations(data: dict, ctx: SotnContext):
     checked = []
     ld: LocationData
 
-    if locations == ctx.locations_array:
+    if not locations or locations == ctx.locations_array:
         return
     ctx.locations_array = locations
     if locations is not None:
@@ -269,25 +258,12 @@ async def parse_locations(data: dict, ctx: SotnContext):
             ctx.checked_locations_sent = True
 
 
-# TODO: Find why AttributeError: 'list' object has no attribute 'items'
 async def parse_bosses(data: dict, ctx: SotnContext):
     bosses = data
 
-    if bosses == ctx.bosses_dead:
+    if not bosses:
         return
-    if bosses is not None:
-        for key, value in bosses.items():
-            if ctx.bosses_dead is not None:
-                if value != ctx.bosses_dead[key]:
-                    ctx.total_bosses_killed += 1
-                    msg = f'Killed: {key} - Total: {ctx.total_bosses_killed}'
-                    logger.info(msg)
-            else:
-                if value:
-                    ctx.total_bosses_killed += 1
-                    msg = f'Killed: {key} - Total: {ctx.total_bosses_killed}'
-                    logger.info(msg)
-    ctx.bosses_dead = bosses
+
     if "Dracula" in bosses:
         if bosses["Dracula"]:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
