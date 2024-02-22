@@ -507,9 +507,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: state.has(laurels, player) or can_ladder_storage(state, player, options))
 
     regions["Rooted Ziggurat Lower Back"].connect(
-        connecting_region=regions["Rooted Ziggurat Portal Room Entrance Region"],
+        connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
-    regions["Rooted Ziggurat Portal Room Entrance Region"].connect(
+    regions["Rooted Ziggurat Portal Room Entrance"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Back"])
 
     regions["Rooted Ziggurat Portal"].connect(
