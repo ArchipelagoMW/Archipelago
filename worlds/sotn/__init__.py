@@ -96,6 +96,46 @@ class SotnWorld(World):
         return SotnItem(name, data.ic, data.index, self.player)
 
     def create_items(self) -> None:
+
+        self.multiworld.get_location("NZ0 - Slogra and Gaibon kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("NO1 - Doppleganger 10 kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("LIB - Lesser Demon kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("NZ1 - Karasuman kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("DAI - Hippogryph kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("ARE - Minotaurus/Werewolf kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("NO2 - Olrox kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("NO4 - Scylla kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("CHI - Cerberos kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("CAT - Legion kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RARE - Fake Trevor/Grant/Sypha kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RCAT - Galamoth kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RCHI - Death kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RDAI - Medusa kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RNO1 - Creature kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RNO2 - Akmodan II kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RNO4 - Doppleganger40 kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RNZ0 - Beezelbub kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("RNZ1 - Darkwing bat kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+
         itempool: typing.List[SotnItem] = []
         # TODO: Learn about item weights for difficult
         difficult = self.multiworld.difficult[self.player]
@@ -204,46 +244,8 @@ class SotnWorld(World):
     def generate_basic(self) -> None:
         self.multiworld.get_location("RCEN - Kill Dracula", self.player).place_locked_item(
             self.create_event("Victory"))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
-
-        self.multiworld.get_location("NZ0 - Slogra and Gaibon kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("NO1 - Doppleganger 10 kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("LIB - Lesser Demon kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("NZ1 - Karasuman kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("DAI - Hippogryph kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("ARE - Minotaurus/Werewolf kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("NO2 - Olrox kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("NO4 - Scylla kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("CHI - Cerberos kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("CAT - Legion kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RARE - Fake Trevor/Grant/Sypha kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RCAT - Galamoth kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RCHI - Death kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RDAI - Medusa kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RNO1 - Creature kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RNO2 - Akmodan II kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RNO4 - Doppleganger40 kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RNZ0 - Beezelbub kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
-        self.multiworld.get_location("RNZ1 - Darkwing bat kill", self.player).place_locked_item(
-            self.create_event("Boss token"))
+        self.multiworld.completion_condition[self.player] = lambda state: \
+            state.has("Victory", self.player) and state.has("Boss token", self.player, self.options.bosses_need)
 
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
