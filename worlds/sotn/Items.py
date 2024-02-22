@@ -378,6 +378,7 @@ item_table = {
     **acc_type_table,
     **vessel_table,
     **relic_table,
+    **event_table,
 }
 
 
