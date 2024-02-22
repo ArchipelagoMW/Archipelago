@@ -13,7 +13,7 @@ class ZoneData:
 
 
 zones_dict = {
-    0: ZoneData("STO", "Final Stage: Bloodlines"),
+    0: ZoneData("ST0", "Final Stage: Bloodlines"),
     1: ZoneData("ARE", "Colosseum"),
     2: ZoneData("CAT", "Catacombs"),
     3: ZoneData("CEN", "Center Cube"),
@@ -134,7 +134,7 @@ nz0_locations = {
     "NZ0 - Leather shield": LocationData("Alchemy Laboratory", 8, [0x54b22a8]),
     "NZ0 - Basilard": LocationData("Alchemy Laboratory", 9, [0x54b22aa]),
     "NZ0 - Potion": LocationData("Alchemy Laboratory", 10, [0x54b22ac]),
-    "NZ0 - Slogra and Gaibon kill": LocationData("Alchemy Laboratory", None),
+    "NZ0 - Slogra and Gaibon kill": LocationData("Alchemy Laboratory", 3140),
     "Skill of Wolf": LocationData("Alchemy Laboratory", 3141, [0x054b1d5a],
                                   False, True),
     "Bat Card": LocationData("Alchemy Laboratory", 3142, [0x054b1d58],
@@ -172,7 +172,7 @@ no1_locations = {
     "NO1 - Life Vessel": LocationData("Outer Wall", 5, [0x49d367e]),
     "NO1 - Zircon": LocationData("Outer Wall", 6, [0x49d3680]),
     "NO1 - Pot Roast": LocationData("Outer Wall", 3090, [0x4a197d8], True),
-    "NO1 - Doppleganger 10 kill": LocationData("Outer Wall", None),
+    "NO1 - Doppleganger 10 kill": LocationData("Outer Wall", 3091),
     "Soul of Wolf": LocationData("Outer Wall", 3092, [0x49d5d36+8, 0x49d658e+8],
                                  False, True, 0x002e00b0)
 }
@@ -187,13 +187,13 @@ lib_locations = {
     "LIB - Potion": LocationData("Long Library", 8, [0x47a3918]),
     "LIB - Antivenom": LocationData("Long Library", 9, [0x47a391a]),
     "LIB - Topaz circlet": LocationData("Long Library", 10, [0x47a391c]),
-    "LIB - Lesser Demon kill": LocationData("Long Library", None),
+    "LIB - Lesser Demon kill": LocationData("Long Library", 3070),
     "Soul of Bat": LocationData("Long Library", 3072, [0x47a5b5e+8, 0x47a623e+8],
                                 False, True, 0x002600b2),
     "Faerie Scroll": LocationData("Long Library", 3073, [0x47a5718+8, 0x47a5dca+8],
                                   False, True, 0x00f400b1),
     "Jewel of Open": LocationData("Long Library", 3074, [0x047a321c], False,
-                                  True),  # TODO: Add librarian text function
+                                  True),
     "Faerie Card": LocationData("Long Library", 3075, [0x47a577c+8, 0x47a5f64+8],
                                 False,True, 0x002600b0),
 }
@@ -214,7 +214,7 @@ nz1_locations = {
     "NZ1 - Pot roast": LocationData("Clock Tower", 3151, [0x557379c], True),
     "NZ1 - Shuriken": LocationData("Clock Tower", 3152, [0x55737a0], True),
     "NZ1 - TNT": LocationData("Clock Tower", 3153, [0x55737a8], True),
-    "NZ1 - Karasuman kill": LocationData("Clock Tower", None),
+    "NZ1 - Karasuman kill": LocationData("Clock Tower", 3154),
     "Fire of Bat": LocationData("Clock Tower", 3155, [0x5575356+8, 0x5575e92+8], False,
                                 True, 0x002300b0)
 }
@@ -263,7 +263,7 @@ dai_locations = {
     "DAI - Zircon": LocationData("Royal Chapel", 13, [0x4676f12]),
     "DAI - Cutlass": LocationData("Royal Chapel", 14, [0x4676f14]),
     "DAI - Potion": LocationData("Royal Chapel", 15, [0x4676f16]),
-    "DAI - Hippogryph kill": LocationData("Royal Chapel", None),
+    "DAI - Hippogryph kill": LocationData("Royal Chapel", 3050),
 }
 
 are_locations = {
@@ -274,7 +274,7 @@ are_locations = {
     "ARE - Library card": LocationData("Colosseum", 5, [0x43c313a]),
     "ARE - Green tea": LocationData("Colosseum", 6, [0x43c313c]),
     "ARE - Holy sword(Hidden attic)": LocationData("Colosseum", 7, [0x43c313e]),
-    "ARE - Minotaurus/Werewolf kill": LocationData("Colosseum", None),
+    "ARE - Minotaurus/Werewolf kill": LocationData("Colosseum", 3010),
     "Form of Mist": LocationData("Colosseum", 3011, [0x43c5782+8, 0x43c5e00+8], False,
                                  True, 0x003300b0)
 }
@@ -290,7 +290,7 @@ no2_locations = {
     "NO2 - Estoc": LocationData("Olrox's Quarters", 10, [0x4aa1698]),
     "NO2 - Iron ball": LocationData("Olrox's Quarters", 11, [0x4aa169a]),
     "NO2 - Garnet": LocationData("Olrox's Quarters", 12, [0x4aa169c]),
-    "NO2 - Olrox kill": LocationData("Olrox's Quarters", None),
+    "NO2 - Olrox kill": LocationData("Olrox's Quarters", 3100),
     "Echo of Bat": LocationData("Olrox's Quarters", 3101, [0x4aa414e+8, 0x4aa49a6+8],
                                 False, True, 0x001a00b0),
     "Sword Card": LocationData("Olrox's Quarters", 3102, [0x4aa3f6e+8, 0x4aa47c6+8],
@@ -332,7 +332,7 @@ no4_locations = {
     "NO4 - Shiitake(Near entrance passage)": LocationData("Underground Caverns", 35, [0x4c324e6]),
     "NO4 - Nunchaku": LocationData("Underground Caverns", 36, [0x4c324e8]),
     "NO4 - Gold Ring": LocationData("Underground Caverns", 3130, [0x4c324b4]),
-    "NO4 - Scylla kill": LocationData("Underground Caverns", None),
+    "NO4 - Scylla kill": LocationData("Underground Caverns", 3131),
     "Holy Symbol": LocationData("Underground Caverns", 3132, [0x4c34ede+8, 0x4c361d0+8],
                                 False, True, 0x003f00b0),
     "Merman Statue": LocationData("Underground Caverns", 3133, [0x4c3516c+8, 0x4c36472+8],
@@ -352,7 +352,7 @@ chi_locations = {
     "CHI - Peanuts 3(Demon)": LocationData("Abandoned Mine", 11, [0x45e9612]),
     "CHI - Peanuts 4(Demon)": LocationData("Abandoned Mine", 12, [0x45e9614]),
     "CHI - Turkey(Demon)": LocationData("Abandoned Mine", 3040, [0x45e9602]),
-    "CHI - Cerberos kill": LocationData("Abandoned Mine", None),
+    "CHI - Cerberos kill": LocationData("Abandoned Mine", 3041),
     "Demon Card": LocationData("Abandoned Mine", 3042, [0x45ea956+8, 0x45eacda+8], False,
                                True, 0x001600b0),
 }
@@ -378,7 +378,7 @@ cat_locations = {
     "CAT - Monster vial 3 2(Sarcophagus)": LocationData("Catacombs", 18, [0x4491308]),
     "CAT - Monster vial 3 3(Sarcophagus)": LocationData("Catacombs", 19, [0x449130a]),
     "CAT - Monster vial 3 4(Sarcophagus)": LocationData("Catacombs", 20, [0x449130c]),
-    "CAT - Legion kill": LocationData("Catacombs", None),
+    "CAT - Legion kill": LocationData("Catacombs", 3020),
 }
 
 rare_locations = {
@@ -390,7 +390,7 @@ rare_locations = {
     "RARE - Heart Vessel(5)": LocationData("Reverse Colosseum", 5, [0x575155e]),
     "RARE - Life Vessel": LocationData("Reverse Colosseum", 6, [0x5751560]),
     "RARE - Heart Vessel(7)": LocationData("Reverse Colosseum", 7, [0x5751562]),
-    "RARE - Fake Trevor/Grant/Sypha kill": LocationData("Reverse Colosseum", None),
+    "RARE - Fake Trevor/Grant/Sypha kill": LocationData("Reverse Colosseum", 3180),
 }
 
 rcat_locations = {
@@ -412,7 +412,7 @@ rcat_locations = {
     "RCAT - Heart Vessel(After Galamoth)": LocationData("Floating Catacombs", 15, [0x4cfb6fe]),
     "RCAT - Life Vessel(After Galamoth)": LocationData("Floating Catacombs", 16,  [0x4cfb700]),
     "RCAT - Ruby circlet": LocationData("Floating Catacombs", 17, [0x4cfb702]),
-    "RCAT - Galamoth kill": LocationData("Floating Catacombs", None),
+    "RCAT - Galamoth kill": LocationData("Floating Catacombs", 3190),
     "Gas Cloud": LocationData("Floating Catacombs", 3191, [0x4cfcb0e+8, 0x4cfd892+8],
                               False, True, 0x00ff00b0)
 }
@@ -429,7 +429,7 @@ rchi_locations = {
     "RCHI - Power of Sire": LocationData("Cave", 4, [0x4da513c]),
     "RCHI - Shiitake 1(6)": LocationData("Cave", 6, [0x4da5140]),
     "RCHI - Shiitake 2(7)": LocationData("Cave", 7, [0x4da5142]),
-    "RCHI - Death kill": LocationData("Cave", None),
+    "RCHI - Death kill": LocationData("Cave", 3210),
     "Eye of Vlad": LocationData("Cave", 3211, [0x4da65ea+8, 0x4da6a4a+8, 0x662263a],
                                 False, True, 0x0016)
 }
@@ -451,7 +451,7 @@ rdai_locations = {
     "RDAI - Magic missile": LocationData("Anti-Chapel", 15, [0x4e322d2]),
     "RDAI - Twilight cloak": LocationData("Anti-Chapel", 16, [0x4e322d4]),
     "RDAI - Heart Vessel(17)": LocationData("Anti-Chapel", 17, [0x4e322d6]),
-    "RDAI - Medusa kill": LocationData("Anti-Chapel", None),
+    "RDAI - Medusa kill": LocationData("Anti-Chapel", 3220),
     "Heart of Vlad": LocationData("Anti-Chapel", 3221, [0x4e335ac+8, 0x4e34048+8, 0x67437d2],
                                   False, True, 0x0016),
 }
@@ -493,7 +493,7 @@ rno1_locations = {
     "RNO1 - High potion": LocationData("Reverse Outer Wall", 6, [0x5050178]),
     "RNO1 - Garnet": LocationData("Reverse Outer Wall", 7, [0x505017a]),
     "RNO1 - Dim Sum set": LocationData("Reverse Outer Wall", 3240, [0x507d08c], True),
-    "RNO1 - Creature kill": LocationData("Reverse Outer Wall", None),
+    "RNO1 - Creature kill": LocationData("Reverse Outer Wall", 3241),
     "Tooth of Vlad": LocationData("Reverse Outer Wall", 3242,
                                   [0x5051d4a+8, 0x5052566+8, 0x67d1630], False, True,
                                   0x0016),
@@ -512,7 +512,7 @@ rno2_locations = {
     "RNO2 - Heart Refresh": LocationData("Death Wing's Lair", 9, [0x50f87ca]),
     "RNO2 - Shuriken": LocationData("Death Wing's Lair", 10, [0x50f87cc]),
     "RNO2 - Heart Vessel": LocationData("Death Wing's Lair", 11, [0x50f87ce]),
-    "RNO2 - Akmodan II kill": LocationData("Death Wing's Lair", None),
+    "RNO2 - Akmodan II kill": LocationData("Death Wing's Lair", 3260),
     "Rib of Vlad": LocationData("Death Wing's Lair", 3261,
                                 [0x50fa90c+8, 0x50fb220+8, 0x69d2b1e], False, True,
                                 0x0016),
@@ -560,7 +560,7 @@ rno4_locations = {
     "RNO4 - Manna prism": LocationData("Reverse Caverns", 24, [0x526c118]),
     "RNO4 - Elixir": LocationData("Reverse Caverns", 25, [0x526c11a]),
     "RNO4 - Osafune katana": LocationData("Reverse Caverns", 26, [0x526c11c]),
-    "RNO4 - Doppleganger40 kill": LocationData("Reverse Caverns", None),
+    "RNO4 - Doppleganger40 kill": LocationData("Reverse Caverns", 3280),
     "Force of Echo": LocationData("Reverse Caverns", 3281, [0x526e6a0+8, 0x526f86e+8],
                                   False, True, 0x00da00b0)
 }
@@ -575,7 +575,7 @@ rnz0_locations = {
     "RNZ0 - Turquoise": LocationData("Necromancy Laboratory", 7, [0x590307e]),
     "RNZ0 - Ring of Arcana": LocationData("Necromancy Laboratory", 8, [0x5903080]),
     "RNZ0 - Resist dark": LocationData("Necromancy Laboratory", 9, [0x5903082]),
-    "RNZ0 - Beezelbub kill": LocationData("Necromancy Laboratory", None),
+    "RNZ0 - Beezelbub kill": LocationData("Necromancy Laboratory", 3290),
 }
 
 rnz1_locations = {
@@ -595,7 +595,7 @@ rnz1_locations = {
     "RNZ1 - Turkey": LocationData("Reverse Clock Tower", 3301, [0x59bc34c], True),
     "RNZ1 - Shuriken": LocationData("Reverse Clock Tower", 3302, [0x59bc350], True),
     "RNZ1 - TNT": LocationData("Reverse Clock Tower", 3303, [0x59bc358], True),
-    "RNZ1 - Darkwing bat kill": LocationData("Reverse Clock Tower", None),
+    "RNZ1 - Darkwing bat kill": LocationData("Reverse Clock Tower", 3304),
     "Ring of Vlad": LocationData("Reverse Clock Tower", 3305,
                                  [0x059e8074, 0x059ee2e4, 0x059bdb30], False, True,
                                  0x0016),
