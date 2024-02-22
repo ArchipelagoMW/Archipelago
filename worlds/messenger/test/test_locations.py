@@ -12,5 +12,5 @@ class LocationsTest(MessengerTestBase):
         return False
 
     def test_locations_exist(self) -> None:
-        for location in self.multiworld.worlds[1].location_name_to_id:
+        for location in self.world.location_name_to_id:
             self.assertIsInstance(self.multiworld.get_location(location, self.player), MessengerLocation)
