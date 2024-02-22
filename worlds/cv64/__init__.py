@@ -79,7 +79,7 @@ class CV64World(World):
     required_s2s: int
     drac_condition: int
 
-    auth: bytes
+    auth: bytearray
 
     web = CV64Web()
 
@@ -108,7 +108,7 @@ class CV64World(World):
 
     def generate_early(self) -> None:
         # Generate the player's unique authentication
-        self.auth = self.random.randbytes(16)
+        self.auth = bytearray(self.multiworld.random.getrandbits(8) for _ in range(16))
 
         self.total_s1s = self.options.total_special1s.value
         self.s1s_per_warp = self.options.special1s_per_warp.value
