@@ -193,9 +193,9 @@ portal_mapping: List[Portal] = [
            destination="Overworld Redux_upper"),
     Portal(name="West Garden Shop", region="West Garden",
            destination="Shop_"),
-    Portal(name="West Garden Laurels Exit", region="West Garden Laurels Exit",
+    Portal(name="West Garden Laurels Exit", region="West Garden Laurels Exit Region",
            destination="Overworld Redux_lowest"),
-    Portal(name="West Garden Hero's Grave", region="West Garden Hero's Grave",
+    Portal(name="West Garden Hero's Grave", region="West Garden Hero's Grave Region",
            destination="RelicVoid_teleporter_relic plinth"),
     Portal(name="West Garden to Far Shore", region="West Garden Portal",
            destination="Transit_teleporter_archipelagos_teleporter"),
@@ -232,14 +232,14 @@ portal_mapping: List[Portal] = [
     Portal(name="Frog's Domain Orb Exit", region="Frog's Domain Back",
            destination="Frog Stairs_Exit"),
     
-    Portal(name="Library Exterior Tree", region="Library Exterior Tree",
+    Portal(name="Library Exterior Tree", region="Library Exterior Tree Region",
            destination="Atoll Redux_"),
-    Portal(name="Library Exterior Ladder", region="Library Exterior Ladder",
+    Portal(name="Library Exterior Ladder", region="Library Exterior Ladder Region",
            destination="Library Hall_"),
     
     Portal(name="Library Hall Bookshelf Exit", region="Library Hall",
            destination="Library Exterior_"),
-    Portal(name="Library Hero's Grave", region="Library Hero's Grave",
+    Portal(name="Library Hero's Grave", region="Library Hero's Grave Region",
            destination="RelicVoid_teleporter_relic plinth"),
     Portal(name="Library Hall to Rotunda", region="Library Hall",
            destination="Library Rotunda_"),
@@ -357,11 +357,11 @@ portal_mapping: List[Portal] = [
     
     Portal(name="Fortress Grave Path Lower Exit", region="Fortress Grave Path",
            destination="Fortress Courtyard_Lower"),
-    Portal(name="Fortress Hero's Grave", region="Fortress Grave Path",
+    Portal(name="Fortress Hero's Grave", region="Fortress Hero's Grave Region",
            destination="RelicVoid_teleporter_relic plinth"),
     Portal(name="Fortress Grave Path Upper Exit", region="Fortress Grave Path Upper",
            destination="Fortress Courtyard_Upper"),
-    Portal(name="Fortress Grave Path Dusty Entrance", region="Fortress Grave Path Dusty Entrance",
+    Portal(name="Fortress Grave Path Dusty Entrance", region="Fortress Grave Path Dusty Entrance Region",
            destination="Dusty_"),
 
     Portal(name="Dusty Exit", region="Fortress Leaf Piles",
@@ -406,7 +406,7 @@ portal_mapping: List[Portal] = [
            destination="Quarry Redux_back"),
     Portal(name="Monastery Front Exit", region="Monastery Front",
            destination="Quarry Redux_front"),
-    Portal(name="Monastery Hero's Grave", region="Monastery Hero's Grave",
+    Portal(name="Monastery Hero's Grave", region="Monastery Hero's Grave Region",
            destination="RelicVoid_teleporter_relic plinth"),
     
     Portal(name="Ziggurat Entry Hallway to Ziggurat Upper", region="Rooted Ziggurat Entry",
@@ -436,7 +436,7 @@ portal_mapping: List[Portal] = [
     
     Portal(name="Swamp Lower Exit", region="Swamp",
            destination="Overworld Redux_conduit"),
-    Portal(name="Swamp to Cathedral Main Entrance", region="Swamp to Cathedral Main Entrance",
+    Portal(name="Swamp to Cathedral Main Entrance", region="Swamp to Cathedral Main Entrance Region",
            destination="Cathedral Redux_main"),
     Portal(name="Swamp to Cathedral Secret Legend Room Entrance", region="Swamp to Cathedral Treasure Room",
            destination="Cathedral Redux_secret"),
@@ -446,7 +446,7 @@ portal_mapping: List[Portal] = [
            destination="Shop_"),
     Portal(name="Swamp Upper Exit", region="Back of Swamp Laurels Area",
            destination="Overworld Redux_wall"),
-    Portal(name="Swamp Hero's Grave", region="Swamp Hero's Grave",
+    Portal(name="Swamp Hero's Grave", region="Swamp Hero's Grave Region",
            destination="RelicVoid_teleporter_relic plinth"),
     
     Portal(name="Cathedral Main Exit", region="Cathedral",
@@ -476,15 +476,15 @@ portal_mapping: List[Portal] = [
     Portal(name="Hero's Grave to Swamp", region="Hero Relic - Swamp",
            destination="Swamp Redux 2_teleporter_relic plinth"),
     
-    Portal(name="Far Shore to West Garden", region="Far Shore to West Garden",
+    Portal(name="Far Shore to West Garden", region="Far Shore to West Garden Region",
            destination="Archipelagos Redux_teleporter_archipelagos_teleporter"),
-    Portal(name="Far Shore to Library", region="Far Shore to Library",
+    Portal(name="Far Shore to Library", region="Far Shore to Library Region",
            destination="Library Lab_teleporter_library teleporter"),
-    Portal(name="Far Shore to Quarry", region="Far Shore to Quarry",
+    Portal(name="Far Shore to Quarry", region="Far Shore to Quarry Region",
            destination="Quarry Redux_teleporter_quarry teleporter"),
-    Portal(name="Far Shore to East Forest", region="Far Shore to East Forest",
+    Portal(name="Far Shore to East Forest", region="Far Shore to East Forest Region",
            destination="East Forest Redux_teleporter_forest teleporter"),
-    Portal(name="Far Shore to Fortress", region="Far Shore to Fortress",
+    Portal(name="Far Shore to Fortress", region="Far Shore to Fortress Region",
            destination="Fortress Arena_teleporter_spidertank"),
     Portal(name="Far Shore to Atoll", region="Far Shore",
            destination="Atoll Redux_teleporter_atoll"),
@@ -494,7 +494,7 @@ portal_mapping: List[Portal] = [
            destination="Spirit Arena_teleporter_spirit arena"),
     Portal(name="Far Shore to Town", region="Far Shore",
            destination="Overworld Redux_teleporter_town"),
-    Portal(name="Far Shore to Spawn", region="Far Shore to Spawn",
+    Portal(name="Far Shore to Spawn", region="Far Shore to Spawn Region",
            destination="Overworld Redux_teleporter_starting island"),
     
     Portal(name="Heir Arena Exit", region="Spirit Arena",
@@ -586,9 +586,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
     "West Garden Portal Item": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
-    "West Garden Laurels Exit": RegionInfo("Archipelagos Redux"),
+    "West Garden Laurels Exit Region": RegionInfo("Archipelagos Redux"),
     "West Garden after Boss": RegionInfo("Archipelagos Redux"),
-    "West Garden Hero's Grave": RegionInfo("Archipelagos Redux"),
+    "West Garden Hero's Grave Region": RegionInfo("Archipelagos Redux"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
@@ -596,10 +596,10 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Frog's Domain Entry": RegionInfo("Frog Stairs"),
     "Frog's Domain": RegionInfo("frog cave main"),
     "Frog's Domain Back": RegionInfo("frog cave main"),
-    "Library Exterior Tree": RegionInfo("Library Exterior"),
-    "Library Exterior Ladder": RegionInfo("Library Exterior"),
+    "Library Exterior Tree Region": RegionInfo("Library Exterior"),
+    "Library Exterior Ladder Region": RegionInfo("Library Exterior"),
     "Library Hall": RegionInfo("Library Hall"),
-    "Library Hero's Grave": RegionInfo("Library Hall"),
+    "Library Hero's Grave Region": RegionInfo("Library Hall"),
     "Library Rotunda": RegionInfo("Library Rotunda"),
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
@@ -618,8 +618,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Fortress East Shortcut Lower": RegionInfo("Fortress East"),
     "Fortress Grave Path": RegionInfo("Fortress Reliquary"),
     "Fortress Grave Path Upper": RegionInfo("Fortress Reliquary", dead_end=DeadEnd.restricted),
-    "Fortress Grave Path Dusty Entrance": RegionInfo("Fortress Reliquary"),
-    "Fortress Hero's Grave": RegionInfo("Fortress Reliquary"),
+    "Fortress Grave Path Dusty Entrance Region": RegionInfo("Fortress Reliquary"),
+    "Fortress Hero's Grave Region": RegionInfo("Fortress Reliquary"),
     "Fortress Leaf Piles": RegionInfo("Dusty", dead_end=DeadEnd.all_cats),
     "Fortress Arena": RegionInfo("Fortress Arena"),
     "Fortress Arena Portal": RegionInfo("Fortress Arena"),
@@ -634,7 +634,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Quarry Monastery Entry": RegionInfo("Quarry Redux"),
     "Monastery Front": RegionInfo("Monastery"),
     "Monastery Back": RegionInfo("Monastery"),
-    "Monastery Hero's Grave": RegionInfo("Monastery"),
+    "Monastery Hero's Grave Region": RegionInfo("Monastery"),
     "Monastery Rope": RegionInfo("Quarry Redux"),
     "Lower Quarry": RegionInfo("Quarry Redux"),
     "Lower Quarry Zig Door": RegionInfo("Quarry Redux"),
@@ -651,9 +651,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
     "Swamp": RegionInfo("Swamp Redux 2"),
     "Swamp to Cathedral Treasure Room": RegionInfo("Swamp Redux 2"),
-    "Swamp to Cathedral Main Entrance": RegionInfo("Swamp Redux 2"),
+    "Swamp to Cathedral Main Entrance Region": RegionInfo("Swamp Redux 2"),
     "Back of Swamp": RegionInfo("Swamp Redux 2"),  # the area with hero grave and gauntlet entrance
-    "Swamp Hero's Grave": RegionInfo("Swamp Redux 2"),
+    "Swamp Hero's Grave Region": RegionInfo("Swamp Redux 2"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
     "Cathedral": RegionInfo("Cathedral Redux"),
     "Cathedral Secret Legend Room": RegionInfo("Cathedral Redux", dead_end=DeadEnd.all_cats),
@@ -661,12 +661,12 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Cathedral Gauntlet": RegionInfo("Cathedral Arena"),
     "Cathedral Gauntlet Exit": RegionInfo("Cathedral Arena"),
     "Far Shore": RegionInfo("Transit"),
-    "Far Shore to Spawn": RegionInfo("Transit"),
-    "Far Shore to East Forest": RegionInfo("Transit"),
-    "Far Shore to Quarry": RegionInfo("Transit"),
-    "Far Shore to Fortress": RegionInfo("Transit"),
-    "Far Shore to Library": RegionInfo("Transit"),
-    "Far Shore to West Garden": RegionInfo("Transit"),
+    "Far Shore to Spawn Region": RegionInfo("Transit"),
+    "Far Shore to East Forest Region": RegionInfo("Transit"),
+    "Far Shore to Quarry Region": RegionInfo("Transit"),
+    "Far Shore to Fortress Region": RegionInfo("Transit"),
+    "Far Shore to Library Region": RegionInfo("Transit"),
+    "Far Shore to West Garden Region": RegionInfo("Transit"),
     "Hero Relic - Fortress": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
     "Hero Relic - Quarry": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
     "Hero Relic - West Garden": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats),
@@ -716,17 +716,17 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"],
     ("Well Boss",):
         ["Dark Tomb Checkpoint", "Well Boss"],
-    ("West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"):
-        ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"],
+    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region"):
+        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region"],
     ("West Garden Portal", "West Garden Portal Item"): ["West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
-    ("Library Exterior Ladder", "Library Exterior Tree"):
-        ["Library Exterior Ladder", "Library Exterior Tree"],
-    ("Library Hall", "Library Hero's Grave"):
-        ["Library Hall", "Library Hero's Grave"],
+    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
+        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
+    ("Library Hall", "Library Hero's Grave Region"):
+        ["Library Hall", "Library Hero's Grave Region"],
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     ("Fortress Courtyard Upper",):
@@ -742,16 +742,16 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
     ("Eastern Vault Fortress",):
         ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"],
+    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
+        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
     ("Fortress Arena", "Fortress Arena Portal"):
         ["Fortress Arena", "Fortress Arena Portal"],
     ("Lower Mountain", "Lower Mountain Stairs"):
         ["Lower Mountain", "Lower Mountain Stairs"],
     ("Monastery Front",):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave"],
-    ("Monastery Back", "Monastery Hero's Grave"):
-        ["Monastery Back", "Monastery Hero's Grave"],
+        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
+    ("Monastery Back", "Monastery Hero's Grave Region"):
+        ["Monastery Back", "Monastery Hero's Grave Region"],
     ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry"):
         ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
          "Lower Quarry Zig Door"],
@@ -766,15 +766,15 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
     ("Swamp", "Swamp to Cathedral Treasure Room"):
-        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance"],
-    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"):
-        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"],
+        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region"],
+    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"):
+        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-     "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
-        ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-         "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"]
+    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+     "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"):
+        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
 }
 
 
@@ -807,18 +807,18 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Dark Tomb Entry Point", "Dark Tomb Main", "Dark Tomb Dark Exit"],
     ("Dark Tomb Checkpoint", "Well Boss"):
         ["Dark Tomb Checkpoint", "Well Boss"],
-    ("West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
+    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
      "West Garden Portal", "West Garden Portal Item"):
-        ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
+        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
          "West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
-    ("Library Exterior Ladder", "Library Exterior Tree"):
-        ["Library Exterior Ladder", "Library Exterior Tree"],
-    ("Library Hall", "Library Hero's Grave"):
-        ["Library Hall", "Library Hero's Grave"],
+    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
+        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
+    ("Library Hall", "Library Hero's Grave Region"):
+        ["Library Hall", "Library Hero's Grave Region"],
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
@@ -831,17 +831,17 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
     ("Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"):
         ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"],
+    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
+        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
     ("Fortress Grave Path Upper",):
-        ["Fortress Grave Path Upper", "Fortress Grave Path", "Fortress Grave Path Dusty Entrance",
-         "Fortress Hero's Grave"],
+        ["Fortress Grave Path Upper", "Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region",
+         "Fortress Hero's Grave Region"],
     ("Fortress Arena", "Fortress Arena Portal"):
         ["Fortress Arena", "Fortress Arena Portal"],
     ("Lower Mountain", "Lower Mountain Stairs"):
         ["Lower Mountain", "Lower Mountain Stairs"],
-    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave"):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave"],
+    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"):
+        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
     ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry"):
         ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
          "Lower Quarry Zig Door"],
@@ -855,17 +855,17 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance"):
-        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance"],
-    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"):
-        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp",
-         "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance"],
+    ("Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region"):
+        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region"],
+    ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"):
+        ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave Region", "Swamp",
+         "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-     "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
-        ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-         "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"]
+    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+     "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"):
+        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
 }
 
 
@@ -901,18 +901,18 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
     ("Dark Tomb Checkpoint", "Well Boss"):
         ["Dark Tomb Checkpoint", "Well Boss"],
     # can ice grapple from portal area to the rest, and vice versa
-    ("West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
+    ("West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
      "West Garden Portal", "West Garden Portal Item"):
-        ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
+        ["West Garden", "West Garden Laurels Exit Region", "West Garden after Boss", "West Garden Hero's Grave Region",
          "West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
-    ("Library Exterior Ladder", "Library Exterior Tree"):
-        ["Library Exterior Ladder", "Library Exterior Tree"],
-    ("Library Hall", "Library Hero's Grave"):
-        ["Library Hall", "Library Hero's Grave"],
+    ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
+        ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
+    ("Library Hall", "Library Hero's Grave Region"):
+        ["Library Hall", "Library Hero's Grave Region"],
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     # can use ice grapple or ladder storage to get from any ladder to upper
@@ -927,18 +927,18 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
     ("Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"):
         ["Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"],
-    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"):
-        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance", "Fortress Hero's Grave"],
+    ("Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"):
+        ["Fortress Grave Path", "Fortress Grave Path Dusty Entrance Region", "Fortress Hero's Grave Region"],
     # can ice grapple down
     ("Fortress Grave Path Upper",):
         ["Fortress Grave Path Upper", "Fortress Grave Path", "Fortress Grave Path Dusty Entrance",
-         "Fortress Hero's Grave"],
+         "Fortress Hero's Grave Region"],
     ("Fortress Arena", "Fortress Arena Portal"):
         ["Fortress Arena", "Fortress Arena Portal"],
     ("Lower Mountain", "Lower Mountain Stairs"):
         ["Lower Mountain", "Lower Mountain Stairs"],
-    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave"):
-        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave"],
+    ("Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"):
+        ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
     # can use ladder storage at any of the Quarry ladders to get to Monastery Rope
     ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
      "Monastery Rope"):
@@ -952,14 +952,14 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance", "Back of Swamp",
-     "Back of Swamp Laurels Area", "Swamp Hero's Grave"):
-        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance", "Back of Swamp",
-         "Back of Swamp Laurels Area", "Swamp Hero's Grave"],
+    ("Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region", "Back of Swamp",
+     "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"):
+        ["Swamp", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region", "Back of Swamp",
+         "Back of Swamp Laurels Area", "Swamp Hero's Grave Region"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
-    ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-     "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
-        ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
-         "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"]
+    ("Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+     "Far Shore to Fortress Region", "Far Shore to Library Region Region", "Far Shore to West Garden Region"):
+        ["Far Shore", "Far Shore to Spawn Region", "Far Shore to East Forest Region", "Far Shore to Quarry Region",
+         "Far Shore to Fortress Region", "Far Shore to Library Region", "Far Shore to West Garden Region"]
 }
