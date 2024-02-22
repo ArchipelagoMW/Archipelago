@@ -1,9 +1,9 @@
 
 import Utils
 
-from BaseClasses import MultiWorld, Location
+from BaseClasses import Location
 from worlds.Files import APDeltaPatch
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Iterable, Collection, TYPE_CHECKING
 
 import hashlib
 import os
@@ -14,9 +14,11 @@ from .data import patches
 from .stages import get_stage_info
 from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
 from .aesthetics import renon_item_dialogue, get_item_text_color
-from .options import CV64Options
 from .locations import get_location_info
 from settings import get_settings
+
+if TYPE_CHECKING:
+    from . import CV64World
 
 CV64US10HASH = "1cc5cf3b4d29d8c3ade957648b529dc1"
 ROM_PLAYER_LIMIT = 65535
@@ -47,7 +49,7 @@ class LocalRom:
     def write_byte(self, address: int, value: int) -> None:
         self.buffer[address] = value
 
-    def write_bytes(self, start_address: int, values: Union[List[int], bytearray, bytes]) -> None:
+    def write_bytes(self, start_address: int, values: Collection[int]) -> None:
         self.buffer[start_address:start_address + len(values)] = values
 
     def write_int16(self, address: int, value: int) -> None:
@@ -79,18 +81,18 @@ class LocalRom:
             outfile.write(self.buffer)
 
 
-def patch_rom(multiworld: MultiWorld, options: CV64Options, rom: LocalRom, player: int, offset_data: Dict[int, int],
-              active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]], s1s_per_warp: int,
-              active_warp_list: List[str], required_s2s: int, total_s2s: int, shop_name_list: List[str],
+def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], shop_name_list: List[str],
               shop_desc_list: List[List[Union[int, str, None]]], shop_colors_list: List[bytearray], slot_name: bytes,
-              active_locations: List[Location]) -> None:
-    w1 = str(s1s_per_warp).zfill(2)
-    w2 = str(s1s_per_warp * 2).zfill(2)
-    w3 = str(s1s_per_warp * 3).zfill(2)
-    w4 = str(s1s_per_warp * 4).zfill(2)
-    w5 = str(s1s_per_warp * 5).zfill(2)
-    w6 = str(s1s_per_warp * 6).zfill(2)
-    w7 = str(s1s_per_warp * 7).zfill(2)
+              active_locations: Iterable[Location]) -> None:
+
+    multiworld = world.multiworld
+    options = world.options
+    player = world.player
+    active_stage_exits = world.active_stage_exits
+    s1s_per_warp = world.s1s_per_warp
+    active_warp_list = world.active_warp_list
+    required_s2s = world.required_s2s
+    total_s2s = world.total_s2s
 
     # NOP out the CRC BNEs
     rom.write_int32(0x66C, 0x00000000)
@@ -222,13 +224,13 @@ def patch_rom(multiworld: MultiWorld, options: CV64Options, rom: LocalRom, playe
 
     # Change the Stage Select menu's text to reflect its new purpose
     rom.write_bytes(0xEFAD0, cv64_string_to_bytearray(f"Where to...?\t{active_warp_list[0]}\t"
-                                                      f"`{w1} {active_warp_list[1]}\t"
-                                                      f"`{w2} {active_warp_list[2]}\t"
-                                                      f"`{w3} {active_warp_list[3]}\t"
-                                                      f"`{w4} {active_warp_list[4]}\t"
-                                                      f"`{w5} {active_warp_list[5]}\t"
-                                                      f"`{w6} {active_warp_list[6]}\t"
-                                                      f"`{w7} {active_warp_list[7]}"))
+                                                      f"`{str(s1s_per_warp).zfill(2)} {active_warp_list[1]}\t"
+                                                      f"`{str(s1s_per_warp * 2).zfill(2)} {active_warp_list[2]}\t"
+                                                      f"`{str(s1s_per_warp * 3).zfill(2)} {active_warp_list[3]}\t"
+                                                      f"`{str(s1s_per_warp * 4).zfill(2)} {active_warp_list[4]}\t"
+                                                      f"`{str(s1s_per_warp * 5).zfill(2)} {active_warp_list[5]}\t"
+                                                      f"`{str(s1s_per_warp * 6).zfill(2)} {active_warp_list[6]}\t"
+                                                      f"`{str(s1s_per_warp * 7).zfill(2)} {active_warp_list[7]}"))
 
     # Lizard-man save proofing
     rom.write_int32(0xA99AC, 0x080FF0B8)  # J 0x803FC2E0

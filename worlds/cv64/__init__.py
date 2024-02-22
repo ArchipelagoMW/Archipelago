@@ -120,13 +120,13 @@ class CV64World(World):
         # Shuffle the stages if the option is on.
         if self.options.stage_shuffle:
             self.active_stage_exits, self.starting_stage, self.active_stage_list = \
-                shuffle_stages(self, stage_1_blacklist, self.options.starting_stage.value, self.active_stage_exits)
+                shuffle_stages(self, stage_1_blacklist)
         else:
             self.active_stage_list = [stage for stage in vanilla_stage_order if stage in self.active_stage_exits]
 
         # Create a list of warps from the active stage list. They are in a random order by default and will never
         # include the starting stage.
-        self.active_warp_list = generate_warps(self, self.options, self.active_stage_list)
+        self.active_warp_list = generate_warps(self)
 
     def create_regions(self) -> None:
         # Create the Menu region.
@@ -177,7 +177,7 @@ class CV64World(World):
         return created_item
 
     def create_items(self) -> None:
-        item_counts = get_item_counts(self, self.options, self.multiworld.get_unfilled_locations(self.player))
+        item_counts = get_item_counts(self)
 
         # Set up the items correctly
         for classification in item_counts:
@@ -186,7 +186,7 @@ class CV64World(World):
                                              for _ in range(item_counts[classification][item])]
 
     def set_rules(self) -> None:
-        active_regions = list(self.multiworld.get_regions(self.player))
+        active_regions = self.multiworld.get_regions(self.player)
 
         # Set the required Special2s to the number of available bosses or crystal events returned if Special2s
         # are not the goal.
@@ -232,15 +232,14 @@ class CV64World(World):
                 self.multiworld.local_early_items[self.player][iname.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
-        active_locations = list(self.multiworld.get_locations(self.player))
+        active_locations = self.multiworld.get_locations(self.player)
 
         # Location data and shop names, descriptions, and colors
         offset_data, shop_name_list, shop_colors_list, shop_desc_list = \
-            get_location_data(self, self.options, active_locations)
+            get_location_data(self, active_locations)
         # Shop prices
         if self.options.shop_prices.value:
-            offset_data.update(randomize_shop_prices(self, self.options.minimum_gold_price.value,
-                                                     self.options.maximum_gold_price.value))
+            offset_data.update(randomize_shop_prices(self))
         # Map lighting
         if self.options.map_lighting.value:
             offset_data.update(randomize_lighting(self))
@@ -254,7 +253,7 @@ class CV64World(World):
             offset_data.update(rom_empty_breakables_flags)
         # Music
         if self.options.background_music.value:
-            offset_data.update(randomize_music(self, self.options))
+            offset_data.update(randomize_music(self))
         # Loading zones
         offset_data.update(get_loading_zone_bytes(self.options, self.starting_stage, self.active_stage_exits))
         # Countdown
@@ -270,9 +269,8 @@ class CV64World(World):
 
         rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
 
-        patch_rom(self.multiworld, self.options, cv64_rom, self.player, offset_data, self.active_stage_exits,
-                  self.s1s_per_warp, self.active_warp_list, self.required_s2s, self.total_s2s, shop_name_list,
-                  shop_desc_list, shop_colors_list, slot_name, active_locations)
+        patch_rom(self, cv64_rom, offset_data, shop_name_list, shop_desc_list, shop_colors_list, slot_name,
+                  active_locations)
 
         cv64_rom.write_to_file(rompath)
 

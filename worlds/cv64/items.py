@@ -1,9 +1,8 @@
-from BaseClasses import Item, Location
+from BaseClasses import Item
 from .data import iname
 from .locations import base_id, get_location_info
-from .options import CV64Options
 
-from typing import TYPE_CHECKING, Dict, List, Union
+from typing import TYPE_CHECKING, Dict, Union
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -108,8 +107,10 @@ def get_item_names_to_ids() -> Dict[str, int]:
     return {name: get_item_info(name, "code")+base_id for name in item_info if get_item_info(name, "code") is not None}
 
 
-def get_item_counts(world: "CV64World", options: CV64Options, active_locations: List[Location]) \
-        -> Dict[str, Dict[str, int]]:
+def get_item_counts(world: "CV64World") -> Dict[str, Dict[str, int]]:
+
+    active_locations = world.multiworld.get_unfilled_locations(world.player)
+
     item_counts = {
         "progression": {},
         "progression_skip_balancing": {},
@@ -125,7 +126,7 @@ def get_item_counts(world: "CV64World", options: CV64Options, active_locations: 
         if loc.address is None:
             continue
 
-        if options.hard_item_pool.value and get_location_info(loc.name, "hard item") is not None:
+        if world.options.hard_item_pool.value and get_location_info(loc.name, "hard item") is not None:
             item_to_add = get_location_info(loc.name, "hard item")
         else:
             item_to_add = get_location_info(loc.name, "normal item")
@@ -139,28 +140,28 @@ def get_item_counts(world: "CV64World", options: CV64Options, active_locations: 
         total_items += 1
 
     # Replace all but 2 PowerUps with junk if Permanent PowerUps is on and mark those two PowerUps as Useful.
-    if options.permanent_powerups.value:
+    if world.options.permanent_powerups.value:
         for i in range(item_counts["filler"][iname.powerup] - 2):
             item_counts["filler"][world.get_filler_item_name()] += 1
         del(item_counts["filler"][iname.powerup])
         item_counts["useful"][iname.permaup] = 2
 
     # Add the total Special1s.
-    item_counts["progression_skip_balancing"][iname.special_one] = options.total_special1s.value
-    extras_count += options.total_special1s.value
+    item_counts["progression_skip_balancing"][iname.special_one] = world.options.total_special1s.value
+    extras_count += world.options.total_special1s.value
 
     # Add the total Special2s if Dracula's Condition is Special2s.
-    if options.draculas_condition.value == options.draculas_condition.option_specials:
-        item_counts["progression_skip_balancing"][iname.special_two] = options.total_special2s.value
-        extras_count += options.total_special2s.value
+    if world.options.draculas_condition.value == world.options.draculas_condition.option_specials:
+        item_counts["progression_skip_balancing"][iname.special_two] = world.options.total_special2s.value
+        extras_count += world.options.total_special2s.value
 
     # Determine the extra key counts if applicable. Doing this before moving Special1s will ensure only the keys and
     # bomb components are affected by this.
     for key in item_counts["progression"]:
         spare_keys = 0
-        if options.spare_keys.value == options.spare_keys.option_on:
+        if world.options.spare_keys.value == world.options.spare_keys.option_on:
             spare_keys = item_counts["progression"][key]
-        elif options.spare_keys.value == options.spare_keys.option_chance:
+        elif world.options.spare_keys.value == world.options.spare_keys.option_chance:
             if item_counts["progression"][key] > 0:
                 for i in range(item_counts["progression"][key]):
                     spare_keys += world.random.randint(0, 1)
@@ -203,7 +204,7 @@ def get_item_counts(world: "CV64World", options: CV64Options, active_locations: 
 
     # Determine the Ice Trap count by taking a certain % of the total filler remaining at this point.
     item_counts["trap"][iname.ice_trap] = math.floor((total_filler_junk + total_non_filler_junk) *
-                                                     (options.ice_trap_percentage.value / 100.0))
+                                                     (world.options.ice_trap_percentage.value / 100.0))
     for i in range(item_counts["trap"][iname.ice_trap]):
         # Subtract the remaining filler after determining the ice trap count.
         item_to_subtract = world.random.choice(list(item_counts["filler"].keys()))

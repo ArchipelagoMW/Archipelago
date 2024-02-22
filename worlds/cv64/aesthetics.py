@@ -6,7 +6,7 @@ from .locations import get_location_info, base_id
 from .regions import get_region_info
 from .items import get_item_info, item_info
 
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union, Iterable
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -293,12 +293,12 @@ def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
     return dict(zip(sub_weapon_dict, sub_bytes))
 
 
-def randomize_music(world: "CV64World", options: CV64Options) -> Dict[int, int]:
+def randomize_music(world: "CV64World") -> Dict[int, int]:
     """Generates randomized or disabled data for all the music in the game."""
     music_array = bytearray(0x7A)
     for number in music_sfx_ids:
         music_array[number] = number
-    if options.background_music.value == options.background_music.option_randomized:
+    if world.options.background_music.value == world.options.background_music.option_randomized:
         looping_songs = []
         non_looping_songs = []
         fade_in_songs = {}
@@ -346,9 +346,12 @@ def randomize_music(world: "CV64World", options: CV64Options) -> Dict[int, int]:
     return music_offsets
 
 
-def randomize_shop_prices(world: "CV64World", min_price: int, max_price: int) -> Dict[int, int]:
+def randomize_shop_prices(world: "CV64World") -> Dict[int, int]:
     """Randomize the shop prices based on the minimum and maximum values chosen.
     The minimum price will adjust if it's higher than the max."""
+    min_price = world.options.minimum_gold_price.value
+    max_price = world.options.maximum_gold_price.value
+
     if min_price > max_price:
         min_price = world.random.randint(0, max_price)
 
@@ -362,7 +365,7 @@ def randomize_shop_prices(world: "CV64World", min_price: int, max_price: int) ->
     return price_dict
 
 
-def get_countdown_numbers(options: CV64Options, active_locations: List[Location]) -> Dict[int, int]:
+def get_countdown_numbers(options: CV64Options, active_locations: Iterable[Location]) -> Dict[int, int]:
     """Figures out which Countdown numbers to increase for each Location after verifying the Item on the Location should
     increase a number.
 
@@ -393,7 +396,7 @@ def get_countdown_numbers(options: CV64Options, active_locations: List[Location]
     return countdown_dict
 
 
-def get_location_data(world: "CV64World", options: CV64Options, active_locations: List[Location]) \
+def get_location_data(world: "CV64World", active_locations: Iterable[Location]) \
         -> Tuple[Dict[int, int], List[str], List[bytearray], List[List[Union[int, str, None]]]]:
     """Gets ALL the item data to go into the ROM. Item data consists of two bytes: the first dictates the appearance of
     the item, the second determines what the item actually is when picked up. All items from other worlds will be AP
@@ -406,9 +409,9 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
     regular data."""
 
     # Figure out the list of possible Ice Trap appearances to use based on the settings, first and foremost.
-    if options.ice_trap_appearance.value == options.ice_trap_appearance.option_major_only:
+    if world.options.ice_trap_appearance.value == world.options.ice_trap_appearance.option_major_only:
         allowed_classifications = ["progression", "progression skip balancing"]
-    elif options.ice_trap_appearance.value == options.ice_trap_appearance.option_junk_only:
+    elif world.options.ice_trap_appearance.value == world.options.ice_trap_appearance.option_junk_only:
         allowed_classifications = ["filler", "useful"]
     else:
         allowed_classifications = ["progression", "progression skip balancing", "filler", "useful"]
@@ -472,10 +475,10 @@ def get_location_data(world: "CV64World", options: CV64Options, active_locations
                     location_bytes[get_location_info(loc.name, "offset") - 1] = 0x0B
 
         # Apply the invisibility variable depending on the "invisible items" setting.
-        if (options.invisible_items.value == 0 and loc_type == "inv") or \
-                (options.invisible_items.value == 2 and loc_type not in ["npc", "shop"]):
+        if (world.options.invisible_items.value == 0 and loc_type == "inv") or \
+                (world.options.invisible_items.value == 2 and loc_type not in ["npc", "shop"]):
             location_bytes[get_location_info(loc.name, "offset") - 1] += 0x80
-        elif options.invisible_items.value == 3 and loc_type not in ["npc", "shop"]:
+        elif world.options.invisible_items.value == 3 and loc_type not in ["npc", "shop"]:
             invisible = world.random.randint(0, 1)
             if invisible:
                 location_bytes[get_location_info(loc.name, "offset") - 1] += 0x80

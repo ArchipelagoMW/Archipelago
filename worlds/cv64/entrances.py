@@ -2,7 +2,7 @@ from .data import ename, iname, rname
 from .stages import get_stage_info
 from .options import CV64Options
 
-from typing import Dict, List, Tuple, Union, Any
+from typing import Dict, List, Tuple, Union
 
 # # #    KEY    # # #
 # "connection" = The name of the Region the Entrance connects into. If it's a Tuple[str, str], we take the stage in
@@ -10,7 +10,7 @@ from typing import Dict, List, Tuple, Union, Any
 #                the first string, and take the start or end Region of that stage.
 # "rule" = What rule should be applied to the Entrance during set_rules, as defined in self.rules in the CV64Rules class
 #          definition in rules.py.
-# "add conds" = A tuple of player options conditions that must be satisfied for the Entrance to be added. Can be of
+# "add conds" = A list of player options conditions that must be satisfied for the Entrance to be added. Can be of
 #               varying length depending on how many conditions need to be satisfied. In the add_conds dict's tuples,
 #               the first element is the name of the option, the second is the option value to check for, and the third
 #               is a boolean for whether we are evaluating for the option value or not.
@@ -21,38 +21,38 @@ entrance_info = {
     ename.forest_end: {"connection": ("next", rname.forest_of_silence)},
     # Castle Wall
     ename.cw_portcullis_c: {"connection": rname.cw_exit},
-    ename.cw_lt_skip: {"connection": ("next", rname.castle_wall), "add conds": ("hard",)},
+    ename.cw_lt_skip: {"connection": ("next", rname.castle_wall), "add conds": ["hard"]},
     ename.cw_lt_door: {"connection": rname.cw_ltower, "rule": iname.left_tower_key},
     ename.cw_end: {"connection": ("next", rname.castle_wall)},
     # Villa
     ename.villa_dog_gates: {"connection": rname.villa_main},
-    ename.villa_snipe_dogs: {"connection": rname.villa_start, "add conds": ("carrie", "hard")},
+    ename.villa_snipe_dogs: {"connection": rname.villa_start, "add conds": ["carrie", "hard"]},
     ename.villa_to_storeroom: {"connection": rname.villa_storeroom, "rule": iname.storeroom_key},
     ename.villa_to_archives: {"connection": rname.villa_archives, "rule": iname.archives_key},
-    ename.villa_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.villa_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.villa_to_maze: {"connection": rname.villa_maze, "rule": iname.garden_key},
     ename.villa_from_storeroom: {"connection": rname.villa_main, "rule": iname.storeroom_key},
     ename.villa_from_maze: {"connection": rname.villa_servants, "rule": iname.garden_key},
     ename.villa_servant_door: {"connection": rname.villa_main},
     ename.villa_copper_door: {"connection": rname.villa_crypt, "rule": iname.copper_key,
-                              "add conds": ("not hard",)},
-    ename.villa_copper_skip: {"connection": rname.villa_crypt, "add conds": ("hard",)},
+                              "add conds": ["not hard"]},
+    ename.villa_copper_skip: {"connection": rname.villa_crypt, "add conds": ["hard"]},
     ename.villa_bridge_door: {"connection": rname.villa_maze},
     ename.villa_end_r: {"connection": ("next", rname.villa)},
     ename.villa_end_c: {"connection": ("alt", rname.villa)},
     # Tunnel
-    ename.tunnel_start_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.tunnel_start_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.tunnel_gondolas: {"connection": rname.tunnel_end},
-    ename.tunnel_end_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.tunnel_end_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.tunnel_end: {"connection": ("next", rname.tunnel)},
     # Underground Waterway
-    ename.uw_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.uw_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.uw_final_waterfall: {"connection": rname.uw_end},
-    ename.uw_waterfall_skip: {"connection": rname.uw_main, "add conds": ("hard",)},
+    ename.uw_waterfall_skip: {"connection": rname.uw_main, "add conds": ["hard"]},
     ename.uw_end: {"connection": ("next", rname.underground_waterway)},
     # Castle Center
     ename.cc_tc_door: {"connection": rname.cc_torture_chamber, "rule": iname.chamber_key},
-    ename.cc_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.cc_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.cc_lower_wall: {"connection": rname.cc_crystal, "rule": "Bomb 2"},
     ename.cc_upper_wall: {"connection": rname.cc_library, "rule": "Bomb 1"},
     ename.cc_elevator: {"connection": rname.cc_elev_top},
@@ -64,8 +64,8 @@ entrance_info = {
     # Tower of Execution
     ename.toe_start: {"connection": ("prev", rname.tower_of_execution)},
     ename.toe_gate: {"connection": rname.toe_ledge, "rule": iname.execution_key,
-                     "add conds": ("not hard",)},
-    ename.toe_gate_skip: {"connection": rname.toe_ledge, "add conds": ("hard",)},
+                     "add conds": ["not hard"]},
+    ename.toe_gate_skip: {"connection": rname.toe_ledge, "add conds": ["hard"]},
     ename.toe_end: {"connection": ("next", rname.tower_of_execution)},
     # Tower of Science
     ename.tosci_start: {"connection": ("prev", rname.tower_of_science)},
@@ -84,10 +84,10 @@ entrance_info = {
     ename.ct_from_door1: {"connection": rname.ct_start, "rule": iname.clocktower_key1},
     ename.ct_to_door2: {"connection": rname.ct_end, "rule": iname.clocktower_key2},
     ename.ct_from_door2: {"connection": rname.ct_middle, "rule": iname.clocktower_key2},
-    ename.ct_renon: {"connection": rname.renon, "add conds": ("shopsanity",)},
+    ename.ct_renon: {"connection": rname.renon, "add conds": ["shopsanity"]},
     ename.ct_door_3: {"connection": ("next", rname.clock_tower), "rule": iname.clocktower_key3},
     # Castle Keep
-    ename.ck_slope_jump: {"connection": rname.roc_main, "add conds": ("hard",)},
+    ename.ck_slope_jump: {"connection": rname.roc_main, "add conds": ["hard"]},
     ename.ck_drac_door: {"connection": rname.ck_drac_chamber, "rule": "Dracula"}
 }
 
@@ -101,7 +101,7 @@ stage_connection_types = {"prev": "end region",
                           "alt": "start region"}
 
 
-def get_entrance_info(entrance: str, info: str) -> Union[str, Tuple[str, Any], None]:
+def get_entrance_info(entrance: str, info: str) -> Union[str, Tuple[str, str], List[str], None]:
     if info in entrance_info[entrance]:
         return entrance_info[entrance][info]
     return None
@@ -119,7 +119,7 @@ def get_warp_entrances(active_warp_list: List[str]) -> Dict[str, str]:
     return warp_entrances
 
 
-def verify_entrances(options: CV64Options, entrances: Tuple[str],
+def verify_entrances(options: CV64Options, entrances: List[str],
                      active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) -> Dict[str, str]:
     verified_entrances = {}
 

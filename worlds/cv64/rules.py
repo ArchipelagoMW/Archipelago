@@ -14,9 +14,9 @@ class CV64Rules:
     player: int
     world: "CV64World"
     rules: Dict[str, CollectionRule]
-    s1s_per_warp = int
-    required_s2s = int
-    drac_condition = int
+    s1s_per_warp: int
+    required_s2s: int
+    drac_condition: int
 
     def __init__(self, world: "CV64World") -> None:
         self.player = world.player
@@ -67,7 +67,7 @@ class CV64Rules:
             for entrance in region.entrances:
                 if entrance.parent_region.name == "Menu":
                     if entrance.name.startswith("Warp "):
-                        entrance.access_rule = lambda state, warp_num = int(entrance.name[5]): \
+                        entrance.access_rule = lambda state, warp_num=int(entrance.name[5]): \
                             state.has(iname.special_one, self.player, self.s1s_per_warp * warp_num)
                 else:
                     ent_rule = get_entrance_info(entrance.name, "rule")
@@ -76,29 +76,28 @@ class CV64Rules:
 
         multiworld.completion_condition[self.player] = lambda state: state.has(iname.victory, self.player)
         if self.world.options.accessibility:  # not locations accessibility
-            set_self_locking_items(self.world, self.player)
+            self.set_self_locking_items()
 
+    def set_self_locking_items(self) -> None:
+        multiworld = self.world.multiworld
 
-def set_self_locking_items(world: "CV64World", player: int) -> None:
-    multiworld = world.multiworld
+        # Do the regions that we know for a fact always exist, and we always do no matter what.
+        allow_self_locking_items(multiworld.get_region(rname.villa_archives, self.player), iname.archives_key)
+        allow_self_locking_items(multiworld.get_region(rname.cc_torture_chamber, self.player), iname.chamber_key)
 
-    # Do the regions that we know for a fact always exist, and we always do no matter what.
-    allow_self_locking_items(multiworld.get_region(rname.villa_archives, player), iname.archives_key)
-    allow_self_locking_items(multiworld.get_region(rname.cc_torture_chamber, player), iname.chamber_key)
+        # Add this region if the world doesn't have the Villa Storeroom warp entrance.
+        if "Villa" not in self.world.active_warp_list[1:]:
+            allow_self_locking_items(multiworld.get_region(rname.villa_storeroom, self.player), iname.storeroom_key)
 
-    # Add this region if the world doesn't have the Villa Storeroom warp entrance.
-    if "Villa" not in world.active_warp_list[1:]:
-        allow_self_locking_items(multiworld.get_region(rname.villa_storeroom, player), iname.storeroom_key)
+        # Add this region if Hard Logic is on and Multi Hit Breakables are off.
+        if self.world.options.hard_logic and not self.world.options.multi_hit_breakables:
+            allow_self_locking_items(multiworld.get_region(rname.cw_ltower, self.player), iname.left_tower_key)
 
-    # Add this region if Hard Logic is on and Multi Hit Breakables are off.
-    if world.options.hard_logic and not world.options.multi_hit_breakables:
-        allow_self_locking_items(multiworld.get_region(rname.cw_ltower, player), iname.left_tower_key)
+        # Add these regions if Tower of Science is in the world.
+        if "Tower of Science" in self.world.active_stage_exits:
+            allow_self_locking_items(multiworld.get_region(rname.tosci_three_doors, self.player), iname.science_key1)
+            allow_self_locking_items(multiworld.get_region(rname.tosci_key3, self.player), iname.science_key3)
 
-    # Add these regions if Tower of Science is in the world.
-    if "Tower of Science" in world.active_stage_exits:
-        allow_self_locking_items(multiworld.get_region(rname.tosci_three_doors, player), iname.science_key1)
-        allow_self_locking_items(multiworld.get_region(rname.tosci_key3, player), iname.science_key3)
-
-    # Add this region if Tower of Execution is in the world and Hard Logic is not on.
-    if "Tower of Execution" in world.active_stage_exits and world.options.hard_logic:
-        allow_self_locking_items(multiworld.get_region(rname.toe_ledge, player), iname.execution_key)
+        # Add this region if Tower of Execution is in the world and Hard Logic is not on.
+        if "Tower of Execution" in self.world.active_stage_exits and self.world.options.hard_logic:
+            allow_self_locking_items(multiworld.get_region(rname.toe_ledge, self.player), iname.execution_key)

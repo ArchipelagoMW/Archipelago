@@ -1,9 +1,8 @@
 from .data import rname
-from .options import CV64Options
 from .regions import get_region_info
 from .locations import get_location_info
 
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union, Any
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
 if TYPE_CHECKING:
     from . import CV64World
@@ -49,10 +48,10 @@ stage_info = {
         "mid region": rname.forest_mid, "mid map id": 0x00, "mid spawn id": 0x04,
         "end region": rname.forest_end, "end map id": 0x00, "end spawn id": 0x01,
         "endzone map offset": 0xB6302F, "endzone spawn offset": 0xB6302B,
-        "save number offsets": (0x1049C5, 0x1049CD, 0x1049D5),
-        "regions": (rname.forest_start,
+        "save number offsets": [0x1049C5, 0x1049CD, 0x1049D5],
+        "regions": [rname.forest_start,
                     rname.forest_mid,
-                    rname.forest_end)
+                    rname.forest_end]
     },
 
     "Castle Wall": {
@@ -60,10 +59,10 @@ stage_info = {
         "mid region": rname.cw_start, "mid map id": 0x02, "mid spawn id": 0x07,
         "end region": rname.cw_exit, "end map id": 0x02, "end spawn id": 0x10,
         "endzone map offset": 0x109A5F, "endzone spawn offset": 0x109A61,
-        "save number offsets": (0x1049DD, 0x1049E5, 0x1049ED),
-        "regions": (rname.cw_start,
+        "save number offsets": [0x1049DD, 0x1049E5, 0x1049ED],
+        "regions": [rname.cw_start,
                     rname.cw_exit,
-                    rname.cw_ltower)
+                    rname.cw_ltower]
     },
 
     "Villa": {
@@ -72,14 +71,14 @@ stage_info = {
         "end region": rname.villa_crypt, "end map id": 0x1A, "end spawn id": 0x03,
         "endzone map offset": 0xD9DA3, "endzone spawn offset": 0x109E81,
         "altzone map offset": 0xD9DAB, "altzone spawn offset": 0x109E81,
-        "save number offsets": (0x1049F5, 0x1049FD, 0x104A05, 0x104A0D),
-        "regions": (rname.villa_start,
+        "save number offsets": [0x1049F5, 0x1049FD, 0x104A05, 0x104A0D],
+        "regions": [rname.villa_start,
                     rname.villa_main,
                     rname.villa_storeroom,
                     rname.villa_archives,
                     rname.villa_maze,
                     rname.villa_servants,
-                    rname.villa_crypt)
+                    rname.villa_crypt]
     },
 
     "Tunnel": {
@@ -87,9 +86,9 @@ stage_info = {
         "mid region": rname.tunnel_end, "mid map id": 0x07, "mid spawn id": 0x03,
         "end region": rname.tunnel_end, "end map id": 0x07, "end spawn id": 0x11,
         "endzone map offset": 0x109B4F, "endzone spawn offset": 0x109B51, "character": "Reinhardt",
-        "save number offsets": (0x104A15, 0x104A1D, 0x104A25, 0x104A2D),
-        "regions": (rname.tunnel_start,
-                    rname.tunnel_end)
+        "save number offsets": [0x104A15, 0x104A1D, 0x104A25, 0x104A2D],
+        "regions": [rname.tunnel_start,
+                    rname.tunnel_end]
     },
 
     "Underground Waterway": {
@@ -97,9 +96,9 @@ stage_info = {
         "mid region": rname.uw_main, "mid map id": 0x08, "mid spawn id": 0x03,
         "end region": rname.uw_end, "end map id": 0x08, "end spawn id": 0x01,
         "endzone map offset": 0x109B67, "endzone spawn offset": 0x109B69, "character": "Carrie",
-        "save number offsets": (0x104A35, 0x104A3D),
-        "regions": (rname.uw_main,
-                    rname.uw_end)
+        "save number offsets": [0x104A35, 0x104A3D],
+        "regions": [rname.uw_main,
+                    rname.uw_end]
     },
 
     "Castle Center": {
@@ -108,12 +107,12 @@ stage_info = {
         "end region": rname.cc_elev_top, "end map id": 0x0F, "end spawn id": 0x02,
         "endzone map offset": 0x109CB7, "endzone spawn offset": 0x109CB9,
         "altzone map offset": 0x109CCF, "altzone spawn offset": 0x109CD1,
-        "save number offsets": (0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75),
-        "regions": (rname.cc_main,
+        "save number offsets": [0x104A45, 0x104A4D, 0x104A55, 0x104A5D, 0x104A65, 0x104A6D, 0x104A75],
+        "regions": [rname.cc_main,
                     rname.cc_torture_chamber,
                     rname.cc_library,
                     rname.cc_crystal,
-                    rname.cc_elev_top)
+                    rname.cc_elev_top]
     },
 
     "Duel Tower": {
@@ -122,8 +121,8 @@ stage_info = {
         "mid region": rname.dt_main, "mid map id": 0x13, "mid spawn id": 0x15,
         "end region": rname.dt_main, "end map id": 0x13, "end spawn id": 0x01,
         "endzone map offset": 0x109D8F, "endzone spawn offset": 0x109D91, "character": "Reinhardt",
-        "save number offsets": (0x104ACD,),
-        "regions": (rname.dt_main,)
+        "save number offsets": [0x104ACD],
+        "regions": [rname.dt_main]
     },
 
     "Tower of Execution": {
@@ -132,9 +131,9 @@ stage_info = {
         "mid region": rname.toe_main, "mid map id": 0x10, "mid spawn id": 0x02,
         "end region": rname.toe_main, "end map id": 0x10, "end spawn id": 0x12,
         "endzone map offset": 0x109CFF, "endzone spawn offset": 0x109D01, "character": "Reinhardt",
-        "save number offsets": (0x104A7D, 0x104A85),
-        "regions": (rname.toe_main,
-                    rname.toe_ledge)
+        "save number offsets": [0x104A7D, 0x104A85],
+        "regions": [rname.toe_main,
+                    rname.toe_ledge]
     },
 
     "Tower of Science": {
@@ -143,11 +142,11 @@ stage_info = {
         "mid region": rname.tosci_conveyors, "mid map id": 0x12, "mid spawn id": 0x03,
         "end region": rname.tosci_conveyors, "end map id": 0x12, "end spawn id": 0x04,
         "endzone map offset": 0x109D5F, "endzone spawn offset": 0x109D61, "character": "Carrie",
-        "save number offsets": (0x104A95, 0x104A9D, 0x104AA5),
-        "regions": (rname.tosci_start,
+        "save number offsets": [0x104A95, 0x104A9D, 0x104AA5],
+        "regions": [rname.tosci_start,
                     rname.tosci_three_doors,
                     rname.tosci_conveyors,
-                    rname.tosci_key3)
+                    rname.tosci_key3]
     },
 
     "Tower of Sorcery": {
@@ -156,8 +155,8 @@ stage_info = {
         "mid region": rname.tosor_main, "mid map id": 0x11, "mid spawn id": 0x01,
         "end region": rname.tosor_main, "end map id": 0x11, "end spawn id": 0x13,
         "endzone map offset": 0x109D2F, "endzone spawn offset": 0x109D31, "character": "Carrie",
-        "save number offsets": (0x104A8D,),
-        "regions": (rname.tosor_main,)
+        "save number offsets": [0x104A8D],
+        "regions": [rname.tosor_main]
     },
 
     "Room of Clocks": {
@@ -165,8 +164,8 @@ stage_info = {
         "mid region": rname.roc_main, "mid map id": 0x1B, "mid spawn id": 0x02,
         "end region": rname.roc_main, "end map id": 0x1B, "end spawn id": 0x14,
         "endzone map offset": 0x109EAF, "endzone spawn offset": 0x109EB1,
-        "save number offsets": (0x104AC5,),
-        "regions": (rname.roc_main,)
+        "save number offsets": [0x104AC5],
+        "regions": [rname.roc_main]
     },
 
     "Clock Tower": {
@@ -174,18 +173,18 @@ stage_info = {
         "mid region": rname.ct_middle, "mid map id": 0x17, "mid spawn id": 0x02,
         "end region": rname.ct_end, "end map id": 0x17, "end spawn id": 0x03,
         "endzone map offset": 0x109E37, "endzone spawn offset": 0x109E39,
-        "save number offsets": (0x104AB5, 0x104ABD),
-        "regions": (rname.ct_start,
+        "save number offsets": [0x104AB5, 0x104ABD],
+        "regions": [rname.ct_start,
                     rname.ct_middle,
-                    rname.ct_end)
+                    rname.ct_end]
     },
 
     "Castle Keep": {
         "start region": rname.ck_main, "start map id": 0x14, "start spawn id": 0x02,
         "mid region": rname.ck_main, "mid map id": 0x14, "mid spawn id": 0x03,
         "end region": rname.ck_drac_chamber,
-        "save number offsets": (0x104AAD,),
-        "regions": (rname.ck_main,)
+        "save number offsets": [0x104AAD],
+        "regions": [rname.ck_main]
     },
 }
 
@@ -228,7 +227,7 @@ vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.cas
                                            "alt": None, "position": 10, "path": " "}}
 
 
-def get_stage_info(stage: str, info: str) -> Union[str, int, Tuple[int, str, Any], None]:
+def get_stage_info(stage: str, info: str) -> Union[str, int, List[Union[int, str]], None]:
     if info in stage_info[stage]:
         return stage_info[stage][info]
     return None
@@ -279,8 +278,7 @@ def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
     return exits
 
 
-def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_stage_value: int,
-                   active_stage_exits: Dict[str, Dict[str, Union[str, int, None]]]) \
+def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str]) \
         -> Tuple[Dict[str, Dict[str, Union[str, int, None]]], str, List[str]]:
     """Woah, this is a lot! I should probably summarize what's happening in here, huh?
 
@@ -320,6 +318,8 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_st
     uglier come Legacy of Darkness and Cornell's funny side route later on.
     """
 
+    starting_stage_value = world.options.starting_stage.value
+
     # Verify the starting stage is valid. If it isn't, or if the mystery setting is being used, pick a stage at random.
     if starting_stage_value < len(vanilla_stage_order) - 1 and vanilla_stage_order[starting_stage_value] not in \
             stage_1_blacklist and verify_character_stage(world, vanilla_stage_order[starting_stage_value]):
@@ -327,11 +327,11 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_st
     else:
         possible_stages = []
         for stage in vanilla_stage_order:
-            if stage in active_stage_exits and stage != rname.castle_keep:
+            if stage in world.active_stage_exits and stage != rname.castle_keep:
                 possible_stages.append(stage)
-        starting_stage = possible_stages[world.random.randrange(0, len(possible_stages))]
+        starting_stage = world.random.choice(possible_stages)
 
-    remaining_stage_pool = [stage for stage in active_stage_exits]
+    remaining_stage_pool = [stage for stage in world.active_stage_exits]
     remaining_stage_pool.remove(rname.castle_keep)
 
     total_stages = len(remaining_stage_pool)
@@ -394,73 +394,73 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str], starting_st
     current_stage_number = 1
     for i in range(len(new_stage_order)):
         # Stage position number and alternate path indicator
-        active_stage_exits[new_stage_order[i]]["position"] = current_stage_number
+        world.active_stage_exits[new_stage_order[i]]["position"] = current_stage_number
         if new_stage_order[i] in alt_villa_stage + alt_cc_stages:
-            active_stage_exits[new_stage_order[i]]["path"] = "'"
+            world.active_stage_exits[new_stage_order[i]]["path"] = "'"
         else:
-            active_stage_exits[new_stage_order[i]]["path"] = " "
+            world.active_stage_exits[new_stage_order[i]]["path"] = " "
 
         # Previous stage
-        if active_stage_exits[new_stage_order[i]]["prev"]:
+        if world.active_stage_exits[new_stage_order[i]]["prev"]:
             if i - 1 < 0:
-                active_stage_exits[new_stage_order[i]]["prev"] = "Menu"
+                world.active_stage_exits[new_stage_order[i]]["prev"] = "Menu"
             elif world.branching_stages:
                 if new_stage_order[i - 1] == alt_villa_stage[0] or new_stage_order[i] == alt_villa_stage[0]:
-                    active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 2]
+                    world.active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 2]
                 elif new_stage_order[i - 1] == alt_cc_stages[1] or new_stage_order[i] == alt_cc_stages[0]:
-                    active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 3]
+                    world.active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 3]
                 else:
-                    active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 1]
+                    world.active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 1]
             else:
-                active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 1]
+                world.active_stage_exits[new_stage_order[i]]["prev"] = new_stage_order[i - 1]
 
         # Next stage
-        if active_stage_exits[new_stage_order[i]]["next"]:
+        if world.active_stage_exits[new_stage_order[i]]["next"]:
             if world.branching_stages:
                 if new_stage_order[i + 1] == alt_villa_stage[0]:
-                    active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 2]
+                    world.active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 2]
                     current_stage_number -= 1
                 elif new_stage_order[i + 1] == alt_cc_stages[0]:
-                    active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 3]
+                    world.active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 3]
                     current_stage_number -= 2
                 else:
-                    active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 1]
+                    world.active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 1]
             else:
-                active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 1]
+                world.active_stage_exits[new_stage_order[i]]["next"] = new_stage_order[i + 1]
 
         # Alternate next stage
-        if active_stage_exits[new_stage_order[i]]["alt"]:
+        if world.active_stage_exits[new_stage_order[i]]["alt"]:
             if world.branching_stages:
                 if new_stage_order[i] == rname.villa:
-                    active_stage_exits[new_stage_order[i]]["alt"] = alt_villa_stage[0]
+                    world.active_stage_exits[new_stage_order[i]]["alt"] = alt_villa_stage[0]
                 else:
-                    active_stage_exits[new_stage_order[i]]["alt"] = alt_cc_stages[0]
+                    world.active_stage_exits[new_stage_order[i]]["alt"] = alt_cc_stages[0]
             else:
-                active_stage_exits[new_stage_order[i]]["alt"] = None
+                world.active_stage_exits[new_stage_order[i]]["alt"] = None
 
         current_stage_number += 1
 
-    return active_stage_exits, starting_stage, new_stage_order
+    return world.active_stage_exits, starting_stage, new_stage_order
 
 
-def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: List[str]) -> List[str]:
+def generate_warps(world: "CV64World") -> List[str]:
     # Create a list of warps from the active stage list. They are in a random order by default and will never
     # include the starting stage.
-    possible_warps = [stage for stage in active_stage_list]
+    possible_warps = [stage for stage in world.active_stage_list]
 
     # Remove the starting stage from the possible warps.
     del (possible_warps[0])
 
     active_warp_list = world.random.sample(possible_warps, 7)
 
-    if options.warp_order.value == options.warp_order.option_seed_stage_order:
+    if world.options.warp_order.value == world.options.warp_order.option_seed_stage_order:
         # Arrange the warps to be in the seed's stage order
-        new_list = active_stage_list.copy()
-        for warp in active_stage_list:
+        new_list = world.active_stage_list.copy()
+        for warp in world.active_stage_list:
             if warp not in active_warp_list:
                 new_list.remove(warp)
         active_warp_list = new_list
-    elif options.warp_order.value == options.warp_order.option_vanilla_stage_order:
+    elif world.options.warp_order.value == world.options.warp_order.option_vanilla_stage_order:
         # Arrange the warps to be in the vanilla game's stage order
         new_list = list(vanilla_stage_order)
         for warp in vanilla_stage_order:
@@ -469,7 +469,7 @@ def generate_warps(world: "CV64World", options: CV64Options, active_stage_list: 
         active_warp_list = new_list
 
     # Insert the starting stage at the start of the warp list
-    active_warp_list.insert(0, active_stage_list[0])
+    active_warp_list.insert(0, world.active_stage_list[0])
 
     return active_warp_list
 
