@@ -49,18 +49,21 @@ local allItems = {1, "Monster vial 1", 0x09798B, 2, "Monster vial 2", 0x09798C, 
 				423, "Life Vessel", 0x000001,
 }
 
-local cur_zone = "ST0"
-local cur_zoneid = 1
-local last_zone = "ST0"
+local cur_zone = "UNKNOWN"
+local cur_zoneid = -1
+local last_zone = "UNKNOWN"
 local last_zoneid = 1
 local dracula_dead = false
 local dracula_timer = 0
 local bosses_dead = 0
 local just_died = false
+local died_zoneid = 0
+local load_screen = false
 local first_connect = true
 local got_data = true
-local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard / 20 just died
+local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard
 local goal_met = false
+local not_patched = true
 
 
 local player_name = ""
@@ -90,7 +93,7 @@ local misplaced_items = {}
 local misplaced_items_queue = {}
 local misplaced_read = {}
 local last_misplaced_save = 0
-local last_misplaced_processed = 0
+local last_misplaced_processed = 1
 local item1 = ""
 local item2 = ""
 local item3 = ""
@@ -105,10 +108,6 @@ local curstate =  STATE_UNINITIALIZED
 local sotnSocket = nil
 local frame = 0
 
--- TODO: I guess there is a bug when the client try to send an item with a pause screen active
--- Display msg had some issues when items are sent on misplaced locations
--- Looks like there is a bug when granting a item and you have one equipped
--- While drawing the misplaced received. grant misplaced stop working. Maybe implement a queue
 
 function getCurrZone()
 	local z = mainmemory.read_u16_le(0x180000)
@@ -117,6 +116,7 @@ function getCurrZone()
 	if z == zones[cur_zoneid] then return end
 
 	for i = 1, size, 2 do
+		z = mainmemory.read_u16_le(0x180000)
 		if zones[i] == z then
 			last_zoneid = cur_zoneid
 			last_zone = cur_zone
@@ -247,16 +247,28 @@ end
 
 function on_loadstate()
 	all_location_table = checkAllLocations()
-	first_connect = false
+	checkBosses()
+	misplaced_items = {}
+	misplaced_read = {}
+	last_misplaced_save = 0
+	last_misplaced_processed = 1
+	got_data = true
+	last_processed_read = read_last_processed()
+	if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
+	else last_item_processed = last_processed_read end
 	just_died = false
-	dracula_timer = 0
-	console.log("Load stated. TODO")
+	load_screen = false
+	not_patched = true
+	console.log("Load stated.")
 end
 
 function check_death()
+	if cur_zone == "UNKNOWN" then return end
 	hp = mainmemory.read_u32_le(0x097ba0)
 	if not just_died and hp <= 0 then
 		just_died = true
+		died_zoneid = cur_zoneid
+		console.log("You are dead!")
 	end
 end
 
@@ -370,9 +382,9 @@ function checkARE()
 	checks["ARE - Green tea"] = bit.check(flag, 6)
 	checks["ARE - Holy sword(Hidden attic)"] = bit.check(flag, 7)
 	if mainmemory.read_u16_le(0x03ca38) ~= 0 then
-		bosses["Minotaurus/Werewolf"] = true
+		checks["ARE - Minotaurus/Werewolf kill"] = true
 	else
-		bosses["Minotaurus/Werewolf"] = false
+		checks["ARE - Minotaurus/Werewolf kill"] = false
 	end
 	if cur_zone == "ARE" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -412,9 +424,9 @@ function checkCAT()
 	checks["CAT - Monster vial 3 3(Sarcophagus)"] = bit.check(flag, 19)
 	checks["CAT - Monster vial 3 4(Sarcophagus)"] = bit.check(flag, 20)
 	if mainmemory.read_u16_le(0x03ca34) ~= 0 then
-		bosses["Legion"] = true
+		checks["CAT - Legion kill"] = true
 	else
-		bosses["Legion"] = false
+		checks["CAT - Legion kill"] = false
 	end
 
 	return checks
@@ -437,9 +449,9 @@ function checkCHI()
 	checks["CHI - Peanuts 4(Demon)"] = bit.check(flag, 12)
 	checks["CHI - Turkey(Demon)"] = bit.check(mainmemory.readbyte(0x03be3d), 0)
 	if mainmemory.read_u16_le(0x03ca5c) ~= 0 then
-		bosses["Cerberos"] = true
+		checks["CHI - Cerberos kill"] = true
 	else
-		bosses["Cerberos"] = false
+		checks["CHI - Cerberos kill"] = false
 	end
 	if cur_zone == "CHI" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -474,9 +486,9 @@ function checkDAI()
 	checks["DAI - Cutlass"] = bit.check(flag, 14)
 	checks["DAI - Potion"] = bit.check(flag, 15)
 	if mainmemory.read_u16_le(0x03ca44) ~= 0 then
-		bosses["Hippogryph"] = true
+		checks["DAI - Hippogryph kill"] = true
 	else
-		bosses["Hippogryph"] = false
+		checks["DAI - Hippogryph kill"] = false
 	end
 
 	return checks
@@ -495,9 +507,9 @@ function checkLIB()
 	checks["LIB - Antivenom"] = bit.check(flag, 9)
 	checks["LIB - Topaz circlet"] = bit.check(flag, 10)
 	if mainmemory.read_u16_le(0x03ca6c) ~= 0 then
-		bosses["Lesser Demon"] = true
+		checks["LIB - Lesser Demon kill"] = true
 	else
-		bosses["Lesser Demon"] = false
+		checks["LIB - Lesser Demon kill"] = false
 	end
 	if cur_zone == "LIB" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -579,9 +591,9 @@ function checkNO1()
 	checks["NO1 - Zircon"] = bit.check(flag, 6)
 	checks["NO1 - Pot Roast"] = bit.check(mainmemory.readbyte(0x03bdfe), 0)
 	if mainmemory.read_u16_le(0x03ca30) ~= 0 then
-		bosses["Doppleganger 10"] = true
+		checks["NO1 - Doppleganger 10 kill"] = true
 	else
-		bosses["Doppleganger 10"] = false
+		checks["NO1 - Doppleganger 10 kill"] = false
 	end
 	if cur_zone == "NO1" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -610,9 +622,9 @@ function checkNO2()
 	checks["NO2 - Iron ball"] = bit.check(flag, 11)
 	checks["NO2 - Garnet"] = bit.check(flag, 12)
 	if mainmemory.read_u16_le(0x03ca2c) ~= 0 then
-		bosses["Olrox"] = true
+		checks["NO2 - Olrox kill"] = true
 	else
-		bosses["Olrox"] = false
+		checks["NO2 - Olrox kill"] = false
 	end
 	if cur_zone == "NO2" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -713,9 +725,9 @@ function checkNO4()
 		checks["NO4 - Gold Ring"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca3c) ~= 0 then
-		bosses["Scylla"] = true
+		checks["NO4 - Scylla kill"] = true
 	else
-		bosses["Scylla"] = false
+		checks["NO4 - Scylla kill"] = false
 	end
 	if cur_zone == "NO4" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -749,12 +761,9 @@ function checkNZ0()
 	checks["NZ0 - Basilard"] = bit.check(flag, 9)
 	checks["NZ0 - Potion"] = bit.check(flag, 10)
 	if mainmemory.read_u16_le(0x03ca40) ~= 0 then
-		-- That doens't trigger Boss Token
 		checks["NZ0 - Slogra and Gaibon kill"] = true
-		bosses["Slogra and Gaibon"] = true
 	else
 		checks["NZ0 - Slogra and Gaibon kill"] = false
-		bosses["Slogra and Gaibon"] = false
 	end
 	if cur_zone == "NZ0" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -794,9 +803,9 @@ function checkNZ1()
 	checks["NZ1 - Shuriken"] = bit.check(mainmemory.readbyte(0x03be8f), 1)
 	checks["NZ1 - TNT"] = bit.check(mainmemory.readbyte(0x03be8f), 3)
 	if mainmemory.read_u16_le(0x03ca50) ~= 0 then
-		bosses["Karasuman"] = true
+		checks["NZ1 - Karasuman kill"] = true
 	else
-		bosses["Karasuman"] = false
+		checks["NZ1 - Karasuman kill"] = false
 	end
 	if cur_zone == "NZ1" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -866,9 +875,9 @@ function checkRARE()
 	checks["RARE - Life Vessel"] = bit.check(flag, 6)
 	checks["RARE - Heart Vessel(7)"] = bit.check(flag, 7)
 	if mainmemory.read_u16_le(0x03ca54) ~= 0 then
-		bosses["Fake Trevor/Grant/Sypha"] = true
+		checks["RARE - Fake Trevor/Grant/Sypha kill"] = true
 	else
-		bosses["Fake Trevor/Grant/Sypha"] = false
+		checks["RARE - Fake Trevor/Grant/Sypha kill"] = false
 	end
 
 	return checks
@@ -896,9 +905,9 @@ function checkRCAT()
 	checks["RCAT - Life Vessel(After Galamoth)"] = bit.check(flag, 16)
 	checks["RCAT - Ruby circlet"] = bit.check(flag, 17)
 	if mainmemory.read_u16_le(0x03ca7c) ~= 0 then
-		bosses["Galamoth"] = true
+		checks["RCAT - Galamoth kill"] = true
 	else
-		bosses["Galamoth"] = false
+		checks["RCAT - Galamoth kill"] = false
 	end
 	if cur_zone == "RCAT" or cur_zone == "RBO8" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -931,10 +940,10 @@ function checkRCHI()
 	checks["RCHI - Shiitake 1(6)"] = bit.check(flag, 6)
 	checks["RCHI - Shiitake 2(7)"] = bit.check(flag, 7)
 	if mainmemory.read_u16_le(0x03ca58) ~= 0 then
-		bosses["Death"] = true
+		checks["RCHI - Death kill"] = true
 		checks["Eye of Vlad"] = true
 	else
-		bosses["Death"] = false
+		checks["RCHI - Death kill"] = false
 		checks["Eye of Vlad"] = false
 	end
 
@@ -961,10 +970,10 @@ function checkRDAI()
 	checks["RDAI - Twilight cloak"] = bit.check(flag, 16)
 	checks["RDAI - Heart Vessel(17)"] = bit.check(flag, 17)
 	if mainmemory.read_u16_le(0x03ca64) ~= 0 then
-		bosses["Medusa"] = true
+		checks["RDAI - Medusa kill"] = true
 		checks["Heart of Vlad"] = true
 	else
-		bosses["Medusa"] = false
+		checks["RDAI - Medusa kill"] = false
 		checks["Heart of Vlad"] = false
 	end
 
@@ -1010,7 +1019,7 @@ function checkRNO0(f)
 			memory.write_u32_le(0x801c132c, 0x14400118, "System Bus")
 		end
 	end
-	gui.drawText(0, client.bufferheight() - 20, bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b))
+	gui.drawText(0, client.bufferheight() - 20, cur_zone .. "->" .. bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b))
 	gui.drawText(0, client.bufferheight() - 30, memory.read_u32_le(0x801c132c, "System Bus"))
 
 	if cur_zone == "RNO0" and last_zone ~= "RNO0" then
@@ -1043,10 +1052,10 @@ function checkRNO1()
 	checks["RNO1 - Garnet"] = bit.check(flag, 7)
 	checks["RNO1 - Dim Sum set"] = bit.check(mainmemory.readbyte(0x03be04), 0)
 	if mainmemory.read_u16_le(0x03ca68) ~= 0 then
-		bosses["Creature"] = true
+		checks["RNO1 - Creature kill"] = true
 		checks["Tooth of Vlad"] = true
 	else
-		bosses["Creature"] = false
+		checks["RNO1 - Creature kill"] = false
 		checks["Tooth of Vlad"] = false
 	end
 
@@ -1069,10 +1078,10 @@ function checkRNO2()
 	checks["RNO2 - Shuriken"] = bit.check(flag, 10)
 	checks["RNO2 - Heart Vessel"] = bit.check(flag, 11)
 	if mainmemory.read_u16_le(0x03ca74) ~= 0 then
-		bosses["Akmodan II"] = true
+		checks["RNO2 - Akmodan II kill"] = true
 		checks["Rib of Vlad"] = true
 	else
-		bosses["Akmodan II"] = false
+		checks["RNO2 - Akmodan II kill"] = false
 		checks["Rib of Vlad"] = false
 	end
 
@@ -1128,9 +1137,9 @@ function checkRNO4()
 	checks["RNO4 - Elixir"] = bit.check(flag, 25)
 	checks["RNO4 - Osafune katana"] = bit.check(flag, 26)
 	if mainmemory.read_u16_le(0x03ca70) ~= 0 then
-		bosses["Doppleganger40"] = true
+		checks["RNO4 - Doppleganger40 kill"] = true
 	else
-		bosses["Doppleganger40"] = false
+		checks["RNO4 - Doppleganger40 kill"] = false
 	end
 	if cur_zone == "RNO4" then
 		local room = mainmemory.read_u16_le(0x1375bc)
@@ -1158,9 +1167,9 @@ function checkRNZ0()
 	checks["RNZ0 - Ring of Arcana"] = bit.check(flag, 8)
 	checks["RNZ0 - Resist dark"] = bit.check(flag, 9)
 	if mainmemory.read_u16_le(0x03ca48) ~= 0 then
-		bosses["Beezelbub"] = true
+		checks["RNZ0 - Beezelbub kill"] = true
 	else
-		bosses["Beezelbub"] = false
+		checks["RNZ0 - Beezelbub kill"] = false
 	end
 
 	return checks
@@ -1186,10 +1195,10 @@ function checkRNZ1()
 	checks["RNZ1 - Shuriken"] = bit.check(mainmemory.readbyte(0x03be97), 1)
 	checks["RNZ1 - TNT"] = bit.check(mainmemory.readbyte(0x03be97), 3)
 	if mainmemory.read_u16_le(0x03ca78) ~= 0 then
-		bosses["Darkwing bat"] = true
+		checks["RNZ1 - Darkwing bat kill"] = true
 		checks["Ring of Vlad"] = true
 	else
-		bosses["Darkwing bat"] = false
+		checks["RNZ1 - Darkwing bat kill"] = false
 		checks["Ring of Vlad"] = false
 	end
 
@@ -1423,6 +1432,7 @@ function checkBosses()
 	else
 		bosses["Minotaurus/Werewolf"] = false
 	end
+	bosses["Dracula"] = dracula_dead
 end
 
 function process_items(f)
@@ -1544,11 +1554,12 @@ function file_exists()
 	local f = io.open(filename, "r")
 	if f ~= nil then
 		for line in io.lines(filename) do
-			table.insert(misplaced_read, line)
+			if line ~= "" then table.insert(misplaced_read, line) end
 		end
 		io.close(f)
 		last_misplaced_save = table.getn(misplaced_read)
 		console.log("Save file found on file_exists!")
+
 		return true
 	else
 		return false
@@ -1574,6 +1585,16 @@ function handle_misplaced(f)
 		local size = table.getn(misplaced_items)
 		local size_r = table.getn(misplaced_read)
 
+		if size == 0 and size_r > 0 then
+			-- Loaded game. Update misplaced table
+			for k, v in ipairs(misplaced_read) do
+				table.insert(misplaced_items, v)
+			end
+			-- Try to find a relic received on misplaced table
+			local ret_pos = check_for_misplaced_relic()
+			if ret_pos ~= 0 then last_misplaced_processed = ret_pos + 1 end
+		end
+
 		if size > size_r then
 			-- We have more items than saved on file. Update
 			local file, err = io.open(filename, "a")
@@ -1596,16 +1617,6 @@ function process_misplaced(f)
 	-- Graphics might be clear before timer
 	local table_size = table.getn(misplaced_items)
 	local table_size_r = table.getn(misplaced_read)
-
-	if table_size == 0 and table_size_r > 0 then
-		-- We have misplaced_read but no misplaced_items Due fresh connect? Add to the table
-		for k, v in ipairs(misplaced_read) do
-			table.insert(misplaced_items, v)
-		end
-		-- Try to find a relic received on misplaced table
-		local ret_pos = check_for_misplaced_relic()
-		if ret_pos ~= 0 then last_misplaced_processed = ret_pos + 1 end
-	end
 
 	if misplaced_drawing == 0 and table_size >= last_misplaced_processed then
 		misplaced_drawing = f
@@ -1700,13 +1711,18 @@ function main()
             if (frame % 5 == 0) then
 				receive()
 				getCurrZone()
+				if cur_zone ~= "RNO0" and cur_zone ~= "UNKNOWN" then
+					if cur_zone == "NP3" then gui.drawText(0, client.bufferheight() - 20, "NO3")
+					elseif cur_zone == "BO3" then gui.drawText(0, client.bufferheight() - 20, "NO4")
+					else gui.drawText(0, client.bufferheight() - 20, cur_zone) end
+				end
 
 				-- printing for testing reasons
-				--gui.drawText(200, 0, mainmemory.read_u16_le(0x0973f0))
-				--gui.drawText(200, 10, mainmemory.read_u16_le(0x0973f4))
-				--gui.drawText(200, 20, mainmemory.read_u16_le(0x1375bc))
-				--last_processed_read = read_last_processed()
-				--gui.drawText(200, 30, bosses_dead)
+				-- gui.drawText(200, 0, last_status)
+				-- gui.drawText(200, 10, mainmemory.read_u16_le(0x180000))
+				-- gui.drawText(200, 20, cur_zone)
+				-- gui.drawText(200, 30, bosses_dead)
+
 				--gui.drawText(300, 0, last_status)
 				--gui.drawText(300, 10, last_item_processed .. " - " .. last_processed_read)
 
@@ -1724,19 +1740,28 @@ function main()
 					-- We are connected. At Richter?
 					if cur_zone == "ST0" then
 						last_status = 4
+						if not_patched then
+							--**-- Simple Clear Game Script - by Eigh7o --**--
+							mainmemory.write_u16_le(0x3BDE0, 0x02)
+							not_patched = false
+						end
 						console.log("At Richter!")
 					end
 					-- At Alucard?
 					if cur_zone ~= "ST0" and cur_zone ~= "UNKNOWN" then
 						-- We just connected and already on Alucard. Loaded game?.
+						if not_patched then
+							--**-- Simple Clear Game Script - by Eigh7o --**--
+							mainmemory.write_u16_le(0x3BDE0, 0x02)
+							not_patched = false
+						end
 						last_status = 10
-						checkAllLocations()
+						all_location_table = checkAllLocations()
 						checkBosses()
 						misplaced_items = {}
 						misplaced_read = {}
 						last_misplaced_save = 0
-						last_misplaced_processed = 0
-						file_exists()
+						last_misplaced_processed = 1
 						-- Do we have a last location flag on memory?
 						last_processed_read = read_last_processed()
 						if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
@@ -1762,24 +1787,51 @@ function main()
 						misplaced_items = {}
 						misplaced_read = {}
 						last_misplaced_save = 0
-						last_misplaced_processed = 0
+						last_misplaced_processed = 1
 						-- fresh game. No item granted yet
 						last_item_processed = 1
 						console.log("Fresh game")
-						file_exists()
 						delay_timer = 0
 					end
 				end
 
 				if last_status == 10 then
+					if not_patched then
+						--**-- Simple Clear Game Script - by Eigh7o --**--
+						mainmemory.write_u16_le(0x3BDE0, 0x02)
+						not_patched = false
+					end
+					-- We died and still playing?
+					if just_died == true and load_screen == false then
+						if mainmemory.read_u16_le(0x180000) == 0xeed8 then
+							load_screen = true
+						end
+					end
+
+					if load_screen == true then
+						getCurrZone()
+						if mainmemory.read_u16_le(0x180000) ~= 0xeed8 and cur_zone ~= "UNKNOWN" then
+							-- We reload
+							all_location_table = checkAllLocations()
+							checkBosses()
+							misplaced_items = {}
+							misplaced_read = {}
+							last_misplaced_save = 0
+							last_misplaced_processed = 1
+							got_data = true
+							last_processed_read = read_last_processed()
+							if last_processed_read == 0 and last_processed_read < 1024 then last_item_processed = 1
+							else last_item_processed = last_processed_read end
+							just_died = false
+							load_screen = false
+							not_patched = true
+						end
+					end
 
 					if got_data and seed ~= "" and player_name ~= "" then
 						console.log("Got seed and player name")
 						if got_data then
-							if file_exists() then
-								-- We just started and have misplaced_items give it to player
-								process_misplaced(frame)
-							end
+							if file_exists() then handle_misplaced(frame) end
 							got_data = false
 						end
 					end
@@ -1788,7 +1840,7 @@ function main()
 						checkVictory(frame)
 					end
 
-					if mainmemory.readbyte(0x09794c) == 2 then
+					if not just_died and mainmemory.readbyte(0x09794c) == 2 then
 						if next(ItemsReceived) ~= nil then
 							process_items(frame)
 						end
@@ -1808,13 +1860,6 @@ function main()
 							end
 						end
 					end
-
-					if just_died then
-						console.log("We just died. TODO: Deal with items we need to receive again")
-						just_died = false
-					end
-
-
 
 					check_death()
 					checkOneLocation(frame)
