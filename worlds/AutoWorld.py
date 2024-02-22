@@ -79,8 +79,8 @@ class AutoWorldRegister(type):
         if "options_dataclass" not in dct and "option_definitions" in dct:
             # TODO - switch to deprecate after a version
             if __debug__:
-                from warnings import warn
-                warn("Assigning options through option_definitions is now deprecated. Use options_dataclass instead.")
+                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
+                                "Please use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
@@ -328,7 +328,7 @@ class World(metaclass=AutoWorldRegister):
 
     def create_items(self) -> None:
         """
-        Method for creating and submitting items to the itempool. Items and Regions should *not* be created and submitted
+        Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
         to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
         """
         pass
@@ -438,7 +438,7 @@ class World(metaclass=AutoWorldRegister):
     def get_pre_fill_items(self) -> List["Item"]:
         return []
 
-    # following methods should not need to be overridden.
+    # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:

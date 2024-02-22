@@ -16,6 +16,21 @@ generic_item_table = {
     "1Up Mushroom": 3626184
 }
 
+action_item_table = {
+    "Double Jump": 3626185,
+    "Triple Jump": 3626186,
+    "Long Jump": 3626187,
+    "Backflip": 3626188,
+    "Side Flip": 3626189,
+    "Wall Kick": 3626190,
+    "Dive": 3626191,
+    "Ground Pound": 3626192,
+    "Kick": 3626193,
+    "Climb": 3626194,
+    "Ledge Grab": 3626195
+}
+
+
 cannon_item_table = {
     "Cannon Unlock BoB": 3626200,
     "Cannon Unlock WF": 3626201,
@@ -29,4 +44,4 @@ cannon_item_table = {
     "Cannon Unlock RR": 3626214
 }
 
-item_table = {**generic_item_table, **cannon_item_table}
+item_table = {**generic_item_table, **action_item_table, **cannon_item_table}

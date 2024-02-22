@@ -82,9 +82,8 @@ class LingoWorld(World):
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
-                filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
                 for i in range(0, non_skips):
-                    pool.append(self.create_item(filler_list[i % len(filler_list)]))
+                    pool.append(self.create_item(self.get_filler_item_name()))
 
                 for i in range(0, skips):
                     pool.append(self.create_item("Puzzle Skip"))
@@ -130,3 +129,7 @@ class LingoWorld(World):
             slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping
 
         return slot_data
+
+    def get_filler_item_name(self) -> str:
+        filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
+        return self.random.choice(filler_list)

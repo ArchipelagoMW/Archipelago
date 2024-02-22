@@ -29,17 +29,21 @@ class TestLightWorld(TestMinor):
 
             ["Kakariko Tavern", True, []],
 
-            ["Chicken House", True, []],
+            ["Chicken House", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Chicken House", True, ['Bomb Upgrade (+5)']],
 
-            ["Aginah's Cave", True, []],
+            ["Aginah's Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Aginah's Cave", True, ['Bomb Upgrade (+5)']],
 
-            ["Sahasrahla's Hut - Left", True, []],
+            ["Sahasrahla's Hut - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Left", True, ['Bomb Upgrade (+5)']],
+            ["Sahasrahla's Hut - Middle", True, ['Pegasus Boots']],
+            ["Sahasrahla's Hut - Middle", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Right", True, ['Bomb Upgrade (+5)']],
+            ["Sahasrahla's Hut - Right", True, ['Pegasus Boots']],
 
-            ["Sahasrahla's Hut - Middle", True, []],
-
-            ["Sahasrahla's Hut - Right", True, []],
-
-            ["Kakariko Well - Top", True, []],
+            ["Kakariko Well - Top", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Kakariko Well - Top", True, ['Bomb Upgrade (+5)']],
 
             ["Kakariko Well - Left", True, []],
 
@@ -49,7 +53,8 @@ class TestLightWorld(TestMinor):
 
             ["Kakariko Well - Bottom", True, []],
 
-            ["Blind's Hideout - Top", True, []],
+            ["Blind's Hideout - Top", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Blind's Hideout - Top", True, ['Bomb Upgrade (+5)']],
 
             ["Blind's Hideout - Left", True, []],
 
@@ -63,15 +68,19 @@ class TestLightWorld(TestMinor):
             ["Bonk Rock Cave", False, [], ['Pegasus Boots']],
             ["Bonk Rock Cave", True, ['Pegasus Boots']],
 
-            ["Mini Moldorm Cave - Far Left", True, []],
+            ["Mini Moldorm Cave - Far Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword']],
+            ["Mini Moldorm Cave - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword']],
+            ["Mini Moldorm Cave - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword']],
+            ["Mini Moldorm Cave - Far Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword']],
+            ["Mini Moldorm Cave - Generous Guy", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Progressive Sword']],
 
-            ["Mini Moldorm Cave - Left", True, []],
-
-            ["Mini Moldorm Cave - Right", True, []],
-
-            ["Mini Moldorm Cave - Far Right", True, []],
-
-            ["Ice Rod Cave", True, []],
+            ["Ice Rod Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Ice Rod Cave", True, ['Bomb Upgrade (+5)']],
 
             ["Bottle Merchant", True, []],
 
@@ -131,19 +140,18 @@ class TestLightWorld(TestMinor):
             ["Graveyard Cave", False, []],
             ["Graveyard Cave", False, [], ['Magic Mirror']],
             ["Graveyard Cave", False, [], ['Moon Pearl']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Magic Mirror', 'Progressive Glove', 'Hammer']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Hammer', 'Hookshot']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Progressive Glove', 'Hookshot']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Flippers', 'Hookshot']],
+            ["Graveyard Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Magic Mirror', 'Progressive Glove', 'Hammer']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Hammer', 'Hookshot']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Progressive Glove', 'Hookshot']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Magic Mirror', 'Beat Agahnim 1', 'Flippers', 'Hookshot']],
 
             ["Checkerboard Cave", False, []],
             ["Checkerboard Cave", False, [], ['Progressive Glove']],
             ["Checkerboard Cave", False, [], ['Flute']],
             ["Checkerboard Cave", False, [], ['Magic Mirror']],
             ["Checkerboard Cave", True, ['Flute', 'Magic Mirror', 'Progressive Glove', 'Progressive Glove']],
-
-            ["Mini Moldorm Cave - Generous Guy", True, []],
 
             ["Library", False, []],
             ["Library", False, [], ['Pegasus Boots']],
@@ -155,7 +163,10 @@ class TestLightWorld(TestMinor):
             ["Potion Shop", False, [], ['Mushroom']],
             ["Potion Shop", True, ['Mushroom']],
 
-            ["Maze Race", True, []],
+            ["Maze Race", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Magic Mirror', 'Pegasus Boots']],
+            ["Maze Race", True, ['Magic Mirror', 'Progressive Glove', 'Progressive Glove', 'Moon Pearl']],
+            ["Maze Race", True, ['Bomb Upgrade (+5)']],
+            ["Maze Race", True, ['Pegasus Boots']],
 
             ["Desert Ledge", False, []],
             ["Desert Ledge", False, [], ['Book of Mudora', 'Flute']],

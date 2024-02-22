@@ -112,30 +112,12 @@ class WitnessPlayerItems:
             or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
         }
 
-        # Adjust item classifications based on game settings.
-        eps_shuffled = self._world.options.shuffle_EPs
-        come_to_you = self._world.options.elevators_come_to_you
-        difficulty = self._world.options.puzzle_randomization
+        # Downgrade door items
         for item_name, item_data in self.item_data.items():
-            if not eps_shuffled and item_name in {"Monastery Garden Entry (Door)",
-                                                  "Monastery Shortcuts",
-                                                  "Quarry Boathouse Hook Control (Panel)",
-                                                  "Windmill Turn Control (Panel)"}:
-                # Downgrade doors that only gate progress in EP shuffle.
-                item_data.classification = ItemClassification.useful
-            elif not come_to_you and not eps_shuffled and item_name in {"Quarry Elevator Control (Panel)",
-                                                                        "Swamp Long Bridge (Panel)"}:
-                # These Bridges/Elevators are not logical access because they may leave you stuck.
-                item_data.classification = ItemClassification.useful
-            elif item_name in {"River Monastery Garden Shortcut (Door)",
-                               "Monastery Laser Shortcut (Door)",
-                               "Orchard Second Gate (Door)",
-                               "Jungle Bamboo Laser Shortcut (Door)",
-                               "Caves Elevator Controls (Panel)"}:
-                # Downgrade doors that don't gate progress.
-                item_data.classification = ItemClassification.useful
-            elif item_name == "Keep Pressure Plates 2 Exit (Door)" and not (difficulty == "none" and eps_shuffled):
-                # PP2EP requires the door in vanilla puzzles, otherwise it's unnecessary
+            if not isinstance(item_data.definition, DoorItemDefinition):
+                continue
+
+            if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
@@ -228,7 +210,7 @@ class WitnessPlayerItems:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
             if self._world.options.shuffle_discarded_panels:
-                if self._world.options.puzzle_randomization == 1:
+                if self._world.options.puzzle_randomization == "sigma_expert":
                     output.add("Arrows")
                 else:
                     output.add("Triangles")

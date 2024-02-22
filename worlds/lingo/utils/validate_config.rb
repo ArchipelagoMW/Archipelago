@@ -8,7 +8,8 @@ require 'set'
 require 'yaml'
 
 configpath = ARGV[0]
-mappath = ARGV[1]
+idspath = ARGV[1]
+mappath = ARGV[2]
 
 panels = Set["Countdown Panels/Panel_1234567890_wanderlust"]
 doors = Set["Naps Room Doors/Door_hider_new1", "Tower Room Area Doors/Door_wanderer_entrance"]
@@ -45,6 +46,8 @@ door_directives = Set["id", "painting_id", "panels", "item_name", "location_name
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
 non_counting = 0
+
+ids = YAML.load_file(idspath)
 
 config = YAML.load_file(configpath)
 config.each do |room_name, room|
@@ -162,6 +165,10 @@ config.each do |room_name, room|
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{panel_name} :::: Panel has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
+
+    unless ids.include?("panels") and ids["panels"].include?(room_name) and ids["panels"][room_name].include?(panel_name)
+      puts "#{room_name} - #{panel_name} :::: Panel is missing a location ID"
+    end
   end
 
   (room["doors"] || {}).each do |door_name, door|
@@ -229,6 +236,18 @@ config.each do |room_name, room|
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{door_name} :::: Door has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
     end
+
+    unless door["skip_item"] or door["event"]
+      unless ids.include?("doors") and ids["doors"].include?(room_name) and ids["doors"][room_name].include?(door_name) and ids["doors"][room_name][door_name].include?("item")
+        puts "#{room_name} - #{door_name} :::: Door is missing an item ID"
+      end
+    end
+
+    unless door["skip_location"] or door["event"]
+      unless ids.include?("doors") and ids["doors"].include?(room_name) and ids["doors"][room_name].include?(door_name) and ids["doors"][room_name][door_name].include?("location")
+        puts "#{room_name} - #{door_name} :::: Door is missing a location ID"
+      end
+    end
   end
 
   (room["paintings"] || []).each do |painting|
@@ -281,6 +300,10 @@ config.each do |room_name, room|
         mentioned_doors.add("#{room_name} - #{door}")
       end
     end
+
+    unless ids.include?("progression") and ids["progression"].include?(progression_name)
+      puts "#{room_name} - #{progression_name} :::: Progression is missing an item ID"
+    end
   end
 end
 
@@ -302,6 +325,10 @@ end
 door_groups.each do |group,num|
   if num == 1 then
     puts "Door group \"#{group}\" only has one door in it"
+  end
+
+  unless ids.include?("door_groups") and ids["door_groups"].include?(group)
+    puts "#{group} :::: Door group is missing an item ID"
   end
 end
 

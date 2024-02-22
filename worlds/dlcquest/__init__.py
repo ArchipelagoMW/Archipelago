@@ -13,14 +13,23 @@ client_version = 0
 
 
 class DLCqwebworld(WebWorld):
-    tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+    setup_en = Tutorial(
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago DLCQuest game on your computer.",
         "English",
         "setup_en.md",
         "setup/en",
         ["axe_y"]
-    )]
+    )
+    setup_fr = Tutorial(
+        "Guide de configuration MultiWorld",
+        "Un guide pour configurer DLCQuest sur votre PC.",
+        "Français",
+        "setup_fr.md",
+        "setup/fr",
+        ["Deoxis"]
+    )
+    tutorials = [setup_en, setup_fr]
 
 
 class DLCqworld(World):

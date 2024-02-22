@@ -94,17 +94,17 @@ def get_pool_core(world):
     # Starting Weapon
     start_weapon_locations = starting_weapon_locations.copy()
     final_starting_weapons = [weapon for weapon in starting_weapons
-                              if weapon not in world.multiworld.non_local_items[world.player]]
+                              if weapon not in world.options.non_local_items]
     if not final_starting_weapons:
         final_starting_weapons = starting_weapons
     starting_weapon = random.choice(final_starting_weapons)
-    if world.multiworld.StartingPosition[world.player] == StartingPosition.option_safe:
+    if world.options.StartingPosition == StartingPosition.option_safe:
         placed_items[start_weapon_locations[0]] = starting_weapon
-    elif world.multiworld.StartingPosition[world.player] in \
+    elif world.options.StartingPosition in \
             [StartingPosition.option_unsafe, StartingPosition.option_dangerous]:
-        if world.multiworld.StartingPosition[world.player] == StartingPosition.option_dangerous:
+        if world.options.StartingPosition == StartingPosition.option_dangerous:
             for location in dangerous_weapon_locations:
-                if world.multiworld.ExpandedPool[world.player] or "Drop" not in location:
+                if world.options.ExpandedPool or "Drop" not in location:
                     start_weapon_locations.append(location)
         placed_items[random.choice(start_weapon_locations)] = starting_weapon
     else:
@@ -115,7 +115,7 @@ def get_pool_core(world):
 
     # Triforce Fragments
     fragment = "Triforce Fragment"
-    if world.multiworld.ExpandedPool[world.player]:
+    if world.options.ExpandedPool:
         possible_level_locations = [location for location in all_level_locations
                                     if location not in level_locations[8]]
     else:
@@ -125,15 +125,15 @@ def get_pool_core(world):
         if location in possible_level_locations:
             possible_level_locations.remove(location)
     for level in range(1, 9):
-        if world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_vanilla:
+        if world.options.TriforceLocations == TriforceLocations.option_vanilla:
             placed_items[f"Level {level} Triforce"] = fragment
-        elif world.multiworld.TriforceLocations[world.player] == TriforceLocations.option_dungeons:
+        elif world.options.TriforceLocations == TriforceLocations.option_dungeons:
             placed_items[possible_level_locations.pop(random.randint(0, len(possible_level_locations) - 1))] = fragment
         else:
             pool.append(fragment)
 
     # Level 9 junk fill
-    if world.multiworld.ExpandedPool[world.player] > 0:
+    if world.options.ExpandedPool > 0:
         spots = random.sample(level_locations[8], len(level_locations[8]) // 2)
         for spot in spots:
             junk = random.choice(list(minor_items.keys()))
@@ -142,7 +142,7 @@ def get_pool_core(world):
 
     # Finish Pool
     final_pool = basic_pool
-    if world.multiworld.ExpandedPool[world.player]:
+    if world.options.ExpandedPool:
         final_pool = {
             item: basic_pool.get(item, 0) + minor_items.get(item, 0) + take_any_items.get(item, 0)
             for item in set(basic_pool) | set(minor_items) | set(take_any_items)

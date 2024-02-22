@@ -209,12 +209,12 @@ Door - 0x0C316 (Elevator Room Entry) - 0x18076
 159034 - 0x337F8 (Flood Room EP) - 0x1C2DF - True
 
 Desert Elevator Room (Desert) - Desert Lowest Level Inbetween Shortcuts - 0x01317:
-158111 - 0x17C31 (Final Transparent) - True - True
-158113 - 0x012D7 (Final Hexagonal) - 0x17C31 & 0x0A015 - True
-158114 - 0x0A015 (Final Hexagonal Control) - 0x17C31 - True
-158115 - 0x0A15C (Final Bent 1) - True - True
-158116 - 0x09FFF (Final Bent 2) - 0x0A15C - True
-158117 - 0x0A15F (Final Bent 3) - 0x09FFF - True
+158111 - 0x17C31 (Elevator Room Transparent) - True - True
+158113 - 0x012D7 (Elevator Room Hexagonal) - 0x17C31 & 0x0A015 - True
+158114 - 0x0A015 (Elevator Room Hexagonal Control) - 0x17C31 - True
+158115 - 0x0A15C (Elevator Room Bent 1) - True - True
+158116 - 0x09FFF (Elevator Room Bent 2) - 0x0A15C - True
+158117 - 0x0A15F (Elevator Room Bent 3) - 0x09FFF - True
 159035 - 0x037BB (Elevator EP) - 0x01317 - True
 Door - 0x01317 (Elevator) - 0x03608
 
@@ -474,7 +474,7 @@ Town (Town) - Main Island - True - The Ocean - 0x0A054 - Town Maze Rooftop - 0x2
 158218 - 0x0A054 (Boat Spawn) - 0x17CA6 | 0x17CDF | 0x09DB8 | 0x17C95 - Boat
 158219 - 0x0A0C8 (Cargo Box Entry Panel) - True - Black/White Squares & Shapers
 Door - 0x0A0C9 (Cargo Box Entry) - 0x0A0C8
-158707 - 0x09F98 (Desert Laser Redirect) - True - True
+158707 - 0x09F98 (Desert Laser Redirect Control) - True - True
 158220 - 0x18590 (Transparent) - True - Symmetry
 158221 - 0x28AE3 (Vines) - 0x18590 - True
 158222 - 0x28938 (Apple Tree) - 0x28AE3 - True
@@ -895,9 +895,9 @@ Mountainside Vault (Mountainside):
 
 Mountaintop (Mountaintop) - Mountain Top Layer - 0x17C34:
 158405 - 0x0042D (River Shape) - True - True
-158406 - 0x09F7F (Box Short) - 7 Lasers - True
+158406 - 0x09F7F (Box Short) - 7 Lasers + Redirect - True
 158407 - 0x17C34 (Mountain Entry Panel) - 0x09F7F - Black/White Squares
-158800 - 0xFFF00 (Box Long) - 11 Lasers & 0x17C34 - True
+158800 - 0xFFF00 (Box Long) - 11 Lasers + Redirect & 0x17C34 - True
 159300 - 0x001A3 (River Shape EP) - True - True
 159320 - 0x3370E (Arch Black EP) - True - True
 159324 - 0x336C8 (Arch White Right EP) - True - True

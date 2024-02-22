@@ -1,7 +1,7 @@
 import typing
 import os
 import json
-from .Items import item_table, cannon_item_table, SM64Item
+from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
@@ -35,14 +35,44 @@ class SM64World(World):
     item_name_to_id = item_table
     location_name_to_id = location_table
 
-    data_version = 8
+    data_version = 9
     required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
 
     option_definitions = sm64_options
 
+    number_of_stars: int
+    move_rando_bitvec: int
+    filler_count: int
+    star_costs: typing.Dict[str, int]
+
     def generate_early(self):
+        max_stars = 120
+        if (not self.multiworld.EnableCoinStars[self.player].value):
+            max_stars -= 15
+        self.move_rando_bitvec = 0
+        for action, itemid in action_item_table.items():
+            # HACK: Disable randomization of double jump
+            if action == 'Double Jump': continue
+            if getattr(self.multiworld, f"MoveRandomizer{action.replace(' ','')}")[self.player].value:
+                max_stars -= 1
+                self.move_rando_bitvec |= (1 << (itemid - action_item_table['Double Jump']))
+        if (self.multiworld.ExclamationBoxes[self.player].value > 0):
+            max_stars += 29
+        self.number_of_stars = min(self.multiworld.AmountOfStars[self.player].value, max_stars)
+        self.filler_count = max_stars - self.number_of_stars
+        self.star_costs = {
+            'FirstBowserDoorCost': round(self.multiworld.FirstBowserStarDoorCost[self.player].value * self.number_of_stars / 100),
+            'BasementDoorCost': round(self.multiworld.BasementStarDoorCost[self.player].value * self.number_of_stars / 100),
+            'SecondFloorDoorCost': round(self.multiworld.SecondFloorStarDoorCost[self.player].value * self.number_of_stars / 100),
+            'MIPS1Cost': round(self.multiworld.MIPS1Cost[self.player].value * self.number_of_stars / 100),
+            'MIPS2Cost': round(self.multiworld.MIPS2Cost[self.player].value * self.number_of_stars / 100),
+            'StarsToFinish': round(self.multiworld.StarsToFinish[self.player].value * self.number_of_stars / 100)
+        }
+        # Nudge MIPS 1 to match vanilla on default percentage
+        if self.number_of_stars == 120 and self.multiworld.MIPS1Cost[self.player].value == 12:
+            self.star_costs['MIPS1Cost'] = 15
         self.topology_present = self.multiworld.AreaRandomizer[self.player].value
 
     def create_regions(self):
@@ -50,7 +80,7 @@ class SM64World(World):
 
     def set_rules(self):
         self.area_connections = {}
-        set_rules(self.multiworld, self.player, self.area_connections)
+        set_rules(self.multiworld, self.player, self.area_connections, self.star_costs, self.move_rando_bitvec)
         if self.topology_present:
             # Write area_connections to spoiler log
             for entrance, destination in self.area_connections.items():
@@ -72,31 +102,29 @@ class SM64World(World):
         return item
 
     def create_items(self):
-        starcount = self.multiworld.AmountOfStars[self.player].value
-        if (not self.multiworld.EnableCoinStars[self.player].value):
-            starcount = max(35,self.multiworld.AmountOfStars[self.player].value-15)
-        starcount = max(starcount, self.multiworld.FirstBowserStarDoorCost[self.player].value,
-                        self.multiworld.BasementStarDoorCost[self.player].value, self.multiworld.SecondFloorStarDoorCost[self.player].value,
-                        self.multiworld.MIPS1Cost[self.player].value, self.multiworld.MIPS2Cost[self.player].value,
-                        self.multiworld.StarsToFinish[self.player].value)
-        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,starcount)]
-        self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(starcount,120 - (15 if not self.multiworld.EnableCoinStars[self.player].value else 0))]
-
+        # 1Up Mushrooms
+        self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,self.filler_count)]
+        # Power Stars
+        self.multiworld.itempool += [self.create_item("Power Star") for i in range(0,self.number_of_stars)]
+        # Keys
         if (not self.multiworld.ProgressiveKeys[self.player].value):
             key1 = self.create_item("Basement Key")
             key2 = self.create_item("Second Floor Key")
             self.multiworld.itempool += [key1, key2]
         else:
             self.multiworld.itempool += [self.create_item("Progressive Key") for i in range(0,2)]
-
-        wingcap = self.create_item("Wing Cap")
-        metalcap = self.create_item("Metal Cap")
-        vanishcap = self.create_item("Vanish Cap")
-        self.multiworld.itempool += [wingcap, metalcap, vanishcap]
-
+        # Caps
+        self.multiworld.itempool += [self.create_item(cap_name) for cap_name in ["Wing Cap", "Metal Cap", "Vanish Cap"]]
+        # Cannons
         if (self.multiworld.BuddyChecks[self.player].value):
             self.multiworld.itempool += [self.create_item(name) for name, id in cannon_item_table.items()]
-        else:
+        # Moves
+        self.multiworld.itempool += [self.create_item(action)
+                                     for action, itemid in action_item_table.items()
+                                     if self.move_rando_bitvec & (1 << itemid - action_item_table['Double Jump'])]
+
+    def generate_basic(self):
+        if not (self.multiworld.BuddyChecks[self.player].value):
             self.multiworld.get_location("BoB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock BoB"))
             self.multiworld.get_location("WF: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock WF"))
             self.multiworld.get_location("JRB: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock JRB"))
@@ -108,9 +136,7 @@ class SM64World(World):
             self.multiworld.get_location("THI: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock THI"))
             self.multiworld.get_location("RR: Bob-omb Buddy", self.player).place_locked_item(self.create_item("Cannon Unlock RR"))
 
-        if (self.multiworld.ExclamationBoxes[self.player].value > 0):
-            self.multiworld.itempool += [self.create_item("1Up Mushroom") for i in range(0,29)]
-        else:
+        if (self.multiworld.ExclamationBoxes[self.player].value == 0):
             self.multiworld.get_location("CCM: 1Up Block Near Snowman", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("CCM: 1Up Block Ice Pillar", self.player).place_locked_item(self.create_item("1Up Mushroom"))
             self.multiworld.get_location("CCM: 1Up Block Secret Slide", self.player).place_locked_item(self.create_item("1Up Mushroom"))
@@ -147,14 +173,10 @@ class SM64World(World):
     def fill_slot_data(self):
         return {
             "AreaRando": self.area_connections,
-            "FirstBowserDoorCost": self.multiworld.FirstBowserStarDoorCost[self.player].value,
-            "BasementDoorCost": self.multiworld.BasementStarDoorCost[self.player].value,
-            "SecondFloorDoorCost": self.multiworld.SecondFloorStarDoorCost[self.player].value,
-            "MIPS1Cost": self.multiworld.MIPS1Cost[self.player].value,
-            "MIPS2Cost": self.multiworld.MIPS2Cost[self.player].value,
-            "StarsToFinish": self.multiworld.StarsToFinish[self.player].value,
+            "MoveRandoVec": self.move_rando_bitvec,
             "DeathLink": self.multiworld.death_link[self.player].value,
-            "CompletionType" : self.multiworld.CompletionType[self.player].value,
+            "CompletionType": self.multiworld.CompletionType[self.player].value,
+            **self.star_costs
         }
 
     def generate_output(self, output_directory: str):

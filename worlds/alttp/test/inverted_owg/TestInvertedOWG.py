@@ -13,8 +13,10 @@ from worlds.alttp.test import LTTPTestBase
 class TestInvertedOWG(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.logic[1] = "owglitches"
-        self.multiworld.mode[1] = "inverted"
+        self.multiworld.glitches_required[1] = "overworld_glitches"
+        self.multiworld.mode[1].value = 2
+        self.multiworld.bombless_start[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = True
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
         create_inverted_regions(self.multiworld, 1)
         self.multiworld.worlds[1].create_dungeons()

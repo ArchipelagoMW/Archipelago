@@ -43,16 +43,18 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Chicken House", False, []],
             ["Chicken House", False, [], ['Moon Pearl']],
-            ["Chicken House", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Chicken House", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Chicken House", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Chicken House", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)','Bomb Upgrade (50)']],
+            ["Chicken House", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Chicken House", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Chicken House", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             # top can't be bombed as super bunny and needs Moon Pearl
             ["Kakariko Well - Top", False, []],
             ["Kakariko Well - Top", False, [], ['Moon Pearl']],
-            ["Kakariko Well - Top", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Kakariko Well - Top", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Kakariko Well - Top", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Kakariko Well - Top", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)','Bomb Upgrade (50)']],
+            ["Kakariko Well - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Kakariko Well - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Kakariko Well - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Kakariko Well - Left", False, []],
             ["Kakariko Well - Left", True, ['Beat Agahnim 1']],
@@ -76,9 +78,10 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Blind's Hideout - Top", False, []],
             ["Blind's Hideout - Top", False, [], ['Moon Pearl', 'Magic Mirror']],
-            ["Blind's Hideout - Top", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Blind's Hideout - Top", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Blind's Hideout - Top", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Blind's Hideout - Top", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)','Bomb Upgrade (50)']],
+            ["Blind's Hideout - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Blind's Hideout - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Blind's Hideout - Top", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Blind's Hideout - Left", False, []],
             ["Blind's Hideout - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
@@ -157,9 +160,10 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Maze Race", False, []],
             ["Maze Race", False, [], ['Moon Pearl']],
-            ["Maze Race", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Maze Race", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Maze Race", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Maze Race", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)','Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Maze Race", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Maze Race", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Maze Race", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
         ])
 
     def testSouthLightWorld(self):
@@ -179,9 +183,10 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Aginah's Cave", False, []],
             ["Aginah's Cave", False, [], ['Moon Pearl']],
-            ["Aginah's Cave", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Aginah's Cave", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Aginah's Cave", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Aginah's Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Aginah's Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Aginah's Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Aginah's Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Bombos Tablet", False, []],
             ["Bombos Tablet", False, ['Progressive Sword'], ['Progressive Sword']],
@@ -209,39 +214,45 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Mini Moldorm Cave - Far Left", False, []],
             ["Mini Moldorm Cave - Far Left", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Far Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Mini Moldorm Cave - Far Left", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Mini Moldorm Cave - Far Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Mini Moldorm Cave - Far Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Mini Moldorm Cave - Far Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Mini Moldorm Cave - Left", False, []],
             ["Mini Moldorm Cave - Left", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Mini Moldorm Cave - Left", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Mini Moldorm Cave - Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Mini Moldorm Cave - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Mini Moldorm Cave - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Mini Moldorm Cave - Generous Guy", False, []],
             ["Mini Moldorm Cave - Generous Guy", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Mini Moldorm Cave - Generous Guy", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Mini Moldorm Cave - Generous Guy", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Mini Moldorm Cave - Generous Guy", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Mini Moldorm Cave - Right", False, []],
             ["Mini Moldorm Cave - Right", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Mini Moldorm Cave - Right", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Mini Moldorm Cave - Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Mini Moldorm Cave - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Mini Moldorm Cave - Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Mini Moldorm Cave - Far Right", False, []],
             ["Mini Moldorm Cave - Far Right", False, [], ['Moon Pearl']],
-            ["Mini Moldorm Cave - Far Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Mini Moldorm Cave - Far Right", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Mini Moldorm Cave - Far Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Mini Moldorm Cave - Far Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Mini Moldorm Cave - Far Right", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
 
             ["Ice Rod Cave", False, []],
             ["Ice Rod Cave", False, [], ['Moon Pearl']],
-            ["Ice Rod Cave", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Ice Rod Cave", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Ice Rod Cave", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Ice Rod Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Ice Rod Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Ice Rod Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Ice Rod Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
         ])
 
     def testZoraArea(self):
@@ -297,25 +308,28 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Sahasrahla's Hut - Left", False, []],
             ["Sahasrahla's Hut - Left", False, [], ['Moon Pearl', 'Magic Mirror']],
-            ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Sahasrahla's Hut - Left", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Sahasrahla's Hut - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Left", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Sahasrahla's Hut - Left", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
             # super bunny bonk
             ["Sahasrahla's Hut - Left", True, ['Magic Mirror', 'Beat Agahnim 1', 'Pegasus Boots']],
 
             ["Sahasrahla's Hut - Middle", False, []],
             ["Sahasrahla's Hut - Middle", False, [], ['Moon Pearl', 'Magic Mirror']],
-            ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Sahasrahla's Hut - Middle", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Sahasrahla's Hut - Middle", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Middle", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Middle", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Sahasrahla's Hut - Middle", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
             # super bunny bonk
             ["Sahasrahla's Hut - Middle", True, ['Magic Mirror', 'Beat Agahnim 1', 'Pegasus Boots']],
 
             ["Sahasrahla's Hut - Right", False, []],
             ["Sahasrahla's Hut - Right", False, [], ['Moon Pearl', 'Magic Mirror']],
-            ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Beat Agahnim 1']],
-            ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Sahasrahla's Hut - Right", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Sahasrahla's Hut - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Pegasus Boots']],
+            ["Sahasrahla's Hut - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
+            ["Sahasrahla's Hut - Right", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Sahasrahla's Hut - Right", True, ['Pegasus Boots', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
             # super bunny bonk
             ["Sahasrahla's Hut - Right", True, ['Magic Mirror', 'Beat Agahnim 1', 'Pegasus Boots']],
 
@@ -347,9 +361,10 @@ class TestInvertedLightWorld(TestInvertedMinor):
 
             ["Graveyard Cave", False, []],
             ["Graveyard Cave", False, [], ['Moon Pearl']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Progressive Glove', 'Hammer']],
-            ["Graveyard Cave", True, ['Moon Pearl', 'Beat Agahnim 1']],
+            ["Graveyard Cave", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Progressive Glove']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Progressive Glove', 'Hammer']],
+            ["Graveyard Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Beat Agahnim 1']],
 
             ["Potion Shop", False, []],
             ["Potion Shop", False, [], ['Mushroom']],

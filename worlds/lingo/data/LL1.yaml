@@ -278,10 +278,10 @@
         tag: forbid
         check: True
         achievement: The Seeker
-      BEAR:
+      BEAR (1):
         id: Heteronym Room/Panel_bear_bear
         tag: midwhite
-      MINE:
+      MINE (1):
         id: Heteronym Room/Panel_mine_mine
         tag: double midwhite
         subtag: left
@@ -297,7 +297,7 @@
       DOES:
         id: Heteronym Room/Panel_does_does
         tag: midwhite
-      MOBILE:
+      MOBILE (1):
         id: Heteronym Room/Panel_mobile_mobile
         tag: double midwhite
         subtag: left
@@ -399,8 +399,7 @@
         door: Crossroads Entrance
       The Tenacious:
         door: Tenacious Entrance
-      Warts Straw Area:
-        door: Symmetry Door
+      Near Far Area: True
       Hedge Maze:
         door: Shortcut to Hedge Maze
       Orange Tower First Floor:
@@ -427,14 +426,6 @@
         id: Palindrome Room/Panel_slaughter_laughter
         colors: red
         tag: midred
-      NEAR:
-        id: Symmetry Room/Panel_near_far
-        colors: black
-        tag: botblack
-      FAR:
-        id: Symmetry Room/Panel_far_near
-        colors: black
-        tag: botblack
       TRACE:
         id: Maze Room/Panel_trace_trace
         tag: midwhite
@@ -477,14 +468,6 @@
         group: Entrances to The Tenacious
         panels:
           - SLAUGHTER
-      Symmetry Door:
-        id:
-          - Symmetry Room Area Doors/Door_near_far
-          - Symmetry Room Area Doors/Door_far_near
-        group: Symmetry Doors
-        panels:
-          - NEAR
-          - FAR
       Shortcut to Hedge Maze:
         id: Maze Area Doors/Door_trace_trace
         group: Hedge Maze Doors
@@ -548,7 +531,7 @@
         id: Lingo Room/Panel_shortcut
         colors: yellow
         tag: midyellow
-      PILGRIMAGE:
+      PILGRIM:
         id: Lingo Room/Panel_pilgrim
         colors: blue
         tag: midblue
@@ -569,7 +552,7 @@
       Exit:
         event: True
         panels:
-          - PILGRIMAGE
+          - PILGRIM
   Pilgrim Room:
     entrances:
       The Seeker:
@@ -755,7 +738,7 @@
         panels:
           - TURN
           - room: Orange Tower Fourth Floor
-            panel: RUNT
+            panel: RUNT (1)
       Words Sword Door:
         id:
           - Shuffle Room Area Doors/Door_words_shuffle_3
@@ -962,11 +945,36 @@
           - LEVEL (White)
           - RACECAR (White)
           - SOLOS (White)
+  Near Far Area:
+    entrances:
+      Hub Room: True
+      Warts Straw Area:
+        door: Door
+    panels:
+      NEAR:
+        id: Symmetry Room/Panel_near_far
+        colors: black
+        tag: botblack
+      FAR:
+        id: Symmetry Room/Panel_far_near
+        colors: black
+        tag: botblack
+    doors:
+      Door:
+        id:
+          - Symmetry Room Area Doors/Door_near_far
+          - Symmetry Room Area Doors/Door_far_near
+        group: Symmetry Doors
+        item_name: Symmetry Room - Near Far Door
+        location_name: Symmetry Room - NEAR, FAR
+        panels:
+          - NEAR
+          - FAR
   Warts Straw Area:
     entrances:
-      Hub Room:
-        room: Hub Room
-        door: Symmetry Door
+      Near Far Area:
+        room: Near Far Area
+        door: Door
       Leaf Feel Area:
         door: Door
     panels:
@@ -984,6 +992,8 @@
           - Symmetry Room Area Doors/Door_warts_straw
           - Symmetry Room Area Doors/Door_straw_warts
         group: Symmetry Doors
+        item_name: Symmetry Room - Warts Straw Door
+        location_name: Symmetry Room - WARTS, STRAW
         panels:
           - WARTS
           - STRAW
@@ -1009,6 +1019,8 @@
           - Symmetry Room Area Doors/Door_leaf_feel
           - Symmetry Room Area Doors/Door_feel_leaf
         group: Symmetry Doors
+        item_name: Symmetry Room - Leaf Feel Door
+        location_name: Symmetry Room - LEAF, FEEL
         panels:
           - LEAF
           - FEEL
@@ -1118,7 +1130,13 @@
         id: Cross Room/Panel_north_missing
         colors: green
         tag: forbid
-        required_room: Outside The Bold
+        required_panel:
+          - room: Outside The Bold
+            panel: SOUND
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
       DIAMONDS:
         id: Cross Room/Panel_diamonds_missing
         colors: green
@@ -1160,7 +1178,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: PURPLE
       Hallway Door:
         id: Red Blue Purple Room Area Doors/Door_room_2
@@ -1430,7 +1448,7 @@
     entrances:
       The Perceptive: True
     panels:
-      NAPS:
+      SPAN:
         id: Naps Room/Panel_naps_span
         colors: black
         tag: midblack
@@ -1456,7 +1474,7 @@
         location_name: The Fearless - First Floor Puzzles
         group: Fearless Doors
         panels:
-          - NAPS
+          - SPAN
           - TEAM
           - TEEM
           - IMPATIENT
@@ -1558,11 +1576,11 @@
         required_door:
           door: Stairs
         achievement: The Observant
-      BACK:
+      FOUR (1):
         id: Look Room/Panel_four_back
         colors: green
         tag: forbid
-      SIDE:
+      FOUR (2):
         id: Look Room/Panel_four_side
         colors: green
         tag: forbid
@@ -1572,87 +1590,87 @@
         hunt: True
         required_door:
           door: Backside Door
-      STAIRS:
+      SIX:
         id: Look Room/Panel_six_stairs
         colors: green
         tag: forbid
-      WAYS:
+      FOUR (3):
         id: Look Room/Panel_four_ways
         colors: green
         tag: forbid
-      "ON":
+      TWO (1):
         id: Look Room/Panel_two_on
         colors: green
         tag: forbid
-      UP:
+      TWO (2):
         id: Look Room/Panel_two_up
         colors: green
         tag: forbid
-      SWIMS:
+      FIVE:
         id: Look Room/Panel_five_swims
         colors: green
         tag: forbid
-      UPSTAIRS:
+      BELOW (1):
         id: Look Room/Panel_eight_upstairs
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      TOIL:
+      BLUE:
         id: Look Room/Panel_blue_toil
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      STOP:
+      BELOW (2):
         id: Look Room/Panel_four_stop
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      TOP:
+      MINT (1):
         id: Look Room/Panel_aqua_top
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      HI:
+      ESACREWOL:
         id: Look Room/Panel_blue_hi
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      HI (2):
+      EULB:
         id: Look Room/Panel_blue_hi2
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      "31":
+      NUMBERS (1):
         id: Look Room/Panel_numbers_31
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      "52":
+      NUMBERS (2):
         id: Look Room/Panel_numbers_52
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      OIL:
+      MINT (2):
         id: Look Room/Panel_aqua_oil
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      BACKSIDE (GREEN):
+      GREEN (1):
         id: Look Room/Panel_eight_backside
         colors: green
         tag: forbid
         required_door:
           door: Stairs
-      SIDEWAYS:
+      GREEN (2):
         id: Look Room/Panel_eight_sideways
         colors: green
         tag: forbid
@@ -1663,13 +1681,13 @@
         id: Maze Area Doors/Door_backside
         group: Backside Doors
         panels:
-          - BACK
-          - SIDE
+          - FOUR (1)
+          - FOUR (2)
       Stairs:
         id: Maze Area Doors/Door_stairs
         group: Observant Doors
         panels:
-          - STAIRS
+          - SIX
   The Incomparable:
     entrances:
       The Observant: True # Assuming that access to The Observant includes access to the right entrance
@@ -1951,7 +1969,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: RED
       Rhyme Room Entrance:
         id: Double Room Area Doors/Door_room_entry_stairs2
@@ -1969,9 +1987,9 @@
           - Color Arrow Room Doors/Door_orange_hider_1
           - Color Arrow Room Doors/Door_orange_hider_2
           - Color Arrow Room Doors/Door_orange_hider_3
-        location_name: Color Hunt - RED and YELLOW
-        group: Champion's Rest - Color Barriers
-        item_name: Champion's Rest - Orange Barrier
+        location_name: Color Barriers - RED and YELLOW
+        group: Color Hunt Barriers
+        item_name: Color Hunt - Orange Barrier
         panels:
           - RED
           - room: Directional Gallery
@@ -1999,7 +2017,7 @@
       Courtyard: True
       Roof: True # through the sunwarp
     panels:
-      RUNT:
+      RUNT (1):
         id: Shuffle Room/Panel_turn_runt2
         colors: yellow
         tag: midyellow
@@ -2213,6 +2231,7 @@
           - Master Room Doors/Door_master_down
           - Master Room Doors/Door_master_down2
         skip_location: True
+        item_name: Mastery
         panels:
           - THE MASTER
       Mastery Panels:
@@ -2229,25 +2248,25 @@
             panel: MASTERY
           - room: Hedge Maze
             panel: MASTERY (1)
-          - room: Roof
-            panel: MASTERY (1)
-          - room: Roof
-            panel: MASTERY (2)
+          - room: Behind A Smile
+            panel: MASTERY
+          - room: Sixteen Colorful Squares
+            panel: MASTERY
           - MASTERY
           - room: Hedge Maze
             panel: MASTERY (2)
-          - room: Roof
-            panel: MASTERY (3)
-          - room: Roof
-            panel: MASTERY (4)
-          - room: Roof
-            panel: MASTERY (5)
+          - room: Among Treetops
+            panel: MASTERY
+          - room: Horizon's Edge
+            panel: MASTERY
+          - room: Beneath The Lookout
+            panel: MASTERY
           - room: Elements Area
             panel: MASTERY
           - room: Pilgrim Antechamber
             panel: MASTERY
-          - room: Roof
-            panel: MASTERY (6)
+          - room: Rooftop Staircase
+            panel: MASTERY
     paintings:
       - id: map_painting2
         orientation: north
@@ -2259,44 +2278,12 @@
       Crossroads:
         room: Crossroads
         door: Roof Access
+  Behind A Smile:
+    entrances:
+      Roof: True
     panels:
-      MASTERY (1):
+      MASTERY:
         id: Master Room/Panel_mastery_mastery6
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (2):
-        id: Master Room/Panel_mastery_mastery7
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (3):
-        id: Master Room/Panel_mastery_mastery10
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (4):
-        id: Master Room/Panel_mastery_mastery11
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (5):
-        id: Master Room/Panel_mastery_mastery12
-        tag: midwhite
-        hunt: True
-        required_door:
-          room: Orange Tower Seventh Floor
-          door: Mastery
-      MASTERY (6):
-        id: Master Room/Panel_mastery_mastery15
         tag: midwhite
         hunt: True
         required_door:
@@ -2305,6 +2292,61 @@
       STAIRCASE:
         id: Open Areas/Panel_staircase
         tag: midwhite
+  Sixteen Colorful Squares:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery7
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Among Treetops:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery10
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Horizon's Edge:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery11
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Beneath The Lookout:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery12
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
+  Rooftop Staircase:
+    entrances:
+      Roof: True
+    panels:
+      MASTERY:
+        id: Master Room/Panel_mastery_mastery15
+        tag: midwhite
+        hunt: True
+        required_door:
+          room: Orange Tower Seventh Floor
+          door: Mastery
   Orange Tower Basement:
     entrances:
       Orange Tower Sixth Floor:
@@ -2376,7 +2418,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: GREEN
     paintings:
       - id: flower_painting_7
@@ -2626,21 +2668,13 @@
         tag: forbid
     doors:
       Progress Door:
-        id:
-          - Doorway Room Doors/Door_gray
-          - Doorway Room Doors/Door_gray2 # See comment below
+        id: Doorway Room Doors/Door_gray
         item_name: The Colorful - Gray Door
         location_name: The Colorful - Gray
         group: Colorful Doors
         panels:
           - OBSTACLE
   The Colorful:
-    # The set of required_doors in the achievement panel should prevent
-    # generation from asking you to solve The Colorful before opening all of the
-    # doors. Access from the roof is included so that the painting here could be
-    # an entrance. The client will have to be hardcoded to not open the door to
-    # the achievement until all of the doors are open, whether by solving the
-    # panels or through receiving items.
     entrances:
       The Colorful (Gray):
         room: The Colorful (Gray)
@@ -2651,31 +2685,53 @@
         id: Countdown Panels/Panel_colorful_colorful
         check: True
         tag: forbid
-        required_door:
+        required_panel:
           - room: The Colorful (White)
-            door: Progress Door
+            panel: BEGIN
           - room: The Colorful (Black)
-            door: Progress Door
+            panel: FOUND
           - room: The Colorful (Red)
-            door: Progress Door
+            panel: LOAF
           - room: The Colorful (Yellow)
-            door: Progress Door
+            panel: CREAM
           - room: The Colorful (Blue)
-            door: Progress Door
+            panel: SUN
           - room: The Colorful (Purple)
-            door: Progress Door
+            panel: SPOON
           - room: The Colorful (Orange)
-            door: Progress Door
+            panel: LETTERS
           - room: The Colorful (Green)
-            door: Progress Door
+            panel: WALLS
           - room: The Colorful (Brown)
-            door: Progress Door
+            panel: IRON
           - room: The Colorful (Gray)
-            door: Progress Door
+            panel: OBSTACLE
         achievement: The Colorful
     paintings:
       - id: arrows_painting_12
         orientation: north
+    progression:
+      Progressive Colorful:
+        - room: The Colorful (White)
+          door: Progress Door
+        - room: The Colorful (Black)
+          door: Progress Door
+        - room: The Colorful (Red)
+          door: Progress Door
+        - room: The Colorful (Yellow)
+          door: Progress Door
+        - room: The Colorful (Blue)
+          door: Progress Door
+        - room: The Colorful (Purple)
+          door: Progress Door
+        - room: The Colorful (Orange)
+          door: Progress Door
+        - room: The Colorful (Green)
+          door: Progress Door
+        - room: The Colorful (Brown)
+          door: Progress Door
+        - room: The Colorful (Gray)
+          door: Progress Door
   Welcome Back Area:
     entrances:
       Starting Room:
@@ -2762,6 +2818,7 @@
         door: Exit
       Eight Alcove:
         door: Eight Door
+      The Optimistic: True
     panels:
       SEVEN (1):
         id: Backside Room/Panel_seven_seven_5
@@ -2811,21 +2868,11 @@
         id: Rhyme Room/Panel_locked_knocked
         colors: purple
         tag: midpurp
-      BACKSIDE:
-        id: Backside Room/Panel_backside_1
-        tag: midwhite
-      The Optimistic:
-        id: Countdown Panels/Panel_optimistic_optimistic
-        check: True
-        tag: forbid
-        required_door:
-          door: Backsides
-        achievement: The Optimistic
-      PAST:
+      PAST (1):
         id: Shuffle Room/Panel_past_present
         colors: brown
         tag: botbrown
-      FUTURE:
+      FUTURE (1):
         id: Shuffle Room/Panel_future_present
         colors:
           - brown
@@ -2871,14 +2918,14 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: BLUE
       Orange Barrier:
         id: Color Arrow Room Doors/Door_orange_3
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: ORANGE
       Initiated Entrance:
         id: Red Blue Purple Room Area Doors/Door_locked_knocked
@@ -2890,9 +2937,9 @@
       # containing region.
       Green Barrier:
         id: Color Arrow Room Doors/Door_green_hider_1
-        location_name: Color Hunt - BLUE and YELLOW
-        item_name: Champion's Rest - Green Barrier
-        group: Champion's Rest - Color Barriers
+        location_name: Color Barriers - BLUE and YELLOW
+        item_name: Color Hunt - Green Barrier
+        group: Color Hunt Barriers
         panels:
           - BLUE
           - room: Directional Gallery
@@ -2902,9 +2949,9 @@
           - Color Arrow Room Doors/Door_purple_hider_1
           - Color Arrow Room Doors/Door_purple_hider_2
           - Color Arrow Room Doors/Door_purple_hider_3
-        location_name: Color Hunt - RED and BLUE
-        item_name: Champion's Rest - Purple Barrier
-        group: Champion's Rest - Color Barriers
+        location_name: Color Barriers - RED and BLUE
+        item_name: Color Hunt - Purple Barrier
+        group: Color Hunt Barriers
         panels:
           - BLUE
           - room: Orange Tower Third Floor
@@ -2914,7 +2961,7 @@
           - Color Arrow Room Doors/Door_all_hider_1
           - Color Arrow Room Doors/Door_all_hider_2
           - Color Arrow Room Doors/Door_all_hider_3
-        location_name: Color Hunt - GREEN, ORANGE and PURPLE
+        location_name: Color Barriers - GREEN, ORANGE and PURPLE
         item_name: Champion's Rest - Entrance
         panels:
           - ORANGE
@@ -2922,17 +2969,6 @@
             panel: GREEN
           - room: Outside The Agreeable
             panel: PURPLE
-      Backsides:
-        event: True
-        panels:
-          - room: The Observant
-            panel: BACKSIDE
-          - room: Yellow Backside Area
-            panel: BACKSIDE
-          - room: Directional Gallery
-            panel: BACKSIDE
-          - room: The Bearer
-            panel: BACKSIDE
       Eight Door:
         id: Red Blue Purple Room Area Doors/Door_a_strands2
         skip_location: True
@@ -3042,6 +3078,28 @@
         id: Rhyme Room/Panel_bed_dead
         colors: purple
         tag: toppurp
+  The Optimistic:
+    entrances:
+      Outside The Initiated: True
+    panels:
+      BACKSIDE:
+        id: Backside Room/Panel_backside_1
+        tag: midwhite
+      Achievement:
+        id: Countdown Panels/Panel_optimistic_optimistic
+        check: True
+        tag: forbid
+        required_panel:
+          - panel: BACKSIDE
+          - room: The Observant
+            panel: BACKSIDE
+          - room: Yellow Backside Area
+            panel: BACKSIDE
+          - room: Directional Gallery
+            panel: BACKSIDE
+          - room: The Bearer
+            panel: BACKSIDE
+        achievement: The Optimistic
   The Traveled:
     entrances:
       Hub Room:
@@ -3142,7 +3200,7 @@
       Outside The Undeterred: True
       Crossroads: True
       Hedge Maze: True
-      Outside The Initiated: True # backside
+      The Optimistic: True # backside
       Directional Gallery: True # backside
       Yellow Backside Area: True
       The Bearer:
@@ -3154,12 +3212,12 @@
   Outside The Bold:
     entrances:
       Color Hallways: True
-      Champion's Rest:
-        room: Champion's Rest
+      Color Hunt:
+        room: Color Hunt
         door: Shortcut to The Steady
       The Bearer:
         room: The Bearer
-        door: Shortcut to The Bold
+        door: Entrance
       Directional Gallery:
         # There is a painting warp here from the Directional Gallery, but it
         # only appears when the sixes are revealed. It could be its own item if
@@ -3230,7 +3288,7 @@
         tag: midwhite
         required_door:
           door: Stargazer Door
-      MOUTH:
+      SOUND:
         id: Cross Room/Panel_mouth_south
         colors: purple
         tag: midpurp
@@ -3574,7 +3632,7 @@
         id: Blue Room/Panel_bone_skeleton
         colors: blue
         tag: botblue
-      EYE:
+      EYE (1):
         id: Blue Room/Panel_mouth_face
         colors: blue
         tag: double botblue
@@ -3980,7 +4038,7 @@
         group: Color Hunt Barriers
         skip_location: True
         panels:
-          - room: Champion's Rest
+          - room: Color Hunt
             panel: YELLOW
     paintings:
       - id: smile_painting_7
@@ -3998,12 +4056,15 @@
         orientation: south
       - id: cherry_painting
         orientation: east
-  Champion's Rest:
+  Color Hunt:
     entrances:
       Outside The Bold:
         door: Shortcut to The Steady
       Orange Tower Fourth Floor: True # sunwarp
       Roof: True # through ceiling of sunwarp
+      Champion's Rest:
+        room: Outside The Initiated
+        door: Entrance
     panels:
       EXIT:
         id: Rock Room/Panel_red_red
@@ -4044,41 +4105,6 @@
         required_door:
           room: Orange Tower Third Floor
           door: Orange Barrier
-      YOU:
-        id: Color Arrow Room/Panel_you
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-        check: True
-        colors: gray
-        tag: forbid
-      ME:
-        id: Color Arrow Room/Panel_me
-        colors: gray
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET BLUE:
-        # Pretend this and the other two are white, because they are snipes.
-        # TODO: Extract them and randomize them?
-        id: Color Arrow Room/Panel_secret_blue
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET YELLOW:
-        id: Color Arrow Room/Panel_secret_yellow
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
-      SECRET RED:
-        id: Color Arrow Room/Panel_secret_red
-        tag: forbid
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
     doors:
       Shortcut to The Steady:
         id: Rock Room Doors/Door_hint
@@ -4093,16 +4119,39 @@
         required_door:
           room: Outside The Initiated
           door: Entrance
+  Champion's Rest:
+    entrances:
+      Color Hunt:
+        room: Outside The Initiated
+        door: Entrance
+    panels:
+      YOU:
+        id: Color Arrow Room/Panel_you
+        check: True
+        colors: gray
+        tag: forbid
+      ME:
+        id: Color Arrow Room/Panel_me
+        colors: gray
+        tag: forbid
+      SECRET BLUE:
+        # Pretend this and the other two are white, because they are snipes.
+        # TODO: Extract them and randomize them?
+        id: Color Arrow Room/Panel_secret_blue
+        tag: forbid
+      SECRET YELLOW:
+        id: Color Arrow Room/Panel_secret_yellow
+        tag: forbid
+      SECRET RED:
+        id: Color Arrow Room/Panel_secret_red
+        tag: forbid
+    paintings:
       - id: colors_painting
         orientation: south
-        enter_only: True
-        required_door:
-          room: Outside The Initiated
-          door: Entrance
   The Bearer:
     entrances:
       Outside The Bold:
-        door: Shortcut to The Bold
+        door: Entrance
       Orange Tower Fifth Floor:
         room: Art Gallery
         door: Exit
@@ -4179,7 +4228,7 @@
           - yellow
         tag: mid red yellow
     doors:
-      Shortcut to The Bold:
+      Entrance:
         id: Red Blue Purple Room Area Doors/Door_middle_middle
         panels:
           - MIDDLE
@@ -4202,9 +4251,6 @@
       SIX:
         id: Backside Room/Panel_six_six_5
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
@@ -4280,9 +4326,6 @@
       SIX:
         id: Backside Room/Panel_six_six_6
         tag: midwhite
-        colors:
-          - red
-          - yellow
         hunt: True
         required_door:
           room: Number Hunt
@@ -4314,21 +4357,21 @@
         door: Side Area Shortcut
       Roof: True
     panels:
-      SNOW:
+      SMILE:
         id: Cross Room/Panel_smile_lime
         colors:
           - red
           - yellow
         tag: mid yellow red
-      SMILE:
+        required_panel:
+          room: The Bearer (North)
+          panel: WARTS
+      SNOW:
         id: Cross Room/Panel_snow_won
         colors:
           - red
           - yellow
         tag: mid red yellow
-        required_panel:
-          room: The Bearer (North)
-          panel: WARTS
     doors:
       Side Area Shortcut:
         event: True
@@ -4404,9 +4447,14 @@
         colors: blue
         tag: forbid
         required_panel:
-          room: The Bearer (West)
-          panel: SMILE
-        required_room: Outside The Bold
+          - room: The Bearer (West)
+            panel: SMILE
+          - room: Outside The Bold
+            panel: SOUND
+          - room: Outside The Bold
+            panel: YEAST
+          - room: Outside The Bold
+            panel: WET
   Cross Tower (South):
     entrances: # No roof access
       The Bearer (North):
@@ -6117,7 +6165,7 @@
         id: Painting Room/Panel_our_four
         colors: blue
         tag: midblue
-      ONE ROAD MANY TURNS:
+      ORDER:
         id: Painting Room/Panel_order_onepathmanyturns
         tag: forbid
         colors:
@@ -6172,8 +6220,9 @@
       Exit:
         id: Tower Room Area Doors/Door_painting_exit
         include_reduce: True
+        item_name: Orange Tower Fifth Floor - Quadruple Intersection
         panels:
-          - ONE ROAD MANY TURNS
+          - ORDER
     paintings:
       - id: smile_painting_3
         orientation: west
@@ -6191,7 +6240,6 @@
         - Third Floor
         - Fourth Floor
         - Fifth Floor
-        - Exit
   Art Gallery (Second Floor):
     entrances:
       Art Gallery:
@@ -6666,7 +6714,7 @@
           - room: Rhyme Room (Target)
             panel: PISTOL
           - room: Rhyme Room (Target)
-            panel: QUARTZ
+            panel: GEM
   Rhyme Room (Target):
     entrances:
       Rhyme Room (Smiley): # one-way
@@ -6694,7 +6742,7 @@
         tag: syn rhyme
         subtag: top
         link: rhyme CRYSTAL
-      QUARTZ:
+      GEM:
         id: Double Room/Panel_crystal_syn
         colors: purple
         tag: syn rhyme
@@ -6719,7 +6767,7 @@
         group: Rhyme Room Doors
         panels:
           - PISTOL
-          - QUARTZ
+          - GEM
           - INNOVATIVE (Top)
           - INNOVATIVE (Bottom)
     paintings:
@@ -6777,20 +6825,16 @@
         id: Panel Room/Panel_room_floor_5
         colors: gray
         tag: forbid
-      FLOOR (7):
+      FLOOR (6):
         id: Panel Room/Panel_room_floor_7
         colors: gray
         tag: forbid
-      FLOOR (8):
+      FLOOR (7):
         id: Panel Room/Panel_room_floor_8
         colors: gray
         tag: forbid
-      FLOOR (9):
+      FLOOR (8):
         id: Panel Room/Panel_room_floor_9
-        colors: gray
-        tag: forbid
-      FLOOR (10):
-        id: Panel Room/Panel_room_floor_10
         colors: gray
         tag: forbid
       CEILING (1):
@@ -6811,6 +6855,10 @@
         tag: forbid
       CEILING (5):
         id: Panel Room/Panel_room_ceiling_5
+        colors: gray
+        tag: forbid
+      CEILING (6):
+        id: Panel Room/Panel_room_floor_10
         colors: gray
         tag: forbid
       WALL (1):
@@ -6918,10 +6966,12 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery
         tag: midwhite
-        colors: gray
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+        required_panel:
+          room: Room Room
+          panel: WALL (2)
     doors:
       Excavation:
         event: True
@@ -7071,7 +7121,7 @@
         id: Hangry Room/Panel_red_top_3
         colors: red
         tag: topred
-      FLUMMOXED:
+      FLUSTERED:
         id: Hangry Room/Panel_red_top_4
         colors: red
         tag: topred
@@ -7574,7 +7624,7 @@
           - black
           - blue
         tag: chain mid black blue
-      BREAD:
+      CHEESE:
         id: Challenge Room/Panel_bread_mold
         colors: brown
         tag: double botbrown
@@ -7621,7 +7671,7 @@
         id: Challenge Room/Panel_double_anagram_5
         colors: yellow
         tag: midyellow
-      FACTS:
+      FACTS (Chain):
         id: Challenge Room/Panel_facts
         colors:
           - red
@@ -7631,18 +7681,18 @@
         id: Challenge Room/Panel_facts2
         colors: red
         tag: forbid
-      FACTS (3):
+      FACTS (2):
         id: Challenge Room/Panel_facts3
         tag: forbid
-      FACTS (4):
+      FACTS (3):
         id: Challenge Room/Panel_facts4
         colors: blue
         tag: forbid
-      FACTS (5):
+      FACTS (4):
         id: Challenge Room/Panel_facts5
         colors: blue
         tag: forbid
-      FACTS (6):
+      FACTS (5):
         id: Challenge Room/Panel_facts6
         colors: blue
         tag: forbid

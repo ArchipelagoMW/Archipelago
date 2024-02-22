@@ -13,16 +13,16 @@ class TestDungeons(TestInvertedOWG):
             ["Sanctuary", False, []],
             ["Sanctuary", False, ['Beat Agahnim 1']],
             ["Sanctuary", True, ['Magic Mirror', 'Beat Agahnim 1']],
-            ["Sanctuary", True, ['Lamp', 'Beat Agahnim 1', 'Small Key (Hyrule Castle)']],
+            ["Sanctuary", True, ['Progressive Sword', 'Lamp', 'Beat Agahnim 1', 'Small Key (Hyrule Castle)']],
             ["Sanctuary", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sanctuary", True, ['Magic Mirror', 'Pegasus Boots']],
 
             ["Sewers - Secret Room - Left", False, []],
             ["Sewers - Secret Room - Left", True, ['Moon Pearl', 'Progressive Glove', 'Pegasus Boots']],
-            ["Sewers - Secret Room - Left", True, ['Moon Pearl', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True,
-             ['Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True, ['Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Moon Pearl', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+10)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", False, []],
             ["Eastern Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots']],
@@ -45,7 +45,7 @@ class TestDungeons(TestInvertedOWG):
             ["Tower of Hera - Basement Cage", True, ['Pegasus Boots', 'Moon Pearl']],
 
             ["Castle Tower - Room 03", False, []],
-            ["Castle Tower - Room 03", False, [], ['Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
+            ["Castle Tower - Room 03", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Progressive Sword', 'Hammer', 'Progressive Bow', 'Fire Rod', 'Ice Rod', 'Cane of Somaria', 'Cane of Byrna']],
             ["Castle Tower - Room 03", True, ['Pegasus Boots', 'Progressive Sword']],
             ["Castle Tower - Room 03", True, ['Pegasus Boots', 'Progressive Bow']],
 
@@ -62,7 +62,8 @@ class TestDungeons(TestInvertedOWG):
 
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
-            ["Skull Woods - Big Chest", True, ['Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Skull Woods)']],
 
             ["Skull Woods - Big Key Chest", True, []],
 
@@ -89,7 +90,16 @@ class TestDungeons(TestInvertedOWG):
             ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Quake', 'Progressive Sword', 'Cane of Somaria']],
 
             ["Turtle Rock - Chain Chomps", False, []],
-            ["Turtle Rock - Chain Chomps", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", False, ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)', 'Hookshot', 'Progressive Sword', 'Progressive Bow', 'Blue Boomerang', 'Red Boomerang', 'Cane of Somaria', 'Fire Rod', 'Ice Rod']],
+            ["Turtle Rock - Chain Chomps", True, ['Bomb Upgrade (+5)', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Hookshot', 'Pegasus Boots']],
+            ["Turtle Rock - Chain Chomps", True, ['Progressive Bow', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Blue Boomerang', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Red Boomerang', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Cane of Somaria', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Fire Rod', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Ice Rod', 'Pegasus Boots', 'Magic Mirror', 'Moon Pearl']],
+            ["Turtle Rock - Chain Chomps", True, ['Progressive Sword', 'Progressive Sword', 'Pegasus Boots']],
 
             ["Turtle Rock - Crystaroller Room", False, []],
             ["Turtle Rock - Crystaroller Room", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Big Key (Turtle Rock)']],

@@ -31,14 +31,3 @@ def create_regions(world: MultiWorld, player: int):
     locWrp_names = ["Edge Games"]
     regWrp.locations += [V6Location(player, loc_name, location_table[loc_name], regWrp) for loc_name in locWrp_names]
     world.regions.append(regWrp)
-
-
-def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule):
-    sourceRegion = world.get_region(source, player)
-    targetRegion = world.get_region(target, player)
-
-    connection = Entrance(player,'', sourceRegion)
-    connection.access_rule = rule
-
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)

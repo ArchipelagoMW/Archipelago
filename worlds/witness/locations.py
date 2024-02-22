@@ -55,8 +55,8 @@ class StaticWitnessLocations:
         "Desert Light Room 3",
         "Desert Pond Room 5",
         "Desert Flood Room 6",
-        "Desert Final Hexagonal",
-        "Desert Final Bent 3",
+        "Desert Elevator Room Hexagonal",
+        "Desert Elevator Room Bent 3",
         "Desert Laser Panel",
 
         "Quarry Entry 1 Panel",
@@ -509,9 +509,9 @@ class WitnessPlayerLocations:
         if world.options.shuffle_vault_boxes:
             self.PANEL_TYPES_TO_SHUFFLE.add("Vault")
 
-        if world.options.shuffle_EPs == 1:
+        if world.options.shuffle_EPs == "individual":
             self.PANEL_TYPES_TO_SHUFFLE.add("EP")
-        elif world.options.shuffle_EPs == 2:
+        elif world.options.shuffle_EPs == "obelisk_sides":
             self.PANEL_TYPES_TO_SHUFFLE.add("Obelisk Side")
 
             for obelisk_loc in StaticWitnessLocations.OBELISK_SIDES:
@@ -543,7 +543,7 @@ class WitnessPlayerLocations:
         )
 
         event_locations = {
-            p for p in player_logic.EVENT_PANELS
+            p for p in player_logic.USED_EVENT_NAMES_BY_HEX
         }
 
         self.EVENT_LOCATION_TABLE = {

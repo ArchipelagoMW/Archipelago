@@ -31,12 +31,12 @@ panels:
     LIES: 444408
   The Seeker:
     Achievement: 444409
-    BEAR: 444410
-    MINE: 444411
+    BEAR (1): 444410
+    MINE (1): 444411
     MINE (2): 444412
     BOW: 444413
     DOES: 444414
-    MOBILE: 444415
+    MOBILE (1): 444415
     MOBILE (2): 444416
     DESERT: 444417
     DESSERT: 444418
@@ -57,8 +57,6 @@ panels:
   Hub Room:
     ORDER: 444432
     SLAUGHTER: 444433
-    NEAR: 444434
-    FAR: 444435
     TRACE: 444436
     RAT: 444437
     OPEN: 444438
@@ -72,7 +70,7 @@ panels:
     EIGHT: 444445
   Pilgrim Antechamber:
     HOT CRUST: 444446
-    PILGRIMAGE: 444447
+    PILGRIM: 444447
     MASTERY: 444448
   Pilgrim Room:
     THIS: 444449
@@ -123,6 +121,9 @@ panels:
     RACECAR (White): 444489
     SOLOS (White): 444490
     Achievement: 444491
+  Near Far Area:
+    NEAR: 444434
+    FAR: 444435
   Warts Straw Area:
     WARTS: 444492
     STRAW: 444493
@@ -187,7 +188,7 @@ panels:
     Achievement: 444546
     GAZE: 444547
   The Fearless (First Floor):
-    NAPS: 444548
+    SPAN: 444548
     TEAM: 444549
     TEEM: 444550
     IMPATIENT: 444551
@@ -208,25 +209,25 @@ panels:
     EVEN: 444564
   The Observant:
     Achievement: 444565
-    BACK: 444566
-    SIDE: 444567
+    FOUR (1): 444566
+    FOUR (2): 444567
     BACKSIDE: 444568
-    STAIRS: 444569
-    WAYS: 444570
-    'ON': 444571
-    UP: 444572
-    SWIMS: 444573
-    UPSTAIRS: 444574
-    TOIL: 444575
-    STOP: 444576
-    TOP: 444577
-    HI: 444578
-    HI (2): 444579
-    '31': 444580
-    '52': 444581
-    OIL: 444582
-    BACKSIDE (GREEN): 444583
-    SIDEWAYS: 444584
+    SIX: 444569
+    FOUR (3): 444570
+    TWO (1): 444571
+    TWO (2): 444572
+    FIVE: 444573
+    BELOW (1): 444574
+    BLUE: 444575
+    BELOW (2): 444576
+    MINT (1): 444577
+    ESACREWOL: 444578
+    EULB: 444579
+    NUMBERS (1): 444580
+    NUMBERS (2): 444581
+    MINT (2): 444582
+    GREEN (1): 444583
+    GREEN (2): 444584
   The Incomparable:
     Achievement: 444585
     A (One): 444586
@@ -254,7 +255,7 @@ panels:
     RED: 444605
     DEER + WREN: 444606
   Orange Tower Fourth Floor:
-    RUNT: 444607
+    RUNT (1): 444607
     RUNT (2): 444608
     LEARNS + UNSEW: 444609
     HOT CRUSTS: 444610
@@ -279,14 +280,19 @@ panels:
     THE END: 444620
     THE MASTER: 444621
     MASTERY: 444622
-  Roof:
-    MASTERY (1): 444623
-    MASTERY (2): 444624
-    MASTERY (3): 444625
-    MASTERY (4): 444626
-    MASTERY (5): 444627
-    MASTERY (6): 444628
+  Behind A Smile:
+    MASTERY: 444623
     STAIRCASE: 444629
+  Sixteen Colorful Squares:
+    MASTERY: 444624
+  Among Treetops:
+    MASTERY: 444625
+  Horizon's Edge:
+    MASTERY: 444626
+  Beneath The Lookout:
+    MASTERY: 444627
+  Rooftop Staircase:
+    MASTERY: 444628
   Orange Tower Basement:
     MASTERY: 444630
     THE LIBRARY: 444631
@@ -341,16 +347,17 @@ panels:
     ORANGE: 444663
     UNCOVER: 444664
     OXEN: 444665
-    BACKSIDE: 444666
-    The Optimistic: 444667
-    PAST: 444668
-    FUTURE: 444669
+    PAST (1): 444668
+    FUTURE (1): 444669
     FUTURE (2): 444670
     PAST (2): 444671
     PRESENT: 444672
     SMILE: 444673
     ANGERED: 444674
     VOTE: 444675
+  The Optimistic:
+    BACKSIDE: 444666
+    Achievement: 444667
   The Initiated:
     Achievement: 444676
     DAUGHTER: 444677
@@ -400,7 +407,7 @@ panels:
     ZEN: 444719
     SON: 444720
     STARGAZER: 444721
-    MOUTH: 444722
+    SOUND: 444722
     YEAST: 444723
     WET: 444724
   The Bold:
@@ -442,7 +449,7 @@ panels:
   The Undeterred:
     Achievement: 444759
     BONE: 444760
-    EYE: 444761
+    EYE (1): 444761
     MOUTH: 444762
     IRIS: 444763
     EYE (2): 444764
@@ -489,7 +496,7 @@ panels:
     WINDWARD: 444803
     LIGHT: 444804
     REWIND: 444805
-  Champion's Rest:
+  Color Hunt:
     EXIT: 444806
     HUES: 444807
     RED: 444808
@@ -498,6 +505,7 @@ panels:
     GREEN: 444811
     PURPLE: 444812
     ORANGE: 444813
+  Champion's Rest:
     YOU: 444814
     ME: 444815
     SECRET BLUE: 444816
@@ -523,8 +531,8 @@ panels:
     TENT: 444832
     BOWL: 444833
   The Bearer (West):
-    SNOW: 444834
-    SMILE: 444835
+    SMILE: 444834
+    SNOW: 444835
   Bearer Side Area:
     SHORTCUT: 444836
     POTS: 444837
@@ -719,7 +727,7 @@ panels:
     TRUSTWORTHY: 444978
     FREE: 444979
     OUR: 444980
-    ONE ROAD MANY TURNS: 444981
+    ORDER: 444981
   Art Gallery (Second Floor):
     HOUSE: 444982
     PATH: 444983
@@ -777,7 +785,7 @@ panels:
     WILD: 445028
     KID: 445029
     PISTOL: 445030
-    QUARTZ: 445031
+    GEM: 445031
     INNOVATIVE (Top): 445032
     INNOVATIVE (Bottom): 445033
   Room Room:
@@ -791,15 +799,15 @@ panels:
     FLOOR (3): 445041
     FLOOR (4): 445042
     FLOOR (5): 445043
-    FLOOR (7): 445044
-    FLOOR (8): 445045
-    FLOOR (9): 445046
-    FLOOR (10): 445047
+    FLOOR (6): 445044
+    FLOOR (7): 445045
+    FLOOR (8): 445046
     CEILING (1): 445048
     CEILING (2): 445049
     CEILING (3): 445050
     CEILING (4): 445051
     CEILING (5): 445052
+    CEILING (6): 445047
     WALL (1): 445053
     WALL (2): 445054
     WALL (3): 445055
@@ -847,7 +855,7 @@ panels:
     PANDEMIC (1): 445100
     TRINITY: 445101
     CHEMISTRY: 445102
-    FLUMMOXED: 445103
+    FLUSTERED: 445103
     PANDEMIC (2): 445104
     COUNTERCLOCKWISE: 445105
     FEARLESS: 445106
@@ -933,7 +941,7 @@ panels:
     CORNER: 445182
     STRAWBERRIES: 445183
     GRUB: 445184
-    BREAD: 445185
+    CHEESE: 445185
     COLOR: 445186
     WRITER: 445187
     '02759': 445188
@@ -944,12 +952,12 @@ panels:
     DUCK LOGO: 445193
     AVIAN GREEN: 445194
     FEVER TEAR: 445195
-    FACTS: 445196
+    FACTS (Chain): 445196
     FACTS (1): 445197
-    FACTS (3): 445198
-    FACTS (4): 445199
-    FACTS (5): 445200
-    FACTS (6): 445201
+    FACTS (2): 445198
+    FACTS (3): 445199
+    FACTS (4): 445200
+    FACTS (5): 445201
     LAPEL SHEEP: 445202
 doors:
   Starting Room:
@@ -979,9 +987,6 @@ doors:
     Tenacious Entrance:
       item: 444426
       location: 444433
-    Symmetry Door:
-      item: 444428
-      location: 445204
     Shortcut to Hedge Maze:
       item: 444430
       location: 444436
@@ -1038,6 +1043,10 @@ doors:
       location: 445210
     White Palindromes:
       location: 445211
+  Near Far Area:
+    Door:
+      item: 444428
+      location: 445204
   Warts Straw Area:
     Door:
       item: 444451
@@ -1286,12 +1295,12 @@ doors:
       location: 445246
     Yellow Barrier:
       item: 444538
-  Champion's Rest:
+  Color Hunt:
     Shortcut to The Steady:
       item: 444539
       location: 444806
   The Bearer:
-    Shortcut to The Bold:
+    Entrance:
       item: 444540
       location: 444820
     Backside Door:
@@ -1442,7 +1451,6 @@ door_groups:
   Fearless Doors: 444469
   Backside Doors: 444473
   Orange Tower First Floor - Shortcuts: 444484
-  Champion's Rest - Color Barriers: 444489
   Welcome Back Doors: 444492
   Colorful Doors: 444498
   Directional Gallery Doors: 444531
@@ -1452,3 +1460,4 @@ progression:
   Progressive Fearless: 444470
   Progressive Orange Tower: 444482
   Progressive Art Gallery: 444563
+  Progressive Colorful: 444580

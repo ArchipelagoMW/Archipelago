@@ -941,4 +941,5 @@ def run_as_textclient():
 
 
 if __name__ == '__main__':
+    logging.getLogger().setLevel(logging.INFO)  # force log-level to work around log level resetting to WARNING
     run_as_textclient()

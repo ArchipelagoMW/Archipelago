@@ -9,7 +9,7 @@ from Fill import fill_restrictive
 from .Bosses import BossFactory, Boss
 from .Items import ItemFactory
 from .Regions import lookup_boss_drops, key_drop_data
-from .Options import smallkey_shuffle
+from .Options import small_key_shuffle
 
 if typing.TYPE_CHECKING:
     from .SubClasses import ALttPLocation, ALttPItem
@@ -66,7 +66,7 @@ def create_dungeons(world: "ALTTPWorld"):
 
     def make_dungeon(name, default_boss, dungeon_regions, big_key, small_keys, dungeon_items):
         dungeon = Dungeon(name, dungeon_regions, big_key,
-                          [] if multiworld.smallkey_shuffle[player] == smallkey_shuffle.option_universal else small_keys,
+                          [] if multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal else small_keys,
                           dungeon_items, player)
         for item in dungeon.all_items:
             item.dungeon = dungeon

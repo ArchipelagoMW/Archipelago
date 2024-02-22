@@ -75,6 +75,9 @@ joke_hints = [
     "Have you tried Bumper Stickers?\nMaybe after spending so much time on this island, you are longing for a simpler puzzle game.",
     "Have you tried Pokemon Emerald?\nI'm going to say it: 10/10, just the right amount of water.",
     "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
+    "Have you tried Final Fantasy Mystic Quest?\nApparently, it was made in an attempt to simplify Final Fantasy for the western market.\nThey were right, I suck at RPGs.",
+    "Have you tried Shivers?\nWitness 2 should totally feature a haunted Museum.",
+    "Have you tried Heretic?\nWait, there is a Doom Engine game where you can look UP AND DOWN???",
     
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
@@ -148,7 +151,7 @@ joke_hints = [
     "You don't have Boat? Invisible boat time!\nYou do have boat? Boat clipping time!",
     "Cet indice est en français. Nous nous excusons de tout inconvénients engendrés par cela.",
     "How many of you have personally witnessed a total solar eclipse?",
-    "In the Treehouse area, you will find \n[Error: Data not found] progression items.",
+    "In the Treehouse area, you will find 69 progression items.\nNice.\n(Source: Just trust me)",
     "Lingo\nLingoing\nLingone",
     "The name of the captain was Albert Einstein.",
     "Panel impossible Sigma plz fix",
@@ -173,28 +176,38 @@ def get_always_hint_items(world: "WitnessWorld") -> List[str]:
     wincon = world.options.victory_condition
 
     if discards:
-        if difficulty == 1:
+        if difficulty == "sigma_expert":
             always.append("Arrows")
         else:
             always.append("Triangles")
 
-    if wincon == 0:
+    if wincon == "elevator":
         always += ["Mountain Bottom Floor Final Room Entry (Door)", "Mountain Bottom Floor Doors"]
 
-    if wincon == 1:
+    if wincon == "challenge":
         always += ["Challenge Entry (Panel)", "Caves Panels"]
 
     return always
 
 
-def get_always_hint_locations(_: "WitnessWorld") -> List[str]:
-    return [
+def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
+    always = [
         "Challenge Vault Box",
         "Mountain Bottom Floor Discard",
         "Theater Eclipse EP",
         "Shipwreck Couch EP",
         "Mountainside Cloud Cycle EP",
     ]
+
+    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
+    if world.options.EP_difficulty == "eclipse":
+        always.append("Town Obelisk Side 6")  # Eclipse EP
+
+    if world.options.EP_difficulty != "normal":
+        always.append("Treehouse Obelisk Side 4")  # Couch EP
+        always.append("River Obelisk Side 1")  # Cloud Cycle EP. Needs to be changed to "Mountainside Obelisk" soon
+
+    return always
 
 
 def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
@@ -217,9 +230,8 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
             "Eraser",
             "Black/White Squares",
             "Colored Squares",
-            "Colored Dots",
             "Sound Dots",
-            "Symmetry"
+            "Progressive Symmetry"
         ]
 
         priority.update(world.random.sample(symbols, 5))
@@ -249,8 +261,8 @@ def get_priority_hint_items(world: "WitnessWorld") -> List[str]:
     return sorted(priority)
 
 
-def get_priority_hint_locations(_: "WitnessWorld") -> List[str]:
-    return [
+def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
+    priority = [
         "Swamp Purple Underwater",
         "Shipwreck Vault Box",
         "Town RGB Room Left",
@@ -265,6 +277,13 @@ def get_priority_hint_locations(_: "WitnessWorld") -> List[str]:
         "Boat Shipwreck Green EP",
         "Quarry Stoneworks Control Room Left",
     ]
+    
+    # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
+    if world.options.EP_difficulty != "normal":
+        priority.append("Town Obelisk Side 6")  # Theater Flowers EP
+        priority.append("Treehouse Obelisk Side 4")  # Shipwreck Green EP
+
+    return priority
 
 
 def make_hint_from_item(world: "WitnessWorld", item_name: str, own_itempool: List[Item]):

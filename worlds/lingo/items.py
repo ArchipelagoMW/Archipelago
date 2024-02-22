@@ -24,10 +24,6 @@ class ItemData(NamedTuple):
             return world.options.shuffle_colors > 0
         elif self.mode == "doors":
             return world.options.shuffle_doors != ShuffleDoors.option_none
-        elif self.mode == "orange tower":
-            # door shuffle is on and tower isn't progressive
-            return world.options.shuffle_doors != ShuffleDoors.option_none \
-                and not world.options.progressive_orange_tower
         elif self.mode == "complex door":
             return world.options.shuffle_doors == ShuffleDoors.option_complex
         elif self.mode == "door group":
@@ -68,10 +64,7 @@ def load_item_data():
                 door_groups.setdefault(door.group, []).extend(door.door_ids)
 
             if room_name in PROGRESSION_BY_ROOM and door_name in PROGRESSION_BY_ROOM[room_name]:
-                if room_name == "Orange Tower":
-                    door_mode = "orange tower"
-                else:
-                    door_mode = "special"
+                door_mode = "special"
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name),

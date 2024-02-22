@@ -10,7 +10,7 @@ from .locations import location_data
 
 logger = logging.getLogger("Client")
 
-BANK_EXCHANGE_RATE = 100000000
+BANK_EXCHANGE_RATE = 50000000
 
 DATA_LOCATIONS = {
     "ItemIndex": (0x1A6E, 0x02),

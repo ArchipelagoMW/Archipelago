@@ -24,36 +24,38 @@ class TestDeathMountain(TestInvertedOWG):
 
             ["Paradox Cave Lower - Far Left", False, []],
             ["Paradox Cave Lower - Far Left", False, [], ['Moon Pearl']],
-            ["Paradox Cave Lower - Far Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Lower - Far Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Lower - Left", False, []],
             ["Paradox Cave Lower - Left", False, [], ['Moon Pearl']],
-            ["Paradox Cave Lower - Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Lower - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Lower - Middle", False, []],
             ["Paradox Cave Lower - Middle", False, [], ['Moon Pearl']],
-            ["Paradox Cave Lower - Middle", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Lower - Middle", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Lower - Right", False, []],
             ["Paradox Cave Lower - Right", False, [], ['Moon Pearl']],
-            ["Paradox Cave Lower - Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Lower - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Lower - Far Right", False, []],
             ["Paradox Cave Lower - Far Right", False, [], ['Moon Pearl']],
-            ["Paradox Cave Lower - Far Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Lower - Far Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Upper - Left", False, []],
             ["Paradox Cave Upper - Left", False, [], ['Moon Pearl']],
-            ["Paradox Cave Upper - Left", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Upper - Left", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Paradox Cave Upper - Left", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Paradox Cave Upper - Right", False, []],
             ["Paradox Cave Upper - Right", False, [], ['Moon Pearl']],
-            ["Paradox Cave Upper - Right", True, ['Moon Pearl', 'Pegasus Boots']],
+            ["Paradox Cave Upper - Right", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Paradox Cave Upper - Right", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Pegasus Boots']],
 
             ["Mimic Cave", False, []],
             ["Mimic Cave", False, [], ['Moon Pearl']],
             ["Mimic Cave", False, [], ['Hammer']],
-            ["Mimic Cave", True, ['Moon Pearl', 'Hammer', 'Pegasus Boots']],
+            ["Mimic Cave", True, ['Bomb Upgrade (+5)', 'Moon Pearl', 'Hammer', 'Pegasus Boots']],
 
             ["Ether Tablet", False, []],
             ["Ether Tablet", False, ['Progressive Sword'], ['Progressive Sword']],

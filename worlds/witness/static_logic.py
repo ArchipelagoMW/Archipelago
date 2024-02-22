@@ -109,7 +109,6 @@ class StaticWitnessLogicObj:
                 "Laser",
                 "Laser Hedges",
                 "Laser Pressure Plates",
-                "Desert Laser Redirect"
             }
             is_vault_or_video = "Vault" in entity_name or "Video" in entity_name
 
