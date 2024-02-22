@@ -1272,12 +1272,12 @@ class Spoiler:
             for location in sphere:
                 state.collect(location.item, True, location)
 
-            required_locations -= sphere
-
             collection_spheres.append(sphere)
 
             logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
+
+            required_locations -= sphere
             if not sphere:
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
