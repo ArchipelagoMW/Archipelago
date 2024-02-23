@@ -103,7 +103,7 @@ class WitnessWorld(World):
         # "Obelisk Keys only" valid for multiworld.
 
         # A note on Laser Shuffle:
-        # In singleplayer, I don't mind "laser shuffle only" being "Ice Rod Hunt".
+        # In singleplayer, I don't mind "Ice Rod Hunt" type gameplay, so "laser shuffle only" is valid.
         # However, I do not want to allow "Ice Rod Hunt" style gameplay in multiworld, so "laser shuffle only" is
         # not considered interactive enough for multiworld.
 
