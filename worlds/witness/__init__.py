@@ -110,7 +110,7 @@ class WitnessWorld(World):
         interacts_sufficiently_with_multiworld = (
             self.options.shuffle_symbols
             or self.options.shuffle_doors
-            or self.options.obelisk_keys
+            or self.options.obelisk_keys and self.options.shuffle_EPs
         )
 
         has_locally_relevant_progression = (
