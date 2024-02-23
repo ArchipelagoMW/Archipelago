@@ -902,7 +902,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
         # bot: $7A is 1, 7B is 2, etc so 7D=4, 82=9 (zero unknown...)
         return 0x53 + int(num), 0x79 + int(num)
 
-    credits_total = 249
+    credits_total = 216
     if world.retro_caves[player]:  # Old man cave and Take any caves will count towards collection rate.
         credits_total += 5
     if world.shop_item_slots[player]:  # Potion shop only counts towards collection rate if included in the shuffle.
@@ -913,6 +913,7 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
     rom.write_byte(0x187010, credits_total)  # dynamic credits
 
     rom.write_byte(0x140000, 1)  # enable key drop shuffle
+    credits_total += len(key_drop_data)
     # update dungeon counters
     rom.write_byte(0x187001, 12)  # Hyrule Castle
     rom.write_byte(0x187002, 8)  # Eastern Palace
