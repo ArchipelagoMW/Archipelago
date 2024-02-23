@@ -1144,7 +1144,7 @@ item_table = {
         ItemData(510 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 10, SC2Race.TERRAN,
                  classification=ItemClassification.progression, origin={"ext"},
                  description="Mercenary Wraiths"),
-    ItemNames.RAID_LIBERATORS:
+    ItemNames.MIDNIGHT_RIDERS:
         ItemData(511 + SC2WOL_ITEM_ID_OFFSET, "Mercenary", 11, SC2Race.TERRAN,
                  origin={"ext"},
                  description="Mercenary Liberators"),

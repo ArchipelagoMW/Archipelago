@@ -76,7 +76,7 @@ JACKSONS_REVENGE  = "Jackson's Revenge"
 SKIBIS_ANGELS     = "Skibi's Angels"
 DEATH_HEADS       = "Death Heads"
 WINGED_NIGHTMARES = "Winged Nightmares"
-RAID_LIBERATORS   = "Raid Liberators"
+MIDNIGHT_RIDERS   = "Midnight Riders"
 BRYNHILDS         = "Brynhilds"
 JOTUN             = "Jotun"
 
