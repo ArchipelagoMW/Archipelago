@@ -11,7 +11,7 @@ La logique est conservée, de sorte qu'il sera toujours possible de terminer le 
 
 ## Quels sont les objets qui peuvent se trouver dans le monde d'un autre joueur ?
 
-Tous les objets qui peuvent être mélangés peuvent également être placés dans le monde d'un autre joueur. Il est possible de choisir de limiter
+Tous les objets qui peuvent être mélangés peuvent également être placés dans le monde d'un autre joueur. Il est possible de limiter
 certains objets à votre propre monde.
 
 ## À quoi ressemble un objet d'un autre monde dans Link's Awakening ?
