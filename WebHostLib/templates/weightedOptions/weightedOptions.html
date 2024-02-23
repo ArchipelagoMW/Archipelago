@@ -72,7 +72,7 @@
             <div id="games-wrapper">
                 {% for world_name, world in worlds|dictsort %}
                     {% if not world.hidden and world.web.options_page == True %}
-                        <div class="world-container">
+                        <div id="{{ world_name }}-container" class="world-container hidden">
                             <h2 class="world-name">
                                 <label for="{{ world_name }}">
                                     <span class="world-collapse-arrow">▶</span>

@@ -19,6 +19,17 @@ window.addEventListener('load', () => {
     if (evt.target.type === 'range') {
       // Update span containing range value. All ranges have a corresponding `{rangeId}-value` span
       document.getElementById(`${evt.target.id}-value`).innerText = evt.target.value;
+
+      // If the changed option was the name of a game, determine whether to show or hide that game's div
+      if (evt.target.id.startsWith('game||')) {
+        const gameName = evt.target.id.split('||')[1];
+        const gameDiv = document.getElementById(`${gameName}-container`);
+        if (evt.target.value > 0) {
+          gameDiv.classList.remove('hidden');
+        } else {
+          gameDiv.classList.add('hidden');
+        }
+      }
     }
   });
 

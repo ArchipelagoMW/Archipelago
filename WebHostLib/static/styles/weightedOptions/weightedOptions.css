@@ -275,6 +275,10 @@ html {
   display: unset;
 }
 
+.hidden {
+  display: none;
+}
+
 @media all and (max-width: 1000px), all and (orientation: portrait) {
   #weighted-options .game-options {
     justify-content: flex-start;
