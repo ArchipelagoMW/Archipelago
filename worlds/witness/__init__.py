@@ -104,23 +104,33 @@ class WitnessWorld(World):
 
         self.log_ids_to_hints = dict()
 
-        interacts_with_multiworld = (
-                self.options.shuffle_symbols or
-                self.options.shuffle_doors or
-                self.options.shuffle_lasers == "anywhere"
+        # will probably need some progression items to win, except when laser count is very low
+        big_progression = (
+            self.options.shuffle_symbols or
+            self.options.shuffle_doors or
+            self.options.shuffle_lasers == "anywhere"
         )
 
-        has_progression = (
-                interacts_with_multiworld
-                or self.options.shuffle_lasers == "local"
-                or self.options.shuffle_boat
-                or self.options.early_caves == "add_to_pool"
+        # Obelisk Keys are never relevant in singleplayer, because the locations they lock are irrelevant to in-game
+        # progress and irrelevant to all victory conditions. Thus, I consider them "fake progression" for singleplayer.
+        # However, those locations could obviously contain big items needed for other players, so I consider
+        # Obelisk Keys valid for multiworld.
+        interacts_sufficiently_with_multiworld = (
+            big_progression or
+            self.options.obelisk_keys
         )
 
-        if not has_progression and self.multiworld.players == 1:
+        has_locally_relevant_progression = (
+            big_progression
+            or self.options.shuffle_lasers == "local"
+            or self.options.shuffle_boat
+            or self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge"
+        )
+
+        if not has_locally_relevant_progression and self.multiworld.players == 1:
             warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
                     f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
-        elif not interacts_with_multiworld and self.multiworld.players > 1:
+        elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
             raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
                             f" progression items that can be placed in other players' worlds. Please turn on Symbol"
                             f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
