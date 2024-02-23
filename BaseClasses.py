@@ -18,11 +18,14 @@ import NetUtils
 import Options
 import Utils
 
+if typing.TYPE_CHECKING:
+    from worlds import AutoWorld
+
 
 class Group(TypedDict, total=False):
     name: str
     game: str
-    world: auto_world
+    world: "AutoWorld.World"
     players: Set[int]
     item_pool: Set[str]
     replacement_items: Dict[int, Optional[str]]
@@ -55,7 +58,7 @@ class MultiWorld():
     plando_texts: List[Dict[str, str]]
     plando_items: List[List[Dict[str, Any]]]
     plando_connections: List
-    worlds: Dict[int, auto_world]
+    worlds: Dict[int, "AutoWorld.World"]
     groups: Dict[int, Group]
     regions: RegionManager
     itempool: List[Item]
@@ -156,11 +159,11 @@ class MultiWorld():
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -219,6 +222,8 @@ class MultiWorld():
     def add_group(self, name: str, game: str, players: Set[int] = frozenset()) -> Tuple[int, Group]:
         """Create a group with name and return the assigned player ID and group.
         If a group of this name already exists, the set of players is extended instead of creating a new one."""
+        from worlds import AutoWorld
+
         for group_id, group in self.groups.items():
             if group["name"] == name:
                 group["players"] |= players
@@ -253,6 +258,8 @@ class MultiWorld():
 
     def set_options(self, args: Namespace) -> None:
         # TODO - remove this section once all worlds use options dataclasses
+        from worlds import AutoWorld
+
         all_keys: Set[str] = {key for player in self.player_ids for key in
                               AutoWorld.AutoWorldRegister.world_types[self.game[player]].options_dataclass.type_hints}
         for option_key in all_keys:
@@ -270,6 +277,8 @@ class MultiWorld():
                                                                for option_key in options_dataclass.type_hints})
 
     def set_item_links(self):
+        from worlds import AutoWorld
+
         item_links = {}
         replacement_prio = [False, True, None]
         for player in self.player_ids:
@@ -572,9 +581,10 @@ class MultiWorld():
 
         def location_condition(location: Location):
             """Determine if this location has to be accessible, location is already filtered by location_relevant"""
-            if location.player in players["minimal"]:
-                return False
-            return True
+            if location.player in players["locations"] or (location.item and location.item.player not in
+                                                           players["minimal"]):
+                return True
+            return False
 
         def location_relevant(location: Location):
             """Determine if this location is relevant to sweep."""
@@ -1262,12 +1272,12 @@ class Spoiler:
             for location in sphere:
                 state.collect(location.item, True, location)
 
-            required_locations -= sphere
-
             collection_spheres.append(sphere)
 
             logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
+
+            required_locations -= sphere
             if not sphere:
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
@@ -1326,6 +1336,8 @@ class Spoiler:
                             get_path(state, multiworld.get_region('Inverted Big Bomb Shop', player))
 
     def to_file(self, filename: str) -> None:
+        from worlds import AutoWorld
+
         def write_option(option_key: str, option_obj: Options.AssembleOptions) -> None:
             res = getattr(self.multiworld.worlds[player].options, option_key)
             display_name = getattr(option_obj, "display_name", option_key)
@@ -1457,8 +1469,3 @@ def get_seed(seed: Optional[int] = None) -> int:
         random.seed(None)
         return random.randint(0, pow(10, seeddigits) - 1)
     return seed
-
-
-from worlds import AutoWorld
-
-auto_world = AutoWorld.World
