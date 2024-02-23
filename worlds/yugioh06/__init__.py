@@ -112,13 +112,14 @@ class Yugioh06World(World):
         start_inventory = self.options.start_inventory.value.copy()
         item_pool = []
         items = item_to_index.copy()
-        if not self.options.add_empty_banList.value:
+        starting_list = Banlist_Items.get(self.options.banlist.value)
+        if not self.options.add_empty_banList.value and starting_list != "No Banlist":
             items.pop("No Banlist")
         for rc in self.removed_challenges:
             items.pop(rc + " Unlock")
         items.pop(self.starting_opponent)
         items.pop(self.starting_booster)
-        items.pop(Banlist_Items.get(self.options.banlist.value))
+        items.pop(starting_list)
         for name in items:
             if name in excluded_items or name in start_inventory:
                 continue
