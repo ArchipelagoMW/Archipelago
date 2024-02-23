@@ -120,7 +120,7 @@ class WitnessWorld(World):
         # Obelisk Keys are never relevant in singleplayer, because the locations they lock are irrelevant to in-game
         # progress and irrelevant to all victory conditions. Thus, I consider them "fake progression" for singleplayer.
         # However, those locations could obviously contain big items needed for other players, so I consider
-        # Obelisk Keys valid for multiworld.
+        # "Obelisk Keys only" valid for multiworld.
 
         has_locally_relevant_progression = (
             big_progression
