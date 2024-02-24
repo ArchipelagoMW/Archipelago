@@ -504,10 +504,6 @@
     "label": "SS Tidal - Hidden Item in Lower Deck Trash Can",
     "tags": ["HiddenItem"]
   },
-  "HIDDEN_ITEM_TRICK_HOUSE_NUGGET": {
-    "label": "Trick House - Hidden Item",
-    "tags": ["HiddenItem"]
-  },
   "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD": {
     "label": "Route 124 UW - Hidden Item in Big Area",
     "tags": ["HiddenItem"]
@@ -1463,31 +1459,31 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1": {
-    "label": "Route 110 - Trick House Reward 1",
+    "label": "Trick House Puzzle 1 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2": {
-    "label": "Route 110 - Trick House Reward 2",
+    "label": "Trick House Puzzle 2 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3": {
-    "label": "Route 110 - Trick House Reward 3",
+    "label": "Trick House Puzzle 3 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4": {
-    "label": "Route 110 - Trick House Reward 4",
+    "label": "Trick House Puzzle 4 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5": {
-    "label": "Route 110 - Trick House Reward 5",
+    "label": "Trick House Puzzle 5 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6": {
-    "label": "Route 110 - Trick House Reward 6",
+    "label": "Trick House Puzzle 6 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7": {
-    "label": "Route 110 - Trick House Reward 7",
+    "label": "Trick House Puzzle 7 - Reward",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_FIRST_POKEBALLS": {
