@@ -1095,12 +1095,22 @@ class PokemonEmeraldWorld(World):
                         if move.move_id != 0 and move.level <= pokemon.level
                     })
 
+                    if len(level_up_movepool) < 4:
+                        level_up_moves = [level_up_movepool[i] if i < len(level_up_movepool) else 0 for i in range(4)]
+                    else:
+                        level_up_moves = self.random.sample(level_up_movepool, 4)
+
+                    if len(tm_hm_movepool) < 4:
+                        hm_moves = list(reversed(tm_hm_movepool[i] if i < len(tm_hm_movepool) else 0 for i in range(4)))
+                    else:
+                        hm_moves = self.random.sample(tm_hm_movepool, 4)
+
                     # 25% chance to pick a move from TMs or HMs
                     new_moves = (
-                        self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
-                        self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
-                        self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool),
-                        self.random.choice(tm_hm_movepool if self.random.random() < 0.25 and len(tm_hm_movepool) > 0 else level_up_movepool)
+                        hm_moves[0] if self.random.random() < 0.25 else level_up_moves[0],
+                        hm_moves[1] if self.random.random() < 0.25 else level_up_moves[1],
+                        hm_moves[2] if self.random.random() < 0.25 else level_up_moves[2],
+                        hm_moves[3] if self.random.random() < 0.25 else level_up_moves[3]
                     )
 
                     new_party.append(TrainerPokemonData(new_species.species_id, pokemon.level, new_moves))
