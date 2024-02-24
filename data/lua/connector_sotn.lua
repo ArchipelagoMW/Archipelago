@@ -694,6 +694,7 @@ function checkNO4()
 	checks["NO4 - Life Vessel(Behind waterfall)"] = bit.check(flag, 6)
 	checks["NO4 - Herald Shield"] = bit.check(flag, 7)
 	checks["NO4 - Zircon"] = bit.check(flag, 9)
+	checks["NO4 - Gold Ring"] = bit.check(flag, 10)
 	checks["NO4 - Bandanna"] = bit.check(flag, 11)
 	checks["NO4 - Shiitake(12)"] = bit.check(flag, 12)
 	checks["NO4 - Claymore"] = bit.check(flag, 13)
@@ -720,9 +721,9 @@ function checkNO4()
 	checks["NO4 - Shiitake(Near entrance passage)"] = bit.check(flag2, 3)
 	checks["NO4 - Nunchaku"] = bit.check(flag2, 4)
 	if mainmemory.read_u16_le(0x03ca4c) ~= 0 then -- Succubus kill, TODO: Look for gold ring looted flag
-		checks["NO4 - Gold Ring"] = true
+		checks["NO4 - Succubus kill"] = true
 	else
-		checks["NO4 - Gold Ring"] = false
+		checks["NO4 - Succubus kill"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca3c) ~= 0 then
 		checks["NO4 - Scylla kill"] = true
@@ -1389,6 +1390,12 @@ function checkBosses()
 		bosses_dead = bosses_dead + 1
 	else
 		bosses["Scylla"] = false
+	end
+	if mainmemory.read_u16_le(0x03ca4c) ~= 0 then
+		bosses["Succubus"] = true
+		bosses_dead = bosses_dead + 1
+	else
+		bosses["Succubus"] = false
 	end
 	if mainmemory.read_u16_le(0x03ca2c) ~= 0 then
 		bosses["Olrox"] = true
