@@ -26,7 +26,7 @@ Progression_Table = {
     ItemName.ProofofPeace:        ItemData(1, 595, 0x36B4),
     ItemName.PromiseCharm:        ItemData(1, 524, 0x3694),
     ItemName.NamineSketches:      ItemData(1, 368, 0x3642),
-    "Namine Sketches":            ItemData(0, 368, 0x3642), # remove after 4.6
+    "Namine Sketches":            ItemData(0, 368, 0x3642),  # remove after 4.6
     ItemName.CastleKey:           ItemData(2, 460, 0x365D),  # dummy 13
     ItemName.BattlefieldsofWar:   ItemData(2, 54, 0x35AE),
     ItemName.SwordoftheAncestor:  ItemData(2, 55, 0x35AF),
@@ -622,7 +622,7 @@ exclusion_item_table = {
 }
 
 default_itempool_option = {
-    item_name: ItemData.quantity for dic in [Magic_Table, Progression_Table, Summon_Table, Movement_Table, Forms_Table] for item_name, ItemData in dic.items() if ItemData.quantity>0
+    item_name: ItemData.quantity for dic in [Magic_Table, Progression_Table, Summon_Table, Movement_Table, Forms_Table] for item_name, ItemData in dic.items() if ItemData.quantity > 0
 }
 item_dictionary_table = {
     **Reports_Table,

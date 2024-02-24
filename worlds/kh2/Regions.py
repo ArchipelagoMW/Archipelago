@@ -6,7 +6,6 @@ from . import Locations, RegionLocations
 from .Subclasses import KH2Location
 from .Names import LocationName, RegionName
 
-
 level_region_list = [
     RegionName.LevelsVS1,
     RegionName.LevelsVS3,
@@ -59,7 +58,7 @@ puzzle_region_list = [
     RegionName.PuzzleRegion,
 ]
 
-KH2REGIONS: typing.Dict[str, typing.List[str]] = {
+KH2REGIONS: typing.Dict[str, list] = {
     "Menu":                        [],
     RegionName.GoA:                RegionLocations.GoALocations,
     RegionName.LoD:                RegionLocations.LoD1Locations,
@@ -262,237 +261,52 @@ def create_regions(self):
                                                  LocationName.Lvl98, LocationName.Lvl99]
     KH2REGIONS[RegionName.Summon] = []
     if multiworld.SummonLevelLocationToggle[player]:
-        KH2REGIONS[RegionName.Summon] = [LocationName.Summonlvl2,
-                                         LocationName.Summonlvl3,
-                                         LocationName.Summonlvl4,
-                                         LocationName.Summonlvl5,
-                                         LocationName.Summonlvl6,
-                                         LocationName.Summonlvl7]
-    if self.options.PuzzlePiecesLocationToggle:
-        KH2REGIONS[RegionName.Tt1PuzzlePieces] = [
-            LocationName.AwakeningPuzzleTT1Tower
-        ]
-        KH2REGIONS[RegionName.Tt2PuzzlePieces] = [
-            LocationName.FrontierPuzzleTT2TramCommon,
-            LocationName.DaylightPuzzleTT2TramCommon,
-            LocationName.DaylightPuzzleTT2MarketStreet,
-            LocationName.FrontierPuzzleTT2StationPlaza,
-        ]
-        KH2REGIONS[RegionName.Tt3PuzzlePieces] = [
-            LocationName.SunsetPuzzleTT3UndergroundConcourse1,
-            LocationName.SunsetPuzzleTT3UndergroundConcourse2,
-            LocationName.SunsetPuzzleTT3Tunnelway,
-            LocationName.SunsetPuzzleTT3TSunsetTerrace1,
-            LocationName.SunsetPuzzleTT3TSunsetTerrace2,
-            LocationName.SunsetPuzzleTT3TSunsetHill1,
-            LocationName.SunsetPuzzleTT3TSunsetHill2,
-            LocationName.SunsetPuzzleTT3OldMansion,
-            LocationName.DaylightPuzzleTT3MansionFoyer1,
-            LocationName.DaylightPuzzleTT3MansionFoyer2,
-            LocationName.SunsetPuzzleTT3TheWhiteRoom,
-            LocationName.DaylightPuzzleTT3PodRoom,
-            LocationName.DaylightPuzzleTT3SttComputerRoom,
-            LocationName.SunsetPuzzlePostTT3Tower,
-            LocationName.SunsetPuzzlePostTT3TowerWardrobe,
-        ]
-        KH2REGIONS[RegionName.Hb1PuzzlePieces] = [
-            LocationName.AwakeningPuzzleHB1MarketplaceArmor,
-            LocationName.HeartPuzzleHB1MarketplaceItem,
-            LocationName.AwakeningPuzzleHB1Borough,
-            LocationName.SunsetPuzzleHB1Borough,
-            LocationName.AwakeningPuzzleHB1MerlinHouse,
-            LocationName.DualityPuzzleHB1Bailey,
-        ]
-        KH2REGIONS[RegionName.Hb2PuzzlePieces] = [
-            LocationName.DaylightPuzzleHB2PosternAerith,
-            LocationName.FrontierPuzzleHB2PosternDoorway,
-            LocationName.SunsetPuzzleHB2Corridors,
-            LocationName.SunsetPuzzleHB2BaileyDancers,
-            LocationName.SunsetPuzzleCoRDepths1,
-            LocationName.SunsetPuzzleCoRDepths2,
-        ]
-        KH2REGIONS[RegionName.PostThousandHeartless] = [
-            LocationName.SunsetPuzzlePostHB2Ansems,
-            LocationName.DaylightPuzzlePostHB2Heartless,
-        ]
-        KH2REGIONS[RegionName.CoRFirstFightPuzzlePieces] = [
-            LocationName.SunsetPuzzleCoRMineshaftLower,
-            LocationName.SunsetPuzzleCoRMiningArea1,
-            LocationName.SunsetPuzzleCoRMiningArea2,
-            LocationName.SunsetPuzzleCoRMiningArea3,
-            LocationName.SunsetPuzzleCoRMiningArea4,
-            LocationName.SunsetPuzzleCoRMineshaftMiddle,
-        ]
-        KH2REGIONS[RegionName.CorSecondFightPuzzlePieces] = [
-            LocationName.SunsetPuzzleCoRMineshaftUpper1,
-            LocationName.SunsetPuzzleCoRMineshaftUpper2,
-            LocationName.SunsetPuzzleCoRMineshaftUpper3,
-        ]
-        KH2REGIONS[RegionName.LoD1PuzzlePieces] = [
-            LocationName.HeartPuzzleEncampmentNearStand,
-            LocationName.SunsetPuzzleEncampmentAwayFromStand,
-            LocationName.FrontierPuzzleMountainTrail,
-            LocationName.AwakeningPuzzleVillageHayPile,
-            LocationName.HeartPuzzleVillageHome,
-            LocationName.AwakeningPuzzleRidgeOne,
-            LocationName.AwakeningPuzzleRidgeTwo,
-        ]
-        KH2REGIONS[RegionName.LoD2PuzzlePieces] = [
-            LocationName.DaylightPuzzleThroneRoomClose,
-            LocationName.DaylightPuzzleRoomFar,
-        ]
-        KH2REGIONS[RegionName.PostStormRiderPuzzlePieces] = [
-            LocationName.DaylightPuzzleVillageBell,
-        ]
-        KH2REGIONS[RegionName.Bc1PuzzlePieces] = [
-            LocationName.SunsetPuzzleEntranceHall,
-            LocationName.DaylightPuzzleWestHall,
-            LocationName.AwakeningPuzzleUnderCroftOne,
-            LocationName.AwakeningPuzzleUnderCroftTwo,
-            LocationName.AwakeningPuzzleSecretPassageOne,
-            LocationName.AwakeningPuzzleSecretPassageTwo,
-            LocationName.HeartPuzzleWestWing,
-            LocationName.AwakeningPuzzleBeastRoom,
+        KH2REGIONS[RegionName.Summon] = RegionLocations.SummonRegionLocations
 
-        ]
-        KH2REGIONS[RegionName.Bc2PuzzlePieces] = [
-            LocationName.SunsetPuzzlePostXaldin,
-        ]
-        KH2REGIONS[RegionName.Oc1PuzzlePieces] = [
-            LocationName.HeartPuzzleCaveDeadEntrance,
-            LocationName.DaylightPuzzleCaveDeadPassage,
-            LocationName.HeartPuzzleUnderworldEntrance,
-            LocationName.DaylightPuzzleUnderworldEntrance,
-            LocationName.DaylightPuzzleLostRoadOne,
-            LocationName.DaylightPuzzleLostRoadTwo,
-            LocationName.DualityPuzzleLostRoadThree,
-            LocationName.HeartPuzzleAtrium,
-            LocationName.DualityPuzzleTheLock,
-        ]
-        KH2REGIONS[RegionName.DcPuzzlePieces] = [
-            LocationName.DualityPuzzleGummiHangar,
-            LocationName.HeartPuzzleCourtyardOne,
-            LocationName.HeartPuzzleCourtyardTwo,
-            LocationName.DualityPuzzleCourtyard,
-            LocationName.DaylightPuzzleCollannade,
-        ]
-        KH2REGIONS[RegionName.TrPuzzlePieces] = [
-            LocationName.DualityPuzzlePierTree,
-            LocationName.FrontierPuzzlePierBoat,
-            LocationName.HeartPuzzleWaterway,
-        ]
-        KH2REGIONS[RegionName.Pr1PuzzlePieces] = [
-            LocationName.HeartPuzzleRampart,
-            LocationName.SunsetPuzzleHarbor,
-            LocationName.DualityPuzzleTown,
-            LocationName.FrontierPuzzleTown,
-            LocationName.HeartPuzzlePowderStore,
-            LocationName.DualityPuzzlePowderStore,
-            LocationName.DaylightPuzzleBlackPearlBack,
-            LocationName.DaylightPuzzleBlackPearlFlags,
-            LocationName.DaylightPuzzleBlackPearlInside,
-        ]
-        KH2REGIONS[RegionName.Pr2PuzzlePieces] = [
-            LocationName.SunsetPuzzleInterceptor,
-            LocationName.SunsetPuzzleSeaDriftRowOne,
-            LocationName.SunsetPuzzleSeaDriftKeepWindow,
-            LocationName.DaylightPuzzleSeaDriftKeepAnchor,
-        ]
-        KH2REGIONS[RegionName.Ag1PuzzlePieces] = [
-            LocationName.FrontierPuzzleAgrabah,
-            LocationName.DualityPuzzleAgrabah,
-            LocationName.FrontierPuzzleBazaar,
-            LocationName.SunsetPuzzleBazaar,
-            LocationName.DaylightPuzzleCaveOfWonders,
-            LocationName.FrontierPuzzleValleyOfStone,
-            LocationName.DaylightPuzzleTreasureRooms,
-            LocationName.SunsetPuzzleTreasureRooms,
-            LocationName.DaylightPuzzleChasmOfChallengesOne,
-            LocationName.DaylightPuzzleChasmOfChallengesTwo,
-            LocationName.DaylightPuzzleChasmOfChallengesThree,
-        ]
-        KH2REGIONS[RegionName.Ag2PuzzlePieces] = [
-            LocationName.SunsetPuzzleSandSwept,
-            LocationName.DaylightPuzzleSandSweptOne,
-            LocationName.DaylightPuzzleSandSweptTwo,
-        ]
-        KH2REGIONS[RegionName.Ht1PuzzlePieces] = [
-            LocationName.DualityPuzzleHalloweenTownSquare,
-            LocationName.DualityPuzzleHinterlands,
-            LocationName.DaylightPuzzleYuletide,
-            LocationName.DaylightPuzzleSantaHouse,
-            LocationName.FrontierPuzzleSantaHouse,
-        ]
-        KH2REGIONS[RegionName.PrisonKeeperPuzzlePieces] = [
-            LocationName.SunsetPuzzleCurlyHill
-        ]
-        KH2REGIONS[RegionName.OogieBoogiePuzzlePieces] = [
-            LocationName.DaylightPuzzleToyFactory,
-            LocationName.SunsetPuzzleToyFactory,
-        ]
-        KH2REGIONS[RegionName.Pl1PuzzlePieces] = [
-            LocationName.DaylightPuzzleElephantOne,
-            LocationName.DaylightPuzzleElephantTwo,
-            LocationName.SunsetPuzzlePrideRock,
-            LocationName.DaylightPuzzleWildebeestOne,
-            LocationName.DaylightPuzzleWildebeestTwo,
-            LocationName.DaylightPuzzleWastelandsOne,
-            LocationName.DaylightPuzzleWastelandsTwo,
-            LocationName.DaylightPuzzleJungle,
-            LocationName.DaylightPuzzleOasis,
-            LocationName.DaylightPuzzleKingsDen,
-        ]
-        KH2REGIONS[RegionName.Sp1PuzzlePieces] = [
-            LocationName.DaylightPuzzleCanyon,
-            LocationName.SunsetPuzzleCanyon,
-        ]
-        KH2REGIONS[RegionName.Sp2PuzzlePieces] = [
-            LocationName.SunsetPuzzleSolarSailor,
-            LocationName.SunsetPuzzleMCP,
-        ]
-        KH2REGIONS[RegionName.TwtnwPuzzlePostRoxas] = [
-            LocationName.SunsetPuzzleMemorysSkyscraper,
-            LocationName.SunsetPuzzleCrooked,
-            LocationName.SunsetPuzzleTwilightView,
-        ]
-        KH2REGIONS[RegionName.TwtnwPuzzlePostXigbar] = [
-            LocationName.DaylightPuzzleNaughts,
-            LocationName.SunsetPuzzleProofExistence,
-        ]
-        KH2REGIONS[RegionName.Twtnw3PuzzlePieces] = [
-            LocationName.SunsetPuzzleRuinPassageOne,
-            LocationName.SunsetPuzzleRuinPassageTwo,
-        ]
-        KH2REGIONS[RegionName.PoohsPuzzlePieces] = [
-            LocationName.DaylightPuzzlePooh
-        ]
-        KH2REGIONS[RegionName.PigletsPuzzlePieces] = [
-            LocationName.DaylightPuzzlePiglet
-        ]
-        KH2REGIONS[RegionName.RabbitsPuzzlePieces] = [
-            LocationName.DaylightPuzzleRabbit
-        ]
-        KH2REGIONS[RegionName.KangasPuzzlePieces] = [
-            LocationName.DaylightPuzzleKanga
-        ]
-        KH2REGIONS[RegionName.SpookyCavePuzzlePieces] = [
-            LocationName.DaylightPuzzleSpookyCave
-        ]
-        KH2REGIONS[RegionName.StarryHillPuzzlePieces] = [
-            LocationName.DaylightPuzzleStarryHill
-        ]
+    if self.options.PuzzlePiecesLocationToggle:
+        KH2REGIONS[RegionName.Tt1PuzzlePieces] = RegionLocations.Tt1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Tt2PuzzlePieces] = RegionLocations.Tt2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Tt3PuzzlePieces] = RegionLocations.Tt3PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Hb1PuzzlePieces] = RegionLocations.Hb1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Hb2PuzzlePieces] = RegionLocations.Hb2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.PostThousandHeartless] = RegionLocations.PostThousandHeartlessPuzzlePiecesLocations
+        KH2REGIONS[RegionName.CoRFirstFightPuzzlePieces] = RegionLocations.CoRFirstFightPuzzlePiecesLocations
+        KH2REGIONS[RegionName.CorSecondFightPuzzlePieces] = RegionLocations.CorSecondFightPuzzlePiecesLocations
+        KH2REGIONS[RegionName.LoD1PuzzlePieces] = RegionLocations.LoD1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.LoD2PuzzlePieces] = RegionLocations.LoD2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.PostStormRiderPuzzlePieces] = RegionLocations.PostStormRiderPuzzlePiecesLocations
+        KH2REGIONS[RegionName.Bc1PuzzlePieces] = RegionLocations.Bc1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Bc2PuzzlePieces] = RegionLocations.Bc2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Oc1PuzzlePieces] = RegionLocations.Oc1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.DcPuzzlePieces] = RegionLocations.DcPuzzlePiecesLocations
+        KH2REGIONS[RegionName.TrPuzzlePieces] = RegionLocations.TrPuzzlePiecesLocations
+        KH2REGIONS[RegionName.Pr1PuzzlePieces] = RegionLocations.Pr1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Pr2PuzzlePieces] = RegionLocations.Pr2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Ag1PuzzlePieces] = RegionLocations.Ag1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Ag2PuzzlePieces] = RegionLocations.Ag2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Ht1PuzzlePieces] = RegionLocations.Ht1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.PrisonKeeperPuzzlePieces] = RegionLocations.PrisonKeeperPuzzlePiecesLocations
+        KH2REGIONS[RegionName.OogieBoogiePuzzlePieces] = RegionLocations.OogieBoogiePuzzlePiecesLocations
+        KH2REGIONS[RegionName.Pl1PuzzlePieces] = RegionLocations.Pl1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Sp1PuzzlePieces] = RegionLocations.Sp1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.Sp2PuzzlePieces] = RegionLocations.Sp2PuzzlePiecesLocations
+        KH2REGIONS[RegionName.TwtnwPuzzlePostRoxas] = RegionLocations.TwtnwPuzzlePostRoxasLocations
+        KH2REGIONS[RegionName.TwtnwPuzzlePostXigbar] = RegionLocations.TwtnwPuzzlePostXigbarLocations
+        KH2REGIONS[RegionName.Twtnw3PuzzlePieces] = RegionLocations.Twtnw3PuzzlePiecesLocations
+        KH2REGIONS[RegionName.PoohsPuzzlePieces] = RegionLocations.PoohsPuzzlePiecesLocations
+        KH2REGIONS[RegionName.PigletsPuzzlePieces] = RegionLocations.PigletsPuzzlePiecesLocations
+        KH2REGIONS[RegionName.RabbitsPuzzlePieces] = RegionLocations.RabbitsPuzzlePiecesLocations
+        KH2REGIONS[RegionName.KangasPuzzlePieces] = RegionLocations.KangasPuzzlePiecesLocations
+        KH2REGIONS[RegionName.SpookyCavePuzzlePieces] = RegionLocations.SpookyCavePuzzlePiecesLocations
+        KH2REGIONS[RegionName.StarryHillPuzzlePieces] = RegionLocations.StarryHillPuzzlePiecesLocations
         if self.options.AtlanticaToggle:
-            KH2REGIONS[RegionName.At1PuzzlePieces] = [
-                LocationName.DualityPuzzleUndersea,
-                LocationName.FrontierPuzzleTritonOne,
-                LocationName.FrontierPuzzleTritonTwo,
-            ]
+            KH2REGIONS[RegionName.At1PuzzlePieces] = At1PuzzlePiecesLocations
     # for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
     #    for location in region_name:
     #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
-                           KH2REGIONS.items()]
+                          KH2REGIONS.items()]
     # fill the event locations with events
 
     for location, item in Locations.event_location_to_item.items():

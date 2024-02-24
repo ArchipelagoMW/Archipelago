@@ -1521,15 +1521,15 @@ exclusion_table = {
     }
 }
 
-location_groups: typing.Dict[str, list]
-location_group_temp={"yas":"todo"}
+#location_groups: typing.Dict[str, list]
+#
 #location_group_temp = {
 #    Region_Name: [loc for loc in Region_Locs if "Event" not in loc]
 #    for Region_Name, Region_Locs in KH2REGIONS.items() if Region_Locs and Region_Name not in ['Armored Xemnas', 'Armored Xemnas 2', 'Final Xemnas']
 #}
 #location_list = []
 #world_groups: typing.Dict[str, list]
-
+#
 #for location_group in [RegionName.Sp, RegionName.Mcp]:
 #    for location in location_group_temp[location_group]:
 #        location_list.append(location)
@@ -1539,4 +1539,4 @@ location_group_temp={"yas":"todo"}
 #}
 #print(world_group)
 #location_group_temp.update(world_group)
-location_groups = location_group_temp
+#location_groups = location_group_temp
