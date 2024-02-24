@@ -16,7 +16,7 @@ fairies = "Fairy"
 coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
-ice_rod = "Pages 52-53 (Ice Rod)"
+icebolt = "Pages 52-53 (Icebolt)"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -884,7 +884,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
             state.has_all({grapple, ice_dagger, fire_wand}, player) and
-            has_ability(state, player, ice_rod, options, ability_unlocks)))
+            has_ability(state, player, icebolt, options, ability_unlocks)))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),

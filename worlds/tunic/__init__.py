@@ -73,9 +73,6 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
 
-        if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
-            self.options.start_inventory.value["Sword"] = 1
-
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
@@ -93,6 +90,9 @@ class TunicWorld(World):
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        if self.options.start_with_sword:
+            self.multiworld.push_precollected(self.create_item("Sword"))
 
         if sword_progression:
             items_to_create["Stick"] = 0
@@ -171,7 +171,7 @@ class TunicWorld(World):
                 passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
                 self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
-                self.ability_unlocks["Pages 52-53 (Ice Rod)"] = passthrough["Hexagon Quest Ice Rod"]
+                self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
             
         if self.options.entrance_rando:
             portal_pairs, portal_hints = create_er_regions(self)
@@ -229,7 +229,7 @@ class TunicWorld(World):
             "entrance_rando": self.options.entrance_rando.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
-            "Hexagon Quest Ice Rod": self.ability_unlocks["Pages 52-53 (Ice Rod)"],
+            "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs
         }
