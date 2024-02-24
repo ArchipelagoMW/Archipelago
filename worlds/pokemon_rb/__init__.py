@@ -554,16 +554,6 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-        # if self.multiworld.door_shuffle[self.player] == "decoupled":
-        #     swept_state = self.multiworld.state.copy()
-        #     swept_state.sweep_for_events(locations=self.multiworld.get_locations(self.player))
-        #     locations = [
-        #                     location for location in self.multiworld.get_unfilled_locations(self.player)
-        #                     if not location.can_reach(swept_state)
-        #                 ]
-        #     self.multiworld.random.shuffle(locations)
-        #     for location in locations[:25]:
-        #         location.progress_type = LocationProgressType.PRIORITY
 
     def create_regions(self):
         if (self.multiworld.old_man[self.player] == "vanilla" or
