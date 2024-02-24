@@ -37,9 +37,6 @@ components.append(Component('SOTN Client', 'SotnClient', func=run_client,
 # Alucart Mail not sorting when received
 
 class SotnSettings(settings.Group):
-    class DisplayMsgs(settings.Bool):
-        """Set this to true to display item received messages in EmuHawk"""
-
     class RomFile(settings.UserFilePath):
         """File name of the SOTN US rom"""
         description = "Symphony of the Night (SLU067) ROM File"
@@ -48,7 +45,12 @@ class SotnSettings(settings.Group):
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
-    display_msgs: typing.Union[DisplayMsgs, bool] = True
+    class AudioFile(settings.UserFilePath):
+        """File name of the SOTN Track 2"""
+        description = "Symphony of the Night (SLU067) Audio File"
+        copy_to = "Castlevania - Symphony of the Night (USA) (Track 2).bin"
+
+    audio_file: AudioFile = AudioFile(AudioFile.copy_to)
 
 
 class SotnWeb(WebWorld):
@@ -112,6 +114,8 @@ class SotnWorld(World):
         self.multiworld.get_location("NO2 - Olrox kill", self.player).place_locked_item(
             self.create_item("Boss token"))
         self.multiworld.get_location("NO4 - Scylla kill", self.player).place_locked_item(
+            self.create_item("Boss token"))
+        self.multiworld.get_location("NO4 - Succubus kill", self.player).place_locked_item(
             self.create_item("Boss token"))
         self.multiworld.get_location("CHI - Cerberos kill", self.player).place_locked_item(
             self.create_item("Boss token"))
@@ -254,13 +258,8 @@ class SotnWorld(World):
         set_rules(self.multiworld, self.player)
 
     def generate_output(self, output_directory: str) -> None:
-        rom_path = patch_rom(self)
+        patch_rom(self, output_directory)
 
-        """print(f"patching: {rom_path}")
-        patch = SOTNDeltaPatch(rom_path[0:-4] + SOTNDeltaPatch.patch_file_ending, player=player,
-                               player_name=multiworld.player_name[player], patched_path=rom_path)
-
-        patch.write()"""
 
 
 
