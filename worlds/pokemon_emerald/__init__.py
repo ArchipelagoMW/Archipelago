@@ -7,7 +7,7 @@ import logging
 import os
 from typing import Any, Set, List, Dict, Optional, Tuple, ClassVar
 
-from BaseClasses import ItemClassification, MultiWorld, Tutorial
+from BaseClasses import ItemClassification, MultiWorld, Tutorial, LocationProgressType
 from Fill import FillError, fill_restrictive
 from Options import Toggle
 import settings
@@ -20,7 +20,7 @@ from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_m
                     offset_item_value)
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
                         create_locations_with_tags)
-from .options import (ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
+from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
                       RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
                       HmCompatibility, RandomizeStaticEncounters, NormanRequirement, PokemonEmeraldOptions)
 from .pokemon import get_random_species, get_random_move, get_random_damaging_move, get_random_type
@@ -146,6 +146,60 @@ class PokemonEmeraldWorld(World):
 
         self.multiworld.regions.extend(regions.values())
 
+        # Exclude locations which are always locked behind the player's goal
+        def exclude_locations(location_names: List[str]):
+            for location_name in location_names:
+                try:
+                    self.multiworld.get_location(location_name,
+                                                 self.player).progress_type = LocationProgressType.EXCLUDED
+                except KeyError:
+                    continue  # Location not in multiworld
+
+        if self.options.goal == Goal.option_champion:
+            # Always required to beat champion before receiving this
+            exclude_locations([
+                "Littleroot Town - S.S. Ticket from Norman"
+            ])
+
+            # S.S. Ticket requires beating champion, so ferry is not accessible until after goal
+            if not self.options.enable_ferry:
+                exclude_locations([
+                    "SS Tidal - Hidden Item in Lower Deck Trash Can",
+                    "SS Tidal - TM49 from Thief"
+                ])
+
+            # Construction workers don't move until champion is defeated
+            if "Safari Zone Construction Workers" not in self.options.remove_roadblocks.value:
+                exclude_locations([
+                    "Safari Zone NE - Hidden Item North",
+                    "Safari Zone NE - Hidden Item East",
+                    "Safari Zone NE - Item on Ledge",
+                    "Safari Zone SE - Hidden Item in South Grass 1",
+                    "Safari Zone SE - Hidden Item in South Grass 2",
+                    "Safari Zone SE - Item in Grass"
+                ])
+        elif self.options.goal == Goal.option_norman:
+            # If the player sets their options such that Surf or the Balance
+            # Badge is vanilla, a very large number of locations become
+            # "post-Norman". Similarly, access to the E4 may require you to
+            # defeat Norman as an event or to get his badge, making postgame
+            # locations inaccessible. Detecting these situations isn't trivial
+            # and excluding all locations requiring Surf would be a bad idea.
+            # So for now we just won't touch it and blame the user for
+            # constructing their options in this way. Players usually expect
+            # to only partially complete their world when playing this goal
+            # anyway.
+
+            # Locations which are directly unlocked by defeating Norman.
+            exclude_locations([
+                "Petalburg Gym - Balance Badge",
+                "Petalburg Gym - TM42 from Norman",
+                "Petalburg City - HM03 from Wally's Uncle",
+                "Dewford Town - TM36 from Sludge Bomb Man",
+                "Mauville City - Basement Key from Wattson",
+                "Mauville City - TM24 from Wattson"
+            ])
+
     def create_items(self) -> None:
         item_locations: List[PokemonEmeraldLocation] = [
             location
@@ -225,6 +279,7 @@ class PokemonEmeraldWorld(World):
             def refresh_tm_choices() -> None:
                 fill_item_candidates_by_category["TM"] = all_tm_choices.copy()
                 self.random.shuffle(fill_item_candidates_by_category["TM"])
+            refresh_tm_choices()
 
             # Create items
             for item in default_itempool:
@@ -275,6 +330,7 @@ class PokemonEmeraldWorld(World):
             for location in locations:
                 if location.tags is not None and tag in location.tags:
                     location.place_locked_item(self.create_event(self.item_id_to_name[location.default_item_code]))
+                    location.progress_type = LocationProgressType.DEFAULT
                     location.address = None
 
         if self.options.badges == RandomizeBadges.option_vanilla:
@@ -310,6 +366,12 @@ class PokemonEmeraldWorld(World):
                 "Feather Badge": 5
             }
             badge_items.sort(key=lambda item: badge_priority.get(item.name, 0))
+
+            # Un-exclude badge locations, since we need to put progression items on them
+            for location in badge_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
 
             collection_state = self.multiworld.get_all_state(False)
             if self.hm_shuffle_info is not None:
@@ -354,6 +416,12 @@ class PokemonEmeraldWorld(World):
                 "HM02 Fly": 5
             }
             hm_items.sort(key=lambda item: hm_priority.get(item.name, 0))
+
+            # Un-exclude HM locations, since we need to put progression items on them
+            for location in hm_locations:
+                location.progress_type = LocationProgressType.DEFAULT \
+                    if location.progress_type == LocationProgressType.EXCLUDED \
+                    else location.progress_type
 
             collection_state = self.multiworld.get_all_state(False)
 

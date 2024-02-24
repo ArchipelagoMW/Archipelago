@@ -30,7 +30,8 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Map Chest", False, [], ['Flippers']],
             ["Swamp Palace - Map Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - Map Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Map Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers']],
+            ["Swamp Palace - Map Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Swamp Palace - Map Chest", True, ['Bomb Upgrade (+5)', 'Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers']],
 
             ["Swamp Palace - West Chest", False, []],
             ["Swamp Palace - West Chest", False, [], ['Flippers']],
