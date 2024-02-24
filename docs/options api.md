@@ -24,8 +24,11 @@ display as `Value1` on the webhost.
 (i.e. `alias_value_1 = option_value1`) which will allow users to use either `value_1` or `value1` in their yaml
 files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
 Choice, and defining `alias_true = option_full`.
-- All options support `random` as a generic option. `random` chooses from any of the available values for that option,
-and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+- All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
+`(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
+option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+However, you can override `from_text` and handle `text == "random"` to customize its behavior or
+implement it for additional option types.
 
 As an example, suppose we want an option that lets the user start their game with a sword in their inventory, an option
 to let the player choose the difficulty, and an option to choose how much health the final boss has. Let's create our
