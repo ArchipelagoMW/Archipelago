@@ -19,11 +19,6 @@ def has_pin(state: CollectionState, player: int) -> bool:
     return state.has_any({"Progressive Minor Piece", "Progressive Major Piece"}, player)
 
 
-def has_castle(state: CollectionState, player: int) -> bool:
-    return (state.count("Progressive Major Piece", player) >=
-            2 + num_items_in_pool(state.multiworld.itempool, (player, "Progressive Major To Queen")))
-
-
 # @cache does not work due to "MultiWorld object was not de-allocated"
 # TODO: @cache_self1 is very close but needs a 'self' object
 def num_items_in_pool(itempool: list[Item], player_and_item: (int, str)):
@@ -116,8 +111,11 @@ def set_rules(multiworld: MultiWorld, player: int):
     add_rule(multiworld.get_location("Threaten Queen", player), lambda state: count_enemy_pieces(state, player) > 6)
     add_rule(multiworld.get_location("Threaten King", player), lambda state: has_pin(state, player))
     # special moves
-    add_rule(multiworld.get_location("O-O Castle", player), lambda state: has_castle(state, player))
-    add_rule(multiworld.get_location("O-O-O Castle", player), lambda state: has_castle(state, player))
+    total_queens = multiworld.worlds[player].items_used[player].get("Progressive Major To Queen", 0)
+    add_rule(multiworld.get_location("O-O Castle", player),
+             lambda state: state.count("Progressive Major Piece", player) >= 2 + total_queens)
+    add_rule(multiworld.get_location("O-O-O Castle", player),
+             lambda state: state.count("Progressive Major Piece", player) >= 2 + total_queens)
     # add_rule(multiworld.get_location("French Move", player), lambda state: state.has_french_move(player))
 
     # goal materials
