@@ -1,10 +1,12 @@
 import asyncio
 import json
 import time
+import os
 from asyncio import StreamReader, StreamWriter, CancelledError
 from typing import NamedTuple
 
 import Utils
+from settings import get_settings
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 from NetUtils import ClientStatus
@@ -13,6 +15,7 @@ from worlds import network_data_package, AutoWorldRegister
 from worlds.sotn.Items import base_item_id, ItemData, get_item_data, IType
 from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, \
     get_location_data
+from worlds.sotn.Rom import pos_patch
 
 SYSTEM_MESSAGE_ID = 0
 
@@ -98,6 +101,20 @@ class SotnCommandProcessor(ClientCommandProcessor):
             if zd.abrev == "WRP" or zd.abrev == "RWRP" or zd.abrev == "ST0" or zd.abrev == "DRE" or "BO" in zd.abrev:
                 continue
             self.output(f'{zd.abrev} - {zd.name}')
+
+    def _cmd_patch(self, patch_dir=""):
+        """Patch the ROM with the provided .apsotn(ONLY NAME)"""
+        print(patch_dir)
+        print(patch_dir + ".apsotn")
+        print(os.path.exists(patch_dir + ".apsotn"))
+        if not os.path.exists(patch_dir + ".apsotn"):
+            logger.info(".apsotn not found!")
+            return
+        if os.path.exists(patch_dir + ".bin"):
+            logger.info("Patched ROM found!")
+            return
+
+        diff_handler(patch_dir)
 
 
 class SotnContext(CommonContext):
@@ -365,17 +382,51 @@ async def psx_sync_task(ctx: SotnContext):
     print("exiting PSX sync task")
 
 
+def diff_handler(diff_file: str):
+    logger.info("Handling patch")
+    if diff_file:
+        try:
+            logger.info("Patching game")
+            source1 = os.path.splitext(diff_file)[0]
+            try:
+                name_start = source1.index("AP_")
+            except ValueError:
+                logger.info("File not an AP format ")
+                return
+            source1 = source1[name_start:] + ".bin"
+            source2 = "Castlevania - Symphony of the Night (USA) (Track 2).bin"
+            destination = os.path.splitext(diff_file)[0] + ".cue"
+
+            pos_patch(os.path.splitext(diff_file)[0])
+
+            cue_file = f'FILE "{source1}" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
+            cue_file += f'FILE "{source2}" BINARY\n  TRACK 02 AUDIO\n'
+            cue_file += f'\tINDEX 00 00:00:00\n\tINDEX 01 00:02:00'
+            with open(destination, 'wb') as outfile:
+                outfile.write(bytes(cue_file, 'utf-8'))
+        except Exception as e:
+            Utils.messagebox('Error', str(e), True)
+            raise
+        logger.info("All done!")
+
 def main():
 
     Utils.init_logging("SotnClient")
 
     async def main():
         parser = get_base_parser()
-        parser.add_argument('patch_file', default="", type=str, nargs="?",
-                            help='Path to an SOTN rom file')
+        parser.add_argument('diff_file', default="", type=str, nargs="?",
+                            help='Path to a Archipelago Binary Patch file')
         parser.add_argument('port', default=17242, type=int, nargs="?",
                             help='port for sotn_connector connection')
         args = parser.parse_args()
+
+        if args.diff_file:
+            try:
+                diff_handler(args.diff_file)
+            except Exception as e:
+                Utils.messagebox('Error', str(e), True)
+                raise
 
         ctx = SotnContext(args.connect, args.password)
         ctx.server_task = asyncio.create_task(server_loop(ctx), name="ServerLoop")
