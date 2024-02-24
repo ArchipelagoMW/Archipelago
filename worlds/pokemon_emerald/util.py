@@ -42,7 +42,6 @@ character_encoding_map.update({
     "\"": character_encoding_map["”"],
     "_": character_encoding_map[" "]
 })
-character_encoding_map.setdefault(character_encoding_map["?"])
 
 valid_name_characters = {
     " ", "0", "1", "2", "3", "4", "5", "6", "7", "8",
@@ -66,7 +65,11 @@ def encode_string(string: str, length: Optional[int] = None) -> bytearray:
             continue
 
         char = string[i]
-        arr.append(character_encoding_map[char])
+        if char in character_encoding_map:
+            arr.append(character_encoding_map[char])
+        else:
+            arr.append(character_encoding_map["?"])
+
 
     return bytearray(arr)
 
