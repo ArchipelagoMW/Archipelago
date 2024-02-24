@@ -47,7 +47,7 @@ class KHRECOMWorld(World):
     location_name_to_id = {name: data.code for name, data in location_table.items()}
     
     def __init__(self, multiworld: "MultiWorld", player: int):
-        super(LOLWorld, self).__init__(multiworld, player)
+        super(KHRECOMWorld, self).__init__(multiworld, player)
         self.world_order = []
     
     def create_items(self):
