@@ -27,6 +27,8 @@ Choice, and defining `alias_true = option_full`.
 - All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
 `(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
 option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+However, you can override `from_text` and handle `text == "random"` to customize its behavior or
+implement it for additional option types.
 
 As an example, suppose we want an option that lets the user start their game with a sword in their inventory, an option
 to let the player choose the difficulty, and an option to choose how much health the final boss has. Let's create our
