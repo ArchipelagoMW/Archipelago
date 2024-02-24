@@ -187,7 +187,7 @@ class HintAmount(Range):
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
-    default = 10
+    default = 12
 
 
 class AreaHintPercentage(Range):
@@ -199,7 +199,7 @@ class AreaHintPercentage(Range):
     display_name = "Area Hint Percentage"
     range_start = 0
     range_end = 100
-    default = 50
+    default = 33
 
 
 class DeathLink(Toggle):
