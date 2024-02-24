@@ -54,7 +54,6 @@ if __name__ == "__main__":
     # TODO: move stuff to not require this
     import ModuleUpdate
     ModuleUpdate.update(yes="--yes" in sys.argv or "-y" in sys.argv)
-    ModuleUpdate.update_ran = False  # restore for later
 
 from worlds.LauncherComponents import components, icon_paths
 from Utils import version_tuple, is_windows, is_linux
@@ -76,7 +75,6 @@ non_apworlds: set = {
     "Ocarina of Time",
     "Overcooked! 2",
     "Raft",
-    "Secret of Evermore",
     "Slay the Spire",
     "Sudoku",
     "Super Mario 64",
@@ -305,7 +303,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
         print(f"Outputting to: {self.buildfolder}")
         os.makedirs(self.buildfolder, exist_ok=True)
         import ModuleUpdate
-        ModuleUpdate.requirements_files.add(os.path.join("WebHostLib", "requirements.txt"))
         ModuleUpdate.update(yes=self.yes)
 
         # auto-build cython modules
@@ -352,6 +349,18 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
             for folder in sdl2.dep_bins + glew.dep_bins:
                 shutil.copytree(folder, self.libfolder, dirs_exist_ok=True)
                 print(f"copying {folder} -> {self.libfolder}")
+            # windows needs Visual Studio C++ Redistributable
+            # Installer works for x64 and arm64
+            print("Downloading VC Redist")
+            import certifi
+            import ssl
+            context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH, cafile=certifi.where())
+            with urllib.request.urlopen(r"https://aka.ms/vs/17/release/vc_redist.x64.exe",
+                                        context=context) as download:
+                vc_redist = download.read()
+            print(f"Download complete, {len(vc_redist) / 1024 / 1024:.2f} MBytes downloaded.", )
+            with open("VC_redist.x64.exe", "wb") as vc_file:
+                vc_file.write(vc_redist)
 
         for data in self.extra_data:
             self.installfile(Path(data))
@@ -387,8 +396,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-        # TODO: fix LttP options one day
-        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:
