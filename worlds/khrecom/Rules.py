@@ -49,17 +49,12 @@ def has_item(state: CollectionState, player: int, item) -> bool:
 
 def set_rules(multiworld: MultiWorld, player: int, options):
     #Location rules.
-    #Keys
     multiworld.get_location("Traverse Town Room of Rewards (Attack Cards Lionheart)"             , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Traverse Town")
     multiworld.get_location("Olympus Coliseum Room of Rewards (Attack Cards Metal Chocobo)"      , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Olympus Coliseum")
     multiworld.get_location("Hollow Bastion Room of Rewards (Summon Cards Mushu)"                , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Hollow Bastion")
     multiworld.get_location("Destiny Islands Room of Rewards (Item Cards Megalixir)"             , player).access_rule = lambda state: has_item(state, player,"Key to Rewards Destiny Islands")
     multiworld.get_location("06F Exit Hall Larxene I (Magic Cards Thunder)"                      , player).access_rule = lambda state: has_x_worlds(state, player, 4)
-    multiworld.get_location("06F Exit Hall Larxene I (Sleight Thundara)"                         , player).access_rule = lambda state: has_x_worlds(state, player, 4)
-    multiworld.get_location("06F Exit Hall Larxene I (Sleight Thundaga)"                         , player).access_rule = lambda state: has_x_worlds(state, player, 4)
     multiworld.get_location("07F Exit Hall Riku I (Magic Cards Aero)"                            , player).access_rule = lambda state: has_x_worlds(state, player, 5)
-    multiworld.get_location("07F Exit Hall Riku I (Sleight Aerora)"                              , player).access_rule = lambda state: has_x_worlds(state, player, 5)
-    multiworld.get_location("07F Exit Hall Riku I (Sleight Aeroga)"                              , player).access_rule = lambda state: has_x_worlds(state, player, 5)
    #multiworld.get_location("11F Exit Hall Riku III (Item Cards Mega-Potion)"                    , player).access_rule = lambda state: has_x_worlds(state, player, 6)
     multiworld.get_location("12F Exit Hall Larxene II (Attack Cards Oblivion)"                   , player).access_rule = lambda state: has_x_worlds(state, player, 7)
     multiworld.get_location("12F Exit Hall Larxene II (Enemy Cards Larxene)"                     , player).access_rule = lambda state: has_x_worlds(state, player, 7)
@@ -131,6 +126,10 @@ def set_rules(multiworld: MultiWorld, player: int, options):
         multiworld.get_location("Wonderland Room of Rewards (Sleight Synchro)"                   , player).access_rule = lambda state: has_item(state, player, "Key to Rewards Wonderland")
         multiworld.get_location("08F Exit Hall Riku II (Sleight Magnet Spiral)"                  , player).access_rule = lambda state: has_x_worlds(state, player, 5)
         multiworld.get_location("10F Exit Hall Vexen I (Sleight Freeze)"                         , player).access_rule = lambda state: has_x_worlds(state, player, 6)
+        multiworld.get_location("06F Exit Hall Larxene I (Sleight Thundara)"                     , player).access_rule = lambda state: has_x_worlds(state, player, 4)
+        multiworld.get_location("06F Exit Hall Larxene I (Sleight Thundaga)"                     , player).access_rule = lambda state: has_x_worlds(state, player, 4)
+        multiworld.get_location("07F Exit Hall Riku I (Sleight Aerora)"                          , player).access_rule = lambda state: has_x_worlds(state, player, 5)
+        multiworld.get_location("07F Exit Hall Riku I (Sleight Aeroga)"                          , player).access_rule = lambda state: has_x_worlds(state, player, 5)
     
     # Region rules.
     multiworld.get_entrance("Wonderland"                                                         , player).access_rule = lambda state: has_item(state, player,"World Card Wonderland")
