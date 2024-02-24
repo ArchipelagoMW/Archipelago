@@ -548,7 +548,7 @@ class PokemonEmeraldWorld(World):
                                     for max_priority in reversed(sorted(blacklists.keys())):
                                         merged_blacklist = set()
                                         for priority in blacklists.keys():
-                                            if priority < max_priority:
+                                            if priority <= max_priority:
                                                 for blacklist in blacklists[priority]:
                                                     merged_blacklist |= blacklist
 
@@ -1058,7 +1058,7 @@ class PokemonEmeraldWorld(World):
                     for max_priority in reversed(sorted(blacklists.keys())):
                         merged_blacklist = set()
                         for priority in blacklists.keys():
-                            if priority < max_priority:
+                            if priority <= max_priority:
                                 for blacklist in blacklists[priority]:
                                     merged_blacklist |= blacklist
 
