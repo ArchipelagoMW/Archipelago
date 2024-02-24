@@ -201,15 +201,20 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     no4.connect(no0, "NO4->NO0", lambda state: state.has("Jewel of open", player))
     if not open_no4:
         no4.connect(no3, "NO4->NO3", lambda state: (state.has("Jewel of open", player)))
+        no4.connect(chi, "NO4->CHI", lambda state: state.has("Leap stone", player) or
+                    state.has("Soul of bat", player) or (state.has("Form of mist", player) and
+                                                         state.has("Power of mist", player)) or
+                    (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                             state.has("Soul of wolf", player) or
+                     state.has("Form of mist", player))) or (state.has("Soul of wolf", player) and
+                                                             state.has("Power of wolf", player)))
     else:
         no4.connect(no3)
-    no4.connect(chi, "NO4->CHI", lambda state: state.has("Leap stone", player) or
-                state.has("Soul of bat", player) or (state.has("Form of mist", player) and
-                                                     state.has("Power of mist", player)) or
-                (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
-                                                         state.has("Soul of wolf", player) or
-                 state.has("Form of mist", player))) or (state.has("Soul of wolf", player) and
-                                                         state.has("Power of wolf", player)))
+        no4.connect(chi, "NO4->CHI", lambda state: state.has("Soul of bat", player) or
+                    (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+                    (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                             state.has("Soul of wolf", player) or
+                                                             state.has("Form of mist", player))))
     # Alchemy Laboratory
     nz0.connect(no0)
     nz0.connect(no3)
