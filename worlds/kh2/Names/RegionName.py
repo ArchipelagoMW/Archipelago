@@ -16,7 +16,7 @@ Master = "Master Form"
 Final = "Final Form"
 Summon = "Summons"
 # sp
-Sp = "Space Paranoids"
+Sp = "Space Paranoids 1"
 HostileProgram = "Hostile Program"
 Sp2 = "Space Paranoids 2"
 Mcp = "Master Control Program"
@@ -24,7 +24,7 @@ ASLarxene = "AS Larxene"
 DataLarxene = "Data Larxene"
 
 # pr
-Pr = "Port Royal"
+Pr = "Port Royal 1"
 Barbosa = "Barbosa"
 Pr2 = "Port Royal 2"
 GrimReaper1 = "Grim Reaper 1"
@@ -32,13 +32,13 @@ GrimReaper2 = "Grim Reaper 2"
 DataLuxord = "Data Luxord"
 
 # tt
-Tt = "Twilight Town"
+Tt = "Twilight Town 1"
 Tt2 = "Twilight Town 2"
 Tt3 = "Twilight Town 3"
 DataAxel = "Data Axel"
 
 # oc
-Oc = "Olympus Coliseum"
+Oc = "Olympus Coliseum 1"
 Cerberus = "Cerberus"
 OlympusPete = "Olympus Pete"
 Hydra = "Hydra"
@@ -54,16 +54,16 @@ Oc2Cups = "Olympus Coliseum Cups"
 HadesCups = "Olympus Coliseum Hade's Paradox"
 
 # ht
-Ht = "Holloween Town"
+Ht = "Halloween Town 1"
 PrisonKeeper = "Prison Keeper"
 OogieBoogie = "Oogie Boogie"
-Ht2 = "Holloween Town 2"
+Ht2 = "Halloween Town 2"
 Experiment = "The Experiment"
 ASVexen = "AS Vexen"
 DataVexen = "Data Vexen"
 
 # lod
-LoD = "Land of Dragons"
+LoD = "Land of Dragons 1"
 ShanYu = "Shan Yu"
 LoD2 = "Land of Dragons 2"
 AnsemRiku = "Ansem Riku"
@@ -84,7 +84,7 @@ FinalXemnas = "Final Xemnas"
 DataXemnas = "Data Xemnas"
 
 # bc
-Bc = "Beast's Castle"
+Bc = "Beast's Castle 1"
 Thresholder = "Thresholder"
 Beast = "Beast"
 DarkThorn = "Dark Thorn"
@@ -93,7 +93,7 @@ Xaldin = "Xaldin"
 DataXaldin = "Data Xaldin"
 
 # ag
-Ag = "Agrabah"
+Ag = "Agrabah 1"
 TwinLords = "Twin Lords"
 Ag2 = "Agrabah 2"
 GenieJafar = "Genie Jafar"
@@ -101,14 +101,14 @@ ASLexaeus = "AS Lexaeus"
 DataLexaeus = "Data Lexaeus"
 
 # pl
-Pl = "Pride Lands"
+Pl = "Pride Lands 1"
 Scar = "Scar"
 Pl2 = "Pride Lands 2"
 GroundShaker = "Groundshaker"
 DataSaix = "Data Saix"
 
 # hb
-Hb = "Hollow Bastion"
+Hb = "Hollow Bastion 1"
 Hb2 = "Hollow Bastion 2"
 HBDemyx = "Hollow Bastion Demyx"
 ThousandHeartless = "Thousand Heartless"

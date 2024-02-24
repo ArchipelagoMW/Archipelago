@@ -440,7 +440,7 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.multiworld.LevelDepth[self.player].current_option_name}"
         }
     ]
-    self.fight_and_form_text = [
+    self.fight_and_form_text = [  # todo: fix 15122 being too long
         {
             'id': 15121,  # poster name
             'en': f"Fight Logic is {self.options.FightLogic.current_option_name}",
