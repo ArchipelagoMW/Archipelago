@@ -46,7 +46,7 @@ Items that are shuffled:
 Any shuffled item can be in other players' worlds.
 
 
-## What does another world's item look like in Mega Man Battle Network 3?
+## What does another world's item look like in Mario & Luigi: Superstar Saga?
 
 Item will show up as a Golden Mushroom from boxes and digspots. All items from another world will show up as AP Item in all textboxes.
 Items in a shop from another player's world will display the player name and item name in addition to being displayed as an AP Item.
