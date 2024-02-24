@@ -409,7 +409,8 @@ class PokemonEmeraldWorld(World):
 
     def generate_basic(self) -> None:
         # Create auth
-        self.auth = self.random.randbytes(16)
+        # self.auth = self.random.randbytes(16)
+        self.auth = self.random.getrandbits(16 * 8).to_bytes(16, "little")
 
         # Randomize types
         if self.options.types == RandomizeTypes.option_shuffle:
