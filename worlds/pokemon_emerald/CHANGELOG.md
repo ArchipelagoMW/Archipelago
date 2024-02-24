@@ -134,6 +134,8 @@ on the second floor of Pokemon Centers.
 turn to face you when you run.
 - New option `normalize_encounter_rates`. Sets every encounter slot to (almost) equal probability. Does NOT make every
 species equally likely to appear, but makes rare encounters less rare.
+- Added `Trick House` location group.
+- Removed `Postgame Locations` location group.
 
 ### QoL
 
@@ -166,6 +168,8 @@ locations.
 - It's no longer possible to join a room using the wrong patch file, even if the slot names match.
 - NPCs now stop moving while you're receiving an item.
 - Creating a secret base no longer triggers sending the Secret Power TM location.
+- Hopefully fix bug where receiving an item while walking over a trigger can skip that trigger (the Moving
+Truck/Petalburg wrong warp)
 
 ## Easter Eggs
 
