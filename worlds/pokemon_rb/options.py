@@ -344,6 +344,10 @@ class WarpTileShuffle(Choice):
     option_vanilla = 0
     option_shuffle = 1
     option_mixed = 2
+    alias_true = 1
+    alias_on = 1
+    alias_off = 0
+    alias_false = 0
 
 
 class RandomizeRockTunnel(Toggle):
