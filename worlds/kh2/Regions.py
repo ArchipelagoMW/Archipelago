@@ -300,7 +300,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.SpookyCavePuzzlePieces] = RegionLocations.SpookyCavePuzzlePiecesLocations
         KH2REGIONS[RegionName.StarryHillPuzzlePieces] = RegionLocations.StarryHillPuzzlePiecesLocations
         if self.options.AtlanticaToggle:
-            KH2REGIONS[RegionName.At1PuzzlePieces] = At1PuzzlePiecesLocations
+            KH2REGIONS[RegionName.At1PuzzlePieces] = RegionLocations.At1PuzzlePiecesLocations
     # for region_name in [Heart_Checks.keys(), Duality_Checks.keys(), Frontier_Checks.keys(), Sunset_Checks.keys(), Daylight_Checks.keys()]:
     #    for location in region_name:
     #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
