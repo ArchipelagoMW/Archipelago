@@ -397,15 +397,17 @@ class Stonesanity(Toggle):
 class LevelScaling(Choice):
     """Off: Encounters use vanilla game levels.
     By Spheres: Levels are scaled by access sphere. Areas reachable in later spheres will have higher levels.
-    Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by number
-    of internal region connections. This is a much more severe curving of levels and may lead to much less variation in
-    levels found in a particular map. However, it may make the higher door shuffle settings significantly more bearable,
-    as these options more often result in a smaller number of larger access spheres."""
+    By Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by
+    number  of internal region connections. This is a much more severe curving of levels and may lead to much less
+    variation in levels found in a particular map. However, it may make the higher door shuffle settings significantly
+    more bearable, as these options more often result in a smaller number of larger access spheres.
+    Auto: Scales by Spheres if Door Shuffle is off or on Simple, otherwise scales by Spheres and Distance"""
     display_name = "Level Scaling"
     option_off = 0
     option_by_spheres = 1
     option_by_spheres_and_distance = 2
-    default = 1
+    option_auto = 3
+    default = 3
 
 
 class ExpModifier(NamedRange):

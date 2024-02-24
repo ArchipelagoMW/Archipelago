@@ -10,7 +10,9 @@ def level_scaling(multiworld):
     while locations:
         sphere = set()
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-            if multiworld.level_scaling[world.player] != "by_spheres_and_distance":
+            if (multiworld.level_scaling[world.player] != "by_spheres_and_distance"
+                    and (multiworld.level_scaling[world.player] != "auto" or multiworld.door_shuffle[world.player]
+                         in ("off", "simple"))):
                 continue
             regions = {multiworld.get_region("Menu", world.player)}
             checked_regions = set()
