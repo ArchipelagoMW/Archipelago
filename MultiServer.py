@@ -805,7 +805,7 @@ async def on_client_joined(ctx: Context, client: Client):
         update_client_status(ctx, client, ClientStatus.CLIENT_CONNECTED)
     version_str = '.'.join(str(x) for x in client.version)
     
-    verbs = {"Tracker": "tracking", "TextOnly": "viewing"}
+    verbs = {"HintGame": "hinting", "Tracker": "tracking", "TextOnly": "viewing"}
     for tag, verb in verbs.items():
         if tag in client.tags:
             final_verb = verb
@@ -833,7 +833,7 @@ async def on_client_left(ctx: Context, client: Client):
     
     version_str = '.'.join(str(x) for x in client.version)
     
-    verbs = {"Tracker": "stopped tracking", "TextOnly": "stopped viewing"}
+    verbs = {"HintGame": "stopped hinting", "Tracker": "stopped tracking", "TextOnly": "stopped viewing"}
     for tag, verb in verbs.items():
         if tag in client.tags:
             final_verb = verb
@@ -1629,7 +1629,14 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
         else:
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
-            ignore_game = ("TextOnly" in args["tags"] or "Tracker" in args["tags"]) and not args.get("game")
+            
+            ignore_game = False
+            if not args.get("game"):
+                for tag in args["tags"]:
+                    if tag in {"HintGame", "TextOnly", "Tracker"}:
+                        ignore_game = True
+                        break
+            
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
             minver = min_client_version if ignore_game else ctx.minimum_client_versions[slot]
