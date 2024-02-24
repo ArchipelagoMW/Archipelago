@@ -46,8 +46,10 @@ class KHRECOMWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = {name: data.code for name, data in location_table.items()}
     
-    world_order = []
-
+    def __init__(self, multiworld: "MultiWorld", player: int):
+        super(LOLWorld, self).__init__(multiworld, player)
+        self.world_order = []
+    
     def create_items(self):
         item_pool: List[KHRECOMItem] = []
         self.multiworld.get_location("12F Exit Hall Larxene II (Enemy Cards Larxene)", self.player).place_locked_item(self.create_item("Friend Card Pluto"))
