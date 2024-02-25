@@ -45,11 +45,11 @@ def set_rules(world: "MM2World") -> None:
         world.weapon_damage = {i: [] for i in range(8)}
         for boss in range(13):
             for weapon in world.weapon_damage:
-                world.weapon_damage[weapon].append(int(14*world.random.expovariate(1.0)))
-            if not any([world.weapon_damage[weapon][boss] > 4 for weapon in world.weapon_damage]):
-                # failsafe, there should be at least one defined weakness
+                world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
+            if not any([world.weapon_damage[weapon][boss] > 4 for weapon in range(1, 7)]):
+                # failsafe, there should be at least one defined non-Buster weakness
                 weapon = world.random.choice(list(world.weapon_damage.keys()))
-                world.weapon_damage[weapon][boss] = world.random.randint(4, 14) # Force weakness
+                world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
         # handle atomic fire
         if world.options.strict_weakness:
             for boss in range(13):
