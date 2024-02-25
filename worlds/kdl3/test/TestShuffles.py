@@ -40,6 +40,26 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)
 
+    def testCutterAndBurning(self):
+        rooms = self.multiworld.worlds[1].rooms
+        copy_abilities = self.multiworld.worlds[1].copy_abilities
+        sand_canyon_5 = next(room for room in rooms if room.name == "Sand Canyon 5 - 9")
+        valid_rooms = [room for room in rooms if (room.level < sand_canyon_5.level)
+                       or (room.level == sand_canyon_5.level and room.stage < sand_canyon_5.stage)]
+        for room in valid_rooms:
+            if any([copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies]):
+                break
+        else:
+            self.fail("Could not reach Cutter Ability before Sand Canyon 5!")
+        iceberg_4 = next(room for room in rooms if room.name == "Iceberg 4 - 7")
+        valid_rooms = [room for room in rooms if (room.level < iceberg_4.level)
+                       or (room.level == iceberg_4.level and room.stage < iceberg_4.stage)]
+        for room in valid_rooms:
+            if any([copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies]):
+                break
+        else:
+            self.fail("Could not reach Burning Ability before Iceberg 4!")
+
     def testValidAbilitiesForROB(self):
         # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
@@ -163,3 +183,58 @@ class TestAllShuffle(KDL3TestBase):
         self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
         self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
         self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
+
+    def testCutterAndBurning(self):
+        rooms = self.multiworld.worlds[1].rooms
+        copy_abilities = self.multiworld.worlds[1].copy_abilities
+        sand_canyon_5 = next(room for room in rooms if room.name == "Sand Canyon 5 - 9")
+        valid_rooms = [room for room in rooms if (room.level < sand_canyon_5.level)
+                       or (room.level == sand_canyon_5.level and room.stage < sand_canyon_5.stage)]
+        for room in valid_rooms:
+            if any([copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies]):
+                break
+        else:
+            self.fail("Could not reach Cutter Ability before Sand Canyon 5!")
+        iceberg_4 = next(room for room in rooms if room.name == "Iceberg 4 - 7")
+        valid_rooms = [room for room in rooms if (room.level < iceberg_4.level)
+                       or (room.level == iceberg_4.level and room.stage < iceberg_4.stage)]
+        for room in valid_rooms:
+            if any([copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies]):
+                break
+        else:
+            self.fail("Could not reach Burning Ability before Iceberg 4!")
+
+    def testValidAbilitiesForROB(self):
+        # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
+        self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
+        # first we need to identify our bukiset requirements
+        groups = [
+            ({"Parasol Ability", "Cutter Ability"}, {'Bukiset (Parasol)', 'Bukiset (Cutter)'}),
+            ({"Spark Ability", "Clean Ability"}, {'Bukiset (Spark)', 'Bukiset (Clean)'}),
+            ({"Ice Ability", "Needle Ability"}, {'Bukiset (Ice)', 'Bukiset (Needle)'}),
+            ({"Stone Ability", "Burning Ability"}, {'Bukiset (Stone)', 'Bukiset (Burning)'}),
+        ]
+        copy_abilities = self.multiworld.worlds[1].copy_abilities
+        required_abilities: List[Tuple[str]] = []
+        for abilities, bukisets in groups:
+            potential_abilities: List[str] = list()
+            for bukiset in bukisets:
+                if copy_abilities[bukiset] in abilities:
+                    potential_abilities.append(copy_abilities[bukiset])
+            required_abilities.append(tuple(potential_abilities))
+        collected_abilities = list()
+        for group in required_abilities:
+            self.assertFalse(len(group) == 0, str(self.multiworld.seed))
+            collected_abilities.append(group[0])
+        self.collect_by_name([ability.replace(" Ability", "") for ability in collected_abilities])
+        if "Parasol Ability" not in collected_abilities or "Stone Ability" not in collected_abilities:
+            # required for non-Bukiset related portions
+            self.collect_by_name(["Parasol", "Stone"])
+
+        if "Cutter Ability" not in collected_abilities:
+            # we can't actually reach 3-6 without Cutter
+            self.assertFalse(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"), str(self.multiworld.seed))
+            self.collect_by_name(["Cutter"])
+
+        self.assertTrue(self.can_reach_location("Sand Canyon 6 - Professor Hector & R.O.B"),
+                        ''.join(str(self.multiworld.seed)).join(collected_abilities))

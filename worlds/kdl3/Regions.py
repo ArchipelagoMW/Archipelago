@@ -94,13 +94,17 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
     for level in world.player_levels:
         for stage in range(6):
             proper_stage = world.player_levels[level][stage]
+            stage_name = world.multiworld.get_location(world.location_id_to_name[proper_stage],
+                                                       world.player).name.replace(" - Complete", "")
+            stage_regions = [rooms[room] for room in rooms if stage_name in rooms[room].name]
+            for region in stage_regions:
+                region.level = level
+                region.stage = stage
             if world.options.open_world or stage == 0:
                 level_regions[level].add_exits([first_rooms[proper_stage].name])
             else:
-                previous_stage = first_rooms[world.player_levels[level][stage - 1]]
-                world.multiworld.get_location(f"{level_names[previous_stage.level]} {previous_stage.stage}"
-                                              f" - Complete", world.player) \
-                    .parent_region.add_exits([first_rooms[proper_stage].name])
+                world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage-1]],
+                                              world.player).parent_region.add_exits([first_rooms[proper_stage].name])
         else:
             level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 

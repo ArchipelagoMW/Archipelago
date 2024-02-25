@@ -13,6 +13,8 @@ class KDL3Location(Location):
     def __init__(self, player: int, name: str, address: typing.Optional[int], parent: typing.Union[Region, None]):
         super().__init__(player, name, address, parent)
         self.event = not address
+        if self.event:
+            self.show_in_spoiler = False
 
 
 stage_locations = {

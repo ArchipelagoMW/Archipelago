@@ -113,7 +113,19 @@ class KDL3World(World):
                                             self.options.slow_trap_weight.value,
                                             self.options.ability_trap_weight.value])[0]
 
-    def generate_early(self) -> None:
+    def get_restrictive_copy_ability_placement(self, copy_ability: str, enemies_to_set: typing.List[str],
+                                               level: int, stage: int):
+        valid_rooms = [room for room in self.rooms if (room.level < level)
+                       or (room.level == level and room.stage < stage)]  # leave out the stage in question to avoid edge
+        valid_enemies = set()
+        for room in valid_rooms:
+            valid_enemies.update(room.enemies)
+        placed_enemies = [enemy for enemy in valid_enemies if enemy not in enemies_to_set]
+        if any([self.copy_abilities[enemy] == copy_ability for enemy in placed_enemies]):
+            return None  # a valid enemy got placed by a more restrictive placement
+        return self.random.choice(sorted([enemy for enemy in valid_enemies if enemy not in placed_enemies]))
+
+    def pre_fill(self) -> None:
         if self.options.copy_ability_randomization:
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
@@ -132,12 +144,22 @@ class KDL3World(World):
                     chosen_ability = self.random.choice(abilities)
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
+            # two less restrictive ones, we need to ensure Cutter and Burning appear before their required stages
+            sand_canyon_5 = next(room for room in self.rooms if room.name == "Sand Canyon 5 - 9")
+            cutter_enemy = self.get_restrictive_copy_ability_placement("Cutter Ability", enemies_to_set,
+                                                                       sand_canyon_5.level, sand_canyon_5.stage)
+            if cutter_enemy:
+                self.copy_abilities[cutter_enemy] = "Cutter Ability"
+                enemies_to_set.remove(cutter_enemy)
+            iceberg_4 = next(room for room in self.rooms if room.name == "Iceberg 4 - 7")
+            burning_enemy = self.get_restrictive_copy_ability_placement("Burning Ability", enemies_to_set,
+                                                                        iceberg_4.level, iceberg_4.stage)
+            if burning_enemy:
+                self.copy_abilities[burning_enemy] = "Burning Ability"
+                enemies_to_set.remove(burning_enemy)
             # place remaining
             for enemy in enemies_to_set:
-                self.copy_abilities[enemy] = self.random \
-                    .choice(valid_abilities)
-
-    def pre_fill(self) -> None:
+                self.copy_abilities[enemy] = self.random.choice(valid_abilities)
         for enemy in enemy_mapping:
             self.multiworld.get_location(enemy, self.player) \
                 .place_locked_item(self.create_item(self.copy_abilities[enemy_mapping[enemy]]))
@@ -299,6 +321,21 @@ class KDL3World(World):
             for level in LocationName.level_names:
                 for stage, i in zip(self.player_levels[LocationName.level_names[level]], range(1, 7)):
                     spoiler_handle.write(f"{level} {i}: {location_table[stage].replace(' - Complete', '')}\n")
+        if self.options.animal_randomization:
+            spoiler_handle.write(f"\nAnimal Friends ({self.multiworld.get_player_name(self.player)}):\n")
+            for level in self.player_levels:
+                for stage in range(6):
+                    rooms = [room for room in self.rooms if room.level == level and room.stage == stage]
+                    animals = []
+                    for room in rooms:
+                        animals.extend([location.item.name.replace(" Spawn", "")
+                                        for location in room.locations if "Animal" in location.name])
+                    spoiler_handle.write(f"{location_table[self.player_levels[level][stage]].replace(' - Complete','')}"
+                                         f": {', '.join(animals)}\n")
+        if self.options.copy_ability_randomization:
+            spoiler_handle.write(f"\nCopy Abilities ({self.multiworld.get_player_name(self.player)}):\n")
+            for enemy in self.copy_abilities:
+                spoiler_handle.write(f"{enemy}: {self.copy_abilities[enemy].replace('No Ability', 'None').replace(' Ability', '')}\n")
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         if self.stage_shuffle_enabled:
