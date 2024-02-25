@@ -15,7 +15,7 @@ from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
     import random
-    from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
 
@@ -438,7 +438,7 @@ class World(metaclass=AutoWorldRegister):
     def get_pre_fill_items(self) -> List["Item"]:
         return []
 
-    # following methods should not need to be overridden.
+    # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
@@ -457,6 +457,16 @@ class World(metaclass=AutoWorldRegister):
 
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
+
+    # convenience methods
+    def get_location(self, location_name: str) -> "Location":
+        return self.multiworld.get_location(location_name, self.player)
+
+    def get_entrance(self, entrance_name: str) -> "Entrance":
+        return self.multiworld.get_entrance(entrance_name, self.player)
+
+    def get_region(self, region_name: str) -> "Region":
+        return self.multiworld.get_region(region_name, self.player)
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
