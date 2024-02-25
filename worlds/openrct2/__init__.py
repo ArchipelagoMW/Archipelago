@@ -419,11 +419,11 @@ class OpenRCT2World(World):
                 # print(unlock["Price"])
             else:  # Everything else will cost lives. The Elder Gods will be pleased
                 if number < 7:
-                    unlock["Lives"] = random.randint(25, 150)
-                elif number < 22:
-                    unlock["Lives"] = random.randint(50, 300)
+                    unlock["Lives"] = random.randint(2, 150)
+                elif number < 32:
+                    unlock["Lives"] = random.randint(2, 300)
                 else:
-                    unlock["Lives"] = random.randint(50, 1000)
+                    unlock["Lives"] = random.randint(2, 1000)
 
             # Handles the selection of a prerequisite and associated stats
 
@@ -462,7 +462,7 @@ class OpenRCT2World(World):
                                 if ride in item_info[category]:
                                     category_selected = True
                         set_openRCT2_rule("category", category, number)
-                        if category == "roller_coasters":
+                        if category == "roller_coasters" and any(item in possible_prereqs and item not in item_info["stat_exempt_roller_coasters"] for item in possible_prereqs):
                             excitement = 0
                             intensity = 0
                             nausea = 0
@@ -475,9 +475,7 @@ class OpenRCT2World(World):
                                 nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
                                 [random.randint(1, 4), category, excitement, intensity, nausea, 0]
-                        elif category == "transport_rides":
-                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
-                        elif category == "water_rides":
+                        elif category == "transport_rides" or category == "water_rides" or category == "roller_coasters":
                             unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
                         else:
                             unlock["RidePrereq"] = [random.randint(1, 10), category, 0, 0, 0, 0]

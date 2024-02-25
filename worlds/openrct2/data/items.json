@@ -384,7 +384,10 @@
         "Reverse Freefall Coaster",
         "Heartline Twister Coaster",
         "Mini Roller Coaster",
-        "Classic Mini Roller Coaster"
+        "Classic Mini Roller Coaster",
+        "Giga Coaster",
+        "Inverted Impulse Coaster",
+        "Vertical Drop Coaster"
     ],
     "requires_height": [
         "Enterprise",

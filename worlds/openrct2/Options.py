@@ -306,7 +306,7 @@ class SelectedScenario(Choice):
     option_fun_fortress = Scenario.fun_fortress.value
     option_future_world = Scenario.future_world.value
     option_gentle_glen = Scenario.gentle_glen.value
-    option_jolly_jungle = Scenario.jolly_jungle.value
+    # option_jolly_jungle = Scenario.jolly_jungle.value #Impossible with the right settings
     option_hydro_hills = Scenario.hydro_hills.value
     option_sprightly_park = Scenario.sprightly_park.value
     option_magic_quarters = Scenario.magic_quarters.value
@@ -325,7 +325,7 @@ class SelectedScenario(Choice):
     option_giggle_downs = Scenario.giggle_downs.value
     option_mineral_park = Scenario.mineral_park.value
     option_coaster_crazy = Scenario.coaster_crazy.value
-    option_urban_park = Scenario.urban_park.value
+    # option_urban_park = Scenario.urban_park.value #Impossible with the right settings
     option_geoffery_gardens = Scenario.geoffery_gardens.value
     option_iceberg_islands = Scenario.iceberg_islands.value
     option_volcania = Scenario.volcania.value
@@ -354,9 +354,9 @@ class SelectedScenario(Choice):
     option_pacifica = Scenario.pacifica.value
     option_urban_jungle = Scenario.urban_jungle.value
     option_terror_town = Scenario.terror_town.value
-    option_megaworld_park = Scenario.megaworld_park.value
+    # option_megaworld_park = Scenario.megaworld_park.value #Nothing but Logic Breaks
     option_venus_ponds = Scenario.venus_ponds.value
-    option_micro_park = Scenario.micro_park.value
+    # option_micro_park = Scenario.micro_park.value #Impossible with the right settings
     option_electric_fields = Scenario.electric_fields.value
     option_factory_capers = Scenario.factory_capers.value
     option_crazy_castle = Scenario.crazy_castle.value
@@ -370,7 +370,7 @@ class SelectedScenario(Choice):
     option_extreme_heights = Scenario.extreme_heights.value
     option_amity_airfield = Scenario.amity_airfield.value
     option_ghost_town = Scenario.ghost_town.value
-    option_fungus_woods = Scenario.fungus_woods.value
+    # option_fungus_woods = Scenario.fungus_woods.value #Impossible with the right settings
     option_rainbow_summit = Scenario.rainbow_summit.value
     option_africa_victoria_falls = Scenario.africa_victoria_falls.value
     option_asia_great_wall_of_china_tourism_enhancement = Scenario.asia_great_wall_of_china_tourism_enhancement.value
@@ -403,9 +403,9 @@ class SelectedScenario(Choice):
     option_prehistoric_stone_age = Scenario.prehistoric_stone_age.value
     option_roaring_twenties_skyscrapers = Scenario.roaring_twenties_skyscrapers.value
     option_rock_n_roll_rock_n_roll = Scenario.rock_n_roll_rock_n_roll.value
-    option_alton_towers = Scenario.alton_towers.value
-    option_blackpool_pleasure_beach = Scenario.blackpool_pleasure_beach.value
-    option_heide_park = Scenario.heide_park.value
+    # option_alton_towers = Scenario.alton_towers.value #Impossible with the right settings
+    # option_blackpool_pleasure_beach = Scenario.blackpool_pleasure_beach.value #Impossible with the right settings
+    # option_heide_park = Scenario.heide_park.value #Impossible with the right settings
     option_six_flags_belgium = Scenario.six_flags_belgium.value
     option_six_flags_great_adventure = Scenario.six_flags_great_adventure.value
     option_six_flags_holland = Scenario.six_flags_holland.value
