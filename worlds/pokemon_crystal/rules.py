@@ -187,6 +187,12 @@ def set_rules(world: PokemonCrystalWorld) -> None:
     set_rule(get_entrance("REGION_RADIO_TOWER_3F -> REGION_RADIO_TOWER_4F:CARDKEY"),
              lambda state: state.has("Card Key", world.player))
 
+    set_rule(get_location("Radio Tower 3F - TM11 from Woman"),
+             lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
+
+    set_rule(get_location("Radio Tower 4F - Pink Bow from Mary"),
+             lambda state: state.has("EVENT_CLEARED_RADIO_TOWER", world.player))
+
     # Route 35
     set_rule(get_location("Route 35 - HP Up After Delivering Kenya"),
              lambda state: state.has("EVENT_GAVE_KENYA", world.player))
