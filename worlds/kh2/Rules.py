@@ -1020,8 +1020,8 @@ class KH2FightRules(KH2Rules):
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
         sephiroth_rules = {
-            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_sephiroth_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
             "hard":   self.kh2_dict_count(hard_sephiroth_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2,
         }
         return sephiroth_rules[self.fight_logic]
@@ -1163,8 +1163,8 @@ class KH2FightRules(KH2Rules):
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus
         data_roxas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_roxas_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
             "hard":   self.kh2_dict_count(hard_data_roxas_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return data_roxas_rules[self.fight_logic]
@@ -1174,8 +1174,8 @@ class KH2FightRules(KH2Rules):
         # normal:both gap closers,limit 5,reflera,guard,both 2 ground finishers,3 dodge roll,finishing plus,blizzaga
         # hard:1 gap closers,reflect, guard,both 1 ground finisher,2 dodge roll,finishing plus,blizzara
         data_axel_rules = {
-            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
-            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
+            "easy":   self.kh2_dict_count(easy_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit], state) >= 1,
+            "normal": self.kh2_dict_count(normal_data_axel_tools, state) and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3) and self.kh2_list_any_sum([donald_limit, gap_closer], state) >= 2,
             "hard":   self.kh2_dict_count(hard_data_axel_tools, state) and self.kh2_list_any_sum([gap_closer, ground_finisher], state) >= 2
         }
         return data_axel_rules[self.fight_logic]
@@ -1274,8 +1274,8 @@ class KH2FightRules(KH2Rules):
         # normal:combo master,slapshot,reflega,2 ground finishers,both gap closers,finishing plus,guard,limit 5,
         # hard:combo master,slapshot,reflera,1 ground finishers,1 gap closers,finishing plus,guard,limit form
         data_xemnas_rules = {
-            "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3),
-            "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_has_limit_form(state) and self.get_form_level_max(state,3),
+            "easy":   self.kh2_dict_count(easy_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3),
+            "normal": self.kh2_dict_count(normal_data_xemnas, state) and self.kh2_list_count_sum(ground_finisher, state) >= 2 and self.kh2_has_limit_form(state) and self.get_form_level_max(state, 3),
             "hard":   self.kh2_dict_count(hard_data_xemnas, state) and self.kh2_list_any_sum([ground_finisher, gap_closer], state) >= 2
         }
         return data_xemnas_rules[self.fight_logic]

@@ -440,15 +440,31 @@ def patch_kh2(self, output_directory):
             'en': f"Your Level Depth is {self.multiworld.LevelDepth[self.player].current_option_name}"
         }
     ]
-    self.fight_and_form_text = [  # todo: fix 15122 being too long
+    self.fight_and_form_text = [
         {
             'id': 15121,  # poster name
             'en': f"Fight Logic is {self.options.FightLogic.current_option_name}",
         },
         {
             'id': 15122,
-            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}. Auto Logic is {self.options.AutoFormLogic.current_option_name}"
+            'en': f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}"
         },
+        {
+            'id': 0x373B,
+            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
+        },
+        {
+            'id': 0x373C,
+            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
+        },
+        {
+            'id': 0x373D,
+            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
+        },
+        {
+            'id': 0x4E31,
+            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
+        }
 
     ]
     self.cups_text = [
