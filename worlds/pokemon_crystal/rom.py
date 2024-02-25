@@ -8,7 +8,7 @@ from settings import get_settings
 
 from .items import reverse_offset_item_value, item_const_name_to_id
 from .data import data
-from .utils import get_random_pokemon_id
+from .utils import get_random_pokemon_id, convert_to_ingame_text
 
 if TYPE_CHECKING:
     from . import PokemonCrystalWorld
@@ -177,18 +177,29 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 write_bytes(patched_rom, better_mart_bytes, mart_address)
             mart_address += 2
 
+    for label in ["AP_Setting_HMBadge_Cut",
+                  "AP_Setting_HMBadge_Fly",
+                  "AP_Setting_HMBadge_Surf1",
+                  "AP_Setting_HMBadge_Surf2",
+                  "AP_Setting_HMBadge_Strength",
+                  "AP_Setting_HMBadge_Flash",
+                  "AP_Setting_HMBadge_Whirlpool",
+                  "AP_Setting_HMBadge_Waterfall"]:
+        address = data.rom_addresses[label] + 1
+        write_bytes(patched_rom, [world.options.hm_badge_requirements], address)
+
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
 
-    elite_four_value = world.options.elite_four_badges - 1
-    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_VictoryRoadBadges"] + 1)
-    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_RocketBadges_2"] + 1)
-    elite_four_value -= 1
-    if elite_four_value < 0:
-        elite_four_value = 0
-    write_bytes(patched_rom, [elite_four_value], data.rom_addresses["AP_Setting_RocketBadges_1"] + 1)
-    red_value = world.options.red_badges - 1
-    write_bytes(patched_rom, [red_value], data.rom_addresses["AP_Setting_RedBadges"] + 1)
+    elite_four_text = convert_to_ingame_text("{:20d}".format(world.options.elite_four_badges))
+    write_bytes(patched_rom, elite_four_text, data.rom_addresses["AP_Setting_VictoryRoadBadges_Text"] + 1)
+    write_bytes(patched_rom, [world.options.elite_four_badges - 1],
+                data.rom_addresses["AP_Setting_VictoryRoadBadges"] + 1)
+    write_bytes(patched_rom, [world.options.elite_four_badges - 2], data.rom_addresses["AP_Setting_RocketBadges"] + 1)
+
+    red_text = convert_to_ingame_text("{:20d}".format(world.options.red_badges))
+    write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text"] + 1)
+    write_bytes(patched_rom, [world.options.red_badges - 1], data.rom_addresses["AP_Setting_RedBadges"] + 1)
 
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]
     start_inventory = world.options.start_inventory.value.copy()

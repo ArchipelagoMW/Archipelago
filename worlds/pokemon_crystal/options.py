@@ -38,6 +38,12 @@ class RequireItemfinder(DefaultOnToggle):
     display_name = "Require Itemfinder"
 
 
+class Trainersanity(Toggle):
+    """Adds checks for defeating trainers"""
+    display_name = "Trainersanity"
+    default = 0
+
+
 class RandomizePokegear(Toggle):
     """Shuffles the Pokegear and cards into the pool"""
     display_name = "Randomize Pokegear"
@@ -91,6 +97,17 @@ class FullTmHmCompatibility(Toggle):
     """All Pokemon can learn any TM/HM"""
     display_name = "Full TM/HM Compatibility"
     default = 0
+
+
+class HMBadgeRequirements(Choice):
+    """vanilla: HMs require their vanilla badges
+    no_badges: HMs do not require a badge to use
+    add_kanto: HMs can be used with the Johto or Kanto badge"""
+    display_name = "HM Badge Requirements"
+    default = 0
+    option_vanilla = 0
+    option_no_badges = 1
+    option_add_kanto = 2
 
 
 class ReusableTMs(Toggle):
@@ -147,6 +164,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     red_badges: RedBadges
     randomize_hidden_items: RandomizeHiddenItems
     require_itemfinder: RequireItemfinder
+    trainersanity: Trainersanity
     randomize_pokegear: RandomizePokegear
     randomize_starters: RandomizeStarters
     randomize_wilds: RandomizeWilds
@@ -155,6 +173,7 @@ class PokemonCrystalOptions(PerGameCommonOptions):
     randomize_trainer_parties: RandomizeTrainerParties
     randomize_learnsets: RandomizeLearnsets
     full_tmhm_compatibility: FullTmHmCompatibility
+    hm_badge_requirements: HMBadgeRequirements
     reusable_tms: ReusableTMs
     guaranteed_catch: GuaranteedCatch
     minimum_catch_rate: MinimumCatchRate

@@ -2016,7 +2016,7 @@
 		"default_item": "FULL_RESTORE"
 	},
 	"WHIRL_ISLAND_B1F_HIDDEN_FULL_RESTORE": {
-		"label": "Whirl Islands B1F - Hiddden Item on Boulder in West",
+		"label": "Whirl Islands B1F - Hidden Item on Boulder in West",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_FULL_RESTORE",
 		"default_item": "FULL_RESTORE",
 		"type": "hiddenitem",
@@ -2024,7 +2024,7 @@
 		"script": "WhirlIslandB1FHiddenFullRestore"
 	},
 	"WHIRL_ISLAND_B1F_HIDDEN_RARE_CANDY": {
-		"label": "Whirl Islands B1F - Hiddden Item in Northeast",
+		"label": "Whirl Islands B1F - Hidden Item in Northeast",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_RARE_CANDY",
 		"default_item": "RARE_CANDY",
 		"type": "hiddenitem",
@@ -2032,7 +2032,7 @@
 		"script": "WhirlIslandB1FHiddenRareCandy"
 	},
 	"WHIRL_ISLAND_B1F_HIDDEN_ULTRA_BALL": {
-		"label": "Whirl Islands B1F - Hiddden Item in Northwest",
+		"label": "Whirl Islands B1F - Hidden Item in East",
 		"flag": "EVENT_WHIRL_ISLAND_B1F_HIDDEN_ULTRA_BALL",
 		"default_item": "ULTRA_BALL",
 		"type": "hiddenitem",
@@ -3005,7 +3005,7 @@
 		"type": "trainer",
 		"tags": ["Trainersanity"],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_TWINS_AMY_AND_MAY"
+		"script": "AP_Trainer_TWINS_AMYANDMAY1"
 	},
 	"ITEM_FROM_BUG_CATCHER_BENNY": {
 		"label": "Azalea Gym - Bug Catcher Benny",
@@ -3125,7 +3125,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_TWINS_JO_AND_ZOE"
+		"script": "AP_Trainer_TWINS_JOANDZOE1"
 	},
 	"ITEM_FROM_SWIMMERF_DIANA": {
 		"label": "Cerulean Gym - Swimmer Diana",
@@ -3165,7 +3165,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_YOSHI"
+		"script": "AP_Trainer_BLACKBELT_T_YOSHI"
 	},
 	"ITEM_FROM_BLACKBELT_LAO": {
 		"label": "Cianwood Gym - Blackbelt Lao",
@@ -3175,7 +3175,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_LAO"
+		"script": "AP_Trainer_BLACKBELT_T_LAO"
 	},
 	"ITEM_FROM_BLACKBELT_NOB": {
 		"label": "Cianwood Gym - Blackbelt Nob",
@@ -3185,7 +3185,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_NOB"
+		"script": "AP_Trainer_BLACKBELT_T_NOB"
 	},
 	"ITEM_FROM_BLACKBELT_LUNG": {
 		"label": "Cianwood Gym - Blackbelt Lung",
@@ -3195,7 +3195,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_LUNG"
+		"script": "AP_Trainer_BLACKBELT_T_LUNG"
 	},
 	"ITEM_FROM_KIMONO_GIRL_NAOKO": {
 		"label": "Dance Theater - Kimono Girl Naoko",
@@ -3275,7 +3275,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_TWINS_LEA_AND_PIA"
+		"script": "AP_Trainer_TWINS_LEAANDPIA1"
 	},
 	"ITEM_FROM_SAGE_JEFFREY": {
 		"label": "Ecruteak Gym - Sage Jeffrey",
@@ -3375,7 +3375,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_WAI"
+		"script": "AP_Trainer_BLACKBELT_T_WAI"
 	},
 	"ITEM_FROM_SAILOR_KENNETH": {
 		"label": "Fast Ship B1F - Sailor Kenneth",
@@ -3495,7 +3495,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_TWINS_MEG_AND_PEG"
+		"script": "AP_Trainer_TWINS_MEGANDPEG1"
 	},
 	"ITEM_FROM_PSYCHIC_RODNEY": {
 		"label": "Fast Ship 1F - Psychic Rodney",
@@ -3505,7 +3505,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_RODNEY"
+		"script": "AP_Trainer_PSYCHIC_T_RODNEY"
 	},
 	"ITEM_FROM_POKEFANM_JEREMY": {
 		"label": "Fast Ship 1F - Pokefan Jeremy",
@@ -3658,24 +3658,24 @@
 		"script": "AP_Trainer_POKEMANIAC_DONALD"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_11": {
-		"label": "Goldenrod UG B2F - Grunt 11",
+		"label": "Goldenrod UG B2F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_11",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_11"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_11"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_25": {
-		"label": "Goldenrod UG B2F - Grunt 25",
+		"label": "Goldenrod UG B2F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_25",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_25"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_25"
 	},
 	"ITEM_FROM_BURGLAR_DUNCAN": {
 		"label": "Goldenrod UG B2F - Burglar Duncan",
@@ -3698,54 +3698,54 @@
 		"script": "AP_Trainer_BURGLAR_EDDIE"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_13": {
-		"label": "Goldenrod UG B2F - Grunt 13",
+		"label": "Goldenrod UG B2F - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_13",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_13"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_13"
 	},
 	"ITEM_FROM_ROCKET_GRUNTF_3": {
-		"label": "Goldenrod UG B2F - Grunt 3",
+		"label": "Goldenrod UG B2F - Grunt 4",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTF_3",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTF_3"
+		"script": "AP_Trainer_GRUNTF_GRUNTF_3"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_24": {
-		"label": "Goldenrod UG Warehouse - Grunt 24",
+		"label": "Goldenrod UG Warehouse - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_24",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_24"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_24"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_14": {
-		"label": "Goldenrod UG Warehouse - Grunt 14",
+		"label": "Goldenrod UG Warehouse - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_14",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_14"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_14"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_15": {
-		"label": "Goldenrod UG Warehouse - Grunt 15",
+		"label": "Goldenrod UG Warehouse - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_15",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_15"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_15"
 	},
 	"ITEM_FROM_BUG_CATCHER_WAYNE": {
 		"label": "Ilex Forest - Bug Catcher Wayne",
@@ -3885,7 +3885,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_SCHOOLBOY_JACK"
+		"script": "AP_Trainer_SCHOOLBOY_JACK1"
 	},
 	"ITEM_FROM_POKEFANM_WILLIAM": {
 		"label": "National Park - Pokefan William",
@@ -3905,7 +3905,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_POKEFANF_BEVERLY"
+		"script": "AP_Trainer_POKEFANF_BEVERLY1"
 	},
 	"ITEM_FROM_LASS_KRISE": {
 		"label": "National Park - Lass Krise",
@@ -3935,7 +3935,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_SAILOR_HUEY"
+		"script": "AP_Trainer_SAILOR_HUEY1"
 	},
 	"ITEM_FROM_BIRD_KEEPER_THEO": {
 		"label": "Olivine Lighthouse 3F - Bird Keeper Theo",
@@ -3975,7 +3975,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_LASS_CONNIE"
+		"script": "AP_Trainer_LASS_CONNIE1"
 	},
 	"ITEM_FROM_SAILOR_KENT": {
 		"label": "Olivine Lighthouse 4F - Sailor Kent",
@@ -4018,84 +4018,84 @@
 		"script": "AP_Trainer_CAMPER_JERRY"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_3": {
-		"label": "Radio Tower 1F - Grunt 3",
+		"label": "Radio Tower 1F - Grunt",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_3",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_3"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_3"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_4": {
-		"label": "Radio Tower 2F - Grunt 4",
+		"label": "Radio Tower 2F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_4",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_4"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_4"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_5": {
-		"label": "Radio Tower 2F - Grunt 5",
+		"label": "Radio Tower 2F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_5",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_5"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_5"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_6": {
-		"label": "Radio Tower 2F - Grunt 6",
+		"label": "Radio Tower 2F - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_6",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_6"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_6"
 	},
 	"ITEM_FROM_ROCKET_GRUNTF_2": {
-		"label": "Radio Tower 2F - Grunt 2",
+		"label": "Radio Tower 2F - Grunt 4",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTF_2",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTF_2"
+		"script": "AP_Trainer_GRUNTF_GRUNTF_2"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_7": {
-		"label": "Radio Tower 3F - Grunt 7",
+		"label": "Radio Tower 3F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_7",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_7"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_7"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_8": {
-		"label": "Radio Tower 3F - Grunt 8",
+		"label": "Radio Tower 3F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_8",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_8"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_8"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_9": {
-		"label": "Radio Tower 3F - Grunt 9",
+		"label": "Radio Tower 3F - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_9",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_9"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_9"
 	},
 	"ITEM_FROM_SCIENTIST_MARC": {
 		"label": "Radio Tower 3F - Scientist Marc",
@@ -4108,34 +4108,34 @@
 		"script": "AP_Trainer_SCIENTIST_MARC"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_10": {
-		"label": "Radio Tower 4F - Grunt 10",
+		"label": "Radio Tower 4F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_10",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_10"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_10"
 	},
 	"ITEM_FROM_ROCKET_EXECUTIVEM_2": {
-		"label": "Radio Tower 4F - Executivem Executivem_2",
+		"label": "Radio Tower 4F - Rocket Executive",
 		"flag": "EVENT_ITEM_FROM_ROCKET_EXECUTIVEM_2",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_EXECUTIVEM_2"
+		"script": "AP_Trainer_EXECUTIVEM_EXECUTIVEM_2"
 	},
 	"ITEM_FROM_ROCKET_GRUNTF_4": {
-		"label": "Radio Tower 4F - Grunt 4",
+		"label": "Radio Tower 4F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTF_4",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTF_4"
+		"script": "AP_Trainer_GRUNTF_GRUNTF_4"
 	},
 	"ITEM_FROM_SCIENTIST_RICH": {
 		"label": "Radio Tower 4F - Scientist Rich",
@@ -4148,14 +4148,14 @@
 		"script": "AP_Trainer_SCIENTIST_RICH"
 	},
 	"ITEM_FROM_ROCKET_EXECUTIVEF_1": {
-		"label": "Radio Tower 5F - Executive 1",
+		"label": "Radio Tower 5F - Executive",
 		"flag": "EVENT_ITEM_FROM_ROCKET_EXECUTIVEF_1",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_EXECUTIVEF_1"
+		"script": "AP_Trainer_EXECUTIVEF_EXECUTIVEF_1"
 	},
 	"ITEM_FROM_SCHOOLBOY_DANNY": {
 		"label": "Route 1 - Schoolboy Danny",
@@ -4225,7 +4225,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_HERMAN"
+		"script": "AP_Trainer_PSYCHIC_T_HERMAN"
 	},
 	"ITEM_FROM_PSYCHIC_FIDEL": {
 		"label": "Route 11 - Psychic Fidel",
@@ -4235,7 +4235,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_FIDEL"
+		"script": "AP_Trainer_PSYCHIC_T_FIDEL"
 	},
 	"ITEM_FROM_FISHER_KYLE": {
 		"label": "Route 12 - Fisher Kyle",
@@ -4385,7 +4385,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_SCHOOLBOY_KIP"
+		"script": "AP_Trainer_SCHOOLBOY_KIPP"
 	},
 	"ITEM_FROM_SCHOOLBOY_TOMMY": {
 		"label": "Route 15 - Schoolboy Tommy",
@@ -4688,14 +4688,14 @@
 		"script": "AP_Trainer_COOLTRAINERM_JAKE"
 	},
 	"ITEM_FROM_COOLTRAINERM_GAVEN": {
-		"label": "Route 26 - Cool Trainer Gaven3",
+		"label": "Route 26 - Cool Trainer Gaven",
 		"flag": "EVENT_ITEM_FROM_COOLTRAINERM_GAVEN",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_COOLTRAINERM_GAVEN"
+		"script": "AP_Trainer_COOLTRAINERM_GAVEN3"
 	},
 	"ITEM_FROM_COOLTRAINERF_JOYCE": {
 		"label": "Route 26 - Cool Trainer Joyce",
@@ -4715,7 +4715,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_COOLTRAINERF_BETH"
+		"script": "AP_Trainer_COOLTRAINERF_BETH1"
 	},
 	"ITEM_FROM_PSYCHIC_RICHARD": {
 		"label": "Route 26 - Psychic Richard",
@@ -4725,7 +4725,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_RICHARD"
+		"script": "AP_Trainer_PSYCHIC_T_RICHARD"
 	},
 	"ITEM_FROM_FISHER_SCOTT": {
 		"label": "Route 26 - Fisher Scott",
@@ -4745,10 +4745,10 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_GILBERT"
+		"script": "AP_Trainer_PSYCHIC_T_GILBERT"
 	},
 	"ITEM_FROM_BIRD_KEEPER_JOSE2": {
-		"label": "Route 27 - Bird Keeper Jose2",
+		"label": "Route 27 - Bird Keeper Jose",
 		"flag": "EVENT_ITEM_FROM_BIRD_KEEPER_JOSE2",
 		"type": "trainer",
 		"tags": [
@@ -4785,7 +4785,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_COOLTRAINERF_REENA"
+		"script": "AP_Trainer_COOLTRAINERF_REENA1"
 	},
 	"ITEM_FROM_COOLTRAINERF_MEGAN": {
 		"label": "Route 27 - Cool Trainer Megan",
@@ -4845,7 +4845,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_YOUNGSTER_JOEY"
+		"script": "AP_Trainer_YOUNGSTER_JOEY1"
 	},
 	"ITEM_FROM_YOUNGSTER_MIKEY": {
 		"label": "Route 30 - Youngster Mikey",
@@ -4875,7 +4875,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BUG_CATCHER_WADE"
+		"script": "AP_Trainer_BUG_CATCHER_WADE1"
 	},
 	"ITEM_FROM_CAMPER_ROLAND": {
 		"label": "Route 32 - Camper Roland",
@@ -4905,7 +4905,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_FISHER_RALPH"
+		"script": "AP_Trainer_FISHER_RALPH1"
 	},
 	"ITEM_FROM_FISHER_HENRY": {
 		"label": "Route 32 - Fisher Henry",
@@ -4925,7 +4925,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PICNICKER_LIZ"
+		"script": "AP_Trainer_PICNICKER_LIZ1"
 	},
 	"ITEM_FROM_YOUNGSTER_ALBERT": {
 		"label": "Route 32 - Youngster Albert",
@@ -4958,14 +4958,14 @@
 		"script": "AP_Trainer_BIRD_KEEPER_PETER"
 	},
 	"ITEM_FROM_HIKER_ANTHONY": {
-		"label": "Route 33 - Hiker Anthony2",
+		"label": "Route 33 - Hiker Anthony",
 		"flag": "EVENT_ITEM_FROM_HIKER_ANTHONY",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_HIKER_ANTHONY"
+		"script": "AP_Trainer_HIKER_ANTHONY2"
 	},
 	"ITEM_FROM_CAMPER_TODD": {
 		"label": "Route 34 - Camper Todd",
@@ -4975,7 +4975,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_CAMPER_TODD"
+		"script": "AP_Trainer_CAMPER_TODD1"
 	},
 	"ITEM_FROM_PICNICKER_GINA": {
 		"label": "Route 34 - Picnicker Gina",
@@ -4985,7 +4985,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PICNICKER_GINA"
+		"script": "AP_Trainer_PICNICKER_GINA1"
 	},
 	"ITEM_FROM_YOUNGSTER_SAMUEL": {
 		"label": "Route 34 - Youngster Samuel",
@@ -5065,7 +5065,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_JUGGLER_IRWIN"
+		"script": "AP_Trainer_JUGGLER_IRWIN1"
 	},
 	"ITEM_FROM_CAMPER_IVAN": {
 		"label": "Route 35 - Camper Ivan",
@@ -5115,7 +5115,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BUG_CATCHER_ARNIE"
+		"script": "AP_Trainer_BUG_CATCHER_ARNIE1"
 	},
 	"ITEM_FROM_FIREBREATHER_WALT": {
 		"label": "Route 35 - Firebreather Walt",
@@ -5135,7 +5135,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_SCHOOLBOY_ALAN"
+		"script": "AP_Trainer_SCHOOLBOY_ALAN1"
 	},
 	"ITEM_FROM_PSYCHIC_MARK": {
 		"label": "Route 36 - Psychic Mark",
@@ -5145,7 +5145,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_MARK"
+		"script": "AP_Trainer_PSYCHIC_T_MARK"
 	},
 	"ITEM_FROM_TWINS_ANN_AND_ANNE": {
 		"label": "Route 37 - Twins Ann & Anne",
@@ -5155,7 +5155,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_TWINS_ANN_AND_ANNE"
+		"script": "AP_Trainer_TWINS_ANNANDANNE1"
 	},
 	"ITEM_FROM_PSYCHIC_GREG": {
 		"label": "Route 37 - Psychic Greg",
@@ -5165,7 +5165,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_GREG"
+		"script": "AP_Trainer_PSYCHIC_T_GREG"
 	},
 	"ITEM_FROM_BIRD_KEEPER_TOBY": {
 		"label": "Route 38 - Bird Keeper Toby",
@@ -5195,7 +5195,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_LASS_DANA"
+		"script": "AP_Trainer_LASS_DANA1"
 	},
 	"ITEM_FROM_SCHOOLBOY_CHAD": {
 		"label": "Route 38 - Schoolboy Chad",
@@ -5205,7 +5205,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_SCHOOLBOY_CHAD"
+		"script": "AP_Trainer_SCHOOLBOY_CHAD1"
 	},
 	"ITEM_FROM_BEAUTY_VALERIE": {
 		"label": "Route 38 - Beauty Valerie",
@@ -5235,7 +5235,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_POKEFANM_DEREK"
+		"script": "AP_Trainer_POKEFANM_DEREK1"
 	},
 	"ITEM_FROM_POKEFANF_RUTH": {
 		"label": "Route 39 - Pokefan Ruth",
@@ -5265,7 +5265,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_NORMAN"
+		"script": "AP_Trainer_PSYCHIC_T_NORMAN"
 	},
 	"ITEM_FROM_BIRD_KEEPER_HANK": {
 		"label": "Route 4 - Bird Keeper Hank",
@@ -5445,7 +5445,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_FISHER_TULLY"
+		"script": "AP_Trainer_FISHER_TULLY1"
 	},
 	"ITEM_FROM_POKEMANIAC_SHANE": {
 		"label": "Route 42 - Pokemaniac Shane",
@@ -5495,7 +5495,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_POKEMANIAC_BRENT"
+		"script": "AP_Trainer_POKEMANIAC_BRENT1"
 	},
 	"ITEM_FROM_POKEMANIAC_RON": {
 		"label": "Route 43 - Pokemaniac Ron",
@@ -5518,14 +5518,14 @@
 		"script": "AP_Trainer_FISHER_MARVIN"
 	},
 	"ITEM_FROM_PICNICKER_TIFFANY": {
-		"label": "Route 43 - Picnicker Tiffany3",
+		"label": "Route 43 - Picnicker Tiffany",
 		"flag": "EVENT_ITEM_FROM_PICNICKER_TIFFANY",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PICNICKER_TIFFANY"
+		"script": "AP_Trainer_PICNICKER_TIFFANY3"
 	},
 	"ITEM_FROM_BIRD_KEEPER_VANCE": {
 		"label": "Route 44 - Bird Keeper Vance",
@@ -5535,7 +5535,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BIRD_KEEPER_VANCE"
+		"script": "AP_Trainer_BIRD_KEEPER_VANCE1"
 	},
 	"ITEM_FROM_PSYCHIC_PHIL": {
 		"label": "Route 44 - Psychic Phil",
@@ -5545,7 +5545,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_PHIL"
+		"script": "AP_Trainer_PSYCHIC_T_PHIL"
 	},
 	"ITEM_FROM_FISHER_WILTON": {
 		"label": "Route 44 - Fisher Wilton",
@@ -5555,7 +5555,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_FISHER_WILTON"
+		"script": "AP_Trainer_FISHER_WILTON1"
 	},
 	"ITEM_FROM_FISHER_EDGAR": {
 		"label": "Route 44 - Fisher Edgar",
@@ -5598,14 +5598,14 @@
 		"script": "AP_Trainer_COOLTRAINERM_ALLEN"
 	},
 	"ITEM_FROM_BLACKBELT_KENJI": {
-		"label": "Route 45 - Blackbelt Kenji3",
+		"label": "Route 45 - Blackbelt Kenji",
 		"flag": "EVENT_ITEM_FROM_BLACKBELT_KENJI",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_BLACKBELT_KENJI"
+		"script": "AP_Trainer_BLACKBELT_T_KENJI3"
 	},
 	"ITEM_FROM_HIKER_ERIK": {
 		"label": "Route 45 - Hiker Erik",
@@ -5628,14 +5628,14 @@
 		"script": "AP_Trainer_HIKER_MICHAEL"
 	},
 	"ITEM_FROM_HIKER_PARRY": {
-		"label": "Route 45 - Hiker Parry3",
+		"label": "Route 45 - Hiker Parry",
 		"flag": "EVENT_ITEM_FROM_HIKER_PARRY",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_HIKER_PARRY"
+		"script": "AP_Trainer_HIKER_PARRY3"
 	},
 	"ITEM_FROM_HIKER_TIMOTHY": {
 		"label": "Route 45 - Hiker Timothy",
@@ -5685,7 +5685,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PICNICKER_ERIN"
+		"script": "AP_Trainer_PICNICKER_ERIN1"
 	},
 	"ITEM_FROM_HIKER_BAILEY": {
 		"label": "Route 46 - Hiker Bailey",
@@ -5828,17 +5828,17 @@
 		"script": "AP_Trainer_HIKER_SIDNEY"
 	},
 	"ITEM_FROM_PSYCHIC_NATHAN": {
-		"label": "RuinsOfAlphOutside - Psychic Nathan",
+		"label": "Ruins of Alph Outside - Psychic Nathan",
 		"flag": "EVENT_ITEM_FROM_PSYCHIC_NATHAN",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_NATHAN"
+		"script": "AP_Trainer_PSYCHIC_T_NATHAN"
 	},
 	"ITEM_FROM_SUPER_NERD_STAN": {
-		"label": "RuinsOfAlphOutside - Super Nerd Stan",
+		"label": "Ruins of Alph Outside - Super Nerd Stan",
 		"flag": "EVENT_ITEM_FROM_SUPER_NERD_STAN",
 		"type": "trainer",
 		"tags": [
@@ -5865,7 +5865,7 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_FRANKLIN"
+		"script": "AP_Trainer_PSYCHIC_T_FRANKLIN"
 	},
 	"ITEM_FROM_MEDIUM_DORIS": {
 		"label": "Saffron Gym - Medium Doris",
@@ -5885,47 +5885,47 @@
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_PSYCHIC_JARED"
+		"script": "AP_Trainer_PSYCHIC_T_JARED"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_29": {
-		"label": "Slowpoke Well B1F - Grunt 29",
+		"label": "Slowpoke Well B1F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_29",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_29"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_29"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_1": {
-		"label": "Slowpoke Well B1F - Grunt 1",
+		"label": "Slowpoke Well B1F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_1",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_1"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_1"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_2": {
-		"label": "Slowpoke Well B1F - Grunt 2",
+		"label": "Slowpoke Well B1F - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_2",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_2"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_2"
 	},
 	"ITEM_FROM_ROCKET_GRUNTF_1": {
-		"label": "Slowpoke Well B1F - Grunt 1",
+		"label": "Slowpoke Well B1F - Grunt 4",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTF_1",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTF_1"
+		"script": "AP_Trainer_GRUNTF_GRUNTF_1"
 	},
 	"ITEM_FROM_SAGE_CHOW": {
 		"label": "Sprout Tower 1F - Sage Chow",
@@ -5998,64 +5998,64 @@
 		"script": "AP_Trainer_SCIENTIST_JED"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_16": {
-		"label": "Rocket HQ B1F - Grunt 16",
+		"label": "Rocket HQ B1F - Grunt",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_16",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_16"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_16"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_17": {
-		"label": "Rocket HQ B2F - Grunt 17",
+		"label": "Rocket HQ B2F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_17",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_17"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_17"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_18": {
-		"label": "Rocket HQ B2F - Grunt 18",
+		"label": "Rocket HQ B2F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_18",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_18"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_18"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_19": {
-		"label": "Rocket HQ B2F - Grunt 19",
+		"label": "Rocket HQ B2F - Grunt 3",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_19",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_19"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_19"
 	},
 	"ITEM_FROM_ROCKET_GRUNTF_5": {
-		"label": "Rocket HQ B3F - Grunt 5",
+		"label": "Rocket HQ B3F - Grunt 1",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTF_5",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTF_5"
+		"script": "AP_Trainer_GRUNTF_GRUNTF_5"
 	},
 	"ITEM_FROM_ROCKET_GRUNTM_28": {
-		"label": "Rocket HQ B3F - Grunt 28",
+		"label": "Rocket HQ B3F - Grunt 2",
 		"flag": "EVENT_ITEM_FROM_ROCKET_GRUNTM_28",
 		"type": "trainer",
 		"tags": [
 			"Trainersanity"
 		],
 		"default_item": "NO_ITEM",
-		"script": "AP_Trainer_ROCKET_GRUNTM_28"
+		"script": "AP_Trainer_GRUNTM_GRUNTM_28"
 	},
 	"ITEM_FROM_SCIENTIST_ROSS": {
 		"label": "Rocket HQ B3F - Scientist Ross",
