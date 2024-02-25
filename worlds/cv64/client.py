@@ -48,7 +48,7 @@ class Castlevania64Client(BizHawkClient):
 
         ctx.game = self.game
         ctx.items_handling = 0b001
-        ctx.want_slot_data = True
+        ctx.want_slot_data = False
         ctx.watcher_timeout = 0.125
         return True
 
@@ -92,7 +92,7 @@ class Castlevania64Client(BizHawkClient):
             if "DeathLink" not in ctx.tags and rom_flags & 0x0100:
                 await ctx.update_death_link(True)
 
-            # Scout the Renon shop locations if shopsanity is in our slot_data.
+            # Scout the Renon shop locations if the shopsanity flag is written in the ROM.
             if rom_flags & 0x0001 and ctx.locations_info == {}:
                 await ctx.send_msgs([{
                         "cmd": "LocationScouts",

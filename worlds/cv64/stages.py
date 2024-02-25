@@ -227,7 +227,7 @@ vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.cas
                                            "alt": None, "position": 10, "path": " "}}
 
 
-def get_stage_info(stage: str, info: str) -> Union[str, int, List[Union[int, str]], None]:
+def get_stage_info(stage: str, info: str) -> Union[str, int, Union[List[int], List[str]], None]:
     if info in stage_info[stage]:
         return stage_info[stage][info]
     return None

@@ -243,12 +243,12 @@ class CV64World(World):
             if self.s1s_per_warp > 3:
                 self.multiworld.local_early_items[self.player][iname.science_key2] = 1
         elif self.starting_stage == rname.clock_tower:
-            if (self.s1s_per_warp > 2 and self.options.multi_hit_breakables.value is False) or \
-                    (self.s1s_per_warp > 8 and self.options.multi_hit_breakables.value is True):
+            if (self.s1s_per_warp > 2 and not self.options.multi_hit_breakables.value) or \
+                    (self.s1s_per_warp > 8 and self.options.multi_hit_breakables.value):
                 self.multiworld.local_early_items[self.player][iname.clocktower_key1] = 1
         elif self.starting_stage == rname.castle_wall:
-            if self.s1s_per_warp > 5 and self.options.hard_logic.value is False and \
-                    self.options.multi_hit_breakables.value is False:
+            if self.s1s_per_warp > 5 and not self.options.hard_logic.value and \
+                    not self.options.multi_hit_breakables.value:
                 self.multiworld.local_early_items[self.player][iname.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
