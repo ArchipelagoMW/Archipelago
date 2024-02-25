@@ -177,12 +177,12 @@ class StaticWitnessLogicObj:
 
     def combine_connections(self):
         # All regions need to be present, and this dict is copied later - Thus, defaultdict is not the correct choice.
-        self.STATIC_CONNECTIONS_BY_REGION_NAME = {region_name: [] for region_name in self.ALL_REGIONS_BY_NAME}
+        self.STATIC_CONNECTIONS_BY_REGION_NAME = {region_name: set() for region_name in self.ALL_REGIONS_BY_NAME}
 
         for source, connections in self.CONNECTIONS_WITH_DUPLICATES.items():
             for target, requirement in connections.items():
                 combined_req = dnf_remove_redundancies(frozenset().union(*requirement))
-                self.STATIC_CONNECTIONS_BY_REGION_NAME[source].append((target, combined_req))
+                self.STATIC_CONNECTIONS_BY_REGION_NAME[source].add((target, combined_req))
 
     def __init__(self, lines=None):
         if lines is None:
