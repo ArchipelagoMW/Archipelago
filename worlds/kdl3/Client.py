@@ -285,7 +285,7 @@ class KDL3SNIClient(SNIClient):
                 consumables = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
                 self.consumables = consumables[0] == 0x01
             if self.stars is None:
-                stars = await snes_read(ctx, KDL3_CONSUMABLE_FLAG, 1)
+                stars = await snes_read(ctx, KDL3_STARS_FLAG, 1)
                 self.stars = stars[0] == 0x01
             is_demo = await snes_read(ctx, KDL3_IS_DEMO, 1)
             # 1 - recording a demo, 2 - playing back recorded, 3+ is a demo
