@@ -13,7 +13,7 @@ class TestDungeons(TestVanillaOWG):
 
             ["Sewers - Secret Room - Left", False, []],
             ["Sewers - Secret Room - Left", True, ['Pegasus Boots', 'Progressive Glove']],
-            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Bomb Upgrade (+5)', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", True, []],
 
@@ -26,8 +26,8 @@ class TestDungeons(TestVanillaOWG):
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Big Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Lamp', 'Fire Rod']],
-            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Lamp', 'Big Key (Desert Palace)']],
-            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Pegasus Boots', 'Fire Rod', 'Big Key (Desert Palace)']],
+            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Lamp', 'Big Key (Desert Palace)']],
+            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Pegasus Boots', 'Fire Rod', 'Big Key (Desert Palace)']],
 
             ["Tower of Hera - Basement Cage", False, []],
             ["Tower of Hera - Basement Cage", False, [], ['Pegasus Boots', "Flute", "Progressive Glove"]],
@@ -90,10 +90,10 @@ class TestDungeons(TestVanillaOWG):
             ["Ice Palace - Compass Chest", False, []],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos']],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
-            ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Moon Pearl', 'Pegasus Boots', 'Flippers', 'Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Fire Rod']],
+            ["Ice Palace - Compass Chest", True, ['Small Key (Ice Palace)', 'Progressive Glove', 'Progressive Glove', 'Bombos', 'Progressive Sword']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Moon Pearl']],
@@ -105,9 +105,9 @@ class TestDungeons(TestVanillaOWG):
             ["Turtle Rock - Compass Chest", False, [], ['Cane of Somaria']],
             #todo: does clip require sword?
             #["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
-            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
+            ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Progressive Sword']],
             ["Turtle Rock - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots', 'Cane of Somaria', 'Progressive Sword', 'Quake']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
 
             ["Turtle Rock - Chain Chomps", False, []],
             #todo: does clip require sword?

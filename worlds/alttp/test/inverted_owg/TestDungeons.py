@@ -13,16 +13,15 @@ class TestDungeons(TestInvertedOWG):
             ["Sanctuary", False, []],
             ["Sanctuary", False, ['Beat Agahnim 1']],
             ["Sanctuary", True, ['Magic Mirror', 'Beat Agahnim 1']],
-            ["Sanctuary", True, ['Progressive Sword', 'Lamp', 'Beat Agahnim 1', 'Small Key (Hyrule Castle)']],
+            ["Sanctuary", True, ['Lamp', 'Beat Agahnim 1', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
             ["Sanctuary", True, ['Moon Pearl', 'Pegasus Boots']],
             ["Sanctuary", True, ['Magic Mirror', 'Pegasus Boots']],
 
             ["Sewers - Secret Room - Left", False, []],
             ["Sewers - Secret Room - Left", True, ['Moon Pearl', 'Progressive Glove', 'Pegasus Boots']],
-            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Moon Pearl', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True, ['Progressive Sword', 'Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Progressive Sword', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
-            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+10)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Moon Pearl', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Magic Mirror', 'Pegasus Boots', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
+            ["Sewers - Secret Room - Left", True, ['Bomb Upgrade (+5)', 'Beat Agahnim 1', 'Lamp', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)', 'Small Key (Hyrule Castle)']],
 
             ["Eastern Palace - Compass Chest", False, []],
             ["Eastern Palace - Compass Chest", True, ['Moon Pearl', 'Pegasus Boots']],
@@ -37,8 +36,8 @@ class TestDungeons(TestInvertedOWG):
             ["Desert Palace - Boss", False, [], ['Small Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Big Key (Desert Palace)']],
             ["Desert Palace - Boss", False, [], ['Lamp', 'Fire Rod']],
-            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Lamp']],
-            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Fire Rod']],
+            ["Desert Palace - Boss", True, ['Progressive Sword', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Lamp']],
+            ["Desert Palace - Boss", True, ['Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Small Key (Desert Palace)', 'Big Key (Desert Palace)', 'Moon Pearl', 'Pegasus Boots', 'Fire Rod']],
 
             ["Tower of Hera - Basement Cage", False, []],
             ["Tower of Hera - Basement Cage", False, [], ['Moon Pearl']],
@@ -76,8 +75,8 @@ class TestDungeons(TestInvertedOWG):
             ["Ice Palace - Compass Chest", False, []],
             ["Ice Palace - Compass Chest", False, [], ['Fire Rod', 'Bombos', 'Progressive Sword']],
             # Qirn Jump
-            ["Ice Palace - Compass Chest", True, ['Fire Rod']],
-            ["Ice Palace - Compass Chest", True, ['Bombos', 'Progressive Sword']],
+            ["Ice Palace - Compass Chest", True, ['Fire Rod', 'Small Key (Ice Palace)']],
+            ["Ice Palace - Compass Chest", True, ['Bombos', 'Progressive Sword', 'Small Key (Ice Palace)']],
 
             ["Misery Mire - Bridge Chest", False, []],
             ["Misery Mire - Bridge Chest", False, [], ['Ether']],
@@ -86,7 +85,7 @@ class TestDungeons(TestInvertedOWG):
 
             ["Turtle Rock - Compass Chest", False, []],
             ["Turtle Rock - Compass Chest", False, [], ['Cane of Somaria']],
-            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
+            ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Magic Mirror', 'Moon Pearl', 'Cane of Somaria', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)', 'Small Key (Turtle Rock)']],
             ["Turtle Rock - Compass Chest", True, ['Pegasus Boots', 'Quake', 'Progressive Sword', 'Cane of Somaria']],
 
             ["Turtle Rock - Chain Chomps", False, []],
