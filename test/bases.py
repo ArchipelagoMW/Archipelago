@@ -1,10 +1,13 @@
+import random
+import sys
 import typing
 import unittest
 from argparse import Namespace
 
+from Generate import get_seed_name
 from test.general import gen_steps
 from worlds import AutoWorld
-from worlds.AutoWorld import call_all
+from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
 from worlds.alttp.Items import ItemFactory
@@ -102,15 +105,46 @@ class TestBase(unittest.TestCase):
 
 class WorldTestBase(unittest.TestCase):
     options: typing.Dict[str, typing.Any] = {}
+    """Define options that should be used when setting up this TestBase."""
     multiworld: MultiWorld
+    """The constructed MultiWorld instance after setup."""
+    world: World
+    """The constructed World instance after setup."""
+    player: typing.ClassVar[int] = 1
 
-    game: typing.ClassVar[str]  # define game name in subclass, example "Secret of Evermore"
+    game: typing.ClassVar[str]
+    """Define game name in subclass, example "Secret of Evermore"."""
     auto_construct: typing.ClassVar[bool] = True
     """ automatically set up a world for each test in this class """
+    memory_leak_tested: typing.ClassVar[bool] = False
+    """ remember if memory leak test was already done for this class """
 
     def setUp(self) -> None:
         if self.auto_construct:
             self.world_setup()
+
+    def tearDown(self) -> None:
+        if self.__class__.memory_leak_tested or not self.options or not self.constructed or \
+                sys.version_info < (3, 11, 0):  # the leak check in tearDown fails in py<3.11 for an unknown reason
+            # only run memory leak test once per class, only for constructed with non-default options
+            # default options will be tested in test/general
+            super().tearDown()
+            return
+
+        import gc
+        import weakref
+        weak = weakref.ref(self.multiworld)
+        for attr_name in dir(self):  # delete all direct references to MultiWorld and World
+            attr: object = typing.cast(object, getattr(self, attr_name))
+            if type(attr) is MultiWorld or isinstance(attr, AutoWorld.World):
+                delattr(self, attr_name)
+        state_cache: typing.Optional[typing.Dict[typing.Any, typing.Any]] = getattr(self, "_state_cache", None)
+        if state_cache is not None:  # in case of multiple inheritance with TestBase, we need to clear its cache
+            state_cache.clear()
+        gc.collect()
+        self.__class__.memory_leak_tested = True
+        self.assertFalse(weak(), f"World {getattr(self, 'game', '')} leaked MultiWorld object")
+        super().tearDown()
 
     def world_setup(self, seed: typing.Optional[int] = None) -> None:
         if type(self) is WorldTestBase or \
@@ -122,16 +156,19 @@ class WorldTestBase(unittest.TestCase):
         if not hasattr(self, "game"):
             raise NotImplementedError("didn't define game name")
         self.multiworld = MultiWorld(1)
-        self.multiworld.game[1] = self.game
-        self.multiworld.player_name = {1: "Tester"}
+        self.multiworld.game[self.player] = self.game
+        self.multiworld.player_name = {self.player: "Tester"}
         self.multiworld.set_seed(seed)
         self.multiworld.state = CollectionState(self.multiworld)
+        random.seed(self.multiworld.seed)
+        self.multiworld.seed_name = get_seed_name(random)  # only called to get same RNG progression as Generate.py
         args = Namespace()
         for name, option in AutoWorld.AutoWorldRegister.world_types[self.game].options_dataclass.type_hints.items():
             setattr(args, name, {
-                1: option.from_any(self.options.get(name, getattr(option, "default")))
+                1: option.from_any(self.options.get(name, option.default))
             })
         self.multiworld.set_options(args)
+        self.world = self.multiworld.worlds[self.player]
         for step in gen_steps:
             call_all(self.multiworld, step)
 
@@ -190,19 +227,19 @@ class WorldTestBase(unittest.TestCase):
 
     def can_reach_location(self, location: str) -> bool:
         """Determines if the current state can reach the provided location name"""
-        return self.multiworld.state.can_reach(location, "Location", 1)
+        return self.multiworld.state.can_reach(location, "Location", self.player)
 
     def can_reach_entrance(self, entrance: str) -> bool:
         """Determines if the current state can reach the provided entrance name"""
-        return self.multiworld.state.can_reach(entrance, "Entrance", 1)
+        return self.multiworld.state.can_reach(entrance, "Entrance", self.player)
     
     def can_reach_region(self, region: str) -> bool:
         """Determines if the current state can reach the provided region name"""
-        return self.multiworld.state.can_reach(region, "Region", 1)
+        return self.multiworld.state.can_reach(region, "Region", self.player)
 
     def count(self, item_name: str) -> int:
         """Returns the amount of an item currently in state"""
-        return self.multiworld.state.count(item_name, 1)
+        return self.multiworld.state.count(item_name, self.player)
 
     def assertAccessDependency(self,
                                locations: typing.List[str],
@@ -216,10 +253,11 @@ class WorldTestBase(unittest.TestCase):
         self.collect_all_but(all_items, state)
         if only_check_listed:
             for location in locations:
-                self.assertFalse(state.can_reach(location, "Location", 1), f"{location} is reachable without {all_items}")
+                self.assertFalse(state.can_reach(location, "Location", self.player),
+                                 f"{location} is reachable without {all_items}")
         else:
             for location in self.multiworld.get_locations():
-                loc_reachable = state.can_reach(location, "Location", 1)
+                loc_reachable = state.can_reach(location, "Location", self.player)
                 self.assertEqual(loc_reachable, location.name not in locations,
                                  f"{location.name} is reachable without {all_items}" if loc_reachable
                                  else f"{location.name} is not reachable without {all_items}")
@@ -228,7 +266,7 @@ class WorldTestBase(unittest.TestCase):
             for item in items:
                 state.collect(item)
             for location in locations:
-                self.assertTrue(state.can_reach(location, "Location", 1),
+                self.assertTrue(state.can_reach(location, "Location", self.player),
                                 f"{location} not reachable with {item_names}")
             for item in items:
                 state.remove(item)
@@ -255,7 +293,7 @@ class WorldTestBase(unittest.TestCase):
         if not (self.run_default_tests and self.constructed):
             return
         with self.subTest("Game", game=self.game):
-            excluded = self.multiworld.exclude_locations[1].value
+            excluded = self.multiworld.worlds[self.player].options.exclude_locations.value
             state = self.multiworld.get_all_state(False)
             for location in self.multiworld.get_locations():
                 if location.name not in excluded:
@@ -272,7 +310,7 @@ class WorldTestBase(unittest.TestCase):
             return
         with self.subTest("Game", game=self.game):
             state = CollectionState(self.multiworld)
-            locations = self.multiworld.get_reachable_locations(state, 1)
+            locations = self.multiworld.get_reachable_locations(state, self.player)
             self.assertGreater(len(locations), 0,
                                "Need to be able to reach at least one location to get started.")
 
@@ -284,7 +322,7 @@ class WorldTestBase(unittest.TestCase):
 
         # basically a shortened reimplementation of this method from core, in order to force the check is done
         def fulfills_accessibility() -> bool:
-            locations = self.multiworld.get_locations(1).copy()
+            locations = list(self.multiworld.get_locations(1))
             state = CollectionState(self.multiworld)
             while locations:
                 sphere: typing.List[Location] = []
@@ -298,7 +336,7 @@ class WorldTestBase(unittest.TestCase):
                 for location in sphere:
                     if location.item:
                         state.collect(location.item, True, location)
-            return self.multiworld.has_beaten_game(state, 1)
+            return self.multiworld.has_beaten_game(state, self.player)
 
         with self.subTest("Game", game=self.game, seed=self.multiworld.seed):
             distribute_items_restrictive(self.multiworld)

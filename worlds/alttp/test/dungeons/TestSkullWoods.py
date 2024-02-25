@@ -8,7 +8,8 @@ class TestSkullWoods(TestDungeon):
         self.run_tests([
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
-            ["Skull Woods - Big Chest", True, ['Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Skull Woods)']],
 
             ["Skull Woods - Compass Chest", True, []],
 
@@ -64,7 +65,8 @@ class TestSkullWoods(TestDungeon):
         self.run_tests([
             ["Skull Woods - Big Chest", False, []],
             ["Skull Woods - Big Chest", False, [], ['Big Key (Skull Woods)']],
-            ["Skull Woods - Big Chest", True, ['Big Key (Skull Woods)']],
+            ["Skull Woods - Big Chest", False, [], ['Bomb Upgrade (+5)', 'Bomb Upgrade (+10)', 'Bomb Upgrade (50)']],
+            ["Skull Woods - Big Chest", True, ['Bomb Upgrade (+5)', 'Big Key (Skull Woods)']],
 
             ["Skull Woods - Compass Chest", False, []],
             ["Skull Woods - Compass Chest", False, ['Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)', 'Small Key (Skull Woods)'], ['Small Key (Skull Woods)']],

@@ -43,7 +43,7 @@ const resetSettings = () => {
 };
 
 const fetchSettingData = () => new Promise((resolve, reject) => {
-  fetch(new Request(`${window.location.origin}/static/generated/weighted-settings.json`)).then((response) => {
+  fetch(new Request(`${window.location.origin}/static/generated/weighted-options.json`)).then((response) => {
     try{ response.json().then((jsonObj) => resolve(jsonObj)); }
     catch(error){ reject(error); }
   });
@@ -93,9 +93,10 @@ class WeightedSettings {
             });
             break;
           case 'range':
-          case 'special_range':
+          case 'named_range':
             this.current[game][gameSetting]['random'] = 0;
             this.current[game][gameSetting]['random-low'] = 0;
+            this.current[game][gameSetting]['random-middle'] = 0;
             this.current[game][gameSetting]['random-high'] = 0;
             if (setting.hasOwnProperty('defaultValue')) {
               this.current[game][gameSetting][setting.defaultValue] = 25;
@@ -210,7 +211,11 @@ class WeightedSettings {
     let errorMessage = null;
 
     // User must choose a name for their file
-    if (!settings.name || settings.name.trim().length === 0 || settings.name.toLowerCase().trim() === 'player') {
+    if (
+      !settings.name ||
+      settings.name.toString().trim().length === 0 ||
+      settings.name.toString().toLowerCase().trim() === 'player'
+    ) {
       userMessage.innerText = 'You forgot to set your player name at the top of the page!';
       userMessage.classList.add('visible');
       userMessage.scrollIntoView({
@@ -256,7 +261,7 @@ class WeightedSettings {
 
         // Remove empty arrays
         else if (
-          ['exclude_locations', 'priority_locations', 'local_items', 
+          ['exclude_locations', 'priority_locations', 'local_items',
           'non_local_items', 'start_hints', 'start_location_hints'].includes(setting) &&
           settings[game][setting].length === 0
         ) {
@@ -428,13 +433,13 @@ class GameSettings {
     const weightedSettingsDiv = this.#buildWeightedSettingsDiv();
     gameDiv.appendChild(weightedSettingsDiv);
 
-    const itemPoolDiv = this.#buildItemsDiv();
+    const itemPoolDiv = this.#buildItemPoolDiv();
     gameDiv.appendChild(itemPoolDiv);
 
     const hintsDiv = this.#buildHintsDiv();
     gameDiv.appendChild(hintsDiv);
 
-    const locationsDiv = this.#buildLocationsDiv();
+    const locationsDiv = this.#buildPriorityExclusionDiv();
     gameDiv.appendChild(locationsDiv);
 
     collapseButton.addEventListener('click', () => {
@@ -518,178 +523,185 @@ class GameSettings {
           break;
 
         case 'range':
-        case 'special_range':
+        case 'named_range':
           const rangeTable = document.createElement('table');
           const rangeTbody = document.createElement('tbody');
 
-          if (((setting.max - setting.min) + 1) < 11) {
-            for (let i=setting.min; i <= setting.max; ++i) {
-              const tr = document.createElement('tr');
-              const tdLeft = document.createElement('td');
-              tdLeft.classList.add('td-left');
-              tdLeft.innerText = i;
-              tr.appendChild(tdLeft);
+          const hintText = document.createElement('p');
+          hintText.classList.add('hint-text');
+          hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
+            `below, then press the "Add" button to add a weight for it.<br /><br />Accepted values:<br />` +
+            `Normal range: ${setting.min} - ${setting.max}`;
 
-              const tdMiddle = document.createElement('td');
-              tdMiddle.classList.add('td-middle');
-              const range = document.createElement('input');
-              range.setAttribute('type', 'range');
-              range.setAttribute('id', `${this.name}-${settingName}-${i}-range`);
-              range.setAttribute('data-game', this.name);
-              range.setAttribute('data-setting', settingName);
-              range.setAttribute('data-option', i);
-              range.setAttribute('min', 0);
-              range.setAttribute('max', 50);
-              range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-              range.value = this.current[settingName][i] || 0;
-              tdMiddle.appendChild(range);
-              tr.appendChild(tdMiddle);
-
-              const tdRight = document.createElement('td');
-              tdRight.setAttribute('id', `${this.name}-${settingName}-${i}`)
-              tdRight.classList.add('td-right');
-              tdRight.innerText = range.value;
-              tr.appendChild(tdRight);
-
-              rangeTbody.appendChild(tr);
-            }
-          } else {
-            const hintText = document.createElement('p');
-            hintText.classList.add('hint-text');
-            hintText.innerHTML = 'This is a range option. You may enter a valid numerical value in the text box ' +
-              `below, then press the "Add" button to add a weight for it.<br />Minimum value: ${setting.min}<br />` +
-              `Maximum value: ${setting.max}`;
-
-            if (setting.hasOwnProperty('value_names')) {
-              hintText.innerHTML += '<br /><br />Certain values have special meaning:';
-              Object.keys(setting.value_names).forEach((specialName) => {
+          const acceptedValuesOutsideRange = [];
+          if (setting.hasOwnProperty('value_names')) {
+            Object.keys(setting.value_names).forEach((specialName) => {
+              if (
+                (setting.value_names[specialName] < setting.min) ||
+                (setting.value_names[specialName] > setting.max)
+              ) {
                 hintText.innerHTML += `<br />${specialName}: ${setting.value_names[specialName]}`;
-              });
-            }
-
-            settingWrapper.appendChild(hintText);
-
-            const addOptionDiv = document.createElement('div');
-            addOptionDiv.classList.add('add-option-div');
-            const optionInput = document.createElement('input');
-            optionInput.setAttribute('id', `${this.name}-${settingName}-option`);
-            optionInput.setAttribute('placeholder', `${setting.min} - ${setting.max}`);
-            addOptionDiv.appendChild(optionInput);
-            const addOptionButton = document.createElement('button');
-            addOptionButton.innerText = 'Add';
-            addOptionDiv.appendChild(addOptionButton);
-            settingWrapper.appendChild(addOptionDiv);
-            optionInput.addEventListener('keydown', (evt) => {
-              if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+                acceptedValuesOutsideRange.push(setting.value_names[specialName]);
+              }
             });
 
-            addOptionButton.addEventListener('click', () => {
-              const optionInput = document.getElementById(`${this.name}-${settingName}-option`);
-              let option = optionInput.value;
-              if (!option || !option.trim()) { return; }
-              option = parseInt(option, 10);
-              if ((option < setting.min) || (option > setting.max)) { return; }
-              optionInput.value = '';
-              if (document.getElementById(`${this.name}-${settingName}-${option}-range`)) { return; }
-
-              const tr = document.createElement('tr');
-              const tdLeft = document.createElement('td');
-              tdLeft.classList.add('td-left');
-              tdLeft.innerText = option;
-              tr.appendChild(tdLeft);
-
-              const tdMiddle = document.createElement('td');
-              tdMiddle.classList.add('td-middle');
-              const range = document.createElement('input');
-              range.setAttribute('type', 'range');
-              range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
-              range.setAttribute('data-game', this.name);
-              range.setAttribute('data-setting', settingName);
-              range.setAttribute('data-option', option);
-              range.setAttribute('min', 0);
-              range.setAttribute('max', 50);
-              range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-              range.value = this.current[settingName][parseInt(option, 10)];
-              tdMiddle.appendChild(range);
-              tr.appendChild(tdMiddle);
-
-              const tdRight = document.createElement('td');
-              tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
-              tdRight.classList.add('td-right');
-              tdRight.innerText = range.value;
-              tr.appendChild(tdRight);
-
-              const tdDelete = document.createElement('td');
-              tdDelete.classList.add('td-delete');
-              const deleteButton = document.createElement('span');
-              deleteButton.classList.add('range-option-delete');
-              deleteButton.innerText = '❌';
-              deleteButton.addEventListener('click', () => {
-                range.value = 0;
-                range.dispatchEvent(new Event('change'));
-                rangeTbody.removeChild(tr);
-              });
-              tdDelete.appendChild(deleteButton);
-              tr.appendChild(tdDelete);
-
-              rangeTbody.appendChild(tr);
-
-              // Save new option to settings
-              range.dispatchEvent(new Event('change'));
-            });
-
-            Object.keys(this.current[settingName]).forEach((option) => {
-              // These options are statically generated below, and should always appear even if they are deleted
-              // from localStorage
-              if (['random-low', 'random', 'random-high'].includes(option)) { return; }
-
-              const tr = document.createElement('tr');
-                const tdLeft = document.createElement('td');
-                tdLeft.classList.add('td-left');
-                tdLeft.innerText = option;
-                tr.appendChild(tdLeft);
-
-                const tdMiddle = document.createElement('td');
-                tdMiddle.classList.add('td-middle');
-                const range = document.createElement('input');
-                range.setAttribute('type', 'range');
-                range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
-                range.setAttribute('data-game', this.name);
-                range.setAttribute('data-setting', settingName);
-                range.setAttribute('data-option', option);
-                range.setAttribute('min', 0);
-                range.setAttribute('max', 50);
-                range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
-                range.value = this.current[settingName][parseInt(option, 10)];
-                tdMiddle.appendChild(range);
-                tr.appendChild(tdMiddle);
-
-                const tdRight = document.createElement('td');
-                tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
-                tdRight.classList.add('td-right');
-                tdRight.innerText = range.value;
-                tr.appendChild(tdRight);
-
-                const tdDelete = document.createElement('td');
-                tdDelete.classList.add('td-delete');
-                const deleteButton = document.createElement('span');
-                deleteButton.classList.add('range-option-delete');
-                deleteButton.innerText = '❌';
-                deleteButton.addEventListener('click', () => {
-                  range.value = 0;
-                  const changeEvent = new Event('change');
-                  changeEvent.action = 'rangeDelete';
-                  range.dispatchEvent(changeEvent);
-                  rangeTbody.removeChild(tr);
-                });
-                tdDelete.appendChild(deleteButton);
-                tr.appendChild(tdDelete);
-
-                rangeTbody.appendChild(tr);
+            hintText.innerHTML += '<br /><br />Certain values have special meaning:';
+            Object.keys(setting.value_names).forEach((specialName) => {
+              hintText.innerHTML += `<br />${specialName}: ${setting.value_names[specialName]}`;
             });
           }
 
-          ['random', 'random-low', 'random-high'].forEach((option) => {
+          settingWrapper.appendChild(hintText);
+
+          const addOptionDiv = document.createElement('div');
+          addOptionDiv.classList.add('add-option-div');
+          const optionInput = document.createElement('input');
+          optionInput.setAttribute('id', `${this.name}-${settingName}-option`);
+          let placeholderText = `${setting.min} - ${setting.max}`;
+          acceptedValuesOutsideRange.forEach((aVal) => placeholderText += `, ${aVal}`);
+          optionInput.setAttribute('placeholder', placeholderText);
+          addOptionDiv.appendChild(optionInput);
+          const addOptionButton = document.createElement('button');
+          addOptionButton.innerText = 'Add';
+          addOptionDiv.appendChild(addOptionButton);
+          settingWrapper.appendChild(addOptionDiv);
+          optionInput.addEventListener('keydown', (evt) => {
+            if (evt.key === 'Enter') { addOptionButton.dispatchEvent(new Event('click')); }
+          });
+
+          addOptionButton.addEventListener('click', () => {
+            const optionInput = document.getElementById(`${this.name}-${settingName}-option`);
+            let option = optionInput.value;
+            if (!option || !option.trim()) { return; }
+            option = parseInt(option, 10);
+
+            let optionAcceptable = false;
+            if ((option >= setting.min) && (option <= setting.max)) {
+              optionAcceptable = true;
+            }
+            if (setting.hasOwnProperty('value_names') && Object.values(setting.value_names).includes(option)){
+              optionAcceptable = true;
+            }
+            if (!optionAcceptable) { return; }
+
+            optionInput.value = '';
+            if (document.getElementById(`${this.name}-${settingName}-${option}-range`)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            if (
+              setting.hasOwnProperty('value_names') &&
+              Object.values(setting.value_names).includes(parseInt(option, 10))
+            ) {
+              const optionName = Object.keys(setting.value_names).find(
+                (key) => setting.value_names[key] === parseInt(option, 10)
+              );
+              tdLeft.innerText += ` [${optionName}]`;
+            }
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', this.name);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
+            range.value = this.current[settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              range.dispatchEvent(new Event('change'));
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+
+            // Save new option to settings
+            range.dispatchEvent(new Event('change'));
+          });
+
+          Object.keys(this.current[settingName]).forEach((option) => {
+            // These options are statically generated below, and should always appear even if they are deleted
+            // from localStorage
+            if (['random', 'random-low', 'random-middle', 'random-high'].includes(option)) { return; }
+
+            const tr = document.createElement('tr');
+            const tdLeft = document.createElement('td');
+            tdLeft.classList.add('td-left');
+            tdLeft.innerText = option;
+            if (
+              setting.hasOwnProperty('value_names') &&
+              Object.values(setting.value_names).includes(parseInt(option, 10))
+            ) {
+              const optionName = Object.keys(setting.value_names).find(
+                (key) => setting.value_names[key] === parseInt(option, 10)
+              );
+              tdLeft.innerText += ` [${optionName}]`;
+            }
+            tr.appendChild(tdLeft);
+
+            const tdMiddle = document.createElement('td');
+            tdMiddle.classList.add('td-middle');
+            const range = document.createElement('input');
+            range.setAttribute('type', 'range');
+            range.setAttribute('id', `${this.name}-${settingName}-${option}-range`);
+            range.setAttribute('data-game', this.name);
+            range.setAttribute('data-setting', settingName);
+            range.setAttribute('data-option', option);
+            range.setAttribute('min', 0);
+            range.setAttribute('max', 50);
+            range.addEventListener('change', (evt) => this.#updateRangeSetting(evt));
+            range.value = this.current[settingName][parseInt(option, 10)];
+            tdMiddle.appendChild(range);
+            tr.appendChild(tdMiddle);
+
+            const tdRight = document.createElement('td');
+            tdRight.setAttribute('id', `${this.name}-${settingName}-${option}`)
+            tdRight.classList.add('td-right');
+            tdRight.innerText = range.value;
+            tr.appendChild(tdRight);
+
+            const tdDelete = document.createElement('td');
+            tdDelete.classList.add('td-delete');
+            const deleteButton = document.createElement('span');
+            deleteButton.classList.add('range-option-delete');
+            deleteButton.innerText = '❌';
+            deleteButton.addEventListener('click', () => {
+              range.value = 0;
+              const changeEvent = new Event('change');
+              changeEvent.action = 'rangeDelete';
+              range.dispatchEvent(changeEvent);
+              rangeTbody.removeChild(tr);
+            });
+            tdDelete.appendChild(deleteButton);
+            tr.appendChild(tdDelete);
+
+            rangeTbody.appendChild(tr);
+          });
+
+          ['random', 'random-low', 'random-middle', 'random-high'].forEach((option) => {
             const tr = document.createElement('tr');
               const tdLeft = document.createElement('td');
               tdLeft.classList.add('td-left');
@@ -699,6 +711,9 @@ class GameSettings {
                   break;
                 case 'random-low':
                   tdLeft.innerText = "Random (Low)";
+                  break;
+                case 'random-middle':
+                  tdLeft.innerText = 'Random (Middle)';
                   break;
                 case 'random-high':
                   tdLeft.innerText = "Random (High)";
@@ -734,107 +749,17 @@ class GameSettings {
           break;
 
         case 'items-list':
-          const itemsList = document.createElement('div');
-          itemsList.classList.add('simple-list');
-
-          Object.values(this.data.gameItems).forEach((item) => {
-            const itemRow = document.createElement('div');
-            itemRow.classList.add('list-row');
-
-            const itemLabel = document.createElement('label');
-            itemLabel.setAttribute('for', `${this.name}-${settingName}-${item}`)
-
-            const itemCheckbox = document.createElement('input');
-            itemCheckbox.setAttribute('id', `${this.name}-${settingName}-${item}`);
-            itemCheckbox.setAttribute('type', 'checkbox');
-            itemCheckbox.setAttribute('data-game', this.name);
-            itemCheckbox.setAttribute('data-setting', settingName);
-            itemCheckbox.setAttribute('data-option', item.toString());
-            itemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(item)) {
-              itemCheckbox.setAttribute('checked', '1');
-            }
-
-            const itemName = document.createElement('span');
-            itemName.innerText = item.toString();
-
-            itemLabel.appendChild(itemCheckbox);
-            itemLabel.appendChild(itemName);
-
-            itemRow.appendChild(itemLabel);
-            itemsList.appendChild((itemRow));
-          });
-
+          const itemsList = this.#buildItemsDiv(settingName);
           settingWrapper.appendChild(itemsList);
           break;
 
         case 'locations-list':
-          const locationsList = document.createElement('div');
-          locationsList.classList.add('simple-list');
-
-          Object.values(this.data.gameLocations).forEach((location) => {
-            const locationRow = document.createElement('div');
-            locationRow.classList.add('list-row');
-
-            const locationLabel = document.createElement('label');
-            locationLabel.setAttribute('for', `${this.name}-${settingName}-${location}`)
-
-            const locationCheckbox = document.createElement('input');
-            locationCheckbox.setAttribute('id', `${this.name}-${settingName}-${location}`);
-            locationCheckbox.setAttribute('type', 'checkbox');
-            locationCheckbox.setAttribute('data-game', this.name);
-            locationCheckbox.setAttribute('data-setting', settingName);
-            locationCheckbox.setAttribute('data-option', location.toString());
-            locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(location)) {
-              locationCheckbox.setAttribute('checked', '1');
-            }
-
-            const locationName = document.createElement('span');
-            locationName.innerText = location.toString();
-
-            locationLabel.appendChild(locationCheckbox);
-            locationLabel.appendChild(locationName);
-
-            locationRow.appendChild(locationLabel);
-            locationsList.appendChild((locationRow));
-          });
-
+          const locationsList = this.#buildLocationsDiv(settingName);
           settingWrapper.appendChild(locationsList);
           break;
 
         case 'custom-list':
-          const customList = document.createElement('div');
-          customList.classList.add('simple-list');
-
-          Object.values(this.data.gameSettings[settingName].options).forEach((listItem) => {
-            const customListRow = document.createElement('div');
-            customListRow.classList.add('list-row');
-
-            const customItemLabel = document.createElement('label');
-            customItemLabel.setAttribute('for', `${this.name}-${settingName}-${listItem}`)
-
-            const customItemCheckbox = document.createElement('input');
-            customItemCheckbox.setAttribute('id', `${this.name}-${settingName}-${listItem}`);
-            customItemCheckbox.setAttribute('type', 'checkbox');
-            customItemCheckbox.setAttribute('data-game', this.name);
-            customItemCheckbox.setAttribute('data-setting', settingName);
-            customItemCheckbox.setAttribute('data-option', listItem.toString());
-            customItemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-            if (this.current[settingName].includes(listItem)) {
-              customItemCheckbox.setAttribute('checked', '1');
-            }
-
-            const customItemName = document.createElement('span');
-            customItemName.innerText = listItem.toString();
-
-            customItemLabel.appendChild(customItemCheckbox);
-            customItemLabel.appendChild(customItemName);
-
-            customListRow.appendChild(customItemLabel);
-            customList.appendChild((customListRow));
-          });
-
+          const customList = this.#buildListDiv(settingName, this.data.gameSettings[settingName].options);
           settingWrapper.appendChild(customList);
           break;
 
@@ -849,7 +774,7 @@ class GameSettings {
     return settingsWrapper;
   }
 
-  #buildItemsDiv() {
+  #buildItemPoolDiv() {
     const itemsDiv = document.createElement('div');
     itemsDiv.classList.add('items-div');
 
@@ -1058,35 +983,7 @@ class GameSettings {
     itemHintsWrapper.classList.add('hints-wrapper');
     itemHintsWrapper.innerText = 'Starting Item Hints';
 
-    const itemHintsDiv = document.createElement('div');
-    itemHintsDiv.classList.add('simple-list');
-    this.data.gameItems.forEach((item) => {
-      const itemRow = document.createElement('div');
-      itemRow.classList.add('list-row');
-
-      const itemLabel = document.createElement('label');
-      itemLabel.setAttribute('for', `${this.name}-start_hints-${item}`);
-
-      const itemCheckbox = document.createElement('input');
-      itemCheckbox.setAttribute('type', 'checkbox');
-      itemCheckbox.setAttribute('id', `${this.name}-start_hints-${item}`);
-      itemCheckbox.setAttribute('data-game', this.name);
-      itemCheckbox.setAttribute('data-setting', 'start_hints');
-      itemCheckbox.setAttribute('data-option', item);
-      if (this.current.start_hints.includes(item)) {
-        itemCheckbox.setAttribute('checked', 'true');
-      }
-      itemCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      itemLabel.appendChild(itemCheckbox);
-
-      const itemName = document.createElement('span');
-      itemName.innerText = item;
-      itemLabel.appendChild(itemName);
-
-      itemRow.appendChild(itemLabel);
-      itemHintsDiv.appendChild(itemRow);
-    });
-
+    const itemHintsDiv = this.#buildItemsDiv('start_hints');
     itemHintsWrapper.appendChild(itemHintsDiv);
     itemHintsContainer.appendChild(itemHintsWrapper);
 
@@ -1095,35 +992,7 @@ class GameSettings {
     locationHintsWrapper.classList.add('hints-wrapper');
     locationHintsWrapper.innerText = 'Starting Location Hints';
 
-    const locationHintsDiv = document.createElement('div');
-    locationHintsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-start_location_hints-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-start_location_hints-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'start_location_hints');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.start_location_hints.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      locationHintsDiv.appendChild(locationRow);
-    });
-
+    const locationHintsDiv = this.#buildLocationsDiv('start_location_hints');
     locationHintsWrapper.appendChild(locationHintsDiv);
     itemHintsContainer.appendChild(locationHintsWrapper);
 
@@ -1131,7 +1000,7 @@ class GameSettings {
     return hintsDiv;
   }
 
-  #buildLocationsDiv() {
+  #buildPriorityExclusionDiv() {
     const locationsDiv = document.createElement('div');
     locationsDiv.classList.add('locations-div');
     const locationsHeader = document.createElement('h3');
@@ -1151,35 +1020,7 @@ class GameSettings {
     priorityLocationsWrapper.classList.add('locations-wrapper');
     priorityLocationsWrapper.innerText = 'Priority Locations';
 
-    const priorityLocationsDiv = document.createElement('div');
-    priorityLocationsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-priority_locations-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-priority_locations-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'priority_locations');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.priority_locations.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      priorityLocationsDiv.appendChild(locationRow);
-    });
-
+    const priorityLocationsDiv = this.#buildLocationsDiv('priority_locations');
     priorityLocationsWrapper.appendChild(priorityLocationsDiv);
     locationsContainer.appendChild(priorityLocationsWrapper);
 
@@ -1188,40 +1029,105 @@ class GameSettings {
     excludeLocationsWrapper.classList.add('locations-wrapper');
     excludeLocationsWrapper.innerText = 'Exclude Locations';
 
-    const excludeLocationsDiv = document.createElement('div');
-    excludeLocationsDiv.classList.add('simple-list');
-    this.data.gameLocations.forEach((location) => {
-      const locationRow = document.createElement('div');
-      locationRow.classList.add('list-row');
-
-      const locationLabel = document.createElement('label');
-      locationLabel.setAttribute('for', `${this.name}-exclude_locations-${location}`);
-
-      const locationCheckbox = document.createElement('input');
-      locationCheckbox.setAttribute('type', 'checkbox');
-      locationCheckbox.setAttribute('id', `${this.name}-exclude_locations-${location}`);
-      locationCheckbox.setAttribute('data-game', this.name);
-      locationCheckbox.setAttribute('data-setting', 'exclude_locations');
-      locationCheckbox.setAttribute('data-option', location);
-      if (this.current.exclude_locations.includes(location)) {
-        locationCheckbox.setAttribute('checked', '1');
-      }
-      locationCheckbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
-      locationLabel.appendChild(locationCheckbox);
-
-      const locationName = document.createElement('span');
-      locationName.innerText = location;
-      locationLabel.appendChild(locationName);
-
-      locationRow.appendChild(locationLabel);
-      excludeLocationsDiv.appendChild(locationRow);
-    });
-
+    const excludeLocationsDiv = this.#buildLocationsDiv('exclude_locations');
     excludeLocationsWrapper.appendChild(excludeLocationsDiv);
     locationsContainer.appendChild(excludeLocationsWrapper);
 
     locationsDiv.appendChild(locationsContainer);
     return locationsDiv;
+  }
+
+  // Builds a div for a setting whose value is a list of locations.
+  #buildLocationsDiv(setting) {
+    return this.#buildListDiv(setting, this.data.gameLocations, {
+      groups: this.data.gameLocationGroups,
+      descriptions: this.data.gameLocationDescriptions,
+    });
+  }
+
+  // Builds a div for a setting whose value is a list of items.
+  #buildItemsDiv(setting) {
+    return this.#buildListDiv(setting, this.data.gameItems, {
+      groups: this.data.gameItemGroups,
+      descriptions: this.data.gameItemDescriptions
+    });
+  }
+
+  // Builds a div for a setting named `setting` with a list value that can
+  // contain `items`.
+  //
+  // The `groups` option can be a list of additional options for this list
+  // (usually `item_name_groups` or `location_name_groups`) that are displayed
+  // in a special section at the top of the list.
+  //
+  // The `descriptions` option can be a map from item names or group names to
+  // descriptions for the user's benefit.
+  #buildListDiv(setting, items, {groups = [], descriptions = {}} = {}) {
+    const div = document.createElement('div');
+    div.classList.add('simple-list');
+
+    groups.forEach((group) => {
+      const row = this.#addListRow(setting, group, descriptions[group]);
+      div.appendChild(row);
+    });
+
+    if (groups.length > 0) {
+      div.appendChild(document.createElement('hr'));
+    }
+
+    items.forEach((item) => {
+      const row = this.#addListRow(setting, item, descriptions[item]);
+      div.appendChild(row);
+    });
+
+    return div;
+  }
+
+  // Builds and returns a row for a list of checkboxes.
+  //
+  // If `help` is passed, it's displayed as a help tooltip for this list item.
+  #addListRow(setting, item, help = undefined) {
+    const row = document.createElement('div');
+    row.classList.add('list-row');
+
+    const label = document.createElement('label');
+    label.setAttribute('for', `${this.name}-${setting}-${item}`);
+
+    const checkbox = document.createElement('input');
+    checkbox.setAttribute('type', 'checkbox');
+    checkbox.setAttribute('id', `${this.name}-${setting}-${item}`);
+    checkbox.setAttribute('data-game', this.name);
+    checkbox.setAttribute('data-setting', setting);
+    checkbox.setAttribute('data-option', item);
+    if (this.current[setting].includes(item)) {
+      checkbox.setAttribute('checked', '1');
+    }
+    checkbox.addEventListener('change', (evt) => this.#updateListSetting(evt));
+    label.appendChild(checkbox);
+
+    const name = document.createElement('span');
+    name.innerText = item;
+
+    if (help) {
+      const helpSpan = document.createElement('span');
+      helpSpan.classList.add('interactive');
+      helpSpan.setAttribute('data-tooltip', help);
+      helpSpan.innerText = '(?)';
+      name.innerText += ' ';
+      name.appendChild(helpSpan);
+
+      // Put the first 7 tooltips below their rows. CSS tooltips in scrolling
+      // containers can't be visible outside those containers, so this helps
+      // ensure they won't be pushed out the top.
+      if (helpSpan.parentNode.childNodes.length < 7) {
+        helpSpan.classList.add('tooltip-bottom');
+      }
+    }
+
+    label.appendChild(name);
+
+    row.appendChild(label);
+    return row;
   }
 
   #updateRangeSetting(evt) {
