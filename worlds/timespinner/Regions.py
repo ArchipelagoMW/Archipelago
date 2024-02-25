@@ -247,13 +247,7 @@ def connect(world: MultiWorld, player: int, source: str, target: str,
 
     sourceRegion = world.get_region(source, player)
     targetRegion = world.get_region(target, player)
-
-    connection = Entrance(player, "", sourceRegion)
-
-    if rule:
-        connection.access_rule = rule
-    sourceRegion.exits.append(connection)
-    connection.connect(targetRegion)
+    sourceRegion.connect(targetRegion, rule=rule)
 
 
 def split_location_datas_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:

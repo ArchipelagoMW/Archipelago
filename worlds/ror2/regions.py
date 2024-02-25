@@ -140,11 +140,7 @@ def create_explore_region(multiworld: MultiWorld, player: int, name: str, data: 
 def create_connections_in_regions(multiworld: MultiWorld, player: int, name: str, data: RoRRegionData) -> None:
     region = multiworld.get_region(name, player)
     if data.region_exits:
-        for region_exit in data.region_exits:
-            r_exit_stage = Entrance(player, region_exit, region)
-            exit_region = multiworld.get_region(region_exit, player)
-            r_exit_stage.connect(exit_region)
-            region.exits.append(r_exit_stage)
+        region.add_exits(data.region_exits)
 
 
 def create_classic_regions(ror2_world: "RiskOfRainWorld") -> None:
