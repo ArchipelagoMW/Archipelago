@@ -16,7 +16,7 @@ class Overcooked2Web(WebWorld):
 
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Overcooked! 2 randomizer on your computer.",
         "English",
         "setup_en.md",
