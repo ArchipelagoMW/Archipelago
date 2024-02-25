@@ -9,6 +9,7 @@ from Utils import KeyedDefaultDict
 from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
+from .utils import dnf_remove_redundancies
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -49,6 +50,7 @@ class WitnessRegions:
 
         # We don't need to check for the accessibility of the source region.
         final_requirement = frozenset({option - frozenset({source}) for option in real_requirement})
+        final_requirement = dnf_remove_redundancies(final_requirement)
 
         source_region = regions_by_name[source]
         target_region = regions_by_name[target]
