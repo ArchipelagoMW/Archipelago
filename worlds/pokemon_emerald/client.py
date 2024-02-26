@@ -241,25 +241,29 @@ class PokemonEmeraldClient(BizHawkClient):
                 if read_result is None:  # Save block moved
                     return
 
-                if self.previous_death_link != ctx.last_death_link:
-                    self.previous_death_link = ctx.last_death_link
-                    if self.ignore_next_death_link:
-                        self.ignore_next_death_link = False
-                    else:
-                        await bizhawk.write(
-                            ctx.bizhawk_ctx,
-                            [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
-                        )
+                encryption_key = int.from_bytes(read_result[1], "little")
+                times_whited_out = int.from_bytes(read_result[0], "little") ^ encryption_key
 
-                times_whited_out = int.from_bytes(read_result[0], "little") ^ int.from_bytes(read_result[1], "little")
+                # Skip all deathlink code if save is not yet loaded (encryption key is zero) or white out stat not yet
+                # initialized (starts at 100 as a safety for subtracting values from an unsigned int).
+                if encryption_key != 0 and times_whited_out >= 100:
+                    if self.previous_death_link != ctx.last_death_link:
+                        self.previous_death_link = ctx.last_death_link
+                        if self.ignore_next_death_link:
+                            self.ignore_next_death_link = False
+                        else:
+                            await bizhawk.write(
+                                ctx.bizhawk_ctx,
+                                [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
+                            )
 
-                if self.death_counter is None:
-                    self.death_counter = times_whited_out
-                elif times_whited_out > self.death_counter:
-                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
-                                         f"{ctx.player_names[ctx.slot]} whited out!")
-                    self.ignore_next_death_link = True
-                    self.death_counter = times_whited_out
+                    if self.death_counter is None:
+                        self.death_counter = times_whited_out
+                    elif times_whited_out > self.death_counter:
+                        await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
+                                            f"{ctx.player_names[ctx.slot]} whited out!")
+                        self.ignore_next_death_link = True
+                        self.death_counter = times_whited_out
 
             # Give player items
             read_result = await bizhawk.guarded_read(
