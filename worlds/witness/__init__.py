@@ -295,9 +295,7 @@ class WitnessWorld(World):
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
-            for _ in range(0, len(generated_hints)):
-                hint = generated_hints.pop(0)
-
+            for hint in generated_hints:
                 location = hint.location
                 area_amount = hint.area_amount
 
