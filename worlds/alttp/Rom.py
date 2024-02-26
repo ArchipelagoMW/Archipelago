@@ -805,7 +805,8 @@ def patch_rom(world: MultiWorld, rom: LocalRom, player: int, enemized: bool):
                     if location.item.trap:
                         itemid = 0x5A  # Nothing, which disguises
                     else:
-                        itemid = get_nonnative_item_sprite(location.item.code, location.item.advancement)
+                        itemid = get_nonnative_item_sprite(location.item.code,
+                                                           world.star_scams[player] or location.item.advancement)
                 # Keys in their native dungeon should use the orignal item code for keys
                 elif location.parent_region.dungeon:
                     if location.parent_region.dungeon.is_dungeon_item(location.item):
@@ -1781,7 +1782,7 @@ def write_custom_shops(rom, world, player):
             slot = 0 if shop.type == ShopType.TakeAny else index
             if item['player'] and world.game[item['player']] != "A Link to the Past":  # item not native to ALTTP
                 item_code = get_nonnative_item_sprite(world.worlds[item['player']].item_name_to_id[item['item']],
-                                                      shop.region.locations[index].item.advancement)
+                                                      world.star_scams[player] or shop.region.locations[index].item.advancement)
             else:
                 item_code = ItemFactory(item['item'], player).code
                 if item['item'] == 'Single Arrow' and item['player'] == 0 and world.retro_bow[player]:
