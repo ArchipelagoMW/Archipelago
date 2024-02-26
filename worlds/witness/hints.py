@@ -436,12 +436,18 @@ def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itemp
             player_name = world.multiworld.get_player_name(world.player)
             logging.warning(f"Ran out of items/locations to hint for player {player_name}.")
             break
+
         if hints_to_use_first:
             location_hint = hints_to_use_first.pop()
-        elif next_random_hint_is_location or not prog_items_in_this_world:
+        elif next_random_hint_is_location and locations_in_this_world:
             location_hint = hint_from_location(world, locations_in_this_world.pop())
-        else:
+        elif not next_random_hint_is_location and prog_items_in_this_world:
             location_hint = hint_from_item(world, prog_items_in_this_world.pop(), own_itempool)
+        # The list that the hint was supposed to be taken from was empty.
+        # Try the other list, which by definition has to still have something.
+        else:
+            next_random_hint_is_location = not next_random_hint_is_location
+            continue
 
         if not location_hint or location_hint.location in already_hinted_locations:
             continue
