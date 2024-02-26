@@ -749,6 +749,8 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Forest Grave Path by Grave", "Forest Hero's Grave"):
@@ -842,6 +844,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
@@ -934,6 +938,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     # can use laurels, ice grapple, or ladder storage to traverse
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
