@@ -346,7 +346,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             for child in self.children:
                 if child.collide_point(*touch.pos):
                     key = child.sort_key
-                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"])
+                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
                     if key == parent.sort_key:
                         # second click reverses order
                         parent.reversed = not parent.reversed
