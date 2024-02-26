@@ -215,7 +215,7 @@ class MasterSmallKeys(Toggle):
     If Universal Small Keys is on, there will be a single universal Small Key."""
     display_name = "Master Keys"
     default = False
-
+    
 
 class DungeonCounters(Choice):
     """On: Always display amount of items checked in a dungeon. Pickup: Show when compass is picked up.
