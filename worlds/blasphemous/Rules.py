@@ -367,25 +367,25 @@ def can_beat_boss(state: CollectionState, boss: str, logic: int, player: int) ->
     elif boss == "Graveyard":
         return (
             has_boss_strength("amanecida")
-            and state.has_all({"D01BZ07S01[Santos]", "D02Z03S23[E]", "D02Z02S14[W]", "Wall Climb Ability"}, player)
+            and state.has_all({"D01Z06S01[Santos]", "D02Z03S23[E]", "D02Z02S14[W]", "Wall Climb Ability"}, player)
         )
     elif boss == "Jondo":
         return (
             has_boss_strength("amanecida")
-            and state.has("D01BZ07S01[Santos]", player)
+            and state.has("D01Z06S01[Santos]", player)
             and state.has_any({"D20Z01S05[W]", "D20Z01S05[E]"}, player)
             and state.has_any({"D03Z01S03[W]", "D03Z01S03[SW]"}, player)
         )
     elif boss == "Patio":
         return (
             has_boss_strength("amanecida")
-            and state.has_all({"D01BZ07S01[Santos]", "D06Z01S18[E]"}, player)
+            and state.has_all({"D01Z06S01[Santos]", "D06Z01S18[E]"}, player)
             and state.has_any({"D04Z01S04[W]", "D04Z01S04[E]", "D04Z01S04[Cherubs]"}, player)
         )
     elif boss == "Wall":
         return (
             has_boss_strength("amanecida")
-            and state.has_all({"D01BZ07S01[Santos]", "D09BZ01S01[Cell24]"}, player)
+            and state.has_all({"D01Z06S01[Santos]", "D09BZ01S01[Cell24]"}, player)
             and state.has_any({"D09Z01S01[W]", "D09Z01S01[E]"}, player)
         )
     elif boss == "Hall":
@@ -578,11 +578,12 @@ def rules(blasphemousworld):
             or state.has("Purified Hand of the Nun", player)
             or state.has("D01Z02S03[NW]", player) 
             and (
-                can_cross_gap(state, logic, player, 1)
+                can_cross_gap(state, logic, player, 2)
                 or state.has("Lorquiana", player)
                 or aubade(state, player)
                 or state.has("Cantina of the Blue Rose", player)
                 or charge_beam(state, player)
+                or state.has("Ranged Skill", player)
             )
         ))
     set_rule(world.get_location("Albero: Lvdovico's 1st reward", player),
@@ -702,10 +703,11 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("WotBC: Cliffside Child of Moonlight", player),
         lambda state: (
-            can_cross_gap(state, logic, player, 1)
+            can_cross_gap(state, logic, player, 2)
             or aubade(state, player)
             or charge_beam(state, player)
-            or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", "Cloistered Ruby"}, player)
+            or state.has_any({"Lorquiana", "Cante Jondo of the Three Sisters", "Cantina of the Blue Rose", \
+                              "Cloistered Ruby", "Ranged Skill"}, player)
             or precise_skips_allowed(logic)
         ))
     # Doors
@@ -2451,6 +2453,8 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("PotSS: 4th meeting with Redento", player),
         lambda state: redento(state, blasphemousworld, player, 4))
+    set_rule(world.get_location("PotSS: Amanecida of the Chiselled Steel", player),
+        lambda state: can_beat_boss(state, "Patio", logic, player))
     # No doors
 
 
@@ -4191,8 +4195,9 @@ def rules(blasphemousworld):
     # Items
     set_rule(world.get_location("BotSS: Platforming gauntlet", player),
         lambda state: (
-            state.has("D17BZ02S01[FrontR]", player)
-            or state.has_all({"Dash Ability", "Wall Climb Ability"}, player)
+            #state.has("D17BZ02S01[FrontR]", player) or
+            # TODO: actually fix this once door rando is real
+            state.has_all({"Dash Ability", "Wall Climb Ability"}, player) 
         ))
     # Doors
     set_rule(world.get_entrance("D17BZ02S01[FrontR]", player),

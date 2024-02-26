@@ -68,12 +68,11 @@ class SNIClientCommandProcessor(ClientCommandProcessor):
         options = snes_options.split()
         num_options = len(options)
 
-        if num_options > 0:
-            snes_device_number = int(options[0])
-
         if num_options > 1:
             snes_address = options[0]
             snes_device_number = int(options[1])
+        elif num_options > 0:
+            snes_device_number = int(options[0])
 
         self.ctx.snes_reconnect_address = None
         if self.ctx.snes_connect_task:
@@ -208,12 +207,12 @@ class SNIContext(CommonContext):
             self.killing_player_task = asyncio.create_task(deathlink_kill_player(self))
         super(SNIContext, self).on_deathlink(data)
 
-    async def handle_deathlink_state(self, currently_dead: bool) -> None:
+    async def handle_deathlink_state(self, currently_dead: bool, death_text: str = "") -> None:
         # in this state we only care about triggering a death send
         if self.death_state == DeathState.alive:
             if currently_dead:
                 self.death_state = DeathState.dead
-                await self.send_death()
+                await self.send_death(death_text)
         # in this state we care about confirming a kill, to move state to dead
         elif self.death_state == DeathState.killing_player:
             # this is being handled in deathlink_kill_player(ctx) already

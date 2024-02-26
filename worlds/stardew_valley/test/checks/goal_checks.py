@@ -1,11 +1,11 @@
 from BaseClasses import MultiWorld
-from .option_checks import is_setting, assert_is_setting
+from .option_checks import get_stardew_options
 from ... import options
 from .. import SVTestBase
 
 
 def is_goal(multiworld: MultiWorld, goal: int) -> bool:
-    return is_setting(multiworld, options.Goal.internal_name, goal)
+    return get_stardew_options(multiworld).goal.value == goal
 
 
 def is_bottom_mines(multiworld: MultiWorld) -> bool:
@@ -33,7 +33,7 @@ def is_not_perfection(multiworld: MultiWorld) -> bool:
 
 
 def assert_ginger_island_is_included(tester: SVTestBase, multiworld: MultiWorld):
-    assert_is_setting(tester, multiworld, options.ExcludeGingerIsland.internal_name, options.ExcludeGingerIsland.option_false)
+    tester.assertEqual(get_stardew_options(multiworld).exclude_ginger_island, options.ExcludeGingerIsland.option_false)
 
 
 def assert_walnut_hunter_world_is_valid(tester: SVTestBase, multiworld: MultiWorld):

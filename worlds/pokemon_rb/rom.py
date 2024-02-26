@@ -238,18 +238,19 @@ def generate_output(self, output_directory: str):
                     data[address] = 0 if "Elevator" in connected_map_name else warp_to_ids[i]
                     data[address + 1] = map_ids[connected_map_name]
 
-    for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
-                                    "Vermilion Gym - Lt. Surge TM", "Celadon Gym - Erika TM",
-                                    "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
-                                    "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
-        item_name = self.multiworld.get_location(gym_leader, self.player).item.name
-        if item_name.startswith("TM"):
-            try:
-                tm = int(item_name[2:4])
-                move = poke_data.moves[self.local_tms[tm - 1]]["id"]
-                data[rom_addresses["Gym_Leader_Moves"] + (2 * i)] = move
-            except KeyError:
-                pass
+    if not self.multiworld.key_items_only[self.player]:
+        for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
+                                        "Vermilion Gym - Lt. Surge TM", "Celadon Gym - Erika TM",
+                                        "Fuchsia Gym - Koga TM", "Saffron Gym - Sabrina TM",
+                                        "Cinnabar Gym - Blaine TM", "Viridian Gym - Giovanni TM")):
+            item_name = self.multiworld.get_location(gym_leader, self.player).item.name
+            if item_name.startswith("TM"):
+                try:
+                    tm = int(item_name[2:4])
+                    move = poke_data.moves[self.local_tms[tm - 1]]["id"]
+                    data[rom_addresses["Gym_Leader_Moves"] + (2 * i)] = move
+                except KeyError:
+                    pass
 
     def set_trade_mon(address, loc):
         mon = self.multiworld.get_location(loc, self.player).item.name
@@ -538,6 +539,10 @@ def generate_output(self, output_directory: str):
         write_bytes(data, self.rival_name, rom_addresses['Rival_Name'])
 
     data[0xFF00] = 2  # client compatibility version
+    rom_name = bytearray(f'AP{Utils.__version__.replace(".", "")[0:3]}_{self.player}_{self.multiworld.seed:11}\0',
+                         'utf8')[:21]
+    rom_name.extend([0] * (21 - len(rom_name)))
+    write_bytes(data, rom_name, 0xFFC6)
     write_bytes(data, self.multiworld.seed_name.encode(), 0xFFDB)
     write_bytes(data, self.multiworld.player_name[self.player].encode(), 0xFFF0)
 
@@ -545,10 +550,8 @@ def generate_output(self, output_directory: str):
 
     write_quizzes(self, data, random)
 
-    for location in self.multiworld.get_locations():
-        if location.player != self.player:
-            continue
-        elif location.party_data:
+    for location in self.multiworld.get_locations(self.player):
+        if location.party_data:
             for party in location.party_data:
                 if not isinstance(party["party_address"], list):
                     addresses = [rom_addresses[party["party_address"]]]
