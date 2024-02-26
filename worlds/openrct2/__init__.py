@@ -558,6 +558,7 @@ class OpenRCT2World(World):
             "randomization_range": self.options.randomization_range.value,
             "stat_rerolls": self.options.stat_rerolls.value,
             "randomize_park_values": self.options.randomize_park_values.value,
+            "ignore_ride_stat_changes": self.options.ignore_ride_stat_changes.value,
             "visibility": self.options.visibility.value,
             "rules": self.rules,
             "preferred_intensity": self.options.preferred_intensity.value,

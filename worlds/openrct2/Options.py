@@ -484,6 +484,10 @@ class SelectedRandomizationRange(Choice):
     option_extreme = Randomization_Range.extreme.value
     default = Randomization_Range.medium.value
 
+class Ignore_Ride_Stat_Changes(OpenRCT2Toggle):
+    """Disables changes to base ride stats. If enabled, rides will behave like they do in the base game."""
+    display_name = "Ignore Ride Stat Changes"
+
 class SelectedScenarioLength(Choice):
     """Choose how long this game will last. This will affect things such as unlock shop prices and if prerequisites are required before purchase. It's reccomended to choose based on how long other worlds in the multi-world take to complete.
     Synchronus Short: Around 2 hours to complete.
@@ -683,6 +687,7 @@ class openRCT2Options(PerGameCommonOptions):
     # generator options
     location_balancing: LocationBalancing
     difficulty: SelectedDifficulty
+    ignore_ride_stat_changes: Ignore_Ride_Stat_Changes
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
     filler: Filler
