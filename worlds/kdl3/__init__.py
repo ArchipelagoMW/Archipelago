@@ -145,7 +145,7 @@ class KDL3World(World):
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
             # two less restrictive ones, we need to ensure Cutter and Burning appear before their required stages
-            sand_canyon_5 = next(room for room in self.rooms if room.name == "Sand Canyon 5 - 9")
+            sand_canyon_5 = self.get_region("Sand Canyon 5 - 9")
             cutter_enemy = self.get_restrictive_copy_ability_placement("Cutter Ability", enemies_to_set,
                                                                        sand_canyon_5.level, sand_canyon_5.stage)
             if cutter_enemy:
@@ -215,8 +215,8 @@ class KDL3World(World):
                                               weights=list(star_item_weights.values()))[0])
                              for _ in range(767)])
         total_heart_stars = self.options.total_heart_stars
-        required_heart_stars = max(math.floor(total_heart_stars * required_percentage),
-                                   5)  # ensure at least 1 heart star required per world
+        # ensure at least 1 heart star required per world
+        required_heart_stars = max(int(total_heart_stars * required_percentage), 5)
         filler_items = total_heart_stars - required_heart_stars
         filler_amount = math.floor(filler_items * (self.options.filler_percentage / 100.0))
         trap_amount = math.floor(filler_amount * (self.options.trap_percentage / 100.0))

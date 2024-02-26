@@ -58,7 +58,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                 add_item_rule(location, lambda item: item.name in {
                     "Rick Spawn", "Kine Spawn", "Coo Spawn", "Nago Spawn", "ChuChu Spawn", "Pitch Spawn"
                 })
-    world.rooms = [rooms[room] for room in rooms]
+    world.rooms = list(rooms.values())
     world.multiworld.regions.extend(world.rooms)
 
     first_rooms: typing.Dict[int, KDL3Room] = dict()
@@ -70,8 +70,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
 
         raise NotImplementedError()
     else:
-        for name in rooms:
-            room = rooms[name]
+        for name, room in rooms.items():
             if room.room == 0:
                 if room.stage == 7:
                     first_rooms[0x770200 + room.level - 1] = room
@@ -87,7 +86,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                 exits
             )
             if world.options.open_world:
-                if any(["Complete" in location.name for location in room.locations]):
+                if any("Complete" in location.name for location in room.locations):
                     room.add_locations({f"{level_names[room.level]} {room.stage} - Stage Completion": None},
                                        KDL3Location)
 
@@ -118,11 +117,7 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
         5: [None for _ in range(7)]
     }
 
-    possible_stages = list()
-    for level in default_levels:
-        for stage in range(6):
-            possible_stages.append(default_levels[level][stage])
-
+    possible_stages = [default_levels[level][stage] for level in default_levels for stage in range(6)]
     if world.multiworld.plando_connections[world.player]:
         for connection in world.multiworld.plando_connections[world.player]:
             try:
