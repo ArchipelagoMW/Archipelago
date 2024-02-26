@@ -22,11 +22,9 @@ class Goal(Choice):
 
     @classmethod
     def get_option_name(cls, value: int) -> str:
-        if cls.auto_display_name and value == 2:
+        if value == 2:
             return cls.name_lookup[value].upper()
-        else:
-            return cls.name_lookup[value].title().replace("_", " ")
-
+        return super().get_option_name(value)
 
 class GoalSpeed(Choice):
     """
