@@ -224,11 +224,13 @@ def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
     ]
 
     # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if world.options.EP_difficulty == "eclipse":
+    if "0x339B6" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         always.append("Town Obelisk Side 6")  # Eclipse EP
 
-    if world.options.EP_difficulty != "normal":
+    if "0x3388F" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         always.append("Treehouse Obelisk Side 4")  # Couch EP
+
+    if "0x335AE" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         always.append("Mountainside Obelisk Side 1")  # Cloud Cycle EP.
 
     return always
@@ -305,11 +307,13 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     ]
     
     # Add Obelisk Sides that contain EPs that are meant to be hinted, if they are necessary to complete the Obelisk Side
-    if world.options.EP_difficulty != "normal":
+    if "0x33A20" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         priority.append("Town Obelisk Side 6")  # Theater Flowers EP
+
+    if "0x28B29" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         priority.append("Treehouse Obelisk Side 4")  # Shipwreck Green EP
 
-    if not world.options.disable_non_randomized_puzzles:
+    if "0x33600" not in world.player_logic.COMPLETELY_DISABLED_ENTITIES:
         priority.append("Town Obelisk Side 2")  # Tutorial Patio Flowers EP.
 
     return priority
