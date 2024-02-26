@@ -252,11 +252,11 @@ class PokemonRedBlueWorld(World):
             for item in itempool:
                 if item.player == loc.player and loc.can_fill(multiworld.state, item, False):
                     if item in progitempool:
-                        progitempool.remove(item)
+                        progitempool = [i for i in progitempool if i is not item]
                     elif item in usefulitempool:
-                        usefulitempool.remove(item)
+                        usefulitempool = [i for i in usefulitempool if i is not item]
                     elif item in filleritempool:
-                        filleritempool.remove(item)
+                        filleritempool = [i for i in filleritempool if i is not item]
                     if item.advancement:
                         state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
