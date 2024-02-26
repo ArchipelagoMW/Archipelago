@@ -2603,7 +2603,7 @@ location_tables = {
         DS3LocationData("PW2: Titanite Slab - boss drop", "Titanite Slab",
                         offline = '11,0:50004700::',
                         boss = True), # One-time drop after Friede Phase 2
-        DS3LocationData("PW2: Floating Chaos - Dunnel drop", "Floating Chaos", hostile_npc = True,
+        DS3LocationData("PW2: Floating Chaos - NPC drop", "Floating Chaos", hostile_npc = True,
                         hidden = True), # Livid Pyromancer Dunnel drop (requires ember)
         DS3LocationData("PW2: Prism Stone - pass, tree by beginning", "Prism Stone x10"),
         DS3LocationData("PW2: Titanite Chunk - pass, cliff overlooking bonfire", "Titanite Chunk"),
@@ -2836,7 +2836,7 @@ location_tables = {
                         "Twinkling Titanite"),
         DS3LocationData("RC: Soul of a Crestfallen Knight - swamp near left, nook",
                         "Soul of a Crestfallen Knight"),
-        DS3LocationData("RC: White Preacher Head - swamp near, ground near bonfire exit",
+        DS3LocationData("RC: White Preacher Head - swamp near, nook right of stairs",
                         "White Preacher Head"),
         DS3LocationData("RC: Titanite Scale - swamp far, by miniboss", "Titanite Scale"),
         DS3LocationData("RC: Dragonhead Greatshield - lower cliff, under bridge",
