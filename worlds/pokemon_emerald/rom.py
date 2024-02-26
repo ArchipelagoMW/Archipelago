@@ -13,7 +13,8 @@ from settings import get_settings
 
 from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
-from .options import RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement
+from .options import (RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement,
+                      MatchTrainerLevels)
 from .pokemon import get_random_move
 from .util import encode_string, get_easter_egg
 
@@ -366,6 +367,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     #     /* 0x2B */ u8 activeEasterEgg;
     #     /* 0x2C */ bool8 normalizeEncounterRates;
     #     /* 0x2D */ bool8 allowWonderTrading;
+    #     /* 0x2E */ u16 matchTrainerLevelMultiplierNumerator;
+    #     /* 0x30 */ u16 matchTrainerLevelMultiplierDenominator;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -406,8 +409,12 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, 1 if world.options.match_trainer_levels else 0)
 
     # Set match trainer levels bonus
-    match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
-    _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
+    if world.options.match_trainer_levels == MatchTrainerLevels.option_additive:
+        match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
+        _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
+    elif world.options.match_trainer_levels == MatchTrainerLevels.option_multiplicative:
+        _set_bytes_little_endian(patched_rom, options_address + 0x2E, 2, world.options.match_trainer_levels_bonus.value + 100)
+        _set_bytes_little_endian(patched_rom, options_address + 0x30, 2, 100)
 
     # Set elite four requirement
     _set_bytes_little_endian(
@@ -512,7 +519,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set normalize encounter rates
     _set_bytes_little_endian(patched_rom, options_address + 0x2C, 1, 1 if world.options.normalize_encounter_rates else 0)
 
-    # Set normalize encounter rates
+    # Set allow wonder trading
     _set_bytes_little_endian(patched_rom, options_address + 0x2D, 1, 1 if world.options.enable_wonder_trading else 0)
 
     if easter_egg[0] == 2:

@@ -616,24 +616,36 @@ class PurgeSpinners(Toggle):
     display_name = "Purge Spinners"
 
 
-class MatchTrainerLevels(Toggle):
+class MatchTrainerLevels(Choice):
     """
     When you start a battle with a trainer, your party's levels will be automatically set to match that trainer's highest level pokemon.
 
     The experience you receive will match your party's average actual level, and will only be awarded when you win the battle.
 
     This is a pseudo-replacement for a level cap and makes every trainer battle a fair fight while still allowing you to level up.
+
+    Off: The vanilla experience
+    Additive: The modifier you apply to your team is a flat bonus
+    Multiplicative: The modifier you apply to your team is a percent bonus
     """
     display_name = "Match Trainer Levels"
+    default = 0
+    option_off = 0
+    option_additive = 1
+    option_multiplicative = 2
 
 
 class MatchTrainerLevelsBonus(Range):
     """
-    A level bonus to apply to your team when matching an opponent's levels.
+    A level bonus (or penalty) to apply to your team when matching an opponent's levels.
 
-    Only used when match trainer levels is enabled.
+    When the match trainer levels option is "additive", this value is added to your team's levels during a battle.
+    For example, if this value is 5, you'll have a level 25 team against a level 20 team, and a level 45 team against a level 40 team.
+
+    When the match trainer levels option is "multiplicative", this is a percent bonus.
+    For example, if this value is 5, you'll have a level 21 team against a level 20 team, and a level 42 team against a level 40 team.
     """
-    display_name = "Match Trainer Levels Bonus"
+    display_name = "Match Trainer Levels Modifier"
     range_start = -100
     range_end = 100
     default = 0
