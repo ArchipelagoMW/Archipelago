@@ -1,5 +1,6 @@
 from typing import List, Tuple
 from . import KDL3TestBase
+from ..Room import KDL3Room
 
 
 class TestCopyAbilityShuffle(KDL3TestBase):
@@ -12,7 +13,7 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         "copy_ability_randomization": "enabled",
     }
 
-    def testGoal(self):
+    def test_goal(self):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
@@ -28,39 +29,41 @@ class TestCopyAbilityShuffle(KDL3TestBase):
         self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
-    def testKine(self):
+    def test_kine(self):
         self.collect_by_name(["Cutter", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testCutter(self):
+    def test_cutter(self):
         self.collect_by_name(["Kine", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testBurning(self):
+    def test_burning(self):
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)
 
-    def testCutterAndBurning(self):
+    def test_cutter_and_burning_reachable(self):
         rooms = self.multiworld.worlds[1].rooms
         copy_abilities = self.multiworld.worlds[1].copy_abilities
-        sand_canyon_5 = next(room for room in rooms if room.name == "Sand Canyon 5 - 9")
+        sand_canyon_5 = self.multiworld.get_region("Sand Canyon 5 - 9", 1)
+        assert isinstance(sand_canyon_5, KDL3Room)
         valid_rooms = [room for room in rooms if (room.level < sand_canyon_5.level)
                        or (room.level == sand_canyon_5.level and room.stage < sand_canyon_5.stage)]
         for room in valid_rooms:
-            if any([copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies]):
+            if any(copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies):
                 break
         else:
             self.fail("Could not reach Cutter Ability before Sand Canyon 5!")
-        iceberg_4 = next(room for room in rooms if room.name == "Iceberg 4 - 7")
+        iceberg_4 = self.multiworld.get_region("Iceberg 4 - 7", 1)
+        assert isinstance(iceberg_4, KDL3Room)
         valid_rooms = [room for room in rooms if (room.level < iceberg_4.level)
                        or (room.level == iceberg_4.level and room.stage < iceberg_4.stage)]
         for room in valid_rooms:
-            if any([copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies]):
+            if any(copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies):
                 break
         else:
             self.fail("Could not reach Burning Ability before Iceberg 4!")
 
-    def testValidAbilitiesForROB(self):
+    def test_valid_abilities_for_ROB(self):
         # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements
@@ -106,7 +109,7 @@ class TestAnimalShuffle(KDL3TestBase):
         "animal_randomization": "full",
     }
 
-    def testGoal(self):
+    def test_goal(self):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
@@ -122,19 +125,19 @@ class TestAnimalShuffle(KDL3TestBase):
         self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
-    def testKine(self):
+    def test_kine(self):
         self.collect_by_name(["Cutter", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testCutter(self):
+    def test_cutter(self):
         self.collect_by_name(["Kine", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testBurning(self):
+    def test_burning(self):
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)
 
-    def testLockedAnimals(self):
+    def test_locked_animals(self):
         self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
         self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
         self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
@@ -151,7 +154,7 @@ class TestAllShuffle(KDL3TestBase):
         "copy_ability_randomization": "enabled",
     }
 
-    def testGoal(self):
+    def test_goal(self):
         self.assertBeatable(False)
         heart_stars = self.get_items_by_name("Heart Star")
         self.collect(heart_stars[0:14])
@@ -167,44 +170,46 @@ class TestAllShuffle(KDL3TestBase):
         self.assertEqual(self.count("Heart Star"), 30, str(self.multiworld.seed))
         self.assertBeatable(True)
 
-    def testKine(self):
+    def test_kine(self):
         self.collect_by_name(["Cutter", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testCutter(self):
+    def test_cutter(self):
         self.collect_by_name(["Kine", "Burning", "Heart Star"])
         self.assertBeatable(False)
 
-    def testBurning(self):
+    def test_burning(self):
         self.collect_by_name(["Cutter", "Kine", "Heart Star"])
         self.assertBeatable(False)
 
-    def testLockedAnimals(self):
+    def test_locked_animals(self):
         self.assertTrue(self.multiworld.get_location("Ripple Field 5 - Animal 2", 1).item.name == "Pitch Spawn")
         self.assertTrue(self.multiworld.get_location("Iceberg 4 - Animal 1", 1).item.name == "ChuChu Spawn")
         self.assertTrue(self.multiworld.get_location("Sand Canyon 6 - Animal 1", 1).item.name in {"Kine Spawn", "Coo Spawn"})
 
-    def testCutterAndBurning(self):
+    def test_cutter_and_burning_reachable(self):
         rooms = self.multiworld.worlds[1].rooms
         copy_abilities = self.multiworld.worlds[1].copy_abilities
-        sand_canyon_5 = next(room for room in rooms if room.name == "Sand Canyon 5 - 9")
+        sand_canyon_5 = self.multiworld.get_region("Sand Canyon 5 - 9", 1)
+        assert isinstance(sand_canyon_5, KDL3Room)
         valid_rooms = [room for room in rooms if (room.level < sand_canyon_5.level)
                        or (room.level == sand_canyon_5.level and room.stage < sand_canyon_5.stage)]
         for room in valid_rooms:
-            if any([copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies]):
+            if any(copy_abilities[enemy] == "Cutter Ability" for enemy in room.enemies):
                 break
         else:
             self.fail("Could not reach Cutter Ability before Sand Canyon 5!")
-        iceberg_4 = next(room for room in rooms if room.name == "Iceberg 4 - 7")
+        iceberg_4 = self.multiworld.get_region("Iceberg 4 - 7", 1)
+        assert isinstance(iceberg_4, KDL3Room)
         valid_rooms = [room for room in rooms if (room.level < iceberg_4.level)
                        or (room.level == iceberg_4.level and room.stage < iceberg_4.stage)]
         for room in valid_rooms:
-            if any([copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies]):
+            if any(copy_abilities[enemy] == "Burning Ability" for enemy in room.enemies):
                 break
         else:
             self.fail("Could not reach Burning Ability before Iceberg 4!")
 
-    def testValidAbilitiesForROB(self):
+    def test_valid_abilities_for_ROB(self):
         # there exists a subset of 4-7 abilities that will allow us access to ROB heart star on default settings
         self.collect_by_name(["Heart Star", "Kine", "Coo"])  # we will guaranteed need Coo, Kine, and Heart Stars to reach
         # first we need to identify our bukiset requirements

@@ -279,6 +279,7 @@ class KirbyFlavorPreset(Choice):
 
     @classmethod
     def from_text(cls, text: str) -> Choice:
+        text = text.lower()
         if text == "random":
             choice_list = list(cls.name_lookup)
             choice_list.remove(14)

@@ -48,7 +48,7 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
                         room_entry["entity_load"], room_entry["consumables"], room_entry["consumables_pointer"])
         room.add_locations({location: world.location_name_to_id[location] if location in world.location_name_to_id else
                             None for location in room_entry["locations"]
-                            if (not any([x in location for x in ["1-Up", "Maxim"]]) or
+                            if (not any(x in location for x in ["1-Up", "Maxim"]) or
                             world.options.consumables.value) and ("Star" not in location
                                                                   or world.options.starsanity.value)},
                            KDL3Location)
@@ -104,17 +104,16 @@ def generate_rooms(world: "KDL3World", door_shuffle: bool, level_regions: typing
             else:
                 world.multiworld.get_location(world.location_id_to_name[world.player_levels[level][stage-1]],
                                               world.player).parent_region.add_exits([first_rooms[proper_stage].name])
-        else:
-            level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
+        level_regions[level].add_exits([first_rooms[0x770200 + level - 1].name])
 
 
 def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_pattern: bool) -> dict:
     levels: typing.Dict[int, typing.List[typing.Optional[int]]] = {
-        1: [None for _ in range(7)],
-        2: [None for _ in range(7)],
-        3: [None for _ in range(7)],
-        4: [None for _ in range(7)],
-        5: [None for _ in range(7)]
+        1: [None] * 7,
+        2: [None] * 7,
+        3: [None] * 7,
+        4: [None] * 7,
+        5: [None] * 7,
     }
 
     possible_stages = [default_levels[level][stage] for level in default_levels for stage in range(6)]
@@ -171,10 +170,10 @@ def generate_valid_levels(world: "KDL3World", enforce_world: bool, enforce_patte
                         plando_bosses.append(LocationName.boss_names[option])
 
     if boss_shuffle > 0:
-        if boss_shuffle == 2:
+        if boss_shuffle == BossShuffle.option_full:
             possible_bosses = [default_levels[world.random.randint(1, 5)][6]
                                for _ in range(5 - len(plando_bosses))]
-        elif boss_shuffle == 3:
+        elif boss_shuffle == BossShuffle.option_singularity:
             boss = world.random.randint(1, 5)
             possible_bosses = [default_levels[boss][6] for _ in range(5 - len(plando_bosses))]
         else:

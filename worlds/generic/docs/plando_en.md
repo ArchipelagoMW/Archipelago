@@ -183,10 +183,6 @@ A Link to the Past:
     Turtle Rock-Trinexx;basic: 1
     # Place as many Arrghus as possible, then let the rest be random
     Arrghus;chaos: 1
-    # Ensure that GT bottom is Kholdstare, then place Trinexx 
-    # into as many arenas as possible, then fill the rest with Kholdstare
-    # Any remaining arenas will have their vanilla bosses placed
-    Ganons Tower Bottom-Kholdstare;Trinexx;Kholdstare: 1
     
 Kirby's Dream Land 3:
   boss_shuffle:

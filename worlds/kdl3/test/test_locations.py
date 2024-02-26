@@ -12,7 +12,7 @@ class TestLocations(KDL3TestBase):
         # these ensure we can always reach all stages physically
     }
 
-    def testSimpleHeartStars(self):
+    def test_simple_heart_stars(self):
         self.run_location_test(LocationName.grass_land_muchi, ["ChuChu"])
         self.run_location_test(LocationName.grass_land_chao, ["Stone"])
         self.run_location_test(LocationName.grass_land_mine, ["Kine"])
@@ -58,7 +58,7 @@ class TestShiro(KDL3TestBase):
         "plando_options": "connections"
     }
 
-    def testShiro(self):
+    def test_shiro(self):
         self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))
         self.collect_by_name("Nago")
         self.assertFalse(self.can_reach_location("Iceberg 5 - Shiro"), str(self.multiworld.seed))

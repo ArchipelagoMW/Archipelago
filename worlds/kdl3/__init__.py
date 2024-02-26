@@ -66,7 +66,6 @@ class KDL3World(World):
     item_name_to_id = {item: item_table[item].code for item in item_table}
     location_name_to_id = {location_table[location]: location for location in location_table}
     item_name_groups = item_names
-    data_version = 1
     web = KDL3WebWorld()
     settings: typing.ClassVar[KDL3Settings]
 
@@ -121,7 +120,7 @@ class KDL3World(World):
         for room in valid_rooms:
             valid_enemies.update(room.enemies)
         placed_enemies = [enemy for enemy in valid_enemies if enemy not in enemies_to_set]
-        if any([self.copy_abilities[enemy] == copy_ability for enemy in placed_enemies]):
+        if any(self.copy_abilities[enemy] == copy_ability for enemy in placed_enemies):
             return None  # a valid enemy got placed by a more restrictive placement
         return self.random.choice(sorted([enemy for enemy in valid_enemies if enemy not in placed_enemies]))
 
@@ -146,12 +145,16 @@ class KDL3World(World):
                     enemies_to_set.remove(chosen_enemy)
             # two less restrictive ones, we need to ensure Cutter and Burning appear before their required stages
             sand_canyon_5 = self.get_region("Sand Canyon 5 - 9")
+            # this is primarily for typing, but if this ever hits it's fine to crash
+            assert isinstance(sand_canyon_5, KDL3Room)
             cutter_enemy = self.get_restrictive_copy_ability_placement("Cutter Ability", enemies_to_set,
                                                                        sand_canyon_5.level, sand_canyon_5.stage)
             if cutter_enemy:
                 self.copy_abilities[cutter_enemy] = "Cutter Ability"
                 enemies_to_set.remove(cutter_enemy)
-            iceberg_4 = next(room for room in self.rooms if room.name == "Iceberg 4 - 7")
+            iceberg_4 = self.get_region("Iceberg 4 - 7")
+            # this is primarily for typing, but if this ever hits it's fine to crash
+            assert isinstance(iceberg_4, KDL3Room)
             burning_enemy = self.get_restrictive_copy_ability_placement("Burning Ability", enemies_to_set,
                                                                         iceberg_4.level, iceberg_4.stage)
             if burning_enemy:
@@ -211,9 +214,10 @@ class KDL3World(World):
         remaining_items -= len(star_locations)
         if self.options.starsanity:
             # star fill, keep consumable pool locked to consumable and fill 767 stars specifically
-            itempool.extend([self.create_item(self.random.choices(list(star_item_weights.keys()),
-                                              weights=list(star_item_weights.values()))[0])
-                             for _ in range(767)])
+            star_items = list(star_item_weights.keys())
+            star_weights = list(star_item_weights.values())
+            itempool.extend([self.create_item(item) for item in self.random.choices(star_items, weights=star_weights,
+                                                                                    k=767)])
         total_heart_stars = self.options.total_heart_stars
         # ensure at least 1 heart star required per world
         required_heart_stars = max(int(total_heart_stars * required_percentage), 5)
@@ -274,21 +278,15 @@ class KDL3World(World):
                 KDL3Item(f"Level {level} Boss Purified", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Love-Love Rod", self.player)
         # this can technically be done at any point before generate_output
-        self.boss_butch_bosses.extend([None for _ in range(6)])
         if self.options.allow_bb:
-            for i in range(6):
-                if self.options.allow_bb == 1:
-                    self.boss_butch_bosses[i] = self.random.choice(
-                        [True, False])
-                else:
-                    self.boss_butch_bosses[i] = True
+            if self.options.allow_bb == self.options.allow_bb.option_enforced:
+                self.boss_butch_bosses = [True for _ in range(6)]
+            else:
+                self.boss_butch_bosses = [self.random.choice([True, False]) for _ in range(6)]
 
     def generate_output(self, output_directory: str):
         rom_path = ""
         try:
-            world = self.multiworld
-            player = self.player
-
             rom = RomData(get_base_rom_path())
             patch_rom(self, rom)
 
@@ -296,8 +294,8 @@ class KDL3World(World):
             rom.write_to_file(rom_path)
             self.rom_name = rom.name
 
-            patch = KDL3DeltaPatch(os.path.splitext(rom_path)[0] + KDL3DeltaPatch.patch_file_ending, player=player,
-                                   player_name=world.player_name[player], patched_path=rom_path)
+            patch = KDL3DeltaPatch(os.path.splitext(rom_path)[0] + KDL3DeltaPatch.patch_file_ending, player=self.player,
+                                   player_name=self.multiworld.player_name[self.player], patched_path=rom_path)
             patch.write()
         except Exception:
             raise

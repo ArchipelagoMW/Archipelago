@@ -1,6 +1,7 @@
 from worlds.generic.Rules import set_rule, add_rule
 from .Names import LocationName, EnemyAbilities
 from .Locations import location_table
+from .Options import GoalSpeed
 import typing
 
 if typing.TYPE_CHECKING:
@@ -111,186 +112,186 @@ def can_fix_angel_wings(state: "CollectionState", player: int, copy_abilities: t
 
 def set_rules(world: "KDL3World") -> None:
     # Level 1
-    add_rule(world.multiworld.get_location(LocationName.grass_land_muchi, world.player),
+    set_rule(world.multiworld.get_location(LocationName.grass_land_muchi, world.player),
              lambda state: can_reach_chuchu(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.grass_land_chao, world.player),
+    set_rule(world.multiworld.get_location(LocationName.grass_land_chao, world.player),
              lambda state: can_reach_stone(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.grass_land_mine, world.player),
+    set_rule(world.multiworld.get_location(LocationName.grass_land_mine, world.player),
              lambda state: can_reach_kine(state, world.player))
 
     # Level 2
-    add_rule(world.multiworld.get_location(LocationName.ripple_field_5, world.player),
+    set_rule(world.multiworld.get_location(LocationName.ripple_field_5, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.ripple_field_kamuribana, world.player),
+    set_rule(world.multiworld.get_location(LocationName.ripple_field_kamuribana, world.player),
              lambda state: can_reach_pitch(state, world.player) and can_reach_clean(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.ripple_field_bakasa, world.player),
+    set_rule(world.multiworld.get_location(LocationName.ripple_field_bakasa, world.player),
              lambda state: can_reach_kine(state, world.player) and can_reach_parasol(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.ripple_field_toad, world.player),
+    set_rule(world.multiworld.get_location(LocationName.ripple_field_toad, world.player),
              lambda state: can_reach_needle(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
+    set_rule(world.multiworld.get_location(LocationName.ripple_field_mama_pitch, world.player),
              lambda state: (can_reach_pitch(state, world.player) and
                             can_reach_kine(state, world.player) and
                             can_reach_burning(state, world.player) and
                             can_reach_stone(state, world.player)))
 
     # Level 3
-    add_rule(world.multiworld.get_location(LocationName.sand_canyon_5, world.player),
+    set_rule(world.multiworld.get_location(LocationName.sand_canyon_5, world.player),
              lambda state: can_reach_cutter(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.sand_canyon_auntie, world.player),
+    set_rule(world.multiworld.get_location(LocationName.sand_canyon_auntie, world.player),
              lambda state: can_reach_clean(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.sand_canyon_nyupun, world.player),
+    set_rule(world.multiworld.get_location(LocationName.sand_canyon_nyupun, world.player),
              lambda state: can_reach_chuchu(state, world.player) and can_reach_cutter(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.sand_canyon_rob, world.player),
+    set_rule(world.multiworld.get_location(LocationName.sand_canyon_rob, world.player),
              lambda state: can_assemble_rob(state, world.player, world.copy_abilities)
              )
 
     # Level 4
-    add_rule(world.multiworld.get_location(LocationName.cloudy_park_hibanamodoki, world.player),
+    set_rule(world.multiworld.get_location(LocationName.cloudy_park_hibanamodoki, world.player),
              lambda state: can_reach_coo(state, world.player) and can_reach_clean(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.cloudy_park_piyokeko, world.player),
+    set_rule(world.multiworld.get_location(LocationName.cloudy_park_piyokeko, world.player),
              lambda state: can_reach_needle(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.cloudy_park_mikarin, world.player),
+    set_rule(world.multiworld.get_location(LocationName.cloudy_park_mikarin, world.player),
              lambda state: can_reach_coo(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.cloudy_park_pick, world.player),
+    set_rule(world.multiworld.get_location(LocationName.cloudy_park_pick, world.player),
              lambda state: can_reach_rick(state, world.player))
 
     # Level 5
-    add_rule(world.multiworld.get_location(LocationName.iceberg_4, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_4, world.player),
              lambda state: can_reach_burning(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.iceberg_kogoesou, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_kogoesou, world.player),
              lambda state: can_reach_burning(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.iceberg_samus, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_samus, world.player),
              lambda state: can_reach_ice(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.iceberg_name, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_name, world.player),
              lambda state: (can_reach_coo(state, world.player) and
                             can_reach_burning(state, world.player) and
                             can_reach_chuchu(state, world.player)))
     # ChuChu is guaranteed here, but we use this for consistency
-    add_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_shiro, world.player),
              lambda state: can_reach_nago(state, world.player))
-    add_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
+    set_rule(world.multiworld.get_location(LocationName.iceberg_angel, world.player),
              lambda state: can_fix_angel_wings(state, world.player, world.copy_abilities))
 
     # Consumables
     if world.options.consumables:
-        add_rule(world.multiworld.get_location(LocationName.grass_land_1_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.grass_land_1_u1, world.player),
                  lambda state: can_reach_parasol(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.grass_land_1_m1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.grass_land_1_m1, world.player),
                  lambda state: can_reach_spark(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.grass_land_2_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.grass_land_2_u1, world.player),
                  lambda state: can_reach_needle(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_2_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_2_u1, world.player),
                  lambda state: can_reach_kine(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_2_m1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_2_m1, world.player),
                  lambda state: can_reach_kine(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_3_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_3_u1, world.player),
                  lambda state: can_reach_cutter(state, world.player) or can_reach_spark(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_4_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_4_u1, world.player),
                  lambda state: can_reach_stone(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_4_m2, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_4_m2, world.player),
                  lambda state: can_reach_stone(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_5_m1, world.player),
                  lambda state: can_reach_kine(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_5_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_5_u1, world.player),
                  lambda state: (can_reach_kine(state, world.player) and
                                 can_reach_burning(state, world.player) and
                                 can_reach_stone(state, world.player)))
-        add_rule(world.multiworld.get_location(LocationName.ripple_field_5_m2, world.player),
+        set_rule(world.multiworld.get_location(LocationName.ripple_field_5_m2, world.player),
                  lambda state: (can_reach_kine(state, world.player) and
                                 can_reach_burning(state, world.player) and
                                 can_reach_stone(state, world.player)))
-        add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.sand_canyon_4_u1, world.player),
                  lambda state: can_reach_clean(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
+        set_rule(world.multiworld.get_location(LocationName.sand_canyon_4_m2, world.player),
                  lambda state: can_reach_needle(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
+        set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
                  lambda state: can_reach_ice(state, world.player) and
                  (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
-        add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
+        set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
                  lambda state: can_reach_ice(state, world.player) and
                  (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
-        add_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
+        set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
                  lambda state: can_reach_ice(state, world.player) and
                  (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
-        add_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
+        set_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
                  lambda state: can_reach_cutter(state, world.player))
 
     if world.options.starsanity:
         # ranges are our friend
         for i in range(7, 11):
-            add_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
                      lambda state: can_reach_cutter(state, world.player))
         for i in range(11, 14):
-            add_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Grass Land 1 - Star {i}", world.player),
                      lambda state: can_reach_parasol(state, world.player))
         for i in [1, 3, 4, 9, 10]:
-            add_rule(world.multiworld.get_location(f"Grass Land 2 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Grass Land 2 - Star {i}", world.player),
                      lambda state: can_reach_stone(state, world.player))
-        add_rule(world.multiworld.get_location("Grass Land 2 - Star 2", world.player),
+        set_rule(world.multiworld.get_location("Grass Land 2 - Star 2", world.player),
                  lambda state: can_reach_burning(state, world.player))
-        add_rule(world.multiworld.get_location("Ripple Field 2 - Star 17", world.player),
+        set_rule(world.multiworld.get_location("Ripple Field 2 - Star 17", world.player),
                  lambda state: can_reach_kine(state, world.player))
         for i in range(41, 43):
             # any star past this point also needs kine, but so does the exit
-            add_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
                      lambda state: can_reach_kine(state, world.player))
         for i in range(46, 49):
             # also requires kine, but only for access from the prior room
-            add_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Ripple Field 5 - Star {i}", world.player),
                      lambda state: can_reach_burning(state, world.player) and can_reach_stone(state, world.player))
         for i in range(12, 18):
-            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                      lambda state: can_reach_ice(state, world.player) and
                      (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
         for i in range(21, 23):
-            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                      lambda state: can_reach_chuchu(state, world.player))
         for r in [range(19, 21), range(23, 31)]:
             for i in r:
-                add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+                set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                          lambda state: can_reach_clean(state, world.player))
         for i in range(31, 41):
-            add_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                      lambda state: can_reach_burning(state, world.player))
         for r in [range(1, 31), range(44, 51)]:
             for i in r:
-                add_rule(world.multiworld.get_location(f"Cloudy Park 4 - Star {i}", world.player),
+                set_rule(world.multiworld.get_location(f"Cloudy Park 4 - Star {i}", world.player),
                          lambda state: can_reach_clean(state, world.player))
         for i in [18, *list(range(20, 25))]:
-            add_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
                      lambda state: can_reach_ice(state, world.player))
         for i in [19, *list(range(25, 30))]:
-            add_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
+            set_rule(world.multiworld.get_location(f"Cloudy Park 6 - Star {i}", world.player),
                      lambda state: can_reach_ice(state, world.player))
     # copy ability access edge cases
     # Kirby cannot eat enemies fully submerged in water. Vast majority of cases, the enemy can be brought to the surface
     # and eaten by inhaling while falling on top of them
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_2_E3, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_2_E3, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_3_E6, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_3_E6, world.player),
              lambda state: can_reach_kine(state, world.player))
     # Ripple Field 4 E5, E7, and E8 are doable, but too strict to leave in logic
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E5, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E5, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E7, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E7, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E8, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E8, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E1, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E1, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E2, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E2, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E3, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E3, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E4, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E4, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E7, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E7, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E8, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E8, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E9, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E9, world.player),
              lambda state: can_reach_kine(state, world.player))
-    add_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E10, world.player),
+    set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E10, world.player),
              lambda state: can_reach_kine(state, world.player))
 
     for boss_flag, purification, i in zip(["Level 1 Boss - Purified", "Level 2 Boss - Purified",
@@ -313,19 +314,19 @@ def set_rules(world: "KDL3World") -> None:
                                                         world.options.ow_boss_requirement.value,
                                                         world.player_levels)))
 
+    set_rule(world.multiworld.get_entrance("To Level 6", world.player),
+             lambda state: state.has("Heart Star", world.player, world.required_heart_stars))
+
+    for level in range(2, 6):
+        set_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
+                 lambda state, i=level: state.has(f"Level {i - 1} Boss Defeated", world.player))
+
     if world.options.strict_bosses:
         for level in range(2, 6):
             add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
                      lambda state, i=level: state.has(f"Level {i - 1} Boss Purified", world.player))
 
-    set_rule(world.multiworld.get_entrance("To Level 6", world.player),
-             lambda state: state.has("Heart Star", world.player, world.required_heart_stars))
-
-    for level in range(2, 6):
-        add_rule(world.multiworld.get_entrance(f"To Level {level}", world.player),
-                 lambda state, i=level: state.has(f"Level {i - 1} Boss Defeated", world.player))
-
-    if world.options.goal_speed == 0:
+    if world.options.goal_speed == GoalSpeed.option_normal:
         add_rule(world.multiworld.get_entrance("To Level 6", world.player),
                  lambda state: state.has_all(["Level 1 Boss Purified", "Level 2 Boss Purified", "Level 3 Boss Purified",
                                               "Level 4 Boss Purified", "Level 5 Boss Purified"], world.player))

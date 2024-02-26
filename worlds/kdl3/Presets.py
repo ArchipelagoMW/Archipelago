@@ -52,5 +52,5 @@ beginner = {
 
 kdl3_options_presets: Dict[str, Dict[str, Any]] = {
     "All Random": all_random,
-    "Beginner": beginner
+    "Beginner": beginner,
 }
