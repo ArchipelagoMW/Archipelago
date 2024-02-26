@@ -56,9 +56,9 @@ def shuffle_entrances(world: "MessengerWorld") -> None:
         child_region.entrances.remove(entrance)
         entrance.connected_region = None
 
-        er_type = Entrance.EntranceType.ONE_WAY if child == "Glacial Peak - Left" else \
-            Entrance.EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else Entrance.EntranceType.ONE_WAY
-        if er_type == Entrance.EntranceType.TWO_WAY:
+        er_type = EntranceType.ONE_WAY if child == "Glacial Peak - Left" else \
+            EntranceType.TWO_WAY if child in RANDOMIZED_CONNECTIONS else EntranceType.ONE_WAY
+        if er_type == EntranceType.TWO_WAY:
             mock_entrance = parent_region.create_er_target(entrance.name)
         else:
             mock_entrance = child_region.create_er_target(child)
