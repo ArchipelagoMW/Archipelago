@@ -794,9 +794,13 @@ class DarkSouls3World(World):
         if 'Pyromancy Flame' in randomized_items:
             # Make this available early because so many items are useless without it.
             self._add_entrance_rule("Road of Sacrifices", "Pyromancy Flame")
+            self._add_entrance_rule("Consumed King's Garden", "Pyromancy Flame")
+            self._add_entrance_rule("Grand Archives", "Pyromancy Flame")
         if 'Transposing Kiln' in randomized_items:
             # Make this available early so players can make use of their boss souls.
             self._add_entrance_rule("Road of Sacrifices", "Transposing Kiln")
+            self._add_entrance_rule("Consumed King's Garden", "Transposing Kiln")
+            self._add_entrance_rule("Grand Archives", "Transposing Kiln")
         # Make this available pretty early 
         if 'Small Lothric Banner' in randomized_items:
             if self.options.early_banner == "early_global":
