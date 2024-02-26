@@ -12,10 +12,10 @@ class OpenRCT2Item(Item):
 
 
 def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, filler):
-    print("\nThis is the selected scenario:")
-    print(scenario)
-    print("And these items will be randomized:")
-    print(Scenario_Items[scenario])
+    # print("\nThis is the selected scenario:")
+    # print(scenario)
+    # print("And these items will be randomized:")
+    # print(Scenario_Items[scenario])
     openRCT2_items = copy.deepcopy(Scenario_Items[scenario])
     
     if monopoly_mode:
@@ -74,9 +74,9 @@ def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, 
         if not found:
             item_frequency[ride] = 1
 
-    print("Here's the generated item table and frequency table")
-    print(item_table)
-    print("\n\n")
-    print(item_frequency)
+    # print("Here's the generated item table and frequency table")
+    # print(item_table)
+    # print("\n\n")
+    # print(item_frequency)
 
     return[item_table,item_frequency]
