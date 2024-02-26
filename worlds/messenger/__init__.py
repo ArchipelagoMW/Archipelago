@@ -181,8 +181,7 @@ class MessengerWorld(World):
         itempool: List[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
-            if item not in
-               {
+            if item not in {
                    "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
                    *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
                } and "Time Shard" not in item

@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING, Tuple
+from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
 from .options import ShufflePortals

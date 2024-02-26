@@ -22,12 +22,12 @@ def connect_plando(world: "MessengerWorld", plando_connections: List[PlandoConne
 
     def disconnect_entrance(region: Region) -> None:
         # find the disconnected entrance and remove references to it
-        for _entrance in reg2.entrances:
+        for _entrance in region.entrances:
             if not _entrance.parent_region:
                 break
         else:
             raise ValueError(f"Invalid target region for {connection}")
-        _entrance.parent_region.entrances.remove(_entrance)
+        region.entrances.remove(_entrance)
 
     multiworld = world.multiworld
     player = world.player
