@@ -295,6 +295,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Ruined Atoll Portal"].connect(
         connecting_region=regions["Ruined Atoll"])
 
+    regions["Ruined Atoll"].connect(
+        connecting_region=regions["Ruined Atoll Statue"],
+        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    regions["Ruined Atoll Statue"].connect(
+        connecting_region=regions["Ruined Atoll"])
+
     regions["Frog's Domain"].connect(
         connecting_region=regions["Frog's Domain Back"],
         rule=lambda state: state.has(grapple, player))
@@ -944,10 +950,12 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     # Bosses
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
              lambda state: has_sword(state, player))
+    # nmg - kill Librarian with a lure, or gun I guess
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or options.logic_rules)
+    # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),

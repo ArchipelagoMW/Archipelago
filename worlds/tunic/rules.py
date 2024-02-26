@@ -131,8 +131,6 @@ def set_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> No
         lambda state: has_mask(state, player, options)
     multiworld.get_entrance("Lower Quarry -> Rooted Ziggurat", player).access_rule = \
         lambda state: state.has(grapple, player) and has_ability(state, player, prayer, options, ability_unlocks)
-    multiworld.get_entrance("Quarry -> Rooted Ziggurat", player).access_rule = \
-        lambda state: has_ice_grapple_logic(False, state, player, options, ability_unlocks)
     multiworld.get_entrance("Swamp -> Cathedral", player).access_rule = \
         lambda state: state.has(laurels, player) and has_ability(state, player, prayer, options, ability_unlocks) \
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks)
@@ -312,8 +310,9 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Quarry - [West] Upper Area Bombable Wall", player),
              lambda state: has_mask(state, player, options))
+    # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),

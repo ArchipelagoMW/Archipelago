@@ -16,7 +16,7 @@ tunic_regions: Dict[str, Set[str]] = {
     "Eastern Vault Fortress": {"Beneath the Vault"},
     "Beneath the Vault": {"Eastern Vault Fortress"},
     "Quarry Back": {"Quarry"},
-    "Quarry": {"Lower Quarry", "Rooted Ziggurat"},
+    "Quarry": {"Lower Quarry"},
     "Lower Quarry": {"Rooted Ziggurat"},
     "Rooted Ziggurat": set(),
     "Swamp": {"Cathedral"},
