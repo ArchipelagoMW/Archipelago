@@ -558,17 +558,6 @@ class DarkSouls3World(World):
                 state.has(soul, self.player) and state.has("Transposing Kiln", self.player)
             ))
 
-        # List missable locations even though they never contain progression items so that the game
-        # knows what sphere they're in. This is especially useful for item smoothing. We could add
-        # rules for boss transposition items as well, but then we couldn't freely reorder boss soul
-        # locations for smoothing.
-
-        self._add_location_rule("FS: Lift Chamber Key - Leonhard", "Pale Tongue")
-        self._add_location_rule([
-            "FK: Twinkling Dragon Head Stone - Hawkwood drop",
-            "FS: Hawkwood's Swordgrass - Andre after gesture in AP summit"
-        ], "Twinkling Dragon Torso Stone")
-
         # Shop unlocks
         shop_unlocks = {
             "Cornyx": [
@@ -625,25 +614,7 @@ class DarkSouls3World(World):
                 self._add_location_rule(
                     [f"FS: {item} - {shop} for {key_name}" for item in items], key)
 
-        self._add_location_rule([
-            "FS: Divine Blessing - Greirat from US",
-            "FS: Ember - Greirat from US",
-        ], lambda state: state.can_reach("Go To Undead Settlement", "Entrance", self.player))
-        self._add_location_rule([
-            "FS: Divine Blessing - Greirat from IBV",
-            "FS: Hidden Blessing - Greirat from IBV",
-            "FS: Titanite Scale - Greirat from IBV",
-            "FS: Twinkling Titanite - Greirat from IBV",
-            "FS: Ember - shop for Greirat's Ashes"
-        ], lambda state: state.can_reach(
-            "Go To Irithyll of the Boreal Valley",
-            "Entrance",
-            self.player
-        ))
-        self._add_location_rule(
-            "FS: Ember - shop for Greirat's Ashes",
-            lambda state: state.can_reach("Go To Grand Archives", "Entrance", self.player)
-        )
+        self._add_npc_rules()
 
         # Crow items
         crow = {
@@ -718,16 +689,16 @@ class DarkSouls3World(World):
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
             "LC: Gotthard Twinswords - by Grand Archives door, after PC and AL bosses"
         ], lambda state: (
-            state.can_reach("AL: Cinders of a Lord - Aldrich", "Location", self.player) and
-            state.can_reach("PC: Cinders of a Lord - Yhorm the Giant", "Location", self.player)
+            self._can_get(state, "AL: Cinders of a Lord - Aldrich") and
+            self._can_get(state, "PC: Cinders of a Lord - Yhorm the Giant")
         ))
 
         self._add_location_rule([
             "FS: Morne's Great Hammer - Eygon",
             "FS: Moaning Shield - Eygon"
         ], lambda state: (
-            state.can_reach("LC: Soul of Dragonslayer Armour", "Location", self.player) and
-            state.can_reach("FK: Soul of the Blood of the Wolf", "Location", self.player)
+            self._can_get(state, "LC: Soul of Dragonslayer Armour") and
+            self._can_get(state, "FK: Soul of the Blood of the Wolf")
         ))
 
         self._add_location_rule([
@@ -735,14 +706,14 @@ class DarkSouls3World(World):
             "CKG: Drakeblood Armor - tomb, after killing AP mausoleum NPC",
             "CKG: Drakeblood Gauntlets - tomb, after killing AP mausoleum NPC",
             "CKG: Drakeblood Leggings - tomb, after killing AP mausoleum NPC",
-        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
+        ], lambda state: self._can_go_to(state, "Archdragon Peak"))
 
         self._add_location_rule([
             "FK: Havel's Helm - upper keep, after killing AP belfry roof NPC",
             "FK: Havel's Armor - upper keep, after killing AP belfry roof NPC",
             "FK: Havel's Gauntlets - upper keep, after killing AP belfry roof NPC",
             "FK: Havel's Leggings - upper keep, after killing AP belfry roof NPC",
-        ], lambda state: state.can_reach("Go To Archdragon Peak", "Entrance", self.player))
+        ], lambda state: self._can_go_to(state, "Archdragon Peak"))
 
         self._add_location_rule([
             "RC: Dragonhead Shield - streets monument, across bridge",
@@ -825,6 +796,200 @@ class DarkSouls3World(World):
             elif self.options.early_banner == "early_local":
                 self.multiworld.local_early_items[self.player]['Small Lothric Banner'] = 1
 
+    def _add_npc_rules(self) -> None:
+        """Adds rules for items accessible via NPC quests.
+
+        We list missable locations here even though they never contain progression items so that the
+        game knows what sphere they're in. This is especially useful for item smoothing. (We could
+        add rules for boss transposition items as well, but then we couldn't freely reorder boss
+        soul locations for smoothing.)
+        """
+
+        ## Greirat
+
+        self._add_location_rule([
+            "FS: Divine Blessing - Greirat from US",
+            "FS: Ember - Greirat from US",
+        ], lambda state: (
+            self._can_go_to(state, "Undead Settlement")
+            and state.has("Loretta's Bone", self.player)
+        ))
+        self._add_location_rule([
+            "FS: Divine Blessing - Greirat from IBV",
+            "FS: Hidden Blessing - Greirat from IBV",
+            "FS: Titanite Scale - Greirat from IBV",
+            "FS: Twinkling Titanite - Greirat from IBV",
+            "FS: Ember - shop for Greirat's Ashes"
+        ], lambda state: (
+            self._can_go_to(state, "Irithyll of the Boreal Valley")
+            and self._can_get(state, "FS: Divine Blessing - Greirat from US")
+            # Either Patches or Siegward can save Greirat, but we assume the player will want to use
+            # Patches because it's harder to screw up
+            and self._can_get(state, "CD: Shotel - Patches")
+        ))
+        self._add_location_rule([
+            "FS: Ember - shop for Greirat's Ashes",
+        ], lambda state: (
+            self._can_go_to(state, "Grand Archives")
+            and self._can_get(state, "FS: Divine Blessing - Greirat from IBV")
+        ))
+
+        ## Patches
+
+        # There are two ways to get Patches to open up shop in Firelink. You can either get tricked
+        # in the firelink bell tower, or you can beat the Abyss Watchers. Because the bell tower
+        # route can be missed if the player accesses the tower before resting in Rosaria's Bed
+        # Chamber, we assume the player will trigger the shop via Abyss Watchers.
+        self._add_location_rule([
+            "CD: Shotel - Patches",
+            "CD: Ember - Patches",
+        ], lambda state: self._can_get(state, "FK: Soul of the Blood of the Wolf"))
+
+        # The forgiveness coin is ONLY accessible through the bell tower interaction, so if the
+        # player has chosen to allow important items in missable locations we ensuer that the bell
+        # tower can't be accessed until after cathedral
+        if self.options.missable_locations == "unnecessary":
+            self._add_entrance_rule(
+                "Firelink Shrine Bell Tower",
+                lambda state: self._can_go_to(state, "Cathedral of the Deep")
+            )
+        self._add_location_rule([
+            "FS: Rusted Gold Coin - don't forgive Patches"
+        ], lambda state: self._can_go_to(state, "Firelink Shrine Bell Tower"))
+
+        # Patches sells this after you tell him to search for Greirat in Grand Archives
+        self._add_location_rule([
+            "FS: Hidden Blessing - Patches after searching GA"
+        ], lambda state: (
+            self._can_get(state, "CD: Shotel - Patches")
+            and self._can_get(state, "FS: Ember - shop for Greirat's Ashes")
+        ))
+
+        # Only make the player kill Patches once all his other items are available
+        self._add_location_rule([
+            "CD: Winged Spear - kill Patches",
+            # You don't _have_ to kill him for this, but he has to be in Firelink at the same time
+            # as Greirat to get it in the shop and that may not be feasible if the player progresses
+            # Greirat's quest much faster.
+            "CD: Horsehoof Ring - Patches",
+        ], lambda state: (
+            self._can_get(state, "FS: Hidden Blessing - Patches after searching GA")
+            and self._can_get(state, "FS: Rusted Gold Coin - don't forgive Patches")
+        ))
+
+        ## Leonhard
+
+        self._add_location_rule([
+            # Talk to Leonhard in Firelink with a Pale Tongue after lighting Cliff Underside or
+            # killing Greatwood. This doesn't consume the Pale Tongue, it just has to be in
+            # inventory
+            "FS: Lift Chamber Key - Leonhard",
+            # Progress Leonhard's quest and then return to Rosaria after lighting Profaned Capital
+            "CD: Black Eye Orb - Rosaria from Leonhard's quest",
+        ], "Pale Tongue")
+
+        ## Hawkwood
+
+        # After Hawkwood leaves and once you have the Torso Stone, you can fight him for dragon
+        # stones. Andre will give Swordgrass as a hint as well
+        self._add_location_rule([
+            "FK: Twinkling Dragon Head Stone - Hawkwood drop",
+            "FS: Hawkwood's Swordgrass - Andre after gesture in AP summit"
+        ], lambda state: (
+            self._can_get(state, "FS: Hawkwood's Shield - gravestone after Hawkwood leaves")
+            and state.has("Twinkling Dragon Torso Stone", self.player)
+        ))
+
+        ## Siegward
+
+        # Unlock Siegward's cell after progressing his quest
+        self._add_location_rule("ID: Titanite Slab - Siegward", "Old Cell Key")
+
+        # These drop after completing Siegward's quest and talking to him in Yhorm's arena
+        self._add_location_rule([
+            "PC: Siegbräu - Siegward after killing boss",
+            "PC: Storm Ruler - Siegward",
+            "PC: Pierce Shield - Siegward",
+        ], lambda state: (
+            self._can_get(state, "ID: Titanite Slab - Siegward")
+            and self._can_get(state, "PC: Soul of Yhorm the Giant")
+        ))
+
+        ## Sirris
+
+        # Kill Greatwood and turn in Dreamchaser's Ashes to trigger this opportunity for invasion
+        self._add_location_rule([
+            "FS: Mail Breaker - Sirris for killing Creighton",
+            "FS: Silvercat Ring - Sirris for killing Creighton",
+        ], lambda state: (
+            self._can_get(state, "US: Soul of the Rotted Greatwood")
+            and state.has("Dreamchaser's Ashes", self.player)
+        ))
+
+        # Kill Creighton and Aldrich to trigger this opportunity for invasion
+        self._add_location_rule([
+            "FS: Budding Green Blossom - shop after killing Creighton and AL boss",
+            "FS: Sunset Shield - by grave after killing Hodrick w/Sirris",
+            "US: Sunset Helm - Pit of Hollows after killing Hodrick w/Sirris",
+            "US: Sunset Armor - pit of hollows after killing Hodrick w/Sirris",
+            "US: Sunset Gauntlets - pit of hollows after killing Hodrick w/Sirris",
+            "US: Sunset Leggings - pit of hollows after killing Hodrick w/Sirris",
+        ], lambda state: (
+            self._can_get(state, "FS: Mail Breaker - Sirris for killing Creighton")
+            and self._can_get(state, "AL: Soul of Aldrich")
+        ))
+
+        # Kill Hodrick and Twin Princes to trigger the end of the quest
+        self._add_location_rule([
+            "FS: Sunless Talisman - Sirris, kill GA boss",
+            "FS: Sunless Veil - shop, Sirris quest, kill GA boss",
+            "FS: Sunless Armor - shop, Sirris quest, kill GA boss",
+            "FS: Sunless Gauntlets - shop, Sirris quest, kill GA boss",
+            "FS: Sunless Leggings - shop, Sirris quest, kill GA boss",
+            # Killing Yorshka will anger Sirris and stop her quest, so don't expect it until the
+            # quest is done
+            "AL: Yorshka's Chime - kill Yorshka",
+        ], lambda state: (
+            self._can_get(state, "US: Soul of the Rotted Greatwood")
+            and state.has("Dreamchaser's Ashes", self.player)
+        ))
+
+        ## Cornyx
+
+        self._add_location_rule([
+            "US: Old Sage's Blindfold - kill Cornyx",
+            "US: Cornyx's Garb - kill Cornyx",
+            "US: Cornyx's Wrap - kill Cornyx",
+            "US: Cornyx's Skirt - kill Cornyx",
+        ], lambda state: (
+            state.has("Great Swamp Pyromancy Tome", self.player)
+            and state.has("Carthus Pyromancy Tome", self.player)
+            and state.has("Izalith Pyromancy Tome", self.player)
+        ))
+
+        ## Irina
+
+        self._add_location_rule([
+            "US: Tower Key - kill Irina",
+        ], lambda state: (
+            state.has("Braille Divine Tome of Carim", self.player)
+            and state.has("Braille Divine Tome of Lothric", self.player)
+        ))
+
+        ## Karla
+
+        self._add_location_rule([
+            "FS: Karla's Pointed Hat - kill Karla",
+            "FS: Karla's Coat - kill Karla",
+            "FS: Karla's Gloves - kill Karla",
+            "FS: Karla's Trousers - kill Karla",
+        ], lambda state: (
+            state.has("Quelana Pyromancy Tome", self.player)
+            and state.has("Grave Warden Pyromancy Tome", self.player)
+            and state.has("Deep Braille Divine Tome", self.player)
+            and state.has("Londor Braille Divine Tome", self.player)
+        ))
+
 
     def _add_location_rule(self, location: Union[str, List[str]], rule: Union[CollectionRule, str]) -> None:
         """Sets a rule for the given location if it that location is randomized.
@@ -849,6 +1014,16 @@ class DarkSouls3World(World):
                 assert item_dictionary[rule].classification == ItemClassification.progression
             rule = lambda state, item=rule: state.has(item, self.player)
         add_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
+
+
+    def _can_go_to(self, state, region) -> None:
+        """Returns whether state can access the given region name."""
+        return state.can_reach(f"Go To {region}", "Entrance", self.player)
+
+
+    def _can_get(self, state, location) -> None:
+        """Returns whether state can access the given location name."""
+        return state.can_reach(location, "Location", self.player)
 
 
     def is_location_available(self, location: Union[str, DS3LocationData]) -> bool:

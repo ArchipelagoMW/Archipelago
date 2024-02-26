@@ -43,7 +43,7 @@ all_bosses = [
         "US: Soul of the Rotted Greatwood",
         "US: Transposing Kiln - boss drop",
         "US: Wargod Wooden Shield - Pit of Hollows",
-        "FS: Hawkwood's Shield - Hawkwood",
+        "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
         "FS: Sunset Shield - by grave after killing Hodrick w/Sirris",
         "US: Sunset Helm - Pit of Hollows after killing Hodrick w/Sirris",
         "US: Sunset Armor - pit of hollows after killing Hodrick w/Sirris",
@@ -58,12 +58,12 @@ all_bosses = [
     DS3BossInfo("Crystal Sage", 3300850, region = "Cathedral of the Deep", locations = {
         "RS: Soul of a Crystal Sage",
         "FS: Sage's Big Hat - shop after killing RS boss",
-        "FS: Hawkwood's Shield - Hawkwood",
+        "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
     DS3BossInfo("Deacons of the Deep", 3500800, locations = {
         "CD: Soul of the Deacons of the Deep",
         "CD: Small Doll - boss drop",
-        "FS: Hawkwood's Shield - Hawkwood",
+        "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
     DS3BossInfo("Abyss Watchers", 3300801, before_storm_ruler = True,
             region = "Catacombs of Carthus", locations = {
@@ -79,7 +79,7 @@ all_bosses = [
         "UG: Wolf Knight Gauntlets - shop after killing FK boss",
         "UG: Wolf Knight Leggings - shop after killing FK boss",
         "FS: Farron Ring - Hawkwood",
-        "FS: Hawkwood's Shield - Hawkwood",
+        "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
     }),
     DS3BossInfo("High Lord Wolnir", 3800800, before_storm_ruler = True,
             region = "Irithyll of the Boreal Valley", locations = {

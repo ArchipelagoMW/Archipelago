@@ -33,7 +33,7 @@ class MissableLocationsOption(Choice):
     * Unnecessary: Missable locations can't have progression items, but they can
       have useful items.
     * Unimportant: Neither progression items nor useful items can be placed in
-      missablek locations.
+      missable locations.
     * Unrandomized: Missable locations always contain the same item as in
       vanilla Dark Souls III.
 

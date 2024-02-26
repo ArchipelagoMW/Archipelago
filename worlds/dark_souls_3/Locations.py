@@ -1174,8 +1174,6 @@ location_tables = {
                         npc = True), # Don't forgive Patches
         DS3LocationData("CD: Shotel - Patches", "Shotel", missable = True, npc = True, shop = True),
         DS3LocationData("CD: Ember - Patches", "Ember", missable = True, npc = True, shop = True),
-        DS3LocationData("CD: Hidden Blessing - Patches", "Hidden Blessing", missable = True,
-                        npc = True, shop = True),
         DS3LocationData("CD: Horsehoof Ring - Patches", "Horsehoof Ring", missable = True,
                         npc = True, drop = True, shop = True), # (kill or buy)
     ],
@@ -1296,7 +1294,8 @@ location_tables = {
         DS3LocationData("FK: Soul of a Stray Demon - upper keep, miniboss drop",
                         "Soul of a Stray Demon", miniboss = True),
         DS3LocationData("FK: Watchdogs of Farron - Old Wolf", "Watchdogs of Farron"),
-        DS3LocationData("FS: Hawkwood's Shield - Hawkwood", "Hawkwood's Shield", missable = True,
+        DS3LocationData("FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
+                        "Hawkwood's Shield", missable = True,
                         npc = True), # Hawkwood (quest, after Greatwood, Sage, Watchers, and Deacons)
         DS3LocationData("US: Hawk Ring - Giant Archer", "Hawk Ring", drop = True,
                         npc = True), # Giant archer (kill or quest), here because you need to
@@ -1896,9 +1895,9 @@ location_tables = {
         DS3LocationData("AL: Aldrich Faithful - water reserves, talk to McDonnel", "Aldrich Faithful",
                         hidden = True), # Behind illusory wall
 
-        DS3LocationData("FS: Budding Green Blossom - shop killing Creighton and AL boss",
-                        "Budding Green Blossom",
-                        offline = '99,0:-1:110000,70000118:', missable = True, npc = True,
+        DS3LocationData("FS: Budding Green Blossom - shop after killing Creighton and AL boss",
+                        "Budding Green Blossom", offline = '99,0:-1:110000,70000118:',
+                        missable = True, npc = True,
                         shop = True), # sold by Shrine Maiden after killing Aldrich and helping
                                       # Sirris defeat Creighton
 
@@ -2301,6 +2300,10 @@ location_tables = {
                         "Sunless Gauntlets",  missable = True, npc = True, shop = True),
         DS3LocationData("FS: Sunless Leggings - shop, Sirris quest, kill GA boss",
                         "Sunless Leggings",  missable = True, npc = True, shop = True),
+
+        # Unbreakable Patches
+        DS3LocationData("FS: Hidden Blessing - Patches after searching GA", "Hidden Blessing",
+                        missable = True, npc = True, shop = True),
     ],
     "Untended Graves": [
         DS3LocationData("UG: Soul of Champion Gundyr", "Soul of Champion Gundyr", prominent = True,
