@@ -230,6 +230,7 @@ def get_always_hint_locations(world: "WitnessWorld") -> List[str]:
     if world.options.EP_difficulty != "normal":
         always.append("Treehouse Obelisk Side 4")  # Couch EP
         always.append("Mountainside Obelisk Side 1")  # Cloud Cycle EP.
+        always.append("Town Obelisk Side 2") # Tutorial Patio Flowers EP.
 
     return always
 
