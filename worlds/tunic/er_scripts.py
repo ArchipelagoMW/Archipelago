@@ -231,11 +231,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 portal_name1 = ""
                 portal_name2 = ""
 
-                # skip this if 10 fairies laurels location is on, it can be handled normally
-                if portal1 == "Overworld Redux, Waterfall_" and portal2 == "Waterfall, Overworld Redux_" \
-                        and world.options.laurels_location == "10_fairies":
-                    continue
-
                 for portal in portal_mapping:
                     if portal.scene_destination() == portal1:
                         portal_name1 = portal.name
@@ -332,7 +327,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     
     # need to plando fairy cave, or it could end up laurels locked
     # fix this later to be random after adding some item logic to dependent regions
-    if world.options.laurels_location == "10_fairies":
+    if world.options.laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         portal2 = None
         for portal in two_plus:
@@ -376,9 +371,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     while len(connected_regions) < len(non_dead_end_regions):
         # if the connected regions length stays unchanged for too long, it's stuck in a loop
         # should, hopefully, only ever occur if someone plandos connections poorly
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
         if previous_conn_num == len(connected_regions):
             fail_count += 1
-            if fail_count >= 100:
+            if fail_count >= 500:
                 raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for loops.")
         else:
             fail_count = 0
@@ -438,6 +435,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # connect dead ends to random non-dead ends
     # none of the key events are in dead ends, so we don't need to do gate_before_switch
     while len(dead_ends) > 0:
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
         portal1 = two_plus.pop()
         portal2 = dead_ends.pop()
         portal_pairs[portal1] = portal2
@@ -445,6 +444,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # then randomly connect the remaining portals to each other
     # every region is accessible, so gate_before_switch is not necessary
     while len(two_plus) > 1:
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
         portal1 = two_plus.pop()
         portal2 = two_plus.pop()
         portal_pairs[portal1] = portal2
