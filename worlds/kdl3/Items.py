@@ -100,5 +100,6 @@ item_table = {
 item_names = {
     "Copy Ability": set(copy_ability_table),
     "Animal Friend": set(animal_friend_table),
+}
 
 lookup_name_to_id: typing.Dict[str, int] = {item_name: data.code for item_name, data in item_table.items() if data.code}
