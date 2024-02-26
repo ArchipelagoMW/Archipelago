@@ -633,7 +633,15 @@ class DarkSouls3World(World):
             "Eleonora": "Hollow Gem",
         }
         for (given, received) in crow.items():
-            self._add_location_rule(f"FSBT: {received} - crow for {given}", given)
+            name = f"FSBT: {received} - crow for {given}"
+            self._add_location_rule(name, given)
+
+            # Don't let crow items have foreign items because they're picked up in a way that's
+            # missed by the hook we use to send location items
+            add_item_rule(
+                self.multiworld.get_location(name, self.player),
+                lambda item: item.player == self.player
+            )
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
