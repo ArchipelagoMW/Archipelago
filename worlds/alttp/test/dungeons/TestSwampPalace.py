@@ -16,15 +16,15 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Big Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - Big Chest", False, [], ['Hammer']],
             ["Swamp Palace - Big Chest", False, [], ['Big Key (Swamp Palace)']],
-            ["Swamp Palace - Big Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Big Chest", True, ['Open Floodgate', 'Big Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - Big Chest", False, [], ['Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)']],
+            ["Swamp Palace - Big Chest", True, ['Open Floodgate', 'Big Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - West Side Switch Chest", False, []],
             ["Swamp Palace - West Side Switch Chest", False, [], ['Flippers']],
             ["Swamp Palace - West Side Switch Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - West Side Switch Chest", False, [], ['Hammer']],
             ["Swamp Palace - West Side Switch Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - West Side Switch Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - West Side Switch Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - Bomb Wall", False, []],
             ["Swamp Palace - Bomb Wall", False, [], ['Flippers']],
@@ -38,14 +38,14 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - West Side Free Chest", False, [], ['Open Floodgate']],
             ["Swamp Palace - West Side Free Chest", False, [], ['Hammer']],
             ["Swamp Palace - West Side Free Chest", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - West Side Free Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - West Side Free Chest", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - South Loop", False, []],
             ["Swamp Palace - South Loop", False, [], ['Flippers']],
             ["Swamp Palace - South Loop", False, [], ['Open Floodgate']],
             ["Swamp Palace - South Loop", False, [], ['Hammer']],
             ["Swamp Palace - South Loop", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - South Loop", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
+            ["Swamp Palace - South Loop", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer']],
 
             ["Swamp Palace - Flooded Room - Left", False, []],
             ["Swamp Palace - Flooded Room - Left", False, [], ['Flippers']],
@@ -53,7 +53,7 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Flooded Room - Left", False, [], ['Hammer']],
             ["Swamp Palace - Flooded Room - Left", False, [], ['Hookshot']],
             ["Swamp Palace - Flooded Room - Left", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Flooded Room - Left", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
+            ["Swamp Palace - Flooded Room - Left", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)',  'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
 
             ["Swamp Palace - Flooded Room - Right", False, []],
             ["Swamp Palace - Flooded Room - Right", False, [], ['Flippers']],
@@ -61,7 +61,7 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Flooded Room - Right", False, [], ['Hammer']],
             ["Swamp Palace - Flooded Room - Right", False, [], ['Hookshot']],
             ["Swamp Palace - Flooded Room - Right", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Flooded Room - Right", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
+            ["Swamp Palace - Flooded Room - Right", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
 
             ["Swamp Palace - Waterfall Room", False, []],
             ["Swamp Palace - Waterfall Room", False, [], ['Flippers']],
@@ -69,7 +69,7 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Waterfall Room", False, [], ['Hammer']],
             ["Swamp Palace - Waterfall Room", False, [], ['Hookshot']],
             ["Swamp Palace - Waterfall Room", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Waterfall Room", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
+            ["Swamp Palace - Waterfall Room", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
 
             ["Swamp Palace - Boss", False, []],
             ["Swamp Palace - Boss", False, [], ['Flippers']],
@@ -77,5 +77,5 @@ class TestSwampPalace(TestDungeon):
             ["Swamp Palace - Boss", False, [], ['Hammer']],
             ["Swamp Palace - Boss", False, [], ['Hookshot']],
             ["Swamp Palace - Boss", False, [], ['Small Key (Swamp Palace)']],
-            ["Swamp Palace - Boss", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
+            ["Swamp Palace - Boss", True, ['Open Floodgate', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Small Key (Swamp Palace)', 'Flippers', 'Hammer', 'Hookshot']],
         ])
