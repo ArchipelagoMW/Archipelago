@@ -1102,7 +1102,7 @@ class PokemonEmeraldWorld(World):
                         level_up_moves = self.random.sample(level_up_movepool, 4)
 
                     if len(tm_hm_movepool) < 4:
-                        hm_moves = list(reversed(tm_hm_movepool[i] if i < len(tm_hm_movepool) else 0 for i in range(4)))
+                        hm_moves = list(reversed(list(tm_hm_movepool[i] if i < len(tm_hm_movepool) else 0 for i in range(4))))
                     else:
                         hm_moves = self.random.sample(tm_hm_movepool, 4)
 
