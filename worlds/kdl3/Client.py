@@ -266,7 +266,7 @@ class KDL3SNIClient(SNIClient):
             ninten = await snes_read(ctx, KDL3_NINTEN, 6)
             if ninten != b"ninten":
                 return
-            if not ctx.server:
+            if not ctx.slot:
                 return
             if not self.initialize_gifting:
                 self.giftbox_key = f"Giftbox;{ctx.team};{ctx.slot}"

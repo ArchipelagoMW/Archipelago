@@ -162,7 +162,10 @@ into any locations within the game slots named BobsSlaytheSpire and BobsRogueLeg
 ## Boss Plando
 
 This is currently only supported by A Link to the Past and Kirby's Dream Land 3. Boss plando allows a player to place a 
-given boss within an arena. Boss plando takes in a list of instructions for placing bosses, separated by a semicolon `;`.
+given boss within an arena. More specific information for boss plando in A Link to the Past can be found in 
+its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en).
+
+Boss plando takes in a list of instructions for placing bosses, separated by a semicolon `;`.
 There are three types of placement: direct, full, and shuffle.
 * Direct placement takes both an arena and a boss, and places the boss into that arena.
   * `Eastern Palace-Trinexx`
