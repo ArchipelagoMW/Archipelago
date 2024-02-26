@@ -56,6 +56,7 @@ class ShufflePortals(Choice):
     """
     Whether the portals lead to random places.
     Entering a portal from its vanilla area will always lead to HQ, and will unlock it if relevant.
+    Supports plando.
 
     None: Portals will take you where they're supposed to.
     Shops: Portals can lead to any area except Music Box and Elemental Skylands, with each portal output guaranteed to not overlap with another portal's. Will only put you at a portal or a shop.
@@ -73,6 +74,7 @@ class ShufflePortals(Choice):
 class ShuffleTransitions(Choice):
     """
     Whether the transitions between the levels should be randomized.
+    Supports plando.
     
     None: Level transitions lead where they should.
     Coupled: Returning through a transition will take you from whence you came.
