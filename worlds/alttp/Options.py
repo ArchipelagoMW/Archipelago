@@ -43,8 +43,7 @@ class Goal(Choice):
     Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then turn them in to Murahadala in front of Hyrule Castle
     Local Triforce Hunt: Collect Triforce pieces spread throughout your world, then turn them in to Murahadala in front of Hyrule Castle
     Ganon Triforce Hunt: Collect Triforce pieces spread throughout the worlds, then kill Ganon
-    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon
-    Ice Rod Hunt: You start with everything except Ice Rod. Find the Ice rod, then kill Trinexx at Turtle rock."""
+    Local Ganon Triforce Hunt: Collect Triforce pieces spread throughout your world, then kill Ganon"""
     display_name = "Goal"
     default = 0
     option_ganon = 0
@@ -211,11 +210,10 @@ class map_shuffle(DungeonItem):
     display_name = "Map Shuffle"
 
 
-class key_drop_shuffle(Toggle):
+class key_drop_shuffle(DefaultOnToggle):
     """Shuffle keys found in pots and dropped from killed enemies,
     respects the small key and big key shuffle options."""
     display_name = "Key Drop Shuffle"
-
 
 
 class DungeonCounters(Choice):
