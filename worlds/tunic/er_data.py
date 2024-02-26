@@ -681,12 +681,6 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Hero Relic - Library": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Hero Relic - Swamp": RegionInfo("RelicVoid", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Purgatory": RegionInfo("Purgatory"),
-    "Shop Entrance 1": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 2": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 3": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 4": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 5": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
-    "Shop Entrance 6": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Shop": RegionInfo("Shop", dead_end=DeadEnd.all_cats),
     "Spirit Arena": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Spirit Arena Victory": RegionInfo("Spirit Arena", dead_end=DeadEnd.all_cats)
@@ -749,6 +743,8 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Forest Grave Path by Grave", "Forest Hero's Grave"):
@@ -842,6 +838,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
@@ -934,6 +932,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     # can use laurels, ice grapple, or ladder storage to traverse
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],

@@ -185,9 +185,14 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
-    plando_connections: List[PlandoConnection] = []
-    fixed_shop = False
     logic_rules = world.options.logic_rules.value
+    player_name = world.multiworld.get_player_name(world.player)
+
+    shop_scenes: Set[str] = set()
+    shop_count = 6
+    if world.options.fixed_shop.value:
+        shop_count = 1
+        shop_scenes.add("Overworld Redux")
 
     if not logic_rules:
         dependent_regions = dependent_regions_restricted
@@ -215,9 +220,12 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
+    plando_connections = world.multiworld.plando_connections[world.player]
+
     # universal tracker support stuff, don't need to care about region dependency
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
+            plando_connections.clear()
             # universal tracker stuff, won't do anything in normal gen
             for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
                 portal_name1 = ""
@@ -240,9 +248,78 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                     portal_name2 = "Shop Portal"
                 plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
 
+    non_dead_end_regions = set()
+    for region_name, region_info in tunic_er_regions.items():
+        if not region_info.dead_end:
+            non_dead_end_regions.add(region_name)
+        elif region_info.dead_end == 2 and logic_rules:
+            non_dead_end_regions.add(region_name)
+
     if plando_connections:
-        portal_pairs, dependent_regions, dead_ends, two_plus = \
-            create_plando_connections(plando_connections, dependent_regions, dead_ends, two_plus)
+        for connection in plando_connections:
+            p_entrance = connection.entrance
+            p_exit = connection.exit
+
+            if p_entrance.startswith("Shop"):
+                p_entrance = p_exit
+                p_exit = "Shop Portal"
+
+            portal1 = None
+            portal2 = None
+
+            # search two_plus for both at once
+            for portal in two_plus:
+                if p_entrance == portal.name:
+                    portal1 = portal
+                if p_exit == portal.name:
+                    portal2 = portal
+
+            # search dead_ends individually since we can't really remove items from two_plus during the loop
+            if not portal1:
+                for portal in dead_ends:
+                    if p_entrance == portal.name:
+                        portal1 = portal
+                        break
+                if not portal1:
+                    raise Exception(f"Could not find entrance named {p_entrance} for "
+                                    f"plando connections in {player_name}'s YAML")
+                dead_ends.remove(portal1)
+            else:
+                two_plus.remove(portal1)
+
+            if not portal2:
+                for portal in dead_ends:
+                    if p_exit == portal.name:
+                        portal2 = portal
+                        break
+                if p_exit in ["Shop Portal", "Shop"]:
+                    portal2 = Portal(name="Shop Portal", region=f"Shop",
+                                     destination="Previous Region_")
+                    shop_count -= 1
+                    if shop_count < 0:
+                        shop_count += 2
+                    for p in portal_mapping:
+                        if p.name == p_entrance:
+                            shop_scenes.add(p.scene())
+                            break
+                else:
+                    if not portal2:
+                        raise Exception(f"Could not find entrance named {p_exit} for "
+                                        f"plando connections in {player_name}'s YAML")
+                    dead_ends.remove(portal2)
+            else:
+                two_plus.remove(portal2)
+
+            portal_pairs[portal1] = portal2
+
+            # update dependent regions based on the plando'd connections, to ensure the portals connect well, logically
+            for origins, destinations in dependent_regions.items():
+                if portal1.region in origins:
+                    if portal2.region in non_dead_end_regions:
+                        destinations.append(portal2.region)
+                if portal2.region in origins:
+                    if portal1.region in non_dead_end_regions:
+                        destinations.append(portal1.region)
 
         # if we have plando connections, our connected regions may change somewhat
         while True:
@@ -266,34 +343,47 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal.scene_destination() == "Waterfall, Overworld Redux_":
                 portal2 = portal
                 break
+        if not portal1:
+            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
+                            f"Did {player_name} plando connection the Secret Gathering Place Entrance?")
+        if not portal2:
+            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
+                            f"Did {player_name} plando connection the Secret Gathering Place Exit?")
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
         dead_ends.remove(portal2)
 
     if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
-        fixed_shop = True
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
-        portal2 = Portal(name="Shop Portal", region=f"Shop Entrance 2", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
+        if not portal1:
+            raise Exception(f"Failed to do Fixed Shop option. "
+                            f"Did {player_name} plando connection the Windmill Shop entrance?")
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
     # we want to start by making sure every region is accessible
-    non_dead_end_regions = set()
-    for region_name, region_info in tunic_er_regions.items():
-        if not region_info.dead_end:
-            non_dead_end_regions.add(region_name)
-        elif region_info.dead_end == 2 and logic_rules:
-            non_dead_end_regions.add(region_name)
-
     world.random.shuffle(two_plus)
     check_success = 0
     portal1 = None
     portal2 = None
+    previous_conn_num = 0
+    fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
+        # if the connected regions length stays unchanged for too long, it's stuck in a loop
+        # should, hopefully, only ever occur if someone plandos connections poorly
+        if previous_conn_num == len(connected_regions):
+            fail_count += 1
+            if fail_count >= 100:
+                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for loops.")
+        else:
+            fail_count = 0
+        previous_conn_num = len(connected_regions)
+
         # find a portal in an inaccessible region
         if check_success == 0:
             for portal in two_plus:
@@ -327,15 +417,6 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             check_success = 0
             world.random.shuffle(two_plus)
 
-    # add 6 shops, connect them to unique scenes
-    # this is due to a limitation in Tunic -- you wrong warp if there's multiple shops
-    shop_scenes: Set[str] = set()
-    shop_count = 6
-
-    if fixed_shop:
-        shop_count = 1
-        shop_scenes.add("Overworld Redux")
-
     # for universal tracker, we want to skip shop gen
     if hasattr(world.multiworld, "re_gen_passthrough"):
         if "TUNIC" in world.multiworld.re_gen_passthrough:
@@ -351,7 +432,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong")
-        portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {i + 1}", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends
@@ -379,9 +460,10 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
-        region1.connect(region2, f"{portal1.name} -> {portal2.name}")
+        if not portal1.name.startswith("Shop"):
+            region1.connect(region2, f"{portal1.name} -> {portal2.name}")
         # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if portal2.name != "Shop":
+        if not portal2.name.startswith("Shop"):
             region2.connect(region1, f"{portal2.name} -> {portal1.name}")
 
 
@@ -507,65 +589,3 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # false means you're good to place the portal
     return False
-
-
-# this is for making the connections themselves
-def create_plando_connections(plando_connections: List[PlandoConnection],
-                              dependent_regions: Dict[Tuple[str, ...], List[str]], dead_ends: List[Portal],
-                              two_plus: List[Portal]) \
-        -> Tuple[Dict[Portal, Portal], Dict[Tuple[str, ...], List[str]], List[Portal], List[Portal]]:
-
-    portal_pairs: Dict[Portal, Portal] = {}
-    shop_num = 1
-    for connection in plando_connections:
-        p_entrance = connection.entrance
-        p_exit = connection.exit
-
-        portal1 = None
-        portal2 = None
-
-        # search two_plus for both at once
-        for portal in two_plus:
-            if p_entrance == portal.name:
-                portal1 = portal
-            if p_exit == portal.name:
-                portal2 = portal
-
-        # search dead_ends individually since we can't really remove items from two_plus during the loop
-        if not portal1:
-            for portal in dead_ends:
-                if p_entrance == portal.name:
-                    portal1 = portal
-                    break
-            dead_ends.remove(portal1)
-        else:
-            two_plus.remove(portal1)
-
-        if not portal2:
-            for portal in dead_ends:
-                if p_exit == portal.name:
-                    portal2 = portal
-                    break
-            if p_exit == "Shop Portal":
-                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region_")
-                shop_num += 1
-            else:
-                dead_ends.remove(portal2)
-        else:
-            two_plus.remove(portal2)
-
-        if not portal1:
-            raise Exception("could not find entrance named " + p_entrance + " for Tunic player's plando")
-        if not portal2:
-            raise Exception("could not find entrance named " + p_exit + " for Tunic player's plando")
-
-        portal_pairs[portal1] = portal2
-
-        # update dependent regions based on the plando'd connections, to make sure the portals connect well, logically
-        for origins, destinations in dependent_regions.items():
-            if portal1.region in origins:
-                destinations.append(portal2.region)
-            if portal2.region in origins:
-                destinations.append(portal1.region)
-            
-    return portal_pairs, dependent_regions, dead_ends, two_plus
