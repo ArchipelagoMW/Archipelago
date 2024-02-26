@@ -554,7 +554,7 @@ class DarkSouls3World(World):
         for (soul, soul_name, items) in transpositions:
             self._add_location_rule([
                 f"FS: {item} - Ludleth for {soul_name}" for item in items
-            ], lambda state: (
+            ], lambda state, soul=soul: (
                 state.has(soul, self.player) and state.has("Transposing Kiln", self.player)
             ))
 
