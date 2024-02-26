@@ -12,7 +12,7 @@ from .connections import CONNECTIONS, RANDOMIZED_CONNECTIONS, TRANSITIONS
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS, PROG_ITEMS, USEFUL_ITEMS
 # from .entrances import shuffle_entrances
 from .options import AvailablePortals, Goal, Logic, MessengerOptions, NotesNeeded, ShuffleTransitions
-from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals
+from .portals import PORTALS, add_closed_portal_reqs, disconnect_portals, shuffle_portals, validate_portals
 from .regions import LEVELS, MEGA_SHARDS, LOCATIONS, REGION_CONNECTIONS
 from .rules import MessengerHardRules, MessengerOOBRules, MessengerRules
 from .shop import FIGURINES, PROG_SHOP_ITEMS, SHOP_ITEMS, USEFUL_SHOP_ITEMS, shuffle_shop_prices
@@ -123,6 +123,7 @@ class MessengerWorld(World):
     figurine_prices: Dict[str, int]
     _filler_items: List[str]
     starting_portals: List[str]
+    plando_portals: List[str]
     spoiler_portal_mapping: Dict[str, str]
     portal_mapping: List[int]
     transitions: List[Entrance]
@@ -145,6 +146,7 @@ class MessengerWorld(World):
         self.starting_portals = [f"{portal} Portal"
                                  for portal in starting_portals[:3] +
                                  self.random.sample(starting_portals[3:], k=self.options.available_portals - 3)]
+        self.plando_portals = []
         self.portal_mapping = []
         self.spoiler_portal_mapping = {}
         self.transitions = []
@@ -242,9 +244,18 @@ class MessengerWorld(World):
 
         add_closed_portal_reqs(self)
         # i need portal shuffle to happen after rules exist so i can validate it
+        attempts = 5
         if self.options.shuffle_portals:
-            disconnect_portals(self)
-            shuffle_portals(self)
+            self.portal_mapping = []
+            self.spoiler_portal_mapping = {}
+            for _ in range(attempts):
+                disconnect_portals(self)
+                shuffle_portals(self)
+                if validate_portals(self):
+                    break
+            # failsafe mostly for invalid plandoed portals with no transition shuffle
+            else:
+                raise RuntimeError("Unable to generate valid portal output.")
 
         # if self.options.shuffle_transitions:
         #     shuffle_entrances(self)
@@ -254,7 +265,9 @@ class MessengerWorld(World):
             spoiler_handle.write(f"\nStarting Portals:\n\n")
             for portal in self.starting_portals:
                 spoiler_handle.write(f"{portal}\n")
+
         spoiler = self.multiworld.spoiler
+
         if self.options.shuffle_portals:
             # sort the portals as they appear left to right in-game
             portal_info = sorted(
