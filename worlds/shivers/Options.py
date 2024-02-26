@@ -13,7 +13,7 @@ class LobbyAccess(Choice):
     option_local = 2
 
 class PuzzleHintsRequired(DefaultOnToggle):
-    """If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Tiki
+    """If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Shaman
     Drums puzzle will be placed after access to the security cameras which give you the solution. Turning this off
     allows for greater randomization."""
     display_name = "Puzzle Hints Required"
