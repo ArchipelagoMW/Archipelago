@@ -282,7 +282,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         break
                 if not portal1:
                     raise Exception(f"Could not find entrance named {p_entrance} for "
-                                    f"plando connections in {player_name}'s YAML")
+                                    f"plando connections in {player_name}'s YAML.")
                 dead_ends.remove(portal1)
             else:
                 two_plus.remove(portal1)
@@ -305,7 +305,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 else:
                     if not portal2:
                         raise Exception(f"Could not find entrance named {p_exit} for "
-                                        f"plando connections in {player_name}'s YAML")
+                                        f"plando connections in {player_name}'s YAML.")
                     dead_ends.remove(portal2)
             else:
                 two_plus.remove(portal2)
@@ -431,7 +431,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 two_plus.remove(portal)
                 break
         if portal1 is None:
-            raise Exception("Too many shops in the pool, or something else went wrong")
+            raise Exception("Too many shops in the pool, or something else went wrong.")
         portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
         portal_pairs[portal1] = portal2
 
@@ -460,8 +460,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
     for portal1, portal2 in portal_pairs.items():
         region1 = regions[portal1.region]
         region2 = regions[portal2.region]
-        if not portal1.name.startswith("Shop"):
-            region1.connect(region2, f"{portal1.name} -> {portal2.name}")
+        region1.connect(region2, f"{portal1.name} -> {portal2.name}")
         # prevent the logic from thinking you can get to any shop-connected region from the shop
         if not portal2.name.startswith("Shop"):
             region2.connect(region1, f"{portal2.name} -> {portal1.name}")
