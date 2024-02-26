@@ -295,6 +295,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Ruined Atoll Portal"].connect(
         connecting_region=regions["Ruined Atoll"])
 
+    regions["Ruined Atoll"].connect(
+        connecting_region=regions["Ruined Atoll Statue"],
+        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    regions["Ruined Atoll Statue"].connect(
+        connecting_region=regions["Ruined Atoll"])
+
     regions["Frog's Domain"].connect(
         connecting_region=regions["Frog's Domain Back"],
         rule=lambda state: state.has(grapple, player))
