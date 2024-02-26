@@ -125,7 +125,7 @@ class OpenRCT2World(World):
                                   scenario not in scenario_info["unreasonable_scenarios"]]
         # Finish assigning the scenario
         if eligible_scenarios:
-            new_scenario = str(random.choice(eligible_scenarios))  # Pick the Scenario
+            new_scenario = str(self.random.choice(eligible_scenarios))  # Pick the Scenario
             scenario = Scenario[new_scenario].value  # Reassign the scenario option to the randomly selected choice
             self.options.scenario.value = scenario
 
@@ -160,7 +160,7 @@ class OpenRCT2World(World):
 
         found_starter = False
         while not found_starter:
-            candidate = random.choice(logic_table)
+            candidate = self.random.choice(logic_table)
             if candidate in item_info["rides"]:
                 if candidate not in item_info["non_starters"]:
                     self.starting_ride = candidate
@@ -306,7 +306,7 @@ class OpenRCT2World(World):
                 logic_table.append(item)
                 count += 1
         print("Here's the logic table:")
-        random.shuffle(logic_table)
+        self.random.shuffle(logic_table)
         print(logic_table)
 
         def set_openRCT2_rule(rule_type, selected_item, location_number):
@@ -413,26 +413,26 @@ class OpenRCT2World(World):
             unlock = {"LocationID": number, "Price": 0, "Lives": 0, "RidePrereq": []}
 
             # Handles the price of each location
-            if random.random() < 0.9 or number == 0:  # 90 percent of locations will have a cash price
+            if self.random.random() < 0.9 or number == 0:  # 90 percent of locations will have a cash price
                 current_price = base_price + increment * number
                 unlock["Price"] = int(current_price)
                 # print(unlock["Price"])
             else:  # Everything else will cost lives. The Elder Gods will be pleased
                 if number < 7:
-                    unlock["Lives"] = random.randint(2, 150)
+                    unlock["Lives"] = self.random.randint(2, 150)
                 elif number < 32:
-                    unlock["Lives"] = random.randint(2, 300)
+                    unlock["Lives"] = self.random.randint(2, 300)
                 else:
-                    unlock["Lives"] = random.randint(2, 1000)
+                    unlock["Lives"] = self.random.randint(2, 1000)
 
             # Handles the selection of a prerequisite and associated stats
 
             # We'll never have a prereq on the first 15 items or on blood prices
             if number > 15 and unlock["Lives"] == 0:
-                if (random.random() < length_modifier) or (
+                if (self.random.random() < length_modifier) or (
                         len(logic_table) * .85 < number):  # Determines if we have a prereq
-                    if random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
-                        chosen_prereq = random.choice(possible_prereqs)
+                    if self.random.random() < difficulty_modifier:  # Determines if the prereq is a specific ride
+                        chosen_prereq = self.random.choice(possible_prereqs)
                         set_openRCT2_rule("ride", chosen_prereq, number)
                         if chosen_prereq in item_info["roller_coasters"] and chosen_prereq not in item_info[
                                 "stat_exempt_roller_coasters"]:
@@ -440,24 +440,24 @@ class OpenRCT2World(World):
                             intensity = 0
                             nausea = 0
                             # 3 coin flips to determine what, if any, stat prereqs will be used
-                            if random.random() < .5:
-                                excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5:
-                                intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5:
-                                nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
+                            if self.random.random() < .5:
+                                excitement = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if self.random.random() < .5:
+                                intensity = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if self.random.random() < .5:
+                                nausea = round(self.random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
-                                [random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, 0]
+                                [self.random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, 0]
                         elif (chosen_prereq in item_info["tracked_rides"]
                               and (self.options.scenario_length.value == 0 or self.options.scenario_length.value == 1)):
-                            unlock["RidePrereq"] = [random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [self.random.randint(1, 3), chosen_prereq, 0, 0, 0, 0]
                         else:
-                            unlock["RidePrereq"] = [random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [self.random.randint(1, 7), chosen_prereq, 0, 0, 0, 0]
                     else:  # Prereq is not a specific ride
                         category = "ride"
                         category_selected = False
                         while not category_selected:
-                            category = random.choice(item_info["ride_types"])
+                            category = self.random.choice(item_info["ride_types"])
                             for ride in possible_prereqs:
                                 if ride in item_info[category]:
                                     category_selected = True
@@ -467,18 +467,18 @@ class OpenRCT2World(World):
                             intensity = 0
                             nausea = 0
                             # 3 coin flips to determine what, if any, stat prereqs will be used
-                            if random.random() < .5:
-                                excitement = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5:
-                                intensity = round(random.uniform(difficulty_minimum, difficulty_maximum), 1)
-                            if random.random() < .5:
-                                nausea = round(random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
+                            if self.random.random() < .5:
+                                excitement = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if self.random.random() < .5:
+                                intensity = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                            if self.random.random() < .5:
+                                nausea = round(self.random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
                             unlock["RidePrereq"] = \
-                                [random.randint(1, 4), category, excitement, intensity, nausea, 0]
+                                [self.random.randint(1, 4), category, excitement, intensity, nausea, 0]
                         elif category == "transport_rides" or category == "water_rides" or category == "roller_coasters":
-                            unlock["RidePrereq"] = [random.randint(1, 3), category, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [self.random.randint(1, 3), category, 0, 0, 0, 0]
                         else:
-                            unlock["RidePrereq"] = [random.randint(1, 10), category, 0, 0, 0, 0]
+                            unlock["RidePrereq"] = [self.random.randint(1, 10), category, 0, 0, 0, 0]
             # Add the shop item to the shop prices
             self.location_prices.append(unlock)
             # Handle unlocked rides
@@ -501,7 +501,7 @@ class OpenRCT2World(World):
         eligible_rides = [item for index, item in enumerate(logic_table) if
                           item in item_info["rides"] and item not in item_info["non_starters"]]
         eligible_rides = list(dict.fromkeys(eligible_rides))
-        random.shuffle(eligible_rides)
+        self.random.shuffle(eligible_rides)
         if self.options.required_unique_rides.value:
             count = 0
             while count < self.options.required_unique_rides.value:
