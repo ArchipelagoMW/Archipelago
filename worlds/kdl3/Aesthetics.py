@@ -400,13 +400,9 @@ gooey_target_palettes = {
 
 def get_kirby_palette(world):
     palette = world.options.kirby_flavor_preset.value
-    if palette in kirby_flavor_presets:
-        return kirby_flavor_presets[palette]
-    elif palette == KirbyFlavorPreset.option_custom:
-        return world.options.kirby_flavor.value
-    else:
-        return None
-
+if palette == KirbyFlavorPreset.option_custom:
+    return world.options.kirby_flavor.value
+return kirby_flavor_presets.get(palette, None)
 
 def get_gooey_palette(world):
     palette = world.options.gooey_flavor_preset.value
