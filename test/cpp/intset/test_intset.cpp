@@ -39,18 +39,12 @@ TEST(IntsetTest, Duplicate)
     uint32Set_free(set);
 }
 
-__attribute__((no_sanitize("address")))
-static int64Set* int64Set_new_unchecked(size_t buckets)
-{
-    return int64Set_new(buckets);
-}
-
 TEST(IntsetTest, SetAllocFailure)
 {
     // try to allocate 100TB of RAM, should fail and return NULL
     if (sizeof(size_t) < 8)
         GTEST_SKIP() << "Alloc error not testable on 32bit";
-    int64Set *set = int64Set_new_unchecked(6250000000000ULL);
+    int64Set *set = int64Set_new(6250000000000ULL);
     EXPECT_FALSE(set);
     int64Set_free(set);
 }
