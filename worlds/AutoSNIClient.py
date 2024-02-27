@@ -1,7 +1,7 @@
 
 from __future__ import annotations
 import abc
-from typing import TYPE_CHECKING, ClassVar, Dict, Tuple, Any, Optional
+from typing import TYPE_CHECKING, ClassVar, Dict, Tuple, Any, Optional, Union
 
 from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
@@ -44,6 +44,9 @@ class AutoSNIClientRegister(abc.ABCMeta):
 
 
 class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
+
+    patch_suffix: ClassVar[Optional[Union[str, Tuple[str, ...]]]]
+    """The file extension(s) this client is meant to open and patch (e.g. ".apz3")"""
 
     @abc.abstractmethod
     async def validate_rom(self, ctx: SNIContext) -> bool:
