@@ -4,7 +4,7 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Mapping, Set, Tuple, Optional, cast
 import os
 import logging
 
@@ -13,7 +13,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionOptions, validate
-from .id_maps import item_name_to_id as _item_name_to_id, \
+from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
 from .item import ZillionItem
@@ -408,7 +408,7 @@ class ZillionWorld(World):
         patch.write()
         os.remove(filename)
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+    def fill_slot_data(self) -> ZillionSlotInfo:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response."""
@@ -418,25 +418,10 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
-
-        rescues: Dict[str, Any] = {}
         self.slot_data_ready.wait()
-        zz_patcher = self.zz_system.patcher
-        assert zz_patcher, "didn't get patcher from generate_output"
-        for i in (0, 1):
-            if i in zz_patcher.rescue_locations:
-                ri = zz_patcher.rescue_locations[i]
-                rescues[str(i)] = {
-                    "start_char": ri.start_char,
-                    "room_code": ri.room_code,
-                    "mask": ri.mask
-                }
-        return {
-            "start_char": self.zz_system.randomizer.options.start_char,
-            "rescues": rescues,
-            "loc_mem_to_id": zz_patcher.loc_memory_to_loc_id
-        }
+        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
+        game = self.zz_system.get_game()
+        return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
 
     # def modify_multidata(self, multidata: Dict[str, Any]) -> None:
     #     """For deeper modification of server multidata."""
