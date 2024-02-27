@@ -62,9 +62,12 @@ ice_trap        = "Ice Trap"
 slow_trap       = "Slow Trap"
 cutscene_trap   = "Cutscene Trap"
 reverse_trap    = "Reverse Trap"
+literature_trap = "Literature Trap"
 
 pong_trap       = "Pong Trap"
 platformer_trap = "Platformer Trap"
+fishing_trap    = "Fishing Trap"
+trivia_trap     = "Trivia Trap"
 
 
 # Chaos Emeralds

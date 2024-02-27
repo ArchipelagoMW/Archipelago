@@ -84,9 +84,12 @@ trap_table = {
     ItemName.slow_trap:       ItemData(0xFF0038, False, True),
     ItemName.cutscene_trap:   ItemData(0xFF0039, False, True),
     ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
+    ItemName.literature_trap: ItemData(0xFF003B, False, True),
 
     ItemName.pong_trap:       ItemData(0xFF0050, False, True),
     ItemName.platformer_trap: ItemData(0xFF0051, False, True),
+    ItemName.fishing_trap:    ItemData(0xFF0052, False, True),
+    ItemName.trivia_trap:     ItemData(0xFF0053, False, True),
 }
 
 emeralds_table = {

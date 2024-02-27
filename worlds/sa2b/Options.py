@@ -147,6 +147,13 @@ class ReverseTrapWeight(BaseTrapWeight):
     display_name = "Reverse Trap Weight"
 
 
+class LiteratureTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to read
+    """
+    display_name = "Literature Trap Weight"
+
+
 class PongTrapWeight(BaseTrapWeight):
     """
     Likelihood of receiving a trap which forces you to play a Pong minigame
@@ -159,6 +166,20 @@ class PlatformerTrapWeight(BaseTrapWeight):
     Likelihood of receiving a trap which forces you to play a Platformer minigame
     """
     display_name = "Platformer Trap Weight"
+
+
+class FishingTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Fishing minigame
+    """
+    display_name = "Fishing Trap Weight"
+
+
+class TriviaTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Trivia minigame
+    """
+    display_name = "Trivia Trap Weight"
 
 
 class MinigameTrapDifficulty(Choice):
@@ -849,8 +870,11 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "slow_trap_weight": SlowTrapWeight,
     "cutscene_trap_weight": CutsceneTrapWeight,
     "reverse_trap_weight": ReverseTrapWeight,
+    "literature_trap_weight": LiteratureTrapWeight,
     "pong_trap_weight": PongTrapWeight,
     "platformer_trap_weight": PlatformerTrapWeight,
+    "fishing_trap_weight": FishingTrapWeight,
+    "trivia_trap_weight": TriviaTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
 
     "sadx_music": SADXMusic,
