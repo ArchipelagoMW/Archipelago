@@ -16,7 +16,7 @@ fairies = "Fairy"
 coins = "Golden Coin"
 prayer = "Pages 24-25 (Prayer)"
 holy_cross = "Pages 42-43 (Holy Cross)"
-ice_rod = "Pages 52-53 (Ice Rod)"
+icebolt = "Pages 52-53 (Icebolt)"
 key = "Key"
 house_key = "Old House Key"
 vault_key = "Fortress Vault Key"
@@ -53,9 +53,23 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         or (state.has(laurels, player) and options.logic_rules))
 
     regions["Overworld"].connect(
-        connecting_region=regions["Overworld Laurels"],
+        connecting_region=regions["Overworld Swamp Upper Entry"],
         rule=lambda state: state.has(laurels, player))
-    regions["Overworld Laurels"].connect(
+    regions["Overworld Swamp Upper Entry"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has(laurels, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld Special Shop Entry"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Overworld Special Shop Entry"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has(laurels, player))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld West Garden Laurels Entry"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Overworld West Garden Laurels Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has(laurels, player))
 
@@ -230,7 +244,6 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["West Garden Laurels Exit"],
         rule=lambda state: state.has(laurels, player))
 
-    # todo: can you wake the boss, then grapple to it, then kill it?
     regions["West Garden after Boss"].connect(
         connecting_region=regions["West Garden"],
         rule=lambda state: state.has(laurels, player))
@@ -280,6 +293,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Ruined Atoll Portal"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
     regions["Ruined Atoll Portal"].connect(
+        connecting_region=regions["Ruined Atoll"])
+
+    regions["Ruined Atoll"].connect(
+        connecting_region=regions["Ruined Atoll Statue"],
+        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
 
     regions["Frog's Domain"].connect(
@@ -364,13 +383,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through the big gold door, can do it both ways
     regions["Eastern Vault Fortress"].connect(
         connecting_region=regions["Eastern Vault Fortress Gold Door"],
-        name="Fortress Gold Door",
+        name="Fortress to Gold Door",
         rule=lambda state: state.has_all({"Activate Eastern Vault West Fuses",
                                           "Activate Eastern Vault East Fuse"}, player)
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Eastern Vault Fortress Gold Door"].connect(
         connecting_region=regions["Eastern Vault Fortress"],
-        name="Fortress Gold Door",
+        name="Gold Door to Fortress",
         rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks))
 
     regions["Fortress Grave Path"].connect(
@@ -431,6 +450,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Quarry"].connect(
         connecting_region=regions["Quarry Monastery Entry"])
 
+    regions["Quarry Monastery Entry"].connect(
+        connecting_region=regions["Quarry Back"],
+        rule=lambda state: state.has(laurels, player))
+    regions["Quarry Back"].connect(
+        connecting_region=regions["Quarry Monastery Entry"],
+        rule=lambda state: state.has(laurels, player))
+
     regions["Monastery Rope"].connect(
         connecting_region=regions["Quarry Back"])
 
@@ -482,9 +508,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: state.has(laurels, player)
         or (has_sword(state, player) and has_ability(state, player, prayer, options, ability_unlocks)))
     # unrestricted: use ladder storage to get to the front, get hit by one of the many enemies
+    # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: state.has(laurels, player) or can_ladder_storage(state, player, options))
+        rule=lambda state: ((state.has(laurels, player) or
+                            has_ice_grapple_logic(True, state, player, options, ability_unlocks)) and
+                            has_ability(state, player, prayer, options, ability_unlocks)
+                            and has_sword(state, player)) or can_ladder_storage(state, player, options))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -864,7 +894,7 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
              lambda state: state.has_all({grapple, laurels}, player))
     set_rule(multiworld.get_location("East Forest - Ice Rod Grapple Chest", player), lambda state: (
             state.has_all({grapple, ice_dagger, fire_wand}, player) and
-            has_ability(state, player, ice_rod, options, ability_unlocks)))
+            has_ability(state, player, icebolt, options, ability_unlocks)))
 
     # West Garden
     set_rule(multiworld.get_location("West Garden - [North] Across From Page Pickup", player),
@@ -920,10 +950,12 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     # Bosses
     set_rule(multiworld.get_location("Fortress Arena - Siege Engine/Vault Key Pickup", player),
              lambda state: has_sword(state, player))
+    # nmg - kill Librarian with a lure, or gun I guess
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or options.logic_rules)
+    # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
-             lambda state: has_sword(state, player))
+             lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
 
     # Swamp
     set_rule(multiworld.get_location("Cathedral Gauntlet - Gauntlet Reward", player),
