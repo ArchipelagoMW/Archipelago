@@ -1,5 +1,5 @@
 """
-Archipelago launcher for bundled app.
+Archipelago launcher for bundled MDApp.
 
 * if run with APBP as argument, launch corresponding client.
 * if run with executable as argument, run it passing argv[2:] as arguments
@@ -8,7 +8,7 @@ Archipelago launcher for bundled app.
 Scroll down to components= to add components to the launcher as well as setup.py
 """
 
-
+import os
 import argparse
 import itertools
 import logging
@@ -154,21 +154,21 @@ def launch(exe, in_terminal=False):
                 subprocess.Popen([terminal, '-e', shlex.join(exe)])
                 return
         elif is_macos:
-            terminal = [which('open'), '-W', '-a', 'Terminal.app']
+            terminal = [which('open'), '-W', '-a', 'Terminal.MDApp']
             subprocess.Popen([*terminal, *exe])
             return
     subprocess.Popen(exe)
 
 
 def run_gui():
-    from kvui import App, ContainerLayout, GridLayout, Button, Label
+    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDRectangleFlatIconButton, MDLabel
     from kivy.uix.image import AsyncImage
-    from kivy.uix.relativelayout import RelativeLayout
+    from kivymd.uix.relativelayout import MDRelativeLayout
 
-    class Launcher(App):
+    class Launcher(MDApp):
         base_title: str = "Archipelago Launcher"
-        container: ContainerLayout
-        grid: GridLayout
+        container: MDFloatLayout
+        grid: MDGridLayout
 
         _tools = {c.display_name: c for c in components if c.type == Type.TOOL}
         _clients = {c.display_name: c for c in components if c.type == Type.CLIENT}
@@ -182,14 +182,18 @@ def run_gui():
             super().__init__()
 
         def build(self):
-            self.container = ContainerLayout()
-            self.grid = GridLayout(cols=2)
+            self.theme_cls.theme_style = "Dark"
+            self.theme_cls.primary_palette = "Green"
+            self.container = MDFloatLayout()
+            self.grid = MDGridLayout(cols=2)
             self.container.add_widget(self.grid)
-            self.grid.add_widget(Label(text="General"))
-            self.grid.add_widget(Label(text="Clients"))
+            self.grid.add_widget(MDLabel(text="General"))
+            self.grid.add_widget(MDLabel(text="Clients"))
             button_layout = self.grid  # make buttons fill the window
+            self.grid.padding = 10
+            self.grid.spacing = 5
 
-            def build_button(component: Component):
+            def build_button(component: Component, col=1):
                 """
                 Builds a button widget for a given component.
 
@@ -200,18 +204,13 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = Button(text=component.display_name)
+                button = MDRectangleFlatIconButton(text=component.display_name)
                 button.component = component
                 button.bind(on_release=self.component_action)
+                button.size_hint = (1, 1)
                 if component.icon != "icon":
-                    image = AsyncImage(source=icon_paths[component.icon],
-                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = RelativeLayout()
-                    box_layout.add_widget(button)
-                    box_layout.add_widget(image)
-                    button_layout.add_widget(box_layout)
-                else:
-                    button_layout.add_widget(button)
+                    button.icon = icon_paths[component.icon]
+                button_layout.add_widget(button)
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
                     self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
@@ -219,12 +218,12 @@ def run_gui():
                 if tool:
                     build_button(tool[1])
                 else:
-                    button_layout.add_widget(Label())
+                    button_layout.add_widget(MDLabel())
                 # column 2
                 if client:
                     build_button(client[1])
                 else:
-                    button_layout.add_widget(Label())
+                    button_layout.add_widget(MDLabel())
 
             return self.container
 
@@ -250,7 +249,7 @@ def run_component(component: Component, *args):
     elif component.script_name:
         subprocess.run([*get_exe(component.script_name), *args])
     else:
-        logging.warning(f"Component {component} does not appear to be executable.")
+        logging.warning(f"Component {component} does not MDAppear to be executable.")
 
 
 def main(args: Optional[Union[argparse.Namespace, dict]] = None):

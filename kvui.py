@@ -29,7 +29,6 @@ Config.set("input", "mouse", "mouse,disable_multitouch")
 Config.set("kivy", "exit_on_escape", "0")
 Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
-from kivy.app import App
 from kivy.core.window import Window
 from kivy.core.clipboard import Clipboard
 from kivy.core.text.markup import MarkupLabel
@@ -39,16 +38,7 @@ from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.metrics import dp
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
-from kivy.uix.textinput import TextInput
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.label import Label
-from kivy.uix.progressbar import ProgressBar
 from kivy.utils import escape_markup
 from kivy.lang import Builder
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
@@ -57,6 +47,17 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
+from kivymd.app import MDApp
+from kivymd.uix.gridlayout import MDGridLayout
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.tab.tab import MDTabs, MDTabsBase
+from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
+from kivymd.uix.label import MDLabel
+from kivymd.uix.recycleview import MDRecycleView
+from kivymd.uix.recyclegridlayout import MDRecycleGridLayout
+from kivymd.uix.textfield.textfield import MDTextFieldRect
+from kivymd.uix.progressbar import MDProgressBar
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -110,7 +111,7 @@ class HoverBehavior(object):
 Factory.register("HoverBehavior", HoverBehavior)
 
 
-class ToolTip(Label):
+class ToolTip(MDLabel):
     pass
 
 
@@ -118,7 +119,7 @@ class ServerToolTip(ToolTip):
     pass
 
 
-class HovererableLabel(HoverBehavior, Label):
+class HovererableLabel(HoverBehavior, MDLabel):
     pass
 
 
@@ -131,11 +132,11 @@ class TooltipLabel(HovererableLabel):
             # update
             self.tooltip.children[0].text = text
         else:
-            self.tooltip = FloatLayout()
+            self.tooltip = MDFloatLayout()
             tooltip_label = ToolTip(text=text)
             self.tooltip.add_widget(tooltip_label)
             fade_in_animation.start(self.tooltip)
-            App.get_running_app().root.add_widget(self.tooltip)
+            MDApp.get_running_app().root.add_widget(self.tooltip)
 
         # handle left-side boundary to not render off-screen
         x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
@@ -146,7 +147,7 @@ class TooltipLabel(HovererableLabel):
 
     def remove_tooltip(self):
         if self.tooltip:
-            App.get_running_app().root.remove_widget(self.tooltip)
+            MDApp.get_running_app().root.remove_widget(self.tooltip)
             self.tooltip = None
 
     def on_mouse_pos(self, window, pos):
@@ -179,21 +180,21 @@ class TooltipLabel(HovererableLabel):
 class ServerLabel(HovererableLabel):
     def __init__(self, *args, **kwargs):
         super(HovererableLabel, self).__init__(*args, **kwargs)
-        self.layout = FloatLayout()
+        self.layout = MDFloatLayout()
         self.popuplabel = ServerToolTip(text="Test")
         self.layout.add_widget(self.popuplabel)
 
     def on_enter(self):
         self.popuplabel.text = self.get_text()
-        App.get_running_app().root.add_widget(self.layout)
+        MDApp.get_running_app().root.add_widget(self.layout)
         fade_in_animation.start(self.layout)
 
     def on_leave(self):
-        App.get_running_app().root.remove_widget(self.layout)
+        MDApp.get_running_app().root.remove_widget(self.layout)
 
     @property
     def ctx(self) -> context_type:
-        return App.get_running_app().ctx
+        return MDApp.get_running_app().ctx
 
     def get_text(self):
         if self.ctx.server:
@@ -231,18 +232,18 @@ class ServerLabel(HovererableLabel):
             return "No current server connection. \nPlease connect to an Archipelago server."
 
 
-class MainLayout(GridLayout):
+class MainLayout(MDGridLayout):
     pass
 
 
-class ContainerLayout(FloatLayout):
+class ContainerLayout(MDFloatLayout):
     pass
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
                                  RecycleBoxLayout):
     """ Adds selection and focus behaviour to the view. """
-
+    pass
 
 class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     """ Add selection support to the Label """
@@ -266,14 +267,14 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
                 # Not a fan of the following few lines, but they work.
                 temp = MarkupLabel(text=self.text).markup
                 text = "".join(part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
-                cmdinput = App.get_running_app().textinput
+                cmdinput = MDApp.get_running_app().textinput
                 if not cmdinput.text and " did you mean " in text:
                     for question in ("Didn't find something that closely matches, did you mean ",
                                      "Too many close matches, did you mean "):
                         if text.startswith(question):
                             name = Utils.get_text_between(text, question,
                                                           "? (")
-                            cmdinput.text = f"!{App.get_running_app().last_autofillable_command} {name}"
+                            cmdinput.text = f"!{MDApp.get_running_app().last_autofillable_command} {name}"
                             break
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
@@ -286,7 +287,7 @@ class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
         self.selected = is_selected
 
 
-class HintLabel(RecycleDataViewBehavior, BoxLayout):
+class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
@@ -345,14 +346,14 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(TextInput):
+class ConnectBarTextInput(MDTextFieldRect):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
 class MessageBox(Popup):
-    class MessageBoxLabel(Label):
+    class MessageBoxLabel(MDLabel):
         def __init__(self, **kwargs):
             super().__init__(**kwargs)
             self._label.refresh()
@@ -369,15 +370,17 @@ class MessageBox(Popup):
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
+class MDTab(MDTabsBase, MDBoxLayout):
+    pass
 
-class GameManager(App):
+class GameManager(MDApp):
     logging_pairs = [
         ("Client", "Archipelago"),
     ]
     base_title: str = "Archipelago Client"
     last_autofillable_command: str
 
-    main_area_container: GridLayout
+    main_area_container: MDGridLayout
     """ subclasses can add more columns beside the tabs """
 
     def __init__(self, ctx: context_type):
@@ -409,15 +412,17 @@ class GameManager(App):
     @property
     def tab_count(self):
         if hasattr(self, "tabs"):
-            return max(1, len(self.tabs.tab_list))
+            return max(1, len(self.tabs.get_tab_list()))
         return 1
 
     def build(self) -> Layout:
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "Green"
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        self.connect_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
@@ -431,46 +436,50 @@ class GameManager(App):
 
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = Button(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = MDRaisedButton(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
-        self.progressbar = ProgressBar(size_hint_y=None, height=3)
+        self.progressbar = MDProgressBar(size_hint_y=None, height=3)
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = TabbedPanel(size_hint_y=1)
-        self.tabs.default_tab_text = "All"
+        self.tabs = MDTabs(size_hint=(1, 1), tab_hint_x=True)
+        self.tabs.default_tab = MDTab(title="All")
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
                                                                          for logger_name, name in
                                                                          self.logging_pairs))
+        self.tabs.default_tab.add_widget(self.tabs.default_tab_content)
+        self.tabs.add_widget(self.tabs.default_tab)
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
-            panel = TabbedPanelItem(text=display_name)
+            panel = MDTab(title=display_name)
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
+            panel.add_widget(panel.content)
             if len(self.logging_pairs) > 1:
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = TabbedPanelItem(text="Hints")
+        hint_panel = MDTab(title="Hints")
         self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
+        hint_panel.add_widget(hint_panel.content)
         self.tabs.add_widget(hint_panel)
 
         if len(self.logging_pairs) == 1:
-            self.tabs.default_tab_text = "Archipelago"
+            self.tabs.default_tab.title = "Archipelago"
 
-        self.main_area_container = GridLayout(size_hint_y=1, rows=1)
+        self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
 
         self.grid.add_widget(self.main_area_container)
 
         # bottom part
-        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
-        info_button = Button(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
+        bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        info_button = MDRaisedButton(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = TextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
+        self.textinput = MDTextFieldRect(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
@@ -490,8 +499,9 @@ class GameManager(App):
         return self.container
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.content.children[0], "fix_heights"):
-            self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        #if hasattr(self.tabs.content.children[0], "fix_heights"):
+            #self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
+        # KIVYMDTODO: see if this bug exists in KivyMD
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
                          f" | Connected to: {self.ctx.server_address} " \
@@ -528,7 +538,7 @@ class GameManager(App):
 
         self.ctx.exit_event.set()
 
-    def on_message(self, textinput: TextInput):
+    def on_message(self, textinput: MDTextFieldRect):
         try:
             input_text = textinput.text.strip()
             textinput.text = ""
@@ -559,7 +569,7 @@ class GameManager(App):
 
     def enable_energy_link(self):
         if not hasattr(self, "energy_link_label"):
-            self.energy_link_label = Label(text="Energy Link: Standby",
+            self.energy_link_label = MDLabel(text="Energy Link: Standby",
                                            size_hint_x=None, width=150)
             self.connect_layout.add_widget(self.energy_link_label)
 
@@ -596,7 +606,7 @@ class LogtoUI(logging.Handler):
             self.on_log(self.format(record))
 
 
-class UILog(RecycleView):
+class UILog(MDRecycleView):
     messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
@@ -624,7 +634,7 @@ class UILog(RecycleView):
                 element.height = element.texture_size[1]
 
 
-class HintLog(RecycleView):
+class HintLog(MDRecycleView):
     header = {
         "receiving": {"text": "[u]Receiving Player[/u]"},
         "item": {"text": "[u]Item[/u]"},
