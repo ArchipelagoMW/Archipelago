@@ -48,9 +48,11 @@ def create_and_collect_fishing_access_items(tester: SVTestBase) -> List[Tuple[St
 
 
 class TestMasterAnglerNoFishsanity(WorldAssertMixin, SVTestBase):
-    options = {options.Goal.internal_name: options.Goal.option_master_angler,
-               options.Fishsanity.internal_name: options.Fishsanity.option_none,
-               options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
+    options = {
+        options.Goal.internal_name: options.Goal.option_master_angler,
+        options.Fishsanity.internal_name: options.Fishsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false
+    }
 
     def test_need_all_fish_to_win(self):
         collect_fishing_abilities(self)
@@ -63,9 +65,11 @@ class TestMasterAnglerNoFishsanity(WorldAssertMixin, SVTestBase):
 
 
 class TestMasterAnglerNoFishsanityNoGingerIsland(WorldAssertMixin, SVTestBase):
-    options = {options.Goal.internal_name: options.Goal.option_master_angler,
-               options.Fishsanity.internal_name: options.Fishsanity.option_none,
-               options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true}
+    options = {
+        options.Goal.internal_name: options.Goal.option_master_angler,
+        options.Fishsanity.internal_name: options.Fishsanity.option_none,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+    }
 
     def test_need_fish_to_win(self):
         collect_fishing_abilities(self)
@@ -83,9 +87,11 @@ class TestMasterAnglerNoFishsanityNoGingerIsland(WorldAssertMixin, SVTestBase):
 
 
 class TestMasterAnglerFishsanityNoHardFish(WorldAssertMixin, SVTestBase):
-    options = {options.Goal.internal_name: options.Goal.option_master_angler,
-               options.Fishsanity.internal_name: options.Fishsanity.option_exclude_hard_fish,
-               options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false}
+    options = {
+        options.Goal.internal_name: options.Goal.option_master_angler,
+        options.Fishsanity.internal_name: options.Fishsanity.option_exclude_hard_fish,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false
+    }
 
     def test_need_fish_to_win(self):
         collect_fishing_abilities(self)

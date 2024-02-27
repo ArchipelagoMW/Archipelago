@@ -1,6 +1,5 @@
-from random import random
-
-from .. import setup_solo_multiworld, SVTestCase
+from BaseClasses import get_seed
+from .. import SVTestCase
 from ..assertion import WorldAssertMixin
 from ... import options
 
@@ -17,8 +16,10 @@ class TestGeneratePreRolledRandomness(WorldAssertMixin, SVTestCase):
 
         num_tests = 1000
         for i in range(num_tests):
-            seed = int(random() * pow(10, 18) - 1)
-            # seed = 738592514038774912
-            with self.subTest(f"Entrance Randomizer and Remixed Bundles [SEED: {seed}]"):
-                multiworld = setup_solo_multiworld(choices, seed)
+            seed = get_seed()  # Put seed in parameter to test
+            with (self.solo_world_sub_test(f"Entrance Randomizer and Remixed Bundles",
+                                           choices,
+                                           seed=seed,
+                                           world_caching=False)
+                  as (multiworld, _)):
                 self.assert_basic_checks(multiworld)

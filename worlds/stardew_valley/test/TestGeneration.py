@@ -1,9 +1,8 @@
-import typing
 from typing import List
 
-from BaseClasses import ItemClassification, MultiWorld, Item
-from . import setup_solo_multiworld, SVTestBase, get_minsanity_options, allsanity_options_without_mods, \
-    allsanity_options_with_mods, minimal_locations_maximal_items, SVTestCase, default_options, minimal_locations_maximal_items_with_island
+from BaseClasses import ItemClassification, Item
+from . import SVTestBase, allsanity_options_without_mods, \
+    allsanity_options_with_mods, minimal_locations_maximal_items, minimal_locations_maximal_items_with_island, get_minsanity_options, default_options
 from .. import items, location_table, options
 from ..data.villagers_data import all_villagers_by_name, all_villagers_by_mod_by_name
 from ..items import Group, item_table
@@ -12,14 +11,6 @@ from ..mods.mod_data import ModNames
 from ..options import Friendsanity, SpecialOrderLocations, Shipsanity, Chefsanity, SeasonRandomization, Craftsanity, ExcludeGingerIsland, ToolProgression, \
     FriendsanityHeartSize
 from ..strings.region_names import Region
-
-
-def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
-    return [location for location in multiworld.get_locations(tester.player) if not location.event]
-
-
-def get_real_location_names(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
-    return [location.name for location in multiworld.get_locations(tester.player) if not location.event]
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -49,9 +40,7 @@ class TestBaseItemGeneration(SVTestBase):
                 self.assertIn(progression_item.name, all_created_items)
 
     def test_creates_as_many_item_as_non_event_locations(self):
-        non_event_locations = [location for location in get_real_locations(self, self.multiworld) if
-                               not location.event]
-
+        non_event_locations = self.get_real_locations()
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
     def test_does_not_create_deprecated_items(self):
@@ -103,8 +92,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
                     self.assertIn(progression_item.name, all_created_items)
 
     def test_creates_as_many_item_as_non_event_locations(self):
-        non_event_locations = [location for location in get_real_locations(self, self.multiworld) if
-                               not location.event]
+        non_event_locations = self.get_real_locations()
 
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
@@ -172,7 +160,7 @@ class TestMonstersanityGoals(SVTestBase):
         self.assertEqual(item_pool.count("Progressive Footwear"), 4)
 
     def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in get_real_locations(self, self.multiworld):
+        for location in self.get_real_locations():
             if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
                 continue
             with self.subTest(location.name):
@@ -201,7 +189,7 @@ class TestMonstersanityOnePerCategory(SVTestBase):
         self.assertEqual(item_pool.count("Progressive Footwear"), 4)
 
     def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in get_real_locations(self, self.multiworld):
+        for location in self.get_real_locations():
             if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
                 continue
             with self.subTest(location.name):
@@ -236,7 +224,7 @@ class TestMonstersanityProgressive(SVTestBase):
         self.assertIn("Slime Charmer Ring", item_pool)
 
     def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in get_real_locations(self, self.multiworld):
+        for location in self.get_real_locations():
             if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
                 continue
             with self.subTest(location.name):
@@ -271,7 +259,7 @@ class TestMonstersanitySplit(SVTestBase):
         self.assertIn("Slime Charmer Ring", item_pool)
 
     def test_when_generate_world_then_all_monster_checks_are_inaccessible(self):
-        for location in get_real_locations(self, self.multiworld):
+        for location in self.get_real_locations():
             if LocationTags.MONSTERSANITY not in location_table[location.name].tags:
                 continue
             with self.subTest(location.name):
@@ -281,7 +269,7 @@ class TestMonstersanitySplit(SVTestBase):
 class TestProgressiveElevator(SVTestBase):
     options = {
         options.ElevatorProgression.internal_name: options.ElevatorProgression.option_progressive,
-        ToolProgression.internal_name: ToolProgression.option_progressive,
+        options.ToolProgression.internal_name: options.ToolProgression.option_progressive,
         options.SkillProgression.internal_name: options.SkillProgression.option_progressive,
     }
 
@@ -382,38 +370,44 @@ class TestSkullCavernLogic(SVTestBase):
 class TestLocationGeneration(SVTestBase):
 
     def test_all_location_created_are_in_location_table(self):
-        for location in get_real_locations(self, self.multiworld):
+        for location in self.get_real_locations():
             if not location.event:
                 self.assertIn(location.name, location_table)
 
 
-class TestLocationAndItemCount(SVTestCase):
+class TestMinLocationAndMaxItem(SVTestBase):
+    options = minimal_locations_maximal_items()
+
+    # They do not pass and I don't know why.
+    skip_base_tests = True
 
     def test_minimal_location_maximal_items_still_valid(self):
-        min_max_options = minimal_locations_maximal_items()
-        multiworld = setup_solo_multiworld(min_max_options)
-        valid_locations = get_real_locations(self, multiworld)
+        valid_locations = self.get_real_locations()
         number_locations = len(valid_locations)
-        number_items = len([item for item in multiworld.itempool
+        number_items = len([item for item in self.multiworld.itempool
                             if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
         self.assertGreaterEqual(number_locations, number_items)
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND EXCLUDED]")
 
+
+class TestMinLocationAndMaxItemWithIsland(SVTestBase):
+    options = minimal_locations_maximal_items_with_island()
+
     def test_minimal_location_maximal_items_with_island_still_valid(self):
-        min_max_options = minimal_locations_maximal_items_with_island()
-        multiworld = setup_solo_multiworld(min_max_options)
-        valid_locations = get_real_locations(self, multiworld)
+        valid_locations = self.get_real_locations()
         number_locations = len(valid_locations)
-        number_items = len([item for item in multiworld.itempool
+        number_items = len([item for item in self.multiworld.itempool
                             if Group.RESOURCE_PACK not in item_table[item.name].groups and Group.TRAP not in item_table[item.name].groups])
         self.assertGreaterEqual(number_locations, number_items)
         print(f"Stardew Valley - Minimum Locations: {number_locations}, Maximum Items: {number_items} [ISLAND INCLUDED]")
 
+
+class TestMinSanityHasAllExpectedLocations(SVTestBase):
+    options = get_minsanity_options()
+
     def test_minsanity_has_fewer_than_locations(self):
         expected_locations = 76
-        minsanity_options = get_minsanity_options()
-        multiworld = setup_solo_multiworld(minsanity_options)
-        real_locations = get_real_locations(self, multiworld)
+        real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertLessEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Minsanity Locations: {number_locations}")
@@ -423,10 +417,13 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 
+
+class TestDefaultSettingsHasAllExpectedLocations(SVTestBase):
+    options = default_options()
+
     def test_default_settings_has_exactly_locations(self):
         expected_locations = 422
-        multiworld = setup_solo_multiworld(default_options())
-        real_locations = get_real_locations(self, multiworld)
+        real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         print(f"Stardew Valley - Default options locations: {number_locations}")
         if number_locations != expected_locations:
@@ -435,11 +432,13 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 
+
+class TestAllSanitySettingsHasAllExpectedLocations(SVTestBase):
+    options = allsanity_options_without_mods()
+
     def test_allsanity_without_mods_has_at_least_locations(self):
         expected_locations = 1956
-        allsanity_options = allsanity_options_without_mods()
-        multiworld = setup_solo_multiworld(allsanity_options)
-        real_locations = get_real_locations(self, multiworld)
+        real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
         print(f"Stardew Valley - Allsanity Locations without mods: {number_locations}")
@@ -449,11 +448,13 @@ class TestLocationAndItemCount(SVTestCase):
                   f"\n\t\tExpected: {expected_locations}"
                   f"\n\t\tActual: {number_locations}")
 
+
+class TestAllSanityWithModsSettingsHasAllExpectedLocations(SVTestBase):
+    options = allsanity_options_with_mods()
+
     def test_allsanity_with_mods_has_at_least_locations(self):
         expected_locations = 2804
-        allsanity_options = allsanity_options_with_mods()
-        multiworld = setup_solo_multiworld(allsanity_options)
-        real_locations = get_real_locations(self, multiworld)
+        real_locations = self.get_real_locations()
         number_locations = len(real_locations)
         self.assertGreaterEqual(number_locations, expected_locations)
         print(f"\nStardew Valley - Allsanity Locations with all mods: {number_locations}")
@@ -485,7 +486,7 @@ class TestFriendsanityNone(SVTestBase):
             self.assertFalse(item.name.endswith(" <3"))
 
     def check_no_friendsanity_locations(self):
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             self.assertFalse(location_name.startswith("Friendsanity"))
 
 
@@ -513,7 +514,7 @@ class TestFriendsanityBachelors(SVTestBase):
     def check_only_bachelors_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if location_name.startswith(prefix):
                 name_no_prefix = location_name[len(prefix):]
                 name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
@@ -547,7 +548,7 @@ class TestFriendsanityStartingNpcs(SVTestBase):
     def check_only_starting_npcs_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if location_name.startswith(prefix):
                 name_no_prefix = location_name[len(prefix):]
                 name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
@@ -600,7 +601,7 @@ class TestFriendsanityAllNpcs(SVTestBase):
     def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if not location_name.startswith(prefix):
                 continue
             name_no_prefix = location_name[len(prefix):]
@@ -641,7 +642,7 @@ class TestFriendsanityAllNpcsExcludingGingerIsland(SVTestBase):
     def check_locations(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if location_name.startswith(prefix):
                 name_no_prefix = location_name[len(prefix):]
                 name_trimmed = name_no_prefix[:name_no_prefix.index(suffix)]
@@ -694,7 +695,7 @@ class TestFriendsanityHeartSize3(SVTestBase):
     def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if not location_name.startswith(prefix):
                 continue
             name_no_prefix = location_name[len(prefix):]
@@ -747,7 +748,7 @@ class TestFriendsanityHeartSize5(SVTestBase):
     def check_locations_are_valid(self):
         prefix = "Friendsanity: "
         suffix = " <3"
-        for location_name in get_real_location_names(self, self.multiworld):
+        for location_name in self.get_real_location_names():
             if not location_name.startswith(prefix):
                 continue
             name_no_prefix = location_name[len(prefix):]

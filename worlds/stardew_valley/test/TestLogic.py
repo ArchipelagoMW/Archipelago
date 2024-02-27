@@ -4,7 +4,7 @@ from . import setup_solo_multiworld, allsanity_options_with_mods
 from .assertion import RuleAssertMixin
 from ..data.bundle_data import all_bundle_items_except_money
 
-multi_world = setup_solo_multiworld(allsanity_options_with_mods())
+multi_world = setup_solo_multiworld(allsanity_options_with_mods(), _cache={})
 world = multi_world.worlds[1]
 logic = world.logic
 

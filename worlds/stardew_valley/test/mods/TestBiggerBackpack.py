@@ -4,8 +4,10 @@ from ...options import Mods, BackpackProgression
 
 
 class TestBiggerBackpackVanilla(SVTestBase):
-    options = {BackpackProgression.internal_name: BackpackProgression.option_vanilla,
-               Mods.internal_name: ModNames.big_backpack}
+    options = {
+        BackpackProgression.internal_name: BackpackProgression.option_vanilla,
+        Mods.internal_name: ModNames.big_backpack
+    }
 
     def test_no_backpack(self):
         with self.subTest(check="no items"):
@@ -20,8 +22,10 @@ class TestBiggerBackpackVanilla(SVTestBase):
 
 
 class TestBiggerBackpackProgressive(SVTestBase):
-    options = {BackpackProgression.internal_name: BackpackProgression.option_progressive,
-               Mods.internal_name: ModNames.big_backpack}
+    options = {
+        BackpackProgression.internal_name: BackpackProgression.option_progressive,
+        Mods.internal_name: ModNames.big_backpack
+    }
 
     def test_backpack(self):
         with self.subTest(check="has items"):
@@ -36,8 +40,10 @@ class TestBiggerBackpackProgressive(SVTestBase):
 
 
 class TestBiggerBackpackEarlyProgressive(TestBiggerBackpackProgressive):
-    options = {BackpackProgression.internal_name: BackpackProgression.option_early_progressive,
-               Mods.internal_name: ModNames.big_backpack}
+    options = {
+        BackpackProgression.internal_name: BackpackProgression.option_early_progressive,
+        Mods.internal_name: ModNames.big_backpack
+    }
 
     def test_backpack(self):
         super().test_backpack()

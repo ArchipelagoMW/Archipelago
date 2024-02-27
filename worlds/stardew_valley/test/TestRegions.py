@@ -1,14 +1,11 @@
 import random
-import sys
 import unittest
-from argparse import Namespace
-from typing import Iterable, Dict, Set
+from typing import Set
 
-from BaseClasses import Region, Entrance
-from . import SVTestCase, setup_solo_multiworld
-from .. import StardewValleyWorld
-from ..options import EntranceRandomization, ExcludeGingerIsland, StardewValleyOptions
-from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_regions, create_final_connections_and_regions
+from BaseClasses import get_seed
+from . import SVTestCase, complete_options_with_default
+from ..options import EntranceRandomization, ExcludeGingerIsland
+from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag, create_final_connections_and_regions
 from ..strings.entrance_names import Entrance as EntranceName
 from ..strings.region_names import Region as RegionName
 
@@ -60,81 +57,69 @@ class TestEntranceRando(SVTestCase):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            # option = options.EntranceRandomization.option_buildings
-            # flag = RandomizationFlag.BUILDINGS
-            # for i in range(0, 100000):
-            seed = random.randrange(sys.maxsize)
+            sv_options = complete_options_with_default({
+                EntranceRandomization.internal_name: option,
+                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false
+            })
+            seed = get_seed()
+            rand = random.Random(seed)
             with self.subTest(flag=flag, msg=f"Seed: {seed}"):
-                rand = random.Random(seed)
-                world_options = {EntranceRandomization.internal_name: option,
-                                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
-                multiworld = setup_solo_multiworld(world_options)
-                sv_options = multiworld.worlds[1].options
                 entrances, regions = create_final_connections_and_regions(sv_options)
-
                 _, randomized_connections = randomize_connections(rand, sv_options, regions, entrances)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
                         connection_in_randomized = connection.name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
-                        self.assertTrue(connection_in_randomized,
-                                        f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
-                        self.assertTrue(reverse_in_randomized,
-                                        f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+                        self.assertTrue(connection_in_randomized, f"Connection {connection.name} should be randomized but it is not in the output.")
+                        self.assertTrue(reverse_in_randomized, f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization. Seed = {seed}")
+                                 f"Connections are duplicated in randomization.")
 
     def test_entrance_randomization_without_island(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            with self.subTest(option=option, flag=flag):
-                seed = random.randrange(sys.maxsize)
-                rand = random.Random(seed)
-                world_options = {EntranceRandomization.internal_name: option,
-                                 ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true}
-                multiworld = setup_solo_multiworld(world_options)
-                sv_options = multiworld.worlds[1].options
-                entrances, regions = create_final_connections_and_regions(sv_options)
 
+            sv_options = complete_options_with_default({
+                EntranceRandomization.internal_name: option,
+                ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true
+            })
+            seed = get_seed()
+            rand = random.Random(seed)
+            with self.subTest(option=option, flag=flag, seed=seed):
+                entrances, regions = create_final_connections_and_regions(sv_options)
                 _, randomized_connections = randomize_connections(rand, sv_options, regions, entrances)
 
                 for connection in vanilla_connections:
                     if flag in connection.flag:
                         if RandomizationFlag.GINGER_ISLAND in connection.flag:
                             self.assertNotIn(connection.name, randomized_connections,
-                                             f"Connection {connection.name} should not be randomized but it is in the output. Seed = {seed}")
+                                             f"Connection {connection.name} should not be randomized but it is in the output.")
                             self.assertNotIn(connection.reverse, randomized_connections,
-                                             f"Connection {connection.reverse} should not be randomized but it is in the output. Seed = {seed}")
+                                             f"Connection {connection.reverse} should not be randomized but it is in the output.")
                         else:
                             self.assertIn(connection.name, randomized_connections,
-                                          f"Connection {connection.name} should be randomized but it is not in the output. Seed = {seed}")
+                                          f"Connection {connection.name} should be randomized but it is not in the output.")
                             self.assertIn(connection.reverse, randomized_connections,
-                                          f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+                                          f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization. Seed = {seed}")
+                                 f"Connections are duplicated in randomization.")
 
     def test_cannot_put_island_access_on_island(self):
-        entrance_option = EntranceRandomization.option_buildings
-        buildings_flag = RandomizationFlag.BUILDINGS
-        string_options = {EntranceRandomization.internal_name: entrance_option,
-                          ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false}
-        player = 1
-        for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-            if name in string_options:
-                continue
-            string_options[name] = option.from_any(option.default)
-        world_options = StardewValleyOptions(**{option_key: string_options[option_key] for option_key in StardewValleyOptions.type_hints})
+        sv_options = complete_options_with_default({
+            EntranceRandomization.internal_name: EntranceRandomization.option_buildings,
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_false
+        })
 
         for i in range(0, 100 if self.skip_long_tests else 10000):
-            seed = random.randrange(sys.maxsize)
+            seed = get_seed()
+            rand = random.Random(seed)
             with self.subTest(msg=f"Seed: {seed}"):
-                rand = random.Random(seed)
-                entrances, regions = create_final_connections_and_regions(world_options)
-                randomized_connections, randomized_data = randomize_connections(rand, world_options, regions, entrances)
+                entrances, regions = create_final_connections_and_regions(sv_options)
+                randomized_connections, randomized_data = randomize_connections(rand, sv_options, regions, entrances)
                 connections_by_name = {connection.name: connection for connection in randomized_connections}
 
                 blocked_entrances = {EntranceName.use_island_obelisk, EntranceName.boat_to_ginger_island}
@@ -151,11 +136,10 @@ class TestEntranceClassifications(SVTestCase):
     def test_non_progression_are_all_accessible_with_empty_inventory(self):
         for option, flag in [(EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION)]:
-            seed = random.randrange(sys.maxsize)
-            with self.subTest(flag=flag, msg=f"Seed: {seed}"):
-                multiworld_options = {EntranceRandomization.internal_name: option}
-                multiworld = setup_solo_multiworld(multiworld_options, seed)
-                sv_world: StardewValleyWorld = multiworld.worlds[1]
+            world_options = {
+                EntranceRandomization.internal_name: option
+            }
+            with self.solo_world_sub_test(world_options=world_options, flag=flag) as (multiworld, sv_world):
                 ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
                 for randomized_entrance in sv_world.randomized_entrances:
                     if randomized_entrance in ap_entrances:
@@ -166,13 +150,14 @@ class TestEntranceClassifications(SVTestCase):
                         self.assertTrue(ap_entrance_destination.access_rule(multiworld.state))
 
     def test_no_ginger_island_entrances_when_excluded(self):
-        seed = random.randrange(sys.maxsize)
-        multiworld_options = {EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
-                              ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true}
-        multiworld = setup_solo_multiworld(multiworld_options, seed)
-        ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
-        entrance_data_by_name = {entrance.name: entrance for entrance in vanilla_connections}
-        for entrance_name in ap_entrances:
-            entrance_data = entrance_data_by_name[entrance_name]
-            with self.subTest(f"{entrance_name}: {entrance_data.flag}"):
-                self.assertFalse(entrance_data.flag & RandomizationFlag.GINGER_ISLAND)
+        world_options = {
+            EntranceRandomization.internal_name: EntranceRandomization.option_disabled,
+            ExcludeGingerIsland.internal_name: ExcludeGingerIsland.option_true
+        }
+        with self.solo_world_sub_test(world_options=world_options) as (multiworld, _):
+            ap_entrances = {entrance.name: entrance for entrance in multiworld.get_entrances()}
+            entrance_data_by_name = {entrance.name: entrance for entrance in vanilla_connections}
+            for entrance_name in ap_entrances:
+                entrance_data = entrance_data_by_name[entrance_name]
+                with self.subTest(f"{entrance_name}: {entrance_data.flag}"):
+                    self.assertFalse(entrance_data.flag & RandomizationFlag.GINGER_ISLAND)

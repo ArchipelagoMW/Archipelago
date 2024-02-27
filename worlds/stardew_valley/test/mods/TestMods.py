@@ -1,7 +1,7 @@
 import random
 
 from BaseClasses import get_seed
-from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
+from .. import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods, complete_options_with_default
 from ..assertion import ModAssertMixin, WorldAssertMixin
 from ... import items, Group, ItemClassification
 from ... import options
@@ -14,32 +14,30 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_single_mods_when_generate_then_basic_checks(self):
         for mod in all_mods:
-            with self.subTest(f"Mod: {mod}"):
-                multi_world = setup_solo_multiworld({options.Mods: mod})
+            with self.solo_world_sub_test(f"Mod: {mod}", {options.Mods: mod}, dirty_state=True) as (multi_world, _):
                 self.assert_basic_checks(multi_world)
                 self.assert_stray_mod_items(mod, multi_world)
 
     def test_given_mod_names_when_generate_paired_with_entrance_randomizer_then_basic_checks(self):
         for option in options.EntranceRandomization.options:
             for mod in all_mods:
-                with self.subTest(f"entrance_randomization: {option}, Mod: {mod}"):
-                    multi_world = setup_solo_multiworld({
-                        options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
-                        options.Mods: mod
-                    })
+                world_options = {
+                    options.EntranceRandomization.internal_name: options.EntranceRandomization.options[option],
+                    options.Mods: mod
+                }
+                with self.solo_world_sub_test(f"entrance_randomization: {option}, Mod: {mod}", world_options, dirty_state=True) as (multi_world, _):
                     self.assert_basic_checks(multi_world)
-                self.assert_stray_mod_items(mod, multi_world)
+                    self.assert_stray_mod_items(mod, multi_world)
 
     def test_allsanity_all_mods_when_generate_then_basic_checks(self):
-        multi_world = setup_solo_multiworld(allsanity_options_with_mods())
-        self.assert_basic_checks(multi_world)
+        with self.solo_world_sub_test(world_options=allsanity_options_with_mods(), dirty_state=True) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
-        option_dict = allsanity_options_with_mods()
-        option_dict = {key: option_dict[key] for key in option_dict}
-        option_dict.update({options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true})
-        multi_world = setup_solo_multiworld(option_dict)
-        self.assert_basic_checks(multi_world)
+        world_options = allsanity_options_with_mods()
+        world_options.update({options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true})
+        with self.solo_world_sub_test(world_options=world_options, dirty_state=True) as (multi_world, _):
+            self.assert_basic_checks(multi_world)
 
 
 class TestBaseLocationDependencies(SVTestBase):
@@ -112,34 +110,31 @@ class TestNoGingerIslandModItemGeneration(SVTestBase):
 class TestModEntranceRando(SVTestCase):
 
     def test_mod_entrance_randomization(self):
-
         for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),
                              (options.EntranceRandomization.option_non_progression, RandomizationFlag.NON_PROGRESSION),
                              (options.EntranceRandomization.option_buildings, RandomizationFlag.BUILDINGS)]:
-            with self.subTest(option=option, flag=flag):
-                seed = get_seed()
-                rand = random.Random(seed)
-                world_options = {options.EntranceRandomization.internal_name: option,
-                                 options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
-                                 options.Mods.internal_name: all_mods}
-                multiworld = setup_solo_multiworld(world_options)
-                world = multiworld.worlds[1]
-                final_connections, final_regions = create_final_connections_and_regions(world.options)
+            sv_options = complete_options_with_default({
+                options.EntranceRandomization.internal_name: option,
+                options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_false,
+                options.Mods.internal_name: all_mods
+            })
+            seed = get_seed()
+            rand = random.Random(seed)
+            with self.subTest(option=option, flag=flag, seed=seed):
+                final_connections, final_regions = create_final_connections_and_regions(sv_options)
 
-                _, randomized_connections = randomize_connections(rand, world.options, final_regions, final_connections)
+                _, randomized_connections = randomize_connections(rand, sv_options, final_regions, final_connections)
 
                 for connection_name in final_connections:
                     connection = final_connections[connection_name]
                     if flag in connection.flag:
                         connection_in_randomized = connection_name in randomized_connections
                         reverse_in_randomized = connection.reverse in randomized_connections
-                        self.assertTrue(connection_in_randomized,
-                                        f"Connection {connection_name} should be randomized but it is not in the output. Seed = {seed}")
-                        self.assertTrue(reverse_in_randomized,
-                                        f"Connection {connection.reverse} should be randomized but it is not in the output. Seed = {seed}")
+                        self.assertTrue(connection_in_randomized, f"Connection {connection_name} should be randomized but it is not in the output")
+                        self.assertTrue(reverse_in_randomized, f"Connection {connection.reverse} should be randomized but it is not in the output.")
 
                 self.assertEqual(len(set(randomized_connections.values())), len(randomized_connections.values()),
-                                 f"Connections are duplicated in randomization. Seed = {seed}")
+                                 f"Connections are duplicated in randomization.")
 
 
 class TestModTraps(SVTestCase):

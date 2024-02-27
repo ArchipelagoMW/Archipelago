@@ -1,7 +1,7 @@
 import random
 from typing import Dict
 
-from BaseClasses import MultiWorld
+from BaseClasses import MultiWorld, get_seed
 from Options import NamedRange, Range
 from .option_names import options_to_include
 from .. import setup_solo_multiworld, SVTestCase
@@ -24,10 +24,10 @@ def generate_random_multiworld(world_id: int):
     return multiworld
 
 
-def generate_random_world_options(world_id: int) -> Dict[str, int]:
+def generate_random_world_options(seed: int) -> Dict[str, int]:
     num_options = len(options_to_include)
     world_options = dict()
-    rng = random.Random(world_id)
+    rng = random.Random(seed)
     for option_index in range(0, num_options):
         option = options_to_include[option_index]
         option_choices = get_option_choices(option)
@@ -59,24 +59,26 @@ class TestGenerateManyWorlds(GoalAssertMixin, OptionAssertMixin, WorldAssertMixi
         if self.skip_long_tests:
             return
         number_worlds = 10 if self.skip_long_tests else 1000
-        start_index = random.Random().randint(0, 9999999999)
-        multiworlds = self.generate_and_check_many_worlds(number_worlds, start_index)
+        seed = get_seed()
+        self.generate_and_check_many_worlds(number_worlds, seed)
 
-    def generate_and_check_many_worlds(self, number_worlds: int, start_index: int) -> Dict[int, MultiWorld]:
+    def generate_and_check_many_worlds(self, number_worlds: int, seed: int):
         num_steps = get_number_log_steps(number_worlds)
         log_step = number_worlds / num_steps
-        multiworlds = dict()
-        print(f"Generating {number_worlds} Solo Multiworlds [Start Seed: {start_index}] for Stardew Valley...")
+
+        print(f"Generating {number_worlds} Solo Multiworlds [Start Seed: {seed}] for Stardew Valley...")
         for world_number in range(0, number_worlds + 1):
-            world_id = world_number + start_index
-            with self.subTest(f"Multiworld: {world_id}"):
-                multiworld = generate_random_multiworld(world_id)
-                multiworlds[world_id] = multiworld
+
+            world_seed = world_number + seed
+            world_options = generate_random_world_options(world_seed)
+
+            with self.solo_world_sub_test(f"Multiworld: {world_seed}", world_options, seed=world_seed, world_caching=False) as (multiworld, _):
                 self.assert_multiworld_is_valid(multiworld)
+
             if world_number > 0 and world_number % log_step == 0:
                 print(f"Generated and Verified {world_number}/{number_worlds} worlds [{(world_number * 100) // number_worlds}%]")
+
         print(f"Finished generating and verifying {number_worlds} Solo Multiworlds for Stardew Valley")
-        return multiworlds
 
     def assert_multiworld_is_valid(self, multiworld: MultiWorld):
         self.assert_victory_exists(multiworld)
