@@ -116,7 +116,6 @@ class TLoZWorld(World):
 
     def create_location(self, name, id, parent, event=False):
         return_location = TLoZLocation(self.player, name, id, parent)
-        return_location.event = event
         return return_location
 
     def create_regions(self):

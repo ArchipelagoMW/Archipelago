@@ -11,11 +11,11 @@ from ..mods.mod_data import ModNames
 
 
 def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
-    return [location for location in multiworld.get_locations(tester.player) if not location.event]
+    return [location for location in multiworld.get_locations(tester.player) if not location.advancement]
 
 
 def get_real_location_names(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
-    return [location.name for location in multiworld.get_locations(tester.player) if not location.event]
+    return [location.name for location in multiworld.get_locations(tester.player) if not location.advancement]
 
 
 class TestBaseItemGeneration(SVTestBase):
@@ -43,7 +43,7 @@ class TestBaseItemGeneration(SVTestBase):
 
     def test_creates_as_many_item_as_non_event_locations(self):
         non_event_locations = [location for location in get_real_locations(self, self.multiworld) if
-                               not location.event]
+                               not location.advancement]
 
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
@@ -94,7 +94,7 @@ class TestNoGingerIslandItemGeneration(SVTestBase):
 
     def test_creates_as_many_item_as_non_event_locations(self):
         non_event_locations = [location for location in get_real_locations(self, self.multiworld) if
-                               not location.event]
+                               not location.advancement]
 
         self.assertEqual(len(non_event_locations), len(self.multiworld.itempool))
 
@@ -189,7 +189,7 @@ class TestLocationGeneration(SVTestBase):
 
     def test_all_location_created_are_in_location_table(self):
         for location in get_real_locations(self, self.multiworld):
-            if not location.event:
+            if not location.advancement:
                 self.assertIn(location.name, location_table)
 
 

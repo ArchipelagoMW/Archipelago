@@ -249,7 +249,6 @@ def create_regions(multiworld: MultiWorld, player: int, locations: Tuple[Locatio
             for i in range(len(location_cache) - 1, -1, -1):
                 if location_cache[i].name == final_location:
                     location_cache[i].locked = True
-                    location_cache[i].event = True
                     location_cache[i].address = None
                     break
         else:
@@ -263,7 +262,6 @@ def create_location(player: int, location_data: LocationData, region: Region,
     location.access_rule = location_data.rule
 
     if id is None:
-        location.event = True
         location.locked = True
 
     location_cache.append(location)

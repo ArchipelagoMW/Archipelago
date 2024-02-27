@@ -115,8 +115,6 @@ class Overcooked2World(World):
             region,
         )
 
-        location.event = is_event
-
         if priority:
             location.progress_type = LocationProgressType.PRIORITY
         else:
