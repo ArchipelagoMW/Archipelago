@@ -47,7 +47,8 @@ def set_rules(multiworld, player):
                                             (logic.prime_can_bomb(state, multiworld, player) or
                                              logic.prime_can_pb(state, multiworld, player))),
         'CR Sunchamber - Flaaghra': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
-                                                   logic.prime_can_bomb(state, multiworld, player)),
+                                                   logic.prime_can_bomb(state, multiworld, player) and
+                                                   logic.prime_etank_count(state, multiworld, player) >= 1),
         'CR Sunchamber - Ghosts': lambda state: (logic.prime_can_super(state, multiworld, player) and
                                                  logic.prime_can_bomb(state, multiworld, player) and
                                                  logic.prime_can_spider(state, multiworld, player)),
@@ -117,7 +118,8 @@ def set_rules(multiworld, player):
                                                state.has({'Space Jump Boots'}, player))),
         'PD Quarantine Cave': lambda state: (logic.prime_quarantine_cave(state, multiworld, player) and
                                              logic.prime_can_spider(state, multiworld, player) and
-                                             state.has({'Thermal Visor'}, player)),
+                                             state.has({'Thermal Visor'}, player) and
+                                             logic.prime_etank_count(state, multiworld, player) >= 3),
         'PD Research Lab Hydra': lambda state: (logic.prime_labs(state, multiworld, player) and
                                                 logic.prime_can_super(state, multiworld, player)),
         'PD Quarantine Monitor': lambda state: (logic.prime_quarantine_cave(state, multiworld, player) and
@@ -236,7 +238,8 @@ def set_rules(multiworld, player):
         'PM Processing Center Access': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
                                                       state.has({'X-Ray Visor'}, player)),
         'PM Elite Quarters': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
-                                            state.has({'X-Ray Visor'}, player)),
+                                            state.has({'X-Ray Visor'}, player) and
+                                            logic.prime_etank_count(state, multiworld, player) >= 7),
         'PM Central Dynamo': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
                                             logic.prime_can_bomb(state, multiworld, player) and
                                             logic.prime_can_pb(state, multiworld, player) and

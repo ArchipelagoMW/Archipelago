@@ -12,7 +12,7 @@ class MetroidPrimeLogic(LogicMixin):
     def prime_has_missile_count(self, world: MultiWorld, player: int) -> int:
         count = 0
         if self.has({'Main Missile'}, player):
-            count = 1
+            count = 5
         count += self.prog_items['Missile Expansion', player] * 5
         return count
 
@@ -23,6 +23,10 @@ class MetroidPrimeLogic(LogicMixin):
                 count += 1
         return count
 
+    def prime_etank_count(self, world: MultiWorld, player: int) -> int:
+        count = 0
+        count += self.prog_items['Energy Tank', player]
+        return count
     def prime_can_bomb(self, world: MultiWorld, player: int) -> bool:
         return self.has({'Morph Ball', 'Morph Ball Bombs'})
 

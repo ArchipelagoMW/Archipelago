@@ -1,5 +1,5 @@
 import typing
-from Options import Option, Toggle, Range, ItemDict, StartInventoryPool
+from Options import Option, Toggle, Range, ItemDict, StartInventoryPool, Choice
 
 
 class SpringBall(Toggle):
@@ -18,14 +18,26 @@ class RequiredArtifacts(Range):
 
 class ExcludeItems(ItemDict):
     """Replaces the following items with filler. INPUT AT YOUR OWN RISK. I cannot promise that removing
-    progression items will not break logic."""
+    progression items will not break logic. (for now please leave the default starting items in)"""
     verify_item_name = True
     display_name = "Exclude Items"
+
+
+class FinalBosses(Choice):
+    """Determines the final bosses required to beat the seed. Choose from Meta Ridley, Metroid Prime,
+    both, or neither."""
+    display_name = "Final Boss Select"
+    option_both = 0
+    option_ridley = 1
+    option_prime = 2
+    option_none = 3
+    default = 0
 
 
 metroidprime_options: typing.Dict[str, type(Option)] = {
     "start_inventory_from_pool": StartInventoryPool,
     "spring_ball": SpringBall,
     "required_artifacts": RequiredArtifacts,
-    "exclude_items": ExcludeItems
+    "exclude_items": ExcludeItems,
+    "final_bosses": FinalBosses
 }

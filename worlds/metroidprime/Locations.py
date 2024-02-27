@@ -119,3 +119,11 @@ magmoor_location_table = {
     'MC Plasma Processing': 5031198,
     'MC Magmoor Workstation': 5031199
 }
+
+every_location = {
+    **chozo_location_table,
+    **phen_location_table,
+    **tallon_location_table,
+    **mines_location_table,
+    **magmoor_location_table
+}
