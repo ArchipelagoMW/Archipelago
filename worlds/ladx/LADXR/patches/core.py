@@ -1,6 +1,6 @@
 from ..assembler import ASM
 from ..entranceInfo import ENTRANCE_INFO
-from ..roomEditor import RoomEditor, ObjectWarp, ObjectHorizontal
+from ..roomEditor import RoomEditor, Object, ObjectWarp, ObjectHorizontal
 from ..backgroundEditor import BackgroundEditor
 from .. import utils
 
@@ -539,6 +539,16 @@ OAMData:
         rom.banks[0x38][0x1400+n*0x20:0x1410+n*0x20] = utils.createTileData(gfx_high)
         rom.banks[0x38][0x1410+n*0x20:0x1420+n*0x20] = utils.createTileData(gfx_low)
 
+# For the D7 exit, make it so that we can exit it properly in ER
+def fixD7exit(rom):
+    re = RoomEditor(rom, 0x0E)
+    for x in [0, 1, 2, 8, 9]:
+        for y in range(3):
+            re.removeObject(x, y)
+    re.objects.append(Object(5, 2, 0xE1))
+    re.objects.append(Object(5, 3, 0x4A))
+    re.store(rom)
+
 def addWarpImprovements(rom, extra_warps):
     # Patch in a warp icon
     tile = utils.createTileData( \
@@ -623,9 +633,7 @@ def addWarpImprovements(rom, extra_warps):
 
     # Allow cursor to move over black squares
     # This allows warping to undiscovered areas - a fine cheat, but needs a check for wOverworldRoomStatus in the warp code
-    CHEAT_WARP_ANYWHERE = False
-    if CHEAT_WARP_ANYWHERE:
-        rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
+    rom.patch(0x01, 0x1AE8, None, ASM("jp $5AF5"))
 
     # This disables the arrows around the selection bubble
     #rom.patch(0x01, 0x1B6F, None, ASM("ret"), fill_nop=True)
@@ -704,8 +712,15 @@ def addWarpImprovements(rom, extra_warps):
 TeleportHandler:
 
     ld  a, [$DBB4] ; Load the current selected tile
-    ; TODO: check if actually revealed so we can have free movement
-    ; Check cursor against different tiles to see if we are selecting a warp
+    ld   hl, wOverworldRoomStatus
+    ld   e, a                                     ; $5D38: $5F
+    ld   d, $00                                   ; $5D39: $16 $00
+    add  hl, de                                   ; $5D3B: $19
+    ld   a, [hl]
+    and  $80
+    jr z, exit
+    ld  a, [$DBB4] ; Load the current selected tile
+
     {warp_jump}
     jr exit
 

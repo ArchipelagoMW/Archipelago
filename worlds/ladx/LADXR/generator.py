@@ -115,10 +115,13 @@ def generateRom(args, settings, ap_settings, auth, seed_name, logic, rnd=None, m
     assembler.const("wDropBombSpawnCount", 0xDE12)
     assembler.const("wLinkSpawnDelay", 0xDE13)
 
+    assembler.const("wOverworldRoomStatus", 0xD800)
+
     #assembler.const("HARDWARE_LINK", 1)
     assembler.const("HARD_MODE", 1 if settings.hardmode != "none" else 0)
 
     patches.core.cleanup(rom)
+    patches.core.fixD7exit(rom)
     patches.save.singleSaveSlot(rom)
     patches.phone.patchPhone(rom)
     patches.photographer.fixPhotographer(rom)

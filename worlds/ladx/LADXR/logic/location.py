@@ -2,17 +2,33 @@ import typing
 from .requirements import hasConsumableRequirement, OR
 from ..locations.itemInfo import ItemInfo
 
+from enum import Enum
+
+class LocationType(Enum):
+    Unknown = 0
+    Overworld = 1
+    Dungeon = 2
+    Indoor = 3
 
 class Location:
-    def __init__(self, name=None, dungeon=None):
+    def __init__(self, name=None, location_type=LocationType.Unknown, dungeon=None):
         self.name = name
         self.items = []  # type: typing.List[ItemInfo]
         self.dungeon = dungeon
+        if self.dungeon != None:
+            assert location_type == location_type.Unknown or location_type == LocationType.Dungeon
+            location_type = LocationType.Dungeon
+        
+        self.location_type = location_type 
         self.__connected_to = set()
         self.simple_connections = []
         self.gated_connections = []
 
     def add(self, *item_infos):
+        if not self.name:
+            meta = item_infos[0].metadata
+            self.name = f"{meta.name} ({meta.area})"
+            
         for ii in item_infos:
             assert isinstance(ii, ItemInfo)
             ii.setLocation(self)
@@ -55,3 +71,17 @@ class Location:
 
     def __repr__(self):
         return "<%s:%s:%d:%d:%d>" % (self.__class__.__name__, self.dungeon, len(self.items), len(self.simple_connections), len(self.gated_connections))
+
+class OverworldLocation(Location):
+    def __init__(self, name=None):
+        assert(name)
+        Location.__init__(self, name, location_type=LocationType.Overworld)
+
+        
+class IndoorLocation(Location):
+    def __init__(self, name):
+        assert(name)
+        Location.__init__(self, name, location_type=LocationType.Indoor)
+
+class VirtualLocation(Location):
+    pass

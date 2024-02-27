@@ -212,7 +212,7 @@ INFO = {
         items={None: 2},
         logic=lambda c, w, r: Location().connect(Location().add(Chest(0x2BD)), SWORD).connect(  # chest in forest cave on route to mushroom
             Location().add(HeartPiece(0x2AB), POWER_BRACELET)),  # piece of heart in the forest cave on route to the mushroom
-        exits=[("right_taltal_connector6", lambda loc: loc)],
+        exits=[("toadstool_exit", lambda loc: loc)],
     ),
     "toadstool_exit": EntranceInfo(),
 

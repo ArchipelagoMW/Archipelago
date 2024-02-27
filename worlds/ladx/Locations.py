@@ -159,19 +159,6 @@ class LinksAwakeningEntrance(Entrance):
         return self.condition.test(GameStateAdapater(state, self.player))
 
 
-# Helper to apply function to every ladxr region
-def walk_ladxdr(f, n, walked=set()):
-    if n in walked:
-        return
-    f(n)
-    walked.add(n)
-
-    for o, req in n.simple_connections:
-        walk_ladxdr(f, o, walked)
-    for o, req in n.gated_connections:
-        walk_ladxdr(f, o, walked)
-
-
 def ladxr_region_to_name(n):
     name = n.name
     if not name:
@@ -233,3 +220,33 @@ def create_regions_from_ladxr(player, multiworld, logic):
             entrance.connect(region_b)
 
     return list(regions.values())
+
+
+class ConnectorInfo:
+    def __init__(self, entrances, oneway=False, castle_button=False) -> None:
+        self.entrances = entrances
+        self.oneway = oneway
+        self.castle_button = castle_button
+
+connector_info = [
+    ConnectorInfo(("fire_cave_entrance", "fire_cave_exit")),
+    ConnectorInfo(("left_to_right_taltalentrance", "left_taltal_entrance"), True),
+    ConnectorInfo(("obstacle_cave_entrance", "obstacle_cave_outside_chest", "obstacle_cave_exit")),
+    ConnectorInfo(("papahl_entrance", "papahl_exit")),
+    ConnectorInfo(("multichest_left", "multichest_right", "multichest_top")),
+    ConnectorInfo(("right_taltal_connector1", "right_taltal_connector2")),
+    ConnectorInfo(("right_taltal_connector3", "right_taltal_connector4"), True),
+    ConnectorInfo(("right_taltal_connector5", "right_taltal_connector6")),
+    ConnectorInfo(("writes_cave_left", "writes_cave_right")),
+    ConnectorInfo(("raft_return_enter", "raft_return_exit"), True),
+    ConnectorInfo(("toadstool_entrance", "toadstool_exit")),
+    ConnectorInfo(("graveyard_cave_left", "graveyard_cave_right")),
+    ConnectorInfo(("castle_main_entrance", "castle_upper_left"), castle_button=True),
+    ConnectorInfo(("castle_secret_entrance", "castle_secret_exit")),
+    ConnectorInfo(("papahl_house_left", "papahl_house_right")),
+    ConnectorInfo(("prairie_right_cave_top", "prairie_right_cave_bottom", "prairie_right_cave_high")),
+    ConnectorInfo(("prairie_to_animal_connector", "animal_to_prairie_connector")),
+    ConnectorInfo(("d6_connector_entrance", "d6_connector_exit")),
+    ConnectorInfo(("richard_house", "richard_maze")),
+    ConnectorInfo(("prairie_madbatter_connector_entrance", "prairie_madbatter_connector_exit"))
+    ]

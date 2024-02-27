@@ -23,9 +23,6 @@ class ItemInfo:
     def setLocation(self, location):
         self._location = location
 
-    def getOptions(self):
-        return self.OPTIONS
-
     def configure(self, options):
         pass
 
