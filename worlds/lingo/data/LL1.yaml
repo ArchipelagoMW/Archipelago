@@ -682,7 +682,9 @@
         warp: True
       The Tenacious:
         door: Tenacious Entrance
-      Orange Tower Fourth Floor: True # through IRK HORN
+      Orange Tower Fourth Floor:
+        - warp: True # through IRK HORN
+        - door: Tower Entrance
       Amen Name Area:
         room: Lost Area
         door: Exit

@@ -198,6 +198,10 @@ class LingoPlayerLogic:
 
             if world.options.level_2_requirement == 1:
                 raise Exception("The Level 2 requirement must be at least 2 when LEVEL 2 is the victory condition.")
+        elif victory_condition == VictoryCondition.option_pilgrimage:
+            self.victory_condition = "Pilgrim Antechamber - PILGRIM"
+            self.add_location("Pilgrim Antechamber", "PILGRIM (Solved)", None, [], world)
+            self.event_loc_to_item["PILGRIM (Solved)"] = "Victory"
 
         # Create groups of counting panel access requirements for the LEVEL 2 check.
         self.create_panel_hunt_events(world)

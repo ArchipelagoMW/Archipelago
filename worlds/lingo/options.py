@@ -83,11 +83,13 @@ class VictoryCondition(Choice):
     """Change the victory condition.
     On "the_end", the goal is to solve THE END at the top of the tower.
     On "the_master", the goal is to solve THE MASTER at the top of the tower, after getting the number of achievements specified in the Mastery Achievements option.
-    On "level_2", the goal is to solve LEVEL 2 in the second room, after solving the number of panels specified in the Level 2 Requirement option."""
+    On "level_2", the goal is to solve LEVEL 2 in the second room, after solving the number of panels specified in the Level 2 Requirement option.
+    On "pilgrimage", the goal is to solve PILGRIM in the Pilgrim Antechamber, typically after performing a Pilgrimage."""
     display_name = "Victory Condition"
     option_the_end = 0
     option_the_master = 1
     option_level_2 = 2
+    option_pilgrimage = 3
 
 
 class MasteryAchievements(Range):
