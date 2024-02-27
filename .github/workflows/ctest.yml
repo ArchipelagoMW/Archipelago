@@ -50,5 +50,5 @@ jobs:
         ls
     - name: Run tests
       run: |
-        cd test
+        cd test/cpp
         ctest --test-dir build/ -C Release --output-on-failure
