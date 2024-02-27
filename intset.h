@@ -45,6 +45,8 @@ static INTSET_NAME *INTSET_FUNC(new)(size_t buckets)
 
     if (buckets < 1)
         buckets = 1;
+    if ((SIZE_MAX - sizeof(INTSET_NAME)) / sizeof(INTSET_BUCKET) < buckets)
+        return NULL;
     size = sizeof(INTSET_NAME) + buckets * sizeof(INTSET_BUCKET);
     set = (INTSET_NAME*)malloc(size);
     if (!set)
@@ -60,6 +62,8 @@ static INTSET_NAME *INTSET_FUNC(new)(size_t buckets)
 static void INTSET_FUNC(free)(INTSET_NAME *set)
 {
     size_t i;
+    if (!set)
+        return;
     for (i = 0; i < set->bucket_count; i++) {
         if (set->buckets[i].count > 1)
             free(set->buckets[i].v.data);
