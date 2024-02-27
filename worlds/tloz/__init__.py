@@ -180,7 +180,7 @@ class TLoZWorld(World):
 
         self.multiworld.get_location("Zelda", self.player).place_locked_item(self.create_event("Rescued Zelda!"))
         add_rule(self.multiworld.get_location("Zelda", self.player),
-                 lambda state: ganon in state.locations_checked)
+                 lambda state: state.has("Triforce of Power", self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Rescued Zelda!", self.player)
 
     def apply_base_patch(self, rom):
