@@ -14,6 +14,12 @@ def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor,
     if world.options.enable_pilgrimage and state.has("Pilgrimage Active", world.player):
         if entrance_type == EntranceType.WARP or entrance_type == EntranceType.SUNWARP:
             return False
+        
+        if entrance_type == EntranceType.PAINTING and not world.options.pilgrimage_allows_paintings:
+            return False
+        
+        if entrance_type == EntranceType.CROSSROADS_ROOF_ACCESS and not world.options.pilgrimage_allows_roof_access:
+            return False
 
     if door is None:
         return True
@@ -64,7 +70,8 @@ def lingo_can_do_pilgrimage(state: CollectionState, world: "LingoWorld", player_
         pilgrim_state.collect(LingoItem(f"Pilgrimage Active", ItemClassification.progression, None, world.player), True)
 
         for item in state.prog_items[world.player].elements():
-            pilgrim_state.collect(LingoItem(item, ItemClassification.progression, None, world.player), True)
+            if not item.endswith("Sunwarp Reached"):
+                pilgrim_state.collect(LingoItem(item, ItemClassification.progression, None, world.player), True)
 
         pilgrim_state.sweep_for_events()
 

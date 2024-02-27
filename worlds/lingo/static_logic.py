@@ -19,6 +19,7 @@ class EntranceType(Enum):
     PAINTING = 2
     SUNWARP = 3
     WARP = 4
+    CROSSROADS_ROOF_ACCESS = 5
 
 
 class RoomEntrance(NamedTuple):
@@ -215,6 +216,8 @@ def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomE
         entrance_type = EntranceType.SUNWARP
     elif "warp" in door_obj and door_obj["warp"]:
         entrance_type = EntranceType.WARP
+    elif source_room == "Crossroads" and room_name == "Roof":
+        entrance_type = EntranceType.CROSSROADS_ROOF_ACCESS
 
     if "painting" in door_obj and door_obj["painting"]:
         PAINTING_EXIT_ROOMS.add(room_name)

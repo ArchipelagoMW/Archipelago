@@ -98,9 +98,13 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
         # Create connections from Menu for the beginning of each pilgrimage segment.
         sunwarp_entrances = ["Crossroads", "Orange Tower Third Floor", "Outside The Initiated",
                              "Outside The Undeterred", "Color Hunt"]
-        for i in range(0, len(sunwarp_entrances)):
+        
+        def connect_pilgrimage_segment(i: int):
             regions["Menu"].connect(regions[sunwarp_entrances[i]], f"Pilgrimage Part {i+1}",
                                     lambda state: lingo_can_do_pilgrimage_segment(state, i+1, world))
+        
+        for i in range(0, len(sunwarp_entrances)):
+            connect_pilgrimage_segment(i)
 
         # Create the actual pilgrimage.
         regions["Hub Room"].connect(regions["Pilgrim Antechamber"], "Pilgrimage",

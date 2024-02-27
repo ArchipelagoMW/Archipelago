@@ -64,6 +64,18 @@ class EnablePilgrimage(Toggle):
     display_name = "Enable Pilgrimage"
 
 
+class PilgrimageAllowsRoofAccess(DefaultOnToggle):
+    """If on, you may use the Crossroads roof access during a pilgrimage (and you may be expected to do so).
+    Otherwise, pilgrimage will be deactivated when going up the stairs."""
+    display_name = "Allow Roof Access for Pilgrimage"
+
+
+class PilgrimageAllowsPaintings(DefaultOnToggle):
+    """If on, you may use paintings during a pilgrimage (and you may be expected to do so).
+    Otherwise, pilgrimage will be deactivated when going through a painting."""
+    display_name = "Allow Paintings for Pilgrimage"
+
+
 class SunwarpAccess(Choice):
     """Determines how access to sunwarps works.
     On "normal", all sunwarps are enabled from the start.
@@ -153,6 +165,8 @@ class LingoOptions(PerGameCommonOptions):
     shuffle_panels: ShufflePanels
     shuffle_paintings: ShufflePaintings
     enable_pilgrimage: EnablePilgrimage
+    pilgrimage_allows_roof_access: PilgrimageAllowsRoofAccess
+    pilgrimage_allows_paintings: PilgrimageAllowsPaintings
     sunwarp_access: SunwarpAccess
     victory_condition: VictoryCondition
     mastery_achievements: MasteryAchievements
