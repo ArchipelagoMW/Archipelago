@@ -522,6 +522,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_1
         group: Sunwarps
         skip_location: True
+        item_name: "1 Sunwarp"
     paintings:
       - id: maze_painting
         orientation: west
@@ -1184,6 +1185,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_6
         group: Sunwarps
         skip_location: True
+        item_name: "6 Sunwarp"
     paintings:
       - id: eyes_yellow_painting
         orientation: east
@@ -1957,6 +1959,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_4
         group: Sunwarps
         skip_location: True
+        item_name: 4 Sunwarp
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
@@ -2038,6 +2041,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_3
         group: Sunwarps
         skip_location: True
+        item_name: "3 Sunwarp"
     paintings:
       - id: arrows_painting_6
         orientation: east
@@ -2100,6 +2104,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_5
         group: Sunwarps
         skip_location: True
+        item_name: "5 Sunwarp"
   Hot Crusts Area:
     entrances:
       Orange Tower Fourth Floor:
@@ -2119,7 +2124,7 @@
         warp_id: Teleporter Warps/Sunwarp_enter_2
         group: Sunwarps
         skip_location: True
-        item_name: Orange Tower Fourth Floor - 2 Sunwarp
+        item_name: 2 Sunwarp
     paintings:
       - id: smile_painting_8
         orientation: north

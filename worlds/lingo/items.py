@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
@@ -9,34 +10,20 @@ if TYPE_CHECKING:
     from . import LingoWorld
 
 
+class ItemType(Enum):
+    NORMAL = 1
+    COLOR = 2
+
+
 class ItemData(NamedTuple):
     """
     ItemData for an item in Lingo
     """
     code: int
     classification: ItemClassification
-    mode: Optional[str]
+    type: ItemType
     door_ids: List[str]
     painting_ids: List[str]
-
-    def should_include(self, world: "LingoWorld") -> bool:
-        if self.mode == "colors":
-            return world.options.shuffle_colors > 0
-        elif self.mode == "doors":
-            return world.options.shuffle_doors != ShuffleDoors.option_none
-        elif self.mode == "complex door":
-            return world.options.shuffle_doors == ShuffleDoors.option_complex
-        elif self.mode == "door group":
-            return world.options.shuffle_doors == ShuffleDoors.option_simple
-        elif self.mode == "sunwarps group":
-            return world.options.shuffle_doors == ShuffleDoors.option_simple\
-                and world.options.sunwarp_access == SunwarpAccess.option_unlock
-        elif self.mode == "sun":
-            return not world.options.enable_pilgrimage
-        elif self.mode == "special":
-            return False
-        else:
-            return True
 
 
 class LingoItem(Item):
@@ -54,7 +41,7 @@ def load_item_data():
 
     for color in ["Black", "Red", "Blue", "Yellow", "Green", "Orange", "Gray", "Brown", "Purple"]:
         ALL_ITEM_TABLE[color] = ItemData(get_special_item_id(color), ItemClassification.progression,
-                                         "colors", [], [])
+                                         ItemType.COLOR, [], [])
 
     door_groups: Dict[str, List[str]] = {}
     for room_name, doors in DOORS_BY_ROOM.items():
@@ -62,30 +49,17 @@ def load_item_data():
             if door.skip_item is True or door.event is True:
                 continue
 
-            if room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
-                door_mode = "sun"
-            elif door.group is None:
-                door_mode = "doors"
-            else:
-                door_mode = "complex door"
+            if door.group is not None:
                 door_groups.setdefault(door.group, []).extend(door.door_ids)
-
-            if room_name in PROGRESSION_BY_ROOM and door_name in PROGRESSION_BY_ROOM[room_name]:
-                door_mode = "special"
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name),
-                         ItemClassification.filler if door.junk_item else ItemClassification.progression, door_mode,
-                         door.door_ids, door.painting_ids)
+                         ItemClassification.filler if door.junk_item else ItemClassification.progression,
+                         ItemType.NORMAL, door.door_ids, door.painting_ids)
 
     for group, group_door_ids in door_groups.items():
-        item_mode = "door group"
-        if group == "Sunwarps":
-            # This is a special case, because sunwarps can be disabled.
-            item_mode = "sunwarps group"
-
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
-                                         ItemClassification.progression, item_mode, group_door_ids, [])
+                                         ItemClassification.progression, ItemType.NORMAL, group_door_ids, [])
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,
@@ -100,11 +74,11 @@ def load_item_data():
 
     for item_name, classification in special_items.items():
         ALL_ITEM_TABLE[item_name] = ItemData(get_special_item_id(item_name), classification,
-                                             "special", [], [])
+                                             ItemType.NORMAL, [], [])
 
     for item_name in PROGRESSIVE_ITEMS:
         ALL_ITEM_TABLE[item_name] = ItemData(get_progressive_item_id(item_name),
-                                             ItemClassification.progression, "special", [], [])
+                                             ItemClassification.progression, ItemType.NORMAL, [], [])
 
 
 # Initialize the item data at module scope.

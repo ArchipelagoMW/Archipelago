@@ -25,6 +25,8 @@ class TestPilgrimageWithRoofAndPaintings(LingoTestBase):
     }
 
     def test_access(self):
+        self.remove_forced_good_item()
+
         doors = ["Second Room - Exit Door", "Crossroads - Roof Access", "Hub Room - Crossroads Entrance",
                  "Outside The Undeterred - Green Painting"]
 
@@ -47,6 +49,8 @@ class TestPilgrimageNoRoofYesPaintings(LingoTestBase):
     }
 
     def test_access(self):
+        self.remove_forced_good_item()
+
         doors = ["Second Room - Exit Door", "Crossroads - Roof Access", "Hub Room - Crossroads Entrance",
                  "Outside The Undeterred - Green Painting", "Crossroads - Tower Entrance",
                  "Orange Tower Fourth Floor - Hot Crusts Door", "Orange Tower First Floor - Shortcut to Hub Room",
@@ -71,6 +75,8 @@ class TestPilgrimageNoRoofNoPaintings(LingoTestBase):
     }
 
     def test_access(self):
+        self.remove_forced_good_item()
+
         doors = ["Second Room - Exit Door", "Crossroads - Roof Access", "Hub Room - Crossroads Entrance",
                  "Outside The Undeterred - Green Painting", "Orange Tower First Floor - Shortcut to Hub Room",
                  "Starting Room - Street Painting", "Outside The Initiated - Shortcut to Hub Room",
@@ -99,6 +105,8 @@ class TestPilgrimageYesRoofNoPaintings(LingoTestBase):
     }
 
     def test_access(self):
+        self.remove_forced_good_item()
+        
         doors = ["Second Room - Exit Door", "Crossroads - Roof Access", "Hub Room - Crossroads Entrance",
                  "Outside The Undeterred - Green Painting", "Orange Tower First Floor - Shortcut to Hub Room",
                  "Starting Room - Street Painting", "Outside The Initiated - Shortcut to Hub Room",

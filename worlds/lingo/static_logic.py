@@ -33,6 +33,12 @@ class Room(NamedTuple):
     entrances: List[RoomEntrance]
 
 
+class DoorType(Enum):
+    NORMAL = 1
+    SUNWARP = 2
+    SUN_PAINTING = 3
+
+
 class Door(NamedTuple):
     name: str
     item_name: str
@@ -46,6 +52,7 @@ class Door(NamedTuple):
     group: Optional[str]
     include_reduce: bool
     junk_item: bool
+    type: DoorType
 
 
 class Panel(NamedTuple):
@@ -435,9 +442,15 @@ def process_door(room_name, door_name, door_data):
             painting_ids = [door_data["painting_id"]]
     else:
         painting_ids = []
+    
+    door_type = DoorType.NORMAL
+    if door_name.endswith(" Sunwarp"):
+        door_type = DoorType.SUNWARP
+    elif room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
+        door_type = DoorType.SUN_PAINTING
 
     door_obj = Door(door_name, item_name, location_name, panels, skip_location, skip_item, door_ids,
-                    painting_ids, event, group, include_reduce, junk_item)
+                    painting_ids, event, group, include_reduce, junk_item, door_type)
 
     DOORS[door_obj.item_name] = door_obj
     DOORS_BY_ROOM[room_name][door_name] = door_obj

@@ -1,11 +1,11 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
-from .items import ALL_ITEM_TABLE
+from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, DoorType, RoomAndDoor, \
     RoomAndPanel
 
 if TYPE_CHECKING:
@@ -54,13 +54,6 @@ def should_split_progression(progression_name: str, world: "LingoWorld") -> Prog
             return ProgressiveItemBehavior.PROGRESSIVE
         else:
             return ProgressiveItemBehavior.SPLIT
-    elif progression_name == "Progressive Pilgrimage":
-        if world.options.sunwarp_access == SunwarpAccess.option_unlock:
-            return ProgressiveItemBehavior.SPLIT
-        elif world.options.sunwarp_access == SunwarpAccess.option_progressive:
-            return ProgressiveItemBehavior.PROGRESSIVE
-        else:
-            return ProgressiveItemBehavior.DISABLE
 
     return ProgressiveItemBehavior.PROGRESSIVE
 
@@ -90,6 +83,9 @@ class LingoPlayerLogic:
     door_reqs: Dict[str, Dict[str, AccessRequirements]]
     mastery_reqs: List[AccessRequirements]
     counting_panel_reqs: Dict[str, List[Tuple[AccessRequirements, int]]]
+
+    sunwarp_entrances: List[str]
+    sunwarp_exits: List[str]
 
     def add_location(self, room: str, name: str, code: Optional[int], panels: List[RoomAndPanel], world: "LingoWorld"):
         """
@@ -124,6 +120,7 @@ class LingoPlayerLogic:
                 self.real_items.append(progressive_item_name)
         else:
             self.set_door_item(room_name, door_data.name, door_data.item_name)
+            self.real_items.append(door_data.item_name)
 
     def __init__(self, world: "LingoWorld"):
         self.item_by_door = {}
@@ -140,6 +137,10 @@ class LingoPlayerLogic:
         self.door_reqs = {}
         self.mastery_reqs = []
         self.counting_panel_reqs = {}
+        self.sunwarp_entrances = ["Hub Room", "Hot Crusts Area", "Orange Tower Third Floor", "Orange Tower First Floor",
+                                  "Orange Tower Fourth Floor", "Outside The Agreeable"]
+        self.sunwarp_exits = ["Crossroads", "Orange Tower Third Floor", "Outside The Initiated",
+                              "Outside The Undeterred", "Color Hunt", "Directional Gallery"]
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -153,15 +154,40 @@ class LingoPlayerLogic:
                             "be enough locations for all of the door items.")
 
         # Create door items, where needed.
-        if door_shuffle != ShuffleDoors.option_none:
-            for room_name, room_data in DOORS_BY_ROOM.items():
-                for door_name, door_data in room_data.items():
-                    if door_data.skip_item is False and door_data.event is False:
+        door_groups: Set[str] = set()
+        for room_name, room_data in DOORS_BY_ROOM.items():
+            for door_name, door_data in room_data.items():
+                if door_data.skip_item is False and door_data.event is False:
+                    if door_data.type == DoorType.NORMAL and door_shuffle != ShuffleDoors.option_none:
                         if door_data.group is not None and door_shuffle == ShuffleDoors.option_simple:
                             # Grouped doors are handled differently if shuffle doors is on simple.
                             self.set_door_item(room_name, door_name, door_data.group)
+                            door_groups.add(door_data.group)
                         else:
                             self.handle_non_grouped_door(room_name, door_data, world)
+                    elif door_data.type == DoorType.SUNWARP:
+                        if world.options.sunwarp_access == SunwarpAccess.option_unlock:
+                            self.set_door_item(room_name, door_name, "Sunwarps")
+                            door_groups.add("Sunwarps")
+                        elif world.options.sunwarp_access == SunwarpAccess.option_individual:
+                            self.set_door_item(room_name, door_name, door_data.item_name)
+                            self.real_items.append(door_data.item_name)
+                        elif world.options.sunwarp_access == SunwarpAccess.option_progressive:
+                            self.set_door_item(room_name, door_name, "Progressive Pilgrimage")
+                            self.real_items.append("Progressive Pilgrimage")
+                    elif door_data.type == DoorType.SUN_PAINTING:
+                        if not world.options.enable_pilgrimage:
+                            self.set_door_item(room_name, door_name, door_data.item_name)
+                            self.real_items.append(door_data.item_name)
+        
+        for door_group in door_groups:
+            self.real_items.append(door_group)
+        
+        # Create color items, if needed.
+        if color_shuffle:
+            for name, item in ALL_ITEM_TABLE.items():
+                if item.type == ItemType.COLOR:
+                    self.real_items.append(name)
 
         # Create events for each achievement panel, so that we can determine when THE MASTER is accessible.
         for room_name, room_data in PANELS_BY_ROOM.items():
@@ -221,24 +247,8 @@ class LingoPlayerLogic:
                 self.add_location(location_data.room, location_name, location_data.code, location_data.panels, world)
                 self.real_locations.append(location_name)
 
-        # Instantiate all real items.
-        for name, item in ALL_ITEM_TABLE.items():
-            if item.should_include(world):
-                self.real_items.append(name)
-
-        if world.options.enable_pilgrimage:
-            if world.options.sunwarp_access == SunwarpAccess.option_disabled:
-                raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
-
-            # Create events for the ends of each pilgrimage segment.
-            sunwarp_exits = ["Hot Crusts Area", "Orange Tower Third Floor", "Orange Tower First Floor",
-                             "Orange Tower Fourth Floor", "Outside The Agreeable"]
-            for i in range(0, len(sunwarp_exits)):
-                event_name = f"{i+2} Sunwarp Reached"
-                self.add_location(sunwarp_exits[i], event_name, None, [], world)
-                self.event_loc_to_item[event_name] = event_name
-        else:
-            self.set_door_item("Pilgrim Antechamber", "Sun Painting", "Pilgrim Room - Sun Painting")
+        if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
+            raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:

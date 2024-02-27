@@ -123,10 +123,10 @@ class TestComplexDoorsDisabledSunwarps(LingoTestBase):
         self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
 
 
-class TestComplexDoorsUnlockSunwarps(LingoTestBase):
+class TestComplexDoorsIndividualSunwarps(LingoTestBase):
     options = {
         "shuffle_doors": "complex",
-        "sunwarp_access": "unlock"
+        "sunwarp_access": "individual"
     }
 
     def test_access(self):
@@ -137,18 +137,18 @@ class TestComplexDoorsUnlockSunwarps(LingoTestBase):
         self.collect_by_name("Second Room - Exit Door")
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
-        self.collect_by_name("Hub Room - 1 Sunwarp")
+        self.collect_by_name("1 Sunwarp")
         self.assertTrue(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name(["Crossroads - Tower Entrance", "Orange Tower Fourth Floor - Hot Crusts Door"])
         self.assertFalse(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
 
-        self.collect_by_name("Orange Tower Fourth Floor - 2 Sunwarp")
+        self.collect_by_name("2 Sunwarp")
         self.assertTrue(self.multiworld.state.can_reach("Orange Tower Third Floor", "Region", self.player))
         self.assertFalse(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
 
-        self.collect_by_name("Orange Tower Third Floor - 3 Sunwarp")
+        self.collect_by_name("3 Sunwarp")
         self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
 
 
@@ -180,3 +180,48 @@ class TestComplexDoorsProgressiveSunwarps(LingoTestBase):
 
         self.collect(progressive_pilgrimage[2])
         self.assertTrue(self.multiworld.state.can_reach("Outside The Initiated", "Region", self.player))
+
+
+class TestUnlockSunwarpPilgrimage(LingoTestBase):
+    options = {
+        "sunwarp_access": "unlock",
+        "shuffle_colors": "false",
+        "enable_pilgrimage": "true"
+    }
+
+    def test_access(self):
+        self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
+
+        self.collect_by_name("Sunwarps")
+
+        self.assertTrue(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
+
+
+class TestIndividualSunwarpPilgrimage(LingoTestBase):
+    options = {
+        "sunwarp_access": "individual",
+        "shuffle_colors": "false",
+        "enable_pilgrimage": "true"
+    }
+
+    def test_access(self):
+        for i in range(1, 7):
+            self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
+            self.collect_by_name(f"{i} Sunwarp")
+
+        self.assertTrue(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
+
+
+class TestProgressiveSunwarpPilgrimage(LingoTestBase):
+    options = {
+        "sunwarp_access": "progressive",
+        "shuffle_colors": "false",
+        "enable_pilgrimage": "true"
+    }
+
+    def test_access(self):
+        for item in self.get_items_by_name("Progressive Pilgrimage"):
+            self.assertFalse(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
+            self.collect(item)
+
+        self.assertTrue(self.can_reach_location("Pilgrim Antechamber - PILGRIM"))
