@@ -1,15 +1,20 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, ItemClassification
+from .items import LingoItem
 from .player_logic import AccessRequirements, LingoPlayerLogic, PlayerLocation
-from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, RoomAndDoor
+from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, EntranceType, RoomAndDoor
 
 if TYPE_CHECKING:
     from . import LingoWorld
 
 
-def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, world: "LingoWorld",
-                           player_logic: LingoPlayerLogic):
+def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor, entrance_type: EntranceType,
+                           world: "LingoWorld", player_logic: LingoPlayerLogic):
+    if world.options.enable_pilgrimage and state.has("Pilgrimage Active", world.player):
+        if entrance_type == EntranceType.WARP or entrance_type == EntranceType.SUNWARP:
+            return False
+
     if door is None:
         return True
 
@@ -46,6 +51,31 @@ def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld", 
     if counted_panels >= world.options.level_2_requirement.value - 1:
         return True
     return False
+
+
+def lingo_can_do_pilgrimage(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
+    if state.has("Pilgrimage Active", world.player):
+        return False
+
+    for i in range(1, 6):
+        pilgrim_state = CollectionState(world.multiworld)
+        pilgrim_state.collect(LingoItem(f"Pilgrimage Part {i}", ItemClassification.progression, None, world.player),
+                              True)
+        pilgrim_state.collect(LingoItem(f"Pilgrimage Active", ItemClassification.progression, None, world.player), True)
+
+        for item in state.prog_items[world.player].elements():
+            pilgrim_state.collect(LingoItem(item, ItemClassification.progression, None, world.player), True)
+
+        pilgrim_state.sweep_for_events()
+
+        if not pilgrim_state.has(f"{i+1} Sunwarp Reached", world.player):
+            return False
+
+    return True
+
+
+def lingo_can_do_pilgrimage_segment(state: CollectionState, part: int, world: "LingoWorld"):
+    return state.has(f"Pilgrimage Part {part}", world.player)
 
 
 def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequirements, world: "LingoWorld",

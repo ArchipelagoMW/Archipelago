@@ -117,7 +117,8 @@ class LingoWorld(World):
     def fill_slot_data(self):
         slot_options = [
             "death_link", "victory_condition", "shuffle_colors", "shuffle_doors", "shuffle_paintings", "shuffle_panels",
-            "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks", "early_color_hallways"
+            "enable_pilgrimage", "sunwarp_access", "mastery_achievements", "level_2_requirement", "location_checks",
+            "early_color_hallways"
         ]
 
         slot_data = {

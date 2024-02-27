@@ -42,7 +42,7 @@ door_groups = {}
 
 directives = Set["entrances", "panels", "doors", "paintings", "progression"]
 panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt"]
-door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event"]
+door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event", "warp_id"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
 
 non_counting = 0
@@ -67,17 +67,17 @@ config.each do |room_name, room|
 
     entrances = []
     if entrance.kind_of? Hash
-      if entrance.keys() != ["painting"] then
-        entrances = [entrance]
-      end
+      entrances = [entrance]
     elsif entrance.kind_of? Array
       entrances = entrance
     end
 
     entrances.each do |e|
-      entrance_room = e.include?("room") ? e["room"] : room_name
-      mentioned_rooms.add(entrance_room)
-      mentioned_doors.add(entrance_room + " - " + e["door"])
+      if e.include?("door") then
+        entrance_room = e.include?("room") ? e["room"] : room_name
+        mentioned_rooms.add(entrance_room)
+        mentioned_doors.add(entrance_room + " - " + e["door"])
+      end
     end
   end
 
@@ -204,8 +204,8 @@ config.each do |room_name, room|
       end
     end
 
-    if not door.include?("id") and not door.include?("painting_id") and not door["skip_item"] and not door["event"] then
-      puts "#{room_name} - #{door_name} :::: Should be marked skip_item or event if there are no doors or paintings"
+    if not door.include?("id") and not door.include?("painting_id") and not door.include?("warp_id") and not door["skip_item"] and not door["event"] then
+      puts "#{room_name} - #{door_name} :::: Should be marked skip_item or event if there are no doors, paintings, or warps"
     end
 
     if door.include?("panels")

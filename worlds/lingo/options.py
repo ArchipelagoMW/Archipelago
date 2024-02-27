@@ -58,17 +58,25 @@ class ShufflePaintings(Toggle):
     display_name = "Shuffle Paintings"
 
 
+class EnablePilgrimage(Toggle):
+    """If on, you are required to complete a pilgrimage in order to access the Pilgrim Antechamber.
+    If off, the pilgrimage will be deactivated, and the sun painting will be added to the pool, even if door shuffle is off."""
+    display_name = "Enable Pilgrimage"
+
+
 class SunwarpAccess(Choice):
-    """Determines how access to sunwarps works. Using any setting besides "normal" requires door shuffle to be on.
+    """Determines how access to sunwarps works.
     On "normal", all sunwarps are enabled from the start.
-    On "disabled", all sunwarps are disabled.
-    On "unlock", sunwarps start off disabled. If on complex doors, each has a corresponding item that unlocks it. If on simple doors, there is one item that unlocks all six.
+    On "disabled", all sunwarps are disabled. Pilgrimage must be disabled when this is used.
+    On "unlock", sunwarps start off disabled, and all six activate once you receive an item.
+    On "individual", sunwarps start off disabled, and each has a corresponding item that unlocks it.
     On "progressive", sunwarps start off disabled, and they unlock in order using a progressive item. Only compatible with complex doors."""
     display_name = "Sunwarp Access"
     option_normal = 0
     option_disabled = 1
     option_unlock = 2
-    option_progressive = 3
+    option_individual = 3
+    option_progressive = 4
 
 
 class VictoryCondition(Choice):
@@ -142,6 +150,7 @@ class LingoOptions(PerGameCommonOptions):
     shuffle_colors: ShuffleColors
     shuffle_panels: ShufflePanels
     shuffle_paintings: ShufflePaintings
+    enable_pilgrimage: EnablePilgrimage
     sunwarp_access: SunwarpAccess
     victory_condition: VictoryCondition
     mastery_achievements: MasteryAchievements

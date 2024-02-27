@@ -31,6 +31,8 @@ class ItemData(NamedTuple):
         elif self.mode == "sunwarps group":
             return world.options.shuffle_doors == ShuffleDoors.option_simple\
                 and world.options.sunwarp_access == SunwarpAccess.option_unlock
+        elif self.mode == "sun":
+            return not world.options.enable_pilgrimage
         elif self.mode == "special":
             return False
         else:
@@ -60,7 +62,9 @@ def load_item_data():
             if door.skip_item is True or door.event is True:
                 continue
 
-            if door.group is None:
+            if room_name == "Pilgrim Antechamber" and door_name == "Sun Painting":
+                door_mode = "sun"
+            elif door.group is None:
                 door_mode = "doors"
             else:
                 door_mode = "complex door"

@@ -140,13 +140,9 @@ panels:
     PURPLE: 444502
     FIVE (1): 444503
     FIVE (2): 444504
-    OUT: 444505
     HIDE: 444506
     DAZE: 444507
-    WALL: 444508
-    KEEP: 444509
-    BAILEY: 444510
-    TOWER: 444511
+  Compass Room:
     NORTH: 444512
     DIAMONDS: 444513
     FIRE: 444514
@@ -689,6 +685,12 @@ panels:
   Arrow Garden:
     MASTERY: 444948
     SHARP: 444949
+  Hallway Room (1):
+    OUT: 444505
+    WALL: 444508
+    KEEP: 444509
+    BAILEY: 444510
+    TOWER: 444511
   Hallway Room (2):
     WISE: 444950
     CLOCK: 444951
@@ -1072,14 +1074,12 @@ doors:
       location: 444501
     Purple Barrier:
       item: 444457
-    Hallway Door:
-      item: 444459
-      location: 445214
+    6 Sunwarp:
+      item: 444584
+  Compass Room:
     Lookout Entrance:
       item: 444579
       location: 445271
-    6 Sunwarp:
-      item: 444584
   Dread Hallway:
     Tenacious Entrance:
       item: 444462
@@ -1355,6 +1355,10 @@ doors:
     Exit:
       item: 444552
       location: 444947
+  Hallway Room (1):
+    Exit:
+      item: 444459
+      location: 445214
   Hallway Room (2):
     Exit:
       item: 444553

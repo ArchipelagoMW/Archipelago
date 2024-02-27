@@ -222,37 +222,19 @@ class LingoPlayerLogic:
             if item.should_include(world):
                 self.real_items.append(name)
 
-        # Calculate the requirements for the fake pilgrimage.
-        fake_pilgrimage = [
-            ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
-            ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
-            ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
-            ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
-            ["Color Hunt", "Shortcut to The Steady"], ["The Bearer", "Entrance"], ["Art Gallery", "Exit"],
-            ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
-        ]
-        if world.options.sunwarp_access != SunwarpAccess.option_normal:
-            fake_pilgrimage += [
-                ["Hub Room", "1 Sunwarp"], ["Hot Crusts Area", "2 Sunwarp"], ["Orange Tower Third Floor", "3 Sunwarp"],
-                ["Orange Tower First Floor", "4 Sunwarp"], ["Orange Tower Fourth Floor", "5 Sunwarp"],
-                ["Outside The Agreeable", "6 Sunwarp"]
-            ]
+        if world.options.enable_pilgrimage:
+            if world.options.sunwarp_access == SunwarpAccess.option_disabled:
+                raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
 
-        if world.options.sunwarp_access != SunwarpAccess.option_normal and door_shuffle == ShuffleDoors.option_none:
-            raise Exception("Sunwarp access must be normal with vanilla doors.")
-        elif world.options.sunwarp_access == SunwarpAccess.option_progressive \
-                and door_shuffle == ShuffleDoors.option_simple:
-            raise Exception("Sunwarp access can't be progressive on simple doors.")
-
-        if world.options.sunwarp_access != SunwarpAccess.option_disabled:
-            pilgrimage_reqs = AccessRequirements()
-            for door in fake_pilgrimage:
-                door_object = DOORS_BY_ROOM[door[0]][door[1]]
-                if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
-                    pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
-                else:
-                    pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
-            self.door_reqs.setdefault("Pilgrim Antechamber", {})["Pilgrimage"] = pilgrimage_reqs
+            # Create events for the ends of each pilgrimage segment.
+            sunwarp_exits = ["Hot Crusts Area", "Orange Tower Third Floor", "Orange Tower First Floor",
+                             "Orange Tower Fourth Floor", "Outside The Agreeable"]
+            for i in range(0, len(sunwarp_exits)):
+                event_name = f"{i+2} Sunwarp Reached"
+                self.add_location(sunwarp_exits[i], event_name, None, [], world)
+                self.event_loc_to_item[event_name] = event_name
+        else:
+            self.set_door_item("Pilgrim Antechamber", "Sun Painting", "Pilgrim Room - Sun Painting")
 
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:
@@ -277,7 +259,7 @@ class LingoPlayerLogic:
             # door shuffle is on simple, because otherwise there are no extra checks in there.
             good_item_options: List[str] = ["Starting Room - Back Right Door", "Second Room - Exit Door"]
 
-            if not color_shuffle:
+            if not color_shuffle and not world.options.enable_pilgrimage:
                 good_item_options.append("Pilgrim Room - Sun Painting")
 
             if door_shuffle == ShuffleDoors.option_simple:
@@ -432,11 +414,12 @@ class LingoPlayerLogic:
             access_reqs = AccessRequirements()
             door_object = DOORS_BY_ROOM[room][door]
 
-            for req_panel in door_object.panels:
-                panel_room = room if req_panel.room is None else req_panel.room
-                access_reqs.rooms.add(panel_room)
-                sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)
-                access_reqs.merge(sub_access_reqs)
+            if door_object.panels is not None:
+                for req_panel in door_object.panels:
+                    panel_room = room if req_panel.room is None else req_panel.room
+                    access_reqs.rooms.add(panel_room)
+                    sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)
+                    access_reqs.merge(sub_access_reqs)
 
             self.door_reqs[room][door] = access_reqs
 

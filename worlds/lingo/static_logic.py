@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set
 
 import Utils
@@ -13,11 +14,17 @@ class RoomAndPanel(NamedTuple):
     panel: str
 
 
+class EntranceType(Enum):
+    NORMAL = 1
+    PAINTING = 2
+    SUNWARP = 3
+    WARP = 4
+
+
 class RoomEntrance(NamedTuple):
     room: str  # source room
     door: Optional[RoomAndDoor]
-    painting: bool
-    sunwarp: bool
+    type: EntranceType
 
 
 class Room(NamedTuple):
@@ -198,41 +205,43 @@ def get_progressive_item_id(name: str):
     return PROGRESSIVE_ITEM_IDS[name]
 
 
-def process_entrance(source_room, doors, room_obj):
+def process_single_entrance(source_room: str, room_name: str, door_obj) -> RoomEntrance:
     global PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS
 
+    entrance_type = EntranceType.NORMAL
+    if "painting" in door_obj and door_obj["painting"]:
+        entrance_type = EntranceType.PAINTING
+    elif "sunwarp" in door_obj and door_obj["sunwarp"]:
+        entrance_type = EntranceType.SUNWARP
+    elif "warp" in door_obj and door_obj["warp"]:
+        entrance_type = EntranceType.WARP
+
+    if "painting" in door_obj and door_obj["painting"]:
+        PAINTING_EXIT_ROOMS.add(room_name)
+        PAINTING_ENTRANCES += 1
+
+    if "door" in door_obj:
+        return RoomEntrance(source_room, RoomAndDoor(
+            door_obj["room"] if "room" in door_obj else None,
+            door_obj["door"]
+        ), entrance_type)
+    else:
+        return RoomEntrance(source_room, None, entrance_type)
+
+
+def process_entrance(source_room, doors, room_obj):
     # If the value of an entrance is just True, that means that the entrance is always accessible.
     if doors is True:
-        room_obj.entrances.append(RoomEntrance(source_room, None, False, False))
+        room_obj.entrances.append(RoomEntrance(source_room, None, EntranceType.NORMAL))
     elif isinstance(doors, dict):
         # If the value of an entrance is a dictionary, that means the entrance requires a door to be accessible, is a
         # painting-based entrance, or both.
-        if "painting" in doors and "door" not in doors:
-            PAINTING_EXIT_ROOMS.add(room_obj.name)
-            PAINTING_ENTRANCES += 1
-
-            room_obj.entrances.append(RoomEntrance(source_room, None, True, False))
-        else:
-            if "painting" in doors and doors["painting"]:
-                PAINTING_EXIT_ROOMS.add(room_obj.name)
-                PAINTING_ENTRANCES += 1
-
-            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                doors["room"] if "room" in doors else None,
-                doors["door"]
-            ), doors["painting"] if "painting" in doors else False, doors["sunwarp"] if "sunwarp" in doors else False))
+        room_obj.entrances.append(process_single_entrance(source_room, room_obj.name, doors))
     else:
         # If the value of an entrance is a list, then there are multiple possible doors that can give access to the
         # entrance.
         for door in doors:
-            if "painting" in door and door["painting"]:
-                PAINTING_EXIT_ROOMS.add(room_obj.name)
-                PAINTING_ENTRANCES += 1
-
-            room_obj.entrances.append(RoomEntrance(source_room, RoomAndDoor(
-                door["room"] if "room" in door else None,
-                door["door"]
-            ), door["painting"] if "painting" in door else False, door["sunwarp"] if "sunwarp" in door else False))
+            room_obj.entrances.append(process_single_entrance(source_room, room_obj.name, door))
 
 
 def process_panel(room_name, panel_name, panel_data):
