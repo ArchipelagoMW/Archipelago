@@ -440,7 +440,7 @@
       The Traveled:
         door: Traveled Entrance
       Roof: True # through the sunwarp
-      Outside The Undeterred: # (NOTE: used in hardcoded pilgrimage)
+      Outside The Undeterred:
         room: Outside The Undeterred
         door: Green Painting
         painting: True
@@ -2060,7 +2060,10 @@
           door: Tower Entrance
         - room: Crossroads
           door: Tower Back Entrance
-      Courtyard: True
+      Courtyard:
+        - warp: True
+        - room: Crossroads
+          door: Tower Entrance
       Roof: True # through the sunwarp
     panels:
       RUNT (1):
@@ -2136,16 +2139,10 @@
         warp: True
       Welcome Back Area:
         door: Welcome Back
-      Art Gallery:
-        room: Art Gallery
-        door: Exit
-        warp: True
-      The Bearer:
-        room: Art Gallery
-        door: Exit
       Outside The Initiated:
         room: Art Gallery
         door: Exit
+        warp: True
     panels:
       SIZE (Small):
         id: Entry Room/Panel_size_small
@@ -2431,7 +2428,10 @@
   Courtyard:
     entrances:
       Roof: True
-      Orange Tower Fourth Floor: True
+      Orange Tower Fourth Floor:
+        - warp: True
+        - room: Crossroads
+          door: Tower Entrance
       Arrow Garden:
         painting: True
       Starting Room:
@@ -2888,6 +2888,14 @@
         door: 3 Sunwarp
         sunwarp: True
       Orange Tower Fifth Floor:
+        room: Art Gallery
+        door: Exit
+        warp: True
+      Art Gallery:
+        room: Art Gallery
+        door: Exit
+        warp: True
+      The Bearer:
         room: Art Gallery
         door: Exit
       Eight Alcove:
@@ -4252,7 +4260,7 @@
     entrances:
       Outside The Bold:
         door: Entrance
-      Orange Tower Fifth Floor:
+      Outside The Initiated:
         room: Art Gallery
         door: Exit
       The Bearer (East): True
@@ -6322,7 +6330,7 @@
         warp: True
       Art Gallery (Fourth Floor):
         warp: True
-      Orange Tower Fifth Floor:
+      Outside The Initiated:
         door: Exit
         warp: True
     panels:
