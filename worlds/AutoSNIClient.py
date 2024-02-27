@@ -46,7 +46,7 @@ class AutoSNIClientRegister(abc.ABCMeta):
 class SNIClient(abc.ABC, metaclass=AutoSNIClientRegister):
 
     patch_suffix: ClassVar[Optional[Union[str, Tuple[str, ...]]]]
-    """The file extension(s) this client is meant to open and patch (e.g. ".apz3")"""
+    """The file extension(s) this client is meant to open and patch (e.g. ".aplttp")"""
 
     @abc.abstractmethod
     async def validate_rom(self, ctx: SNIContext) -> bool:
