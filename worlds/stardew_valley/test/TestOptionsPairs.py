@@ -1,5 +1,6 @@
 from . import SVTestBase
 from .assertion import WorldAssertMixin
+from .. import options
 from ..options import Goal, QuestLocations
 
 
@@ -37,6 +38,17 @@ class TestCraftMasterNoQuests(WorldAssertMixin, SVTestBase):
     options = {
         Goal.internal_name: Goal.option_craft_master,
         QuestLocations.internal_name: "none"
+    }
+
+    def test_given_option_pair_then_basic_checks(self):
+        self.assert_basic_checks(self.multiworld)
+
+
+class TestCraftMasterNoSpecialOrder(WorldAssertMixin, SVTestBase):
+    options = {
+        options.Goal.internal_name: Goal.option_craft_master,
+        options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
     }
 
     def test_given_option_pair_then_basic_checks(self):

@@ -2038,7 +2038,7 @@ id,region,name,tags,mod_name
 3504,Farm,Craft Seed Maker,CRAFTSANITY,
 3505,Farm,Craft Slime Egg-Press,CRAFTSANITY,
 3506,Farm,Craft Slime Incubator,CRAFTSANITY,
-3507,Farm,Craft Solar Panel,CRAFTSANITY,
+3507,Farm,Craft Solar Panel,"CRAFTSANITY,GINGER_ISLAND",
 3508,Farm,Craft Tapper,CRAFTSANITY,
 3509,Farm,Craft Worm Bin,CRAFTSANITY,
 3510,Farm,Craft Tub o' Flowers,CRAFTSANITY,
