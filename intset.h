@@ -25,6 +25,12 @@
 #define INTSET_BUCKET INTSET_CONCAT(INTSET_NAME, Bucket)
 #define INTSET_UNION INTSET_CONCAT(INTSET_NAME, Union)
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+#pragma warning(disable : 4200)
+#endif
+
+
 typedef struct {
     size_t count;
     union INTSET_UNION {
@@ -118,6 +124,11 @@ static bool INTSET_FUNC(add)(INTSET_NAME *set, INTSET_TYPE val)
     }
     return true; /* success */
 }
+
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #undef INTSET_FUNC
 #undef INTSET_BUCKET
