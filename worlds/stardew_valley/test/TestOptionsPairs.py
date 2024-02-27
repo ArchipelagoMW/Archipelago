@@ -48,7 +48,8 @@ class TestCraftMasterNoSpecialOrder(WorldAssertMixin, SVTestBase):
     options = {
         options.Goal.internal_name: Goal.option_craft_master,
         options.SpecialOrderLocations.internal_name: options.SpecialOrderLocations.option_disabled,
-        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true
+        options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
+        options.Craftsanity.internal_name: options.Craftsanity.option_none
     }
 
     def test_given_option_pair_then_basic_checks(self):
