@@ -343,8 +343,6 @@ class OpenRCT2World(World):
         length = self.options.scenario_length.value
         length_modifier = 0
         difficulty_modifier = 0
-        difficulty_minimum = 0
-        difficulty_maximum = 2
         base_price = 500
         final_price = 500
 
@@ -352,18 +350,12 @@ class OpenRCT2World(World):
             difficulty_modifier = 0
         if difficulty == 1:  # easy
             difficulty_modifier = .3
-            difficulty_maximum = 5
         if difficulty == 2:  # medium
             difficulty_modifier = .5
-            difficulty_maximum = 6
         if difficulty == 3:  # hard
             difficulty_modifier = .75
-            difficulty_minimum = 5
-            difficulty_maximum = 7
         if difficulty == 4:  # extreme
             difficulty_modifier = .9
-            difficulty_minimum = 6
-            difficulty_maximum = 9
 
         if length == 0:  # sync short
             length_modifier = .2
@@ -424,11 +416,11 @@ class OpenRCT2World(World):
                             nausea = 0
                             # 3 coin flips to determine what, if any, stat prereqs will be used
                             if self.random.random() < .5:
-                                excitement = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement, self.options.shop_maximum_excitement), 1)
                             if self.random.random() < .5:
-                                intensity = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity, self.options.shop_maximum_intensity), 1)
                             if self.random.random() < .5:
-                                nausea = round(self.random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
+                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea, self.options.shop_maximum_nausea), 1)
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 3), chosen_prereq, excitement, intensity, nausea, 0]
                         elif (chosen_prereq in item_info["tracked_rides"]
@@ -451,11 +443,11 @@ class OpenRCT2World(World):
                             nausea = 0
                             # 3 coin flips to determine what, if any, stat prereqs will be used
                             if self.random.random() < .5:
-                                excitement = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                                excitement = round(self.random.uniform(self.options.shop_minimum_excitement, self.options.shop_maximum_excitement), 1)
                             if self.random.random() < .5:
-                                intensity = round(self.random.uniform(difficulty_minimum, difficulty_maximum), 1)
+                                intensity = round(self.random.uniform(self.options.shop_minimum_intensity, self.options.shop_maximum_intensity), 1)
                             if self.random.random() < .5:
-                                nausea = round(self.random.uniform(difficulty_minimum, difficulty_maximum - 2), 1)
+                                nausea = round(self.random.uniform(self.options.shop_minimum_nausea, self.options.shop_maximum_nausea), 1)
                             unlock["RidePrereq"] = \
                                 [self.random.randint(1, 4), category, excitement, intensity, nausea, 0]
                         elif category == "transport_rides" or category == "water_rides" or category == "roller_coasters":

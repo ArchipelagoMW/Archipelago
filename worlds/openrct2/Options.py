@@ -154,7 +154,9 @@ class Scenario(IntEnum):
     random_wacky_worlds = 147
     random_time_twister = 148
     random_RCT1_expansions = 149
-    random_RCT2_expansions =150
+    random_RCT2_expansions = 150
+    archipelago_madness_vanilla = 151
+    archipelago_madness_expansions = 152
 
 class LocationBalancingMode(IntEnum):
     disabled = 0
@@ -275,6 +277,8 @@ class SelectedScenario(Choice):
     option_random_time_twister = Scenario.random_time_twister.value
     option_random_RCT1_expansions = Scenario.random_RCT1_expansions.value
     option_random_RCT2_expansions = Scenario.random_RCT2_expansions.value
+    option_archipelago_madness_vanilla = Scenario.archipelago_madness_vanilla.value
+    option_archipelago_madness_expansions = Scenario.archipelago_madness_expansions.value
     option_forest_frontiers = Scenario.forest_frontiers.value
     option_dynamite_dunes = Scenario.dynamite_dunes.value
     option_leafy_lake = Scenario.leafy_lake.value
@@ -418,7 +422,7 @@ class SelectedScenario(Choice):
     option_build_your_own_six_flags_magic_mountain = Scenario.build_your_own_six_flags_magic_mountain.value
     option_build_your_own_six_flags_park = Scenario.build_your_own_six_flags_park.value
     option_build_your_own_six_flags_over_texas = Scenario.build_your_own_six_flags_over_texas.value
-    default = Scenario.build_your_own_six_flags_park.value    
+    default = Scenario.archipelago_madness_vanilla.value    
 
 class DeathLink(Choice):
     """DeathLink is an opt-in feature for Multiworlds where individual death events are propagated to all games with DeathLink enabled.
@@ -452,7 +456,8 @@ class SelectedVisibility(Choice):
     default = Visibility.recipient.value
 
 class SelectedDifficulty(Choice):
-    """Choose a difficulty for the randomization. This will affect things such as ride multipliers and interest rates for loans.
+    """Choose a difficulty for the randomization. This will make rides have more difficult stat results (If that's enabled), as well as affect
+    things like the loan interest rate.
     """
     auto_display_name = True
     display_name = "Difficulty"
@@ -473,7 +478,8 @@ class SelectedIntensity(Choice):
     default = Preferred_Intensity.normal.value
 
 class SelectedRandomizationRange(Choice):
-    """Choose the spread for randomized values.
+    """Influences how spread random values will be (Mostly this affects the excitement, intensity, and nausea ratings). The more extreme this value,
+    the more extreme the difficulty will swing, with easy becoming much easier and hard becoming much more difficult.
     """
     auto_display_name = True
     display_name = "Randomization Range"
@@ -485,7 +491,7 @@ class SelectedRandomizationRange(Choice):
     default = Randomization_Range.medium.value
 
 class Ignore_Ride_Stat_Changes(OpenRCT2Toggle):
-    """Disables changes to base ride stats. If enabled, rides will behave like they do in the base game."""
+    """Disables changes to base ride stats. If enabled, rides will always behave like they do in the base game."""
     display_name = "Ignore Ride Stat Changes"
 
 class SelectedScenarioLength(Choice):
@@ -623,9 +629,57 @@ class Roller_Coaster_Nausea(Range):
     range_end = 10
     default = 4
 
-# class Include_Park_Rating_Objective(OpenRCT2OnToggle):
-#     """Include an objective to require a minimum park rating for completion. Multiple objectives can be enabled!"""
-#     display_name = "Include Park Rating Objective"
+class Shop_Minimum_Excitement(Range):
+    """If the shop determines you need a ride with a minimum excitement, this value will be the lowest it can ask for.
+    If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
+    """
+    display_name = "Minimum Shop Excitement Requirement"
+    range_start = 0
+    range_end = 10
+    default = 0
+
+class Shop_Minimum_Intensity(Range):
+    """If the shop determines you need a ride with a minimum intensity, this value will be the lowest it can ask for.
+    If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
+    """
+    display_name = "Minimum Shop Intensity Requirement"
+    range_start = 0
+    range_end = 7
+    default = 0
+
+class Shop_Minimum_Nausea(Range):
+    """If the shop determines you need a ride with a minimum nausea, this value will be the lowest it can ask for.
+    If this value is higher than the maximum, the generator will assume it is a mistake and set it to 0.
+    """
+    display_name = "Minimum Shop Nausea Requirement"
+    range_start = 0
+    range_end = 7
+    default = 0
+
+class Shop_Maximum_Excitement(Range):
+    """If the shop determines you need a ride with a maximum excitement, this value will be the highest it can ask for.
+    """
+    display_name = "Maximum Shop Excitement Requirement"
+    range_start = 0
+    range_end = 10
+    default = 5
+
+class Shop_Maximum_Intensity(Range):
+    """If the shop determines you need a ride with a maximum intensity, this value will be the highest it can ask for.
+    """
+    display_name = "Maximum Shop Intensity Requirement"
+    range_start = 0
+    range_end = 7
+    default = 5
+
+class Shop_Maximum_Nausea(Range):
+    """If the shop determines you need a ride with a maximum nausea, this value will be the highest it can ask for.
+    """
+    display_name = "Maximum Shop Nausea Requirement"
+    range_start = 0
+    range_end = 7
+    default = 4
+
 
 class Required_Unique_Rides(Range):
     """Requires specific rides to be built before scenario completion is awarded. These will tend to appear in the later half of the game.
@@ -687,6 +741,12 @@ class openRCT2Options(PerGameCommonOptions):
     # generator options
     location_balancing: LocationBalancing
     difficulty: SelectedDifficulty
+    shop_minimum_excitement: Shop_Minimum_Excitement
+    shop_maximum_excitement: Shop_Maximum_Excitement
+    shop_minimum_intensity: Shop_Minimum_Intensity
+    shop_maximum_intensity: Shop_Maximum_Intensity
+    shop_minimum_nausea: Shop_Minimum_Nausea
+    shop_maximum_nausea: Shop_Maximum_Nausea
     ignore_ride_stat_changes: Ignore_Ride_Stat_Changes
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
@@ -729,5 +789,3 @@ class openRCT2Options(PerGameCommonOptions):
     forbid_marketing_campaigns: SelectedForbidMarketingCampaigns
     forbid_tree_removal: SelectedForbidTreeRemoval
 
-
-# OpenRCT2Options = TypedDict("OpenRCT2Options", {option.__name__: option for option in openRCT2_options.values()})
