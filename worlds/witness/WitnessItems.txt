@@ -39,8 +39,8 @@ Jokes:
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
-1101 - Tutorial Outpost Entry (Panel) - 0x0A171
-1102 - Tutorial Outpost Exit (Panel) - 0x04CA4
+1101 - Outside Tutorial Outpost Entry (Panel) - 0x0A171
+1102 - Outside Tutorial Outpost Exit (Panel) - 0x04CA4
 1105 - Symmetry Island Lower (Panel) - 0x000B0
 1107 - Symmetry Island Upper (Panel) - 0x1C349
 1108 - Desert Surface 3 Control (Panel) - 0x09FA0
@@ -168,9 +168,9 @@ Doors:
 1750 - Theater Entry (Door) - 0x17F88
 1753 - Theater Exit Left (Door) - 0x0A16D
 1756 - Theater Exit Right (Door) - 0x3CCDF
-1759 - Jungle Bamboo Laser Shortcut (Door) - 0x3873B
+1759 - Jungle Laser Shortcut (Door) - 0x3873B
 1760 - Jungle Popup Wall (Door) - 0x1475B
-1762 - River Monastery Garden Shortcut (Door) - 0x0CF2A
+1762 - Jungle Monastery Garden Shortcut (Door) - 0x0CF2A
 1765 - Bunker Entry (Door) - 0x0C2A4
 1768 - Bunker Tinted Glass Door - 0x17C79
 1771 - Bunker UV Room Entry (Door) - 0x0C2A3
@@ -195,7 +195,7 @@ Doors:
 1828 - Mountain Floor 2 Exit (Door) - 0x09EDD
 1831 - Mountain Floor 2 Staircase Far (Door) - 0x09E07
 1834 - Mountain Bottom Floor Giant Puzzle Exit (Door) - 0x09F89
-1840 - Mountain Bottom Floor Final Room Entry (Door) - 0x0C141
+1840 - Mountain Bottom Floor Pillars Room Entry (Door) - 0x0C141
 1843 - Mountain Bottom Floor Rock (Door) - 0x17F33
 1846 - Caves Entry (Door) - 0x2D77D
 1849 - Caves Pillar Door - 0x019A5
@@ -247,7 +247,7 @@ Doors:
 2035 - Mountain & Caves Control Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB,0x335AB,0x335AC,0x3369D
 
 2100 - Symmetry Island Panels - 0x1C349,0x000B0
-2101 - Tutorial Outpost Panels - 0x0A171,0x04CA4
+2101 - Outside Tutorial Outpost Panels - 0x0A171,0x04CA4
 2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249,0x0A015,0x09FA0,0x09F86
 2110 - Quarry Outside Panels - 0x17C09,0x09E57,0x17CC4
 2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675

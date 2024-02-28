@@ -187,7 +187,19 @@ class HintAmount(Range):
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
-    default = 10
+    default = 12
+
+
+class AreaHintPercentage(Range):
+    """There are two types of hints for The Witness.
+    "Location hints" hint one location in your world / containing an item for your world.
+    "Area hints" will tell you some general info about the items you can find in one of the
+    main geographic areas on the island.
+    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints."""
+    display_name = "Area Hint Percentage"
+    range_start = 0
+    range_end = 100
+    default = 33
 
 
 class DeathLink(Toggle):
@@ -227,5 +239,6 @@ class TheWitnessOptions(PerGameCommonOptions):
     trap_percentage: TrapPercentage
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
+    area_hint_percentage: AreaHintPercentage
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty

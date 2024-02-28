@@ -76,8 +76,8 @@ Town Wooden Roof Lower Row 5
 Town RGB House Entry Panel
 Town Church Entry Panel
 Town Maze Panel
-Town Windmill Entry Panel
-Town Sound Room Right
+Windmill Entry Panel
+Town RGB House Sound Room Right
 Town Red Rooftop 5
 Town Church Lattice
 Town Tall Hexagonal
@@ -87,7 +87,7 @@ Theater Exit Left Panel
 Theater Exit Right Panel
 Jungle Laser Shortcut Panel
 Jungle Popup Wall Control
-River Monastery Garden Shortcut Panel
+Jungle Monastery Garden Shortcut Panel
 Bunker Entry Panel
 Bunker Tinted Glass Door Panel
 Bunker Glass Room 3
@@ -119,8 +119,8 @@ Mountain Floor 2 Light Bridge Controller Near
 Mountain Floor 2 Light Bridge Controller Far
 Mountain Floor 2 Far Row 6
 Mountain Bottom Floor Giant Puzzle
-Mountain Bottom Floor Final Room Entry Left
-Mountain Bottom Floor Final Room Entry Right
+Mountain Bottom Floor Pillars Room Entry Left
+Mountain Bottom Floor Pillars Room Entry Right
 Mountain Bottom Floor Discard
 Mountain Bottom Floor Rock Control
 Mountain Bottom Floor Caves Entry Panel
