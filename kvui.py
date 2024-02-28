@@ -3,6 +3,9 @@ import logging
 import sys
 import typing
 
+from kivymd.uix.divider import MDDivider
+from kivymd.uix.recyclegridlayout import MDRecycleGridLayout
+
 if sys.platform == "win32":
     import ctypes
 
@@ -51,13 +54,12 @@ from kivymd.app import MDApp
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.tab.tab import MDTabs, MDTabsBase
-from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
+from kivymd.uix.tab.tab import MDTabsPrimary, MDTabsItem, MDTabsItemText, MDTabsItemIcon, MDTabsCarousel
+from kivymd.uix.button import MDButton, MDButtonText
 from kivymd.uix.label import MDLabel
 from kivymd.uix.recycleview import MDRecycleView
-from kivymd.uix.recyclegridlayout import MDRecycleGridLayout
-from kivymd.uix.textfield.textfield import MDTextFieldRect
-from kivymd.uix.progressbar import MDProgressBar
+from kivymd.uix.textfield.textfield import MDTextField
+from kivymd.uix.progressindicator import MDLinearProgressIndicator
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
@@ -241,9 +243,10 @@ class ContainerLayout(MDFloatLayout):
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
-                                 RecycleBoxLayout):
+                                 MDRecycleGridLayout):
     """ Adds selection and focus behaviour to the view. """
-    pass
+    adaptive_height = True
+
 
 class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     """ Add selection support to the Label """
@@ -346,7 +349,7 @@ class HintLabel(RecycleDataViewBehavior, MDBoxLayout):
             self.selected = is_selected
 
 
-class ConnectBarTextInput(MDTextFieldRect):
+class ConnectBarTextInput(MDTextField):
     def insert_text(self, substring, from_undo=False):
         s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
@@ -370,8 +373,17 @@ class MessageBox(Popup):
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
-class MDTab(MDTabsBase, MDBoxLayout):
-    pass
+
+class ClientTabs(MDTabsPrimary):
+    carousel: MDTabsCarousel
+
+    def __init__(self, *args, **kwargs):
+        self.carousel = MDTabsCarousel()
+        super().__init__(MDDivider(), self.carousel, *args, **kwargs)
+
+    def on_tab_switch(self, *args) -> None:
+        pass
+
 
 class GameManager(MDApp):
     logging_pairs = [
@@ -412,8 +424,16 @@ class GameManager(MDApp):
     @property
     def tab_count(self):
         if hasattr(self, "tabs"):
-            return max(1, len(self.tabs.get_tab_list()))
+            return max(1, len(self.tabs.tab_list))
         return 1
+
+    def on_start(self):
+        def on_start(*args):
+            self.root.md_bg_color = self.theme_cls.backgroundColor
+        super().on_start()
+        Clock.schedule_once(on_start)
+        #self.tabs.add_widget(MDTabsItem(MDTabsItemText("TestTab")))
+        #self.tabs.carousel.add_widget(MDLabel(text="Label 1"))
 
     def build(self) -> Layout:
         self.theme_cls.theme_style = "Dark"
@@ -436,38 +456,39 @@ class GameManager(MDApp):
 
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = MDRaisedButton(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = MDButton(MDButtonText(text="Connect"), style="filled", size=(dp(100), dp(30)),
+                                              size_hint_x=None, size_hint_y=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
-        self.progressbar = MDProgressBar(size_hint_y=None, height=3)
+        self.progressbar = MDLinearProgressIndicator(size_hint_y=None, height=3)
         self.grid.add_widget(self.progressbar)
 
         # middle part
-        self.tabs = MDTabs(size_hint=(1, 1), tab_hint_x=True)
-        self.tabs.default_tab = MDTab(title="All")
+        self.tabs = ClientTabs(allow_stretch=True, size_hint=(1, 1), pos_hint={"center_x": .5, "center_y": .5})
+        self.tabs.default_tab = MDTabsItem(MDTabsItemText(text="All" if len(self.logging_pairs) > 1 else "Archipelago"))
         self.log_panels["All"] = self.tabs.default_tab_content = UILog(*(logging.getLogger(logger_name)
-                                                                         for logger_name, name in
-                                                                         self.logging_pairs))
-        self.tabs.default_tab.add_widget(self.tabs.default_tab_content)
+                                                                             for logger_name, name in
+                                                                             self.logging_pairs))
+        self.tabs.carousel.add_widget(self.tabs.default_tab_content)
         self.tabs.add_widget(self.tabs.default_tab)
 
         for logger_name, display_name in self.logging_pairs:
             bridge_logger = logging.getLogger(logger_name)
-            panel = MDTab(title=display_name)
+            panel = MDTabsItem(MDTabsItemText(text=display_name))
+            grid = MDGridLayout(cols=1)
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
-            panel.add_widget(panel.content)
+            grid.add_widget(panel.content)
+            self.tabs.carousel.add_widget(grid)
             if len(self.logging_pairs) > 1:
                 # show Archipelago tab if other logging is present
                 self.tabs.add_widget(panel)
 
-        hint_panel = MDTab(title="Hints")
+        hint_panel = MDTabsItem(MDTabsItemText(text="Hints"))
         self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
-        hint_panel.add_widget(hint_panel.content)
+        #self.tabs.carousel.add_widget(grid)
+        #self.tabs.carousel.add_widget(MDLabel(text="TEST", halign="center"))
         self.tabs.add_widget(hint_panel)
-
-        if len(self.logging_pairs) == 1:
-            self.tabs.default_tab.title = "Archipelago"
 
         self.main_area_container = MDGridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
@@ -476,10 +497,10 @@ class GameManager(MDApp):
 
         # bottom part
         bottom_layout = MDBoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
-        info_button = MDRaisedButton(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
+        info_button = MDButton(MDButtonText(text="Command:"), style="filled", size=(dp(100), dp(30)), size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = MDTextFieldRect(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
+        self.textinput = MDTextField(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
@@ -538,7 +559,7 @@ class GameManager(MDApp):
 
         self.ctx.exit_event.set()
 
-    def on_message(self, textinput: MDTextFieldRect):
+    def on_message(self, textinput: MDTextField):
         try:
             input_text = textinput.text.strip()
             textinput.text = ""
@@ -608,6 +629,7 @@ class LogtoUI(logging.Handler):
 
 class UILog(MDRecycleView):
     messages: typing.ClassVar[int]  # comes from kv file
+    adaptive_height = True
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)

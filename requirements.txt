@@ -5,7 +5,11 @@ jellyfish>=1.0.3
 jinja2>=3.1.2
 schema>=0.7.5
 kivy>=2.3.0
-kivymd==1.2.0
+<<<<<<< HEAD
+kivymd @ git+https://github.com/kivymd/KivyMD@master
+kivymd>=2.0.1.dev0
+=======
+>>>>>>> parent of 4f3fbebe (kivymd testing)
 bsdiff4>=1.2.4
 platformdirs>=4.0.0
 certifi>=2023.11.17

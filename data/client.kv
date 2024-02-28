@@ -15,8 +15,6 @@
     white: "FFFFFF"  # not used, if you want to change the generic text color change color in Label
 <MDLabel>:
     color: "FFFFFF"
-<MDTabs>:
-    fixed_tab_label_width: root.width / app.tab_count
 <TooltipLabel>:
     text_size: self.width, None
     size_hint_y: None
@@ -39,11 +37,8 @@
     bar_width: dp(12)
     effect_cls: "ScrollEffect"
     SelectableRecycleBoxLayout:
-        default_size: None, dp(20)
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical'
+        cols: 1
+        orientation: 'tb-lr'
         spacing: dp(3)
 <HintLabel>:
     canvas.before:
@@ -103,16 +98,12 @@
     bar_width: dp(12)
     effect_cls: "ScrollEffect"
     SelectableRecycleBoxLayout:
-        default_size: None, dp(20)
-        default_size_hint: 1, None
-        size_hint_y: None
-        height: self.minimum_height
-        orientation: 'vertical'
+        cols: 1
+        orientation: 'tb-lr'
         spacing: dp(3)
 <ServerLabel>:
     text: "Server:"
     size_hint_x: None
-    halign: "center"
 <ContainerLayout>:
     size_hint_x: 1
     size_hint_y: 1
