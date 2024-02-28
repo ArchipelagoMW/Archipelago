@@ -118,15 +118,15 @@ class KH1World(World):
 
     def pre_fill(self) -> None:
         goal_dict = {
-            "sephiroth":      "Ansem's Report 12",
-            "wonderland":     "Wonderland Ifrit's Horn Event",
-            "deep_jungle":    "Deep Jungle Jungle King Event",
-            "agrabah":        "Agrabah Genie Event",
-            "monstro":        "Monstro Stop Event",
-            "atlantica":      "Atlantica Crabclaw Event",
-            "halloween_town": "Halloween Town Pumpkinhead Event",
-            "neverland":      "Neverland Fairy Harp Event",
-            "unknown":        "Ansem's Report 13",
+            "sephiroth":      "Olympus Coliseum Defeat Sephiroth Ansem's Report 12",
+            "wonderland":     "Wonderland Defeat Trickmaster Ifrit's Horn Event",
+            "deep_jungle":    "Deep Jungle Seal Keyhole Jungle King Event",
+            "agrabah":        "Agrabah Seal Keyhole Genie Event",
+            "monstro":        "Monstro Defeat Parasite Cage II Stop Event",
+            "atlantica":      "Atlantica Seal Keyhole Crabclaw Event",
+            "halloween_town": "Halloween Town Seal Keyhole Pumpkinhead Event",
+            "neverland":      "Neverland Seal Keyhole Fairy Harp Event",
+            "unknown":        "Hollow Bastion Defeat Unknown Ansem's Report 13",
             "final_rest":     "End of the World Final Rest Chest",
             "postcards":      "Traverse Town Mail Postcard 10 Event",
             "final_ansem":    "Final Ansem"

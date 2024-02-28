@@ -52,7 +52,7 @@ class AccessorySlotIncrease(Range):
 
 class ItemSlotIncrease(Range):
     """
-    Number of Accessory Slot Increases to Add to the Level Up Rewards
+    Number of Item Slot Increases to Add to the Level Up Rewards
     """
     range_start = 0
     range_end = 5
@@ -66,7 +66,7 @@ class Atlantica(Toggle):
 
 class Goal(Choice):
     """
-    Determines the goal of your run.
+    Determines the goal of your playthrough.
     """
     display_name = "Goal"
     option_final_rest = 0
