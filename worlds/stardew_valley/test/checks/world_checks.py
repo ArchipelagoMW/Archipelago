@@ -10,7 +10,7 @@ def get_all_item_names(multiworld: MultiWorld) -> List[str]:
 
 
 def get_all_location_names(multiworld: MultiWorld) -> List[str]:
-    return [location.name for location in multiworld.get_locations() if not location.advancement]
+    return [location.name for location in multiworld.get_locations() if location.address is not None]
 
 
 def assert_victory_exists(tester: unittest.TestCase, multiworld: MultiWorld):

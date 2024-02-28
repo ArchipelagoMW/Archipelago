@@ -28,7 +28,7 @@ def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
 def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
     tester.assertIn(StardewItem("Victory", ItemClassification.progression, None, 1), multiworld.get_items())
     assert_can_win(tester, multiworld)
-    non_event_locations = [location for location in multiworld.get_locations() if not location.advancement]
+    non_event_locations = [location for location in multiworld.get_locations() if location.address is not None]
     tester.assertEqual(len(multiworld.itempool), len(non_event_locations))
 
 

@@ -21,7 +21,7 @@ def check_stray_mod_items(chosen_mods: Union[List[str], str], tester: unittest.T
         item = item_table[multiworld_item.name]
         tester.assertTrue(item.mod_name is None or item.mod_name in chosen_mods)
     for multiworld_location in multiworld.get_locations():
-        if multiworld_location.advancement:
+        if multiworld_location.address is None:
             continue
         location = location_table[multiworld_location.name]
         tester.assertTrue(location.mod_name is None or location.mod_name in chosen_mods)

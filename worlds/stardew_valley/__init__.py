@@ -122,7 +122,7 @@ class StardewValleyWorld(World):
 
         locations_count = len([location
                                for location in self.multiworld.get_locations(self.player)
-                               if not location.advancement])
+                               if location.address is not None])
 
         created_items = create_items(self.create_item, locations_count, items_to_exclude, self.options,
                                      self.multiworld.random)
