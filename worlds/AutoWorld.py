@@ -7,8 +7,8 @@ import re
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
-    Union
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
+                    Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
@@ -365,7 +365,7 @@ class World(metaclass=AutoWorldRegister):
         If you need any last-second randomization, use self.random instead."""
         pass
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
