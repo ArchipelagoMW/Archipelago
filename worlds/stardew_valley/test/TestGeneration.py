@@ -11,7 +11,7 @@ from ..mods.mod_data import ModNames
 
 
 def get_real_locations(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
-    return [location for location in multiworld.get_locations(tester.player) if location.address is None]
+    return [location for location in multiworld.get_locations(tester.player) if location.address is not None]
 
 
 def get_real_location_names(tester: typing.Union[SVTestBase, SVTestCase], multiworld: MultiWorld):
