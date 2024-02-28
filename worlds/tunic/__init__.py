@@ -5,7 +5,8 @@ from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, fi
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
-from .regions import tunic_regions
+from .ladder_rules import set_ladder_region_rules, set_ladder_location_rules
+from .regions import tunic_regions, tunic_ladder_regions
 from .er_scripts import create_er_regions
 from .options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
@@ -72,6 +73,7 @@ class TunicWorld(World):
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
+                self.options.ladder_rando.value = passthrough["ladder_rando"]
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -86,7 +88,7 @@ class TunicWorld(World):
         self.slot_data_items = []
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
-
+        
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
@@ -119,27 +121,41 @@ class TunicWorld(World):
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
+        # Filler items that are still in the item pool to swap out
+        available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
+                                       item_table[filler].classification == ItemClassification.filler]
+
+        def remove_filler(amount: int):
+            # Remove filler to make room for other items
+            for _ in range(0, amount):
+                fill = self.random.choice(available_filler)
+                items_to_create[fill] -= 1
+                if items_to_create[fill] == 0:
+                    available_filler.remove(fill)
+
+        if self.options.ladder_rando:
+            ladder_count = 0
+            for item_name, item_data in item_table.items():
+                if item_data.item_group == "ladders":
+                    items_to_create[item_name] = 1
+                    ladder_count += 1
+            remove_filler(ladder_count)
+            
         if hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
             extra_hexagons = self.options.extra_hexagon_percentage
             items_to_create[gold_hexagon] += int((Decimal(100 + extra_hexagons) / 100 * hexagon_goal).to_integral_value(rounding=ROUND_HALF_UP))
-
+            
             # Replace pages and normal hexagons with filler
             for replaced_item in list(filter(lambda item: "Pages" in item or item in hexagon_locations, items_to_create)):
-                items_to_create[self.get_filler_item_name()] += items_to_create[replaced_item]
+                filler_name = self.get_filler_item_name()
+                items_to_create[filler_name] += items_to_create[replaced_item]
+                if items_to_create[filler_name] >= 1 and filler_name not in available_filler:
+                    available_filler.append(filler_name)
                 items_to_create[replaced_item] = 0
 
-            # Filler items that are still in the item pool to swap out
-            available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
-                                           item_table[filler].classification == ItemClassification.filler]
-
-            # Remove filler to make room for extra hexagons
-            for i in range(0, items_to_create[gold_hexagon]):
-                fill = self.random.choice(available_filler)
-                items_to_create[fill] -= 1
-                if items_to_create[fill] == 0:
-                    available_filler.remove(fill)
+            remove_filler(items_to_create[gold_hexagon])
 
         if self.options.maskless:
             mask_item = TunicItem("Scavenger Mask", ItemClassification.useful, self.item_name_to_id["Scavenger Mask"], self.player)
@@ -181,16 +197,24 @@ class TunicWorld(World):
             self.er_portal_hints = portal_hints
 
         else:
-            for region_name in tunic_regions:
+            if self.options.ladder_rando:
+                region_list = tunic_ladder_regions
+            else:
+                region_list = tunic_regions
+
+            for region_name in region_list:
                 region = Region(region_name, self.player, self.multiworld)
                 self.multiworld.regions.append(region)
 
-            for region_name, exits in tunic_regions.items():
+            for region_name, exits in region_list.items():
                 region = self.multiworld.get_region(region_name, self.player)
                 region.add_exits(exits)
 
             for location_name, location_id in self.location_name_to_id.items():
-                region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                if self.options.ladder_rando:
+                    region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                else:
+                    region = self.multiworld.get_region(location_table[location_name].region, self.player)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
 
@@ -203,6 +227,9 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         if self.options.entrance_rando:
             set_er_location_rules(self, self.ability_unlocks)
+        elif self.options.ladder_rando:
+            set_ladder_region_rules(self, self.ability_unlocks)
+            set_ladder_location_rules(self, self.ability_unlocks)
         else:
             set_region_rules(self, self.ability_unlocks)
             set_location_rules(self, self.ability_unlocks)
@@ -227,6 +254,7 @@ class TunicWorld(World):
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": self.options.entrance_rando.value,
+            "ladder_rando": self.options.ladder_rando.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],

@@ -143,6 +143,22 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 50-51": TunicItemData(ItemClassification.useful, 1, 127, "pages"),
     "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
+
+    "Hourglass Cave Ladders": TunicItemData(ItemClassification.progression, 0, 130, "ladders"),
+    "Ladders next to Dark Tomb": TunicItemData(ItemClassification.progression, 0, 131, "ladders"),
+    "Ladder to Quarry": TunicItemData(ItemClassification.progression, 0, 132, "ladders"),
+    "Ladders next to Ruined Passage Exit": TunicItemData(ItemClassification.progression, 0, 133, "ladders"),
+    "Overworld Shortcut Ladders": TunicItemData(ItemClassification.progression, 0, 134, "ladders"),
+    "Ladder by Temple Rafters Exit": TunicItemData(ItemClassification.progression, 0, 136, "ladders"),
+    "Ladder to Ruined Atoll": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
+    "Ladder to Swamp": TunicItemData(ItemClassification.progression, 0, 138, "ladders"),
+    "Ladders next to West Belltower": TunicItemData(ItemClassification.progression, 0, 139, "ladders"),
+    "Ladder to Well": TunicItemData(ItemClassification.progression, 0, 140, "ladders"),
+    "Ladder Drop to East Forest": TunicItemData(ItemClassification.progression, 0, 141, "ladders"),
+    "Ladders next to Patrol Cave": TunicItemData(ItemClassification.progression, 0, 142, "ladders"),
+    "Dark Tomb Ladder": TunicItemData(ItemClassification.progression, 0, 143, "ladders"),
+    "Well Back Ladder": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
+    "Swamp Ladder": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
 }
 
 fool_tiers: List[List[str]] = [

@@ -131,6 +131,12 @@ class LaurelsLocation(Choice):
     default = 0
 
 
+class LadderRando(Toggle):
+    """Ladder rando description"""
+    internal_name = "ladder_rando"
+    display_name = "Ladder Rando"
+
+
 @dataclass
 class TunicOptions(PerGameCommonOptions):
     sword_progression: SwordProgression
@@ -147,4 +153,5 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
+    ladder_rando: LadderRando
     start_inventory_from_pool: StartInventoryPool
