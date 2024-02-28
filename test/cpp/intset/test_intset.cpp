@@ -96,7 +96,7 @@ TEST(InsetTest, Negative)
 {
     constexpr auto n = std::numeric_limits<int64_t>::min();
     static_assert(n < 0, "n not negative");
-    int64Set *set = int64Set_new(1);
+    int64Set *set = int64Set_new(3);
     ASSERT_TRUE(set);
     EXPECT_FALSE(int64Set_contains(set, n));
     EXPECT_TRUE(int64Set_add(set, n));
