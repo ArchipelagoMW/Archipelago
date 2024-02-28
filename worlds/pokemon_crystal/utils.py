@@ -88,6 +88,8 @@ def convert_to_ingame_text(text: str):
         "x": 0xb7,
         "y": 0xb8,
         "z": 0xb9,
+        "'": 0xe0,
+        "-": 0xe3,
         "?": 0xe6,
         "!": 0xe7,
         ".": 0xe8,

@@ -32,6 +32,7 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/basepatch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
+    remote_progression_items = []
 
     for location in world.multiworld.get_locations(world.player):
         if location.address is None:
@@ -40,7 +41,9 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
         if location.item and location.item.player == world.player:
             write_bytes(patched_rom, [reverse_offset_item_value(location.item.code)], location.rom_address)
         else:
-            write_bytes(patched_rom, [184], location.rom_address)
+            write_bytes(patched_rom, [world.item_name_to_id("AP ITEM")], location.rom_address)
+            if location.item.advancement:
+                remote_progression_items.append(location)
 
     static = {
         "RedGyarados": 2,
@@ -177,28 +180,33 @@ def generate_output(world: PokemonCrystalWorld, output_directory: str) -> None:
                 write_bytes(patched_rom, better_mart_bytes, mart_address)
             mart_address += 2
 
-    for label in ["AP_Setting_HMBadge_Cut",
+    for label in ["AP_Setting_HMBadge_Cut1",
+                  "AP_Setting_HMBadge_Cut2",
                   "AP_Setting_HMBadge_Fly",
                   "AP_Setting_HMBadge_Surf1",
                   "AP_Setting_HMBadge_Surf2",
-                  "AP_Setting_HMBadge_Strength",
+                  "AP_Setting_HMBadge_Strength1",
+                  "AP_Setting_HMBadge_Strength2",
                   "AP_Setting_HMBadge_Flash",
-                  "AP_Setting_HMBadge_Whirlpool",
-                  "AP_Setting_HMBadge_Waterfall"]:
+                  "AP_Setting_HMBadge_Whirlpool1",
+                  "AP_Setting_HMBadge_Whirlpool2",
+                  "AP_Setting_HMBadge_Waterfall1",
+                  "AP_Setting_HMBadge_Waterfall2"]:
         address = data.rom_addresses[label] + 1
         write_bytes(patched_rom, [world.options.hm_badge_requirements], address)
 
     exp_modifier_address = data.rom_addresses["AP_Setting_ExpModifier"] + 1
     write_bytes(patched_rom, [world.options.experience_modifier], exp_modifier_address)
 
-    elite_four_text = convert_to_ingame_text("{:20d}".format(world.options.elite_four_badges))
+    elite_four_text = convert_to_ingame_text("{:02d}".format(world.options.elite_four_badges.value))
     write_bytes(patched_rom, elite_four_text, data.rom_addresses["AP_Setting_VictoryRoadBadges_Text"] + 1)
     write_bytes(patched_rom, [world.options.elite_four_badges - 1],
                 data.rom_addresses["AP_Setting_VictoryRoadBadges"] + 1)
     write_bytes(patched_rom, [world.options.elite_four_badges - 2], data.rom_addresses["AP_Setting_RocketBadges"] + 1)
 
-    red_text = convert_to_ingame_text("{:20d}".format(world.options.red_badges))
+    red_text = convert_to_ingame_text("{:02d}".format(world.options.red_badges.value))
     write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text"] + 1)
+    write_bytes(patched_rom, red_text, data.rom_addresses["AP_Setting_RedBadges_Text2"] + 1)
     write_bytes(patched_rom, [world.options.red_badges - 1], data.rom_addresses["AP_Setting_RedBadges"] + 1)
 
     start_inventory_address = data.rom_addresses["AP_Start_Inventory"]

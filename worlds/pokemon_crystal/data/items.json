@@ -34,7 +34,7 @@
 	"CARBOS": {"name": "Carbos", "classification": "FILLER", "tags": []},
 	"LUCKY_PUNCH": {"name": "Lucky Punch", "classification": "FILLER", "tags": []},
 	"CALCIUM": {"name": "Calcium", "classification": "FILLER", "tags": []},
-	"RARE_CANDY": {"name": "Rare Candy", "classification": "FILLER", "tags": []},
+	"RARE_CANDY": {"name": "Rare Candy", "classification": "USEFUL", "tags": []},
 	"X_ACCURACY": {"name": "X Accuracy", "classification": "FILLER", "tags": []},
 	"LEAF_STONE": {"name": "Leaf Stone", "classification": "USEFUL", "tags": []},
 	"METAL_POWDER": {"name": "Metal Powder", "classification": "FILLER", "tags": []},
@@ -350,6 +350,10 @@
 	"POKE_DEX": {
 		"name": "Pokedex", "classification": "PROGRESSION",
 		"tags": ["KeyItem", "Unique"]
+	},
+	"PHONE_TRAP": {
+		"name": "Phone Trap", "classification": "TRAP",
+		"tags": ["Trap"]
 	},
 	"AP_ITEM": {"name": "AP Item", "classification": "FILLER", "tags": ["INVALID"]},
 	"TM_DYNAMICPUNCH": {
