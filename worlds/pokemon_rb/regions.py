@@ -2154,6 +2154,17 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         while warps:
             forced_connections.add((warps.pop(), warps.pop(),))
 
+
+    one_way_forced_connections.add(("Saffron City-Pidgey to Saffron Pidgey House", "Silph Co Elevator-1F to Silph Co 1F"))
+    one_way_forced_connections.add(("Saffron City-G to Saffron Gym-S", "Silph Co Elevator-2F to Silph Co 2F"))
+    one_way_forced_connections.add(("Saffron City-Silph to Silph Co 1F", "Silph Co Elevator-3F to Silph Co 3F"))
+    one_way_forced_connections.add(("Saffron City-Copycat to Saffron Copycat's House 1F", "Silph Co Elevator-4F to Silph Co 4F"))
+    one_way_forced_connections.add(("Cerulean City-T to Cerulean Trashed House", "Silph Co Elevator-5F to Silph Co 5F"))
+    one_way_forced_connections.add(("Cerulean City-Cave to Cerulean Cave 1F-SE", "Silph Co Elevator-6F to Silph Co 6F"))
+
+    one_way_forced_connections.add(("Viridian City to Viridian School House", "Saffron City-Pidgey to Saffron Pidgey House"))
+
+
     dc_destinations = None
     if multiworld.door_shuffle[player] == "decoupled":
         dc_destinations = entrances.copy()
