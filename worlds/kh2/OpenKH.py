@@ -443,27 +443,13 @@ def patch_kh2(self, output_directory):
     self.fight_and_form_text = [
         {
             'id': 15121,  # poster name
-            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}",
+            'en': f"Game Options"
         },
         {
             'id': 15122,
-            'en': f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}"
-        },
-        {
-            'id': 0x373B,
-            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
-        },
-        {
-            'id': 0x373C,
-            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
-        },
-        {
-            'id': 0x373D,
-            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
-        },
-        {
-            'id': 0x4E31,
-            'en': f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}."
+            'en': f"Fight Logic is {self.options.FightLogic.current_option_name}\n"
+                  f"Auto Form Logic is {self.options.AutoFormLogic.current_option_name}\n"
+                  f"Final Form Logic is {self.options.FinalFormLogic.current_option_name}"
         }
 
     ]
