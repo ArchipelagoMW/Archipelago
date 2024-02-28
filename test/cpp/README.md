@@ -7,7 +7,7 @@ Test framework for C and C++ code in AP.
 ### GoogleTest
 
 Adding GoogleTests is as simple as creating a directory with
-* one or more `test_*.cpp` files that defines tests using
+* one or more `test_*.cpp` files that define tests using
   [GoogleTest API](https://google.github.io/googletest/)
 * a `CMakeLists.txt` that adds the .cpp files to `test_default` target using
   [target_sources](https://cmake.org/cmake/help/latest/command/target_sources.html)
