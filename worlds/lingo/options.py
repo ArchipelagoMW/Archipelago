@@ -82,7 +82,7 @@ class SunwarpAccess(Choice):
     On "disabled", all sunwarps are disabled. Pilgrimage must be disabled when this is used.
     On "unlock", sunwarps start off disabled, and all six activate once you receive an item.
     On "individual", sunwarps start off disabled, and each has a corresponding item that unlocks it.
-    On "progressive", sunwarps start off disabled, and they unlock in order using a progressive item. Only compatible with complex doors."""
+    On "progressive", sunwarps start off disabled, and they unlock in order using a progressive item."""
     display_name = "Sunwarp Access"
     option_normal = 0
     option_disabled = 1
