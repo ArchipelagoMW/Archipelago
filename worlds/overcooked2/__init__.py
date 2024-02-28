@@ -16,7 +16,7 @@ class Overcooked2Web(WebWorld):
 
     bug_report_page = "https://github.com/toasterparty/oc2-modding/issues"
     setup_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Overcooked! 2 randomizer on your computer.",
         "English",
         "setup_en.md",
@@ -90,13 +90,7 @@ class Overcooked2World(World):
     def connect_regions(self, source: str, target: str, rule: Optional[Callable[[CollectionState], bool]] = None):
         sourceRegion = self.multiworld.get_region(source, self.player)
         targetRegion = self.multiworld.get_region(target, self.player)
-
-        connection = Entrance(self.player, '', sourceRegion)
-        if rule:
-            connection.access_rule = rule
-
-        sourceRegion.exits.append(connection)
-        connection.connect(targetRegion)
+        sourceRegion.connect(targetRegion, rule=rule)
 
     def add_level_location(
         self,
