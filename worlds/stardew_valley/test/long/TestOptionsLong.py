@@ -27,16 +27,16 @@ class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
         for (option1, option1_choice), (option2, option2_choice) in combinations(option_choices, 2):
             if option1 is option2:
                 continue
-                
+
             world_options = {
                 option1.internal_name: option1_choice,
                 option2.internal_name: option2_choice
             }
 
-            with (self.solo_world_sub_test(f"{option1.internal_name}: {option1_choice}, {option2.internal_name}: {option2_choice}",
-                                           world_options,
-                                           world_caching=False)
-                  as (multiworld, _)):
+            with self.solo_world_sub_test(f"{option1.internal_name}: {option1_choice}, {option2.internal_name}: {option2_choice}",
+                                          world_options,
+                                          world_caching=False) \
+                    as (multiworld, _):
                 self.assert_basic_checks(multiworld)
 
 

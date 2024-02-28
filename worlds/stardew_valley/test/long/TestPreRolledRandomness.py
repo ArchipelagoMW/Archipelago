@@ -17,9 +17,9 @@ class TestGeneratePreRolledRandomness(WorldAssertMixin, SVTestCase):
         num_tests = 1000
         for i in range(num_tests):
             seed = get_seed()  # Put seed in parameter to test
-            with (self.solo_world_sub_test(f"Entrance Randomizer and Remixed Bundles",
-                                           choices,
-                                           seed=seed,
-                                           world_caching=False)
-                  as (multiworld, _)):
+            with self.solo_world_sub_test(f"Entrance Randomizer and Remixed Bundles",
+                                          choices,
+                                          seed=seed,
+                                          world_caching=False) \
+                    as (multiworld, _):
                 self.assert_basic_checks(multiworld)

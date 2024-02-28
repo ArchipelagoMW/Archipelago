@@ -162,8 +162,8 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(WorldAssertMixin, SVTestCase
                     Goal.internal_name: Goal.options[goal],
                     island_option.internal_name: island_option.options[value]
                 }
-                with (self.solo_world_sub_test(f"Goal: {goal}, {island_option.internal_name}: {value}", world_options, dirty_state=True)
-                      as (multiworld, stardew_world)):
+                with self.solo_world_sub_test(f"Goal: {goal}, {island_option.internal_name}: {value}", world_options, dirty_state=True) \
+                        as (multiworld, stardew_world):
                     self.assertEqual(stardew_world.options.exclude_ginger_island, island_option.option_false)
                     self.assert_basic_checks(multiworld)
 
