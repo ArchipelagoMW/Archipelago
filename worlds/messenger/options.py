@@ -133,7 +133,7 @@ class PlannedShopPrices(OptionDict):
 
 
 @dataclass
-class MessengerOptions(PerGameCommonOptions, DeathLinkMixin):
+class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     accessibility: MessengerAccessibility
     start_inventory: StartInventoryPool
     logic_level: Logic
