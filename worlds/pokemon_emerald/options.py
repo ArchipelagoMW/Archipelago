@@ -70,6 +70,13 @@ class RandomizeBikes(Toggle):
     display_name = "Randomize Bikes"
 
 
+class RandomizeEventTickets(Toggle):
+    """
+    Adds the event tickets to the pool, which let you access legendaries by sailing from Lilycove
+    """
+    display_name = "Randomize Event Tickets"
+
+
 class RandomizeRods(Toggle):
     """
     Adds fishing rods to the pool
@@ -811,6 +818,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     hms: RandomizeHms
     key_items: RandomizeKeyItems
     bikes: RandomizeBikes
+    event_tickets: RandomizeEventTickets
     rods: RandomizeRods
     overworld_items: RandomizeOverworldItems
     hidden_items: RandomizeHiddenItems

@@ -148,19 +148,19 @@
   },
   "NPC_GIFT_RECEIVED_AURORA_TICKET": {
     "label": "Littleroot Town - Aurora Ticket from Norman",
-    "tags": ["KeyItem"]
+    "tags": ["EventTicket"]
   },
   "NPC_GIFT_RECEIVED_EON_TICKET": {
     "label": "Littleroot Town - Eon Ticket from Norman",
-    "tags": ["KeyItem"]
+    "tags": ["EventTicket"]
   },
   "NPC_GIFT_RECEIVED_MYSTIC_TICKET": {
     "label": "Littleroot Town - Mystic Ticket from Norman",
-    "tags": ["KeyItem"]
+    "tags": ["EventTicket"]
   },
   "NPC_GIFT_RECEIVED_OLD_SEA_MAP": {
     "label": "Littleroot Town - Old Sea Map from Norman",
-    "tags": ["KeyItem"]
+    "tags": ["EventTicket"]
   },
 
   "NPC_GIFT_RECEIVED_OLD_ROD": {

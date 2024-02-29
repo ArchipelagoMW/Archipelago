@@ -94,9 +94,9 @@ HMs. For now, only includes the presets `vanilla` and `fly_without_badge`.
     - The ferry is now always present.
     - The S.S. Ticket item/location is now part of `key_items`.
 - Added event tickets and islands.
-    - All event tickets are given to the player by Norman after defeating the Champion alongside the S.S. Ticket. They
-    are also part of `key_items`.
+    - All event tickets are given to the player by Norman after defeating the Champion alongside the S.S. Ticket.
     - As in vanilla, these tickets are only usable from Lilycove. Not Slateport or the Battle Frontier.
+- New option `event_tickets`. Randomizes the above-mentioned tickets into the item pool.
 - New option `enable_wonder_trading`. You can participate in Wonder Trading by interacting with the center receptionist
 on the second floor of Pokemon Centers.
     - Why is this an option instead of just being enabled? You might want to disable wonder trading in a meta yaml to

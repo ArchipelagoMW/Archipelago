@@ -225,7 +225,7 @@ class PokemonEmeraldWorld(World):
         from .regions import create_regions
         regions = create_regions(self)
 
-        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike"}  # Tags with progression items always included
+        tags = {"Badge", "HM", "KeyItem", "Rod", "Bike", "EventTicket"}  # Tags with progression items always included
         if self.options.overworld_items:
             tags.add("OverworldItem")
         if self.options.hidden_items:
@@ -318,6 +318,8 @@ class PokemonEmeraldWorld(World):
             filter_tags.add("Rod")
         if not self.options.bikes:
             filter_tags.add("Bike")
+        if not self.options.event_tickets:
+            filter_tags.add("EventTicket")
 
         if self.options.badges in {RandomizeBadges.option_vanilla, RandomizeBadges.option_shuffle}:
             filter_tags.add("Badge")
@@ -682,6 +684,9 @@ class PokemonEmeraldWorld(World):
             convert_unrandomized_items_to_events("Rod")
         if not self.options.bikes:
             convert_unrandomized_items_to_events("Bike")
+        if not self.options.event_tickets:
+            print("hello")
+            convert_unrandomized_items_to_events("EventTicket")
         if not self.options.key_items:
             convert_unrandomized_items_to_events("KeyItem")
 
@@ -1351,6 +1356,7 @@ class PokemonEmeraldWorld(World):
             "hms",
             "key_items",
             "bikes",
+            "event_tickets",
             "rods",
             "overworld_items",
             "hidden_items",
