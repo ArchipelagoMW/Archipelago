@@ -158,7 +158,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladder to Swamp": TunicItemData(ItemClassification.progression, 0, 141, "ladders"),
     "Swamp Ladder": TunicItemData(ItemClassification.progression, 0, 142, "ladders"),
     "Ladder to Ruined Atoll": TunicItemData(ItemClassification.progression, 0, 143, "ladders"),
-    "Frog's Domain Ladder": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
+    "Frog's Domain Ladders": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
     "Hourglass Cave Ladders": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
 }
 
