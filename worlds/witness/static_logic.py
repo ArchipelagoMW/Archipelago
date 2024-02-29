@@ -295,3 +295,6 @@ class StaticWitnessLogic:
         self.EP_TO_OBELISK_SIDE.update(self.sigma_normal.EP_TO_OBELISK_SIDE)
 
         self.ENTITY_ID_TO_NAME.update(self.sigma_normal.ENTITY_ID_TO_NAME)
+
+
+StaticWitnessLogic()

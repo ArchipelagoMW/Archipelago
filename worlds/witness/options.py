@@ -1,5 +1,10 @@
 from dataclasses import dataclass
-from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions
+
+from schema import Schema, And, Optional
+
+from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
+
+from worlds.witness.static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -172,6 +177,24 @@ class TrapPercentage(Range):
     default = 20
 
 
+class TrapWeights(OptionDict):
+    """Specify the weights determining how many copies of each trap item will be in your itempool.
+    If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
+    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
+
+    display_name = "Trap Weights"
+    schema = Schema({
+        trap_name: And(int, lambda n: n >= 0)
+        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+    })
+    default = {
+        trap_name: item_definition.weight
+        for trap_name, item_definition in StaticWitnessLogic.all_items.items()
+        if isinstance(item_definition, WeightedItemDefinition) and item_definition.category is ItemCategory.TRAP
+    }
+
+
 class PuzzleSkipAmount(Range):
     """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
     Works on most panels in the game - The only big exception is The Challenge."""
@@ -237,6 +260,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     early_caves: EarlyCaves
     elevators_come_to_you: ElevatorsComeToYou
     trap_percentage: TrapPercentage
+    trap_weights: TrapWeights
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
     area_hint_percentage: AreaHintPercentage
