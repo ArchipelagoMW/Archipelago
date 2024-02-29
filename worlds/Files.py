@@ -56,18 +56,18 @@ class AutoPatchExtensionRegister(type):
 
     @staticmethod
     def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
-        for extension_type, handler in AutoPatchExtensionRegister.extension_types.items():
-            if extension_type == game:
-                if handler.required_extensions:
-                    handlers = [handler]
-                    for required in handler.required_extensions:
-                        if required in AutoPatchExtensionRegister.extension_types:
-                            handlers.append(AutoPatchExtensionRegister.extension_types[required])
-                        else:
-                            raise NotImplementedError(f"No handler for {required}.")
-                    return handlers
-                else:
-                    return handler
+        if game in AutoPatchExtensionRegister.extension_types:
+            handler = AutoPatchExtensionRegister.extension_types.get(game)
+            if handler.required_extensions:
+                handlers = [handler]
+                for required in handler.required_extensions:
+                    if required in AutoPatchExtensionRegister.extension_types:
+                        handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
+                    else:
+                        raise NotImplementedError(f"No handler for {required}.")
+                return handlers
+            else:
+                return handler
         return APPatchExtension
 
 
