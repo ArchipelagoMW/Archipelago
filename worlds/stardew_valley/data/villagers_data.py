@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Optional, Dict, Callable, Set
 
-from ..strings.food_names import Beverage
-from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
 from ..mods.mod_data import ModNames
+from ..strings.food_names import Beverage
 from ..strings.generic_names import Generic
+from ..strings.region_names import Region, SVERegion, AlectoRegion, BoardingHouseRegion, LaceyRegion
 from ..strings.season_names import Season
 from ..strings.villager_names import NPC, ModNPC
 
@@ -229,7 +229,7 @@ super_cucumber = ("Super Cucumber",)
 void_essence = ("Void Essence",)
 wizard_loves = purple_mushroom + solar_essence + super_cucumber + void_essence
 
-#Custom NPC Items and Loves
+# Custom NPC Items and Loves
 
 blueberry = ("Blueberry",)
 chanterelle = ("Chanterelle",)
@@ -351,7 +351,7 @@ martin_loves = juice + ice_cream + big_bark_burger
 morgan_loves = iridium_bar + void_egg + void_mayonnaise + frog + kittyfish
 morris_loves = lobster_bisque + chowder + truffle_oil + star_shards + aged_blue_moon_wine
 scarlett_loves = goat_cheese + duck_feather + goat_milk + cherry + maple_syrup + honey + \
-                 chocolate_cake + pink_cake + jade + glazed_yams # actually large milk but meh
+                 chocolate_cake + pink_cake + jade + glazed_yams  # actually large milk but meh
 susan_loves = pancakes + chocolate_cake + pink_cake + ice_cream + cookie + pumpkin_pie + rhubarb_pie + \
               blueberry_tart + blackberry_cobbler + cranberry_candy + red_plate
 
@@ -422,7 +422,7 @@ jasper = villager(ModNPC.jasper, True, town, Season.fall, universal_loves + jasp
 juna = villager(ModNPC.juna, False, forest, Season.summer, universal_loves + juna_loves, True, ModNames.juna)
 kitty = villager(ModNPC.mr_ginger, False, forest, Season.summer, universal_loves + mister_ginger_loves, True, ModNames.ginger)
 shiko = villager(ModNPC.shiko, True, town, Season.winter, universal_loves + shiko_loves, True, ModNames.shiko)
-wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_loves + wellwick_loves, True, ModNames.shiko)
+wellwick = villager(ModNPC.wellwick, True, forest, Season.winter, universal_loves + wellwick_loves, True, ModNames.wellwick)
 yoba = villager(ModNPC.yoba, False, secret_woods, Season.spring, universal_loves + yoba_loves, False, ModNames.yoba)
 riley = villager(ModNPC.riley, True, town, Season.spring, universal_loves, True, ModNames.riley)
 zic = villager(ModNPC.goblin, False, witch_swamp, Season.fall, void_mayonnaise, False, ModNames.distant_lands)
@@ -493,4 +493,3 @@ def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
             modified_npc = modification(active_mod, modified_npc)
         villagers_for_current_mods.append(modified_npc)
     return villagers_for_current_mods
-
