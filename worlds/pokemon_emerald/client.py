@@ -350,7 +350,7 @@ class PokemonEmeraldClient(BizHawkClient):
                         # sent by this player, and if so, try to receive one.
                         if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
                             if any(item[0] != ctx.slot
-                                    for key, item in ctx.stored_data[f"pokemon_wonder_trades_{ctx.team}"].items()
+                                    for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
                                     if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
                                 received_trade = await self.wonder_trade_receive(ctx)
                                 if received_trade is None:
