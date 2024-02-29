@@ -97,7 +97,7 @@ class OpenRCT2Socket:
                     while self.package_queue:
                         self._send(self.package_queue[0])
                         self.package_queue.pop(0)
-                        await time.sleep(0.1)
+                        await asyncio.sleep(0.1)
                 except Exception as e:
                     print("Error in connect game: " + e)
         except socket.timeout as e:
@@ -227,7 +227,7 @@ class OpenRCT2Context(CommonContext):
                     args['data'][index]['text'] = match.group(1) 
         print(args)
         self.gamesock.sendobj(args)
-        time.sleep(0.00000272727*len(args))
+        time.sleep(0.00000272727*len(args)) #Future Colby, this probably won't help to extend... but maybe?
 
     async def disconnect(self, allow_autoreconnect: bool = False):
         # self.game = ""
