@@ -21,7 +21,7 @@ from .items import (ITEM_GROUPS, PokemonEmeraldItem, create_item_label_to_code_m
 from .locations import (LOCATION_GROUPS, PokemonEmeraldLocation, create_location_label_to_id_map,
                         create_locations_with_tags)
 from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges, RandomizeTrainerParties, RandomizeHms,
-                      RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmCompatibility,
+                      RandomizeStarters, LevelUpMoves, RandomizeAbilities, RandomizeTypes, TmTutorCompatibility,
                       HmCompatibility, RandomizeLegendaryEncounters, NormanRequirement,
                       PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon, DarkCavesRequireFlash)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_move,
@@ -916,9 +916,9 @@ class PokemonEmeraldWorld(World):
                 combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
 
                 # TMs
-                if self.options.tm_compatibility != TmCompatibility.special_range_names["vanilla"]:
+                if self.options.tm_tutor_compatibility != TmTutorCompatibility.special_range_names["vanilla"]:
                     for i in range(0, 50):
-                        combatibility_array[i] = self.random.random() < self.options.tm_compatibility / 100
+                        combatibility_array[i] = self.random.random() < self.options.tm_tutor_compatibility / 100
 
                 # HMs
                 if self.options.hm_compatibility != HmCompatibility.special_range_names["vanilla"]:
@@ -1248,7 +1248,7 @@ class PokemonEmeraldWorld(World):
             if species is not None:
                 species.catch_rate = max(species.catch_rate, min_catch_rate)
 
-        if self.options.tm_moves:
+        if self.options.tm_tutor_moves:
             randomize_tm_moves()
 
         # Randomize legendary encounters

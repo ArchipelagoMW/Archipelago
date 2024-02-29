@@ -14,7 +14,7 @@ from settings import get_settings
 from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import (RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement,
-                      MatchTrainerLevels, Goal, TmCompatibility)
+                      MatchTrainerLevels)
 from .pokemon import HM_MOVES, get_random_move
 from .util import bool_array_to_int, encode_string, get_easter_egg
 
@@ -751,7 +751,7 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
         for i in range(30):
             _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
     else:
-        if world.options.tm_moves:
+        if world.options.tm_tutor_moves:
             new_tutor_moves = []
             for i in range(30):
                 new_move = get_random_move(world.random, set(new_tutor_moves) | world.blacklisted_moves | HM_MOVES)
@@ -763,7 +763,7 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
     _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (24 * 2), 2, data.constants["MOVE_DIG"])
 
     # Modify compatibility
-    if world.options.tm_compatibility.value != -1:
+    if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species:
             if species is None:
                 continue
@@ -772,5 +772,5 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
                 rom,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
                 4,
-                bool_array_to_int([world.random.randrange(0, 100) < world.options.tm_compatibility.value for _ in range(32)])
+                bool_array_to_int([world.random.randrange(0, 100) < world.options.tm_tutor_compatibility.value for _ in range(32)])
             )

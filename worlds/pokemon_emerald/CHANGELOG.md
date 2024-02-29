@@ -15,11 +15,11 @@ encounters themselves, whatever species they may be. Legendary species found in 
     - Relicanth and Wailord are guaranteed to be reachable in the wild (for Sealed Chamber). Interacting with the Sealed
     Chamber wall will give you dex info for Wailord and Relicanth.
     - Event legendaries are included for this goal (see below for new ferry behavior and event tickets).
-    - The roamer is included in this count. It will _always_ be Latios no matter what your settings are. Otherwise you
+    - The roamer is included in this count. It will _always_ be Latios no matter what your options are. Otherwise you
     might not have any way of knowing which species is roaming to be able to track it. In legendary hunt, Latios will
     never appear as a wild pokemon to make tracking it easier. The television broadcast that creates the roamer will
     give you dex info for Latios.
-    - You can set which encounters are considered for this goal with the `allowed_legendary_hunt_encounters` setting.
+    - You can set which encounters are considered for this goal with the `allowed_legendary_hunt_encounters` option.
 - New option `dexsanity`. Adds pokedex entries as locations.
     - Added locations contribute either a Poke Ball, Great Ball, or Ultra Ball to the item pool, based on the evolution
     stage.
@@ -63,10 +63,10 @@ encounters themselves, whatever species they may be. Legendary species found in 
     opponent's party.
     - During the battle, all earned exp is set to 0 (EVs are still gained during battle as normal). When the outcome of
     the battle is decided, your pokemon have their levels reset to what they were before the fight and exp is awarded as
-    it would have been without this setting. Think of it as holding earned exp in reserve and awarding it at the end
+    it would have been without this option. Think of it as holding earned exp in reserve and awarding it at the end
     instead, even giving it to fainted pokemon if they earned any before fainting.
     - Exp gain is based on _your_ party's average level to moderate exp over the course of a seed. Wild battles are
-    entirely unchanged by this setting.
+    entirely unchanged by this option.
 - New option `match_trainer_levels_bonus`. A flat bonus to apply to your party's levels when using
 `match_trainer_levels`. In case you want to give yourself a nerf or buff while still approximately matching your
 opponent.
@@ -125,11 +125,12 @@ on the second floor of Pokemon Centers.
     `"HERE GOES GRANDMOTHER"`, `"late eh?"` (None of those do anything, but I'd love to hear what you think they would.)  
 - Added three new easter egg effects.
 - Changed the original easter egg phrase to use the new system.
-- Changed `tm_compatibility` to be a percent chance instead of a choice. Use `-1` for vanilla.
+- Renamed `tm_moves` to `tm_tutor_moves`. Move tutors are also affected by this option (except the new Dig tutor).
+- Renamed `tm_compatibility` to `tm_tutor_compatibility`. Move tutors are also affected by this option.
+- Changed `tm_tutor_compatibility` to be a percent chance instead of a choice. Use `-1` for vanilla.
 - Changed `hm_compatibility` to be a percent chance instead of a choice. Use `-1` for vanilla.
 - New option `music`. Shuffles all looping music. Includes FRLG tracks and possibly some unused stuff.
 - New option `fanfares`. Shuffles all fanfares. Includes FRLG tracks.
-- New option `move_tutor_moves`. Randomizes the move that move tutors teach (except the Dig tutor).
 - New option `purge_spinners`. Trainers that change which direction they face will do so predictably, and will no longer
 turn to face you when you run.
 - New option `normalize_encounter_rates`. Sets every encounter slot to (almost) equal probability. Does NOT make every

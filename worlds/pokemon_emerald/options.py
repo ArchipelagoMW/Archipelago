@@ -524,11 +524,11 @@ class HmCompatibility(NamedRange):
     }
 
 
-class TmCompatibility(NamedRange):
+class TmTutorCompatibility(NamedRange):
     """
-    Sets the percent chance that a given TM is compatible with a species
+    Sets the percent chance that a given TM or move tutor is compatible with a species
     """
-    display_name = "TM Compatibility"
+    display_name = "TM/Tutor Compatibility"
     default = -1
     range_start = 0
     range_end = 100
@@ -536,25 +536,21 @@ class TmCompatibility(NamedRange):
         "vanilla": -1
     }
 
-class TmMoves(Toggle):
+
+class TmTutorMoves(Toggle):
     """
-    Randomizes the moves taught by TMs
+    Randomizes the moves taught by TMs and move tutors
     """
-    display_name = "TM Moves"
+    display_name = "TM/Tutor Moves"
 
 
 class ReusableTms(Toggle):
     """
     Sets TMs to not break after use (they remain sellable)
+
+    Also sets move tutors to infinite use
     """
     display_name = "Reusable TMs"
-
-
-class MoveTutorMoves(Toggle):
-    """
-    Randomizes the moves taught by move tutors
-    """
-    display_name = "Move Tutor Moves"
 
 
 class MinCatchRate(Range):
@@ -850,11 +846,10 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     level_up_moves: LevelUpMoves
     move_match_type_bias: MoveMatchTypeBias
     move_normal_type_bias: MoveNormalTypeBias
-    tm_compatibility: TmCompatibility
+    tm_tutor_compatibility: TmTutorCompatibility
     hm_compatibility: HmCompatibility
-    tm_moves: TmMoves
+    tm_tutor_moves: TmTutorMoves
     reusable_tms: ReusableTms
-    move_tutor_moves: MoveTutorMoves
     move_blacklist: MoveBlacklist
 
     min_catch_rate: MinCatchRate
