@@ -178,9 +178,6 @@ class SotnWorld(World):
             for r in relic_table:
                 itempool += [self.create_item(r)]
                 added_items += 1
-            for r in prog_relics:
-                itempool += [self.create_item(r)]
-                added_items += 1
             while True:
                 if added_items >= total_location or len(vanilla_list) == 0:
                     break
@@ -188,6 +185,12 @@ class SotnWorld(World):
                 itempool += [self.create_item(item)]
                 added_items += 1
                 vanilla_list.remove(item)
+
+            self.multiworld.early_items[self.player]["Soul of bat"] = 1
+            self.multiworld.early_items[self.player]["Leap stone"] = 1
+            self.multiworld.early_items[self.player]["Gravity boots"] = 1
+            self.multiworld.early_items[self.player]["Alucard sword"] = 1
+            self.multiworld.early_items[self.player]["Alucard mail"] = 1
 
         if difficult == 1:
             itempool += [self.create_item("Life Vessel") for _ in range(32)]
@@ -246,10 +249,13 @@ class SotnWorld(World):
         create_regions(self.multiworld, self.player)
 
     def generate_basic(self) -> None:
+        required = self.options.bosses_need
+        if required > 20:
+            required = 20
         self.multiworld.get_location("RCEN - Kill Dracula", self.player).place_locked_item(
             self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Victory", self.player) and state.has("Boss token", self.player, self.options.bosses_need)
+            state.has("Victory", self.player) and state.has("Boss token", self.player, required)
 
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
