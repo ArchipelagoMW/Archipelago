@@ -1009,6 +1009,14 @@ class PokemonEmeraldWorld(World):
                         ]
                     if should_match_bst:
                         candidates = self.filter_species_by_nearby_bst(candidates, sum(original_species.base_stats))
+                    
+                    player_filtered_candidates = [
+                        species
+                        for species in candidates
+                        if species.species_id not in self.blacklisted_wilds
+                    ]
+                    if len(player_filtered_candidates) > 0:
+                        candidates = player_filtered_candidates
 
                     self.modified_misc_pokemon.append(MiscPokemonData(
                         self.random.choice(candidates).species_id,
