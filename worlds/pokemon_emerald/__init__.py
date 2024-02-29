@@ -1301,7 +1301,7 @@ class PokemonEmeraldWorld(World):
                     for encounter in map.fishing_encounters.slots:
                         species_maps[encounter].add(map.name[4:])
 
-            lines = [f"\t{emerald_data.species[species].label}: {', '.join(maps)}\n"
+            lines = [f"{emerald_data.species[species].label}: {', '.join(maps)}\n"
                      for species, maps in species_maps.items()]
             lines.sort()
             for line in lines:
