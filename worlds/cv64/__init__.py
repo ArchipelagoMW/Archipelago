@@ -7,7 +7,7 @@ from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
 from .locations import CV64Location, get_location_info, verify_locations, get_location_names_to_ids, base_id
 from .entrances import verify_entrances, get_warp_entrances
-from .options import CV64Options
+from .options import CV64Options, CharacterStages, DraculasCondition, SubWeaponShuffle
 from .stages import get_locations_from_stage, get_normal_stage_exits, vanilla_stage_order, \
     shuffle_stages, generate_warps, get_region_names
 from .regions import get_region_info
@@ -83,25 +83,8 @@ class CV64World(World):
 
     web = CV64Web()
 
-    def __init__(self, multiworld: MultiWorld, player: int) -> None:
-        self.active_stage_exits = {}
-        self.active_stage_list = []
-        self.active_warp_list = []
-        self.reinhardt_stages = True
-        self.carrie_stages = True
-        self.branching_stages = False
-        self.starting_stage = rname.forest_of_silence
-
-        self.total_s1s = 0
-        self.s1s_per_warp = 0
-        self.total_s2s = 0
-        self.required_s2s = 0
-        self.drac_condition = 0
-
-        super().__init__(multiworld, player)
-
     @classmethod
-    def stage_assert_generate(cls, world) -> None:
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
@@ -112,8 +95,6 @@ class CV64World(World):
 
         self.total_s1s = self.options.total_special1s.value
         self.s1s_per_warp = self.options.special1s_per_warp.value
-        self.total_s2s = self.options.total_special2s.value
-        self.required_s2s = int(self.options.percent_special2s_required.value / 100 * self.total_s2s)
         self.drac_condition = self.options.draculas_condition.value
 
         # If there are more S1s needed to unlock the whole warp menu than there are S1s in total, drop S1s per warp to
@@ -121,12 +102,28 @@ class CV64World(World):
         while self.s1s_per_warp * 7 > self.total_s1s:
             self.s1s_per_warp -= 1
 
+        # Set the total and required Special2s to 1 if the drac condition is the Crystal, to the specified YAML numbers
+        # if it's Specials, or to 0 if it's None or Bosses. The boss totals will be figured out later.
+        if self.drac_condition == DraculasCondition.option_crystal:
+            self.total_s2s = 1
+            self.required_s2s = 1
+        elif self.drac_condition == DraculasCondition.option_specials:
+            self.total_s2s = self.options.total_special2s.value
+            self.required_s2s = int(self.options.percent_special2s_required.value / 100 * self.total_s2s)
+        else:
+            self.total_s2s = 0
+            self.required_s2s = 0
+
         # Enable/disable character stages and branching paths accordingly
-        if self.options.character_stages.value == self.options.character_stages.option_reinhardt_only:
+        self.reinhardt_stages = True
+        self.carrie_stages = True
+        self.branching_stages = False
+
+        if self.options.character_stages == CharacterStages.option_reinhardt_only:
             self.carrie_stages = False
-        elif self.options.character_stages.value == self.options.character_stages.option_carrie_only:
+        elif self.options.character_stages == CharacterStages.option_carrie_only:
             self.reinhardt_stages = False
-        elif self.options.character_stages.value == self.options.character_stages.option_both:
+        elif self.options.character_stages == CharacterStages.option_both:
             self.branching_stages = True
 
         self.active_stage_exits = get_normal_stage_exits(self)
@@ -134,7 +131,7 @@ class CV64World(World):
         stage_1_blacklist = []
 
         # Prevent Clock Tower from being Stage 1 if more than 4 S1s are needed to warp out of it.
-        if self.s1s_per_warp > 4 and not self.options.multi_hit_breakables.value:
+        if self.s1s_per_warp > 4 and not self.options.multi_hit_breakables:
             stage_1_blacklist.append(rname.clock_tower)
 
         # Shuffle the stages if the option is on.
@@ -142,6 +139,7 @@ class CV64World(World):
             self.active_stage_exits, self.starting_stage, self.active_stage_list = \
                 shuffle_stages(self, stage_1_blacklist)
         else:
+            self.starting_stage = rname.forest_of_silence
             self.active_stage_list = [stage for stage in vanilla_stage_order if stage in self.active_stage_exits]
 
         # Create a list of warps from the active stage list. They are in a random order by default and will never
@@ -149,40 +147,50 @@ class CV64World(World):
         self.active_warp_list = generate_warps(self)
 
     def create_regions(self) -> None:
-        # Create the Menu region.
-        active_regions = {"Menu": Region("Menu", self.player, self.multiworld)}
+        # Add the Menu Region.
+        reg_names = ["Menu"]
 
-        # Create every stage region by checking to see if that stage is active.
-        active_regions.update({name: Region(name, self.player, self.multiworld) for name in
-                               get_region_names(self.active_stage_exits)})
+        # Add every stage Region by checking to see if that stage is active.
+        reg_names.extend([name for name in get_region_names(self.active_stage_exits)])
 
-        # Add the Renon's shop region if shopsanity is on.
-        if self.options.shopsanity.value:
-            active_regions.update({rname.renon: Region(rname.renon, self.player, self.multiworld)})
+        # Add the Renon's shop Region if shopsanity is on.
+        if self.options.shopsanity:
+            reg_names.append(rname.renon)
 
-        # Add the Dracula's chamber (the end) region.
-        active_regions.update({rname.ck_drac_chamber: Region(rname.ck_drac_chamber, self.player, self.multiworld)})
+        # Add the Dracula's chamber (the end) Region.
+        reg_names.append(rname.ck_drac_chamber)
 
-        # Add the locations to the regions.
-        for reg_name in active_regions:
-            reg_locs = get_region_info(reg_name, "locations")
-            if reg_locs is not None:
-                active_regions[reg_name].add_locations(verify_locations(self.options, reg_locs), CV64Location)
+        # Set up the Regions correctly
+        self.multiworld.regions.extend([Region(name, self.player, self.multiworld) for name in reg_names])
 
-        # Set up the regions correctly.
-        for region in active_regions:
-            self.multiworld.regions.append(active_regions[region])
+        # Add the warp Entrances to the Menu Region.
+        self.get_region("Menu").add_exits(get_warp_entrances(self.active_warp_list))
 
-        # Add the warp Entrances to Menu.
-        active_regions["Menu"].add_exits(get_warp_entrances(self.active_warp_list))
+        for reg_name in reg_names:
 
-        # Add the Entrances to the stage regions.
-        for reg_name in active_regions:
-            reg_ents = get_region_info(reg_name, "entrances")
-            if reg_ents is not None:
-                active_regions[reg_name].add_exits(verify_entrances(self.options, reg_ents, self.active_stage_exits))
+            # Add the Locations to all the Regions.
+            loc_names = get_region_info(reg_name, "locations")
+            if loc_names is not None:
+                verified_locs, events = verify_locations(self.options, loc_names)
+                self.get_region(reg_name).add_locations(verified_locs, CV64Location)
 
-    def create_item(self, name: str, force_classification=None) -> Item:
+                # Place event Items on all of their associated Locations.
+                for event_loc in events:
+                    self.get_location(event_loc).place_locked_item(self.create_item(events[event_loc], "progression"))
+                    # If we're looking at a boss kill trophy, increment the total S2s and, if we're not already at the
+                    # set number of required bosses, the total required number. This way, we can prevent gen failures
+                    # should the player set more bosses required than there are total.
+                    if events[event_loc] == iname.trophy:
+                        self.total_s2s += 1
+                        if self.required_s2s < self.options.bosses_required.value:
+                            self.required_s2s += 1
+
+            # Add the Entrances to all the Regions
+            ent_names = get_region_info(reg_name, "entrances")
+            if ent_names is not None:
+                self.get_region(reg_name).add_exits(verify_entrances(self.options, ent_names, self.active_stage_exits))
+
+    def create_item(self, name: str, force_classification: typing.Optional[str] = None) -> Item:
         if force_classification is not None:
             classification = getattr(ItemClassification, force_classification)
         else:
@@ -200,38 +208,11 @@ class CV64World(World):
         item_counts = get_item_counts(self)
 
         # Set up the items correctly
-        for classification in item_counts:
-            for item in item_counts[classification]:
-                self.multiworld.itempool += [self.create_item(item, classification)
-                                             for _ in range(item_counts[classification][item])]
+        self.multiworld.itempool += [self.create_item(item, classification) for classification in item_counts for item
+                                     in item_counts[classification] for _ in range(item_counts[classification][item])]
 
     def set_rules(self) -> None:
-        active_regions = self.multiworld.get_regions(self.player)
-
-        # Set the required Special2s to the number of available bosses or crystal events returned if Special2s
-        # are not the goal.
-        if self.options.draculas_condition == self.options.draculas_condition.option_crystal:
-            self.total_s2s = 1
-            self.required_s2s = 1
-        elif self.options.draculas_condition != self.options.draculas_condition.option_specials:
-            self.total_s2s = 0
-            self.required_s2s = 0
-
-        for region in active_regions:
-            # Place event items where they should be.
-            for loc in region.locations:
-                if loc.address is None:
-                    event_item = get_location_info(loc.name, "event")
-                    loc.place_locked_item(self.create_item(event_item, "progression"))
-                    # If we're looking at a boss kill trophy, increment the total S2s and, if we're not already at the
-                    # set number of required bosses, the total required number. This way, we can prevent gen failures
-                    # should the player set more bosses required than there are total.
-                    if event_item == iname.trophy:
-                        self.total_s2s += 1
-                        if self.required_s2s < self.options.bosses_required.value:
-                            self.required_s2s += 1
-
-        # Set up the rules properly.
+        # Set all the Entrance rules properly.
         CV64Rules(self).set_cv64_rules()
 
     def pre_fill(self) -> None:
@@ -243,12 +224,12 @@ class CV64World(World):
             if self.s1s_per_warp > 3:
                 self.multiworld.local_early_items[self.player][iname.science_key2] = 1
         elif self.starting_stage == rname.clock_tower:
-            if (self.s1s_per_warp > 2 and not self.options.multi_hit_breakables.value) or \
-                    (self.s1s_per_warp > 8 and self.options.multi_hit_breakables.value):
+            if (self.s1s_per_warp > 2 and not self.options.multi_hit_breakables) or \
+                    (self.s1s_per_warp > 8 and self.options.multi_hit_breakables):
                 self.multiworld.local_early_items[self.player][iname.clocktower_key1] = 1
         elif self.starting_stage == rname.castle_wall:
-            if self.s1s_per_warp > 5 and not self.options.hard_logic.value and \
-                    not self.options.multi_hit_breakables.value:
+            if self.s1s_per_warp > 5 and not self.options.hard_logic and \
+                    not self.options.multi_hit_breakables:
                 self.multiworld.local_early_items[self.player][iname.left_tower_key] = 1
 
     def generate_output(self, output_directory: str) -> None:
@@ -258,26 +239,26 @@ class CV64World(World):
         offset_data, shop_name_list, shop_colors_list, shop_desc_list = \
             get_location_data(self, active_locations)
         # Shop prices
-        if self.options.shop_prices.value:
+        if self.options.shop_prices:
             offset_data.update(randomize_shop_prices(self))
         # Map lighting
-        if self.options.map_lighting.value:
+        if self.options.map_lighting:
             offset_data.update(randomize_lighting(self))
         # Sub-weapons
-        if self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_own_pool:
+        if self.options.sub_weapon_shuffle == SubWeaponShuffle.option_own_pool:
             offset_data.update(shuffle_sub_weapons(self))
-        elif self.options.sub_weapon_shuffle.value == self.options.sub_weapon_shuffle.option_anywhere:
+        elif self.options.sub_weapon_shuffle == SubWeaponShuffle.option_anywhere:
             offset_data.update(rom_sub_weapon_flags)
         # Empty breakables
-        if self.options.empty_breakables.value:
+        if self.options.empty_breakables:
             offset_data.update(rom_empty_breakables_flags)
         # Music
-        if self.options.background_music.value:
+        if self.options.background_music:
             offset_data.update(randomize_music(self))
         # Loading zones
         offset_data.update(get_loading_zone_bytes(self.options, self.starting_stage, self.active_stage_exits))
         # Countdown
-        if self.options.countdown.value:
+        if self.options.countdown:
             offset_data.update(get_countdown_numbers(self.options, active_locations))
         # Start Inventory
         offset_data.update(get_start_inventory_data(self.player, self.options,
@@ -301,7 +282,7 @@ class CV64World(World):
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         # Attach each location's stage's position to its hint information if Stage Shuffle is on.
-        if self.options.stage_shuffle.value:
+        if self.options.stage_shuffle:
             stage_pos_data = {}
             for loc in list(self.multiworld.get_locations(self.player)):
                 stage = get_region_info(loc.parent_region.name, "stage")
@@ -314,6 +295,7 @@ class CV64World(World):
             hint_data[self.player] = stage_pos_data
 
     def modify_multidata(self, multidata: typing.Dict[str, typing.Any]):
+        # Put the player's unique authentication in connect_names.
         multidata["connect_names"][base64.b64encode(self.auth).decode("ascii")] = \
             multidata["connect_names"][self.multiworld.player_name[self.player]]
 

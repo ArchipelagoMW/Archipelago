@@ -514,6 +514,4 @@ region_info = {
 
 
 def get_region_info(region: str, info: str) -> Union[str, List[str], None]:
-    if info in region_info[region]:
-        return region_info[region][info]
-    return None
+    return region_info[region].get(info, None)

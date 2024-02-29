@@ -102,9 +102,7 @@ stage_connection_types = {"prev": "end region",
 
 
 def get_entrance_info(entrance: str, info: str) -> Union[str, Tuple[str, str], List[str], None]:
-    if info in entrance_info[entrance]:
-        return entrance_info[entrance][info]
-    return None
+    return entrance_info[entrance].get(info, None)
 
 
 def get_warp_entrances(active_warp_list: List[str]) -> Dict[str, str]:
@@ -136,7 +134,7 @@ def verify_entrances(options: CV64Options, entrances: List[str],
         if not add_it:
             continue
 
-        # Add the Entrance to the verified entrances if the above check passes.
+        # Add the Entrance to the verified Entrances if the above check passes.
         connection = get_entrance_info(ent_name, "connection")
 
         # If the Entrance is a connection to a different stage, get the corresponding other stage Region.

@@ -1,8 +1,8 @@
 from BaseClasses import Location
 from .data import lname, iname
-from .options import CV64Options
+from .options import CV64Options, SubWeaponShuffle, DraculasCondition, RenonFightCondition, VincentFightCondition
 
-from typing import Dict, Optional, Union, List
+from typing import Dict, Optional, Union, List, Tuple
 
 base_id = 0xC64000
 
@@ -649,20 +649,18 @@ location_info = {
 
 add_conds = {"carrie":  ("carrie_logic", True, True),
              "liz":     ("lizard_locker_items", True, True),
-             "sub":     ("sub_weapon_shuffle", 2, True),
+             "sub":     ("sub_weapon_shuffle", SubWeaponShuffle.option_anywhere, True),
              "3hb":     ("multi_hit_breakables", True, True),
              "empty":   ("empty_breakables", True, True),
              "shop":    ("shopsanity", True, True),
-             "crystal": ("draculas_condition", 1, True),
-             "boss":    ("draculas_condition", 2, True),
-             "renon":   ("renon_fight_condition", 0, False),
-             "vincent": ("vincent_fight_condition", 0, False)}
+             "crystal": ("draculas_condition", DraculasCondition.option_crystal, True),
+             "boss":    ("draculas_condition", DraculasCondition.option_bosses, True),
+             "renon":   ("renon_fight_condition", RenonFightCondition.option_never, False),
+             "vincent": ("vincent_fight_condition", VincentFightCondition.option_never, False)}
 
 
 def get_location_info(location: str, info: str) -> Union[int, str, List[str], None]:
-    if info in location_info[location]:
-        return location_info[location][info]
-    return None
+    return location_info[location].get(info, None)
 
 
 def get_location_names_to_ids() -> Dict[str, int]:
@@ -670,9 +668,10 @@ def get_location_names_to_ids() -> Dict[str, int]:
             is not None}
 
 
-def verify_locations(options: CV64Options, locations: List[str]) -> Dict[str, Optional[int]]:
+def verify_locations(options: CV64Options, locations: List[str]) -> Tuple[Dict[str, Optional[int]], Dict[str, str]]:
 
     verified_locations = {}
+    events = {}
 
     for loc in locations:
         loc_add_conds = get_location_info(loc, "add conds")
@@ -688,9 +687,13 @@ def verify_locations(options: CV64Options, locations: List[str]) -> Dict[str, Op
         if not add_it:
             continue
 
-        # Add the location to the verified locations if the above check passes.
-        if loc_code is not None:
+        # Add the location to the verified Locations if the above check passes.
+        # If we are looking at an event Location, add its associated event Item to the events' dict.
+        # Otherwise, add the base_id to the Location's code.
+        if loc_code is None:
+            events[loc] = get_location_info(loc, "event")
+        else:
             loc_code += base_id
         verified_locations.update({loc: loc_code})
 
-    return verified_locations
+    return verified_locations, events

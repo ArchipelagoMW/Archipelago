@@ -15,6 +15,8 @@ from .stages import get_stage_info
 from .text import cv64_string_to_bytearray, cv64_text_truncate, cv64_text_wrap
 from .aesthetics import renon_item_dialogue, get_item_text_color
 from .locations import get_location_info
+from .options import CharacterStages, VincentFightCondition, RenonFightCondition, PostBehemothBoss, RoomOfClocksBoss, \
+    BadEndingCondition, DeathLink, DraculasCondition, InvisibleItems, Countdown, PantherDash
 from settings import get_settings
 
 if TYPE_CHECKING:
@@ -137,9 +139,9 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Fix both Castle Center elevator bridges for both characters unless enabling only one character's stages. At which
     # point one bridge will be always broken and one always repaired instead.
-    if options.character_stages.value == options.character_stages.option_reinhardt_only:
+    if options.character_stages == CharacterStages.option_reinhardt_only:
         rom.write_int32(0x6CEAA0, 0x240B0000)  # ADDIU T3, R0, 0x0000
-    elif options.character_stages.value == options.character_stages.option_carrie_only == 3:
+    elif options.character_stages == CharacterStages.option_carrie_only:
         rom.write_int32(0x6CEAA0, 0x240B0001)  # ADDIU T3, R0, 0x0001
     else:
         rom.write_int32(0x6CEAA0, 0x240B0001)  # ADDIU T3, R0, 0x0001
@@ -237,17 +239,17 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFC2E0, patches.boss_save_stopper)
 
     # Disable or guarantee vampire Vincent's fight
-    if options.vincent_fight_condition.value == options.vincent_fight_condition.option_never:
+    if options.vincent_fight_condition == VincentFightCondition.option_never:
         rom.write_int32(0xAACC0, 0x24010001)  # ADDIU AT, R0, 0x0001
         rom.write_int32(0xAACE0, 0x24180000)  # ADDIU T8, R0, 0x0000
-    elif options.vincent_fight_condition.value == options.vincent_fight_condition.option_always:
+    elif options.vincent_fight_condition == VincentFightCondition.option_always:
         rom.write_int32(0xAACE0, 0x24180010)  # ADDIU T8, R0, 0x0010
     else:
         rom.write_int32(0xAACE0, 0x24180000)  # ADDIU T8, R0, 0x0000
 
     # Disable or guarantee Renon's fight
     rom.write_int32(0xAACB4, 0x080FF1A4)  # J 0x803FC690
-    if options.renon_fight_condition.value == options.renon_fight_condition.option_never:
+    if options.renon_fight_condition == RenonFightCondition.option_never:
         rom.write_byte(0xB804F0, 0x00)
         rom.write_byte(0xB80632, 0x00)
         rom.write_byte(0xB807E3, 0x00)
@@ -255,7 +257,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_byte(0xB816BD, 0xB8)
         rom.write_byte(0xB817CF, 0x00)
         rom.write_int32s(0xBFC690, patches.renon_cutscene_checker_jr)
-    elif options.renon_fight_condition.value == options.renon_fight_condition.option_always:
+    elif options.renon_fight_condition == RenonFightCondition.option_always:
         rom.write_byte(0xB804F0, 0x0C)
         rom.write_byte(0xB80632, 0x0C)
         rom.write_byte(0xB807E3, 0x0C)
@@ -270,9 +272,9 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32(0xBD8B4, 0x00000000)
 
     # Disable or guarantee the Bad Ending
-    if options.bad_ending_condition.value == options.bad_ending_condition.option_never:
+    if options.bad_ending_condition == BadEndingCondition.option_never:
         rom.write_int32(0xAEE5C6, 0x3C0A0000)  # LUI  T2, 0x0000
-    elif options.bad_ending_condition.value == options.bad_ending_condition.option_always:
+    elif options.bad_ending_condition == BadEndingCondition.option_always:
         rom.write_int32(0xAEE5C6, 0x3C0A0040)  # LUI  T2, 0x0040
 
     # Play Castle Keep's song if teleporting in front of Dracula's door outside the escape sequence
@@ -280,19 +282,19 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFC4B8, patches.ck_door_music_player)
 
     # Increase item capacity to 100 if "Increase Item Limit" is turned on
-    if options.increase_item_limit.value:
+    if options.increase_item_limit:
         rom.write_byte(0xBF30B, 0x64)  # Most items
         rom.write_byte(0xBF3F7, 0x64)  # Sun/Moon cards
     rom.write_byte(0xBF353, 0x64)  # Keys (increase regardless)
 
     # Change the item healing values if "Nerf Healing" is turned on
-    if options.nerf_healing_items.value:
+    if options.nerf_healing_items:
         rom.write_byte(0xB56371, 0x50)  # Healing kit   (100 -> 80)
         rom.write_byte(0xB56374, 0x32)  # Roast beef    ( 80 -> 50)
         rom.write_byte(0xB56377, 0x19)  # Roast chicken ( 50 -> 25)
 
     # Disable loading zone healing if turned off
-    if not options.loading_zone_heals.value:
+    if not options.loading_zone_heals:
         rom.write_byte(0xD99A5, 0x00)  # Skip all loading zone checks
         rom.write_byte(0xA9DFFB, 0x40)  # Disable free heal from King Skeleton by reading the unused magic meter value
 
@@ -359,7 +361,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFC2C0, patches.elevator_flag_checker)
 
     # Disable time restrictions
-    if options.disable_time_restrictions.value:
+    if options.disable_time_restrictions:
         # Fountain
         rom.write_int32(0x6C2340, 0x00000000)  # NOP
         rom.write_int32(0x6C257C, 0x10000023)  # B [forward 0x23]
@@ -383,11 +385,11 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFE190, patches.subweapon_surface_checker)
 
     # Make received DeathLinks blow you to smithereens instead of kill you normally.
-    if options.death_link.value == options.death_link.option_explosive:
+    if options.death_link == DeathLink.option_explosive:
         rom.write_byte(0xBFBFDE, 0x01)
 
     # Set the DeathLink ROM flag if it's on at all.
-    if options.death_link.value != options.death_link.option_off:
+    if options.death_link != DeathLink.option_off:
         rom.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
         rom.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
 
@@ -430,7 +432,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_bytes(0xBFCC48, [0xA0, 0x00, 0xFF, 0xFF, 0xA0, 0x01, 0xFF, 0xFF, 0xA0, 0x02, 0xFF, 0xFF, 0xA0, 0x03, 0xFF,
                                0xFF, 0xA0, 0x04, 0xFF, 0xFF, 0xA0, 0x05, 0xFF, 0xFF, 0xA0, 0x06, 0xFF, 0xFF, 0xA0, 0x07,
                                0xFF, 0xFF, 0xA0, 0x08, 0xFF, 0xFF, 0xA0, 0x09])
-    if options.draculas_condition.value == options.draculas_condition.option_crystal:
+    if options.draculas_condition == DraculasCondition.option_crystal:
         rom.write_int32(0x6C8A54, 0x0C0FF0C1)  # JAL 0x803FC304
         rom.write_int32s(0xBFC304, patches.crystal_special2_giver)
         rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
@@ -441,7 +443,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         special2_text = "The crystal is on!\n" \
                         "Time to teach the old man\n" \
                         "a lesson!"
-    elif options.draculas_condition.value == options.draculas_condition.option_bosses:
+    elif options.draculas_condition == DraculasCondition.option_bosses:
         rom.write_int32(0xBBD50, 0x080FF18C)  # J	0x803FC630
         rom.write_int32s(0xBFC630, patches.boss_special2_giver)
         rom.write_int32s(0xBFC55C, patches.werebull_flag_unsetter_special2_electric_boogaloo)
@@ -453,7 +455,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         special2_text = f"Proof you killed a powerful\n" \
                         f"Night Creature. Earn {required_s2s}/{total_s2s}\n" \
                         f"to battle Dracula."
-    elif options.draculas_condition.value == options.draculas_condition.option_specials:
+    elif options.draculas_condition == DraculasCondition.option_specials:
         special2_name = "Special2"
         rom.write_bytes(0xBFCC6E, cv64_string_to_bytearray(f"It won't budge!\n"
                                                            f"You'll need to find\n"
@@ -540,7 +542,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_byte(0x9B518F, 0x01)
 
     # Slightly move some once-invisible freestanding items to be more visible
-    if options.invisible_items.value == options.invisible_items.option_reveal_all:
+    if options.invisible_items == InvisibleItems.option_reveal_all:
         rom.write_byte(0x7C7F95, 0xEF)  # Forest dirge maiden statue
         rom.write_byte(0x7C7FA8, 0xAB)  # Forest werewolf statue
         rom.write_byte(0x8099C4, 0x8C)  # Villa courtyard tombstone
@@ -562,32 +564,32 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_byte(0x10CE9F, 0x01)
 
     # Change the CC post-Behemoth boss depending on the option for Post-Behemoth Boss
-    if options.post_behemoth_boss.value == options.post_behemoth_boss.option_inverted:
+    if options.post_behemoth_boss == PostBehemothBoss.option_inverted:
         rom.write_byte(0xEEDAD, 0x02)
         rom.write_byte(0xEEDD9, 0x01)
-    elif options.post_behemoth_boss.value == options.post_behemoth_boss.option_always_rosa:
+    elif options.post_behemoth_boss == PostBehemothBoss.option_always_rosa:
         rom.write_byte(0xEEDAD, 0x00)
         rom.write_byte(0xEEDD9, 0x03)
         # Put both on the same flag so changing character won't trigger a rematch with the same boss.
         rom.write_byte(0xEED8B, 0x40)
-    elif options.post_behemoth_boss.value == options.post_behemoth_boss.option_always_camilla:
+    elif options.post_behemoth_boss == PostBehemothBoss.option_always_camilla:
         rom.write_byte(0xEEDAD, 0x03)
         rom.write_byte(0xEEDD9, 0x00)
         rom.write_byte(0xEED8B, 0x40)
 
     # Change the RoC boss depending on the option for Room of Clocks Boss
-    if options.room_of_clocks_boss.value == options.room_of_clocks_boss.option_inverted:
+    if options.room_of_clocks_boss == RoomOfClocksBoss.option_inverted:
         rom.write_byte(0x109FB3, 0x56)
         rom.write_byte(0x109FBF, 0x44)
         rom.write_byte(0xD9D44, 0x14)
         rom.write_byte(0xD9D4C, 0x14)
-    elif options.room_of_clocks_boss.value == options.room_of_clocks_boss.option_always_death:
+    elif options.room_of_clocks_boss == RoomOfClocksBoss.option_always_death:
         rom.write_byte(0x109FBF, 0x44)
         rom.write_byte(0xD9D45, 0x00)
         # Put both on the same flag so changing character won't trigger a rematch with the same boss.
         rom.write_byte(0x109FB7, 0x90)
         rom.write_byte(0x109FC3, 0x90)
-    elif options.room_of_clocks_boss.value == options.room_of_clocks_boss.option_always_actrise:
+    elif options.room_of_clocks_boss == RoomOfClocksBoss.option_always_actrise:
         rom.write_byte(0x109FB3, 0x56)
         rom.write_int32(0xD9D44, 0x00000000)
         rom.write_byte(0xD9D4D, 0x00)
@@ -599,7 +601,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32(0xB318B4, 0x240E0001)  # ADDIU	T6, R0, 0x0001
 
     # Tunnel gondola skip
-    if options.skip_gondolas.value:
+    if options.skip_gondolas:
         rom.write_int32(0x6C5F58, 0x080FF7D0)  # J 0x803FDF40
         rom.write_int32s(0xBFDF40, patches.gondola_skipper)
         # New gondola transfer point candle coordinates
@@ -607,7 +609,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_bytes(0x86D824, [0x27, 0x01, 0x10, 0xF7, 0xA0])
 
     # Waterway brick platforms skip
-    if options.skip_waterway_blocks.value:
+    if options.skip_waterway_blocks:
         rom.write_int32(0x6C7E2C, 0x00000000)  # NOP
 
     # Ambience silencing fix
@@ -627,21 +629,21 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFE200, patches.coffin_cutscene_skipper)
 
     # Increase shimmy speed
-    if options.increase_shimmy_speed.value:
+    if options.increase_shimmy_speed:
         rom.write_byte(0xA4241, 0x5A)
 
     # Disable landing fall damage
-    if options.fall_guard.value:
+    if options.fall_guard:
         rom.write_byte(0x27B23, 0x00)
 
     # Enable the unused film reel effect on all cutscenes
-    if options.cinematic_experience.value:
+    if options.cinematic_experience:
         rom.write_int32(0xAA33C, 0x240A0001)  # ADDIU T2, R0, 0x0001
         rom.write_byte(0xAA34B, 0x0C)
         rom.write_int32(0xAA4C4, 0x24090001)  # ADDIU T1, R0, 0x0001
 
     # Permanent PowerUp stuff
-    if options.permanent_powerups.value:
+    if options.permanent_powerups:
         # Make receiving PowerUps increase the unused menu PowerUp counter instead of the one outside the save struct
         rom.write_int32(0xBF2EC, 0x806B619B)  # LB	T3, 0x619B (V1)
         rom.write_int32(0xBFC5BC, 0xA06C619B)  # SB	T4, 0x619B (V1)
@@ -660,14 +662,14 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         # Rename the PowerUp to "PermaUp"
         rom.write_bytes(0xEFDEE, cv64_string_to_bytearray("PermaUp"))
         # Replace the PowerUp in the Forest Special1 Bridge 3HB rock with an L jewel if 3HBs aren't randomized
-        if not options.multi_hit_breakables.value:
+        if not options.multi_hit_breakables:
             rom.write_byte(0x10C7A1, 0x03)
     # Change the appearance of the Pot-Pourri to that of a larger PowerUp regardless of the above setting, so other
     # game PermaUps are distinguishable.
     rom.write_int32s(0xEE558, [0x06005F08, 0x3FB00000, 0xFFFFFF00])
 
     # Write the randomized (or disabled) music ID list and its associated code
-    if options.background_music.value:
+    if options.background_music:
         rom.write_int32(0x14588, 0x08060D60)  # J 0x80183580
         rom.write_int32(0x14590, 0x00000000)  # NOP
         rom.write_int32s(0x106770, patches.music_modifier)
@@ -675,22 +677,34 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_int32s(0xBFCDB8, patches.music_comparer_modifier)
 
     # Enable storing item flags anywhere and changing the item model/visibility on any item instance.
-    rom.write_int32s(0xA857C, [0x080FF38F,  # J	    0x803FCE3C
+    rom.write_int32s(0xA857C, [0x080FF38F,   # J     0x803FCE3C
                                0x94D90038])  # LHU   T9, 0x0038 (A2)
     rom.write_int32s(0xBFCE3C, patches.item_customizer)
-    rom.write_int32s(0xA86A0, [0x0C0FF3AF,  # JAL   0x803FCEBC
+    rom.write_int32s(0xA86A0, [0x0C0FF3AF,   # JAL   0x803FCEBC
                                0x95C40002])  # LHU   A0, 0x0002 (T6)
     rom.write_int32s(0xBFCEBC, patches.item_appearance_switcher)
-    rom.write_int32s(0xA8728, [0x0C0FF3B8,  # JAL   0x803FCEE4
+    rom.write_int32s(0xA8728, [0x0C0FF3B8,   # JAL   0x803FCEE4
                                0x01396021])  # ADDU  T4, T1, T9
     rom.write_int32s(0xBFCEE4, patches.item_model_visibility_switcher)
-    rom.write_int32s(0xA8A04, [0x0C0FF3C2,  # JAL   0x803FCF08
+    rom.write_int32s(0xA8A04, [0x0C0FF3C2,   # JAL   0x803FCF08
                                0x018B6021])  # ADDU  T4, T4, T3
     rom.write_int32s(0xBFCF08, patches.item_shine_visibility_switcher)
 
+    # Make Axes and Crosses in AP Locations drop to their correct height, and make items with changed appearances spin
+    # their correct speed.
+    rom.write_int32s(0xE649C, [0x0C0FFA03,   # JAL   0x803FE80C
+                               0x956C0002])  # LHU   T4, 0x0002 (T3)
+    rom.write_int32s(0xA8B08, [0x080FFA0C,   # J     0x803FE830
+                               0x960A0038])  # LHU   T2, 0x0038 (S0)
+    rom.write_int32s(0xE8584, [0x0C0FFA21,   # JAL   0x803FE884
+                               0x95D80000])  # LHU   T8, 0x0000 (T6)
+    rom.write_int32s(0xE7AF0, [0x0C0FFA2A,   # JAL   0x803FE8A8
+                               0x958D0000])  # LHU   T5, 0x0000 (T4)
+    rom.write_int32s(0xBFE7DC, patches.item_drop_spin_corrector)
+
     # Disable the 3HBs checking and setting flags when breaking them and enable their individual items checking and
     # setting flags instead.
-    if options.multi_hit_breakables.value:
+    if options.multi_hit_breakables:
         rom.write_int32(0xE87F8, 0x00000000)  # NOP
         rom.write_int16(0xE836C, 0x1000)
         rom.write_int32(0xE8B40, 0x0C0FF3CD)  # JAL 0x803FCF34
@@ -728,7 +742,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32(0xBFD058, 0x0801AEB5)  # J 0x8006BAD4
 
     # Everything related to dropping the previous sub-weapon
-    if options.drop_previous_sub_weapon.value:
+    if options.drop_previous_sub_weapon:
         rom.write_int32(0xBFD034, 0x080FF3FF)  # J 0x803FCFFC
         rom.write_int32(0xBFC190, 0x080FF3F2)  # J 0x803FCFC8
         rom.write_int32s(0xBFCFC4, patches.prev_subweapon_spawn_checker)
@@ -736,7 +750,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_int32s(0xBFD060, patches.prev_subweapon_dropper)
 
     # Everything related to the Countdown counter
-    if options.countdown.value:
+    if options.countdown:
         rom.write_int32(0xBFD03C, 0x080FF9DC)  # J 0x803FE770
         rom.write_int32(0xD5D48, 0x080FF4EC)  # J 0x803FD3B0
         rom.write_int32s(0xBFD3B0, patches.countdown_number_displayer)
@@ -751,7 +765,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_int32(0xBC4C4, 0x080FF5E6)  # J 0x803FD798
         rom.write_int32(0x19844, 0x080FF602)  # J 0x803FD808
         # If the option is set to "all locations", count it down no matter what the item is.
-        if options.countdown.value == options.countdown.option_all_locations:
+        if options.countdown == Countdown.option_all_locations:
             rom.write_int32s(0xBFD71C, [0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101,
                                         0x01010101, 0x01010101, 0x01010101, 0x01010101, 0x01010101])
         else:
@@ -777,7 +791,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
     rom.write_int32s(0xBFD828, patches.new_game_extras)
 
     # Everything related to shopsanity
-    if options.shopsanity.value:
+    if options.shopsanity:
         rom.write_byte(0xBFBFDF, 0x01)
         rom.write_bytes(0x103868, cv64_string_to_bytearray("Not obtained. "))
         rom.write_int32s(0xBFD8D0, patches.shopsanity_stuff)
@@ -803,7 +817,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_bytes(0x1A800, shopsanity_desc_text)
 
     # Panther Dash running
-    if options.panther_dash.value:
+    if options.panther_dash:
         rom.write_int32(0x69C8C4, 0x0C0FF77E)  # JAL   0x803FDDF8
         rom.write_int32(0x6AA228, 0x0C0FF77E)  # JAL   0x803FDDF8
         rom.write_int32s(0x69C86C, [0x0C0FF78E,  # JAL   0x803FDE38
@@ -814,7 +828,7 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
         rom.write_int32(0x6AACE0, 0x0C0FF79E)  # JAL   0x803FDE78
         rom.write_int32s(0xBFDDF8, patches.panther_dash)
         # Jump prevention
-        if options.panther_dash.value == options.panther_dash.option_jumpless:
+        if options.panther_dash == PantherDash.option_jumpless:
             rom.write_int32(0xBFDE2C, 0x080FF7BB)  # J     0x803FDEEC
             rom.write_int32(0xBFD044, 0x080FF7B1)  # J     0x803FDEC4
             rom.write_int32s(0x69B630, [0x0C0FF7C6,  # JAL   0x803FDF18
@@ -838,22 +852,6 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
             rom.write_int24(offset, item_id)
         else:
             rom.write_int32(offset, item_id)
-
-    # Extract the item models file, decompress it, append the AP icons, compress it back, re-insert it.
-    items_file = lzkn64.decompress_buffer(rom.read_bytes(0x9C5310, 0x3D28))
-    compressed_file = lzkn64.compress_buffer(items_file[0:0x69B6] + pkgutil.get_data(__name__, "data/ap_icons.bin"))
-    rom.write_bytes(0xBB2D88, compressed_file)
-    # Update the items' Nisitenma-Ichigo table entry to point to the new file's start and end addresses in the ROM.
-    rom.write_int32s(0x95F04, [0x80BB2D88, 0x00BB2D88 + len(compressed_file)])
-    # Update the items' decompressed file size tables with the new file's decompressed file size.
-    rom.write_int16(0x95706, 0x7BF0)
-    rom.write_int16(0x104CCE, 0x7BF0)
-    # Update the Wooden Stake and Roses' item appearance settings table to point to the Archipelago item graphics.
-    rom.write_int16(0xEE5BA, 0x7B38)
-    rom.write_int16(0xEE5CA, 0x7280)
-    # Change the items' sizes. The progression one will be larger than the non-progression one.
-    rom.write_int32(0xEE5BC, 0x3FF00000)
-    rom.write_int32(0xEE5CC, 0x3FA00000)
 
     # Write the secondary name the client will use to distinguish a vanilla ROM from an AP one.
     rom.write_bytes(0xBFBFD0, "ARCHIPELAGO1".encode("utf-8"))
@@ -908,6 +906,27 @@ class CV64DeltaPatch(APDeltaPatch):
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
+
+    def patch(self, target: str):
+        super().patch(target)
+        rom = LocalRom(target)
+
+        # Extract the item models file, decompress it, append the AP icons, compress it back, re-insert it.
+        items_file = lzkn64.decompress_buffer(rom.read_bytes(0x9C5310, 0x3D28))
+        compressed_file = lzkn64.compress_buffer(items_file[0:0x69B6] + pkgutil.get_data(__name__, "data/ap_icons.bin"))
+        rom.write_bytes(0xBB2D88, compressed_file)
+        # Update the items' Nisitenma-Ichigo table entry to point to the new file's start and end addresses in the ROM.
+        rom.write_int32s(0x95F04, [0x80BB2D88, 0x00BB2D88 + len(compressed_file)])
+        # Update the items' decompressed file size tables with the new file's decompressed file size.
+        rom.write_int16(0x95706, 0x7BF0)
+        rom.write_int16(0x104CCE, 0x7BF0)
+        # Update the Wooden Stake and Roses' item appearance settings table to point to the Archipelago item graphics.
+        rom.write_int16(0xEE5BA, 0x7B38)
+        rom.write_int16(0xEE5CA, 0x7280)
+        # Change the items' sizes. The progression one will be larger than the non-progression one.
+        rom.write_int32(0xEE5BC, 0x3FF00000)
+        rom.write_int32(0xEE5CC, 0x3FA00000)
+        rom.write_to_file(target)
 
 
 def get_base_rom_bytes(file_name: str = "") -> bytes:

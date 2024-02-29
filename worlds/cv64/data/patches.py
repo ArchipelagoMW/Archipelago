@@ -2748,3 +2748,76 @@ countdown_demo_hider = [
     0x24050000,  # ADDIU A1, R0, 0x0000
     0x080FF411,  # J     0x803FD044
 ]
+
+item_drop_spin_corrector = [
+    # Corrects how far AP-placed items drop and how fast they spin based on what appearance they take.
+
+    # Pickup actor ID table for the item appearance IDs to reference.
+    0x01020304,
+    0x05060708,
+    0x090A0B0C,
+    0x100D0E0F,
+    0x11121314,
+    0x15161718,
+    0x191D1E1F,
+    0x20212223,
+    0x24252627,
+    0x28291A1B,
+    0x1C000000,
+    0x00000000,
+    # Makes AP-placed items in 1-hit breakables drop to their correct, dev-intended height depending on what appearance
+    # we gave it. Primarily intended for the Axe and the Cross to ensure they don't land half buried in the ground.
+    0x000C4202,  # SRL   T0, T4, 8
+    0x318C00FF,  # ANDI  T4, T4, 0x00FF
+    0x11000003,  # BEQZ  T0,     [forward 0x03]
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDU  T1, T1, T0
+    0x912CE7DB,  # LBU   T4, 0xE7D8
+    0x03E00008,  # JR    RA
+    0xAC600000,  # SW    R0, 0x0000 (V1)
+    0x00000000,  # NOP
+    # Makes items with changed appearances spin at their correct speed. Unless it's a local Ice Trap, wherein it will
+    # instead spin at the speed it isn't supposed to.
+    0x920B0040,  # LBU   T3, 0x0040 (S0)
+    0x1160000D,  # BEQZ  T3,     [forward 0x0D]
+    0x3C0C8040,  # LUI   T4, 0x8040
+    0x016C6021,  # ADDU  T4, T3, T4
+    0x918CE7DB,  # LBU   T4, 0xE7DB (T4)
+    0x258CFFFF,  # ADDIU T4, T4, 0xFFFF
+    0x240D0011,  # ADDIU T5, R0, 0x0011
+    0x154D0006,  # BNE   T2, T5, [forward 0x06]
+    0x29AE0006,  # SLTI  T6, T5, 0x0006
+    0x240A0001,  # ADDIU T2, R0, 0x0001
+    0x55C00001,  # BNEZL T6,     [forward 0x01]
+    0x240A0007,  # ADDIU T2, R0, 0x0007
+    0x10000002,  # B             [forward 0x02]
+    0x00000000,  # NOP
+    0x258A0000,  # ADDIU T2, T4, 0x0000
+    0x08049648,  # J     0x80125920
+    0x3C028017,  # LUI   V0, 0x8017
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    0x00000000,
+    # Makes AP-placed items in 3-hit breakables drop to their correct, dev-intended height depending on what appearance
+    # we gave it.
+    0x00184202,  # SRL   T0, T8, 8
+    0x331800FF,  # ANDI  T8, T8, 0x00FF
+    0x11000003,  # BEQZ  T0,     [forward 0x03]
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDU  T1, T1, T0
+    0x9138E7DB,  # LBU   T8, 0xE7D8
+    0x03E00008,  # JR    RA
+    0xAC60FFD8,  # SW    R0, 0xFFD8 (V1)
+    0x00000000,
+    # Makes AP-placed items in the Villa chandelier drop to their correct, dev-intended height depending on what
+    # appearance we gave it. (why must this singular breakable be such a problem child with its own code? :/)
+    0x000D4202,  # SRL   T0, T5, 8
+    0x31AD00FF,  # ANDI  T5, T5, 0x00FF
+    0x11000003,  # BEQZ  T0,     [forward 0x03]
+    0x3C098040,  # LUI   T1, 0x8040
+    0x01284821,  # ADDU  T1, T1, T0
+    0x912DE7DB,  # LBU   T5, 0xE7D8
+    0x03E00008,  # JR    RA
+    0xAC60FFD8,  # SW    R0, 0xFFD8 (V1)
+]

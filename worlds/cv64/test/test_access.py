@@ -7,7 +7,7 @@ class WarpTest(CV64TestBase):
         "total_special1s": 21
     }
 
-    def testWarps(self) -> None:
+    def test_warps(self) -> None:
         for i in range(1, 8):
             self.assertFalse(self.can_reach_entrance(f"Warp {i}"))
             self.collect([self.get_item_by_name("Special1")] * 2)
@@ -22,7 +22,7 @@ class CastleWallTest(CV64TestBase):
         "starting_stage": 1
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance(f"Left Tower door"))
         self.collect([self.get_item_by_name("Left Tower Key")] * 1)
         self.assertTrue(self.can_reach_entrance(f"Left Tower door"))
@@ -34,7 +34,7 @@ class VillaTest(CV64TestBase):
         "starting_stage": 2
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance("To Storeroom door"))
         self.collect([self.get_item_by_name("Storeroom Key")] * 1)
         self.assertTrue(self.can_reach_entrance("To Storeroom door"))
@@ -56,7 +56,7 @@ class CastleCenterTest(CV64TestBase):
         "starting_stage": 5
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance("Torture Chamber door"))
         self.collect([self.get_item_by_name("Chamber Key")] * 1)
         self.assertTrue(self.can_reach_entrance("Torture Chamber door"))
@@ -80,7 +80,7 @@ class ExecutionTest(CV64TestBase):
         "starting_stage": 7
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance("Execution gate"))
         self.collect([self.get_item_by_name("Execution Key")] * 1)
         self.assertTrue(self.can_reach_entrance("Execution gate"))
@@ -92,7 +92,7 @@ class ScienceTest(CV64TestBase):
         "starting_stage": 8
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance("Science Door 1"))
         self.collect([self.get_item_by_name("Science Key1")] * 1)
         self.assertTrue(self.can_reach_entrance("Science Door 1"))
@@ -111,7 +111,7 @@ class ClocktowerTest(CV64TestBase):
         "starting_stage": 11
     }
 
-    def testDoors(self) -> None:
+    def test_doors(self) -> None:
         self.assertFalse(self.can_reach_entrance("To Clocktower Door 1"))
         self.assertFalse(self.can_reach_entrance("To Clocktower Door 2"))
         self.assertFalse(self.can_reach_entrance("Clocktower Door 3"))
@@ -133,7 +133,7 @@ class DraculaNoneTest(CV64TestBase):
         "starting_stage": 5,
     }
 
-    def testDraculaNoneCondition(self) -> None:
+    def test_dracula_none_condition(self) -> None:
         self.assertFalse(self.can_reach_entrance("Dracula's door"))
         self.collect([self.get_item_by_name("Left Tower Key"),
                       self.get_item_by_name("Garden Key"),
@@ -154,7 +154,7 @@ class DraculaSpecialTest(CV64TestBase):
         "draculas_condition": 3
     }
 
-    def testDraculaSpecialCondition(self) -> None:
+    def test_dracula_special_condition(self) -> None:
         self.assertFalse(self.can_reach_entrance("Clocktower Door 3"))
         self.collect([self.get_item_by_name("Left Tower Key"),
                       self.get_item_by_name("Garden Key"),
@@ -180,7 +180,7 @@ class DraculaCrystalTest(CV64TestBase):
         "hard_logic": True
     }
 
-    def testDraculaCrystalCondition(self) -> None:
+    def test_dracula_crystal_condition(self) -> None:
         self.assertFalse(self.can_reach_entrance("Slope Jump to boss tower"))
         self.collect([self.get_item_by_name("Left Tower Key"),
                       self.get_item_by_name("Garden Key"),
@@ -214,7 +214,7 @@ class DraculaBossTest(CV64TestBase):
         "bosses_required": 16
     }
 
-    def testDraculaBossCondition(self) -> None:
+    def test_dracula_boss_condition(self) -> None:
         self.assertFalse(self.can_reach_entrance("Slope Jump to boss tower"))
         self.collect([self.get_item_by_name("Left Tower Key"),
                       self.get_item_by_name("Garden Key"),
@@ -246,5 +246,5 @@ class LizardTest(CV64TestBase):
         "starting_stage": 4
     }
 
-    def testLizardManTrio(self) -> None:
+    def test_lizard_man_trio(self) -> None:
         self.assertTrue(self.can_reach_location("Underground Waterway: Lizard-man trio"))

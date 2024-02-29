@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification, Location, Item
 from .data import iname, rname
-from .options import CV64Options
+from .options import CV64Options, BackgroundMusic, Countdown, IceTrapAppearance, InvisibleItems, CharacterStages
 from .stages import vanilla_stage_order, get_stage_info
 from .locations import get_location_info, base_id
 from .regions import get_region_info
@@ -285,7 +285,7 @@ def shuffle_sub_weapons(world: "CV64World") -> Dict[int, int]:
                        rom_sub_weapon_offsets[offset][1] in world.active_stage_exits}
 
     # Remove the one 3HB sub-weapon in Tower of Execution if 3HBs are not shuffled.
-    if not world.options.multi_hit_breakables.value and 0x10CD65 in sub_weapon_dict:
+    if not world.options.multi_hit_breakables and 0x10CD65 in sub_weapon_dict:
         del (sub_weapon_dict[0x10CD65])
 
     sub_bytes = list(sub_weapon_dict.values())
@@ -298,7 +298,7 @@ def randomize_music(world: "CV64World") -> Dict[int, int]:
     music_array = bytearray(0x7A)
     for number in music_sfx_ids:
         music_array[number] = number
-    if world.options.background_music.value == world.options.background_music.option_randomized:
+    if world.options.background_music == BackgroundMusic.option_randomized:
         looping_songs = []
         non_looping_songs = []
         fade_in_songs = {}
@@ -374,8 +374,8 @@ def get_countdown_numbers(options: CV64Options, active_locations: Iterable[Locat
     If the parent region is not part of any stage (as is the case for Renon's shop), skip the location entirely."""
     countdown_list = [0 for _ in range(15)]
     for loc in active_locations:
-        if loc.address is not None and (options.countdown.value == options.countdown.option_all_locations or
-                                        (options.countdown.value == options.countdown.option_majors
+        if loc.address is not None and (options.countdown == Countdown.option_all_locations or
+                                        (options.countdown == Countdown.option_majors
                                          and loc.item.advancement)):
 
             countdown_number = get_location_info(loc.name, "countdown")
@@ -409,9 +409,9 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
     regular data."""
 
     # Figure out the list of possible Ice Trap appearances to use based on the settings, first and foremost.
-    if world.options.ice_trap_appearance.value == world.options.ice_trap_appearance.option_major_only:
+    if world.options.ice_trap_appearance == IceTrapAppearance.option_major_only:
         allowed_classifications = ["progression", "progression skip balancing"]
-    elif world.options.ice_trap_appearance.value == world.options.ice_trap_appearance.option_junk_only:
+    elif world.options.ice_trap_appearance == IceTrapAppearance.option_junk_only:
         allowed_classifications = ["filler", "useful"]
     else:
         allowed_classifications = ["progression", "progression skip balancing", "filler", "useful"]
@@ -475,10 +475,10 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
                     location_bytes[get_location_info(loc.name, "offset") - 1] = 0x0B
 
         # Apply the invisibility variable depending on the "invisible items" setting.
-        if (world.options.invisible_items.value == 0 and loc_type == "inv") or \
-                (world.options.invisible_items.value == 2 and loc_type not in ["npc", "shop"]):
+        if (world.options.invisible_items == InvisibleItems.option_vanilla and loc_type == "inv") or \
+                (world.options.invisible_items == InvisibleItems.option_hide_all and loc_type not in ["npc", "shop"]):
             location_bytes[get_location_info(loc.name, "offset") - 1] += 0x80
-        elif world.options.invisible_items.value == 3 and loc_type not in ["npc", "shop"]:
+        elif world.options.invisible_items == InvisibleItems.option_chance and loc_type not in ["npc", "shop"]:
             invisible = world.random.randint(0, 1)
             if invisible:
                 location_bytes[get_location_info(loc.name, "offset") - 1] += 0x80
@@ -548,7 +548,7 @@ def get_loading_zone_bytes(options: CV64Options, starting_stage: str,
 
             # Change CC's end-spawn ID to put you at Carrie's exit if appropriate
             if active_stage_exits[stage]["prev"] == rname.castle_center:
-                if options.character_stages.value == options.character_stages.option_carrie_only or \
+                if options.character_stages == CharacterStages.option_carrie_only or \
                         active_stage_exits[rname.castle_center]["alt"] == stage:
                     loading_zone_bytes[get_stage_info(stage, "startzone spawn offset")] += 1
 
@@ -583,7 +583,7 @@ def get_start_inventory_data(player: int, options: CV64Options, precollected_ite
     items_max = 10
 
     # Raise the items max if increase item limit is enabled.
-    if options.increase_item_limit.value:
+    if options.increase_item_limit:
         items_max = 100
 
     for item in precollected_items:

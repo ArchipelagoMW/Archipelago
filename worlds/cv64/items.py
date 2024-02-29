@@ -1,6 +1,7 @@
 from BaseClasses import Item
 from .data import iname
 from .locations import base_id, get_location_info
+from .options import DraculasCondition, SpareKeys
 
 from typing import TYPE_CHECKING, Dict, Union
 
@@ -98,9 +99,7 @@ filler_item_names = [iname.red_jewel_s, iname.red_jewel_l, iname.five_hundred_go
 
 
 def get_item_info(item: str, info: str) -> Union[str, int, None]:
-    if info in item_info[item]:
-        return item_info[item][info]
-    return None
+    return item_info[item].get(info, None)
 
 
 def get_item_names_to_ids() -> Dict[str, int]:
@@ -126,7 +125,7 @@ def get_item_counts(world: "CV64World") -> Dict[str, Dict[str, int]]:
         if loc.address is None:
             continue
 
-        if world.options.hard_item_pool.value and get_location_info(loc.name, "hard item") is not None:
+        if world.options.hard_item_pool and get_location_info(loc.name, "hard item") is not None:
             item_to_add = get_location_info(loc.name, "hard item")
         else:
             item_to_add = get_location_info(loc.name, "normal item")
@@ -140,7 +139,7 @@ def get_item_counts(world: "CV64World") -> Dict[str, Dict[str, int]]:
         total_items += 1
 
     # Replace all but 2 PowerUps with junk if Permanent PowerUps is on and mark those two PowerUps as Useful.
-    if world.options.permanent_powerups.value:
+    if world.options.permanent_powerups:
         for i in range(item_counts["filler"][iname.powerup] - 2):
             item_counts["filler"][world.get_filler_item_name()] += 1
         del(item_counts["filler"][iname.powerup])
@@ -151,7 +150,7 @@ def get_item_counts(world: "CV64World") -> Dict[str, Dict[str, int]]:
     extras_count += world.options.total_special1s.value
 
     # Add the total Special2s if Dracula's Condition is Special2s.
-    if world.options.draculas_condition.value == world.options.draculas_condition.option_specials:
+    if world.options.draculas_condition == DraculasCondition.option_specials:
         item_counts["progression_skip_balancing"][iname.special_two] = world.options.total_special2s.value
         extras_count += world.options.total_special2s.value
 
@@ -159,9 +158,9 @@ def get_item_counts(world: "CV64World") -> Dict[str, Dict[str, int]]:
     # bomb components are affected by this.
     for key in item_counts["progression"]:
         spare_keys = 0
-        if world.options.spare_keys.value == world.options.spare_keys.option_on:
+        if world.options.spare_keys == SpareKeys.option_on:
             spare_keys = item_counts["progression"][key]
-        elif world.options.spare_keys.value == world.options.spare_keys.option_chance:
+        elif world.options.spare_keys == SpareKeys.option_chance:
             if item_counts["progression"][key] > 0:
                 for i in range(item_counts["progression"][key]):
                     spare_keys += world.random.randint(0, 1)

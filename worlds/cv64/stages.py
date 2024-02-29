@@ -1,6 +1,7 @@
 from .data import rname
 from .regions import get_region_info
 from .locations import get_location_info
+from .options import WarpOrder
 
 from typing import TYPE_CHECKING, Dict, List, Tuple, Union
 
@@ -228,9 +229,7 @@ vanilla_stage_exits = {rname.forest_of_silence: {"prev": None, "next": rname.cas
 
 
 def get_stage_info(stage: str, info: str) -> Union[str, int, Union[List[int], List[str]], None]:
-    if info in stage_info[stage]:
-        return stage_info[stage][info]
-    return None
+    return stage_info[stage].get(info, None)
 
 
 def get_locations_from_stage(stage: str) -> List[str]:
@@ -453,14 +452,14 @@ def generate_warps(world: "CV64World") -> List[str]:
 
     active_warp_list = world.random.sample(possible_warps, 7)
 
-    if world.options.warp_order.value == world.options.warp_order.option_seed_stage_order:
+    if world.options.warp_order == WarpOrder.option_seed_stage_order:
         # Arrange the warps to be in the seed's stage order
         new_list = world.active_stage_list.copy()
         for warp in world.active_stage_list:
             if warp not in active_warp_list:
                 new_list.remove(warp)
         active_warp_list = new_list
-    elif world.options.warp_order.value == world.options.warp_order.option_vanilla_stage_order:
+    elif world.options.warp_order == WarpOrder.option_vanilla_stage_order:
         # Arrange the warps to be in the vanilla game's stage order
         new_list = list(vanilla_stage_order)
         for warp in vanilla_stage_order:
