@@ -56,19 +56,17 @@ class AutoPatchExtensionRegister(type):
 
     @staticmethod
     def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
-        if game in AutoPatchExtensionRegister.extension_types:
-            handler = AutoPatchExtensionRegister.extension_types.get(game)
-            if handler.required_extensions:
-                handlers = [handler]
-                for required in handler.required_extensions:
-                    if required in AutoPatchExtensionRegister.extension_types:
-                        handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
-                    else:
-                        raise NotImplementedError(f"No handler for {required}.")
-                return handlers
-            else:
-                return handler
-        return APPatchExtension
+        handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
+        if handler.required_extensions:
+            handlers = [handler]
+            for required in handler.required_extensions:
+                if required in AutoPatchExtensionRegister.extension_types:
+                    handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
+                else:
+                    raise NotImplementedError(f"No handler for {required}.")
+            return handlers
+        else:
+            return handler
 
 
 class APContainer:
@@ -267,11 +265,11 @@ class APTokenMixin:
     """
     tokens: List[
         Tuple[int, int,
-              Union[
-                    bytes,  # WRITE
-                    Tuple[int, int],  # COPY, RLE
-                    int  # AND_8, OR_8, XOR_8
-              ]]] = []
+        Union[
+            bytes,  # WRITE
+            Tuple[int, int],  # COPY, RLE
+            int  # AND_8, OR_8, XOR_8
+        ]]] = []
 
     def get_token_binary(self) -> bytes:
         """
@@ -365,4 +363,3 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         inv = crc ^ 0xFFFF
         rom_data[0x7FDC:0x7FE0] = [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF]
         return rom_data
-
