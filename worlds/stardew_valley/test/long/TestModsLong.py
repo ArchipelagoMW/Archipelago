@@ -1,3 +1,4 @@
+import unittest
 from itertools import combinations, product
 
 from BaseClasses import get_seed
@@ -6,6 +7,8 @@ from .. import SVTestCase
 from ..assertion import WorldAssertMixin, ModAssertMixin
 from ... import options
 from ...mods.mod_data import all_mods, ModNames
+
+assert unittest
 
 
 class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
@@ -37,12 +40,12 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
                 self.assert_basic_checks(multiworld)
                 self.assert_stray_mod_items(mod, multiworld)
 
-    # @unittest.skip
+    @unittest.skip
     def test_troubleshoot_option(self):
         seed = get_seed(45949559493817417717)
         world_options = {
-            options.Friendsanity: options.Friendsanity.option_all,
-            options.Mods: ModNames.shiko
+            options.ToolProgression: options.ToolProgression.option_vanilla_cheap,
+            options.Mods: ModNames.deepwoods
         }
 
         with self.solo_world_sub_test(world_options=world_options, seed=seed, world_caching=False) as (multiworld, _):

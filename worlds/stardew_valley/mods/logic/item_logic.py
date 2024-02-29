@@ -185,7 +185,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             # Gingerbread House
         }
 
-        if self.options.tool_progression != options.ToolProgression.option_vanilla:
+        if self.options.tool_progression & options.ToolProgression.option_progressive:
             options_to_update.update({
                 Ore.iridium: items[Ore.iridium] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iridium, DeepWoodsRegion.floor_50),  # Iridium Tree
             })
