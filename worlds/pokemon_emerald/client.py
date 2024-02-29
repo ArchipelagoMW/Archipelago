@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 EXPECTED_ROM_NAME = "pokemon emerald version / AP 4"
 
-IS_CHAMPION_FLAG = data.constants["FLAG_IS_CHAMPION"]
+DEFEATED_WALLACE_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_WALLACE"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
 DEFEATED_NORMAN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_NORMAN_1"]
 
@@ -40,7 +40,7 @@ TRACKER_EVENT_FLAGS = [
     "FLAG_RECEIVED_POKENAV",                            # Talk to Mr. Stone
     "FLAG_DELIVERED_STEVEN_LETTER",
     "FLAG_DELIVERED_DEVON_GOODS",
-    "FLAG_HIDE_ROUTE_119_TEAM_AQUA",                    # Clear Weather Institute
+    "FLAG_HIDE_ROUTE_119_TEAM_AQUA_SHELLY",             # Clear Weather Institute
     "FLAG_MET_ARCHIE_METEOR_FALLS",                     # Magma steals meteorite
     "FLAG_GROUDON_AWAKENED_MAGMA_HIDEOUT",              # Clear Magma Hideout
     "FLAG_MET_TEAM_AQUA_HARBOR",                        # Aqua steals submarine
@@ -190,7 +190,7 @@ class PokemonEmeraldClient(BizHawkClient):
         from CommonClient import logger
 
         if ctx.slot_data["goal"] == Goal.option_champion:
-            self.goal_flag = IS_CHAMPION_FLAG
+            self.goal_flag = DEFEATED_WALLACE_FLAG
         elif ctx.slot_data["goal"] == Goal.option_steven:
             self.goal_flag = DEFEATED_STEVEN_FLAG
         elif ctx.slot_data["goal"] == Goal.option_norman:
