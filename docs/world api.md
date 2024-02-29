@@ -738,7 +738,7 @@ def generate_output(self, output_directory: str) -> None:
 
 If the game client needs to know information about the generated seed, a preferred method of transferring the data
 is through the slot data. This is filled with the `fill_slot_data` method of your world by returning
-something that can be serialized with json (usually a dictionary).
+a `dict` with `str` keys that can be serialized with json.
 But, to not waste resources, it should be limited to data that is absolutely necessary. Slot data is sent to your client
 once it has successfully [connected](network%20protocol.md#connected).
 If you need to know information about locations in your world, instead of propagating the slot data, it is preferable
@@ -746,7 +746,7 @@ to use [LocationScouts](network%20protocol.md#locationscouts), since that data a
 common usage of slot data is sending option results that the client needs to be aware of.
 
 ```python
-def fill_slot_data(self) -> Mapping[str, Any]:
+def fill_slot_data(self) -> Dict[str, Any]:
     # In order for our game client to handle the generated seed correctly we need to know what the user selected
     # for their difficulty and final boss HP.
     # A dictionary returned from this method gets set as the slot_data and will be sent to the client after connecting.

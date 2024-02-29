@@ -366,12 +366,18 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the `slot_data` field in the `Connected` network package.
+        """What is returned from this function will be in the `slot_data` field
+        in the `Connected` network package.
+        It should be a `dict` with `str` keys, and should be serializable with json.
+
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
         `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        # The reason for the `Mapping` type annotation, rather than `dict`
+        # is so that type checkers won't worry about the mutability of `dict`,
+        # so you can have more specific typing in your world implementation.
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
