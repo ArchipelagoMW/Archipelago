@@ -6,6 +6,7 @@ import traceback
 import typing
 import urllib
 import time
+from select import select
 # import CommonClient
 from CommonClient import CommonContext, get_base_parser, server_loop
 import Utils
@@ -25,7 +26,7 @@ logger = logging.getLogger("Client")
 
 class OpenRCT2Socket:
     listener:socket = None
-    gamecons:[socket] = []
+    gamecons:list[socket.socket] = []
     gameport:int = 38280
 
     def __init__(self, ctx):
@@ -115,10 +116,13 @@ class OpenRCT2Socket:
     
     def recv(self):
         # print('Attempting to Receive', self.game, self)
-        for sock in self.gamecons:
+        for sock in select(self.gamecons, [], []):
             try:
                 data = sock.recv(16384)
-                if data:
+                if not data:
+                    print('closing', sock.getpeername(), '->', sock.getsockname())
+                    self.gamecons.remove(sock)
+                else:
                     print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
                     # data = json.dumps(data)
                     packets = []
