@@ -3,6 +3,7 @@ from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_ta
 from .PrimeOptions import metroidprime_options
 from .Locations import every_location
 from .Regions import create_regions
+from .Rules import set_rules
 from worlds.AutoWorld import World
 
 class MetroidPrimeWorld(World):
@@ -11,10 +12,11 @@ class MetroidPrimeWorld(World):
     the bounty hunter Samus Aran as she traverses the planet Tallon IV and uncovers the plans
     of the Space Pirates.
     """
-    game: str = "Metroid Prime"
+    game = "Metroid Prime"
     option_definitions = metroidprime_options
+    topology_present = True
     item_name_to_id = {name: data.code for name, data in item_table.items()}
-    location_name_to_id = location_name_to_id = {loc_data.name: loc_data.id for loc_data in every_location}
+    location_name_to_id = {loc_data.name: loc_data.id for loc_data in every_location}
 
     def generate_early(self):
         reqarts = self.option_definitions['required_artifacts']
@@ -79,6 +81,12 @@ class MetroidPrimeWorld(World):
         # add missiles as extra filler
         while 100 - items_added > 0:
             self.multiworld.itempool += [self.create_item("Missile Expansion")]
+            items_added += 1
+
+    def set_rules(self) -> None:
+        set_rules(self.multiworld, self.player)
+
+
 
 
 
