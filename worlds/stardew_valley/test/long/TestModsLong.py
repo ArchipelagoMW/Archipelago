@@ -40,11 +40,11 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
                 self.assert_basic_checks(multiworld)
                 self.assert_stray_mod_items(mod, multiworld)
 
-    @unittest.skip
+    # @unittest.skip
     def test_troubleshoot_option(self):
         seed = get_seed(45949559493817417717)
         world_options = {
-            options.ToolProgression: options.ToolProgression.option_vanilla_cheap,
+            options.SkillProgression: options.SkillProgression.option_vanilla,
             options.Mods: ModNames.deepwoods
         }
 
