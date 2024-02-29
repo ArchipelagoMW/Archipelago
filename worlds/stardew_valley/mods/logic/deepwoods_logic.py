@@ -52,7 +52,7 @@ CookingLogicMixin]]):
         return And(*rules)
 
     def has_woods_rune_to_depth(self, floor: int) -> StardewRule:
-        if self.options.skill_progression == ElevatorProgression.option_vanilla:
+        if self.options.elevator_progression == ElevatorProgression.option_vanilla:
             return True_()
         return self.logic.received(DeepWoodsItem.obelisk_sigil, int(floor / 10))
 

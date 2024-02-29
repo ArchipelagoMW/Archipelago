@@ -44,7 +44,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
     def test_troubleshoot_option(self):
         seed = get_seed(45949559493817417717)
         world_options = {
-            options.SkillProgression: options.SkillProgression.option_vanilla,
+            options.ElevatorProgression: options.ElevatorProgression.option_vanilla,
             options.Mods: ModNames.deepwoods
         }
 

@@ -23,11 +23,11 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
 
     def assert_can_reach_victory(self, multiworld: MultiWorld):
         victory = multiworld.find_item("Victory", 1)
-        self.assert_rule_true(victory.can_reach, multiworld.state)
+        self.assert_rule_true(victory.access_rule, multiworld.state)
 
     def assert_cannot_reach_victory(self, multiworld: MultiWorld):
         victory = multiworld.find_item("Victory", 1)
-        self.assert_rule_false(victory.can_reach, multiworld.state)
+        self.assert_rule_false(victory.access_rule, multiworld.state)
 
     def assert_item_was_necessary_for_victory(self, item: StardewItem, multiworld: MultiWorld):
         self.assert_can_reach_victory(multiworld)
@@ -53,7 +53,7 @@ class WorldAssertMixin(RuleAssertMixin, TestCase):
 
     def assert_can_reach_everything(self, multiworld: MultiWorld):
         for location in multiworld.get_locations():
-            self.assert_rule_true(location.can_reach, multiworld.state)
+            self.assert_rule_true(location.access_rule, multiworld.state)
 
     def assert_basic_checks(self, multiworld: MultiWorld):
         self.assert_same_number_items_locations(multiworld)
