@@ -80,15 +80,16 @@ def replace_shop_text(buffer, new_text):
     write_char(buffer, start_address + 1, 0x00)
 
 
-# TODO: ALWAYS REMEMBER that the slice will change if more address are added
-def patch_rom(world: World, output_directory: str) -> str:
-    player = world.player
+# TODO: ALWAYS REMEMBER that the slice will change if more addresses are added Slice: 0x04389c6c:0x06a868a4
+def patch_rom(world: World, output_directory: str) -> None:
     original_rom = bytearray(get_base_rom_bytes())
-    patched_rom =  original_rom.copy()
+    patched_rom = original_rom.copy()
     no4 = world.options.opened_no4
     are = world.options.opened_are
     no2 = world.options.opened_no2
     bosses = world.options.bosses_need
+    if bosses > 20:
+        bosses = 20
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -144,6 +145,7 @@ def patch_rom(world: World, output_directory: str) -> str:
                             elif loc.name == "Jewel of Open":
                                 write_short(patched_rom, address, 0x0013)
                                 replace_shop_text(patched_rom, "Ghost Card")
+                                write_char(patched_rom, 0x047dbde0, 0x77)
                             elif loc.name in relics_vlad:
                                 write_short(patched_rom, address, 0x0013)
                             else:
@@ -202,10 +204,8 @@ def patch_rom(world: World, output_directory: str) -> str:
     original_slice = original_rom[0x04389c6c:0x06a868a4]
     patched_slice = patched_rom[0x04389c6c:0x06a868a4]
 
-    print("Diff started")
     patch = bsdiff4.diff(bytes(original_slice), bytes(patched_slice))
-    print("Diff ended")
-    print("Writing")
+
     patch_path = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.apsotn")
 
     with open(patch_path, 'wb') as outfile:
@@ -238,7 +238,6 @@ def write_seed(buffer, seed):
 
 
 def write_to_file(buffer, filename=""):
-    print(filename)
     if filename == "":
         output_file = get_settings().sotn_settings.rom_file
     else:
