@@ -157,7 +157,7 @@ class Scenario(IntEnum):
     random_RCT2_expansions = 150
     archipelago_madness_vanilla = 151
     archipelago_madness_expansions = 152
-
+    
 class LocationBalancingMode(IntEnum):
     disabled = 0
     compromise = 1
