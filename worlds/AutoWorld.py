@@ -7,8 +7,8 @@ import re
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
-    Union
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
+                    Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
@@ -365,13 +365,19 @@ class World(metaclass=AutoWorldRegister):
         If you need any last-second randomization, use self.random instead."""
         pass
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the `slot_data` field in the `Connected` network package.
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
+        """What is returned from this function will be in the `slot_data` field
+        in the `Connected` network package.
+        It should be a `dict` with `str` keys, and should be serializable with json.
+
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
         `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        # The reason for the `Mapping` type annotation, rather than `dict`
+        # is so that type checkers won't worry about the mutability of `dict`,
+        # so you can have more specific typing in your world implementation.
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
