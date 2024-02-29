@@ -6966,10 +6966,12 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery
         tag: midwhite
-        colors: gray
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+        required_panel:
+          room: Room Room
+          panel: WALL (2)
     doors:
       Excavation:
         event: True
