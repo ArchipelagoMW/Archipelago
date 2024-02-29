@@ -116,13 +116,11 @@ class OpenRCT2Socket:
     
     def recv(self):
         # print('Attempting to Receive', self.game, self)
-        for sock in select(self.gamecons, [], []):
+        for sock in select(self.gamecons, [], [])[0]:
+            # print(repr(sock))
             try:
                 data = sock.recv(16384)
-                if not data:
-                    print('closing', sock.getpeername(), '->', sock.getsockname())
-                    self.gamecons.remove(sock)
-                else:
+                if data:
                     print('received', len(data), 'bytes from', sock.getpeername(), '->', sock.getsockname(),':\n', data)
                     # data = json.dumps(data)
                     packets = []
@@ -136,6 +134,9 @@ class OpenRCT2Socket:
                 pass
             except BlockingIOError as e:
                 pass
+            except ConnectionAbortedError as e:
+                print('closing', sock.getpeername(), '->', sock.getsockname())
+                self.gamecons.remove(sock)
             except Exception as e:
                 print(traceback.format_exc(100))
                 print("Error in recv", e)
@@ -183,8 +184,9 @@ class OpenRCT2Socket:
 
     async def tick(self):
         await self.connectgame()
+        loop = asyncio.get_event_loop()
         try:
-            data = self.recv()
+            data = await loop.run_in_executor(None, self.recv)
             if data:
                 await self.ctx.send_msgs(data)
                 #await self.ctx.send_death('Some death message')
