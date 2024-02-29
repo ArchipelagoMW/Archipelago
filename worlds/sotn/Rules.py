@@ -994,7 +994,8 @@ def set_rules(world: MultiWorld, player: int) -> None:
 
     # Reverse Castle -> Already have some kind of high jump
     set_rule(world.get_location("RDAI - Twilight cloak", player), lambda state:
-             state.has("Spike breaker", player) and state.has("Form of mist", player))
+             state.has("Spike breaker", player) and state.has("Form of mist", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
     set_rule(world.get_location("RNO2 - Akmodan II kill", player), lambda state:
              state.has("Soul of bat", player) or state.has("Soul of wolf", player) or state.has("Form of mist", player))
