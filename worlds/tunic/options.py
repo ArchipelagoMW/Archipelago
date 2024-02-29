@@ -132,7 +132,8 @@ class LaurelsLocation(Choice):
 
 
 class LadderRando(Toggle):
-    """Ladder rando description"""
+    """Removes several of the ladders from the game, requiring you to find their items to get them back.
+    Greatly increases the number of spheres, making it great for asyncs."""
     internal_name = "ladder_rando"
     display_name = "Ladder Rando"
 
