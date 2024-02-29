@@ -176,9 +176,14 @@ class WitnessPlayerItems:
 
         # Read trap configuration data.
         trap_weight = self._world.options.trap_percentage / 100
-        filler_weight = 1 - trap_weight
+        trap_items = self._world.options.trap_weights.value
+
+        if not sum(trap_items.values()):
+            trap_weight = 0
 
         # Add filler items to the list.
+        filler_weight = 1 - trap_weight
+
         filler_items: Dict[str, float]
         filler_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
                         for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.FILLER}
@@ -187,8 +192,6 @@ class WitnessPlayerItems:
 
         # Add trap items.
         if trap_weight > 0:
-            trap_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
-                          for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.TRAP}
             filler_items.update({name: base_weight * trap_weight / sum(trap_items.values())
                                  for name, base_weight in trap_items.items() if base_weight > 0})
 
@@ -267,3 +270,6 @@ class WitnessPlayerItems:
                 output[item.ap_code] = [StaticWitnessItems.item_data[child_item].ap_code
                                         for child_item in item.definition.child_item_names]
         return output
+
+
+StaticWitnessItems()
