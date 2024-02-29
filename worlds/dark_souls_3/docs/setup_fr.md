@@ -12,7 +12,7 @@ permettant de lire des informations de la partie et écrire des commandes pour i
 
 ## Procédures d'installation
 
-<span style="color:tomato">
+<span style="color:#ff7800">
 **Il y a des risques de bannissement permanent des serveurs FromSoftware si ce mod est utilisé en ligne.**
 </span>  
 Ce client a été testé sur la version Steam officielle du jeu (v1.15/1.35), peu importe les DLCs actuellement installés.

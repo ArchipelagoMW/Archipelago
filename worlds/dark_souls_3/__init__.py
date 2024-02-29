@@ -14,6 +14,7 @@ from .Options import RandomizeWeaponLevelOption, PoolTypeOption, EarlySmallLothr
 
 class DarkSouls3Web(WebWorld):
     bug_report_page = "https://github.com/Marechal-L/Dark-Souls-III-Archipelago-client/issues"
+    theme = "stone"
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Dark Souls III randomizer on your computer.",
