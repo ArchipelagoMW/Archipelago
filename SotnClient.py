@@ -102,18 +102,15 @@ class SotnCommandProcessor(ClientCommandProcessor):
                 continue
             self.output(f'{zd.abrev} - {zd.name}')
 
-    def _cmd_patch(self, patch_dir=""):
+    def _cmd_patch(self, patch_dir: str):
         """Patch the ROM with the provided .apsotn(ONLY NAME)"""
-        print(patch_dir)
-        print(patch_dir + ".apsotn")
-        print(os.path.exists(patch_dir + ".apsotn"))
         if not os.path.exists(patch_dir + ".apsotn"):
             logger.info(".apsotn not found!")
             return
         if os.path.exists(patch_dir + ".bin"):
             logger.info("Patched ROM found!")
             return
-
+        logger.info("Start patching. Please wait!")
         diff_handler(patch_dir)
 
 
@@ -135,6 +132,7 @@ class SotnContext(CommonContext):
         self.items_handling = 0b101
         self.checked_locations_sent: bool = False
         self.misplaced_items = []
+        self.finished_game = False
         # self.username = "Lockmau"
 
     async def server_auth(self, password_requested: bool = False):
@@ -162,8 +160,6 @@ class SotnContext(CommonContext):
             if 'item' in args:
                 message_type: NamedTuple = args['type']
                 received: NamedTuple = args['item']
-
-
 
                 if message_type != "Hint":
                     # Check if it's our item first
@@ -282,7 +278,7 @@ async def parse_bosses(data: dict, ctx: SotnContext):
         return
 
     if "Dracula" in bosses:
-        if bosses["Dracula"]:
+        if bosses["Dracula"] and not ctx.finished_game:
             await ctx.send_msgs([{"cmd": "StatusUpdate", "status": ClientStatus.CLIENT_GOAL}])
             ctx.finished_game = True
 
