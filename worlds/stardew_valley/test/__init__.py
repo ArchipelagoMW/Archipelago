@@ -251,6 +251,8 @@ class SVTestBase(RuleAssertMixin, WorldTestBase, SVTestCase):
     options = get_minsanity_options()
 
     def world_setup(self, *args, **kwargs):
+        self.options = parse_class_option_keys(self.options)
+
         super().world_setup(seed=self.seed)
         if self.constructed:
             self.world = self.multiworld.worlds[self.player]  # noqa
@@ -289,7 +291,49 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
                           seed=DEFAULT_TEST_SEED,
                           _cache: Dict[Hashable, MultiWorld] = {},  # noqa
                           _steps=gen_steps) -> MultiWorld:
-    # Now the option class is allowed as key.
+    test_options = parse_class_option_keys(test_options)
+
+    # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
+    should_cache = "start_inventory" not in test_options
+    frozen_options = frozenset({})
+    if should_cache:
+        frozen_options = frozenset(test_options.items()).union({seed})
+        if frozen_options in _cache:
+            cached_multi_world = _cache[frozen_options]
+            print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}]")
+            return cached_multi_world
+
+    multiworld = setup_base_solo_multiworld(StardewValleyWorld, ())
+    multiworld.set_seed(seed)
+    # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
+
+    args = Namespace()
+    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
+        value = option.from_any(test_options.get(name, option.default))
+
+        if issubclass(option, VerifyKeys):
+            # Values should already be verified, but just in case...
+            option.verify_keys(value.value)
+
+        setattr(args, name, {1: value})
+    multiworld.set_options(args)
+
+    if "start_inventory" in test_options:
+        for item, amount in test_options["start_inventory"].items():
+            for _ in range(amount):
+                multiworld.push_precollected(multiworld.create_item(item, 1))
+
+    for step in _steps:
+        call_all(multiworld, step)
+
+    if should_cache:
+        _cache[frozen_options] = multiworld
+
+    return multiworld
+
+
+def parse_class_option_keys(test_options: dict) -> dict:
+    """ Now the option class is allowed as key. """
     parsed_options = {}
 
     if test_options:
@@ -302,43 +346,7 @@ def setup_solo_multiworld(test_options: Optional[Dict[Union[str, StardewValleyOp
                     f"All keys of world_options must be a possible Stardew Valley option, {option} is not."
                 parsed_options[option] = value
 
-    # Yes I reuse the worlds generated between tests, its speeds the execution by a couple seconds
-    should_cache = "start_inventory" not in parsed_options
-    frozen_options = frozenset({})
-    if should_cache:
-        frozen_options = frozenset(parsed_options.items()).union({seed})
-        if frozen_options in _cache:
-            cached_multi_world = _cache[frozen_options]
-            print(f"Using cached solo multi world [Seed = {cached_multi_world.seed}]")
-            return cached_multi_world
-
-    multiworld = setup_base_solo_multiworld(StardewValleyWorld, ())
-    multiworld.set_seed(seed)
-    # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
-
-    args = Namespace()
-    for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
-        value = option.from_any(parsed_options.get(name, option.default))
-
-        if issubclass(option, VerifyKeys):
-            # Values should already be verified, but just in case...
-            option.verify_keys(value.value)
-
-        setattr(args, name, {1: value})
-    multiworld.set_options(args)
-
-    if "start_inventory" in parsed_options:
-        for item, amount in parsed_options["start_inventory"].items():
-            for _ in range(amount):
-                multiworld.push_precollected(multiworld.create_item(item, 1))
-
-    for step in _steps:
-        call_all(multiworld, step)
-
-    if should_cache:
-        _cache[frozen_options] = multiworld
-
-    return multiworld
+    return parsed_options
 
 
 def complete_options_with_default(options_to_complete=None) -> StardewValleyOptions:

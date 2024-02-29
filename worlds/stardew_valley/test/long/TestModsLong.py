@@ -39,8 +39,8 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
     # @unittest.skip
     def test_troubleshoot_option(self):
         world_options = {
-            options.ToolProgression: options.ToolProgression.option_vanilla,
-            options.Mods: ModNames.deepwoods
+            options.SkillProgression: options.SkillProgression.option_vanilla,
+            options.Mods: ModNames.archaeology
         }
 
         with self.solo_world_sub_test(world_options=world_options, seed=12619010600507985842, world_caching=False) as (multiworld, _):

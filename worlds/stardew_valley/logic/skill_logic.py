@@ -21,7 +21,7 @@ from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
 from ..strings.quality_names import ForageQuality
 from ..strings.region_names import Region
-from ..strings.skill_names import Skill
+from ..strings.skill_names import Skill, all_mod_skills
 from ..strings.tool_names import ToolMaterial, Tool
 
 fishing_regions = (Region.beach, Region.town, Region.forest, Region.mountain, Region.island_south, Region.island_west)
@@ -51,17 +51,18 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         elif skill == Skill.farming:
             xp_rule = self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
-            xp_rule = self.logic.tool.has_tool(Tool.axe,
-                                               tool_material) | self.logic.magic.can_use_clear_debris_instead_of_tool_level(
-                tool_level)
+            xp_rule = self.logic.tool.has_tool(Tool.axe, tool_material) | self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
         elif skill == Skill.mining:
-            xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) |\
+            xp_rule = self.logic.tool.has_tool(Tool.pickaxe, tool_material) | \
                       self.logic.magic.can_use_clear_debris_instead_of_tool_level(tool_level)
             xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
         elif skill == Skill.combat:
             combat_tier = Performance.tiers[tool_level]
             xp_rule = self.logic.combat.can_fight_at_level(combat_tier)
             xp_rule = xp_rule & self.logic.region.can_reach(Region.mines_floor_5)
+        elif skill in all_mod_skills:
+            # Ideal solution would be to add a logic registry, but I'm too lazy.
+            return self.logic.mod.skill.can_earn_mod_skill_level(skill, level)
         else:
             raise Exception(f"Unknown skill: {skill}")
 

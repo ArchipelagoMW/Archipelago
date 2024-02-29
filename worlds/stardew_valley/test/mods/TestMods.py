@@ -35,7 +35,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_allsanity_all_mods_exclude_island_when_generate_then_basic_checks(self):
         world_options = allsanity_options_with_mods()
-        world_options.update({options.ExcludeGingerIsland: options.ExcludeGingerIsland.option_true})
+        world_options.update({options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true})
         with self.solo_world_sub_test(world_options=world_options, dirty_state=True) as (multi_world, _):
             self.assert_basic_checks(multi_world)
 
