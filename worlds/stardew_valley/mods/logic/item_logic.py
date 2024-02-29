@@ -1,6 +1,7 @@
 from typing import Dict, Union
 
 from ..mod_data import ModNames
+from ... import options
 from ...data.craftable_data import all_crafting_recipes_by_name
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.combat_logic import CombatLogicMixin
@@ -24,14 +25,14 @@ from ...stardew_rule import StardewRule, True_
 from ...strings.artisan_good_names import ModArtisanGood
 from ...strings.craftable_names import ModCraftable, ModEdible, ModMachine
 from ...strings.crop_names import SVEVegetable, SVEFruit, DistantLandsCrop, Fruit
-from ...strings.fish_names import DistantLandsFish, WaterItem, Fish
+from ...strings.fish_names import WaterItem
 from ...strings.flower_names import Flower
-from ...strings.food_names import SVEMeal, SVEBeverage, Meal
+from ...strings.food_names import SVEMeal, SVEBeverage
 from ...strings.forageable_names import SVEForage, DistantLandsForageable, Forageable
 from ...strings.gift_names import SVEGift
 from ...strings.ingredient_names import Ingredient
 from ...strings.material_names import Material
-from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil, ModArtifact
+from ...strings.metal_names import all_fossils, all_artifacts, Ore, ModFossil
 from ...strings.monster_drop_names import ModLoot, Loot
 from ...strings.performance_names import Performance
 from ...strings.quest_names import ModQuest
@@ -143,8 +144,8 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
                     self.logic.tool.can_forage((Season.spring, Season.summer, Season.fall), SVERegion.sprite_spring) &
                     self.logic.time.has_year_three) | self.logic.region.can_reach(SVERegion.sprite_spring_cave),
             Fruit.sweet_gem_berry: items[Fruit.sweet_gem_berry] | (
-                        self.logic.tool.can_forage((Season.spring, Season.summer, Season.fall), SVERegion.sprite_spring) &
-                        self.logic.time.has_year_three),
+                    self.logic.tool.can_forage((Season.spring, Season.summer, Season.fall), SVERegion.sprite_spring) &
+                    self.logic.time.has_year_three),
             WaterItem.coral: items[WaterItem.coral] | self.logic.region.can_reach(SVERegion.fable_reef),
             Forageable.rainbow_shell: items[Forageable.rainbow_shell] | self.logic.region.can_reach(SVERegion.fable_reef),
             WaterItem.sea_urchin: items[WaterItem.sea_urchin] | self.logic.region.can_reach(SVERegion.fable_reef),
@@ -164,7 +165,7 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         }
 
     def get_modified_item_rules_for_deep_woods(self, items: Dict[str, StardewRule]):
-        return {
+        options_to_update = {
             Fruit.apple: items[Fruit.apple] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),  # Deep enough to have seen such a tree at least once
             Fruit.apricot: items[Fruit.apricot] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
             Fruit.cherry: items[Fruit.cherry] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
@@ -178,12 +179,18 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
             Flower.poppy: items[Flower.poppy] | self.logic.tool.can_forage(Season.not_winter, DeepWoodsRegion.floor_10),
             Flower.fairy_rose: items[Flower.fairy_rose] | self.logic.region.can_reach(DeepWoodsRegion.floor_10),
             Material.hardwood: items[Material.hardwood] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iron, DeepWoodsRegion.floor_10),
-            Ore.iridium: items[Ore.iridium] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iridium, DeepWoodsRegion.floor_50),  # Iridium Tree
             Ingredient.sugar: items[Ingredient.sugar] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.gold, DeepWoodsRegion.floor_50),
             # Gingerbread House
             Ingredient.wheat_flour: items[Ingredient.wheat_flour] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.gold, DeepWoodsRegion.floor_50),
             # Gingerbread House
         }
+
+        if self.options.tool_progression != options.ToolProgression.option_vanilla:
+            options_to_update.update({
+                Ore.iridium: items[Ore.iridium] | self.logic.tool.can_use_tool_at(Tool.axe, ToolMaterial.iridium, DeepWoodsRegion.floor_50),  # Iridium Tree
+            })
+
+        return options_to_update
 
     def get_archaeology_item_rules(self):
         archaeology_item_rules = {}
@@ -206,8 +213,10 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         return {
             DistantLandsForageable.swamp_herb: self.logic.region.can_reach(Region.witch_swamp),
             DistantLandsForageable.brown_amanita: self.logic.region.can_reach(Region.witch_swamp),
-            DistantLandsSeed.vile_ancient_fruit: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(ModQuest.CorruptedCropsTask),
-            DistantLandsSeed.void_mint: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(ModQuest.CorruptedCropsTask),
+            DistantLandsSeed.vile_ancient_fruit: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
+                ModQuest.CorruptedCropsTask),
+            DistantLandsSeed.void_mint: self.logic.quest.can_complete_quest(ModQuest.WitchOrder) | self.logic.quest.can_complete_quest(
+                ModQuest.CorruptedCropsTask),
             DistantLandsCrop.void_mint: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.void_mint),
             DistantLandsCrop.vile_ancient_fruit: self.logic.season.has_any_not_winter() & self.logic.has(DistantLandsSeed.vile_ancient_fruit),
         }
@@ -216,43 +225,62 @@ RegionLogicMixin, SeasonLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, To
         return {
             # Mob Drops from lost valley enemies
             ModArtisanGood.pterodactyl_egg: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_claw: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_ribs: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_vertebra: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_skull: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_phalange: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                             BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_l_wing_bone: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                                BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                                BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.pterodactyl_r_wing_bone: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                                BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                                BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_skull: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_tooth: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_femur: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                       BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_pelvis: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                        BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                        BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_ribs: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                      BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                      BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_vertebra: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.dinosaur_claw: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                      BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.good),
+                                                                      BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.good),
             ModFossil.neanderthal_skull: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.great),
+                                                                          BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.great),
             ModFossil.neanderthal_ribs: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.great),
+                                                                         BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.great),
             ModFossil.neanderthal_pelvis: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                           BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.great),
+                                                                           BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.great),
             ModFossil.neanderthal_limb_bones: self.logic.region.can_reach_any((BoardingHouseRegion.lost_valley_ruins, BoardingHouseRegion.lost_valley_house_1,
-                                                                               BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(Performance.great),
+                                                                               BoardingHouseRegion.lost_valley_house_2,)) & self.logic.combat.can_fight_at_level(
+                Performance.great),
         }
 
     def has_seed_unlocked(self, seed_name: str):
