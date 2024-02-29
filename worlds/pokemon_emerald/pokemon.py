@@ -59,6 +59,17 @@ _move_types = [
 _moves_by_type: Dict[int, List[int]] = {}
 for move, type in enumerate(_move_types):
     _moves_by_type.setdefault(type, []).append(move)
+    
+HM_MOVES = {
+    data.constants["MOVE_CUT"],
+    data.constants["MOVE_FLY"],
+    data.constants["MOVE_SURF"],
+    data.constants["MOVE_STRENGTH"],
+    data.constants["MOVE_FLASH"],
+    data.constants["MOVE_ROCK_SMASH"],
+    data.constants["MOVE_WATERFALL"],
+    data.constants["MOVE_DIVE"]
+}
 
 _move_blacklist = frozenset({
     0,    # MOVE_NONE

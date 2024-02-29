@@ -14,9 +14,9 @@ from settings import get_settings
 from .data import TrainerPokemonDataTypeEnum, BASE_OFFSET, data
 from .items import reverse_offset_item_value
 from .options import (RandomizeWildPokemon, RandomizeTrainerParties, EliteFourRequirement, NormanRequirement,
-                      MatchTrainerLevels)
-from .pokemon import get_random_move
-from .util import encode_string, get_easter_egg
+                      MatchTrainerLevels, Goal, TmCompatibility)
+from .pokemon import HM_MOVES, get_random_move
+from .util import bool_array_to_int, encode_string, get_easter_egg
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld
@@ -322,8 +322,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     _set_tm_moves(world, patched_rom, easter_egg)
 
     # Randomize move tutor moves
-    if world.options.move_tutor_moves or easter_egg[0] == 2:
-        _randomize_move_tutor_moves(world, patched_rom, easter_egg)
+    _randomize_move_tutor_moves(world, patched_rom, easter_egg)
 
     # Set TM/HM compatibility
     _set_tmhm_compatibility(world, patched_rom)
@@ -748,23 +747,30 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
 
 
 def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
-    for i in range(30):
-        if i == 24:
-            continue  # Don't overwrite the Dig tutor
-
-        if easter_egg[0] == 2:
+    if easter_egg[0] == 2:
+        for i in range(30):
             _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
-        else:
+    else:
+        if world.options.tm_moves:
+            new_tutor_moves = []
+            for i in range(30):
+                new_move = get_random_move(world.random, set(new_tutor_moves) | world.blacklisted_moves | HM_MOVES)
+                new_tutor_moves.append(new_move)
+
+                _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, new_move)
+
+    # Always set Fortree move tutor to Dig
+    _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (24 * 2), 2, data.constants["MOVE_DIG"])
+
+    # Modify compatibility
+    if world.options.tm_compatibility.value != -1:
+        for species in data.species:
+            if species is None:
+                continue
+
             _set_bytes_little_endian(
                 rom,
-                data.rom_addresses["gTutorMoves"] + (i * 2),
-                2,
-                get_random_move(world.random, {data.constants["MOVE_CUT"],
-                                               data.constants["MOVE_FLY"],
-                                               data.constants["MOVE_SURF"],
-                                               data.constants["MOVE_STRENGTH"],
-                                               data.constants["MOVE_FLASH"],
-                                               data.constants["MOVE_ROCK_SMASH"],
-                                               data.constants["MOVE_WATERFALL"],
-                                               data.constants["MOVE_DIVE"]} | world.blacklisted_moves)
+                data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
+                4,
+                bool_array_to_int([world.random.randrange(0, 100) < world.options.tm_compatibility.value for _ in range(32)])
             )
