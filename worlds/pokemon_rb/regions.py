@@ -1935,7 +1935,7 @@ def create_regions(self):
     else:
         badges = [item for item in self.item_pool if "Badge" in item.name]
         for badge in badges:
-           self.item_pool.remove(badge)
+            self.item_pool.remove(badge)
         badge_locs = [multiworld.get_location(loc, player) for loc in [
             "Pewter Gym - Brock Prize", "Cerulean Gym - Misty Prize", "Vermilion Gym - Lt. Surge Prize",
             "Celadon Gym - Erika Prize", "Fuchsia Gym - Koga Prize", "Saffron Gym - Sabrina Prize",
