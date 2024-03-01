@@ -182,6 +182,7 @@ class ZorkGrandInquisitorWorld(World):
             "goal",
             "quick_port_foozle",
             "deathsanity",
+            "grant_missable_location_checks",
         )
 
     def get_filler_item_name(self) -> str:

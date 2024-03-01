@@ -342,6 +342,7 @@ class ZorkGrandInquisitorTags(enum.Enum):
     FILLER = "Filler"
     HOTSPOT = "Hotspot"
     INVENTORY_ITEM = "Inventory Item"
+    MISSABLE = "Missable"
     SPELL = "Spell"
     SUBWAY_DESTINATION = "Subway Destination"
     TELEPORTER_DESTINATION = "Teleporter Destination"

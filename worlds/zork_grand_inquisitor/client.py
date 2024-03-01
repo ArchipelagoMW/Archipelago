@@ -161,6 +161,10 @@ async def process_package(ctx: ZorkGrandInquisitorContext, cmd: str, _args: Any)
         ctx.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
         ctx.game_controller.option_deathsanity = _args["slot_data"]["deathsanity"] == 1
 
+        ctx.game_controller.option_grant_missable_location_checks = (
+            _args["slot_data"]["grant_missable_location_checks"] == 1
+        )
+
 
 def main() -> None:
     Utils.init_logging("ZorkGrandInquisitorClient", exception_logger="Client")

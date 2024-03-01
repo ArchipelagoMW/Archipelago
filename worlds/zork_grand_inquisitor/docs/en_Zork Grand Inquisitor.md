@@ -73,9 +73,11 @@ Absolutely! The save system is fully supported (and its use is in fact strongly 
 game as you normally would and the client will automatically sync your items and hotspots with what you should have in 
 that game state. 
 
-Depending on the way your game unfolds, it's possible that a few location checks may become missable. This is a great 
-scenario to leverage the save system in. Just get in the habit of saving when you are about do something irreversible so
-you can always go back to a previous state if you need to.
+Depending on how your game progresses, there's a chance that certain location checks might become missable. This 
+presents an excellent opportunity to utilize the save system. Simply make it a habit to save before undertaking 
+irreversible actions, ensuring you can revert to a previous state if necessary. If you prefer not to depend on the save 
+system for accessing missable location checks, there's an option to automatically unlock them as they become 
+unavailable.
 
 ## Unique Local Commands
 The following commands are only available when using the Zork Grand Inquisitor Client to play the game with Archipelago.

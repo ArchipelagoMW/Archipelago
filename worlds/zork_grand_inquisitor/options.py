@@ -27,8 +27,22 @@ class Deathsanity(Toggle):
     display_name: str = "Deathsanity"
 
 
+class GrantMissableLocationChecks(Toggle):
+    """
+    If true, performing an irreversible action will grant the locations checks that would have become unobtainable as a
+    result of that action
+
+    Otherwise, the player is expected to potentially have to use the save system to reach those location checks. If you
+    don't like the idea of rarely having to reload an earlier save to get a location check, make sure this option is
+    enabled
+    """
+
+    display_name: str = "Grant Missable Checks"
+
+
 @dataclass
 class ZorkGrandInquisitorOptions(PerGameCommonOptions):
     goal: Goal
     quick_port_foozle: QuickPortFoozle
     deathsanity: Deathsanity
+    grant_missable_location_checks: GrantMissableLocationChecks
