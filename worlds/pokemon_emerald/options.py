@@ -643,10 +643,10 @@ class MatchTrainerLevelsBonus(Range):
     A level bonus (or penalty) to apply to your team when matching an opponent's levels.
 
     When the match trainer levels option is "additive", this value is added to your team's levels during a battle.
-    For example, if this value is 5, you'll have a level 25 team against a level 20 team, and a level 45 team against a level 40 team.
+    For example, if this value is 5 (+5 levels), you'll have a level 25 team against a level 20 team, and a level 45 team against a level 40 team.
 
     When the match trainer levels option is "multiplicative", this is a percent bonus.
-    For example, if this value is 5, you'll have a level 21 team against a level 20 team, and a level 42 team against a level 40 team.
+    For example, if this value is 5 (+5%), you'll have a level 21 team against a level 20 team, and a level 42 team against a level 40 team.
     """
     display_name = "Match Trainer Levels Modifier"
     range_start = -100
