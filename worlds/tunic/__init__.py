@@ -73,9 +73,6 @@ class TunicWorld(World):
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
 
-        if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
-            self.options.start_inventory.value["Sword"] = 1
-
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
         return TunicItem(name, item_data.classification, self.item_name_to_id[name], self.player)
@@ -93,6 +90,9 @@ class TunicWorld(World):
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        if self.options.start_with_sword:
+            self.multiworld.push_precollected(self.create_item("Sword"))
 
         if sword_progression:
             items_to_create["Stick"] = 0
