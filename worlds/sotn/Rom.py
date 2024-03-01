@@ -1,9 +1,10 @@
 import Utils
+import random
 from sys import platform
-from worlds.Files import APDeltaPatch, APContainer
+from worlds.Files import APDeltaPatch
 from settings import get_settings
 from worlds.AutoWorld import World
-from .Items import item_table, IType
+from .Items import ItemData, item_table, IType, get_item_data_shop
 from .Locations import location_table
 
 import hashlib
@@ -12,6 +13,50 @@ import subprocess
 import bsdiff4
 
 USHASH = 'acbb3a2e4a8f865f363dc06df147afa2'
+
+shop_stock = {
+        "Potion": 0x047a309c,
+        "High potion": 0x047a30a4,
+        "Elixir": 0x047a30ac,
+        "Manna prism": 0x047a30b4,
+        "Antivenom": 0x047a30bc,
+        "Uncurse": 0x047a30c4,
+        "Hammer": 0x047a30cc,
+        "Magic missile": 0x047a30d4,
+        "Bwaka knife": 0x047a30dc,
+        "Boomerang": 0x047a30e4,
+        "Javelin": 0x047a30ec,
+        "Fire boomerang": 0x047a30f4,
+        "Shuriken": 0x047a30fc,
+        "Cross shuriken": 0x047a3104,
+        "Buffalo star": 0x047a310c,
+        "Flame star": 0x047a3114,
+        "Library card": 0x047a311c,
+        "Meal ticket": 0x047a3124,
+        "Saber": 0x047a312c,
+        "Mace": 0x047a3134,
+        "Damascus sword": 0x047a313c,
+        "Firebrand": 0x047a3144,
+        "Icebrand": 0x047a314c,
+        "Thunderbrand": 0x047a3154,
+        "Harper": 0x047a315c,
+        "Leather shield": 0x047a3164,
+        "Iron shield": 0x047a316c,
+        "Velvet hat": 0x047a3174,
+        "Leather hat": 0x047a317c,
+        "Circlet": 0x047a3184,
+        "Silver crown": 0x047a318c,
+        "Iron cuirass": 0x047a3194,
+        "Steel cuirass": 0x047a319c,
+        "Diamond plate": 0x047a31a4,
+        "Reverse cloak": 0x047a31ac,
+        "Elven cloak": 0x047a31b4,
+        "Joseph's cloak": 0x047a31bc,
+        "Medal": 0x047a31c4,
+        "Ring of pales": 0x047a31cc,
+        "Gauntlet": 0x047a31d4,
+        "Duplicator": 0x047a31dc
+}
 
 
 class SOTNDeltaPatch(APDeltaPatch):
@@ -48,7 +93,7 @@ def get_base_rom_path(file_name: str = "") -> str:
 
 
 def write_char(buffer, address: int, value: int):
-    buffer[address] = value
+    buffer[address] = (value & 0xFF)
 
 
 def write_short(buffer, address: int, value: int):
@@ -81,12 +126,16 @@ def replace_shop_text(buffer, new_text):
 
 
 # TODO: ALWAYS REMEMBER that the slice will change if more addresses are added Slice: 0x04389c6c:0x06a868a4
+# Music extra slice 0x000affd0:0x000b0c2c
 def patch_rom(world: World, output_directory: str) -> None:
     original_rom = bytearray(get_base_rom_bytes())
     patched_rom = original_rom.copy()
     no4 = world.options.opened_no4
     are = world.options.opened_are
     no2 = world.options.opened_no2
+    songs = world.options.rng_songs
+    shop = world.options.rng_shop
+    prices = world.options.rng_prices
     bosses = world.options.bosses_need
     if bosses > 20:
         bosses = 20
@@ -197,12 +246,26 @@ def patch_rom(world: World, output_directory: str) -> None:
     seed_num = world.multiworld.seed
     write_seed(patched_rom, seed_num)
 
+    if songs:
+        randomize_music(patched_rom)
+
+    if shop:
+        randomize_shop(patched_rom)
+
+    if prices != 0 and prices <= 3:
+        randomize_prices(patched_rom, prices)
+
     # Guess I don't need this anymore
     filename = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.bin")
     write_to_file(patched_rom, filename)
 
-    original_slice = original_rom[0x04389c6c:0x06a868a4]
-    patched_slice = patched_rom[0x04389c6c:0x06a868a4]
+    music_slice = original_rom[0x000affd0:0x000b0c2c]
+    music_patched = patched_rom[0x000affd0:0x000b0c2c]
+
+    original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
+    patched_slice = music_patched + patched_rom[0x04389c6c:0x06a868a4]
+
+    print("Generating patch. Please wait!")
 
     patch = bsdiff4.diff(bytes(original_slice), bytes(patched_slice))
 
@@ -255,7 +318,8 @@ def pos_patch(seed_name):
         diff_patch = bytes(infile.read())
 
     patched_rom = original_rom.copy()
-    original_slice = original_rom[0x04389c6c:0x06a868a4]
+    music_slice = original_rom[0x000affd0:0x000b0c2c]  # Size 0xc5c / 3164
+    original_slice = music_slice + original_rom[0x04389c6c:0x06a868a4]
 
     patched_slice = bsdiff4.patch(bytes(original_slice), diff_patch)
 
@@ -266,7 +330,8 @@ def pos_patch(seed_name):
     # patchPowerOfSireFlashing Patches researched by MottZilla.
     write_word(patched_rom, 0x00136580, 0x03e00008)
 
-    patched_rom[0x04389c6c:0x06a868a4] = patched_slice
+    patched_rom[0x000affd0:0x000b0c2c] = patched_slice[0:0xc5c]
+    patched_rom[0x04389c6c:0x06a868a4] = patched_slice[0xc5c:]
 
     file_name = seed_name + ".bin"
     with open(file_name, "wb") as stream:
@@ -279,7 +344,98 @@ def pos_patch(seed_name):
         print("ERROR RECALC FAILED!!!")
 
 
+def randomize_music(buffer):
+    music = {
+        "Lost Painting": 0x01,
+        "Curse Zone": 0x03,
+        "Requiem for the gods": 0x05,
+        "Rainbow cemetery": 0x07,
+        "Wood carving partita": 0x09,
+        "Crystal teardrops": 0x0b,
+        "Marble gallery": 0x0d,
+        "Dracula's castle": 0x0f,
+        "The tragic prince": 0x11,
+        "Tower of mist": 0x13,
+        "Door of holy spirits": 0x15,
+        "Dance of pales": 0x17,
+        "Abandoned pít": 0x19,
+        "Heavenly doorway": 0x1b,
+        "Festival of servants": 0x1d,
+        "Wandering ghosts": 0x23,
+        "The door to the abyss": 0x25,
+        "Dance of gold": 0x2e,
+        "Enchanted banquet": 0x30,
+        "Death ballad": 0x34,
+        "Final toccata": 0x38
+    }
+    music_addresses = {
+        "Lost Painting": [0x00b0788, 0x6757ad8, 0x6757b74, 0x00b06d8, 0x00b080c],
+        "Curse Zone": [0x00b0704, 0x6a7c4f0, 0x6a7c58c],
+        "Requiem for the gods": [0x00b00d8],
+        "Rainbow cemetery": [0x00b0054, 0x609505c],
+        "Wood carving partita": [0x00b0028, 0x00b036c, 0x47e5ec4, 0x47e6060],
+        "Crystal teardrops": [0x00b015c, 0x61d1fa8, 0x61d1fec, 0x61d2188],
+        "Marble gallery": [0x00affd0],
+        "Dracula's castle": [0x00b0104, 0x00b0c2c, 0x4ba6cb0, 0x4bb0064],
+        "The tragic prince": [0x00b020c, 0x55a2f90, 0x55a3008],
+        "Tower of mist": [0x00afffc],
+        "Door of holy spirits": [0x00b0838, 0x6487b44, 0x6487bec],
+        "Dance of pales": [0x00b0080, 0x5fea9dc],
+        "Abandoned pít": [0x00b00ac, 0x66cc898, 0x00b075c, 0x6644d10],
+        "Heavenly doorway": [0x00b01b4, 0x00b0864],
+        "Festival of servants": [0x47e5e08, 0x54eca88, 0x55a2ed0, 0x59ee490, 0x6129480, 0x61d20f4, 0x67ec2bc, 0x689e4f0,
+                                 0x69e8318],
+        "Wandering ghosts": [0x00b0188, 0x6126570],
+        "The door to the abyss": [0x00b0130, 0x00b07e0],
+        "Dance of gold": [0x00b01e0, 0x54ecb58, 0x54ecbd4],
+        "Enchanted banquet": [0x5b074f4, 0x6757a78],
+        "Death ballad": [0x56dc624, 0x5fddd24, 0x5fddd80, 0x5fddda0, 0x5fdde14, 0x6094500, 0x6094534, 0x632e8c8,
+                         0x65a88e8, 0x65a8908, 0x6644bc4, 0x6a7c490],
+        "Final toccata": [0x00b08bc, 0x00b07b4, 0x00b0680, 0x00b06ac, 0x00b0730, 0x00b0890, 0x59ee534, 0x59ee5ac,
+                          0x65a8960, 0x65a89f0, 0x67ec31c, 0x67ec3b8]
+    }
+
+    for key, value in music_addresses.items():
+        rng_song, rng_value = random.choice(list(music.items()))
+        for address in value:
+            write_char(buffer, address, rng_value)
+        music.pop(rng_song)
 
 
+def randomize_shop(buffer):
+    for key, value in shop_stock.items():
+        rng_item = random.choice([i for i in range(1, 258) if i not in [169, 195, 226]])
+        print(rng_item)
+        item_name: str
+        item_data: ItemData
+        item_name, item_data = get_item_data_shop(rng_item)
+        type_value = 0x00
+        offset = -0xa9
+        if item_data.type == IType.HELMET:
+            type_value = 0x01
+        elif item_data.type == IType.ARMOR:
+            type_value = 0x02
+        elif item_data.type == IType.CLOAK:
+            type_value = 0x03
+        elif item_data.type == IType.ACCESSORY:
+            type_value = 0x04
+        else:
+            offset = 0x00
+        write_char(buffer, value, type_value)
+        write_short(buffer, value + 2, rng_item + offset)
 
 
+def randomize_prices(buffer, prices):
+    min_prices = 1
+    max_prices = 100
+
+    if prices == 2:
+        min_prices = 100
+        max_prices = 1000
+    if prices == 3:
+        min_prices = 1000
+        max_prices = 10000
+
+    for key, value in shop_stock.items():
+        rng_price = random.randrange(min_prices, max_prices)
+        write_word(buffer, value + 4, rng_price)
