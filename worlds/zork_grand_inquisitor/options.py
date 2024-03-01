@@ -21,6 +21,18 @@ class QuickPortFoozle(DefaultOnToggle):
     display_name: str = "Quick Port Foozle"
 
 
+class StartWithHotspotItems(DefaultOnToggle):
+    """
+    If true, the player will be given all the hotspot items at the start of the game, effectively removing the need
+    to enable the important hotspots in the game before interacting with them. Recommended for beginners
+
+    Note: The spots these hotspot items would have occupied in the item pool will instead be filled with junk items.
+    Expect a higher volume of filler items if you enable this option
+    """
+
+    display_name: str = "Start with Hotspot Items"
+
+
 class Deathsanity(Toggle):
     """If true, adds 16 player death locations to the world"""
 
@@ -44,5 +56,6 @@ class GrantMissableLocationChecks(Toggle):
 class ZorkGrandInquisitorOptions(PerGameCommonOptions):
     goal: Goal
     quick_port_foozle: QuickPortFoozle
+    start_with_hotspot_items: StartWithHotspotItems
     deathsanity: Deathsanity
     grant_missable_location_checks: GrantMissableLocationChecks

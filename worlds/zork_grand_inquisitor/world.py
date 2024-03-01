@@ -13,6 +13,7 @@ from .data_funcs import (
     item_names_to_item,
     location_names_to_id,
     item_groups,
+    items_with_tag,
     location_groups,
     locations_by_region,
     location_access_rule_for,
@@ -145,7 +146,11 @@ class ZorkGrandInquisitorWorld(World):
         item: ZorkGrandInquisitorItems
         data: ZorkGrandInquisitorItemData
         for item, data in item_data.items():
-            if ZorkGrandInquisitorTags.FILLER in (data.tags or tuple()):
+            tags: Tuple[ZorkGrandInquisitorTags, ...] = data.tags or tuple()
+
+            if ZorkGrandInquisitorTags.FILLER in tags:
+                continue
+            elif ZorkGrandInquisitorTags.HOTSPOT in tags and self.options.start_with_hotspot_items.value == 1:
                 continue
 
             item_pool.append(self.create_item(item.value))
@@ -159,10 +164,20 @@ class ZorkGrandInquisitorWorld(World):
 
         if self.options.quick_port_foozle.value == 1:
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
-            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_WELL.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
-            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_JACKS_DOOR.value] = 1
-            self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_GRAND_INQUISITOR_DOLL.value] = 1
+
+            if self.options.start_with_hotspot_items.value == 0:
+                self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_WELL.value] = 1
+                self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_JACKS_DOOR.value] = 1
+
+                self.multiworld.early_items[self.player][
+                    ZorkGrandInquisitorItems.HOTSPOT_GRAND_INQUISITOR_DOLL.value
+                ] = 1
+
+        if self.options.start_with_hotspot_items.value == 1:
+            item: ZorkGrandInquisitorItems
+            for item in items_with_tag(ZorkGrandInquisitorTags.HOTSPOT):
+                self.multiworld.push_precollected(self.create_item(item.value))
 
     def create_item(self, name: str) -> ZorkGrandInquisitorItem:
         data: ZorkGrandInquisitorItemData = item_data[self.item_name_to_item[name]]
@@ -181,6 +196,7 @@ class ZorkGrandInquisitorWorld(World):
         return self.options.as_dict(
             "goal",
             "quick_port_foozle",
+            "start_with_hotspot_items",
             "deathsanity",
             "grant_missable_location_checks",
         )

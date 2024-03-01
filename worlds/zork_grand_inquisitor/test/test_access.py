@@ -11,6 +11,10 @@ from ..enums import (
 
 
 class AccessTestRegions(ZorkGrandInquisitorTestBase):
+    options = {
+        "start_with_hotspot_items": "false",
+    }
+
     def test_access_crossroads_to_dm_lair_sword(self) -> None:
         self._go_to_crossroads()
 
@@ -1284,6 +1288,7 @@ class AccessTestRegions(ZorkGrandInquisitorTestBase):
 class AccessTestLocations(ZorkGrandInquisitorTestBase):
     options = {
         "deathsanity": "true",
+        "start_with_hotspot_items": "false",
     }
 
     def test_access_locations_requiring_brogs_flickering_torch(self) -> None:

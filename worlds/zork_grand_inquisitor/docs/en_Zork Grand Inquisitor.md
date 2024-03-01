@@ -39,7 +39,8 @@ Attempting to cast VOXAM will teleport you back to the Crossroads. Fast Travel!
 - Subway destinations
 - Teleporter destinations
 - Totemizer destinations
-- Hotspots
+- Hotspots (with option to start with the items enabling them instead if you prefer not playing with the randomization 
+  of hotspots)
 
 ## When the player receives an item, what happens?
 
