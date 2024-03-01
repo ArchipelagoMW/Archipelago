@@ -569,3 +569,6 @@ class WitnessPlayerLocations:
         entity_hex = StaticWitnessLogic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
         self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
         self.CHECK_PANELHEX_TO_ID[entity_hex] = StaticWitnessLocations.get_id(entity_hex)
+
+
+StaticWitnessLocations()

@@ -44,10 +44,6 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-
-    StaticWitnessLogic()
-    StaticWitnessLocations()
-    StaticWitnessItems()
     web = WitnessWebWorld()
 
     options_dataclass = TheWitnessOptions
