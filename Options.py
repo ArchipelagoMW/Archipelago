@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results
+from Utils import get_fuzzy_results, is_iterable_of_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -766,7 +766,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     value: typing.Any
 
     @classmethod
-    def verify_keys(cls, data: typing.List[str]):
+    def verify_keys(cls, data: typing.Iterable[str]):
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
@@ -857,7 +857,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if isinstance(data, (list, set, frozenset, tuple)):
+        if is_iterable_of_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -883,7 +883,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if isinstance(data, (list, set, frozenset, tuple)):
+        if is_iterable_of_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
