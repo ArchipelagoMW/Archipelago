@@ -644,11 +644,16 @@ def create_deepwoods_pendants(item_factory: StardewItemFactory, options: Stardew
 
 
 def create_special_quest_rewards_sve(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.quest_locations < 0 or ModNames.sve not in options.mods:
+    if ModNames.sve not in options.mods:
         return
+
+    items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if item.mod_name == ModNames.sve])
+
+    if options.quest_locations < 0:
+        return
+
     exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items])
-    items.extend([item_factory(item) for item in items_by_group[Group.MOD_WARP] if item.mod_name == ModNames.sve])
     if exclude_ginger_island:
         return
     items.extend([item_factory(item) for item in SVEQuestItem.sve_quest_items_ginger_island])
