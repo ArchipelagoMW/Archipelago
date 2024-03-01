@@ -522,6 +522,7 @@ class PokemonEmeraldClient(BizHawkClient):
         until successful. Otherwise it will return `None` if it fails to
         acquire the lock.
         """
+        from CommonClient import logger
         while not ctx.exit_event.is_set():
             lock = int(time.time_ns() / 1000000)
             message_uuid = str(uuid.uuid4())
@@ -533,6 +534,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "operations": [{"operation": "update", "value": {"_lock": lock}}],
                 "uuid": message_uuid
             }])
+            logger.info("DEBUG: Aquiring Wonder Trade lock")
             self.check_num_wonder_trade_communiations()
 
             self.wonder_trade_update_event.clear()
@@ -541,6 +543,7 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Make sure the most recently received update was triggered by our lock attempt
             if reply.get("uuid", None) != message_uuid:
+                logger.info("DEBUG: Lock attempt and recent update were mismatched")
                 if not keep_trying:
                     return None
                 await asyncio.sleep(self.wonder_trade_cooldown)
@@ -549,6 +552,7 @@ class PokemonEmeraldClient(BizHawkClient):
             # Make sure the current value of the lock is what we set it to
             # (I think this should theoretically never run)
             if reply["value"]["_lock"] != lock:
+                logger.info("DEBUG: Lock attempt set to incorrect value")
                 if not keep_trying:
                     return None
                 await asyncio.sleep(self.wonder_trade_cooldown)
@@ -562,6 +566,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 # too new when we replaced it, we should wait for increasingly longer periods so that
                 # eventually the lock will expire and a client will acquire it.
                 self.wonder_trade_cooldown *= 2
+                logger.info(f"DEBUG: Lock is too new. Cooldown set to {self.wonder_trade_cooldown}")
 
                 if not keep_trying:
                     self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
@@ -603,6 +608,7 @@ class PokemonEmeraldClient(BizHawkClient):
         Tries to pop a pokemon out of the wonder trades. Returns `None` if
         for some reason it can't immediately remove a compatible pokemon.
         """
+        from CommonClient import logger
         reply = await self.wonder_trade_acquire(ctx)
 
         if reply is None:
@@ -617,6 +623,7 @@ class PokemonEmeraldClient(BizHawkClient):
         ]
 
         if len(candidate_slots) == 0:
+            logger.info(f"DEBUG: Tried to receive, but no trades available")
             await ctx.send_msgs([{
                 "cmd": "Set",
                 "key": f"pokemon_wonder_trades_{ctx.team}",
