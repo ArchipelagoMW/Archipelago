@@ -80,7 +80,7 @@ class GameController:
             ZorkGrandInquisitorItems.LUCYS_PLAYING_CARD_4,
         }
 
-    @functools.cached_property
+    @property
     def totem_items(self) -> Set[ZorkGrandInquisitorItems]:
         return self.brog_items | self.griff_items | self.lucy_items
 
