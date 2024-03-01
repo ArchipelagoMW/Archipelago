@@ -42,7 +42,7 @@ class Deathsanity(Toggle):
 class GrantMissableLocationChecks(Toggle):
     """
     If true, performing an irreversible action will grant the locations checks that would have become unobtainable as a
-    result of that action
+    result of that action when you meet the item requirements
 
     Otherwise, the player is expected to potentially have to use the save system to reach those location checks. If you
     don't like the idea of rarely having to reload an earlier save to get a location check, make sure this option is

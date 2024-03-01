@@ -370,7 +370,8 @@ class GameController:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.BONK:
                 if ZorkGrandInquisitorLocations.PROZORKED in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.HAMMER):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.DEATH_ARRESTED_WITH_JACK:
                 if ZorkGrandInquisitorLocations.ARREST_THE_VANDAL in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
@@ -403,22 +404,27 @@ class GameController:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.DENIED_BY_THE_LAKE_MONSTER:
                 if ZorkGrandInquisitorLocations.WOW_IVE_NEVER_GONE_INSIDE_HIM_BEFORE in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SPELL_GOLGATEM):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.EMERGENCY_MAGICATRONIC_MESSAGE:
                 if ZorkGrandInquisitorLocations.ARTIFACTS_EXPLAINED in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.FAT_LOT_OF_GOOD_THATLL_DO_YA:
                 if ZorkGrandInquisitorLocations.YOU_GAINED_86_EXPERIENCE_POINTS in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SPELL_IGRAM):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.I_DONT_THINK_YOU_WOULDVE_WANTED_THAT_TO_WORK_ANYWAY:
                 if ZorkGrandInquisitorLocations.PROZORKED in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SPELL_THROCK):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.I_SPIT_ON_YOUR_FILTHY_COINAGE:
                 if ZorkGrandInquisitorLocations.YOU_GAINED_86_EXPERIENCE_POINTS in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.POUCH_OF_ZORKMIDS):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.MEAD_LIGHT:
                 if ZorkGrandInquisitorLocations.FIRE_FIRE in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.MEAD_LIGHT):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.MUSHROOM_HAMMERED:
                 if ZorkGrandInquisitorLocations.THROCKED_MUSHROOM_HAMMERED in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
@@ -427,28 +433,36 @@ class GameController:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.NO_BONDAGE:
                 if ZorkGrandInquisitorLocations.HELP_ME_CANT_BREATHE in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.ROPE):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.TALK_TO_ME_GRAND_INQUISITOR:
                 if ZorkGrandInquisitorLocations.FIRE_FIRE in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.THATS_A_ROPE:
                 if ZorkGrandInquisitorLocations.FIRE_FIRE in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.ROPE):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.THATS_IT_JUST_KEEP_HITTING_THOSE_BUTTONS:
                 if ZorkGrandInquisitorLocations.ENJOY_YOUR_TRIP in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.THATS_STILL_A_ROPE:
                 if ZorkGrandInquisitorLocations.YOU_GAINED_86_EXPERIENCE_POINTS in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SPELL_GLORF):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.WHAT_ARE_YOU_STUPID:
                 if ZorkGrandInquisitorLocations.FIRE_FIRE in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.PLASTIC_SIX_PACK_HOLDER):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.YOUR_PUNY_WEAPONS_DONT_PHASE_ME_BABY:
                 if ZorkGrandInquisitorLocations.WANT_SOME_RYE_COURSE_YA_DO in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SWORD) and self._player_has(
+                            ZorkGrandInquisitorItems.HOTSPOT_HARRY
+                    ):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.YOU_DONT_GO_MESSING_WITH_A_MANS_ZIPPER:
                 if ZorkGrandInquisitorLocations.YOU_GAINED_86_EXPERIENCE_POINTS in self.completed_locations:
-                    self.completed_locations_queue.append(missable_location)
+                    if self._player_has(ZorkGrandInquisitorItems.SPELL_REZROV):
+                        self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.YOU_WANT_A_PIECE_OF_ME_DOCK_BOY:
                 if ZorkGrandInquisitorLocations.HELP_ME_CANT_BREATHE in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
