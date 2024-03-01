@@ -389,7 +389,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     _set_bytes_little_endian(patched_rom, options_address + 0x04, 1, 1 if world.options.better_shops else 0)
 
     # Set reusable TMs
-    _set_bytes_little_endian(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms else 0)
+    _set_bytes_little_endian(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms_tutors else 0)
 
     # Set guaranteed catch
     _set_bytes_little_endian(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)

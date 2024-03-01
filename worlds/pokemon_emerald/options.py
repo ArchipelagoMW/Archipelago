@@ -551,13 +551,11 @@ class TmTutorMoves(Toggle):
     display_name = "TM/Tutor Moves"
 
 
-class ReusableTms(Toggle):
+class ReusableTmsTutors(Toggle):
     """
-    Sets TMs to not break after use (they remain sellable)
-
-    Also sets move tutors to infinite use
+    Sets TMs to not break after use (they remain sellable). Sets move tutors to infinite use.
     """
-    display_name = "Reusable TMs"
+    display_name = "Reusable TMs and Tutors"
 
 
 class MinCatchRate(Range):
@@ -857,7 +855,7 @@ class PokemonEmeraldOptions(PerGameCommonOptions):
     tm_tutor_compatibility: TmTutorCompatibility
     hm_compatibility: HmCompatibility
     tm_tutor_moves: TmTutorMoves
-    reusable_tms: ReusableTms
+    reusable_tms_tutors: ReusableTmsTutors
     move_blacklist: MoveBlacklist
 
     min_catch_rate: MinCatchRate
