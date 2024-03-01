@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Tuple
 from enum import Enum
 from BaseClasses import ItemClassification, Item
 
@@ -387,6 +387,13 @@ def get_item_data(item_id: int) -> ItemData:
         data: ItemData = v
         if data.index == item_id:
             return data
+
+
+def get_item_data_shop(item_id: int) -> Tuple:
+    for k, v in item_table.items():
+        data: ItemData = v
+        if data.index == item_id + base_item_id:
+            return k, data
 
 
 vanilla_list = ["Monster vial 3", "Monster vial 3", "Monster vial 3", "Monster vial 3", "Shield rod", "Leather shield",
