@@ -128,6 +128,11 @@ function getCurrZone()
 end
 
 function checkVictory(f)
+	-- We died at Dracula return and reset
+	if just_died then
+		dracula_timer = 0
+		return
+	end
 	if dracula_timer == 0 then
 		dracula_timer = f
 	end
@@ -246,7 +251,7 @@ function organize_inventory(item_id)
 end
 
 function on_loadstate()
-	all_location_table = checkAllLocations()
+	all_location_table = checkAllLocations(0)
 	checkBosses()
 	misplaced_items = {}
 	misplaced_read = {}
@@ -259,7 +264,8 @@ function on_loadstate()
 	just_died = false
 	load_screen = false
 	not_patched = true
-	console.log("Load stated.")
+	dracula_timer = 0
+	--console.log("Load stated.")
 end
 
 function check_death()
@@ -268,7 +274,7 @@ function check_death()
 	if not just_died and hp <= 0 then
 		just_died = true
 		died_zoneid = cur_zoneid
-		console.log("You are dead!")
+		--console.log("You are dead!")
 	end
 end
 
@@ -1014,11 +1020,11 @@ function checkRNO0(f)
 	checks["RNO0 - Heart Refresh(Inside clock)"] = bit.check(flag, 11)
 
 	if last_zone == cur_zone then
-		if delay_timer == 0 then delay_timer = f end
 		if delay_timer ~=0 and f - delay_timer >= 900 then
 			-- Give some time to zone load before patching
 			memory.write_u32_le(0x801c132c, 0x14400118, "System Bus")
 		end
+		if delay_timer == 0 then delay_timer = f end
 	end
 	gui.drawText(0, client.bufferheight() - 20, cur_zone .. "->" .. bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b))
 	gui.drawText(0, client.bufferheight() - 30, memory.read_u32_le(0x801c132c, "System Bus"))
@@ -1232,7 +1238,8 @@ function checkRTOP()
 	return checks
 end
 
-function checkAllLocations()
+function checkAllLocations(f)
+	if mainmemory.read_u16_le(0x180000) == 0xeed8 or mainmemory.read_u16_le(0x180000) == 0x0000 then return end
 	local location_checks = {}
 
 	-- Normal Castle
@@ -1257,7 +1264,7 @@ function checkAllLocations()
 	for k,v in pairs(checkRCHI()) do location_checks[k] = v end
 	for k,v in pairs(checkRDAI()) do location_checks[k] = v end
 	for k,v in pairs(checkRLIB()) do location_checks[k] = v end
-	for k,v in pairs(checkRNO0()) do location_checks[k] = v end
+	for k,v in pairs(checkRNO0(f)) do location_checks[k] = v end
 	for k,v in pairs(checkRNO1()) do location_checks[k] = v end
 	for k,v in pairs(checkRNO2()) do location_checks[k] = v end
 	for k,v in pairs(checkRNO3()) do location_checks[k] = v end
@@ -1270,9 +1277,13 @@ function checkAllLocations()
 end
 
 function checkOneLocation(f)
+	if mainmemory.read_u16_le(0x180000) == 0xeed8 or mainmemory.read_u16_le(0x180000) == 0x0000 then return end
 	local current_table = {}
 
-	if last_zone == "RNO0" and cur_zone ~= "RNO0" then gui.clearGraphics() end
+	if last_zone == "RNO0" and cur_zone ~= "RNO0" then
+		gui.clearGraphics()
+		last_zone = cur_zone
+	end
 
 	-- Normal Castle
 	if cur_zone == "ARE" or cur_zone == "BO2" then current_table = checkARE() end
@@ -1565,7 +1576,7 @@ function file_exists()
 		end
 		io.close(f)
 		last_misplaced_save = table.getn(misplaced_read)
-		console.log("Save file found on file_exists!")
+		--console.log("Save file found on file_exists!")
 
 		return true
 	else
@@ -1664,10 +1675,10 @@ end
 function check_for_misplaced_relic()
 	for i = #misplaced_items, 1, -1 do
 		local item = tonumber(misplaced_items[i])
-		-- It's better to keep sword card out
-		if item >= 300 and item <= 329 and item ~= 322 then
+		-- It's better to keep ghost card out
+		if item >= 300 and item <= 329 and item ~= 319 then
 			if has_relic(item) then
-				console.log("Found misplaced relic")
+				--console.log("Found misplaced relic")
 				return i
 			end
 		end
@@ -1763,7 +1774,7 @@ function main()
 							not_patched = false
 						end
 						last_status = 10
-						all_location_table = checkAllLocations()
+						all_location_table = checkAllLocations(frame)
 						checkBosses()
 						misplaced_items = {}
 						misplaced_read = {}
@@ -1819,7 +1830,7 @@ function main()
 						getCurrZone()
 						if mainmemory.read_u16_le(0x180000) ~= 0xeed8 and cur_zone ~= "UNKNOWN" then
 							-- We reload
-							all_location_table = checkAllLocations()
+							all_location_table = checkAllLocations(frame)
 							checkBosses()
 							misplaced_items = {}
 							misplaced_read = {}
@@ -1836,7 +1847,7 @@ function main()
 					end
 
 					if got_data and seed ~= "" and player_name ~= "" then
-						console.log("Got seed and player name")
+						--console.log("Got seed and player name")
 						if got_data then
 							if file_exists() then handle_misplaced(frame) end
 							got_data = false
