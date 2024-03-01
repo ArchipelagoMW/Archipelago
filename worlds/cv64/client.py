@@ -17,6 +17,7 @@ class Castlevania64Client(BizHawkClient):
     patch_suffix = ".apcv64"
     self_induced_death = False
     received_deathlinks = 0
+    death_causes = []
     currently_shopping = False
     local_checked_locations: Set[int]
 
@@ -61,6 +62,13 @@ class Castlevania64Client(BizHawkClient):
             if "tags" in args:
                 if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
                     self.received_deathlinks += 1
+                    if "cause" in args["data"]:
+                        cause = args["data"]["cause"]
+                        if len(cause) > 67:
+                            cause = cause[0x00:0x68]
+                    else:
+                        cause = f"{args['data']['source']} killed you!"
+                    self.death_causes.append(cause)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
 
@@ -82,7 +90,7 @@ class Castlevania64Client(BizHawkClient):
             rom_flags = int.from_bytes(read_state[5], "big")
 
             # Make sure we are in the Gameplay or Credits states before detecting sent locations and/or DeathLinks.
-            # If we are in any other state, such as the Game Over state, set currently_dead to false, so we can once
+            # If we are in any other state, such as the Game Over state, set self_induced_death to false, so we can once
             # again send a DeathLink once we are back in the Gameplay state.
             if game_state not in [0x00000002, 0x0000000B]:
                 self.self_induced_death = False
@@ -104,15 +112,23 @@ class Castlevania64Client(BizHawkClient):
             if "DeathLink" in ctx.tags and save_struct[0xA4] & 0x80 and not self.self_induced_death and not \
                     deathlink_induced_death:
                 self.self_induced_death = True
-                await ctx.send_death("Dracula wins!")
+                if save_struct[0xA4] & 0x08:
+                    # Special death message for dying while having the Vamp status.
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} became a vampire and drank your blood!")
+                else:
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} perished. Dracula has won!")
 
-            # Increase the game's number of received DeathLinks if the client has received some. To minimize Bizhawk
-            # Write jank, the DeathLink write will be prioritized over the item received one.
-            if self.received_deathlinks and not self.self_induced_death:
-                written_deathlinks += self.received_deathlinks
-                self.received_deathlinks = 0
-                await bizhawk.write(ctx.bizhawk_ctx,
-                                    [(0x389BE2, [written_deathlinks >> 8, written_deathlinks], "RDRAM")])
+            # Write any DeathLinks received along with the corresponding death cause starting with the oldest.
+            # To minimize Bizhawk Write jank, the DeathLink write will be prioritized over the item received one.
+            if self.received_deathlinks and not self.self_induced_death and not written_deathlinks:
+                death_text, num_lines = cv64_text_wrap(self.death_causes[0], 96)
+                await bizhawk.write(ctx.bizhawk_ctx, [(0x389BE3, [0x01], "RDRAM"),
+                                                      (0x389BDF, [0x11], "RDRAM"),
+                                                      (0x18BF98, bytearray([0xA2, 0x0B]) +
+                                                       cv64_string_to_bytearray(death_text, False), "RDRAM"),
+                                                      (0x18C097, [num_lines], "RDRAM")])
+                self.received_deathlinks -= 1
+                del self.death_causes[0]
             else:
                 # If the game hasn't received all items yet, the received item struct doesn't contain an item, the
                 # current number of received items still matches what we read before, and there are no open text boxes,

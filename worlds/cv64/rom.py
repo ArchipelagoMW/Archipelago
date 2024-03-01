@@ -386,12 +386,12 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Make received DeathLinks blow you to smithereens instead of kill you normally.
     if options.death_link == DeathLink.option_explosive:
-        rom.write_byte(0xBFBFDE, 0x01)
+        rom.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
+        rom.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
 
     # Set the DeathLink ROM flag if it's on at all.
     if options.death_link != DeathLink.option_off:
-        rom.write_int32(0x27A70, 0x10000008)  # B [forward 0x08]
-        rom.write_int32s(0xBFC0D0, patches.deathlink_nitro_edition)
+        rom.write_byte(0xBFBFDE, 0x01)
 
     # DeathLink counter decrementer code
     rom.write_int32(0x1C340, 0x080FF8F0)  # J 0x803FE3C0
