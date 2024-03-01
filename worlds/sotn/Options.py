@@ -40,7 +40,33 @@ class BossesNeed(Range):
     """Bosses required to beat Dracula."""
     display_name = "Required Bosses Tokens"
     range_start = 0
-    range_end = 19
+    range_end = 20
+    default = 0
+
+
+class RngSongs(Toggle):
+    """
+        Randomize the zone songs
+    """
+    display_name = "Randomize Songs"
+
+
+class RngShop(Toggle):
+    """
+        Randomize shop items
+    """
+    display_name = "Randomize shop items"
+
+
+class RngPrices(Choice):
+    """
+    Randomize shop prices
+    """
+    display_name = "Shop prices"
+    option_disable = 0
+    option_cheap = 1
+    option_normal = 2
+    option_expensive = 3
     default = 0
 
 
@@ -50,6 +76,9 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "opened_no2": OpenedDAINO2,
     "difficult": Difficult,
     "bosses_need": BossesNeed,
+    "rng_songs": RngSongs,
+    "rng_shop": RngShop,
+    "rng_prices": RngPrices
 }
 
 
