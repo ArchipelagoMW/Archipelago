@@ -238,9 +238,8 @@ async def _patch_and_run_game(patch_file: str):
     try:
         metadata, output_file = Patch.create_rom_file(patch_file)
         Utils.async_start(_run_game(output_file))
-    except (FileNotFoundError, ValueError) as exc:
-        logger.info("ERROR: Unable to patch game. It's likely that your ROM is missing or is an incompatible version.")
-        raise exc
+    except Exception as exc:
+        logger.exception(exc)
 
 
 def launch() -> None:
