@@ -27,23 +27,24 @@ class MetroidPrimeLogic(LogicMixin):
         count = 0
         count += self.prog_items['Energy Tank', player]
         return count
+
     def prime_can_bomb(self, world: MultiWorld, player: int) -> bool:
-        return self.has({'Morph Ball', 'Morph Ball Bombs'})
+        return self.has({'Morph Ball', 'Morph Ball Bombs'} ,player)
 
     def prime_can_boost(self, world: MultiWorld, player: int) -> bool:
-        return self.has({'Morph Ball', 'Boost Ball'})
+        return self.has({'Morph Ball', 'Boost Ball'}, player)
 
     def prime_can_spider(self, world: MultiWorld, player: int) -> bool:
-        return self.has({'Morph Ball', 'Spider Ball'})
+        return self.has({'Morph Ball', 'Spider Ball'}, player)
 
     def prime_can_pb(self, world: MultiWorld, player: int) -> bool:
-        return self.has({'Morph Ball'}) and self.has_any({'Power Bomb', 'Power Bomb Expansion'})
+        return self.has({'Morph Ball'}, player) and self.has_any({'Power Bomb', 'Power Bomb Expansion'}, player)
 
     def prime_can_super(self, world: MultiWorld, player: int) -> bool:
-        return self._prime_has_missiles(world, player) and self.has({'Charge Beam', 'Super Missile'})
+        return self._prime_has_missiles(world, player) and self.has({'Charge Beam', 'Super Missile'}, player)
 
     def prime_can_heat(self, world: MultiWorld, player: int) -> bool:
-        return self.has_any({'Varia Suit, Gravity Suit, Phazon Suit'})
+        return self.has_any({'Varia Suit, Gravity Suit, Phazon Suit'}, player)
 
     # logic rules related to accessing regions or subregions
 
