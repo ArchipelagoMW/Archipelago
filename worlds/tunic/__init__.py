@@ -253,11 +253,11 @@ class TunicWorld(World):
                 name, connection = paths[location.parent_region]
                 while connection != ("Menu", None):
                     name, connection = connection
-                    if name.endswith("(LS)"):
-                        name = name.replace(" (LS)", "")
                     # was getting some cases like Library Grave -> Library Grave -> other place
                     if name in portal_names and name != previous_name:
                         previous_name = name
+                        if "(LS)" in name:
+                            name, _ = name.split(" (LS) ")
                         path_to_loc.append(name)
                 hint_text = ""
                 for transition in reversed(path_to_loc):
