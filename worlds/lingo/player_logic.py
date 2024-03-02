@@ -5,8 +5,8 @@ from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, DoorType, RoomAndDoor, \
-    RoomAndPanel
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, \
+    SUNWARP_ENTRANCES, SUNWARP_EXITS, DoorType, RoomAndDoor, RoomAndPanel
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -84,6 +84,7 @@ class LingoPlayerLogic:
     mastery_reqs: List[AccessRequirements]
     counting_panel_reqs: Dict[str, List[Tuple[AccessRequirements, int]]]
 
+    sunwarp_mapping: List[int]
     sunwarp_entrances: List[str]
     sunwarp_exits: List[str]
 
@@ -137,10 +138,7 @@ class LingoPlayerLogic:
         self.door_reqs = {}
         self.mastery_reqs = []
         self.counting_panel_reqs = {}
-        self.sunwarp_entrances = ["Hub Room", "Hot Crusts Area", "Orange Tower Third Floor", "Orange Tower First Floor",
-                                  "Orange Tower Fourth Floor", "Outside The Agreeable"]
-        self.sunwarp_exits = ["Crossroads", "Orange Tower Third Floor", "Outside The Initiated",
-                              "Outside The Undeterred", "Color Hunt", "Directional Gallery"]
+        self.sunwarp_mapping = []
 
         door_shuffle = world.options.shuffle_doors
         color_shuffle = world.options.shuffle_colors
@@ -249,6 +247,20 @@ class LingoPlayerLogic:
 
         if world.options.enable_pilgrimage and world.options.sunwarp_access == SunwarpAccess.option_disabled:
             raise Exception("Sunwarps cannot be disabled when pilgrimage is enabled.")
+
+        if world.options.shuffle_sunwarps:
+            if world.options.sunwarp_access == SunwarpAccess.option_disabled:
+                raise Exception("Sunwarps cannot be shuffled if they are disabled.")
+
+            self.sunwarp_mapping = list(range(0, 12))
+            world.random.shuffle(self.sunwarp_mapping)
+
+            sunwarp_rooms = SUNWARP_ENTRANCES + SUNWARP_EXITS
+            self.sunwarp_entrances = [sunwarp_rooms[i] for i in self.sunwarp_mapping[0:6]]
+            self.sunwarp_exits = [sunwarp_rooms[i] for i in self.sunwarp_mapping[6:12]]
+        else:
+            self.sunwarp_entrances = SUNWARP_ENTRANCES
+            self.sunwarp_exits = SUNWARP_EXITS
 
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:

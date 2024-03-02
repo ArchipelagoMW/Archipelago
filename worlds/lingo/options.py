@@ -91,6 +91,11 @@ class SunwarpAccess(Choice):
     option_progressive = 4
 
 
+class ShuffleSunwarps(Toggle):
+    """If on, the pairing and ordering of the sunwarps in the game will be randomized."""
+    display_name = "Shuffle Sunwarps"
+
+
 class VictoryCondition(Choice):
     """Change the victory condition.
     On "the_end", the goal is to solve THE END at the top of the tower.
@@ -168,6 +173,7 @@ class LingoOptions(PerGameCommonOptions):
     pilgrimage_allows_roof_access: PilgrimageAllowsRoofAccess
     pilgrimage_allows_paintings: PilgrimageAllowsPaintings
     sunwarp_access: SunwarpAccess
+    shuffle_sunwarps: ShuffleSunwarps
     victory_condition: VictoryCondition
     mastery_achievements: MasteryAchievements
     level_2_requirement: Level2Requirement

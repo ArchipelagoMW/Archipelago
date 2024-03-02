@@ -107,6 +107,9 @@ PAINTING_EXITS: int = 0
 REQUIRED_PAINTING_ROOMS: List[str] = []
 REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS: List[str] = []
 
+SUNWARP_ENTRANCES: List[str] = ["", "", "", "", "", ""]
+SUNWARP_EXITS: List[str] = ["", "", "", "", "", ""]
+
 SPECIAL_ITEM_IDS: Dict[str, int] = {}
 PANEL_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
 DOOR_LOCATION_IDS: Dict[str, Dict[str, int]] = {}
@@ -526,6 +529,15 @@ def process_painting(room_name, painting_data):
     PAINTINGS_BY_ROOM[room_name].append(painting_obj)
 
 
+def process_sunwarp(room_name, sunwarp_data):
+    global SUNWARP_ENTRANCES, SUNWARP_EXITS
+
+    if sunwarp_data["direction"] == "enter":
+        SUNWARP_ENTRANCES[sunwarp_data["dots"]-1] = room_name
+    else:
+        SUNWARP_EXITS[sunwarp_data["dots"] - 1] = room_name
+
+
 def process_progression(room_name, progression_name, progression_doors):
     global PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM
 
@@ -572,6 +584,10 @@ def process_room(room_name, room_data):
 
         for painting_data in room_data["paintings"]:
             process_painting(room_name, painting_data)
+
+    if "sunwarps" in room_data:
+        for sunwarp_data in room_data["sunwarps"]:
+            process_sunwarp(room_name, sunwarp_data)
 
     if "progression" in room_data:
         for progression_name, progression_doors in room_data["progression"].items():

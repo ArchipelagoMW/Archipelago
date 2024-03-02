@@ -37,10 +37,12 @@ configured_panels = Set[]
 mentioned_rooms = Set[]
 mentioned_doors = Set[]
 mentioned_panels = Set[]
+mentioned_sunwarp_entrances = Set[]
+mentioned_sunwarp_exits = Set[]
 
 door_groups = {}
 
-directives = Set["entrances", "panels", "doors", "paintings", "progression"]
+directives = Set["entrances", "panels", "doors", "paintings", "sunwarps", "progression"]
 panel_directives = Set["id", "required_room", "required_door", "required_panel", "colors", "check", "exclude_reduce", "tag", "link", "subtag", "achievement", "copy_to_sign", "non_counting", "hunt"]
 door_directives = Set["id", "painting_id", "panels", "item_name", "location_name", "skip_location", "skip_item", "group", "include_reduce", "junk_item", "event", "warp_id"]
 painting_directives = Set["id", "enter_only", "exit_only", "orientation", "required_door", "required", "required_when_no_doors", "move", "req_blocked", "req_blocked_when_no_doors"]
@@ -289,6 +291,32 @@ config.each do |room_name, room|
     end
     unless bad_subdirectives.empty? then
       puts "#{room_name} - #{painting["id"] || "painting"} :::: Painting has the following invalid subdirectives: #{bad_subdirectives.join(", ")}"
+    end
+  end
+
+  (room["sunwarps"] || []).each do |sunwarp|
+    if sunwarp.include? "dots" and sunwarp.include? "direction" then
+      if sunwarp["dots"] < 1 or sunwarp["dots"] > 6 then
+        puts "#{room_name} :::: Contains a sunwarp with an invalid dots value"
+      end
+
+      if sunwarp["direction"] == "enter" then
+        if mentioned_sunwarp_entrances.include? sunwarp["dots"] then
+          puts "Multiple #{sunwarp["dots"]} sunwarp entrances were found"
+        else
+          mentioned_sunwarp_entrances.add(sunwarp["dots"])
+        end
+      elsif sunwarp["direction"] == "exit" then
+        if mentioned_sunwarp_exits.include? sunwarp["dots"] then
+          puts "Multiple #{sunwarp["dots"]} sunwarp exits were found"
+        else
+          mentioned_sunwarp_exits.add(sunwarp["dots"])
+        end
+      else
+        puts "#{room_name} :::: Contains a sunwarp with an invalid direction value"
+      end
+    else
+      puts "#{room_name} :::: Contains a sunwarp without a dots and direction"
     end
   end
 

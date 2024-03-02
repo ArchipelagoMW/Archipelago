@@ -107,6 +107,14 @@
   #                   Use "req_blocked_when_no_doors" instead if it would be
   #                   fine in door shuffle mode.
   # - move:           Denotes that the painting is able to move.
+  #
+  # sunwarps is an array of sunwarps in the room. This is used for sunwarp
+  # shuffling.
+  # - dots:                   The number of dots on this sunwarp.
+  # - direction:              "enter" or "exit"
+  # - entrance_indicator_pos: Coordinates for where the entrance indicator
+  #                           should be placed if this becomes an entrance.
+  # - orientation:            One of north/south/east/west.
   Starting Room:
     entrances:
       Menu:
@@ -518,14 +526,14 @@
         junk_item: True
         panels:
           - LOST
-      1 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_1
-        group: Sunwarps
-        skip_location: True
-        item_name: "1 Sunwarp"
     paintings:
       - id: maze_painting
         orientation: west
+    sunwarps:
+      - dots: 1
+        direction: enter
+        entrance_indicator_pos: [18, 2.5, -17.01]
+        orientation: north
   Dead End Area:
     entrances:
       Hidden Room:
@@ -552,9 +560,52 @@
     paintings:
       - id: smile_painting_6
         orientation: north
+  Sunwarps:
+    # This is a special, meta-ish room.
+    entrances:
+      Menu: True
+    doors:
+      1 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_1
+        group: Sunwarps
+        skip_location: True
+        item_name: "1 Sunwarp"
+      2 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_2
+        group: Sunwarps
+        skip_location: True
+        item_name: 2 Sunwarp
+      3 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_3
+        group: Sunwarps
+        skip_location: True
+        item_name: "3 Sunwarp"
+      4 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_4
+        group: Sunwarps
+        skip_location: True
+        item_name: 4 Sunwarp
+      5 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_5
+        group: Sunwarps
+        skip_location: True
+        item_name: "5 Sunwarp"
+      6 Sunwarp:
+        warp_id: Teleporter Warps/Sunwarp_enter_6
+        group: Sunwarps
+        skip_location: True
+        item_name: "6 Sunwarp"
+    progression:
+      Progressive Pilgrimage:
+        - 1 Sunwarp
+        - 2 Sunwarp
+        - 3 Sunwarp
+        - 4 Sunwarp
+        - 5 Sunwarp
+        - 6 Sunwarp
   Pilgrim Antechamber:
-    # The entrances to this room are special. When pilgrimage is enabled, we use CollectionStates to detect whether a
-    # pilgrimage can succeed. When pilgrimage is disabled, the sun painting will be added to the pool.
+    # The entrances to this room are special. When pilgrimage is enabled, we use a special access rule to determine
+    # whether a pilgrimage can succeed. When pilgrimage is disabled, the sun painting will be added to the pool.
     panels:
       HOT CRUST:
         id: Lingo Room/Panel_shortcut
@@ -583,20 +634,6 @@
         event: True
         panels:
           - PILGRIM
-    progression:
-      Progressive Pilgrimage:
-        - room: Hub Room
-          door: 1 Sunwarp
-        - room: Hot Crusts Area
-          door: 2 Sunwarp
-        - room: Orange Tower Third Floor
-          door: 3 Sunwarp
-        - room: Orange Tower First Floor
-          door: 4 Sunwarp
-        - room: Orange Tower Fourth Floor
-          door: 5 Sunwarp
-        - room: Outside The Agreeable
-          door: 6 Sunwarp
   Pilgrim Room:
     entrances:
       The Seeker:
@@ -674,7 +711,7 @@
   Crossroads:
     entrances:
       Hub Room:
-        - room: Hub Room
+        - room: Sunwarps
           door: 1 Sunwarp
           sunwarp: True
         - room: Hub Room
@@ -836,6 +873,11 @@
           door: Eye Wall
       - id: smile_painting_4
         orientation: south
+    sunwarps:
+      - dots: 1
+        direction: exit
+        entrance_indicator_pos: [ -17, 2.5, -41.01 ]
+        orientation: north
   Lost Area:
     entrances:
       Outside The Agreeable:
@@ -1181,14 +1223,14 @@
         panels:
           - room: Color Hunt
             panel: PURPLE
-      6 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_6
-        group: Sunwarps
-        skip_location: True
-        item_name: "6 Sunwarp"
     paintings:
       - id: eyes_yellow_painting
         orientation: east
+    sunwarps:
+      - dots: 6
+        direction: enter
+        entrance_indicator_pos: [ 3, 2.5, -55.01 ]
+        orientation: north
   Compass Room:
     entrances:
       Outside The Agreeable:
@@ -1955,11 +1997,11 @@
           - SALT
           - room: Directional Gallery
             panel: PEPPER
-      4 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_4
-        group: Sunwarps
-        skip_location: True
-        item_name: 4 Sunwarp
+    sunwarps:
+      - dots: 4
+        direction: enter
+        entrance_indicator_pos: [ -32, 2.5, -14.99 ]
+        orientation: south
   Orange Tower Second Floor:
     entrances:
       Orange Tower First Floor:
@@ -1986,7 +2028,7 @@
         door: Fourth Floor
         warp: True
       Hot Crusts Area:
-        room: Hot Crusts Area
+        room: Sunwarps
         door: 2 Sunwarp
         sunwarp: True
       Bearer Side Area:
@@ -2037,16 +2079,20 @@
           - RED
           - room: Directional Gallery
             panel: YELLOW
-      3 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_3
-        group: Sunwarps
-        skip_location: True
-        item_name: "3 Sunwarp"
     paintings:
       - id: arrows_painting_6
         orientation: east
       - id: flower_painting_5
         orientation: south
+    sunwarps:
+      - dots: 2
+        direction: exit
+        entrance_indicator_pos: [ 24.01, 2.5, 38 ]
+        orientation: west
+      - dots: 3
+        direction: enter
+        entrance_indicator_pos: [ 28.01, 2.5, 29 ]
+        orientation: west
   Orange Tower Fourth Floor:
     entrances:
       Orange Tower Third Floor:
@@ -2100,11 +2146,11 @@
         id: Shuffle Room Area Doors/Door_hotcrust_shortcuts
         panels:
           - HOT CRUSTS
-      5 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_5
-        group: Sunwarps
-        skip_location: True
-        item_name: "5 Sunwarp"
+    sunwarps:
+      - dots: 5
+        direction: enter
+        entrance_indicator_pos: [ -20, 3, -64.01 ]
+        orientation: north
   Hot Crusts Area:
     entrances:
       Orange Tower Fourth Floor:
@@ -2119,14 +2165,13 @@
         required_door:
           room: Number Hunt
           door: Eights
-    doors:
-      2 Sunwarp:
-        warp_id: Teleporter Warps/Sunwarp_enter_2
-        group: Sunwarps
-        skip_location: True
-        item_name: 2 Sunwarp
     paintings:
       - id: smile_painting_8
+        orientation: north
+    sunwarps:
+      - dots: 2
+        direction: enter
+        entrance_indicator_pos: [ -26, 3.5, -80.01 ]
         orientation: north
   Orange Tower Fifth Floor:
     entrances:
@@ -2889,7 +2934,7 @@
         room: Knight Night (Final)
         door: Exit
       Orange Tower Third Floor:
-        room: Orange Tower Third Floor
+        room: Sunwarps
         door: 3 Sunwarp
         sunwarp: True
       Orange Tower Fifth Floor:
@@ -3071,6 +3116,11 @@
         orientation: east
       - id: smile_painting_1
         orientation: north
+    sunwarps:
+      - dots: 3
+        direction: exit
+        entrance_indicator_pos: [ 89.99, 2.5, 1 ]
+        orientation: east
   The Initiated:
     entrances:
       Outside The Initiated:
@@ -3529,7 +3579,7 @@
       Color Hallways:
         warp: True
       Orange Tower First Floor:
-        room: Orange Tower First Floor
+        room: Sunwarps
         door: 4 Sunwarp
         sunwarp: True
       Orange Tower Second Floor:
@@ -3722,6 +3772,11 @@
         required_door:
           door: Green Painting
       - id: blueman_painting_2
+        orientation: east
+    sunwarps:
+      - dots: 4
+        direction: exit
+        entrance_indicator_pos: [ -89.01, 2.5, 4 ]
         orientation: east
   The Undeterred:
     entrances:
@@ -3996,7 +4051,7 @@
   Directional Gallery:
     entrances:
       Outside The Agreeable:
-        room: Outside The Agreeable
+        room: Sunwarps
         door: 6 Sunwarp
         sunwarp: True
       Orange Tower First Floor:
@@ -4166,12 +4221,17 @@
         orientation: south
       - id: cherry_painting
         orientation: east
+    sunwarps:
+      - dots: 6
+        direction: exit
+        entrance_indicator_pos: [ -39, 2.5, -7.01 ]
+        orientation: north
   Color Hunt:
     entrances:
       Outside The Bold:
         door: Shortcut to The Steady
       Orange Tower Fourth Floor:
-        room: Orange Tower Fourth Floor
+        room: Sunwarps
         door: 5 Sunwarp
         sunwarp: True
       Roof: True # through ceiling of sunwarp
@@ -4232,6 +4292,11 @@
         required_door:
           room: Outside The Initiated
           door: Entrance
+    sunwarps:
+      - dots: 5
+        direction: exit
+        entrance_indicator_pos: [ 54, 2.5, 69.99 ]
+        orientation: north
   Champion's Rest:
     entrances:
       Color Hunt:

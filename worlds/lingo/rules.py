@@ -52,7 +52,7 @@ def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld", 
 
 def lingo_can_do_pilgrimage(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
     if world.options.sunwarp_access >= SunwarpAccess.option_unlock and\
-            not _lingo_can_open_door(state, "Hub Room", "1 Sunwarp", world, player_logic):
+            not _lingo_can_open_door(state, "Sunwarps", "1 Sunwarp", world, player_logic):
         return False
 
     for i in range(1, 6):
