@@ -34,7 +34,8 @@ class MetroidPrimeWorld(World):
             artcount -= 1
 
     def create_regions(self) -> None:
-        create_regions(self)
+        boss_selection = int(self.options.final_bosses)
+        create_regions(self, boss_selection)
 
     def create_item(self, name: str) -> "Item":
         createdthing = item_table[name]
