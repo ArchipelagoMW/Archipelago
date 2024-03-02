@@ -46,18 +46,19 @@ def create_regions(self, final_boss_selection):
     tallon_overworld.connect(phazon_mines, "East Mines Elevator", lambda state: (
         logic.prime_frigate(state, self.multiworld, self.player)))
     if (final_boss_selection == 0 or
-       final_boss_selection == 2):
+            final_boss_selection == 2):
         tallon_overworld.connect(impact_crater, "Crater Access", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
-                state.has({"Wave Beam", "Ice Beam", "Plasma Beam", "Thermal Visor", "X-Ray Visor", "Phazon Suit",
-                           "Space Jump Boots"}, self.player) and
+                state.has_all({"Wave Beam", "Ice Beam", "Plasma Beam", "Thermal Visor", "X-Ray Visor", "Phazon Suit",
+                               "Space Jump Boots"}, self.player) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
     elif final_boss_selection == 1:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
-                (state.has({"Plasma Beam"}, self.player) or logic.prime_can_super(state, self.multiworld, self.player)) and
+                (state.has({"Plasma Beam"}, self.player) or logic.prime_can_super(state, self.multiworld,
+                                                                                  self.player)) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
     elif self.MetroidPrimeOptions.final_bosses == 3:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
@@ -65,15 +66,15 @@ def create_regions(self, final_boss_selection):
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12)))
 
     chozo_ruins.connect(magmoor_caverns, "North Magmoor Elevator", lambda state: (
-        logic.prime_has_missiles(state, self.multiworld, self.player) and
-        logic.prime_can_heat(state, self.multiworld, self.player) and
-        state.has({"Morph Ball"}, self.player)))
+            logic.prime_has_missiles(state, self.multiworld, self.player) and
+            logic.prime_can_heat(state, self.multiworld, self.player) and
+            state.has({"Morph Ball"}, self.player)))
 
     magmoor_caverns.connect(phendrana_drifts, "Magmoor-Phendrana Elevators", lambda state: (
-        logic.prime_front_phen(state, self.multiworld, self.player) or
-        logic.prime_late_magmoor(state, self.multiworld, self.player)))
+            logic.prime_front_phen(state, self.multiworld, self.player) or
+            logic.prime_late_magmoor(state, self.multiworld, self.player)))
     magmoor_caverns.connect(phazon_mines, "West Mines Elevator", lambda state: (
-        logic.prime_late_magmoor(state, self.multiworld, self.player) and state.has({"Ice Beam"}, self.player)))
+            logic.prime_late_magmoor(state, self.multiworld, self.player) and state.has({"Ice Beam"}, self.player)))
 
     if (final_boss_selection == 0 or
             final_boss_selection == 2):

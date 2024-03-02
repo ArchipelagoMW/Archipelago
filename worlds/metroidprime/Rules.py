@@ -28,7 +28,7 @@ def set_rules(multiworld, player):
                                    and logic.prime_can_bomb(state, multiworld, player)),
         'CR Training Chamber': lambda state: (logic.prime_magma_pool(state, multiworld, player) and
                                               logic.prime_can_bomb(state, multiworld, player) and
-                                              state.has({'Boost Ball', 'Spider Ball', 'Wave Beam'}, player)),
+                                              state.has_all({'Boost Ball', 'Spider Ball', 'Wave Beam'}, player)),
         'CR Ruined Nursery': lambda state: logic.prime_can_bomb(state, multiworld, player),
         'CR Training Chamber Access': lambda state: (logic.prime_magma_pool(state, multiworld, player) and
                                                      logic.prime_can_bomb(state, multiworld, player) and
@@ -58,7 +58,7 @@ def set_rules(multiworld, player):
                                                        state.has({'Morph Ball'}, player)),
         'CR Watery Hall - Underwater': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
                                                       logic.prime_can_bomb(state, multiworld, player) and
-                                                      state.has({'Space Jump Boots', 'Gravity Suit'}, player)),
+                                                      state.has_all({'Space Jump Boots', 'Gravity Suit'}, player)),
         'CR Dynamo - Lower': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
                                             (logic.prime_can_bomb(state, multiworld, player) or
                                              logic.prime_can_pb(state, multiworld, player))),
@@ -82,10 +82,10 @@ def set_rules(multiworld, player):
         'CR Crossway': lambda state: (logic.prime_late_chozo(state, multiworld, player) and
                                       logic.prime_can_super(state, multiworld, player) and
                                       logic.prime_can_bomb(state, multiworld, player) and
-                                      state.has({'Boost Ball', 'Spider Ball'}, player)),
+                                      state.has_all({'Boost Ball', 'Spider Ball'}, player)),
         'CR Elder Chamber': lambda state: (logic.prime_late_chozo(state, multiworld, player) and
                                            logic.prime_can_bomb(state, multiworld, player) and
-                                           state.has({'Space Jump Boots', 'Ice Beam', 'Plasma Beam'}, player)),
+                                           state.has_all({'Space Jump Boots', 'Ice Beam', 'Plasma Beam'}, player)),
         'CR Antechamber': lambda state: (logic.prime_reflecting_pool(state, multiworld, player) and
                                          logic.prime_has_missiles(state, multiworld, player) and
                                          state.has({'Ice Beam'}, player)),
@@ -98,18 +98,18 @@ def set_rules(multiworld, player):
                                                                  logic.prime_can_spider(state, multiworld, player) and
                                                                  state.has({'Space Jump Boots'}, player)),
         'PD Chozo Ice Temple': lambda state: (logic.prime_front_phen(state, multiworld, player) and
-                                              state.has({'Plasma Beam', 'Space Jump Boots'}, player)),
+                                              state.has_all({'Plasma Beam', 'Space Jump Boots'}, player)),
         'PD Ice Ruins West': lambda state: (logic.prime_front_phen(state, multiworld, player) and
-                                            state.has({'Plasma Beam', 'Space Jump Boots'}, player)),
+                                            state.has_all({'Plasma Beam', 'Space Jump Boots'}, player)),
         'PD Ice Ruins East - Behind Ice': lambda state: (logic.prime_front_phen(state, multiworld, player) and
                                                          state.has({'Plasma Beam'}, player)),
         'PD Ice Ruins East - Spider Track': lambda state: (logic.prime_front_phen(state, multiworld, player) and
                                                            logic.prime_can_spider(state, multiworld, player)),
         'PD Chapel of the Elders': lambda state: (logic.prime_front_phen(state, multiworld, player) and
                                                   logic.prime_can_bomb(state, multiworld, player) and
-                                                  state.has({'Space Jump Boots', 'Wave Beam'}, player)),
+                                                  state.has_all({'Space Jump Boots', 'Wave Beam'}, player)),
         'PD Ruined Courtyard': lambda state: (logic.prime_middle_phen(state, multiworld, player) and
-                                              state.has({'Space Jump Boots', 'Wave Beam'}, player) and
+                                              state.has_all({'Space Jump Boots', 'Wave Beam'}, player) and
                                               ((logic.prime_can_bomb(state, multiworld, player) and
                                                logic.prime_can_boost(state, multiworld, player)) or
                                                logic.prime_can_spider(state, multiworld, player))),
@@ -124,7 +124,7 @@ def set_rules(multiworld, player):
                                                 logic.prime_can_super(state, multiworld, player)),
         'PD Quarantine Monitor': lambda state: (logic.prime_quarantine_cave(state, multiworld, player) and
                                                 logic.prime_can_spider(state, multiworld, player) and
-                                                state.has({'Thermal Visor', 'Grapple Beam'}, player)),
+                                                state.has_all({'Thermal Visor', 'Grapple Beam'}, player)),
         'PD Observatory': lambda state: (logic.prime_labs(state, multiworld, player) and
                                          logic.prime_can_bomb(state, multiworld, player) and
                                          logic.prime_can_boost(state, multiworld, player)),
@@ -141,14 +141,14 @@ def set_rules(multiworld, player):
         'PD Gravity Chamber - Underwater': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                                           state.has({'Gravity Suit'}, player)),
         'PD Gravity Chamber - Grapple Ledge': lambda state: (logic.prime_far_phen(state, multiworld, player) and
-                                                             state.has({'Gravity Suit', 'Plasma Beam',
+                                                             state.has_all({'Gravity Suit', 'Plasma Beam',
                                                                         'Grapple Beam'}, player)),
         'PD Storage Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                           logic.prime_can_pb(state, multiworld, player) and
-                                          state.has({'Plasma Beam', 'Grapple Beam'}, player)),
+                                          state.has_all({'Plasma Beam', 'Grapple Beam'}, player)),
         'PD Security Cave': lambda state: (logic.prime_far_phen(state, multiworld, player) and
                                            logic.prime_can_pb(state, multiworld, player) and
-                                           state.has({'Plasma Beam', 'Grapple Beam'}, player)),
+                                           state.has_all({'Plasma Beam', 'Grapple Beam'}, player)),
 
         # tallon overworld locations
         'TO Landing Site': lambda state: state.has({'Morph Ball'}, player),
@@ -156,23 +156,23 @@ def set_rules(multiworld, player):
                                      logic.prime_can_boost(state, multiworld, player)) or
                                     state.has({'Space Jump Boots'}, player)),
         'TO Frigate Crash Site': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
-                                                state.has({'Space Jump Boots', 'Morph Ball', 'Gravity Suit'}, player)),
+                                                state.has_all({'Space Jump Boots', 'Morph Ball', 'Gravity Suit'}, player)),
         'TO Overgrown Cavern': lambda state: (logic.prime_reflecting_pool(state, multiworld, player) and
-                                              state.has({'Ice Beam', 'Morph Ball'}, player)),
+                                              state.has_all({'Ice Beam', 'Morph Ball'}, player)),
 
         'TO Root Cave': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
-                                       state.has({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor'}, player)),
+                                       state.has_all({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor'}, player)),
         'TO Artifact Temple': lambda state: logic.prime_has_missiles(state, multiworld, player),
         'TO Transport Tunnel B': lambda state: logic.prime_has_missiles(state, multiworld, player),
         'TO Arbor Chamber': lambda state: (logic.prime_has_missiles(state, multiworld, player) and
-                                           state.has({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor',
+                                           state.has_all({'Grapple Beam', 'Space Jump Boots', 'X-Ray Visor',
                                                       'Plasma Beam'}, player)),
         'TO Cargo Freight Lift to Deck Gamma': lambda state: logic.prime_frigate(state, multiworld, player),
         'TO Biohazard Containment': lambda state: (logic.prime_frigate(state, multiworld, player) and
                                                    logic.prime_can_super(state, multiworld, player)),
         'TO Hydro Access Tunnel': lambda state: (logic.prime_frigate(state, multiworld, player) and
                                                  logic.prime_can_bomb(state, multiworld, player)),
-        'TO Great Tree Chamber': lambda state: (state.has({'X-Ray Visor', 'Ice Beam', 'Space Jump Boots'}, player) and
+        'TO Great Tree Chamber': lambda state: (state.has_all({'X-Ray Visor', 'Ice Beam', 'Space Jump Boots'}, player) and
                                                 (logic.prime_reflecting_pool(state, multiworld, player) or
                                                  (logic.prime_frigate(state, multiworld, player) and
                                                   logic.prime_can_bomb(state, multiworld, player) and
@@ -181,21 +181,21 @@ def set_rules(multiworld, player):
                                                logic.prime_can_boost(state, multiworld, player) and
                                                logic.prime_can_spider(state, multiworld, player) and
                                                logic.prime_can_pb(state, multiworld, player) and
-                                               state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                               state.has_all({'Ice Beam', 'Space Jump Boots'}, player) and
                                                (logic.prime_frigate(state, multiworld, player) or
                                                 logic.prime_reflecting_pool(state, multiworld, player))),
         'TO Life Grove - Start': lambda state: (logic.prime_can_bomb(state, multiworld, player) and
                                                 logic.prime_can_boost(state, multiworld, player) and
                                                 logic.prime_can_spider(state, multiworld, player) and
                                                 logic.prime_can_pb(state, multiworld, player) and
-                                                state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                                state.has_all({'Ice Beam', 'Space Jump Boots'}, player) and
                                                 (logic.prime_frigate(state, multiworld, player) or
                                                  logic.prime_reflecting_pool(state, multiworld, player))),
         'TO Life Grove - Underwater Spinner': lambda state: (logic.prime_can_bomb(state, multiworld, player) and
                                                              logic.prime_can_boost(state, multiworld, player) and
                                                              logic.prime_can_spider(state, multiworld, player) and
                                                              logic.prime_can_pb(state, multiworld, player) and
-                                                             state.has({'Ice Beam', 'Space Jump Boots'}, player) and
+                                                             state.has_all({'Ice Beam', 'Space Jump Boots'}, player) and
                                                              (logic.prime_frigate(state, multiworld, player) or
                                                               logic.prime_reflecting_pool(state, multiworld, player))),
 
@@ -244,7 +244,7 @@ def set_rules(multiworld, player):
                                             logic.prime_can_bomb(state, multiworld, player) and
                                             logic.prime_can_pb(state, multiworld, player) and
                                             logic.prime_can_spider(state, multiworld, player) and
-                                            state.has({'Grapple Beam', 'X-Ray Visor'}, player)),
+                                            state.has_all({'Grapple Beam', 'X-Ray Visor'}, player)),
         'PM Metroid Quarantine B': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
                                                   logic.prime_can_super(state, multiworld, player)),
         'PM Metroid Quarantine A': lambda state: (logic.prime_upper_mines(state, multiworld, player) and
@@ -252,7 +252,7 @@ def set_rules(multiworld, player):
                                                   logic.prime_can_pb(state, multiworld, player) and
                                                   logic.prime_can_spider(state, multiworld, player) and
                                                   logic.prime_can_boost(state, multiworld, player) and
-                                                  state.has({'Grapple Beam', 'X-Ray Visor'}, player)),
+                                                  state.has_all({'Grapple Beam', 'X-Ray Visor'}, player)),
         'PM Fungal Hall B': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
                                            state.has_any({'Thermal Visor', 'X-Ray Visor'}, player)),
         'PM Phazon Mining Tunnel': lambda state: (logic.prime_lower_mines(state, multiworld, player) and
@@ -261,12 +261,12 @@ def set_rules(multiworld, player):
                                                 logic.prime_can_bomb(state, multiworld, player) and
                                                 logic.prime_can_pb(state, multiworld, player) and
                                                 logic.prime_can_boost(state, multiworld, player) and
-                                                state.has({'Grapple Beam', 'X-Ray Visor', 'Plasma Beam'}, player)),
+                                                state.has_all({'Grapple Beam', 'X-Ray Visor', 'Plasma Beam'}, player)),
 
         # magmoor caverns locations
         'MC Lava Lake': lambda state: (logic.prime_can_heat(state, multiworld, player) and
                                        logic.prime_has_missiles(state, multiworld, player) and
-                                       state.has({'Morph Ball', 'Space Jump Boots'}, player)),
+                                       state.has_all({'Morph Ball', 'Space Jump Boots'}, player)),
         'MC Triclops Pit': lambda state: (logic.prime_early_magmoor(state, multiworld, player) and
                                           logic.prime_has_missiles(state, multiworld, player) and
                                           state.has({'Space Jump Boots'}, player)),
@@ -293,7 +293,7 @@ def set_rules(multiworld, player):
                                                logic.prime_can_bomb(state, multiworld, player) and
                                                logic.prime_can_boost(state, multiworld, player) and
                                                logic.prime_can_spider(state, multiworld, player) and
-                                               state.has({'Ice Beam', 'Plasma Beam', 'Grapple Beam'}, player)),
+                                               state.has_all({'Ice Beam', 'Plasma Beam', 'Grapple Beam'}, player)),
         'MC Magmoor Workstation': lambda state: (logic.prime_late_magmoor(state, multiworld, player) and
-                                                 state.has({'Morph Ball', 'Wave Beam', 'Thermal Visor'}, player))
+                                                 state.has_all({'Morph Ball', 'Wave Beam', 'Thermal Visor'}, player))
     }
