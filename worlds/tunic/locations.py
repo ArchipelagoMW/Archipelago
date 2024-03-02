@@ -175,7 +175,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Sealed Temple - Page Pickup": TunicLocationData("Overworld", "Sealed Temple", ladder_region="Sealed Temple"),
     "Hourglass Cave - Hourglass Chest": TunicLocationData("Overworld", "Hourglass Cave", ladder_region="Overworld Beach"),
     "Far Shore - Secret Chest": TunicLocationData("Overworld", "Far Shore"),
-    "Far Shore - Page Pickup": TunicLocationData("Overworld", "Far Shore to Spawn"),
+    "Far Shore - Page Pickup": TunicLocationData("Overworld", "Far Shore to Spawn Region"),
     "Coins in the Well - 10 Coins": TunicLocationData("Overworld", "Overworld", location_group="well"),
     "Coins in the Well - 15 Coins": TunicLocationData("Overworld", "Overworld", location_group="well"),
     "Coins in the Well - 3 Coins": TunicLocationData("Overworld", "Overworld", location_group="well"),

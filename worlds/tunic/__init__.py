@@ -8,6 +8,7 @@ from .er_rules import set_er_location_rules
 from .ladder_rules import set_ladder_region_rules, set_ladder_location_rules
 from .regions import tunic_regions, tunic_ladder_regions
 from .er_scripts import create_er_regions
+from .er_data import portal_mapping
 from .options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
 from decimal import Decimal, ROUND_HALF_UP
@@ -190,11 +191,9 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
             
         if self.options.entrance_rando:
-            portal_pairs, portal_hints = create_er_regions(self)
+            portal_pairs = create_er_regions(self)
             for portal1, portal2 in portal_pairs.items():
                 self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
-
-            self.er_portal_hints = portal_hints
 
         else:
             if self.options.ladder_rando:
@@ -239,7 +238,33 @@ class TunicWorld(World):
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
         if self.options.entrance_rando:
-            hint_data[self.player] = self.er_portal_hints
+            hint_data.update({self.player: {}})
+            # all state seems to have efficient paths
+            all_state = self.multiworld.get_all_state(True)
+            all_state.update_reachable_regions(self.player)
+            paths = all_state.path
+            portal_names = [portal.name for portal in portal_mapping]
+            for location in self.multiworld.get_locations(self.player):
+                # skipping event locations
+                if not location.address:
+                    continue
+                path_to_loc = []
+                previous_name = "placeholder"
+                name, connection = paths[location.parent_region]
+                while connection != ("Menu", None):
+                    name, connection = connection
+                    if name.endswith("(LS)"):
+                        name = name.replace(" (LS)", "")
+                    # was getting some cases like Library Grave -> Library Grave -> other place
+                    if name in portal_names and name != previous_name:
+                        previous_name = name
+                        path_to_loc.append(name)
+                hint_text = ""
+                for transition in reversed(path_to_loc):
+                    hint_text += f"{transition} -> "
+                hint_text = hint_text.rstrip("-> ")
+                if hint_text:
+                    hint_data[self.player][location.address] = hint_text
 
     def fill_slot_data(self) -> Dict[str, Any]:
         slot_data: Dict[str, Any] = {
