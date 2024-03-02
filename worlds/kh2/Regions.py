@@ -281,6 +281,7 @@ def create_regions(self):
         KH2REGIONS[RegionName.DcPuzzlePieces] = RegionLocations.DcPuzzlePiecesLocations
         KH2REGIONS[RegionName.TrPuzzlePieces] = RegionLocations.TrPuzzlePiecesLocations
         KH2REGIONS[RegionName.Pr1PuzzlePieces] = RegionLocations.Pr1PuzzlePiecesLocations
+        KH2REGIONS[RegionName.BarbosaPuzzlePieces] = RegionLocations.PR1PostBarbosaPuzzlePiecesLocations
         KH2REGIONS[RegionName.Pr2PuzzlePieces] = RegionLocations.Pr2PuzzlePiecesLocations
         KH2REGIONS[RegionName.Ag1PuzzlePieces] = RegionLocations.Ag1PuzzlePiecesLocations
         KH2REGIONS[RegionName.Ag2PuzzlePieces] = RegionLocations.Ag2PuzzlePiecesLocations
@@ -306,7 +307,7 @@ def create_regions(self):
     #        KH2REGIONS[RegionName.PuzzlePieces].append(location)
 
     multiworld.regions += [create_region(multiworld, player, active_locations, region, locations) for region, locations in
-                          KH2REGIONS.items()]
+                           KH2REGIONS.items()]
     # fill the event locations with events
 
     for location, item in Locations.event_location_to_item.items():
@@ -347,7 +348,7 @@ def connect_regions(self):
         RegionName.Ha5:                {RegionName.SpookyCavePuzzlePieces, RegionName.Ha6},
         RegionName.Ha6:                {RegionName.StarryHillPuzzlePieces},
         RegionName.Pr:                 {RegionName.Pr1PuzzlePieces, RegionName.Barbosa},
-        RegionName.Barbosa:            {RegionName.Pr2},
+        RegionName.Barbosa:            {RegionName.Pr2, RegionName.BarbosaPuzzlePieces},
         RegionName.Pr2:                {RegionName.Pr2PuzzlePieces, RegionName.GrimReaper1},
         RegionName.GrimReaper1:        {RegionName.GrimReaper2},
         RegionName.GrimReaper2:        {RegionName.DataLuxord},

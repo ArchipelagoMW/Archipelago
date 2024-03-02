@@ -1028,6 +1028,8 @@ Pr1PuzzlePiecesLocations = [
     LocationName.FrontierPuzzleTown,
     LocationName.HeartPuzzlePowderStore,
     LocationName.DualityPuzzlePowderStore,
+]
+PR1PostBarbosaPuzzlePiecesLocations = [
     LocationName.DaylightPuzzleBlackPearlBack,
     LocationName.DaylightPuzzleBlackPearlFlags,
     LocationName.DaylightPuzzleBlackPearlInside,

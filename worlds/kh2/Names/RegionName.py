@@ -173,6 +173,7 @@ Oc1PuzzlePieces = "Olympus 1 Puzzle Pieces"
 DcPuzzlePieces = "Disney Castle Puzzle Pieces"
 TrPuzzlePieces = "Timeless River Puzzle Pieces"
 Pr1PuzzlePieces = "Port Royal 1 Puzzle Pieces"
+BarbosaPuzzlePieces = "Barbosa Puzzle Pieces"
 Pr2PuzzlePieces = "Port Royal 2 Puzzle Pieces"
 Ag1PuzzlePieces = "Agrabah 1 Puzzle Pieces"
 Ag2PuzzlePieces = "Agrabah 2 Puzzle Pieces"  # dont need magic for these
