@@ -558,6 +558,21 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
+    @classmethod
+    def stage_post_fill(cls, multiworld):
+        # Convert all but one of each instance of a wild Pokemon to useful classification.
+        # This cuts down on time spent calculating the spoiler playthrough.
+        found_mons = set()
+        for sphere in multiworld.get_spheres():
+            for location in sphere:
+                if (location.game == "Pokemon Red and Blue" and (location.item.name in poke_data.pokemon_data.keys()
+                                                                 or "Static " in location.item.name)
+                        and location.item.advancement):
+                    key = (location.player, location.item.name)
+                    if key in found_mons:
+                        location.item.classification = ItemClassification.useful
+                    else:
+                        found_mons.add(key)
 
     def create_regions(self):
         if (self.multiworld.old_man[self.player] == "vanilla" or
