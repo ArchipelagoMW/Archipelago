@@ -48,6 +48,8 @@ class SVPerformanceTestCase(SVTestCase):
     skip_performance_tests: bool = True
     # Set False to not call the fill in the tests"""
     skip_fill: bool = True
+    # Set True to print results as CSV"""
+    csv: bool = False
 
     @classmethod
     def setUpClass(cls) -> None:
@@ -72,15 +74,27 @@ class SVPerformanceTestCase(SVTestCase):
         else:
             cls.number_generations = default_number_generations
 
+        csv_key = "csv"
+        if csv_key in os.environ:
+            cls.csv = bool(os.environ[csv_key])
+
     @classmethod
     def tearDownClass(cls) -> None:
-        case = None
-        for result in cls.results:
-            if type(result.case) is not case:
-                case = type(result.case)
-                print(case.__name__)
-            print(result)
-        print()
+        if cls.csv:
+            csved_results = (f"{type(result.case).__name__},{result.amount_of_players},{val:.6f}"
+                             for result in cls.results for val in result.results)
+            for r in csved_results:
+                print(r)
+            print()
+        else:
+            case = None
+            for result in cls.results:
+                if type(result.case) is not case:
+                    case = type(result.case)
+                    print(case.__name__)
+                print(result)
+            print()
+
         super().tearDownClass()
 
     def performance_test_multiworld(self, options):
