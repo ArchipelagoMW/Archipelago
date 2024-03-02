@@ -51,35 +51,35 @@ class MetroidPrimeLogic(LogicMixin):
     def prime_late_chozo(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and self.prime_can_bomb(world, player) and
                 self.prime_can_spider(world, player) and
-                ((self.has({'Wave Beam'}) and self.prime_can_boost(world, player)) or
-                 self.has({'Ice Beam', 'Space Jump Boots'})))
+                ((self.has({'Wave Beam'}, player) and self.prime_can_boost(world, player)) or
+                 self.has({'Ice Beam', 'Space Jump Boots'}, player)))
 
     def prime_reflecting_pool(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_late_chozo(world, player) and self.prime_can_boost(world, player) and
-                self.has({'Space Jump Boots', 'Wave Beam'}))
+                self.has({'Space Jump Boots', 'Wave Beam'}, player))
 
     def prime_frigate(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and
                 self.has({'Morph Ball, Space Jump Boots, Ice Beam, Wave Beam',
-                          'Gravity Suit', 'Thermal Visor'}))
+                          'Gravity Suit', 'Thermal Visor'}, player))
 
     def prime_magma_pool(self, world: MultiWorld, player: int) -> bool:
-        return self.prime_can_heat(world, player) and self.has({'Grapple Beam'})
+        return self.prime_can_heat(world, player) and self.has({'Grapple Beam'}, player)
 
     def prime_tower_of_light(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and self.prime_can_boost(world, player) and
-                self.prime_can_spider(world, player) and self.has({'Wave Beam', 'Space Jump Boots'}))
+                self.prime_can_spider(world, player) and self.has({'Wave Beam', 'Space Jump Boots'}, player))
 
     def prime_early_magmoor(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_can_heat(world, player) and self.prime_has_missiles(world, player)
-                and self.has({'Morph Ball'}) and (self.has({'Grapple Beam'}) or
+                and self.has({'Morph Ball'}, player) and (self.has({'Grapple Beam'}, player) or
                                                   (self.prime_can_bomb(world, player) or
                                                    self.prime_can_pb(world, player))))
 
     def prime_late_magmoor(self, world: MultiWorld, player: int) -> bool:
         # through early magmoor
         return ((self.prime_can_heat(world, player) and self.prime_has_missiles(world, player)
-                 and self.prime_can_spider(world, player) and self.has({'Wave Beam', 'Space Jump Boots'}))
+                 and self.prime_can_spider(world, player) and self.has({'Wave Beam', 'Space Jump Boots'}, player))
                 # from mines via tallon
                 or (self.prime_frigate(world, player) and self.prime_can_bomb(world, player) and
                     self.prime_can_pb(world, player) and self.prime_can_spider(world, player)))
@@ -89,32 +89,32 @@ class MetroidPrimeLogic(LogicMixin):
         return ((self.prime_early_magmoor(world, player) and self.prime_can_bomb(world, player))
                 # backwards from quarantine cave
                 or (self.prime_late_magmoor(world, player) and self.prime_can_bomb(world, player)
-                    and self.prime_can_spider(world, player) and self.has({'Thermal Visor', 'Wave Beam'})))
+                    and self.prime_can_spider(world, player) and self.has({'Thermal Visor', 'Wave Beam'}, player)))
 
     # basically just ruined courtyard
     def prime_middle_phen(self, world: MultiWorld, player: int) -> bool:
-        return (self.prime_front_phen(world, player) and self.has({'Space Jump Boots', 'Wave Beam'}) and
+        return (self.prime_front_phen(world, player) and self.has({'Space Jump Boots', 'Wave Beam'}, player) and
                 ((self.prime_can_bomb(world, player) and self.prime_can_boost(world, player)) or
                  self.prime_can_spider(world, player)))
 
     def prime_quarantine_cave(self, world: MultiWorld, player: int) -> bool:
         # from ruined courtyard
         return ((self.prime_middle_phen(world, player) and self.prime_can_super(world, player) and
-                 self.has({'Thermal Visor'}))
+                 self.has({'Thermal Visor'}, player))
                 # from late magmoor
                 or (self.prime_late_magmoor(world, player) and self.prime_can_bomb(world, player)))
 
     def prime_far_phen(self, world: MultiWorld, player: int) -> bool:
-        return (self.prime_middle_phen(world, player) and self.has({'Ice Beam'}) and
+        return (self.prime_middle_phen(world, player) and self.has({'Ice Beam'}, player) and
                 # from labs
-                ((self.prime_can_bomb(world, player) and self.has({'Boost Ball, Space Jump Boots'})) or
+                ((self.prime_can_bomb(world, player) and self.has({'Boost Ball, Space Jump Boots'}, player)) or
                  # from late magmoor elevator
                  (self.prime_can_spider(world, player) and self.prime_can_super(world, player) and
-                  self.has({'Thermal Visor'}))))
+                  self.has({'Thermal Visor'}, player))))
 
     def prime_labs(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_middle_phen(world, player) and self.prime_can_bomb(world, player)
-                and self.has({'Boost Ball', 'Space Jump Boots'}))
+                and self.has({'Boost Ball', 'Space Jump Boots'}, player))
         # or self._prime_far_phen(world, player)     [reverse labs]
 
     def prime_upper_mines(self, world: MultiWorld, player: int) -> bool:
@@ -122,10 +122,10 @@ class MetroidPrimeLogic(LogicMixin):
         return ((self.prime_frigate(world, player) and self.prime_can_bomb(world, player)) or
                 # from PPC via magmoor
                 (self.prime_late_magmoor(world, player) and self.prime_can_bomb(world, player)
-                 and self.prime_can_pb(world, player) and self.has({'Spider Ball', 'Ice Beam'})))
+                 and self.prime_can_pb(world, player) and self.has({'Spider Ball', 'Ice Beam'}, player)))
 
     # should also cover reverse lower mines since upper mines can logically expect magmoor elevator
     def prime_lower_mines(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_upper_mines(world, player) and self.prime_can_pb(world, player) and
-                self.has('Morph Ball Bombs', 'Boost Ball', 'Spider Ball', 'Plasma Beam',
-                         'X-Ray Visor', 'Grapple Beam'))
+                self.has({'Morph Ball Bombs', 'Boost Ball', 'Spider Ball', 'Plasma Beam',
+                         'X-Ray Visor', 'Grapple Beam'}, player))
