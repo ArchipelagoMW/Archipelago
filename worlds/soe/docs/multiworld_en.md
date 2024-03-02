@@ -29,7 +29,7 @@ them. Player settings page: [Secret of Evermore Player Settings PAge](/games/Sec
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator
-page: [YAML Validation page](/mysterycheck)
+page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 

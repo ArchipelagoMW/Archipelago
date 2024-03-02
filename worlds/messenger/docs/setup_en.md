@@ -1,16 +1,15 @@
 # The Messenger Randomizer Setup Guide
 
 ## Quick Links
-- [Game Info](../../../../games/The%20Messenger/info/en)
-- [Settings Page](../../../../games/The%20Messenger/player-settings)
+- [Game Info](/games/The%20Messenger/info/en)
+- [Options Page](/games/The%20Messenger/player-options)
 - [Courier Github](https://github.com/Brokemia/Courier)
 - [The Messenger Randomizer AP Github](https://github.com/alwaysintreble/TheMessengerRandomizerModAP)
-- [Jacksonbird8237's Item Tracker](https://github.com/Jacksonbird8237/TheMessengerItemTracker)
 - [PopTracker Pack](https://github.com/alwaysintreble/TheMessengerTrackPack)
 
 ## Installation
 
-1. Read the [Game Info Page](../../../../games/The%20Messenger/info/en) for how the game works, caveats and known issues
+1. Read the [Game Info Page](/games/The%20Messenger/info/en) for how the game works, caveats and known issues
 2. Download and install Courier Mod Loader using the instructions on the release page
    * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
 3. Download and install the randomizer mod

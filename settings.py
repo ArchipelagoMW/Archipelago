@@ -118,7 +118,7 @@ class Group:
                 cls._type_cache = typing.get_type_hints(cls, globalns=mod_dict, localns=cls.__dict__)
         return cls._type_cache
 
-    def get(self, key: str, default: Any) -> Any:
+    def get(self, key: str, default: Any = None) -> Any:
         if key in self:
             return self[key]
         return default
@@ -597,8 +597,8 @@ class ServerOptions(Group):
     disable_item_cheat: Union[DisableItemCheat, bool] = False
     location_check_points: LocationCheckPoints = LocationCheckPoints(1)
     hint_cost: HintCost = HintCost(10)
-    release_mode: ReleaseMode = ReleaseMode("goal")
-    collect_mode: CollectMode = CollectMode("goal")
+    release_mode: ReleaseMode = ReleaseMode("auto")
+    collect_mode: CollectMode = CollectMode("auto")
     remaining_mode: RemainingMode = RemainingMode("goal")
     auto_shutdown: AutoShutdown = AutoShutdown(0)
     compatibility: Compatibility = Compatibility(2)
@@ -673,7 +673,7 @@ class GeneratorOptions(Group):
     spoiler: Spoiler = Spoiler(3)
     glitch_triforce_room: GlitchTriforceRoom = GlitchTriforceRoom(1)  # why is this here?
     race: Race = Race(0)
-    plando_options: PlandoOptions = PlandoOptions("bosses")
+    plando_options: PlandoOptions = PlandoOptions("bosses, connections, texts")
 
 
 class SNIOptions(Group):
@@ -694,6 +694,25 @@ does nothing if not found
     snes_rom_start: Union[SnesRomStart, bool] = True
 
 
+class BizHawkClientOptions(Group):
+    class EmuHawkPath(UserFilePath):
+        """
+        The location of the EmuHawk you want to auto launch patched ROMs with
+        """
+        is_exe = True
+        description = "EmuHawk Executable"
+
+    class RomStart(str):
+        """
+        Set this to true to autostart a patched ROM in BizHawk with the connector script,
+        to false to never open the patched rom automatically,
+        or to a path to an external program to open the ROM file with that instead.
+        """
+
+    emuhawk_path: EmuHawkPath = EmuHawkPath(None)
+    rom_start: Union[RomStart, bool] = True
+
+
 # Top-level group with lazy loading of worlds
 
 class Settings(Group):
@@ -701,6 +720,7 @@ class Settings(Group):
     server_options: ServerOptions = ServerOptions()
     generator: GeneratorOptions = GeneratorOptions()
     sni_options: SNIOptions = SNIOptions()
+    bizhawkclient_options: BizHawkClientOptions = BizHawkClientOptions()
 
     _filename: Optional[str] = None
 

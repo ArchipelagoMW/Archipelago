@@ -39,6 +39,7 @@ oasis = (Region.oasis,)
 sewers = (Region.sewer,)
 island = (Region.island_east,)
 secret_woods = (Region.secret_woods,)
+wizard_tower = (Region.wizard_tower,)
 
 golden_pumpkin = ("Golden Pumpkin",)
 # magic_rock_candy = ("Magic Rock Candy",)
@@ -314,7 +315,7 @@ milf = villager(NPC.robin, False, carpenter, Season.fall, universal_loves + robi
 sandy = villager(NPC.sandy, False, oasis, Season.fall, universal_loves + sandy_loves, False)
 vincent = villager(NPC.vincent, False, town, Season.spring, universal_loves + vincent_loves, True)
 willy = villager(NPC.willy, False, beach, Season.summer, universal_loves + willy_loves, True)
-wizard = villager(NPC.wizard, False, forest, Season.winter, universal_loves + wizard_loves, True)
+wizard = villager(NPC.wizard, False, wizard_tower, Season.winter, universal_loves + wizard_loves, True)
 
 # Custom NPCs
 alec = villager(ModNPC.alec, True, forest, Season.winter, universal_loves + trilobite, True, ModNames.alec)

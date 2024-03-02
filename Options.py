@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import abc
 import logging
+from copy import deepcopy
+from dataclasses import dataclass
+import functools
 import math
 import numbers
 import random
@@ -210,6 +213,12 @@ class NumericOption(Option[int], numbers.Integral, abc.ABC):
             return self.value > other.value
         else:
             return self.value > other
+
+    def __ge__(self, other: typing.Union[int, NumericOption]) -> bool:
+        if isinstance(other, NumericOption):
+            return self.value >= other.value
+        else:
+            return self.value >= other
 
     def __bool__(self) -> bool:
         return bool(self.value)
@@ -687,10 +696,18 @@ class Range(NumericOption):
         return int(round(random.triangular(lower, end, tri), 0))
 
 
-class SpecialRange(Range):
-    special_range_cutoff = 0
+class NamedRange(Range):
     special_range_names: typing.Dict[str, int] = {}
     """Special Range names have to be all lowercase as matching is done with text.lower()"""
+
+    def __init__(self, value: int) -> None:
+        if value < self.range_start and value not in self.special_range_names.values():
+            raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        elif value > self.range_end and value not in self.special_range_names.values():
+            raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -698,6 +715,19 @@ class SpecialRange(Range):
         if text in cls.special_range_names:
             return cls(cls.special_range_names[text])
         return super().from_text(text)
+
+
+class SpecialRange(NamedRange):
+    special_range_cutoff = 0
+
+    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
+    def __new__(cls, value: int) -> SpecialRange:
+        from Utils import deprecate
+        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
+                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
+                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
+                  "placed anywhere (below, inside, or above the regular range).")
+        return super().__new__(cls, value)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -882,7 +912,7 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(SpecialRange):
+class ProgressionBalancing(NamedRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
@@ -896,10 +926,58 @@ class ProgressionBalancing(SpecialRange):
     }
 
 
-common_options = {
-    "progression_balancing": ProgressionBalancing,
-    "accessibility": Accessibility
-}
+class OptionsMetaProperty(type):
+    def __new__(mcs,
+                name: str,
+                bases: typing.Tuple[type, ...],
+                attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
+        for attr_type in attrs.values():
+            assert not isinstance(attr_type, AssembleOptions),\
+                f"Options for {name} should be type hinted on the class, not assigned"
+        return super().__new__(mcs, name, bases, attrs)
+
+    @property
+    @functools.lru_cache(maxsize=None)
+    def type_hints(cls) -> typing.Dict[str, typing.Type[Option[typing.Any]]]:
+        """Returns type hints of the class as a dictionary."""
+        return typing.get_type_hints(cls)
+
+
+@dataclass
+class CommonOptions(metaclass=OptionsMetaProperty):
+    progression_balancing: ProgressionBalancing
+    accessibility: Accessibility
+
+    def as_dict(self, *option_names: str, casing: str = "snake") -> typing.Dict[str, typing.Any]:
+        """
+        Returns a dictionary of [str, Option.value]
+        
+        :param option_names: names of the options to return
+        :param casing: case of the keys to return. Supports `snake`, `camel`, `pascal`, `kebab`
+        """
+        option_results = {}
+        for option_name in option_names:
+            if option_name in type(self).type_hints:
+                if casing == "snake":
+                    display_name = option_name
+                elif casing == "camel":
+                    split_name = [name.title() for name in option_name.split("_")]
+                    split_name[0] = split_name[0].lower()
+                    display_name = "".join(split_name)
+                elif casing == "pascal":
+                    display_name = "".join([name.title() for name in option_name.split("_")])
+                elif casing == "kebab":
+                    display_name = option_name.replace("_", "-")
+                else:
+                    raise ValueError(f"{casing} is invalid casing for as_dict. "
+                                     "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
+                value = getattr(self, option_name).value
+                if isinstance(value, set):
+                    value = sorted(value)
+                option_results[display_name] = value
+            else:
+                raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
+        return option_results
 
 
 class LocalItems(ItemSet):
@@ -1020,17 +1098,16 @@ class ItemLinks(OptionList):
             link.setdefault("link_replacement", None)
 
 
-per_game_common_options = {
-    **common_options,  # can be overwritten per-game
-    "local_items": LocalItems,
-    "non_local_items": NonLocalItems,
-    "start_inventory": StartInventory,
-    "start_hints": StartHints,
-    "start_location_hints": StartLocationHints,
-    "exclude_locations": ExcludeLocations,
-    "priority_locations": PriorityLocations,
-    "item_links": ItemLinks
-}
+@dataclass
+class PerGameCommonOptions(CommonOptions):
+    local_items: LocalItems
+    non_local_items: NonLocalItems
+    start_inventory: StartInventory
+    start_hints: StartHints
+    start_location_hints: StartLocationHints
+    exclude_locations: ExcludeLocations
+    priority_locations: PriorityLocations
+    item_links: ItemLinks
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
@@ -1052,7 +1129,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: typing.Union[Range, SpecialRange]):
+    def dictify_range(option: Range):
         data = {option.default: 50}
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:
@@ -1071,10 +1148,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
 
     for game_name, world in AutoWorldRegister.world_types.items():
         if not world.hidden or generate_hidden:
-            all_options: typing.Dict[str, AssembleOptions] = {
-                **per_game_common_options,
-                **world.option_definitions
-            }
+            all_options: typing.Dict[str, AssembleOptions] = world.options_dataclass.type_hints
 
             with open(local_path("data", "options.yaml")) as f:
                 file_data = f.read()
