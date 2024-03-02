@@ -1,8 +1,6 @@
-from Logic import MetroidPrimeLogic as logic
+from .Logic import MetroidPrimeLogic as logic
 from BaseClasses import Region
-import PrimeOptions
-import Locations
-
+from . import PrimeOptions, Locations
 
 def create_regions(self):
     # create all regions and populate with locations

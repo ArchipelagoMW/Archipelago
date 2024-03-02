@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from worlds.AutoWorld import LogicMixin
-from Items import artifact_table
+from .Items import artifact_table
 
 
 class MetroidPrimeLogic(LogicMixin):

@@ -1,5 +1,5 @@
 from worlds.generic.Rules import add_rule
-from Logic import MetroidPrimeLogic as logic
+from .Logic import MetroidPrimeLogic as logic
 
 
 def set_rules(multiworld, player):
