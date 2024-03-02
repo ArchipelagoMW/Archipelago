@@ -161,7 +161,7 @@ def launch(exe, in_terminal=False):
 
 
 def run_gui():
-    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDRectangleFlatIconButton, MDLabel
+    from kvui import MDApp, MDFloatLayout, MDGridLayout, MDButton, MDLabel, MDButtonText, MDButtonIcon, ScrollBox
     from kivy.uix.image import AsyncImage
     from kivymd.uix.relativelayout import MDRelativeLayout
 
@@ -187,9 +187,14 @@ def run_gui():
             self.container = MDFloatLayout()
             self.grid = MDGridLayout(cols=2)
             self.container.add_widget(self.grid)
-            self.grid.add_widget(MDLabel(text="General"))
-            self.grid.add_widget(MDLabel(text="Clients"))
-            button_layout = self.grid  # make buttons fill the window
+            self.grid.add_widget(MDLabel(text="General", size_hint_y=None, height=40))
+            self.grid.add_widget(MDLabel(text="Clients", size_hint_y=None, height=40))
+            tool_layout = ScrollBox()
+            tool_layout.layout.orientation = "vertical"
+            self.grid.add_widget(tool_layout)
+            client_layout = ScrollBox()
+            client_layout.layout.orientation = "vertical"
+            self.grid.add_widget(client_layout)
             self.grid.padding = 10
             self.grid.spacing = 5
 
@@ -204,26 +209,28 @@ def run_gui():
                     None. The button is added to the parent grid layout.
 
                 """
-                button = MDRectangleFlatIconButton(text=component.display_name)
+                button = MDButton(MDButtonText(text=component.display_name),
+                                  style="elevated", size_hint_y=None, height=40)
                 button.component = component
                 button.bind(on_release=self.component_action)
                 button.size_hint = (1, 1)
                 if component.icon != "icon":
-                    button.icon = icon_paths[component.icon]
-                button_layout.add_widget(button)
+                    image = AsyncImage(source=icon_paths[component.icon],
+                                       size=(38, 38), size_hint=(None, 1), pos=(5, 0))
+                    box_layout = MDRelativeLayout()
+                    box_layout.add_widget(button)
+                    box_layout.add_widget(image)
+                    return box_layout
+                return button
 
             for (tool, client) in itertools.zip_longest(itertools.chain(
                     self._tools.items(), self._miscs.items(), self._adjusters.items()), self._clients.items()):
                 # column 1
                 if tool:
-                    build_button(tool[1])
-                else:
-                    button_layout.add_widget(MDLabel())
+                    tool_layout.layout.add_widget(build_button(tool[1]))
                 # column 2
                 if client:
-                    build_button(client[1])
-                else:
-                    button_layout.add_widget(MDLabel())
+                    client_layout.layout.add_widget(build_button(client[1]))
 
             return self.container
 
