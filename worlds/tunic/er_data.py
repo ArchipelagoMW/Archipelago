@@ -166,7 +166,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Temple Door Exit", region="Sealed Temple",
            destination="Overworld Redux_main"),
     
-    Portal(name="Well Ladder Exit", region="Beneath Well the Ladder Exit",
+    Portal(name="Well Ladder Exit", region="Beneath the Well Ladder Exit",
            destination="Overworld Redux_entrance"),
     Portal(name="Well to Well Boss", region="Beneath the Well Back",
            destination="Sewer_Boss_"),
@@ -213,12 +213,12 @@ portal_mapping: List[Portal] = [
            destination="Transit_teleporter_atoll"),
     Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Statue",
            destination="Library Exterior_"),
-    Portal(name="Frog Stairs Eye Entrance", region="Ruined Atoll Frog Eye Entrance",
+    Portal(name="Frog Stairs Eye Entrance", region="Ruined Atoll Frog Eye",
            destination="Frog Stairs_eye"),
     Portal(name="Frog Stairs Mouth Entrance", region="Ruined Atoll Frog Mouth",
            destination="Frog Stairs_mouth"),
     
-    Portal(name="Frog Stairs Eye Exit", region="Frog Eye Exit",
+    Portal(name="Frog Stairs Eye Exit", region="Frog Stairs Eye Exit",
            destination="Atoll Redux_eye"),
     Portal(name="Frog Stairs Mouth Exit", region="Frog Stairs Upper",
            destination="Atoll Redux_mouth"),
@@ -533,6 +533,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld": RegionInfo("Overworld Redux"),
     "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
     "Overworld Belltower": RegionInfo("Overworld Redux"),  # the area with the belltower and chest
+    "Overworld Belltower at Bell": RegionInfo("Overworld Redux"),  # the belltower itself, being able to ring it
     "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
     "Overworld Swamp Lower Entry": RegionInfo("Overworld Redux"),  # lower swamp entrance, rotating lights
     "After Ruined Passage": RegionInfo("Overworld Redux"),  # just the door and chest
@@ -546,12 +547,11 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld above Patrol Cave": RegionInfo("Overworld Redux"),  # where the hook is, and one ladder up from patrol
     "Overworld at Patrol Cave": RegionInfo("Overworld Redux"),  # right at the patrol cave entrance
     "Overworld West Garden Laurels Entry": RegionInfo("Overworld Redux"),  # west garden laurels entry
-    # todo: continue from here
-    "Overworld to West Garden Upper": RegionInfo("Overworld Redux"),  # usually leads to garden knight # todo
+    "Overworld to West Garden Upper": RegionInfo("Overworld Redux"),  # usually leads to garden knight
     "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux", hint=Hint.region),
-    "Overworld Well Ladder": RegionInfo("Overworld Redux"),  # just the ladder entrance # todo
-    "Overworld Beach": RegionInfo("Overworld Redux"),  # todo
-    "Overworld to Atoll Upper": RegionInfo("Overworld Redux"),  # todo
+    "Overworld Well Ladder": RegionInfo("Overworld Redux"),  # just the ladder entrance
+    "Overworld Beach": RegionInfo("Overworld Redux"),
+    "Overworld to Atoll Upper": RegionInfo("Overworld Redux"),
     "Overworld Well to Furnace Rail": RegionInfo("Overworld Redux"),  # the tiny rail passageway
     "Overworld Ruined Passage Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Old House Door": RegionInfo("Overworld Redux"),  # the too-small space between the door and the portal
@@ -579,8 +579,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Cube Cave": RegionInfo("CubeRoom", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Southeast Cross Room": RegionInfo("EastFiligreeCache", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "Fountain Cross Room": RegionInfo("Town_FiligreeRoom", dead_end=DeadEnd.all_cats, hint=Hint.region),
-    "Hourglass Cave": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats),  # todo
-    "Hourglass Cave Tower": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats),  # top of the tower  # todo
+    "Hourglass Cave": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats),
+    "Hourglass Cave Tower": RegionInfo("Town Basement", dead_end=DeadEnd.all_cats),  # top of the tower
     "Sealed Temple": RegionInfo("Temple", hint=Hint.scene),
     "Sealed Temple Rafters": RegionInfo("Temple", hint=Hint.scene),
     "Forest Belltower Upper": RegionInfo("Forest Belltower", hint=Hint.region),
@@ -589,26 +589,26 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "East Forest": RegionInfo("East Forest Redux"),
     "East Forest Dance Fox Spot": RegionInfo("East Forest Redux"),
     "East Forest Portal": RegionInfo("East Forest Redux"),
-    "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest  # todo
+    "Lower Forest": RegionInfo("East Forest Redux"),  # bottom of the forest
     "Guard House 1 East": RegionInfo("East Forest Redux Laddercave"),
     "Guard House 1 West": RegionInfo("East Forest Redux Laddercave"),
-    "Guard House 2 Upper": RegionInfo("East Forest Redux Interior"),  # todo
-    "Guard House 2 Lower": RegionInfo("East Forest Redux Interior"),  # todo
+    "Guard House 2 Upper": RegionInfo("East Forest Redux Interior"),
+    "Guard House 2 Lower": RegionInfo("East Forest Redux Interior"),
     "Forest Boss Room": RegionInfo("Forest Boss Room"),
     "Forest Grave Path Main": RegionInfo("Sword Access"),
     "Forest Grave Path Upper": RegionInfo("Sword Access"),
     "Forest Grave Path by Grave": RegionInfo("Sword Access"),
     "Forest Hero's Grave": RegionInfo("Sword Access"),
     "Dark Tomb Entry Point": RegionInfo("Crypt Redux"),  # both upper exits
-    "Dark Tomb Upper": RegionInfo("Crypt Redux"),  # the part with the casket and the top of the ladder  # todo
+    "Dark Tomb Upper": RegionInfo("Crypt Redux"),  # the part with the casket and the top of the ladder
     "Dark Tomb Main": RegionInfo("Crypt Redux"),
     "Dark Tomb Dark Exit": RegionInfo("Crypt Redux"),
     "Dark Tomb Checkpoint": RegionInfo("Sewer_Boss"),  # can laurels backwards
     "Well Boss": RegionInfo("Sewer_Boss"),  # can walk through (with bombs at least)
-    "Beneath the Well Ladder Exit": RegionInfo("Sewer"),  # just the ladder  # todo
-    "Beneath the Well Front": RegionInfo("Sewer"),  # the front, to separate it from the weapon requirement in the mid  # todo
-    "Beneath the Well Main": RegionInfo("Sewer"),  # the main section of it, requires a weapon  # todo
-    "Beneath the Well Back": RegionInfo("Sewer"),  # the back two portals, and all 4 upper chests  # todo
+    "Beneath the Well Ladder Exit": RegionInfo("Sewer"),  # just the ladder
+    "Beneath the Well Front": RegionInfo("Sewer"),  # the front, to separate it from the weapon requirement in the mid
+    "Beneath the Well Main": RegionInfo("Sewer"),  # the main section of it, requires a weapon
+    "Beneath the Well Back": RegionInfo("Sewer"),  # the back two portals, and all 4 upper chests
     "West Garden": RegionInfo("Archipelagos Redux"),
     "Magic Dagger House": RegionInfo("archipelagos_house", dead_end=DeadEnd.all_cats, hint=Hint.region),
     "West Garden Portal": RegionInfo("Archipelagos Redux", dead_end=DeadEnd.restricted),
@@ -618,15 +618,15 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "West Garden Hero's Grave": RegionInfo("Archipelagos Redux"),
     "Ruined Atoll": RegionInfo("Atoll Redux"),
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
-    "Ruined Atoll Ladder Tops": RegionInfo("Atoll Redux"),  # at the top of the 5 ladders in south Atoll  # todo
+    "Ruined Atoll Ladder Tops": RegionInfo("Atoll Redux"),  # at the top of the 5 ladders in south Atoll
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
+    "Ruined Atoll Frog Eye": RegionInfo("Atoll Redux"),
     "Ruined Atoll Portal": RegionInfo("Atoll Redux"),
     "Ruined Atoll Statue": RegionInfo("Atoll Redux"),
-    "Frog Eye Entrance": RegionInfo("Atoll Redux"),  # todo
-    "Frog Eye Exit": RegionInfo("Frog Stairs"),  # todo
-    "Frog Stairs Upper": RegionInfo("Frog Stairs"),  # todo
-    "Frog Stairs Lower": RegionInfo("Frog Stairs"),  # todo
-    "Frog Stairs to Frog's Domain": RegionInfo("Frog Stairs"),  # todo
+    "Frog Stairs Eye Exit": RegionInfo("Frog Stairs"),
+    "Frog Stairs Upper": RegionInfo("Frog Stairs"),
+    "Frog Stairs Lower": RegionInfo("Frog Stairs"),
+    "Frog Stairs to Frog's Domain": RegionInfo("Frog Stairs"),
     "Frog's Domain": RegionInfo("frog cave main", hint=Hint.region),
     "Frog's Domain Back": RegionInfo("frog cave main", hint=Hint.scene),
     "Library Exterior Tree": RegionInfo("Library Exterior"),
@@ -682,11 +682,11 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Rooted Ziggurat Portal Room Entrance": RegionInfo("ziggurat2020_3"),  # the door itself on the zig 3 side
     "Rooted Ziggurat Portal": RegionInfo("ziggurat2020_FTRoom"),
     "Rooted Ziggurat Portal Room Exit": RegionInfo("ziggurat2020_FTRoom"),
-    "Swamp Front": RegionInfo("Swamp Redux 2"),  # from the main entry to the top of the ladder after south  # todo
-    "Swamp Mid": RegionInfo("Swamp Redux 2"),  # from the bottom of the ladder to the cathedral door  # todo
-    "Swamp Ledge Under Cathedral Door": RegionInfo("Swamp Redux 2"),  # the ledge with the chest and secret door  # todo
-    "Swamp to Cathedral Treasure Room": RegionInfo("Swamp Redux 2"),  # just the door  # todo
-    "Swamp to Cathedral Main Entrance": RegionInfo("Swamp Redux 2"),  # just the door  # todo
+    "Swamp Front": RegionInfo("Swamp Redux 2"),  # from the main entry to the top of the ladder after south
+    "Swamp Mid": RegionInfo("Swamp Redux 2"),  # from the bottom of the ladder to the cathedral door
+    "Swamp Ledge under Cathedral Door": RegionInfo("Swamp Redux 2"),  # the ledge with the chest and secret door
+    "Swamp to Cathedral Treasure Room": RegionInfo("Swamp Redux 2"),  # just the door
+    "Swamp to Cathedral Main Entrance": RegionInfo("Swamp Redux 2"),  # just the door
     "Back of Swamp": RegionInfo("Swamp Redux 2"),  # the area with hero grave and gauntlet entrance
     "Swamp Hero's Grave": RegionInfo("Swamp Redux 2"),
     "Back of Swamp Laurels Area": RegionInfo("Swamp Redux 2"),  # the spots you need laurels to traverse
@@ -805,9 +805,9 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"],
     ("West Garden Portal", "West Garden Portal Item"): ["West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"):
+     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"],
+         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
     ("Frog's Domain",):
@@ -854,9 +854,9 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Rooted Ziggurat Lower Front", "Rooted Ziggurat Lower Back", "Rooted Ziggurat Portal Room Entrance"],
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
-    ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp Ledge Under Cathedral Door"):
+    ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp Ledge under Cathedral Door"):
         ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance",
-         "Swamp Ledge Under Cathedral Door"],
+         "Swamp Ledge under Cathedral Door"],
     ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"):
         ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"],
     ("Cathedral Gauntlet Checkpoint",):
@@ -914,9 +914,9 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"):
+     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"],
+         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
     ("Frog's Domain",):
@@ -962,12 +962,12 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
     ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance",
-     "Swamp Ledge Under Cathedral Door"):
+     "Swamp Ledge under Cathedral Door"):
         ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance",
-         "Swamp Ledge Under Cathedral Door"],
+         "Swamp Ledge under Cathedral Door"],
     ("Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"):
         ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Front", "Swamp Mid",
-         "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance", "Swamp Ledge Under Cathedral Door"],
+         "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance", "Swamp Ledge under Cathedral Door"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
     ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
@@ -1027,9 +1027,9 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
     ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"):
+     "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"):
         ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
-         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Frog Eye Entrance", "Ruined Atoll Ladder Tops"],
+         "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
     ("Frog's Domain",):
@@ -1078,9 +1078,9 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
     ("Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"):
         ["Rooted Ziggurat Portal", "Rooted Ziggurat Portal Room Exit"],
     ("Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance",
-     "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Ledge Under Cathedral Door"):
+     "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Ledge under Cathedral Door"):
         ["Swamp Front", "Swamp Mid", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance",
-         "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Ledge Under Cathedral Door"],
+         "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Ledge under Cathedral Door"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
     ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",

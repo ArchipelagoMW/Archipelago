@@ -79,7 +79,9 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
     multiworld.get_entrance("East Overworld -> East Forest", player).access_rule = \
         lambda state: state.has("Ladder Drop to East Forest", player)
     multiworld.get_entrance("East Forest -> Lower Forest", player).access_rule = \
-        lambda state: state.has("Ladders to Lower Forest", player)
+        lambda state: state.has("Ladders to Lower Forest", player) \
+        or (state.has_all({grapple, fire_wand, ice_dagger}, player)  # do ice slime, then go to the lower hook
+            and has_ability(state, player, icebolt, options, ability_unlocks))
     multiworld.get_entrance("Overworld -> Swamp", player).access_rule = \
         lambda state: state.has("Ladder to Swamp", player)
     multiworld.get_entrance("Swamp -> Swamp Middle", player).access_rule = \
@@ -102,10 +104,8 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         or can_ladder_storage(state, player, options)
     multiworld.get_entrance("Overworld -> Beneath the Well", player).access_rule = \
         lambda state: state.has("Ladder to Well", player)
-    # todo: make sure this ice grapple actually works with enemy rando off
     multiworld.get_entrance("Beneath the Well -> Beneath the Well Back", player).access_rule = \
-        lambda state: state.has("Well Back Ladder", player) \
-        or has_ice_grapple_logic(True, state, player, options, ability_unlocks)
+        lambda state: state.has("Well Back Ladder", player)
     # dash to the fuse and have the rear ladder, or dash through the well boss gate in nmg
     multiworld.get_entrance("Overworld -> Beneath the Well Back", player).access_rule = \
         lambda state: state.has(laurels, player) and (state.has("Well Back Ladder", player)
@@ -125,7 +125,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         lambda state: state.has_any({"Ladder to Ruined Atoll", laurels, grapple}, player) \
         or has_ability(state, player, prayer, options, ability_unlocks)
     multiworld.get_entrance("Ruined Atoll -> Frog's Domain", player).access_rule = \
-        lambda state: state.has("Frog's Domain Ladders", player)
+        lambda state: state.has("Ladders to Frog's Domain", player)
     multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = \
         lambda state: state.has_any({grapple, laurels}, player) and \
         has_ability(state, player, prayer, options, ability_unlocks) and \

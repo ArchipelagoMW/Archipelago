@@ -151,7 +151,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
 
 tunic_events: Dict[str, str] = {
     "Eastern Bell": "Forest Belltower Upper",
-    "Western Bell": "Overworld Belltower",
+    "Western Bell": "Overworld Belltower at Bell",
     "Furnace Fuse": "Furnace Fuse",
     "South and West Fortress Exterior Fuses": "Fortress Exterior from Overworld",
     "Upper and Central Fortress Exterior Fuses": "Fortress Courtyard Upper",
