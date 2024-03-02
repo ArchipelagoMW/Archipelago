@@ -23,14 +23,14 @@ class MetroidPrimeWorld(World):
     def generate_early(self):
         reqarts = int(self.options.required_artifacts)
         # starting inventory
-        self.multiworld.precollected_items += [self.create_item("Power Beam")]
-        self.multiworld.precollected_items += [self.create_item("Scan Visor")]
-        self.multiworld.precollected_items += [self.create_item("Combat Visor")]
-        self.multiworld.precollected_items += [self.create_item("Power Suit")]
+        self.multiworld.push_precollected(self.create_item("Power Beam"))
+        self.multiworld.push_precollected(self.create_item("Scan Visor"))
+        self.multiworld.push_precollected(self.create_item("Combat Visor"))
+        self.multiworld.push_precollected(self.create_item("Power Suit"))
         artcount = 12
         for i in artifact_table:
             if artcount <= reqarts:
-                self.multiworld.precollected_items += [self.create_item(i)]
+                self.multiworld.push_precollected(self.create_item(i))
             artcount -= 1
 
     def create_regions(self) -> None:
