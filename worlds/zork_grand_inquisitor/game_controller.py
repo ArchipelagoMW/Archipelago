@@ -384,6 +384,9 @@ class GameController:
             elif missable_location == ZorkGrandInquisitorLocations.DEATH_LOST_GAME_OF_STRIP_GRUE_FIRE_WATER:
                 if ZorkGrandInquisitorLocations.STRIP_GRUE_FIRE_WATER in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)
+            elif missable_location == ZorkGrandInquisitorLocations.DEATH_LOST_SOUL_TO_OLD_SCRATCH:
+                if ZorkGrandInquisitorLocations.OLD_SCRATCH_WINNER in self.completed_locations:
+                    self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.DEATH_OUTSMARTED_BY_THE_QUELBEES:
                 if ZorkGrandInquisitorLocations.OUTSMART_THE_QUELBEES in self.completed_locations:
                     self.completed_locations_queue.append(missable_location)

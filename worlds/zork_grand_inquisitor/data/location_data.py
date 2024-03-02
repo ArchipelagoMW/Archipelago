@@ -1243,7 +1243,7 @@ location_data: Dict[
         game_state_trigger=(("location", "gjde"), (2201, 23)),
         archipelago_id=LOCATION_OFFSET + 200 + 6,
         region=ZorkGrandInquisitorRegions.PORT_FOOZLE,
-        tags=(ZorkGrandInquisitorTags.DEATHSANITY,),
+        tags=(ZorkGrandInquisitorTags.DEATHSANITY, ZorkGrandInquisitorTags.MISSABLE),
         requirements=(ZorkGrandInquisitorItems.OLD_SCRATCH_CARD,),
     ),
     ZorkGrandInquisitorLocations.DEATH_OUTSMARTED_BY_THE_QUELBEES: ZorkGrandInquisitorLocationData(
