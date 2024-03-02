@@ -60,7 +60,7 @@ class MetroidPrimeLogic(LogicMixin):
 
     def prime_frigate(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and
-                self.has({'Morph Ball, Space Jump Boots, Ice Beam, Wave Beam',
+                self.has({'Morph Ball', 'Space Jump Boots', 'Ice Beam', 'Wave Beam',
                           'Gravity Suit', 'Thermal Visor'}, player))
 
     def prime_magma_pool(self, world: MultiWorld, player: int) -> bool:
