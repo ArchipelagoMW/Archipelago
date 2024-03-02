@@ -1,6 +1,9 @@
 from .Logic import MetroidPrimeLogic as logic
 from BaseClasses import Region
-from . import PrimeOptions, Locations
+from .PrimeOptions import MetroidPrimeOptions
+from .Locations import tallon_location_table, magmoor_location_table, mines_location_table, chozo_location_table, \
+    phen_location_table, MetroidPrimeLocation
+
 
 def create_regions(self):
     # create all regions and populate with locations
@@ -8,23 +11,23 @@ def create_regions(self):
     self.multiworld.regions.append(menu)
 
     tallon_overworld = Region("Tallon Overworld", self.player, self.multiworld)
-    tallon_overworld.add_locations(Locations.tallon_location_table, Locations.MetroidPrimeLocation)
+    tallon_overworld.add_locations(tallon_location_table, MetroidPrimeLocation)
     self.multiworld.regions.append(tallon_overworld)
 
     chozo_ruins = Region("Chozo Ruins", self.player, self.multiworld)
-    chozo_ruins.add_locations(Locations.chozo_location_table, Locations.MetroidPrimeLocation)
+    chozo_ruins.add_locations(chozo_location_table, MetroidPrimeLocation)
     self.multiworld.regions.append(chozo_ruins)
 
     magmoor_caverns = Region("Magmoor Caverns", self.player, self.multiworld)
-    magmoor_caverns.add_locations(Locations.magmoor_location_table, Locations.MetroidPrimeLocation)
+    magmoor_caverns.add_locations(magmoor_location_table, MetroidPrimeLocation)
     self.multiworld.regions.append(magmoor_caverns)
 
     phendrana_drifts = Region("Phendrana Drifts", self.player, self.multiworld)
-    phendrana_drifts.add_locations(Locations.phen_location_table, Locations.MetroidPrimeLocation)
+    phendrana_drifts.add_locations(phen_location_table, MetroidPrimeLocation)
     self.multiworld.regions.append(phendrana_drifts)
 
     phazon_mines = Region("Phazon Mines", self.player, self.multiworld)
-    phazon_mines.add_locations(Locations.mines_location_table, Locations.MetroidPrimeLocation)
+    phazon_mines.add_locations(mines_location_table, MetroidPrimeLocation)
     self.multiworld.regions.append(phazon_mines)
 
     impact_crater = Region("Impact Crater", self.player, self.multiworld)
@@ -42,21 +45,21 @@ def create_regions(self):
             logic.prime_can_heat(state, self.multiworld, self.player)))
     tallon_overworld.connect(phazon_mines, "East Mines Elevator", lambda state: (
         logic.prime_frigate(state, self.multiworld, self.player)))
-    if (PrimeOptions.MetroidPrimeOptions.final_bosses == 0 or
-       PrimeOptions.MetroidPrimeOptions.final_bosses == 2):
+    if (self.MetroidPrimeOptions.final_bosses == 0 or
+       self.MetroidPrimeOptions.final_bosses == 2):
         tallon_overworld.connect(impact_crater, "Crater Access", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
                 state.has({"Wave Beam", "Ice Beam", "Plasma Beam", "Thermal Visor", "X-Ray Visor", "Phazon Suit",
                            "Space Jump Boots"}, self.player) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
-    elif PrimeOptions.MetroidPrimeOptions.final_bosses == 1:
+    elif self.MetroidPrimeOptions.final_bosses == 1:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
                 (state.has({"Plasma Beam"}, self.player) or logic.prime_can_super(state, self.multiworld, self.player)) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
-    elif PrimeOptions.MetroidPrimeOptions.final_bosses == 3:
+    elif self.MetroidPrimeOptions.final_bosses == 3:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12)))
@@ -72,6 +75,6 @@ def create_regions(self):
     magmoor_caverns.connect(phazon_mines, "West Mines Elevator", lambda state: (
         logic.prime_late_magmoor(state, self.multiworld, self.player) and state.has({"Ice Beam"}, self.player)))
 
-    if (PrimeOptions.MetroidPrimeOptions.final_bosses == 0 or
-            PrimeOptions.MetroidPrimeOptions.final_bosses == 2):
+    if (self.MetroidPrimeOptions.final_bosses == 0 or
+            self.MetroidPrimeOptions.final_bosses == 2):
         impact_crater.connect(mission_complete)
