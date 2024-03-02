@@ -217,7 +217,7 @@ def run_gui():
                 if component.icon != "icon":
                     image = AsyncImage(source=icon_paths[component.icon],
                                        size=(38, 38), size_hint=(None, 1), pos=(5, 0))
-                    box_layout = MDRelativeLayout()
+                    box_layout = MDRelativeLayout(size_hint_y=None, height=40)
                     box_layout.add_widget(button)
                     box_layout.add_widget(image)
                     return box_layout
