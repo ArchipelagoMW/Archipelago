@@ -1,5 +1,6 @@
-import typing
-from Options import Option, Toggle, Range, ItemDict, StartInventoryPool, Choice
+
+from Options import Toggle, Range, ItemDict, StartInventoryPool, Choice, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class SpringBall(Toggle):
@@ -34,10 +35,11 @@ class FinalBosses(Choice):
     default = 0
 
 
-metroidprime_options: typing.Dict[str, type(Option)] = {
-    "start_inventory_from_pool": StartInventoryPool,
-    "spring_ball": SpringBall,
-    "required_artifacts": RequiredArtifacts,
-    "exclude_items": ExcludeItems,
-    "final_bosses": FinalBosses
-}
+@dataclass
+class MetroidPrimeOptions(PerGameCommonOptions):
+    start_inventory_from_pool: StartInventoryPool
+    spring_ball: SpringBall
+    required_artifacts: RequiredArtifacts
+    exclude_items: ExcludeItems
+    final_bosses: FinalBosses
+

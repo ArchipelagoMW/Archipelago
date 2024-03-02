@@ -1,6 +1,6 @@
 from BaseClasses import Item
 from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table
-from .PrimeOptions import metroidprime_options
+from .PrimeOptions import MetroidPrimeOptions
 from .Locations import every_location
 from .Regions import create_regions
 from .Rules import set_rules
@@ -14,13 +14,14 @@ class MetroidPrimeWorld(World):
     of the Space Pirates.
     """
     game = "Metroid Prime"
-    option_definitions = metroidprime_options
+    options_dataclass = MetroidPrimeOptions
+    options: MetroidPrimeOptions
     topology_present = True
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = every_location
 
     def generate_early(self):
-        reqarts = self.option_definitions['required_artifacts']
+        reqarts = int(self.options.required_artifacts)
         # starting inventory
         self.multiworld.precollected_items += [self.create_item("Power Beam")]
         self.multiworld.precollected_items += [self.create_item("Scan Visor")]
@@ -41,14 +42,14 @@ class MetroidPrimeWorld(World):
 
     def create_items(self) -> None:
         # add remaining artifacts
-        reqarts = self.option_definitions['required_artifacts']
+        reqarts = int(self.options.required_artifacts)
         artcount = 12
         for i in artifact_table:
             if artcount >= reqarts:
                 self.multiworld.itempool += [self.create_item(i)]
             artcount -= 1
-        excluded = self.option_definitions['excluded_items']
-        spring = self.option_definitions['spring_ball']
+        excluded = self.options.exclude_items
+        spring = bool(self.options.spring_ball)
         items_added = 0
         for i in suit_upgrade_table:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
@@ -82,11 +83,3 @@ class MetroidPrimeWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self.multiworld, self.player)
-
-
-
-
-
-
-
-
