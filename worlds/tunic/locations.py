@@ -278,7 +278,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Swamp - [South Graveyard] Upper Walkway On Pedestal": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [South Graveyard] Guarded By Tentacles": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [Upper Graveyard] Near Telescope": TunicLocationData("Swamp", "Swamp Mid", ladder_region="Swamp Middle"),
-    "Swamp - [Outside Cathedral] Near Moonlight Bridge Door": TunicLocationData("Swamp", "Swamp Ledge Under Cathedral Door", ladder_region="Swamp Middle"),
+    "Swamp - [Outside Cathedral] Near Moonlight Bridge Door": TunicLocationData("Swamp", "Swamp Ledge under Cathedral Door", ladder_region="Swamp Middle"),
     "Swamp - [Entrance] Obscured Inside Watchtower": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [Entrance] South Near Fence": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [South Graveyard] Guarded By Big Skeleton": TunicLocationData("Swamp", "Swamp Front"),

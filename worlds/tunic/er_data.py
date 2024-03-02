@@ -541,7 +541,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "East Overworld": RegionInfo("Overworld Redux"),  # where the east forest and fortress entrances are
     "Overworld Special Shop Entry": RegionInfo("Overworld Redux"),  # special shop entry spot
     "Upper Overworld": RegionInfo("Overworld Redux"),  # where the mountain stairs are
-    "Overworld above Quarry Entrance": RegionInfo("Overworld Redux"),
+    "Overworld above Quarry Entrance": RegionInfo("Overworld Redux"),  # top of the ladder where the chest is
     "Overworld after Temple Rafters": RegionInfo("Overworld Redux"),  # the ledge after the rafter exit, before ladder
     "Overworld Quarry Entry": RegionInfo("Overworld Redux"),  # at the top of the ladder to darkwoods
     "Overworld above Patrol Cave": RegionInfo("Overworld Redux"),  # where the hook is, and one ladder up from patrol
@@ -759,21 +759,21 @@ for p1, p2 in hallways_ur.items():
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information
 dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
-     "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal", "Overworld Swamp Lower Entry",
-     "After Ruined Passage", "Above Ruined Passage", "East Overworld", "Upper Overworld",
+    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
+     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+     "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld", "Upper Overworld",
      "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
      "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
      "Overworld to Atoll Upper", "Overworld above Quarry Entrance"):
-         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-          "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door", "Overworld Southeast Cross Door",
-          "Overworld Old House Door", "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal",
-          "Overworld Spawn Portal", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
-          "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
-          "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
-          "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld Temple Door",
-          "Overworld above Quarry Entrance"],
+         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
+          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
+          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+          "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld",
+          "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
+          "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
+          "Overworld to Atoll Upper", "Overworld Temple Door", "Overworld above Quarry Entrance"],
     ("Hourglass Cave",):
         ["Hourglass Cave", "Hourglass Cave Tower"],
     ("Old House Front",):
@@ -861,6 +861,8 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
+    ("Cathedral Gauntlet Exit",):
+        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
     ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
      "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
         ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
@@ -869,20 +871,21 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
 
 
 dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
-     "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
+     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
      "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
      "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
      "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
      "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance"):
-         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-          "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door", "Overworld Southeast Cross Door",
-          "Overworld Old House Door", "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal",
-          "Overworld Spawn Portal", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
-          "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
-          "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
-          "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance"],
+         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
+          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
+          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+          "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld",
+          "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
+          "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
+          "Overworld to Atoll Upper", "Overworld above Quarry Entrance"],
     # can laurels through the gate
     ("Old House Front", "Old House Back"):
         ["Old House Front", "Old House Back"],
@@ -970,6 +973,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
          "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance", "Swamp Ledge under Cathedral Door"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
+    ("Cathedral Gauntlet Exit",):
+        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
     ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
      "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
         ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
@@ -979,16 +984,16 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
 
 dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
     # can use ladder storage to get to the well rail
-    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
-     "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+    ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+     "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
+     "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
      "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage",
      "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
      "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
      "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance"):
-         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
-          "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
+         ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
+          "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
+          "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
           "Overworld Ruined Passage Door", "Overworld Swamp Lower Entry", "After Ruined Passage",
           "Above Ruined Passage", "East Overworld", "Upper Overworld", "Overworld after Temple Rafters",
           "Overworld Quarry Entry", "Overworld above Patrol Cave", "Overworld at Patrol Cave",
@@ -1083,6 +1088,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
          "Back of Swamp", "Back of Swamp Laurels Area", "Swamp Hero's Grave", "Swamp Ledge under Cathedral Door"],
     ("Cathedral Gauntlet Checkpoint",):
         ["Cathedral Gauntlet Checkpoint", "Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
+    ("Cathedral Gauntlet Exit",):
+        ["Cathedral Gauntlet Exit", "Cathedral Gauntlet"],
     ("Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",
      "Far Shore to Fortress", "Far Shore to Library", "Far Shore to West Garden"):
         ["Far Shore", "Far Shore to Spawn", "Far Shore to East Forest", "Far Shore to Quarry",

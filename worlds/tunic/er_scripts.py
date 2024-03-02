@@ -451,7 +451,7 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
     elif check_portal.scene_destination() == "Swamp Redux 2, Cathedral Redux_main":
         i = 0
         for portal in two_plus:
-            if portal.region == "Swamp":
+            if portal.region in ["Swamp Front", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance"]:
                 i += 1
         if i == 4:
             return True
