@@ -53,7 +53,7 @@ def set_rules(world: "MM2World") -> None:
         # handle atomic fire
         if world.options.strict_weakness:
             for boss in range(13):
-                if world.weapon_damage[1][boss] >= 4:
+                if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] for i in range(2, 8)):
                     # Atomic Fire can only shoot two fully powered shots
                     # So we need to be able to kill the boss in 2 hits
                     world.weapon_damage[1][boss] = 14
