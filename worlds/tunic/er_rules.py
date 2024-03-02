@@ -1,8 +1,9 @@
-from typing import Dict, TYPE_CHECKING
+from typing import Dict, Set, TYPE_CHECKING
 from worlds.generic.Rules import set_rule, forbid_item
 from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
 from .er_data import Portal
-from BaseClasses import Region
+from .options import TunicOptions
+from BaseClasses import Region, CollectionState
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -27,6 +28,27 @@ blue_hexagon = "Blue Questagon"
 gold_hexagon = "Gold Questagon"
 
 
+def has_ladder(ladder: str, state: CollectionState, player: int, options: TunicOptions):
+    if not options.ladder_rando:
+        return True
+    else:
+        return state.has(ladder, player)
+
+
+def has_ladders(ladders: Set[str], state: CollectionState, player: int, options: TunicOptions):
+    if not options.ladder_rando:
+        return True
+    else:
+        return state.has_all(ladders, player)
+
+
+def has_ladders_any(ladders: Set[str], state: CollectionState, player: int, options: TunicOptions):
+    if not options.ladder_rando:
+        return True
+    else:
+        return state.has_any(ladders, player)
+
+
 def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], regions: Dict[str, Region],
                         portal_pairs: Dict[Portal, Portal]) -> None:
     player = world.player
@@ -41,6 +63,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
 
     regions["Overworld"].connect(
+        connecting_region=regions["Overworld Beach"],
+        rule=lambda state: has_ladder("West Overworld Ladders", state, player, options) or state.has(laurels, player))
+    regions["Overworld Beach"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("West Overworld Ladders", state, player, options) or state.has(laurels, player))
+
+    regions["Overworld"].connect(
         connecting_region=regions["Overworld Belltower"],
         rule=lambda state: state.has(laurels, player))
     regions["Overworld Belltower"].connect(
@@ -51,6 +80,40 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld Ruined Passage Door"],
         rule=lambda state: state.has(key, player, 2)
         or (state.has(laurels, player) and options.logic_rules))
+    regions["Overworld Ruined Passage Door"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has(laurels, player) and options.logic_rules)
+
+    regions["Overworld"].connect(
+        connecting_region=regions["After Ruined Passage"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+    regions["After Ruined Passage"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Above Ruined Passage"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
+        or state.has(laurels, player))
+    regions["Above Ruined Passage"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
+        or state.has(laurels, player))
+
+    regions["After Ruined Passage"].connect(
+        connecting_region=regions["Above Ruined Passage"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
+    regions["Above Ruined Passage"].connect(
+        connecting_region=regions["After Ruined Passage"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
+
+    regions["Above Ruined Passage"].connect(
+        connecting_region=regions["East Overworld"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
+    regions["East Overworld"].connect(
+        connecting_region=regions["Above Ruined Passage"],
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Upper Entry"],
@@ -58,6 +121,82 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Overworld Swamp Upper Entry"].connect(
         connecting_region=regions["Overworld"],
         rule=lambda state: state.has(laurels, player))
+
+    # todo: check if there's ice grapple logic
+    regions["Overworld"].connect(
+        connecting_region=regions["East Overworld"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options))
+    regions["East Overworld"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options))
+
+    regions["East Overworld"].connect(
+        connecting_region=regions["Overworld at Patrol Cave"])
+    regions["Overworld at Patrol Cave"].connect(
+        connecting_region=regions["East Overworld"],
+        rule=lambda state: state.has(laurels, player))
+
+    regions["Overworld at Patrol Cave"].connect(
+        connecting_region=regions["Overworld above Patrol Cave"],
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+    regions["Overworld above Patrol Cave"].connect(
+        connecting_region=regions["Overworld at Patrol Cave"],
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld above Patrol Cave"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options)
+        or state.has(grapple, player))
+    regions["Overworld above Patrol Cave"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options))
+
+    regions["East Overworld"].connect(
+        connecting_region=regions["Overworld above Patrol Cave"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+    regions["Overworld above Patrol Cave"].connect(
+        connecting_region=regions["East Overworld"],
+        rule=lambda state: has_ladder("Overworld Shortcut Ladders", state, player, options))
+
+    regions["Overworld above Patrol Cave"].connect(
+        connecting_region=regions["Upper Overworld"],
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+    regions["Upper Overworld"].connect(
+        connecting_region=regions["Overworld above Patrol Cave"],
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
+        or state.has(grapple, player))
+
+    regions["Upper Overworld"].connect(
+        connecting_region=regions["Overworld above Quarry Entrance"],
+        rule=lambda state: state.has_any({grapple, laurels}, player))
+    regions["Overworld above Quarry Entrance"].connect(
+        connecting_region=regions["Upper Overworld"],
+        rule=lambda state: state.has_any({grapple, laurels}, player))
+
+    regions["Upper Overworld"].connect(
+        connecting_region=regions["Overworld after Temple Rafters"],
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, player, options))
+    regions["Overworld after Temple Rafters"].connect(
+        connecting_region=regions["Upper Overworld"],
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+
+    regions["Overworld above Quarry Entrance"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladders near Dark Tomb", state, player, options))
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld above Quarry Entrance"],
+        rule=lambda state: has_ladder("Ladders near Dark Tomb", state, player, options))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld Swamp Lower Entry"],
+        rule=lambda state: has_ladder("Ladder to Swamp", state, player, options))
+    regions["Overworld Swamp Lower Entry"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: has_ladder("Ladder to Swamp", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Special Shop Entry"],
@@ -109,9 +248,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through temple door
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Temple Door"],
-        name="Overworld Temple Door",
+        name="Overworld to Temple Door",
         rule=lambda state: state.has_all({"Ring Eastern Bell", "Ring Western Bell"}, player)
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
+
+    regions["Overworld Temple Door"].connect(
+        connecting_region=regions["Overworld above Patrol Cave"],
+        name="Temple Door to Overworld Grapple",
+        rule=lambda state: state.has(grapple, player))
 
     # Overworld side areas
     regions["Old House Front"].connect(
@@ -837,6 +981,16 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     set_rule(multiworld.get_location("Quarry - [Back Entrance] Bushes Holy Cross", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("Cathedral - Secret Legend Trophy Chest", player),
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Southwest] Flowers Holy Cross", player),
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [East] Weathervane Holy Cross", player),
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Southwest] Haiku Holy Cross", player),
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Northwest] Golden Obelisk Page", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
 
     # Overworld
