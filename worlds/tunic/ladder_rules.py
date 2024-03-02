@@ -77,9 +77,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
     multiworld.get_entrance("Overworld -> Swamp", player).access_rule = \
         lambda state: state.has("Ladder to Swamp", player)
     multiworld.get_entrance("Swamp -> Swamp Middle", player).access_rule = \
-        lambda state: (state.has("Central Swamp Ladder", player) or state.has(laurels, player)) \
-        or (can_ladder_storage(state, player, options)
-            and has_ability(state, player, holy_cross, options, ability_unlocks))
+        lambda state: state.has("Swamp Ladders", player) or state.has(laurels, player)
     multiworld.get_entrance("Swamp Middle -> Cathedral", player).access_rule = \
         lambda state: (has_ability(state, player, prayer, options, ability_unlocks)
                        and (state.has(laurels, player)
