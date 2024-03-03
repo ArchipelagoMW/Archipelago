@@ -771,7 +771,11 @@ item_table = {
     ItemNames.THOR_PROGRESSIVE_IMMORTALITY_PROTOCOL:
         ItemData(325 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade", 22, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.THOR, quantity=2,
-                 description="Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas."),
+                 description=inspect.cleandoc("""
+                 Level 1: Allows destroyed Thors to be reconstructed on the field. Costs Vespene Gas.
+                 Level 2: Thors are automatically reconstructed after falling for free.
+                 """
+        )),
     ItemNames.LIBERATOR_ADVANCED_BALLISTICS:
         ItemData(326 + SC2WOL_ITEM_ID_OFFSET, "Armory 4", 7, SC2Race.TERRAN,
                  parent_item=ItemNames.LIBERATOR, origin={"ext"},
@@ -1301,25 +1305,25 @@ item_table = {
                  description="Does nothing. Used to remove a location from the game."),
 
     # Nova gear
-    ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}),
-    ItemNames.NOVA_RANGEFINDER_OCULUS: ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"}),
-    ItemNames.NOVA_DOMINATION: ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_BLINK: ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, quantity=2, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_ENERGY_SUIT_MODULE: ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"}),
-    ItemNames.NOVA_ARMORED_SUIT_MODULE: ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_JUMP_SUIT_MODULE: ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_C20A_CANISTER_RIFLE: ItemData(908 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 7, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_HELLFIRE_SHOTGUN: ItemData(909 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 8, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_PLASMA_RIFLE: ItemData(910 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 9, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_MONOMOLECULAR_BLADE: ItemData(911 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 10, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_BLAZEFIRE_GUNBLADE: ItemData(912 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 11, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_STIM_INFUSION: ItemData(913 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 12, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_PULSE_GRENADES: ItemData(914 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 13, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_FLASHBANG_GRENADES: ItemData(915 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 14, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_IONIC_FORCE_FIELD: ItemData(916 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 15, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_HOLO_DECOY: ItemData(917 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 16, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
-    ItemNames.NOVA_NUKE: ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression),
+    ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}, description="Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units."),
+    ItemNames.NOVA_RANGEFINDER_OCULUS: ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"}, description="Increaases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1."),
+    ItemNames.NOVA_DOMINATION: ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to mind-control a target enemy unit."),
+    ItemNames.NOVA_BLINK: ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to teleport a short distance and cloak for 10s."),
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, quantity=2, origin={"nco"}, classification=ItemClassification.progression, description="Level 1: Gives Nova the ability to cloak.\nLevel 2: Nova is permanently cloaked."),
+    ItemNames.NOVA_ENERGY_SUIT_MODULE: ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"}, description="Increases Nova's maximum energy and energy regeneration rate."),
+    ItemNames.NOVA_ARMORED_SUIT_MODULE: ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Increases Nova's Health by 100 and Armour by 1."),
+    ItemNames.NOVA_JUMP_SUIT_MODULE: ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Increases Nova's movement speed and allows her to jump up and down cliffs."),
+    ItemNames.NOVA_C20A_CANISTER_RIFLE: ItemData(908 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 7, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the C20A Canister Rifle, which has a ranged attack and allows Nova to cast Snipe."),
+    ItemNames.NOVA_HELLFIRE_SHOTGUN: ItemData(909 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 8, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Hellfire Shotgun, which has a short-range area attack in a cone and allows Nova to cast Penetrating Blast."),
+    ItemNames.NOVA_PLASMA_RIFLE: ItemData(910 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 9, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Plasma Rifle, which has a rapidfire ranged attack and allows Nova to cast Plasma Shot."),
+    ItemNames.NOVA_MONOMOLECULAR_BLADE: ItemData(911 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 10, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Monomolecular Blade, which has a melee attack and allows Nova to cast Dash Attack."),
+    ItemNames.NOVA_BLAZEFIRE_GUNBLADE: ItemData(912 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 11, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Blazefire Gunblade, which has a melee attack and allows Nova to cast Fury of One."),
+    ItemNames.NOVA_STIM_INFUSION: ItemData(913 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 12, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to heal and temporarily increase her movement and attack speeds."),
+    ItemNames.NOVA_PULSE_GRENADES: ItemData(914 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 13, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to throw a grenade dealing large damage in an area."),
+    ItemNames.NOVA_FLASHBANG_GRENADES: ItemData(915 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 14, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to throw a grenade to stun enemies and disable detection in a large area."),
+    ItemNames.NOVA_IONIC_FORCE_FIELD: ItemData(916 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 15, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to shield herself temporarily."),
+    ItemNames.NOVA_HOLO_DECOY: ItemData(917 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 16, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to summon a decoy unit which enemies will prefer to target and takes reduced damage."),
+    ItemNames.NOVA_NUKE: ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to launch tactical nukes built from the Shadow Ops."),
 
     # HotS
     ItemNames.ZERGLING: ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, 
