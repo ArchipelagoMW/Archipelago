@@ -11,7 +11,6 @@ from .options import LingoOptions
 from .player_logic import LingoPlayerLogic
 from .regions import create_regions
 from .static_logic import Room, RoomEntrance
-from .testing import LingoTestOptions
 
 
 class LingoWebWorld(WebWorld):
@@ -83,9 +82,8 @@ class LingoWorld(World):
                 skips = int(non_traps * skip_percentage / 100.0)
                 non_skips = non_traps - skips
 
-                filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
                 for i in range(0, non_skips):
-                    pool.append(self.create_item(filler_list[i % len(filler_list)]))
+                    pool.append(self.create_item(self.get_filler_item_name()))
 
                 for i in range(0, skips):
                     pool.append(self.create_item("Puzzle Skip"))
@@ -104,9 +102,11 @@ class LingoWorld(World):
         classification = item.classification
         if hasattr(self, "options") and self.options.shuffle_paintings and len(item.painting_ids) > 0\
                 and len(item.door_ids) == 0 and all(painting_id not in self.player_logic.painting_mapping
-                                                    for painting_id in item.painting_ids):
+                                                    for painting_id in item.painting_ids)\
+                and "pilgrim_painting2" not in item.painting_ids:
             # If this is a "door" that just moves one or more paintings, and painting shuffle is on and those paintings
-            # go nowhere, then this item should not be progression.
+            # go nowhere, then this item should not be progression. The Pilgrim Room painting is special and needs to be
+            # excluded from this.
             classification = ItemClassification.filler
 
         return LingoItem(name, classification, item.code, self.player)
@@ -129,3 +129,7 @@ class LingoWorld(World):
             slot_data["painting_entrance_to_exit"] = self.player_logic.painting_mapping
 
         return slot_data
+
+    def get_filler_item_name(self) -> str:
+        filler_list = [":)", "The Feeling of Being Lost", "Wanderlust", "Empty White Hallways"]
+        return self.random.choice(filler_list)

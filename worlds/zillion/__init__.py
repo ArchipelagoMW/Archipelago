@@ -4,7 +4,7 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Set, Tuple, Optional, cast
 import os
 import logging
 
@@ -12,7 +12,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionOptions, ZillionStartChar, validate
+from .options import ZillionOptions, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -225,7 +225,7 @@ class ZillionWorld(World):
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
                         loc.progress_type = LocationProgressType.EXCLUDED
-                        self.multiworld.exclude_locations[p].value.add(loc.name)
+                        self.options.exclude_locations.value.add(loc.name)
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
@@ -288,15 +288,15 @@ class ZillionWorld(World):
             if group["game"] == "Zillion":
                 assert "item_pool" in group
                 item_pool = group["item_pool"]
-                to_stay: Literal['Apple', 'Champ', 'JJ'] = "JJ"
+                to_stay: Chars = "JJ"
                 if "JJ" in item_pool:
                     assert "players" in group
                     group_players = group["players"]
-                    start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
-                    players_start_chars = [
-                        (player, start_chars[player].current_option_name)
-                        for player in group_players
-                    ]
+                    players_start_chars: List[Tuple[int, Chars]] = []
+                    for player in group_players:
+                        z_world = multiworld.worlds[player]
+                        assert isinstance(z_world, ZillionWorld)
+                        players_start_chars.append((player, z_world.options.start_char.get_char()))
                     start_char_counts = Counter(sc for _, sc in players_start_chars)
                     # majority rules
                     if start_char_counts["Apple"] > start_char_counts["Champ"]:
@@ -304,7 +304,7 @@ class ZillionWorld(World):
                     elif start_char_counts["Champ"] > start_char_counts["Apple"]:
                         to_stay = "Champ"
                     else:  # equal
-                        choices: Tuple[Literal['Apple', 'Champ', 'JJ'], ...] = ("Apple", "Champ")
+                        choices: Tuple[Chars, ...] = ("Apple", "Champ")
                         to_stay = multiworld.random.choice(choices)
 
                     for p, sc in players_start_chars:

@@ -23,7 +23,7 @@ def parse_arguments(argv, no_defaults=False):
     multiargs, _ = parser.parse_known_args(argv)
 
     parser = argparse.ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
-    parser.add_argument('--logic', default=defval('noglitches'), const='noglitches', nargs='?', choices=['noglitches', 'minorglitches', 'owglitches', 'hybridglitches', 'nologic'],
+    parser.add_argument('--logic', default=defval('no_glitches'), const='no_glitches', nargs='?', choices=['no_glitches', 'minor_glitches', 'overworld_glitches', 'hybrid_major_glitches', 'no_logic'],
                         help='''\
                              Select Enforcement of Item Requirements. (default: %(default)s)
                              No Glitches:
@@ -49,7 +49,7 @@ def parse_arguments(argv, no_defaults=False):
                                         instead of a bunny.
                              ''')
     parser.add_argument('--goal', default=defval('ganon'), const='ganon', nargs='?',
-                        choices=['ganon', 'pedestal', 'bosses', 'triforcehunt', 'localtriforcehunt', 'ganontriforcehunt', 'localganontriforcehunt', 'crystals', 'ganonpedestal'],
+                        choices=['ganon', 'pedestal', 'bosses', 'triforce_hunt', 'local_triforce_hunt', 'ganon_triforce_hunt', 'local_ganon_triforce_hunt', 'crystals', 'ganon_pedestal'],
                         help='''\
                              Select completion goal. (default: %(default)s)
                              Ganon:         Collect all crystals, beat Agahnim 2 then
@@ -92,7 +92,7 @@ def parse_arguments(argv, no_defaults=False):
                              Hard:            Reduced functionality.
                              Expert:          Greatly reduced functionality.
                                   ''')
-    parser.add_argument('--timer', default=defval('none'), const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed-ohko', 'ohko', 'timed-countdown'],
+    parser.add_argument('--timer', default=defval('none'), const='normal', nargs='?', choices=['none', 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'],
                         help='''\
                              Select game timer setting. Affects available itempool. (default: %(default)s)
                              None:            No timer.
@@ -151,7 +151,7 @@ def parse_arguments(argv, no_defaults=False):
                                           slightly biased to placing progression items with
                                           less restrictions.
                              ''')
-    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeonsfull', 'dungeonssimple', 'dungeonscrossed'],
+    parser.add_argument('--shuffle', default=defval('vanilla'), const='vanilla', nargs='?', choices=['vanilla', 'simple', 'restricted', 'full', 'crossed', 'insanity', 'restricted_legacy', 'full_legacy', 'madness_legacy', 'insanity_legacy', 'dungeons_full', 'dungeons_simple', 'dungeons_crossed'],
                         help='''\
                              Select Entrance Shuffling Algorithm. (default: %(default)s)
                              Full:       Mix cave and dungeon entrances freely while limiting
@@ -178,9 +178,9 @@ def parse_arguments(argv, no_defaults=False):
     parser.add_argument('--open_pyramid', default=defval('auto'), help='''\
                             Pre-opens the pyramid hole, this removes the Agahnim 2 requirement for it.
                             Depending on goal, you might still need to beat Agahnim 2 in order to beat ganon.
-                            fast ganon goals are crystals, ganontriforcehunt, localganontriforcehunt, pedestalganon
+                            fast ganon goals are crystals, ganon_triforce_hunt, local_ganon_triforce_hunt, pedestalganon
                             auto - Only opens pyramid hole if the goal specifies a fast ganon, and entrance shuffle
-                                   is vanilla, dungeonssimple or dungeonsfull.
+                                   is vanilla, dungeons_simple or dungeons_full.
                             goal - Opens pyramid hole if the goal specifies a fast ganon.
                             yes - Always opens the pyramid hole.
                             no - Never opens the pyramid hole.
