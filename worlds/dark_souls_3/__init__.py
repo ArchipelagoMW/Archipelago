@@ -287,6 +287,12 @@ class DarkSouls3World(World):
 
             new_region.locations.append(new_location)
 
+        # If we allow useful  items in the excluded locations, we don't want Archipelago's fill
+        # algorithm to consider them excluded because it never allows useful items there. Instead,
+        # we manually add item rules to exclude important items.
+        if self.options.excluded_locations == "unnecessary":
+            self.options.exclude_locations.value.clear()
+
         self.multiworld.regions.append(new_region)
         return new_region
 
