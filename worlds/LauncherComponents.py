@@ -85,6 +85,7 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
+    Component('Color Picker', 'ColorPicker', 'ArchipelagoColorPicker'),
     # SNI
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
