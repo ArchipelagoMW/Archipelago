@@ -1723,10 +1723,13 @@ location_tables = {
         DS3LocationData("ID: Titanite Chunk - balcony above pit, lizard", "Titanite Chunk",
                         lizard = True),
         DS3LocationData("ID: Titanite Scale - B2 far, lizard", "Titanite Scale", lizard = True),
+
+        # These are missable because of a bug that causes them to be dropped wherever the giant is
+        # randomized to, instead of where the miniboss is in vanilla.
         DS3LocationData("ID: Dung Pie - pit, miniboss drop", "Dung Pie x4",
-                        miniboss = True), # Giant slave drop
+                        miniboss = True, missable = True), # Giant slave drop
         DS3LocationData("ID: Titanite Chunk - pit, miniboss drop", "Titanite Chunk",
-                        miniboss = True), # Giant Slave Drop
+                        miniboss = True, missable = True), # Giant Slave Drop
 
         # Alva (requires ember)
         DS3LocationData("ID: Alva Helm - B3 near, by Karla's cell, after killing Alva", "Alva Helm",
