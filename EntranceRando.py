@@ -164,7 +164,7 @@ class ERPlacementState:
             self,
             source_exit: Entrance,
             target_entrance: Entrance
-    ) -> Tuple[Iterable[Entrance], Iterable[Entrance]]:
+    ) -> Tuple[List[Entrance], List[Entrance]]:
         """
         Connects a source exit to a target entrance in the graph, accounting for coupling
 
@@ -199,8 +199,8 @@ class ERPlacementState:
                 raise EntranceRandomizationError(f"Two way entrance {target_entrance.name} had no corresponding exit "
                                                  f"in {target_region.name}.")
             self._connect_one_way(reverse_exit, reverse_entrance)
-            return (source_exit, reverse_exit), (target_entrance, reverse_entrance)
-        return (source_exit,), (target_entrance,)
+            return [source_exit, reverse_exit], [target_entrance, reverse_entrance]
+        return [source_exit], [target_entrance]
 
 
 def disconnect_entrance_for_randomization(entrance: Entrance, target_group: Optional[str] = None) -> None:
@@ -242,7 +242,7 @@ def randomize_entrances(
         coupled: bool,
         get_target_groups: Callable[[str], List[str]],
         preserve_group_order: bool = False,
-        on_connect: Optional[Callable[[ERPlacementState, Iterable[Entrance]], None]] = None
+        on_connect: Optional[Callable[[ERPlacementState, List[Entrance]], None]] = None
 ) -> ERPlacementState:
     """
     Randomizes Entrances for a single world in the multiworld.
@@ -281,6 +281,9 @@ def randomize_entrances(
          be placed/registered before calling this function if you want them to be respected.
        * If you set access rules that contain items other than events, those items must be added to
          the multiworld item pool before randomizing entrances.
+       * Any plando (item or entrance) you want to accommodate in logic should be completed for logic to
+         work correctly. Notably, if you want to logically accommodate items placed in plando, you will
+         have to do ER in pre_fill.
 
     Post-conditions:
     1. All randomizable Entrances will be connected
@@ -348,6 +351,9 @@ def randomize_entrances(
                 # ensure that we have enough locations to place our progression
                 accessible_location_count = 0
                 prog_item_count = len(er_state.collection_state.prog_items[world.player])
+                # short-circuit location checking in this case
+                if prog_item_count == 0:
+                    return True
                 for region in er_state.placed_regions:
                     for loc in region.locations:
                         if loc.can_reach(er_state.collection_state):

@@ -1,10 +1,12 @@
+import itertools
 import unittest
-from typing import Optional, List, Type
+from typing import Optional, List, Type, Iterable
 
-from BaseClasses import Region, EntranceType, MultiWorld, Entrance
+from BaseClasses import Region, EntranceType, MultiWorld, Entrance, CollectionState
 from EntranceRando import disconnect_entrance_for_randomization, randomize_entrances, EntranceRandomizationError, \
-    ERPlacementState
-from test.general import generate_multiworld, generate_locations
+    ERPlacementState, EntranceLookup
+from Options import Accessibility
+from test.general import generate_multiworld, generate_locations, generate_items
 from worlds.generic.Rules import set_rule
 
 
@@ -55,6 +57,43 @@ def directionally_matched_group_selection(group: str) -> List[str]:
         return ["Top"]
     else:
         return []
+
+
+class TestEntranceLookup(unittest.TestCase):
+    def test_shuffled_targets(self):
+        """tests that get_targets shuffles targets between groups when requested"""
+        multiworld = generate_multiworld()
+        generate_disconnected_region_grid(multiworld, 5)
+
+        lookup = EntranceLookup(multiworld.per_slot_randoms[1])
+        er_targets = [entrance for region in multiworld.get_regions(1)
+                      for entrance in region.entrances if not entrance.parent_region]
+        for entrance in er_targets:
+            lookup.add(entrance)
+
+        retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, False)
+        prev = None
+        group_order = [prev := group.er_group for group in retrieved_targets if prev != group.er_group]
+        # technically possible that group order may not be shuffled, by some small chance, on some seeds. but generally
+        # a shuffled list should alternate more frequently which is the desired behavior here
+        self.assertGreater(len(group_order), 2)
+
+
+    def test_ordered_targets(self):
+        """tests that get_targets does not shuffle targets between groups when requested"""
+        multiworld = generate_multiworld()
+        generate_disconnected_region_grid(multiworld, 5)
+
+        lookup = EntranceLookup(multiworld.per_slot_randoms[1])
+        er_targets = [entrance for region in multiworld.get_regions(1)
+                      for entrance in region.entrances if not entrance.parent_region]
+        for entrance in er_targets:
+            lookup.add(entrance)
+
+        retrieved_targets = lookup.get_targets(["Top", "Bottom"], False, True)
+        prev = None
+        group_order = [prev := group.er_group for group in retrieved_targets if prev != group.er_group]
+        self.assertEqual(["Top", "Bottom"], group_order)
 
 
 class TestDisconnectForRandomization(unittest.TestCase):
@@ -130,7 +169,21 @@ class TestDisconnectForRandomization(unittest.TestCase):
 
 class TestRandomizeEntrances(unittest.TestCase):
     def test_determinism(self):
-        self.fail()
+        """tests that the same output is produced for the same input"""
+        multiworld1 = generate_multiworld()
+        multiworld1.worlds[1].random = multiworld1.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld1, 5)
+        multiworld2 = generate_multiworld()
+        multiworld2.worlds[1].random = multiworld2.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld2, 5)
+
+        result1 = randomize_entrances(multiworld1.worlds[1], False, directionally_matched_group_selection)
+        result2 = randomize_entrances(multiworld2.worlds[1], False, directionally_matched_group_selection)
+        self.assertEqual(result1.pairings, result2.pairings)
+        for e1, e2 in zip(result1.placements, result2.placements):
+            self.assertEqual(e1.name, e2.name)
+            self.assertEqual(e1.parent_region.name, e1.parent_region.name)
+            self.assertEqual(e1.connected_region.name, e2.connected_region.name)
 
     def test_all_entrances_placed(self):
         """tests that all entrances and exits were placed, all regions are connected, and no dangling edges exist"""
@@ -151,19 +204,101 @@ class TestRandomizeEntrances(unittest.TestCase):
 
     def test_coupling(self):
         """tests that in coupled mode, all 2 way transitions have an inverse"""
-        self.fail()
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld, 5)
+        seen_placement_count = 0
+
+        def verify_coupled(state: ERPlacementState, placed_entrances: List[Entrance]):
+            nonlocal seen_placement_count
+            seen_placement_count += len(placed_entrances)
+            self.assertEqual(2, len(placed_entrances))
+            self.assertEqual(placed_entrances[0].parent_region, placed_entrances[1].connected_region)
+            self.assertEqual(placed_entrances[1].parent_region, placed_entrances[0].connected_region)
+
+        result = randomize_entrances(multiworld.worlds[1], True, directionally_matched_group_selection,
+                                     on_connect=verify_coupled)
+        # if we didn't visit every placement the verification on_connect doesn't really mean much
+        self.assertEqual(len(result.placements), seen_placement_count)
+
+    def test_uncoupled(self):
+        """tests that in uncoupled mode, no transitions have an (intentional) inverse"""
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld, 5)
+        seen_placement_count = 0
+
+        def verify_uncoupled(state: ERPlacementState, placed_entrances: List[Entrance]):
+            nonlocal seen_placement_count
+            seen_placement_count += len(placed_entrances)
+            self.assertEqual(1, len(placed_entrances))
+
+        result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_selection,
+                                     on_connect=verify_uncoupled)
+        # if we didn't visit every placement the verification on_connect doesn't really mean much
+        self.assertEqual(len(result.placements), seen_placement_count)
 
     def test_oneway_twoway_pairing(self):
         """tests that 1 ways are only paired to 1 ways and 2 ways are only paired to 2 ways"""
-        self.fail()
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld, 5)
+        region26 = Region("region26", 1, multiworld)
+        multiworld.regions.append(region26)
+        for index, region in enumerate(["region4", "region20", "region24"]):
+            x = multiworld.get_region(region, 1).create_exit(f"{region}_bottom_1way")
+            x.er_type = EntranceType.ONE_WAY
+            x.er_group = "Bottom"
+            e = region26.create_er_target(f"region26_top_1way{index}")
+            e.er_type = EntranceType.ONE_WAY
+            e.er_group = "Top"
+
+        result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_selection)
+        for exit_name, entrance_name in result.pairings:
+            # we have labeled our entrances in such a way that all the 1 way entrances have 1way in the name,
+            # so test for that since the ER target will have been discarded
+            if "1way" in exit_name:
+                self.assertIn("1way", entrance_name)
 
     def test_group_constraints_satisfied(self):
         """tests that all grouping constraints are satisfied"""
-        self.fail()
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        generate_disconnected_region_grid(multiworld, 5)
+
+        result = randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_selection)
+        for exit_name, entrance_name in result.pairings:
+            # we have labeled our entrances in such a way that all the entrances contain their group in the name
+            # so test for that since the ER target will have been discarded
+            if "top" in exit_name:
+                self.assertIn("bottom", entrance_name)
+            if "bottom" in exit_name:
+                self.assertIn("top", entrance_name)
+            if "left" in exit_name:
+                self.assertIn("right", entrance_name)
+            if "right" in exit_name:
+                self.assertIn("left", entrance_name)
 
     def test_minimal_entrance_rando(self):
         """tests that entrance randomization can complete with minimal accessibility and unreachable exits"""
-        self.fail()
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
+        multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
+        generate_disconnected_region_grid(multiworld, 5, 1)
+        prog_items = generate_items(10, 1, True)
+        multiworld.itempool += prog_items
+        filler_items = generate_items(15, 1, False)
+        multiworld.itempool += filler_items
+        e = multiworld.get_entrance("region1_right", 1)
+        set_rule(e, lambda state: False)
+
+        randomize_entrances(multiworld.worlds[1], False, directionally_matched_group_selection)
+
+        self.assertEqual([], [entrance for region in multiworld.get_regions()
+                              for entrance in region.entrances if not entrance.parent_region])
+        self.assertEqual([], [exit_ for region in multiworld.get_regions()
+                              for exit_ in region.exits if not exit_.connected_region])
 
     def test_fails_when_mismatched_entrance_and_exit_count(self):
         """tests that entrance randomization fast-fails if the input exit and entrance count do not match"""
@@ -187,6 +322,7 @@ class TestRandomizeEntrances(unittest.TestCase):
                           directionally_matched_group_selection)
 
     def test_fails_when_some_unconnectable_exit(self):
+        """tests that entrance randomization fails if an exit can't be made into a valid placement (non-minimal)"""
         class CustomEntrance(Entrance):
             def can_connect_to(self, other: Entrance, state: "ERPlacementState") -> bool:
                 if other.name == "region1_right":
@@ -198,6 +334,24 @@ class TestRandomizeEntrances(unittest.TestCase):
         multiworld = generate_multiworld()
         multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
         generate_disconnected_region_grid(multiworld, 5, region_type=CustomRegion)
+
+        self.assertRaises(EntranceRandomizationError, randomize_entrances, multiworld.worlds[1], False,
+                          directionally_matched_group_selection)
+
+    def test_minimal_er_fails_when_not_enough_locations_to_fit_progression(self):
+        """
+        tests that entrance randomization fails in minimal accessibility if there are not enough locations
+        available to place all progression items locally
+        """
+        multiworld = generate_multiworld()
+        multiworld.worlds[1].random = multiworld.per_slot_randoms[1]
+        multiworld.worlds[1].options.accessibility = Accessibility.from_any(Accessibility.option_minimal)
+        multiworld.completion_condition[1] = lambda state: state.can_reach("region24", player=1)
+        generate_disconnected_region_grid(multiworld, 5, 1)
+        prog_items = generate_items(30, 1, True)
+        multiworld.itempool += prog_items
+        e = multiworld.get_entrance("region1_right", 1)
+        set_rule(e, lambda state: False)
 
         self.assertRaises(EntranceRandomizationError, randomize_entrances, multiworld.worlds[1], False,
                           directionally_matched_group_selection)
