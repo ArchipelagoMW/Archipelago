@@ -32,7 +32,7 @@ def generate_disconnected_region_grid(multiworld: MultiWorld, grid_side_length: 
             name = f"region{index}"
             region = region_type(name, 1, multiworld)
             multiworld.regions.append(region)
-            generate_locations(region_size, 1, region=region)
+            generate_locations(region_size, 1, region=region, tag=f"_{name}")
 
             if row == 0 and col == 0:
                 multiworld.get_region("Menu", 1).connect(region)
