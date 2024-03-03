@@ -19,7 +19,7 @@ class Celeste64ItemData(NamedTuple):
 item_data_table: Dict[str, Celeste64ItemData] = {
     ItemName.strawberry: Celeste64ItemData(
         code = celeste_64_base_id + 0,
-        type=ItemClassification.progression,
+        type=ItemClassification.progression_skip_balancing,
     ),
     ItemName.dash_refill: Celeste64ItemData(
         code = celeste_64_base_id + 1,

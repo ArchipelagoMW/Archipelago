@@ -42,7 +42,7 @@ class Celeste64World(World):
             classification: ItemClassification = ItemClassification.filler
             self.prog_strawberries = getattr(self, "prog_strawberries", 0)
             if self.prog_strawberries < self.options.strawberries_required.value:
-                classification = ItemClassification.progression
+                classification = ItemClassification.progression_skip_balancing
                 self.prog_strawberries += 1
 
             return Celeste64Item(name, classification, item_data_table[name].code, self.player)
