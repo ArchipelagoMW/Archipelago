@@ -209,8 +209,9 @@ class SM64World(World):
                 regions = [self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)]
                 if regions[0].name == "Tiny-Huge Island (Huge)":
                     # Special rules for Tiny-Huge Island's dual entrances
-                    entrance_name = sm64_level_to_entrances[self.area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
-                                    + ' or ' + sm64_level_to_entrances[self.area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
+                    reverse_area_connections = {destination: entrance for entrance, destination in self.area_connections.items()}
+                    entrance_name = sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
+                                    + ' or ' + sm64_level_to_entrances[reverse_area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
                     regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
                 else:
                     entrance_name = sm64_level_to_entrances[entrance]
