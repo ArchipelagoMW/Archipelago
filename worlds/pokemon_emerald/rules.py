@@ -44,21 +44,26 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "EVENT_DEFEAT_JUAN"
         ]]) >= n
 
+    huntable_legendary_events = [
+        f"EVENT_ENCOUNTER_{key}"
+        for name, key in {
+            "Groudon": "GROUDON",
+            "Kyogre": "KYOGRE",
+            "Rayquaza": "RAYQUAZA",
+            "Latias": "LATIAS",
+            "Latios": "LATIOS",
+            "Regirock": "REGIROCK",
+            "Regice": "REGICE",
+            "Registeel": "REGISTEEL",
+            "Mew": "MEW",
+            "Deoxys": "DEOXYS",
+            "Ho-oh": "HO_OH",
+            "Lugia": "LUGIA"
+        }.items()
+        if name in world.options.allowed_legendary_hunt_encounters.value
+    ]
     def encountered_n_legendaries(state: CollectionState, n: int) -> bool:
-        num_encounters = 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_GROUDON", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_KYOGRE", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_RAYQUAZA", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIAS", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LATIOS", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGIROCK", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGICE", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_REGISTEEL", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_MEW", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_DEOXYS", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_HO_OH", world.player) else 0
-        num_encounters += 1 if state.has("EVENT_ENCOUNTER_LUGIA", world.player) else 0
-        return num_encounters >= n
+        return sum(int(state.has(event, world.player)) for event in huntable_legendary_events) >= n
 
     def get_entrance(entrance: str):
         return world.multiworld.get_entrance(entrance, world.player)
