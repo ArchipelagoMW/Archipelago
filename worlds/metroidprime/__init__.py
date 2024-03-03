@@ -41,7 +41,7 @@ class MetroidPrimeWorld(World):
         self.multiworld.push_precollected(self.create_item("Combat Visor"))
         self.multiworld.push_precollected(self.create_item("Power Suit"))
         artcount = 12
-        for i in artifact_table:
+        for i in artifact_table.keys():
             if artcount <= reqarts:
                 self.multiworld.push_precollected(self.create_item(i))
             artcount -= 1
@@ -58,7 +58,7 @@ class MetroidPrimeWorld(World):
         # add remaining artifacts
         reqarts = int(self.options.required_artifacts)
         artcount = 12
-        for i in artifact_table:
+        for i in artifact_table.keys():
             if artcount >= reqarts:
                 self.multiworld.itempool += [self.create_item(i)]
             artcount -= 1
