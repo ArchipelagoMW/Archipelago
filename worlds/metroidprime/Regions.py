@@ -76,4 +76,4 @@ def create_regions(self, final_boss_selection):
 
     if (final_boss_selection == 0 or
             final_boss_selection == 2):
-        impact_crater.connect(mission_complete)
+        impact_crater.connect(mission_complete, "Mission Complete")
