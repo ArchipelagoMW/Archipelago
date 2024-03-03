@@ -127,7 +127,7 @@ class DarkSouls3World(World):
 
         if not self.options.enable_dlc and boss.dlc: return False
 
-        if not self.is_location_available("PC: Storm Ruler - boss room"):
+        if not self._is_location_available("PC: Storm Ruler - boss room"):
             # If the Storm Ruler isn't randomized, make sure the player can get to the normal Storm
             # Ruler location before they need to get through Yhorm.
             if boss.before_storm_ruler: return False
@@ -135,7 +135,7 @@ class DarkSouls3World(World):
             # If the Small Doll also wasn't randomized, make sure Yhorm isn't blocking access to it
             # or it won't be possible to get into Profaned Capital before beating him.
             if (
-                not self.is_location_available("CD: Small Doll - boss drop")
+                not self._is_location_available("CD: Small Doll - boss drop")
                 and boss.name in {"Crystal Sage", "Deacons of the Deep"}
             ):
                 return False
@@ -146,7 +146,7 @@ class DarkSouls3World(World):
         # allow Yhorm as Iudex Gundyr if there's at least one available location.
         excluded = self.options.exclude_locations.value
         return any(
-            self.is_location_available(location)
+            self._is_location_available(location)
             and location.name not in excluded
             and location.name != "CA: Coiled Sword - boss drop"
             for location in location_tables["Cemetery of Ash"]
@@ -250,14 +250,14 @@ class DarkSouls3World(World):
         excluded = self.options.exclude_locations.value
 
         for location in location_table:
-            if self.is_location_available(location):
+            if self._is_location_available(location):
                 new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
                     location.missable and self.options.missable_locations == "unimportant"
                 ) or (
                     # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
                     # the latter is missable by default.
-                    not self.is_location_available("FS: Lift Chamber Key - Leonhard")
+                    not self._is_location_available("FS: Lift Chamber Key - Leonhard")
                     and location.name == "HWL: Red Eye Orb - wall tower, miniboss"
                 ):
                     new_location.progress_type = LocationProgressType.EXCLUDED
@@ -299,7 +299,7 @@ class DarkSouls3World(World):
         itempool: List[DarkSouls3Item] = []
         num_required_extra_items = 0
         for location in self.multiworld.get_unfilled_locations(self.player):
-            if not self.is_location_available(location.name):
+            if not self._is_location_available(location.name):
                 raise Exception("DS3 generation bug: Added an unavailable location.")
 
             item = item_dictionary[location.data.default_item_name]
@@ -462,7 +462,7 @@ class DarkSouls3World(World):
                 )
 
         # Define the access rules to some specific locations
-        if self.is_location_available("FS: Lift Chamber Key - Leonhard"):
+        if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
             self._add_location_rule("HWL: Red Eye Orb - wall tower, miniboss",
                                     "Lift Chamber Key")
         self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
@@ -746,7 +746,7 @@ class DarkSouls3World(World):
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
         for location in location_dictionary.values():
-            if self.is_location_available(location):
+            if self._is_location_available(location):
                 if location.shop:
                     add_item_rule(self.multiworld.get_location(location.name, self.player),
                                   lambda item: (
@@ -756,7 +756,7 @@ class DarkSouls3World(World):
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
-        if self.is_location_available("US: Young White Branch - by white tree #2"):
+        if self._is_location_available("US: Young White Branch - by white tree #2"):
             loc = self.multiworld.get_location(
                 "US: Young White Branch - by white tree #2",
                 self.player
@@ -789,7 +789,7 @@ class DarkSouls3World(World):
             else set()
         )
         for location in unnecessary_locations:
-            if self.is_location_available(location):
+            if self._is_location_available(location):
                 add_item_rule(self.multiworld.get_location(location, self.player),
                               lambda item: item.classification not in {
                                   ItemClassification.progression,
@@ -1020,7 +1020,7 @@ class DarkSouls3World(World):
         """
         locations = location if type(location) is list else [location]
         for location in locations:
-            if not self.is_location_available(location): return
+            if not self._is_location_available(location): return
             if isinstance(rule, str):
                 assert item_dictionary[rule].classification == ItemClassification.progression
                 rule = lambda state, item=rule: state.has(item, self.player)
@@ -1048,7 +1048,7 @@ class DarkSouls3World(World):
         return state.can_reach(location, "Location", self.player)
 
 
-    def is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
+    def _is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
         """Returns whether the given location is being randomized."""
         if isinstance(location, DS3LocationData):
             data = location
@@ -1126,7 +1126,7 @@ class DarkSouls3World(World):
                 self.multiworld.get_location(location.name, self.player)
                 for region in regions
                 for location in location_tables[region]
-                if self.is_location_available(location)
+                if self._is_location_available(location)
                 and not location.missable
                 and not location.conditional
                 and (not additional_condition or additional_condition(location))
@@ -1175,7 +1175,7 @@ class DarkSouls3World(World):
             for region in region_order
             # Shuffle locations within each region.
             for location in self._shuffle(location_tables[region])
-            if self.is_location_available(location)
+            if self._is_location_available(location)
         ]
 
         # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
