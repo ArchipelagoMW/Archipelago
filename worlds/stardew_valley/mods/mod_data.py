@@ -27,8 +27,6 @@ class ModNames:
     lacey = "Hat Mouse Lacey"
     boarding_house = "Boarding House and Bus Stop Extension"
 
-    jasper_sve = jasper + "," + sve
-
 
 all_mods = frozenset({ModNames.deepwoods, ModNames.tractor, ModNames.big_backpack,
                       ModNames.luck_skill, ModNames.magic, ModNames.socializing_skill, ModNames.archaeology,

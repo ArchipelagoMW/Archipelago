@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Collection
 
 from .ability_logic import AbilityLogicMixin
@@ -37,6 +36,7 @@ from .time_logic import TimeLogicMixin
 from .tool_logic import ToolLogicMixin
 from .traveling_merchant_logic import TravelingMerchantLogicMixin
 from .wallet_logic import WalletLogicMixin
+from ..content.game_content import StardewContent
 from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
@@ -46,7 +46,7 @@ from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, Friendsanity, StardewValleyOptions
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, StardewValleyOptions
 from ..stardew_rule import False_, Or, True_, And, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -84,7 +84,6 @@ from ..strings.villager_names import NPC
 from ..strings.wallet_item_names import Wallet
 
 
-@dataclass(frozen=False, repr=False)
 class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogicMixin, TravelingMerchantLogicMixin, TimeLogicMixin,
                    SeasonLogicMixin, MoneyLogicMixin, ActionLogicMixin, ArcadeLogicMixin, ArtisanLogicMixin, GiftLogicMixin,
                    BuildingLogicMixin, ShippingLogicMixin, RelationshipLogicMixin, MuseumLogicMixin, WalletLogicMixin, AnimalLogicMixin,
@@ -93,11 +92,12 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                    SpecialOrderLogicMixin, QuestLogicMixin, CraftingLogicMixin, ModLogicMixin):
     player: int
     options: StardewValleyOptions
+    content: StardewContent
     regions: Collection[str]
 
-    def __init__(self, player: int, options: StardewValleyOptions, regions: Collection[str]):
+    def __init__(self, player: int, options: StardewValleyOptions, content: StardewContent, regions: Collection[str]):
         self.registry = LogicRegistry()
-        super().__init__(player, self.registry, options, regions, self)
+        super().__init__(player, self.registry, options, content, regions, self)
 
         self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
@@ -300,9 +300,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Geode.golden_coconut: self.region.can_reach(Region.island_north),
             Geode.magma: self.mine.can_mine_in_the_mines_floor_81_120() | (self.has(Fish.lava_eel) & self.building.has_building(Building.fish_pond)),
             Geode.omni: self.mine.can_mine_in_the_mines_floor_41_80() | self.region.can_reach(Region.desert) | self.action.can_pan() | self.received(Wallet.rusty_key) | (self.has(Fish.octopus) & self.building.has_building(Building.fish_pond)) | self.region.can_reach(Region.volcano_floor_10),
-            Gift.bouquet: self.relationship.has_hearts(Generic.bachelor, 8) & self.money.can_spend_at(Region.pierre_store, 100),
+            Gift.bouquet: self.relationship.has_hearts_with_any_bachelor(8) & self.money.can_spend_at(Region.pierre_store, 100),
             Gift.golden_pumpkin: self.season.has(Season.fall) | self.action.can_open_geode(Geode.artifact_trove),
-            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts(Generic.bachelor, 10) & self.building.has_house(1) & self.has(Consumable.rain_totem),
+            Gift.mermaid_pendant: self.region.can_reach(Region.tide_pools) & self.relationship.has_hearts_with_any_bachelor(10) & self.building.has_house(1) & self.has(Consumable.rain_totem),
             Gift.movie_ticket: self.money.can_spend_at(Region.movie_ticket_stand, 1000),
             Gift.pearl: (self.has(Fish.blobfish) & self.building.has_building(Building.fish_pond)) | self.action.can_open_geode(Geode.artifact_trove),
             Gift.tea_set: self.season.has(Season.winter) & self.time.has_lived_max_months,
@@ -423,7 +423,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.registry.festival_rules.update({
             FestivalCheck.egg_hunt: self.can_win_egg_hunt(),
             FestivalCheck.strawberry_seeds: self.money.can_spend(1000),
-            FestivalCheck.dance: self.relationship.has_hearts(Generic.bachelor, 4),
+            FestivalCheck.dance: self.relationship.has_hearts_with_any_bachelor(4),
             FestivalCheck.tub_o_flowers: self.money.can_spend(2000),
             FestivalCheck.rarecrow_5: self.money.can_spend(2500),
             FestivalCheck.luau_soup: self.can_succeed_luau_soup(),
@@ -511,9 +511,9 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             # Catching every fish not expected
             # Shipping every item not expected
             self.relationship.can_get_married() & self.building.has_house(2),
-            self.relationship.has_hearts("5", 8),  # 5 Friends
-            self.relationship.has_hearts("10", 8),  # 10 friends
-            self.pet.has_hearts(5),  # Max Pet
+            self.relationship.has_hearts_with_n(5, 8),  # 5 Friends
+            self.relationship.has_hearts_with_n(10, 8),  # 10 friends
+            self.pet.has_pet_hearts(5),  # Max Pet
             self.bundle.can_complete_community_center,  # Community Center Completion
             self.bundle.can_complete_community_center,  # CC Ceremony first point
             self.bundle.can_complete_community_center,  # CC Ceremony second point
@@ -631,10 +631,11 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         else:
             number_of_stardrops_to_receive += 1
 
-        if self.options.friendsanity == Friendsanity.option_none:  # Spouse Stardrop
-            other_rules.append(self.relationship.has_hearts(Generic.bachelor, 13))
-        else:
+        # Spouse Stardrop
+        if self.content.features.friendsanity.is_enabled:
             number_of_stardrops_to_receive += 1
+        else:
+            other_rules.append(self.relationship.has_hearts_with_any_bachelor(13))
 
         if ModNames.deepwoods in self.options.mods:  # Petting the Unicorn
             number_of_stardrops_to_receive += 1

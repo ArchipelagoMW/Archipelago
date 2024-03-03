@@ -1,7 +1,6 @@
 from typing import Union
 
 from .magic_logic import MagicLogicMixin
-from ...data.villagers_data import all_villagers
 from ...logic.action_logic import ActionLogicMixin
 from ...logic.base_logic import BaseLogicMixin, BaseLogic
 from ...logic.building_logic import BuildingLogicMixin
@@ -15,9 +14,8 @@ from ...logic.tool_logic import ToolLogicMixin
 from ...mods.mod_data import ModNames
 from ...options import SkillProgression
 from ...stardew_rule import StardewRule, False_, True_
-from ...strings.ap_names.mods.mod_items import SkillLevel
-from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.building_names import Building
+from ...strings.craftable_names import ModCraftable, ModMachine
 from ...strings.geode_names import Geode
 from ...strings.machine_names import Machine
 from ...strings.region_names import Region
@@ -77,9 +75,10 @@ ToolLogicMixin, FishingLogicMixin, CookingLogicMixin, MagicLogicMixin]]):
 
     def can_earn_socializing_skill_level(self, level: int) -> StardewRule:
         villager_count = []
-        for villager in all_villagers:
-            if villager.mod_name in self.options.mods or villager.mod_name is None:
-                villager_count.append(self.logic.relationship.can_earn_relationship(villager.name, level))
+
+        for villager in self.content.villagers.values():
+            villager_count.append(self.logic.relationship.can_earn_relationship(villager.name, level))
+
         return self.logic.count(level * 2, *villager_count)
 
     def can_earn_archaeology_skill_level(self, level: int) -> StardewRule:

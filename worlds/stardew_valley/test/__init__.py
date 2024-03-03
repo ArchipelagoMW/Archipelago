@@ -109,7 +109,7 @@ def minimal_locations_maximal_items():
         options.NumberOfLuckBuffs.internal_name: 12,
         options.ExcludeGingerIsland.internal_name: options.ExcludeGingerIsland.option_true,
         options.TrapItems.internal_name: options.TrapItems.option_nightmare,
-        options.Mods.internal_name: (),
+        options.Mods.internal_name: frozenset(),
     }
     return min_max_options
 

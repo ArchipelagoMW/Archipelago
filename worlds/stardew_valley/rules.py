@@ -5,6 +5,8 @@ from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
 from . import locations
 from .bundles.bundle_room import BundleRoom
+from .content import StardewContent
+from .content.feature import friendsanity
 from .data.craftable_data import all_crafting_recipes_by_name
 from .data.museum_data import all_museum_items, dwarf_scrolls, skeleton_front, skeleton_middle, skeleton_back, all_museum_items_by_name, all_museum_minerals, \
     all_museum_artifacts, Artifact
@@ -14,7 +16,7 @@ from .logic.logic import StardewLogic
 from .logic.time_logic import MAX_MONTHS
 from .logic.tool_logic import tool_upgrade_prices
 from .mods.mod_data import ModNames
-from .options import StardewValleyOptions, Friendsanity
+from .options import StardewValleyOptions
 from .options import ToolProgression, BuildingProgression, ExcludeGingerIsland, SpecialOrderLocations, Museumsanity, BackpackProgression, Shipsanity, \
     Monstersanity, Chefsanity, Craftsanity, ArcadeMachineLocations, Cooksanity, Cropsanity, SkillProgression
 from .stardew_rule import And, StardewRule
@@ -30,7 +32,6 @@ from .strings.craftable_names import Bomb
 from .strings.crop_names import Fruit
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, DeepWoodsEntrance, AlecEntrance, \
     SVEEntrance, LaceyEntrance, BoardingHouseEntrance
-from .strings.generic_names import Generic
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
 from .strings.performance_names import Performance
@@ -47,6 +48,7 @@ from .strings.wallet_item_names import Wallet
 def set_rules(world):
     multiworld = world.multiworld
     world_options = world.options
+    world_content = world.content
     player = world.player
     logic = world.logic
     bundle_rooms: List[BundleRoom] = world.modified_bundles
@@ -67,7 +69,7 @@ def set_rules(world):
     set_fishsanity_rules(all_location_names, logic, multiworld, player)
     set_museumsanity_rules(all_location_names, logic, multiworld, player, world_options)
 
-    set_friendsanity_rules(all_location_names, logic, multiworld, player, world_options)
+    set_friendsanity_rules(logic, multiworld, player, world_content)
     set_backpack_rules(logic, multiworld, player, world_options)
     set_festival_rules(all_location_names, logic, multiworld, player)
     set_monstersanity_rules(all_location_names, logic, multiworld, player, world_options)
@@ -761,28 +763,26 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
                              logic.has("JotPK Max Buff"))
 
 
-def set_friendsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
-    if world_options.friendsanity == Friendsanity.option_none:
+def set_friendsanity_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, content: StardewContent):
+    if not content.features.friendsanity.is_enabled:
         return
     MultiWorldRules.add_rule(multiworld.get_location("Spouse Stardrop", player),
-                             logic.relationship.has_hearts(Generic.bachelor, 13))
+                             logic.relationship.has_hearts_with_any_bachelor(13))
     MultiWorldRules.add_rule(multiworld.get_location("Have a Baby", player),
                              logic.relationship.can_reproduce(1))
     MultiWorldRules.add_rule(multiworld.get_location("Have Another Baby", player),
                              logic.relationship.can_reproduce(2))
 
-    friend_prefix = "Friendsanity: "
-    friend_suffix = " <3"
-    for friend_location in locations.locations_by_tag[LocationTags.FRIENDSANITY]:
-        if not friend_location.name in all_location_names:
-            continue
-        friend_location_without_prefix = friend_location.name[len(friend_prefix):]
-        friend_location_trimmed = friend_location_without_prefix[:friend_location_without_prefix.index(friend_suffix)]
-        split_index = friend_location_trimmed.rindex(" ")
-        friend_name = friend_location_trimmed[:split_index]
-        num_hearts = int(friend_location_trimmed[split_index + 1:])
-        MultiWorldRules.set_rule(multiworld.get_location(friend_location.name, player),
-                                 logic.relationship.can_earn_relationship(friend_name, num_hearts))
+    for villager in content.villagers.values():
+        for heart in content.features.friendsanity.get_randomized_hearts(villager):
+            rule = logic.relationship.can_earn_relationship(villager.name, heart)
+            location_name = friendsanity.to_location_name(villager.name, heart)
+            MultiWorldRules.set_rule(multiworld.get_location(location_name, player), rule)
+
+    for heart in content.features.friendsanity.get_pet_randomized_hearts():
+        rule = logic.pet.can_befriend_pet(heart)
+        location_name = friendsanity.to_location_name(NPC.pet, heart)
+        MultiWorldRules.set_rule(multiworld.get_location(location_name, player), rule)
 
 
 def set_deepwoods_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):

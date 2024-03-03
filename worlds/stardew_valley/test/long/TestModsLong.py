@@ -40,12 +40,14 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
                 self.assert_basic_checks(multiworld)
                 self.assert_stray_mod_items(mod, multiworld)
 
-    # @unittest.skip
+    @unittest.skip
     def test_troubleshoot_option(self):
-        seed = get_seed(45949559493817417717)
+        seed = get_seed(78709133382876990000)
+        # This seed is also broken 61810967650051856921
+
         world_options = {
-            options.ElevatorProgression: options.ElevatorProgression.option_vanilla,
-            options.Mods: ModNames.deepwoods
+            options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+            options.Mods: ModNames.sve
         }
 
         with self.solo_world_sub_test(world_options=world_options, seed=seed, world_caching=False) as (multiworld, _):

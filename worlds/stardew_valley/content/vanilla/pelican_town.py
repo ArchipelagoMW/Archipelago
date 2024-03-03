@@ -1,0 +1,41 @@
+from ..game_content import ContentPack
+from ...data import villagers_data
+
+pelican_town = ContentPack(
+    "Pelican Town (Vanilla)",
+    villagers=(
+        villagers_data.josh,
+        villagers_data.elliott,
+        villagers_data.harvey,
+        villagers_data.sam,
+        villagers_data.sebastian,
+        villagers_data.shane,
+        villagers_data.best_girl,
+        villagers_data.emily,
+        villagers_data.hoe,
+        villagers_data.leah,
+        villagers_data.nerd,
+        villagers_data.penny,
+        villagers_data.caroline,
+        villagers_data.clint,
+        villagers_data.demetrius,
+        villagers_data.dwarf,
+        villagers_data.gilf,
+        villagers_data.boomer,
+        villagers_data.gus,
+        villagers_data.jas,
+        villagers_data.jodi,
+        villagers_data.kent,
+        villagers_data.krobus,
+        villagers_data.lewis,
+        villagers_data.linus,
+        villagers_data.marnie,
+        villagers_data.pam,
+        villagers_data.pierre,
+        villagers_data.milf,
+        villagers_data.sandy,
+        villagers_data.vincent,
+        villagers_data.willy,
+        villagers_data.wizard,
+    )
+)

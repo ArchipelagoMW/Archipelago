@@ -6,17 +6,18 @@ from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
+from .content.feature import friendsanity
+from .content.game_content import StardewContent
 from .data.fish_data import special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
-from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, \
+from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, \
     SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest
 from .strings.region_names import Region
-from .strings.villager_names import NPC, ModNPC
+from .strings.villager_names import NPC
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -240,38 +241,19 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], opti
         randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"] for museum_item in all_museum_items)
 
 
-def extend_friendsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions):
-    island_villagers = [NPC.leo, ModNPC.lance]
-    if options.friendsanity == Friendsanity.option_none:
+def extend_friendsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
+    if not content.features.friendsanity.is_enabled:
         return
 
     randomized_locations.append(location_table[f"Spouse Stardrop"])
     extend_baby_locations(randomized_locations)
-    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors
-    exclude_locked_villagers = options.friendsanity == Friendsanity.option_starting_npcs or \
-                               options.friendsanity == Friendsanity.option_bachelors
-    include_post_marriage_hearts = options.friendsanity == Friendsanity.option_all_with_marriage
-    heart_size = options.friendsanity_heart_size
-    for villager in get_villagers_for_mods(options.mods.value):
-        if not villager.available and exclude_locked_villagers:
-            continue
-        if not villager.bachelor and exclude_non_bachelors:
-            continue
-        if villager.name in island_villagers and exclude_ginger_island:
-            continue
-        heart_cap = 8 if villager.bachelor else 10
-        if include_post_marriage_hearts and villager.bachelor:
-            heart_cap = 14
-        for heart in range(1, 15):
-            if heart > heart_cap:
-                break
-            if heart % heart_size == 0 or heart == heart_cap:
-                randomized_locations.append(location_table[f"Friendsanity: {villager.name} {heart} <3"])
-    if not exclude_non_bachelors:
-        for heart in range(1, 6):
-            if heart % heart_size == 0 or heart == 5:
-                randomized_locations.append(location_table[f"Friendsanity: Pet {heart} <3"])
+
+    for villager in content.villagers.values():
+        for heart in content.features.friendsanity.get_randomized_hearts(villager):
+            randomized_locations.append(location_table[friendsanity.to_location_name(villager.name, heart)])
+
+    for heart in content.features.friendsanity.get_pet_randomized_hearts():
+        randomized_locations.append(location_table[friendsanity.to_location_name(NPC.pet, heart)])
 
 
 def extend_baby_locations(randomized_locations: List[LocationData]):
@@ -447,6 +429,7 @@ def extend_craftsanity_locations(randomized_locations: List[LocationData], optio
 def create_locations(location_collector: StardewLocationCollector,
                      bundle_rooms: List[BundleRoom],
                      options: StardewValleyOptions,
+                     content: StardewContent,
                      random: Random):
     randomized_locations = []
 
@@ -478,7 +461,7 @@ def create_locations(location_collector: StardewLocationCollector,
     extend_cropsanity_locations(randomized_locations, options)
     extend_fishsanity_locations(randomized_locations, options, random)
     extend_museumsanity_locations(randomized_locations, options, random)
-    extend_friendsanity_locations(randomized_locations, options)
+    extend_friendsanity_locations(randomized_locations, options, content)
 
     extend_festival_locations(randomized_locations, options)
     extend_special_order_locations(randomized_locations, options)

@@ -8,10 +8,11 @@ from typing import Dict, List, Protocol, Union, Set, Optional
 
 from BaseClasses import Item, ItemClassification
 from . import data
-from .data.villagers_data import get_villagers_for_mods
+from .content.feature import friendsanity
+from .content.game_content import StardewContent
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
-    Friendsanity, Museumsanity, \
+    Museumsanity, \
     Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
 from .strings.ap_names.ap_weapon_names import APWeapon
@@ -19,7 +20,6 @@ from .strings.ap_names.buff_names import Buff
 from .strings.ap_names.community_upgrade_names import CommunityUpgrade
 from .strings.ap_names.event_names import Event
 from .strings.ap_names.mods.mod_items import SVEQuestItem
-from .strings.villager_names import NPC, ModNPC
 from .strings.wallet_item_names import Wallet
 
 ITEM_CODE_OFFSET = 717000
@@ -168,9 +168,9 @@ def get_too_many_items_error_message(locations_count: int, items_count: int) -> 
 
 
 def create_items(item_factory: StardewItemFactory, item_deleter: StardewItemDeleter, locations_count: int, items_to_exclude: List[Item],
-                 options: StardewValleyOptions, random: Random) -> List[Item]:
+                 options: StardewValleyOptions, content: StardewContent, random: Random) -> List[Item]:
     items = []
-    unique_items = create_unique_items(item_factory, options, random)
+    unique_items = create_unique_items(item_factory, options, content, random)
 
     remove_items(item_deleter, items_to_exclude, unique_items)
 
@@ -213,7 +213,7 @@ def remove_items_if_no_room_for_them(item_deleter: StardewItemDeleter, unique_it
     remove_items(item_deleter, items_to_remove, unique_items)
 
 
-def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, random: Random) -> List[Item]:
+def create_unique_items(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, random: Random) -> List[Item]:
     items = []
 
     items.extend(item_factory(item) for item in items_by_group[Group.COMMUNITY_REWARD])
@@ -234,7 +234,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Beach Bridge"))
     create_tv_channels(item_factory, options, items)
     create_special_quest_rewards(item_factory, options, items)
-    create_stardrops(item_factory, options, items)
+    create_stardrops(item_factory, options, content, items)
     create_museum_items(item_factory, options, items)
     create_arcade_machine_items(item_factory, options, items)
     create_player_buffs(item_factory, options, items)
@@ -242,7 +242,7 @@ def create_unique_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory("Return Scepter"))
     create_seasons(item_factory, options, items)
     create_seeds(item_factory, options, items)
-    create_friendsanity_items(item_factory, options, items, random)
+    create_friendsanity_items(item_factory, options, content, items, random)
     create_festival_rewards(item_factory, options, items)
     create_special_order_board_rewards(item_factory, options, items)
     create_special_order_qi_rewards(item_factory, options, items)
@@ -378,7 +378,7 @@ def create_special_quest_rewards(item_factory: StardewItemFactory, options: Star
     create_boarding_house_quest_rewards(item_factory, options, items)
 
 
-def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
+def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item]):
     stardrops_classification = get_stardrop_classification(options)
     items.append(item_factory("Stardrop", stardrops_classification))  # The Mines level 100
     items.append(item_factory("Stardrop", stardrops_classification))  # Old Master Cannoli
@@ -387,7 +387,7 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
         items.append(item_factory("Stardrop", stardrops_classification))  # Master Angler Stardrop
     if ModNames.deepwoods in options.mods:
         items.append(item_factory("Stardrop", stardrops_classification))  # Petting the Unicorn
-    if options.friendsanity != Friendsanity.option_none:
+    if content.features.friendsanity.is_enabled:
         items.append(item_factory("Stardrop", stardrops_classification))  # Spouse Stardrop
 
 
@@ -403,39 +403,23 @@ def create_museum_items(item_factory: StardewItemFactory, options: StardewValley
     items.append(item_factory(Wallet.metal_detector))
 
 
-def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item], random: Random):
-    island_villagers = [NPC.leo, ModNPC.lance]
-    if options.friendsanity == Friendsanity.option_none:
+def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, content: StardewContent, items: List[Item], random: Random):
+    if not content.features.friendsanity.is_enabled:
         return
+
     create_babies(item_factory, items, random)
-    exclude_non_bachelors = options.friendsanity == Friendsanity.option_bachelors
-    exclude_locked_villagers = options.friendsanity == Friendsanity.option_starting_npcs or \
-                               options.friendsanity == Friendsanity.option_bachelors
-    include_post_marriage_hearts = options.friendsanity == Friendsanity.option_all_with_marriage
-    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
-    mods = options.mods
-    heart_size = options.friendsanity_heart_size
-    for villager in get_villagers_for_mods(mods.value):
-        if not villager.available and exclude_locked_villagers:
-            continue
-        if not villager.bachelor and exclude_non_bachelors:
-            continue
-        if villager.name in island_villagers and exclude_ginger_island:
-            continue
-        heart_cap = 8 if villager.bachelor else 10
-        if include_post_marriage_hearts and villager.bachelor:
-            heart_cap = 14
-        classification = ItemClassification.progression
-        for heart in range(1, 15):
-            if heart > heart_cap:
-                break
-            if heart % heart_size == 0 or heart == heart_cap:
-                items.append(item_factory(f"{villager.name} <3", classification))
-    if not exclude_non_bachelors:
-        need_pet = options.goal == Goal.option_grandpa_evaluation
-        for heart in range(1, 6):
-            if heart % heart_size == 0 or heart == 5:
-                items.append(item_factory(f"Pet <3", ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful))
+
+    for villager in content.villagers.values():
+        item_name = friendsanity.to_item_name(villager.name)
+
+        for _ in content.features.friendsanity.get_randomized_hearts(villager):
+            items.append(item_factory(item_name, ItemClassification.progression))
+
+    need_pet = options.goal == Goal.option_grandpa_evaluation
+    pet_item_classification = ItemClassification.progression_skip_balancing if need_pet else ItemClassification.useful
+
+    for _ in content.features.friendsanity.get_pet_randomized_hearts():
+        items.append(item_factory(friendsanity.pet_heart_item_name, pet_item_classification))
 
 
 def create_babies(item_factory: StardewItemFactory, items: List[Item], random: Random):

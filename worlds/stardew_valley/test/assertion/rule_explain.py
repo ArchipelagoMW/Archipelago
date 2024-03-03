@@ -8,7 +8,7 @@ from BaseClasses import CollectionState
 from worlds.generic.Rules import CollectionRule
 from ...stardew_rule import StardewRule, AggregatingStardewRule, Count, Has, TotalReceived, Received, Reach
 
-max_explanation_depth = 10
+max_explanation_depth = 15
 
 
 @dataclass

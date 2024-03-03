@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TypeVar, Generic, Dict, Collection
 
+from ..content.game_content import StardewContent
 from ..options import StardewValleyOptions
 from ..stardew_rule import StardewRule
 
@@ -38,13 +39,15 @@ class BaseLogic(BaseLogicMixin, Generic[T]):
     player: int
     registry: LogicRegistry
     options: StardewValleyOptions
+    content: StardewContent
     regions: Collection[str]
     logic: T
 
-    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, regions: Collection[str], logic: T):
-        super().__init__(player, registry, options, regions, logic)
+    def __init__(self, player: int, registry: LogicRegistry, options: StardewValleyOptions, content: StardewContent, regions: Collection[str], logic: T):
+        super().__init__(player, registry, options, content, regions, logic)
         self.player = player
         self.registry = registry
         self.options = options
+        self.content = content
         self.regions = regions
         self.logic = logic

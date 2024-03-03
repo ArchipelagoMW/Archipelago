@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, Optional, Dict, Callable, Set
+from typing import Tuple, Optional
 
 from ..mods.mod_data import ModNames
 from ..strings.food_names import Beverage
@@ -355,28 +355,10 @@ scarlett_loves = goat_cheese + duck_feather + goat_milk + cherry + maple_syrup +
 susan_loves = pancakes + chocolate_cake + pink_cake + ice_cream + cookie + pumpkin_pie + rhubarb_pie + \
               blueberry_tart + blackberry_cobbler + cranberry_candy + red_plate
 
-all_villagers: List[Villager] = []
-villager_modifications_by_mod: Dict[str, Dict[str, Callable[[str, Villager], Villager]]] = {}
-
 
 def villager(name: str, bachelor: bool, locations: Tuple[str, ...], birthday: str, gifts: Tuple[str, ...],
              available: bool, mod_name: Optional[str] = None) -> Villager:
-    npc = Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
-    all_villagers.append(npc)
-    return npc
-
-
-def adapt_wizard_to_sve(mod_name: str, npc: Villager):
-    if npc.mod_name:
-        mod_name = npc.mod_name
-    # The wizard leaves his tower on sunday, for like 1 hour... Good enough to meet him!
-    return Villager(npc.name, True, npc.locations + forest, npc.birthday, npc.gifts, npc.available, mod_name)
-
-
-def register_villager_modification(mod_name: str, npc: Villager, modification_function):
-    if mod_name not in villager_modifications_by_mod:
-        villager_modifications_by_mod[mod_name] = {}
-    villager_modifications_by_mod[mod_name][npc.name] = modification_function
+    return Villager(name, bachelor, locations, birthday, gifts, available, mod_name)
 
 
 josh = villager(NPC.alex, True, town + alex_house, Season.summer, universal_loves + complete_breakfast + salmon_dinner, True)
@@ -443,54 +425,10 @@ sophia = villager(ModNPC.sophia, True, bluemoon, Season.winter, universal_loves_
 victor = villager(ModNPC.victor, True, town, Season.summer, universal_loves + victor_loves, True, ModNames.sve)
 andy = villager(ModNPC.andy, False, forest, Season.spring, universal_loves + andy_loves, True, ModNames.sve)
 apples = villager(ModNPC.apples, False, aurora + junimo, Generic.any, starfruit, False, ModNames.sve)
-gunther = villager(ModNPC.gunther, False, museum, Season.winter, universal_loves + gunther_loves, True, ModNames.jasper_sve)
+gunther = villager(ModNPC.gunther, False, museum, Season.winter, universal_loves + gunther_loves, True, ModNames.sve)
 martin = villager(ModNPC.martin, False, town + jojamart, Season.summer, universal_loves + martin_loves, True, ModNames.sve)
-marlon = villager(ModNPC.marlon, False, adventurer, Season.winter, universal_loves + marlon_loves, False, ModNames.jasper_sve)
+marlon = villager(ModNPC.marlon, False, adventurer, Season.winter, universal_loves + marlon_loves, False, ModNames.sve)
 morgan = villager(ModNPC.morgan, False, forest, Season.fall, universal_loves_no_rabbit_foot + morgan_loves, False, ModNames.sve)
 scarlett = villager(ModNPC.scarlett, False, bluemoon, Season.summer, universal_loves + scarlett_loves, False, ModNames.sve)
 susan = villager(ModNPC.susan, False, railroad, Season.fall, universal_loves + susan_loves, False, ModNames.sve)
 morris = villager(ModNPC.morris, False, jojamart, Season.spring, universal_loves + morris_loves, True, ModNames.sve)
-
-# Modified villagers; not included in all villagers
-
-register_villager_modification(ModNames.sve, wizard, adapt_wizard_to_sve)
-
-all_villagers_by_name: Dict[str, Villager] = {villager.name: villager for villager in all_villagers}
-all_villagers_by_mod: Dict[str, List[Villager]] = {}
-all_villagers_by_mod_by_name: Dict[str, Dict[str, Villager]] = {}
-
-for npc in all_villagers:
-    mod = npc.mod_name
-    name = npc.name
-    if mod in all_villagers_by_mod:
-        all_villagers_by_mod[mod].append(npc)
-        all_villagers_by_mod_by_name[mod][name] = npc
-    else:
-        all_villagers_by_mod[mod] = [npc]
-        all_villagers_by_mod_by_name[mod] = {}
-        all_villagers_by_mod_by_name[mod][name] = npc
-
-
-def villager_included_for_any_mod(npc: Villager, mods: Set[str]):
-    if not npc.mod_name:
-        return True
-    for mod in npc.mod_name.split(","):
-        if mod in mods:
-            return True
-    return False
-
-
-def get_villagers_for_mods(mods: Set[str]) -> List[Villager]:
-    villagers_for_current_mods = []
-    for npc in all_villagers:
-        if not villager_included_for_any_mod(npc, mods):
-            continue
-        modified_npc = npc
-        for active_mod in mods:
-            if (active_mod not in villager_modifications_by_mod or
-                    npc.name not in villager_modifications_by_mod[active_mod]):
-                continue
-            modification = villager_modifications_by_mod[active_mod][npc.name]
-            modified_npc = modification(active_mod, modified_npc)
-        villagers_for_current_mods.append(modified_npc)
-    return villagers_for_current_mods

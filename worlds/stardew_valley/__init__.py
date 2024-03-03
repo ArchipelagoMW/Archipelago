@@ -7,6 +7,7 @@ from worlds.AutoWorld import World, WebWorld
 from . import rules
 from .bundles.bundle_room import BundleRoom
 from .bundles.bundles import get_all_bundles
+from .content import content_packs, StardewContent, unpack_content, create_content
 from .early_items import setup_early_items
 from .items import item_table, create_items, ItemData, Group, items_by_group, get_all_filler_items, remove_limited_amount_packs
 from .locations import location_table, create_locations, LocationData, locations_by_tag
@@ -77,6 +78,7 @@ class StardewValleyWorld(World):
 
     options_dataclass = StardewValleyOptions
     options: StardewValleyOptions
+    content: StardewContent
     logic: StardewLogic
 
     web = StardewWebWorld()
@@ -94,6 +96,7 @@ class StardewValleyWorld(World):
 
     def generate_early(self):
         self.force_change_options_if_incompatible()
+        self.content = create_content(self.options)
 
     def force_change_options_if_incompatible(self):
         goal_is_walnut_hunter = self.options.goal == Goal.option_greatest_walnut_hunter
@@ -115,7 +118,7 @@ class StardewValleyWorld(World):
 
         world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
 
-        self.logic = StardewLogic(self.player, self.options, world_regions.keys())
+        self.logic = StardewLogic(self.player, self.options, self.content, world_regions.keys())
         self.modified_bundles = get_all_bundles(self.random,
                                                 self.logic,
                                                 self.options)
@@ -125,7 +128,7 @@ class StardewValleyWorld(World):
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.options, self.random)
+        create_locations(add_location, self.modified_bundles, self.options, self.content, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
@@ -143,7 +146,7 @@ class StardewValleyWorld(World):
                                for location in self.multiworld.get_locations(self.player)
                                if location.address is not None])
 
-        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
+        created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options, self.content,
                                      self.random)
 
         self.multiworld.itempool += created_items
