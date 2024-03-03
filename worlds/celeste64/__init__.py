@@ -52,11 +52,9 @@ class Celeste64World(World):
     def create_items(self) -> None:
         item_pool: List[Celeste64Item] = []
 
-        for name, item in item_data_table.items():
-            item_pool.append(self.create_item(name))
+        item_pool += [self.create_item(name) for name in item_data_table.keys()]
 
-        for _ in range(21):
-            item_pool.append(self.create_item(ItemName.strawberry))
+        item_pool += [self.create_item(ItemName.strawberry) for _ in range(21)]
 
         self.multiworld.itempool += item_pool
 
