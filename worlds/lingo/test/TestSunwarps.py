@@ -24,8 +24,6 @@ class TestSimpleDoorsNormalSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -44,8 +42,6 @@ class TestSimpleDoorsDisabledSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -65,8 +61,6 @@ class TestSimpleDoorsUnlockSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -89,8 +83,6 @@ class TestComplexDoorsNormalSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -109,8 +101,6 @@ class TestComplexDoorsDisabledSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -130,8 +120,6 @@ class TestComplexDoorsIndividualSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
@@ -159,8 +147,6 @@ class TestComplexDoorsProgressiveSunwarps(LingoTestBase):
     }
 
     def test_access(self):
-        self.remove_forced_good_item()
-
         self.assertFalse(self.multiworld.state.can_reach("Crossroads", "Region", self.player))
 
         self.collect_by_name("Second Room - Exit Door")
