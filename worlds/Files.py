@@ -144,7 +144,7 @@ class APPatch(APContainer):
         return manifest
 
 
-class CreateRomInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
+class APAutoPatchInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
     """
     An abstract `APPatch` that defines the requirements for a patch
     to be applied with AP's `Patch.py`
@@ -156,7 +156,7 @@ class CreateRomInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
         """ create the output file with the file name `target` """
 
 
-class APDeltaPatch(CreateRomInterface):
+class APDeltaPatch(APAutoPatchInterface):
     """An implementation of `CreateRomInterface` that additionally
     has delta.bsdiff4 containing a delta patch to get the desired file."""
 
