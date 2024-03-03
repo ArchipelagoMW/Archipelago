@@ -6,7 +6,7 @@ import zipfile
 import os
 import threading
 
-from typing import ClassVar, Dict, Tuple, Any, Optional, Union, BinaryIO
+from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO
 
 import bsdiff4
 
@@ -128,10 +128,26 @@ class APContainer:
         }
 
 
-class APPatch(APContainer, abc.ABC, metaclass=AutoPatchRegister):
+class APPatch(APContainer):
     """
-    An abstract `APContainer` that defines the requirements for an object
-    to be used by the `Patch.create_rom_file` function.
+    An `APContainer` that represents a patch file.
+    It includes the `procedure` key in the manifest to indicate that it is a patch.
+
+    Your implementation should inherit from this if your output file
+    represents a patch file, but will not be applied with AP's `Patch.py`
+    """
+    procedure: Union[Literal["custom"], List[Tuple[str, List[Any]]]] = "custom"
+
+    def get_manifest(self) -> Dict[str, Any]:
+        manifest = super(APPatch, self).get_manifest()
+        manifest["procedure"] = self.procedure
+        return manifest
+
+
+class CreateRomInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
+    """
+    An abstract `APPatch` that defines the requirements for a patch
+    to be applied with AP's `Patch.py`
     """
     result_file_ending: str = ".sfc"
 
@@ -140,9 +156,9 @@ class APPatch(APContainer, abc.ABC, metaclass=AutoPatchRegister):
         """ create the output file with the file name `target` """
 
 
-class APDeltaPatch(APPatch):
-    """An APPatch that additionally has delta.bsdiff4
-    containing a delta patch to get the desired file, often a rom."""
+class APDeltaPatch(CreateRomInterface):
+    """An implementation of `CreateRomInterface` that additionally
+    has delta.bsdiff4 containing a delta patch to get the desired file."""
 
     hash: Optional[str]  # base checksum of source file
     patch_file_ending: str = ""
