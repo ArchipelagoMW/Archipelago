@@ -60,6 +60,9 @@ def is_acceptable_pilgrimage_entrance(entrance_type: EntranceType, world: "Lingo
 def connect_entrance(regions: Dict[str, Region], source_region: Region, target_region: Region, description: str,
                      door: Optional[RoomAndDoor], entrance_type: EntranceType, pilgrimage: bool, world: "LingoWorld",
                      player_logic: LingoPlayerLogic):
+    if description in world.multiworld.regions.entrance_cache[world.player]:
+        description += f" ({entrance_type.name})"
+
     connection = Entrance(world.player, description, source_region)
     connection.access_rule = lambda state: lingo_can_use_entrance(state, target_region.name, door, world, player_logic)
 
