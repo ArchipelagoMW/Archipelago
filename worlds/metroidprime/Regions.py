@@ -49,8 +49,8 @@ def create_regions(self, final_boss_selection):
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 logic.prime_artifact_count(state, self.multiworld, self.player) and
                 state.has_all({"Wave Beam", "Ice Beam", "Plasma Beam", "Thermal Visor", "X-Ray Visor", "Phazon Suit",
-                               "Space Jump Boots"}, self.player) and
-                logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
+                               "Space Jump Boots"}, self.player))) #and
+                #logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
     elif final_boss_selection == 1:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
