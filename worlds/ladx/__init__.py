@@ -276,6 +276,11 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
+        # For now, special case first item
+        FORCE_START_ITEM = True
+        if FORCE_START_ITEM:
+            self.force_start_item()
+
     def force_start_item(self):    
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
@@ -287,17 +292,12 @@ class LinksAwakeningWorld(World):
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
 
-
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
 
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            self.force_start_item()
 
         # Set up filter rules
 
