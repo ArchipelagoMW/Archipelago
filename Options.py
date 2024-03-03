@@ -766,7 +766,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     value: typing.Any
 
     @classmethod
-    def verify_keys(cls, data: typing.Iterable[str]):
+    def verify_keys(cls, data: typing.Iterable[str]) -> None:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
