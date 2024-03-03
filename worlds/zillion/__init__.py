@@ -25,7 +25,7 @@ from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Ite
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 from zilliandomizer.options import Chars
 
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class ZillionSettings(settings.Group):

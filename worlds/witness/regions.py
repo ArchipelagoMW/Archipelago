@@ -129,19 +129,20 @@ class WitnessRegions:
                 regions_to_check.add(target.name)
                 reachable_regions.add(target.name)
 
-        final_regions_list = [v for k, v in regions_by_name.items() if k in reachable_regions]
+        self.created_regions = {k: v for k, v in regions_by_name.items() if k in reachable_regions}
 
-        world.multiworld.regions += final_regions_list
+        world.multiworld.regions += self.created_regions.values()
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
-        difficulty = world.options.puzzle_randomization.value
+        difficulty = world.options.puzzle_randomization
 
-        if difficulty == 0:
+        if difficulty == "sigma_normal":
             self.reference_logic = StaticWitnessLogic.sigma_normal
-        elif difficulty == 1:
+        elif difficulty == "sigma_expert":
             self.reference_logic = StaticWitnessLogic.sigma_expert
-        elif difficulty == 2:
+        elif difficulty == "none":
             self.reference_logic = StaticWitnessLogic.vanilla
 
         self.locat = locat
         self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = KeyedDefaultDict(lambda _: [])
+        self.created_regions: Dict[str, Region] = dict()

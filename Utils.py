@@ -19,14 +19,12 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from yaml import load, load_all, dump, SafeLoader
+from yaml import load, load_all, dump
 
 try:
-    from yaml import CLoader as UnsafeLoader
-    from yaml import CDumper as Dumper
+    from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
 except ImportError:
-    from yaml import Loader as UnsafeLoader
-    from yaml import Dumper
+    from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
 if typing.TYPE_CHECKING:
     import tkinter
@@ -871,8 +869,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     Example usage in Main code:
     from Utils import visualize_regions
-    for player in world.player_ids:
-        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    for player in multiworld.player_ids:
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
