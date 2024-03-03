@@ -5,8 +5,8 @@ from .Items import item_table, action_item_table, cannon_item_table, SM64Item
 from .Locations import location_table, SM64Location
 from .Options import sm64_options
 from .Rules import set_rules
-from .Regions import create_regions, sm64_level_to_entrances
-from BaseClasses import Item, Tutorial, ItemClassification
+from .Regions import create_regions, sm64_level_to_entrances, SM64Levels
+from BaseClasses import Item, Tutorial, ItemClassification, Region
 from ..AutoWorld import World, WebWorld
 
 
@@ -39,6 +39,7 @@ class SM64World(World):
     required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
+    subregion_map: typing.Dict[Region, Region]
 
     option_definitions = sm64_options
 
@@ -76,7 +77,8 @@ class SM64World(World):
         self.topology_present = self.multiworld.AreaRandomizer[self.player].value
 
     def create_regions(self):
-        create_regions(self.multiworld, self.player)
+        self.subregion_map = {}
+        create_regions(self.multiworld, self.player, self.subregion_map)
 
     def set_rules(self):
         self.area_connections = {}
@@ -204,7 +206,16 @@ class SM64World(World):
         if self.topology_present:
             er_hint_data = {}
             for entrance, destination in self.area_connections.items():
-                region = self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)
-                for location in region.locations:
-                    er_hint_data[location.address] = sm64_level_to_entrances[entrance]
+                regions = [self.multiworld.get_region(sm64_level_to_entrances[destination], self.player)]
+                if regions[0].name == "Tiny-Huge Island (Huge)":
+                    # Special rules for Tiny-Huge Island's dual entrances
+                    entrance_name = sm64_level_to_entrances[self.area_connections[SM64Levels.TINY_HUGE_ISLAND_HUGE]] \
+                                    + ' or ' + sm64_level_to_entrances[self.area_connections[SM64Levels.TINY_HUGE_ISLAND_TINY]]
+                    regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
+                else:
+                    entrance_name = sm64_level_to_entrances[entrance]
+                regions += self.subregion_map.get(regions[0], [])
+                for region in regions:
+                    for location in region.locations:
+                        er_hint_data[location.address] = entrance_name
             multidata['er_hint_data'][self.player] = er_hint_data
