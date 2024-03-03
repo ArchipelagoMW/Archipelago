@@ -23,7 +23,7 @@ class KeysBehindBosses(Toggle):
 
 
 class AbilityShuffling(Toggle):
-    """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant pages of the manual have been found.
+    """Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
     Hexagon goal amount.
     *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other
@@ -36,9 +36,10 @@ class AbilityShuffling(Toggle):
 class LogicRules(Choice):
     """Set which logic rules to use for your world.
     Restricted: Standard logic, no glitches.
-    No Major Glitches: Ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
+    No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
+    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
     Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
-    *Special Shop is not in logic without the Hero's Laurels in Unrestricted due to soft lock potential.
+    *Special Shop is not in logic without the Hero's Laurels due to soft lock potential.
     *Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
     *Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in
     Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on."""
@@ -46,7 +47,9 @@ class LogicRules(Choice):
     display_name = "Logic Rules"
     option_restricted = 0
     option_no_major_glitches = 1
+    alias_nmg = 1
     option_unrestricted = 2
+    alias_ur = 2
     default = 0
 
 
