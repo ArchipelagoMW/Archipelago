@@ -38,7 +38,7 @@ class MetroidPrimeLogic(LogicMixin):
         return self.has_all({'Morph Ball', 'Spider Ball'}, player)
 
     def prime_can_pb(self, world: MultiWorld, player: int) -> bool:
-        return self.has({'Morph Ball'}, player) and self.has_any({'Power Bomb', 'Power Bomb Expansion'}, player)
+        return self.has('Morph Ball', player) and self.has_any({'Power Bomb', 'Power Bomb Expansion'}, player)
 
     def prime_can_super(self, world: MultiWorld, player: int) -> bool:
         return self.prime_has_missiles(world, player) and self.has_all({'Charge Beam', 'Super Missile'}, player)
@@ -51,7 +51,7 @@ class MetroidPrimeLogic(LogicMixin):
     def prime_late_chozo(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and self.prime_can_bomb(world, player) and
                 self.prime_can_spider(world, player) and
-                ((self.has_all({'Wave Beam'}, player) and self.prime_can_boost(world, player)) or
+                ((self.has('Wave Beam', player) and self.prime_can_boost(world, player)) or
                  self.has_all({'Ice Beam', 'Space Jump Boots'}, player)))
 
     def prime_reflecting_pool(self, world: MultiWorld, player: int) -> bool:
@@ -64,7 +64,7 @@ class MetroidPrimeLogic(LogicMixin):
                               'Gravity Suit', 'Thermal Visor'}, player))
 
     def prime_magma_pool(self, world: MultiWorld, player: int) -> bool:
-        return self.prime_can_heat(world, player) and self.has({'Grapple Beam'}, player)
+        return self.prime_can_heat(world, player) and self.has('Grapple Beam', player)
 
     def prime_tower_of_light(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_has_missiles(world, player) and self.prime_can_boost(world, player) and
@@ -72,9 +72,9 @@ class MetroidPrimeLogic(LogicMixin):
 
     def prime_early_magmoor(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_can_heat(world, player) and self.prime_has_missiles(world, player)
-                and self.has({'Morph Ball'}, player) and (self.has({'Grapple Beam'}, player) or
-                                                          (self.prime_can_bomb(world, player) or
-                                                           self.prime_can_pb(world, player))))
+                and self.has('Morph Ball', player) and (self.has('Grapple Beam', player) or
+                                                        (self.prime_can_bomb(world, player) or
+                                                         self.prime_can_pb(world, player))))
 
     def prime_late_magmoor(self, world: MultiWorld, player: int) -> bool:
         # through early magmoor
@@ -100,17 +100,17 @@ class MetroidPrimeLogic(LogicMixin):
     def prime_quarantine_cave(self, world: MultiWorld, player: int) -> bool:
         # from ruined courtyard
         return ((self.prime_middle_phen(world, player) and self.prime_can_super(world, player) and
-                 self.has({'Thermal Visor'}, player))
+                 self.has('Thermal Visor', player))
                 # from late magmoor
                 or (self.prime_late_magmoor(world, player) and self.prime_can_bomb(world, player)))
 
     def prime_far_phen(self, world: MultiWorld, player: int) -> bool:
-        return (self.prime_middle_phen(world, player) and self.has({'Ice Beam'}, player) and
+        return (self.prime_middle_phen(world, player) and self.has('Ice Beam', player) and
                 # from labs
-                ((self.prime_can_bomb(world, player) and self.has_all({'Boost Ball, Space Jump Boots'}, player)) or
+                ((self.prime_can_bomb(world, player) and self.has_all({'Boost Ball', 'Space Jump Boots'}, player)) or
                  # from late magmoor elevator
                  (self.prime_can_spider(world, player) and self.prime_can_super(world, player) and
-                  self.has({'Thermal Visor'}, player))))
+                  self.has('Thermal Visor', player))))
 
     def prime_labs(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_middle_phen(world, player) and self.prime_can_bomb(world, player)
@@ -128,4 +128,4 @@ class MetroidPrimeLogic(LogicMixin):
     def prime_lower_mines(self, world: MultiWorld, player: int) -> bool:
         return (self.prime_upper_mines(world, player) and self.prime_can_pb(world, player) and
                 self.has_all({'Morph Ball Bombs', 'Boost Ball', 'Spider Ball', 'Plasma Beam',
-                          'X-Ray Visor', 'Grapple Beam'}, player))
+                              'X-Ray Visor', 'Grapple Beam'}, player))
