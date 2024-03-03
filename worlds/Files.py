@@ -38,7 +38,7 @@ class AutoPatchRegister(abc.ABCMeta):
         return None
 
 
-current_patch_version: int = 5
+container_version: int = 6
 
 
 class InvalidDataError(Exception):
@@ -50,7 +50,7 @@ class InvalidDataError(Exception):
 
 class APContainer:
     """A zipfile containing at least archipelago.json"""
-    version: int = current_patch_version
+    version: int = container_version
     compression_level: int = 9
     compression_method: int = zipfile.ZIP_DEFLATED
     game: Optional[str] = None
@@ -124,7 +124,7 @@ class APContainer:
             "game": self.game,
             # minimum version of patch system expected for patching to be successful
             "compatible_version": 5,
-            "version": current_patch_version,
+            "version": container_version,
         }
 
 
