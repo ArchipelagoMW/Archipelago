@@ -50,14 +50,14 @@ class MetroidPrimeWorld(World):
                 self.multiworld.itempool += [self.create_item(i)]
             artcount -= 1
         excluded = self.options.exclude_items
-        spring = bool(self.options.spring_ball)
+        spring = self.options.spring_ball
         items_added = 0
         for i in suit_upgrade_table:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
                 continue
             elif i in excluded.keys():
                 continue
-            elif i == "Spring Ball" and spring:
+            elif i == "Spring Ball" and spring == 1:
                 self.multiworld.itempool += [self.create_item("Spring Ball")]
                 items_added += 1
                 continue
@@ -78,9 +78,9 @@ class MetroidPrimeWorld(World):
                 self.multiworld.itempool += [self.create_item(i)]
                 items_added += 1
         # add missiles in whatever slots we have left
-        while 100 - items_added > 0:
+        remain = 100 - items_added
+        for i in range(0, remain):
             self.multiworld.itempool += [self.create_item("Missile Expansion")]
-            items_added += 1
 
     def set_rules(self) -> None:
         set_rules(self.multiworld, self.player)
