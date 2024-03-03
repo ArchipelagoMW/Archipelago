@@ -61,7 +61,7 @@ class SVPerformanceTestCase(SVTestCase):
 
         fill_tests_key = "fill"
         if fill_tests_key in os.environ:
-            cls.skip_fill = not bool(os.environ[fill_tests_key])
+            cls.skip_fill = os.environ[fill_tests_key] != "True"
 
         fixed_seed_key = "fixed_seed"
         if fixed_seed_key in os.environ:
