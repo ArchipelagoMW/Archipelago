@@ -13,7 +13,7 @@ class MetroidPrimeWeb(WebWorld):
         "Multiworld Setup Guide",
         "A guide to setting up Metroid Prime for Archipelago",
         "English",
-        "setup_en.md",
+        "setup.md",
         "setup/en",
         ["Electro15, UltiNaruto"]
     )]
@@ -26,6 +26,7 @@ class MetroidPrimeWorld(World):
     of the Space Pirates.
     """
     game = "Metroid Prime"
+    web = MetroidPrimeWeb()
     options_dataclass = MetroidPrimeOptions
     options: MetroidPrimeOptions
     topology_present = True
