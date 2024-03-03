@@ -39,7 +39,7 @@ class SM64World(World):
     required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
-    subregion_map: typing.Dict[Region, Region]
+    subregion_map: typing.Dict[Region, typing.List[Region]]
 
     option_definitions = sm64_options
 
