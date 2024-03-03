@@ -8,7 +8,7 @@ from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, Loc
 from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import CollectionRule, set_rule, add_rule, add_item_rule
+from worlds.generic.Rules import CollectionRule, ItemRule, set_rule, add_rule, add_item_rule
 
 from .Bosses import DS3BossInfo, all_bosses, default_yhorm_location
 from .Items import DarkSouls3Item, DS3ItemCategory, DS3ItemData, Infusion, UsefulIf, filler_item_names, item_descriptions, item_dictionary, item_name_groups
@@ -638,10 +638,7 @@ class DarkSouls3World(World):
 
             # Don't let crow items have foreign items because they're picked up in a way that's
             # missed by the hook we use to send location items
-            add_item_rule(
-                self.multiworld.get_location(name, self.player),
-                lambda item: item.player == self.player
-            )
+            self._add_item_rule(name, lambda item: item.player == self.player)
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.
@@ -746,22 +743,22 @@ class DarkSouls3World(World):
         # Forbid shops from carrying items with multiple counts (the offline randomizer has its own
         # logic for choosing how many shop items to sell), and from carring soul items.
         for location in location_dictionary.values():
-            if self._is_location_available(location):
-                if location.shop:
-                    add_item_rule(self.multiworld.get_location(location.name, self.player),
-                                  lambda item: (
-                                      item.player != self.player or
-                                      (item.data.count == 1 and not item.data.souls)
-                                  ))
+            if location.shop:
+                self._add_item_rule(
+                    location.name,
+                    lambda item: (
+                        item.player != self.player or
+                        (item.data.count == 1 and not item.data.souls)
+                    )
+                )
 
         # This particular location is bugged, and will drop two copies of whatever item is placed
         # there.
         if self._is_location_available("US: Young White Branch - by white tree #2"):
-            loc = self.multiworld.get_location(
+            self._add_item_rule(
                 "US: Young White Branch - by white tree #2",
-                self.player
+                lambda item: item.player == self.player and not item.data.unique
             )
-            add_item_rule(loc, lambda item: item.player == self.player and not item.data.unique)
         
         # Make sure the Storm Ruler is available BEFORE Yhorm the Giant
         if self.yhorm_location.region:
@@ -789,12 +786,13 @@ class DarkSouls3World(World):
             else set()
         )
         for location in unnecessary_locations:
-            if self._is_location_available(location):
-                add_item_rule(self.multiworld.get_location(location, self.player),
-                              lambda item: item.classification not in {
-                                  ItemClassification.progression,
-                                  ItemClassification.progression_skip_balancing
-                              })
+            self._add_item_rule(
+                location,
+                lambda item: item.classification not in {
+                    ItemClassification.progression,
+                    ItemClassification.progression_skip_balancing
+                }
+            )
 
         randomized_items = {
             item.name for item in self.multiworld.itempool
@@ -1036,6 +1034,12 @@ class DarkSouls3World(World):
                 assert item_dictionary[rule].classification == ItemClassification.progression
             rule = lambda state, item=rule: state.has(item, self.player)
         add_rule(self.multiworld.get_entrance("Go To " + region, self.player), rule)
+
+
+    def _add_item_rule(self, location: str, rule: ItemRule) -> None:
+        """Sets a rule for what items are allowed in a given location."""
+        if not self._is_location_available(location): return
+        add_item_rule(self.multiworld.get_location(location, self.player), rule)
 
 
     def _can_go_to(self, state, region) -> None:
