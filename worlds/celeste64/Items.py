@@ -1,6 +1,6 @@
-from typing import Callable, Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional
 
-from BaseClasses import Item, ItemClassification, MultiWorld
+from BaseClasses import Item, ItemClassification
 from .Names import ItemName
 
 

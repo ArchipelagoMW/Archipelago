@@ -1,6 +1,6 @@
-from typing import Callable, Dict, NamedTuple, Optional
+from typing import Dict, NamedTuple, Optional
 
-from BaseClasses import Location, MultiWorld
+from BaseClasses import Location
 from .Names import LocationName
 
 

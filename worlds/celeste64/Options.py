@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-from typing import Dict
 
-from Options import Choice, Option, Toggle, Range, DeathLink, PerGameCommonOptions
+from Options import Range, DeathLink, PerGameCommonOptions
 
 
 class StrawberriesRequired(Range):

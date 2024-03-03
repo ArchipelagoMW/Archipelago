@@ -1,13 +1,11 @@
 from typing import List
 
-from BaseClasses import Region, Tutorial
+from BaseClasses import ItemClassification, Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .Items import Celeste64Item, item_data_table, item_table
 from .Locations import Celeste64Location, location_data_table, location_table
-from .Names import ItemName, LocationName
+from .Names import ItemName
 from .Options import Celeste64Options
-from .Regions import region_data_table
-from .Rules import set_rules
 
 
 class Celeste64WebWorld(WebWorld):
@@ -39,11 +37,21 @@ class Celeste64World(World):
 
 
     def create_item(self, name: str) -> Celeste64Item:
-        # Potentially don't make all strawberries Progression
-        return Celeste64Item(name, item_data_table[name].type, item_data_table[name].code, self.player)
+        # Only make required amount of strawberries be Progression
+        if name == ItemName.strawberry:
+            classification: ItemClassification = ItemClassification.filler
+            if self.prog_strawberries < self.options.strawberries_required.value:
+                classification = ItemClassification.progression
+                self.prog_strawberries += 1
+
+            return Celeste64Item(name, classification, item_data_table[name].code, self.player)
+        else:
+            return Celeste64Item(name, item_data_table[name].type, item_data_table[name].code, self.player)
 
     def create_items(self) -> None:
         item_pool: List[Celeste64Item] = []
+        self.prog_strawberries: int = 0
+
         for name, item in item_data_table.items():
             item_pool.append(self.create_item(name))
 
@@ -54,6 +62,7 @@ class Celeste64World(World):
 
 
     def create_regions(self) -> None:
+        from .Regions import region_data_table
         # Create regions.
         for region_name in region_data_table.keys():
             region = Region(region_name, self.player, self.multiworld)
@@ -74,6 +83,7 @@ class Celeste64World(World):
 
 
     def set_rules(self) -> None:
+        from .Rules import set_rules
         set_rules(self)
 
 
