@@ -687,11 +687,21 @@ class DarkSouls3World(World):
         # Lump Soul of the Dancer in with LC for locations that should not be reachable
         # before having access to US. (Prevents requiring getting Basin to fight Dancer to get SLB to go to US)
         if self.options.late_basin_of_vows:
-            self._add_location_rule("HWL: Soul of the Dancer", "Small Lothric Banner")
-            # This isn't really necessary, but it ensures that the game logic knows players will
-            # want to do Lothric Castle after at least being _able_ to access Catacombs. This is
-            # useful for smooth item placement.
-            self._add_location_rule("HWL: Soul of the Dancer", has_any_scroll)
+            self._add_location_rule("HWL: Soul of the Dancer", lambda state: (
+                state.has("Small Lothric Banner", self.player)
+                # Make sure these are actually available early.
+                and (
+                    "Transposing Kiln" not in randomized_items
+                    or state.has("Transposing Kiln", self.player)
+                ) and (
+                    "Pyromancy Flame" not in randomized_items
+                    or state.has("Pyromancy Flame", self.player)
+                )
+                # This isn't really necessary, but it ensures that the game logic knows players will
+                # want to do Lothric Castle after at least being _able_ to access Catacombs. This is
+                # useful for smooth item placement.
+                and has_any_scroll(state)
+            ))
 
         self._add_location_rule([
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
