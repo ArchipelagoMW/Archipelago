@@ -15,13 +15,13 @@ import pkgutil
 
 
 ability_rom_data = {
-    0xBC0003: [[0x1F2C, 0x7]], # Run         0x80
-    0xBC0004: [[0x1F2C, 0x6]], # Carry       0x40
-    0xBC0005: [[0x1F2C, 0x2]], # Swim        0x04
-    0xBC0006: [[0x1F2C, 0x3]], # Spin Jump   0x08
-    0xBC0007: [[0x1F2C, 0x5]], # Climb       0x20
-    0xBC0008: [[0x1F2C, 0x1]], # Yoshi       0x02
-    0xBC0009: [[0x1F2C, 0x4]], # P-Switch    0x10
+    0xBC0003: [[0x1F1C, 0x7]], # Run         0x80
+    0xBC0004: [[0x1F1C, 0x6]], # Carry       0x40
+    0xBC0005: [[0x1F1C, 0x2]], # Swim        0x04
+    0xBC0006: [[0x1F1C, 0x3]], # Spin Jump   0x08
+    0xBC0007: [[0x1F1C, 0x5]], # Climb       0x20
+    0xBC0008: [[0x1F1C, 0x1]], # Yoshi       0x02
+    0xBC0009: [[0x1F1C, 0x4]], # P-Switch    0x10
     #0xBC000A: [[]]
     0xBC000B: [[0x1F2D, 0x3]], # P-Balloon   0x08
     0xBC000D: [[0x1F2D, 0x4]]  # Super Star  0x10
@@ -44,7 +44,7 @@ item_rom_data = {
     0xBC000F: [0x1F27, 0x1,  0x1C], # Green Switch Palace
     0xBC0010: [0x1F2A, 0x1,  0x1C], # Red Switch Palace
     0xBC0011: [0x1F29, 0x1,  0x1C], # Blue Switch Palace
-    0xBC001B: [0x1FFF, 0x80, 0x39]  # Special Zone Clear
+    0xBC001B: [0x1F1E, 0x80, 0x39]  # Special Zone Clear
 }
 
 trap_rom_data = {
@@ -120,7 +120,7 @@ def handle_ability_code(rom):
     rom.write_bytes(RUN_SUB_ADDR + 0x04, bytearray([0xC8]))             # INY
     rom.write_bytes(RUN_SUB_ADDR + 0x05, bytearray([0xA9, 0x70]))       # LDA #70
     rom.write_bytes(RUN_SUB_ADDR + 0x07, bytearray([0xAA]))             # TAX
-    rom.write_bytes(RUN_SUB_ADDR + 0x08, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(RUN_SUB_ADDR + 0x08, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(RUN_SUB_ADDR + 0x0B, bytearray([0x89, 0x80]))       # BIT #80
     rom.write_bytes(RUN_SUB_ADDR + 0x0D, bytearray([0xF0, 0x04]))       # BEQ +0x04
     rom.write_bytes(RUN_SUB_ADDR + 0x0F, bytearray([0x8A]))             # TXA
@@ -137,7 +137,7 @@ def handle_ability_code(rom):
 
     PURPLE_BLOCK_CARRY_SUB_ADDR = 0x01BA28
     rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x04, bytearray([0x89, 0x40]))       # BIT #40
     rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))       # BEQ +0x09
     rom.write_bytes(PURPLE_BLOCK_CARRY_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
@@ -156,7 +156,7 @@ def handle_ability_code(rom):
     SPRINGBOARD_CARRY_SUB_ADDR = 0x01BA40
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
-    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x02, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x05, bytearray([0x89, 0x40]))       # BIT #40
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x07, bytearray([0xF0, 0x08]))       # BEQ +0x08
     rom.write_bytes(SPRINGBOARD_CARRY_SUB_ADDR + 0x09, bytearray([0xA9, 0x0B]))       # LDA #0B
@@ -168,7 +168,7 @@ def handle_ability_code(rom):
     # End Springboard Carry
 
     # Shell Carry
-    rom.write_bytes(0xAA66, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(0xAA66, bytearray([0xAD, 0x1C, 0x1F]))       # LDA $1F1C
     rom.write_bytes(0xAA69, bytearray([0x89, 0x40]))             # BIT #40
     rom.write_bytes(0xAA6B, bytearray([0xF0, 0x07]))             # BEQ +0x07
     rom.write_bytes(0xAA6D, bytearray([0x22, 0x60, 0xBA, 0x03])) # JSL $03BA60
@@ -191,7 +191,7 @@ def handle_ability_code(rom):
 
     YOSHI_CARRY_SUB_ADDR = 0x01BA70
     rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x04, bytearray([0x89, 0x40]))       # BIT #40
     rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x06, bytearray([0xF0, 0x0A]))       # BEQ +0x0A
     rom.write_bytes(YOSHI_CARRY_SUB_ADDR + 0x08, bytearray([0xA9, 0x12]))       # LDA #12
@@ -208,7 +208,7 @@ def handle_ability_code(rom):
 
     CLIMB_SUB_ADDR = 0x01BA88
     rom.write_bytes(CLIMB_SUB_ADDR + 0x00, bytearray([0x08]))                   # PHP
-    rom.write_bytes(CLIMB_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(CLIMB_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F]))       # LDA $1F1C
     rom.write_bytes(CLIMB_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))             # BIT #20
     rom.write_bytes(CLIMB_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))             # BEQ +0x09
     rom.write_bytes(CLIMB_SUB_ADDR + 0x08, bytearray([0xA5, 0x8B]))             # LDA $8B
@@ -224,7 +224,7 @@ def handle_ability_code(rom):
 
     CLIMB_ROPE_SUB_ADDR = 0x01BC70
     rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x04, bytearray([0x89, 0x20]))       # BIT #20
     rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x06, bytearray([0xF0, 0x07]))       # BEQ +0x07
     rom.write_bytes(CLIMB_ROPE_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
@@ -241,7 +241,7 @@ def handle_ability_code(rom):
 
     P_SWITCH_SUB_ADDR = 0x01BAA0
     rom.write_bytes(P_SWITCH_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(P_SWITCH_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(P_SWITCH_SUB_ADDR + 0x04, bytearray([0x89, 0x10]))       # BIT #10
     rom.write_bytes(P_SWITCH_SUB_ADDR + 0x06, bytearray([0xF0, 0x04]))       # BEQ +0x04
     rom.write_bytes(P_SWITCH_SUB_ADDR + 0x08, bytearray([0xA9, 0xB0]))       # LDA #B0
@@ -253,7 +253,7 @@ def handle_ability_code(rom):
     # End P-Switch
 
     # Spin Jump
-    rom.write_bytes(0x5645, bytearray([0xAD, 0x2C, 0x1F]))       # LDA $1F2C
+    rom.write_bytes(0x5645, bytearray([0xAD, 0x1C, 0x1F]))       # LDA $1F1C
     rom.write_bytes(0x5648, bytearray([0x89, 0x08]))             # BIT #08
     rom.write_bytes(0x564A, bytearray([0xF0, 0x12]))             # BEQ +0x12
     rom.write_bytes(0x564C, bytearray([0x22, 0xB8, 0xBA, 0x03])) # JSL $03BAB8
@@ -275,7 +275,7 @@ def handle_ability_code(rom):
 
     SPIN_JUMP_WATER_SUB_ADDR = 0x01BBF8
     rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x04, bytearray([0x89, 0x08]))       # BIT #08
     rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x06, bytearray([0xF0, 0x09]))       # BEQ +0x09
     rom.write_bytes(SPIN_JUMP_WATER_SUB_ADDR + 0x08, bytearray([0x1A]))             # INC
@@ -292,7 +292,7 @@ def handle_ability_code(rom):
 
     SPIN_JUMP_SPRING_SUB_ADDR = 0x01BC0C
     rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x04, bytearray([0x89, 0x08]))       # BIT #08
     rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x06, bytearray([0xF0, 0x05]))       # BEQ +0x05
     rom.write_bytes(SPIN_JUMP_SPRING_SUB_ADDR + 0x08, bytearray([0xA9, 0x01]))       # LDA #01
@@ -308,7 +308,7 @@ def handle_ability_code(rom):
     SWIM_SUB_ADDR = 0x01BAC8
     rom.write_bytes(SWIM_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
     rom.write_bytes(SWIM_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
-    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(SWIM_SUB_ADDR + 0x05, bytearray([0x89, 0x04]))       # BIT #04
     rom.write_bytes(SWIM_SUB_ADDR + 0x07, bytearray([0xF0, 0x0C]))       # BEQ +0x0C
     rom.write_bytes(SWIM_SUB_ADDR + 0x09, bytearray([0x28]))             # PLP
@@ -332,7 +332,7 @@ def handle_ability_code(rom):
     SWIM_SUB_ADDR = 0x01BAE8
     rom.write_bytes(SWIM_SUB_ADDR + 0x00, bytearray([0x48]))             # PHA
     rom.write_bytes(SWIM_SUB_ADDR + 0x01, bytearray([0x08]))             # PHP
-    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(SWIM_SUB_ADDR + 0x02, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(SWIM_SUB_ADDR + 0x05, bytearray([0x89, 0x04]))       # BIT #04
     rom.write_bytes(SWIM_SUB_ADDR + 0x07, bytearray([0xF0, 0x0A]))       # BEQ +0x0A
     rom.write_bytes(SWIM_SUB_ADDR + 0x09, bytearray([0x28]))             # PLP
@@ -355,7 +355,7 @@ def handle_ability_code(rom):
 
     YOSHI_SUB_ADDR = 0x01BB08
     rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
-    rom.write_bytes(YOSHI_SUB_ADDR + 0x01, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x01, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(YOSHI_SUB_ADDR + 0x04, bytearray([0x89, 0x02]))       # BIT #02
     rom.write_bytes(YOSHI_SUB_ADDR + 0x06, bytearray([0xF0, 0x06]))       # BEQ +0x06
     rom.write_bytes(YOSHI_SUB_ADDR + 0x08, bytearray([0x28]))             # PLP
@@ -377,7 +377,7 @@ def handle_ability_code(rom):
     YOSHI_SUB_ADDR = 0x01BB20
     rom.write_bytes(YOSHI_SUB_ADDR + 0x00, bytearray([0x08]))             # PHP
     rom.write_bytes(YOSHI_SUB_ADDR + 0x01, bytearray([0x9C, 0x1E, 0x14])) # STZ $141E
-    rom.write_bytes(YOSHI_SUB_ADDR + 0x04, bytearray([0xAD, 0x2C, 0x1F])) # LDA $1F2C
+    rom.write_bytes(YOSHI_SUB_ADDR + 0x04, bytearray([0xAD, 0x1C, 0x1F])) # LDA $1F1C
     rom.write_bytes(YOSHI_SUB_ADDR + 0x07, bytearray([0x89, 0x02]))       # BIT #02
     rom.write_bytes(YOSHI_SUB_ADDR + 0x09, bytearray([0xF0, 0x05]))       # BEQ +0x05
     rom.write_bytes(YOSHI_SUB_ADDR + 0x0B, bytearray([0x28]))             # PLP
@@ -975,12 +975,13 @@ def handle_ram(rom):
     rom.write_bytes(INIT_SRAM_ADDR + 0x004D, bytearray([0xCA]))                     #                         dex 
     rom.write_bytes(INIT_SRAM_ADDR + 0x004E, bytearray([0x10, 0xF5]))               #                         bpl -
     rom.write_bytes(INIT_SRAM_ADDR + 0x0050, bytearray([0xE2, 0x10]))               #                         sep #$10
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0052, bytearray([0xAF, 0x50, 0x09, 0x70]))   #                         lda !received_items_count_sram+$00
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0056, bytearray([0x8F, 0x0E, 0xA0, 0x7F]))   #                         sta !received_items_count+$00
-    rom.write_bytes(INIT_SRAM_ADDR + 0x005A, bytearray([0xAF, 0x51, 0x09, 0x70]))   #                         lda !received_items_count_sram+$01
-    rom.write_bytes(INIT_SRAM_ADDR + 0x005E, bytearray([0x8F, 0x0F, 0xA0, 0x7F]))   #                         sta !received_items_count+$01
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0062, bytearray([0xAF, 0x52, 0x09, 0x70]))   #                         lda !special_world_clear_sram
-    rom.write_bytes(INIT_SRAM_ADDR + 0x0066, bytearray([0x8D, 0xFF, 0x1F]))         #                         sta !special_world_clear_flag
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x0052, bytearray([0xAF, 0x50, 0x09, 0x70]))   #                         lda !received_items_count_sram+$00
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x0056, bytearray([0x8F, 0x0E, 0xA0, 0x7F]))   #                         sta !received_items_count+$00
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x005A, bytearray([0xAF, 0x51, 0x09, 0x70]))   #                         lda !received_items_count_sram+$01
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x005E, bytearray([0x8F, 0x0F, 0xA0, 0x7F]))   #                         sta !received_items_count+$01
+    rom.write_bytes(INIT_SRAM_ADDR + 0x0052, bytearray([0xEA] * 0x17))              # Ugly, will apply be better when we port everything to a Base Patch
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x0062, bytearray([0xAF, 0x52, 0x09, 0x70]))   #                         lda !special_world_clear_sram
+    #rom.write_bytes(INIT_SRAM_ADDR + 0x0066, bytearray([0x8D, 0xFF, 0x1F]))         #                         sta !special_world_clear_flag
     rom.write_bytes(INIT_SRAM_ADDR + 0x0069, bytearray([0xAF, 0x54, 0x09, 0x70]))   #                         lda !goal_item_count_sram
     rom.write_bytes(INIT_SRAM_ADDR + 0x006D, bytearray([0x8F, 0x1E, 0xA0, 0x7F]))   #                         sta !goal_item_count
     rom.write_bytes(INIT_SRAM_ADDR + 0x0071, bytearray([0x28]))                     #                         plp 
@@ -1038,12 +1039,13 @@ def handle_ram(rom):
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0047, bytearray([0xCA]))                               #                             dex 
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0048, bytearray([0x10, 0xF5]))                         #                             bpl -
     rom.write_bytes(SAVE_SRAM_ADDR + 0x004A, bytearray([0xE2, 0x10]))                         #                             sep #$10
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x004C, bytearray([0xAD, 0xFF, 0x1F]))                   #                             lda !special_world_clear_flag
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x004F, bytearray([0x8F, 0x52, 0x09, 0x70]))             #                             sta !special_world_clear_sram
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x0053, bytearray([0xAF, 0x0E, 0xA0, 0x7F]))             #                             lda !received_items_count+$00
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x0057, bytearray([0x8F, 0x50, 0x09, 0x70]))             #                             sta !received_items_count_sram+$00
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x005B, bytearray([0xAF, 0x0F, 0xA0, 0x7F]))             #                             lda !received_items_count+$01
-    rom.write_bytes(SAVE_SRAM_ADDR + 0x005F, bytearray([0x8F, 0x51, 0x09, 0x70]))             #                             sta !received_items_count_sram+$01
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x004C, bytearray([0xAD, 0xFF, 0x1F]))                   #                             lda !special_world_clear_flag
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x004F, bytearray([0x8F, 0x52, 0x09, 0x70]))             #                             sta !special_world_clear_sram
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x0053, bytearray([0xAF, 0x0E, 0xA0, 0x7F]))             #                             lda !received_items_count+$00
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x0057, bytearray([0x8F, 0x50, 0x09, 0x70]))             #                             sta !received_items_count_sram+$00
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x005B, bytearray([0xAF, 0x0F, 0xA0, 0x7F]))             #                             lda !received_items_count+$01
+    #rom.write_bytes(SAVE_SRAM_ADDR + 0x005F, bytearray([0x8F, 0x51, 0x09, 0x70]))             #                             sta !received_items_count_sram+$01
+    rom.write_bytes(SAVE_SRAM_ADDR + 0x004C, bytearray([0xEA] * 0x17))                        # Ugly, will apply be better when we port everything to a Base Patch
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0063, bytearray([0xAF, 0x0F, 0xA0, 0x7F]))             #                             lda !goal_item_count
     rom.write_bytes(SAVE_SRAM_ADDR + 0x0067, bytearray([0x8F, 0x51, 0x09, 0x70]))             #                             sta !goal_item_count_sram
     rom.write_bytes(SAVE_SRAM_ADDR + 0x006B, bytearray([0x6B]))                               #                             rtl 
@@ -1073,7 +1075,8 @@ def handle_ram(rom):
     rom.write_bytes(INIT_RAM_ADDR + 0x0036, bytearray([0x9F, 0x00, 0xB0, 0x7F]))    # -                       sta !score_sprite_count,x
     rom.write_bytes(INIT_RAM_ADDR + 0x003A, bytearray([0xCA]))                      #                         dex 
     rom.write_bytes(INIT_RAM_ADDR + 0x003B, bytearray([0x10, 0xF9]))                #                         bpl -
-    rom.write_bytes(INIT_RAM_ADDR + 0x003D, bytearray([0x8D, 0xFF, 0x1F]))          #                         sta !special_world_clear_flag
+    #rom.write_bytes(INIT_RAM_ADDR + 0x003D, bytearray([0x8D, 0xFF, 0x1F]))          #                         sta !special_world_clear_flag
+    rom.write_bytes(INIT_RAM_ADDR + 0x003D, bytearray([0xEA, 0xEA, 0xEA]))          #                         sta !special_world_clear_flag
     rom.write_bytes(INIT_RAM_ADDR + 0x0040, bytearray([0x8F, 0x0E, 0xA0, 0x7F]))    #                         sta !received_items_count+$00
     rom.write_bytes(INIT_RAM_ADDR + 0x0044, bytearray([0x8F, 0x0F, 0xA0, 0x7F]))    #                         sta !received_items_count+$01
     rom.write_bytes(INIT_RAM_ADDR + 0x0048, bytearray([0x8F, 0x1E, 0xA0, 0x7F]))    #                         sta !goal_item_count
@@ -1333,49 +1336,49 @@ def handle_map_indicators(rom):
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0015, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0016, bytearray([0x8F, 0x00, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities         ; Progressive powerup
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x001A, bytearray([0xA0, 0x5E]))                     # .handle_spinjump:           ldy #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x001C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x001C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x001F, bytearray([0x29, 0x08]))                     #                             and #$08
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0021, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0023, bytearray([0xA0, 0x3F]))                     #                             ldy #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0025, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0026, bytearray([0x8F, 0x02, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$02         ; Spin jump
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x002A, bytearray([0xA0, 0x5E]))                     # .handle_run:                ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x002C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x002C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x002F, bytearray([0x29, 0x80]))                     #                             and #$80
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0031, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0033, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0035, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0036, bytearray([0x8F, 0x04, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$04         ; Run
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x003A, bytearray([0xA0, 0x5E]))                     # .handle_carry:              ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x003C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x003C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x003F, bytearray([0x29, 0x40]))                     #                             and #$40
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0041, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0043, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0045, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0046, bytearray([0x8F, 0x06, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$06         ; Carry
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x004A, bytearray([0xA0, 0x5E]))                     # .handle_swim:               ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x004C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x004C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x004F, bytearray([0x29, 0x04]))                     #                             and #$04
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0051, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0053, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0055, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0056, bytearray([0x8F, 0x08, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$08         ; Swim
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x005A, bytearray([0xA0, 0x5E]))                     # .handle_climb:              ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x005C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x005C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x005F, bytearray([0x29, 0x20]))                     #                             and #$20
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0061, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0063, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0065, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0066, bytearray([0x8F, 0x0A, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$0A         ; Climb
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x006A, bytearray([0xA0, 0x5E]))                     # .handle_yoshi:              ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x006C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x006C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x006F, bytearray([0x29, 0x02]))                     #                             and #$02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0071, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0073, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0075, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0076, bytearray([0x8F, 0x0C, 0xA1, 0x7F]))         #                             sta !ow_tilemap_abilities+$0C         ; Yoshi
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x007A, bytearray([0xA0, 0x5E]))                     # .handle_pswitch:            ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x007C, bytearray([0xAD, 0x2C, 0x1F]))               #                             lda $1F2C
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x007C, bytearray([0xAD, 0x1C, 0x1F]))               #                             lda $1F1C
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x007F, bytearray([0x29, 0x10]))                     #                             and #$10
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0081, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x0083, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
@@ -1420,7 +1423,7 @@ def handle_map_indicators(rom):
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00DD, bytearray([0x98]))                           #                             tya 
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00DE, bytearray([0x8F, 0x26, 0xA1, 0x7F]))         #                             sta !ow_tilemap_switches+$06
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00E2, bytearray([0xA0, 0x5E]))                     # .handle_special_world_clear:    ldy.b #!icon_not_obtained
-    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00E4, bytearray([0xAD, 0xFF, 0x1F]))               #                             lda !special_world_clear_flag
+    rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00E4, bytearray([0xAD, 0x1E, 0x1F]))               #                             lda !special_world_clear_flag
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00E7, bytearray([0xF0, 0x02]))                     #                             beq $02
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00E9, bytearray([0xA0, 0x3F]))                     #                             ldy.b #!icon_obtained
     rom.write_bytes(BUILD_TILEMAP_ADDR + 0x00EB, bytearray([0x98]))                           #                             tya 
@@ -3063,11 +3066,11 @@ def patch_rom(world: World, rom, player, active_level_dict):
     handle_uncompressed_player_gfx(rom)
     
     # Handle Special Zone Clear flag
-    rom.write_bytes(0x02A74, bytearray([0xFF, 0x1F]))
-    rom.write_bytes(0x09826, bytearray([0xFF, 0x1F]))
-    rom.write_bytes(0x0B9CD, bytearray([0xFF, 0x1F]))
-    rom.write_bytes(0x12986, bytearray([0xFF, 0x1F]))
-    rom.write_bytes(0x62E0F, bytearray([0xFF, 0x1F]))
+    rom.write_bytes(0x02A74, bytearray([0x1E, 0x1F]))
+    rom.write_bytes(0x09826, bytearray([0x1E, 0x1F]))
+    rom.write_bytes(0x0B9CD, bytearray([0x1E, 0x1F]))
+    rom.write_bytes(0x12986, bytearray([0x1E, 0x1F]))
+    rom.write_bytes(0x62E0F, bytearray([0x1E, 0x1F]))
 
     handle_indicators(rom)
     handle_map_indicators(rom)
