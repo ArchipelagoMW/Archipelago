@@ -1,10 +1,22 @@
-from BaseClasses import Item
+from BaseClasses import Item, Tutorial
 from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table
 from .PrimeOptions import MetroidPrimeOptions
 from .Locations import every_location
 from .Regions import create_regions
 from .Rules import set_rules
 from worlds.AutoWorld import World
+from ..AutoWorld import WebWorld
+
+
+class MetroidPrimeWeb(WebWorld):
+    tutorials = [Tutorial(
+        "Multiworld Setup Guide",
+        "A guide to setting up Metroid Prime for Archipelago",
+        "English",
+        "setup_en.md",
+        "setup/en",
+        ["Electro15, UltiNaruto"]
+    )]
 
 
 class MetroidPrimeWorld(World):
@@ -84,3 +96,5 @@ class MetroidPrimeWorld(World):
 
     def set_rules(self) -> None:
         set_rules(self.multiworld, self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: (
+            state.can_reach("Mission Complete", "Region", self.player))
