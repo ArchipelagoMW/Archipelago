@@ -16,12 +16,11 @@ class MetroidPrimeLogic(LogicMixin):
         count += self.count('Missile Expansion', player) * 5
         return count
 
-    def prime_artifact_count(self, world: MultiWorld, player: int) -> int:
-        count = 0
+    def prime_artifact_count(self, world: MultiWorld, player: int) -> bool:
         for i in artifact_table.keys():
-            if self.has(i, player):
-                count += 1
-        return count
+            if not self.has(i, player):
+                return False
+        return True
 
     def prime_etank_count(self, world: MultiWorld, player: int) -> int:
         count = 0

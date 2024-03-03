@@ -47,21 +47,21 @@ def create_regions(self, final_boss_selection):
     if final_boss_selection == 0 or final_boss_selection == 2:
         tallon_overworld.connect(impact_crater, "Crater Access", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
-                (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
+                logic.prime_artifact_count(state, self.multiworld, self.player) and
                 state.has_all({"Wave Beam", "Ice Beam", "Plasma Beam", "Thermal Visor", "X-Ray Visor", "Phazon Suit",
                                "Space Jump Boots"}, self.player) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
     elif final_boss_selection == 1:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
-                (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
+                logic.prime_artifact_count(state, self.multiworld, self.player) and
                 (state.has("Plasma Beam", self.player) or logic.prime_can_super(state, self.multiworld,
                                                                                 self.player)) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
     elif final_boss_selection == 3:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
-                (logic.prime_artifact_count(state, self.multiworld, self.player) == 12)))
+                logic.prime_artifact_count(state, self.multiworld, self.player)))
 
     chozo_ruins.connect(magmoor_caverns, "North Magmoor Elevator", lambda state: (
             logic.prime_has_missiles(state, self.multiworld, self.player) and
