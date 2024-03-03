@@ -17,7 +17,7 @@ class ShopCostTest(MessengerTestBase):
                 self.assertFalse(self.can_reach_location(loc))
 
     def test_shop_prices(self) -> None:
-        prices: Dict[str, int] = self.multiworld.worlds[self.player].shop_prices
+        prices: Dict[str, int] = self.world.shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
                 self.assertLessEqual(price, self.multiworld.get_location(f"The Shop - {loc}", self.player).cost)
@@ -51,7 +51,7 @@ class ShopCostMinTest(ShopCostTest):
     }
 
     def test_shop_rules(self) -> None:
-        if self.multiworld.worlds[self.player].total_shards:
+        if self.world.total_shards:
             super().test_shop_rules()
         else:
             for loc in SHOP_ITEMS:
@@ -85,7 +85,7 @@ class PlandoTest(MessengerTestBase):
             with self.subTest("has cost", loc=loc):
                 self.assertFalse(self.can_reach_location(loc))
 
-        prices = self.multiworld.worlds[self.player].shop_prices
+        prices = self.world.shop_prices
         for loc, price in prices.items():
             with self.subTest("prices", loc=loc):
                 if loc == "Karuta Plates":
@@ -98,7 +98,7 @@ class PlandoTest(MessengerTestBase):
                 self.assertTrue(loc.replace("The Shop - ", "") in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
-        figures = self.multiworld.worlds[self.player].figurine_prices
+        figures = self.world.figurine_prices
         for loc, price in figures.items():
             with self.subTest("figure prices", loc=loc):
                 if loc == "Barmath'azel Figurine":
