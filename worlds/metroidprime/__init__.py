@@ -79,7 +79,7 @@ class MetroidPrimeWorld(World):
                 items_added += 1
         # add missiles in whatever slots we have left
         remain = 100 - items_added
-        for i in range(0, remain):
+        for i in range(0, remain-1):
             self.multiworld.itempool += [self.create_item("Missile Expansion")]
 
     def set_rules(self) -> None:
