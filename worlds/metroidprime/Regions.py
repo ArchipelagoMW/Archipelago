@@ -1,6 +1,5 @@
 from .Logic import MetroidPrimeLogic as logic
 from BaseClasses import Region
-from .PrimeOptions import MetroidPrimeOptions
 from .Locations import tallon_location_table, magmoor_location_table, mines_location_table, chozo_location_table, \
     phen_location_table, MetroidPrimeLocation
 
@@ -45,8 +44,7 @@ def create_regions(self, final_boss_selection):
             logic.prime_can_heat(state, self.multiworld, self.player)))
     tallon_overworld.connect(phazon_mines, "East Mines Elevator", lambda state: (
         logic.prime_frigate(state, self.multiworld, self.player)))
-    if (final_boss_selection == 0 or
-            final_boss_selection == 2):
+    if final_boss_selection == 0 or final_boss_selection == 2:
         tallon_overworld.connect(impact_crater, "Crater Access", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
@@ -58,9 +56,9 @@ def create_regions(self, final_boss_selection):
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12) and
                 (state.has("Plasma Beam", self.player) or logic.prime_can_super(state, self.multiworld,
-                                                                                  self.player)) and
+                                                                                self.player)) and
                 logic.prime_etank_count(state, self.multiworld, self.player) >= 8))
-    elif self.MetroidPrimeOptions.final_bosses == 3:
+    elif final_boss_selection == 3:
         tallon_overworld.connect(mission_complete, "Mission Complete", lambda state: (
                 logic.prime_has_missiles(state, self.multiworld, self.player) and
                 (logic.prime_artifact_count(state, self.multiworld, self.player) == 12)))

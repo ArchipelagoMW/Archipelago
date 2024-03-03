@@ -18,7 +18,7 @@ class MetroidPrimeLogic(LogicMixin):
 
     def prime_artifact_count(self, world: MultiWorld, player: int) -> int:
         count = 0
-        for i in artifact_table:
+        for i in artifact_table.keys():
             if self.has(i, player):
                 count += 1
         return count
