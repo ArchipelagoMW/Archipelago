@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from worlds._bizhawk.context import BizHawkClientContext
 
 
-EXPECTED_ROM_NAME = "pokemon emerald version / AP 4"
+EXPECTED_ROM_NAME = "pokemon emerald version / AP 5"
 
 DEFEATED_WALLACE_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_WALLACE"]
 DEFEATED_STEVEN_FLAG = data.constants["TRAINER_FLAGS_START"] + data.constants["TRAINER_STEVEN"]
