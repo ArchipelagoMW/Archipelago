@@ -115,7 +115,7 @@ class SubnauticaWorld(World):
                 for i in range(item.count):
                     subnautica_item = self.create_item(item.name)
                     if item.name == "Neptune Launch Platform":
-                        self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
+                        self.get_location("Aurora - Captain Data Terminal").place_locked_item(
                             subnautica_item)
                     else:
                         pool.append(subnautica_item)
@@ -128,7 +128,7 @@ class SubnauticaWorld(World):
                 pool.append(self.create_item(name))
             extras -= group_amount
 
-        for item_name in self.multiworld.random.sample(
+        for item_name in self.random.sample(
             # list of high-count important fragments as priority filler
                 [
                     "Cyclops Engine Fragment",
@@ -174,18 +174,6 @@ class SubnauticaWorld(World):
         return SubnauticaItem(name,
                               item_table[item_id].classification,
                               item_id, player=self.player)
-
-    def create_region(self, name: str, region_locations=None, exits=None):
-        ret = Region(name, self.player, self.multiworld)
-        if region_locations:
-            for location in region_locations:
-                loc_id = self.location_name_to_id.get(location, None)
-                location = SubnauticaLocation(self.player, location, loc_id, ret)
-                ret.locations.append(location)
-        if exits:
-            for region_exit in exits:
-                ret.exits.append(Entrance(self.player, region_exit, ret))
-        return ret
 
     def get_filler_item_name(self) -> str:
         return item_table[self.multiworld.random.choice(items_by_type[ItemType.resource])].name
