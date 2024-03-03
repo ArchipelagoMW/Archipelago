@@ -40,6 +40,7 @@ class Celeste64World(World):
         # Only make required amount of strawberries be Progression
         if name == ItemName.strawberry:
             classification: ItemClassification = ItemClassification.filler
+            self.prog_strawberries = getattr(self, "prog_strawberries", 0)
             if self.prog_strawberries < self.options.strawberries_required.value:
                 classification = ItemClassification.progression
                 self.prog_strawberries += 1
@@ -50,7 +51,6 @@ class Celeste64World(World):
 
     def create_items(self) -> None:
         item_pool: List[Celeste64Item] = []
-        self.prog_strawberries: int = 0
 
         for name, item in item_data_table.items():
             item_pool.append(self.create_item(name))
