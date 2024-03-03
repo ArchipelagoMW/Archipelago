@@ -355,7 +355,8 @@ class PokemonEmeraldClient(BizHawkClient):
                                 received_trade = await self.wonder_trade_receive(ctx)
                                 if received_trade is None:
                                     self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
-                                    self.wonder_trade_cooldown *= self.wonder_trade_cooldown
+                                    self.wonder_trade_cooldown *= 2
+                                    logger.info(f"DEBUG: Wonder trade was empty. Cooldown set to {self.wonder_trade_cooldown}")
                                 else:
                                     await bizhawk.write(ctx.bizhawk_ctx, [
                                         (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
