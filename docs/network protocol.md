@@ -327,7 +327,11 @@ Sent to server to inform it of locations that the client has checked. Used to in
 | locations | list\[int\] | The ids of the locations checked by the client. May contain any number of checks, even ones sent before; duplicates do not cause issues with the Archipelago server. |
 
 ### LocationScouts
-Sent to the server to inform it of locations the client has seen, but not checked. Useful in cases in which the item may appear in the game world, such as 'ledge items' in A Link to the Past. The server will always respond with a [LocationInfo](#LocationInfo) packet with the items located in the scouted location.
+Sent to the server to retrieve the items that are on a specified list of locations. The server will respond with a [LocationInfo](#LocationInfo) packet containing the items located in the scouted locations.
+Fully remote clients without a patch file may use this to "place" items onto their in-game locations, most commonly to display their names or item classifications before/upon pickup.
+
+LocationScouts can also be used to inform the server of locations the client has seen, but not checked. This creates a hint as if the player had run `!hint_location` on a location, but without deducting hint points.
+This is useful in cases where an item appears in the game world, such as 'ledge items' in _A Link to the Past_. To do this, set the `create_as_hint` parameter to a non-zero value.
 
 #### Arguments
 | Name | Type | Notes |
@@ -341,7 +345,7 @@ Sent to the server to update on the sender's status. Examples include readiness 
 #### Arguments
 | Name | Type | Notes |
 | ---- | ---- | ----- |
-| status | ClientStatus\[int\] | One of [Client States](#Client-States). Send as int. Follow the link for more information. |
+| status | ClientStatus\[int\] | One of [Client States](#ClientStatus). Send as int. Follow the link for more information. |
 
 ### Say
 Basic chat command which sends text to the server to be distributed to other clients.
