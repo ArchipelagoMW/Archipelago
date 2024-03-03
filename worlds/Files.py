@@ -136,7 +136,7 @@ class APContainer:
             "player_name": self.player_name,
             "game": self.game,
             # minimum version of patch system expected for patching to be successful
-            "compatible_version": 6,
+            "compatible_version": 5,
             "version": current_patch_version,
         }
 
@@ -183,13 +183,15 @@ class APProcedurePatch(APPatch):
         manifest["result_file_ending"] = self.result_file_ending
         manifest["patch_file_ending"] = self.patch_file_ending
         manifest["procedure"] = self.procedure
+        if self.procedure != APDeltaPatch.procedure:
+            manifest["compatible_version"] = 6
         return manifest
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         super(APProcedurePatch, self).read_contents(opened_zipfile)
         with opened_zipfile.open("archipelago.json", "r") as f:
             manifest = json.load(f)
-        if manifest["version"] < 6:
+        if "procedure" not in manifest:
             # support patching files made before moving to procedures
             self.procedure = [("apply_bsdiff4", ["delta.bsdiff4"])]
         else:
