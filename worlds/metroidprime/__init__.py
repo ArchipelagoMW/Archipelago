@@ -52,6 +52,7 @@ class MetroidPrimeWorld(World):
 
     def create_items(self) -> None:
         # add artifacts
+        items_added = 0
         reqarts = int(self.options.required_artifacts)
         precollectedarts = [*artifact_table][reqarts:]
         neededarts = [*artifact_table][:reqarts]
@@ -59,9 +60,9 @@ class MetroidPrimeWorld(World):
             self.multiworld.push_precollected(self.create_item(i))
         for i in neededarts:
             self.multiworld.itempool += [self.create_item(i)]
+            items_added += 1
         excluded = self.options.exclude_items
         spring = self.options.spring_ball
-        items_added = 0
         for i in suit_upgrade_table:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
                 continue
@@ -74,6 +75,7 @@ class MetroidPrimeWorld(World):
             elif i == "Missile Expansion":
                 for j in range(0, 8):
                     self.multiworld.itempool += [self.create_item('Missile Expansion', True)]
+                items_added += 8
             elif i == "Energy Tank":
                 for j in range(0, 8):
                     self.multiworld.itempool += [self.create_item("Energy Tank", True)]
