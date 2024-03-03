@@ -43,8 +43,8 @@ class MuseumItem(GameItem):
 
 unlikely = ()
 
-all_artifact_items: List[MuseumItem] = []
-all_mineral_items: List[MuseumItem] = []
+all_museum_artifacts: List[MuseumItem] = []
+all_museum_minerals: List[MuseumItem] = []
 
 all_museum_items: List[MuseumItem] = []
 
@@ -56,7 +56,7 @@ def create_artifact(name: str,
                     geodes: Union[str, Tuple[str, ...]] = (),
                     monsters: Union[str, Tuple[str, ...]] = ()) -> MuseumItem:
     artifact_item = MuseumItem.of(name, item_id, difficulty, locations, geodes, monsters)
-    all_artifact_items.append(artifact_item)
+    all_museum_artifacts.append(artifact_item)
     all_museum_items.append(artifact_item)
     return artifact_item
 
@@ -79,7 +79,7 @@ def create_mineral(name: str,
             difficulty += 31.0 / 2750.0 * 100
 
     mineral_item = MuseumItem.of(name, item_id, difficulty, locations, geodes, monsters)
-    all_mineral_items.append(mineral_item)
+    all_museum_minerals.append(mineral_item)
     all_museum_items.append(mineral_item)
     return mineral_item
 

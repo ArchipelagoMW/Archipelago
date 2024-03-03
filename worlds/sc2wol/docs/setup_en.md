@@ -7,7 +7,7 @@ to obtain a config file for StarCraft 2.
 
 - [StarCraft 2](https://starcraft2.com/en-us/)
 - [The most recent Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases)
-- [StarCraft 2 AP Maps and Data](https://github.com/TheCondor07/Starcraft2ArchipelagoData)
+- [StarCraft 2 AP Maps and Data](https://github.com/Ziktofel/Archipelago-SC2-data/releases)
 
 ## How do I install this randomizer?
 
@@ -49,7 +49,7 @@ specific description of what's going wrong and attach your log file to your mess
 
 ## Running in macOS
 
-To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`. This is done to make sure that `/download_data` works correctly.
+To run StarCraft 2 through Archipelago in macOS, you will need to run the client via source as seen here: [macOS Guide](https://archipelago.gg/tutorial/Archipelago/mac/en). Note: when running the client, you will need to run the command `python3 Starcraft2Client.py`.
 
 ## Running in Linux
 

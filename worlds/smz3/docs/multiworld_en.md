@@ -4,8 +4,7 @@
 
 - One of the client programs:
   - [SNIClient](https://github.com/ArchipelagoMW/Archipelago/releases), included with the main 
-  Archipelago install. Make sure to check the box for `SNI Client - Super Metroid Patch Setup` and 
-  `SNI Client - A Link to the Past Patch Setup`
+  Archipelago install. 
 - Hardware or software capable of loading and playing SNES ROM files
     - An emulator capable of connecting to SNI such as:
         - snes9x-rr from: [snes9x rr](https://github.com/gocha/snes9x-rr/releases),
@@ -20,9 +19,10 @@
 
 ### Windows Setup
 
-1. During the installation of Archipelago, you will have been asked to install the SNI Client. If you did not do this,
-   or you are on an older version, you may run the installer again to install the SNI Client.
-2. During setup, you will be asked to locate your base ROM files. This is your Super Metroid and Zelda3 ROM files.
+1. Download and install [Archipelago](<https://github.com/ArchipelagoMW/Archipelago/releases/latest>). **The installer 
+   file is located in the assets section at the bottom of the version information.**
+2. The first time you do local generation or patch your game, you will be asked to locate your base ROM file.  
+   This is your Super Metroid and Zelda3 ROM files. This only needs to be done once.
 3. If you are using an emulator, you should assign your Lua capable emulator as your default program for launching ROM
    files.
     1. Extract your emulator's folder to your Desktop, or somewhere you will remember.
@@ -47,7 +47,7 @@ them. Player settings page: [SMZ3 Player Settings Page](/games/SMZ3/player-setti
 ### Verifying your config file
 
 If you would like to validate your config file to make sure it works, you may do so on the YAML Validator page. YAML
-validator page: [YAML Validation page](/mysterycheck)
+validator page: [YAML Validation page](/check)
 
 ## Generating a Single-Player Game
 
@@ -85,8 +85,7 @@ first time launching, you may be prompted to allow it to communicate through the
 3. Click on **New Lua Script Window...**
 4. In the new window, click **Browse...**
 5. Select the connector lua file included with your client
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
 6. If you see an error while loading the script that states `socket.dll missing` or similar, navigate to the folder of 
 the lua you are using in your file explorer and copy the `socket.dll` to the base folder of your snes9x install.
 
@@ -98,8 +97,7 @@ the lua you are using in your file explorer and copy the `socket.dll` to the bas
 2. Load your ROM file if it hasn't already been loaded.
    If you changed your core preference after loading the ROM, don't forget to reload it (default hotkey: Ctrl+R).
 3. Drag+drop the `Connector.lua` file included with your client onto the main EmuHawk window.
-    - Look in the Archipelago folder for `/SNI/lua/x64` or `/SNI/lua/x86` depending on if the
-      emulator is 64-bit or 32-bit. Please note the most recent versions of BizHawk are 64-bit only.
+    - Look in the Archipelago folder for `/SNI/lua/Connector.lua`.
     - You could instead open the Lua Console manually, click `Script` 〉 `Open Script`, and navigate to `Connector.lua`
       with the file picker.
 

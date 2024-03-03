@@ -10,12 +10,13 @@ config file.
 Puzzles are randomly generated using the popular [Sigma Rando](https://github.com/sigma144/witness-randomizer).
 They are made to be similar to the original game, but with different solutions.
 
-Ontop of that each puzzle symbol (Squares, Stars, Dots, etc.) is now an item.
+On top of that, each puzzle symbol (Squares, Stars, Dots, etc.) is now an item.
 Panels with puzzle symbols on them are now locked initially.
 
 ## What is a "check" in The Witness?
 
 Solving the last panel in a row of panels or an important standalone panel will count as a check, and send out an item.
+It is also possible to add Environmental Puzzles into the location pool via the "Shuffle Environmental Puzzles" setting.
 
 ## What "items" can you unlock in The Witness?
 
@@ -32,7 +33,7 @@ By default, the audio logs scattered around the world will have 10 hints for you
 
 Example: "Shipwreck Vault contains Triangles".
 
-## The Jungle, Orchard, Forest and Color House aren't randomized. What gives?
+## The Jungle, Orchard, Forest and Color Bunker aren't randomized. What gives?
 
 There are limitations to what can currently be randomized in The Witness.
 There is an option to turn these non-randomized panels off, called "disable_non_randomized" in your yaml file. This will also slightly change the activation requirement of certain panels, detailed [here](https://github.com/sigma144/witness-randomizer/wiki/Activation-Triggers).

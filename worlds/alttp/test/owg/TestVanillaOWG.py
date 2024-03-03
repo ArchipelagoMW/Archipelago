@@ -1,26 +1,19 @@
-from argparse import Namespace
-
-from BaseClasses import MultiWorld
 from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.InvertedRegions import mark_dark_world_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import ItemFactory
 from test.TestBase import TestBase
 
-from worlds import AutoWorld
+from worlds.alttp.test import LTTPTestBase
 
 
-class TestVanillaOWG(TestBase):
+class TestVanillaOWG(TestBase, LTTPTestBase):
     def setUp(self):
-        self.multiworld = MultiWorld(1)
-        self.multiworld.set_seed(None)
-        args = Namespace()
-        for name, option in AutoWorld.AutoWorldRegister.world_types["A Link to the Past"].option_definitions.items():
-            setattr(args, name, {1: option.from_any(option.default)})
-        self.multiworld.set_options(args)
-        self.multiworld.set_default_common_options()
+        self.world_setup()
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
-        self.multiworld.logic[1] = "owglitches"
+        self.multiworld.glitches_required[1] = "overworld_glitches"
+        self.multiworld.bombless_start[1].value = True
+        self.multiworld.shuffle_capacity_upgrades[1].value = True
         self.multiworld.worlds[1].er_seed = 0
         self.multiworld.worlds[1].create_regions()
         self.multiworld.worlds[1].create_items()

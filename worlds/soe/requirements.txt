@@ -1,18 +1,36 @@
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp38-cp38-win_amd64.whl#0.44.0 ; sys_platform == 'win32' and platform_machine == 'AMD64' and python_version == '3.8'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp39-cp39-win_amd64.whl#0.44.0 ; sys_platform == 'win32' and platform_machine == 'AMD64' and python_version == '3.9'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp310-cp310-win_amd64.whl#0.44.0 ; sys_platform == 'win32' and platform_machine == 'AMD64' and python_version == '3.10'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp311-cp311-win_amd64.whl#0.44.0 ; sys_platform == 'win32' and platform_machine == 'AMD64' and python_version == '3.11'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp38-cp38-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.8'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp39-cp39-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.9'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.10'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.11'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.8'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.9'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.10'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl#0.44.0 ; sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.11'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp38-cp38-macosx_10_9_x86_64.whl#0.44.0 ; sys_platform == 'darwin' and python_version == '3.8'
-#pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp39-cp39-macosx_10_9_x86_64.whl#0.44.0 ; sys_platform == 'darwin' and python_version == '3.9'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp39-cp39-macosx_10_9_universal2.whl#0.44.0 ; sys_platform == 'darwin' and python_version == '3.9'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp310-cp310-macosx_10_9_universal2.whl#0.44.0 ; sys_platform == 'darwin' and python_version == '3.10'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-cp311-cp311-macosx_10_9_universal2.whl#0.44.0 ; sys_platform == 'darwin' and python_version == '3.11'
-pyevermizer @ https://github.com/black-sliver/pyevermizer/releases/download/v0.44.0/pyevermizer-0.44.0-1.tar.gz#0.44.0 ; python_version < '3.8' or python_version > '3.11' or (sys_platform != 'win32' and sys_platform != 'linux' and sys_platform != 'darwin') or (platform_machine != 'AMD64' and platform_machine != 'x86_64' and platform_machine != 'aarch64' and platform_machine != 'universal2' and platform_machine != 'arm64')
+pyevermizer==0.46.1 \
+  --hash=sha256:9fd71b5e4af26a5dd24a9cbf5320bf0111eef80320613401a1c03011b1515806 \
+  --hash=sha256:23f553ed0509d9a238b2832f775e0b5abd7741b38ab60d388294ee8a7b96c5fb \
+  --hash=sha256:7189b67766418a3e7e6c683f09c5e758aa1a5c24316dd9b714984bac099c4b75 \
+  --hash=sha256:befa930711e63d5d5892f67fd888b2e65e746363e74599c53e71ecefb90ae16a \
+  --hash=sha256:202933ce21e0f33859537bf3800d9a626c70262a9490962e3f450171758507ca \
+  --hash=sha256:c20ca69311c696528e1122ebc7d33775ee971f538c0e3e05dd3bfd4de10b82d4 \
+  --hash=sha256:74dc689a771ae5ffcd5257e763f571ee890e3e87bdb208233b7f451522c00d66 \
+  --hash=sha256:072296baef464daeb6304cf58827dcbae441ad0803039aee1c0caa10d56e0674 \
+  --hash=sha256:7921baf20d52d92d6aeb674125963c335b61abb7e1298bde4baf069d11a2d05e \
+  --hash=sha256:ca098034a84007038c2bff004582e6e6ac2fa9cc8b9251301d25d7e2adcee6da \
+  --hash=sha256:22ddb29823c19be9b15e1b3627db1babfe08b486aede7d5cc463a0a1ae4c75d8 \
+  --hash=sha256:bf1c441b49026d9000166be6e2f63fc351a3fda170aa3fdf18d44d5e5d044640 \
+  --hash=sha256:9710aa7957b4b1f14392006237eb95803acf27897377df3e85395f057f4316b9 \
+  --hash=sha256:8feb676c198bee17ab991ee015828345ac3f87c27dfdb3061d92d1fe47c184b4 \
+  --hash=sha256:597026dede72178ff3627a4eb3315de8444461c7f0f856f5773993c3f9790c53 \
+  --hash=sha256:70f9b964bdfb5191e8f264644c5d1af3041c66fe15261df8a99b3d719dc680d6 \
+  --hash=sha256:74655c0353ffb6cda30485091d0917ce703b128cd824b612b3110a85c79a93d0 \
+  --hash=sha256:0e9c74d105d4ec3af12404e85bb8776931c043657add19f798ee69465f92b999 \
+  --hash=sha256:d3c13446d3d482b9cce61ac73b38effd26fcdcf7f693a405868d3aaaa4d18ca6 \
+  --hash=sha256:371ac3360640ef439a5920ddfe11a34e9d2e546ed886bb8c9ed312611f9f4655 \
+  --hash=sha256:6e5cf63b036f24d2ae4375a88df8d0bc93208352939521d1fcac3c829ef2c363 \
+  --hash=sha256:edf28f5c4d1950d17343adf6d8d40d12c7e982d1e39535d55f7915e122cd8b0e \
+  --hash=sha256:b5ef6f3b4e04f677c296f60f7f4c320ac22cd5bc09c05574460116c8641c801a \
+  --hash=sha256:dd651f66720af4abe2ddae29944e299a57ff91e6fca1739e6dc1f8fd7a8c2b39 \
+  --hash=sha256:4e278f5f72c27f9703bce5514d2fead8c00361caac03e94b0bf9ad8a144f1eeb \
+  --hash=sha256:38f36ea1f545b835c3ecd6e081685a233ac2e3cf0eec8916adc92e4d791098a6 \
+  --hash=sha256:0a2e58ed6e7c42f006cc17d32cec1f432f01b3fe490e24d71471b36e0d0d8742 \
+  --hash=sha256:c1b658db76240596c03571c60635abe953f36fb55b363202971831c2872ea9a0 \
+  --hash=sha256:deb5a84a6a56325eb6701336cdbf70f72adaaeab33cbe953d0e551ecf2592f20 \
+  --hash=sha256:b1425c793e0825f58b3726e7afebaf5a296c07cb0d28580d0ee93dbe10dcdf63 \
+  --hash=sha256:11995fb4dfd14b5c359591baee2a864c5814650ba0084524d4ea0466edfaf029 \
+  --hash=sha256:5d2120b5c93ae322fe2a85d48e3eab4168a19e974a880908f1ac291c0300940f \
+  --hash=sha256:254912ea4bfaaffb0abe366e73bd9ecde622677d6afaf2ce8a0c330df99fefd9 \
+  --hash=sha256:540d8e4525f0b5255c1554b4589089dc58e15df22f343e9545ea00f7012efa07 \
+  --hash=sha256:f69b8ebded7eed181fabe30deabae89fd10c41964f38abb26b19664bbe55c1ae

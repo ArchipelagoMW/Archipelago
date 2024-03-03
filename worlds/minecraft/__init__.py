@@ -37,7 +37,7 @@ class MinecraftWebWorld(WebWorld):
     bug_report_page = "https://github.com/KonoTyran/Minecraft_AP_Randomizer/issues/new?assignees=&labels=bug&template=bug_report.yaml&title=%5BBug%5D%3A+Brief+Description+of+bug+here"
 
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Minecraft software on your computer. This guide covers"
         "single-player, multiworld, and related software.",
         "English",
@@ -173,7 +173,7 @@ class MinecraftWorld(World):
 
     def generate_output(self, output_directory: str) -> None:
         data = self._get_mc_data()
-        filename = f"AP_{self.multiworld.get_out_file_name_base(self.player)}.apmc"
+        filename = f"{self.multiworld.get_out_file_name_base(self.player)}.apmc"
         with open(os.path.join(output_directory, filename), 'wb') as f:
             f.write(b64encode(bytes(json.dumps(data), 'utf-8')))
 

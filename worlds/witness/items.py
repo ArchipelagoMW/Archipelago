@@ -2,17 +2,19 @@
 Defines progression, junk and event items for The Witness
 """
 import copy
+
 from dataclasses import dataclass
-from typing import Optional, Dict, List, Set
+from typing import Optional, Dict, List, Set, TYPE_CHECKING
 
 from BaseClasses import Item, MultiWorld, ItemClassification
-from .Options import get_option_value, is_option_enabled, the_witness_options
-
 from .locations import ID_START, WitnessPlayerLocations
 from .player_logic import WitnessPlayerLogic
 from .static_logic import ItemDefinition, DoorItemDefinition, ProgressiveItemDefinition, ItemCategory, \
     StaticWitnessLogic, WeightedItemDefinition
 from .utils import build_weighted_int_list
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
 
 NUM_ENERGY_UPGRADES = 4
 
@@ -59,7 +61,7 @@ class StaticWitnessItems:
                 classification = ItemClassification.progression
                 StaticWitnessItems.item_groups.setdefault("Doors", []).append(item_name)
             elif definition.category is ItemCategory.LASER:
-                classification = ItemClassification.progression
+                classification = ItemClassification.progression_skip_balancing
                 StaticWitnessItems.item_groups.setdefault("Lasers", []).append(item_name)
             elif definition.category is ItemCategory.USEFUL:
                 classification = ItemClassification.useful
@@ -90,11 +92,12 @@ class WitnessPlayerItems:
     Class that defines Items for a single world
     """
 
-    def __init__(self, multiworld: MultiWorld, player: int, logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
+    def __init__(self, world: "WitnessWorld", logic: WitnessPlayerLogic, locat: WitnessPlayerLocations):
         """Adds event items after logic changes due to options"""
 
-        self._world: MultiWorld = multiworld
-        self._player_id: int = player
+        self._world: "WitnessWorld" = world
+        self._multiworld: MultiWorld = world.multiworld
+        self._player_id: int = world.player
         self._logic: WitnessPlayerLogic = logic
         self._locations: WitnessPlayerLocations = locat
 
@@ -102,28 +105,30 @@ class WitnessPlayerItems:
         self.item_data: Dict[str, ItemData] = copy.deepcopy(StaticWitnessItems.item_data)
 
         # Remove all progression items that aren't actually in the game.
-        self.item_data = {name: data for (name, data) in self.item_data.items()
-                          if data.classification is not ItemClassification.progression or
-                          name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME}
+        self.item_data = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification not in
+            {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+            or name in logic.PROG_ITEMS_ACTUALLY_IN_THE_GAME
+        }
 
-        # Adjust item classifications based on game settings.
-        eps_shuffled = get_option_value(self._world, self._player_id, "shuffle_EPs") != 0
+        # Downgrade door items
         for item_name, item_data in self.item_data.items():
-            if not eps_shuffled and item_name in ["Monastery Garden Entry (Door)", "Monastery Shortcuts"]:
-                # Downgrade doors that only gate progress in EP shuffle.
-                item_data.classification = ItemClassification.useful
-            elif item_name in ["River Monastery Shortcut (Door)", "Jungle & River Shortcuts",
-                               "Monastery Shortcut (Door)",
-                               "Orchard Second Gate (Door)"]:
-                # Downgrade doors that don't gate progress.
+            if not isinstance(item_data.definition, DoorItemDefinition):
+                continue
+
+            if all(not self._logic.solvability_guaranteed(e_hex) for e_hex in item_data.definition.panel_id_hexes):
                 item_data.classification = ItemClassification.useful
 
         # Build the mandatory item list.
         self._mandatory_items: Dict[str, int] = {}
 
         # Add progression items to the mandatory item list.
-        for item_name, item_data in {name: data for (name, data) in self.item_data.items()
-                                     if data.classification == ItemClassification.progression}.items():
+        progression_dict = {
+            name: data for (name, data) in self.item_data.items()
+            if data.classification in {ItemClassification.progression, ItemClassification.progression_skip_balancing}
+        }
+        for item_name, item_data in progression_dict.items():
             if isinstance(item_data.definition, ProgressiveItemDefinition):
                 num_progression = len(self._logic.MULTI_LISTS[item_name])
                 self._mandatory_items[item_name] = num_progression
@@ -152,7 +157,7 @@ class WitnessPlayerItems:
         """
         Returns the list of items that must be in the pool for the game to successfully generate.
         """
-        return self._mandatory_items
+        return self._mandatory_items.copy()
 
     def get_filler_items(self, quantity: int) -> Dict[str, int]:
         """
@@ -170,10 +175,15 @@ class WitnessPlayerItems:
         remaining_quantity -= len(output)
 
         # Read trap configuration data.
-        trap_weight = get_option_value(self._world, self._player_id, "trap_percentage") / 100
-        filler_weight = 1 - trap_weight
+        trap_weight = self._world.options.trap_percentage / 100
+        trap_items = self._world.options.trap_weights.value
+
+        if not sum(trap_items.values()):
+            trap_weight = 0
 
         # Add filler items to the list.
+        filler_weight = 1 - trap_weight
+
         filler_items: Dict[str, float]
         filler_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
                         for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.FILLER}
@@ -182,8 +192,6 @@ class WitnessPlayerItems:
 
         # Add trap items.
         if trap_weight > 0:
-            trap_items = {name: data.definition.weight if isinstance(data.definition, WeightedItemDefinition) else 1
-                          for (name, data) in self.item_data.items() if data.definition.category is ItemCategory.TRAP}
             filler_items.update({name: base_weight * trap_weight / sum(trap_items.values())
                                  for name, base_weight in trap_items.items() if base_weight > 0})
 
@@ -198,15 +206,14 @@ class WitnessPlayerItems:
         Returns items that are ideal for placing on extremely early checks, like the tutorial gate.
         """
         output: Set[str] = set()
-        if "shuffle_symbols" not in the_witness_options.keys() \
-                or is_option_enabled(self._world, self._player_id, "shuffle_symbols"):
-            if get_option_value(self._world, self._player_id, "shuffle_doors") > 0:
+        if self._world.options.shuffle_symbols:
+            if self._world.options.shuffle_doors:
                 output = {"Dots", "Black/White Squares", "Symmetry"}
             else:
                 output = {"Dots", "Black/White Squares", "Symmetry", "Shapers", "Stars"}
 
-            if is_option_enabled(self._world, self._player_id, "shuffle_discarded_panels"):
-                if get_option_value(self._world, self._player_id, "puzzle_randomization") == 1:
+            if self._world.options.shuffle_discarded_panels:
+                if self._world.options.puzzle_randomization == "sigma_expert":
                     output.add("Arrows")
                 else:
                     output.add("Triangles")
@@ -217,19 +224,23 @@ class WitnessPlayerItems:
         # Remove items that are mentioned in any plando options. (Hopefully, in the future, plando will get resolved
         #   before create_items so that we'll be able to check placed items instead of just removing all items mentioned
         #   regardless of whether or not they actually wind up being manually placed.
-        for plando_setting in self._world.plando_items[self._player_id]:
+        for plando_setting in self._multiworld.plando_items[self._player_id]:
             if plando_setting.get("from_pool", True):
-                for item_setting_key in (key for key in ["item", "items"] if key in plando_setting):
+                for item_setting_key in [key for key in ["item", "items"] if key in plando_setting]:
                     if type(plando_setting[item_setting_key]) is str:
-                        output.remove(plando_setting[item_setting_key])
+                        output -= {plando_setting[item_setting_key]}
                     elif type(plando_setting[item_setting_key]) is dict:
                         output -= {item for item, weight in plando_setting[item_setting_key].items() if weight}
                     else:
                         # Assume this is some other kind of iterable.
-                        output -= plando_setting[item_setting_key]
+                        for inner_item in plando_setting[item_setting_key]:
+                            if type(inner_item) is str:
+                                output -= {inner_item}
+                            elif type(inner_item) is dict:
+                                output -= {item for item, weight in inner_item.items() if weight}
 
         # Sort the output for consistency across versions if the implementation changes but the logic does not.
-        return sorted(output)
+        return sorted(list(output))
 
     def get_door_ids_in_pool(self) -> List[int]:
         """
@@ -239,6 +250,7 @@ class WitnessPlayerItems:
         for item_name, item_data in {name: data for name, data in self.item_data.items()
                                      if isinstance(data.definition, DoorItemDefinition)}.items():
             output += [int(hex_string, 16) for hex_string in item_data.definition.panel_id_hexes]
+
         return output
 
     def get_symbol_ids_not_in_pool(self) -> List[int]:
@@ -258,3 +270,6 @@ class WitnessPlayerItems:
                 output[item.ap_code] = [StaticWitnessItems.item_data[child_item].ap_code
                                         for child_item in item.definition.child_item_names]
         return output
+
+
+StaticWitnessItems()

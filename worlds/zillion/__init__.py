@@ -4,7 +4,7 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Literal, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Set, Tuple, Optional, cast
 import os
 import logging
 
@@ -12,7 +12,7 @@ from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
-from .options import ZillionStartChar, zillion_options, validate
+from .options import ZillionOptions, validate
 from .id_maps import item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
@@ -33,6 +33,7 @@ class ZillionSettings(settings.Group):
         """File name of the Zillion US rom"""
         description = "Zillion US ROM File"
         copy_to = "Zillion (UE) [!].sms"
+        assert ZillionDeltaPatch.hash
         md5s = [ZillionDeltaPatch.hash]
 
     class RomStart(str):
@@ -69,8 +70,12 @@ class ZillionWorld(World):
     game = "Zillion"
     web = ZillionWebWorld()
 
-    option_definitions = zillion_options
-    settings: typing.ClassVar[ZillionSettings]
+    options_dataclass = ZillionOptions
+    options: ZillionOptions  # type: ignore
+
+    settings: typing.ClassVar[ZillionSettings]  # type: ignore
+    # these type: ignore are because of this issue: https://github.com/python/typing/discussions/1486
+
     topology_present = True  # indicate if world type has any meaningful layout/pathing
 
     # map names to their IDs
@@ -141,14 +146,14 @@ class ZillionWorld(World):
         if not hasattr(self.multiworld, "zillion_logic_cache"):
             setattr(self.multiworld, "zillion_logic_cache", {})
 
-        zz_op, item_counts = validate(self.multiworld, self.player)
+        zz_op, item_counts = validate(self.options)
+
+        if zz_op.early_scope:
+            self.multiworld.early_items[self.player]["Scope"] = 1
 
         self._item_counts = item_counts
 
-        import __main__
-        rom_dir_name = "" if "test" in __main__.__file__ else os.path.dirname(get_base_rom_path())
         with redirect_stdout(self.lsi):  # type: ignore
-            self.zz_system.make_patcher(rom_dir_name)
             self.zz_system.make_randomizer(zz_op)
 
             self.zz_system.seed(self.multiworld.seed)
@@ -220,7 +225,7 @@ class ZillionWorld(World):
                     loc.access_rule = access_rule
                     if not (limited_skill >= zz_loc.req):
                         loc.progress_type = LocationProgressType.EXCLUDED
-                        self.multiworld.exclude_locations[p].value.add(loc.name)
+                        self.options.exclude_locations.value.add(loc.name)
                     here.locations.append(loc)
                     self.my_locations.append(loc)
 
@@ -283,15 +288,15 @@ class ZillionWorld(World):
             if group["game"] == "Zillion":
                 assert "item_pool" in group
                 item_pool = group["item_pool"]
-                to_stay: Literal['Apple', 'Champ', 'JJ'] = "JJ"
+                to_stay: Chars = "JJ"
                 if "JJ" in item_pool:
                     assert "players" in group
                     group_players = group["players"]
-                    start_chars = cast(Dict[int, ZillionStartChar], getattr(multiworld, "start_char"))
-                    players_start_chars = [
-                        (player, start_chars[player].current_option_name)
-                        for player in group_players
-                    ]
+                    players_start_chars: List[Tuple[int, Chars]] = []
+                    for player in group_players:
+                        z_world = multiworld.worlds[player]
+                        assert isinstance(z_world, ZillionWorld)
+                        players_start_chars.append((player, z_world.options.start_char.get_char()))
                     start_char_counts = Counter(sc for _, sc in players_start_chars)
                     # majority rules
                     if start_char_counts["Apple"] > start_char_counts["Champ"]:
@@ -299,7 +304,8 @@ class ZillionWorld(World):
                     elif start_char_counts["Champ"] > start_char_counts["Apple"]:
                         to_stay = "Champ"
                     else:  # equal
-                        to_stay = multiworld.random.choice(("Apple", "Champ"))
+                        choices: Tuple[Chars, ...] = ("Apple", "Champ")
+                        to_stay = multiworld.random.choice(choices)
 
                     for p, sc in players_start_chars:
                         if sc != to_stay:
@@ -317,6 +323,8 @@ class ZillionWorld(World):
         """
         sync zilliandomizer item locations with AP item locations
         """
+        rom_dir_name = os.path.dirname(get_base_rom_path())
+        self.zz_system.make_patcher(rom_dir_name)
         assert self.zz_system.randomizer and self.zz_system.patcher, "generate_early hasn't been called"
         zz_options = self.zz_system.randomizer.options
 
@@ -324,23 +332,22 @@ class ZillionWorld(World):
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
         multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
-        for loc in self.multiworld.get_locations():
-            if loc.player == self.player:
-                z_loc = cast(ZillionLocation, loc)
-                # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
-                if z_loc.item is None:
-                    self.logger.warn("generate_output location has no item - is that ok?")
-                    z_loc.zz_loc.item = empty
-                elif z_loc.item.player == self.player:
-                    z_item = cast(ZillionItem, z_loc.item)
-                    z_loc.zz_loc.item = z_item.zz_item
-                else:  # another player's item
-                    # print(f"put multi item in {z_loc.zz_loc.name}")
-                    z_loc.zz_loc.item = multi_item
-                    multi_items[z_loc.zz_loc.name] = (
-                        z_loc.item.name,
-                        self.multiworld.get_player_name(z_loc.item.player)
-                    )
+        for loc in self.multiworld.get_locations(self.player):
+            z_loc = cast(ZillionLocation, loc)
+            # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
+            if z_loc.item is None:
+                self.logger.warn("generate_output location has no item - is that ok?")
+                z_loc.zz_loc.item = empty
+            elif z_loc.item.player == self.player:
+                z_item = cast(ZillionItem, z_loc.item)
+                z_loc.zz_loc.item = z_item.zz_item
+            else:  # another player's item
+                # print(f"put multi item in {z_loc.zz_loc.name}")
+                z_loc.zz_loc.item = multi_item
+                multi_items[z_loc.zz_loc.name] = (
+                    z_loc.item.name,
+                    self.multiworld.get_player_name(z_loc.item.player)
+                )
         # debug_zz_loc_ids.sort()
         # for name, id_ in debug_zz_loc_ids.items():
         #     print(id_)
@@ -367,7 +374,9 @@ class ZillionWorld(World):
                                    zz_options.start_char,
                                    self.zz_system.randomizer.loc_name_2_pretty)
         self.slot_data_ready.set()
-        zz_patcher.all_fixes_and_options(zz_options)
+        rm = self.zz_system.resource_managers
+        assert rm, "missing resource_managers from generate_early"
+        zz_patcher.all_fixes_and_options(zz_options, rm)
         zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
         zz_patcher.set_multiworld_items(multi_items)
         game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
@@ -378,7 +387,7 @@ class ZillionWorld(World):
         If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
         self.finalize_item_locations()
 
-        assert self.zz_system.patcher, "didn't get patcher from generate_early"
+        assert self.zz_system.patcher, "didn't get patcher from finalize_item_locations"
         # original_rom_bytes = self.zz_patcher.rom
         patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
 
@@ -409,12 +418,12 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        zz_patcher = self.zz_system.patcher
-        assert zz_patcher, "didn't get patcher from generate_early"
         assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
 
         rescues: Dict[str, Any] = {}
         self.slot_data_ready.wait()
+        zz_patcher = self.zz_system.patcher
+        assert zz_patcher, "didn't get patcher from generate_output"
         for i in (0, 1):
             if i in zz_patcher.rescue_locations:
                 ri = zz_patcher.rescue_locations[i]

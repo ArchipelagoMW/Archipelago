@@ -12,7 +12,7 @@ awarded from scanning those items have been shuffled into location checks throug
 
 ## What is the goal of Subnautica when randomized?
 
-The goal remains unchanged. Cure the plague, build the Neptune Escape Rocket, and escape into space.
+There are four goals currently available. The Launch goal has you leave the planet. The Free goal has you cure the plague. Infected is achieved at maximum infection level. Drive asks you to repair the Aurora Drive Core.
 
 ## What items and locations get shuffled?
 
@@ -34,5 +34,5 @@ player's world.
 
 ## When the player receives a technology, what happens?
 
-When the player receives a technology, the chat log displays a notification the technology has been received.
+When the player receives a technology, the chat log displays a notification that the technology has been received.
 
