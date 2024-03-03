@@ -33,13 +33,6 @@ class MetroidPrimeWorld(World):
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = every_location
 
-    def generate_early(self):
-        # starting inventory
-        self.multiworld.push_precollected(self.create_item("Power Beam"))
-        self.multiworld.push_precollected(self.create_item("Scan Visor"))
-        self.multiworld.push_precollected(self.create_item("Combat Visor"))
-        self.multiworld.push_precollected(self.create_item("Power Suit"))
-
     def create_regions(self) -> None:
         boss_selection = int(self.options.final_bosses)
         create_regions(self, boss_selection)
@@ -65,7 +58,7 @@ class MetroidPrimeWorld(World):
         spring = self.options.spring_ball
         for i in suit_upgrade_table:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
-                continue
+                self.multiworld.push_precollected(self.create_item(i))
             elif i in excluded.keys():
                 continue
             elif i == "Spring Ball" and spring == 1:
