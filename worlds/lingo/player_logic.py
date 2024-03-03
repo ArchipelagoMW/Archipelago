@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
 from .items import ALL_ITEM_TABLE
@@ -6,7 +7,6 @@ from .options import LocationChecks, ShuffleDoors, VictoryCondition
 from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
     RoomAndPanel
-from .testing import LingoTestOptions
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -35,6 +35,27 @@ class PlayerLocation(NamedTuple):
     name: str
     code: Optional[int]
     access: AccessRequirements
+
+
+class ProgressiveItemBehavior(Enum):
+    DISABLE = 1
+    SPLIT = 2
+    PROGRESSIVE = 3
+
+
+def should_split_progression(progression_name: str, world: "LingoWorld") -> ProgressiveItemBehavior:
+    if progression_name == "Progressive Orange Tower":
+        if world.options.progressive_orange_tower:
+            return ProgressiveItemBehavior.PROGRESSIVE
+        else:
+            return ProgressiveItemBehavior.SPLIT
+    elif progression_name == "Progressive Colorful":
+        if world.options.progressive_colorful:
+            return ProgressiveItemBehavior.PROGRESSIVE
+        else:
+            return ProgressiveItemBehavior.SPLIT
+
+    return ProgressiveItemBehavior.PROGRESSIVE
 
 
 class LingoPlayerLogic:
@@ -84,9 +105,13 @@ class LingoPlayerLogic:
 
     def handle_non_grouped_door(self, room_name: str, door_data: Door, world: "LingoWorld"):
         if room_name in PROGRESSION_BY_ROOM and door_data.name in PROGRESSION_BY_ROOM[room_name]:
-            if room_name == "Orange Tower" and not world.options.progressive_orange_tower:
+            progression_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
+            progression_handling = should_split_progression(progression_name, world)
+
+            if progression_handling == ProgressiveItemBehavior.SPLIT:
                 self.set_door_item(room_name, door_data.name, door_data.item_name)
-            else:
+                self.real_items.append(door_data.item_name)
+            elif progression_handling == ProgressiveItemBehavior.PROGRESSIVE:
                 progressive_item_name = PROGRESSION_BY_ROOM[room_name][door_data.name].item_name
                 self.set_door_item(room_name, door_data.name, progressive_item_name)
                 self.real_items.append(progressive_item_name)
@@ -190,6 +215,24 @@ class LingoPlayerLogic:
             if item.should_include(world):
                 self.real_items.append(name)
 
+        # Calculate the requirements for the fake pilgrimage.
+        fake_pilgrimage = [
+            ["Second Room", "Exit Door"], ["Crossroads", "Tower Entrance"],
+            ["Orange Tower Fourth Floor", "Hot Crusts Door"], ["Outside The Initiated", "Shortcut to Hub Room"],
+            ["Orange Tower First Floor", "Shortcut to Hub Room"], ["Directional Gallery", "Shortcut to The Undeterred"],
+            ["Orange Tower First Floor", "Salt Pepper Door"], ["Hub Room", "Crossroads Entrance"],
+            ["Color Hunt", "Shortcut to The Steady"], ["The Bearer", "Entrance"], ["Art Gallery", "Exit"],
+            ["The Tenacious", "Shortcut to Hub Room"], ["Outside The Agreeable", "Tenacious Entrance"]
+        ]
+        pilgrimage_reqs = AccessRequirements()
+        for door in fake_pilgrimage:
+            door_object = DOORS_BY_ROOM[door[0]][door[1]]
+            if door_object.event or world.options.shuffle_doors == ShuffleDoors.option_none:
+                pilgrimage_reqs.merge(self.calculate_door_requirements(door[0], door[1], world))
+            else:
+                pilgrimage_reqs.doors.add(RoomAndDoor(door[0], door[1]))
+        self.door_reqs.setdefault("Pilgrim Antechamber", {})["Pilgrimage"] = pilgrimage_reqs
+
         # Create the paintings mapping, if painting shuffle is on.
         if painting_shuffle:
             # Shuffle paintings until we get something workable.
@@ -205,7 +248,7 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
-                and not early_color_hallways and LingoTestOptions.disable_forced_good_item is False:
+                and not early_color_hallways:
             # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
             # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
             # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
@@ -369,11 +412,9 @@ class LingoPlayerLogic:
             door_object = DOORS_BY_ROOM[room][door]
 
             for req_panel in door_object.panels:
-                if req_panel.room is not None and req_panel.room != room:
-                    access_reqs.rooms.add(req_panel.room)
-
-                sub_access_reqs = self.calculate_panel_requirements(room if req_panel.room is None else req_panel.room,
-                                                                    req_panel.panel, world)
+                panel_room = room if req_panel.room is None else req_panel.room
+                access_reqs.rooms.add(panel_room)
+                sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)
                 access_reqs.merge(sub_access_reqs)
 
             self.door_reqs[room][door] = access_reqs
@@ -397,8 +438,8 @@ class LingoPlayerLogic:
             unhindered_panels_by_color: dict[Optional[str], int] = {}
 
             for panel_name, panel_data in room_data.items():
-                # We won't count non-counting panels.
-                if panel_data.non_counting:
+                # We won't count non-counting panels. THE MASTER has special access rules and is handled separately.
+                if panel_data.non_counting or panel_name == "THE MASTER":
                     continue
 
                 # We won't coalesce any panels that have requirements beyond colors. To simplify things for now, we will

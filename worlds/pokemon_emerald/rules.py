@@ -626,6 +626,10 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
         get_entrance("REGION_ROUTE120/NORTH_POND_SHORE -> REGION_ROUTE120/NORTH_POND"),
         can_surf
     )
+    set_rule(
+        get_entrance("REGION_ROUTE120/SOUTH -> REGION_ROUTE120/SOUTH_PONDS"),
+        can_surf
+    )
 
     # Route 121
     set_rule(

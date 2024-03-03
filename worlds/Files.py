@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import abc
 import json
 import struct
 import zipfile
@@ -17,7 +18,7 @@ del threading
 del os
 
 
-class AutoPatchRegister(type):
+class AutoPatchRegister(abc.ABCMeta):
     patch_types: ClassVar[Dict[str, AutoPatchRegister]] = {}
     file_endings: ClassVar[Dict[str, AutoPatchRegister]] = {}
 
@@ -44,7 +45,7 @@ current_patch_version: int = 6
 
 class AutoPatchExtensionRegister(type):
     extension_types: ClassVar[Dict[str, AutoPatchExtensionRegister]] = {}
-    required_extensions: List[str]
+    required_extensions: List[str] = []
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchExtensionRegister:
         # construct class
@@ -55,19 +56,17 @@ class AutoPatchExtensionRegister(type):
 
     @staticmethod
     def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
-        for extension_type, handler in AutoPatchExtensionRegister.extension_types.items():
-            if extension_type == game:
-                if len(handler.required_extensions) > 0:
-                    handlers = [handler]
-                    for required in handler.required_extensions:
-                        if required in AutoPatchExtensionRegister.extension_types:
-                            handlers.append(AutoPatchExtensionRegister.extension_types[required])
-                        else:
-                            raise NotImplementedError(f"No handler for {required}.")
-                    return handlers
+        handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
+        if handler.required_extensions:
+            handlers = [handler]
+            for required in handler.required_extensions:
+                if required in AutoPatchExtensionRegister.extension_types:
+                    handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
                 else:
-                    return handler
-        return APPatchExtension
+                    raise NotImplementedError(f"No handler for {required}.")
+            return handlers
+        else:
+            return handler
 
 
 class APContainer:
@@ -142,16 +141,27 @@ class APContainer:
         }
 
 
-class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
+class APPatch(APContainer, abc.ABC, metaclass=AutoPatchRegister):
     """
-    An APContainer that defines a procedure to produce the desired file.
+    An abstract `APContainer` that defines the requirements for an object
+    to be used by the `Patch.create_rom_file` function.
+    """
+    result_file_ending: str = ".sfc"
+
+    @abc.abstractmethod
+    def patch(self, target: str) -> None:
+        """ create the output file with the file name `target` """
+
+
+class APProcedurePatch(APPatch):
+    """
+    An APPatch that defines a procedure to produce the desired file.
     """
     procedure: List[Tuple[str, List[Any]]]
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
     patch_file_ending: str = ""
-    result_file_ending: str = ".sfc"
-    files: Dict[str, bytes] = dict()
+    files: Dict[str, bytes] = {}
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -209,7 +219,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
         for step, args in self.procedure:
-            if isinstance(patch_extender, List):
+            if isinstance(patch_extender, list):
                 extension = next((item for item in [getattr(extender, step, None) for extender in patch_extender]
                                   if item is not None), None)
             else:
@@ -223,7 +233,7 @@ class APProcedurePatch(APContainer, metaclass=AutoPatchRegister):
 
 
 class APDeltaPatch(APProcedurePatch):
-    """An APContainer that additionally has delta.bsdiff4
+    """An APProcedurePatch that additionally has delta.bsdiff4
     containing a delta patch to get the desired file, often a rom."""
 
     procedure = [
@@ -255,11 +265,11 @@ class APTokenMixin:
     """
     tokens: List[
         Tuple[int, int,
-              Union[
-                    bytes,  # WRITE
-                    Tuple[int, int],  # COPY, RLE
-                    int  # AND_8, OR_8, XOR_8
-              ]]] = []
+        Union[
+            bytes,  # WRITE
+            Tuple[int, int],  # COPY, RLE
+            int  # AND_8, OR_8, XOR_8
+        ]]] = []
 
     def get_token_binary(self) -> bytes:
         """
@@ -292,13 +302,18 @@ class APTokenMixin:
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     """Class that defines patch extension functions for a given game.
-    Patch extension functions must have the following two arguments:
+    Patch extension functions must have the following two arguments in the following order:
+
     caller: APProcedurePatch (used to retrieve files from the patch container)
+
     rom: bytes (the data to patch)
+
+    Further arguments are passed in from the procedure as defined.
+
     Patch extension functions must return the changed bytes.
     """
     game: str
-    required_extensions: List[str] = list()
+    required_extensions: List[str] = []
 
     @staticmethod
     def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str):
@@ -327,14 +342,12 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
                     rom_data[offset] = rom_data[offset] ^ arg
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
                 args = struct.unpack("II", data)
+                length = args[0]
+                value = args[1]
                 if token_type == APTokenTypes.COPY:
-                    length = args[0]
-                    target = args[1]
-                    rom_data[offset: offset + length] = rom_data[target: target + length]
+                    rom_data[offset: offset + length] = rom_data[value: value + length]
                 else:
-                    length = args[0]
-                    val = args[1]
-                    rom_data[offset: offset + length] = bytes([val] * length)
+                    rom_data[offset: offset + length] = bytes([value] * length)
             else:
                 rom_data[offset:offset + len(data)] = data
             bpr += 9 + size
@@ -344,8 +357,9 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     def calc_snes_crc(caller: APProcedurePatch, rom: bytes):
         """Calculates and applies a valid CRC for the SNES rom header."""
         rom_data = bytearray(rom)
+        if len(rom) < 0x8000:
+            raise Exception("Tried to calculate SNES CRC on file too small to be a SNES ROM.")
         crc = (sum(rom_data[:0x7FDC] + rom_data[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         rom_data[0x7FDC:0x7FE0] = [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF]
         return rom_data
-

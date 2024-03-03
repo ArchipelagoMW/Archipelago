@@ -63,7 +63,10 @@ class MessengerRules:
             "Searing Crags Seal - Triple Ball Spinner": self.has_vertical,
             "Searing Crags - Astral Tea Leaves":
                 lambda state: state.can_reach("Ninja Village - Astral Seed", "Location", self.player),
-            "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player),
+            "Searing Crags - Key of Strength": lambda state: state.has("Power Thistle", self.player)
+                                                             and (self.has_dart(state)
+                                                                  or (self.has_wingsuit(state)
+                                                                      and self.can_destroy_projectiles(state))),
             # glacial peak
             "Glacial Peak Seal - Ice Climbers": self.has_dart,
             "Glacial Peak Seal - Projectile Spike Pit": self.can_destroy_projectiles,
