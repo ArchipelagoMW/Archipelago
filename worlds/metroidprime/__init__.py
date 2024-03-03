@@ -1,4 +1,4 @@
-from BaseClasses import Item, Tutorial
+from BaseClasses import Item, Tutorial, ItemClassification
 from .Items import MetroidPrimeItem, suit_upgrade_table, artifact_table, item_table
 from .PrimeOptions import MetroidPrimeOptions
 from .Locations import every_location
@@ -44,15 +44,17 @@ class MetroidPrimeWorld(World):
         boss_selection = int(self.options.final_bosses)
         create_regions(self, boss_selection)
 
-    def create_item(self, name: str) -> "Item":
+    def create_item(self, name: str, override: bool = False) -> "Item":
         createdthing = item_table[name]
+        if override:
+            return MetroidPrimeItem(name, ItemClassification.progression, createdthing.code, self.player)
         return MetroidPrimeItem(name, createdthing.progression, createdthing.code, self.player)
 
     def create_items(self) -> None:
         # add artifacts
         reqarts = int(self.options.required_artifacts)
-        precollectedarts = [*artifact_table][:reqarts]
-        neededarts = [*artifact_table][reqarts:]
+        precollectedarts = [*artifact_table][reqarts:]
+        neededarts = [*artifact_table][:reqarts]
         for i in precollectedarts:
             self.multiworld.push_precollected(self.create_item(i))
         for i in neededarts:
@@ -70,9 +72,12 @@ class MetroidPrimeWorld(World):
                 items_added += 1
                 continue
             elif i == "Missile Expansion":
-                continue
+                for j in range(0, 8):
+                    self.multiworld.itempool += [self.create_item('Missile Expansion', True)]
             elif i == "Energy Tank":
-                for j in range(0, 14):
+                for j in range(0, 8):
+                    self.multiworld.itempool += [self.create_item("Energy Tank", True)]
+                for j in range(0, 6):
                     self.multiworld.itempool += [self.create_item("Energy Tank")]
                 items_added += 14
                 continue
@@ -91,6 +96,6 @@ class MetroidPrimeWorld(World):
             self.multiworld.itempool += [self.create_item("Missile Expansion")]
 
     def set_rules(self) -> None:
-        set_rules(self.multiworld, self.player)
+        set_rules(self.multiworld, self.player, every_location)
         self.multiworld.completion_condition[self.player] = lambda state: (
             state.can_reach("Mission Complete", "Region", self.player))
