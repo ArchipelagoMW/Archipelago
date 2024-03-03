@@ -92,7 +92,8 @@ This project makes use of multiple other projects. We wouldn't be here without t
 * [Ocarina of Time Randomizer](https://github.com/TestRunnerSRL/OoT-Randomizer)
 
 ## Contributing
-For contribution guidelines, please see our [Contributing doc.](/docs/contributing.md)
+To contribute to Archipelago, including the WebHost, core program, or by adding a new game, see our
+[Contributing guidelines.](/docs/contributing.md)
 
 ## FAQ
 For Frequently asked questions, please see the website's [FAQ Page.](https://archipelago.gg/faq/en/)
