@@ -165,6 +165,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("TTM: Top", "MOVELESS & TJ | LJ/DV & LG/KK | MOVELESS & WK & SF/LG | MOVELESS & KK/DV")
     rf.assign_rule("TTM: Blast to the Lonely Mushroom", "CANN | CANNLESS & LJ | MOVELESS & CANNLESS")
     # Tiny-Huge Island
+    rf.assign_rule("THI: 1Up Block THI Small near Start", "NAR | {THI: Pipes}")
     rf.assign_rule("THI: Pipes", "NAR | LJ/TJ/DV/LG | MOVELESS & BF/SF/KK")
     rf.assign_rule("THI: Large Top", "NAR | LJ/TJ/DV | MOVELESS")
     rf.assign_rule("THI: Wiggler's Red Coins", "WK")

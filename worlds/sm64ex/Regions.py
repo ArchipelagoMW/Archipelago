@@ -202,8 +202,8 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_region("Tiny-Huge Island (Huge)", player, world)
     create_region("Tiny-Huge Island (Tiny)", player, world)
     regTHI = create_region("Tiny-Huge Island", player, world)
-    create_locs(regTHI, "THI: The Tip Top of the Huge Island", "THI: 1Up Block THI Small near Start")
-    thi_pipes = create_subregion(regTHI, "THI: Pipes", "THI: Pluck the Piranha Flower", "THI: Rematch with Koopa the Quick",
+    create_locs(regTHI, "THI: 1Up Block THI Small near Start")
+    thi_pipes = create_subregion(regTHI, "THI: Pipes", "THI: The Tip Top of the Huge Island", "THI: Pluck the Piranha Flower", "THI: Rematch with Koopa the Quick",
                                                        "THI: Five Itty Bitty Secrets", "THI: Wiggler's Red Coins", "THI: Bob-omb Buddy",
                                                        "THI: 1Up Block THI Large near Start", "THI: 1Up Block Windy Area")
     thi_large_top = create_subregion(thi_pipes, "THI: Large Top", "THI: Make Wiggler Squirm")
