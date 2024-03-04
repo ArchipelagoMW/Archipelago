@@ -157,7 +157,7 @@ class APAutoPatchInterface(APPatch, abc.ABC, metaclass=AutoPatchRegister):
 
 
 class APDeltaPatch(APAutoPatchInterface):
-    """An implementation of `CreateRomInterface` that additionally
+    """An implementation of `APAutoPatchInterface` that additionally
     has delta.bsdiff4 containing a delta patch to get the desired file."""
 
     hash: Optional[str]  # base checksum of source file
