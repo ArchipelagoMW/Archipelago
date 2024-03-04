@@ -123,8 +123,8 @@ Root: HKCR; Subkey: "{#MyAppName}smz3patch\shell\open\command";  ValueData: """{
 
 Root: HKCR; Subkey: ".apsoe";                                    ValueData: "{#MyAppName}soepatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}soepatch";                      ValueData: "Archipelago Secret of Evermore Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}soepatch\DefaultIcon";          ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
-Root: HKCR; Subkey: "{#MyAppName}soepatch\shell\open\command";   ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}soepatch\DefaultIcon";          ValueData: "{app}\ArchipelagoLauncher.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}soepatch\shell\open\command";   ValueData: """{app}\ArchipelagoLauncher.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".apl2ac";                                   ValueData: "{#MyAppName}l2acpatch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch";                     ValueData: "Archipelago Lufia II Ancient Cave Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
