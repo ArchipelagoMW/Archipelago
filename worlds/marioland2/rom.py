@@ -5,7 +5,7 @@ import bsdiff4
 
 import Utils
 
-from Patch import APDeltaPatch
+from worlds.Files import APDeltaPatch
 from settings import get_settings
 
 from .rom_addresses import rom_addresses
@@ -173,25 +173,25 @@ def generate_output(self, output_directory: str):
 
     random = self.multiworld.per_slot_randoms[self.player]
 
-    if self.multiworld.randomize_enemies[self.player]:
+    if self.options.randomize_enemies:
         randomize_enemies(data, random)
-    if self.multiworld.randomize_platforms[self.player]:
+    if self.options.randomize_platforms:
         randomize_platforms(data, random)
-    if self.multiworld.auto_scroll_levels[self.player] > -1:
-        randomize_auto_scroll_levels(data, random, self.multiworld.auto_scroll_levels[self.player].value)
-    if self.multiworld.randomize_music[self.player]:
+    if self.options.auto_scroll_levels > -1:
+        randomize_auto_scroll_levels(data, random, self.options.auto_scroll_levels.value)
+    if self.options.randomize_music:
         randomize_music(data, random)
 
-    if self.multiworld.auto_scroll_trap[self.player]:
+    if self.options.auto_scroll_trap:
         data[rom_addresses["Auto_Scroll_Disable"]] = 0xAF
-    if self.multiworld.coinsanity[self.player]:
+    if self.options.coinsanity:
         data[rom_addresses["Coin_Shuffle"]] = 0x40
-    if self.multiworld.shuffle_midway_bells[self.player]:
+    if self.options.shuffle_midway_bells:
         data[rom_addresses["Disable_Midway_Bell"]] = 0xC9
 
-    data[rom_addresses["Required_Golden_Coins"]] = self.multiworld.required_golden_coins[self.player].value
+    data[rom_addresses["Required_Golden_Coins"]] = self.options.required_golden_coins.value
 
-    if self.multiworld.energy_link[self.player]:
+    if self.options.energy_link:
         # start with 1 life if Energy Link is on so that you don't deposit lives at the start of the game.
         data[rom_addresses["Starting_Lives"]] = 1
 

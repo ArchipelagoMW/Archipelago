@@ -8,7 +8,7 @@ from BaseClasses import Region, Location, Item, ItemClassification, Tutorial
 
 from . import client
 from .rom import generate_output, SuperMarioLand2DeltaPatch
-from .options import sml2options
+from .options import SML2Options
 from .locations import locations
 from .items import items
 from .logic import has_pipe_up, has_pipe_down, has_pipe_left, has_pipe_right, has_level_progression
@@ -73,7 +73,8 @@ class MarioLand2World(World):
         "Bells": {location for location in locations if locations[location]["type"] == "bell"},
     }
 
-    option_definitions = sml2options
+    options_dataclass = SML2Options
+    options: SML2Options
 
     generate_output = generate_output
 
@@ -114,7 +115,7 @@ class MarioLand2World(World):
                 self.multiworld.regions.append(region)
                 created_regions.append(region_name)
 
-            if "Midway Bell" in location_name and not self.multiworld.shuffle_midway_bells[self.player]:
+            if "Midway Bell" in location_name and not self.options.shuffle_midway_bells:
                 continue
             region.locations.append(MarioLand2Location(self.player, location_name,
                                                        self.location_name_to_id[location_name], region))
@@ -159,7 +160,7 @@ class MarioLand2World(World):
                     state.has("Tree Coin", self.player), state.has("Space Coin", self.player),
                     state.has("Macro Coin", self.player), state.has("Pumpkin Coin", self.player),
                     state.has("Mario Coin", self.player), state.has("Turtle Coin", self.player)
-                ].count(True) >= self.multiworld.required_golden_coins[self.player])
+                ].count(True) >= self.options.required_golden_coins)
         }
         location_rules = {
             "Hippo Zone": lambda state: state.has_any(["Hippo Bubble", "Carrot", "Swim"], self.player),
@@ -176,11 +177,12 @@ class MarioLand2World(World):
             # Otherwise, you need the bell item from the item pool, or you need to be able to take damage twice in one
             # visit.
             "Space Zone 2 - Star Stage": lambda state: has_pipe_right(state, self.player) and (state.has(
-                "Space Physics", self.player) or ((not state.multiworld.shuffle_midway_bells[self.player])
-                and state.has_any(["Mushroom", "Fire Flower", "Carrot"], self.player)) or (state.has(
-                "Mushroom", self.player) and state.has_any(["Fire Flower", "Carrot"], self.player))
-                or (state.has("Space Zone 2 - Star Stage Midway Bell", self.player) and state.has_any(
-                ["Mushroom", "Fire Flower", "Carrot"], self.player))),
+                "Space Physics", self.player) or ((not
+                state.multiworld.worlds[self.player].options.shuffle_midway_bells) and state.has_any(["Mushroom",
+                "Fire Flower", "Carrot"], self.player)) or (state.has("Mushroom", self.player)
+                and state.has_any(["Fire Flower", "Carrot"], self.player))
+                or (state.has("Space Zone 2 - Star Stage Midway Bell", self.player) and state.has_any(["Mushroom",
+                "Fire Flower", "Carrot"], self.player))),
             "Space Zone 2 - Star Stage Midway Bell": lambda state: state.has_any(
                 ["Space Physics", "Space Zone 2 - Star Stage Midway Bell", "Mushroom", "Fire Flower", "Carrot"],
                 self.player),
@@ -256,7 +258,7 @@ class MarioLand2World(World):
             self.multiworld.get_entrance(entrance, self.player).access_rule = rule
 
         for level, rule in location_rules.items():
-            if ("Midway Bell" not in level) or self.multiworld.shuffle_midway_bells[self.player]:
+            if ("Midway Bell" not in level) or self.options.shuffle_midway_bells:
                 self.multiworld.get_location(level, self.player).access_rule = rule
 
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Wario Defeated", self.player)
@@ -289,7 +291,7 @@ class MarioLand2World(World):
             "Super Star Duration Increase": 6,
         }
 
-        if self.multiworld.coinsanity[self.player]:
+        if self.options.coinsanity:
             for item in self.item_name_groups["Coins"]:
                 item_counts[item] = 1
         else:
@@ -306,21 +308,21 @@ class MarioLand2World(World):
                 location.address = None
                 location.item.code = None
 
-        if self.multiworld.shuffle_midway_bells[self.player]:
+        if self.options.shuffle_midway_bells:
             for item in [item for item in items if "Midway Bell" in item]:
                 item_counts[item] = 1
 
-        if self.multiworld.difficulty_mode[self.player] == "easy_to_normal":
+        if self.options.difficulty_mode == "easy_to_normal":
             item_counts["Normal Mode"] = 1
-        elif self.multiworld.difficulty_mode[self.player] == "normal_to_easy":
+        elif self.options.difficulty_mode == "normal_to_easy":
             item_counts["Easy Mode"] = 1
         else:
             item_counts["Super Star Duration Increase"] += 1
 
-        if self.multiworld.shuffle_pipe_traversal[self.player] == "single":
+        if self.options.shuffle_pipe_traversal == "single":
             item_counts["Super Star Duration Increase"] -= 1
             item_counts["Pipe Traversal"] = 1
-        elif self.multiworld.shuffle_pipe_traversal[self.player] == "split":
+        elif self.options.shuffle_pipe_traversal == "split":
             item_counts["Super Star Duration Increase"] -= 4
             item_counts["Pipe Traversal - Right"] = 1
             item_counts["Pipe Traversal - Left"] = 1
@@ -329,7 +331,7 @@ class MarioLand2World(World):
         else:
             self.multiworld.push_precollected(self.create_item("Pipe Traversal"))
 
-        if self.multiworld.auto_scroll_trap[self.player]:
+        if self.options.auto_scroll_trap:
             item_counts["Super Star Duration Increase"] -= 1
             item_counts["Auto Scroll"] = 1
 
@@ -343,11 +345,11 @@ class MarioLand2World(World):
 
     def fill_slot_data(self):
         return {
-            "mode": self.multiworld.difficulty_mode[self.player].value,
+            "mode": self.options.difficulty_mode.value,
             "stars": max(len([loc for loc in self.multiworld.get_filled_locations() if loc.item.player == self.player
                               and loc.item.name == "Super Star Duration Increase"]), 1),
-            "midway_bells": self.multiworld.shuffle_midway_bells[self.player].value,
-            "energy_link": self.multiworld.energy_link[self.player].value
+            "midway_bells": self.options.shuffle_midway_bells.value,
+            "energy_link": self.options.energy_link.value
         }
 
     def create_item(self, name: str) -> Item:

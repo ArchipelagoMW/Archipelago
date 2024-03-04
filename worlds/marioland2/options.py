@@ -1,4 +1,5 @@
-from Options import Toggle, Choice, NamedRange, Range
+from Options import Toggle, Choice, NamedRange, Range, PerGameCommonOptions
+from dataclasses import dataclass
 
 
 class GoldenCoins(Toggle):
@@ -81,17 +82,16 @@ class EnergyLink(Toggle):
     display_name = "Energy Link"
     default = 1
 
-
-sml2options = {
-    "coinsanity": GoldenCoins,
-    "required_golden_coins": GoldenCoinsRequired,
-    "difficulty_mode": DifficultyMode,
-    "shuffle_midway_bells": ShuffleMidwayBells,
-    "shuffle_pipe_traversal": ShufflePipeTraversal,
-    "randomize_enemies": RandomizeEnemies,
-    "randomize_platforms": RandomizePlatforms,
-    "auto_scroll_levels": AutoScrollLevels,
-    "auto_scroll_trap": AutoScrollTrap,
-    "randomize_music": RandomizeMusic,
-    "energy_link": EnergyLink
-}
+@dataclass
+class SML2Options(PerGameCommonOptions):
+    coinsanity: GoldenCoins
+    required_golden_coins: GoldenCoinsRequired
+    difficulty_mode: DifficultyMode
+    shuffle_midway_bells: ShuffleMidwayBells
+    shuffle_pipe_traversal: ShufflePipeTraversal
+    randomize_enemies: RandomizeEnemies
+    randomize_platforms: RandomizePlatforms
+    auto_scroll_levels: AutoScrollLevels
+    auto_scroll_trap: AutoScrollTrap
+    randomize_music: RandomizeMusic
+    energy_link: EnergyLink
