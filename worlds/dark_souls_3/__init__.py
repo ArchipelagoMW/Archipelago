@@ -265,12 +265,11 @@ class DarkSouls3World(World):
                 # Don't allow Siegward's Storm Ruler to mark Yhorm as defeatable.
                 if location.name == "PC: Storm Ruler - Siegward": continue
 
-                # Replace non-randomized progression items with events
+                # Replace non-randomized items with events
                 event_item = (
                     self.create_item(location.default_item_name) if location.default_item_name
                     else DarkSouls3Item.event(location.name, self.player)
                 )
-                if event_item.classification != ItemClassification.progression: continue
 
                 new_location = DarkSouls3Location(
                     self.player,
@@ -1064,10 +1063,15 @@ class DarkSouls3World(World):
         return state.can_reach(location, "Location", self.player)
 
 
-    def _is_location_available(self, location: Union[str, DS3LocationData]) -> bool:
+    def _is_location_available(
+        self,
+        location: Union[str, DS3LocationData, DarkSouls3Location]
+    ) -> bool:
         """Returns whether the given location is being randomized."""
         if isinstance(location, DS3LocationData):
             data = location
+        elif isinstance(location, DarkSouls3Location):
+            data = location.data
         else:
             data = location_dictionary[location]
 
@@ -1197,7 +1201,7 @@ class DarkSouls3World(World):
         # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
         full_items_by_name = defaultdict(list)
         for location in self.multiworld.get_filled_locations():
-            if location.item.player == self.player:
+            if location.item.player == self.player and self._is_location_available(location):
                 full_items_by_name[location.item.name].append(location.item)
 
         def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
