@@ -867,26 +867,19 @@ class DarkSouls3World(World):
 
         ## Patches
 
-        # There are two ways to get Patches to open up shop in Firelink. You can either get tricked
-        # in the firelink bell tower, or you can beat the Abyss Watchers. Because the bell tower
-        # route can be missed if the player accesses the tower before resting in Rosaria's Bed
-        # Chamber, we assume the player will trigger the shop via Abyss Watchers.
+        # Patches will only set up shop in Firelink once he's tricked you in the bell tower. He'll
+        # only do _that_ once you've spoken to Siegward after killing the Fire Demon and lit the
+        # Rosaria's Bed Chamber bonfire. He _won't_ set up shop in the Cathedral if you light the
+        # Rosaria's Bed Chamber bonfire before getting tricked by him, so we assume these locations
+        # require the bell tower.
         self._add_location_rule([
             "CD: Shotel - Patches",
             "CD: Ember - Patches",
-        ], lambda state: self._can_get(state, "FK: Soul of the Blood of the Wolf"))
-
-        # The forgiveness coin is ONLY accessible through the bell tower interaction, so if the
-        # player has chosen to allow important items in missable locations we ensuer that the bell
-        # tower can't be accessed until after cathedral
-        if self.options.missable_locations == "unnecessary":
-            self._add_entrance_rule(
-                "Firelink Shrine Bell Tower",
-                lambda state: self._can_go_to(state, "Cathedral of the Deep")
-            )
-        self._add_location_rule([
             "FS: Rusted Gold Coin - don't forgive Patches"
-        ], lambda state: self._can_go_to(state, "Firelink Shrine Bell Tower"))
+        ], lambda state: (
+            self._can_go_to(state, "Firelink Shrine Bell Tower")
+            and self._can_go_to(state, "Cathedral of the Deep")
+        ))
 
         # Patches sells this after you tell him to search for Greirat in Grand Archives
         self._add_location_rule([
@@ -934,7 +927,13 @@ class DarkSouls3World(World):
         ## Siegward
 
         # Unlock Siegward's cell after progressing his quest
-        self._add_location_rule("ID: Titanite Slab - Siegward", "Old Cell Key")
+        self._add_location_rule([
+            "ID: Titanite Slab - Siegward",
+        ], lambda state: (
+            state.has("Old Cell Key", self.player)
+            # Progressing Siegward's quest requires buying his armor from Patches.
+            and self._can_get(state, "CD: Shotel - Patches")
+        ))
 
         # These drop after completing Siegward's quest and talking to him in Yhorm's arena
         self._add_location_rule([
