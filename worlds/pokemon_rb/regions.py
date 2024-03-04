@@ -826,7 +826,7 @@ warp_data = {'Menu': [], 'Evolution': [], 'Old Rod Fishing': [], 'Good Rod Fishi
              'Route 4-W': [{'address': 'Warps_Route4', 'id': 0, 'to': {'map': 'Route 4 Pokemon Center', 'id': 0}},
                            {'address': 'Warps_Route4', 'id': 1, 'to': {'map': 'Mt Moon 1F', 'id': 0}}],
              'Route 4-C': [{'address': 'Warps_Route4', 'id': 2, 'to': {'map': 'Mt Moon B1F-NE', 'id': 7}}],
-             'Route 4-E': [], 'Route 4-Lass': [], 'Route 4-Grass': [],
+             'Route 4-Lass': [], 'Route 4-E': [],
              'Route 5': [{'address': 'Warps_Route5', 'id': (1, 0), 'to': {'map': 'Route 5 Gate-N', 'id': (3, 2)}},
                          {'address': 'Warps_Route5', 'id': 3, 'to': {'map': 'Underground Path Route 5', 'id': 0}},
                          {'address': 'Warps_Route5', 'id': 4, 'to': {'map': 'Daycare', 'id': 0}}], 'Route 9': [],
@@ -1472,7 +1472,6 @@ mansion_stair_destinations = [
 ]
 
 unreachable_outdoor_entrances = [
-    "Route 4-C to Mt Moon B1F-NE",
     "Fuchsia City-Good Rod House Backyard to Fuchsia Good Rod House",
     "Cerulean City-Badge House Backyard to Cerulean Badge House",
     # TODO: This doesn't need to be forced if fly location is Pokemon League?
@@ -1635,16 +1634,15 @@ def create_regions(self):
     connect(multiworld, player, "Pewter City-E", "Route 3", lambda state: logic.route_3(state, player), one_way=True)
     connect(multiworld, player, "Route 3", "Pewter City-E", one_way=True)
     connect(multiworld, player, "Route 4-W", "Route 3")
-    connect(multiworld, player, "Route 24", "Cerulean City-Water", one_way=True)
+    connect(multiworld, player, "Route 24", "Cerulean City-Water", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Cerulean City-Water", "Route 4-Lass", lambda state: logic.can_surf(state, player), one_way=True)
     connect(multiworld, player, "Mt Moon B2F", "Mt Moon B2F-Wild", one_way=True)
     connect(multiworld, player, "Mt Moon B2F-NE", "Mt Moon B2F-Wild", one_way=True)
     connect(multiworld, player, "Mt Moon B2F-C", "Mt Moon B2F-Wild", one_way=True)
-    connect(multiworld, player, "Route 4-Lass", "Route 4-E", one_way=True)
+    connect(multiworld, player, "Route 4-Lass", "Route 4-C", one_way=True)
     connect(multiworld, player, "Route 4-C", "Route 4-E", one_way=True)
-    connect(multiworld, player, "Route 4-E", "Route 4-Grass", one_way=True)
-    connect(multiworld, player, "Route 4-Grass", "Cerulean City", one_way=True)
-    connect(multiworld, player, "Cerulean City", "Route 24", one_way=True)
+    connect(multiworld, player, "Route 4-E", "Cerulean City")
+    connect(multiworld, player, "Cerulean City", "Route 24")
     connect(multiworld, player, "Cerulean City", "Cerulean City-T", lambda state: state.has("Help Bill", player))
     connect(multiworld, player, "Cerulean City-Outskirts", "Cerulean City", one_way=True)
     connect(multiworld, player, "Cerulean City", "Cerulean City-Outskirts", lambda state: logic.can_cut(state, player), one_way=True)
@@ -1801,7 +1799,6 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B3F-SE", "Seafoam Islands B3F-Wild", one_way=True)
     connect(multiworld, player, "Seafoam Islands B4F", "Seafoam Islands B4F-W", lambda state: logic.can_surf(state, player), one_way=True)
     connect(multiworld, player, "Seafoam Islands B4F-W", "Seafoam Islands B4F", one_way=True)
-    # This really shouldn't be necessary since if the boulders are reachable you can drop, but might as well be thorough
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_surf(state, player) and logic.can_strength(state, player) and state.has("Seafoam Exit Boulder", player, 6))
     connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or logic.can_cut(state, player))
     connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, player) or not state.multiworld.extra_strength_boulders[player])
