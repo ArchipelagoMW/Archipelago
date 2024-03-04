@@ -11,7 +11,7 @@
 
 ## General Concept
 
-<span style="color:tomato">
+<span style="color:#ff7800">
 **This mod can ban you permanently from the FromSoftware servers if used online.** 
 </span>
 The Dark Souls III AP Client is a dinput8.dll triggered when launching Dark Souls III. This .dll file will launch a command 

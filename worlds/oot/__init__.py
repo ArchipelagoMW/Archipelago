@@ -92,7 +92,7 @@ class OOTSettings(settings.Group):
 
 class OOTWeb(WebWorld):
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
         "English",
         "setup_en.md",
@@ -118,7 +118,16 @@ class OOTWeb(WebWorld):
         ["TheLynk"]
     )
 
-    tutorials = [setup, setup_es, setup_fr]
+    setup_de = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Deutsch",
+        "setup_de.md",
+        "setup/de",
+        ["Held_der_Zeit"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr, setup_de]
 
 
 class OOTWorld(World):

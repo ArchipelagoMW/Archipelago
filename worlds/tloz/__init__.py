@@ -45,7 +45,7 @@ class TLoZSettings(settings.Group):
 class TLoZWeb(WebWorld):
     theme = "stone"
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Legend of Zelda for Archipelago on your computer.",
         "English",
         "multiworld_en.md",
@@ -64,7 +64,7 @@ class TLoZWorld(World):
     every time.
     """
     options_dataclass = TlozOptions
-    options = TlozOptions
+    options: TlozOptions
     settings: typing.ClassVar[TLoZSettings]
     game = "The Legend of Zelda"
     topology_present = False
