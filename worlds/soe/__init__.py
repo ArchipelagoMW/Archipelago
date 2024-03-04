@@ -16,7 +16,7 @@ from worlds.generic.Rules import add_item_rule, set_rule
 from .logic import SoEPlayerLogic
 from .options import Difficulty, EnergyCore, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
-from worlds.LauncherComponents import Component, Type, components
+from worlds.LauncherComponents import Component, SuffixIdentifier, Type, components
 
 if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
@@ -82,7 +82,8 @@ def launch_soe_client(*args: str) -> None:
     open(url)
 
 
-components.append(Component("Evermizer Client", component_type=Type.CLIENT, func=launch_soe_client))
+components.append(Component("Evermizer Client", component_type=Type.CLIENT,
+    func=launch_soe_client, file_identifier=SuffixIdentifier(".apsoe")))
 
 
 _id_base = 64000
