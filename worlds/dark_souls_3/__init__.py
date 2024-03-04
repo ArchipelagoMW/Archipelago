@@ -644,7 +644,13 @@ class DarkSouls3World(World):
 
             # Don't let crow items have foreign items because they're picked up in a way that's
             # missed by the hook we use to send location items
-            self._add_item_rule(name, lambda item: item.player == self.player)
+            self._add_item_rule(name, lambda item: (
+                item.player == self.player
+                # Because of the weird way they're delivered, crow items don't seem to support
+                # infused or upgraded weapons.
+                and not item.data.is_infused
+                and not item.data.is_upgraded
+            ))
 
         # The offline randomizer edits events to guarantee that Greirat won't go to Lothric until
         # Grand Archives is available, so his shop will always be available one way or another.

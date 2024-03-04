@@ -194,10 +194,15 @@ class DS3ItemData():
                 filler = False, # Don't count multiples as filler by default
             )
 
+    @property
+    def is_infused(self) -> bool:
+        """Returns whether this item is an infused weapon."""
+        return self.ds3_code - self.base_ds3_code >= 100
+
     def infuse(self, infusion: Infusion) -> "DS3ItemData":
         """Returns this item with the given infusion applied."""
         if not self.category.is_infusible: raise RuntimeError(f"{self.name} is not infusible.")
-        if self.ds3_code - self.base_ds3_code >= 100:
+        if self.is_infused:
             raise RuntimeError(f"{self.name} is already infused.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
@@ -210,12 +215,17 @@ class DS3ItemData():
             filler = False,
         )
 
+    @property
+    def is_upgraded(self) -> bool:
+        """Returns whether this item is a weapon that's upgraded beyond level 0."""
+        return (self.ds3_code - self.base_ds3_code) % 100 != 0
+
     def upgrade(self, level: int) -> "DS3ItemData":
         """Upgrades this item to the given level."""
         if not self.category.upgrade_level: raise RuntimeError(f"{self.name} is not upgradable.")
         if level > self.category.upgrade_level:
             raise RuntimeError(f"{self.name} can't be upgraded to +{level}.")
-        if (self.ds3_code - self.base_ds3_code) % 100 != 0:
+        if self.is_upgraded:
             raise RuntimeError(f"{self.name} is already upgraded.")
 
         # We can't change the name or AP code when infusing/upgrading weapons, because they both
