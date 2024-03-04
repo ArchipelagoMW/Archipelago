@@ -636,14 +636,15 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     return hints, unhinted_locations_per_area
 
 
-def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -> List[WitnessWordedHint]:
+def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
+                     already_hinted_locations: Set[Location]) -> List[WitnessWordedHint]:
     generated_hints: List[WitnessWordedHint] = []
 
     state = CollectionState(world.multiworld)
 
     # Keep track of already hinted locations. Consider early Tutorial as "already hinted"
 
-    already_hinted_locations = {
+    already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
         if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }

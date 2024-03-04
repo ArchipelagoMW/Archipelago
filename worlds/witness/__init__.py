@@ -272,6 +272,18 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
+        already_hinted_locations = set()
+
+        # Laser hints
+
+        if self.options.laser_hints:
+            laser_hints = make_laser_hints(self, StaticWitnessItems.item_groups["Lasers"])
+
+            for item_name, hint in laser_hints.items():
+                item_def = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name])
+                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
+                already_hinted_locations.add(hint.location)
+
         # Audio Log Hints
 
         hint_amount = self.options.hint_amount.value
@@ -287,7 +299,7 @@ class WitnessWorld(World):
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
-            generated_hints = create_all_hints(self, hint_amount, area_hints)
+            generated_hints = create_all_hints(self, hint_amount, area_hints, already_hinted_locations)
 
             self.random.shuffle(audio_logs)
 
@@ -310,15 +322,6 @@ class WitnessWorld(World):
         while audio_logs:
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
-
-        # Laser hints
-
-        if self.options.laser_hints:
-            laser_hints = make_laser_hints(self, StaticWitnessItems.item_groups["Lasers"])
-
-            for item_name, hint in laser_hints.items():
-                item_def = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name])
-                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
 
         # Options for the client & auto-tracker
 
