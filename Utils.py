@@ -226,7 +226,7 @@ class UniqueKeyLoader(SafeLoader):
             if key in mapping:
                 logging.error(f"YAML duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Duplicate key {key} found in YAML. Already found keys: {mapping}.")
-            if str(key).replace("@merge", "") in mapping or str(key) + "@merge" in mapping:
+            if (str(key).startswith("+") and (str(key)[1:] in mapping)) or (f"+{key}" in mapping):
                 logging.error(f"YAML merge duplicates sanity check failed{key_node.start_mark}")
                 raise KeyError(f"Equivalent key {key} found in YAML. Already found keys: {mapping}.")
             mapping.add(key)

@@ -339,8 +339,8 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
-        if option.endswith("@merge"):
-            option_name = option.replace("@merge", "")
+        if option.startswith("+"):
+            option_name = option[1:]
             new_value = new_weights[option]
             if option_name in weights:
                 if isinstance(new_value, dict):
@@ -348,7 +348,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                 elif isinstance(new_value, list):
                     new_value.extend(weights[option_name])
                 else:
-                    raise Exception(f"Cannot apply @merge to non-dict or list type {option_name}.")
+                    raise Exception(f"Cannot apply merge to non-dict or list type {option_name}.")
             cleaned_weights[option_name] = new_value
         else:
             cleaned_weights[option] = new_weights[option]
@@ -488,9 +488,9 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
 
-    if any(weight.startswith("@merge") for weight in game_weights) or \
-       any(weight.startswith("@merge") for weight in weights):
-        raise Exception(f"@merge tag cannot be used outside of trigger contexts.")
+    if any(weight.startswith("+") for weight in game_weights) or \
+       any(weight.startswith("+") for weight in weights):
+        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
