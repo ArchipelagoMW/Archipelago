@@ -1174,8 +1174,6 @@ location_tables = {
                         npc = True), # Don't forgive Patches
         DS3LocationData("CD: Shotel - Patches", "Shotel", missable = True, npc = True, shop = True),
         DS3LocationData("CD: Ember - Patches", "Ember", missable = True, npc = True, shop = True),
-        DS3LocationData("CD: Hidden Blessing - Patches", "Hidden Blessing", missable = True,
-                        npc = True, shop = True),
         DS3LocationData("CD: Horsehoof Ring - Patches", "Horsehoof Ring", missable = True,
                         npc = True, drop = True, shop = True), # (kill or buy)
     ],
@@ -1296,7 +1294,8 @@ location_tables = {
         DS3LocationData("FK: Soul of a Stray Demon - upper keep, miniboss drop",
                         "Soul of a Stray Demon", miniboss = True),
         DS3LocationData("FK: Watchdogs of Farron - Old Wolf", "Watchdogs of Farron"),
-        DS3LocationData("FS: Hawkwood's Shield - Hawkwood", "Hawkwood's Shield", missable = True,
+        DS3LocationData("FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
+                        "Hawkwood's Shield", missable = True,
                         npc = True), # Hawkwood (quest, after Greatwood, Sage, Watchers, and Deacons)
         DS3LocationData("US: Hawk Ring - Giant Archer", "Hawk Ring", drop = True,
                         npc = True), # Giant archer (kill or quest), here because you need to
@@ -1724,10 +1723,13 @@ location_tables = {
         DS3LocationData("ID: Titanite Chunk - balcony above pit, lizard", "Titanite Chunk",
                         lizard = True),
         DS3LocationData("ID: Titanite Scale - B2 far, lizard", "Titanite Scale", lizard = True),
+
+        # These are missable because of a bug that causes them to be dropped wherever the giant is
+        # randomized to, instead of where the miniboss is in vanilla.
         DS3LocationData("ID: Dung Pie - pit, miniboss drop", "Dung Pie x4",
-                        miniboss = True), # Giant slave drop
+                        miniboss = True, missable = True), # Giant slave drop
         DS3LocationData("ID: Titanite Chunk - pit, miniboss drop", "Titanite Chunk",
-                        miniboss = True), # Giant Slave Drop
+                        miniboss = True, missable = True), # Giant Slave Drop
 
         # Alva (requires ember)
         DS3LocationData("ID: Alva Helm - B3 near, by Karla's cell, after killing Alva", "Alva Helm",
@@ -1896,9 +1898,9 @@ location_tables = {
         DS3LocationData("AL: Aldrich Faithful - water reserves, talk to McDonnel", "Aldrich Faithful",
                         hidden = True), # Behind illusory wall
 
-        DS3LocationData("FS: Budding Green Blossom - shop killing Creighton and AL boss",
-                        "Budding Green Blossom",
-                        offline = '99,0:-1:110000,70000118:', missable = True, npc = True,
+        DS3LocationData("FS: Budding Green Blossom - shop after killing Creighton and AL boss",
+                        "Budding Green Blossom", offline = '99,0:-1:110000,70000118:',
+                        missable = True, npc = True,
                         shop = True), # sold by Shrine Maiden after killing Aldrich and helping
                                       # Sirris defeat Creighton
 
@@ -2301,6 +2303,10 @@ location_tables = {
                         "Sunless Gauntlets",  missable = True, npc = True, shop = True),
         DS3LocationData("FS: Sunless Leggings - shop, Sirris quest, kill GA boss",
                         "Sunless Leggings",  missable = True, npc = True, shop = True),
+
+        # Unbreakable Patches
+        DS3LocationData("FS: Hidden Blessing - Patches after searching GA", "Hidden Blessing",
+                        missable = True, npc = True, shop = True),
     ],
     "Untended Graves": [
         DS3LocationData("UG: Soul of Champion Gundyr", "Soul of Champion Gundyr", prominent = True,
@@ -2603,7 +2609,7 @@ location_tables = {
         DS3LocationData("PW2: Titanite Slab - boss drop", "Titanite Slab",
                         offline = '11,0:50004700::',
                         boss = True), # One-time drop after Friede Phase 2
-        DS3LocationData("PW2: Floating Chaos - Dunnel drop", "Floating Chaos", hostile_npc = True,
+        DS3LocationData("PW2: Floating Chaos - NPC drop", "Floating Chaos", hostile_npc = True,
                         hidden = True), # Livid Pyromancer Dunnel drop (requires ember)
         DS3LocationData("PW2: Prism Stone - pass, tree by beginning", "Prism Stone x10"),
         DS3LocationData("PW2: Titanite Chunk - pass, cliff overlooking bonfire", "Titanite Chunk"),
@@ -2836,7 +2842,7 @@ location_tables = {
                         "Twinkling Titanite"),
         DS3LocationData("RC: Soul of a Crestfallen Knight - swamp near left, nook",
                         "Soul of a Crestfallen Knight"),
-        DS3LocationData("RC: White Preacher Head - swamp near, ground near bonfire exit",
+        DS3LocationData("RC: White Preacher Head - swamp near, nook right of stairs",
                         "White Preacher Head"),
         DS3LocationData("RC: Titanite Scale - swamp far, by miniboss", "Titanite Scale"),
         DS3LocationData("RC: Dragonhead Greatshield - lower cliff, under bridge",

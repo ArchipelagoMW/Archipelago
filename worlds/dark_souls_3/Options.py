@@ -33,7 +33,7 @@ class MissableLocationsOption(Choice):
     * Unnecessary: Missable locations can't have progression items, but they can
       have useful items.
     * Unimportant: Neither progression items nor useful items can be placed in
-      missablek locations.
+      missable locations.
     * Unrandomized: Missable locations always contain the same item as in
       vanilla Dark Souls III.
 
@@ -53,7 +53,7 @@ class RandomizeWeaponLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Weapons" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Weapon Locations"
 
@@ -63,7 +63,7 @@ class RandomizeShieldLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Shields" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Shield Locations"
 
@@ -73,7 +73,7 @@ class RandomizeArmorLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Armor" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Armor Locations"
 
@@ -83,7 +83,7 @@ class RandomizeRingLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Rings" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Ring Locations"
 
@@ -93,7 +93,7 @@ class RandomizeSpellLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Spells" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Spell Locations"
 
@@ -103,7 +103,7 @@ class RandomizeKeyLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Progression" to the
     "Exclude Locations" option. It does _not_ cause the locations not be
-    randomized unless "Excluded Locations" is also set to "Original Items".
+    randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Key Locations"
 
@@ -113,7 +113,7 @@ class RandomizeBossSoulLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Boss Souls" to the
     "Exclude Locations" option. It does _not_ cause the locations not be
-    randomized unless "Excluded Locations" is also set to "Original Items".
+    randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Key Locations"
 
@@ -123,7 +123,7 @@ class RandomizeNPCLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Friendly NPC Rewards" to
     the "Exclude Locations" option. It does _not_ cause the locations not be
-    randomized unless "Excluded Locations" is also set to "Original Items".
+    randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize NPC Locations"
 
@@ -133,7 +133,7 @@ class RandomizeMiscLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Unique" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Miscellaneous Locations"
 
@@ -143,7 +143,7 @@ class RandomizeHealthLocations(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Healing" to the "Exclude
     Locations" option. It does _not_ cause the locations not be randomized
-    unless "Excluded Locations" is also set to "Original Items".
+    unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Health Locations"
 
@@ -153,7 +153,7 @@ class RandomizeProgressiveLocationsOption(DefaultOnToggle):
 
     Setting this to false is now equivalent to adding "Miscellaneous" to the
     "Exclude Locations" option. It does _not_ cause the locations not be
-    randomized unless "Excluded Locations" is also set to "Original Items".
+    randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
     display_name = "Randomize Progressive Locations"
 
