@@ -397,9 +397,9 @@ def global_rules(world, player):
         set_rule(world.get_entrance('Blind Fight', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3) and can_use_bombs(state, player))
 
     set_rule(world.get_location('Thieves\' Town - Big Chest', player),
-             lambda state: (state._lttp_has_key('Small Key (Thieves Town)', player, 3)) and state.has('Hammer', player))
+             lambda state: ((state._lttp_has_key('Small Key (Thieves Town)', player, 3)) or (location_item_name(state, 'Thieves\' Town - Big Chest', player) == ("Small Key (Thieves Town)", player)) and state._lttp_has_key('Small Key (Thieves Town)', player, 2)) and state.has('Hammer', player))
     if world.accessibility[player] != 'locations':
-        allow_self_locking_items(world.get_location('Thieves\' Town - Big Chest', player), 'Small Key (Thieves Town)')
+        set_always_allow(world.get_location('Thieves\' Town - Big Chest', player), lambda state, item: item.name == 'Small Key (Thieves Town)' and item.player == player)
 
     set_rule(world.get_location('Thieves\' Town - Attic', player), lambda state: state._lttp_has_key('Small Key (Thieves Town)', player, 3))
     set_rule(world.get_location('Thieves\' Town - Spike Switch Pot Key', player),
@@ -420,11 +420,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
     set_rule(world.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
-    if not world.enemy_shuffle[player]:
-        # Stalfos Knights can be killed by damaging them repeatedly with boomerang, swords, etc. if bombs are
-        # unavailable. If bombs are available, the pots can be thrown at them, so no other weapons are needed
-        add_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: (can_use_bombs(state, player)
-            or state.has('Blue Boomerang', player) or state.has('Red Boomerang', player) or has_sword(state, player) or state.has("Hammer", player)))
+
     set_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state._lttp_has_key('Small Key (Ice Palace)', player, 6) or (state.has('Cane of Somaria', player) and state._lttp_has_key('Small Key (Ice Palace)', player, 5))))
