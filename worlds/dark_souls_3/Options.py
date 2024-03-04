@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import json
 import typing
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, NamedRange, Toggle, VerifyKeys
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, NamedRange, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
 
 
 class ExcludedLocationsOption(Choice):
