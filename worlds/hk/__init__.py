@@ -296,6 +296,9 @@ class HKWorld(World):
                             item_name = "Left_Mothwing_Cloak"
                         else:
                             item_name = "Right_Mothwing_Cloak"
+                    if item_name == "Grimmchild2" and self.multiworld.RandomizeGrimmkinFlames[self.player] and self.multiworld.RandomizeCharms[self.player]:
+                        _add("Grimmchild1", location_name, randomized)
+                        continue
 
                     _add(item_name, location_name, randomized)
 
