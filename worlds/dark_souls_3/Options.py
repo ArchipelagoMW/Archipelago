@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import json
 import typing
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, NamedRange, Toggle, VerifyKeys
 
 
 class ExcludedLocationsOption(Choice):
@@ -233,7 +233,7 @@ class RandomizeInfusionOption(Toggle):
     display_name = "Randomize Infusion"
 
 
-class RandomizeInfusionPercentageOption(Range):
+class RandomizeInfusionPercentageOption(NamedRange):
     """The percentage of weapons/shields in the pool to be infused if Randomize Infusion is toggled"""
     display_name = "Percentage of Infused Weapons"
     range_start = 0
