@@ -1,4 +1,5 @@
 import itertools
+import logging
 import os
 import os.path
 import threading
@@ -15,6 +16,7 @@ from worlds.generic.Rules import add_item_rule, set_rule
 from .logic import SoEPlayerLogic
 from .options import Difficulty, EnergyCore, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path
+from worlds.LauncherComponents import Component, Type, components
 
 if typing.TYPE_CHECKING:
     from BaseClasses import MultiWorld, CollectionState
@@ -57,6 +59,31 @@ Item grouping currently supports
 * Weapons - Matches all weapons but Bazooka, Bone Crusher, Neutron Blade
 * Traps - Matches all traps
 """
+
+
+def launch_soe_client(*args: str) -> None:
+    """Launches the SoE client in browser, patching and launching SNI as needed."""
+    from webbrowser import open
+    from SNIClient import launch_sni
+
+    url = "http://www.evermizer.com/apclient/"
+    launch_sni()
+    for arg in args:
+        if arg.endswith(".apsoe"):
+            from Patch import create_rom_file
+            from Utils import async_start
+            from SNIClient import run_game
+
+            meta, rom_file = create_rom_file(arg)
+            async_start(run_game(rom_file))
+            url += f"#server={meta['server']}"
+
+    logging.info("Starting Evermizer Client in your Browser...")
+    open(url)
+
+
+components.append(Component("Evermizer Client", component_type=Type.CLIENT, func=launch_soe_client))
+
 
 _id_base = 64000
 _id_offset: typing.Dict[int, int] = {

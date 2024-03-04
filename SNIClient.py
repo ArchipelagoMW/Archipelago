@@ -686,13 +686,12 @@ async def main() -> None:
         args.connect = meta["server"]
         logging.info(f"Wrote rom file to {romfile}")
         if args.diff_file.endswith(".apsoe"):
-            import webbrowser
+            from time import sleep
+            from worlds.soe import launch_soe_client
             async_start(run_game(romfile))
-            await _snes_connect(SNIContext(args.snes, args.connect, args.password), args.snes, False)
-            webbrowser.open(f"http://www.evermizer.com/apclient/#server={meta['server']}")
-            logging.info("Starting Evermizer Client in your Browser...")
-            import time
-            time.sleep(3)
+            launch_soe_client()
+            sleep(3)
+
             sys.exit()
         elif args.diff_file.endswith(".aplttp"):
             from worlds.alttp.Client import get_alttp_settings
