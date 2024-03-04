@@ -173,7 +173,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
         # validate all placements and remove invalid ones
         state = sweep_from_pool(base_state, [])
         for placement in placements:
-            if multiworld.accessibility[placement.item.player] != "minimal" and not placement.can_reach(state):
+            if multiworld.worlds[placement.item.player].options.accessibility != "minimal" and not placement.can_reach(state):
                 placement.item.location = None
                 unplaced_items.append(placement.item)
                 placement.item = None
