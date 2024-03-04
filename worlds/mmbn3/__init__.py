@@ -100,9 +100,7 @@ class MMBN3World(World):
         for region_info in regions:
             region = name_to_region[region_info.name]
             for connection in region_info.connections:
-                connection_region = name_to_region[connection]
-                entrance = Entrance(self.player, connection, region)
-                entrance.connect(connection_region)
+                entrance = region.connect(name_to_region[connection])
 
                 # ACDC Pending with Start Randomizer
                 # if connection == RegionName.ACDC_Overworld:
@@ -141,7 +139,6 @@ class MMBN3World(World):
                 if connection == RegionName.WWW_Island:
                     entrance.access_rule = lambda state:\
                         state.has(ItemName.Progressive_Undernet_Rank, self.player, 8)
-                region.exits.append(entrance)
 
     def create_items(self) -> None:
         # First add in all progression and useful items
