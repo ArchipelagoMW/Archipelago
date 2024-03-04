@@ -115,7 +115,7 @@ class RandomizeBossSoulLocations(DefaultOnToggle):
     "Exclude Locations" option. It does _not_ cause the locations not be
     randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
-    display_name = "Randomize Key Locations"
+    display_name = "Randomize Boss Soul Locations"
 
 
 class RandomizeNPCLocations(DefaultOnToggle):
