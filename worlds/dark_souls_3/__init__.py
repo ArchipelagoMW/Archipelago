@@ -778,8 +778,6 @@ class DarkSouls3World(World):
             "CD: Black Eye Orb - Rosaria from Leonhard's quest",
         ], "Pale Tongue")
 
-        self._add_location_rule("CD: Black Eye Orb - Rosaria from Leonhard's quest", "Lift Chamber Key")
-
         self._add_location_rule([
             f"FS: {item} - shop after killing Leonhard"
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
