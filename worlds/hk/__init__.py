@@ -234,7 +234,7 @@ class HKWorld(World):
                 randomized_starting_items.update(items)
 
         # noinspection PyShadowingNames
-        def _add(item_name: str, location_name: str):
+        def _add(item_name: str, location_name: str, randomized: bool):
             """
             Adds a pairing of an item and location, doing appropriate checks to see if it should be vanilla or not.
             """
@@ -252,21 +252,21 @@ class HKWorld(World):
             if item_name in junk_replace:
                 item_name = self.get_filler_item_name()
 
-            item = self.create_item(item_name)
-
             if location_name == "Start":
                 if item_name in randomized_starting_items:
                     if item_name == "Focus":
                         self.create_location("Focus")
                         unfilled_locations += 1
-                    pool.append(item)
+                    pool.append(self.create_item(item_name))
                 else:
-                    self.multiworld.push_precollected(item)
+                    self.multiworld.push_precollected(self.create_item(item_name))
                 return
 
             if vanilla:
+                item = self.create_event(item_name)
                 location = self.create_vanilla_location(location_name, item)
             else:
+                item = self.create_item(item_name)
                 pool.append(item)
                 if location_name in multi_locations:  # Create shop locations later.
                     return
@@ -277,30 +277,31 @@ class HKWorld(World):
 
         for option_key, option in hollow_knight_randomize_options.items():
             randomized = getattr(self.multiworld, option_key)[self.player]
-            for item_name, location_name in zip(option.items, option.locations):
-                if item_name in junk_replace:
-                    item_name = self.get_filler_item_name()
+            if randomized or option_key not in logicless_options:
+                for item_name, location_name in zip(option.items, option.locations):
+                    if item_name in junk_replace:
+                        item_name = self.get_filler_item_name()
 
-                if (item_name == "Crystal_Heart" and self.multiworld.SplitCrystalHeart[self.player]) or \
-                        (item_name == "Mothwing_Cloak" and self.multiworld.SplitMothwingCloak[self.player]):
-                    _add("Left_" + item_name, location_name)
-                    _add("Right_" + item_name, "Split_" + location_name)
-                    continue
-                if item_name == "Mantis_Claw" and self.multiworld.SplitMantisClaw[self.player]:
-                    _add("Left_" + item_name, "Left_" + location_name)
-                    _add("Right_" + item_name, "Right_" + location_name)
-                    continue
-                if item_name == "Shade_Cloak" and self.multiworld.SplitMothwingCloak[self.player]:
-                    if self.multiworld.random.randint(0, 1):
-                        item_name = "Left_Mothwing_Cloak"
-                    else:
-                        item_name = "Right_Mothwing_Cloak"
+                    if (item_name == "Crystal_Heart" and self.multiworld.SplitCrystalHeart[self.player]) or \
+                            (item_name == "Mothwing_Cloak" and self.multiworld.SplitMothwingCloak[self.player]):
+                        _add("Left_" + item_name, location_name, randomized)
+                        _add("Right_" + item_name, "Split_" + location_name, randomized)
+                        continue
+                    if item_name == "Mantis_Claw" and self.multiworld.SplitMantisClaw[self.player]:
+                        _add("Left_" + item_name, "Left_" + location_name, randomized)
+                        _add("Right_" + item_name, "Right_" + location_name, randomized)
+                        continue
+                    if item_name == "Shade_Cloak" and self.multiworld.SplitMothwingCloak[self.player]:
+                        if self.multiworld.random.randint(0, 1):
+                            item_name = "Left_Mothwing_Cloak"
+                        else:
+                            item_name = "Right_Mothwing_Cloak"
 
-                _add(item_name, location_name)
+                    _add(item_name, location_name, randomized)
 
         if self.multiworld.RandomizeElevatorPass[self.player]:
             randomized = True
-            _add("Elevator_Pass", "Elevator_Pass")
+            _add("Elevator_Pass", "Elevator_Pass", randomized)
 
         for shop, locations in self.created_multi_locations.items():
             for _ in range(len(locations), getattr(self.multiworld, shop_to_option[shop])[self.player].value):
@@ -475,6 +476,10 @@ class HKWorld(World):
         item_data = item_table[name]
         return HKItem(name, item_data.advancement, item_data.id, item_data.type, self.player)
 
+    def create_event(self, name: str) -> HKItem:
+        item_data = item_table[name]
+        return HKItem(name, item_data.advancement, None, item_data.type, self.player)
+
     def create_location(self, name: str, vanilla=False) -> HKLocation:
         costs = None
         basename = name
@@ -493,9 +498,15 @@ class HKWorld(World):
             name = f"{name}_{i}"
 
         region = self.multiworld.get_region("Menu", self.player)
-        loc = HKLocation(self.player, name,
-                         self.location_name_to_id[name], region, costs=costs, vanilla=vanilla,
-                         basename=basename)
+
+        if vanilla:
+            loc = HKLocation(self.player, name,
+                             None, region, costs=costs, vanilla=vanilla,
+                             basename=basename)
+        else:
+            loc = HKLocation(self.player, name,
+                             self.location_name_to_id[name], region, costs=costs, vanilla=vanilla,
+                             basename=basename)
 
         if multi is not None:
             multi.append(loc)
