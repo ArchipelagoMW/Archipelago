@@ -253,8 +253,8 @@ class DarkSouls3World(World):
             if self._is_location_available(location):
                 new_location = DarkSouls3Location(self.player, location, new_region)
                 if (
-#                    location.missable and self.options.missable_locations == "unimportant"
-#                ) or (
+                    location.missable and self.options.missable_locations == "unimportant"
+                ) or (
                     # Mark Red Eye Orb as missable if Lift Chamber Key isn't randomized, because
                     # the latter is missable by default.
                     not self._is_location_available("FS: Lift Chamber Key - Leonhard")
@@ -1299,6 +1299,7 @@ class DarkSouls3World(World):
                 offworld = self._shuffle(loc for loc in locations if loc.game != "Dark Souls III")
                 onworld = sorted((loc for loc in locations if loc.game == "Dark Souls III"),
                                  key=lambda loc: loc.data.region_value)
+
                 # Give offworld regions the last (best) items within a given sphere
                 for location in onworld + offworld:
                     new_item = self._pop_item(location, item_order)
