@@ -1,9 +1,6 @@
 from .level_logic import YoshiLogic
 from worlds.generic.Rules import set_rule
 
-
-
-logic: YoshiLogic
 def set_easy_rules(world):
     logic = YoshiLogic(world)
     multiworld = world.multiworld
@@ -474,7 +471,7 @@ def set_hard_rules(world):
     set_rule(multiworld.get_location("Watch Out For Lakitu: Flowers", player), lambda state: state.has_all({'Key', 'Train Morph'}, player))
 
     set_rule(multiworld.get_location("The Cave Of The Mystery Maze: Red Coins", player), lambda state: state.has_all({'Large Spring Ball'}, player))
-    set_rule(multiworld.get_location("The Cave Of The Mystery Maze: Flowers", player), lambda state: state.has_all({'Large Spring Ball','Egg Launcher'}, player))
+    set_rule(multiworld.get_location("The Cave Of The Mystery Maze: Flowers", player), lambda state: state.has_all({'Large Spring Ball'}, player))
     set_rule(multiworld.get_location("The Cave Of The Mystery Maze: Level Clear", player), lambda state: state.has_all({'Large Spring Ball'}, player))
 
     set_rule(multiworld.get_location("Lakitu's Wall: Flowers", player), lambda state: state.has_all({'! Switch'}, player))

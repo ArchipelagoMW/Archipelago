@@ -115,7 +115,7 @@ def init_areas(world, locations: Tuple[LocationData, ...]):
         regions.insert(19, create_region(multiworld, player, locations_per_region, location_cache, "1-Bonus"))
     multiworld.regions += regions
 
-    connectStartingRegion(multiworld, player, world)
+    connect_starting_region(world)
 
     bosses = BossReqs(player, world)
 
@@ -201,19 +201,12 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
 
     return region
 
-def connectStartingRegion(multiworld: MultiWorld, player: int, world):
-    menu = multiworld.get_region('Menu', player)
-    world_main = multiworld.get_region('Overworld', player)
-
-    starting_region = multiworld.get_region(f'World {world.options.starting_world.value + 1}', player)
-
-    load_file = Entrance(player, 'Overworld', menu)
-    load_file.connect(world_main)
+def connect_starting_region(world):
+    menu = world.multiworld.get_region("Menu", world.player)
+    world_main = world.multiworld.get_region("Overworld", world.player)
+    starting_region = world.multiworld.get_region(f"World {world.options.starting_world + 1}", world.player)
     menu.connect(world_main, "Start Game")
-
-    starting_world = Entrance(player, 'Overworld', world_main)
-    starting_world.connect(starting_region)
-    world_main.connect(starting_region, "Overworld")
+    world_main.connect(starting_region)
 
 
 def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
