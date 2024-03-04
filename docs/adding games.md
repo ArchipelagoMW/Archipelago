@@ -20,7 +20,8 @@ order to behave as expected are as follows:
 * Detect and react when a location has been "checked" by the player by sending a network packet to the server
 * Receive and parse network packets when the player receives an item from the server, and reward it to the player on
 demand
-  * **Any** item can be received any number of times, up to and far surpassing those that the game might normally expect
+  * **Any** of your items can be received any number of times, up to and far surpassing those that the game might
+normally expect
   * Items can be sent from the server and so might not have a player or location attributed to them
 * Be able to change the port for saved connection info
   * Rooms hosted on the website attempt to reserve their port, but since there are a limited amount of numbers, this
@@ -46,23 +47,28 @@ following requirements:
 
 * a folder within `/worlds/` that contains an `__init__.py`
 * A `World` subclass where you create your world and define all of its rules
+* A unique game name
+* For webhost documentation and behaviors, a `WebWorld` subclass that must be instantiated in the `World` class 
+definition
+  * the game_info doc must follow the format `{language_code}_{game_name}.md`
 * A mapping for items and locations defining their names and id's for clients to be able to identify them, 
 `item_name_to_id` and `location_name_to_id`, respectively
 * Create an item when `create_item` is called both by your code and externally
 * An `options_dataclass` defining the options players have available to them.
 * A "Menu" Region
-* Define a non-zero amount of locations
-* Define a non-zero amount of items **equal** to the number of locations
-* All items submitted to the multiworld must not be manually placed by the World. If you need to place specific 
-items, just place the items without ever telling the multiworld about them.
+* Create a non-zero amount of locations and add them to your regions
+* Create a non-zero amount of items **equal** to the amount of locations and add them to the multiworld itempool
+* All items submitted to the multiworld itempool must not be manually placed by the World. If you need to place specific 
+items, there are multiple ways to do so, but they should not be added to the multiworld itempool.
 
 Notable caveats:
 * The "Menu" region will always be considered the "start" for the player
 * The "Menu" region is *always* considered accessible; i.e. the player is expected to always be able to return to the
 start of the game from anywhere
-* When submitting regions or items to the multiworld, use `append`, `extend`, or `+=`. **Do not use `=`**
-* Regions are simply containers for locations and do not have to map to real regions in your game. They can be as real
-or as abstract as you like and works for your use case.
+* When submitting regions or items to the multiworld (multiworld.regions and multiworld.itempool respectively), use 
+`append`, `extend`, or `+=`. **Do not use `=`**
+* Regions are simply containers for locations that share similar access rules. They do not have to map to 
+concrete, physical areas within your game and can be more abstract like tech trees or a quest line.
 
 The base World class can be found in [AutoWorld](/worlds/AutoWorld.py). Methods available for your world to call during
 generation can be found in [BaseClasses](/BaseClasses.py) and [Fill](/Fill.py). Some examples and documentation 
