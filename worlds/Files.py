@@ -102,7 +102,7 @@ class APContainer:
                 message = ""
                 if len(e.args):
                     arg0 = e.args[0]
-                    if isinstance(e.args[0], str):
+                    if isinstance(arg0, str):
                         message = f"{arg0} - "
                 raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
