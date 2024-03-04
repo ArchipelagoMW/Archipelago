@@ -110,13 +110,13 @@ class StaticWitnessLocations:
         "Town Red Rooftop 5",
         "Town Wooden Roof Lower Row 5",
         "Town Wooden Rooftop",
-        "Town Windmill Entry Panel",
+        "Windmill Entry Panel",
         "Town RGB House Entry Panel",
         "Town Laser Panel",
 
-        "Town RGB Room Left",
-        "Town RGB Room Right",
-        "Town Sound Room Right",
+        "Town RGB House Upstairs Left",
+        "Town RGB House Upstairs Right",
+        "Town RGB House Sound Room Right",
 
         "Windmill Theater Entry Panel",
         "Theater Exit Left Panel",
@@ -134,8 +134,8 @@ class StaticWitnessLocations:
         "Jungle Popup Wall 6",
         "Jungle Laser Panel",
 
-        "River Vault Box",
-        "River Monastery Garden Shortcut Panel",
+        "Jungle Vault Box",
+        "Jungle Monastery Garden Shortcut Panel",
 
         "Bunker Entry Panel",
         "Bunker Intro Left 5",
@@ -177,7 +177,7 @@ class StaticWitnessLocations:
         "Mountainside Vault Box",
         "Mountaintop River Shape",
 
-        "First Hallway EP",
+        "Tutorial First Hallway EP",
         "Tutorial Cloud EP",
         "Tutorial Patio Flowers EP",
         "Tutorial Gate EP",
@@ -185,7 +185,7 @@ class StaticWitnessLocations:
         "Outside Tutorial Town Sewer EP",
         "Outside Tutorial Path EP",
         "Outside Tutorial Tractor EP",
-        "Main Island Thundercloud EP",
+        "Mountainside Thundercloud EP",
         "Glass Factory Vase EP",
         "Symmetry Island Glass Factory Black Line Reflection EP",
         "Symmetry Island Glass Factory Black Line EP",
@@ -242,9 +242,9 @@ class StaticWitnessLocations:
         "Monastery Left Shutter EP",
         "Monastery Middle Shutter EP",
         "Monastery Right Shutter EP",
-        "Town Windmill First Blade EP",
-        "Town Windmill Second Blade EP",
-        "Town Windmill Third Blade EP",
+        "Windmill First Blade EP",
+        "Windmill Second Blade EP",
+        "Windmill Third Blade EP",
         "Town Tower Underside Third EP",
         "Town Tower Underside Fourth EP",
         "Town Tower Underside First EP",
@@ -268,10 +268,10 @@ class StaticWitnessLocations:
         "Jungle Tree Halo EP",
         "Jungle Bamboo CCW EP",
         "Jungle Bamboo CW EP",
-        "River Green Leaf Moss EP",
-        "River Monastery Garden Left EP",
-        "River Monastery Garden Right EP",
-        "River Monastery Wall EP",
+        "Jungle Green Leaf Moss EP",
+        "Monastery Garden Left EP",
+        "Monastery Garden Right EP",
+        "Monastery Wall EP",
         "Bunker Tinted Door EP",
         "Bunker Green Room Flowers EP",
         "Swamp Purple Sand Middle EP",
@@ -330,12 +330,12 @@ class StaticWitnessLocations:
         "Treehouse Obelisk Side 4",
         "Treehouse Obelisk Side 5",
         "Treehouse Obelisk Side 6",
-        "River Obelisk Side 1",
-        "River Obelisk Side 2",
-        "River Obelisk Side 3",
-        "River Obelisk Side 4",
-        "River Obelisk Side 5",
-        "River Obelisk Side 6",
+        "Mountainside Obelisk Side 1",
+        "Mountainside Obelisk Side 2",
+        "Mountainside Obelisk Side 3",
+        "Mountainside Obelisk Side 4",
+        "Mountainside Obelisk Side 5",
+        "Mountainside Obelisk Side 6",
         "Quarry Obelisk Side 1",
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
@@ -407,13 +407,13 @@ class StaticWitnessLocations:
         "Mountain Floor 2 Elevator Discard",
         "Mountain Bottom Floor Giant Puzzle",
 
-        "Mountain Bottom Floor Final Room Entry Left",
-        "Mountain Bottom Floor Final Room Entry Right",
+        "Mountain Bottom Floor Pillars Room Entry Left",
+        "Mountain Bottom Floor Pillars Room Entry Right",
 
         "Mountain Bottom Floor Caves Entry Panel",
 
-        "Mountain Final Room Left Pillar 4",
-        "Mountain Final Room Right Pillar 4",
+        "Mountain Bottom Floor Left Pillar 4",
+        "Mountain Bottom Floor Right Pillar 4",
 
         "Challenge Vault Box",
         "Theater Challenge Video",
@@ -438,12 +438,12 @@ class StaticWitnessLocations:
         "Treehouse Obelisk Side 4",
         "Treehouse Obelisk Side 5",
         "Treehouse Obelisk Side 6",
-        "River Obelisk Side 1",
-        "River Obelisk Side 2",
-        "River Obelisk Side 3",
-        "River Obelisk Side 4",
-        "River Obelisk Side 5",
-        "River Obelisk Side 6",
+        "Mountainside Obelisk Side 1",
+        "Mountainside Obelisk Side 2",
+        "Mountainside Obelisk Side 3",
+        "Mountainside Obelisk Side 4",
+        "Mountainside Obelisk Side 5",
+        "Mountainside Obelisk Side 6",
         "Quarry Obelisk Side 1",
         "Quarry Obelisk Side 2",
         "Quarry Obelisk Side 3",
@@ -458,6 +458,8 @@ class StaticWitnessLocations:
     }
 
     ALL_LOCATIONS_TO_ID = dict()
+
+    AREA_LOCATION_GROUPS = dict()
 
     @staticmethod
     def get_id(chex: str):
@@ -490,6 +492,10 @@ class StaticWitnessLocations:
 
         for key, item in all_loc_to_id.items():
             self.ALL_LOCATIONS_TO_ID[key] = item
+
+        for loc in all_loc_to_id:
+            area = StaticWitnessLogic.ENTITIES_BY_NAME[loc]["area"]["name"]
+            self.AREA_LOCATION_GROUPS.setdefault(area, []).append(loc)
 
 
 class WitnessPlayerLocations:
@@ -563,3 +569,6 @@ class WitnessPlayerLocations:
         entity_hex = StaticWitnessLogic.ENTITIES_BY_NAME[entity_name]["entity_hex"]
         self.CHECK_LOCATION_TABLE[entity_hex] = entity_name
         self.CHECK_PANELHEX_TO_ID[entity_hex] = StaticWitnessLocations.get_id(entity_hex)
+
+
+StaticWitnessLocations()

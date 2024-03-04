@@ -2,16 +2,17 @@
 Archipelago init file for The Witness
 """
 import dataclasses
-from typing import Dict, Optional
 
+from typing import Dict, Optional
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
-from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
-    get_priority_hint_items, make_hints, generate_joke_hints
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
 from .static_logic import StaticWitnessLogic
+from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
+    get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
+    make_extra_location_hints, create_all_hints
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
@@ -43,10 +44,6 @@ class WitnessWorld(World):
     """
     game = "The Witness"
     topology_present = False
-
-    StaticWitnessLogic()
-    StaticWitnessLocations()
-    StaticWitnessItems()
     web = WitnessWebWorld()
 
     options_dataclass = TheWitnessOptions
@@ -57,6 +54,7 @@ class WitnessWorld(World):
     }
     location_name_to_id = StaticWitnessLocations.ALL_LOCATIONS_TO_ID
     item_name_groups = StaticWitnessItems.item_groups
+    location_name_groups = StaticWitnessLocations.AREA_LOCATION_GROUPS
 
     required_client_version = (0, 4, 4)
 
@@ -191,8 +189,8 @@ class WitnessWorld(World):
         # Then, add checks in order until the required amount of sphere 1 checks is met.
 
         extra_checks = [
-            ("First Hallway Room", "First Hallway Bend"),
-            ("First Hallway", "First Hallway Straight"),
+            ("Tutorial First Hallway Room", "Tutorial First Hallway Bend"),
+            ("Tutorial First Hallway", "Tutorial First Hallway Straight"),
             ("Desert Outside", "Desert Surface 1"),
             ("Desert Outside", "Desert Surface 2"),
         ]
@@ -277,26 +275,35 @@ class WitnessWorld(World):
         hint_amount = self.options.hint_amount.value
 
         credits_hint = (
-            "This Randomizer is brought to you by",
-            "NewSoupVi, Jarno, blastron,",
-            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1
+            "This Randomizer is brought to you by\n"
+            "NewSoupVi, Jarno, blastron,\n",
+            "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
         )
 
         audio_logs = get_audio_logs().copy()
 
         if hint_amount:
-            generated_hints = make_hints(self, hint_amount, self.own_itempool)
+            area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
+
+            generated_hints = create_all_hints(self, hint_amount, area_hints)
 
             self.random.shuffle(audio_logs)
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
-            for _ in range(0, hint_amount):
-                hint = generated_hints.pop(0)
+            for hint in generated_hints:
+                location = hint.location
+                area_amount = hint.area_amount
+
+                # None if junk hint, address if location hint, area string if area hint
+                arg_1 = location.address if location else (hint.area if hint.area else None)
+
+                # self.player if junk hint, player if location hint, progression amount if area hint
+                arg_2 = area_amount if area_amount is not None else (location.player if location else self.player)
 
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
-                    self.log_ids_to_hints[int(audio_log, 16)] = hint
+                    self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, arg_1, arg_2)
 
         if audio_logs:
             audio_log = audio_logs.pop()
