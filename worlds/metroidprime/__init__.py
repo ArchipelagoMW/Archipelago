@@ -55,20 +55,21 @@ class MetroidPrimeWorld(World):
             self.multiworld.itempool += [self.create_item(i)]
             items_added += 1
         excluded = self.options.exclude_items
-        spring = self.options.spring_ball
+        spring = int(self.options.spring_ball)
+        if spring == 1:
+            self.multiworld.itempool += [self.create_item("Spring Ball")]
+            items_added += 1
         for i in suit_upgrade_table:
             if i == "Power Beam" or i == "Scan Visor" or i == "Power Suit" or i == "Combat Visor":
                 self.multiworld.push_precollected(self.create_item(i))
             elif i in excluded.keys():
                 continue
-            elif i == "Spring Ball" and spring == 1:
-                self.multiworld.itempool += [self.create_item("Spring Ball")]
-                items_added += 1
-                continue
             elif i == "Missile Expansion":
                 for j in range(0, 8):
                     self.multiworld.itempool += [self.create_item('Missile Expansion', True)]
                 items_added += 8
+            elif i == "Spring Ball":
+                continue
             elif i == "Energy Tank":
                 for j in range(0, 8):
                     self.multiworld.itempool += [self.create_item("Energy Tank", True)]
