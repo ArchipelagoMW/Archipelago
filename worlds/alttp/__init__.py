@@ -256,6 +256,7 @@ class ALTTPWorld(World):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
+        self.pushed_shop_inventories = threading.Event()
         self.has_progressive_bows = False
         self.dungeons = {}
         self.waterfall_fairy_bottle_fill = "Bottle"
@@ -508,8 +509,8 @@ class ALTTPWorld(World):
         fill_dungeons_restrictive(world)
 
     @classmethod
-    def stage_post_fill(cls, world):
-        push_shop_inventories(world)
+    def stage_generate_output(cls, multiworld, output_directory):
+        push_shop_inventories(multiworld)
 
     @property
     def use_enemizer(self) -> bool:
@@ -523,6 +524,9 @@ class ALTTPWorld(World):
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
         player = self.player
+
+        self.pushed_shop_inventories.wait()
+
         try:
             use_enemizer = self.use_enemizer
 
