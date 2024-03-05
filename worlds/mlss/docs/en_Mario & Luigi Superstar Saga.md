@@ -38,7 +38,7 @@ In total, this requires:
 - All 3 Chuckola Fruits
 - Membership Card OR Red Goblet
 
-## What items and locations get shuffled?
+## What items and locations can get shuffled?
 
 Locations in which items can be found:
 - All Item Blocks and Coin Blocks
