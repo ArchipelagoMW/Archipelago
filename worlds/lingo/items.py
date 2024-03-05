@@ -2,12 +2,8 @@ from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
 
 from BaseClasses import Item, ItemClassification
-from .options import ShuffleDoors, SunwarpAccess
-from .static_logic import DOORS_BY_ROOM, PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, \
-    get_door_item_id, get_progressive_item_id, get_special_item_id
-
-if TYPE_CHECKING:
-    from . import LingoWorld
+from .static_logic import DOORS_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, get_door_item_id, \
+    get_progressive_item_id, get_special_item_id
 
 
 class ItemType(Enum):

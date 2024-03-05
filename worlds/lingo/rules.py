@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 
-from BaseClasses import CollectionState, ItemClassification
-from .items import LingoItem
+from BaseClasses import CollectionState
 from .options import SunwarpAccess
 from .player_logic import AccessRequirements, LingoPlayerLogic, PlayerLocation
-from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, EntranceType, RoomAndDoor
+from .static_logic import PROGRESSION_BY_ROOM, PROGRESSIVE_ITEMS, RoomAndDoor
 
 if TYPE_CHECKING:
     from . import LingoWorld
