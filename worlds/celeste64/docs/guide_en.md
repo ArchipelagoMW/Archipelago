@@ -15,7 +15,7 @@
 
 3. For the `SlotName` field, enter your "name" field from the yaml or website config.
 
-4. For the `Password` field, enter the server password if one exists; otherwise leave this field blank blank.
+4. For the `Password` field, enter the server password if one exists; otherwise leave this field blank.
 
 5. Save the file, and run `Celeste64.exe`. If you can continue past the title screen, then you are successfully connected.
 
