@@ -50,8 +50,8 @@ class TestResolvePlayerName(unittest.TestCase):
         command = '/help'
 
         processor(command)
-        assert f'>{command}<' not in logged_outputs
+        self.assertNotIn(f'>{command}<', logged_outputs)
 
         processor.echo_commands = True
         processor(command)
-        assert f'>{command}<' in logged_outputs
+        self.assertIn(f'>{command}<', logged_outputs)
