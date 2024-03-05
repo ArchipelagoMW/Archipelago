@@ -1463,7 +1463,9 @@ def is_mod_installed_correctly() -> bool:
         check_game_install_path()
     sc2_path: str = os.environ["SC2PATH"]
     mapdir = sc2_path / Path('Maps/ArchipelagoCampaign')
-    mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerWoL", "ArchipelagoTriggers"]
+    mods = ["ArchipelagoCore", "ArchipelagoPlayer", "ArchipelagoPlayerSuper", "ArchipelagoPatches",
+            "ArchipelagoTriggers", "ArchipelagoPlayerWoL", "ArchipelagoPlayerHotS",
+            "ArchipelagoPlayerLotV", "ArchipelagoPlayerLotVPrologue", "ArchipelagoPlayerNCO"]
     modfiles = [sc2_path / Path("Mods/" + mod + ".SC2Mod") for mod in mods]
     wol_required_maps: typing.List[str] = ["WoL" + os.sep + mission.map_file + ".SC2Map" for mission in SC2Mission
                          if mission.campaign in (SC2Campaign.WOL, SC2Campaign.PROPHECY)]
