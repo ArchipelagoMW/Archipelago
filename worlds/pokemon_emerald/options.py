@@ -781,6 +781,8 @@ class RandomizeMusic(Toggle):
 class RandomizeFanfares(Toggle):
     """
     Shuffles fanfares for item pickups, healing at the pokecenter, etc.
+
+    When this option is enabled, pressing B will interrupt most fanfares.
     """
     display_name = "Randomize Fanfares"
 

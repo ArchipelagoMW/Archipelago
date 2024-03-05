@@ -130,7 +130,8 @@ on the second floor of Pokemon Centers.
 - Changed `tm_tutor_compatibility` to be a percent chance instead of a choice. Use `-1` for vanilla.
 - Changed `hm_compatibility` to be a percent chance instead of a choice. Use `-1` for vanilla.
 - New option `music`. Shuffles all looping music. Includes FRLG tracks and possibly some unused stuff.
-- New option `fanfares`. Shuffles all fanfares. Includes FRLG tracks.
+- New option `fanfares`. Shuffles all fanfares. Includes FRLG tracks. When this is enabled, pressing B will interrupt
+most fanfares.
 - New option `purge_spinners`. Trainers that change which direction they face will do so predictably, and will no longer
 turn to face you when you run.
 - New option `normalize_encounter_rates`. Sets every encounter slot to (almost) equal probability. Does NOT make every
@@ -146,7 +147,6 @@ species equally likely to appear, but makes rare encounters less rare.
 - Waking Rayquaza is no longer required. After releasing Kyogre, going to Sootopolis will immediately trigger the
 Rayquaza cutscene.
 - Renamed some locations to be more accurate.
-- Most fanfares can be interrupted by pressing B.
 - Most trainers will no longer ask to be registered in your Pokegear after battle. Also removed most step-based match
 calls.
 - Removed a ledge on Route 123. With careful routing, it's now possible to check every location without having to save
