@@ -1,4 +1,5 @@
 import math
+from typing import TextIO
 
 import worlds.LauncherComponents as LauncherComponents
 from BaseClasses import ItemClassification, Region
@@ -497,6 +498,9 @@ class OpenRCT2World(World):
         self.multiworld.get_location("Victory", self.player).place_locked_item(
             OpenRCT2Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
+
+    def write_spoiler(self, spoiler_handle: TextIO) -> None:
+        spoiler_handle.write(f'Starting Ride:       {self.starting_ride}\n')
 
     def fill_slot_data(self):
         # archipelago_objectives = {Guests: [300, false], ParkValue: [0, false], RollerCoasters: [5,2,2,2,0,false],
