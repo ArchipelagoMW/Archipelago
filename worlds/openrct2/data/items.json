@@ -387,7 +387,8 @@
         "Classic Mini Roller Coaster",
         "Giga Coaster",
         "Inverted Impulse Coaster",
-        "Vertical Drop Coaster"
+        "Vertical Drop Coaster",
+        "Alpine Roller Coaster"
     ],
     "requires_height": [
         "Enterprise",
