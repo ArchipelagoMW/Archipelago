@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 import abc
-import logging
-from copy import deepcopy
-from dataclasses import dataclass
 import functools
+import logging
 import math
 import numbers
 import random
 import typing
 from copy import deepcopy
+from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results
+from Utils import get_fuzzy_results, is_iterable_of_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -59,6 +58,7 @@ class AssembleOptions(abc.ABCMeta):
                 def verify(self, *args, **kwargs) -> None:
                     for f in verifiers:
                         f(self, *args, **kwargs)
+
                 attrs["verify"] = verify
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
@@ -183,6 +183,7 @@ class FreeText(Option[str]):
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
+
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -598,7 +599,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
-        if not(PlandoOptions.bosses & plando_options):
+        if not (PlandoOptions.bosses & plando_options):
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
@@ -727,7 +728,7 @@ class SpecialRange(NamedRange):
                   "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
                   "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
                   "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls, value)
+        return super().__new__(cls)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -765,7 +766,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     value: typing.Any
 
     @classmethod
-    def verify_keys(cls, data: typing.List[str]):
+    def verify_keys(cls, data: typing.Iterable[str]) -> None:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
@@ -843,11 +844,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.List[typing.Any] = []
+    default: typing.Union[typing.List[typing.Any], typing.Tuple[typing.Any, ...]] = ()
     supports_weighting = False
 
-    def __init__(self, value: typing.List[typing.Any]):
-        self.value = deepcopy(value)
+    def __init__(self, value: typing.Iterable[str]):
+        self.value = list(deepcopy(value))
         super(OptionList, self).__init__()
 
     @classmethod
@@ -856,7 +857,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
+        if is_iterable_of_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -882,7 +883,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if isinstance(data, (list, set, frozenset)):
+        if is_iterable_of_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -932,7 +933,7 @@ class OptionsMetaProperty(type):
                 bases: typing.Tuple[type, ...],
                 attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
         for attr_type in attrs.values():
-            assert not isinstance(attr_type, AssembleOptions),\
+            assert not isinstance(attr_type, AssembleOptions), \
                 f"Options for {name} should be type hinted on the class, not assigned"
         return super().__new__(mcs, name, bases, attrs)
 
@@ -1108,6 +1109,11 @@ class PerGameCommonOptions(CommonOptions):
     exclude_locations: ExcludeLocations
     priority_locations: PriorityLocations
     item_links: ItemLinks
+
+
+@dataclass
+class DeathLinkMixin:
+    death_link: DeathLink
 
 
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
