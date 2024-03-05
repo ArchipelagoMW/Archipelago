@@ -252,21 +252,21 @@ class HKWorld(World):
             if item_name in junk_replace:
                 item_name = self.get_filler_item_name()
 
+            item = self.create_item(item_name) if not vanilla or location_name == "Start" else self.create_event(item_name)
+
             if location_name == "Start":
                 if item_name in randomized_starting_items:
                     if item_name == "Focus":
                         self.create_location("Focus")
                         unfilled_locations += 1
-                    pool.append(self.create_item(item_name))
+                    pool.append(item)
                 else:
-                    self.multiworld.push_precollected(self.create_item(item_name))
+                    self.multiworld.push_precollected(item)
                 return
 
             if vanilla:
-                item = self.create_event(item_name)
                 location = self.create_vanilla_location(location_name, item)
             else:
-                item = self.create_item(item_name)
                 pool.append(item)
                 if location_name in multi_locations:  # Create shop locations later.
                     return
