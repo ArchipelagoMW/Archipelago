@@ -717,13 +717,22 @@ class CollectionState():
             assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
             if resolution_hint == 'Location':
-                spot = self.multiworld.get_location(spot, player)
+                return self.can_reach_location(spot, player)
             elif resolution_hint == 'Entrance':
-                spot = self.multiworld.get_entrance(spot, player)
+                return self.can_reach_entrance(spot, player)
             else:
                 # default to Region
-                spot = self.multiworld.get_region(spot, player)
+                return self.can_reach_region(spot, player)
         return spot.can_reach(self)
+
+    def can_reach_location(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_location(spot, player).can_reach(self)
+
+    def can_reach_entrance(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_entrance(spot, player).can_reach(self)
+
+    def can_reach_region(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:

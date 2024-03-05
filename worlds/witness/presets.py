@@ -32,6 +32,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": PuzzleSkipAmount.default,
         "hint_amount": HintAmount.default,
+        "area_hint_percentage": AreaHintPercentage.default,
+        "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
     },
 
@@ -64,6 +66,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
         "hint_amount": HintAmount.default,
+        "area_hint_percentage": AreaHintPercentage.default,
+        "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
     },
 
@@ -96,6 +100,8 @@ witness_option_presets: Dict[str, Dict[str, Any]] = {
         "trap_percentage": TrapPercentage.default,
         "puzzle_skip_amount": 15,
         "hint_amount": HintAmount.default,
+        "area_hint_percentage": AreaHintPercentage.default,
+        "laser_hints": LaserHints.default,
         "death_link": DeathLink.default,
     },
 }
