@@ -56,11 +56,6 @@ Items that can be shuffled:
 - All key items (Beanfruits, Beanbean Brooch, Hammers etc.)
 - All Extra Gears (Great Force, Gameboy Horror SP etc.)
 
-## Which items can be in another player's world?
-
-Any shuffled item can be in other players' worlds.
-
-
 ## What does another world's item look like in Mario & Luigi: Superstar Saga?
 
 Items will show up as a Golden Mushroom from boxes and digspots and "AP Item" in all textboxes.
