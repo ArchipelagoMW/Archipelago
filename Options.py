@@ -728,7 +728,7 @@ class SpecialRange(NamedRange):
                   "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
                   "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
                   "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls, value)
+        return super().__new__(cls)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
