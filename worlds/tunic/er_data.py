@@ -321,7 +321,7 @@ portal_mapping: List[Portal] = [
            destination="Fortress Main_Big Door"),
     Portal(name="Fortress Courtyard to East Fortress", region="Fortress Courtyard Upper",
            destination="Fortress East_"),
-    Portal(name="Fortress Courtyard to Beneath the Earth", region="Fortress Exterior near cave",
+    Portal(name="Fortress Courtyard to Beneath the Vault", region="Beneath the Vault Entry",
            destination="Fortress Basement_"),
     Portal(name="Fortress Courtyard to Forest Belltower", region="Fortress Exterior from East Forest",
            destination="Forest Belltower_"),
@@ -330,9 +330,9 @@ portal_mapping: List[Portal] = [
     Portal(name="Fortress Courtyard Shop", region="Fortress Exterior near cave",
            destination="Shop_"),
     
-    Portal(name="Beneath the Earth to Fortress Interior", region="Beneath the Vault Back",
+    Portal(name="Beneath the Vault to Fortress Interior", region="Beneath the Vault Back",
            destination="Fortress Main_"),
-    Portal(name="Beneath the Earth to Fortress Courtyard", region="Beneath the Vault Front",
+    Portal(name="Beneath the Vault to Fortress Courtyard", region="Beneath the Vault Ladder Exit",
            destination="Fortress Courtyard_"),
     
     Portal(name="Fortress Interior Main Exit", region="Eastern Vault Fortress",
@@ -634,8 +634,10 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Fortress Exterior from East Forest": RegionInfo("Fortress Courtyard"),
     "Fortress Exterior from Overworld": RegionInfo("Fortress Courtyard"),
     "Fortress Exterior near cave": RegionInfo("Fortress Courtyard"),  # where the shop and beneath the earth entry are
+    "Beneath the Vault Entry": RegionInfo("Fortress Courtyard"),
     "Fortress Courtyard": RegionInfo("Fortress Courtyard"),
     "Fortress Courtyard Upper": RegionInfo("Fortress Courtyard"),
+    "Beneath the Vault Ladder Exit": RegionInfo("Fortress Basement"),
     "Beneath the Vault Front": RegionInfo("Fortress Basement"),  # the vanilla entry point
     "Beneath the Vault Back": RegionInfo("Fortress Basement"),  # the vanilla exit point
     "Eastern Vault Fortress": RegionInfo("Fortress Main"),
@@ -780,11 +782,11 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Fortress Courtyard Upper", "Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
          "Fortress Exterior near cave", "Fortress Courtyard"],
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard"):
+     "Fortress Exterior near cave", "Fortress Courtyard", "Beneath the Vault Entry"):
         ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard"],
-    ("Beneath the Vault Front", "Beneath the Vault Back"):
-        ["Beneath the Vault Front", "Beneath the Vault Back"],
+         "Fortress Exterior near cave", "Fortress Courtyard", "Beneath the Vault Entry"],
+    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
+        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
     ("Fortress East Shortcut Upper",):
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
     ("Eastern Vault Fortress",):
@@ -889,11 +891,11 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper"):
+     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
         ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper"],
-    ("Beneath the Vault Front", "Beneath the Vault Back"):
-        ["Beneath the Vault Front", "Beneath the Vault Back"],
+         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"],
+    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
+        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
     ("Fortress East Shortcut Upper", "Fortress East Shortcut Lower"):
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],
     ("Eastern Vault Fortress", "Eastern Vault Fortress Gold Door"):
@@ -1006,11 +1008,11 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     # can use ice grapple or ladder storage to get from any ladder to upper
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper"):
+     "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
         ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
-         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper"],
-    ("Beneath the Vault Front", "Beneath the Vault Back"):
-        ["Beneath the Vault Front", "Beneath the Vault Back"],
+         "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"],
+    ("Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"):
+        ["Beneath the Vault Front", "Beneath the Vault Back", "Beneath the Vault Ladder Exit"],
     # can ice grapple up
     ("Fortress East Shortcut Upper", "Fortress East Shortcut Lower"):
         ["Fortress East Shortcut Upper", "Fortress East Shortcut Lower"],

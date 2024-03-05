@@ -118,6 +118,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         or can_ladder_storage(state, player, options)
     multiworld.get_entrance("East Overworld -> Beneath the Vault", player).access_rule = \
         lambda state: has_lantern(state, player, options) \
+        and state.has("Ladder to Beneath the Vault", player) \
         and (can_ladder_storage(state, player, options)
              or has_ability(state, player, prayer, options, ability_unlocks)
              or state.has(laurels, player))

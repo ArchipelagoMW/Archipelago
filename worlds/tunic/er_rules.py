@@ -601,6 +601,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Fortress Exterior near cave"],
         rule=lambda state: state.has(laurels, player) or has_ability(state, player, prayer, options, ability_unlocks))
 
+    regions["Fortress Exterior near cave"].connect(
+        connecting_region=regions["Beneath the Vault Entry"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
+    regions["Beneath the Vault Entry"].connect(
+        connecting_region=regions["Fortress Exterior near cave"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
+
     regions["Fortress Courtyard"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"],
         rule=lambda state: state.has(laurels, player))
@@ -619,6 +626,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Fortress Courtyard Upper"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"])
+
+    regions["Beneath the Vault Ladder Exit"].connect(
+        connecting_region=regions["Beneath the Vault Front"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
+    regions["Beneath the Vault Front"].connect(
+        connecting_region=regions["Beneath the Vault Ladder Exit"],
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
     regions["Beneath the Vault Front"].connect(
         connecting_region=regions["Beneath the Vault Back"],
