@@ -1,4 +1,4 @@
-# Archipelago API
+# Archipelago World API
 
 This document tries to explain some aspects of the Archipelago World API used when implementing the generation logic of
 a game.

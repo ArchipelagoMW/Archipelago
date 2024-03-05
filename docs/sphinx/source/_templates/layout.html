@@ -1,11 +1,12 @@
 {% block head %}
-    <link rel="stylesheet" type="text/css" href="_static/styles/themes/stone.css"/>
-    <link rel="stylesheet" type="text/css" href="_static/styles/themes/base.css"/>
     <link rel="stylesheet" type="text/css" href="_static/styles/tooltip.css"/>
     <link rel="stylesheet" type="text/css" href="_static/styles/cookieNotice.css"/>
     <link rel="stylesheet" type="text/css" href="_static/styles/globalStyles.css"/>
     <script type="application/ecmascript" src="_static/assets/styleController.js"></script>
     <script type="application/ecmascript" src="_static/assets/cookieNotice.js"></script>
+    <link rel="stylesheet" type="text/css" href="_static/styles/markdown.css"/>
+    <link rel="stylesheet" type="text/css" href="_static/styles/themes/stone.css"/>
+    <link rel="stylesheet" type="text/css" href="_static/styles/themes/base.css"/>
     <script type="application/ecmascript" src="_static/assets/baseHeader.js"></script>
 {% endblock %}
 
@@ -82,7 +83,6 @@
 {%- endmacro %}
 
 {%- macro sidebar() %}
-{%- if render_sidebar %}
 <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
     <div class="sphinxsidebarwrapper">
         {%- block sidebarlogo %}
@@ -118,7 +118,6 @@
     </div>
     {%- block sidebarextra %}{%- endblock %}
 </div>
-{%- endif %}
 {%- endmacro %}
 
 {%- macro script() %}
@@ -181,25 +180,19 @@
 {%- block relbar1 %}{{ relbar() }}{% endblock %}
 
 {%- block content %}
-{%- block sidebar1 %} {# possible location for sidebar #} {% endblock %}
+{%- block sidebar1 %} {{ sidebar() }} {% endblock %}
 
 <div class="document">
     {%- block document %}
-    <div class="documentwrapper">
-        {%- if render_sidebar %}
+    <div id="document-wrapper" class="markdown">
         <div class="bodywrapper">
-            {%- endif %}
             <div class="body" role="main">
                 {% block body %} {% endblock %}
                 <div class="clearer"></div>
             </div>
-            {%- if render_sidebar %}
         </div>
-        {%- endif %}
     </div>
     {%- endblock %}
-
-    {%- block sidebar2 %}{{ sidebar() }}{% endblock %}
     <div class="clearer"></div>
 </div>
 {%- endblock %}

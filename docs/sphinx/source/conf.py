@@ -13,7 +13,7 @@ base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__fil
 templates_dir = os.path.join(base_dir, "WebHostLib", "templates")
 static_dir = os.path.join(base_dir, "WebHostLib", "static")
 # add this path to sys to load everything correctly
-# sys.path.append(os.path.dirname(__file__))
+sys.path.append(os.path.join(base_dir, "docs"))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -26,7 +26,11 @@ release = __version__
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["sphinx.ext.autodoc"]
+extensions = ["sphinx.ext.autodoc", "myst_parser"]
+source_suffix = {
+    ".rst": "restructuredtext",
+    ".md": "markdown",
+}
 
 # we need to copy over the AP templates in order to use them in the generated html
 templates_path = [

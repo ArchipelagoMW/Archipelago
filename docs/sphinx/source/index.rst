@@ -13,11 +13,15 @@ This is an auto-generated doc and may not currently reflect Main.
    :caption: Contents:
 
    baseclasses
-   world
-   web_world
+   autoworld
    options
    rules
    fill
+   netutils
+   world api
+   options api
+   network protocol
+   tests
 
 
 Indices and tables
