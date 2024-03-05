@@ -28,7 +28,6 @@ class Celeste64World(World):
     Created in a week(ish) by the Celeste team to celebrate the game’s sixth anniversary 🍓✨"""
 
     game = "Celeste 64"
-    data_version = 0
     web = Celeste64WebWorld()
     options_dataclass = Celeste64Options
     options: Celeste64Options
