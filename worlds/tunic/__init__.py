@@ -129,7 +129,10 @@ class TunicWorld(World):
         def remove_filler(amount: int):
             # Remove filler to make room for other items
             for _ in range(0, amount):
-                fill = self.random.choice(available_filler)
+                if not available_filler:
+                    fill = "Fool Trap"
+                else:
+                    fill = self.random.choice(available_filler)
                 items_to_create[fill] -= 1
                 if items_to_create[fill] == 0:
                     available_filler.remove(fill)
