@@ -151,7 +151,7 @@ item_table: Dict[str, TunicItemData] = {
     "Ladders near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 134, "ladders"),
     "Ladder to Well": TunicItemData(ItemClassification.progression, 0, 135, "ladders"),
     "Well Back Ladder": TunicItemData(ItemClassification.progression, 0, 136, "ladders"),
-    "Ladders to West Belltower": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
+    "Ladders to West Bell": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
     "Ladder to Quarry": TunicItemData(ItemClassification.progression, 0, 138, "ladders"),
     "Dark Tomb Ladder": TunicItemData(ItemClassification.progression, 0, 139, "ladders"),
     "Ladders near Dark Tomb": TunicItemData(ItemClassification.progression, 0, 140, "ladders"),

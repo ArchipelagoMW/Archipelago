@@ -57,7 +57,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
     multiworld.get_entrance("Overworld -> Sealed Temple", player).access_rule = \
         lambda state: ((state.has("Ladder Drop to East Forest", player) and
                        can_reach_east_overworld(state, player, options, ability_unlocks)) and
-                       (state.has("Ladders to West Belltower", player) and
+                       (state.has("Ladders to West Bell", player) and
                        ((state.has(laurels, player) and (has_sword(state, player) or state.has(fire_wand, player))) or
                         (state.has_all({lantern, "Dark Tomb Ladder"}, player) and has_sword(state, player))))
                        or (can_reach_upper_overworld(state, player, options, ability_unlocks) 
@@ -100,7 +100,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         lambda state: state.has("Dark Tomb Ladder", player)
     # dark tomb to west garden has no rule intentionally
     multiworld.get_entrance("Overworld -> West Garden", player).access_rule = \
-        lambda state: (state.has(laurels, player) and state.has("Ladders to West Belltower", player)) \
+        lambda state: (state.has(laurels, player) and state.has("Ladders to West Bell", player)) \
         or can_ladder_storage(state, player, options)
     multiworld.get_entrance("Overworld -> Beneath the Well", player).access_rule = \
         lambda state: state.has("Ladder to Well", player)
@@ -240,7 +240,7 @@ def set_ladder_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, in
     set_rule(multiworld.get_location("Overworld - [West] Chest After Bell", player),
              lambda state: state.has(laurels, player)
              or (has_lantern(state, player, options) and has_sword(state, player)
-                 and state.has_all({"Ladders to West Belltower", "Dark Tomb Ladder"}, player))
+                 and state.has_all({"Ladders to West Bell", "Dark Tomb Ladder"}, player))
              or can_ladder_storage(state, player, options))
     set_rule(multiworld.get_location("Overworld - [Northwest] Chest Beneath Quarry Gate", player),
              lambda state: state.has_any({grapple, laurels}, player) or options.logic_rules)

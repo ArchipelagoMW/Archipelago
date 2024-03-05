@@ -85,14 +85,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders to West Belltower", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: has_ladder("Ladders to West Belltower", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
 
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld Belltower at Bell"],
-        rule=lambda state: has_ladder("Ladders to West Belltower", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
 
     # long dong, do not make a reverse connection here or to belltower
     regions["Overworld above Patrol Cave"].connect(
@@ -1011,31 +1011,31 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # from the ladders by the belltower
             # Ruined Passage
             ("Overworld to West Garden Upper", "Overworld Redux, Ruins Passage_east",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Well rail, west side. Can ls in town, get extra height by going over the portal pad
             ("Overworld to West Garden Upper", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Well rail, east side. Need some height from the temple stairs
             ("Overworld to West Garden Upper", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Quarry entry
             ("Overworld to West Garden Upper", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # East Forest entry
             ("Overworld to West Garden Upper", "Overworld Redux, Forest Belltower_",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Fortress entry
             ("Overworld to West Garden Upper", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Patrol Cave entry
             ("Overworld to West Garden Upper", "Overworld Redux, PatrolCave_",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Special Shop entry
             ("Overworld to West Garden Upper", "Overworld Redux, ShopSpecial_",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
             # Temple Rafters
             ("Overworld to West Garden Upper", "Overworld Redux, Temple_rafters",
-                {"Ladders to West Belltower"}),
+                {"Ladders to West Bell"}),
 
             # Furnace ladder to the fuse entrance
             ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north", set()),
