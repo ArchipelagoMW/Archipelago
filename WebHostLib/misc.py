@@ -201,5 +201,5 @@ def get_sitemap():
 @app.route("/docs/")
 @app.route("/docs/<path:filename>")
 def get_dev_docs(filename: str = "index.html"):
-    docs_dir = os.path.join(os.path.dirname(__file__), "static", "generated", "sphinx", "html")
+    docs_dir = os.path.join(os.path.dirname(__file__), "templates", "sphinx", "html")
     return send_from_directory(docs_dir, filename)

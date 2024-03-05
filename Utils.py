@@ -982,4 +982,4 @@ def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
 def build_sphinx_docs() -> None:
     """Build Sphinx autodocs for webhost."""
     from sphinx.cmd.build import main as sphinx_main
-    sphinx_main(["-M", "html", "docs/sphinx/source", "WebHostLib/static/generated/sphinx"])
+    sphinx_main(["-M", "html", "docs/sphinx/source", "WebHostLib/templates/sphinx"])

@@ -6,6 +6,8 @@
 Archipelago API Reference
 =========================
 
+This is an auto-generated doc and may not currently reflect Main.
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:

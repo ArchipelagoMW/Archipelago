@@ -5,7 +5,7 @@ BaseClasses
     :maxdepth: 2
 
     multiworld
-    collection_state
+    collectionstate
     entrance
     item
     location
