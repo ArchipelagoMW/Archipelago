@@ -1,0 +1,2 @@
+.. autoclass:: BaseClasses.Item
+    :members:
