@@ -196,3 +196,10 @@ def get_sitemap():
             has_settings: bool = isinstance(world.web.options_page, bool) and world.web.options_page
             available_games.append({ 'title': game, 'has_settings': has_settings })
     return render_template("siteMap.html", games=available_games)
+
+
+@app.route("/docs/")
+@app.route("/docs/<path:filename>")
+def get_dev_docs(filename: str = "index.html"):
+    docs_dir = os.path.join(os.path.dirname(__file__), "static", "generated", "sphinx", "html")
+    return send_from_directory(docs_dir, filename)

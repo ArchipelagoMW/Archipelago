@@ -977,3 +977,9 @@ def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
         return False
     obj_it: typing.Iterable[object] = obj
     return all(isinstance(v, str) for v in obj_it)
+
+
+def build_sphinx_docs() -> None:
+    """Build Sphinx autodocs for webhost."""
+    from sphinx.cmd.build import main as sphinx_main
+    sphinx_main(["-M", "html", "docs/sphinx/source", "WebHostLib/static/generated/sphinx"])
