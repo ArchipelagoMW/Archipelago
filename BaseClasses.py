@@ -110,10 +110,14 @@ class MultiWorld():
             return self
 
         def append(self, region: Region):
+            assert region.name not in self.region_cache[region.player], \
+                f"{region.name} already exists in region cache."
             self.region_cache[region.player][region.name] = region
 
         def extend(self, regions: Iterable[Region]):
             for region in regions:
+                assert region.name not in self.region_cache[region.player], \
+                    f"{region.name} already exists in region cache."
                 self.region_cache[region.player][region.name] = region
 
         def add_group(self, new_id: int):
@@ -159,11 +163,11 @@ class MultiWorld():
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -713,13 +717,22 @@ class CollectionState():
             assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
             if resolution_hint == 'Location':
-                spot = self.multiworld.get_location(spot, player)
+                return self.can_reach_location(spot, player)
             elif resolution_hint == 'Entrance':
-                spot = self.multiworld.get_entrance(spot, player)
+                return self.can_reach_entrance(spot, player)
             else:
                 # default to Region
-                spot = self.multiworld.get_region(spot, player)
+                return self.can_reach_region(spot, player)
         return spot.can_reach(self)
+
+    def can_reach_location(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_location(spot, player).can_reach(self)
+
+    def can_reach_entrance(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_entrance(spot, player).can_reach(self)
+
+    def can_reach_region(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
@@ -877,6 +890,8 @@ class Region:
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
+            assert value.name not in self.region_manager.location_cache[value.player], \
+                f"{value.name} already exists in the location cache."
             self._list.insert(index, value)
             self.region_manager.location_cache[value.player][value.name] = value
 
@@ -887,6 +902,8 @@ class Region:
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
+            assert value.name not in self.region_manager.entrance_cache[value.player], \
+                f"{value.name} already exists in the entrance cache."
             self._list.insert(index, value)
             self.region_manager.entrance_cache[value.player][value.name] = value
 
@@ -1272,12 +1289,12 @@ class Spoiler:
             for location in sphere:
                 state.collect(location.item, True, location)
 
-            required_locations -= sphere
-
             collection_spheres.append(sphere)
 
             logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
+
+            required_locations -= sphere
             if not sphere:
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
