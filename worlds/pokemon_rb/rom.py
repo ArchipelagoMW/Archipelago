@@ -9,8 +9,9 @@ from .items import item_table
 from .pokemon import set_mon_palettes
 from .rock_tunnel import randomize_rock_tunnel
 from .rom_addresses import rom_addresses
-from .regions import PokemonRBWarp, map_ids
+from .regions import PokemonRBWarp, map_ids, town_map_coords
 from . import poke_data
+
 
 def write_quizzes(self, data, random):
 
@@ -204,19 +205,21 @@ def generate_output(self, output_directory: str):
     basemd5 = hashlib.md5()
     basemd5.update(data)
 
-    lab_loc = self.multiworld.get_entrance("Oak's Lab to Pallet Town", self.player).target
+    pallet_connections = {entrance: self.multiworld.get_entrance(f"Pallet Town to {entrance}",
+                                                                 self.player).connected_region.name for
+                          entrance in ["Player's House 1F", "Oak's Lab",
+                                       "Rival's House"]}
     paths = None
-    if lab_loc == 0:  # Player's House
+    if pallet_connections["Player's House 1F"] == "Oak's Lab":
         paths = ((0x00, 4, 0x80, 5, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x20, 5, 0x80, 5, 0xFF))
-    elif lab_loc == 1:  # Rival's House
+    elif pallet_connections["Rival's House"] == "Oak's Lab":
         paths = ((0x00, 4, 0xC0, 3, 0x40, 1, 0xE0, 1, 0xFF), (0x40, 2, 0x10, 3, 0x80, 5, 0xFF))
     if paths:
         write_bytes(data, paths[0], rom_addresses["Path_Pallet_Oak"])
         write_bytes(data, paths[1], rom_addresses["Path_Pallet_Player"])
-    home_loc = self.multiworld.get_entrance("Player's House 1F to Pallet Town", self.player).target
-    if home_loc == 1:  # Rival's House
+    if pallet_connections["Rival's House"] == "Player's House 1F":
         write_bytes(data, [0x2F, 0xC7, 0x06, 0x0D, 0x00, 0x01], rom_addresses["Pallet_Fly_Coords"])
-    elif home_loc == 2:  # Oak's Lab
+    elif pallet_connections["Oak's Lab"] == "Player's House 1F":
         write_bytes(data, [0x5F, 0xC7, 0x0C, 0x0C, 0x00, 0x00], rom_addresses["Pallet_Fly_Coords"])
 
     for region in self.multiworld.get_regions(self.player):
@@ -237,6 +240,14 @@ def generate_output(self, output_directory: str):
                     connected_map_name = entrance.connected_region.name.split("-")[0]
                     data[address] = 0 if "Elevator" in connected_map_name else warp_to_ids[i]
                     data[address + 1] = map_ids[connected_map_name]
+
+    if self.multiworld.door_shuffle[self.player] == "simple":
+        for (entrance, _, _, map_coords_entries, map_name, _) in town_map_coords.values():
+            destination = self.multiworld.get_entrance(entrance, self.player).connected_region.name
+            (_, x, y, _, _, map_order_entry) = town_map_coords[destination]
+            for map_coord_entry in map_coords_entries:
+                data[rom_addresses["Town_Map_Coords"] + (map_coord_entry * 4) + 1] = (y << 4) | x
+            data[rom_addresses["Town_Map_Order"] + map_order_entry] = map_ids[map_name]
 
     if not self.multiworld.key_items_only[self.player]:
         for i, gym_leader in enumerate(("Pewter Gym - Brock TM", "Cerulean Gym - Misty TM",
