@@ -26,7 +26,8 @@ class MuseDashCollections:
         # MUSE_PLUS_DLC, # To be included when OptionSets are rendered as part of basic settings.
         # "maimai DX Limited-time Suite", # Part of Muse Plus. Goes away 31st Jan 2026.
         "Miku in Museland", # Paid DLC not included in Muse Plus
-        "MSR Anthology", # Part of Muse Plus. Goes away 20th Jan 2024.
+        "Rin Len's Mirrorland", # Paid DLC not included in Muse Plus
+        "MSR Anthology", # Now no longer available.
     ]
 
     DIFF_OVERRIDES: List[str] = [
@@ -35,6 +36,12 @@ class MuseDashCollections:
         "Find this Month's Featured Playlist",
         "PeroPero in the Universe",
         "umpopoff"
+    ]
+    
+    REMOVED_SONGS = [
+        "CHAOS Glitch",
+        "FM 17314 SUGAR RADIO",
+        "Yume Ou Mono Yo Secret"
     ]
 
     album_items: Dict[str, AlbumData] = {}
@@ -128,6 +135,9 @@ class MuseDashCollections:
 
         for songKey, songData in self.song_items.items():
             if not self.song_matches_dlc_filter(songData, dlc_songs):
+                continue
+                
+            if songKey in self.REMOVED_SONGS:
                 continue
 
             if streamer_mode_active and not songData.streamer_mode:
