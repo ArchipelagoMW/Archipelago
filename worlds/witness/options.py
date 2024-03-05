@@ -4,7 +4,7 @@ from schema import Schema, And, Optional
 
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
 
-from worlds.witness.static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
 
 
 class DisableNonRandomizedPuzzles(Toggle):
