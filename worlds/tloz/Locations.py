@@ -105,6 +105,10 @@ food_locations = [
     "Level 7 Bomb Drop (Dodongos)", "Level 7 Rupee Drop (Goriyas North)"
 ]
 
+gleeok_locations = [
+    "Level 4 Boss", "Level 4 Triforce", "Level 8 Boss", "Level 8 Triforce"
+]
+
 floor_location_game_offsets_early = {
     "Level 1 Item (Bow)": 0x7F,
     "Level 1 Item (Boomerang)": 0x44,

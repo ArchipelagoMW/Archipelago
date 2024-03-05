@@ -46,7 +46,7 @@ class PokemonSettings(settings.Group):
 class PokemonWebWorld(WebWorld):
     setup_en = Tutorial(
         "Multiworld Setup Guide",
-        "A guide to playing Pokemon Red and Blue with Archipelago.",
+        "A guide to playing Pokémon Red and Blue with Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -353,7 +353,9 @@ class PokemonRedBlueWorld(World):
                 location.show_in_spoiler = False
 
         def intervene(move, test_state):
-            if self.multiworld.randomize_wild_pokemon[self.player]:
+            move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
+            viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
+            if self.multiworld.randomize_wild_pokemon[self.player] and viable_mons:
                 accessible_slots = [loc for loc in self.multiworld.get_reachable_locations(test_state, self.player) if
                                     loc.type == "Wild Encounter"]
 
@@ -363,8 +365,6 @@ class PokemonRedBlueWorld(World):
                         zones.add(loc.name.split(" - ")[0])
                     return len(zones)
 
-                move_bit = pow(2, poke_data.hm_moves.index(move) + 2)
-                viable_mons = [mon for mon in self.local_poke_data if self.local_poke_data[mon]["tms"][6] & move_bit]
                 placed_mons = [slot.item.name for slot in accessible_slots]
 
                 if self.multiworld.area_1_to_1_mapping[self.player]:
