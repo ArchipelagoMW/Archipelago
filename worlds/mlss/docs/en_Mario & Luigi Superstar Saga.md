@@ -49,7 +49,7 @@ Locations in which items can be found:
 - All Minigame Rewards
 - All Event based items
 
-Items that are shuffled:
+Items that can be shuffled:
 - All consumable items (Mushrooms, Nuts, Syrups etc.)
 - All Hoo Beans and Chuckle Beans
 - All Badges and Pants
