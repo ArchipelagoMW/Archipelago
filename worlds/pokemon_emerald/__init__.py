@@ -685,7 +685,6 @@ class PokemonEmeraldWorld(World):
         if not self.options.bikes:
             convert_unrandomized_items_to_events("Bike")
         if not self.options.event_tickets:
-            print("hello")
             convert_unrandomized_items_to_events("EventTicket")
         if not self.options.key_items:
             convert_unrandomized_items_to_events("KeyItem")
