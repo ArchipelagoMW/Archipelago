@@ -8,7 +8,7 @@ location_id_to_level_id = {
     LocationName.intro_stage_hp_1:              [0x00, 0x100, 0x00],
     LocationName.intro_stage_hp_2:              [0x00, 0x101, 0x00],
 
-    LocationName.blast_hornet_clear:            [0x01, 0x300, 0x00],
+    LocationName.blast_hornet_clear:            [0x01, 0x300, 0x02],
     LocationName.blast_hornet_boss:             [0x01, 0x202, 0x00],
     LocationName.blast_hornet_mini_boss:        [0x01, 0x203, 0x00],
     LocationName.blast_hornet_heart_tank:       [0x01, 0x002, 0x01],
@@ -18,7 +18,7 @@ location_id_to_level_id = {
     LocationName.blast_hornet_hp_1:             [0x01, 0x102, 0x00],
     LocationName.blast_hornet_hp_2:             [0x01, 0x103, 0x00],
 
-    LocationName.blizzard_buffalo_clear:        [0x02, 0x302, 0x00],
+    LocationName.blizzard_buffalo_clear:        [0x02, 0x302, 0x0C],
     LocationName.blizzard_buffalo_boss:         [0x02, 0x204, 0x00],
     LocationName.blizzard_buffalo_heart_tank:   [0x02, 0x002, 0x02],
     LocationName.blizzard_buffalo_sub_tank:     [0x02, 0x003, 0x10],
@@ -29,7 +29,7 @@ location_id_to_level_id = {
     LocationName.blizzard_buffalo_hp_4:         [0x02, 0x107, 0x00],
     LocationName.blizzard_buffalo_hp_5:         [0x02, 0x108, 0x00],
 
-    LocationName.gravity_beetle_boss:           [0x03, 0x304, 0x00],
+    LocationName.gravity_beetle_clear:          [0x03, 0x304, 0x0A],
     LocationName.gravity_beetle_boss:           [0x03, 0x205, 0x00],
     LocationName.gravity_beetle_heart_tank:     [0x03, 0x002, 0x04],
     LocationName.gravity_beetle_frog_ride:      [0x03, 0x005, 0x08],
@@ -54,7 +54,7 @@ location_id_to_level_id = {
     LocationName.toxic_seahorse_hp_2:           [0x04, 0x113, 0x00],
     LocationName.toxic_seahorse_hp_3:           [0x04, 0x114, 0x00],
 
-    LocationName.volt_catfish_clear:            [0x05, 0x308, 0x00],
+    LocationName.volt_catfish_clear:            [0x05, 0x308, 0x04],
     LocationName.volt_catfish_boss:             [0x05, 0x208, 0x00],
     LocationName.volt_catfish_heart_tank:       [0x05, 0x002, 0x10],
     LocationName.volt_catfish_sub_tank:         [0x05, 0x003, 0x20],
@@ -68,7 +68,7 @@ location_id_to_level_id = {
     LocationName.volt_catfish_energy_3:         [0x05, 0x11B, 0x00],
     LocationName.volt_catfish_hp_5:             [0x05, 0x11C, 0x00],
 
-    LocationName.crush_crawfish_clear:          [0x06, 0x30A, 0x00],
+    LocationName.crush_crawfish_clear:          [0x06, 0x30A, 0x06],
     LocationName.crush_crawfish_boss:           [0x06, 0x209, 0x00],
     LocationName.crush_crawfish_heart_tank:     [0x06, 0x002, 0x20],
     LocationName.crush_crawfish_hawk_ride:      [0x06, 0x005, 0x04],
@@ -83,7 +83,7 @@ location_id_to_level_id = {
     LocationName.crush_crawfish_1up_1:          [0x06, 0x124, 0x00],
     LocationName.crush_crawfish_1up_2:          [0x06, 0x125, 0x00],
 
-    LocationName.tunnel_rhino_clear:            [0x07, 0x30C, 0x00],
+    LocationName.tunnel_rhino_clear:            [0x07, 0x30C, 0x0E],
     LocationName.tunnel_rhino_boss:             [0x07, 0x20A, 0x00],
     LocationName.tunnel_rhino_mini_boss:        [0x07, 0x20B, 0x00],
     LocationName.tunnel_rhino_heart_tank:       [0x07, 0x002, 0x40],
@@ -92,7 +92,7 @@ location_id_to_level_id = {
     LocationName.tunnel_rhino_energy_1:         [0x07, 0x126, 0x00],
     LocationName.tunnel_rhino_hp_1:             [0x07, 0x127, 0x00],
 
-    LocationName.neon_tiger_clear:              [0x08, 0x30E, 0x00],
+    LocationName.neon_tiger_clear:              [0x08, 0x30E, 0x08],
     LocationName.neon_tiger_boss:               [0x08, 0x20C, 0x00],
     LocationName.neon_tiger_mini_boss:          [0x08, 0x20D, 0x00],
     LocationName.neon_tiger_heart_tank:         [0x08, 0x002, 0x80],

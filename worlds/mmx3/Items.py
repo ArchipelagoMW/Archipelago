@@ -95,6 +95,17 @@ item_groups = {
         ItemName.third_armor_body,
         ItemName.third_armor_arms,
         ItemName.third_armor_legs
+    },
+    "AccessCodes": {
+        ItemName.stage_toxic_seahorse,
+        ItemName.stage_volt_catfish,
+        ItemName.stage_tunnel_rhino,
+        ItemName.stage_blizzard_buffalo,
+        ItemName.stage_crush_crawfish,
+        ItemName.stage_neon_tiger,
+        ItemName.stage_gravity_beetle,
+        ItemName.stage_blast_hornet,
+        ItemName.stage_doppler_lab
     }
 }
 

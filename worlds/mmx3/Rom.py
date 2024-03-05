@@ -2,13 +2,13 @@ import Utils
 from worlds.AutoWorld import World
 from worlds.Files import APDeltaPatch
 
-USHASH = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
-ROM_PLAYER_LIMIT = 65535
-
+import bsdiff4
 import hashlib
 import os
-import math
-import pkgutil
+from pkgutil import get_data
+
+USHASH = 'cfe8c11f0dce19e4fa5f3fd75775e47c'
+ROM_PLAYER_LIMIT = 65535
 
 weapon_rom_data = {
     0xBD000B: [0x1FC8, 0xFF],
@@ -100,12 +100,27 @@ class LocalRom:
         with open(file, 'rb') as stream:
             self.buffer = bytearray(stream.read())
 
+    def apply_patch(self, patch: bytes):
+        self.buffer = bytearray(bsdiff4.patch(bytes(self.buffer), patch))
+
+    def write_crc(self):
+        crc = (sum(self.buffer[:0x7FDC] + self.buffer[0x7FE0:]) + 0x01FE) & 0xFFFF
+        inv = crc ^ 0xFFFF
+        self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
+
+
 def patch_rom(world: World, rom, player):
     from Utils import __version__
+
+    # Apply base patch
+    rom.apply_patch(get_data(__name__, os.path.join("data", "mmx3_basepatch.bsdiff4")))
+
+    # Edit the ROM header
     rom.name = bytearray(f'MMX3{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x7FC0, rom.name)
 
+    # Write options to the ROM
     rom.write_byte(0x17FFF0, world.options.doppler_open.value)
     rom.write_byte(0x17FFF1, world.options.doppler_medal_count.value)
     rom.write_byte(0x17FFF2, world.options.doppler_weapon_count.value)
@@ -122,6 +137,11 @@ def patch_rom(world: World, rom, player):
     rom.write_byte(0x0019B1, world.options.starting_life_count.value)
     rom.write_byte(0x0072C3, world.options.starting_life_count.value)
     rom.write_byte(0x0021BE, world.options.starting_life_count.value)
+
+    # Debug option
+    rom.write_byte(0x17FFFF, 0x00)
+
+    rom.write_crc()
 
     
 def get_base_rom_bytes(file_name: str = "") -> bytes:

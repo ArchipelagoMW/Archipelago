@@ -158,24 +158,21 @@ class MMX3SNIClient(SNIClient):
                 heart_tanks |= 1 << heart_tank_count
                 snes_buffered_write(ctx, MMX3_HEART_TANKS, bytearray([heart_tanks]))
                 snes_buffered_write(ctx, MMX3_ENABLE_HEART_TANK, bytearray([0x02]))
-                snes_logger.info(f"Heart Tank: {MMX3_HEART_TANKS:06X}, {heart_tanks:02X}")
-                snes_logger.info(f"Heart Tank: {MMX3_ENABLE_HEART_TANK:06X}, 0x02")
             self.item_queue.pop(0)
 
         elif next_item[0] == "sub tank":
             upgrades = await snes_read(ctx, MMX3_UPGRADES, 0x1)
             sub_tanks = await snes_read(ctx, MMX3_SUB_TANK_ARRAY, 0x4)
             sub_tanks = list(sub_tanks)
-            upgrades = upgrades[0] & 0xF0
-            sub_tank_count = upgrades.bit_count()
-            if sub_tank_count < 8:
-                upgrades = upgrades[0]
-                upgrades |= 0x10 << sub_tank_count
+            upgrade = upgrades[0]
+            upgrade = upgrade & 0xF0
+            sub_tank_count = upgrade.bit_count()
+            if sub_tank_count < 4:
+                upgrade = upgrades[0]
+                upgrade |= 0x10 << sub_tank_count
                 sub_tanks[sub_tank_count] = 0x8E
-                snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
+                snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrade]))
                 snes_buffered_write(ctx, MMX3_SUB_TANK_ARRAY, bytearray(sub_tanks))
-                snes_logger.info(f"Sub Tank: {MMX3_UPGRADES:06X}, {upgrades:02X}")
-                snes_logger.info(f"Sub Tank: {MMX3_SUB_TANK_ARRAY:06X}, {sub_tanks}")
             self.item_queue.pop(0)
         
         elif next_item[0] == "upgrade":
@@ -191,14 +188,12 @@ class MMX3SNIClient(SNIClient):
                 upgrades = upgrades[0]
                 upgrades |= bit
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
-                snes_logger.info(f"Upgrade (armor): {MMX3_UPGRADES:06X}, {upgrades:02X}")
             else:
                 # Chip
                 bit = bit << 4
                 chips = chips[0]
                 chips |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([chips]))
-                snes_logger.info(f"Upgrade (chip): {MMX3_RIDE_CHIPS:06X}, {chips:02X}")
             self.item_queue.pop(0)
 
         elif next_item[0] == "ride":
@@ -210,7 +205,6 @@ class MMX3SNIClient(SNIClient):
             if check == 0:
                 ride |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([ride]))
-                snes_logger.info(f"Ride Armor: {MMX3_RIDE_CHIPS:06X}, {ride:02X}")
             self.item_queue.pop(0)
 
         elif next_item[0] == "boss access":
@@ -337,8 +331,7 @@ class MMX3SNIClient(SNIClient):
                     pass
                 elif internal_id >= 0x300:
                     # Maverick Medal
-                    level_id = internal_id & 0x0F
-                    if cleared_levels_data[level_id] != 0:
+                    if cleared_levels_data[data_bit] != 0:
                         new_checks.append(loc_id)
                 elif internal_id >= 0x200:
                     # Boss clear
@@ -355,14 +348,12 @@ class MMX3SNIClient(SNIClient):
         
         verify_game_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 1)
         if verify_game_state is None:
-            print ("Exit Game")
             snes_logger.info(f'Exit Game.')
             return
         
         rom = await snes_read(ctx, MMX3_ROMHASH_START, ROMHASH_SIZE)
         if rom != ctx.rom:
             ctx.rom = None
-            print ("Exit ROM")
             snes_logger.info(f'Exit ROM.')
             return
         
@@ -484,8 +475,7 @@ class MMX3SNIClient(SNIClient):
                     pass
                 elif internal_id >= 0x300:
                     # Maverick Medal
-                    level_id = internal_id & 0x0F
-                    cleared_levels[level_id] = 0xFF
+                    cleared_levels[data_bit] = 0xFF
                     new_cleared_level = True
                 elif internal_id >= 0x200:
                     # Boss clear
@@ -500,8 +490,6 @@ class MMX3SNIClient(SNIClient):
                     
             if new_cleared_level:
                 snes_buffered_write(ctx, MMX3_LEVEL_CLEARED, bytes(cleared_levels))
-                snes_logger.info(cleared_levels_data)
-                snes_logger.info(cleared_levels)
                 await snes_flush_writes(ctx)
             if menu_state[0] == 0x04:
                 if new_boss_clears:
