@@ -4,7 +4,7 @@ from schema import Schema, And, Optional
 
 from Options import Toggle, DefaultOnToggle, Range, Choice, PerGameCommonOptions, OptionDict
 
-from worlds.witness.static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
+from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLogic
 
 
 class DisableNonRandomizedPuzzles(Toggle):
@@ -233,6 +233,12 @@ class AreaHintPercentage(Range):
     default = 33
 
 
+class LaserHints(Toggle):
+    """If on, lasers will tell you where their items are if you walk close to them in-game.
+    Only applies if laser shuffle is enabled."""
+    display_name = "Laser Hints"
+
+
 class DeathLink(Toggle):
     """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Bonk Trap."""
@@ -273,5 +279,6 @@ class TheWitnessOptions(PerGameCommonOptions):
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
     area_hint_percentage: AreaHintPercentage
+    laser_hints: LaserHints
     death_link: DeathLink
     death_link_amnesty: DeathLinkAmnesty
