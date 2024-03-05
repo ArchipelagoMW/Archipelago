@@ -709,7 +709,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
                 text += f"<br>Members:<br> " + "<br> ".join(
-                    self.ctx.player_names[player].replace("[", "&bl;").replace("]", "&br;")
+                    escape_markup(self.ctx.player_names[player])
                     for player in slot_info.group_members
                 )
             node.setdefault("refs", []).append(text)
