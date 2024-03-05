@@ -21,7 +21,22 @@ Other aspects of the game can be randomized as well such as music, sounds, battl
 
 ## What is the goal of Mario & Luigi: Superstar Saga when randomized?
 
-Defeat Cackletta's Soul in Bowser's Castle. This requires you to collect all 4 beanstar pieces and restore the beanstar, as well as Peach's Extra Dress and the Fake beanstar, and bring them to Fawful at the end of Jokes End. This also requires Ultra Hammers, Thunder Hand and Green Pearl Bean, Fire Hand and Red Pearl Bean, Green Goblet, The Beanbean Brooch, All 3 Chuckola Fruits, Peasley's Rose, and either the Membership card or Red Goblet.
+Defeat Cackletta's Soul in Bowser's Castle. This requires you to collect all 4 Beanstar Pieces, restore the Beanstar, and bring Peach's Extra Dress and the Fake Beanstar to Fawful at the end of Jokes End. 
+
+In total, this requires:
+- 4 Beanstar Pieces
+- Peach's Extra Dress
+- Fake Beanstar
+- Ultra Hammers
+- Fire Hand
+- Thunder Hand
+- Red Pearl Bean
+- Green Pearl Bean
+- Green Goblet
+- Peasley's Rose
+- Beanbean Brooch
+- All 3 Chuckola Fruits
+- Membership Card OR Red Goblet
 
 ## What items and locations get shuffled?
 
