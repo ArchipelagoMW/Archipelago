@@ -123,7 +123,7 @@ again using the new options `normal`, `pupdunk_hard`, and `pupdunk_mystery`, and
 new weights for 150 and 200. This allows for two more triggers that will only be used for the new `pupdunk_hard`
 and `pupdunk_mystery` options so that they will only be triggered on "pupdunk AND hard/mystery".
 
-Options that define a list or dict can additionally have the character `+` added to the start of their name, which applies the contents of
+Options that define a list, set, or dict can additionally have the character `+` added to the start of their name, which applies the contents of
 the activated trigger to the already present equivalents in the game options.
 
 For example:

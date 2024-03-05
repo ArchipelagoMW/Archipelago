@@ -333,8 +333,10 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                     new_value.update(weights[option_name])
                 elif isinstance(new_value, list):
                     new_value.extend(weights[option_name])
+                elif isinstance(new_value, set):
+                    new_value.update(weights[option_name])
                 else:
-                    raise Exception(f"Cannot apply merge to non-dict or list type {option_name}.")
+                    raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name}.")
             cleaned_weights[option_name] = new_value
         else:
             cleaned_weights[option] = new_weights[option]
