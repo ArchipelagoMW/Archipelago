@@ -1026,6 +1026,11 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
         for connection in connections:
                 entrance = connection.entrance
                 exit = connection.exit
+                direction = connection.direction
+                if direction not in (PlandoConnections.Direction.Entrance,
+                                     PlandoConnections.Direction.Exit,
+                                     PlandoConnections.Direction.Both):
+                    raise ValueError(f"Unknown direction: {direction}")
                 if entrance in used_entrances:
                     raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
                 if exit in used_exits:
