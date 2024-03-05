@@ -900,11 +900,18 @@ class ItemSet(OptionSet):
     convert_name_groups = True
 
 
-class PlandoTexts(Option[typing.Dict[str, str]], VerifyKeys):
+class PlandoText(typing.NamedTuple):
+    at: str
+    text: str
+    percentage: int = 100
+
+
+class PlandoTexts(Option[typing.List[PlandoText]], VerifyKeys):
     default: typing.List = []
     supports_weighting = False
+    display_name = "Plando Texts"
 
-    def __init__(self, value: typing.Dict[str, str]):
+    def __init__(self, value: typing.List[PlandoText]):
         self.value = deepcopy(value)
         super().__init__()
 
@@ -917,21 +924,40 @@ class PlandoTexts(Option[typing.Dict[str, str]], VerifyKeys):
                             f"so text for {player_name} will be ignored.")
 
     @classmethod
-    def from_any(cls, data: typing.List[typing.Any]) -> Option[typing.Dict[str, str]]:
-        texts = {}
+    def from_any(cls, data: typing.List[typing.Any]) -> Option[typing.List[PlandoText]]:
+        texts = []
         if type(data) == list:
             for text in data:
                 if type(text) == dict:
                     if random.random() < float(text.get("percentage", 100)/100):
                         at = text.get("at", None)
                         if at is not None:
-                            texts[at] = text.get("text", "")
+                            texts.append(PlandoText(
+                                at,
+                                text.get("text"),
+                                text.get("percentage", 100)
+                            ))
+                elif type(text) == PlandoText:
+                    if random.random() < float(text.percentage/100):
+                        texts.append(text)
                 else:
                     raise Exception(f"Cannot create plando text from non-dictionary type, got {type(text)}")
             cls.verify_keys([text.at for text in texts])
             return cls(texts)
         else:
             raise NotImplementedError(f"Cannot Convert from non-list, got {type(data)}")
+
+    def get_option_name(self, value) -> str:
+        return str({text.at: text.text for text in value})
+
+    def __iter__(self):
+        yield from self.value
+
+    def __getitem__(self, item):
+        return self.value.__getitem__(item)
+
+    def __len__(self):
+        return self.value.__len__()
 
 
 class ConnectionsMeta(AssembleOptions):
@@ -1057,6 +1083,9 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
                                         "<=" if connection.direction == self.Direction.Exit else
                                         "=>",
                                         connection.exit) for connection in value])
+
+    def __getitem__(self, item):
+        return self.value.__getitem__(item)
 
     def __iter__(self):
         yield from self.value

@@ -2535,7 +2535,7 @@ def write_strings(rom, world, player):
         tt['menu_start_2'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n{CHOICE3}"
         tt['menu_start_3'] = "{MENU}\n{SPEED0}\n≥@'s house\n Dark Chapel\n Mountain Cave\n{CHOICE2}"
 
-    for at, text in world.plando_texts[player].items():
+    for at, text, _ in world.plando_texts[player]:
 
         if at not in tt:
             raise Exception(f"No text target \"{at}\" found.")

@@ -4,7 +4,7 @@ from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
-from worlds.generic import PlandoConnection
+from Options import PlandoConnection
 
 if TYPE_CHECKING:
     from . import TunicWorld

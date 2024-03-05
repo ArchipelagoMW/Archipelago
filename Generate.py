@@ -25,7 +25,6 @@ from worlds.alttp import Options as LttPOptions
 from worlds.alttp.EntranceRandomizer import parse_arguments
 from worlds.alttp.Text import TextTable
 from worlds.AutoWorld import AutoWorldRegister
-from worlds.generic import PlandoConnection
 
 
 def mystery_argparse():
@@ -463,12 +462,12 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
     if ret.game == "A Link to the Past":
-        roll_alttp_settings(ret, game_weights, plando_options)
+        roll_alttp_settings(ret, game_weights)
 
     return ret
 
 
-def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
+def roll_alttp_settings(ret: argparse.Namespace, weights):
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")
     if 'random_sprite_on_event' in weights:
