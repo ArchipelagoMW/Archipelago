@@ -1,5 +1,5 @@
 import itertools
-from typing import List, Dict
+from typing import List, Dict, Set
 
 from BaseClasses import MultiWorld
 from worlds.generic import Rules as MultiWorldRules
@@ -50,7 +50,7 @@ def set_rules(world):
     logic = world.logic
     bundle_rooms: List[BundleRoom] = world.modified_bundles
 
-    all_location_names = list(location.name for location in multiworld.get_locations(player))
+    all_location_names = set(location.name for location in multiworld.get_locations(player))
 
     set_entrance_rules(logic, multiworld, player, world_options)
     set_ginger_island_rules(logic, multiworld, player, world_options)
@@ -206,7 +206,7 @@ def set_entrance_rules(logic: StardewLogic, multiworld, player, world_options: S
     set_entrance_rule(multiworld, player, Entrance.talk_to_mines_dwarf, logic.wallet.can_speak_dwarf() & logic.tool.has_tool(Tool.pickaxe, ToolMaterial.iron))
     set_entrance_rule(multiworld, player, Entrance.buy_from_traveling_merchant, logic.traveling_merchant.has_days())
 
-    set_farm_buildings_entrance_rules(logic, multiworld, player, world_options)
+    set_farm_buildings_entrance_rules(logic, multiworld, player)
 
     set_entrance_rule(multiworld, player, Entrance.mountain_to_railroad, logic.received("Railroad Boulder Removed"))
     set_entrance_rule(multiworld, player, Entrance.enter_witch_warp_cave, logic.quest.has_dark_talisman() | (logic.mod.magic.can_blink()))
@@ -234,7 +234,7 @@ def set_dangerous_mine_rules(logic, multiworld, player, world_options: StardewVa
                       (logic.received(Wallet.skull_key) & logic.region.can_reach(Region.qi_walnut_room)))
 
 
-def set_farm_buildings_entrance_rules(logic, multiworld, player, world_options):
+def set_farm_buildings_entrance_rules(logic, multiworld, player):
     set_entrance_rule(multiworld, player, Entrance.use_desert_obelisk, logic.can_use_obelisk(Transportation.desert_obelisk))
     set_entrance_rule(multiworld, player, Entrance.enter_greenhouse, logic.received("Greenhouse"))
     set_entrance_rule(multiworld, player, Entrance.enter_coop, logic.building.has_building(Building.coop))
@@ -402,7 +402,7 @@ def set_island_parrot_rules(logic: StardewLogic, multiworld, player):
                              has_10_walnut)
 
 
-def set_cropsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_cropsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     if world_options.cropsanity == Cropsanity.option_disabled:
         return
 
@@ -415,7 +415,7 @@ def set_cropsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
                                      logic.has(crop_name))
 
 
-def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_story_quests_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     if world_options.quest_locations < 0:
         return
     for quest in locations.locations_by_tag[LocationTags.STORY_QUEST]:
@@ -424,7 +424,7 @@ def set_story_quests_rules(all_location_names: List[str], logic: StardewLogic, m
                                      logic.registry.quest_rules[quest.name])
 
 
-def set_special_order_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player,
+def set_special_order_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player,
                             world_options: StardewValleyOptions):
     if world_options.special_order_locations == SpecialOrderLocations.option_disabled:
         return
@@ -492,7 +492,7 @@ def set_help_wanted_slay_monsters_rule(multiworld, player, month_rule, quest_num
     MultiWorldRules.set_rule(multiworld.get_location(location_name, player), month_rule)
 
 
-def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int):
+def set_fishsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int):
     fish_prefix = "Fishsanity: "
     for fish_location in locations.locations_by_tag[LocationTags.FISHSANITY]:
         if fish_location.name in all_location_names:
@@ -501,7 +501,7 @@ def set_fishsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
                                      logic.has(fish_name))
 
 
-def set_museumsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int,
+def set_museumsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int,
                            world_options: StardewValleyOptions):
     museum_prefix = "Museumsanity: "
     if world_options.museumsanity == Museumsanity.option_milestones:
@@ -575,7 +575,7 @@ def set_backpack_rules(logic: StardewLogic, multiworld: MultiWorld, player: int,
                                       logic.received("Progressive Backpack", 2)))
 
 
-def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player):
+def set_festival_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player):
     festival_locations = []
     festival_locations.extend(locations.locations_by_tag[LocationTags.FESTIVAL])
     festival_locations.extend(locations.locations_by_tag[LocationTags.FESTIVAL_HARD])
@@ -588,7 +588,7 @@ def set_festival_rules(all_location_names: List[str], logic: StardewLogic, multi
 monster_eradication_prefix = "Monster Eradication: "
 
 
-def set_monstersanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_monstersanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     monstersanity_option = world_options.monstersanity
     if monstersanity_option == Monstersanity.option_none:
         return
@@ -604,7 +604,7 @@ def set_monstersanity_rules(all_location_names: List[str], logic: StardewLogic, 
     set_monstersanity_category_rules(all_location_names, logic, multiworld, player, monstersanity_option)
 
 
-def set_monstersanity_monster_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, monstersanity_option):
+def set_monstersanity_monster_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, monstersanity_option):
     for monster_name in logic.monster.all_monsters_by_name:
         location_name = f"{monster_eradication_prefix}{monster_name}"
         if location_name not in all_location_names:
@@ -617,12 +617,12 @@ def set_monstersanity_monster_rules(all_location_names: List[str], logic: Starde
         MultiWorldRules.set_rule(location, rule)
 
 
-def set_monstersanity_progressive_category_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player):
+def set_monstersanity_progressive_category_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player):
     for monster_category in logic.monster.all_monsters_by_category:
         set_monstersanity_progressive_single_category_rules(all_location_names, logic, multiworld, player, monster_category)
 
 
-def set_monstersanity_progressive_single_category_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, monster_category: str):
+def set_monstersanity_progressive_single_category_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, monster_category: str):
     location_names = [name for name in all_location_names if name.startswith(monster_eradication_prefix) and name.endswith(monster_category)]
     if not location_names:
         return
@@ -632,7 +632,7 @@ def set_monstersanity_progressive_single_category_rules(all_location_names: List
         set_monstersanity_progressive_category_rule(all_location_names, logic, multiworld, player, monster_category, location_name, i)
 
 
-def set_monstersanity_progressive_category_rule(all_location_names: List[str], logic: StardewLogic, multiworld, player,
+def set_monstersanity_progressive_category_rule(all_location_names: Set[str], logic: StardewLogic, multiworld, player,
                                                 monster_category: str, location_name: str, goal_index):
     if location_name not in all_location_names:
         return
@@ -652,7 +652,7 @@ def get_monster_eradication_number(location_name, monster_category) -> int:
     return 1000
 
 
-def set_monstersanity_category_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, monstersanity_option):
+def set_monstersanity_category_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, monstersanity_option):
     for monster_category in logic.monster.all_monsters_by_category:
         location_name = f"{monster_eradication_prefix}{monster_category}"
         if location_name not in all_location_names:
@@ -665,7 +665,7 @@ def set_monstersanity_category_rules(all_location_names: List[str], logic: Stard
         MultiWorldRules.set_rule(location, rule)
 
 
-def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_shipsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     shipsanity_option = world_options.shipsanity
     if shipsanity_option == Shipsanity.option_none:
         return
@@ -678,7 +678,7 @@ def set_shipsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), logic.shipping.can_ship(item_to_ship))
 
 
-def set_cooksanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_cooksanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     cooksanity_option = world_options.cooksanity
     if cooksanity_option == Cooksanity.option_none:
         return
@@ -693,7 +693,7 @@ def set_cooksanity_rules(all_location_names: List[str], logic: StardewLogic, mul
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), cook_rule)
 
 
-def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_chefsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     chefsanity_option = world_options.chefsanity
     if chefsanity_option == Chefsanity.option_none:
         return
@@ -708,7 +708,7 @@ def set_chefsanity_rules(all_location_names: List[str], logic: StardewLogic, mul
         MultiWorldRules.set_rule(multiworld.get_location(location.name, player), learn_rule)
 
 
-def set_craftsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
+def set_craftsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld, player, world_options: StardewValleyOptions):
     craftsanity_option = world_options.craftsanity
     if craftsanity_option == Craftsanity.option_none:
         return
@@ -760,7 +760,7 @@ def set_arcade_machine_rules(logic: StardewLogic, multiworld: MultiWorld, player
                              logic.has("JotPK Max Buff"))
 
 
-def set_friendsanity_rules(all_location_names: List[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
+def set_friendsanity_rules(all_location_names: Set[str], logic: StardewLogic, multiworld: MultiWorld, player: int, world_options: StardewValleyOptions):
     if world_options.friendsanity == Friendsanity.option_none:
         return
     MultiWorldRules.add_rule(multiworld.get_location("Spouse Stardrop", player),

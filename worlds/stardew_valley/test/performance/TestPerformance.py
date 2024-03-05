@@ -86,7 +86,6 @@ class SVPerformanceTestCase(SVTestCase):
                              for result in cls.results for val in result.results)
             for r in csved_results:
                 print(r)
-            print()
         else:
             case = None
             for result in cls.results:
