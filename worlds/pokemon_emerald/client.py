@@ -122,8 +122,6 @@ class PokemonEmeraldClient(BizHawkClient):
     wonder_trade_cooldown: int
     wonder_trade_cooldown_timer: int
 
-    num_wonder_trade_communications: int
-
     death_counter: Optional[int]
     previous_death_link: float
     ignore_next_death_link: bool
@@ -139,7 +137,6 @@ class PokemonEmeraldClient(BizHawkClient):
         self.wonder_trade_task = None
         self.wonder_trade_cooldown = 5000
         self.wonder_trade_cooldown_timer = 0
-        self.num_wonder_trade_communications = 0
         self.death_counter = None
         self.previous_death_link = 0
         self.ignore_next_death_link = False
@@ -233,8 +230,8 @@ class PokemonEmeraldClient(BizHawkClient):
 
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx, [
-                        (save_block_1_address + 0x177C + (52 * 4), 4, "System Bus"),           # White out stat
-                        (save_block_2_address + 0xAC, 4, "System Bus"),                        # Encryption key
+                        (save_block_1_address + 0x177C + (52 * 4), 4, "System Bus"),  # White out stat
+                        (save_block_2_address + 0xAC, 4, "System Bus"),               # Encryption key
                     ],
                     [save_block_1_address_guard, save_block_2_address_guard]
                 )
@@ -263,6 +260,7 @@ class PokemonEmeraldClient(BizHawkClient):
                         await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
                                             f"{ctx.player_names[ctx.slot]} whited out!")
                         self.ignore_next_death_link = True
+                        logger.info(f"DEBUG: Death counter updated to {times_whited_out}")
                         self.death_counter = times_whited_out
 
             # Give player items
@@ -323,50 +321,48 @@ class PokemonEmeraldClient(BizHawkClient):
                     pokedex_caught_bytes = read_result[0]
 
             # Wonder Trades
-            if self.num_wonder_trade_communications < 100:
-                read_result = await bizhawk.guarded_read(
-                    ctx.bizhawk_ctx,
-                    [
-                        (save_block_1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
-                        (save_block_1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
-                    ],
-                    [overworld_guard, save_block_1_address_guard]
-                )
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx,
+                [
+                    (save_block_1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
+                    (save_block_1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
+                ],
+                [overworld_guard, save_block_1_address_guard]
+            )
 
-                if read_result is not None:
-                    wonder_trade_pokemon_data = read_result[0]
-                    trade_is_sent = read_result[1][0]
+            if read_result is not None:
+                wonder_trade_pokemon_data = read_result[0]
+                trade_is_sent = read_result[1][0]
 
-                    if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
-                        # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
-                        # and mark that the game is waiting on receiving a trade
-                        Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
-                        await bizhawk.write(ctx.bizhawk_ctx, [
-                            (save_block_1_address + 0x377C, bytes(0x50), "System Bus"),
-                            (save_block_1_address + 0x37CC, [1], "System Bus"),
-                        ])
-                    elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
-                        # Game is waiting on receiving a trade. See if there are any available trades that were not
-                        # sent by this player, and if so, try to receive one.
-                        if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
-                            if any(item[0] != ctx.slot
-                                    for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
-                                    if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
-                                received_trade = await self.wonder_trade_receive(ctx)
-                                if received_trade is None:
-                                    self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
-                                    self.wonder_trade_cooldown *= 2
-                                    logger.info(f"DEBUG: Wonder trade was empty. Cooldown set to {self.wonder_trade_cooldown}")
-                                else:
-                                    await bizhawk.write(ctx.bizhawk_ctx, [
-                                        (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
-                                    ])
-                                    logger.info("Wonder trade received!")
-                                    self.wonder_trade_cooldown = 5000
+                if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
+                    # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
+                    # and mark that the game is waiting on receiving a trade
+                    Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
+                    await bizhawk.write(ctx.bizhawk_ctx, [
+                        (save_block_1_address + 0x377C, bytes(0x50), "System Bus"),
+                        (save_block_1_address + 0x37CC, [1], "System Bus"),
+                    ])
+                elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
+                    # Game is waiting on receiving a trade. See if there are any available trades that were not
+                    # sent by this player, and if so, try to receive one.
+                    if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                        if any(item[0] != ctx.slot
+                                for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
+                                if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
+                            received_trade = await self.wonder_trade_receive(ctx)
+                            if received_trade is None:
+                                self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
+                                self.wonder_trade_cooldown *= 2
+                            else:
+                                await bizhawk.write(ctx.bizhawk_ctx, [
+                                    (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
+                                ])
+                                logger.info("Wonder trade received!")
+                                self.wonder_trade_cooldown = 5000
 
-                        else:
-                            # Very approximate "time since last loop", but extra delay is fine for this
-                            self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
+                    else:
+                        # Very approximate "time since last loop", but extra delay is fine for this
+                        self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
 
             game_clear = False
             local_checked_locations = set()
@@ -494,24 +490,6 @@ class PokemonEmeraldClient(BizHawkClient):
             # Exit handler and return to main loop to reconnect
             pass
 
-    def check_num_wonder_trade_communiations(self) -> bool:
-        """
-        Because the wonder trade code is so complicated and I have found myself in many infinite loops before,
-        this puts a hard cap on participation in wonder trade communications. That way a bug doesn't cause an absurd
-        number of writes to the server's data storage over the course of a seed.
-        """
-        self.num_wonder_trade_communications += 1
-        if self.num_wonder_trade_communications < 100:
-            return True
-        
-        if self.num_wonder_trade_communications == 100:
-            from CommonClient import logger
-            logger.info("Your client seems to be doing an excessive amount of communication related to wonder trades. "
-                        "Wonder trade communications will be turned off for now to protect the server from excessive "
-                        "data storage updates. Please report this to the dev with details about what you had been doing"
-                        "as it relates to wonder trading.")
-        return False
-
     async def wonder_trade_acquire(self, ctx: "BizHawkClientContext", keep_trying: bool = False) -> Optional[dict]:
         """
         Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
@@ -535,8 +513,6 @@ class PokemonEmeraldClient(BizHawkClient):
                 "operations": [{"operation": "update", "value": {"_lock": lock}}],
                 "uuid": message_uuid
             }])
-            logger.info("DEBUG: Aquiring Wonder Trade lock")
-            self.check_num_wonder_trade_communiations()
 
             self.wonder_trade_update_event.clear()
             await self.wonder_trade_update_event.wait()
@@ -544,7 +520,6 @@ class PokemonEmeraldClient(BizHawkClient):
 
             # Make sure the most recently received update was triggered by our lock attempt
             if reply.get("uuid", None) != message_uuid:
-                logger.info("DEBUG: Lock attempt and recent update were mismatched")
                 if not keep_trying:
                     return None
                 await asyncio.sleep(self.wonder_trade_cooldown)
@@ -553,7 +528,6 @@ class PokemonEmeraldClient(BizHawkClient):
             # Make sure the current value of the lock is what we set it to
             # (I think this should theoretically never run)
             if reply["value"]["_lock"] != lock:
-                logger.info("DEBUG: Lock attempt set to incorrect value")
                 if not keep_trying:
                     return None
                 await asyncio.sleep(self.wonder_trade_cooldown)
@@ -567,7 +541,6 @@ class PokemonEmeraldClient(BizHawkClient):
                 # too new when we replaced it, we should wait for increasingly longer periods so that
                 # eventually the lock will expire and a client will acquire it.
                 self.wonder_trade_cooldown *= 2
-                logger.info(f"DEBUG: Lock is too new. Cooldown set to {self.wonder_trade_cooldown}")
 
                 if not keep_trying:
                     self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
@@ -600,7 +573,6 @@ class PokemonEmeraldClient(BizHawkClient):
                 str(wonder_trade_slot): (ctx.slot, data)
             }}]
         }])
-        self.check_num_wonder_trade_communiations()
 
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
 
@@ -624,14 +596,12 @@ class PokemonEmeraldClient(BizHawkClient):
         ]
 
         if len(candidate_slots) == 0:
-            logger.info(f"DEBUG: Tried to receive, but no trades available")
             await ctx.send_msgs([{
                 "cmd": "Set",
                 "key": f"pokemon_wonder_trades_{ctx.team}",
                 "default": {"_lock": 0},
                 "operations": [{"operation": "update", "value": {"_lock": 0}}]
             }])
-            self.check_num_wonder_trade_communiations()
             return None
 
         wonder_trade_slot = max(candidate_slots)
@@ -645,7 +615,6 @@ class PokemonEmeraldClient(BizHawkClient):
                 {"operation": "pop", "value": str(wonder_trade_slot)}
             ]
         }])
-        self.check_num_wonder_trade_communiations()
 
         return reply["value"][str(wonder_trade_slot)][1]
 
