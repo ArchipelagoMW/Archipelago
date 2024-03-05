@@ -206,7 +206,7 @@ class PokemonRBClient(BizHawkClient):
             money = int(original_money.hex())
             if self.banking_command > money:
                 logger.warning(f"You do not have ${self.banking_command} to deposit!")
-            elif (-self.banking_command * BANK_EXCHANGE_RATE) > ctx.stored_data[f"EnergyLink{ctx.team}"]:
+            elif (-self.banking_command * BANK_EXCHANGE_RATE) > (ctx.stored_data[f"EnergyLink{ctx.team}"] or 0):
                 logger.warning("Not enough money in the EnergyLink storage!")
             else:
                 if self.banking_command + money > 999999:
@@ -258,11 +258,12 @@ def cmd_bank(self, cmd: str = "", amount: str = ""):
     if self.ctx.game != "Pokemon Red and Blue":
         logger.warning("This command can only be used while playing Pokémon Red and Blue")
         return
-    if not cmd:
-        logger.info(f"Money available: {int(self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] / BANK_EXCHANGE_RATE)}")
-        return
-    elif (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
+    if (not self.ctx.server) or self.ctx.server.socket.closed or not self.ctx.client_handler.game_state:
         logger.info(f"Must be connected to server and in game.")
+        return
+    elif not cmd:
+        logger.info(f"Money available: {int((self.ctx.stored_data[f'EnergyLink{self.ctx.team}'] or 0) / BANK_EXCHANGE_RATE)}")
+        return
     elif not amount:
         logger.warning("You must specify an amount.")
     elif cmd == "withdraw":
