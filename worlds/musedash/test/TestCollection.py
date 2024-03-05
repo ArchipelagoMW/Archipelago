@@ -3,11 +3,6 @@ from ..MuseDashCollection import MuseDashCollections
 
 
 class CollectionsTest(unittest.TestCase):
-    REMOVED_SONGS = [
-        "CHAOS Glitch",
-        "FM 17314 SUGAR RADIO",
-    ]
-
     def test_all_names_are_ascii(self) -> None:
         bad_names = list()
         collection = MuseDashCollections()
@@ -58,5 +53,5 @@ class CollectionsTest(unittest.TestCase):
         collection = MuseDashCollections()
         songs = collection.get_songs_with_settings({x for x in collection.DLC}, False, 0, 12)
 
-        for song_name in self.REMOVED_SONGS:
+        for song_name in collection.REMOVED_SONGS:
             self.assertNotIn(song_name, songs, f"Song '{song_name}' wasn't removed correctly.")
