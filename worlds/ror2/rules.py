@@ -9,9 +9,10 @@ if TYPE_CHECKING:
 
 
 # Rule to see if it has access to the previous stage
-def has_entrance_access_rule(multiworld: MultiWorld, stage: str, entrance: str, player: int) -> None:
-    multiworld.get_entrance(entrance, player).access_rule = \
-        lambda state: state.has(entrance, player) and state.has(stage, player)
+def has_entrance_access_rule(multiworld: MultiWorld, stage: str, region: str, player: int) -> None:
+    rule = lambda state: state.has(region, player) and state.has(stage, player)
+    for entrance in multiworld.get_region(region, player).entrances:
+        entrance.access_rule = rule
 
 
 def has_stage_access_rule(multiworld: MultiWorld, stage: str, amount: int, entrance: str, player: int) -> None:
@@ -20,9 +21,10 @@ def has_stage_access_rule(multiworld: MultiWorld, stage: str, amount: int, entra
                       (state.has(stage, player) or state.count("Progressive Stage", player) >= amount)
 
 
-def has_all_items(multiworld: MultiWorld, items: Set[str], entrance: str, player: int) -> None:
-    multiworld.get_entrance(entrance, player).access_rule = \
-        lambda state: state.has_all(items, player) and state.has(entrance, player)
+def has_all_items(multiworld: MultiWorld, items: Set[str], region: str, player: int) -> None:
+    rule = lambda state: state.has_all(items, player) and state.has(region, player)
+    for entrance in multiworld.get_region(region, player).entrances:
+        entrance.access_rule = rule
 
 
 # Checks to see if chest/shrine are accessible
@@ -51,8 +53,9 @@ def check_location(state, environment: str, player: int, item_number: int, item_
 def get_stage_event(multiworld: MultiWorld, player: int, stage_number: int) -> None:
     if stage_number == 4:
         return
-    multiworld.get_entrance(f"OrderedStage_{stage_number + 1}", player).access_rule = \
-        lambda state: state.has(f"Stage {stage_number + 1}", player)
+    rule = lambda state: state.has(f"Stage {stage_number + 1}", player)
+    for entrance in multiworld.get_region(f"OrderedStage_{stage_number + 1}", player).entrances:
+        entrance.access_rule = rule
 
 
 def set_rules(ror2_world: "RiskOfRainWorld") -> None:
@@ -127,7 +130,7 @@ def set_rules(ror2_world: "RiskOfRainWorld") -> None:
                     for newt in range(1, newts + 1):
                         has_location_access_rule(multiworld, environment_name, player, newt, "Newt Altar")
                 if i > 0:
-                    has_stage_access_rule(multiworld, f"Stage {i}", i, environment_name, player)
+                    has_entrance_access_rule(multiworld, f"Stage {i}", environment_name, player)
             get_stage_event(multiworld, player, i)
 
         if ror2_options.dlc_sotv:
