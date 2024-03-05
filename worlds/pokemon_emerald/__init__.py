@@ -35,6 +35,7 @@ class PokemonEmeraldWebWorld(WebWorld):
     Webhost info for Pokemon Emerald
     """
     theme = "ocean"
+
     setup_en = Tutorial(
         "Multiworld Setup Guide",
         "A guide to playing Pokémon Emerald with Archipelago.",
@@ -44,7 +45,16 @@ class PokemonEmeraldWebWorld(WebWorld):
         ["Zunawe"]
     )
 
-    tutorials = [setup_en]
+    setup_es = Tutorial(
+        "Guía de configuración para Multiworld",
+        "Una guía para jugar Pokémon Emerald en Archipelago",
+        "Español",
+        "setup_es.md",
+        "setup/es",
+        ["nachocua"]
+    )
+
+    tutorials = [setup_en, setup_es]
 
 
 class PokemonEmeraldSettings(settings.Group):
