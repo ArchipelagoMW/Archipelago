@@ -1,4 +1,4 @@
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from BaseClasses import MultiWorld
 from .locations import get_locations
 from .ror2environments import environment_vanilla_orderedstages_table, environment_sotv_orderedstages_table

@@ -1,10 +1,9 @@
 from typing import Dict, Callable, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from .Items import exclusion_item_table, visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table, SupportAbility_Table
-from .Locations import exclusion_table, popups_set, Goofy_Checks, Donald_Checks
-from .Names import LocationName, ItemName, RegionName
-from worlds.generic.Rules import add_rule, forbid_items, add_item_rule
+from .Items import visit_locking_dict, DonaldAbility_Table, GoofyAbility_Table, SupportAbility_Table
+from .Locations import exclusion_table, Goofy_Checks, Donald_Checks
+from worlds.rules import add_rule, add_item_rule
 from .Logic import *
 
 # I don't know what is going on here, but it works.

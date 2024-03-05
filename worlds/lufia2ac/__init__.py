@@ -9,7 +9,7 @@ from BaseClasses import Item, ItemClassification, Location, MultiWorld, Region, 
 from Options import PerGameCommonOptions
 from Utils import __version__
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_rule, CollectionRule, set_rule
+from worlds.rules import add_rule, CollectionRule, set_rule
 from .Client import L2ACSNIClient  # noqa: F401
 from .Items import ItemData, ItemType, l2ac_item_name_to_id, l2ac_item_table, L2ACItem, start_id as items_start_id
 from .Locations import l2ac_location_name_to_id, L2ACLocation

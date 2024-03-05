@@ -1,5 +1,5 @@
 from BaseClasses import Entrance
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from .StateHelpers import can_bomb_clip, has_sword, has_beam_sword, has_fire_source, can_melt_things, has_misery_mire_medallion
 
 

@@ -1,4 +1,4 @@
-from ..generic.Rules import set_rule
+from worlds.rules import set_rule
 from .Locations import location_table
 from .Regions import regionMap
 from ..AutoWorld import LogicMixin

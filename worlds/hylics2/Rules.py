@@ -1,4 +1,4 @@
-from worlds.generic.Rules import add_rule
+from worlds.rules import add_rule
 from BaseClasses import CollectionState
 
 

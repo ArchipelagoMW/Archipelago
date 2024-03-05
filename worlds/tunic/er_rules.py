@@ -1,5 +1,5 @@
 from typing import Dict, TYPE_CHECKING
-from worlds.generic.Rules import set_rule, forbid_item
+from worlds.rules import set_rule, forbid_item
 from .rules import has_ability, has_sword, has_stick, has_ice_grapple_logic, has_lantern, has_mask, can_ladder_storage
 from .er_data import Portal
 from BaseClasses import Region

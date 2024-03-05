@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Dict, Callable, Optional
 
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from .locations import location_table, LocationDict
 from .creatures import all_creatures, aggressive, suffix, hatchable, containment
 from .options import AggressiveScanLogic, SwimRule

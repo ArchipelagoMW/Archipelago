@@ -2,7 +2,7 @@ import typing
 from collections.abc import Callable
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import exclusion_rules
+from worlds.rules import exclusion_rules
 from worlds.AutoWorld import World
 
 from . import Constants

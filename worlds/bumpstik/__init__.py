@@ -9,7 +9,6 @@ from .Locations import location_table
 from .Options import *
 from .Regions import create_regions
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import forbid_item
 
 
 class BumpStikWeb(WebWorld):

@@ -2,7 +2,7 @@ import itertools
 from typing import List
 
 from BaseClasses import MultiWorld
-from worlds.generic import Rules as MultiWorldRules
+from worlds import rules as MultiWorldRules
 from .options import StardewValleyOptions, ToolProgression, BuildingProgression, SkillProgression, ExcludeGingerIsland, Cropsanity, SpecialOrderLocations, Museumsanity, \
     BackpackProgression, ArcadeMachineLocations
 from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entrance, move_to_woods_depth, \

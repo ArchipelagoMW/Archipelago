@@ -583,7 +583,7 @@ def create_items(self) -> None:
 ### Setting Rules
 
 ```python
-from worlds.generic.Rules import add_rule, set_rule, forbid_item, add_item_rule
+from worlds.rules import add_rule, set_rule, forbid_item, add_item_rule
 from .items import get_item_type
 
 
@@ -665,7 +665,7 @@ def mygame_has_key(self, state: CollectionState, player: int) -> bool:
 ```python
 # __init__.py
 
-from worlds.generic.Rules import set_rule
+from worlds.Rules import set_rule
 from . import logic
 
 

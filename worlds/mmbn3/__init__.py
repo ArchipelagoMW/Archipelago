@@ -1,21 +1,19 @@
 import os
 import settings
 import typing
-import threading
 
-from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, Entrance, \
-    LocationProgressType
+from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification, Region, LocationProgressType
 
 from worlds.AutoWorld import WebWorld, World
 from .Rom import MMBN3DeltaPatch, LocalRom, get_base_rom_path
 from .Items import MMBN3Item, ItemData, item_table, all_items, item_frequencies, items_by_id, ItemType
-from .Locations import Location, MMBN3Location, all_locations, location_table, location_data_table, \
+from .Locations import MMBN3Location, all_locations, location_table, location_data_table, \
     always_excluded_locations, jobs
 from .Options import MMBN3Options
 from .Regions import regions, RegionName
 from .Names.ItemName import ItemName
 from .Names.LocationName import LocationName
-from worlds.generic.Rules import add_item_rule
+from worlds.rules import add_item_rule
 
 
 class MMBN3Settings(settings.Group):

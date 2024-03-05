@@ -1,6 +1,5 @@
 import ast
 from collections import defaultdict
-from inspect import signature, _ParameterKind
 import logging
 import re
 
@@ -10,7 +9,7 @@ from .Regions import TimeOfDay, OOTRegion
 from BaseClasses import CollectionState as State
 from .Utils import data_path, read_json
 
-from worlds.generic.Rules import set_rule
+from worlds.rules import set_rule
 
 
 escaped_items = {}

@@ -6,7 +6,7 @@ from .Items import base_id, item_table, group_table, tears_set, reliquary_set, e
 from .Locations import location_table
 from .Rooms import room_table, door_table
 from .Rules import rules
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from .Options import blasphemous_options
 from .Vanilla import unrandomized_dict, junk_locations, thorn_set, skill_dict
 

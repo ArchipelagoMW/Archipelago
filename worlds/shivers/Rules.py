@@ -1,7 +1,7 @@
 from typing import Dict, List, TYPE_CHECKING
 from collections.abc import Callable
 from BaseClasses import CollectionState
-from worlds.generic.Rules import forbid_item
+from worlds.rules import forbid_item
 
 if TYPE_CHECKING:
     from . import ShiversWorld

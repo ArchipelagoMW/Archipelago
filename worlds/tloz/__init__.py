@@ -7,7 +7,7 @@ import Utils
 import settings
 import typing
 
-from typing import NamedTuple, Union, Dict, Any
+from typing import Dict, Any
 from BaseClasses import Item, Location, Region, Entrance, MultiWorld, ItemClassification, Tutorial
 from .ItemPool import generate_itempool, starting_weapons, dangerous_weapon_locations
 from .Items import item_table, item_prices, item_game_ids
@@ -17,7 +17,7 @@ from .Options import TlozOptions
 from .Rom import TLoZDeltaPatch, get_base_rom_path, first_quest_dungeon_items_early, first_quest_dungeon_items_late
 from .Rules import set_rules
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import add_rule
+from worlds.rules import add_rule
 
 
 class TLoZSettings(settings.Group):
@@ -170,7 +170,7 @@ class TLoZWorld(World):
         # refer to ItemPool.py
         generate_itempool(self)
 
-    # refer to Rules.py
+    # refer to rules.py
     set_rules = set_rules
 
     def generate_basic(self):

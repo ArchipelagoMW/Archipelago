@@ -1,5 +1,5 @@
 from BaseClasses import Region, MultiWorld, Entrance, Location, LocationProgressType, ItemClassification
-from worlds.generic.Rules import add_rule
+from worlds.rules import add_rule
 from .Items import item_groups, yaml_item
 import pkgutil
 import yaml

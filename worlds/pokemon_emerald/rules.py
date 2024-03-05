@@ -4,7 +4,7 @@ Logic rule definitions for Pokemon Emerald
 from typing import TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.rules import add_rule, set_rule
 
 from .data import data
 from .options import EliteFourRequirement, NormanRequirement, Goal

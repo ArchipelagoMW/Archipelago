@@ -8,7 +8,7 @@ from Fill import FillError, balance_multiworld_progression, fill_restrictive, \
     distribute_early_items, distribute_items_restrictive
 from BaseClasses import Entrance, LocationProgressType, MultiWorld, Region, Item, Location, \
     ItemClassification, CollectionState
-from worlds.generic.Rules import CollectionRule, add_item_rule, locality_rules, set_rule
+from worlds.rules import CollectionRule, add_item_rule, locality_rules, set_rule
 
 
 def generate_multiworld(players: int = 1) -> MultiWorld:

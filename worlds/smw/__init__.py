@@ -11,7 +11,7 @@ from .Options import smw_options
 from .Regions import create_regions, connect_regions
 from .Levels import full_level_list, generate_level_list, location_id_to_level_id
 from .Rules import set_rules
-from worlds.generic.Rules import add_rule, exclusion_rules
+from worlds.rules import add_rule, exclusion_rules
 from .Names import ItemName, LocationName
 from .Client import SMWSNIClient
 from worlds.AutoWorld import WebWorld, World

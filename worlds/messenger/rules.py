@@ -1,7 +1,7 @@
 from typing import Dict, TYPE_CHECKING
 
 from BaseClasses import CollectionState
-from worlds.generic.Rules import add_rule, allow_self_locking_items, CollectionRule
+from worlds.rules import add_rule, allow_self_locking_items, CollectionRule
 from .constants import NOTES, PHOBEKINS
 from .options import MessengerAccessibility
 

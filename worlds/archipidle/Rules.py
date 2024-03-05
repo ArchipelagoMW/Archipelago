@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
 from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.rules import set_rule
 
 
 class ArchipIDLELogic(LogicMixin):

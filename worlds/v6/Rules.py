@@ -1,5 +1,5 @@
 import typing
-from ..generic.Rules import add_rule
+from worlds.rules import add_rule
 from .Regions import v6areas
 
 

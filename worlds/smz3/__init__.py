@@ -7,7 +7,7 @@ from typing import Dict, Set, TextIO
 
 from BaseClasses import Region, Entrance, Location, MultiWorld, Item, ItemClassification, CollectionState, \
     Tutorial
-from worlds.generic.Rules import set_rule
+from worlds.rules import set_rule
 from .TotalSMZ3.Item import ItemType
 from .TotalSMZ3 import Item as TotalSMZ3Item
 from .TotalSMZ3.World import World as TotalSMZ3World
@@ -23,7 +23,6 @@ from .Client import SMZ3SNIClient
 from .Rom import get_base_rom_bytes, SMZ3DeltaPatch
 from .ips import IPS_Patch
 from .Options import smz3_options
-from Options import Accessibility
 
 world_folder = os.path.dirname(__file__)
 logger = logging.getLogger("SMZ3")

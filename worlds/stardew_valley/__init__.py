@@ -14,7 +14,7 @@ from .options import StardewValleyOptions, SeasonRandomization, Goal, BundleRand
 from .presets import sv_options_presets
 from .regions import create_regions
 from .rules import set_rules
-from worlds.generic.Rules import set_rule
+from worlds.rules import set_rule
 from .strings.goal_names import Goal as GoalName
 
 client_version = 0

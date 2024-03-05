@@ -16,7 +16,7 @@ from Options import StartInventoryPool
 from Utils import __version__, output_path, version_tuple
 from settings import get_settings
 from worlds import AutoWorld
-from worlds.generic.Rules import exclusion_rules, locality_rules
+from worlds.rules import exclusion_rules, locality_rules
 
 __all__ = ["main"]
 

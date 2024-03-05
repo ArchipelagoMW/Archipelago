@@ -1,4 +1,4 @@
-from ..generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from ..AutoWorld import World
 from .GeneratedRules import set_generated_rules
 from typing import NamedTuple

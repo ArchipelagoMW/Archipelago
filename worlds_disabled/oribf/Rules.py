@@ -1,7 +1,7 @@
 from typing import Set
 
 from .RulesData import location_rules
-from worlds.generic.Rules import set_rule
+from worlds.rules import set_rule
 from BaseClasses import Location, CollectionState
 
 

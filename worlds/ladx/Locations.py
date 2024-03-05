@@ -3,7 +3,7 @@ from BaseClasses import Region, Entrance, Location, CollectionState
 
 from .LADXR.checkMetadata import checkMetadataTable
 from .Common import *
-from worlds.generic.Rules import add_item_rule
+from worlds.rules import add_item_rule
 from .Items import ladxr_item_to_la_item_name
 
 

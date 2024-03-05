@@ -1,7 +1,7 @@
 from itertools import chain
 import logging
 
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from BaseClasses import CollectionState
 
 from .Hints import get_hint_area, HintAreaNotFound

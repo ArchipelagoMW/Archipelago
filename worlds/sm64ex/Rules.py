@@ -1,10 +1,9 @@
 from typing import Callable, Union, Dict, Set
 
 from BaseClasses import MultiWorld
-from ..generic.Rules import add_rule, set_rule
+from worlds.rules import add_rule, set_rule
 from .Locations import location_table
-from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_paintings_to_level,\
-sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
+from .Regions import connect_regions, SM64Levels, sm64_level_to_paintings, sm64_level_to_secrets, sm64_secrets_to_level, sm64_entrances_to_level, sm64_level_to_entrances
 from .Items import action_item_table
 
 def shuffle_dict_keys(world, dictionary: dict) -> dict:

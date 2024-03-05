@@ -5,7 +5,7 @@ import functools
 import settings
 import typing
 from typing import Optional, List, AbstractSet, Union  # remove when 3.8 support is dropped
-from collections import Counter, deque
+from collections import Counter
 from string import printable
 
 logger = logging.getLogger("Ocarina of Time")
@@ -31,10 +31,10 @@ from .N64Patch import create_patch_file
 from .Cosmetics import patch_cosmetics
 
 from Utils import get_options
-from BaseClasses import MultiWorld, CollectionState, Tutorial, LocationProgressType
+from BaseClasses import MultiWorld, CollectionState, Tutorial
 from Options import Range, Toggle, VerifyKeys, Accessibility
 from Fill import fill_restrictive, fast_fill, FillError
-from worlds.generic.Rules import exclusion_rules, add_item_rule
+from worlds.rules import exclusion_rules
 from ..AutoWorld import World, AutoLogicRegister, WebWorld
 
 # OoT's generate_output doesn't benefit from more than 2 threads, instead it uses a lot of memory.

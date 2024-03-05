@@ -8,7 +8,7 @@ from BaseClasses import CollectionState, Item, Location, LocationProgressType, M
 from Options import Accessibility
 
 from worlds.AutoWorld import call_all
-from worlds.generic.Rules import add_item_rule
+from worlds.rules import add_item_rule
 
 
 class FillError(RuntimeError):

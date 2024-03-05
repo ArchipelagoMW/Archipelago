@@ -5,7 +5,7 @@ import logging
 
 from Utils import int16_as_bytes
 
-from worlds.generic.Rules import add_rule
+from worlds.rules import add_rule
 
 from BaseClasses import CollectionState
 from .SubClasses import ALttPLocation

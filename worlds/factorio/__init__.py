@@ -8,7 +8,7 @@ import typing
 from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 from worlds.LauncherComponents import Component, components, Type, launch_subprocess
-from worlds.generic import Rules
+from worlds import rules as Rules
 from .Locations import location_pools, location_table
 from .Mod import generate_mod
 from .Options import factorio_options, MaxSciencePack, Silo, Satellite, TechTreeInformation, Goal, TechCostDistribution

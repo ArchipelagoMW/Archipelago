@@ -3,8 +3,8 @@ import logging
 from typing import Iterator, Set
 
 from BaseClasses import Entrance, MultiWorld
-from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
-                                  item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
+from worlds.rules import (add_item_rule, add_rule, forbid_item,
+                          item_name_in_location_names, location_item_name, set_rule, allow_self_locking_items)
 
 from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule

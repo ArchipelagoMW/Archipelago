@@ -2,7 +2,7 @@ from typing import List
 
 from BaseClasses import MultiWorld, Region, Location
 from ..AutoWorld import LogicMixin
-from ..generic.Rules import set_rule
+from worlds.rules import set_rule
 
 
 class WargrooveLogic(LogicMixin):

@@ -11,7 +11,7 @@ import settings
 from BaseClasses import Item, ItemClassification, Location, LocationProgressType, Region, Tutorial
 from Utils import output_path
 from worlds.AutoWorld import WebWorld, World
-from worlds.generic.Rules import add_item_rule, set_rule
+from worlds.rules import add_item_rule, set_rule
 from .logic import SoEPlayerLogic
 from .options import Difficulty, EnergyCore, SoEOptions
 from .patch import SoEDeltaPatch, get_base_rom_path

@@ -1,5 +1,5 @@
 from typing import Dict, List, Set
-from worlds.generic.Rules import set_rule, add_rule
+from worlds.rules import set_rule, add_rule
 from BaseClasses import CollectionState
 
 

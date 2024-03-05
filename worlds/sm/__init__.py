@@ -11,7 +11,7 @@ import settings
 from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
 from Options import Accessibility
 from worlds.AutoWorld import AutoLogicRegister, WebWorld, World
-from worlds.generic.Rules import add_rule, set_rule
+from worlds.rules import add_rule, set_rule
 
 logger = logging.getLogger("Super Metroid")
 

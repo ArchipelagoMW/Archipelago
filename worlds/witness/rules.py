@@ -9,7 +9,7 @@ from BaseClasses import CollectionState
 from .player_logic import WitnessPlayerLogic
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic, WitnessRegions
-from worlds.generic.Rules import set_rule
+from worlds.rules import set_rule
 
 if TYPE_CHECKING:
     from . import WitnessWorld

@@ -5,7 +5,7 @@ from BaseClasses import MultiWorld, Region, Item, Entrance, Tutorial, ItemClassi
 from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
-from worlds.generic.Rules import set_rule, add_rule, add_item_rule
+from worlds.rules import set_rule, add_rule, add_item_rule
 
 from .Items import DarkSouls3Item, DS3ItemCategory, item_dictionary, key_item_names, item_descriptions
 from .Locations import DarkSouls3Location, DS3LocationCategory, location_tables, location_dictionary

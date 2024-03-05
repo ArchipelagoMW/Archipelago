@@ -3,11 +3,11 @@ from .Items import UndertaleItem, item_table, required_armor, required_weapons, 
 from .Locations import UndertaleAdvancement, advancement_table, exclusion_table
 from .Regions import undertale_regions, link_undertale_areas
 from .Rules import set_rules, set_completion_rules
-from worlds.generic.Rules import exclusion_rules
+from worlds.rules import exclusion_rules
 from BaseClasses import Region, Entrance, Tutorial, Item
 from .Options import undertale_options
 from worlds.AutoWorld import World, WebWorld
-from worlds.LauncherComponents import Component, components, Type
+from worlds.LauncherComponents import Component, components
 from multiprocessing import Process
 
 

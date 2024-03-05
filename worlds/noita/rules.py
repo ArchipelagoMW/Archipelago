@@ -3,7 +3,7 @@ from typing import List, NamedTuple, Set, TYPE_CHECKING
 from BaseClasses import CollectionState
 from . import items, locations
 from .options import BossesAsChecks, VictoryCondition
-from worlds.generic import Rules as GenericRules
+from worlds import rules as GenericRules
 
 if TYPE_CHECKING:
     from . import NoitaWorld

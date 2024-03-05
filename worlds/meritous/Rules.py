@@ -3,7 +3,7 @@
 # This software is released under the MIT License.
 # https://opensource.org/licenses/MIT
 
-from ..generic.Rules import forbid_item, exclusion_rules
+from worlds.rules import forbid_item, exclusion_rules
 
 
 def set_rules(world, player):
