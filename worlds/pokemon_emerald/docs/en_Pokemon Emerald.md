@@ -1,15 +1,15 @@
 # Pokémon Emerald
 
-## Where is the settings page?
+## Where is the options page?
 
-You can read through all the settings and generate a YAML [here](../player-settings).
+You can read through all the options and generate a YAML [here](../player-options).
 
 ## What does randomization do to this game?
 
 This randomizer handles both item randomization and pokémon randomization. Badges, HMs, gifts from NPCs, and items on
 the ground can all be randomized. There are also many options for randomizing wild pokémon, starters, opponent pokémon,
 abilities, types, etc… You can even change a percentage of single battles into double battles. Check the
-[settings page](../player-settings) for a more comprehensive list of what can be changed.
+[options page](../player-options) for a more comprehensive list of what can be changed.
 
 ## What items and locations get randomized?
 
@@ -28,7 +28,7 @@ randomizer. Here are some of the more important ones:
 - You can have both bikes simultaneously
 - You can run or bike (almost) anywhere
 - The Wally catching tutorial is skipped
-- All text is instant, and with a setting it can be automatically progressed by holding A
+- All text is instant and, with an option, can be automatically progressed by holding A
 - When a Repel runs out, you will be prompted to use another
 - Many more minor improvements…
 
@@ -44,7 +44,7 @@ your inventory.
 ## When the player receives an item, what happens?
 
 You will only receive items while in the overworld and not during battles. Depending on your `Receive Item Messages`
-setting, the received item will either be silently added to your bag or you will be shown a text box with the item's
+option, the received item will either be silently added to your bag or you will be shown a text box with the item's
 name and the item will be added to your bag while a fanfare plays.
 
 ## Can I play offline?

@@ -67,10 +67,10 @@ def create_regions(self):
         self.multiworld.regions.append(create_region(self.multiworld, self.player, room["name"], room["id"],
             [FFMQLocation(self.player, object["name"], location_table[object["name"]] if object["name"] in
             location_table else None, object["type"], object["access"],
-            self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for
-            object in room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in
-            ("BattlefieldGp", "BattlefieldXp") and (object["type"] != "Box" or
-            self.multiworld.brown_boxes[self.player] == "include")], room["links"]))
+            self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for object in
+            room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in ("BattlefieldGp",
+            "BattlefieldXp") and (object["type"] != "Box" or self.multiworld.brown_boxes[self.player] == "include") and
+            not (object["name"] == "Kaeli Companion" and not object["on_trigger"])], room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
     dark_king = FFMQLocation(self.player, "Dark King", None, "Trigger", [])
@@ -220,15 +220,12 @@ def stage_set_rules(multiworld):
         for player in no_enemies_players:
             for location in vendor_locations:
                 if multiworld.accessibility[player] == "locations":
-                    print("exclude")
                     multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
                 else:
-                    print("unreachable")
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
         # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
-        # advancement items so that useful items can be placed.
-        print("no advancement")
+        # advancement items so that useful items can be placed
         for player in no_enemies_players:
             for location in vendor_locations:
                 multiworld.get_location(location, player).item_rule = lambda item: not item.advancement
