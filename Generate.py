@@ -321,7 +321,7 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
     return random.random() < (float(percentage) / 100)
 
 
-def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
@@ -336,7 +336,8 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
                 elif isinstance(new_value, set):
                     new_value.update(weights[option_name])
                 else:
-                    raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name}.")
+                    raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                    f" received {type(new_value).__name__}.")
             cleaned_weights[option_name] = new_value
         else:
             cleaned_weights[option] = new_weights[option]
@@ -344,7 +345,7 @@ def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> di
     weights.update(cleaned_weights)
     if new_options:
         for new_option in new_options:
-            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+            logging.warning(f'{update_type} Suboption "{new_option}" of "{name}" did not '
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
