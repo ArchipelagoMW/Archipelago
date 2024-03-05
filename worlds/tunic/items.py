@@ -162,7 +162,7 @@ item_table: Dict[str, TunicItemData] = {
     "South Atoll Ladders": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
     "Ladders to Frog's Domain": TunicItemData(ItemClassification.progression, 0, 146, "ladders"),
     "Hourglass Cave Ladders": TunicItemData(ItemClassification.progression, 0, 147, "ladders"),
-    "West Overworld Ladders": TunicItemData(ItemClassification.progression, 0, 148, "ladders")
+    "Overworld Town Ladders": TunicItemData(ItemClassification.progression, 0, 148, "ladders")
 }
 
 fool_tiers: List[List[str]] = [

@@ -51,10 +51,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Beach"],
-        rule=lambda state: has_ladder("West Overworld Ladders", state, player, options) or state.has(laurels, player))
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options) or state.has(laurels, player))
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("West Overworld Ladders", state, player, options) or state.has(laurels, player))
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options) or state.has(laurels, player))
 
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld West Garden Laurels Entry"],
@@ -914,50 +914,50 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         ladder_storages: List[Tuple[str, str, Set[str]]] = [
             # The upper Swamp entrance
             ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
-             {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders"}),
+             {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Furnace entrance, next to the sign that leads to West Garden
             ("Overworld", "Overworld Redux, Furnace_gyro_west",
-             {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders"}),
+             {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Upper West Garden entry, by the belltower
             ("Overworld", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Ruined Passage
             ("Overworld", "Overworld Redux, Ruins Passage_east",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Well rail, west side. Can ls in town, get extra height by going over the portal pad
             ("Overworld", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Quarry"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Quarry"}),
             # Well rail, east side. Need some height from the temple stairs
             ("Overworld", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Quarry"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Quarry"}),
             # Quarry entry
             ("Overworld", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well"}),
 
             # East Forest entry
             ("Overworld", "Overworld Redux, Forest Belltower_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well",
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
 
             # Fortress entry
             ("Overworld", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well",
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
 
             # Patrol Cave entry
             ("Overworld", "Overworld Redux, PatrolCave_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well",
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladder to Quarry", "Ladders near Dark Tomb"}),
 
             # Special Shop entry
             ("Overworld", "Overworld Redux, ShopSpecial_",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well",
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladders near Patrol Cave", "Ladder to Quarry",
                  "Ladders near Dark Tomb"}),
 
             # Temple Rafters
             ("Overworld", "Overworld Redux, Temple_rafters",
-                {"Ladders near Weathervane", "Ladder to Swamp", "West Overworld Ladders", "Ladder to Well",
+                {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladders near Patrol Cave", "Ladder to Quarry",
                  "Ladders near Dark Tomb"}),
 
@@ -967,16 +967,16 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
             # West Garden entry by the Furnace
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lower",
-                {"West Overworld Ladders", "Ladder to Ruined Atoll"}),
+                {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
             # West Garden laurels entry
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lowest",
-                {"West Overworld Ladders", "Ladder to Ruined Atoll"}),
+                {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
             # Swamp lower entrance
             ("Overworld Beach", "Overworld Redux, Swamp Redux 2_conduit",
-                {"West Overworld Ladders", "Ladder to Ruined Atoll"}),
+                {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
             # Rotating Lights entrance
             ("Overworld Beach", "Overworld Redux, Overworld Cave_",
-                {"West Overworld Ladders", "Ladder to Ruined Atoll"}),
+                {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
 
             # West Garden main entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
