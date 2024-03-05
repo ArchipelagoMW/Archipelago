@@ -161,8 +161,40 @@ into any locations within the game slots named BobsSlaytheSpire and BobsRogueLeg
 
 ## Boss Plando
 
-As this is currently only supported by A Link to the Past, instead of finding an explanation here, please refer to the
-relevant guide: [A Link to the Past Plando Guide](/tutorial/A%20Link%20to%20the%20Past/plando/en)
+This is currently only supported by A Link to the Past and Kirby's Dream Land 3. Boss plando allows a player to place a 
+given boss within an arena. More specific information for boss plando in A Link to the Past can be found in 
+its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en).
+
+Boss plando takes in a list of instructions for placing bosses, separated by a semicolon `;`.
+There are three types of placement: direct, full, and shuffle.
+* Direct placement takes both an arena and a boss, and places the boss into that arena.
+  * `Eastern Palace-Trinexx`
+* Full placement will take a boss, and place it into as many remaining arenas as possible.
+  * `King Dedede`
+* Shuffle will fill any remaining arenas using a given boss shuffle option, typically to be used as the last instruction.
+  * `full`
+
+### Examples
+
+```yaml
+A Link to the Past:
+  boss_shuffle:
+    # Basic boss shuffle, but prevent Trinexx from being outside Turtle Rock
+    Turtle Rock-Trinexx;basic: 1
+    # Place as many Arrghus as possible, then let the rest be random
+    Arrghus;chaos: 1
+    
+Kirby's Dream Land 3:
+  boss_shuffle:
+    # Ensure Iceberg's boss will be King Dedede, but randomize the rest
+    Iceberg-King Dedede;full: 1
+    # Have all bosses be Whispy Woods
+    Whispy Woods: 1
+    # Ensure Ripple Field's boss is Pon & Con, but let the method others
+    # are placed with be random
+    Ripple Field-Pon & Con;random: 1
+```
+
 
 ## Text Plando
 
@@ -184,7 +216,7 @@ its [plando guide](/tutorial/A%20Link%20to%20the%20Past/plando/en#connections).
 
 [A Link to the Past connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/alttp/EntranceShuffle.py#L3852)
 
-[Minecraft connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/Regions.py#L62)
+[Minecraft connections](https://github.com/ArchipelagoMW/Archipelago/blob/main/worlds/minecraft/data/regions.json#L18****)
 
 ### Examples
 
