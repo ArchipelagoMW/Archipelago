@@ -166,7 +166,9 @@ itemList: typing.List[ItemData] = [
     ItemData(77771148, "Entered Fungitown", ItemClassification.skip_balancing, 0x0),
     ItemData(77771149, "Beanstar Complete", ItemClassification.skip_balancing, 0x0),
     ItemData(77771150, "Jojora Defeated", ItemClassification.skip_balancing, 0x0),
-    ItemData(77771151, "Birdo Defeated", ItemClassification.skip_balancing, 0x0)
+    ItemData(77771151, "Birdo Defeated", ItemClassification.skip_balancing, 0x0),
+    ItemData(77771152, "Woo Bean", ItemClassification.skip_balancing, 0x1C),
+    ItemData(77771153, "Hee Bean", ItemClassification.skip_balancing, 0x1F),
 ]
 
 item_frequencies: typing.Dict[str, int] = {

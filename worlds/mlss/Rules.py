@@ -244,8 +244,9 @@ def set_rules(world: "MLSSWorld", excluded):
                  lambda state: StateLogic.canCrash(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.BeanstarPieceHermie, world.player),
                  lambda state: StateLogic.canCrash(state, world.player))
-        add_rule(world.multiworld.get_location(LocationName.GwarharLagoonPastHermieDigspot, world.player),
-                 lambda state: StateLogic.canCrash(state, world.player))
+        if world.options.chuckle_beans != 0:
+            add_rule(world.multiworld.get_location(LocationName.GwarharLagoonPastHermieDigspot, world.player),
+                    lambda state: StateLogic.canCrash(state, world.player))
 
     if world.options.coins:
         add_rule(world.multiworld.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock1, world.player),

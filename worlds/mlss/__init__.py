@@ -94,6 +94,10 @@ class MLSSWorld(World):
         self.multiworld.get_location(LocationName.ShopStartingFlag2, self.player).place_locked_item(item)
         item = self.create_item("1-UP Mushroom")
         self.multiworld.get_location(LocationName.ShopStartingFlag3, self.player).place_locked_item(item)
+        item = self.create_item("Hoo Bean")
+        self.multiworld.get_location(LocationName.PantsShopStartingFlag1, self.player).place_locked_item(item)
+        item = self.create_item("Chuckle Bean")
+        self.multiworld.get_location(LocationName.PantsShopStartingFlag2, self.player).place_locked_item(item)
         item = self.create_item("Dragohoho Defeated")
         self.multiworld.get_location("Dragohoho", self.player).place_locked_item(item)
         item = self.create_item("Queen Bean Defeated")
@@ -132,6 +136,8 @@ class MLSSWorld(World):
         # Then, get a random amount of fillers until we have as many items as we have locations
         filler_items = []
         for item in itemList:
+            if item.progression == ItemClassification.skip_balancing:
+                continue
             if item.progression == ItemClassification.filler:
                 if item.itemName == "5 Coins" and not self.options.coins:
                     continue
@@ -146,9 +152,9 @@ class MLSSWorld(World):
                     freq = 1
                 filler_items += [item.itemName for _ in range(freq)]
 
-        remaining = len(all_locations) - len(required_items) - len(event) - 3
+        remaining = len(all_locations) - len(required_items) - len(event) - 5
         if self.options.castle_skip:
-            remaining -= (len(bowsers) + len(bowsersMini))
+            remaining -= (len(bowsers) + len(bowsersMini) - (5 if self.options.chuckle_beans == 0 else 0))
         if self.options.skip_minecart and self.options.chuckle_beans == 2:
             remaining -= 1
         if self.options.disable_surf:
@@ -156,7 +162,7 @@ class MLSSWorld(World):
         if self.options.harhalls_pants:
             remaining -= 1
         if self.options.chuckle_beans == 0:
-            remaining -= 186
+            remaining -= 192
         if self.options.chuckle_beans == 1:
             remaining -= 59
         if not self.options.coins:

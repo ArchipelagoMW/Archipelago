@@ -235,7 +235,7 @@ def find_key(dictionary, target):
 
 def id_to_RAM(id_: int):
     code = id_
-    if code == 0x1D or code == 0x1E:
+    if 0x1C <= code <= 0x1F:
         code += 0xE
     if 0x20 <= code <= 0x26:
         code -= 0x4
