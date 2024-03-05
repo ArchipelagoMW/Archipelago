@@ -17,7 +17,7 @@ class MessengerWeb(WebWorld):
     bug_report_page = "https://github.com/alwaysintreble/TheMessengerRandomizerModAP/issues"
 
     tut_en = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up The Messenger randomizer on your computer.",
         "English",
         "setup_en.md",
@@ -62,7 +62,7 @@ class MessengerWorld(World):
                                "Money Wrench",
                            ], base_offset)}
 
-    required_client_version = (0, 4, 1)
+    required_client_version = (0, 4, 2)
 
     web = MessengerWeb()
 

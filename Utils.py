@@ -19,14 +19,13 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
-from yaml import load, load_all, dump, SafeLoader
+from typing_extensions import TypeGuard
+from yaml import load, load_all, dump
 
 try:
-    from yaml import CLoader as UnsafeLoader
-    from yaml import CDumper as Dumper
+    from yaml import CLoader as UnsafeLoader, CSafeLoader as SafeLoader, CDumper as Dumper
 except ImportError:
-    from yaml import Loader as UnsafeLoader
-    from yaml import Dumper
+    from yaml import Loader as UnsafeLoader, SafeLoader, Dumper
 
 if typing.TYPE_CHECKING:
     import tkinter
@@ -779,6 +778,25 @@ def deprecate(message: str):
     import warnings
     warnings.warn(message)
 
+
+class DeprecateDict(dict):
+    log_message: str
+    should_error: bool
+
+    def __init__(self, message, error: bool = False) -> None:
+        self.log_message = message
+        self.should_error = error
+        super().__init__()
+
+    def __getitem__(self, item: Any) -> Any:
+        if self.should_error:
+            deprecate(self.log_message)
+        elif __debug__:
+            import warnings
+            warnings.warn(self.log_message)
+        return super().__getitem__(item)
+
+
 def _extend_freeze_support() -> None:
     """Extend multiprocessing.freeze_support() to also work on Non-Windows for spawn."""
     # upstream issue: https://github.com/python/cpython/issues/76327
@@ -852,8 +870,8 @@ def visualize_regions(root_region: Region, file_name: str, *,
 
     Example usage in Main code:
     from Utils import visualize_regions
-    for player in world.player_ids:
-        visualize_regions(world.get_region("Menu", player), f"{world.get_out_file_name_base(player)}.puml")
+    for player in multiworld.player_ids:
+        visualize_regions(multiworld.get_region("Menu", player), f"{multiworld.get_out_file_name_base(player)}.puml")
     """
     assert root_region.multiworld, "The multiworld attribute of root_region has to be filled"
     from BaseClasses import Entrance, Item, Location, LocationProgressType, MultiWorld, Region
@@ -949,3 +967,13 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+
+def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
+    """ but not a `str` (because technically, `str` is `Iterable[str]`) """
+    if isinstance(obj, str):
+        return False
+    if not isinstance(obj, typing.Iterable):
+        return False
+    obj_it: typing.Iterable[object] = obj
+    return all(isinstance(v, str) for v in obj_it)

@@ -146,6 +146,10 @@ sample_chao_names = [
 	"Rin",
 	"Doomguy",
 	"Guide",
+	"May",
+	"Hubert",
+	"Corvus",
+	"Nigel",
 ]
 
 totally_real_item_names = [

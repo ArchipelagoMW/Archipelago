@@ -16,6 +16,7 @@ Symbols:
 72 - Colored Squares
 80 - Arrows
 200 - Progressive Dots - Dots,Full Dots
+210 - Progressive Symmetry - Symmetry,Colored Dots
 260 - Progressive Stars - Stars,Stars + Same Colored Symbol
 
 Useful:
@@ -29,22 +30,26 @@ Filler:
 #503 - Energy Fill (Max) - 1
 
 Traps:
-600 - Slowness - 8
+600 - Slowness - 6
 610 - Power Surge - 2
+615 - Bonk - 1
 
 Jokes:
 650 - Functioning Brain
 
 Doors:
 1100 - Glass Factory Entry (Panel) - 0x01A54
-1101 - Tutorial Outpost Entry (Panel) - 0x0A171
-1102 - Tutorial Outpost Exit (Panel) - 0x04CA4
+1101 - Outside Tutorial Outpost Entry (Panel) - 0x0A171
+1102 - Outside Tutorial Outpost Exit (Panel) - 0x04CA4
 1105 - Symmetry Island Lower (Panel) - 0x000B0
 1107 - Symmetry Island Upper (Panel) - 0x1C349
+1108 - Desert Surface 3 Control (Panel) - 0x09FA0
+1109 - Desert Surface 8 Control (Panel) - 0x09F86
 1110 - Desert Light Room Entry (Panel) - 0x0C339
 1111 - Desert Flood Controls (Panel) - 0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
 1112 - Desert Light Control (Panel) - 0x09FAA
 1113 - Desert Flood Room Entry (Panel) - 0x0A249
+1114 - Desert Elevator Room Hexagonal Control (Panel) - 0x0A015
 1115 - Quarry Elevator Control (Panel) - 0x17CC4
 1117 - Quarry Entry 1 (Panel) - 0x09E57
 1118 - Quarry Entry 2 (Panel) - 0x17C09
@@ -69,6 +74,7 @@ Doors:
 1167 - Town Maze Rooftop Bridge (Panel) - 0x2896A
 1169 - Town Windmill Entry (Panel) - 0x17F5F
 1172 - Town Cargo Box Entry (Panel) - 0x0A0C8
+1173 - Town Desert Laser Redirect Control (Panel) - 0x09F98
 1182 - Windmill Turn Control (Panel) - 0x17D02
 1184 - Theater Entry (Panel) - 0x17F89
 1185 - Theater Video Input (Panel) - 0x00815
@@ -162,9 +168,9 @@ Doors:
 1750 - Theater Entry (Door) - 0x17F88
 1753 - Theater Exit Left (Door) - 0x0A16D
 1756 - Theater Exit Right (Door) - 0x3CCDF
-1759 - Jungle Bamboo Laser Shortcut (Door) - 0x3873B
+1759 - Jungle Laser Shortcut (Door) - 0x3873B
 1760 - Jungle Popup Wall (Door) - 0x1475B
-1762 - River Monastery Garden Shortcut (Door) - 0x0CF2A
+1762 - Jungle Monastery Garden Shortcut (Door) - 0x0CF2A
 1765 - Bunker Entry (Door) - 0x0C2A4
 1768 - Bunker Tinted Glass Door - 0x17C79
 1771 - Bunker UV Room Entry (Door) - 0x0C2A3
@@ -189,7 +195,7 @@ Doors:
 1828 - Mountain Floor 2 Exit (Door) - 0x09EDD
 1831 - Mountain Floor 2 Staircase Far (Door) - 0x09E07
 1834 - Mountain Bottom Floor Giant Puzzle Exit (Door) - 0x09F89
-1840 - Mountain Bottom Floor Final Room Entry (Door) - 0x0C141
+1840 - Mountain Bottom Floor Pillars Room Entry (Door) - 0x0C141
 1843 - Mountain Bottom Floor Rock (Door) - 0x17F33
 1846 - Caves Entry (Door) - 0x2D77D
 1849 - Caves Pillar Door - 0x019A5
@@ -231,18 +237,18 @@ Doors:
 1984 - Caves Shortcuts - 0x2D859,0x2D73F
 1987 - Tunnels Doors - 0x27739,0x27263,0x09E87,0x0348A
 
-2000 - Desert Control Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B
+2000 - Desert Control Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0A015,0x09FA0,0x09F86
 2005 - Quarry Stoneworks Control Panels - 0x03678,0x03676,0x03679,0x03675
 2010 - Quarry Boathouse Control Panels - 0x03852,0x03858,0x275FA
-2015 - Town Control Panels - 0x2896A,0x334D8
+2015 - Town Control Panels - 0x2896A,0x334D8,0x09F98
 2020 - Windmill & Theater Control Panels - 0x17D02,0x00815
 2025 - Bunker Control Panels - 0x34BC5,0x34BC6,0x0A079
 2030 - Swamp Control Panels - 0x00609,0x18488,0x181F5,0x17E2B,0x17C0A,0x17E07
 2035 - Mountain & Caves Control Panels - 0x09ED8,0x09E86,0x09E39,0x09EEB,0x335AB,0x335AC,0x3369D
 
 2100 - Symmetry Island Panels - 0x1C349,0x000B0
-2101 - Tutorial Outpost Panels - 0x0A171,0x04CA4
-2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249
+2101 - Outside Tutorial Outpost Panels - 0x0A171,0x04CA4
+2105 - Desert Panels - 0x09FAA,0x1C2DF,0x1831E,0x1C260,0x1831C,0x1C2F3,0x1831D,0x1C2B1,0x1831B,0x0C339,0x0A249,0x0A015,0x09FA0,0x09F86
 2110 - Quarry Outside Panels - 0x17C09,0x09E57,0x17CC4
 2115 - Quarry Stoneworks Panels - 0x01E5A,0x01E59,0x03678,0x03676,0x03679,0x03675
 2120 - Quarry Boathouse Panels - 0x03852,0x03858,0x275FA
@@ -250,6 +256,7 @@ Doors:
 2125 - Monastery Panels - 0x09D9B,0x00C92,0x00B10
 2130 - Town Church & RGB House Panels - 0x28998,0x28A0D,0x334D8
 2135 - Town Maze Panels - 0x2896A,0x28A79
+2137 - Town Dockside House Panels - 0x0A0C8,0x09F98
 2140 - Windmill & Theater Panels - 0x17D02,0x00815,0x17F5F,0x17F89,0x0A168,0x33AB2
 2145 - Treehouse Panels - 0x0A182,0x0288C,0x02886,0x2700B,0x17CBC,0x037FF
 2150 - Bunker Panels - 0x34BC5,0x34BC6,0x0A079,0x0A099,0x17C2E

@@ -7,7 +7,7 @@ Contributions are welcome. We have a few requests for new contributors:
 
 * **Ensure that critical changes are covered by tests.** 
 It is strongly recommended that unit tests are used to avoid regression and to ensure everything is still working.
-If you wish to contribute by adding a new game, please take a look at the [logic unit test documentation](/docs/world%20api.md#tests).
+If you wish to contribute by adding a new game, please take a look at the [logic unit test documentation](/docs/tests.md).
 If you wish to contribute to the website, please take a look at [these tests](/test/webhost).
 
 * **Do not introduce unit test failures/regressions.**
