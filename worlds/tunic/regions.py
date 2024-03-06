@@ -35,7 +35,7 @@ tunic_ladder_regions: Dict[str, Set[str]] = {
     "Lower Forest": set(),
     "East Overworld": {"East Forest", "Eastern Vault Fortress", "Beneath the Vault"},
     "Upper Overworld": {"Quarry Back", "Sealed Temple"},
-    "Overworld Beach": {"West Garden"},
+    "Overworld Beach": {"West Garden", "Ruined Atoll"},
     "Dark Tomb Front": {"Dark Tomb"},
     "Dark Tomb": {"West Garden"},
     "Beneath the Well": {"Beneath the Well Back"},

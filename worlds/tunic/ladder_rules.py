@@ -103,7 +103,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         lambda state: (state.has(laurels, player) and state.has("Ladders to West Bell", player)) \
         or can_ladder_storage(state, player, options)
     multiworld.get_entrance("Overworld -> Beneath the Well", player).access_rule = \
-        lambda state: state.has("Ladder to Well", player)
+        lambda state: state.has("Ladder to Well", player) and (has_stick(state, player) or state.has(fire_wand, player))
     multiworld.get_entrance("Beneath the Well -> Beneath the Well Back", player).access_rule = \
         lambda state: state.has("Well Back Ladder", player)
     # dash to the fuse and have the rear ladder, or dash through the well boss gate in nmg
@@ -111,7 +111,8 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         lambda state: state.has(laurels, player) and (state.has("Well Back Ladder", player)
                                                       or options.logic_rules)
     multiworld.get_entrance("Beneath the Well Back -> Beneath the Well", player).access_rule = \
-        lambda state: state.has("Well Back Ladder", player)
+        lambda state: state.has("Well Back Ladder", player) \
+        and (has_stick(state, player) or state.has(fire_wand, player))
     multiworld.get_entrance("East Overworld -> Eastern Vault Fortress", player).access_rule = \
         lambda state: state.has(laurels, player) \
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks) \
@@ -123,8 +124,10 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
              or has_ability(state, player, prayer, options, ability_unlocks)
              or state.has(laurels, player))
     multiworld.get_entrance("Overworld -> Ruined Atoll", player).access_rule = \
-        lambda state: state.has_any({"Ladder to Ruined Atoll", laurels, grapple}, player) \
+        lambda state: state.has_any({laurels, grapple}, player) \
         or has_ability(state, player, prayer, options, ability_unlocks)
+    multiworld.get_entrance("Overworld Beach -> Ruined Atoll", player).access_rule = \
+        lambda state: state.has("Ladder to Ruined Atoll", player)
     multiworld.get_entrance("Ruined Atoll -> Frog's Domain", player).access_rule = \
         lambda state: state.has("Ladders to Frog's Domain", player)
     multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = \
