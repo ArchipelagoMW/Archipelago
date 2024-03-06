@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results, is_iterable_of_str
+from Utils import get_fuzzy_results, is_iterable_but_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -857,7 +857,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_but_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -883,7 +883,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_but_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))

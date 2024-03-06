@@ -713,7 +713,7 @@ def messagebox(title: str, text: str, error: bool = False) -> None:
         import ctypes
         style = 0x10 if error else 0x0
         return ctypes.windll.user32.MessageBoxW(0, text, title, style)
-    
+
     # fall back to tk
     try:
         import tkinter
@@ -969,7 +969,7 @@ class RepeatableChain:
         return sum(len(iterable) for iterable in self.iterable)
 
 
-def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
+def is_iterable_but_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
     """ but not a `str` (because technically, `str` is `Iterable[str]`) """
     if isinstance(obj, str):
         return False
