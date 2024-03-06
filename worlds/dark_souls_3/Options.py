@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import json
 import typing
 
-from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
+from Options import Choice, DeathLink, DefaultOnToggle, ExcludeLocations, ItemDict, NamedRange, Option, PerGameCommonOptions, Range, Toggle, VerifyKeys
 
 
 class ExcludedLocationsOption(Choice):
@@ -115,7 +115,7 @@ class RandomizeBossSoulLocations(DefaultOnToggle):
     "Exclude Locations" option. It does _not_ cause the locations not be
     randomized unless "Excluded Locations" is also set to "Unrandomized".
     """
-    display_name = "Randomize Key Locations"
+    display_name = "Randomize Boss Soul Locations"
 
 
 class RandomizeNPCLocations(DefaultOnToggle):
@@ -233,7 +233,7 @@ class RandomizeInfusionOption(Toggle):
     display_name = "Randomize Infusion"
 
 
-class RandomizeInfusionPercentageOption(Range):
+class RandomizeInfusionPercentageOption(NamedRange):
     """The percentage of weapons/shields in the pool to be infused if Randomize Infusion is toggled"""
     display_name = "Percentage of Infused Weapons"
     range_start = 0

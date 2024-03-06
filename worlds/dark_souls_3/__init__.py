@@ -112,7 +112,7 @@ class DarkSouls3World(World):
                 )
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
-                self.multiworld.local_items[self.player].value.add('Storm Ruler')
+                self.multiworld.worlds[self.player].options.local_items.value.add('Storm Ruler')
         else:
             self.yhorm_location = default_yhorm_location
 
@@ -462,7 +462,21 @@ class DarkSouls3World(World):
                           state.has("Cinders of a Lord - Lothric Prince", self.player))
 
         if self.options.late_basin_of_vows:
-            self._add_entrance_rule("Lothric Castle", "Small Lothric Banner")
+            self._add_entrance_rule("Lothric Castle", lambda state: (
+                state.has("Small Lothric Banner", self.player)
+                # Make sure these are actually available early.
+                and (
+                    "Transposing Kiln" not in randomized_items
+                    or state.has("Transposing Kiln", self.player)
+                ) and (
+                    "Pyromancy Flame" not in randomized_items
+                    or state.has("Pyromancy Flame", self.player)
+                )
+                # This isn't really necessary, but it ensures that the game logic knows players will
+                # want to do Lothric Castle after at least being _able_ to access Catacombs. This is
+                # useful for smooth item placement.
+                and self._has_any_scroll(state)
+            ))
 
         # DLC Access Rules Below
         if self.options.enable_dlc:
@@ -892,18 +906,27 @@ class DarkSouls3World(World):
 
         ## Orbeck
 
+        self._add_location_rule([
+            "FS: Morion Blade - Yuria for Orbeck's Ashes",
+            "FS: Clandestine Coat - shop with Orbeck's Ashes"
+        ], lambda state: (
+            state.has("Golden Scroll", self.player)
+            and state.has("Logan's Scroll", self.player)
+            and state.has("Crystal Scroll", self.player)
+            and state.has("Sage's Scroll", self.player)
+        ))
+
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
         # before killing Abyss Watchers.
-        def has_any_scroll(state):
-            self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
-            self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", self._has_any_scroll)
-            self._add_entrance_rule("Catacombs of Carthus", self._has_any_scroll)
-            # Not really necessary but ensures players can decide which way to go
-            if self.options.enable_dlc:
-                self._add_entrance_rule(
-                    "Painted World of Ariandel (After Contraption)",
-                    self._has_any_scroll
-                )
+        self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
+        self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", self._has_any_scroll)
+        self._add_entrance_rule("Catacombs of Carthus", self._has_any_scroll)
+        # Not really necessary but ensures players can decide which way to go
+        if self.options.enable_dlc:
+            self._add_entrance_rule(
+                "Painted World of Ariandel (After Contraption)",
+                self._has_any_scroll
+            )
 
 
     def _add_transposition_rules(self) -> None:
@@ -1022,10 +1045,7 @@ class DarkSouls3World(World):
         for location in unnecessary_locations:
             self._add_item_rule(
                 location,
-                lambda item: item.classification not in {
-                    ItemClassification.progression,
-                    ItemClassification.progression_skip_balancing
-                }
+                lambda item: not item.advancement
             )
 
 
