@@ -1,32 +1,29 @@
 import binascii
-import bsdiff4
 import os
 import pkgutil
-import settings
-import typing
 import tempfile
+import typing
 
+import bsdiff4
 
+import settings
 from BaseClasses import Entrance, Item, ItemClassification, Location, Tutorial
 from Fill import fill_restrictive
 from worlds.AutoWorld import WebWorld, World
-
 from .Common import *
-from .Items import (DungeonItemData, DungeonItemType, LinksAwakeningItem, TradeItemData,
-                    ladxr_item_to_la_item_name, links_awakening_items,
-                    links_awakening_items_by_name, ItemName)
+from .Items import (DungeonItemData, DungeonItemType, ItemName, LinksAwakeningItem, TradeItemData,
+                    ladxr_item_to_la_item_name, links_awakening_items, links_awakening_items_by_name)
 from .LADXR import generator
 from .LADXR.itempool import ItemPool as LADXRItemPool
+from .LADXR.locations.constants import CHEST_ITEMS
+from .LADXR.locations.instrument import Instrument
 from .LADXR.logic import Logic as LAXDRLogic
 from .LADXR.main import get_parser
 from .LADXR.settings import Settings as LADXRSettings
 from .LADXR.worldSetup import WorldSetup as LADXRWorldSetup
-from .LADXR.locations.instrument import Instrument
-from .LADXR.locations.constants import CHEST_ITEMS
 from .Locations import (LinksAwakeningLocation, LinksAwakeningRegion,
                         create_regions_from_ladxr, get_locations_to_id)
-from .Options import links_awakening_options, DungeonItemShuffle
-
+from .Options import DungeonItemShuffle, links_awakening_options
 from .Rom import LADXDeltaPatch
 
 DEVELOPER_MODE = False
@@ -279,6 +276,11 @@ class LinksAwakeningWorld(World):
                     # Properly fill locations within dungeon
                     location.dungeon = r.dungeon_index
 
+        # For now, special case first item
+        FORCE_START_ITEM = True
+        if FORCE_START_ITEM:
+            self.force_start_item()
+
     def force_start_item(self):    
         start_loc = self.multiworld.get_location("Tarin's Gift (Mabe Village)", self.player)
         if not start_loc.item:
@@ -290,17 +292,12 @@ class LinksAwakeningWorld(World):
                 start_item = self.multiworld.itempool.pop(index)
                 start_loc.place_locked_item(start_item)
 
-
     def get_pre_fill_items(self):
         return self.pre_fill_items
 
     def pre_fill(self) -> None:
         allowed_locations_by_item = {}
 
-        # For now, special case first item
-        FORCE_START_ITEM = True
-        if FORCE_START_ITEM:
-            self.force_start_item()
 
         # Set up filter rules
 
@@ -511,16 +508,12 @@ class LinksAwakeningWorld(World):
 
     def collect(self, state, item: Item) -> bool:
         change = super().collect(state, item)
-        if change:
-            rupees = self.rupees.get(item.name, 0)
-            state.prog_items[item.player]["RUPEES"] += rupees
-
+        if change and item.name in self.rupees:
+            state.prog_items[self.player]["RUPEES"] += self.rupees[item.name]
         return change
 
     def remove(self, state, item: Item) -> bool:
         change = super().remove(state, item)
-        if change:
-            rupees = self.rupees.get(item.name, 0)
-            state.prog_items[item.player]["RUPEES"] -= rupees
-
+        if change and item.name in self.rupees:
+            state.prog_items[self.player]["RUPEES"] -= self.rupees[item.name]
         return change

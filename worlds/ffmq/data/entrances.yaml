@@ -1,0 +1,2450 @@
+- name: Doom Castle - Sand Floor - To Sky Door - Sand Floor
+  id: 0
+  area: 7
+  coordinates: [24, 19]
+  teleporter: [0, 0]
+- name: Doom Castle - Sand Floor - Main Entrance - Sand Floor
+  id: 1
+  area: 7
+  coordinates: [19, 43]
+  teleporter: [1, 6]
+- name: Doom Castle - Aero Room - Aero Room Entrance
+  id: 2
+  area: 7
+  coordinates: [27, 39]
+  teleporter: [1, 0]
+- name: Focus Tower B1 - Main Loop - South Entrance
+  id: 3
+  area: 8
+  coordinates: [43, 60]
+  teleporter: [2, 6]
+- name: Focus Tower B1 - Main Loop - To Focus Tower 1F - Main Hall
+  id: 4
+  area: 8
+  coordinates: [37, 41]
+  teleporter: [4, 0]
+- name: Focus Tower B1 - Aero Corridor - To Focus Tower 1F - Sun Coin Room
+  id: 5
+  area: 8
+  coordinates: [59, 35]
+  teleporter: [5, 0]
+- name: Focus Tower B1 - Aero Corridor - To Sand Floor - Aero Chest
+  id: 6
+  area: 8
+  coordinates: [57, 59]
+  teleporter: [8, 0]
+- name: Focus Tower B1 - Inner Loop - To Focus Tower 1F - Sky Door
+  id: 7
+  area: 8
+  coordinates: [51, 49]
+  teleporter: [6, 0]
+- name: Focus Tower B1 - Inner Loop - To Doom Castle Sand Floor
+  id: 8
+  area: 8
+  coordinates: [51, 45]
+  teleporter: [7, 0]
+- name: Focus Tower 1F - Focus Tower West Entrance
+  id: 9
+  area: 9
+  coordinates: [25, 29]
+  teleporter: [3, 6]
+- name: Focus Tower 1F - To Focus Tower 2F - From SandCoin
+  id: 10
+  area: 9
+  coordinates: [16, 4]
+  teleporter: [10, 0]
+- name: Focus Tower 1F - To Focus Tower B1 - Main Hall
+  id: 11
+  area: 9
+  coordinates: [4, 23]
+  teleporter: [11, 0]
+- name: Focus Tower 1F - To Focus Tower B1 - To Aero Chest
+  id: 12
+  area: 9
+  coordinates: [26, 17]
+  teleporter: [12, 0]
+- name: Focus Tower 1F - Sky Door
+  id: 13
+  area: 9
+  coordinates: [16, 24]
+  teleporter: [13, 0]
+- name: Focus Tower 1F - To Focus Tower 2F - From RiverCoin
+  id: 14
+  area: 9
+  coordinates: [16, 10]
+  teleporter: [14, 0]
+- name: Focus Tower 1F - To Focus Tower B1 - From Sky Door
+  id: 15
+  area: 9
+  coordinates: [16, 29]
+  teleporter: [15, 0]
+- name: Focus Tower 2F - Sand Coin Passage - North Entrance
+  id: 16
+  area: 10
+  coordinates: [49, 30]
+  teleporter: [4, 6]
+- name: Focus Tower 2F - Sand Coin Passage - To Focus Tower 1F - To SandCoin
+  id: 17
+  area: 10
+  coordinates: [47, 33]
+  teleporter: [17, 0]
+- name: Focus Tower 2F - River Coin Passage - To Focus Tower 1F - To RiverCoin
+  id: 18
+  area: 10
+  coordinates: [47, 41]
+  teleporter: [18, 0]
+- name: Focus Tower 2F - River Coin Passage - To Focus Tower 3F - Lower Floor
+  id: 19
+  area: 10
+  coordinates: [38, 40]
+  teleporter: [20, 0]
+- name: Focus Tower 2F - Venus Chest Room - To Focus Tower 3F - Upper Floor
+  id: 20
+  area: 10
+  coordinates: [56, 40]
+  teleporter: [19, 0]
+- name: Focus Tower 2F - Venus Chest Room - Pillar Script
+  id: 21
+  area: 10
+  coordinates: [48, 53]
+  teleporter: [13, 8]
+- name: Focus Tower 3F - Lower Floor - To Fireburg Entrance
+  id: 22
+  area: 11
+  coordinates: [11, 39]
+  teleporter: [6, 6]
+- name: Focus Tower 3F - Lower Floor - To Focus Tower 2F - Jump on Pillar
+  id: 23
+  area: 11
+  coordinates: [6, 47]
+  teleporter: [24, 0]
+- name: Focus Tower 3F - Upper Floor - To Aquaria Entrance
+  id: 24
+  area: 11
+  coordinates: [21, 38]
+  teleporter: [5, 6]
+- name: Focus Tower 3F - Upper Floor - To Focus Tower 2F - Venus Chest Room
+  id: 25
+  area: 11
+  coordinates: [24, 47]
+  teleporter: [23, 0]
+- name: Level Forest - Boulder Script
+  id: 26
+  area: 14
+  coordinates: [52, 15]
+  teleporter: [0, 8]
+- name: Level Forest - Rotten Tree Script
+  id: 27
+  area: 14
+  coordinates: [47, 6]
+  teleporter: [2, 8]
+- name: Level Forest - Exit Level Forest 1
+  id: 28
+  area: 14
+  coordinates: [46, 25]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 2
+  id: 29
+  area: 14
+  coordinates: [46, 26]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 3
+  id: 30
+  area: 14
+  coordinates: [47, 25]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 4
+  id: 31
+  area: 14
+  coordinates: [47, 26]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 5
+  id: 32
+  area: 14
+  coordinates: [60, 14]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 6
+  id: 33
+  area: 14
+  coordinates: [61, 14]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 7
+  id: 34
+  area: 14
+  coordinates: [46, 4]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 8
+  id: 35
+  area: 14
+  coordinates: [46, 3]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest 9
+  id: 36
+  area: 14
+  coordinates: [47, 4]
+  teleporter: [25, 0]
+- name: Level Forest - Exit Level Forest A
+  id: 37
+  area: 14
+  coordinates: [47, 3]
+  teleporter: [25, 0]
+- name: Foresta - Exit Foresta 1
+  id: 38
+  area: 15
+  coordinates: [10, 25]
+  teleporter: [31, 0]
+- name: Foresta - Exit Foresta 2
+  id: 39
+  area: 15
+  coordinates: [10, 26]
+  teleporter: [31, 0]
+- name: Foresta - Exit Foresta 3
+  id: 40
+  area: 15
+  coordinates: [11, 25]
+  teleporter: [31, 0]
+- name: Foresta - Exit Foresta 4
+  id: 41
+  area: 15
+  coordinates: [11, 26]
+  teleporter: [31, 0]
+- name: Foresta - Old Man House - Front Door
+  id: 42
+  area: 15
+  coordinates: [25, 17]
+  teleporter: [32, 4]
+- name: Foresta - Old Man House - Back Door
+  id: 43
+  area: 15
+  coordinates: [25, 14]
+  teleporter: [33, 0]
+- name: Foresta - Kaeli's House
+  id: 44
+  area: 15
+  coordinates: [7, 21]
+  teleporter: [0, 5]
+- name: Foresta - Rest House
+  id: 45
+  area: 15
+  coordinates: [23, 23]
+  teleporter: [1, 5]
+- name: Kaeli's House - Kaeli's House Entrance
+  id: 46
+  area: 16
+  coordinates: [11, 20]
+  teleporter: [86, 3]
+- name: Foresta Houses - Old Man's House - Old Man Front Exit
+  id: 47
+  area: 17
+  coordinates: [35, 44]
+  teleporter: [34, 0]
+- name: Foresta Houses - Old Man's House - Old Man Back Exit
+  id: 48
+  area: 17
+  coordinates: [35, 27]
+  teleporter: [35, 0]
+- name: Foresta - Old Man House - Barrel Tile Script # New, use the focus tower column's script
+  id: 483
+  area: 17
+  coordinates: [0x23, 0x1E]
+  teleporter: [0x0D, 8]
+- name: Foresta Houses - Rest House - Bed Script
+  id: 49
+  area: 17
+  coordinates: [30, 6]
+  teleporter: [1, 8]
+- name: Foresta Houses - Rest House - Rest House Exit
+  id: 50
+  area: 17
+  coordinates: [35, 20]
+  teleporter: [87, 3]
+- name: Foresta Houses - Libra House - Libra House Script
+  id: 51
+  area: 17
+  coordinates: [8, 49]
+  teleporter: [67, 8]
+- name: Foresta Houses - Gemini House - Gemini House Script
+  id: 52
+  area: 17
+  coordinates: [26, 55]
+  teleporter: [68, 8]
+- name: Foresta Houses - Mobius House - Mobius House Script
+  id: 53
+  area: 17
+  coordinates: [14, 33]
+  teleporter: [69, 8]
+- name: Sand Temple - Sand Temple Entrance
+  id: 54
+  area: 18
+  coordinates: [56, 27]
+  teleporter: [36, 0]
+- name: Bone Dungeon 1F - Bone Dungeon Entrance
+  id: 55
+  area: 19
+  coordinates: [13, 60]
+  teleporter: [37, 0]
+- name: Bone Dungeon 1F - To Bone Dungeon B1
+  id: 56
+  area: 19
+  coordinates: [13, 39]
+  teleporter: [2, 2]
+- name: Bone Dungeon B1 - Waterway - Exit Waterway
+  id: 57
+  area: 20
+  coordinates: [27, 39]
+  teleporter: [3, 2]
+- name: Bone Dungeon B1 - Waterway - Tristam's Script
+  id: 58
+  area: 20
+  coordinates: [27, 45]
+  teleporter: [3, 8]
+- name: Bone Dungeon B1 - Waterway - To Bone Dungeon 1F
+  id: 59
+  area: 20
+  coordinates: [54, 61]
+  teleporter: [88, 3]
+- name: Bone Dungeon B1 - Checker Room - Exit Checker Room
+  id: 60
+  area: 20
+  coordinates: [23, 40]
+  teleporter: [4, 2]
+- name: Bone Dungeon B1 - Checker Room - To Waterway
+  id: 61
+  area: 20
+  coordinates: [39, 49]
+  teleporter: [89, 3]
+- name: Bone Dungeon B1 - Hidden Room - To B2 - Exploding Skull Room
+  id: 62
+  area: 20
+  coordinates: [5, 33]
+  teleporter: [91, 3]
+- name: Bonne Dungeon B2 - Exploding Skull Room - To Hidden Passage
+  id: 63
+  area: 21
+  coordinates: [19, 13]
+  teleporter: [5, 2]
+- name: Bonne Dungeon B2 - Exploding Skull Room - To Two Skulls Room
+  id: 64
+  area: 21
+  coordinates: [29, 15]
+  teleporter: [6, 2]
+- name: Bonne Dungeon B2 - Exploding Skull Room - To Checker Room
+  id: 65
+  area: 21
+  coordinates: [8, 25]
+  teleporter: [90, 3]
+- name: Bonne Dungeon B2 - Box Room - To B2 - Two Skulls Room
+  id: 66
+  area: 21
+  coordinates: [59, 12]
+  teleporter: [93, 3]
+- name: Bonne Dungeon B2 - Quake Room - To B2 - Two Skulls Room
+  id: 67
+  area: 21
+  coordinates: [59, 28]
+  teleporter: [94, 3]
+- name: Bonne Dungeon B2 - Two Skulls Room - To Box Room
+  id: 68
+  area: 21
+  coordinates: [53, 7]
+  teleporter: [7, 2]
+- name: Bonne Dungeon B2 - Two Skulls Room - To Quake Room
+  id: 69
+  area: 21
+  coordinates: [41, 3]
+  teleporter: [8, 2]
+- name: Bonne Dungeon B2 - Two Skulls Room - To Boss Room
+  id: 70
+  area: 21
+  coordinates: [47, 57]
+  teleporter: [9, 2]
+- name: Bonne Dungeon B2 - Two Skulls Room - To B2 - Exploding Skull Room
+  id: 71
+  area: 21
+  coordinates: [54, 23]
+  teleporter: [92, 3]
+- name: Bone Dungeon B2 - Boss Room - Flamerus Rex Script
+  id: 72
+  area: 22
+  coordinates: [29, 19]
+  teleporter: [4, 8]
+- name: Bone Dungeon B2 - Boss Room - Tristam Leave Script
+  id: 73
+  area: 22
+  coordinates: [29, 23]
+  teleporter: [75, 8]
+- name: Bone Dungeon B2 - Boss Room - To B2 - Two Skulls Room
+  id: 74
+  area: 22
+  coordinates: [30, 27]
+  teleporter: [95, 3]
+- name: Libra Temple - Entrance
+  id: 75
+  area: 23
+  coordinates: [10, 15]
+  teleporter: [13, 6]
+- name: Libra Temple - Libra Tile Script
+  id: 76
+  area: 23
+  coordinates: [9, 8]
+  teleporter: [59, 8]
+- name: Aquaria Winter - Winter Entrance 1
+  id: 77
+  area: 24
+  coordinates: [25, 25]
+  teleporter: [8, 6]
+- name: Aquaria Winter - Winter Entrance 2
+  id: 78
+  area: 24
+  coordinates: [25, 26]
+  teleporter: [8, 6]
+- name: Aquaria Winter - Winter Entrance 3
+  id: 79
+  area: 24
+  coordinates: [26, 25]
+  teleporter: [8, 6]
+- name: Aquaria Winter - Winter Entrance 4
+  id: 80
+  area: 24
+  coordinates: [26, 26]
+  teleporter: [8, 6]
+- name: Aquaria Winter - Winter Phoebe's House Entrance Script #Modified to not be a script
+  id: 81
+  area: 24
+  coordinates: [8, 19]
+  teleporter: [10, 5] # original value [5, 8]
+- name: Aquaria Winter - Winter Vendor House Entrance
+  id: 82
+  area: 24
+  coordinates: [8, 5]
+  teleporter: [44, 4]
+- name: Aquaria Winter - Winter INN Entrance
+  id: 83
+  area: 24
+  coordinates: [26, 17]
+  teleporter: [11, 5]
+- name: Aquaria Summer - Summer Entrance 1
+  id: 84
+  area: 25
+  coordinates: [57, 25]
+  teleporter: [8, 6]
+- name: Aquaria Summer - Summer Entrance 2
+  id: 85
+  area: 25
+  coordinates: [57, 26]
+  teleporter: [8, 6]
+- name: Aquaria Summer - Summer Entrance 3
+  id: 86
+  area: 25
+  coordinates: [58, 25]
+  teleporter: [8, 6]
+- name: Aquaria Summer - Summer Entrance 4
+  id: 87
+  area: 25
+  coordinates: [58, 26]
+  teleporter: [8, 6]
+- name: Aquaria Summer - Summer Phoebe's House Entrance
+  id: 88
+  area: 25
+  coordinates: [40, 19]
+  teleporter: [10, 5]
+- name: Aquaria Summer - Spencer's Place Entrance Top
+  id: 89
+  area: 25
+  coordinates: [40, 16]
+  teleporter: [42, 0]
+- name: Aquaria Summer - Spencer's Place Entrance Side
+  id: 90
+  area: 25
+  coordinates: [41, 18]
+  teleporter: [43, 0]
+- name: Aquaria Summer - Summer Vendor House Entrance
+  id: 91
+  area: 25
+  coordinates: [40, 5]
+  teleporter: [44, 4]
+- name: Aquaria Summer - Summer INN Entrance
+  id: 92
+  area: 25
+  coordinates: [58, 17]
+  teleporter: [11, 5]
+- name: Phoebe's House - Entrance # Change to a script, same as vendor house
+  id: 93
+  area: 26
+  coordinates: [29, 14]
+  teleporter: [5, 8] # Original Value [11,3]
+- name: Aquaria Vendor House - Vendor House Entrance's Script
+  id: 94
+  area: 27
+  coordinates: [7, 10]
+  teleporter: [40, 8]
+- name: Aquaria Vendor House - Vendor House Stairs
+  id: 95
+  area: 27
+  coordinates: [1, 4]
+  teleporter: [47, 0]
+- name: Aquaria Gemini Room - Gemini Script
+  id: 96
+  area: 27
+  coordinates: [2, 40]
+  teleporter: [72, 8]
+- name: Aquaria Gemini Room - Gemini Room Stairs
+  id: 97
+  area: 27
+  coordinates: [4, 39]
+  teleporter: [48, 0]
+- name: Aquaria INN - Aquaria INN entrance # Change to a script, same as vendor house
+  id: 98
+  area: 27
+  coordinates: [51, 46]
+  teleporter: [75, 8] # Original value [48,3]
+- name: Wintry Cave 1F - Main Entrance
+  id: 99
+  area: 28
+  coordinates: [50, 58]
+  teleporter: [49, 0]
+- name: Wintry Cave 1F - To 3F Top
+  id: 100
+  area: 28
+  coordinates: [40, 25]
+  teleporter: [14, 2]
+- name: Wintry Cave 1F - To 2F
+  id: 101
+  area: 28
+  coordinates: [10, 43]
+  teleporter: [15, 2]
+- name: Wintry Cave 1F - Phoebe's Script
+  id: 102
+  area: 28
+  coordinates: [44, 37]
+  teleporter: [6, 8]
+- name: Wintry Cave 2F - To 3F Bottom
+  id: 103
+  area: 29
+  coordinates: [58, 5]
+  teleporter: [50, 0]
+- name: Wintry Cave 2F - To 1F
+  id: 104
+  area: 29
+  coordinates: [38, 18]
+  teleporter: [97, 3]
+- name: Wintry Cave 3F Top - Exit from 3F Top
+  id: 105
+  area: 30
+  coordinates: [24, 6]
+  teleporter: [96, 3]
+- name: Wintry Cave 3F Bottom - Exit to 2F
+  id: 106
+  area: 31
+  coordinates: [4, 29]
+  teleporter: [51, 0]
+- name: Life Temple - Entrance
+  id: 107
+  area: 32
+  coordinates: [9, 60]
+  teleporter: [14, 6]
+- name: Life Temple - Libra Tile Script
+  id: 108
+  area: 32
+  coordinates: [3, 55]
+  teleporter: [60, 8]
+- name: Life Temple - Mysterious Man Script
+  id: 109
+  area: 32
+  coordinates: [9, 44]
+  teleporter: [78, 8]
+- name: Fall Basin - Back Exit Script
+  id: 110
+  area: 33
+  coordinates: [17, 5]
+  teleporter: [9, 0] # Remove script [42, 8] for overworld teleport (but not main exit)
+- name: Fall Basin - Main Exit
+  id: 111
+  area: 33
+  coordinates: [15, 26]
+  teleporter: [53, 0]
+- name: Fall Basin - Phoebe's Script
+  id: 112
+  area: 33
+  coordinates: [17, 6]
+  teleporter: [9, 8]
+- name: Ice Pyramid B1 Taunt Room - To Climbing Wall Room
+  id: 113
+  area: 34
+  coordinates: [43, 6]
+  teleporter: [55, 0]
+- name: Ice Pyramid 1F Maze - Main Entrance 1
+  id: 114
+  area: 35
+  coordinates: [18, 36]
+  teleporter: [56, 0]
+- name: Ice Pyramid 1F Maze - Main Entrance 2
+  id: 115
+  area: 35
+  coordinates: [19, 36]
+  teleporter: [56, 0]
+- name: Ice Pyramid 1F Maze - West Stairs To 2F South Tiled Room
+  id: 116
+  area: 35
+  coordinates: [3, 27]
+  teleporter: [57, 0]
+- name: Ice Pyramid 1F Maze - West Center Stairs to 2F West Room
+  id: 117
+  area: 35
+  coordinates: [11, 15]
+  teleporter: [58, 0]
+- name: Ice Pyramid 1F Maze - East Center Stairs to 2F Center Room
+  id: 118
+  area: 35
+  coordinates: [25, 16]
+  teleporter: [59, 0]
+- name: Ice Pyramid 1F Maze - Upper Stairs to 2F Small North Room
+  id: 119
+  area: 35
+  coordinates: [31, 1]
+  teleporter: [60, 0]
+- name: Ice Pyramid 1F Maze - East Stairs to 2F North Corridor
+  id: 120
+  area: 35
+  coordinates: [34, 9]
+  teleporter: [61, 0]
+- name: Ice Pyramid 1F Maze - Statue's Script
+  id: 121
+  area: 35
+  coordinates: [21, 32]
+  teleporter: [77, 8]
+- name: Ice Pyramid 2F South Tiled Room - To 1F
+  id: 122
+  area: 36
+  coordinates: [4, 26]
+  teleporter: [62, 0]
+- name: Ice Pyramid 2F South Tiled Room - To 3F Two Boxes Room
+  id: 123
+  area: 36
+  coordinates: [22, 17]
+  teleporter: [67, 0]
+- name: Ice Pyramid 2F West Room - To 1F
+  id: 124
+  area: 36
+  coordinates: [9, 10]
+  teleporter: [63, 0]
+- name: Ice Pyramid 2F Center Room - To 1F
+  id: 125
+  area: 36
+  coordinates: [22, 14]
+  teleporter: [64, 0]
+- name: Ice Pyramid 2F Small North Room - To 1F
+  id: 126
+  area: 36
+  coordinates: [26, 4]
+  teleporter: [65, 0]
+- name: Ice Pyramid 2F North Corridor - To 1F
+  id: 127
+  area: 36
+  coordinates: [32, 8]
+  teleporter: [66, 0]
+- name: Ice Pyramid 2F North Corridor - To 3F Main Loop
+  id: 128
+  area: 36
+  coordinates: [12, 7]
+  teleporter: [68, 0]
+- name: Ice Pyramid 3F Two Boxes Room - To 2F South Tiled Room
+  id: 129
+  area: 37
+  coordinates: [24, 54]
+  teleporter: [69, 0]
+- name: Ice Pyramid 3F Main Loop - To 2F Corridor
+  id: 130
+  area: 37
+  coordinates: [16, 45]
+  teleporter: [70, 0]
+- name: Ice Pyramid 3F Main Loop - To 4F
+  id: 131
+  area: 37
+  coordinates: [19, 43]
+  teleporter: [71, 0]
+- name: Ice Pyramid 4F Treasure Room - To 3F Main Loop
+  id: 132
+  area: 38
+  coordinates: [52, 5]
+  teleporter: [72, 0]
+- name: Ice Pyramid 4F Treasure Room - To 5F Leap of Faith Room
+  id: 133
+  area: 38
+  coordinates: [62, 19]
+  teleporter: [73, 0]
+- name: Ice Pyramid 5F Leap of Faith Room - To 4F Treasure Room
+  id: 134
+  area: 39
+  coordinates: [54, 63]
+  teleporter: [74, 0]
+- name: Ice Pyramid 5F Leap of Faith Room - Bombed Ice Plate
+  id: 135
+  area: 39
+  coordinates: [47, 54]
+  teleporter: [77, 8]
+- name: Ice Pyramid 5F Stairs to Ice Golem - To Ice Golem Room
+  id: 136
+  area: 39
+  coordinates: [39, 43]
+  teleporter: [75, 0]
+- name: Ice Pyramid 5F Stairs to Ice Golem - To Climbing Wall Room
+  id: 137
+  area: 39
+  coordinates: [39, 60]
+  teleporter: [76, 0]
+- name: Ice Pyramid - Duplicate Ice Golem Room # not used?
+  id: 138
+  area: 40
+  coordinates: [44, 43]
+  teleporter: [77, 0]
+- name: Ice Pyramid Climbing Wall Room - To Taunt Room
+  id: 139
+  area: 41
+  coordinates: [4, 59]
+  teleporter: [78, 0]
+- name: Ice Pyramid Climbing Wall Room - To 5F Stairs
+  id: 140
+  area: 41
+  coordinates: [4, 45]
+  teleporter: [79, 0]
+- name: Ice Pyramid Ice Golem Room - To 5F Stairs
+  id: 141
+  area: 42
+  coordinates: [44, 43]
+  teleporter: [80, 0]
+- name: Ice Pyramid Ice Golem Room - Ice Golem Script
+  id: 142
+  area: 42
+  coordinates: [53, 32]
+  teleporter: [10, 8]
+- name: Spencer Waterfall - To Spencer Cave
+  id: 143
+  area: 43
+  coordinates: [48, 57]
+  teleporter: [81, 0]
+- name: Spencer Waterfall - Upper Exit to Aquaria 1
+  id: 144
+  area: 43
+  coordinates: [40, 5]
+  teleporter: [82, 0]
+- name: Spencer Waterfall - Upper Exit to Aquaria 2
+  id: 145
+  area: 43
+  coordinates: [40, 6]
+  teleporter: [82, 0]
+- name: Spencer Waterfall - Upper Exit to Aquaria 3
+  id: 146
+  area: 43
+  coordinates: [41, 5]
+  teleporter: [82, 0]
+- name: Spencer Waterfall - Upper Exit to Aquaria 4
+  id: 147
+  area: 43
+  coordinates: [41, 6]
+  teleporter: [82, 0]
+- name: Spencer Waterfall - Right Exit to Aquaria 1
+  id: 148
+  area: 43
+  coordinates: [46, 8]
+  teleporter: [83, 0]
+- name: Spencer Waterfall - Right Exit to Aquaria 2
+  id: 149
+  area: 43
+  coordinates: [47, 8]
+  teleporter: [83, 0]
+- name: Spencer Cave Normal Main - To Waterfall
+  id: 150
+  area: 44
+  coordinates: [14, 39]
+  teleporter: [85, 0]
+- name: Spencer Cave Normal From Overworld - Exit to Overworld
+  id: 151
+  area: 44
+  coordinates: [15, 57]
+  teleporter: [7, 6]
+- name: Spencer Cave Unplug - Exit to Overworld
+  id: 152
+  area: 45
+  coordinates: [40, 29]
+  teleporter: [7, 6]
+- name: Spencer Cave Unplug - Libra Teleporter Start Script
+  id: 153
+  area: 45
+  coordinates: [28, 21]
+  teleporter: [33, 8]
+- name: Spencer Cave Unplug - Libra Teleporter End Script
+  id: 154
+  area: 45
+  coordinates: [46, 4]
+  teleporter: [34, 8]
+- name: Spencer Cave Unplug - Mobius Teleporter Chest Script
+  id: 155
+  area: 45
+  coordinates: [21, 9]
+  teleporter: [35, 8]
+- name: Spencer Cave Unplug - Mobius Teleporter Start Script
+  id: 156
+  area: 45
+  coordinates: [29, 28]
+  teleporter: [36, 8]
+- name: Wintry Temple Outer Room - Main Entrance
+  id: 157
+  area: 46
+  coordinates: [8, 31]
+  teleporter: [15, 6]
+- name: Wintry Temple Inner Room - Gemini Tile to Sealed temple
+  id: 158
+  area: 46
+  coordinates: [9, 24]
+  teleporter: [62, 8]
+- name: Fireburg - To Overworld
+  id: 159
+  area: 47
+  coordinates: [4, 13]
+  teleporter: [9, 6]
+- name: Fireburg - To Overworld
+  id: 160
+  area: 47
+  coordinates: [5, 13]
+  teleporter: [9, 6]
+- name: Fireburg - To Overworld
+  id: 161
+  area: 47
+  coordinates: [28, 15]
+  teleporter: [9, 6]
+- name: Fireburg - To Overworld
+  id: 162
+  area: 47
+  coordinates: [27, 15]
+  teleporter: [9, 6]
+- name: Fireburg - Vendor House
+  id: 163
+  area: 47
+  coordinates: [10, 24]
+  teleporter: [91, 0]
+- name: Fireburg - Reuben House
+  id: 164
+  area: 47
+  coordinates: [14, 6]
+  teleporter: [98, 8] # Script for reuben, original value [16, 2]
+- name: Fireburg - Hotel
+  id: 165
+  area: 47
+  coordinates: [20, 8]
+  teleporter: [96, 8] # It's a script now for tristam, original value [17, 2]
+- name: Fireburg - GrenadeMan House Script
+  id: 166
+  area: 47
+  coordinates: [12, 18]
+  teleporter: [11, 8]
+- name: Reuben House - Main Entrance
+  id: 167
+  area: 48
+  coordinates: [33, 46]
+  teleporter: [98, 3]
+- name: GrenadeMan House - Entrance Script
+  id: 168
+  area: 49
+  coordinates: [55, 60]
+  teleporter: [9, 8]
+- name: GrenadeMan House - To Mobius Crest Room
+  id: 169
+  area: 49
+  coordinates: [57, 52]
+  teleporter: [93, 0]
+- name: GrenadeMan Mobius Room - Stairs to House
+  id: 170
+  area: 49
+  coordinates: [39, 26]
+  teleporter: [94, 0]
+- name: GrenadeMan Mobius Room - Mobius Teleporter Script
+  id: 171
+  area: 49
+  coordinates: [39, 23]
+  teleporter: [54, 8]
+- name: Fireburg Vendor House - Entrance Script # No use to be a script
+  id: 172
+  area: 49
+  coordinates: [7, 10]
+  teleporter: [95, 0] # Original value [39, 8]
+- name: Fireburg Vendor House - Stairs to Gemini Room
+  id: 173
+  area: 49
+  coordinates: [1, 4]
+  teleporter: [96, 0]
+- name: Fireburg Gemini Room - Stairs to Vendor House
+  id: 174
+  area: 49
+  coordinates: [4, 39]
+  teleporter: [97, 0]
+- name: Fireburg Gemini Room - Gemini Teleporter Script
+  id: 175
+  area: 49
+  coordinates: [2, 40]
+  teleporter: [45, 8]
+- name: Fireburg Hotel Lobby - Stairs to beds
+  id: 176
+  area: 49
+  coordinates: [4, 50]
+  teleporter: [213, 0]
+- name: Fireburg Hotel Lobby - Entrance
+  id: 177
+  area: 49
+  coordinates: [17, 56]
+  teleporter: [99, 3]
+- name: Fireburg Hotel Beds - Stairs to Hotel Lobby
+  id: 178
+  area: 49
+  coordinates: [45, 59]
+  teleporter: [214, 0]
+- name: Mine Exterior - Main Entrance
+  id: 179
+  area: 50
+  coordinates: [5, 28]
+  teleporter: [98, 0]
+- name: Mine Exterior - To Cliff
+  id: 180
+  area: 50
+  coordinates: [58, 29]
+  teleporter: [99, 0]
+- name: Mine Exterior - To Parallel Room
+  id: 181
+  area: 50
+  coordinates: [8, 7]
+  teleporter: [20, 2]
+- name: Mine Exterior - To Crescent Room
+  id: 182
+  area: 50
+  coordinates: [26, 15]
+  teleporter: [21, 2]
+- name: Mine Exterior - To Climbing Room
+  id: 183
+  area: 50
+  coordinates: [21, 35]
+  teleporter: [22, 2]
+- name: Mine Exterior - Jinn Fight Script
+  id: 184
+  area: 50
+  coordinates: [58, 31]
+  teleporter: [74, 8]
+- name: Mine Parallel Room - To Mine Exterior
+  id: 185
+  area: 51
+  coordinates: [7, 60]
+  teleporter: [100, 3]
+- name: Mine Crescent Room - To Mine Exterior
+  id: 186
+  area: 51
+  coordinates: [22, 61]
+  teleporter: [101, 3]
+- name: Mine Climbing Room - To Mine Exterior
+  id: 187
+  area: 51
+  coordinates: [56, 21]
+  teleporter: [102, 3]
+- name: Mine Cliff - Entrance
+  id: 188
+  area: 52
+  coordinates: [9, 5]
+  teleporter: [100, 0]
+- name: Mine Cliff - Reuben Grenade Script
+  id: 189
+  area: 52
+  coordinates: [15, 7]
+  teleporter: [12, 8]
+- name: Sealed Temple - To Overworld
+  id: 190
+  area: 53
+  coordinates: [58, 43]
+  teleporter: [16, 6]
+- name: Sealed Temple - Gemini Tile Script
+  id: 191
+  area: 53
+  coordinates: [56, 38]
+  teleporter: [63, 8]
+- name: Volcano Base - Main Entrance 1
+  id: 192
+  area: 54
+  coordinates: [23, 25]
+  teleporter: [103, 0]
+- name: Volcano Base - Main Entrance 2
+  id: 193
+  area: 54
+  coordinates: [23, 26]
+  teleporter: [103, 0]
+- name: Volcano Base - Main Entrance 3
+  id: 194
+  area: 54
+  coordinates: [24, 25]
+  teleporter: [103, 0]
+- name: Volcano Base - Main Entrance 4
+  id: 195
+  area: 54
+  coordinates: [24, 26]
+  teleporter: [103, 0]
+- name: Volcano Base - Left Stairs Script
+  id: 196
+  area: 54
+  coordinates: [20, 5]
+  teleporter: [31, 8]
+- name: Volcano Base - Right Stairs Script
+  id: 197
+  area: 54
+  coordinates: [32, 5]
+  teleporter: [30, 8]
+- name: Volcano Top Right - Top Exit
+  id: 198
+  area: 55
+  coordinates: [44, 8]
+  teleporter: [9, 0] # Original value [103, 0] changed to volcano escape so floor shuffling doesn't pick it up
+- name: Volcano Top Left - To Right-Left Path Script
+  id: 199
+  area: 55
+  coordinates: [40, 24]
+  teleporter: [26, 8]
+- name: Volcano Top Right - To Left-Right Path Script
+  id: 200
+  area: 55
+  coordinates: [52, 24]
+  teleporter: [79, 8]  # Original Value [26, 8]
+- name: Volcano Right Path - To Volcano Base Script
+  id: 201
+  area: 56
+  coordinates: [48, 42]
+  teleporter: [15, 8] # Original Value [27, 8]
+- name: Volcano Left Path - To Volcano Cross Left-Right
+  id: 202
+  area: 56
+  coordinates: [40, 31]
+  teleporter: [25, 2]
+- name: Volcano Left Path - To Volcano Cross Right-Left
+  id: 203
+  area: 56
+  coordinates: [52, 29]
+  teleporter: [26, 2]
+- name: Volcano Left Path - To Volcano Base Script
+  id: 204
+  area: 56
+  coordinates: [36, 42]
+  teleporter: [27, 8]
+- name: Volcano Cross Left-Right - To Volcano Left Path
+  id: 205
+  area: 56
+  coordinates: [10, 42]
+  teleporter: [103, 3]
+- name: Volcano Cross Left-Right - To Volcano Top Right Script
+  id: 206
+  area: 56
+  coordinates: [16, 24]
+  teleporter: [29, 8]
+- name: Volcano Cross Right-Left - To Volcano Top Left Script
+  id: 207
+  area: 56
+  coordinates: [8, 22]
+  teleporter: [28, 8]
+- name: Volcano Cross Right-Left - To Volcano Left Path
+  id: 208
+  area: 56
+  coordinates: [16, 42]
+  teleporter: [104, 3]
+- name: Lava Dome Inner Ring Main Loop - Main Entrance 1
+  id: 209
+  area: 57
+  coordinates: [32, 5]
+  teleporter: [104, 0]
+- name: Lava Dome Inner Ring Main Loop - Main Entrance 2
+  id: 210
+  area: 57
+  coordinates: [33, 5]
+  teleporter: [104, 0]
+- name: Lava Dome Inner Ring Main Loop - To Three Steps Room
+  id: 211
+  area: 57
+  coordinates: [14, 5]
+  teleporter: [105, 0]
+- name: Lava Dome Inner Ring Main Loop - To Life Chest Room Lower
+  id: 212
+  area: 57
+  coordinates: [40, 17]
+  teleporter: [106, 0]
+- name: Lava Dome Inner Ring Main Loop - To Big Jump Room Left
+  id: 213
+  area: 57
+  coordinates: [8, 11]
+  teleporter: [108, 0]
+- name: Lava Dome Inner Ring Main Loop - To Split Corridor Room
+  id: 214
+  area: 57
+  coordinates: [11, 19]
+  teleporter: [111, 0]
+- name: Lava Dome Inner Ring Center Ledge - To Life Chest Room Higher
+  id: 215
+  area: 57
+  coordinates: [32, 11]
+  teleporter: [107, 0]
+- name: Lava Dome Inner Ring Plate Ledge - To Plate Corridor
+  id: 216
+  area: 57
+  coordinates: [12, 23]
+  teleporter: [109, 0]
+- name: Lava Dome Inner Ring Plate Ledge - Plate Script
+  id: 217
+  area: 57
+  coordinates: [5, 23]
+  teleporter: [47, 8]
+- name: Lava Dome Inner Ring Upper Ledges - To Pointless Room
+  id: 218
+  area: 57
+  coordinates: [0, 9]
+  teleporter: [110, 0]
+- name: Lava Dome Inner Ring Upper Ledges - To Lower Moon Helm Room
+  id: 219
+  area: 57
+  coordinates: [0, 15]
+  teleporter: [112, 0]
+- name: Lava Dome Inner Ring Upper Ledges - To Up-Down Corridor
+  id: 220
+  area: 57
+  coordinates: [54, 5]
+  teleporter: [113, 0]
+- name: Lava Dome Inner Ring Big Door Ledge - To Jumping Maze II
+  id: 221
+  area: 57
+  coordinates: [54, 21]
+  teleporter: [114, 0]
+- name: Lava Dome Inner Ring Big Door Ledge - Hydra Gate 1
+  id: 222
+  area: 57
+  coordinates: [62, 20]
+  teleporter: [29, 2]
+- name: Lava Dome Inner Ring Big Door Ledge - Hydra Gate 2
+  id: 223
+  area: 57
+  coordinates: [63, 20]
+  teleporter: [29, 2]
+- name: Lava Dome Inner Ring Big Door Ledge - Hydra Gate 3
+  id: 224
+  area: 57
+  coordinates: [62, 21]
+  teleporter: [29, 2]
+- name: Lava Dome Inner Ring Big Door Ledge - Hydra Gate 4
+  id: 225
+  area: 57
+  coordinates: [63, 21]
+  teleporter: [29, 2]
+- name: Lava Dome Inner Ring Tiny Bottom Ledge - To Four Boxes Corridor
+  id: 226
+  area: 57
+  coordinates: [50, 25]
+  teleporter: [115, 0]
+- name: Lava Dome Jump Maze II - Lower Right Entrance
+  id: 227
+  area: 58
+  coordinates: [55, 28]
+  teleporter: [116, 0]
+- name: Lava Dome Jump Maze II - Upper Entrance
+  id: 228
+  area: 58
+  coordinates: [35, 3]
+  teleporter: [119, 0]
+- name: Lava Dome Jump Maze II - Lower Left Entrance
+  id: 229
+  area: 58
+  coordinates: [34, 27]
+  teleporter: [120, 0]
+- name: Lava Dome Up-Down Corridor - Upper Entrance
+  id: 230
+  area: 58
+  coordinates: [29, 8]
+  teleporter: [117, 0]
+- name: Lava Dome Up-Down Corridor - Lower Entrance
+  id: 231
+  area: 58
+  coordinates: [28, 25]
+  teleporter: [118, 0]
+- name: Lava Dome Jump Maze I - South Entrance
+  id: 232
+  area: 59
+  coordinates: [20, 27]
+  teleporter: [121, 0]
+- name: Lava Dome Jump Maze I - North Entrance
+  id: 233
+  area: 59
+  coordinates: [7, 3]
+  teleporter: [122, 0]
+- name: Lava Dome Pointless Room - Entrance
+  id: 234
+  area: 60
+  coordinates: [2, 7]
+  teleporter: [123, 0]
+- name: Lava Dome Pointless Room - Visit Quest Script 1
+  id: 490
+  area: 60
+  coordinates: [4, 4]
+  teleporter: [99, 8]
+- name: Lava Dome Pointless Room - Visit Quest Script 2
+  id: 491
+  area: 60
+  coordinates: [4, 5]
+  teleporter: [99, 8]
+- name: Lava Dome Lower Moon Helm Room - Left Entrance
+  id: 235
+  area: 60
+  coordinates: [2, 19]
+  teleporter: [124, 0]
+- name: Lava Dome Lower Moon Helm Room - Right Entrance
+  id: 236
+  area: 60
+  coordinates: [11, 21]
+  teleporter: [125, 0]
+- name: Lava Dome Moon Helm Room - Entrance
+  id: 237
+  area: 60
+  coordinates: [15, 23]
+  teleporter: [126, 0]
+- name: Lava Dome Three Jumps Room - To Main Loop
+  id: 238
+  area: 61
+  coordinates: [58, 15]
+  teleporter: [127, 0]
+- name: Lava Dome Life Chest Room - Lower South Entrance
+  id: 239
+  area: 61
+  coordinates: [38, 27]
+  teleporter: [128, 0]
+- name: Lava Dome Life Chest Room - Upper South Entrance
+  id: 240
+  area: 61
+  coordinates: [28, 23]
+  teleporter: [129, 0]
+- name: Lava Dome Big Jump Room - Left Entrance
+  id: 241
+  area: 62
+  coordinates: [42, 51]
+  teleporter: [133, 0]
+- name: Lava Dome Big Jump Room - North Entrance
+  id: 242
+  area: 62
+  coordinates: [30, 29]
+  teleporter: [131, 0]
+- name: Lava Dome Big Jump Room - Lower Right Stairs
+  id: 243
+  area: 62
+  coordinates: [61, 59]
+  teleporter: [132, 0]
+- name: Lava Dome Split Corridor - Upper Stairs
+  id: 244
+  area: 62
+  coordinates: [30, 43]
+  teleporter: [130, 0]
+- name: Lava Dome Split Corridor - Lower Stairs
+  id: 245
+  area: 62
+  coordinates: [36, 61]
+  teleporter: [134, 0]
+- name: Lava Dome Plate Corridor - Right Entrance
+  id: 246
+  area: 63
+  coordinates: [19, 29]
+  teleporter: [135, 0]
+- name: Lava Dome Plate Corridor - Left Entrance
+  id: 247
+  area: 63
+  coordinates: [60, 21]
+  teleporter: [137, 0]
+- name: Lava Dome Four Boxes Stairs - Upper Entrance
+  id: 248
+  area: 63
+  coordinates: [22, 3]
+  teleporter: [136, 0]
+- name: Lava Dome Four Boxes Stairs - Lower Entrance
+  id: 249
+  area: 63
+  coordinates: [22, 17]
+  teleporter: [16, 0]
+- name: Lava Dome Hydra Room - South Entrance
+  id: 250
+  area: 64
+  coordinates: [14, 59]
+  teleporter: [105, 3]
+- name: Lava Dome Hydra Room - North Exit
+  id: 251
+  area: 64
+  coordinates: [25, 31]
+  teleporter: [138, 0]
+- name: Lava Dome Hydra Room - Hydra Script
+  id: 252
+  area: 64
+  coordinates: [14, 36]
+  teleporter: [14, 8]
+- name: Lava Dome Escape Corridor - South Entrance
+  id: 253
+  area: 65
+  coordinates: [22, 17]
+  teleporter: [139, 0]
+- name: Lava Dome Escape Corridor - North Entrance
+  id: 254
+  area: 65
+  coordinates: [22, 3]
+  teleporter: [9, 0]
+- name: Rope Bridge - West Entrance 1
+  id: 255
+  area: 66
+  coordinates: [3, 10]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 2
+  id: 256
+  area: 66
+  coordinates: [3, 11]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 3
+  id: 257
+  area: 66
+  coordinates: [3, 12]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 4
+  id: 258
+  area: 66
+  coordinates: [3, 13]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 5
+  id: 259
+  area: 66
+  coordinates: [4, 10]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 6
+  id: 260
+  area: 66
+  coordinates: [4, 11]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 7
+  id: 261
+  area: 66
+  coordinates: [4, 12]
+  teleporter: [140, 0]
+- name: Rope Bridge - West Entrance 8
+  id: 262
+  area: 66
+  coordinates: [4, 13]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 1
+  id: 263
+  area: 66
+  coordinates: [59, 10]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 2
+  id: 264
+  area: 66
+  coordinates: [59, 11]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 3
+  id: 265
+  area: 66
+  coordinates: [59, 12]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 4
+  id: 266
+  area: 66
+  coordinates: [59, 13]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 5
+  id: 267
+  area: 66
+  coordinates: [60, 10]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 6
+  id: 268
+  area: 66
+  coordinates: [60, 11]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 7
+  id: 269
+  area: 66
+  coordinates: [60, 12]
+  teleporter: [140, 0]
+- name: Rope Bridge - East Entrance 8
+  id: 270
+  area: 66
+  coordinates: [60, 13]
+  teleporter: [140, 0]
+- name: Rope Bridge - Reuben Fall Script
+  id: 271
+  area: 66
+  coordinates: [13, 12]
+  teleporter: [15, 8]
+- name: Alive Forest - West Entrance 1
+  id: 272
+  area: 67
+  coordinates: [8, 13]
+  teleporter: [142, 0]
+- name: Alive Forest - West Entrance 2
+  id: 273
+  area: 67
+  coordinates: [9, 13]
+  teleporter: [142, 0]
+- name: Alive Forest - Giant Tree Entrance
+  id: 274
+  area: 67
+  coordinates: [42, 42]
+  teleporter: [143, 0]
+- name: Alive Forest - Libra Teleporter Script
+  id: 275
+  area: 67
+  coordinates: [8, 52]
+  teleporter: [64, 8]
+- name: Alive Forest - Gemini Teleporter Script
+  id: 276
+  area: 67
+  coordinates: [57, 49]
+  teleporter: [65, 8]
+- name: Alive Forest - Mobius Teleporter Script
+  id: 277
+  area: 67
+  coordinates: [24, 10]
+  teleporter: [66, 8]
+- name: Giant Tree 1F - Entrance Script 1
+  id: 278
+  area: 68
+  coordinates: [18, 31]
+  teleporter: [56, 1] # The script is restored if no map shuffling [49, 8]
+- name: Giant Tree 1F - Entrance Script 2
+  id: 279
+  area: 68
+  coordinates: [19, 31]
+  teleporter: [56, 1] # Same [49, 8]
+- name: Giant Tree 1F - North Entrance To 2F
+  id: 280
+  area: 68
+  coordinates: [16, 1]
+  teleporter: [144, 0]
+- name: Giant Tree 2F Main Lobby - North Entrance to 1F
+  id: 281
+  area: 69
+  coordinates: [44, 33]
+  teleporter: [145, 0]
+- name: Giant Tree 2F Main Lobby - Central Entrance to 3F
+  id: 282
+  area: 69
+  coordinates: [42, 47]
+  teleporter: [146, 0]
+- name: Giant Tree 2F Main Lobby - West Entrance to Mushroom Room
+  id: 283
+  area: 69
+  coordinates: [58, 49]
+  teleporter: [149, 0]
+- name: Giant Tree 2F West Ledge - To 3F Northwest Ledge
+  id: 284
+  area: 69
+  coordinates: [34, 37]
+  teleporter: [147, 0]
+- name: Giant Tree 2F Fall From Vine Script
+  id: 482
+  area: 69
+  coordinates: [0x2E, 0x33]
+  teleporter: [76, 8]
+- name: Giant Tree Meteor Chest Room - To 2F Mushroom Room
+  id: 285
+  area: 69
+  coordinates: [58, 44]
+  teleporter: [148, 0]
+- name: Giant Tree 2F Mushroom Room - Entrance
+  id: 286
+  area: 70
+  coordinates: [55, 18]
+  teleporter: [150, 0]
+- name: Giant Tree 2F Mushroom Room - North Face to Meteor
+  id: 287
+  area: 70
+  coordinates: [56, 7]
+  teleporter: [151, 0]
+- name: Giant Tree 3F Central Room - Central Entrance to 2F
+  id: 288
+  area: 71
+  coordinates: [46, 53]
+  teleporter: [152, 0]
+- name: Giant Tree 3F Central Room - East Entrance to Worm Room
+  id: 289
+  area: 71
+  coordinates: [58, 39]
+  teleporter: [153, 0]
+- name: Giant Tree 3F Lower Corridor - Entrance from Worm Room
+  id: 290
+  area: 71
+  coordinates: [45, 39]
+  teleporter: [154, 0]
+- name: Giant Tree 3F West Platform - Lower Entrance
+  id: 291
+  area: 71
+  coordinates: [33, 43]
+  teleporter: [155, 0]
+- name: Giant Tree 3F West Platform - Top Entrance
+  id: 292
+  area: 71
+  coordinates: [52, 25]
+  teleporter: [156, 0]
+- name: Giant Tree Worm Room - East Entrance
+  id: 293
+  area: 72
+  coordinates: [20, 58]
+  teleporter: [157, 0]
+- name: Giant Tree Worm Room - West Entrance
+  id: 294
+  area: 72
+  coordinates: [6, 56]
+  teleporter: [158, 0]
+- name: Giant Tree 4F Lower Floor - Entrance
+  id: 295
+  area: 73
+  coordinates: [20, 7]
+  teleporter: [159, 0]
+- name: Giant Tree 4F Lower Floor - Lower West Mouth
+  id: 296
+  area: 73
+  coordinates: [8, 23]
+  teleporter: [160, 0]
+- name: Giant Tree 4F Lower Floor - Lower Central Mouth
+  id: 297
+  area: 73
+  coordinates: [14, 25]
+  teleporter: [161, 0]
+- name: Giant Tree 4F Lower Floor - Lower East Mouth
+  id: 298
+  area: 73
+  coordinates: [20, 25]
+  teleporter: [162, 0]
+- name: Giant Tree 4F Upper Floor - Upper West Mouth
+  id: 299
+  area: 73
+  coordinates: [8, 19]
+  teleporter: [163, 0]
+- name: Giant Tree 4F Upper Floor - Upper Central Mouth
+  id: 300
+  area: 73
+  coordinates: [12, 17]
+  teleporter: [164, 0]
+- name: Giant Tree 4F Slime Room - Exit
+  id: 301
+  area: 74
+  coordinates: [47, 10]
+  teleporter: [165, 0]
+- name: Giant Tree 4F Slime Room - West Entrance
+  id: 302
+  area: 74
+  coordinates: [45, 24]
+  teleporter: [166, 0]
+- name: Giant Tree 4F Slime Room - Central Entrance
+  id: 303
+  area: 74
+  coordinates: [50, 24]
+  teleporter: [167, 0]
+- name: Giant Tree 4F Slime Room - East Entrance
+  id: 304
+  area: 74
+  coordinates: [57, 28]
+  teleporter: [168, 0]
+- name: Giant Tree 5F - Entrance
+  id: 305
+  area: 75
+  coordinates: [14, 51]
+  teleporter: [169, 0]
+- name: Giant Tree 5F - Giant Tree Face # Unused
+  id: 306
+  area: 75
+  coordinates: [14, 37]
+  teleporter: [170, 0]
+- name: Kaidge Temple - Entrance
+  id: 307
+  area: 77
+  coordinates: [44, 63]
+  teleporter: [18, 6]
+- name: Kaidge Temple - Mobius Teleporter Script
+  id: 308
+  area: 77
+  coordinates: [35, 57]
+  teleporter: [71, 8]
+- name: Windhole Temple - Entrance
+  id: 309
+  area: 78
+  coordinates: [10, 29]
+  teleporter: [173, 0]
+- name: Mount Gale - Entrance 1
+  id: 310
+  area: 79
+  coordinates: [1, 45]
+  teleporter: [174, 0]
+- name: Mount Gale - Entrance 2
+  id: 311
+  area: 79
+  coordinates: [2, 45]
+  teleporter: [174, 0]
+- name: Mount Gale - Visit Quest
+  id: 494
+  area: 79
+  coordinates: [44, 7]
+  teleporter: [101, 8]
+- name: Windia - Main Entrance 1
+  id: 312
+  area: 80
+  coordinates: [12, 40]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 2
+  id: 313
+  area: 80
+  coordinates: [13, 40]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 3
+  id: 314
+  area: 80
+  coordinates: [14, 40]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 4
+  id: 315
+  area: 80
+  coordinates: [15, 40]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 5
+  id: 316
+  area: 80
+  coordinates: [12, 41]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 6
+  id: 317
+  area: 80
+  coordinates: [13, 41]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 7
+  id: 318
+  area: 80
+  coordinates: [14, 41]
+  teleporter: [10, 6]
+- name: Windia - Main Entrance 8
+  id: 319
+  area: 80
+  coordinates: [15, 41]
+  teleporter: [10, 6]
+- name: Windia - Otto's House
+  id: 320
+  area: 80
+  coordinates: [21, 39]
+  teleporter: [30, 5]
+- name: Windia - INN's Script # Change to teleporter /  Change back to script!
+  id: 321
+  area: 80
+  coordinates: [18, 34]
+  teleporter: [97, 8] # Original value [79, 8] > [31, 2]
+- name: Windia - Vendor House
+  id: 322
+  area: 80
+  coordinates: [8, 36]
+  teleporter: [32, 5]
+- name: Windia - Kid House
+  id: 323
+  area: 80
+  coordinates: [7, 23]
+  teleporter: [176, 4]
+- name: Windia - Old People House
+  id: 324
+  area: 80
+  coordinates: [19, 21]
+  teleporter: [177, 4]
+- name: Windia - Rainbow Bridge Script
+  id: 325
+  area: 80
+  coordinates: [21, 9]
+  teleporter: [10, 6] # Change to entrance, usually a script [41, 8]
+- name: Otto's House - Attic Stairs
+  id: 326
+  area: 81
+  coordinates: [2, 19]
+  teleporter: [33, 2]
+- name: Otto's House - Entrance
+  id: 327
+  area: 81
+  coordinates: [9, 30]
+  teleporter: [106, 3]
+- name: Otto's Attic - Stairs
+  id: 328
+  area: 81
+  coordinates: [26, 23]
+  teleporter: [107, 3]
+- name: Windia Kid House - Entrance Script # Change to teleporter
+  id: 329
+  area: 82
+  coordinates: [7, 10]
+  teleporter: [178, 0] # Original value [38, 8]
+- name: Windia Kid House - Basement Stairs
+  id: 330
+  area: 82
+  coordinates: [1, 4]
+  teleporter: [180, 0]
+- name: Windia Old People House - Entrance
+  id: 331
+  area: 82
+  coordinates: [55, 12]
+  teleporter: [179, 0]
+- name: Windia Old People House - Basement Stairs
+  id: 332
+  area: 82
+  coordinates: [60, 5]
+  teleporter: [181, 0]
+- name: Windia Kid House Basement - Stairs
+  id: 333
+  area: 82
+  coordinates: [43, 8]
+  teleporter: [182, 0]
+- name: Windia Kid House Basement - Mobius Teleporter
+  id: 334
+  area: 82
+  coordinates: [41, 9]
+  teleporter: [44, 8]
+- name: Windia Old People House Basement - Stairs
+  id: 335
+  area: 82
+  coordinates: [39, 26]
+  teleporter: [183, 0]
+- name: Windia Old People House Basement - Mobius Teleporter Script
+  id: 336
+  area: 82
+  coordinates: [39, 23]
+  teleporter: [43, 8]
+- name: Windia Inn Lobby - Stairs to Beds
+  id: 337
+  area: 82
+  coordinates: [45, 24]
+  teleporter: [102, 8]          # Changed to script, original value [215, 0]
+- name: Windia Inn Lobby - Exit
+  id: 338
+  area: 82
+  coordinates: [53, 30]
+  teleporter: [135, 3]
+- name: Windia Inn Beds - Stairs to Lobby
+  id: 339
+  area: 82
+  coordinates: [33, 59]
+  teleporter: [216, 0]
+- name: Windia Vendor House - Entrance
+  id: 340
+  area: 82
+  coordinates: [29, 14]
+  teleporter: [108, 3]
+- name: Pazuzu Tower 1F Main Lobby - Main Entrance 1
+  id: 341
+  area: 83
+  coordinates: [47, 29]
+  teleporter: [184, 0]
+- name: Pazuzu Tower 1F Main Lobby - Main Entrance 2
+  id: 342
+  area: 83
+  coordinates: [47, 30]
+  teleporter: [184, 0]
+- name: Pazuzu Tower 1F Main Lobby - Main Entrance 3
+  id: 343
+  area: 83
+  coordinates: [48, 29]
+  teleporter: [184, 0]
+- name: Pazuzu Tower 1F Main Lobby - Main Entrance 4
+  id: 344
+  area: 83
+  coordinates: [48, 30]
+  teleporter: [184, 0]
+- name: Pazuzu Tower 1F Main Lobby - East Entrance
+  id: 345
+  area: 83
+  coordinates: [55, 12]
+  teleporter: [185, 0]
+- name: Pazuzu Tower 1F Main Lobby - South Stairs
+  id: 346
+  area: 83
+  coordinates: [51, 25]
+  teleporter: [186, 0]
+- name: Pazuzu Tower 1F Main Lobby - Pazuzu Script 1
+  id: 347
+  area: 83
+  coordinates: [47, 8]
+  teleporter: [16, 8]
+- name: Pazuzu Tower 1F Main Lobby - Pazuzu Script 2
+  id: 348
+  area: 83
+  coordinates: [48, 8]
+  teleporter: [16, 8]
+- name: Pazuzu Tower 1F Boxes Room - West Stairs
+  id: 349
+  area: 83
+  coordinates: [38, 17]
+  teleporter: [187, 0]
+- name: Pazuzu 2F - West Upper Stairs
+  id: 350
+  area: 84
+  coordinates: [7, 11]
+  teleporter: [188, 0]
+- name: Pazuzu 2F - South Stairs
+  id: 351
+  area: 84
+  coordinates: [20, 24]
+  teleporter: [189, 0]
+- name: Pazuzu 2F - West Lower Stairs
+  id: 352
+  area: 84
+  coordinates: [6, 17]
+  teleporter: [190, 0]
+- name: Pazuzu 2F - Central Stairs
+  id: 353
+  area: 84
+  coordinates: [15, 15]
+  teleporter: [191, 0]
+- name: Pazuzu 2F - Pazuzu 1
+  id: 354
+  area: 84
+  coordinates: [15, 8]
+  teleporter: [17, 8]
+- name: Pazuzu 2F - Pazuzu 2
+  id: 355
+  area: 84
+  coordinates: [16, 8]
+  teleporter: [17, 8]
+- name: Pazuzu 3F Main Room - North Stairs
+  id: 356
+  area: 85
+  coordinates: [23, 11]
+  teleporter: [192, 0]
+- name: Pazuzu 3F Main Room - West Stairs
+  id: 357
+  area: 85
+  coordinates: [7, 15]
+  teleporter: [193, 0]
+- name: Pazuzu 3F Main Room - Pazuzu Script 1
+  id: 358
+  area: 85
+  coordinates: [15, 8]
+  teleporter: [18, 8]
+- name: Pazuzu 3F Main Room - Pazuzu Script 2
+  id: 359
+  area: 85
+  coordinates: [16, 8]
+  teleporter: [18, 8]
+- name: Pazuzu 3F Central Island - Central Stairs
+  id: 360
+  area: 85
+  coordinates: [15, 14]
+  teleporter: [194, 0]
+- name: Pazuzu 3F Central Island - South Stairs
+  id: 361
+  area: 85
+  coordinates: [17, 25]
+  teleporter: [195, 0]
+- name: Pazuzu 4F - Northwest Stairs
+  id: 362
+  area: 86
+  coordinates: [39, 12]
+  teleporter: [196, 0]
+- name: Pazuzu 4F - Southwest Stairs
+  id: 363
+  area: 86
+  coordinates: [39, 19]
+  teleporter: [197, 0]
+- name: Pazuzu 4F - South Stairs
+  id: 364
+  area: 86
+  coordinates: [47, 24]
+  teleporter: [198, 0]
+- name: Pazuzu 4F - Northeast Stairs
+  id: 365
+  area: 86
+  coordinates: [54, 9]
+  teleporter: [199, 0]
+- name: Pazuzu 4F - Pazuzu Script 1
+  id: 366
+  area: 86
+  coordinates: [47, 8]
+  teleporter: [19, 8]
+- name: Pazuzu 4F - Pazuzu Script 2
+  id: 367
+  area: 86
+  coordinates: [48, 8]
+  teleporter: [19, 8]
+- name: Pazuzu 5F Pazuzu Loop - West Stairs
+  id: 368
+  area: 87
+  coordinates: [9, 49]
+  teleporter: [200, 0]
+- name: Pazuzu 5F Pazuzu Loop - South Stairs
+  id: 369
+  area: 87
+  coordinates: [16, 55]
+  teleporter: [201, 0]
+- name: Pazuzu 5F Upper Loop - Northeast Stairs
+  id: 370
+  area: 87
+  coordinates: [22, 40]
+  teleporter: [202, 0]
+- name: Pazuzu 5F Upper Loop - Northwest Stairs
+  id: 371
+  area: 87
+  coordinates: [9, 40]
+  teleporter: [203, 0]
+- name: Pazuzu 5F Upper Loop - Pazuzu Script 1
+  id: 372
+  area: 87
+  coordinates: [15, 40]
+  teleporter: [20, 8]
+- name: Pazuzu 5F Upper Loop - Pazuzu Script 2
+  id: 373
+  area: 87
+  coordinates: [16, 40]
+  teleporter: [20, 8]
+- name: Pazuzu 6F - West Stairs
+  id: 374
+  area: 88
+  coordinates: [41, 47]
+  teleporter: [204, 0]
+- name: Pazuzu 6F - Northwest Stairs
+  id: 375
+  area: 88
+  coordinates: [41, 40]
+  teleporter: [205, 0]
+- name: Pazuzu 6F - Northeast Stairs
+  id: 376
+  area: 88
+  coordinates: [54, 40]
+  teleporter: [206, 0]
+- name: Pazuzu 6F - South Stairs
+  id: 377
+  area: 88
+  coordinates: [52, 56]
+  teleporter: [207, 0]
+- name: Pazuzu 6F - Pazuzu Script 1
+  id: 378
+  area: 88
+  coordinates: [47, 40]
+  teleporter: [21, 8]
+- name: Pazuzu 6F - Pazuzu Script 2
+  id: 379
+  area: 88
+  coordinates: [48, 40]
+  teleporter: [21, 8]
+- name: Pazuzu 7F Main Room - Southwest Stairs
+  id: 380
+  area: 89
+  coordinates: [15, 54]
+  teleporter: [26, 0]
+- name: Pazuzu 7F Main Room - Northeast Stairs
+  id: 381
+  area: 89
+  coordinates: [21, 40]
+  teleporter: [27, 0]
+- name: Pazuzu 7F Main Room - Southeast Stairs
+  id: 382
+  area: 89
+  coordinates: [21, 56]
+  teleporter: [28, 0]
+- name: Pazuzu 7F Main Room - Pazuzu Script 1
+  id: 383
+  area: 89
+  coordinates: [15, 44]
+  teleporter: [22, 8]
+- name: Pazuzu 7F Main Room - Pazuzu Script 2
+  id: 384
+  area: 89
+  coordinates: [16, 44]
+  teleporter: [22, 8]
+- name: Pazuzu 7F Main Room - Crystal Script # Added for floor shuffle
+  id: 480
+  area: 89
+  coordinates: [15, 40]
+  teleporter: [38, 8]
+- name: Pazuzu 1F to 3F - South Stairs
+  id: 385
+  area: 90
+  coordinates: [43, 60]
+  teleporter: [29, 0]
+- name: Pazuzu 1F to 3F - North Stairs
+  id: 386
+  area: 90
+  coordinates: [43, 36]
+  teleporter: [30, 0]
+- name: Pazuzu 3F to 5F - South Stairs
+  id: 387
+  area: 91
+  coordinates: [43, 60]
+  teleporter: [40, 0]
+- name: Pazuzu 3F to 5F - North Stairs
+  id: 388
+  area: 91
+  coordinates: [43, 36]
+  teleporter: [41, 0]
+- name: Pazuzu 5F to 7F - South Stairs
+  id: 389
+  area: 92
+  coordinates: [43, 60]
+  teleporter: [38, 0]
+- name: Pazuzu 5F to 7F - North Stairs
+  id: 390
+  area: 92
+  coordinates: [43, 36]
+  teleporter: [39, 0]
+- name: Pazuzu 2F to 4F - South Stairs
+  id: 391
+  area: 93
+  coordinates: [43, 60]
+  teleporter: [21, 0]
+- name: Pazuzu 2F to 4F - North Stairs
+  id: 392
+  area: 93
+  coordinates: [43, 36]
+  teleporter: [22, 0]
+- name: Pazuzu 4F to 6F - South Stairs
+  id: 393
+  area: 94
+  coordinates: [43, 60]
+  teleporter: [2, 0]
+- name: Pazuzu 4F to 6F - North Stairs
+  id: 394
+  area: 94
+  coordinates: [43, 36]
+  teleporter: [3, 0]
+- name: Light Temple - Entrance
+  id: 395
+  area: 95
+  coordinates: [28, 57]
+  teleporter: [19, 6]
+- name: Light Temple - Mobius Teleporter Script
+  id: 396
+  area: 95
+  coordinates: [29, 37]
+  teleporter: [70, 8]
+- name: Light Temple - Visit Quest Script 1
+  id: 492
+  area: 95
+  coordinates: [34, 39]
+  teleporter: [100, 8]
+- name: Light Temple - Visit Quest Script 2
+  id: 493
+  area: 95
+  coordinates: [35, 39]
+  teleporter: [100, 8]
+- name: Ship Dock - Mobius Teleporter Script
+  id: 397
+  area: 96
+  coordinates: [15, 18]
+  teleporter: [61, 8]
+- name: Ship Dock - From Overworld
+  id: 398
+  area: 96
+  coordinates: [15, 11]
+  teleporter: [73, 0]
+- name: Ship Dock - Entrance
+  id: 399
+  area: 96
+  coordinates: [15, 23]
+  teleporter: [17, 6]
+- name: Mac Ship Deck - East Entrance Script
+  id: 400
+  area: 97
+  coordinates: [26, 40]
+  teleporter: [37, 8]
+- name: Mac Ship Deck - Central Stairs Script
+  id: 401
+  area: 97
+  coordinates: [16, 47]
+  teleporter: [50, 8]
+- name: Mac Ship Deck - West Stairs Script
+  id: 402
+  area: 97
+  coordinates: [8, 34]
+  teleporter: [51, 8]
+- name: Mac Ship Deck - East Stairs Script
+  id: 403
+  area: 97
+  coordinates: [24, 36]
+  teleporter: [52, 8]
+- name: Mac Ship Deck - North Stairs Script
+  id: 404
+  area: 97
+  coordinates: [12, 9]
+  teleporter: [53, 8]
+- name: Mac Ship B1 Outer Ring - South Stairs
+  id: 405
+  area: 98
+  coordinates: [16, 45]
+  teleporter: [208, 0]
+- name: Mac Ship B1 Outer Ring - West Stairs
+  id: 406
+  area: 98
+  coordinates: [8, 35]
+  teleporter: [175, 0]
+- name: Mac Ship B1 Outer Ring - East Stairs
+  id: 407
+  area: 98
+  coordinates: [25, 37]
+  teleporter: [172, 0]
+- name: Mac Ship B1 Outer Ring - Northwest Stairs
+  id: 408
+  area: 98
+  coordinates: [10, 23]
+  teleporter: [88, 0]
+- name: Mac Ship B1 Square Room - North Stairs
+  id: 409
+  area: 98
+  coordinates: [14, 9]
+  teleporter: [141, 0]
+- name: Mac Ship B1 Square Room - South Stairs
+  id: 410
+  area: 98
+  coordinates: [16, 12]
+  teleporter: [87, 0]
+- name: Mac Ship B1 Mac Room - Stairs # Unused?
+  id: 411
+  area: 98
+  coordinates: [16, 51]
+  teleporter: [101, 0]
+- name: Mac Ship B1 Central Corridor - South Stairs
+  id: 412
+  area: 98
+  coordinates: [16, 38]
+  teleporter: [102, 0]
+- name: Mac Ship B1 Central Corridor - North Stairs
+  id: 413
+  area: 98
+  coordinates: [16, 26]
+  teleporter: [86, 0]
+- name: Mac Ship B2 South Corridor - South Stairs
+  id: 414
+  area: 99
+  coordinates: [48, 51]
+  teleporter: [57, 1]
+- name: Mac Ship B2 South Corridor - North Stairs Script
+  id: 415
+  area: 99
+  coordinates: [48, 38]
+  teleporter: [55, 8]
+- name: Mac Ship B2 North Corridor - South Stairs Script
+  id: 416
+  area: 99
+  coordinates: [48, 27]
+  teleporter: [56, 8]
+- name: Mac Ship B2 North Corridor - North Stairs Script
+  id: 417
+  area: 99
+  coordinates: [48, 12]
+  teleporter: [57, 8]
+- name: Mac Ship B2 Outer Ring - Northwest Stairs Script
+  id: 418
+  area: 99
+  coordinates: [55, 11]
+  teleporter: [58, 8]
+- name: Mac Ship B1 Outer Ring Cleared - South Stairs
+  id: 419
+  area: 100
+  coordinates: [16, 45]
+  teleporter: [208, 0]
+- name: Mac Ship B1 Outer Ring Cleared - West Stairs
+  id: 420
+  area: 100
+  coordinates: [8, 35]
+  teleporter: [175, 0]
+- name: Mac Ship B1 Outer Ring Cleared - East Stairs
+  id: 421
+  area: 100
+  coordinates: [25, 37]
+  teleporter: [172, 0]
+- name: Mac Ship B1 Square Room Cleared - North Stairs
+  id: 422
+  area: 100
+  coordinates: [14, 9]
+  teleporter: [141, 0]
+- name: Mac Ship B1 Square Room Cleared - South Stairs
+  id: 423
+  area: 100
+  coordinates: [16, 12]
+  teleporter: [87, 0]
+- name: Mac Ship B1 Mac Room Cleared - Main Stairs
+  id: 424
+  area: 100
+  coordinates: [16, 51]
+  teleporter: [101, 0]
+- name: Mac Ship B1 Central Corridor Cleared - South Stairs
+  id: 425
+  area: 100
+  coordinates: [16, 38]
+  teleporter: [102, 0]
+- name: Mac Ship B1 Central Corridor Cleared - North Stairs
+  id: 426
+  area: 100
+  coordinates: [16, 26]
+  teleporter: [86, 0]
+- name: Mac Ship B1 Central Corridor Cleared - Northwest Stairs
+  id: 427
+  area: 100
+  coordinates: [23, 10]
+  teleporter: [88, 0]
+- name: Doom Castle Corridor of Destiny - South Entrance
+  id: 428
+  area: 101
+  coordinates: [59, 29]
+  teleporter: [84, 0]
+- name: Doom Castle Corridor of Destiny - Ice Floor Entrance
+  id: 429
+  area: 101
+  coordinates: [59, 21]
+  teleporter: [35, 2]
+- name: Doom Castle Corridor of Destiny - Lava Floor Entrance
+  id: 430
+  area: 101
+  coordinates: [59, 13]
+  teleporter: [209, 0]
+- name: Doom Castle Corridor of Destiny - Sky Floor Entrance
+  id: 431
+  area: 101
+  coordinates: [59, 5]
+  teleporter: [211, 0]
+- name: Doom Castle Corridor of Destiny - Hero Room Entrance
+  id: 432
+  area: 101
+  coordinates: [59, 61]
+  teleporter: [13, 2]
+- name: Doom Castle Ice Floor - Entrance
+  id: 433
+  area: 102
+  coordinates: [23, 42]
+  teleporter: [109, 3]
+- name: Doom Castle Lava Floor - Entrance
+  id: 434
+  area: 103
+  coordinates: [23, 40]
+  teleporter: [210, 0]
+- name: Doom Castle Sky Floor - Entrance
+  id: 435
+  area: 104
+  coordinates: [24, 41]
+  teleporter: [212, 0]
+- name: Doom Castle Hero Room - Dark King Entrance 1
+  id: 436
+  area: 106
+  coordinates: [15, 5]
+  teleporter: [54, 0]
+- name: Doom Castle Hero Room - Dark King Entrance 2
+  id: 437
+  area: 106
+  coordinates: [16, 5]
+  teleporter: [54, 0]
+- name: Doom Castle Hero Room - Dark King Entrance 3
+  id: 438
+  area: 106
+  coordinates: [15, 4]
+  teleporter: [54, 0]
+- name: Doom Castle Hero Room - Dark King Entrance 4
+  id: 439
+  area: 106
+  coordinates: [16, 4]
+  teleporter: [54, 0]
+- name: Doom Castle Hero Room - Hero Statue Script
+  id: 440
+  area: 106
+  coordinates: [15, 17]
+  teleporter: [24, 8]
+- name: Doom Castle Hero Room - Entrance
+  id: 441
+  area: 106
+  coordinates: [15, 24]
+  teleporter: [110, 3]
+- name: Doom Castle Dark King Room - Entrance
+  id: 442
+  area: 107
+  coordinates: [14, 26]
+  teleporter: [52, 0]
+- name: Doom Castle Dark King Room - Dark King Script
+  id: 443
+  area: 107
+  coordinates: [14, 15]
+  teleporter: [25, 8]
+- name: Doom Castle Dark King Room - Unknown
+  id: 444
+  area: 107
+  coordinates: [47, 54]
+  teleporter: [77, 0]
+- name: Overworld - Level Forest
+  id: 445
+  area: 0
+  type: "Overworld"
+  teleporter: [0x2E, 8]
+- name: Overworld - Foresta
+  id: 446
+  area: 0
+  type: "Overworld"
+  teleporter: [0x02, 1]
+- name: Overworld - Sand Temple
+  id: 447
+  area: 0
+  type: "Overworld"
+  teleporter: [0x03, 1]
+- name: Overworld - Bone Dungeon
+  id: 448
+  area: 0
+  type: "Overworld"
+  teleporter: [0x04, 1]
+- name: Overworld - Focus Tower Foresta
+  id: 449
+  area: 0
+  type: "Overworld"
+  teleporter: [0x05, 1]
+- name: Overworld - Focus Tower Aquaria
+  id: 450
+  area: 0
+  type: "Overworld"
+  teleporter: [0x13, 1]
+- name: Overworld - Libra Temple
+  id: 451
+  area: 0
+  type: "Overworld"
+  teleporter: [0x07, 1]
+- name: Overworld - Aquaria
+  id: 452
+  area: 0
+  type: "Overworld"
+  teleporter: [0x08, 8]
+- name: Overworld - Wintry Cave
+  id: 453
+  area: 0
+  type: "Overworld"
+  teleporter: [0x0A, 1]
+- name: Overworld - Life Temple
+  id: 454
+  area: 0
+  type: "Overworld"
+  teleporter: [0x0B, 1]
+- name: Overworld - Falls Basin
+  id: 455
+  area: 0
+  type: "Overworld"
+  teleporter: [0x0C, 1]
+- name: Overworld - Ice Pyramid
+  id: 456
+  area: 0
+  type: "Overworld"
+  teleporter: [0x0D, 1] # Will be switched to a script
+- name: Overworld - Spencer's Place
+  id: 457
+  area: 0
+  type: "Overworld"
+  teleporter: [0x30, 8]
+- name: Overworld - Wintry Temple
+  id: 458
+  area: 0
+  type: "Overworld"
+  teleporter: [0x10, 1]
+- name: Overworld - Focus Tower Frozen Strip
+  id: 459
+  area: 0
+  type: "Overworld"
+  teleporter: [0x11, 1]
+- name: Overworld - Focus Tower Fireburg
+  id: 460
+  area: 0
+  type: "Overworld"
+  teleporter: [0x12, 1]
+- name: Overworld - Fireburg
+  id: 461
+  area: 0
+  type: "Overworld"
+  teleporter: [0x14, 1]
+- name: Overworld - Mine
+  id: 462
+  area: 0
+  type: "Overworld"
+  teleporter: [0x15, 1]
+- name: Overworld - Sealed Temple
+  id: 463
+  area: 0
+  type: "Overworld"
+  teleporter: [0x16, 1]
+- name: Overworld - Volcano
+  id: 464
+  area: 0
+  type: "Overworld"
+  teleporter: [0x17, 1]
+- name: Overworld - Lava Dome
+  id: 465
+  area: 0
+  type: "Overworld"
+  teleporter: [0x18, 1]
+- name: Overworld - Focus Tower Windia
+  id: 466
+  area: 0
+  type: "Overworld"
+  teleporter: [0x06, 1]
+- name: Overworld - Rope Bridge
+  id: 467
+  area: 0
+  type: "Overworld"
+  teleporter: [0x19, 1]
+- name: Overworld - Alive Forest
+  id: 468
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1A, 1]
+- name: Overworld - Giant Tree
+  id: 469
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1B, 1]
+- name: Overworld - Kaidge Temple
+  id: 470
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1C, 1]
+- name: Overworld - Windia
+  id: 471
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1D, 1]
+- name: Overworld - Windhole Temple
+  id: 472
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1E, 1]
+- name: Overworld - Mount Gale
+  id: 473
+  area: 0
+  type: "Overworld"
+  teleporter: [0x1F, 1]
+- name: Overworld - Pazuzu Tower
+  id: 474
+  area: 0
+  type: "Overworld"
+  teleporter: [0x20, 1]
+- name: Overworld - Ship Dock
+  id: 475
+  area: 0
+  type: "Overworld"
+  teleporter: [0x3E, 1]
+- name: Overworld - Doom Castle
+  id: 476
+  area: 0
+  type: "Overworld"
+  teleporter: [0x21, 1]
+- name: Overworld - Light Temple
+  id: 477
+  area: 0
+  type: "Overworld"
+  teleporter: [0x22, 1]
+- name: Overworld - Mac Ship
+  id: 478
+  area: 0
+  type: "Overworld"
+  teleporter: [0x24, 1]
+- name: Overworld - Mac Ship Doom
+  id: 479
+  area: 0
+  type: "Overworld"
+  teleporter: [0x24, 1]
+- name: Dummy House - Bed Script
+  id: 480
+  area: 17
+  coordinates: [0x28, 0x38]
+  teleporter: [1, 8]
+- name: Dummy House - Entrance
+  id: 481
+  area: 17
+  coordinates: [0x29, 0x3B]
+  teleporter: [0, 10] #None

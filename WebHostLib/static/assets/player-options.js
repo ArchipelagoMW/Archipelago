@@ -369,7 +369,7 @@ const setPresets = (optionsData, presetName) => {
         break;
       }
 
-      case 'special_range': {
+      case 'named_range': {
         const selectElement = document.querySelector(`select[data-key='${option}']`);
         const rangeElement = document.querySelector(`input[data-key='${option}']`);
         const randomElement = document.querySelector(`.randomize-button[data-key='${option}']`);
