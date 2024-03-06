@@ -2,7 +2,7 @@ import asyncio
 import copy
 import orjson
 import time
-from typing import TYPE_CHECKING, Optional, Dict, Set
+from typing import TYPE_CHECKING, Optional, Dict, Set, Tuple
 import uuid
 
 from NetUtils import ClientStatus
@@ -184,8 +184,6 @@ class PokemonEmeraldClient(BizHawkClient):
         if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
             return
 
-        from CommonClient import logger
-
         if ctx.slot_data["goal"] == Goal.option_champion:
             self.goal_flag = DEFEATED_WALLACE_FLAG
         elif ctx.slot_data["goal"] == Goal.option_steven:
@@ -203,8 +201,14 @@ class PokemonEmeraldClient(BizHawkClient):
             }]))
 
         try:
+            guards: Dict[str, Tuple[int, bytes, str]] = {}
+
             # Checks that the player is in the overworld
-            overworld_guard = (data.ram_addresses["gMain"] + 4, (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"), "System Bus")
+            guards["IN OVERWORLD"] = (
+                data.ram_addresses["gMain"] + 4,
+                (data.ram_addresses["CB2_Overworld"] + 1).to_bytes(4, "little"),
+                "System Bus"
+            )
 
             # Read save block addresses
             read_result = await bizhawk.read(
@@ -215,86 +219,22 @@ class PokemonEmeraldClient(BizHawkClient):
                 ]
             )
 
-            # Checks that the save blocks haven't moved
-            save_block_1_address_guard = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
-            save_block_2_address_guard = (data.ram_addresses["gSaveBlock2Ptr"], read_result[1], "System Bus")
+            # Checks that the save data hasn't moved
+            guards["SAVE BLOCK 1"] = (data.ram_addresses["gSaveBlock1Ptr"], read_result[0], "System Bus")
+            guards["SAVE BLOCK 2"] = (data.ram_addresses["gSaveBlock2Ptr"], read_result[1], "System Bus")
 
-            save_block_1_address = int.from_bytes(read_result[0], "little")
-            save_block_2_address = int.from_bytes(read_result[1], "little")
+            sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
+            sb2_address = int.from_bytes(guards["SAVE BLOCK 2"][1], "little")
 
-            # Death Link
-            if ctx.slot_data.get("death_link", Toggle.option_false) == Toggle.option_true:
-                if "DeathLink" not in ctx.tags:
-                    await ctx.update_death_link(True)
-                    self.previous_death_link = ctx.last_death_link
-
-                read_result = await bizhawk.guarded_read(
-                    ctx.bizhawk_ctx, [
-                        (save_block_1_address + 0x177C + (52 * 4), 4, "System Bus"),  # White out stat
-                        (save_block_2_address + 0xAC, 4, "System Bus"),               # Encryption key
-                    ],
-                    [save_block_1_address_guard, save_block_2_address_guard]
-                )
-                if read_result is None:  # Save block moved
-                    return
-
-                encryption_key = int.from_bytes(read_result[1], "little")
-                times_whited_out = int.from_bytes(read_result[0], "little") ^ encryption_key
-
-                # Skip all deathlink code if save is not yet loaded (encryption key is zero) or white out stat not yet
-                # initialized (starts at 100 as a safety for subtracting values from an unsigned int).
-                if encryption_key != 0 and times_whited_out >= 100:
-                    if self.previous_death_link != ctx.last_death_link:
-                        self.previous_death_link = ctx.last_death_link
-                        if self.ignore_next_death_link:
-                            self.ignore_next_death_link = False
-                        else:
-                            await bizhawk.write(
-                                ctx.bizhawk_ctx,
-                                [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
-                            )
-
-                    if self.death_counter is None:
-                        self.death_counter = times_whited_out
-                    elif times_whited_out > self.death_counter:
-                        await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
-                                            f"{ctx.player_names[ctx.slot]} whited out!")
-                        self.ignore_next_death_link = True
-                        logger.info(f"DEBUG: Death counter updated to {times_whited_out}")
-                        self.death_counter = times_whited_out
-
-            # Give player items
-            read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx,
-                [
-                    (save_block_1_address + 0x3778, 2, "System Bus"),                      # Number of received items
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, 1, "System Bus")  # Received item struct full?
-                ],
-                [overworld_guard, save_block_1_address_guard]
-            )
-            if read_result is None:  # Not in overworld, or save block moved
-                return
-
-            num_received_items = int.from_bytes(read_result[0], "little")
-            received_item_is_empty = read_result[1][0] == 0
-
-            # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
-            # fill it with the next item
-            if num_received_items < len(ctx.items_received) and received_item_is_empty:
-                next_item = ctx.items_received[num_received_items]
-                should_display = 1 if next_item.flags & 1 or next_item.player == ctx.slot else 0
-                await bizhawk.write(ctx.bizhawk_ctx, [
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 4, [1], "System Bus"),
-                    (data.ram_addresses["gArchipelagoReceivedItem"] + 5, [should_display], "System Bus"),
-                ])
+            await self.handle_death_link(ctx, guards)
+            await self.handle_received_items(ctx, guards)
+            await self.handle_wonder_trade(ctx, guards)
 
             # Read flags in 2 chunks
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
-                [(save_block_1_address + 0x1450, 0x96, "System Bus")],  # Flags
-                [overworld_guard, save_block_1_address_guard]
+                [(sb1_address + 0x1450, 0x96, "System Bus")],  # Flags
+                [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
             )
             if read_result is None:  # Not in overworld, or save block moved
                 return
@@ -302,8 +242,8 @@ class PokemonEmeraldClient(BizHawkClient):
 
             read_result = await bizhawk.guarded_read(
                 ctx.bizhawk_ctx,
-                [(save_block_1_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
-                [overworld_guard, save_block_1_address_guard]
+                [(sb1_address + 0x14E6, 0x96, "System Bus")],  # Flags continued
+                [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
             )
             if read_result is not None:
                 flag_bytes += read_result[0]
@@ -314,55 +254,11 @@ class PokemonEmeraldClient(BizHawkClient):
                 # Read pokedex flags
                 read_result = await bizhawk.guarded_read(
                     ctx.bizhawk_ctx,
-                    [(save_block_2_address + 0x28, 0x34, "System Bus")],
-                    [overworld_guard, save_block_2_address_guard]
+                    [(sb2_address + 0x28, 0x34, "System Bus")],
+                    [guards["IN OVERWORLD"], guards["SAVE BLOCK 2"]]
                 )
                 if read_result is not None:
                     pokedex_caught_bytes = read_result[0]
-
-            # Wonder Trades
-            read_result = await bizhawk.guarded_read(
-                ctx.bizhawk_ctx,
-                [
-                    (save_block_1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
-                    (save_block_1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
-                ],
-                [overworld_guard, save_block_1_address_guard]
-            )
-
-            if read_result is not None:
-                wonder_trade_pokemon_data = read_result[0]
-                trade_is_sent = read_result[1][0]
-
-                if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
-                    # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
-                    # and mark that the game is waiting on receiving a trade
-                    Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
-                    await bizhawk.write(ctx.bizhawk_ctx, [
-                        (save_block_1_address + 0x377C, bytes(0x50), "System Bus"),
-                        (save_block_1_address + 0x37CC, [1], "System Bus"),
-                    ])
-                elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
-                    # Game is waiting on receiving a trade. See if there are any available trades that were not
-                    # sent by this player, and if so, try to receive one.
-                    if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
-                        if any(item[0] != ctx.slot
-                                for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
-                                if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
-                            received_trade = await self.wonder_trade_receive(ctx)
-                            if received_trade is None:
-                                self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
-                                self.wonder_trade_cooldown *= 2
-                            else:
-                                await bizhawk.write(ctx.bizhawk_ctx, [
-                                    (save_block_1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
-                                ])
-                                logger.info("Wonder trade received!")
-                                self.wonder_trade_cooldown = 5000
-
-                    else:
-                        # Very approximate "time since last loop", but extra delay is fine for this
-                        self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
 
             game_clear = False
             local_checked_locations = set()
@@ -490,6 +386,146 @@ class PokemonEmeraldClient(BizHawkClient):
             # Exit handler and return to main loop to reconnect
             pass
 
+    async def handle_death_link(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+        """
+        Checks whether the player has died while connected and sends a death link if so. Queues a death link in the game
+        if a new one has been received.
+        """
+        if ctx.slot_data.get("death_link", Toggle.option_false) == Toggle.option_true:
+            if "DeathLink" not in ctx.tags:
+                await ctx.update_death_link(True)
+                self.previous_death_link = ctx.last_death_link
+
+            sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
+            sb2_address = int.from_bytes(guards["SAVE BLOCK 2"][1], "little")
+
+            read_result = await bizhawk.guarded_read(
+                ctx.bizhawk_ctx, [
+                    (sb1_address + 0x177C + (52 * 4), 4, "System Bus"),  # White out stat
+                    (sb1_address + 0x177C + (22 * 4), 4, "System Bus"),  # Canary stat
+                    (sb2_address + 0xAC, 4, "System Bus"),               # Encryption key
+                ],
+                [guards["SAVE BLOCK 1"], guards["SAVE BLOCK 2"]]
+            )
+            if read_result is None:  # Save block moved
+                return
+
+            encryption_key = int.from_bytes(read_result[2], "little")
+            times_whited_out = int.from_bytes(read_result[0], "little") ^ encryption_key
+
+            # Canary is an unused stat that will always be 0. There is a low chance that we've done this read on
+            # a frame where the user has just entered a battle and the encryption key has been changed, but the data
+            # has not yet been encrypted with the new key. If `canary` is 0, `times_whited_out` is correct.
+            canary = int.from_bytes(read_result[1], "little") ^ encryption_key
+
+            # Skip all deathlink code if save is not yet loaded (encryption key is zero) or white out stat not yet
+            # initialized (starts at 100 as a safety for subtracting values from an unsigned int).
+            if canary == 0 and encryption_key != 0 and times_whited_out >= 100:
+                if self.previous_death_link != ctx.last_death_link:
+                    self.previous_death_link = ctx.last_death_link
+                    if self.ignore_next_death_link:
+                        self.ignore_next_death_link = False
+                    else:
+                        await bizhawk.write(
+                            ctx.bizhawk_ctx,
+                            [(data.ram_addresses["gArchipelagoDeathLinkQueued"], [1], "System Bus")]
+                        )
+
+                if self.death_counter is None:
+                    self.death_counter = times_whited_out
+                elif times_whited_out > self.death_counter:
+                    await ctx.send_death(f"{ctx.player_names[ctx.slot]} is out of usable POKéMON! "
+                                        f"{ctx.player_names[ctx.slot]} whited out!")
+                    self.ignore_next_death_link = True
+                    self.death_counter = times_whited_out
+
+    async def handle_received_items(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+        """
+        Checks the index of the most recently received item and whether the item queue is full. Writes the next item
+        into the game if necessary.
+        """
+        received_item_address = data.ram_addresses["gArchipelagoReceivedItem"]
+
+        sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
+
+        read_result = await bizhawk.guarded_read(
+            ctx.bizhawk_ctx,
+            [
+                (sb1_address + 0x3778, 2, "System Bus"),      # Number of received items
+                (received_item_address + 4, 1, "System Bus")  # Received item struct full?
+            ],
+            [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
+        )
+        if read_result is None:  # Not in overworld, or save block moved
+            return
+
+        num_received_items = int.from_bytes(read_result[0], "little")
+        received_item_is_empty = read_result[1][0] == 0
+
+        # If the game hasn't received all items yet and the received item struct doesn't contain an item, then
+        # fill it with the next item
+        if num_received_items < len(ctx.items_received) and received_item_is_empty:
+            next_item = ctx.items_received[num_received_items]
+            should_display = 1 if next_item.flags & 1 or next_item.player == ctx.slot else 0
+            await bizhawk.write(ctx.bizhawk_ctx, [
+                (received_item_address + 0, (next_item.item - BASE_OFFSET).to_bytes(2, "little"), "System Bus"),
+                (received_item_address + 2, (num_received_items + 1).to_bytes(2, "little"), "System Bus"),
+                (received_item_address + 4, [1], "System Bus"),
+                (received_item_address + 5, [should_display], "System Bus"),
+            ])
+
+    async def handle_wonder_trade(self, ctx: "BizHawkClientContext", guards: Dict[str, Tuple[int, bytes, str]]) -> None:
+        """
+        Read wonder trade status from save data and either send a queued pokemon to data storage or attempt to retrieve
+        one from data storage and write it into the save.
+        """
+        from CommonClient import logger
+
+        sb1_address = int.from_bytes(guards["SAVE BLOCK 1"][1], "little")
+
+        read_result = await bizhawk.guarded_read(
+            ctx.bizhawk_ctx,
+            [
+                (sb1_address + 0x377C, 0x50, "System Bus"),  # Wonder trade data
+                (sb1_address + 0x37CC, 1, "System Bus"),     # Is wonder trade sent
+            ],
+            [guards["IN OVERWORLD"], guards["SAVE BLOCK 1"]]
+        )
+
+        if read_result is not None:
+            wonder_trade_pokemon_data = read_result[0]
+            trade_is_sent = read_result[1][0]
+
+            if trade_is_sent == 0 and wonder_trade_pokemon_data[19] == 2:
+                # Game has wonder trade data to send. Send it to data storage, remove it from the game's memory,
+                # and mark that the game is waiting on receiving a trade
+                Utils.async_start(self.wonder_trade_send(ctx, pokemon_data_to_json(wonder_trade_pokemon_data)))
+                await bizhawk.write(ctx.bizhawk_ctx, [
+                    (sb1_address + 0x377C, bytes(0x50), "System Bus"),
+                    (sb1_address + 0x37CC, [1], "System Bus"),
+                ])
+            elif trade_is_sent != 0 and wonder_trade_pokemon_data[19] != 2:
+                # Game is waiting on receiving a trade. See if there are any available trades that were not
+                # sent by this player, and if so, try to receive one.
+                if self.wonder_trade_cooldown_timer <= 0 and f"pokemon_wonder_trades_{ctx.team}" in ctx.stored_data:
+                    if any(item[0] != ctx.slot
+                            for key, item in ctx.stored_data.get(f"pokemon_wonder_trades_{ctx.team}", {}).items()
+                            if key != "_lock" and orjson.loads(item[1])["species"] <= 386):
+                        received_trade = await self.wonder_trade_receive(ctx)
+                        if received_trade is None:
+                            self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
+                            self.wonder_trade_cooldown *= 2
+                        else:
+                            await bizhawk.write(ctx.bizhawk_ctx, [
+                                (sb1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
+                            ])
+                            logger.info("Wonder trade received!")
+                            self.wonder_trade_cooldown = 5000
+
+                else:
+                    # Very approximate "time since last loop", but extra delay is fine for this
+                    self.wonder_trade_cooldown_timer -= int(ctx.watcher_timeout * 1000)
+
     async def wonder_trade_acquire(self, ctx: "BizHawkClientContext", keep_trying: bool = False) -> Optional[dict]:
         """
         Acquires a lock on the `pokemon_wonder_trades_{ctx.team}` key in
@@ -501,7 +537,6 @@ class PokemonEmeraldClient(BizHawkClient):
         until successful. Otherwise it will return `None` if it fails to
         acquire the lock.
         """
-        from CommonClient import logger
         while not ctx.exit_event.is_set():
             lock = int(time.time_ns() / 1000000)
             message_uuid = str(uuid.uuid4())
@@ -581,7 +616,6 @@ class PokemonEmeraldClient(BizHawkClient):
         Tries to pop a pokemon out of the wonder trades. Returns `None` if
         for some reason it can't immediately remove a compatible pokemon.
         """
-        from CommonClient import logger
         reply = await self.wonder_trade_acquire(ctx)
 
         if reply is None:
