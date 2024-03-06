@@ -453,7 +453,7 @@ def get_price(multiworld, item, player: int, price_type=None):
         price = item["price"]
         if multiworld.randomize_shop_prices[player]:
             adjust = 2 if price < 100 else 5
-            price = int((price / adjust) * (0.5 + multiworld.random.random() * 1.5)) * adjust
+            price = int((price / adjust) * (0.5 + multiworld.per_slot_randoms[player].random() * 1.5)) * adjust
         multiworld.per_slot_randoms[player].shuffle(price_types)
         for p_type in price_types:
             if any(x in item['item'] for x in price_blacklist[p_type]):
