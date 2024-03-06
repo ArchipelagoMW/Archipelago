@@ -368,6 +368,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     #     /* 0x2D */ bool8 allowWonderTrading;
     #     /* 0x2E */ u16 matchTrainerLevelMultiplierNumerator;
     #     /* 0x30 */ u16 matchTrainerLevelMultiplierDenominator;
+    #     /* 0x32 */ bool8 allowSkippingFanfares;
     # };
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
@@ -520,6 +521,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Set allow wonder trading
     _set_bytes_little_endian(patched_rom, options_address + 0x2D, 1, 1 if world.options.enable_wonder_trading else 0)
+
+    # Set allowed to skip fanfares
+    _set_bytes_little_endian(patched_rom, options_address + 0x32, 1, 1 if world.options.fanfares else 0)
 
     if easter_egg[0] == 2:
         _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
