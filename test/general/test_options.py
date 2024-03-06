@@ -23,10 +23,6 @@ class TestOptions(unittest.TestCase):
 
     def test_item_links_resolve(self):
         """Test item link option resolves correctly."""
-        multiworld = MultiWorld(2)
-        multiworld.game = {1: "Game 1", 2: "Game 2"}
-        multiworld.player_name = {1: "Player 1", 2: "Player 2"}
-        multiworld.set_seed()
         item_link_group = [{
             "name": "ItemLinkTest",
             "item_pool": ["Everything"],
