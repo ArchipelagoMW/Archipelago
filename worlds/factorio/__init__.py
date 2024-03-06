@@ -515,10 +515,11 @@ class Factorio(World):
             if name in self.advancement_technologies:
                 classification = ItemClassification.progression
             else:
-                classification = ItemClassification.filler
-            return FactorioItem(name,
+                classification = ItemClassification.useful if technology_table[name].is_useful else ItemClassification.filler
+            item = FactorioItem(name,
                                 classification,
                                 tech_table[name], self.player)
+            return item
 
         item = FactorioItem(name,
                             ItemClassification.trap if name.endswith("Trap") else ItemClassification.filler,
