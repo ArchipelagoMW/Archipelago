@@ -1,0 +1,53 @@
+name: Deploy Sphinx API Docs
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "docs/"
+      - "BaseClasses.py"
+      - "Fill.py"
+      - "Options.py"
+      - "NetUtils.py"
+      - "worlds/AutoWorld.py"
+      - "worlds/generic/Rules.py"
+  # allow manual deployment
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python ModuleUpdate.py --yes --force --append "WebHostLib/requirements.txt"
+      - name: Sphinx build
+        run: |
+          python -c "import Utils; Utils.build_sphinx_docs()"
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: build/html/
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/html/

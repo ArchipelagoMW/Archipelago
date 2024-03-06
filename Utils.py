@@ -986,6 +986,6 @@ def build_sphinx_docs(stable: bool = False) -> None:
     base_dir = os.path.dirname(__file__)
     sphinx_input = os.path.join(base_dir, "docs", "sphinx", "source")
     sphinx_output = os.path.join(base_dir, "WebHostLib", "templates", "sphinx") if stable \
-        else os.path.join(base_dir, "docs", "sphinx", "build")
+        else os.path.join(base_dir, "build")
 
     sphinx_main(["-M", "html", sphinx_input, sphinx_output])
