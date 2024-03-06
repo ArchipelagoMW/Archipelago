@@ -969,8 +969,8 @@ class RepeatableChain:
         return sum(len(iterable) for iterable in self.iterable)
 
 
-def is_iterable_but_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
-    """ but not a `str` nor `bytes` (because technically, `str` and `bytes` are `Iterable[str | bytes]`) """
+def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
+    """ `str` and `bytes` and `Iterable`, but that's not what we want """
     if isinstance(obj, (str, bytes)):
         return False
     return isinstance(obj, typing.Iterable)
