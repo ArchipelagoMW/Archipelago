@@ -6,7 +6,7 @@ class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
     ladder_region: Optional[str] = None
-    location_group: str = "region"
+    location_group: Optional[str] = None
 
     def ladders_region(self) -> str:
         return self.ladder_region or self.region
@@ -74,11 +74,11 @@ location_table: Dict[str, TunicLocationData] = {
     "Forest Grave Path - Obscured Chest": TunicLocationData("East Forest", "Forest Grave Path Main"),
     "Forest Grave Path - Upper Walkway": TunicLocationData("East Forest", "Forest Grave Path Upper"),
     "Forest Grave Path - Sword Pickup": TunicLocationData("East Forest", "Forest Grave Path by Grave"),
-    "Hero's Grave - Tooth Relic": TunicLocationData("East Forest", "Hero Relic - East Forest"),
+    "Hero's Grave - Tooth Relic": TunicLocationData("East Forest", "Hero Relic - East Forest", location_group="hero relic"),
     "Fortress Courtyard - From East Belltower": TunicLocationData("East Forest", "Fortress Exterior from East Forest"),
     "Fortress Leaf Piles - Secret Chest": TunicLocationData("Eastern Vault Fortress", "Fortress Leaf Piles"),
     "Fortress Arena - Hexagon Red": TunicLocationData("Eastern Vault Fortress", "Fortress Arena"),
-    "Fortress Arena - Siege Engine/Vault Key Pickup": TunicLocationData("Eastern Vault Fortress", "Fortress Arena"),
+    "Fortress Arena - Siege Engine/Vault Key Pickup": TunicLocationData("Eastern Vault Fortress", "Fortress Arena", location_group="bosses"),
     "Fortress East Shortcut - Chest Near Slimes": TunicLocationData("Eastern Vault Fortress", "Fortress East Shortcut Lower"),
     "Eastern Vault Fortress - [West Wing] Candles Holy Cross": TunicLocationData("Eastern Vault Fortress", "Eastern Vault Fortress", location_group="holy cross"),
     "Eastern Vault Fortress - [West Wing] Dark Room Chest 1": TunicLocationData("Eastern Vault Fortress", "Eastern Vault Fortress"),
@@ -88,7 +88,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Fortress Grave Path - Upper Walkway": TunicLocationData("Eastern Vault Fortress", "Fortress Grave Path Upper"),
     "Fortress Grave Path - Chest Right of Grave": TunicLocationData("Eastern Vault Fortress", "Fortress Grave Path"),
     "Fortress Grave Path - Obscured Chest Left of Grave": TunicLocationData("Eastern Vault Fortress", "Fortress Grave Path"),
-    "Hero's Grave - Flowers Relic": TunicLocationData("Eastern Vault Fortress", "Hero Relic - Fortress"),
+    "Hero's Grave - Flowers Relic": TunicLocationData("Eastern Vault Fortress", "Hero Relic - Fortress", location_group="hero relic"),
     "Beneath the Fortress - Bridge": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
     "Beneath the Fortress - Cell Chest 1": TunicLocationData("Beneath the Vault", "Beneath the Vault Back"),
     "Beneath the Fortress - Obscured Behind Waterfall": TunicLocationData("Beneath the Vault", "Beneath the Vault Front"),
@@ -105,7 +105,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Frog's Domain - Side Room Chest": TunicLocationData("Frog's Domain", "Frog's Domain"),
     "Frog's Domain - Side Room Grapple Secret": TunicLocationData("Frog's Domain", "Frog's Domain"),
     "Frog's Domain - Magic Orb Pickup": TunicLocationData("Frog's Domain", "Frog's Domain"),
-    "Librarian - Hexagon Green": TunicLocationData("Library", "Library Arena"),
+    "Librarian - Hexagon Green": TunicLocationData("Library", "Library Arena", location_group="bosses"),
     "Library Hall - Holy Cross Chest": TunicLocationData("Library", "Library Hall", location_group="holy cross"),
     "Library Lab - Chest By Shrine 2": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Chest By Shrine 1": TunicLocationData("Library", "Library Lab"),
@@ -114,7 +114,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Library Lab - Page 3": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Page 1": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Page 2": TunicLocationData("Library", "Library Lab"),
-    "Hero's Grave - Mushroom Relic": TunicLocationData("Library", "Hero Relic - Library"),
+    "Hero's Grave - Mushroom Relic": TunicLocationData("Library", "Hero Relic - Library", location_group="hero relic"),
     "Lower Mountain - Page Before Door": TunicLocationData("Overworld", "Lower Mountain", ladder_region="Upper Overworld"),
     "Changing Room - Normal Chest": TunicLocationData("Overworld", "Changing Room"),
     "Fortress Courtyard - Chest Near Cave": TunicLocationData("Overworld", "Fortress Exterior near cave", ladder_region="East Overworld"),
@@ -229,7 +229,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Quarry - [Central] Above Ladder Dash Chest": TunicLocationData("Quarry", "Quarry Monastery Entry"),
     "Quarry - [West] Upper Area Bombable Wall": TunicLocationData("Quarry Back", "Quarry Back"),
     "Quarry - [East] Bombable Wall": TunicLocationData("Quarry", "Quarry"),
-    "Hero's Grave - Ash Relic": TunicLocationData("Quarry", "Hero Relic - Quarry"),
+    "Hero's Grave - Ash Relic": TunicLocationData("Quarry", "Hero Relic - Quarry", location_group="hero relics"),
     "Quarry - [West] Shooting Range Secret Path": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Quarry - [West] Near Shooting Range": TunicLocationData("Lower Quarry", "Lower Quarry"),
     "Quarry - [West] Below Shooting Range": TunicLocationData("Lower Quarry", "Lower Quarry"),
@@ -250,7 +250,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Rooted Ziggurat Lower - Guarded By Double Turrets": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
     "Rooted Ziggurat Lower - After 2nd Double Turret Chest": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
     "Rooted Ziggurat Lower - Guarded By Double Turrets 2": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Front"),
-    "Rooted Ziggurat Lower - Hexagon Blue": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Back"),
+    "Rooted Ziggurat Lower - Hexagon Blue": TunicLocationData("Rooted Ziggurat", "Rooted Ziggurat Lower Back", location_group="bosses"),
     "Ruined Atoll - [West] Near Kevin Block": TunicLocationData("Ruined Atoll", "Ruined Atoll"),
     "Ruined Atoll - [South] Upper Floor On Power Line": TunicLocationData("Ruined Atoll", "Ruined Atoll Ladder Tops"),
     "Ruined Atoll - [South] Chest Near Big Crabs": TunicLocationData("Ruined Atoll", "Ruined Atoll"),
@@ -292,7 +292,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Swamp - [South Graveyard] Upper Walkway Dash Chest": TunicLocationData("Swamp", "Swamp Mid", ladder_region="Swamp Middle"),
     "Swamp - [South Graveyard] Above Big Skeleton": TunicLocationData("Swamp", "Swamp Front"),
     "Swamp - [Central] Beneath Memorial": TunicLocationData("Swamp", "Swamp Mid", ladder_region="Swamp Middle"),
-    "Hero's Grave - Feathers Relic": TunicLocationData("Swamp", "Hero Relic - Swamp"),
+    "Hero's Grave - Feathers Relic": TunicLocationData("Swamp", "Hero Relic - Swamp", location_group="hero relic"),
     "West Furnace - Chest": TunicLocationData("West Garden", "Furnace Walking Path"),
     "Overworld - [West] Near West Garden Entrance": TunicLocationData("West Garden", "Overworld to West Garden from Furnace"),
     "West Garden - [Central Highlands] Holy Cross (Blue Lines)": TunicLocationData("West Garden", "West Garden", location_group="holy cross"),
@@ -311,12 +311,12 @@ location_table: Dict[str, TunicLocationData] = {
     "West Garden - [West Highlands] Upper Left Walkway": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [Central Lowlands] Chest Beneath Save Point": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [Central Highlands] Behind Guard Captain": TunicLocationData("West Garden", "West Garden"),
-    "West Garden - [Central Highlands] After Garden Knight": TunicLocationData("Overworld", "West Garden after Boss", location_group="west garden"),
+    "West Garden - [Central Highlands] After Garden Knight": TunicLocationData("Overworld", "West Garden after Boss", location_group="bosses"),
     "West Garden - [South Highlands] Secret Chest Beneath Fuse": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [East Lowlands] Page Behind Ice Dagger House": TunicLocationData("West Garden", "West Garden Portal Item"),
     "West Garden - [North] Page Pickup": TunicLocationData("West Garden", "West Garden"),
     "West Garden House - [Southeast Lowlands] Ice Dagger Pickup": TunicLocationData("West Garden", "Magic Dagger House"),
-    "Hero's Grave - Effigy Relic": TunicLocationData("West Garden", "Hero Relic - West Garden"),
+    "Hero's Grave - Effigy Relic": TunicLocationData("West Garden", "Hero Relic - West Garden", location_group="hero relic"),
 }
 
 hexagon_locations: Dict[str, str] = {
@@ -327,15 +327,9 @@ hexagon_locations: Dict[str, str] = {
 
 location_name_to_id: Dict[str, int] = {name: location_base_id + index for index, name in enumerate(location_table)}
 
-
-def get_loc_group(location_name: str) -> str:
-    loc_group = location_table[location_name].location_group
-    if loc_group == "region":
-        # set loc_group as the region name. Typically, location groups are lowercase
-        loc_group = location_table[location_name].region.lower()
-    return loc_group
-
-
-location_name_groups: Dict[str, Set[str]] = {
-    group: set(item_names) for group, item_names in groupby(sorted(location_table, key=get_loc_group), get_loc_group)
-}
+location_name_groups: Dict[str, Set[str]] = {}
+for loc_name, loc_data in location_table.items():
+    if loc_data.location_group:
+        if loc_data.location_group not in location_name_groups.keys():
+            location_name_groups[loc_data.location_group] = set()
+        location_name_groups[loc_data.location_group].add(loc_name)
