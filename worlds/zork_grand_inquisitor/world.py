@@ -207,4 +207,4 @@ class ZorkGrandInquisitorWorld(World):
         )
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(list(self.item_name_groups["Filler"]))
+        return self.random.choice(list(self.item_name_groups["Filler"]))
