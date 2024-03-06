@@ -196,7 +196,7 @@ def fill_restrictive(multiworld: MultiWorld, base_state: CollectionState, locati
 
     if not allow_partial and len(unplaced_items) > 0 and len(locations) > 0:
         # There are leftover unplaceable items and locations that won't accept them
-        players = set([item.player for item in unplaced_items]) | set([loc.player for loc in locations])
+        players = set(item.player for item in unplaced_items) | set(loc.player for loc in locations)
         for player in sorted(players):
             items = [item for item in unplaced_items if item.player == player]
             locs = [loc for loc in locations if loc.player == player]
