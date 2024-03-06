@@ -16,6 +16,9 @@ class LocationsTestNoDeathsanity(ZorkGrandInquisitorTestBase):
             ZorkGrandInquisitorTags.CORE
         )
 
+        self._assert_expected_locations_exist(expected_locations)
+
+    def _assert_expected_locations_exist(self, expected_locations: Set[ZorkGrandInquisitorLocations]) -> None:
         location_name_to_location: Dict[str, ZorkGrandInquisitorLocations] = location_names_to_location()
 
         for location_object in self.multiworld.get_locations(1):
@@ -33,7 +36,7 @@ class LocationsTestNoDeathsanity(ZorkGrandInquisitorTestBase):
         self.assertEqual(0, len(expected_locations))
 
 
-class LocationsTestDeathsanity(ZorkGrandInquisitorTestBase):
+class LocationsTestDeathsanity(LocationsTestNoDeathsanity):
     options = {
         "deathsanity": "true",
     }
@@ -43,16 +46,4 @@ class LocationsTestDeathsanity(ZorkGrandInquisitorTestBase):
             locations_with_tag(ZorkGrandInquisitorTags.CORE) | locations_with_tag(ZorkGrandInquisitorTags.DEATHSANITY)
         )
 
-        location_name_to_location: Dict[str, ZorkGrandInquisitorLocations] = location_names_to_location()
-
-        for location_object in self.multiworld.get_locations(1):
-            location: ZorkGrandInquisitorLocations = location_name_to_location.get(location_object.name)
-
-            if location is None:
-                continue
-
-            self.assertIn(location, expected_locations)
-
-            expected_locations.remove(location)
-
-        self.assertEqual(0, len(expected_locations))
+        self._assert_expected_locations_exist(expected_locations)

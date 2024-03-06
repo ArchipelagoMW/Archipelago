@@ -83,6 +83,8 @@ class ZorkGrandInquisitorWorld(World):
     item_name_to_item: Dict[str, ZorkGrandInquisitorItems] = item_names_to_item()
 
     def create_regions(self) -> None:
+        deathsanity: bool = self.options.deathsanity.value == 1
+
         region_mapping: Dict[ZorkGrandInquisitorRegions, Region] = dict()
 
         region_enum_item: ZorkGrandInquisitorRegions
@@ -90,7 +92,7 @@ class ZorkGrandInquisitorWorld(World):
             region_mapping[region_enum_item] = Region(region_enum_item.value, self.player, self.multiworld)
 
         region_locations_mapping: Dict[ZorkGrandInquisitorRegions, Set[ZorkGrandInquisitorLocations]]
-        region_locations_mapping = locations_by_region(include_deathsanity=self.options.deathsanity.value == 1)
+        region_locations_mapping = locations_by_region(include_deathsanity=deathsanity)
 
         region_enum_item: ZorkGrandInquisitorRegions
         region: Region
@@ -141,6 +143,9 @@ class ZorkGrandInquisitorWorld(World):
             self.multiworld.regions.append(region)
 
     def create_items(self) -> None:
+        quick_port_foozle: bool = self.options.quick_port_foozle.value == 1
+        start_with_hotspot_items: bool = self.options.start_with_hotspot_items.value == 1
+
         item_pool: List[ZorkGrandInquisitorItem] = list()
 
         item: ZorkGrandInquisitorItems
@@ -150,7 +155,7 @@ class ZorkGrandInquisitorWorld(World):
 
             if ZorkGrandInquisitorTags.FILLER in tags:
                 continue
-            elif ZorkGrandInquisitorTags.HOTSPOT in tags and self.options.start_with_hotspot_items.value == 1:
+            elif ZorkGrandInquisitorTags.HOTSPOT in tags and start_with_hotspot_items:
                 continue
 
             item_pool.append(self.create_item(item.value))
@@ -162,11 +167,11 @@ class ZorkGrandInquisitorWorld(World):
 
         self.multiworld.itempool += item_pool
 
-        if self.options.quick_port_foozle.value == 1:
+        if quick_port_foozle:
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
 
-            if self.options.start_with_hotspot_items.value == 0:
+            if start_with_hotspot_items is False:
                 self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_WELL.value] = 1
                 self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_JACKS_DOOR.value] = 1
 
@@ -174,7 +179,7 @@ class ZorkGrandInquisitorWorld(World):
                     ZorkGrandInquisitorItems.HOTSPOT_GRAND_INQUISITOR_DOLL.value
                 ] = 1
 
-        if self.options.start_with_hotspot_items.value == 1:
+        if start_with_hotspot_items:
             item: ZorkGrandInquisitorItems
             for item in items_with_tag(ZorkGrandInquisitorTags.HOTSPOT):
                 self.multiworld.push_precollected(self.create_item(item.value))
