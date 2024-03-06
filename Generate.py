@@ -329,12 +329,10 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
             option_name = option[1:]
             new_value = new_weights[option]
             if option_name in weights:
-                if isinstance(new_value, dict):
+                if isinstance(new_value, (set, dict)):
                     new_value.update(weights[option_name])
                 elif isinstance(new_value, list):
                     new_value.extend(weights[option_name])
-                elif isinstance(new_value, set):
-                    new_value.update(weights[option_name])
                 else:
                     raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
                                     f" received {type(new_value).__name__}.")
