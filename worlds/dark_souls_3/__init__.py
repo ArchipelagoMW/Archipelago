@@ -779,6 +779,10 @@ class DarkSouls3World(World):
         ], "Pale Tongue")
 
         self._add_location_rule([
+            "AL: Crescent Moon Sword - Leonhard drop",
+            "AL: Silver Mask - Leonhard drop",
+            "AL: Soul of Rosaria - Leonhard drop",
+        ] + [
             f"FS: {item} - shop after killing Leonhard"
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
         ], "Black Eye Orb")
