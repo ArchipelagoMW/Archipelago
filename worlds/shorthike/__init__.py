@@ -6,7 +6,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
 from .Rules import create_rules, get_min_feathers
-from .Options import ShortHikeOptions
+from .Options import ShortHikeOptions, Goal
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
@@ -33,7 +33,6 @@ class ShortHikeWorld(World):
     item_name_to_id = {item["name"]: item["id"] for item in item_table}
     location_name_to_id = {loc["name"]: loc["id"] for loc in location_table}
     location_name_to_game_id = {loc["name"]: loc["inGameId"] for loc in location_table}
-    location_name_to_chest_angle = {loc["name"]: loc["chestAngle"] for loc in location_table}
 
     item_name_groups = group_table
     
@@ -88,25 +87,25 @@ class ShortHikeWorld(World):
 
         menu_region.connect(main_region)
 
-        if self.options.goal == 0:
+        if self.options.goal == Goal.option_nap:
             # Nap
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
-        elif self.options.goal == 1:
+        elif self.options.goal == Goal.option_photo:
             # Photo
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Golden Feather", self.player, 12)
-        elif self.options.goal == 2:
+        elif self.options.goal == Goal.option_photo:
             # Races
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
-        elif self.options.goal == 3:
+        elif self.options.goal == Goal.option_help_everyone:
             # Help Everyone
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, 12)
                 and state.has("Toy Shovel", self.player) and state.has("Camping Permit", self.player)
                 and state.has("Motorboat Key", self.player) and state.has("Headband", self.player)
                 and state.has("Wristwatch", self.player) and state.has("Seashell", self.player, 15)
                 and state.has("Shell Necklace", self.player))
-        elif self.options.goal == 4:
+        elif self.options.goal == Goal.option_fishmonger:
             # Fishmonger
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7))
@@ -116,25 +115,7 @@ class ShortHikeWorld(World):
         create_rules(self, location_table)
 
     def fill_slot_data(self) -> Dict[str, Any]:
-        locations: Dict[int, Any] = {}
-
-        multiworld = self.multiworld
-        player = self.player
         options = self.options
-
-        for loc in multiworld.get_filled_locations(player):
-            if loc.item.code is None:
-                continue
-            else:
-                data = {
-                    "ap_id": loc.address,
-                    "item_name": loc.item.name,
-                    "player_name": multiworld.player_name[loc.item.player],
-                    "type": int(loc.item.classification),
-                    "chest_angle": self.location_name_to_chest_angle[loc.name]
-                }
-
-                locations[self.location_name_to_game_id[loc.name]] = data
 
         settings = {
             "goal": int(options.goal),
@@ -142,7 +123,6 @@ class ShortHikeWorld(World):
         }
     
         slot_data = {
-            "locations": locations,
             "settings": settings,
         }
     
