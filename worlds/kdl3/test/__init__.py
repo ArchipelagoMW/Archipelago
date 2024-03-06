@@ -2,7 +2,7 @@ import typing
 from argparse import Namespace
 
 from BaseClasses import MultiWorld, PlandoOptions, CollectionState
-from test.TestBase import WorldTestBase
+from test.bases import WorldTestBase
 from test.general import gen_steps
 from worlds import AutoWorld
 from worlds.AutoWorld import call_all
@@ -32,6 +32,5 @@ class KDL3TestBase(WorldTestBase):
             })
         self.multiworld.set_options(args)
         self.multiworld.plando_options = PlandoOptions.connections
-        self.multiworld.plando_connections = self.options["plando_connections"] if "plando_connections" in self.options.keys() else []
         for step in gen_steps:
             call_all(self.multiworld, step)
