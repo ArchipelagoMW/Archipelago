@@ -66,7 +66,7 @@ class L2ACWorld(World):
         "Party members": {name for name, data in l2ac_item_table.items() if data.type is ItemType.PARTY_MEMBER},
     }
     data_version: ClassVar[int] = 2
-    required_client_version: Tuple[int, int, int] = (0, 4, 2)
+    required_client_version: Tuple[int, int, int] = (0, 4, 4)
 
     # L2ACWorld specific properties
     rom_name: bytearray

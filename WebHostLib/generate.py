@@ -1,18 +1,18 @@
+import concurrent.futures
 import json
 import os
 import pickle
 import random
 import tempfile
 import zipfile
-import concurrent.futures
 from collections import Counter
-from typing import Dict, Optional, Any, Union, List
+from typing import Any, Dict, List, Optional, Union
 
-from flask import request, flash, redirect, url_for, session, render_template
+from flask import flash, redirect, render_template, request, session, url_for
 from pony.orm import commit, db_session
 
-from BaseClasses import seeddigits, get_seed
-from Generate import handle_name, PlandoOptions
+from BaseClasses import get_seed, seeddigits
+from Generate import PlandoOptions, handle_name
 from Main import main as ERmain
 from Utils import __version__
 from WebHostLib import app
@@ -131,6 +131,7 @@ def gen_game(gen_options: dict, meta: Optional[Dict[str, Any]] = None, owner=Non
         erargs.plando_options = PlandoOptions.from_set(meta.setdefault("plando_options",
                                                                        {"bosses", "items", "connections", "texts"}))
         erargs.skip_prog_balancing = False
+        erargs.skip_output = False
 
         name_counter = Counter()
         for player, (playerfile, settings) in enumerate(gen_options.items(), 1):

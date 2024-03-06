@@ -53,7 +53,7 @@
             {% endif %}
             {% if world.web.options_page is string %}
             <span class="link-spacer">|</span>
-            <a href="{{ world.web.settings_page }}">Options Page</a>
+            <a href="{{ world.web.options_page }}">Options Page</a>
             {% elif world.web.options_page %}
             <span class="link-spacer">|</span>
             <a href="{{ url_for("player_options", game=game_name) }}">Options Page</a>

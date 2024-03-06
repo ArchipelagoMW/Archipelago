@@ -160,18 +160,18 @@ html{
     margin-left: 0.25rem;
 }
 
-#player-options table .special-range-container{
+#player-options table .named-range-container{
     display: flex;
     flex-direction: column;
 }
 
-#player-options table .special-range-wrapper{
+#player-options table .named-range-wrapper{
     display: flex;
     flex-direction: row;
     margin-top: 0.25rem;
 }
 
-#player-options table .special-range-wrapper input[type=range]{
+#player-options table .named-range-wrapper input[type=range]{
     flex-grow: 1;
 }
 

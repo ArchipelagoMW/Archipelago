@@ -2,7 +2,7 @@ import typing
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 
-from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, SpecialRange
+from Options import Option, DefaultOnToggle, Toggle, Choice, Range, OptionDict, NamedRange, DeathLink
 from .Charms import vanilla_costs, names as charm_names
 
 if typing.TYPE_CHECKING:
@@ -242,7 +242,7 @@ class MaximumGeoPrice(Range):
     default = 400
 
 
-class RandomCharmCosts(SpecialRange):
+class RandomCharmCosts(NamedRange):
     """Total Notch Cost of all Charms together. Vanilla sums to 90.
     This value is distributed among all charms in a random fashion.
     Special Cases:
@@ -250,7 +250,7 @@ class RandomCharmCosts(SpecialRange):
     Set to -2 or shuffle to shuffle around the vanilla costs to different charms."""
 
     display_name = "Randomize Charm Notch Costs"
-    range_start = -2
+    range_start = 0
     range_end = 240
     default = -1
     vanilla_costs: typing.List[int] = vanilla_costs
@@ -402,22 +402,34 @@ class WhitePalace(Choice):
     default = 0
 
 
-class DeathLink(Choice):
+class ExtraPlatforms(DefaultOnToggle):
+    """Places additional platforms to make traveling throughout Hallownest more convenient."""
+
+
+class DeathLinkShade(Choice):
+    """Sets whether to create a shade when you are killed by a DeathLink and how to handle your existing shade, if any.
+
+    vanilla: DeathLink deaths function like any other death and overrides your existing shade (including geo), if any.
+    shadeless: DeathLink deaths do not spawn shades. Your existing shade (including geo), if any, is untouched.
+    shade: DeathLink deaths spawn a shade if you do not have an existing shade. Otherwise, it acts like shadeless.
+
+    * This option has no effect if DeathLink is disabled.
+    ** Self-death shade behavior is not changed; if a self-death normally creates a shade in vanilla, it will override
+        your existing shade, if any.
     """
-    When you die, everyone dies. Of course the reverse is true too.
-    When enabled, choose how incoming deathlinks are handled:
-    vanilla: DeathLink kills you and is just like any other death.  RIP your previous shade and geo.
-    shadeless: DeathLink kills you, but no shade spawns and no geo is lost.  Your previous shade, if any, is untouched.
-    shade: DeathLink functions like a normal death if you do not already have a shade, shadeless otherwise.
-    """
-    option_off = 0
-    alias_no = 0
-    alias_true = 1
-    alias_on = 1
-    alias_yes = 1
+    option_vanilla = 0
     option_shadeless = 1
-    option_vanilla = 2
-    option_shade = 3
+    option_shade = 2
+    default = 2
+
+
+class DeathLinkBreaksFragileCharms(Toggle):
+    """Sets if fragile charms break when you are killed by a DeathLink.
+
+    * This option has no effect if DeathLink is disabled.
+    ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
+        will continue to do so.
+    """
 
 
 class StartingGeo(Range):
@@ -476,7 +488,8 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, StartingGeo, DeathLink,
+            StartLocation, Goal, WhitePalace, ExtraPlatforms, StartingGeo,
+            DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
             MinimumEssencePrice, MaximumEssencePrice,
@@ -488,7 +501,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
             LegEaterShopSlots, GrubfatherRewardSlots,
             SeerRewardSlots, ExtraShopSlots,
             SplitCrystalHeart, SplitMothwingCloak, SplitMantisClaw,
-            CostSanity, CostSanityHybridChance,
+            CostSanity, CostSanityHybridChance
         )
     },
     **cost_sanity_weights

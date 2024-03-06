@@ -41,6 +41,8 @@ and repeatable source of money.
 * You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
 * You can reset static encounters (Poké Flute encounter, legendaries, and the trap Poké Ball battles in Power Plant)
 for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
+* Dungeons normally hidden on the Town Map are now present, and the "Sea Cottage" has been removed. This is to allow
+Simple Door Shuffle to update the locations of all of the dungeons on the Town Map.
 
 ## What items and locations get shuffled?
 
@@ -83,6 +85,9 @@ you until these have ended.
 
 ## Unique Local Commands
 
-The following command is only available when using the PokemonClient to play with Archipelago.
+You can use `/bank` commands to deposit and withdraw money from the server's EnergyLink storage. This can be accessed by
+any players playing games that use the EnergyLink feature.
 
-- `/gb` Check Gameboy Connection State
+- `/bank` - check the amount of money available on the server.
+- `/bank withdraw #` - withdraw money from the server.
+- `/bank deposit #` - deposit money into the server. 25% of the amount will be lost to taxation.

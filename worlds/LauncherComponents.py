@@ -88,7 +88,7 @@ components: List[Component] = [
     # SNI
     Component('SNI Client', 'SNIClient',
               file_identifier=SuffixIdentifier('.apz3', '.apm3', '.apsoe', '.aplttp', '.apsm', '.apsmz3', '.apdkc3',
-                                               '.apsmw', '.apl2ac')),
+                                               '.apsmw', '.apl2ac', '.apkdl3')),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),
@@ -101,8 +101,6 @@ components: List[Component] = [
     Component('OoT Adjuster', 'OoTAdjuster'),
     # FF1
     Component('FF1 Client', 'FF1Client'),
-    # Pokémon
-    Component('Pokemon Client', 'PokemonClient', file_identifier=SuffixIdentifier('.apred', '.apblue')),
     # TLoZ
     Component('Zelda 1 Client', 'Zelda1Client', file_identifier=SuffixIdentifier('.aptloz')),
     # ChecksFinder
@@ -114,8 +112,6 @@ components: List[Component] = [
     # Zillion
     Component('Zillion Client', 'ZillionClient',
               file_identifier=SuffixIdentifier('.apzl')),
-    # Kingdom Hearts 2
-    Component('KH2 Client', "KH2Client"),
 
     #MegaMan Battle Network 3
     Component('MMBN3 Client', 'MMBN3Client', file_identifier=SuffixIdentifier('.apbn3'))
