@@ -302,7 +302,9 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                  NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    new_name = new_name.strip()[:16]
+    # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
+    # Could cause issues for some clients that cannot handle the additional whitespace.
+    new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name
@@ -462,20 +464,18 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
         handle_option(ret, game_weights, option_key, option, plando_options)
     if PlandoOptions.items in plando_options:
         ret.plando_items = game_weights.get("plando_items", [])
-    if ret.game == "Minecraft" or ret.game == "Ocarina of Time":
-        # bad hardcoded behavior to make this work for now
-        ret.plando_connections = []
-        if PlandoOptions.connections in plando_options:
-            options = game_weights.get("plando_connections", [])
-            for placement in options:
-                if roll_percentage(get_choice("percentage", placement, 100)):
-                    ret.plando_connections.append(PlandoConnection(
-                        get_choice("entrance", placement),
-                        get_choice("exit", placement),
-                        get_choice("direction", placement)
-                    ))
-    elif ret.game == "A Link to the Past":
+    if ret.game == "A Link to the Past":
         roll_alttp_settings(ret, game_weights, plando_options)
+    if PlandoOptions.connections in plando_options:
+        ret.plando_connections = []
+        options = game_weights.get("plando_connections", [])
+        for placement in options:
+            if roll_percentage(get_choice("percentage", placement, 100)):
+                ret.plando_connections.append(PlandoConnection(
+                    get_choice("entrance", placement),
+                    get_choice("exit", placement),
+                    get_choice("direction", placement, "both")
+                ))
 
     return ret
 
@@ -493,17 +493,6 @@ def roll_alttp_settings(ret: argparse.Namespace, weights, plando_options):
                 if at not in tt:
                     raise Exception(f"No text target \"{at}\" found.")
                 ret.plando_texts[at] = str(get_choice_legacy("text", placement))
-
-    ret.plando_connections = []
-    if PlandoOptions.connections in plando_options:
-        options = weights.get("plando_connections", [])
-        for placement in options:
-            if roll_percentage(get_choice_legacy("percentage", placement, 100)):
-                ret.plando_connections.append(PlandoConnection(
-                    get_choice_legacy("entrance", placement),
-                    get_choice_legacy("exit", placement),
-                    get_choice_legacy("direction", placement, "both")
-                ))
 
     ret.sprite_pool = weights.get('sprite_pool', [])
     ret.sprite = get_choice_legacy('sprite', weights, "Link")

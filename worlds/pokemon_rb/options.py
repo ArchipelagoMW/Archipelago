@@ -228,7 +228,7 @@ class SplitCardKey(Choice):
 
 class AllElevatorsLocked(Toggle):
     """Adds requirements to the Celadon Department Store elevator and Silph Co elevators to have the Lift Key.
-    No logical implications normally, but may have a significant impact on Insanity Door Shuffle."""
+    No logical implications normally, but may have a significant impact on some Door Shuffle options."""
     display_name = "All Elevators Locked"
     default = 1
 
@@ -317,42 +317,42 @@ class TownMapFlyLocation(Toggle):
 class DoorShuffle(Choice):
     """Simple: entrances are randomized together in groups: Pokemarts, Gyms, single exit dungeons, dual exit dungeons,
     single exit misc interiors, dual exit misc interiors are all shuffled separately. Safari Zone is not shuffled.
-    Full: Any outdoor entrance may lead to any interior.
-    Insanity: All rooms in the game are shuffled."""
+    On Simple only, the Town Map will be updated to show the new locations for each dungeon.
+    Interiors: Any outdoor entrance may lead to any interior, but intra-interior doors are not shuffled. Previously
+    named Full.
+    Full: Exterior to interior entrances are shuffled, and interior to interior doors are shuffled, separately.
+    Insanity: All doors in the game are shuffled.
+    Decoupled: Doors may be decoupled from each other, so that leaving through an exit may not return you to the
+    door you entered from."""
     display_name = "Door Shuffle"
     option_off = 0
     option_simple = 1
-    option_full = 2
-    option_insanity = 3
-    # Disabled for now, has issues with elevators that need to be resolved
-    # option_decoupled = 4
+    option_interiors = 2
+    option_full = 3
+    option_insanity = 4
+    option_decoupled = 5
     default = 0
 
-    # remove assertions that blow up checks for decoupled
-    def __eq__(self, other):
-        if isinstance(other, self.__class__):
-            return other.value == self.value
-        elif isinstance(other, str):
-            return other == self.current_key
-        elif isinstance(other, int):
-            return other == self.value
-        elif isinstance(other, bool):
-            return other == bool(self.value)
-        else:
-            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
-
-class WarpTileShuffle(Toggle):
-    """Shuffle the warp tiles in Silph Co and Sabrina's Gym among themselves, separately.
-    On Insanity, turning this off means they are mixed into the general door shuffle instead of only being shuffled
-    among themselves."""
+class WarpTileShuffle(Choice):
+    """Vanilla: The warp tiles in Silph Co and Sabrina's Gym are not changed.
+    Shuffle: The warp tile destinations are shuffled among themselves.
+    Mixed: The warp tiles are mixed into the pool of available doors for Full, Insanity, and Decoupled. Same as Shuffle
+    for any other door shuffle option."""
     display_name = "Warp Tile Shuffle"
     default = 0
+    option_vanilla = 0
+    option_shuffle = 1
+    option_mixed = 2
+    alias_true = 1
+    alias_on = 1
+    alias_off = 0
+    alias_false = 0
 
 
 class RandomizeRockTunnel(Toggle):
-    """Randomize the layout of Rock Tunnel.
-    If Insanity Door Shuffle is on, this will cause only the main entrances to Rock Tunnel to be shuffled."""
+    """Randomize the layout of Rock Tunnel. If Full, Insanity, or Decoupled Door Shuffle is on, this will cause only the
+    main entrances to Rock Tunnel to be shuffled."""
     display_name = "Randomize Rock Tunnel"
     default = 0
 
@@ -401,15 +401,17 @@ class Stonesanity(Toggle):
 class LevelScaling(Choice):
     """Off: Encounters use vanilla game levels.
     By Spheres: Levels are scaled by access sphere. Areas reachable in later spheres will have higher levels.
-    Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by number
-    of internal region connections. This is a much more severe curving of levels and may lead to much less variation in
-    levels found in a particular map. However, it may make the higher door shuffle settings significantly more bearable,
-    as these options more often result in a smaller number of larger access spheres."""
+    By Spheres and Distance: Levels are scaled by access spheres as well as distance from Pallet Town, measured by
+    number  of internal region connections. This is a much more severe curving of levels and may lead to much less
+    variation in levels found in a particular map. However, it may make the higher door shuffle settings significantly
+    more bearable, as these options more often result in a smaller number of larger access spheres.
+    Auto: Scales by Spheres if Door Shuffle is off or on Simple, otherwise scales by Spheres and Distance"""
     display_name = "Level Scaling"
     option_off = 0
     option_by_spheres = 1
     option_by_spheres_and_distance = 2
-    default = 1
+    option_auto = 3
+    default = 3
 
 
 class ExpModifier(NamedRange):

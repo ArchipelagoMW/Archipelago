@@ -195,11 +195,11 @@ class PokemonRedBlueWorld(World):
                 normals -= subtract_amounts[2]
                 while super_effectives + not_very_effectives + normals > 225 - immunities:
                     r = self.multiworld.random.randint(0, 2)
-                    if r == 0:
+                    if r == 0 and super_effectives:
                         super_effectives -= 1
-                    elif r == 1:
+                    elif r == 1 and not_very_effectives:
                         not_very_effectives -= 1
-                    else:
+                    elif normals:
                         normals -= 1
             chart = []
             for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
@@ -249,14 +249,18 @@ class PokemonRedBlueWorld(World):
             itempool = progitempool + usefulitempool + filleritempool
             multiworld.random.shuffle(itempool)
             unplaced_items = []
-            for item in itempool:
+            for i, item in enumerate(itempool):
                 if item.player == loc.player and loc.can_fill(multiworld.state, item, False):
-                    if item in progitempool:
-                        progitempool.remove(item)
-                    elif item in usefulitempool:
-                        usefulitempool.remove(item)
-                    elif item in filleritempool:
-                        filleritempool.remove(item)
+                    if item.advancement:
+                        pool = progitempool
+                    elif item.useful:
+                        pool = usefulitempool
+                    else:
+                        pool = filleritempool
+                    for i, check_item in enumerate(pool):
+                        if item is check_item:
+                            pool.pop(i)
+                            break
                     if item.advancement:
                         state = sweep_from_pool(multiworld.state, progitempool + unplaced_items)
                     if (not item.advancement) or state.can_reach(loc, "Location", loc.player):
@@ -416,16 +420,16 @@ class PokemonRedBlueWorld(World):
                     self.multiworld.victory_road_condition[self.player])
                     > 7) or (self.multiworld.door_shuffle[self.player] not in ("off", "simple")))):
                 intervene_move = "Cut"
-            elif ((not logic.can_learn_hm(test_state, "Flash", self.player)) and self.multiworld.dark_rock_tunnel_logic[self.player]
-                    and (((self.multiworld.accessibility[self.player] != "minimal" or
-                    (self.multiworld.trainersanity[self.player] or self.multiworld.extra_key_items[self.player])) or
-                    self.multiworld.door_shuffle[self.player]))):
+            elif ((not logic.can_learn_hm(test_state, "Flash", self.player))
+                   and self.multiworld.dark_rock_tunnel_logic[self.player]
+                   and (self.multiworld.accessibility[self.player] != "minimal"
+                        or self.multiworld.door_shuffle[self.player])):
                 intervene_move = "Flash"
             # If no Pokémon can learn Fly, then during door shuffle it would simply not treat the free fly maps
             # as reachable, and if on no door shuffle or simple, fly is simply never necessary.
             # We only intervene if a Pokémon is able to learn fly but none are reachable, as that would have been
             # considered in door shuffle.
-            elif ((not logic.can_learn_hm(test_state, "Fly", self.player)) and logic.can_learn_hm(test_state, "Fly", self.player)
+            elif ((not logic.can_learn_hm(test_state, "Fly", self.player))
                     and self.multiworld.door_shuffle[self.player] not in
                     ("off", "simple") and [self.fly_map, self.town_map_fly_map] != ["Pallet Town", "Pallet Town"]):
                 intervene_move = "Fly"
@@ -554,23 +558,21 @@ class PokemonRedBlueWorld(World):
                     else:
                         raise Exception("Failed to remove corresponding item while deleting unreachable Dexsanity location")
 
-
-        if self.multiworld.door_shuffle[self.player] == "decoupled":
-            swept_state = self.multiworld.state.copy()
-            swept_state.sweep_for_events(player=self.player)
-            locations = [location for location in
-                         self.multiworld.get_reachable_locations(swept_state, self.player) if location.item is
-                         None]
-            self.multiworld.random.shuffle(locations)
-            while len(locations) > 10:
-                location = locations.pop()
-                location.progress_type = LocationProgressType.EXCLUDED
-
-        if self.multiworld.key_items_only[self.player]:
-            locations = [location for location in self.multiworld.get_unfilled_locations(self.player) if
-                         location.progress_type == LocationProgressType.DEFAULT]
-            for location in locations:
-                location.progress_type = LocationProgressType.PRIORITY
+    @classmethod
+    def stage_post_fill(cls, multiworld):
+        # Convert all but one of each instance of a wild Pokemon to useful classification.
+        # This cuts down on time spent calculating the spoiler playthrough.
+        found_mons = set()
+        for sphere in multiworld.get_spheres():
+            for location in sphere:
+                if (location.game == "Pokemon Red and Blue" and (location.item.name in poke_data.pokemon_data.keys()
+                                                                 or "Static " in location.item.name)
+                        and location.item.advancement):
+                    key = (location.player, location.item.name)
+                    if key in found_mons:
+                        location.item.classification = ItemClassification.useful
+                    else:
+                        found_mons.add(key)
 
     def create_regions(self):
         if (self.multiworld.old_man[self.player] == "vanilla" or

@@ -80,7 +80,6 @@ non_apworlds: set = {
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
-    "Zillion",
 }
 
 # LogicMixin is broken before 3.10 import revamp

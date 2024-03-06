@@ -3,8 +3,8 @@ from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
-from Options import Choice, DeathLink, DefaultOnToggle, ItemsAccessibility, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, ItemsAccessibility, OptionDict, \ 
+    PerGameCommonOptions, Range, StartInventoryPool, Toggle
 
 
 class MessengerAccessibility(ItemsAccessibility):
@@ -133,7 +133,7 @@ class PlannedShopPrices(OptionDict):
 
 
 @dataclass
-class MessengerOptions(PerGameCommonOptions):
+class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     accessibility: MessengerAccessibility
     start_inventory: StartInventoryPool
     logic_level: Logic
@@ -146,5 +146,3 @@ class MessengerOptions(PerGameCommonOptions):
     percent_seals_required: RequiredSeals
     shop_price: ShopPrices
     shop_price_plan: PlannedShopPrices
-    death_link: DeathLink
-
