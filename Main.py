@@ -34,6 +34,11 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
     multiworld = MultiWorld(args.multi)
 
     logger = logging.getLogger()
+    formatter = logging.Formatter(fmt='[%(asctime)s] %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+    console_handler = logging.StreamHandler()
+    console_handler.setFormatter(formatter)
+    logger.handlers = [console_handler]
+
     multiworld.set_seed(seed, args.race, str(args.outputname) if args.outputname else None)
     multiworld.plando_options = args.plando_options
 
