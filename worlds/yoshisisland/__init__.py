@@ -73,10 +73,9 @@ class YIWorld(World):
     boss_burt: int
     luigi_pieces: int
 
-    def __init__(self, world: MultiWorld, player: int):
+    def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
-        super().__init__(world, player)
-
+        super().__init__(multiworld, player)
         self.locked_locations= []
         self.location_cache= []
 

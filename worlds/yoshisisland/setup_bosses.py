@@ -4,8 +4,8 @@ class BossReqs:
     player: int
 
 
-    def __init__(self, player: int, world):
-        self.player = player
+    def __init__(self, world):
+        self.player = world.player
         self.castle_unlock = world.options.castle_open_condition.value
         self.boss_unlock = world.options.castle_clear_condition.value
 

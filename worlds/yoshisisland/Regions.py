@@ -115,9 +115,9 @@ def init_areas(world, locations: Tuple[LocationData, ...]):
         regions.insert(19, create_region(multiworld, player, locations_per_region, location_cache, "1-Bonus"))
     multiworld.regions += regions
 
-    connect_starting_region(multiworld, player, world)
+    connect_starting_region(world)
 
-    bosses = BossReqs(player, world)
+    bosses = BossReqs(world)
 
     multiworld.get_region('Overworld', player).add_exits(['World 1', 'World 2', 'World 3', 'World 4', 'World 5', 'World 6'],
                                                         {'World 1': lambda state: state.has('World 1 Gate', player),
@@ -201,7 +201,9 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
 
     return region
 
-def connect_starting_region(multiworld: MultiWorld, player: int, world):
+def connect_starting_region(world):
+    multiworld = world.multiworld
+    player = world.player
     menu = multiworld.get_region('Menu', player)
     world_main = multiworld.get_region('Overworld', player)
 
