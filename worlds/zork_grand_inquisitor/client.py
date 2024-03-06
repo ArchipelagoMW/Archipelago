@@ -89,16 +89,6 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
         while not self.exit_event.is_set():
             await asyncio.sleep(0.1)
 
-            # Update Completed Locations
-            completed_locations: Set[ZorkGrandInquisitorLocations] = set()
-
-            location_id: int
-            for location_id in self.checked_locations:
-                location: ZorkGrandInquisitorLocations = self.id_to_locations[location_id]
-                completed_locations.add(location)
-
-            self.game_controller.completed_locations = completed_locations
-
             # Enqueue Received Item Delta
             network_item: NetUtils.NetworkItem
             for network_item in self.items_received:

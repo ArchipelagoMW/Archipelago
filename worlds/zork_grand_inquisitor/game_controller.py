@@ -352,6 +352,7 @@ class GameController:
                     break
 
             if is_location_completed:
+                self.completed_locations.add(location)
                 self.completed_locations_queue.append(location)
 
     def _check_for_missable_locations_to_grant(self) -> None:
@@ -456,6 +457,9 @@ class GameController:
                 if ZorkGrandInquisitorLocations.FIRE_FIRE in self.completed_locations:
                     if self._player_has(ZorkGrandInquisitorItems.PLASTIC_SIX_PACK_HOLDER):
                         self.completed_locations_queue.append(missable_location)
+            elif missable_location == ZorkGrandInquisitorLocations.YAD_GOHDNUORGREDNU_3_YRAUBORF:
+                if ZorkGrandInquisitorLocations.REASSEMBLE_SNAVIG in self.completed_locations:
+                    self.completed_locations_queue.append(missable_location)
             elif missable_location == ZorkGrandInquisitorLocations.YOUR_PUNY_WEAPONS_DONT_PHASE_ME_BABY:
                 if ZorkGrandInquisitorLocations.WANT_SOME_RYE_COURSE_YA_DO in self.completed_locations:
                     if self._player_has(ZorkGrandInquisitorItems.SWORD) and self._player_has(

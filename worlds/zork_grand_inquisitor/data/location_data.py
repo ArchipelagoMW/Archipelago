@@ -1139,7 +1139,7 @@ location_data: Dict[
         game_state_trigger=(("location", "dm2g"),),
         archipelago_id=LOCATION_OFFSET + 128,
         region=ZorkGrandInquisitorRegions.DM_LAIR_INTERIOR,
-        tags=(ZorkGrandInquisitorTags.CORE,),
+        tags=(ZorkGrandInquisitorTags.CORE, ZorkGrandInquisitorTags.MISSABLE),
         requirements=(ZorkGrandInquisitorItems.HOTSPOT_MIRROR,),
     ),
     ZorkGrandInquisitorLocations.YOUR_PUNY_WEAPONS_DONT_PHASE_ME_BABY: ZorkGrandInquisitorLocationData(
