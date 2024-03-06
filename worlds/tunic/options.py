@@ -135,7 +135,7 @@ class ShuffleLadders(Toggle):
     """Removes several of the ladders from the game, requiring you to find their items to get them back.
     Greatly increases the number of spheres, making it great for asyncs."""
     internal_name = "shuffle_ladders"
-    display_name = "Ladder Rando"
+    display_name = "Shuffle Ladders"
 
 
 @dataclass
@@ -144,9 +144,10 @@ class TunicOptions(PerGameCommonOptions):
     start_with_sword: StartWithSword
     keys_behind_bosses: KeysBehindBosses
     ability_shuffling: AbilityShuffling
-    logic_rules: LogicRules
+    shuffle_ladders: ShuffleLadders
     entrance_rando: EntranceRando
     fixed_shop: FixedShop
+    logic_rules: LogicRules
     fool_traps: FoolTraps
     hexagon_quest: HexagonQuest
     hexagon_goal: HexagonGoal
@@ -154,5 +155,4 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-    shuffle_ladders: ShuffleLadders
     start_inventory_from_pool: StartInventoryPool
