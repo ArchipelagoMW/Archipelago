@@ -131,10 +131,10 @@ class LaurelsLocation(Choice):
     default = 0
 
 
-class LadderRando(Toggle):
+class ShuffleLadders(Toggle):
     """Removes several of the ladders from the game, requiring you to find their items to get them back.
     Greatly increases the number of spheres, making it great for asyncs."""
-    internal_name = "ladder_rando"
+    internal_name = "shuffle_ladders"
     display_name = "Ladder Rando"
 
 
@@ -154,5 +154,5 @@ class TunicOptions(PerGameCommonOptions):
     lanternless: Lanternless
     maskless: Maskless
     laurels_location: LaurelsLocation
-    ladder_rando: LadderRando
+    shuffle_ladders: ShuffleLadders
     start_inventory_from_pool: StartInventoryPool

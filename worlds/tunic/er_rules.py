@@ -29,11 +29,11 @@ gold_hexagon = "Gold Questagon"
 
 
 def has_ladder(ladder: str, state: CollectionState, player: int, options: TunicOptions):
-    return not options.ladder_rando or state.has(ladder, player)
+    return not options.shuffle_ladders or state.has(ladder, player)
 
 
 def has_any_ladder(ladders: Set[str], state: CollectionState, player: int, options: TunicOptions):
-    return not options.ladder_rando or state.has_any(ladders, player)
+    return not options.shuffle_ladders or state.has_any(ladders, player)
 
 
 def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], regions: Dict[str, Region],

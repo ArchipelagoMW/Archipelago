@@ -74,7 +74,7 @@ class TunicWorld(World):
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
-                self.options.ladder_rando.value = passthrough["ladder_rando"]
+                self.options.shuffle_ladders.value = passthrough["shuffle_ladders"]
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -137,7 +137,7 @@ class TunicWorld(World):
                 if items_to_create[fill] == 0:
                     available_filler.remove(fill)
 
-        if self.options.ladder_rando:
+        if self.options.shuffle_ladders:
             ladder_count = 0
             for item_name, item_data in item_table.items():
                 if item_data.item_group == "ladders":
@@ -199,7 +199,7 @@ class TunicWorld(World):
                 self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
 
         else:
-            if self.options.ladder_rando:
+            if self.options.shuffle_ladders:
                 region_list = tunic_ladder_regions
             else:
                 region_list = tunic_regions
@@ -213,7 +213,7 @@ class TunicWorld(World):
                 region.add_exits(exits)
 
             for location_name, location_id in self.location_name_to_id.items():
-                if self.options.ladder_rando:
+                if self.options.shuffle_ladders:
                     region = self.multiworld.get_region(location_table[location_name].region, self.player)
                 else:
                     region = self.multiworld.get_region(location_table[location_name].region, self.player)
@@ -229,7 +229,7 @@ class TunicWorld(World):
     def set_rules(self) -> None:
         if self.options.entrance_rando:
             set_er_location_rules(self, self.ability_unlocks)
-        elif self.options.ladder_rando:
+        elif self.options.shuffle_ladders:
             set_ladder_region_rules(self, self.ability_unlocks)
             set_ladder_location_rules(self, self.ability_unlocks)
         else:
@@ -282,7 +282,7 @@ class TunicWorld(World):
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
             "entrance_rando": self.options.entrance_rando.value,
-            "ladder_rando": self.options.ladder_rando.value,
+            "shuffle_ladders": self.options.shuffle_ladders.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
             "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
