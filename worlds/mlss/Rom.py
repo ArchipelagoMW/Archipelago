@@ -285,10 +285,8 @@ class Rom:
         self.stream.seek(0x21cc44, 0)
         for i in range(354):
             current_position = self.stream.tell()
-            print(format(current_position, 'x'))
             value = int.from_bytes(self.stream.read(3), 'little')
             if value in fresh_pointers:
-                print(format(value, 'x'))
                 self.stream.seek(current_position)
                 self.stream.write(pointers.pop().to_bytes(3, 'little'))
             self.stream.seek(1, 1)
