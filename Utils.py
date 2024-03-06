@@ -979,7 +979,13 @@ def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
     return all(isinstance(v, str) for v in obj_it)
 
 
-def build_sphinx_docs() -> None:
-    """Build Sphinx autodocs for webhost."""
+def build_sphinx_docs(stable: bool = False) -> None:
+    """Build Sphinx autodocs."""
     from sphinx.cmd.build import main as sphinx_main
-    sphinx_main(["-M", "html", "docs/sphinx/source", "WebHostLib/templates/sphinx"])
+
+    base_dir = os.path.dirname(__file__)
+    sphinx_input = os.path.join(base_dir, "docs", "sphinx", "source")
+    sphinx_output = os.path.join(base_dir, "WebHostLib", "templates", "sphinx") if stable \
+        else os.path.join(base_dir, "docs", "sphinx", "build")
+
+    sphinx_main(["-M", "html", sphinx_input, sphinx_output])
