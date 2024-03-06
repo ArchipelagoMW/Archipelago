@@ -973,7 +973,4 @@ def is_iterable_but_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
     """ but not a `str` (because technically, `str` is `Iterable[str]`) """
     if isinstance(obj, str):
         return False
-    if not isinstance(obj, typing.Iterable):
-        return False
-    obj_it: typing.Iterable[object] = obj
-    return all(isinstance(v, str) for v in obj_it)
+    return isinstance(obj, typing.Iterable)
