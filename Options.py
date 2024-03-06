@@ -1010,8 +1010,8 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
     default = ()
     supports_weighting = False
 
-    entrances: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
-    exits: typing.ClassVar[typing.Union[typing.Set[str], typing.FrozenSet[str]]]
+    entrances: typing.ClassVar[typing.AbstractSet[str]]
+    exits: typing.ClassVar[typing.AbstractSet[str]]
 
     def __init__(self, value: typing.Iterable[PlandoConnection]):
         self.value = list(deepcopy(value))
