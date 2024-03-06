@@ -54,8 +54,6 @@ class TestAllGamesMultiworld(MultiworldTestBase):
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
         all_worlds = list(AutoWorldRegister.world_types.values())
-        # TODO LTTP requires a bunch of options not in the options API to function
-        all_worlds.remove(ALTTPWorld)
         self.multiworld = setup_multiworld(all_worlds, ())
         for world in self.multiworld.worlds.values():
             world.options.accessibility.value = Accessibility.option_locations
@@ -70,9 +68,6 @@ class TestTwoPlayerMulti(MultiworldTestBase):
     def test_two_player_single_game_fills(self) -> None:
         """Tests that a multiworld of two players for each registered game world can generate."""
         for world in AutoWorldRegister.world_types.values():
-            # TODO LTTP requires a bunch of options not in the options API to function
-            if world is ALTTPWorld:
-                continue
             self.multiworld = setup_multiworld([world, world], ())
             for world in self.multiworld.worlds.values():
                 world.options.accessibility.value = Accessibility.option_locations
