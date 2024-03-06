@@ -8,6 +8,9 @@ class TunicLocationData(NamedTuple):
     ladder_region: Optional[str] = None
     location_group: str = "region"
 
+    def ladders_region(self) -> str:
+        return self.ladder_region or self.region
+
 
 location_base_id = 509342400
 
@@ -103,7 +106,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Frog's Domain - Side Room Grapple Secret": TunicLocationData("Frog's Domain", "Frog's Domain"),
     "Frog's Domain - Magic Orb Pickup": TunicLocationData("Frog's Domain", "Frog's Domain"),
     "Librarian - Hexagon Green": TunicLocationData("Library", "Library Arena"),
-    "Library Hall - Holy Cross Chest": TunicLocationData("Library", "Library Hall", "holy cross"),
+    "Library Hall - Holy Cross Chest": TunicLocationData("Library", "Library Hall", location_group="holy cross"),
     "Library Lab - Chest By Shrine 2": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Chest By Shrine 1": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Chest By Shrine 3": TunicLocationData("Library", "Library Lab"),
@@ -112,7 +115,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Library Lab - Page 1": TunicLocationData("Library", "Library Lab"),
     "Library Lab - Page 2": TunicLocationData("Library", "Library Lab"),
     "Hero's Grave - Mushroom Relic": TunicLocationData("Library", "Hero Relic - Library"),
-    "Lower Mountain - Page Before Door": TunicLocationData("Overworld", "Lower Mountain"),
+    "Lower Mountain - Page Before Door": TunicLocationData("Overworld", "Lower Mountain", ladder_region="Upper Overworld"),
     "Changing Room - Normal Chest": TunicLocationData("Overworld", "Changing Room"),
     "Fortress Courtyard - Chest Near Cave": TunicLocationData("Overworld", "Fortress Exterior near cave", ladder_region="East Overworld"),
     "Fortress Courtyard - Near Fuse": TunicLocationData("Overworld", "Fortress Exterior from Overworld", ladder_region="East Overworld"),
@@ -166,10 +169,10 @@ location_table: Dict[str, TunicLocationData] = {
     "Ruined Shop - Chest 2": TunicLocationData("Overworld", "Ruined Shop"),
     "Ruined Shop - Chest 3": TunicLocationData("Overworld", "Ruined Shop"),
     "Ruined Passage - Page Pickup": TunicLocationData("Overworld", "Ruined Passage"),
-    "Shop - Potion 1": TunicLocationData("Overworld", "Shop", "shop"),
-    "Shop - Potion 2": TunicLocationData("Overworld", "Shop", "shop"),
-    "Shop - Coin 1": TunicLocationData("Overworld", "Shop", "shop"),
-    "Shop - Coin 2": TunicLocationData("Overworld", "Shop", "shop"),
+    "Shop - Potion 1": TunicLocationData("Overworld", "Shop", location_group="shop"),
+    "Shop - Potion 2": TunicLocationData("Overworld", "Shop", location_group="shop"),
+    "Shop - Coin 1": TunicLocationData("Overworld", "Shop", location_group="shop"),
+    "Shop - Coin 2": TunicLocationData("Overworld", "Shop", location_group="shop"),
     "Special Shop - Secret Page Pickup": TunicLocationData("Overworld", "Special Shop", ladder_region="East Overworld"),
     "Stick House - Stick Chest": TunicLocationData("Overworld", "Stick House"),
     "Sealed Temple - Page Pickup": TunicLocationData("Overworld", "Sealed Temple", ladder_region="Sealed Temple"),
@@ -190,7 +193,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Overworld - [West] Windmill Holy Cross": TunicLocationData("Overworld Holy Cross", "Overworld Holy Cross", location_group="holy cross"),
     "Overworld - [Southwest] Haiku Holy Cross": TunicLocationData("Overworld Holy Cross", "Overworld Beach", ladder_region="Overworld Beach", location_group="holy cross"),
     "Overworld - [West] Windchimes Holy Cross": TunicLocationData("Overworld Holy Cross", "Overworld Holy Cross", location_group="holy cross"),
-    "Overworld - [South] Starting Platform Holy Cross": TunicLocationData("Overworld Holy Cross", "Overworld Holy Cross", "holy cross"),
+    "Overworld - [South] Starting Platform Holy Cross": TunicLocationData("Overworld Holy Cross", "Overworld Holy Cross", location_group="holy cross"),
     "Overworld - [Northwest] Golden Obelisk Page": TunicLocationData("Overworld Holy Cross", "Upper Overworld", ladder_region="Upper Overworld", location_group="holy cross"),
     "Old House - Holy Cross Door Page": TunicLocationData("Overworld Holy Cross", "Old House Back", location_group="holy cross"),
     "Cube Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Cube Cave", location_group="holy cross"),
@@ -199,12 +202,12 @@ location_table: Dict[str, TunicLocationData] = {
     "Southeast Cross Door - Chest 1": TunicLocationData("Overworld Holy Cross", "Southeast Cross Room", location_group="holy cross"),
     "Maze Cave - Maze Room Holy Cross": TunicLocationData("Overworld Holy Cross", "Maze Cave", ladder_region="Overworld Beach", location_group="holy cross"),
     "Caustic Light Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Caustic Light Cave", ladder_region="Swamp", location_group="holy cross"),
-    "Old House - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Old House Front", "holy cross"),
-    "Patrol Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Patrol Cave", "holy cross"),
+    "Old House - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Old House Front", location_group="holy cross"),
+    "Patrol Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Patrol Cave", location_group="holy cross"),
     "Ruined Passage - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Ruined Passage", ladder_region="Overworld", location_group="holy cross"),
     "Hourglass Cave - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Hourglass Cave Tower", ladder_region="Overworld Beach", location_group="holy cross"),
     "Sealed Temple - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Sealed Temple", ladder_region="Sealed Temple", location_group="holy cross"),
-    "Fountain Cross Door - Page Pickup": TunicLocationData("Overworld Holy Cross", "Fountain Cross Room", "holy cross"),
+    "Fountain Cross Door - Page Pickup": TunicLocationData("Overworld Holy Cross", "Fountain Cross Room", location_group="holy cross"),
     "Secret Gathering Place - Holy Cross Chest": TunicLocationData("Overworld Holy Cross", "Secret Gathering Place", location_group="holy cross"),
     "Top of the Mountain - Page At The Peak": TunicLocationData("Overworld Holy Cross", "Top of the Mountain", ladder_region="Upper Overworld", location_group="holy cross"),
     "Monastery - Monastery Chest": TunicLocationData("Quarry", "Monastery Back"),
@@ -296,7 +299,7 @@ location_table: Dict[str, TunicLocationData] = {
     "West Garden - [West Lowlands] Tree Holy Cross Chest": TunicLocationData("West Garden", "West Garden", location_group="holy cross"),
     "West Garden - [Southeast Lowlands] Outside Cave": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [Central Lowlands] Chest Beneath Faeries": TunicLocationData("West Garden", "West Garden"),
-    "West Garden - [North] Behind Holy Cross Door": TunicLocationData("West Garden", "West Garden", "holy cross"),
+    "West Garden - [North] Behind Holy Cross Door": TunicLocationData("West Garden", "West Garden", location_group="holy cross"),
     "West Garden - [Central Highlands] Top of Ladder Before Boss": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [Central Lowlands] Passage Beneath Bridge": TunicLocationData("West Garden", "West Garden"),
     "West Garden - [North] Across From Page Pickup": TunicLocationData("West Garden", "West Garden"),

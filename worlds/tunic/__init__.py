@@ -214,7 +214,7 @@ class TunicWorld(World):
 
             for location_name, location_id in self.location_name_to_id.items():
                 if self.options.shuffle_ladders:
-                    region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                    region = self.multiworld.get_region(location_table[location_name].ladders_region(), self.player)
                 else:
                     region = self.multiworld.get_region(location_table[location_name].region, self.player)
                 location = TunicLocation(self.player, location_name, location_id, region)
