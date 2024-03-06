@@ -1259,7 +1259,9 @@ class DarkSouls3World(World):
         # All DarkSouls3Items for this world that have been assigned anywhere, grouped by name
         full_items_by_name = defaultdict(list)
         for location in self.multiworld.get_filled_locations():
-            if location.item.player == self.player and self._is_location_available(location):
+            if location.item.player == self.player and (
+                location.player != self.player or self._is_location_available(location)
+            ):
                 full_items_by_name[location.item.name].append(location.item)
 
         def smooth_items(item_order: List[Union[DS3ItemData, DarkSouls3Item]]) -> None:
@@ -1284,6 +1286,21 @@ class DarkSouls3World(World):
             ]
 
             names = {item.name for item in item_order}
+
+            all_matching_locations = [
+                loc
+                for locations in locations_by_sphere
+                for loc in locations
+                if loc.item.player == self.player
+                and not loc.locked
+                and loc.item.name in names
+            ]
+
+            if len(item_order) != len(all_matching_locations):
+                raise Exception(
+                    f"DS3 bug: there are {len(all_matching_locations)} locations that can " +
+                    f"contain smoothed items, but only {len(item_order)} items to smooth."
+                )
 
             for i, all_locations in enumerate(locations_by_sphere):
                 locations = [
