@@ -124,10 +124,9 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
              or has_ability(state, player, prayer, options, ability_unlocks)
              or state.has(laurels, player))
     multiworld.get_entrance("Overworld -> Ruined Atoll", player).access_rule = \
-        lambda state: state.has_any({laurels, grapple}, player) \
-        or has_ability(state, player, prayer, options, ability_unlocks)
+        lambda state: state.has(laurels, player) or has_ability(state, player, prayer, options, ability_unlocks)
     multiworld.get_entrance("Overworld Beach -> Ruined Atoll", player).access_rule = \
-        lambda state: state.has("Ladder to Ruined Atoll", player)
+        lambda state: state.has_any({"Ladder to Ruined Atoll", grapple}, player)
     multiworld.get_entrance("Ruined Atoll -> Frog's Domain", player).access_rule = \
         lambda state: state.has("Ladders to Frog's Domain", player)
     multiworld.get_entrance("Ruined Atoll -> Library", player).access_rule = \
