@@ -61,4 +61,4 @@ For Entrance Rando specifically:
 Bombs, consumables (non-bomb ones), weapons, melee weapons (stick and sword), keys, hexagons, offerings, hero relics, cards, golden treasures, money, pages, and abilities (the three ability pages). There are also a few groups being used for singular items: laurels, orb, dagger, magic rod, holy cross, prayer, ice rod, and progressive sword.
 
 ## What location groups are there?
-Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), and shop. Additionally, for checks that do not fall into the above categories, the name of the region is the name of the location group.
+Holy cross (for all holy cross checks), fairies (for the two fairy checks), well (for the coin well checks), shop, bosses (for the bosses with checks associated with them), and hero relic (for the 6 hero grave checks).

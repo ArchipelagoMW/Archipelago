@@ -1,5 +1,4 @@
 from typing import Dict, NamedTuple, Set, Optional
-from itertools import groupby
 
 
 class TunicLocationData(NamedTuple):
