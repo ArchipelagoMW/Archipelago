@@ -60,6 +60,7 @@ Currently, the following games are supported:
 * Final Fantasy Mystic Quest
 * TUNIC
 * Kirby's Dream Land 3
+* Celeste 64
 * Zork Grand Inquisitor
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
