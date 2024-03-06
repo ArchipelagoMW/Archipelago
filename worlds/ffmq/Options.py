@@ -267,11 +267,11 @@ class CompanionLevelingType(Choice):
 class CompanionSpellbookType(Choice):
     """Update companions' spellbook.
     Standard: Original game spellbooks.
-    Standard Extended: Add some extra spells. Tristam gains Exit and Quake and Reuben gets Blizzard.
+    Extended: Add some extra spells. Tristam gains Exit and Quake and Reuben gets Blizzard.
     Random Balanced: Randomize the spellbooks with an appropriate mix of spells.
     Random Chaos: Randomize the spellbooks in total free-for-all."""
     option_standard = 0
-    option_standard_extended = 1
+    option_extended = 1
     option_random_balanced = 2
     option_random_chaos = 3
     default = 0

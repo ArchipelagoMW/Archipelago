@@ -11,17 +11,29 @@ from flask import request, flash, redirect, url_for, session, render_template
 from markupsafe import Markup
 from pony.orm import commit, flush, select, rollback
 from pony.orm.core import TransactionIntegrityError
+import schema
 
 import MultiServer
 from NetUtils import SlotType
 from Utils import VersionException, __version__
+from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
+from worlds.AutoWorld import data_package_checksum
 from . import app
 from .models import Seed, Room, Slot, GameDataPackage
 
 banned_extensions = (".sfc", ".z64", ".n64", ".nes", ".smc", ".sms", ".gb", ".gbc", ".gba")
 allowed_options_extensions = (".yaml", ".json", ".yml", ".txt", ".zip")
 allowed_generation_extensions = (".archipelago", ".zip")
+
+games_package_schema = schema.Schema({
+    "item_name_groups": {str: [str]},
+    "item_name_to_id": {str: int},
+    "location_name_groups": {str: [str]},
+    "location_name_to_id": {str: int},
+    schema.Optional("checksum"): str,
+    schema.Optional("version"): int,
+})
 
 
 def allowed_options(filename: str) -> bool:
@@ -37,6 +49,8 @@ def banned_file(filename: str) -> bool:
 
 
 def process_multidata(compressed_multidata, files={}):
+    game_data: GamesPackage
+
     decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
 
     slots: typing.Set[Slot] = set()
@@ -45,11 +59,19 @@ def process_multidata(compressed_multidata, files={}):
         game_data_packages: typing.List[GameDataPackage] = []
         for game, game_data in decompressed_multidata["datapackage"].items():
             if game_data.get("checksum"):
+                original_checksum = game_data.pop("checksum")
+                game_data = games_package_schema.validate(game_data)
+                game_data = {key: value for key, value in sorted(game_data.items())}
+                game_data["checksum"] = data_package_checksum(game_data)
                 game_data_package = GameDataPackage(checksum=game_data["checksum"],
                                                     data=pickle.dumps(game_data))
+                if original_checksum != game_data["checksum"]:
+                    raise Exception(f"Original checksum {original_checksum} != "
+                                    f"calculated checksum {game_data['checksum']} "
+                                    f"for game {game}.")
                 decompressed_multidata["datapackage"][game] = {
                     "version": game_data.get("version", 0),
-                    "checksum": game_data["checksum"]
+                    "checksum": game_data["checksum"],
                 }
                 try:
                     commit()  # commit game data package
@@ -64,13 +86,14 @@ def process_multidata(compressed_multidata, files={}):
             if slot_info.type == SlotType.group:
                 continue
             slots.add(Slot(data=files.get(slot, None),
-                            player_name=slot_info.name,
-                            player_id=slot,
-                            game=slot_info.game))
+                           player_name=slot_info.name,
+                           player_id=slot,
+                           game=slot_info.game))
         flush()  # commit slots
 
     compressed_multidata = compressed_multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
     return slots, compressed_multidata
+
 
 def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
     if not owner:

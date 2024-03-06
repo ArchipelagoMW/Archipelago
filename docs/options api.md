@@ -24,17 +24,21 @@ display as `Value1` on the webhost.
 (i.e. `alias_value_1 = option_value1`) which will allow users to use either `value_1` or `value1` in their yaml
 files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
 Choice, and defining `alias_true = option_full`.
-- All options support `random` as a generic option. `random` chooses from any of the available values for that option,
-and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+- All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
+`(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
+option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+However, you can override `from_text` and handle `text == "random"` to customize its behavior or
+implement it for additional option types.
 
-As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
-create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
+As an example, suppose we want an option that lets the user start their game with a sword in their inventory, an option
+to let the player choose the difficulty, and an option to choose how much health the final boss has. Let's create our
+option classes (with a docstring), give them a `display_name`, and add them to our game's options dataclass:
 
 ```python
 # options.py
 from dataclasses import dataclass
 
-from Options import Toggle, PerGameCommonOptions
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 
 class StartingSword(Toggle):
@@ -42,13 +46,33 @@ class StartingSword(Toggle):
     display_name = "Start With Sword"
 
 
+class Difficulty(Choice):
+    """Sets overall game difficulty."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    alias_beginner = 0  # same as easy but allows the player to use beginner as an alternative for easy in the result in their options
+    alias_expert = 2  # same as hard
+    default = 1  # default to normal
+
+
+class FinalBossHP(Range):
+    """Sets the HP of the final boss"""
+    display_name = "Final Boss HP"
+    range_start = 100
+    range_end = 10000
+    default = 2000
+
+
 @dataclass
 class ExampleGameOptions(PerGameCommonOptions):
     starting_sword: StartingSword
+    difficulty: Difficulty
+    final_boss_health: FinalBossHP
 ```
 
-This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld, we add it
-to our world's `__init__.py`:
+To then submit this to the multiworld, we add it to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World

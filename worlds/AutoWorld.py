@@ -7,15 +7,15 @@ import re
 import sys
 import time
 from dataclasses import make_dataclass
-from typing import Any, Callable, ClassVar, Dict, Set, Tuple, FrozenSet, List, Optional, TYPE_CHECKING, TextIO, Type, \
-    Union
+from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
+                    Optional, Set, TextIO, Tuple, TYPE_CHECKING, Type, Union)
 
 from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
 
 if TYPE_CHECKING:
     import random
-    from BaseClasses import MultiWorld, Item, Location, Tutorial
+    from BaseClasses import MultiWorld, Item, Location, Tutorial, Region, Entrance
     from . import GamesPackage
     from settings import Group
 
@@ -77,6 +77,10 @@ class AutoWorldRegister(type):
         # create missing options_dataclass from legacy option_definitions
         # TODO - remove this once all worlds use options dataclasses
         if "options_dataclass" not in dct and "option_definitions" in dct:
+            # TODO - switch to deprecate after a version
+            if __debug__:
+                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
+                                "Please use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
@@ -324,7 +328,7 @@ class World(metaclass=AutoWorldRegister):
 
     def create_items(self) -> None:
         """
-        Method for creating and submitting items to the itempool. Items and Regions should *not* be created and submitted
+        Method for creating and submitting items to the itempool. Items and Regions must *not* be created and submitted
         to the MultiWorld after this step. If items need to be placed during pre_fill use `get_prefill_items`.
         """
         pass
@@ -361,13 +365,19 @@ class World(metaclass=AutoWorldRegister):
         If you need any last-second randomization, use self.random instead."""
         pass
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
-        """Fill in the `slot_data` field in the `Connected` network package.
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
+        """What is returned from this function will be in the `slot_data` field
+        in the `Connected` network package.
+        It should be a `dict` with `str` keys, and should be serializable with json.
+
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
         `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        # The reason for the `Mapping` type annotation, rather than `dict`
+        # is so that type checkers won't worry about the mutability of `dict`,
+        # so you can have more specific typing in your world implementation.
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
@@ -434,7 +444,7 @@ class World(metaclass=AutoWorldRegister):
     def get_pre_fill_items(self) -> List["Item"]:
         return []
 
-    # following methods should not need to be overridden.
+    # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
         name = self.collect_item(state, item)
         if name:
@@ -453,6 +463,16 @@ class World(metaclass=AutoWorldRegister):
 
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
+
+    # convenience methods
+    def get_location(self, location_name: str) -> "Location":
+        return self.multiworld.get_location(location_name, self.player)
+
+    def get_entrance(self, entrance_name: str) -> "Entrance":
+        return self.multiworld.get_entrance(entrance_name, self.player)
+
+    def get_region(self, region_name: str) -> "Region":
+        return self.multiworld.get_region(region_name, self.player)
 
     @classmethod
     def get_data_package_data(cls) -> "GamesPackage":
