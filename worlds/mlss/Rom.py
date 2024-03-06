@@ -181,10 +181,10 @@ class Rom:
 
     def patch_options(self):
         name = self.world.multiworld.player_name[self.player].encode("UTF-8")
-        self.stream.seek(0xB0, 0)
+        self.stream.seek(0xDF0000, 0)
         self.stream.write(name)
-        self.stream.seek(0xAF, 0)
-        self.stream.write(self.player.to_bytes(1, 'little'))
+        self.stream.seek(0xDF00A0, 0)
+        self.stream.write(self.world.multiworld.seed_name.encode("UTF-8"))
 
         if self.world.options.skip_intro:
             # Enable Skip Intro in ROM
@@ -273,47 +273,26 @@ class Rom:
             self.stream.write(bytes([self.random.randint(0x0, 0x26)]))
 
     def randomize_sounds(self):
-        pointers = []
-        sounds = []
-        self.stream.seek(0x21CC44)
-        for i in range(353):
-            p_arr = bytearray(self.stream.read(4))
-            pointers.append(p_arr[0] | p_arr[1] << 8 | p_arr[2] << 16)
-            pointers.sort(reverse=True)
+        temp = pkgutil.get_data(__name__, "data/sounds.txt")
+        temp_io = io.BytesIO(temp)
+        fresh_pointers = []
 
-        for i in range(len(pointers) - 1, -1, -1):
-            if i == 0:
-                continue
-            j = 1
-            while True:
-                self.stream.seek(pointers[i - 1] - j)
-                read_byte = self.stream.read(1)
-                if read_byte != b'\xFF':
-                    j += 1
-                    continue
-                else:
-                    break
-            self.stream.seek(pointers[i - 1] - (j + 1))
-            if self.stream.read(1) >= b'\xFE' and i != 0:
-                pointers.pop(i)
-            else:
-                temp = bytearray([
-                    pointers[i] & 0xFF,
-                    (pointers[i] >> 8) & 0xFF,
-                    (pointers[i] >> 16) & 0xFF,
-                    0x8
-                ])
-                sounds.append(temp)
+        for line in temp_io.readlines():
+            fresh_pointers += [int(line.decode('utf-8').strip(), 16)]
+        pointers = list(fresh_pointers)
 
-        self.random.shuffle(sounds)
-        self.stream.seek(0x21CC44)
-        for i in range(len(pointers)):
-            current_pos = self.stream.tell()
-            p_arr = bytearray(self.stream.read(4))
-            if (p_arr[0] | p_arr[1] << 8 | p_arr[2] << 16) not in pointers:
-                continue
-            self.stream.seek(current_pos)
-            self.stream.write(self.random.choice(sounds))
+        self.world.random.shuffle(pointers)
+        self.stream.seek(0x21cc44, 0)
+        for i in range(354):
+            current_position = self.stream.tell()
+            print(format(current_position, 'x'))
+            value = int.from_bytes(self.stream.read(3), 'little')
+            if value in fresh_pointers:
+                print(format(value, 'x'))
+                self.stream.seek(current_position)
+                self.stream.write(pointers.pop().to_bytes(3, 'little'))
+            self.stream.seek(1, 1)
+
 
     def disable_music(self):
         self.stream.seek(0x19B118)

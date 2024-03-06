@@ -11,6 +11,16 @@ if typing.TYPE_CHECKING:
 
 
 def set_rules(world: "MLSSWorld", excluded):
+    add_rule(world.multiworld.get_location("Queen Bean", world.player), lambda state: StateLogic.rose(state, world.player))
+    add_rule(world.multiworld.get_location("Chuckolator", world.player), lambda state: StateLogic.castleTown(state, world.player))
+    add_rule(world.multiworld.get_location("Oasis", world.player),
+             lambda state: (StateLogic.canDig(state, world.player) and StateLogic.canMini(state, world.player))
+                           or (StateLogic.fire(state, world.player) and StateLogic.membership(state, world.player)) and (StateLogic.super(state, world.player) or StateLogic.canDash(state, world.player)))
+    add_rule(world.multiworld.get_location("Mom Piranha", world.player), lambda state: StateLogic.thunder(state, world.player))
+    add_rule(world.multiworld.get_location("Fungitown", world.player), lambda state: StateLogic.fungitown(state, world.player))
+    add_rule(world.multiworld.get_location("Beanstar", world.player),
+             lambda state: StateLogic.castleTown(state, world.player) and StateLogic.rose(state,world.player) and StateLogic.pieces(state,world.player))
+
     for location in all_locations:
         if "Digspot" in location.name:
             if (world.options.skip_minecart and "Minecart" in location.name) or (
@@ -240,6 +250,10 @@ def set_rules(world: "MLSSWorld", excluded):
     add_rule(world.multiworld.get_location(LocationName.ChateauRedGoblet, world.player),
              lambda state: StateLogic.brooch(state, world.player) and StateLogic.canMini(state, world.player))
     if world.options.difficult_logic:
+        add_rule(world.multiworld.get_location("Birdo", world.player),
+                 lambda state: StateLogic.postJokes(state, world.player))
+        add_rule(world.multiworld.get_location("Jojora", world.player), lambda state: StateLogic.surfable(state, world.player)
+                                                                                and StateLogic.canDash(state, world.player) and StateLogic.canDig(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.GwarharLagoonSpangleReward, world.player),
                  lambda state: StateLogic.canCrash(state, world.player))
         add_rule(world.multiworld.get_location(LocationName.BeanstarPieceHermie, world.player),
@@ -247,6 +261,12 @@ def set_rules(world: "MLSSWorld", excluded):
         if world.options.chuckle_beans != 0:
             add_rule(world.multiworld.get_location(LocationName.GwarharLagoonPastHermieDigspot, world.player),
                     lambda state: StateLogic.canCrash(state, world.player))
+    else:
+        add_rule(world.multiworld.get_location("Birdo", world.player),
+                 lambda state: StateLogic.postJokes(state, world.player) and StateLogic.canCrash(state, world.player))
+        add_rule(world.multiworld.get_location("Jojora", world.player), lambda state: StateLogic.surfable(state, world.player)
+                                                                                and StateLogic.canDash(state, world.player) and StateLogic.canCrash(state, world.player)
+                                                                                and StateLogic.canDig(state, world.player))
 
     if world.options.coins:
         add_rule(world.multiworld.get_location(LocationName.HoohooMountainBaseBooStatueCaveCoinBlock1, world.player),
