@@ -2,20 +2,21 @@ import csv
 import enum
 from dataclasses import dataclass
 from random import Random
-from typing import Optional, Dict, Protocol, List, FrozenSet
+from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
-from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .data.fish_data import legendary_fish, special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
 from .data.villagers_data import get_villagers_for_mods
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
+from .options import ExcludeGingerIsland, Friendsanity, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, \
+    SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
+from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
 from .strings.quest_names import ModQuest
-from .strings.villager_names import NPC, ModNPC
 from .strings.region_names import Region
+from .strings.villager_names import NPC, ModNPC
 
 LOCATION_CODE_OFFSET = 717000
 
@@ -303,7 +304,8 @@ def extend_special_order_locations(randomized_locations: List[LocationData], opt
     randomized_locations.extend(board_locations)
     if options.special_order_locations == SpecialOrderLocations.option_board_qi and include_island:
         include_arcade = options.arcade_machine_locations != ArcadeMachineLocations.option_disabled
-        qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if include_arcade or LocationTags.JUNIMO_KART not in location.tags]
+        qi_orders = [location for location in locations_by_tag[LocationTags.SPECIAL_ORDER_QI] if
+                     include_arcade or LocationTags.JUNIMO_KART not in location.tags]
         randomized_locations.extend(qi_orders)
 
 
@@ -404,11 +406,11 @@ def extend_cooksanity_locations(randomized_locations: List[LocationData], option
     if cooksanity == Cooksanity.option_none:
         return
     if cooksanity == Cooksanity.option_queen_of_sauce:
-        cooksanity_locations = {location for location in locations_by_tag[LocationTags.COOKSANITY_QOS]}
+        cooksanity_locations = (location for location in locations_by_tag[LocationTags.COOKSANITY_QOS])
     else:
-        cooksanity_locations = {location for location in locations_by_tag[LocationTags.COOKSANITY]}
+        cooksanity_locations = (location for location in locations_by_tag[LocationTags.COOKSANITY])
 
-    filtered_cooksanity_locations = filter_disabled_locations(options, list(cooksanity_locations))
+    filtered_cooksanity_locations = filter_disabled_locations(options, cooksanity_locations)
     randomized_locations.extend(filtered_cooksanity_locations)
 
 
@@ -493,21 +495,21 @@ def create_locations(location_collector: StardewLocationCollector,
         location_collector(location_data.name, location_data.code, location_data.region)
 
 
-def filter_ginger_island(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
+def filter_ginger_island(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     include_island = options.exclude_ginger_island == ExcludeGingerIsland.option_false
-    return [location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags]
+    return (location for location in locations if include_island or LocationTags.GINGER_ISLAND not in location.tags)
 
 
-def filter_qi_order_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
+def filter_qi_order_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     include_qi_orders = options.special_order_locations == SpecialOrderLocations.option_board_qi
-    return [location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags]
+    return (location for location in locations if include_qi_orders or LocationTags.REQUIRES_QI_ORDERS not in location.tags)
 
 
-def filter_modded_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
-    return [location for location in locations if location.mod_name is None or location.mod_name in options.mods]
+def filter_modded_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
+    return (location for location in locations if location.mod_name is None or location.mod_name in options.mods)
 
 
-def filter_disabled_locations(options: StardewValleyOptions, locations: List[LocationData]) -> List[LocationData]:
+def filter_disabled_locations(options: StardewValleyOptions, locations: Iterable[LocationData]) -> Iterable[LocationData]:
     locations_island_filter = filter_ginger_island(options, locations)
     locations_qi_filter = filter_qi_order_locations(options, locations_island_filter)
     locations_mod_filter = filter_modded_locations(options, locations_qi_filter)

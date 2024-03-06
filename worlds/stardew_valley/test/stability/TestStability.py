@@ -2,10 +2,9 @@ import json
 import re
 import subprocess
 import sys
-import unittest
-from random import random
 
 from BaseClasses import get_seed
+from .. import SVTestCase
 
 # <function Location.<lambda> at 0x102ca98a0>
 lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
@@ -13,11 +12,14 @@ lambda_regex = re.compile(r"^<function Location\.<lambda> at (.*)>$")
 python_version_regex = re.compile(r"^Python (\d+)\.(\d+)\.(\d+)\s*$")
 
 
-class TestGenerationIsStable(unittest.TestCase):
+class TestGenerationIsStable(SVTestCase):
     """Let it be known that I hate this tests, and if someone has a better idea than starting subprocesses, please fix this.
     """
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
+        if self.skip_long_tests:
+            return
+
         # seed = get_seed(33778671150797368040) # troubleshooting seed
         seed = get_seed()
 
@@ -37,7 +39,7 @@ class TestGenerationIsStable(unittest.TestCase):
             self.assertEqual(item_a, item_b, f"Item at index {i} is different between both executions. Seed={seed}")
 
         for i, ((location_a, rule_a), (location_b, rule_b)) in enumerate(zip(result_a["location_rules"].items(), result_b["location_rules"].items())):
-            self.assertEqual(location_a, location_a, f"Location at index {i} is different between both executions. Seed={seed}")
+            self.assertEqual(location_a, location_b, f"Location at index {i} is different between both executions. Seed={seed}")
 
             match = lambda_regex.match(rule_a)
             if match:
@@ -45,4 +47,6 @@ class TestGenerationIsStable(unittest.TestCase):
                                 f"Location rule of {location_a} at index {i} is different between both executions. Seed={seed}")
                 continue
 
+            # We check that the actual rule has the same order to make sure it is evaluated in the same order,
+            #  so performance tests are repeatable as much as possible.
             self.assertEqual(rule_a, rule_b, f"Location rule of {location_a} at index {i} is different between both executions. Seed={seed}")

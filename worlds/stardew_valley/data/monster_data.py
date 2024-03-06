@@ -1,13 +1,11 @@
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, Set, Callable
-from Utils import cache_self1
 
 from ..mods.mod_data import ModNames
+from ..mods.mod_monster_locations import modded_monsters_locations
 from ..strings.monster_names import Monster, MonsterCategory
 from ..strings.performance_names import Performance
 from ..strings.region_names import Region
-
-from ..mods.mod_monster_locations import modded_monsters_locations
 
 
 @dataclass(frozen=True)
@@ -50,7 +48,7 @@ def create_monster(name: str, category: str, locations: Tuple[str, ...], difficu
 
 def update_monster_locations(mod_name: str, monster: StardewMonster):
     new_locations = modded_monsters_locations[mod_name][monster.name]
-    total_locations = tuple(set(monster.locations + new_locations))
+    total_locations = tuple(sorted(set(monster.locations + new_locations)))
     return StardewMonster(monster.name, monster.category, total_locations, monster.difficulty)
 
 

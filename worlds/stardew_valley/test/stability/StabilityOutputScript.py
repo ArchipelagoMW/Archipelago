@@ -1,7 +1,7 @@
 import argparse
 import json
 
-from ...test import setup_solo_multiworld
+from ...test import setup_solo_multiworld, allsanity_options_with_mods
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -10,7 +10,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
     seed = args.seed
 
-    multi_world = setup_solo_multiworld(seed=seed)
+    multi_world = setup_solo_multiworld(
+        allsanity_options_with_mods(),
+        seed=seed
+    )
 
     output = {
         "bundles": {
