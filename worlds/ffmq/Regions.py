@@ -220,15 +220,12 @@ def stage_set_rules(multiworld):
         for player in no_enemies_players:
             for location in vendor_locations:
                 if multiworld.accessibility[player] == "locations":
-                    print("exclude")
                     multiworld.get_location(location, player).progress_type = LocationProgressType.EXCLUDED
                 else:
-                    print("unreachable")
                     multiworld.get_location(location, player).access_rule = lambda state: False
     else:
         # There are not enough junk items to fill non-minimal players' vendors. Just set an item rule not allowing
-        # advancement items so that useful items can be placed.
-        print("no advancement")
+        # advancement items so that useful items can be placed
         for player in no_enemies_players:
             for location in vendor_locations:
                 multiworld.get_location(location, player).item_rule = lambda item: not item.advancement

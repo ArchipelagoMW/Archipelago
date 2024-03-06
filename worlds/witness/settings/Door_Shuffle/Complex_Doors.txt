@@ -58,9 +58,9 @@ Town Tower Third (Door)
 Theater Entry (Door)
 Theater Exit Left (Door)
 Theater Exit Right (Door)
-Jungle Bamboo Laser Shortcut (Door)
+Jungle Laser Shortcut (Door)
 Jungle Popup Wall (Door)
-River Monastery Garden Shortcut (Door)
+Jungle Monastery Garden Shortcut (Door)
 Bunker Entry (Door)
 Bunker Tinted Glass Door
 Bunker UV Room Entry (Door)
@@ -85,7 +85,7 @@ Mountain Floor 2 Staircase Near (Door)
 Mountain Floor 2 Exit (Door)
 Mountain Floor 2 Staircase Far (Door)
 Mountain Bottom Floor Giant Puzzle Exit (Door)
-Mountain Bottom Floor Final Room Entry (Door)
+Mountain Bottom Floor Pillars Room Entry (Door)
 Mountain Bottom Floor Rock (Door)
 Caves Entry (Door)
 Caves Pillar Door
@@ -143,8 +143,8 @@ Town Wooden Roof Lower Row 5
 Town RGB House Entry Panel
 Town Church Entry Panel
 Town Maze Panel
-Town Windmill Entry Panel
-Town Sound Room Right
+Windmill Entry Panel
+Town RGB House Sound Room Right
 Town Red Rooftop 5
 Town Church Lattice
 Town Tall Hexagonal
@@ -154,7 +154,7 @@ Theater Exit Left Panel
 Theater Exit Right Panel
 Jungle Laser Shortcut Panel
 Jungle Popup Wall Control
-River Monastery Garden Shortcut Panel
+Jungle Monastery Garden Shortcut Panel
 Bunker Entry Panel
 Bunker Tinted Glass Door Panel
 Bunker Glass Room 3
@@ -186,8 +186,8 @@ Mountain Floor 2 Light Bridge Controller Near
 Mountain Floor 2 Light Bridge Controller Far
 Mountain Floor 2 Far Row 6
 Mountain Bottom Floor Giant Puzzle
-Mountain Bottom Floor Final Room Entry Left
-Mountain Bottom Floor Final Room Entry Right
+Mountain Bottom Floor Pillars Room Entry Left
+Mountain Bottom Floor Pillars Room Entry Right
 Mountain Bottom Floor Discard
 Mountain Bottom Floor Rock Control
 Mountain Bottom Floor Caves Entry Panel
