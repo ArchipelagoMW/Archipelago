@@ -1632,12 +1632,7 @@ async def process_client_cmd(ctx: Context, client: Client, args: dict):
             team, slot = ctx.connect_names[args['name']]
             game = ctx.games[slot]
 
-            ignore_game = False
-            if not args.get("game"):
-                for tag in args["tags"]:
-                    if tag in _non_game_messages:
-                        ignore_game = True
-                        break
+            ignore_game = not args.get("game") and any(tag in _non_game_messages for tag in args["tags"])
 
             if not ignore_game and args['game'] != game:
                 errors.add('InvalidGame')
