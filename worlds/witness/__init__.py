@@ -3,22 +3,22 @@ Archipelago init file for The Witness
 """
 import dataclasses
 
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 from BaseClasses import Region, Location, MultiWorld, Item, Entrance, Tutorial, CollectionState
 from Options import PerGameCommonOptions, Toggle
 from .presets import witness_option_presets
 from worlds.AutoWorld import World, WebWorld
 from .player_logic import WitnessPlayerLogic
-from .static_logic import StaticWitnessLogic
+from .static_logic import StaticWitnessLogic, ItemCategory, DoorItemDefinition
 from .hints import get_always_hint_locations, get_always_hint_items, get_priority_hint_locations, \
     get_priority_hint_items, make_always_and_priority_hints, generate_joke_hints, make_area_hints, get_hintable_areas, \
-    make_extra_location_hints, create_all_hints
+    make_extra_location_hints, create_all_hints, make_laser_hints, make_compact_hint_data, CompactItemData
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .items import WitnessItem, StaticWitnessItems, WitnessPlayerItems, ItemData
 from .regions import WitnessRegions
 from .rules import set_rules
 from .options import TheWitnessOptions
-from .utils import get_audio_logs
+from .utils import get_audio_logs, get_laser_shuffle
 from logging import warning, error
 
 
@@ -56,7 +56,7 @@ class WitnessWorld(World):
     item_name_groups = StaticWitnessItems.item_groups
     location_name_groups = StaticWitnessLocations.AREA_LOCATION_GROUPS
 
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 5)
 
     def __init__(self, multiworld: "MultiWorld", player: int):
         super().__init__(multiworld, player)
@@ -66,7 +66,8 @@ class WitnessWorld(World):
         self.items = None
         self.regio = None
 
-        self.log_ids_to_hints = None
+        self.log_ids_to_hints: Dict[int, CompactItemData] = dict()
+        self.laser_ids_to_hints: Dict[int, CompactItemData] = dict()
 
         self.items_placed_early = []
         self.own_itempool = []
@@ -81,6 +82,7 @@ class WitnessWorld(World):
             'symbols_not_in_the_game': self.items.get_symbol_ids_not_in_pool(),
             'disabled_entities': [int(h, 16) for h in self.player_logic.COMPLETELY_DISABLED_ENTITIES],
             'log_ids_to_hints': self.log_ids_to_hints,
+            'laser_ids_to_hints': self.laser_ids_to_hints,
             'progressive_item_lists': self.items.get_progressive_item_ids_in_pool(),
             'obelisk_side_id_to_EPs': StaticWitnessLogic.OBELISK_SIDE_ID_TO_EP_HEXES,
             'precompleted_puzzles': [int(h, 16) for h in self.player_logic.EXCLUDED_LOCATIONS],
@@ -99,8 +101,6 @@ class WitnessWorld(World):
             self, self.player_logic, self.locat
         )
         self.regio: WitnessRegions = WitnessRegions(self.locat, self)
-
-        self.log_ids_to_hints = dict()
 
         interacts_with_multiworld = (
                 self.options.shuffle_symbols or
@@ -272,11 +272,25 @@ class WitnessWorld(World):
                 self.options.local_items.value.add(item_name)
 
     def fill_slot_data(self) -> dict:
+        already_hinted_locations = set()
+
+        # Laser hints
+
+        if self.options.laser_hints:
+            laser_hints = make_laser_hints(self, StaticWitnessItems.item_groups["Lasers"])
+
+            for item_name, hint in laser_hints.items():
+                item_def = cast(DoorItemDefinition, StaticWitnessLogic.all_items[item_name])
+                self.laser_ids_to_hints[int(item_def.panel_id_hexes[0], 16)] = make_compact_hint_data(hint, self.player)
+                already_hinted_locations.add(hint.location)
+
+        # Audio Log Hints
+
         hint_amount = self.options.hint_amount.value
 
         credits_hint = (
             "This Randomizer is brought to you by\n"
-            "NewSoupVi, Jarno, blastron,\n",
+            "NewSoupVi, Jarno, blastron,\n"
             "jbzdarkid, sigma144, IHNN, oddGarrett, Exempt-Medic.", -1, -1
         )
 
@@ -285,25 +299,19 @@ class WitnessWorld(World):
         if hint_amount:
             area_hints = round(self.options.area_hint_percentage / 100 * hint_amount)
 
-            generated_hints = create_all_hints(self, hint_amount, area_hints)
+            generated_hints = create_all_hints(self, hint_amount, area_hints, already_hinted_locations)
 
             self.random.shuffle(audio_logs)
 
             duplicates = min(3, len(audio_logs) // hint_amount)
 
             for hint in generated_hints:
-                location = hint.location
-                area_amount = hint.area_amount
-
-                # None if junk hint, address if location hint, area string if area hint
-                arg_1 = location.address if location else (hint.area if hint.area else None)
-
-                # self.player if junk hint, player if location hint, progression amount if area hint
-                arg_2 = area_amount if area_amount is not None else (location.player if location else self.player)
+                hint = generated_hints.pop(0)
+                compact_hint_data = make_compact_hint_data(hint, self.player)
 
                 for _ in range(0, duplicates):
                     audio_log = audio_logs.pop()
-                    self.log_ids_to_hints[int(audio_log, 16)] = (hint.wording, arg_1, arg_2)
+                    self.log_ids_to_hints[int(audio_log, 16)] = compact_hint_data
 
         if audio_logs:
             audio_log = audio_logs.pop()
@@ -315,7 +323,7 @@ class WitnessWorld(World):
             audio_log = audio_logs.pop()
             self.log_ids_to_hints[int(audio_log, 16)] = joke_hints.pop()
 
-        # generate hints done
+        # Options for the client & auto-tracker
 
         slot_data = self._get_slot_data()
 
