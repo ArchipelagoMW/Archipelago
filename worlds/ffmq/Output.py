@@ -3,7 +3,7 @@ import os
 import zipfile
 from copy import deepcopy
 from .Regions import object_id_table
-from Main import __version__
+from Utils import __version__
 from worlds.Files import APContainer
 import pkgutil
 

@@ -14,7 +14,7 @@ from worlds.generic.Rules import forbid_item
 
 class BumpStikWeb(WebWorld):
     tutorials = [Tutorial(
-        "Bumper Stickers Setup Tutorial",
+        "Bumper Stickers Setup Guide",
         "A guide to setting up the Archipelago Bumper Stickers software on your computer.",
         "English",
         "setup_en.md",

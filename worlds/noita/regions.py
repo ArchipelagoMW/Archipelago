@@ -1,48 +1,43 @@
 # Regions are areas in your game that you travel to.
-from typing import Dict, Set, List
+from typing import Dict, List, TYPE_CHECKING
 
-from BaseClasses import Entrance, MultiWorld, Region
-from . import Locations
+from BaseClasses import Entrance, Region
+from . import locations
+from .events import create_all_events
+
+if TYPE_CHECKING:
+    from . import NoitaWorld
 
 
-def add_location(player: int, loc_name: str, id: int, region: Region) -> None:
-    location = Locations.NoitaLocation(player, loc_name, id, region)
-    region.locations.append(location)
-
-
-def add_locations(multiworld: MultiWorld, player: int, region: Region) -> None:
-    locations = Locations.location_region_mapping.get(region.name, {})
-    for location_name, location_data in locations.items():
+def create_locations(world: "NoitaWorld", region: Region) -> None:
+    locs = locations.location_region_mapping.get(region.name, {})
+    for location_name, location_data in locs.items():
         location_type = location_data.ltype
         flag = location_data.flag
 
-        opt_orbs = multiworld.orbs_as_checks[player].value
-        opt_bosses = multiworld.bosses_as_checks[player].value
-        opt_paths = multiworld.path_option[player].value
-        opt_num_chests = multiworld.hidden_chests[player].value
-        opt_num_pedestals = multiworld.pedestal_checks[player].value
+        is_orb_allowed = location_type == "orb" and flag <= world.options.orbs_as_checks
+        is_boss_allowed = location_type == "boss" and flag <= world.options.bosses_as_checks
+        amount = 0
+        if flag == locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
+            amount = 1
+        elif location_type == "chest" and flag <= world.options.path_option:
+            amount = world.options.hidden_chests.value
+        elif location_type == "pedestal" and flag <= world.options.path_option:
+            amount = world.options.pedestal_checks.value
 
-        is_orb_allowed = location_type == "orb" and flag <= opt_orbs
-        is_boss_allowed = location_type == "boss" and flag <= opt_bosses
-        if flag == Locations.LocationFlag.none or is_orb_allowed or is_boss_allowed:
-            add_location(player, location_name, location_data.id, region)
-        elif location_type == "chest" and flag <= opt_paths:
-            for i in range(opt_num_chests):
-                add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
-        elif location_type == "pedestal" and flag <= opt_paths:
-            for i in range(opt_num_pedestals):
-                add_location(player, f"{location_name} {i+1}", location_data.id + i, region)
+        region.add_locations(locations.make_location_range(location_name, location_data.id, amount),
+                             locations.NoitaLocation)
 
 
 # Creates a new Region with the locations found in `location_region_mapping` and adds them to the world.
-def create_region(multiworld: MultiWorld, player: int, region_name: str) -> Region:
-    new_region = Region(region_name, player, multiworld)
-    add_locations(multiworld, player, new_region)
+def create_region(world: "NoitaWorld", region_name: str) -> Region:
+    new_region = Region(region_name, world.player, world.multiworld)
+    create_locations(world, new_region)
     return new_region
 
 
-def create_regions(multiworld: MultiWorld, player: int) -> Dict[str, Region]:
-    return {name: create_region(multiworld, player, name) for name in noita_regions}
+def create_regions(world: "NoitaWorld") -> Dict[str, Region]:
+    return {name: create_region(world, name) for name in noita_regions}
 
 
 # An "Entrance" is really just a connection between two regions
@@ -60,11 +55,12 @@ def create_connections(player: int, regions: Dict[str, Region]) -> None:
 
 
 # Creates all regions and connections. Called from NoitaWorld.
-def create_all_regions_and_connections(multiworld: MultiWorld, player: int) -> None:
-    created_regions = create_regions(multiworld, player)
-    create_connections(player, created_regions)
+def create_all_regions_and_connections(world: "NoitaWorld") -> None:
+    created_regions = create_regions(world)
+    create_connections(world.player, created_regions)
+    create_all_events(world, created_regions)
 
-    multiworld.regions += created_regions.values()
+    world.multiworld.regions += created_regions.values()
 
 
 # Oh, what a tangled web we weave

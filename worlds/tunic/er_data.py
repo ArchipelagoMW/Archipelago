@@ -37,7 +37,7 @@ portal_mapping: List[Portal] = [
            destination="Furnace_gyro_lower"),
     Portal(name="Caustic Light Cave Entrance", region="Overworld",
            destination="Overworld Cave_"),
-    Portal(name="Swamp Upper Entrance", region="Overworld Laurels",
+    Portal(name="Swamp Upper Entrance", region="Overworld Swamp Upper Entry",
            destination="Swamp Redux 2_wall"),
     Portal(name="Swamp Lower Entrance", region="Overworld",
            destination="Swamp Redux 2_conduit"),
@@ -49,7 +49,7 @@ portal_mapping: List[Portal] = [
            destination="Atoll Redux_upper"),
     Portal(name="Atoll Lower Entrance", region="Overworld",
            destination="Atoll Redux_lower"),
-    Portal(name="Special Shop Entrance", region="Overworld Laurels",
+    Portal(name="Special Shop Entrance", region="Overworld Special Shop Entry",
            destination="ShopSpecial_"),
     Portal(name="Maze Cave Entrance", region="Overworld",
            destination="Maze Room_"),
@@ -57,7 +57,7 @@ portal_mapping: List[Portal] = [
            destination="Archipelagos Redux_upper"),
     Portal(name="West Garden Entrance from Furnace", region="Overworld to West Garden from Furnace",
            destination="Archipelagos Redux_lower"),
-    Portal(name="West Garden Laurels Entrance", region="Overworld Laurels",
+    Portal(name="West Garden Laurels Entrance", region="Overworld West Garden Laurels Entry",
            destination="Archipelagos Redux_lowest"),
     Portal(name="Temple Door Entrance", region="Overworld Temple Door",
            destination="Temple_main"),
@@ -211,7 +211,7 @@ portal_mapping: List[Portal] = [
            destination="Shop_"),
     Portal(name="Atoll to Far Shore", region="Ruined Atoll Portal",
            destination="Transit_teleporter_atoll"),
-    Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Portal",
+    Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Statue",
            destination="Library Exterior_"),
     Portal(name="Frog Stairs Eye Entrance", region="Ruined Atoll",
            destination="Frog Stairs_eye"),
@@ -533,7 +533,9 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld": RegionInfo("Overworld Redux"),
     "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
     "Overworld Belltower": RegionInfo("Overworld Redux"),  # the area with the belltower and chest
-    "Overworld Laurels": RegionInfo("Overworld Redux"),  # all spots in Overworld that you need laurels to reach
+    "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
+    "Overworld Special Shop Entry": RegionInfo("Overworld Redux"),  # special shop entry spot
+    "Overworld West Garden Laurels Entry": RegionInfo("Overworld Redux"),  # west garden laurels entry
     "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux", hint=Hint.region),
     "Overworld Well to Furnace Rail": RegionInfo("Overworld Redux"),  # the tiny rail passageway
     "Overworld Ruined Passage Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
@@ -598,6 +600,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
     "Ruined Atoll Portal": RegionInfo("Atoll Redux"),
+    "Ruined Atoll Statue": RegionInfo("Atoll Redux"),
     "Frog's Domain Entry": RegionInfo("Frog Stairs"),
     "Frog's Domain": RegionInfo("frog cave main", hint=Hint.region),
     "Frog's Domain Back": RegionInfo("frog cave main", hint=Hint.scene),
@@ -710,7 +713,7 @@ for p1, p2 in hallways.items():
     hallway_helper[p2] = p1
 
 # so we can just loop over this instead of doing some complicated thing to deal with hallways in the hints
-hallways_nmg: Dict[str, str] = {
+hallways_ur: Dict[str, str] = {
     "Ruins Passage, Overworld Redux_east": "Ruins Passage, Overworld Redux_west",
     "East Forest Redux Interior, East Forest Redux_upper": "East Forest Redux Interior, East Forest Redux_lower",
     "Forest Boss Room, East Forest Redux Laddercave_": "Forest Boss Room, Forest Belltower_",
@@ -720,20 +723,22 @@ hallways_nmg: Dict[str, str] = {
     "ziggurat2020_0, Quarry Redux_": "ziggurat2020_0, ziggurat2020_1_",
     "Purgatory, Purgatory_bottom": "Purgatory, Purgatory_top",
 }
-hallway_helper_nmg: Dict[str, str] = {}
-for p1, p2 in hallways.items():
-    hallway_helper[p1] = p2
-    hallway_helper[p2] = p1
+hallway_helper_ur: Dict[str, str] = {}
+for p1, p2 in hallways_ur.items():
+    hallway_helper_ur[p1] = p2
+    hallway_helper_ur[p2] = p1
 
 
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information
-dependent_regions: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Southeast Cross Door", "Overworld Temple Door",
+dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
+    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
      "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal"):
-         ["Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Ruined Passage Door",
-          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal"],
+         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+          "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door", "Overworld Southeast Cross Door",
+          "Overworld Old House Door", "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal",
+          "Overworld Spawn Portal"],
     ("Old House Front",):
         ["Old House Front", "Old House Back"],
     ("Furnace Fuse", "Furnace Ladder Area", "Furnace Walking Path"):
@@ -745,6 +750,8 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Forest Grave Path by Grave", "Forest Hero's Grave"):
@@ -758,8 +765,10 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
     ("West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"],
     ("West Garden Portal", "West Garden Portal Item"): ["West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
@@ -818,12 +827,14 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
 
 
 dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
-    ("Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Southeast Cross Door", "Overworld Temple Door",
+    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
      "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
      "Overworld Ruined Passage Door"):
-         ["Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Ruined Passage Door",
-          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal"],
+         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+          "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door", "Overworld Southeast Cross Door",
+          "Overworld Old House Door", "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal",
+          "Overworld Spawn Portal"],
     # can laurels through the gate
     ("Old House Front", "Old House Back"):
         ["Old House Front", "Old House Back"],
@@ -836,6 +847,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
@@ -848,8 +861,10 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
      "West Garden Portal", "West Garden Portal Item"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
@@ -908,13 +923,14 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
 
 dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
     # can use ladder storage to get to the well rail
-    ("Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Southeast Cross Door", "Overworld Temple Door",
+    ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+     "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
      "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
      "Overworld Ruined Passage Door"):
-         ["Overworld", "Overworld Belltower", "Overworld Laurels", "Overworld Ruined Passage Door",
-          "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
-          "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
-          "Overworld Well to Furnace Rail"],
+         ["Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
+          "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door", "Overworld Southeast Cross Door",
+          "Overworld Old House Door", "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal",
+          "Overworld Spawn Portal", "Overworld Well to Furnace Rail"],
     # can laurels through the gate
     ("Old House Front", "Old House Back"):
         ["Old House Front", "Old House Back"],
@@ -927,6 +943,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     # can use laurels, ice grapple, or ladder storage to traverse
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
@@ -941,8 +959,10 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
      "West Garden Portal", "West Garden Portal Item"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
