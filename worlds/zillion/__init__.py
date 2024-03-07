@@ -4,20 +4,22 @@ import functools
 import settings
 import threading
 import typing
-from typing import Any, Dict, List, Set, Tuple, Optional, cast
+from typing import Any, Dict, List, Set, Tuple, Optional
 import os
 import logging
 
 from BaseClasses import ItemClassification, LocationProgressType, \
     MultiWorld, Item, CollectionState, Entrance, Tutorial
+
+from .gen_data import GenData
 from .logic import cs_to_zz_locs
 from .region import ZillionLocation, ZillionRegion
 from .options import ZillionOptions, validate
-from .id_maps import item_name_to_id as _item_name_to_id, \
+from .id_maps import ZillionSlotInfo, get_slot_info, item_name_to_id as _item_name_to_id, \
     loc_name_to_id as _loc_name_to_id, make_id_to_others, \
     zz_reg_name_to_reg_name, base_id
 from .item import ZillionItem
-from .patch import ZillionDeltaPatch, get_base_rom_path
+from .patch import ZillionPatch
 
 from zilliandomizer.randomizer import Randomizer as ZzRandomizer
 from zilliandomizer.system import System
@@ -25,7 +27,7 @@ from zilliandomizer.logic_components.items import RESCUE, items as zz_items, Ite
 from zilliandomizer.logic_components.locations import Location as ZzLocation, Req
 from zilliandomizer.options import Chars
 
-from ..AutoWorld import World, WebWorld
+from worlds.AutoWorld import World, WebWorld
 
 
 class ZillionSettings(settings.Group):
@@ -33,8 +35,8 @@ class ZillionSettings(settings.Group):
         """File name of the Zillion US rom"""
         description = "Zillion US ROM File"
         copy_to = "Zillion (UE) [!].sms"
-        assert ZillionDeltaPatch.hash
-        md5s = [ZillionDeltaPatch.hash]
+        assert ZillionPatch.hash
+        md5s = [ZillionPatch.hash]
 
     class RomStart(str):
         """
@@ -133,14 +135,6 @@ class ZillionWorld(World):
     def _make_item_maps(self, start_char: Chars) -> None:
         _id_to_name, _id_to_zz_id, id_to_zz_item = make_id_to_others(start_char)
         self.id_to_zz_item = id_to_zz_item
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        """Checks that a game is capable of generating, usually checks for some base file like a ROM.
-        Not run for unittests since they don't produce output"""
-        rom_file = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
         if not hasattr(self.multiworld, "zillion_logic_cache"):
@@ -311,7 +305,9 @@ class ZillionWorld(World):
                         if sc != to_stay:
                             group_players.remove(p)
                 assert "world" in group
-                cast(ZillionWorld, group["world"])._make_item_maps(to_stay)
+                group_world = group["world"]
+                assert isinstance(group_world, ZillionWorld)
+                group_world._make_item_maps(to_stay)
 
     def post_fill(self) -> None:
         """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
@@ -319,27 +315,28 @@ class ZillionWorld(World):
 
         self.zz_system.post_fill()
 
-    def finalize_item_locations(self) -> None:
+    def finalize_item_locations(self) -> GenData:
         """
         sync zilliandomizer item locations with AP item locations
+
+        return the data needed to generate output
         """
-        rom_dir_name = os.path.dirname(get_base_rom_path())
-        self.zz_system.make_patcher(rom_dir_name)
-        assert self.zz_system.randomizer and self.zz_system.patcher, "generate_early hasn't been called"
-        zz_options = self.zz_system.randomizer.options
+
+        assert self.zz_system.randomizer, "generate_early hasn't been called"
 
         # debug_zz_loc_ids: Dict[str, int] = {}
         empty = zz_items[4]
         multi_item = empty  # a different patcher method differentiates empty from ap multi item
         multi_items: Dict[str, Tuple[str, str]] = {}  # zz_loc_name to (item_name, player_name)
-        for loc in self.multiworld.get_locations(self.player):
-            z_loc = cast(ZillionLocation, loc)
+        for z_loc in self.multiworld.get_locations(self.player):
+            assert isinstance(z_loc, ZillionLocation)
             # debug_zz_loc_ids[z_loc.zz_loc.name] = id(z_loc.zz_loc)
             if z_loc.item is None:
                 self.logger.warn("generate_output location has no item - is that ok?")
                 z_loc.zz_loc.item = empty
             elif z_loc.item.player == self.player:
-                z_item = cast(ZillionItem, z_loc.item)
+                z_item = z_loc.item
+                assert isinstance(z_item, ZillionItem)
                 z_loc.zz_loc.item = z_item.zz_item
             else:  # another player's item
                 # print(f"put multi item in {z_loc.zz_loc.name}")
@@ -368,47 +365,32 @@ class ZillionWorld(World):
                 f"in world {self.player} didn't get an item"
             )
 
-        zz_patcher = self.zz_system.patcher
-
-        zz_patcher.write_locations(self.zz_system.randomizer.regions,
-                                   zz_options.start_char,
-                                   self.zz_system.randomizer.loc_name_2_pretty)
-        self.slot_data_ready.set()
-        rm = self.zz_system.resource_managers
-        assert rm, "missing resource_managers from generate_early"
-        zz_patcher.all_fixes_and_options(zz_options, rm)
-        zz_patcher.set_external_item_interface(zz_options.start_char, zz_options.max_level)
-        zz_patcher.set_multiworld_items(multi_items)
         game_id = self.multiworld.player_name[self.player].encode() + b'\x00' + self.multiworld.seed_name[-6:].encode()
-        zz_patcher.set_rom_to_ram_data(game_id)
+
+        return GenData(multi_items, self.zz_system.get_game(), game_id)
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use world.random here.
-        If you need any last-second randomization, use MultiWorld.per_slot_randoms[slot] instead."""
-        self.finalize_item_locations()
-
-        assert self.zz_system.patcher, "didn't get patcher from finalize_item_locations"
-        # original_rom_bytes = self.zz_patcher.rom
-        patched_rom_bytes = self.zz_system.patcher.get_patched_bytes()
+        """This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead."""
+        try:
+            gen_data = self.finalize_item_locations()
+        except BaseException:
+            raise
+        finally:
+            self.slot_data_ready.set()
 
         out_file_base = self.multiworld.get_out_file_name_base(self.player)
 
-        filename = os.path.join(
-            output_directory,
-            f'{out_file_base}{ZillionDeltaPatch.result_file_ending}'
-        )
-        with open(filename, "wb") as binary_file:
-            binary_file.write(patched_rom_bytes)
-        patch = ZillionDeltaPatch(
-            os.path.splitext(filename)[0] + ZillionDeltaPatch.patch_file_ending,
-            player=self.player,
-            player_name=self.multiworld.player_name[self.player],
-            patched_path=filename
-        )
+        patch_file_name = os.path.join(output_directory, f"{out_file_base}{ZillionPatch.patch_file_ending}")
+        patch = ZillionPatch(patch_file_name,
+                             player=self.player,
+                             player_name=self.multiworld.player_name[self.player],
+                             gen_data_str=gen_data.to_json())
         patch.write()
-        os.remove(filename)
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+        self.logger.debug(f"Zillion player {self.player} finished generate_output")
+
+    def fill_slot_data(self) -> ZillionSlotInfo:  # json of WebHostLib.models.Slot
         """Fill in the `slot_data` field in the `Connected` network package.
         This is a way the generator can give custom data to the client.
         The client will receive this as JSON in the `Connected` response."""
@@ -418,25 +400,10 @@ class ZillionWorld(World):
         # TODO: tell client which canisters are keywords
         # so it can open and get those when restoring doors
 
-        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
-
-        rescues: Dict[str, Any] = {}
         self.slot_data_ready.wait()
-        zz_patcher = self.zz_system.patcher
-        assert zz_patcher, "didn't get patcher from generate_output"
-        for i in (0, 1):
-            if i in zz_patcher.rescue_locations:
-                ri = zz_patcher.rescue_locations[i]
-                rescues[str(i)] = {
-                    "start_char": ri.start_char,
-                    "room_code": ri.room_code,
-                    "mask": ri.mask
-                }
-        return {
-            "start_char": self.zz_system.randomizer.options.start_char,
-            "rescues": rescues,
-            "loc_mem_to_id": zz_patcher.loc_memory_to_loc_id
-        }
+        assert self.zz_system.randomizer, "didn't get randomizer from generate_early"
+        game = self.zz_system.get_game()
+        return get_slot_info(game.regions, game.char_order[0], game.loc_name_2_pretty)
 
     # def modify_multidata(self, multidata: Dict[str, Any]) -> None:
     #     """For deeper modification of server multidata."""
