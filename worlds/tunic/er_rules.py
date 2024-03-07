@@ -929,6 +929,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # The upper Swamp entrance
             ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
              {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
+            ("Overworld", "Overworld Redux, Atoll Redux_upper",
+             {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Furnace entrance, next to the sign that leads to West Garden
             ("Overworld", "Overworld Redux, Furnace_gyro_west",
              {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
@@ -991,6 +993,28 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # Rotating Lights entrance
             ("Overworld Beach", "Overworld Redux, Overworld Cave_",
                 {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
+            # todo: verify the ones below from the atoll ladder, see if there's any missing
+            # Swamp upper entrance
+            ("Overworld Beach", "Overworld Redux, Swamp Redux 2_wall",
+                {"Ladder to Ruined Atoll"}),
+            # Furnace entrance, next to the sign that leads to West Garden
+            ("Overworld Beach", "Overworld Redux, Furnace_gyro_west",
+                {"Ladder to Ruined Atoll"}),
+            # Upper West Garden entry, by the belltower
+            ("Overworld Beach", "Overworld Redux, Archipelagos Redux_upper",
+                {"Ladder to Ruined Atoll"}),
+            # Ruined Passage
+            ("Overworld Beach", "Overworld Redux, Ruins Passage_east",
+                {"Ladder to Ruined Atoll"}),
+            # Well rail, west side. Can ls in town, get extra height by going over the portal pad
+            ("Overworld Beach", "Overworld Redux, Sewer_west_aqueduct",
+                {"Ladder to Ruined Atoll"}),
+            # Well rail, east side. Need some height from the temple stairs
+            ("Overworld Beach", "Overworld Redux, Furnace_gyro_upper_north",
+                {"Ladder to Ruined Atoll"}),
+            # Quarry entry
+            ("Overworld Beach", "Overworld Redux, Darkwoods Tunnel_",
+                {"Ladder to Ruined Atoll"}),
 
             # West Garden main entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
