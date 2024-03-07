@@ -163,6 +163,7 @@ class OSRSWorld(World):
 
     def roll_locations(self):
         locations_required = 0
+        generation_is_fake = hasattr(self.multiworld, "generation_is_fake") #UT specific override
         for item_row in self.item_rows:
             locations_required += item_row.count
 
@@ -195,7 +196,8 @@ class OSRSWorld(World):
                         if task.skills[0].level <= int(self.options.max_combat_level)]
         #if not self.options.progressive_tasks:
         rnd.shuffle(combat_tasks)
-        combat_tasks = combat_tasks[0:self.options.max_combat_tasks]
+        if not generation_is_fake:
+            combat_tasks = combat_tasks[0:self.options.max_combat_tasks]
         combat_weight = self.options.combat_task_weight if len(combat_tasks) > 0 else 0
 
         prayer_tasks = [task for task in self.locations_by_category["Prayer"]
@@ -204,7 +206,8 @@ class OSRSWorld(World):
             rnd.shuffle(prayer_tasks)
         else:
             prayer_tasks.reverse()
-        prayer_tasks = prayer_tasks[0:self.options.max_prayer_tasks]
+        if not generation_is_fake:
+            prayer_tasks = prayer_tasks[0:self.options.max_prayer_tasks]
         prayer_weight = self.options.prayer_task_weight if len(prayer_tasks) > 0 else 0
 
         magic_tasks = [task for task in self.locations_by_category["Magic"]
@@ -213,7 +216,8 @@ class OSRSWorld(World):
             rnd.shuffle(magic_tasks)
         else:
             magic_tasks.reverse()
-        magic_tasks = magic_tasks[0:self.options.max_magic_tasks]
+        if not generation_is_fake:
+            magic_tasks = magic_tasks[0:self.options.max_magic_tasks]
         magic_weight = self.options.magic_task_weight if len(magic_tasks) > 0 else 0
 
         runecraft_tasks = [task for task in self.locations_by_category["Runecraft"]
@@ -222,7 +226,8 @@ class OSRSWorld(World):
             rnd.shuffle(runecraft_tasks)
         else:
             runecraft_tasks.reverse()
-        runecraft_tasks = runecraft_tasks[0:self.options.max_runecraft_tasks]
+        if not generation_is_fake:
+            runecraft_tasks = runecraft_tasks[0:self.options.max_runecraft_tasks]
         runecraft_weight = self.options.runecraft_task_weight if len(runecraft_tasks) > 0 else 0
 
         crafting_tasks = [task for task in self.locations_by_category["Crafting"]
@@ -231,7 +236,8 @@ class OSRSWorld(World):
             rnd.shuffle(crafting_tasks)
         else:
             crafting_tasks.reverse()
-        crafting_tasks = crafting_tasks[0:self.options.max_crafting_tasks]
+        if not generation_is_fake:
+            crafting_tasks = crafting_tasks[0:self.options.max_crafting_tasks]
         crafting_weight = self.options.crafting_task_weight if len(crafting_tasks) > 0 else 0
 
         mining_tasks = [task for task in self.locations_by_category["Mining"]
@@ -240,7 +246,8 @@ class OSRSWorld(World):
             rnd.shuffle(mining_tasks)
         else:
             mining_tasks.reverse()
-        mining_tasks = mining_tasks[0:self.options.max_mining_tasks]
+        if not generation_is_fake:
+            mining_tasks = mining_tasks[0:self.options.max_mining_tasks]
         mining_weight = self.options.mining_task_weight if len(mining_tasks) > 0 else 0
 
         smithing_tasks = [task for task in self.locations_by_category["Smithing"]
@@ -249,7 +256,8 @@ class OSRSWorld(World):
             rnd.shuffle(smithing_tasks)
         else:
             smithing_tasks.reverse()
-        smithing_tasks = smithing_tasks[0:self.options.max_smithing_tasks]
+        if not generation_is_fake:
+            smithing_tasks = smithing_tasks[0:self.options.max_smithing_tasks]
         smithing_weight = self.options.smithing_task_weight if len(smithing_tasks) > 0 else 0
 
         fishing_tasks = [task for task in self.locations_by_category["Fishing"]
@@ -258,7 +266,8 @@ class OSRSWorld(World):
             rnd.shuffle(fishing_tasks)
         else:
             fishing_tasks.reverse()
-        fishing_tasks = fishing_tasks[0:self.options.max_fishing_tasks]
+        if not generation_is_fake:
+            fishing_tasks = fishing_tasks[0:self.options.max_fishing_tasks]
         fishing_weight = self.options.fishing_task_weight if len(fishing_tasks) > 0 else 0
 
         cooking_tasks = [task for task in self.locations_by_category["Cooking"]
@@ -267,7 +276,8 @@ class OSRSWorld(World):
             rnd.shuffle(cooking_tasks)
         else:
             cooking_tasks.reverse()
-        cooking_tasks = cooking_tasks[0:self.options.max_cooking_tasks]
+        if not generation_is_fake:
+            cooking_tasks = cooking_tasks[0:self.options.max_cooking_tasks]
         cooking_weight = self.options.cooking_task_weight if len(cooking_tasks) > 0 else 0
 
         firemaking_tasks = [task for task in self.locations_by_category["Firemaking"]
@@ -276,7 +286,8 @@ class OSRSWorld(World):
             rnd.shuffle(firemaking_tasks)
         else:
             firemaking_tasks.reverse()
-        firemaking_tasks = firemaking_tasks[0:self.options.max_firemaking_tasks]
+        if not generation_is_fake:
+            firemaking_tasks = firemaking_tasks[0:self.options.max_firemaking_tasks]
         firemaking_weight = self.options.firemaking_task_weight if len(firemaking_tasks) > 0 else 0
 
         woodcutting_tasks = [task for task in self.locations_by_category["Woodcutting"]
@@ -285,7 +296,8 @@ class OSRSWorld(World):
             rnd.shuffle(woodcutting_tasks)
         else:
             woodcutting_tasks.reverse()
-        woodcutting_tasks = woodcutting_tasks[0:self.options.max_woodcutting_tasks]
+        if not generation_is_fake:
+            woodcutting_tasks = woodcutting_tasks[0:self.options.max_woodcutting_tasks]
         woodcutting_weight = self.options.woodcutting_task_weight if len(woodcutting_tasks) > 0 else 0
 
         all_tasks = [
@@ -317,7 +329,7 @@ class OSRSWorld(World):
             general_weight
         ]
 
-        while locations_added < locations_required:
+        while locations_added < locations_required or (generation_is_fake and len(all_tasks)>0):
             taskChosen = False
             if all_tasks:
                 chosen_task = rnd.choices(all_tasks, all_weights)[0]
