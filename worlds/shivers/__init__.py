@@ -140,9 +140,9 @@ class ShiversWorld(World):
 
         #Pot piece shuffle location:
         if self.options.location_pot_pieces == 0:
-            self.multiworld.local_items[self.player].value.update({name for name, data in item_table.items() if data.type == "pot"})
+            self.options.local_items.value.update({name for name, data in item_table.items() if data.type == "pot"})
         if self.options.location_pot_pieces == 1:
-            self.multiworld.non_local_items[self.player].value.update({name for name, data in item_table.items() if data.type == "pot"})
+            self.options.non_local_items.value.update({name for name, data in item_table.items() if data.type == "pot"})
 
     def pre_fill(self) -> None:
         # Prefills event storage locations with duplicate pots
