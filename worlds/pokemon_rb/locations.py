@@ -6,7 +6,9 @@ loc_id_start = 172000000
 
 
 def trainersanity(multiworld, player):
-    return multiworld.trainersanity[player]
+    include = multiworld.worlds[player].trainersanity_table.pop(0)
+    multiworld.worlds[player].trainersanity_table.append(include)
+    return include
 
 
 def dexsanity(multiworld, player):

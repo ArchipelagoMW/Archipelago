@@ -263,12 +263,18 @@ class PrizeSanity(Toggle):
     default = 0
 
 
-class TrainerSanity(Toggle):
-    """Add a location check to every trainer in the game, which can be obtained by talking to a trainer after defeating
-    them. Does not affect gym leaders and some scripted event battles (including all Rival, Giovanni, and
-    Cinnabar Gym battles)."""
+class TrainerSanity(NamedRange):
+    """Add location checks to trainers, which can be obtained by talking to a trainer after defeating them. Does not
+    affect gym leaders and some scripted event battles. You may specify a number of trainers to have checks, and in
+    this case they will be randomly selected. There is no in-game indication as to which trainers have checks."""
     display_name = "Trainersanity"
     default = 0
+    range_start = 0
+    range_end = 317
+    special_range_names = {
+        "disabled": 0,
+        "full": 317
+    }
 
 
 class RequirePokedex(Toggle):

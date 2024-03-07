@@ -107,6 +107,7 @@ class PokemonRedBlueWorld(World):
         self.trade_mons = {}
         self.finished_level_scaling = threading.Event()
         self.dexsanity_table = []
+        self.trainersanity_table = []
         self.local_locs = []
 
     @classmethod
@@ -140,7 +141,7 @@ class PokemonRedBlueWorld(World):
             self.multiworld.non_local_items[self.player].value -= self.item_name_groups["Badges"]
 
         if self.multiworld.key_items_only[self.player]:
-            self.multiworld.trainersanity[self.player] = self.multiworld.trainersanity[self.player].from_text("off")
+            self.multiworld.trainersanity[self.player].value = 0
             self.multiworld.dexsanity[self.player].value = 0
             self.multiworld.randomize_hidden_items[self.player] = \
                 self.multiworld.randomize_hidden_items[self.player].from_text("off")
@@ -234,6 +235,13 @@ class PokemonRedBlueWorld(World):
             *(False for _ in range(151 - round(self.multiworld.dexsanity[self.player].value * 1.51)))
         ]
         self.multiworld.random.shuffle(self.dexsanity_table)
+
+        self.trainersanity_table = [
+            *(True for _ in range(self.multiworld.trainersanity[self.player].value)),
+            *(False for _ in range(317 - self.multiworld.dexsanity[self.player].value))
+        ]
+        self.multiworld.random.shuffle(self.trainersanity_table)
+
 
     def create_items(self):
         self.multiworld.itempool += self.item_pool
