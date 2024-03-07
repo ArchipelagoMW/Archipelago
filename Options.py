@@ -879,6 +879,42 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_text(cls, text: str):
+        check_text = text.lower()
+        if "random" in check_text:
+            choice_list = list(cls.valid_keys)
+            if text == "random":
+                choice_count = random.randint(0, len(choice_list)-1)
+            elif text == "random-low":
+                choice_count = int(round(random.triangular(0, len(choice_list)-1, 0)))
+            elif text == "random-high":
+                choice_count = int(round(random.triangular(0, len(choice_list)-1, len(choice_list)-1)))
+            elif text == "random-middle":
+                choice_count = int(round(random.triangular(0, len(choice_list) - 1)))
+            elif text.startswith("random-range-"):
+                textsplit = text.split("-")
+                try:
+                    random_range = [int(textsplit[len(textsplit) - 2]), int(textsplit[len(textsplit) - 1])]
+                except ValueError:
+                    raise ValueError(f"Invalid random range {text} for option {cls.__name__}")
+                random_range.sort()
+                if random_range[0] < 0 or random_range[1] >= len(choice_list):
+                    raise Exception(
+                        f"{random_range[0]}-{random_range[1]} is outside allowed range "
+                        f"{0}-{len(choice_list)} for option {cls.__name__}")
+                if text.startswith("random-range-low"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[0])))
+                elif text.startswith("random-range-high"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1], random_range[1])))
+                elif text.startswith("random-range-middle"):
+                    choice_count = int(round(random.triangular(random_range[0], random_range[1])))
+                else:
+                    choice_count = random.randint(random_range[0], random_range[1])
+            else:
+                raise Exception(f"random text \"{text}\" did not resolve to a recognized pattern. "
+                                f"Acceptable values are: random, random-high, random-middle, random-low, "
+                                f"random-range-low-<min>-<max>, random-range-middle-<min>-<max>, "
+                                f"random-range-high-<min>-<max>, or random-range-<min>-<max>.")
+            return cls(random.sample(choice_list, k=choice_count))
         return cls([option.strip() for option in text.split(",")])
 
     @classmethod
