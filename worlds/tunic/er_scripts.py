@@ -86,6 +86,9 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
 def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # separate the portals into dead ends and non-dead ends
     portal_pairs: Dict[Portal, Portal] = {}
+
+    # todo: if not er, return vanilla connections
+    
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
     plando_connections: List[PlandoConnection] = []
