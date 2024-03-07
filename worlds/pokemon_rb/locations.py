@@ -18,19 +18,19 @@ def dexsanity(multiworld, player):
 
 
 def hidden_items(multiworld, player):
-    return multiworld.randomize_hidden_items[player]
+    return multiworld.worlds[player].options.randomize_hidden_items
 
 
 def hidden_moon_stones(multiworld, player):
-    return multiworld.randomize_hidden_items[player] or multiworld.stonesanity[player]
+    return multiworld.worlds[player].options.randomize_hidden_items or multiworld.worlds[player].options.stonesanity
 
 
 def tea(multiworld, player):
-    return multiworld.tea[player]
+    return multiworld.worlds[player].options.tea
 
 
 def extra_key_items(multiworld, player):
-    return multiworld.extra_key_items[player]
+    return multiworld.worlds[player].options.extra_key_items
 
 
 def always_on(multiworld, player):
@@ -38,15 +38,15 @@ def always_on(multiworld, player):
 
 
 def prizesanity(multiworld, player):
-    return multiworld.prizesanity[player]
+    return multiworld.worlds[player].options.prizesanity
 
 
 def split_card_key(multiworld, player):
-    return multiworld.split_card_key[player].value > 0
+    return multiworld.worlds[player].options.split_card_key.value > 0
 
 
 def not_stonesanity(multiworld, player):
-    return not multiworld.stonesanity[player]
+    return not multiworld.worlds[player].options.stonesanity
 
 
 class LocationData:

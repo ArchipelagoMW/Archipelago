@@ -1484,7 +1484,7 @@ def create_region(multiworld: MultiWorld, player: int, name: str, locations_per_
     for location in locations_per_region.get(name, []):
         location.parent_region = ret
         ret.locations.append(location)
-        if multiworld.randomize_hidden_items[player] == "exclude" and "Hidden" in location.name:
+        if multiworld.worlds[player].options.randomize_hidden_items == "exclude" and "Hidden" in location.name:
             location.progress_type = LocationProgressType.EXCLUDED
     if exits:
         for exit in exits:
@@ -1505,26 +1505,28 @@ def create_regions(self):
     player = self.player
     locations_per_region = {}
 
-    start_inventory = self.multiworld.start_inventory[self.player].value.copy()
-    if self.multiworld.randomize_pokedex[self.player] == "start_with":
+    start_inventory = self.options.start_inventory.value.copy()
+    if self.options.randomize_pokedex == "start_with":
         start_inventory["Pokedex"] = 1
         self.multiworld.push_precollected(self.create_item("Pokedex"))
-    if self.multiworld.exp_all[self.player] == "start_with":
+    if self.options.exp_all == "start_with":
         start_inventory["Exp. All"] = 1
         self.multiworld.push_precollected(self.create_item("Exp. All"))
 
     self.item_pool = []
-    combined_traps = (self.multiworld.poison_trap_weight[self.player].value
-                      + self.multiworld.fire_trap_weight[self.player].value
-                      + self.multiworld.paralyze_trap_weight[self.player].value
-                      + self.multiworld.ice_trap_weight[self.player].value)
+    combined_traps = (self.options.poison_trap_weight.value
+                      + self.options.fire_trap_weight.value
+                      + self.options.paralyze_trap_weight.value
+                      + self.options.ice_trap_weight.value
+                      + self.options.sleep_trap_weight.value)
+
     stones = ["Moon Stone", "Fire Stone", "Water Stone", "Thunder Stone", "Leaf Stone"]
 
     for location in location_data:
         locations_per_region.setdefault(location.region, [])
         # The check for list is so that we don't try to check the item table with a list as a key
         if location.inclusion(multiworld, player) and (isinstance(location.original_item, list) or
-                not (self.multiworld.key_items_only[self.player] and item_table[location.original_item].classification
+                not (self.options.key_items_only and item_table[location.original_item].classification
                 not in (ItemClassification.progression, ItemClassification.progression_skip_balancing) and not
                 location.event)):
             location_object = PokemonRBLocation(player, location.name, location.address, location.rom_address,
@@ -1536,32 +1538,32 @@ def create_regions(self):
 
                 if location.original_item is None:
                     item = self.create_filler()
-                elif location.original_item == "Exp. All" and self.multiworld.exp_all[self.player] == "remove":
+                elif location.original_item == "Exp. All" and self.options.exp_all == "remove":
                     item = self.create_filler()
                 elif location.original_item == "Pokedex":
-                    if self.multiworld.randomize_pokedex[self.player] == "vanilla":
+                    if self.options.randomize_pokedex == "vanilla":
                         location_object.event = True
                         event = True
                     item = self.create_item("Pokedex")
-                elif location.original_item == "Moon Stone" and self.multiworld.stonesanity[self.player]:
+                elif location.original_item == "Moon Stone" and self.options.stonesanity:
                     stone = stones.pop()
                     item = self.create_item(stone)
                 elif location.original_item.startswith("TM"):
-                    if self.multiworld.randomize_tm_moves[self.player]:
+                    if self.options.randomize_tm_moves:
                         item = self.create_item(location.original_item.split(" ")[0])
                     else:
                         item = self.create_item(location.original_item)
-                elif location.original_item == "Card Key" and self.multiworld.split_card_key[self.player] == "on":
+                elif location.original_item == "Card Key" and self.options.split_card_key == "on":
                     item = self.create_item("Card Key 3F")
-                elif "Card Key" in location.original_item and self.multiworld.split_card_key[self.player] == "progressive":
+                elif "Card Key" in location.original_item and self.options.split_card_key == "progressive":
                     item = self.create_item("Progressive Card Key")
                 else:
                     item = self.create_item(location.original_item)
-                    if (item.classification == ItemClassification.filler and self.multiworld.random.randint(1, 100)
-                            <= self.multiworld.trap_percentage[self.player].value and combined_traps != 0):
+                    if (item.classification == ItemClassification.filler and self.random.randint(1, 100)
+                            <= self.options.trap_percentage.value and combined_traps != 0):
                         item = self.create_item(self.select_trap())
 
-                if self.multiworld.key_items_only[self.player] and (not location.event) and (not item.advancement):
+                if self.options.key_items_only and (not location.event) and (not item.advancement):
                     continue
 
                 if item.name in start_inventory and start_inventory[item.name] > 0 and \
@@ -1576,7 +1578,7 @@ def create_regions(self):
                 else:
                     self.item_pool.append(item)
 
-    self.multiworld.random.shuffle(self.item_pool)
+    self.random.shuffle(self.item_pool)
     advancement_items = [item.name for item in self.item_pool if item.advancement] \
                         + [item.name for item in self.multiworld.precollected_items[self.player] if
                            item.advancement]
@@ -1595,11 +1597,11 @@ def create_regions(self):
     if "Progressive Card Key" in advancement_items:
         self.total_key_items += 10
 
-    self.multiworld.cerulean_cave_key_items_condition[self.player].total = \
-        int((self.total_key_items / 100) * self.multiworld.cerulean_cave_key_items_condition[self.player].value)
+    self.options.cerulean_cave_key_items_condition.total = \
+        int((self.total_key_items / 100) * self.options.cerulean_cave_key_items_condition.value)
 
-    self.multiworld.elite_four_key_items_condition[self.player].total = \
-        int((self.total_key_items / 100) * self.multiworld.elite_four_key_items_condition[self.player].value)
+    self.options.elite_four_key_items_condition.total = \
+        int((self.total_key_items / 100) * self.options.elite_four_key_items_condition.value)
 
     regions = [create_region(multiworld, player, region, locations_per_region) for region in warp_data]
     multiworld.regions += regions
@@ -1611,7 +1613,7 @@ def create_regions(self):
     connect(multiworld, player, "Menu", "Pokedex", one_way=True)
     connect(multiworld, player, "Menu", "Evolution", one_way=True)
     connect(multiworld, player, "Menu", "Fossil", lambda state: logic.fossil_checks(state,
-        state.multiworld.second_fossil_check_condition[player].value, player), one_way=True)
+        state.multiworld.worlds[player].options.second_fossil_check_condition.value, player), one_way=True)
     connect(multiworld, player, "Pallet Town", "Route 1")
     connect(multiworld, player, "Route 1", "Viridian City")
     connect(multiworld, player, "Viridian City", "Route 22")
@@ -1619,11 +1621,11 @@ def create_regions(self):
     connect(multiworld, player, "Route 2-SW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 2-NW", "Route 2-Grass", one_way=True)
     connect(multiworld, player, "Route 22 Gate-S", "Route 22 Gate-N",
-            lambda state: logic.has_badges(state, state.multiworld.route_22_gate_condition[player].value, player))
-    connect(multiworld, player, "Route 23-Grass", "Route 23-C", lambda state: logic.has_badges(state, state.multiworld.victory_road_condition[player].value, player))
+            lambda state: logic.has_badges(state, state.multiworld.worlds[player].options.route_22_gate_condition.value, player))
+    connect(multiworld, player, "Route 23-Grass", "Route 23-C", lambda state: logic.has_badges(state, state.multiworld.worlds[player].options.victory_road_condition.value, player))
     connect(multiworld, player, "Route 23-Grass", "Route 23-S", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Viridian City-N", "Viridian City-G", lambda state:
-                     logic.has_badges(state, state.multiworld.viridian_gym_condition[player].value, player))
+                     logic.has_badges(state, state.multiworld.worlds[player].options.viridian_gym_condition.value, player))
     connect(multiworld, player, "Route 2-SW", "Route 2-SE", lambda state: logic.can_cut(state, player))
     connect(multiworld, player, "Route 2-NW", "Route 2-NE", lambda state: logic.can_cut(state, player))
     connect(multiworld, player, "Route 2-E", "Route 2-NE", lambda state: logic.can_cut(state, player))
@@ -1653,7 +1655,7 @@ def create_regions(self):
     connect(multiworld, player, "Route 24", "Route 25")
     connect(multiworld, player, "Route 9", "Route 10-N")
     connect(multiworld, player, "Route 10-N", "Route 10-C", lambda state: logic.can_surf(state, player))
-    connect(multiworld, player, "Route 10-C", "Route 10-P", lambda state: state.has("Plant Key", player) or not state.multiworld.extra_key_items[player].value)
+    connect(multiworld, player, "Route 10-C", "Route 10-P", lambda state: state.has("Plant Key", player) or not state.multiworld.worlds[player].options.extra_key_items.value)
     connect(multiworld, player, "Pallet Town", "Pallet/Viridian Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Viridian City", "Pallet/Viridian Fishing", lambda state: state.has("Super Rod", player), one_way=True)
     connect(multiworld, player, "Route 22", "Route 22 Fishing", lambda state: state.has("Super Rod", player), one_way=True)
@@ -1723,19 +1725,19 @@ def create_regions(self):
     connect(multiworld, player, "Route 12-L", "Lavender Town")
     connect(multiworld, player, "Route 10-S", "Lavender Town")
     connect(multiworld, player, "Route 8", "Lavender Town")
-    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and state.multiworld.poke_doll_skip[player]))
+    connect(multiworld, player, "Pokemon Tower 6F", "Pokemon Tower 6F-S", lambda state: state.has("Silph Scope", player) or (state.has("Buy Poke Doll", player) and state.multiworld.worlds[player].options.poke_doll_skip))
     connect(multiworld, player, "Route 8", "Route 8-Grass", lambda state: logic.can_cut(state, player), one_way=True)
     connect(multiworld, player, "Route 7", "Celadon City")
     connect(multiworld, player, "Celadon City", "Celadon City-G", lambda state: logic.can_cut(state, player))
     connect(multiworld, player, "Celadon City", "Route 16-E")
-    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.bicycle_gate_skips[player] == "in_logic")
-    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.bicycle_gate_skips[player] == "in_logic")
+    connect(multiworld, player, "Route 18 Gate 1F-W", "Route 18 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.worlds[player].options.bicycle_gate_skips == "in_logic")
+    connect(multiworld, player, "Route 16 Gate 1F-W", "Route 16 Gate 1F-E", lambda state: state.has("Bicycle", player) or state.multiworld.worlds[player].options.bicycle_gate_skips == "in_logic")
     connect(multiworld, player, "Route 16-E", "Route 16-NE", lambda state: logic.can_cut(state, player))
     connect(multiworld, player, "Route 16-E", "Route 16-C", lambda state: state.has("Poke Flute", player))
     connect(multiworld, player, "Route 17", "Route 16-SW")
     connect(multiworld, player, "Route 17", "Route 18-W")
     # connect(multiworld, player, "Pokemon Mansion 2F", "Pokemon Mansion 2F-NW", one_way=True)
-    connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N", lambda state: state.has("Safari Pass", player) or not state.multiworld.extra_key_items[player].value, one_way=True)
+    connect(multiworld, player, "Safari Zone Gate-S", "Safari Zone Gate-N", lambda state: state.has("Safari Pass", player) or not state.multiworld.worlds[player].options.extra_key_items.value, one_way=True)
     connect(multiworld, player, "Fuchsia City", "Route 15-W")
     connect(multiworld, player, "Fuchsia City", "Route 18-E")
     connect(multiworld, player, "Route 15", "Route 14")
@@ -1743,7 +1745,7 @@ def create_regions(self):
     connect(multiworld, player, "Route 14", "Route 14-Grass", lambda state: logic.can_cut(state, player), one_way=True)
     connect(multiworld, player, "Route 13", "Route 13-Grass", lambda state: logic.can_cut(state, player), one_way=True)
     connect(multiworld, player, "Route 14", "Route 13")
-    connect(multiworld, player, "Route 13", "Route 13-E", lambda state: logic.can_strength(state, player) or logic.can_surf(state, player) or not state.multiworld.extra_strength_boulders[player].value)
+    connect(multiworld, player, "Route 13", "Route 13-E", lambda state: logic.can_strength(state, player) or logic.can_surf(state, player) or not state.multiworld.worlds[player].options.extra_strength_boulders.value)
     connect(multiworld, player, "Route 12-S", "Route 13-E")
     connect(multiworld, player, "Fuchsia City", "Route 19-N")
     connect(multiworld, player, "Route 19-N", "Route 19-S", lambda state: logic.can_surf(state, player))
@@ -1801,17 +1803,17 @@ def create_regions(self):
     connect(multiworld, player, "Seafoam Islands B4F", "Seafoam Islands B4F-W", lambda state: logic.can_surf(state, player), one_way=True)
     connect(multiworld, player, "Seafoam Islands B4F-W", "Seafoam Islands B4F", one_way=True)
     connect(multiworld, player, "Seafoam Islands B3F", "Seafoam Islands B3F-SE", lambda state: logic.can_surf(state, player) and logic.can_strength(state, player) and state.has("Seafoam Exit Boulder", player, 6))
-    connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.old_man[player].value == 2 or logic.can_cut(state, player))
-    connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, player) or not state.multiworld.extra_strength_boulders[player])
+    connect(multiworld, player, "Viridian City", "Viridian City-N", lambda state: state.has("Oak's Parcel", player) or state.multiworld.worlds[player].options.old_man.value == 2 or logic.can_cut(state, player))
+    connect(multiworld, player, "Route 11", "Route 11-C", lambda state: logic.can_strength(state, player) or not state.multiworld.worlds[player].options.extra_strength_boulders)
     connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-G", lambda state: state.has("Secret Key", player))
-    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M", lambda state: state.has("Mansion Key", player) or not state.multiworld.extra_key_items[player].value)
+    connect(multiworld, player, "Cinnabar Island", "Cinnabar Island-M", lambda state: state.has("Mansion Key", player) or not state.multiworld.worlds[player].options.extra_key_items.value)
     connect(multiworld, player, "Route 21", "Cinnabar Island", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Pallet Town", "Route 21", lambda state: logic.can_surf(state, player))
     connect(multiworld, player, "Celadon Gym", "Celadon Gym-C", lambda state: logic.can_cut(state, player), one_way=True)
-    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not state.multiworld.extra_key_items[player]) or state.has("Hideout Key", player), one_way=True)
+    connect(multiworld, player, "Celadon Game Corner", "Celadon Game Corner-Hidden Stairs", lambda state: (not state.multiworld.worlds[player].options.extra_key_items) or state.has("Hideout Key", player), one_way=True)
     connect(multiworld, player, "Celadon Game Corner-Hidden Stairs", "Celadon Game Corner", one_way=True)
     connect(multiworld, player, "Rocket Hideout B1F-SE", "Rocket Hideout B1F", one_way=True)
-    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.elite_four_badges_condition[player].value, player) and logic.has_pokemon(state, state.multiworld.elite_four_pokedex_condition[player].total, player) and logic.has_key_items(state, state.multiworld.elite_four_key_items_condition[player].total, player) and (state.has("Pokedex", player, int(state.multiworld.elite_four_pokedex_condition[player].total > 1) * state.multiworld.require_pokedex[player].value)))
+    connect(multiworld, player, "Indigo Plateau Lobby", "Indigo Plateau Lobby-N", lambda state: logic.has_badges(state, state.multiworld.worlds[player].options.elite_four_badges_condition.value, player) and logic.has_pokemon(state, state.multiworld.worlds[player].options.elite_four_pokedex_condition.total, player) and logic.has_key_items(state, state.multiworld.worlds[player].options.elite_four_key_items_condition.total, player) and (state.has("Pokedex", player, int(state.multiworld.worlds[player].options.elite_four_pokedex_condition.total > 1) * state.multiworld.worlds[player].options.require_pokedex.value)))
     connect(multiworld, player, "Pokemon Mansion 3F", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SW", "Pokemon Mansion 3F-Wild", one_way=True)
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 3F-Wild", one_way=True)
@@ -1860,29 +1862,29 @@ def create_regions(self):
     connect(multiworld, player, "Silph Co 9F-NW", "Silph Co 9F-SW", lambda state: logic.card_key(state, 9, player))
     connect(multiworld, player, "Silph Co 10F", "Silph Co 10F-SE", lambda state: logic.card_key(state, 10, player))
     connect(multiworld, player, "Silph Co 11F-W", "Silph Co 11F-C", lambda state: logic.card_key(state, 11, player))
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-1F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-2F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-3F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-4F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-5F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-6F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-7F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-8F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-9F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-10F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-11F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-1F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-2F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-3F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-4F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-5F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-6F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-7F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-8F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-9F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-10F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Silph Co Elevator", "Silph Co Elevator-11F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
     connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B1F", lambda state: state.has("Lift Key", player))
     connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B2F", lambda state: state.has("Lift Key", player))
     connect(multiworld, player, "Rocket Hideout Elevator", "Rocket Hideout Elevator-B4F", lambda state: state.has("Lift Key", player))
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-1F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-2F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-3F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
-    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F", lambda state: (not state.multiworld.all_elevators_locked[player]) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-1F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-2F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-3F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-4F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
+    connect(multiworld, player, "Celadon Department Store Elevator", "Celadon Department Store Elevator-5F", lambda state: (not state.multiworld.worlds[player].options.all_elevators_locked) or state.has("Lift Key", player)),
     connect(multiworld, player, "Route 23-N", "Indigo Plateau")
     connect(multiworld, player, "Cerulean City-Water", "Cerulean City-Cave", lambda state:
-        logic.has_badges(state, self.multiworld.cerulean_cave_badges_condition[player].value, player) and
-        logic.has_key_items(state, self.multiworld.cerulean_cave_key_items_condition[player].total, player) and logic.can_surf(state, player))
+        logic.has_badges(state, self.options.cerulean_cave_badges_condition.value, player) and
+        logic.has_key_items(state, self.options.cerulean_cave_key_items_condition.total, player) and logic.can_surf(state, player))
 
     # access to any part of a city will enable flying to the Pokemon Center
     connect(multiworld, player, "Cerulean City-Cave", "Cerulean City", lambda state: logic.can_fly(state, player), one_way=True)
@@ -1917,17 +1919,17 @@ def create_regions(self):
     connect(multiworld, player, "Pokemon Mansion 3F-SE", "Pokemon Mansion 1F-SE", one_way=True)
     connect(multiworld, player, "Victory Road 3F-S", "Victory Road 2F-C", one_way=True)
 
-    if multiworld.worlds[player].fly_map != "Pallet Town":
-        connect(multiworld, player, "Menu", multiworld.worlds[player].fly_map,
+    if self.fly_map != "Pallet Town":
+        connect(multiworld, player, "Menu", self.fly_map,
                 lambda state: logic.can_fly(state, player), one_way=True, name="Free Fly Location")
 
-    if multiworld.worlds[player].town_map_fly_map != "Pallet Town":
-        connect(multiworld, player, "Menu", multiworld.worlds[player].town_map_fly_map,
+    if self.town_map_fly_map != "Pallet Town":
+        connect(multiworld, player, "Menu", self.town_map_fly_map,
                 lambda state: logic.can_fly(state, player) and state.has("Town Map", player), one_way=True,
                 name="Town Map Fly Location")
 
     cache = multiworld.regions.entrance_cache[self.player].copy()
-    if multiworld.badgesanity[player] or multiworld.door_shuffle[player] in ("off", "simple"):
+    if self.options.badgesanity or self.options.door_shuffle in ("off", "simple"):
         badges = None
         badge_locs = None
     else:
@@ -1967,36 +1969,36 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             shuffle = True
             interior = False
             if not outdoor_map(region.name) and not outdoor_map(entrance_data['to']['map']):
-                if multiworld.door_shuffle[player] not in ("full", "insanity", "decoupled"):
+                if world.options.door_shuffle not in ("full", "insanity", "decoupled"):
                     shuffle = False
                 interior = True
-            if multiworld.door_shuffle[player] == "simple":
+            if world.options.door_shuffle == "simple":
                 if sorted([entrance_data['to']['map'], region.name]) == ["Celadon Game Corner-Hidden Stairs",
                                                                          "Rocket Hideout B1F"]:
                     shuffle = True
                 elif sorted([entrance_data['to']['map'], region.name]) == ["Celadon City", "Celadon Game Corner"]:
                     shuffle = False
-            if (multiworld.randomize_rock_tunnel[player] and "Rock Tunnel" in region.name and "Rock Tunnel" in
+            if (world.options.randomize_rock_tunnel and "Rock Tunnel" in region.name and "Rock Tunnel" in
                     entrance_data['to']['map']):
                 shuffle = False
             elif (f"{region.name} to {entrance_data['to']['map']}" if "name" not in entrance_data else
                     entrance_data["name"]) in silph_co_warps + saffron_gym_warps:
-                if multiworld.warp_tile_shuffle[player]:
+                if world.options.warp_tile_shuffle:
                     shuffle = True
-                    if multiworld.warp_tile_shuffle[player] == "mixed" and multiworld.door_shuffle[player] == "full":
+                    if world.options.warp_tile_shuffle == "mixed" and world.options.door_shuffle == "full":
                         interior = True
                     else:
                         interior = False
                 else:
                     shuffle = False
-            elif not multiworld.door_shuffle[player]:
+            elif not world.options.door_shuffle:
                 shuffle = False
             if shuffle:
                 entrance = PokemonRBWarp(player, f"{region.name} to {entrance_data['to']['map']}" if "name" not in
                                          entrance_data else entrance_data["name"], region, entrance_data["id"],
                                          entrance_data["address"], entrance_data["flags"] if "flags" in
                                          entrance_data else "")
-                if interior and multiworld.door_shuffle[player] == "full":
+                if interior and world.options.door_shuffle == "full":
                     full_interiors.append(entrance)
                 else:
                     entrances.append(entrance)
@@ -2008,22 +2010,22 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
     forced_connections = set()
     one_way_forced_connections = set()
 
-    if multiworld.door_shuffle[player]:
-        if multiworld.door_shuffle[player] in ("full", "insanity", "decoupled"):
+    if world.options.door_shuffle:
+        if world.options.door_shuffle in ("full", "insanity", "decoupled"):
             safari_zone_doors = [door for pair in safari_zone_connections for door in pair]
             safari_zone_doors.sort()
             order = ["Center", "East", "North", "West"]
-            multiworld.random.shuffle(order)
+            world.random.shuffle(order)
             usable_doors = ["Safari Zone Gate-N to Safari Zone Center-S"]
             for section in order:
                 section_doors = [door for door in safari_zone_doors if door.startswith(f"Safari Zone {section}")]
-                connect_door_a = multiworld.random.choice(usable_doors)
-                connect_door_b = multiworld.random.choice(section_doors)
+                connect_door_a = world.random.choice(usable_doors)
+                connect_door_b = world.random.choice(section_doors)
                 usable_doors.remove(connect_door_a)
                 section_doors.remove(connect_door_b)
                 forced_connections.add((connect_door_a, connect_door_b))
                 usable_doors += section_doors
-                multiworld.random.shuffle(usable_doors)
+                world.random.shuffle(usable_doors)
             while usable_doors:
                 forced_connections.add((usable_doors.pop(), usable_doors.pop()))
         else:
@@ -2031,32 +2033,32 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         usable_safe_rooms = safe_rooms.copy()
 
-        if multiworld.door_shuffle[player] == "simple":
+        if world.options.door_shuffle == "simple":
             forced_connections.update(simple_mandatory_connections)
         else:
             usable_safe_rooms += pokemarts
-            if multiworld.key_items_only[player]:
+            if world.options.key_items_only:
                 usable_safe_rooms.remove("Viridian Pokemart to Viridian City")
-        if multiworld.door_shuffle[player] in ("full", "insanity", "decoupled"):
+        if world.options.door_shuffle in ("full", "insanity", "decoupled"):
             forced_connections.update(full_mandatory_connections)
-            r = multiworld.random.randint(0, 3)
+            r = world.random.randint(0, 3)
             if r == 2:
                 forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
                                         "Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E"))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
-                                        multiworld.random.choice(mansion_stair_destinations + mansion_dead_ends
+                                        world.random.choice(mansion_stair_destinations + mansion_dead_ends
                                                                  + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
-                if multiworld.door_shuffle[player] == "full":
+                if world.options.door_shuffle == "full":
                     forced_connections.add(("Pokemon Mansion 1F to Pokemon Mansion 2F",
                                             "Pokemon Mansion 3F to Pokemon Mansion 2F"))
             elif r == 3:
-                dead_end = multiworld.random.randint(0, 1)
+                dead_end = world.random.randint(0, 1)
                 forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
                                         mansion_dead_ends[dead_end]))
                 forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
                                         "Pokemon Mansion B1F to Pokemon Mansion 1F-SE"))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
-                                        multiworld.random.choice(mansion_stair_destinations
+                                        world.random.choice(mansion_stair_destinations
                                                                  + [mansion_dead_ends[dead_end ^ 1]])))
             else:
                 forced_connections.add(("Pokemon Mansion 3F-SE to Pokemon Mansion 2F-E",
@@ -2064,40 +2066,40 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 forced_connections.add(("Pokemon Mansion 1F-SE to Pokemon Mansion B1F",
                                         mansion_dead_ends[r ^ 1]))
                 forced_connections.add(("Pokemon Mansion 2F to Pokemon Mansion 3F",
-                                        multiworld.random.choice(mansion_stair_destinations
+                                        world.random.choice(mansion_stair_destinations
                                                                  + ["Pokemon Mansion B1F to Pokemon Mansion 1F-SE"])))
 
-            if multiworld.door_shuffle[player] in ("insanity", "decoupled"):
+            if world.options.door_shuffle in ("insanity", "decoupled"):
                 usable_safe_rooms += insanity_safe_rooms
 
-        safe_rooms_sample = multiworld.random.sample(usable_safe_rooms, 6)
+        safe_rooms_sample = world.random.sample(usable_safe_rooms, 6)
         pallet_safe_room = safe_rooms_sample[-1]
 
-        for a, b in zip(multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
+        for a, b in zip(world.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
                                                   "Pallet Town to Rival's House"], 3), ["Oak's Lab to Pallet Town",
                                                   "Player's House 1F to Pallet Town", pallet_safe_room]):
             one_way_forced_connections.add((a, b))
 
-        if multiworld.door_shuffle[player] == "decoupled":
+        if world.options.door_shuffle == "decoupled":
             for a, b in zip(["Oak's Lab to Pallet Town", "Player's House 1F to Pallet Town", pallet_safe_room],
-                            multiworld.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
+                            world.random.sample(["Pallet Town to Player's House 1F", "Pallet Town to Oak's Lab",
                                                       "Pallet Town to Rival's House"], 3)):
                 one_way_forced_connections.add((a, b))
 
         for a, b in zip(safari_zone_houses, safe_rooms_sample):
             one_way_forced_connections.add((a, b))
-        if multiworld.door_shuffle[player] == "decoupled":
-            for a, b in zip(multiworld.random.sample(safe_rooms_sample[:-1], len(safe_rooms_sample) - 1),
+        if world.options.door_shuffle == "decoupled":
+            for a, b in zip(world.random.sample(safe_rooms_sample[:-1], len(safe_rooms_sample) - 1),
                             safari_zone_houses):
                 one_way_forced_connections.add((a, b))
 
-        if multiworld.door_shuffle[player] == "simple":
+        if world.options.door_shuffle == "simple":
             # force Indigo Plateau Lobby to vanilla location on simple, otherwise shuffle with Pokemon Centers.
-            for a, b in zip(multiworld.random.sample(pokemon_center_entrances[0:-1], 11), pokemon_centers[0:-1]):
+            for a, b in zip(world.random.sample(pokemon_center_entrances[0:-1], 11), pokemon_centers[0:-1]):
                 forced_connections.add((a, b))
             forced_connections.add((pokemon_center_entrances[-1], pokemon_centers[-1]))
-            forced_pokemarts = multiworld.random.sample(pokemart_entrances, 8)
-            if multiworld.key_items_only[player]:
+            forced_pokemarts = world.random.sample(pokemart_entrances, 8)
+            if world.options.key_items_only:
                 forced_pokemarts.sort(key=lambda i: i[0] != "Viridian Pokemart to Viridian City")
             for a, b in zip(forced_pokemarts, pokemarts):
                 forced_connections.add((a, b))
@@ -2106,21 +2108,21 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             # fly / blackout warps. Rather than mess with those coordinates (besides in Pallet Town) or have players
             # warping outside an entrance that isn't the Pokemon Center, just always put Pokemon Centers at Pokemon
             # Center entrances
-            for a, b in zip(multiworld.random.sample(pokemon_center_entrances, 12), pokemon_centers):
+            for a, b in zip(world.random.sample(pokemon_center_entrances, 12), pokemon_centers):
                 one_way_forced_connections.add((a, b))
             # Ensure a Pokemart is available at the beginning of the game
-            if multiworld.key_items_only[player]:
-                one_way_forced_connections.add((multiworld.random.choice(initial_doors),
+            if world.options.key_items_only:
+                one_way_forced_connections.add((world.random.choice(initial_doors),
                                                 "Viridian Pokemart to Viridian City"))
 
             elif "Pokemart" not in pallet_safe_room:
-                one_way_forced_connections.add((multiworld.random.choice(initial_doors), multiworld.random.choice(
+                one_way_forced_connections.add((world.random.choice(initial_doors), world.random.choice(
                         [mart for mart in pokemarts if mart not in safe_rooms_sample])))
 
-    if multiworld.warp_tile_shuffle[player] == "shuffle" or (multiworld.warp_tile_shuffle[player] == "mixed"
-                                                             and multiworld.door_shuffle[player]
-                                                             in ("off", "simple", "interiors")):
-        warps = multiworld.random.sample(silph_co_warps, len(silph_co_warps))
+    if world.options.warp_tile_shuffle == "shuffle" or (world.options.warp_tile_shuffle == "mixed"
+                                                        and world.options.door_shuffle
+                                                        in ("off", "simple", "interiors")):
+        warps = world.random.sample(silph_co_warps, len(silph_co_warps))
         # The only warp tiles never reachable from the stairs/elevators are the two 7F-NW warps (where the rival is)
         # and the final 11F-W warp. As long as the two 7F-NW warps aren't connected to each other, everything should
         # always be reachable.
@@ -2131,9 +2133,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
         # Shuffle Saffron Gym sections, then connect one warp from each section to the next.
         # Then connect the rest at random.
-        warps = multiworld.random.sample(saffron_gym_warps, len(saffron_gym_warps))
+        warps = world.random.sample(saffron_gym_warps, len(saffron_gym_warps))
         solution = ["SW", "W", "NW", "N", "NE", "E", "SE"]
-        multiworld.random.shuffle(solution)
+        world.random.shuffle(solution)
         solution = ["S"] + solution + ["C"]
         for i in range(len(solution) - 1):
             f, t = solution[i], solution[i + 1]
@@ -2153,7 +2155,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             forced_connections.add((warps.pop(), warps.pop(),))
 
     dc_destinations = None
-    if multiworld.door_shuffle[player] == "decoupled":
+    if world.options.door_shuffle == "decoupled":
         dc_destinations = entrances.copy()
         for pair in one_way_forced_connections:
             entrance_a = multiworld.get_entrance(pair[0], player)
@@ -2181,11 +2183,11 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             full_interiors.remove(entrance_b)
         else:
             raise DoorShuffleException("Attempted to force connection with entrance not in any entrance pool, likely because it tried to force an entrance to connect twice.")
-        if multiworld.door_shuffle[player] == "decoupled":
+        if world.options.door_shuffle == "decoupled":
             dc_destinations.remove(entrance_a)
             dc_destinations.remove(entrance_b)
 
-    if multiworld.door_shuffle[player] == "simple":
+    if world.options.door_shuffle == "simple":
         def connect_connecting_interiors(interior_exits, exterior_entrances):
             for interior, exterior in zip(interior_exits, exterior_entrances):
                 for a, b in zip(interior, exterior):
@@ -2224,39 +2226,39 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         single_entrance_dungeon_entrances = dungeon_entrances.copy()
 
         for i in range(2):
-            if not multiworld.random.randint(0, 2):
+            if not world.random.randint(0, 2):
                 placed_connecting_interior_dungeons.append(multi_purpose_dungeons[i])
                 interior_dungeon_entrances.append([multi_purpose_dungeon_entrances[i], None])
             else:
                 placed_single_entrance_dungeons.append(multi_purpose_dungeons[i])
                 single_entrance_dungeon_entrances.append(multi_purpose_dungeon_entrances[i])
 
-        multiworld.random.shuffle(placed_connecting_interior_dungeons)
+        world.random.shuffle(placed_connecting_interior_dungeons)
         while placed_connecting_interior_dungeons[0] in unsafe_connecting_interior_dungeons:
-            multiworld.random.shuffle(placed_connecting_interior_dungeons)
+            world.random.shuffle(placed_connecting_interior_dungeons)
         connect_connecting_interiors(placed_connecting_interior_dungeons, interior_dungeon_entrances)
 
         interiors = connecting_interiors.copy()
-        multiworld.random.shuffle(interiors)
+        world.random.shuffle(interiors)
         while ((connecting_interiors[2] in (interiors[2], interiors[10], interiors[11])  # Dept Store at Dept Store
                                                                                          # or Rt 16 Gate S or N
                 and (interiors[11] in connecting_interiors[13:17]  # Saffron Gate at Rt 16 Gate S
                      or interiors[12] in connecting_interiors[13:17]))  # Saffron Gate at Rt 18 Gate
                 and interiors[15] in connecting_interiors[13:17]  # Saffron Gate at Rt 7 Gate
                 and interiors[1] in connecting_interiors[13:17]  # Saffron Gate at Rt 7-8 Underground Path
-                and (not multiworld.tea[player]) and multiworld.worlds[player].fly_map != "Celadon City"
-                and multiworld.worlds[player].town_map_fly_map != "Celadon City"):
-            multiworld.random.shuffle(interiors)
+                and (not world.options.tea) and world.fly_map != "Celadon City"
+                and world.town_map_fly_map != "Celadon City"):
+            world.random.shuffle(interiors)
 
         connect_connecting_interiors(interiors, connecting_interior_entrances)
         placed_gyms = gyms.copy()
-        multiworld.random.shuffle(placed_gyms)
+        world.random.shuffle(placed_gyms)
 
         # Celadon Gym requires Cut access to reach the Gym Leader. There are some scenarios where its placement
         # could make badge placement impossible
         def celadon_gym_problem():
             # Badgesanity or no badges needed for HM moves means gyms can go anywhere
-            if multiworld.badgesanity[player] or not multiworld.badges_needed_for_hm_moves[player]:
+            if world.options.badgesanity or not world.options.badges_needed_for_hm_moves:
                 return False
 
             # Celadon Gym in Pewter City and need one or more badges for Viridian City gym.
@@ -2271,21 +2273,21 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             # At this point we need to see if we can get beyond Pewter/Cinnabar with just one badge
 
             # Can get Fly access from Pewter City gym and fly beyond Pewter/Cinnabar
-            if multiworld.worlds[player].fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
-                    "Indigo Plateau") and multiworld.worlds[player].town_map_fly_map not in ("Pallet Town",
+            if world.fly_map not in ("Pallet Town", "Viridian City", "Cinnabar Island",
+                    "Indigo Plateau") and world.town_map_fly_map not in ("Pallet Town",
                     "Viridian City", "Cinnabar Island", "Indigo Plateau"):
                 return False
 
             # Route 3 condition is boulder badge but Mt Moon entrance leads to safe dungeons or Rock Tunnel
-            if multiworld.route_3_condition[player] == "boulder_badge" and placed_connecting_interior_dungeons[2] not \
+            if world.options.route_3_condition == "boulder_badge" and placed_connecting_interior_dungeons[2] not \
                     in (unsafe_connecting_interior_dungeons[0], unsafe_connecting_interior_dungeons[2]):
                 return False
 
             # Route 3 condition is Defeat Brock and he is in Pewter City, or any other condition besides Boulder Badge.
             # Any badge can land in Pewter City, so the only problematic dungeon at Mt Moon is Seafoam Islands since
             # it requires two badges
-            if (((multiworld.route_3_condition[player] == "defeat_brock" and gyms[0] == placed_gyms[0])
-                    or multiworld.route_3_condition[player] not in ("defeat_brock", "boulder_badge"))
+            if (((world.options.route_3_condition == "defeat_brock" and gyms[0] == placed_gyms[0])
+                    or world.options.route_3_condition not in ("defeat_brock", "boulder_badge"))
                     and placed_connecting_interior_dungeons[2] != unsafe_connecting_interior_dungeons[0]):
                 return False
 
@@ -2307,31 +2309,31 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     and interiors[0] in connecting_interiors[13:17]  # Saffron Gate at Underground Path North South
                     and interiors[13] in connecting_interiors[13:17]  # Saffron Gate at Route 5 Saffron Gate
                     and multi_purpose_dungeons[0] == placed_connecting_interior_dungeons[4]  # Pokémon Mansion at Rock Tunnel, which is
-                    and (not multiworld.tea[player])                                         # not traversable backwards
-                    and multiworld.route_3_condition[player] == "defeat_brock"
-                    and multiworld.worlds[player].fly_map != "Cerulean City"
-                    and multiworld.worlds[player].town_map_fly_map != "Cerulean City"):
+                    and (not world.options.tea)                                         # not traversable backwards
+                    and world.options.route_3_condition == "defeat_brock"
+                    and world.fly_map != "Cerulean City"
+                    and world.town_map_fly_map != "Cerulean City"):
                 return True
 
         while celadon_gym_problem() or cerulean_city_problem():
-            multiworld.random.shuffle(placed_gyms)
+            world.random.shuffle(placed_gyms)
 
         connect_interiors(placed_gyms, gym_entrances)
 
-        multiworld.random.shuffle(placed_single_entrance_dungeons)
+        world.random.shuffle(placed_single_entrance_dungeons)
         while dungeons[4] == placed_single_entrance_dungeons[0]:  # Pokémon Tower at Silph Co
-            multiworld.random.shuffle(placed_single_entrance_dungeons)
+            world.random.shuffle(placed_single_entrance_dungeons)
         connect_interiors(placed_single_entrance_dungeons, single_entrance_dungeon_entrances)
 
         remaining_entrances = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name)]
-        multiworld.random.shuffle(remaining_entrances)
+        world.random.shuffle(remaining_entrances)
         remaining_interiors = [entrance for entrance in entrances if entrance not in remaining_entrances]
         for entrance_a, entrance_b in zip(remaining_entrances, remaining_interiors):
             entrance_a.connect(entrance_b)
             entrance_b.connect(entrance_a)
-    elif multiworld.door_shuffle[player]:
-        if multiworld.door_shuffle[player] == "full":
-            multiworld.random.shuffle(full_interiors)
+    elif world.options.door_shuffle:
+        if world.options.door_shuffle == "full":
+            world.random.shuffle(full_interiors)
 
             def search_for_exit(entrance, region, checked_regions):
                 checked_regions.add(region)
@@ -2365,7 +2367,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                     break
 
             loop_out_interiors = []
-            multiworld.random.shuffle(entrances)
+            world.random.shuffle(entrances)
             for entrance in reversed(entrances):
                 if not outdoor_map(entrance.parent_region.name):
                     found_exit = search_for_exit(entrance, entrance.parent_region, set())
@@ -2382,26 +2384,26 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 entrance_a.connect(entrance_b)
                 entrance_b.connect(entrance_a)
 
-        elif multiworld.door_shuffle[player] == "interiors":
+        elif world.options.door_shuffle == "interiors":
             loop_out_interiors = [[multiworld.get_entrance(e[0], player), multiworld.get_entrance(e[1], player)] for e
-                                  in multiworld.random.sample(unsafe_connecting_interior_dungeons
-                                                              + safe_connecting_interior_dungeons, 2)]
+                                  in world.random.sample(unsafe_connecting_interior_dungeons
+                                                         + safe_connecting_interior_dungeons, 2)]
             entrances.remove(loop_out_interiors[0][1])
             entrances.remove(loop_out_interiors[1][1])
-        if not multiworld.badgesanity[player]:
-            multiworld.random.shuffle(badges)
-            while badges[3].name == "Cascade Badge" and multiworld.badges_needed_for_hm_moves[player]:
-                multiworld.random.shuffle(badges)
+        if not world.options.badgesanity:
+            world.random.shuffle(badges)
+            while badges[3].name == "Cascade Badge" and world.options.badges_needed_for_hm_moves:
+                world.random.shuffle(badges)
             for badge, loc in zip(badges, badge_locs):
                 loc.place_locked_item(badge)
 
         state = multiworld.state.copy()
         for item, data in item_table.items():
             if (data.id or item in poke_data.pokemon_data) and data.classification == ItemClassification.progression \
-                    and ("Badge" not in item or multiworld.badgesanity[player]):
+                    and ("Badge" not in item or world.options.badgesanity):
                 state.collect(world.create_item(item))
 
-        multiworld.random.shuffle(entrances)
+        world.random.shuffle(entrances)
         reachable_entrances = []
 
         relevant_events = [
@@ -2417,13 +2419,13 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             "Victory Road Boulder",
             "Silph Co Liberated",
         ]
-        if multiworld.robbed_house_officer[player]:
+        if world.options.robbed_house_officer:
             relevant_events.append("Help Bill")
-        if multiworld.tea[player]:
+        if world.options.tea:
             relevant_events.append("Vending Machine Drinks")
-        if multiworld.route_3_condition[player] == "defeat_brock":
+        if world.options.route_3_condition == "defeat_brock":
             relevant_events.append("Defeat Brock")
-        elif multiworld.route_3_condition[player] == "defeat_any_gym":
+        elif world.options.route_3_condition == "defeat_any_gym":
             relevant_events += [
                 "Defeat Brock",
                 "Defeat Misty",
@@ -2449,7 +2451,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
         def dead_end(e):
             if e.can_reach(state):
                 return True
-            elif multiworld.door_shuffle[player] == "decoupled":
+            elif world.options.door_shuffle == "decoupled":
                 # Any unreachable exit in decoupled is not a dead end
                 return False
             region = e.parent_region
@@ -2484,10 +2486,10 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
             state.update_reachable_regions(player)
             state.sweep_for_events(locations=event_locations)
 
-            multiworld.random.shuffle(entrances)
+            world.random.shuffle(entrances)
 
-            if multiworld.door_shuffle[player] == "decoupled":
-                multiworld.random.shuffle(dc_destinations)
+            if world.options.door_shuffle == "decoupled":
+                world.random.shuffle(dc_destinations)
             else:
                 entrances.sort(key=lambda e: e.name not in entrance_only)
 
@@ -2504,15 +2506,15 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
             is_outdoor_map = outdoor_map(entrance_a.parent_region.name)
 
-            if multiworld.door_shuffle[player] in ("interiors", "full") or len(entrances) != len(reachable_entrances):
+            if world.options.door_shuffle in ("interiors", "full") or len(entrances) != len(reachable_entrances):
 
                 find_dead_end = False
                 if (len(reachable_entrances) >
-                        (1 if multiworld.door_shuffle[player] in ("insanity", "decoupled") else 8) and len(entrances)
+                        (1 if world.options.door_shuffle in ("insanity", "decoupled") else 8) and len(entrances)
                         <= (starting_entrances - 3)):
                     find_dead_end = True
 
-                if (multiworld.door_shuffle[player] in ("interiors", "full") and len(entrances) < 48
+                if (world.options.door_shuffle in ("interiors", "full") and len(entrances) < 48
                         and not is_outdoor_map):
                     # Try to prevent a situation where the only remaining outdoor entrances are ones that cannot be
                     # reached except by connecting directly to it.
@@ -2521,9 +2523,9 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                             in reachable_entrances if not outdoor_map(entrance.parent_region.name)]) > 1:
                         find_dead_end = True
 
-                if multiworld.door_shuffle[player] == "decoupled":
+                if world.options.door_shuffle == "decoupled":
                     destinations = dc_destinations
-                elif multiworld.door_shuffle[player] in ("interiors", "full"):
+                elif world.options.door_shuffle in ("interiors", "full"):
                     destinations = [entrance for entrance in entrances if outdoor_map(entrance.parent_region.name) is
                                     not is_outdoor_map]
                     if not destinations:
@@ -2533,7 +2535,7 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
 
                 destinations.sort(key=lambda e: e == entrance_a)
                 for entrance in destinations:
-                    if (dead_end(entrance) is find_dead_end and (multiworld.door_shuffle[player] != "decoupled"
+                    if (dead_end(entrance) is find_dead_end and (world.options.door_shuffle != "decoupled"
                                                                  or entrance.parent_region.name.split("-")[0] !=
                                                                  entrance_a.parent_region.name.split("-")[0])):
                         entrance_b = entrance
@@ -2542,28 +2544,28 @@ def door_shuffle(world, multiworld, player, badges, badge_locs):
                 else:
                     entrance_b = destinations.pop(0)
 
-                if multiworld.door_shuffle[player] in ("interiors", "full"):
+                if world.options.door_shuffle in ("interiors", "full"):
                     # on Interiors/Full, the destinations variable does not point to the entrances list, so we need to
                     # remove from that list here.
                     entrances.remove(entrance_b)
             else:
                 # Everything is reachable. Just start connecting the rest of the doors at random.
-                if multiworld.door_shuffle[player] == "decoupled":
+                if world.options.door_shuffle == "decoupled":
                     entrance_b = dc_destinations.pop(0)
                 else:
                     entrance_b = entrances.pop(0)
 
             entrance_a.connect(entrance_b)
-            if multiworld.door_shuffle[player] != "decoupled":
+            if world.options.door_shuffle != "decoupled":
                 entrance_b.connect(entrance_a)
 
-        if multiworld.door_shuffle[player] in ("interiors", "full"):
+        if world.options.door_shuffle in ("interiors", "full"):
             for pair in loop_out_interiors:
                 pair[1].connected_region = pair[0].connected_region
                 pair[1].parent_region.entrances.append(pair[0])
                 pair[1].target = pair[0].target
 
-    if multiworld.door_shuffle[player]:
+    if world.options.door_shuffle:
         for region in multiworld.get_regions(player):
             checked_regions = {region}
 
@@ -2623,7 +2625,7 @@ class PokemonRBWarp(Entrance):
         if self.connected_region is None:
             return False
         if "Elevator" in self.parent_region.name and (
-                (state.multiworld.all_elevators_locked[self.player]
+                (state.multiworld.worlds[self.player].options.all_elevators_locked
                  or "Rocket Hideout" in self.parent_region.name)
                 and not state.has("Lift Key", self.player)):
             return False

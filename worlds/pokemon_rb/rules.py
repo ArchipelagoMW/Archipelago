@@ -3,7 +3,7 @@ from .items import item_groups
 from . import logic
 
 
-def set_rules(multiworld, player):
+def set_rules(multiworld, world, player):
 
     item_rules = {
         # Some items do special things when they are passed into the GiveItem function in the game, but
@@ -15,14 +15,14 @@ def set_rules(multiworld, player):
                                             not in i.name)
     }
 
-    if multiworld.prizesanity[player]:
+    if world.options.prizesanity:
         def prize_rule(i):
             return i.player != player or i.name in item_groups["Unique"]
         item_rules["Celadon Prize Corner - Item Prize 1"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 2"] = prize_rule
         item_rules["Celadon Prize Corner - Item Prize 3"] = prize_rule
 
-    if multiworld.accessibility[player] != "locations":
+    if world.options.accessibility != "locations":
         multiworld.get_location("Cerulean Bicycle Shop", player).always_allow = (lambda state, item:
                                                                                    item.name == "Bike Voucher"
                                                                                    and item.player == player)
@@ -34,16 +34,16 @@ def set_rules(multiworld, player):
         "Rival's House - Rival's Sister": lambda state: state.has("Oak's Parcel", player),
         "Oak's Lab - Oak's Post-Route-22-Rival Gift": lambda state: state.has("Oak's Parcel", player),
         "Viridian City - Sleepy Guy": lambda state: logic.can_cut(state, player) or logic.can_surf(state, player),
-        "Route 2 Gate - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_2[player].value + 5, player),
+        "Route 2 Gate - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.worlds[player].options.oaks_aide_rt_2.value + 5, player),
         "Cerulean Bicycle Shop": lambda state: state.has("Bike Voucher", player)
             or location_item_name(state, "Cerulean Bicycle Shop", player) == ("Bike Voucher", player),
         "Lavender Mr. Fuji's House - Mr. Fuji": lambda state: state.has("Fuji Saved", player),
-        "Route 11 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_11[player].value + 5, player),
+        "Route 11 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.worlds[player].options.oaks_aide_rt_11.value + 5, player),
         "Celadon City - Stranded Man": lambda state: logic.can_surf(state, player),
         "Fuchsia Warden's House - Safari Zone Warden": lambda state: state.has("Gold Teeth", player)
             or location_item_name(state, "Fuchsia Warden's House - Safari Zone Warden", player) == ("Gold Teeth", player),
         "Route 12 - Island Item": lambda state: logic.can_surf(state, player),
-        "Route 15 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.oaks_aide_rt_15[player].value + 5, player),
+        "Route 15 Gate 2F - Oak's Aide": lambda state: logic.oaks_aide(state, state.multiworld.worlds[player].options.oaks_aide_rt_15.value + 5, player),
         "Route 25 - Item": lambda state: logic.can_cut(state, player),
         "Fuchsia Warden's House - Behind Boulder Item": lambda state: logic.can_strength(state, player),
         "Safari Zone Center - Island Item": lambda state: logic.can_surf(state, player),
@@ -281,5 +281,5 @@ def set_rules(multiworld, player):
         if loc.name.startswith("Pokedex"):
             mon = loc.name.split(" - ")[1]
             add_rule(loc, lambda state, i=mon: (state.has("Pokedex", player) or not
-                     state.multiworld.require_pokedex[player]) and (state.has(i, player)
+                     state.multiworld.worlds[player].options.require_pokedex) and (state.has(i, player)
                                                                     or state.has(f"Static {i}", player)))

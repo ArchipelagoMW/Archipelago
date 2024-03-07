@@ -10,9 +10,9 @@ def level_scaling(multiworld):
     while locations:
         sphere = set()
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-            if (multiworld.level_scaling[world.player] != "by_spheres_and_distance"
-                    and (multiworld.level_scaling[world.player] != "auto" or multiworld.door_shuffle[world.player]
-                         in ("off", "simple"))):
+            if (multiworld.worlds[world.player].options.level_scaling != "by_spheres_and_distance"
+                    and (multiworld.worlds[world.player].options.level_scaling != "auto"
+                         or multiworld.worlds[world.player].options.door_shuffle[world.player] in ("off", "simple"))):
                 continue
             regions = {multiworld.get_region("Menu", world.player)}
             checked_regions = set()
@@ -41,7 +41,7 @@ def level_scaling(multiworld):
                     # reach them earlier. We treat them both as reachable right away for this purpose
                     return True
                 if (location.name == "Route 25 - Item" and state.can_reach("Route 25", "Region", location.player)
-                        and multiworld.blind_trainers[location.player].value < 100):
+                        and multiworld.worlds[location.player].options.blind_trainers.value < 100):
                     # Assume they will take their one chance to get the trainer to walk out of the way to reach
                     # the item behind them
                     return True
@@ -106,7 +106,7 @@ def level_scaling(multiworld):
             else:
                 state.collect(location.item, True, location)
     for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
-        if multiworld.level_scaling[world.player] == "off":
+        if multiworld.worlds[world.player].options.level_scaling == "off":
             continue
         level_list_copy = level_list.copy()
         for sphere in spheres:
