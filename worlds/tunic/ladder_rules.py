@@ -70,6 +70,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         lambda state: can_reach_east_overworld(state, player, options, ability_unlocks)
     multiworld.get_entrance("Overworld -> Upper Overworld", player).access_rule = \
         lambda state: can_reach_upper_overworld(state, player, options, ability_unlocks)
+    # use the ladder down, use laurels, or 
     multiworld.get_entrance("Overworld -> Overworld Beach", player).access_rule = \
         lambda state: state.has_any({"Overworld Town Ladders", laurels}, player)
     multiworld.get_entrance("Overworld Beach -> West Garden", player).access_rule = \
@@ -94,7 +95,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
                             or (can_ladder_storage(state, player, options) and state.has(fire_wand, player)))
                        or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     multiworld.get_entrance("Overworld -> Back of Swamp", player).access_rule = \
-        lambda state: state.has(laurels, player) or can_ladder_storage(state, player, options)
+        lambda state: state.has(laurels, player)
     # before the ladder, just the one chest in the room where you open up the grave to the ladder
     multiworld.get_entrance("Overworld -> Dark Tomb Front", player).access_rule = \
         lambda state: has_lantern(state, player, options)
@@ -125,6 +126,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         and (can_ladder_storage(state, player, options)
              or has_ability(state, player, prayer, options, ability_unlocks)
              or state.has(laurels, player))
+    # todo: LS to atoll upper, maybe also do atoll lower + orb from swamp
     multiworld.get_entrance("Overworld -> Ruined Atoll", player).access_rule = \
         lambda state: state.has(laurels, player) or has_ability(state, player, prayer, options, ability_unlocks)
     # either use the ladder, or enter through the lower and use orb
