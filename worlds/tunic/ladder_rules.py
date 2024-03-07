@@ -197,7 +197,8 @@ def set_ladder_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, in
     set_rule(multiworld.get_location("Quarry - [Back Entrance] Bushes Holy Cross", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("Cathedral - Secret Legend Trophy Chest", player),
-             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
+             lambda state: has_ability(state, player, holy_cross, options, ability_unlocks)
+             and state.has("Swamp Ladders", player))
     set_rule(multiworld.get_location("Overworld - [Northwest] Golden Obelisk Page", player),
              lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
@@ -276,7 +277,7 @@ def set_ladder_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, in
              lambda state: state.has_any({laurels, "Ladders near Weathervane"}, player))
     set_rule(multiworld.get_location("Hourglass Cave - Holy Cross Chest", player),
              lambda state: state.has("Hourglass Cave Ladders", player)
-             and has_ability(state, player, prayer, options, ability_unlocks))
+             and has_ability(state, player, holy_cross, options, ability_unlocks))
     set_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Golden Obelisk", player),
              lambda state: state.has("Ladders near Dark Tomb", player)
              or (can_reach_upper_overworld(state, player, options, ability_unlocks) 

@@ -230,7 +230,8 @@ extra_groups: Dict[str, Set[str]] = {
     "melee weapons": {"Stick", "Sword", "Sword Upgrade"},
     "progressive sword": {"Sword Upgrade"},
     "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
-    "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"}
+    "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
+    "ladder to atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint ladder to well, now it won't
 }
 
 item_name_groups.update(extra_groups)
