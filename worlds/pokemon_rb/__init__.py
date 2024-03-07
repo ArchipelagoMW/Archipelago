@@ -14,7 +14,7 @@ from worlds.generic.Rules import add_item_rule
 from .items import item_table, item_groups
 from .locations import location_data, PokemonRBLocation
 from .regions import create_regions
-from .options import pokemon_rb_options
+from .options import PokemonRBOptions
 from .rom_addresses import rom_addresses
 from .text import encode_text
 from .rom import generate_output, get_base_rom_bytes, get_base_rom_path, RedDeltaPatch, BlueDeltaPatch
@@ -71,7 +71,10 @@ class PokemonRedBlueWorld(World):
     Elite Four to become the champion!"""
     # -MuffinJets#4559
     game = "Pokemon Red and Blue"
-    option_definitions = pokemon_rb_options
+
+    options_dataclass = PokemonRBOptions
+    options: PokemonRBOptions
+
     settings: typing.ClassVar[PokemonSettings]
 
     data_version = 9
@@ -102,7 +105,6 @@ class PokemonRedBlueWorld(World):
         self.learnsets = None
         self.trainer_name = None
         self.rival_name = None
-        self.type_chart = None
         self.traps = None
         self.trade_mons = {}
         self.finished_level_scaling = threading.Event()
