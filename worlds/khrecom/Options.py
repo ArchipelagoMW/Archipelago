@@ -14,6 +14,21 @@ class EarlyCure(DefaultOnToggle):
     """
     display_name = "Early Cure"
 
+class Zeroes(DefaultOnToggle):
+    """
+    Toggle whether 0 value cards are included in card sets
+    """
+    display_name = "Zeroes"
+
+class AttackPower(Range):
+    """
+    Modifier for Sora's strike power.  Default is 10
+    """
+    display_name = "Attack Power"
+    range_start = 1
+    range_end = 100
+    default = 10
+
 class DaysLocations(Toggle):
     """
     Toggle whether locations not available to the player until they watch 358/2 Days are included in the locations list.
@@ -56,3 +71,5 @@ class KHRECOMOptions(PerGameCommonOptions):
     exp_multiplier: EXPMultiplier
     minigames: ChecksBehindMinigames
     levels: ChecksBehindSleightsLevels
+    zeroes: Zeroes
+    attack_power: AttackPower

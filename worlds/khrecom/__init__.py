@@ -122,12 +122,17 @@ class KHRECOMWorld(World):
     
     def fill_slot_data(self) -> dict:
         self.decide_world_order()
+        zeroes_string = "Yes"
         world_order_string = ""
         for world_id in self.world_order:
             world_order_string = world_order_string + str(world_id) + ","
         world_order_string = world_order_string[:-1]
-        slot_data = {"EXP Multiplier":      int(self.options.exp_multiplier)
-                    ,"World Order": world_order_string}
+        if not self.options.zeroes:
+            zeroes_string = "No"
+        slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)
+                    ,"World Order":    world_order_string
+                    ,"Zeroes":         zeroes_string
+                    ,"Attack Power":   int(self.options.attack_power)}
         return slot_data
     
     def decide_world_order(self):
