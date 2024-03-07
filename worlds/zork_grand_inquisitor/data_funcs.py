@@ -19,7 +19,7 @@ def item_names_to_id() -> Dict[str, int]:
 
 
 def item_names_to_item() -> Dict[str, ZorkGrandInquisitorItems]:
-    return {item.value: item for item, _ in item_data.items()}
+    return {item.value: item for item in item_data}
 
 
 def location_names_to_id() -> Dict[str, int]:
@@ -57,16 +57,12 @@ def id_to_locations() -> Dict[int, ZorkGrandInquisitorLocations]:
 def item_groups() -> Dict[str, Set[str]]:
     groups: Dict[str, Set[str]] = dict()
 
-    tag: ZorkGrandInquisitorTags
-    for tag in ZorkGrandInquisitorTags:
-        groups[tag.value] = set()
-
     item: ZorkGrandInquisitorItems
     data: ZorkGrandInquisitorItemData
     for item, data in item_data.items():
         if data.tags is not None:
             for tag in data.tags:
-                groups[tag.value].add(item.value)
+                groups.setdefault(tag.value, set()).add(item.value)
 
     return {k: v for k, v in groups.items() if len(v)}
 
@@ -136,15 +132,10 @@ def locations_by_region(include_deathsanity: bool = False) -> Dict[
 
 
 def locations_with_tag(tag: ZorkGrandInquisitorTags) -> Set[ZorkGrandInquisitorLocations]:
-    locations: Set[ZorkGrandInquisitorLocations] = set()
-
     location: ZorkGrandInquisitorLocations
     data: ZorkGrandInquisitorLocationData
-    for location, data in location_data.items():
-        if data.tags is not None and tag in data.tags:
-            locations.add(location)
 
-    return locations
+    return {location for location, data in location_data.items() if data.tags is not None and tag in data.tags}
 
 
 def location_access_rule_for(location: ZorkGrandInquisitorLocations, player: int) -> str:

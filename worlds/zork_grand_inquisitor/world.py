@@ -83,7 +83,7 @@ class ZorkGrandInquisitorWorld(World):
     item_name_to_item: Dict[str, ZorkGrandInquisitorItems] = item_names_to_item()
 
     def create_regions(self) -> None:
-        deathsanity: bool = self.options.deathsanity.value == 1
+        deathsanity: bool = bool(self.options.deathsanity)
 
         region_mapping: Dict[ZorkGrandInquisitorRegions, Region] = dict()
 
@@ -143,8 +143,8 @@ class ZorkGrandInquisitorWorld(World):
             self.multiworld.regions.append(region)
 
     def create_items(self) -> None:
-        quick_port_foozle: bool = self.options.quick_port_foozle.value == 1
-        start_with_hotspot_items: bool = self.options.start_with_hotspot_items.value == 1
+        quick_port_foozle: bool = bool(self.options.quick_port_foozle)
+        start_with_hotspot_items: bool = bool(self.options.start_with_hotspot_items)
 
         item_pool: List[ZorkGrandInquisitorItem] = list()
 
@@ -161,9 +161,7 @@ class ZorkGrandInquisitorWorld(World):
             item_pool.append(self.create_item(item.value))
 
         total_locations: int = len(self.multiworld.get_unfilled_locations(self.player))
-
-        for _ in range(total_locations - len(item_pool)):
-            item_pool.append(self.create_item(self.get_filler_item_name()))
+        item_pool += [self.create_filler() for _ in range(total_locations - len(item_pool))]
 
         self.multiworld.itempool += item_pool
 

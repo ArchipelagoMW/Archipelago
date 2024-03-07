@@ -1,6 +1,6 @@
 # Zork Grand Inquisitor
 
-## Where is the settings page?
+## Where is the options page?
 
 The [player options page for this game](../player-options) contains all the options you need to configure and export a
 configuration file.
