@@ -467,7 +467,7 @@ def distribute_items_restrictive(multiworld: MultiWorld) -> None:
 
     inaccessible_location_rules(multiworld, multiworld.state, defaultlocations)
 
-    remaining_fill(multiworld, excludedlocations, filleritempool, name="Remaining Excluded")
+    remaining_fill(multiworld, excludedlocations, filleritempool, "Remaining Excluded")
     if excludedlocations:
         raise FillError(
             f"Not enough filler items for excluded locations. There are {len(excludedlocations)} more locations than items")
