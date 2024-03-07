@@ -471,6 +471,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
 
 class ALTTPSNIClient(SNIClient):
     game = "A Link to the Past"
+    patch_suffix = [".aplttp", ".apz3"]
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_read, snes_buffered_write, snes_flush_writes

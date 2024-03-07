@@ -30,6 +30,7 @@ L2AC_RX_ADDR: int = SRAM_START + 0x2800
 
 class L2ACSNIClient(SNIClient):
     game: str = "Lufia II Ancient Cave"
+    patch_suffix = ".apl2ac"
 
     async def validate_rom(self, ctx: SNIContext) -> bool:
         from SNIClient import snes_read

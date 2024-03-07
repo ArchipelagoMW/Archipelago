@@ -24,6 +24,7 @@ DEATH_LINK_ACTIVE_ADDR = DKC3_ROMNAME_START + 0x15     # DKC3_TODO: Find a perma
 
 class DKC3SNIClient(SNIClient):
     game = "Donkey Kong Country 3"
+    patch_suffix = ".apdkc3"
 
     async def deathlink_kill_player(self, ctx):
         pass

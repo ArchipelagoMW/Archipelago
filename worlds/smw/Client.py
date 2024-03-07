@@ -57,6 +57,7 @@ SMW_UNCOLLECTABLE_LEVELS = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A
 
 class SMWSNIClient(SNIClient):
     game = "Super Mario World"
+    patch_suffix = ".apsmw"
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
