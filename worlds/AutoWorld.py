@@ -12,6 +12,7 @@ from typing import (Any, Callable, ClassVar, Dict, FrozenSet, List, Mapping,
 
 from Options import PerGameCommonOptions
 from BaseClasses import CollectionState
+from Utils import deprecate
 
 if TYPE_CHECKING:
     import random
@@ -78,9 +79,8 @@ class AutoWorldRegister(type):
         # TODO - remove this once all worlds use options dataclasses
         if "options_dataclass" not in dct and "option_definitions" in dct:
             # TODO - switch to deprecate after a version
-            if __debug__:
-                logging.warning(f"{name} Assigned options through option_definitions which is now deprecated. "
-                                "Please use options_dataclass instead.")
+            deprecate(f"{name} Assigned options through option_definitions which is now deprecated. "
+                      "Please use options_dataclass instead.")
             dct["options_dataclass"] = make_dataclass(f"{name}Options", dct["option_definitions"].items(),
                                                       bases=(PerGameCommonOptions,))
 
