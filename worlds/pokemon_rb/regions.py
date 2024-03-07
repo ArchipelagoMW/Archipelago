@@ -1590,7 +1590,8 @@ def create_regions(self):
                            "Secret Key", "Poke Flute", "Mansion Key", "Safari Pass", "Plant Key",
                            "Hideout Key", "Card Key 2F", "Card Key 3F", "Card Key 4F", "Card Key 5F",
                            "Card Key 6F", "Card Key 7F", "Card Key 8F", "Card Key 9F", "Card Key 10F",
-                           "Card Key 11F", "Exp. All", "Moon Stone"] if item in advancement_items]) + 4
+                           "Card Key 11F", "Exp. All", "Moon Stone", "Oak's Parcel", "Helix Fossil", "Dome Fossil",
+                           "Old Amber", "Tea", "Gold Teeth", "Bike Voucher"] if item in advancement_items]) + 4
     if "Progressive Card Key" in advancement_items:
         self.total_key_items += 10
 

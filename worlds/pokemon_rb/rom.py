@@ -354,7 +354,7 @@ def generate_output(self, output_directory: str):
         data[rom_addresses["Option_Locked_Elevator_Celadon"]] = 0x20  # jr nz
         data[rom_addresses["Option_Locked_Elevator_Silph"]] = 0x20    # jr nz
 
-    if self.multiworld.tea[self.player].value:
+    if self.multiworld.tea[self.player]:
         data[rom_addresses["Option_Tea"]] = 1
         data[rom_addresses["Guard_Drink_List"]] = 0x54
         data[rom_addresses["Guard_Drink_List"] + 1] = 0
@@ -362,6 +362,10 @@ def generate_output(self, output_directory: str):
         write_bytes(data, encode_text("<LINE>Gee, I have the<CONT>worst caffeine<CONT>headache though."
                                       "<PARA>Oh wait there,<LINE>the road's closed.<DONE>"),
                     rom_addresses["Text_Saffron_Gate"])
+
+        data[rom_addresses["Tea_Key_Item_A"]] = 0x28 #  jr .z
+        data[rom_addresses["Tea_Key_Item_B"]] = 0x28 #  jr .z
+        data[rom_addresses["Tea_Key_Item_C"]] = 0x28 #  jr .z
 
     data[rom_addresses["Fossils_Needed_For_Second_Item"]] = (
         self.multiworld.second_fossil_check_condition[self.player].value)
