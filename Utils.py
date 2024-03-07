@@ -19,6 +19,7 @@ import warnings
 from argparse import Namespace
 from settings import Settings, get_settings
 from typing import BinaryIO, Coroutine, Optional, Set, Dict, Any, Union
+from typing_extensions import TypeGuard
 from yaml import load, load_all, dump
 
 try:
@@ -966,3 +967,13 @@ class RepeatableChain:
 
     def __len__(self):
         return sum(len(iterable) for iterable in self.iterable)
+
+
+def is_iterable_of_str(obj: object) -> TypeGuard[typing.Iterable[str]]:
+    """ but not a `str` (because technically, `str` is `Iterable[str]`) """
+    if isinstance(obj, str):
+        return False
+    if not isinstance(obj, typing.Iterable):
+        return False
+    obj_it: typing.Iterable[object] = obj
+    return all(isinstance(v, str) for v in obj_it)

@@ -41,6 +41,8 @@ and repeatable source of money.
 * You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
 * You can reset static encounters (Poké Flute encounter, legendaries, and the trap Poké Ball battles in Power Plant)
 for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
+* Dungeons normally hidden on the Town Map are now present, and the "Sea Cottage" has been removed. This is to allow
+Simple Door Shuffle to update the locations of all of the dungeons on the Town Map.
 
 ## What items and locations get shuffled?
 

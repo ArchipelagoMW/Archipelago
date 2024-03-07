@@ -69,6 +69,13 @@ class AutoPatchExtensionRegister(type):
             return handler
 
 
+class InvalidDataError(Exception):
+    """
+    Since games can override `read_contents` in APContainer,
+    this is to report problems in that process.
+    """
+
+
 class APContainer:
     """A zipfile containing at least archipelago.json"""
     version: int = current_patch_version
@@ -117,7 +124,15 @@ class APContainer:
         with zipfile.ZipFile(zip_file, "r") as zf:
             if file:
                 self.path = zf.filename
-            self.read_contents(zf)
+            try:
+                self.read_contents(zf)
+            except Exception as e:
+                message = ""
+                if len(e.args):
+                    arg0 = e.args[0]
+                    if isinstance(arg0, str):
+                        message = f"{arg0} - "
+                raise InvalidDataError(f"{message}This might be the incorrect world version for this file") from e
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         with opened_zipfile.open("archipelago.json", "r") as f:
