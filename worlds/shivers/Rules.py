@@ -96,8 +96,8 @@ def get_rules_lookup(player: int):
             "To Lobby From Egypt": lambda state: state.has("Key for Egypt Room", player),
             "To Egypt From Lobby": lambda state: state.has("Key for Egypt Room", player),
             "To Janitor Closet": lambda state: state.has("Key for Janitor Closet", player),
-            "To Tiki From Burial": lambda state: state.has("Key for Tiki Room", player),
-            "To Burial From Tiki": lambda state: state.has("Key for Tiki Room", player),
+            "To Shaman From Burial": lambda state: state.has("Key for Shaman Room", player),
+            "To Burial From Shaman": lambda state: state.has("Key for Shaman Room", player),
             "To Inventions From UFO": lambda state: state.has("Key for UFO Room", player),
             "To UFO From Inventions": lambda state: state.has("Key for UFO Room", player),
             "To Torture From Inventions": lambda state: state.has("Key for Torture Room", player),
@@ -145,7 +145,7 @@ def get_rules_lookup(player: int):
         "locations_puzzle_hints": {
             "Puzzle Solved Clock Tower Door": lambda state: state.can_reach("Three Floor Elevator", "Region", player),
             "Puzzle Solved Clock Chains": lambda state: state.can_reach("Bedroom", "Region", player),
-            "Puzzle Solved Tiki Drums": lambda state: state.can_reach("Clock Tower", "Region", player),
+            "Puzzle Solved Shaman Drums": lambda state: state.can_reach("Clock Tower", "Region", player),
             "Puzzle Solved Red Door": lambda state: state.can_reach("Maintenance Tunnels", "Region", player),
             "Puzzle Solved UFO Symbols": lambda state: state.can_reach("Library", "Region", player),
             "Puzzle Solved Maze Door": lambda state: state.can_reach("Projector Room", "Region", player),
@@ -202,7 +202,7 @@ def set_rules(world: "ShiversWorld") -> None:
     forbid_item(multiworld.get_location("Ixupi Captured Water", player), "Water Always Available in Lobby", player)
     forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Library", player)
     forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Anansi Room", player)
-    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Tiki Room", player)
+    forbid_item(multiworld.get_location("Ixupi Captured Wax", player), "Wax Always Available in Shaman Room", player)
     forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Available in Office", player)
     forbid_item(multiworld.get_location("Ixupi Captured Ash", player), "Ash Always Available in Burial Room", player)
     forbid_item(multiworld.get_location("Ixupi Captured Oil", player), "Oil Always Available in Prehistoric Room", player)
