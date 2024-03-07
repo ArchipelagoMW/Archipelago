@@ -14,7 +14,7 @@ class TunicLocationData(NamedTuple):
 location_base_id = 509342400
 
 location_table: Dict[str, TunicLocationData] = {
-    "Beneath the Well - [Powered Secret Room] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Back"),
+    "Beneath the Well - [Powered Secret Room] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Back", ladder_region="Beneath the Well Back"),
     "Beneath the Well - [Entryway] Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
     "Beneath the Well - [Third Room] Beneath Platform Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
     "Beneath the Well - [Third Room] Tentacle Chest": TunicLocationData("Beneath the Well", "Beneath the Well Main"),
