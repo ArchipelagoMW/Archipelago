@@ -121,6 +121,10 @@ Path to a single file. Automatically resolves as user_path:
 Source folder or AP install path on Windows. ~/Archipelago for the AppImage.
 Will open a file browser if the file is missing when in GUI mode.
 
+If the file is used in the world's `generate_output`, make sure to add a `stage_assert_generate` that checks if the
+file is available, otherwise generation may fail at the very end.
+See also [world api.md](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/world%20api.md#generation).
+
 #### class method validate(cls, path: str)
 
 Override this and raise ValueError if validation fails.
