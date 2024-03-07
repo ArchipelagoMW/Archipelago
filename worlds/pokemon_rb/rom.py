@@ -52,7 +52,11 @@ def write_quizzes(self, data, random):
             if player_name == self.multiworld.player_name[self.player]:
                 player_name = "yourself"
             player_name = encode_text(player_name, force=True, safety=True)
-            return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("<DONE>")
+            if self.multiworld.get_entrance(
+                    "Cinnabar Island-G to Cinnabar Gym").connected_region.name == "Cinnabar Gym":
+                return encode_text(f"The Secret Key was<LINE>found by<CONT>{player_name}?<DONE>")
+            # Might not have found it yet
+            return encode_text(f"The Secret Key was<LINE>placed in<CONT>{player_name}'s<CONT>world?<DONE>")
         elif q == 2:
             if a:
                 return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
@@ -102,12 +106,36 @@ def write_quizzes(self, data, random):
                 i = random.randint(0, random.choice([9, 99]))
             return encode_text(f"POLIWAG evolves {i}<LINE>times?<DONE>")
         elif q == 7:
-            entity = "Motor Carrier"
-            if not a:
-                entity = random.choice(["Driver", "Shipper"])
-            return encode_text("Title 49 of the<LINE>U.S. Code of<CONT>Federal<CONT>Regulations part<CONT>397.67 states"
-                               f"<CONT>that the<CONT>{entity}<CONT>is responsible<CONT>for planning<CONT>routes when"
-                               "<CONT>hazardous<CONT>materials are<CONT>transported?<DONE>")
+            q2 = random.randint(0, 2)
+            if q2 == 0:
+                entity = "Motor Carrier"
+                if not a:
+                    entity = random.choice(["Driver", "Shipper"])
+                return encode_text("Title 49 of the<LINE>U.S. Code of<CONT>Federal<CONT>Regulations part<CONT>397.67 "
+                                   f"states<CONT>that the<CONT>{entity}<CONT>is responsible<CONT>for planning<CONT>"
+                                   "routes when<CONT>hazardous<CONT>materials are<CONT>transported?<DONE>")
+            elif q2 == 1:
+                if a:
+                    state = random.choice(
+                        ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                         'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas',
+                         'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+                         'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Jersey', 'New Mexico',
+                         'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+                         'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+                         'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'])
+                else:
+                    state = "New Hampshire"
+                return encode_text(
+                    f"As of 2023,<LINE>{state}<CONT>has a law<CONT>requiring all<CONT>front seat vehicle<CONT>occupants to use<CONT>seatbelts?<DONE>")
+            elif q2 == 2:
+                if a:
+                    country = random.choice(["The United States", "Mexico", "Canada", "Germany", "France", "China",
+                                             "Russia", "Spain", "Brazil", "Ukraine", "Saudi Arabia", "Egypt"])
+                else:
+                    country = random.choice(["The U.K.", "Pakistan", "India", "Japan", "Australia",
+                                             "New Zealand", "Thailand"])
+                return encode_text(f"As of 2020,<LINE>drivers in<CONT>{country}<CONT>drive on the<CONT>right side of<CONT>the road?<DONE>")
         elif q == 8:
             mon = random.choice(list(poke_data.evolution_levels.keys()))
             level = poke_data.evolution_levels[mon]
@@ -180,10 +208,20 @@ def write_quizzes(self, data, random):
             if not a:
                 fossil_level += random.choice((-5, 5))
             return encode_text(f"Fossil #MON<LINE>revive at level<CONT>{fossil_level}?<DONE>")
+        elif q == 15:
+            if a:
+                fodmap = random.choice(["garlic", "onion", "milk", "watermelon", "cherries", "wheat", "barley",
+                                        "pistachios", "cashews", "kidney beans", "apples", "honey"])
+            else:
+                fodmap = random.choice(["carrots", "potatoes", "oranges", "pineapple", "blueberries", "parmesan",
+                                        "eggs", "beef", "chicken", "oat", "rice", "maple syrup", "peanuts"])
+            are_is = "are" if fodmap[-1] == "s" else "is"
+            return encode_text(f"According to<LINE>Monash Uni.,<CONT>{fodmap} {are_is}<CONT>considered high<CONT>in FODMAPs?<DONE>")
 
     answers = [random.randint(0, 1) for _ in range(6)]
 
-    questions = random.sample((range(0, 15)), 6)
+    questions = random.sample((range(0, 16)), 6)
+
     question_texts = []
     for i, question in enumerate(questions):
         question_texts.append(get_quiz(question, answers[i]))
@@ -474,9 +512,6 @@ def generate_output(self, output_directory: str):
 
     if self.multiworld.reusable_tms[self.player].value:
         data[rom_addresses["Option_Reusable_TMs"]] = 0xC9
-
-    for i in range(1, 10):
-        data[rom_addresses[f"Option_Trainersanity{i}"]] = self.multiworld.trainersanity[self.player].value
 
     data[rom_addresses["Option_Always_Half_STAB"]] = int(not self.multiworld.same_type_attack_bonus[self.player].value)
 
