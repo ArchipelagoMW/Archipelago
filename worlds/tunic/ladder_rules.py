@@ -126,7 +126,7 @@ def set_ladder_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]
         and (can_ladder_storage(state, player, options)
              or has_ability(state, player, prayer, options, ability_unlocks)
              or state.has(laurels, player))
-    # todo: LS to atoll upper, maybe also do atoll lower + orb from swamp
+    # todo: LS to atoll upper, maybe also do atoll lower + orb from swamp, and vice versa?
     multiworld.get_entrance("Overworld -> Ruined Atoll", player).access_rule = \
         lambda state: state.has(laurels, player) or has_ability(state, player, prayer, options, ability_unlocks)
     # either use the ladder, or enter through the lower and use orb
