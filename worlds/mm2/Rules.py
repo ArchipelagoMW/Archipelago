@@ -48,21 +48,14 @@ def set_rules(world: "MM2World") -> None:
                 world.weapon_damage[weapon].append(min(14, max(-1, int(world.random.normalvariate(3, 3)))))
             if not any([world.weapon_damage[weapon][boss] > 4 for weapon in range(1, 7)]):
                 # failsafe, there should be at least one defined non-Buster weakness
-                weapon = world.random.choice(list(world.weapon_damage.keys()))
+                weapon = world.random.randint(1, 7)
                 world.weapon_damage[weapon][boss] = world.random.randint(4, 14)  # Force weakness
-        # handle atomic fire
-        if world.options.strict_weakness:
-            for boss in range(13):
-                if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] for i in range(2, 8)):
-                    # Atomic Fire can only shoot two fully powered shots
-                    # So we need to be able to kill the boss in 2 hits
-                    world.weapon_damage[1][boss] = 14
         # handle the alien
         boss = 13
         for weapon in world.weapon_damage:
             world.weapon_damage[weapon].append(-1)
         weapon = world.random.choice(list(world.weapon_damage.keys()))
-        world.weapon_damage[weapon][boss] = 1 if weapon != 1 else 6
+        world.weapon_damage[weapon][boss] = 1 if weapon != 1 else 14
 
     if world.options.strict_weakness:
         for weapon in weapon_damage:
@@ -71,6 +64,12 @@ def set_rules(world: "MM2World") -> None:
                     continue
                 if weapon == 0 or 4 > world.weapon_damage[weapon][i] > 0:
                     world.weapon_damage[weapon][i] = 0
+        # handle atomic fire
+        for boss in range(14):
+            if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] for i in range(2, 8)):
+                # Atomic Fire can only shoot two fully powered shots
+                # So we need to be able to kill the boss in 2 hits
+                world.weapon_damage[1][boss] = 14
         starting = world.options.starting_robot_master.value
         world.weapon_damage[0][starting] = 1
 
