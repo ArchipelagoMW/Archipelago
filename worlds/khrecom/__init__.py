@@ -63,14 +63,14 @@ class KHRECOMWorld(World):
             if i < 3:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
             elif i == 3 and self.options.early_cure:
-                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure 4-6"))
+                self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure"))
             i = i + 1
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
         for name, data in item_table.items():
             quantity = data.max_quantity
             
             # Ignore filler, it will be added in a later stage.
-            if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards"]:
+            if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards", "Enemy Cards", "Sleights"]:
                 continue
             if name not in starting_worlds:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
@@ -91,21 +91,17 @@ class KHRECOMWorld(World):
                 attempts = attempts + 1
 
         self.multiworld.itempool += item_pool
+        
+        print("Total Locations: " + str(total_locations))
+        print("Item Pool Length: " + str(len(item_pool)))
 
     def get_filler_item_name(self) -> str:
         fillers = {}
         disclude = []
-        if not self.options.zeroes:
-            disclude.append("0")
         if not self.options.cure:
             disclude.append("Cure")
         if self.options.early_cure:
-            disclude.append("Cure 4-6")
-        if self.options.enemy_cards:
-            fillers.update(get_items_by_category("Enemy Cards", disclude))
-        if self.options.days_items:
-            fillers.update(get_items_by_category("Days Sets", disclude))
-            fillers.update(get_items_by_category("Days Enemy Cards", disclude))
+            disclude.append("Cure")
         fillers.update(get_items_by_category("Sets", disclude))
         weights = [data.weight for data in fillers.values()]
         return self.random.choices([filler for filler in fillers.keys()], weights, k=1)[0]
@@ -126,12 +122,17 @@ class KHRECOMWorld(World):
     
     def fill_slot_data(self) -> dict:
         self.decide_world_order()
+        zeroes_string = "Yes"
         world_order_string = ""
         for world_id in self.world_order:
             world_order_string = world_order_string + str(world_id) + ","
         world_order_string = world_order_string[:-1]
-        slot_data = {"EXP Multiplier":      int(self.options.exp_multiplier)
-                    ,"World Order": world_order_string}
+        if not self.options.zeroes:
+            zeroes_string = "No"
+        slot_data = {"EXP Multiplier": int(self.options.exp_multiplier)
+                    ,"World Order":    world_order_string
+                    ,"Zeroes":         zeroes_string
+                    ,"Attack Power":   int(self.options.attack_power)}
         return slot_data
     
     def decide_world_order(self):

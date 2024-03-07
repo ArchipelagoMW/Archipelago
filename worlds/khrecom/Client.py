@@ -98,6 +98,21 @@ class KHRECOMContext(CommonContext):
             with open(os.path.join(self.game_communication_path, "worldorder.cfg"), 'w') as f:
                 f.write(str(world_order))
                 f.close()
+            if "Zeroes" in list(args['slot_data'].keys()):
+                zeroes_str = args['slot_data']["Zeroes"]
+            else:
+                zeroes_str = "Yes"
+            if zeroes_str == "No":
+                with open(os.path.join(self.game_communication_path, "nozeroes.cfg"), 'w') as f:
+                    f.write("")
+                    f.close()
+            if "Attack Power" in list(args['slot_data'].keys()):
+                attack_power = args['slot_data']["Attack Power"]
+            else:
+                attack_power = 10
+            with open(os.path.join(self.game_communication_path, "attackpower.cfg"), 'w') as f:
+                f.write(str(attack_power))
+                f.close()
         if cmd in {"ReceivedItems"}:
             start_index = args["index"]
             if start_index != len(self.items_received):

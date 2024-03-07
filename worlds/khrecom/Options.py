@@ -2,12 +2,6 @@ from dataclasses import dataclass
 
 from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionSet, PerGameCommonOptions
 
-class Zeroes(DefaultOnToggle):
-    """
-    Toggle whether 0 value cards should be included in the item pool.
-    """
-    display_name = "Zeroes"
-
 class Cure(DefaultOnToggle):
     """
     Toggle whether Cure cards should be included in the item pool.
@@ -20,17 +14,20 @@ class EarlyCure(DefaultOnToggle):
     """
     display_name = "Early Cure"
 
-class EnemyCards(DefaultOnToggle):
+class Zeroes(DefaultOnToggle):
     """
-    Toggle whether Enemy Cards should be included in the item pool.
+    Toggle whether 0 value cards are included in card sets
     """
-    display_name = "Enemy Cards"
+    display_name = "Zeroes"
 
-class DaysItems(Toggle):
+class AttackPower(Range):
     """
-    Toggle whether items not available to the player until they watch 358/2 Days are included in the item pool.
+    Modifier for Sora's strike power.  Default is 10
     """
-    display_name = "Days Items"
+    display_name = "Attack Power"
+    range_start = 1
+    range_end = 100
+    default = 10
 
 class DaysLocations(Toggle):
     """
@@ -49,12 +46,6 @@ class ChecksBehindMinigames(Toggle):
     Toggle whether to include checks behind 100 Acre Woods Minigames.
     """
     display_name = "Checks Behind Minigames"
-    
-class ChecksBehindSleights(Toggle):
-    """
-    Toggle whether to include checks behind Sleights.
-    """
-    display_name = "Checks Behind Sleights"
 
 class ChecksBehindSleightsLevels(Toggle):
     """
@@ -73,14 +64,12 @@ class EXPMultiplier(Range):
 
 @dataclass
 class KHRECOMOptions(PerGameCommonOptions):
-    zeroes: Zeroes
     cure: Cure
     early_cure: EarlyCure
-    enemy_cards: EnemyCards
-    days_items: DaysItems
     days_locations: DaysLocations
     checks_behind_leon: ChecksBehindLeon
     exp_multiplier: EXPMultiplier
     minigames: ChecksBehindMinigames
-    sleights: ChecksBehindSleights
     levels: ChecksBehindSleightsLevels
+    zeroes: Zeroes
+    attack_power: AttackPower
