@@ -176,6 +176,7 @@ class Context:
     all_location_and_group_names: typing.Dict[str, typing.Set[str]]
     non_hintable_names: typing.Dict[str, typing.Set[str]]
     spheres: typing.List[typing.Dict[int, typing.Set[int]]]
+    """ each sphere is { player: { location_id, ... } } """
 
     def __init__(self, host: str, port: int, server_password: str, password: str, location_check_points: int,
                  hint_cost: int, item_cheat: bool, release_mode: str = "disabled", collect_mode="disabled",
