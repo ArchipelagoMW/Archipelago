@@ -3,6 +3,7 @@ import settings
 import typing
 import threading
 import base64
+import random
 from copy import deepcopy
 from typing import TextIO
 
@@ -164,6 +165,14 @@ class PokemonRedBlueWorld(World):
         process_move_data(self)
         process_pokemon_data(self)
 
+        tc_random = self.random
+        if self.options.type_chart_seed.value != "random":
+            tc_random = random.Random()
+            if self.options.type_chart_seed.value.isdigit():
+                tc_random.seed(int(self.options.type_chart_seed.value))
+            else:
+                tc_random.seed(int(hash(self.options.type_chart_seed.value)) + int(self.multiworld.seed))
+
         if self.multiworld.randomize_type_chart[self.player] == "vanilla":
             chart = deepcopy(poke_data.type_chart)
         elif self.multiworld.randomize_type_chart[self.player] == "randomize":
@@ -172,7 +181,7 @@ class PokemonRedBlueWorld(World):
             for type1 in types:
                 for type2 in types:
                     matchups.append([type1, type2])
-            self.multiworld.random.shuffle(matchups)
+            tc_random.shuffle(matchups)
             immunities = self.multiworld.immunity_matchups[self.player].value
             super_effectives = self.multiworld.super_effective_matchups[self.player].value
             not_very_effectives = self.multiworld.not_very_effective_matchups[self.player].value
@@ -197,7 +206,7 @@ class PokemonRedBlueWorld(World):
                 not_very_effectives -= subtract_amounts[1]
                 normals -= subtract_amounts[2]
                 while super_effectives + not_very_effectives + normals > 225 - immunities:
-                    r = self.multiworld.random.randint(0, 2)
+                    r = tc_random.randint(0, 2)
                     if r == 0 and super_effectives:
                         super_effectives -= 1
                     elif r == 1 and not_very_effectives:
@@ -219,8 +228,8 @@ class PokemonRedBlueWorld(World):
                     matchups.append([type1, type2])
             chart = []
             values = list(range(21))
-            self.multiworld.random.shuffle(matchups)
-            self.multiworld.random.shuffle(values)
+            tc_random.shuffle(matchups)
+            tc_random.shuffle(values)
             for matchup in matchups:
                 value = values.pop(0)
                 values.append(value)
@@ -710,7 +719,7 @@ class PokemonRedBlueWorld(World):
                     hint_data[self.player][location.address] = location.parent_region.entrance_hint
 
     def fill_slot_data(self) -> dict:
-        return {
+        ret = {
             "second_fossil_check_condition": self.multiworld.second_fossil_check_condition[self.player].value,
             "require_item_finder": self.multiworld.require_item_finder[self.player].value,
             "randomize_hidden_items": self.multiworld.randomize_hidden_items[self.player].value,
@@ -735,7 +744,6 @@ class PokemonRedBlueWorld(World):
             "free_fly_map": self.fly_map_code,
             "town_map_fly_map": self.town_map_fly_map_code,
             "extra_badges": self.extra_badges,
-            "type_chart": self.type_chart,
             "randomize_pokedex": self.multiworld.randomize_pokedex[self.player].value,
             "trainersanity": self.multiworld.trainersanity[self.player].value,
             "death_link": self.multiworld.death_link[self.player].value,
@@ -749,9 +757,11 @@ class PokemonRedBlueWorld(World):
             "dark_rock_tunnel_logic": self.multiworld.dark_rock_tunnel_logic[self.player].value,
             "split_card_key": self.multiworld.split_card_key[self.player].value,
             "all_elevators_locked": self.multiworld.all_elevators_locked[self.player].value,
-
         }
+        if self.options.type_chart_seed == "random" or self.options.type_chart_seed.value.isdigit():
+            ret["type_chart"] = self.type_chart
 
+        return ret
 
 class PokemonRBItem(Item):
     game = "Pokemon Red and Blue"
