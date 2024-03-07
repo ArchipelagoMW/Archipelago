@@ -371,7 +371,7 @@ class World(metaclass=AutoWorldRegister):
         """
         pass
 
-    def fill_slot_data(self) -> Dict[str, Any]:  # json of WebHostLib.models.Slot
+    def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
         """
         What is returned from this function will be in the `slot_data` field
         in the `Connected` network package.
