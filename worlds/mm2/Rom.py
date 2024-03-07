@@ -241,6 +241,20 @@ def patch_rom(world: "MM2World", rom: RomData):
                              for i in range(14)]
             output.extend(weapon_damage)
         rom.write_bytes(0x2E952, bytes(output))
+        wily_5_weaknesses = [i for i in range(8) if world.weapon_damage[i][12] > 4]
+        world.random.shuffle(wily_5_weaknesses)
+        if len(wily_5_weaknesses) >= 3:
+            weak1 = wily_5_weaknesses.pop()
+            weak2 = wily_5_weaknesses.pop()
+            weak3 = wily_5_weaknesses.pop()
+        elif len(wily_5_weaknesses) == 2:
+            weak1 = weak2 = wily_5_weaknesses.pop()
+            weak3 = wily_5_weaknesses.pop()
+        else:
+            weak1 = weak2 = weak3 = 0
+        rom.write_byte(0x2DA2E, weak1)
+        rom.write_byte(0x2DA32, weak2)
+        rom.write_byte(0x2DA3A, weak3)
         for weapon in picopico_weakness_ptrs:
             damage = world.weapon_damage[weapon][9]
             if damage < 0:
