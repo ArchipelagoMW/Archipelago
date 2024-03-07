@@ -39,7 +39,9 @@ class TestResolvePlayerName(unittest.TestCase):
         assert p.resolve_player("ABC") == (1, 2, "abc"), "case insensitive resolves when 1 match"
         assert p.resolve_player("abcd") == (1, 3, "abCD"), "case insensitive resolves when 1 match"
         assert not p.resolve_player("aB"), "partial name shouldn't resolve to player"
-    
+
+
+class TestTextProcessor(unittest.TestCase):
     def test_echo_commands_on_request(self) -> None:
         processor = CommandProcessor()
         processor.echo_commands = False
