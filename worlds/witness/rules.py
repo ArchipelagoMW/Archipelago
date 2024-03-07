@@ -29,8 +29,9 @@ laser_hexes = [
 ]
 
 
-def _has_laser(laser_hex: str, world: "WitnessWorld", player: int) -> Callable[[CollectionState], bool]:
-    if laser_hex == "0x012FB":
+def _has_laser(laser_hex: str, world: "WitnessWorld", player: int,
+               redirect_required: bool) -> Callable[[CollectionState], bool]:
+    if laser_hex == "0x012FB" and redirect_required:
         return lambda state: (
             _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
             and state.has("Desert Laser Redirection", player)
@@ -39,11 +40,11 @@ def _has_laser(laser_hex: str, world: "WitnessWorld", player: int) -> Callable[[
         return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)
 
 
-def _has_lasers(amount: int, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> Callable[[CollectionState], bool]:
     laser_lambdas = []
 
     for laser_hex in laser_hexes:
-        has_laser_lambda = _has_laser(laser_hex, world, world.player)
+        has_laser_lambda = _has_laser(laser_hex, world, world.player, redirect_required)
 
         laser_lambdas.append(has_laser_lambda)
 
@@ -155,15 +156,21 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
         return lambda state: state.can_reach(item, "Region", player)
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
-        return _has_lasers(laser_req, world)
+        return _has_lasers(laser_req, world, False)
+    if item == "7 Lasers + Redirect":
+        laser_req = world.options.mountain_lasers.value
+        return _has_lasers(laser_req, world, True)
     if item == "11 Lasers":
         laser_req = world.options.challenge_lasers.value
-        return _has_lasers(laser_req, world)
+        return _has_lasers(laser_req, world, False)
+    if item == "11 Lasers + Redirect":
+        laser_req = world.options.challenge_lasers.value
+        return _has_lasers(laser_req, world, True)
     elif item == "PP2 Weirdness":
         return lambda state: _can_do_expert_pp2(state, world)
     elif item == "Theater to Tunnels":
         return lambda state: _can_do_theater_to_tunnels(state, world)
-    if item in player_logic.EVENT_PANELS:
+    if item in player_logic.USED_EVENT_NAMES_BY_HEX:
         return _can_solve_panel(item, world, player, player_logic, locat)
 
     prog_item = StaticWitnessLogic.get_parent_progressive_item(item)
