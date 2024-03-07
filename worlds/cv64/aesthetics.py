@@ -357,10 +357,16 @@ def randomize_shop_prices(world: "CV64World") -> Dict[int, int]:
 
     shop_price_list = [world.random.randint(min_price * 100, max_price * 100) for _ in range(7)]
 
-    # Convert the price list into a data dict
+    # Convert the price list into a data dict. Which offset it starts from depends on how many bytes it takes up.
     price_dict = {}
     for i in range(len(shop_price_list)):
-        price_dict[0x103D6E + (i*12)] = shop_price_list[i]
+        if shop_price_list[i] <= 0xFF:
+            price_dict[0x103D6E + (i*12)] = 0
+            price_dict[0x103D6F + (i*12)] = shop_price_list[i]
+        elif shop_price_list[i] <= 0xFFFF:
+            price_dict[0x103D6E + (i*12)] = shop_price_list[i]
+        else:
+            price_dict[0x103D6D + (i*12)] = shop_price_list[i]
 
     return price_dict
 
@@ -490,36 +496,37 @@ def get_location_data(world: "CV64World", active_locations: Iterable[Location]) 
                 rom_axe_cross_lower_values[loc.address & 0xFFF][1]
 
         # Figure out the list of shop names, descriptions, and text colors here.
-        if loc.parent_region.name == rname.renon:
+        if loc.parent_region.name != rname.renon:
+            continue
 
-            shop_name = loc.item.name
-            if len(shop_name) > 18:
-                shop_name = shop_name[0:18]
-            shop_name_list.append(shop_name)
+        shop_name = loc.item.name
+        if len(shop_name) > 18:
+            shop_name = shop_name[0:18]
+        shop_name_list.append(shop_name)
 
-            if loc.item.player == world.player:
-                shop_desc_list.append([get_item_info(loc.item.name, "code"), None])
-            elif loc.item.game == "Castlevania 64":
-                shop_desc_list.append([get_item_info(loc.item.name, "code"),
-                                       world.multiworld.get_player_name(loc.item.player)])
+        if loc.item.player == world.player:
+            shop_desc_list.append([get_item_info(loc.item.name, "code"), None])
+        elif loc.item.game == "Castlevania 64":
+            shop_desc_list.append([get_item_info(loc.item.name, "code"),
+                                   world.multiworld.get_player_name(loc.item.player)])
+        else:
+            if loc.item.game == "DLCQuest" and loc.item.name in ["DLC Quest: Coin Bundle",
+                                                                 "Live Freemium or Die: Coin Bundle"]:
+                if getattr(world.multiworld.worlds[loc.item.player].options, "coinbundlequantity") == 1:
+                    shop_desc_list.append(["dlc coin", world.multiworld.get_player_name(loc.item.player)])
+                    shop_colors_list.append(get_item_text_color(loc))
+                    continue
+
+            if loc.item.advancement:
+                shop_desc_list.append(["prog", world.multiworld.get_player_name(loc.item.player)])
+            elif loc.item.classification == ItemClassification.useful:
+                shop_desc_list.append(["useful", world.multiworld.get_player_name(loc.item.player)])
+            elif loc.item.classification == ItemClassification.trap:
+                shop_desc_list.append(["trap", world.multiworld.get_player_name(loc.item.player)])
             else:
-                if loc.item.game == "DLCQuest" and loc.item.name in ["DLC Quest: Coin Bundle",
-                                                                     "Live Freemium or Die: Coin Bundle"]:
-                    if getattr(world.multiworld.worlds[loc.item.player].options, "coinbundlequantity") == 1:
-                        shop_desc_list.append(["dlc coin", world.multiworld.get_player_name(loc.item.player)])
-                        shop_colors_list.append(get_item_text_color(loc))
-                        continue
+                shop_desc_list.append(["common", world.multiworld.get_player_name(loc.item.player)])
 
-                if loc.item.advancement:
-                    shop_desc_list.append(["prog", world.multiworld.get_player_name(loc.item.player)])
-                elif loc.item.classification == ItemClassification.useful:
-                    shop_desc_list.append(["useful", world.multiworld.get_player_name(loc.item.player)])
-                elif loc.item.classification == ItemClassification.trap:
-                    shop_desc_list.append(["trap", world.multiworld.get_player_name(loc.item.player)])
-                else:
-                    shop_desc_list.append(["common", world.multiworld.get_player_name(loc.item.player)])
-
-            shop_colors_list.append(get_item_text_color(loc))
+        shop_colors_list.append(get_item_text_color(loc))
 
     return location_bytes, shop_name_list, shop_colors_list, shop_desc_list
 
@@ -582,48 +589,50 @@ def get_start_inventory_data(player: int, options: CV64Options, precollected_ite
 
     items_max = 10
 
-    # Raise the items max if increase item limit is enabled.
+    # Raise the items max if Increase Item Limit is enabled.
     if options.increase_item_limit:
-        items_max = 100
+        items_max = 99
 
     for item in precollected_items:
-        if item.player == player:
-            inventory_offset = get_item_info(item.name, "inventory offset")
-            sub_equip_id = get_item_info(item.name, "sub equip id")
-            # Starting inventory items
-            if inventory_offset is not None:
-                inventory_items_array[inventory_offset] += 1
-                if inventory_items_array[inventory_offset] > items_max and "Special" not in item.name:
-                    inventory_items_array[inventory_offset] = items_max
-                if item.name == iname.permaup:
-                    if inventory_items_array[inventory_offset] > 2:
-                        inventory_items_array[inventory_offset] = 2
-            # Starting sub-weapon
-            elif sub_equip_id is not None:
-                start_inventory_data[0xBFD883] = sub_equip_id
-            # Starting PowerUps
-            elif item.name == iname.powerup:
-                start_inventory_data[0xBFD87B] += 1
-                if start_inventory_data[0xBFD87B] > 2:
-                    start_inventory_data[0xBFD87B] = 2
-            # Starting Gold
-            elif "GOLD" in item.name:
-                total_money += int(item.name[0:4])
-                if total_money > 99999:
-                    total_money = 99999
-            # Starting Jewels
-            elif "jewel" in item.name:
-                if "L" in item.name:
-                    start_inventory_data[0xBFD867] += 10
-                else:
-                    start_inventory_data[0xBFD867] += 5
-                if start_inventory_data[0xBFD867] > 99:
-                    start_inventory_data[0xBFD867] = 99
-            # Starting Ice Traps
+        if item.player != player:
+            continue
+
+        inventory_offset = get_item_info(item.name, "inventory offset")
+        sub_equip_id = get_item_info(item.name, "sub equip id")
+        # Starting inventory items
+        if inventory_offset is not None:
+            inventory_items_array[inventory_offset] += 1
+            if inventory_items_array[inventory_offset] > items_max and "Special" not in item.name:
+                inventory_items_array[inventory_offset] = items_max
+            if item.name == iname.permaup:
+                if inventory_items_array[inventory_offset] > 2:
+                    inventory_items_array[inventory_offset] = 2
+        # Starting sub-weapon
+        elif sub_equip_id is not None:
+            start_inventory_data[0xBFD883] = sub_equip_id
+        # Starting PowerUps
+        elif item.name == iname.powerup:
+            start_inventory_data[0xBFD87B] += 1
+            if start_inventory_data[0xBFD87B] > 2:
+                start_inventory_data[0xBFD87B] = 2
+        # Starting Gold
+        elif "GOLD" in item.name:
+            total_money += int(item.name[0:4])
+            if total_money > 99999:
+                total_money = 99999
+        # Starting Jewels
+        elif "jewel" in item.name:
+            if "L" in item.name:
+                start_inventory_data[0xBFD867] += 10
             else:
-                start_inventory_data[0xBFD88B] += 1
-                if start_inventory_data[0xBFD88B] > 0xFF:
-                    start_inventory_data[0xBFD88B] = 0xFF
+                start_inventory_data[0xBFD867] += 5
+            if start_inventory_data[0xBFD867] > 99:
+                start_inventory_data[0xBFD867] = 99
+        # Starting Ice Traps
+        else:
+            start_inventory_data[0xBFD88B] += 1
+            if start_inventory_data[0xBFD88B] > 0xFF:
+                start_inventory_data[0xBFD88B] = 0xFF
 
     # Convert the inventory items into data.
     for i in range(len(inventory_items_array)):

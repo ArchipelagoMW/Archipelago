@@ -36,7 +36,8 @@ class CV64Web(WebWorld):
 
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Castlevania 64 randomizer connected to an Archipelago Multiworld.",
+        "A guide to setting up the Archipleago Castlevania 64 randomizer on your computer and connecting it to a "
+        "multiworld.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -48,7 +49,7 @@ class CV64World(World):
     """
     Castlevania for the Nintendo 64 is the first 3D game in the franchise. As either whip-wielding Belmont descendant
     Reinhardt Schneider or powerful sorceress Carrie Fernandez, brave many terrifying traps and foes as you make your
-    way to Dracula's chamber and stop his rule of terror.
+    way to Dracula's chamber and stop his rule of terror!
     """
     game = "Castlevania 64"
     item_name_groups = {
@@ -68,16 +69,16 @@ class CV64World(World):
     active_stage_exits: typing.Dict[str, typing.Dict]
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
-    reinhardt_stages: bool
-    carrie_stages: bool
-    branching_stages: bool
-    starting_stage: str
+    reinhardt_stages: bool = True
+    carrie_stages: bool = True
+    branching_stages: bool = False
+    starting_stage: str = rname.forest_of_silence
 
-    total_s1s: int
-    s1s_per_warp: int
-    total_s2s: int
-    required_s2s: int
-    drac_condition: int
+    total_s1s: int = 7
+    s1s_per_warp: int = 1
+    total_s2s: int = 0
+    required_s2s: int = 0
+    drac_condition: int = 0
 
     auth: bytearray
 
@@ -110,15 +111,8 @@ class CV64World(World):
         elif self.drac_condition == DraculasCondition.option_specials:
             self.total_s2s = self.options.total_special2s.value
             self.required_s2s = int(self.options.percent_special2s_required.value / 100 * self.total_s2s)
-        else:
-            self.total_s2s = 0
-            self.required_s2s = 0
 
         # Enable/disable character stages and branching paths accordingly
-        self.reinhardt_stages = True
-        self.carrie_stages = True
-        self.branching_stages = False
-
         if self.options.character_stages == CharacterStages.option_reinhardt_only:
             self.carrie_stages = False
         elif self.options.character_stages == CharacterStages.option_carrie_only:
@@ -139,7 +133,6 @@ class CV64World(World):
             self.active_stage_exits, self.starting_stage, self.active_stage_list = \
                 shuffle_stages(self, stage_1_blacklist)
         else:
-            self.starting_stage = rname.forest_of_silence
             self.active_stage_list = [stage for stage in vanilla_stage_order if stage in self.active_stage_exits]
 
         # Create a list of warps from the active stage list. They are in a random order by default and will never
@@ -148,47 +141,49 @@ class CV64World(World):
 
     def create_regions(self) -> None:
         # Add the Menu Region.
-        reg_names = ["Menu"]
+        created_regions = [Region("Menu", self.player, self.multiworld)]
 
         # Add every stage Region by checking to see if that stage is active.
-        reg_names.extend([name for name in get_region_names(self.active_stage_exits)])
+        created_regions.extend([Region(name, self.player, self.multiworld)
+                                for name in get_region_names(self.active_stage_exits)])
 
         # Add the Renon's shop Region if shopsanity is on.
         if self.options.shopsanity:
-            reg_names.append(rname.renon)
+            created_regions.append(Region(rname.renon, self.player, self.multiworld))
 
         # Add the Dracula's chamber (the end) Region.
-        reg_names.append(rname.ck_drac_chamber)
+        created_regions.append(Region(rname.ck_drac_chamber, self.player, self.multiworld))
 
-        # Set up the Regions correctly
-        self.multiworld.regions.extend([Region(name, self.player, self.multiworld) for name in reg_names])
+        # Set up the Regions correctly.
+        self.multiworld.regions.extend(created_regions)
 
-        # Add the warp Entrances to the Menu Region.
-        self.get_region("Menu").add_exits(get_warp_entrances(self.active_warp_list))
+        # Add the warp Entrances to the Menu Region (the one always at the start of the Region list).
+        created_regions[0].add_exits(get_warp_entrances(self.active_warp_list))
 
-        for reg_name in reg_names:
+        for reg in created_regions:
+
+            # Add the Entrances to all the Regions.
+            ent_names = get_region_info(reg.name, "entrances")
+            if ent_names is not None:
+                reg.add_exits(verify_entrances(self.options, ent_names, self.active_stage_exits))
 
             # Add the Locations to all the Regions.
-            loc_names = get_region_info(reg_name, "locations")
-            if loc_names is not None:
-                verified_locs, events = verify_locations(self.options, loc_names)
-                self.get_region(reg_name).add_locations(verified_locs, CV64Location)
+            loc_names = get_region_info(reg.name, "locations")
+            if loc_names is None:
+                continue
+            verified_locs, events = verify_locations(self.options, loc_names)
+            reg.add_locations(verified_locs, CV64Location)
 
-                # Place event Items on all of their associated Locations.
-                for event_loc in events:
-                    self.get_location(event_loc).place_locked_item(self.create_item(events[event_loc], "progression"))
-                    # If we're looking at a boss kill trophy, increment the total S2s and, if we're not already at the
-                    # set number of required bosses, the total required number. This way, we can prevent gen failures
-                    # should the player set more bosses required than there are total.
-                    if events[event_loc] == iname.trophy:
-                        self.total_s2s += 1
-                        if self.required_s2s < self.options.bosses_required.value:
-                            self.required_s2s += 1
-
-            # Add the Entrances to all the Regions
-            ent_names = get_region_info(reg_name, "entrances")
-            if ent_names is not None:
-                self.get_region(reg_name).add_exits(verify_entrances(self.options, ent_names, self.active_stage_exits))
+            # Place event Items on all of their associated Locations.
+            for event_loc, event_item in events.items():
+                self.get_location(event_loc).place_locked_item(self.create_item(event_item, "progression"))
+                # If we're looking at a boss kill trophy, increment the total S2s and, if we're not already at the
+                # set number of required bosses, the total required number. This way, we can prevent gen failures
+                # should the player set more bosses required than there are total.
+                if event_item == iname.trophy:
+                    self.total_s2s += 1
+                    if self.required_s2s < self.options.bosses_required.value:
+                        self.required_s2s += 1
 
     def create_item(self, name: str, force_classification: typing.Optional[str] = None) -> Item:
         if force_classification is not None:
@@ -282,17 +277,19 @@ class CV64World(World):
 
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         # Attach each location's stage's position to its hint information if Stage Shuffle is on.
-        if self.options.stage_shuffle:
-            stage_pos_data = {}
-            for loc in list(self.multiworld.get_locations(self.player)):
-                stage = get_region_info(loc.parent_region.name, "stage")
-                if stage is not None and loc.address is not None:
-                    num = str(self.active_stage_exits[stage]["position"]).zfill(2)
-                    path = self.active_stage_exits[stage]["path"]
-                    stage_pos_data[loc.address] = f"Stage {num}"
-                    if path != " ":
-                        stage_pos_data[loc.address] += path
-            hint_data[self.player] = stage_pos_data
+        if not self.options.stage_shuffle:
+            return
+
+        stage_pos_data = {}
+        for loc in list(self.multiworld.get_locations(self.player)):
+            stage = get_region_info(loc.parent_region.name, "stage")
+            if stage is not None and loc.address is not None:
+                num = str(self.active_stage_exits[stage]["position"]).zfill(2)
+                path = self.active_stage_exits[stage]["path"]
+                stage_pos_data[loc.address] = f"Stage {num}"
+                if path != " ":
+                    stage_pos_data[loc.address] += path
+        hint_data[self.player] = stage_pos_data
 
     def modify_multidata(self, multidata: typing.Dict[str, typing.Any]):
         # Put the player's unique authentication in connect_names.

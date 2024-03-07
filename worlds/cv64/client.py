@@ -58,17 +58,19 @@ class Castlevania64Client(BizHawkClient):
         ctx.auth = base64.b64encode(auth_raw).decode("utf-8")
 
     def on_package(self, ctx: "BizHawkClientContext", cmd: str, args: dict) -> None:
-        if cmd == "Bounced":
-            if "tags" in args:
-                if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
-                    self.received_deathlinks += 1
-                    if "cause" in args["data"]:
-                        cause = args["data"]["cause"]
-                        if len(cause) > 67:
-                            cause = cause[0x00:0x68]
-                    else:
-                        cause = f"{args['data']['source']} killed you!"
-                    self.death_causes.append(cause)
+        if cmd != "Bounced":
+            return
+        if "tags" not in args:
+            return
+        if "DeathLink" in args["tags"] and args["data"]["source"] != ctx.slot_info[ctx.slot].name:
+            self.received_deathlinks += 1
+            if "cause" in args["data"]:
+                cause = args["data"]["cause"]
+                if len(cause) > 88:
+                    cause = cause[0x00:0x89]
+            else:
+                cause = f"{args['data']['source']} killed you!"
+            self.death_causes.append(cause)
 
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
 

@@ -18,9 +18,12 @@ tabbed out of EmuHawk.
 `Controllers…`, load any `.z64` ROM first.
 - Consider clearing keybinds in `Config > Hotkeys…` if you don't intend to use them. Select the keybind and press Esc to
 clear it.
-- All non-JP versions of both Castlevania 64 and Legacy of Darkness require a Controller Pak to save data. To enable this,
-while you still have the `.z64` ROM loaded, go to `N64 > Controller Settings...`, click the dropdown by `Controller 1`, and
+- All non-Japanese versions of the N64 Castlevanias require a Controller Pak to save game data. To enable this, while
+you still have the `.z64` ROM loaded, go to `N64 > Controller Settings...`, click the dropdown by `Controller 1`, and
 click `Memory Card`. You must then restart EmuHawk for it to take effect.
+- After enabling the `Memory Card` setting, next time you boot up your Castlevania 64 ROM, you will see the 
+No "CASTLEVANIA" Note Found screen. Pick `Create "CASTLEVANIA" Note Now > Yes` to create save data and enable saving at
+the White Jewels.
 
 
 ## Generating and Patching a Game
@@ -36,9 +39,9 @@ This will generate an output file for you. Your patch file will have the `.apcv6
 7. On your first time opening a patch with BizHawk Client, you will also be asked to locate `EmuHawk.exe` in your
 BizHawk install.
 
-If you're playing a single-player seed, and you don't care about hints, you can stop here, close the
-client, and load the patched ROM in any emulator or EverDrive. However, for multiworlds and other Archipelago features, continue
-below using BizHawk as your emulator.
+If you're playing a single-player seed, and you don't care about hints, you can stop here, close the client, and load
+the patched ROM in any emulator or EverDrive of your choice. However, for multiworlds and other Archipelago features,
+continue below using BizHawk as your emulator.
 
 ## Connecting to a Server
 

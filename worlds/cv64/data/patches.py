@@ -2821,3 +2821,45 @@ item_drop_spin_corrector = [
     0x03E00008,  # JR    RA
     0xAC60FFD8,  # SW    R0, 0xFFD8 (V1)
 ]
+
+big_tosser = [
+    # Makes every hit the player takes that does not immobilize them send them flying backwards with the power of
+    # Behemoth's charge.
+    0x3C0A8038,  # LUI   T2, 0x8038
+    0x914A7D7E,  # LBU   T2, 0x7D7E (T2)
+    0x314A0020,  # ANDI  T2, T2, 0x0020
+    0x1540000D,  # BEQZ  T2,     [forward 0x0D]
+    0x3C0A800E,  # LUI   T2, 0x800E
+    0x954B8290,  # LHU   T3, 0x8290 (T2)
+    0x356B2000,  # ORI   T3, T3, 0x2000
+    0xA54B8290,  # SH    T3, 0x8290 (T2)
+    0x3C0C8035,  # LUI   T4, 0x8035
+    0x958C09DE,  # LHU   T4, 0x09DE (T4)
+    0x258C8000,  # ADDIU T4, T4, 0x8000
+    0x3C0D8039,  # LUI   T5, 0x8039
+    0xA5AC9CF0,  # SH    T4, 0x9CF0 (T5)
+    0x3C0C4160,  # LUI   T4, 0x4160
+    0xADAC9CF4,  # SW    T4, 0x9CF4 (T5)
+    0x3C0C4040,  # LUI   T4, 0x4040
+    0xADAC9CF8,  # SW    T4, 0x9CF8 (T5)
+    0x03E00008,  # JR    RA
+    0x8C680048,  # LW    T0, 0x0048 (V1)
+    0x00000000,
+    0x00000000,
+    # Allows pressing A while getting launched to cancel all XZ momentum. Useful for saving oneself from getting
+    # launched into an instant death trap.
+    0x3C088038,  # LUI   T0, 0x8038
+    0x91087D80,  # LBU   T0, 0x7D80 (T0)
+    0x31090080,  # ANDI  T1, T0, 0x0080
+    0x11200009,  # BEQZ  T1,     [forward 0x09]
+    0x3C088035,  # LUI   T0, 0x8035
+    0x8D0A079C,  # LW    T2, 0x079C (T0)
+    0x3C0B000C,  # LUI   T3, 0x000C
+    0x256B4000,  # ADDIU T3, T3, 0x4000
+    0x014B5024,  # AND   T2, T2, T3
+    0x154B0003,  # BNE   T2, T3, [forward 0x03]
+    0x00000000,  # NOP
+    0xAD00080C,  # SW    R0, 0x080C (T0)
+    0xAD000814,  # SW    R0, 0x0814 (T0)
+    0x03200008   # JR    T9
+]

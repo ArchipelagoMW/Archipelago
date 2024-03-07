@@ -283,8 +283,8 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Increase item capacity to 100 if "Increase Item Limit" is turned on
     if options.increase_item_limit:
-        rom.write_byte(0xBF30B, 0x64)  # Most items
-        rom.write_byte(0xBF3F7, 0x64)  # Sun/Moon cards
+        rom.write_byte(0xBF30B, 0x63)  # Most items
+        rom.write_byte(0xBF3F7, 0x63)  # Sun/Moon cards
     rom.write_byte(0xBF353, 0x64)  # Keys (increase regardless)
 
     # Change the item healing values if "Nerf Healing" is turned on
@@ -842,7 +842,14 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
                                         0x8C4E0000])  # LW    T6, 0x0000 (V0)
             rom.write_int32s(0xBFDEC4, patches.panther_jump_preventer)
 
-    # Write all the new item and loading zone bytes
+    # Everything related to Big Toss.
+    if options.big_toss:
+        rom.write_int32s(0x27E90, [0x0C0FFA38,   # JAL 0x803FE8E0
+                                   0xAFB80074])  # SW  T8, 0x0074 (SP)
+        rom.write_int32(0x26F54, 0x0C0FFA4D)  # JAL 0x803FE934
+        rom.write_int32s(0xBFE8E0, patches.big_tosser)
+
+    # Write all the new randomized bytes.
     for offset, item_id in offset_data.items():
         if item_id <= 0xFF:
             rom.write_byte(offset, item_id)
@@ -866,16 +873,16 @@ def patch_rom(world: "CV64World", rom: LocalRom, offset_data: Dict[int, int], sh
 
     # Write the item/player names for other game items
     for loc in active_locations:
-        if loc.address is not None and get_location_info(loc.name, "type") != "shop" and loc.item.player != player:
-            if len(loc.item.name) > 67:
-                item_name = loc.item.name[0x00:0x68]
-            else:
-                item_name = loc.item.name
-            inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
-            wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + multiworld.get_player_name(
-                loc.item.player), 96)
-            rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytearray(wrapped_name))
-            rom.write_byte(inject_address + 255, num_lines)
+        if loc.address is None or get_location_info(loc.name, "type") == "shop" or loc.item.player == player:
+            continue
+        if len(loc.item.name) > 67:
+            item_name = loc.item.name[0x00:0x68]
+        else:
+            item_name = loc.item.name
+        inject_address = 0xBB7164 + (256 * (loc.address & 0xFFF))
+        wrapped_name, num_lines = cv64_text_wrap(item_name + "\nfor " + multiworld.get_player_name(loc.item.player), 96)
+        rom.write_bytes(inject_address, get_item_text_color(loc) + cv64_string_to_bytearray(wrapped_name))
+        rom.write_byte(inject_address + 255, num_lines)
 
     # Everything relating to loading the other game items text
     rom.write_int32(0xA8D8C, 0x080FF88F)  # J   0x803FE23C

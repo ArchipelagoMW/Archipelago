@@ -264,15 +264,16 @@ def get_normal_stage_exits(world: "CV64World") -> Dict[str, dict]:
             continue
 
         # If branching pathways are not enabled, update the exit info to converge said stages on a single path.
-        if not world.branching_stages:
-            if world.carrie_stages and not world.reinhardt_stages and exits[stage]["alt"] is not None:
-                exits[stage]["next"] = exits[stage]["alt"]
-            elif world.carrie_stages and world.reinhardt_stages and stage != rname.castle_keep:
-                exits[stage]["next"] = vanilla_stage_order[vanilla_stage_order.index(stage) + 1]
-            exits[stage]["alt"] = None
-            exits[stage]["position"] = non_branching_pos
-            exits[stage]["path"] = " "
-            non_branching_pos += 1
+        if world.branching_stages:
+            continue
+        if world.carrie_stages and not world.reinhardt_stages and exits[stage]["alt"] is not None:
+            exits[stage]["next"] = exits[stage]["alt"]
+        elif world.carrie_stages and world.reinhardt_stages and stage != rname.castle_keep:
+            exits[stage]["next"] = vanilla_stage_order[vanilla_stage_order.index(stage) + 1]
+        exits[stage]["alt"] = None
+        exits[stage]["position"] = non_branching_pos
+        exits[stage]["path"] = " "
+        non_branching_pos += 1
 
     return exits
 
@@ -319,9 +320,9 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str]) \
 
     starting_stage_value = world.options.starting_stage.value
 
-    # Verify the starting stage is valid. If it isn't, or if the mystery setting is being used, pick a stage at random.
-    if starting_stage_value < len(vanilla_stage_order) - 1 and vanilla_stage_order[starting_stage_value] not in \
-            stage_1_blacklist and verify_character_stage(world, vanilla_stage_order[starting_stage_value]):
+    # Verify the starting stage is valid. If it isn't, pick a stage at random.
+    if vanilla_stage_order[starting_stage_value] not in stage_1_blacklist and \
+            verify_character_stage(world, vanilla_stage_order[starting_stage_value]):
         starting_stage = vanilla_stage_order[starting_stage_value]
     else:
         possible_stages = []
@@ -376,16 +377,17 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str]) \
                 remaining_stage_pool.remove(new_stage_order[i])
 
         # If we're looking at an alternate stage slot, put the stage in one of these lists to indicate it as such
-        if world.branching_stages:
-            if i - 2 >= 0:
-                if new_stage_order[i - 2] == rname.villa:
-                    alt_villa_stage.append(new_stage_order[i])
-            if i - 3 >= 0:
-                if new_stage_order[i - 3] == rname.castle_center:
-                    alt_cc_stages.append(new_stage_order[i])
-            if i - 4 >= 0:
-                if new_stage_order[i - 4] == rname.castle_center:
-                    alt_cc_stages.append(new_stage_order[i])
+        if not world.branching_stages:
+            continue
+        if i - 2 >= 0:
+            if new_stage_order[i - 2] == rname.villa:
+                alt_villa_stage.append(new_stage_order[i])
+        if i - 3 >= 0:
+            if new_stage_order[i - 3] == rname.castle_center:
+                alt_cc_stages.append(new_stage_order[i])
+        if i - 4 >= 0:
+            if new_stage_order[i - 4] == rname.castle_center:
+                alt_cc_stages.append(new_stage_order[i])
 
     new_stage_order.append(rname.castle_keep)
 

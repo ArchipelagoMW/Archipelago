@@ -3,10 +3,11 @@ from Options import Choice, DefaultOnToggle, Range, Toggle, PerGameCommonOptions
 
 
 class CharacterStages(Choice):
-    """Whether to include Reinhardt-only stages, Carrie-only stages, or both."""
+    """Whether to include Reinhardt-only stages, Carrie-only stages, or both with or without branching paths at the end
+    of Villa and Castle Center."""
     display_name = "Character Stages"
     option_both = 0
-    option_both_no_branches = 1
+    option_branchless_both = 1
     option_reinhardt_only = 2
     option_carrie_only = 3
     default = 0
@@ -14,7 +15,7 @@ class CharacterStages(Choice):
 
 class StageShuffle(Toggle):
     """Shuffles which stages appear in which stage slots. Villa and Castle Center will never appear in any character
-    stage slots if all character stages are included; they can only be somewhere on the main path.
+    stage slots if Character Stages is set to Both; they can only be somewhere on the main path.
     Castle Keep will always be at the end of the line."""
     display_name = "Stage Shuffle"
 
@@ -34,13 +35,12 @@ class StartingStage(Choice):
     option_tower_of_sorcery = 9
     option_room_of_clocks = 10
     option_clock_tower = 11
-    option_mystery = 12
-    default = 12
+    default = "random"
 
 
 class WarpOrder(Choice):
     """Arranges the warps in the warp menu in whichever stage order chosen,
-    thus changing the order they are unlocked in."""
+    thereby changing the order they are unlocked in."""
     display_name = "Warp Order"
     option_seed_stage_order = 0
     option_vanilla_stage_order = 1
@@ -49,7 +49,7 @@ class WarpOrder(Choice):
 
 
 class SubWeaponShuffle(Choice):
-    """Shuffles all sub-weapons in the game within their own pool or in the main item pool."""
+    """Shuffles all sub-weapons in the game within each other in their own pool or in the main item pool."""
     display_name = "Sub-weapon Shuffle"
     option_off = 0
     option_own_pool = 1
@@ -58,9 +58,8 @@ class SubWeaponShuffle(Choice):
 
 
 class SpareKeys(Choice):
-    """Puts an additional copy of every key item in the pool for every key item that there is to ensure fewer specific
-    locations are required. Chance gives each key item a 50% chance of having a duplicate instead of guaranteeing one
-    for all of them."""
+    """Puts an additional copy of every non-Special key item in the pool for every key item that there is.
+    Chance gives each key item a 50% chance of having a duplicate instead of guaranteeing one for all of them."""
     display_name = "Spare Keys"
     option_off = 0
     option_on = 1
@@ -83,7 +82,8 @@ class Special1sPerWarp(Range):
 
 
 class TotalSpecial1s(Range):
-    """Sets how many Speical1 jewels are in the pool in total. This cannot be less than Special1s Per Warp x 7."""
+    """Sets how many Speical1 jewels are in the pool in total.
+    If this is set to be less than Special1s Required x 7, it will increase by 1 until it isn't."""
     range_start = 1
     range_end = 70
     default = 7
@@ -106,7 +106,7 @@ class DraculasCondition(Choice):
 
 class PercentSpecial2sRequired(Range):
     """Percentage of Special2s required to enter Dracula's chamber when Dracula's Condition is Special2s."""
-    range_start = 10
+    range_start = 1
     range_end = 100
     default = 100
     display_name = "Percent Special2s Required"
@@ -121,8 +121,8 @@ class TotalSpecial2s(Range):
 
 
 class BossesRequired(Range):
-    """Sets how many bosses need to be defeated to enter Dracula's chamber. Only applies if Dracula's Chamber Condition
-    is set to Bosses. Completely disabling the Renon and/or Vincent fights will decrease this number if above 14."""
+    """How many bosses need to be defeated to enter Dracula's chamber when Dracula's Condition is set to Bosses.
+    This will automatically adjust if there are fewer available bosses than the chosen number."""
     range_start = 1
     range_end = 16
     default = 14
@@ -130,35 +130,36 @@ class BossesRequired(Range):
 
 
 class CarrieLogic(Toggle):
-    """Adds the 2 checks inside Underground Waterway's crawlspace to the pool. If you are not yet certain that you
-    (and everyone else if racing the same seed) will be playing as Carrie, don't enable this. Can be combined with
-    Glitch Logic to include Carrie-only tricks."""
+    """Adds the 2 checks inside Underground Waterway's crawlspace to the pool.
+    If you (and everyone else if racing the same seed) are planning to only ever play Reinhardt, don't enable this.
+    Can be combined with Hard Logic to include Carrie-only tricks."""
     display_name = "Carrie Logic"
 
 
 class HardLogic(Toggle):
-    """Properly considers sequence break tricks in logic (i.e. Left Tower skip). Can be combined with Carrie Logic to
-    include Carrie-only skips. See the FAQ for a full list of tricks and glitches that may be logically required."""
+    """Properly considers sequence break tricks in logic (i.e. maze skip). Can be combined with Carrie Logic to include
+    Carrie-only tricks.
+    See the FAQ page for a full list of tricks and glitches that may be logically required."""
     display_name = "Hard Logic"
 
 
 class MultiHitBreakables(Toggle):
     """Adds the items that drop from the objects that break in three hits to the pool. There are 17 of these throughout
-    the game adding up to 74 checks in total. The game will be modified to remember exactly which of their items you've
-    picked up instead of simply whether they were broken or not."""
+    the game, adding up to 74 checks in total with all stages.
+    The game will be modified to
+    remember exactly which of their items you've picked up instead of simply whether they were broken or not."""
     display_name = "Multi-hit Breakables"
 
 
 class EmptyBreakables(Toggle):
-    """Adds 9 check locations in the form of breakables that normally have nothing (i.e. many Forest coffins, the candle
-    in the Villa foyer that drops nothing, etc.) and some additional Red Jewels and/or moneybags into the item pool to
-    compensate."""
+    """Adds 9 check locations in the form of breakables that normally have nothing (all empty Forest coffins, etc.)
+    and some additional Red Jewels and/or moneybags into the item pool to compensate."""
     display_name = "Empty Breakables"
 
 
 class LizardLockerItems(Toggle):
-    """Adds the 6 items inside Castle Center 2F's Lizard-man generators to the pool. Picking up all of these can be a
-    very time-consuming and luck-based process, so they are excluded by default."""
+    """Adds the 6 items inside Castle Center 2F's Lizard-man generators to the pool.
+    Picking up all of these can be a very tedious luck-based process, so they are off by default."""
     display_name = "Lizard Locker Items"
 
 
@@ -178,8 +179,7 @@ class ShopPrices(Choice):
 
 
 class MinimumGoldPrice(Range):
-    """The lowest amount of gold an item can cost in Renon's shop, divided by 100.
-    Only applies if shop prices are randomized."""
+    """The lowest amount of gold an item can cost in Renon's shop, divided by 100."""
     display_name = "Minimum Gold Price"
     range_start = 1
     range_end = 50
@@ -187,8 +187,7 @@ class MinimumGoldPrice(Range):
 
 
 class MaximumGoldPrice(Range):
-    """The highest amount of gold an item can cost in Renon's shop, divided by 100.
-    Only applies if shop prices are randomized."""
+    """The highest amount of gold an item can cost in Renon's shop, divided by 100."""
     display_name = "Maximum Gold Price"
     range_start = 1
     range_end = 50
@@ -196,8 +195,8 @@ class MaximumGoldPrice(Range):
 
 
 class PostBehemothBoss(Choice):
-    """Sets which boss is fought in the vampire triplets' room
-    in Castle Center by which characters after defeating Behemoth."""
+    """Sets which boss is fought in the vampire triplets' room in Castle Center by which characters after defeating
+    Behemoth."""
     display_name = "Post-Behemoth Boss"
     option_vanilla = 0
     option_inverted = 1
@@ -217,37 +216,34 @@ class RoomOfClocksBoss(Choice):
 
 
 class RenonFightCondition(Choice):
-    """Sets the condition on which the Renon fight will trigger.
-    Vanilla = after spending more than 30,000 gold in his shop."""
+    """Sets the condition on which the Renon fight will trigger."""
     display_name = "Renon Fight Condition"
     option_never = 0
     option_spend_30k = 1
     option_always = 2
-    default = 0
+    default = 1
 
 
 class VincentFightCondition(Choice):
-    """Sets the condition on which the vampire Vincent fight will trigger.
-    Vanilla = after 16 or more in-game days pass."""
+    """Sets the condition on which the vampire Vincent fight will trigger."""
     display_name = "Vincent Fight Condition"
     option_never = 0
     option_wait_16_days = 1
     option_always = 2
-    default = 0
+    default = 1
 
 
 class BadEndingCondition(Choice):
-    """Sets the condition on which the currently-controlled character's Bad Ending will trigger.
-    Vanilla = after defeating vampire Vincent."""
+    """Sets the condition on which the currently-controlled character's Bad Ending will trigger."""
     display_name = "Bad Ending Condition"
     option_never = 0
-    option_defeat_vincent = 1
+    option_kill_vincent = 1
     option_always = 2
-    default = 0
+    default = 1
 
 
 class IncreaseItemLimit(DefaultOnToggle):
-    """Increases the holding limit of usable items from 10 to 100 of each item."""
+    """Increases the holding limit of usable items from 10 to 99 of each item."""
     display_name = "Increase Item Limit"
 
 
@@ -259,11 +255,12 @@ class NerfHealingItems(Toggle):
 class LoadingZoneHeals(DefaultOnToggle):
     """Whether end-of-level loading zones restore health and cure status aliments or not.
     Recommended off for those looking for more of a survival horror experience!"""
+    display_name = "Loading Zone Heals"
 
 
 class InvisibleItems(Choice):
-    """Sets which items are visible in their locations and which are invisible until picked up. 'Chance' gives each item
-    a 50/50 chance of being visible or invisible."""
+    """Sets which items are visible in their locations and which are invisible until picked up.
+    'Chance' gives each item a 50/50 chance of being visible or invisible."""
     display_name = "Invisible Items"
     option_vanilla = 0
     option_reveal_all = 1
@@ -273,18 +270,21 @@ class InvisibleItems(Choice):
 
 
 class DropPreviousSubWeapon(Toggle):
-    """When picking up a sub-weapon, the one you had before will drop behind you, so it can be taken back if desired."""
+    """When receiving a sub-weapon, the one you had before will drop behind you, so it can be taken back if desired."""
     display_name = "Drop Previous Sub-weapon"
 
 
 class PermanentPowerUps(Toggle):
-    """Replaces PowerUps with PermaUps, which upgrade your B weapon level permanently after receiving them even after
-    death. To compensate, only two will be in the pool overall, and they will not drop from any enemy or projectile."""
+    """Replaces PowerUps with PermaUps, which upgrade your B weapon level permanently and will stay even after
+    dying and/or continuing.
+    To compensate, only two will be in the pool overall, and they will not drop from any enemy or projectile."""
     display_name = "Permanent PowerUps"
 
 
 class IceTrapPercentage(Range):
-    """Replaces a percentage of junk items with Ice Traps."""
+    """Replaces a percentage of junk items with Ice Traps.
+    These will be visibly disguised as other items, and receiving one will freeze you
+    as if you were hit by Camilla's ice cloud attack."""
     display_name = "Ice Trap Percentage"
     range_start = 0
     range_end = 100
@@ -292,7 +292,7 @@ class IceTrapPercentage(Range):
 
 
 class IceTrapAppearance(Choice):
-    """Changes the appearance of ice traps as freestanding items."""
+    """What items Ice Traps can possibly be disguised as."""
     display_name = "Ice Trap Appearance"
     option_major_only = 0
     option_junk_only = 1
@@ -301,27 +301,31 @@ class IceTrapAppearance(Choice):
 
 
 class DisableTimeRestrictions(Toggle):
-    """Disables the time restriction on every event and door that requires the current time to be something specific
-     (sun/moon doors, meeting Rosa, and the Villa fountain). The Villa coffin is not affected by this."""
+    """Disables the restriction on every event and door that requires the current time
+    to be within a specific range, so they can be triggered at any time.
+    This includes all sun/moon doors and, in the Villa, the meeting with Rosa and the fountain pillar.
+    The Villa coffin is not affected by this."""
     display_name = "Disable Time Requirements"
 
 
 class SkipGondolas(Toggle):
-    """Makes jumping on and activating a gondola in Tunnel instantly teleport you to the other station, thereby skipping
-    the entire three-minute wait to ride the gondolas. The item normally at the gondola transfer point will be moved to
-    instead be near the red gondola at its station."""
+    """Makes jumping on and activating a gondola in Tunnel instantly teleport you
+    to the other station, thereby skipping the entire three-minute ride.
+    The item normally at the gondola transfer point is moved to instead be
+    near the red gondola at its station."""
     display_name = "Skip Gondolas"
 
 
 class SkipWaterwayBlocks(Toggle):
     """Opens the door to the third switch in Underground Waterway from the start so that the jumping across floating
-    brick platforms won't have to be done."""
+    brick platforms won't have to be done. Shopping at the Contract on the other side of them may still be logically
+    required if Shopsanity is on."""
     display_name = "Skip Waterway Blocks"
 
 
 class Countdown(Choice):
-    """Displays, below the HUD clock, the number of unobtained progression-marked items or locations remaining in the
-    stage you're currently in."""
+    """Displays, below the HUD clock, the number of unobtained progression-marked items or the total check
+    locations remaining in the stage you are currently in."""
     display_name = "Countdown"
     option_none = 0
     option_majors = 1
@@ -329,11 +333,20 @@ class Countdown(Choice):
     default = 0
 
 
+class BigToss(Toggle):
+    """Makes every non-immobilizing damage source launch you as if you got hit by Behemoth's charge.
+    Press A while tossed to cancel the launch momentum and avoid being thrown off ledges.
+    Hold Z to have all incoming damage be treated as it normally would.
+    Any tricks that might be possible with it are NOT considered in logic on any setting."""
+    display_name = "Big Toss"
+
+
 class PantherDash(Choice):
-    """Hold C-right at any time to sprint way faster. Any sequence breaks that might be possible with it are NOT
-    considered in logic on any setting and any boss fights with boss health meters, if started, are expected to be
-    finished before leaving their arenas if Dracula's Condition is bosses. Jumpless will prevent jumping while moving at
-    the increased speed to make it impossible to cheat logic with it."""
+    """Hold C-right at any time to sprint way faster. Any tricks that might be
+    possible with it are NOT considered in logic on any setting and any boss
+    fights with boss health meters, if started, are expected to be finished
+    before leaving their arenas if Dracula's Condition is bosses. Jumpless will
+    prevent jumping while moving at the increased speed to ensure logic cannot be broken with it."""
     display_name = "Panther Dash"
     option_off = 0
     option_on = 1
@@ -347,13 +360,14 @@ class IncreaseShimmySpeed(Toggle):
 
 
 class FallGuard(Toggle):
-    """Removes fall damage from landing hard. Note that falling for too long will still result in instant death."""
+    """Removes fall damage from landing too hard. Note that falling for too long will still result in instant death."""
     display_name = "Fall Guard"
 
 
 class BackgroundMusic(Choice):
-    """Randomizes or disables the music heard throughout the game. Randomized music is split into two pools: songs that
-    loop and songs that don't."""
+    """Randomizes or disables the music heard throughout the game.
+    Randomized music is split into two pools: songs that loop and songs that don't.
+    The "lead-in" versions of some songs will be paired accordingly."""
     display_name = "Background Music"
     option_normal = 0
     option_disabled = 1
@@ -376,7 +390,7 @@ class CinematicExperience(Toggle):
 
 
 class WindowColorR(Range):
-    """The red color value for the text windows during gameplay."""
+    """The red value for the background color of the text windows during gameplay."""
     display_name = "Window Color R"
     range_start = 0
     range_end = 15
@@ -384,7 +398,7 @@ class WindowColorR(Range):
 
 
 class WindowColorG(Range):
-    """The green color value for the text windows during gameplay."""
+    """The green value for the background color of the text windows during gameplay."""
     display_name = "Window Color G"
     range_start = 0
     range_end = 15
@@ -392,7 +406,7 @@ class WindowColorG(Range):
 
 
 class WindowColorB(Range):
-    """The blue color value for the text windows during gameplay."""
+    """The blue value for the background color of the text windows during gameplay."""
     display_name = "Window Color B"
     range_start = 0
     range_end = 15
@@ -400,7 +414,7 @@ class WindowColorB(Range):
 
 
 class WindowColorA(Range):
-    """The alpha value for the text windows during gameplay."""
+    """The alpha value for the background color of the text windows during gameplay."""
     display_name = "Window Color A"
     range_start = 0
     range_end = 15
@@ -409,8 +423,8 @@ class WindowColorA(Range):
 
 class DeathLink(Choice):
     """When you die, everyone dies. Of course the reverse is true too.
-    explosive: Makes received DeathLinks kill you via the Magical Nitro explosion rather than the normal death
-    animation."""
+    Explosive: Makes received DeathLinks kill you via the Magical Nitro explosion
+    instead of the normal death animation."""
     display_name = "DeathLink"
     option_off = 0
     alias_no = 0
@@ -425,7 +439,6 @@ class CV64Options(PerGameCommonOptions):
     character_stages: CharacterStages
     stage_shuffle: StageShuffle
     starting_stage: StartingStage
-    # custom_stage_order: CustomStageOrder
     warp_order: WarpOrder
     sub_weapon_shuffle: SubWeaponShuffle
     spare_keys: SpareKeys
@@ -462,6 +475,7 @@ class CV64Options(PerGameCommonOptions):
     skip_gondolas: SkipGondolas
     skip_waterway_blocks: SkipWaterwayBlocks
     countdown: Countdown
+    big_toss: BigToss
     panther_dash: PantherDash
     increase_shimmy_speed: IncreaseShimmySpeed
     background_music: BackgroundMusic
