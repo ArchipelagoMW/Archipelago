@@ -160,6 +160,16 @@ def set_ladder_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, in
     # Ability Shuffle Exclusive Rules
     set_rule(multiworld.get_location("Far Shore - Page Pickup", player),
              lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(multiworld.get_location("Maze Cave - Maze Room Holy Cross", player),
+             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Southwest] Haiku Holy Cross", player),
+             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Northeast] Flowers Holy Cross", player),
+             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [Southwest] Flowers Holy Cross", player),
+             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+    set_rule(multiworld.get_location("Overworld - [East] Weathervane Holy Cross", player),
+             lambda state: has_ability(state, player, prayer, options, ability_unlocks))
     set_rule(multiworld.get_location("Fortress Courtyard - Chest Near Cave", player),
              lambda state: can_ladder_storage(state, player, options)
              or has_ability(state, player, prayer, options, ability_unlocks)
@@ -265,7 +275,8 @@ def set_ladder_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, in
     set_rule(multiworld.get_location("Overworld - [East] Chest In Trees", player),
              lambda state: state.has_any({laurels, "Ladders near Weathervane"}, player))
     set_rule(multiworld.get_location("Hourglass Cave - Holy Cross Chest", player),
-             lambda state: state.has("Hourglass Cave Ladders", player))
+             lambda state: state.has("Hourglass Cave Ladders", player)
+             and has_ability(state, player, prayer, options, ability_unlocks))
     set_rule(multiworld.get_location("Overworld - [Northwest] Chest Near Golden Obelisk", player),
              lambda state: state.has("Ladders near Dark Tomb", player)
              or (can_reach_upper_overworld(state, player, options, ability_unlocks) 
