@@ -121,12 +121,12 @@ class TunicWorld(World):
                 items_to_create[rgb_hexagon] = 0
             items_to_create[gold_hexagon] -= 3
 
-        # Filler items that are still in the item pool to swap out
+        # Filler items in the item pool
         available_filler: List[str] = [filler for filler in items_to_create if items_to_create[filler] > 0 and
                                        item_table[filler].classification == ItemClassification.filler]
-
+        
+        # Remove filler to make room for other items
         def remove_filler(amount: int):
-            # Remove filler to make room for other items
             for _ in range(0, amount):
                 if not available_filler:
                     fill = "Fool Trap"
@@ -166,8 +166,8 @@ class TunicWorld(World):
             items_to_create["Scavenger Mask"] = 0
 
         if self.options.lanternless:
-            mask_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
-            tunic_items.append(mask_item)
+            lantern_item = TunicItem("Lantern", ItemClassification.useful, self.item_name_to_id["Lantern"], self.player)
+            tunic_items.append(lantern_item)
             items_to_create["Lantern"] = 0
 
         for item, quantity in items_to_create.items():
@@ -191,14 +191,16 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
-            
+
+        # ladder rando uses ER with vanilla connections, so that we're not managing more rules files
         if self.options.entrance_rando or self.options.shuffle_ladders:
             portal_pairs = create_er_regions(self)
             if self.options.entrance_rando:
+                # these get interpreted by the game to tell it which entrances to connect
                 for portal1, portal2 in portal_pairs.items():
                     self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
-
         else:
+            # for non-ER, non-ladder
             region_list = tunic_regions
 
             for region_name in region_list:
@@ -247,9 +249,10 @@ class TunicWorld(World):
                 name, connection = paths[location.parent_region]
                 while connection != ("Menu", None):
                     name, connection = connection
-                    # was getting some cases like Library Grave -> Library Grave -> other place
+                    # for LS entrances, we just want to give the portal name
                     if "(LS)" in name:
                         name, _ = name.split(" (LS) ")
+                    # was getting some cases like Library Grave -> Library Grave -> other place
                     if name in portal_names and name != previous_name:
                         previous_name = name
                         path_to_loc.append(name)
