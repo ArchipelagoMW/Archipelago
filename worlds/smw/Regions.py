@@ -1,6 +1,6 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import CollectionState, MultiWorld, Region, Entrance
 from .Locations import SMWLocation
 from .Levels import level_info_dict
 from .Names import LocationName, ItemName
@@ -1855,201 +1855,200 @@ def connect_regions(world: World, level_to_tile_dict):
 
     names: typing.Dict[str, int] = {}
 
-    connect(multiworld, player, names, "Menu", LocationName.yoshis_island_region)
-    connect(multiworld, player, names, LocationName.yoshis_island_region, LocationName.yoshis_house_tile)
-    connect(multiworld, player, names, LocationName.yoshis_house_tile, LocationName.donut_plains_top_secret)
-    connect(multiworld, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_1_tile)
-    connect(multiworld, player, names, LocationName.yoshis_island_region, LocationName.yoshis_island_2_tile)
+    connect(world, "Menu", LocationName.yoshis_island_region)
+    connect(world, LocationName.yoshis_island_region, LocationName.yoshis_house_tile)
+    connect(world, LocationName.yoshis_island_region, LocationName.yoshis_island_1_tile)
+    connect(world, LocationName.yoshis_island_region, LocationName.yoshis_island_2_tile)
 
     # Connect regions within levels using rules
-    connect(multiworld, player, names, LocationName.yoshis_island_1_region, LocationName.yoshis_island_1_exit_1)
-    connect(multiworld, player, names, LocationName.yoshis_island_2_region, LocationName.yoshis_island_2_exit_1)
-    connect(multiworld, player, names, LocationName.yoshis_island_3_region, LocationName.yoshis_island_3_exit_1)
-    connect(multiworld, player, names, LocationName.yoshis_island_4_region, LocationName.yoshis_island_4_exit_1)
-    connect(multiworld, player, names, LocationName.yoshis_island_castle_region, LocationName.yoshis_island_castle,
+    connect(world, LocationName.yoshis_island_1_region, LocationName.yoshis_island_1_exit_1)
+    connect(world, LocationName.yoshis_island_2_region, LocationName.yoshis_island_2_exit_1)
+    connect(world, LocationName.yoshis_island_3_region, LocationName.yoshis_island_3_exit_1)
+    connect(world, LocationName.yoshis_island_4_region, LocationName.yoshis_island_4_exit_1)
+    connect(world, LocationName.yoshis_island_castle_region, LocationName.yoshis_island_castle,
             lambda state: (state.has(ItemName.mario_climb, player)))
 
-    connect(multiworld, player, names, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_1)
-    connect(multiworld, player, names, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_2,
+    connect(world, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_1)
+    connect(world, LocationName.donut_plains_1_region, LocationName.donut_plains_1_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.yoshi_activate, player) or
                            state.has(ItemName.green_switch_palace, player) or
                            (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3)))))
-    connect(multiworld, player, names, LocationName.donut_plains_2_region, LocationName.donut_plains_2_exit_1)
-    connect(multiworld, player, names, LocationName.donut_plains_2_region, LocationName.donut_plains_2_exit_2,
+    connect(world, LocationName.donut_plains_2_region, LocationName.donut_plains_2_exit_1)
+    connect(world, LocationName.donut_plains_2_region, LocationName.donut_plains_2_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.yoshi_activate, player) or
                            (state.has(ItemName.mario_spin_jump, player) and state.has(ItemName.mario_climb, player) and state.has(ItemName.progressive_powerup, player, 1)))))
-    connect(multiworld, player, names, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_1,
+    connect(world, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_2,
+    connect(world, LocationName.donut_secret_1_region, LocationName.donut_secret_1_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.p_switch, player)))
-    connect(multiworld, player, names, LocationName.donut_ghost_house_region, LocationName.donut_ghost_house_exit_1,
+    connect(world, LocationName.donut_ghost_house_region, LocationName.donut_ghost_house_exit_1,
             lambda state: (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3)))
-    connect(multiworld, player, names, LocationName.donut_ghost_house_region, LocationName.donut_ghost_house_exit_2,
+    connect(world, LocationName.donut_ghost_house_region, LocationName.donut_ghost_house_exit_2,
             lambda state: (state.has(ItemName.mario_climb, player) or
                            (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3))))
-    connect(multiworld, player, names, LocationName.donut_secret_house_region, LocationName.donut_secret_house_exit_1,
+    connect(world, LocationName.donut_secret_house_region, LocationName.donut_secret_house_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.donut_secret_house_region, LocationName.donut_secret_house_exit_2,
+    connect(world, LocationName.donut_secret_house_region, LocationName.donut_secret_house_exit_2,
             lambda state: (state.has(ItemName.p_switch, player) and state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.mario_climb, player) or
                             (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3)))))
-    connect(multiworld, player, names, LocationName.donut_plains_3_region, LocationName.donut_plains_3_exit_1)
-    connect(multiworld, player, names, LocationName.donut_plains_4_region, LocationName.donut_plains_4_exit_1)
-    connect(multiworld, player, names, LocationName.donut_secret_2_region, LocationName.donut_secret_2_exit_1)
-    connect(multiworld, player, names, LocationName.donut_plains_castle_region, LocationName.donut_plains_castle)
+    connect(world, LocationName.donut_plains_3_region, LocationName.donut_plains_3_exit_1)
+    connect(world, LocationName.donut_plains_4_region, LocationName.donut_plains_4_exit_1)
+    connect(world, LocationName.donut_secret_2_region, LocationName.donut_secret_2_exit_1)
+    connect(world, LocationName.donut_plains_castle_region, LocationName.donut_plains_castle)
     
-    connect(multiworld, player, names, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_1,
+    connect(world, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_1,
             lambda state: (state.has(ItemName.mario_run, player) and
                            (state.has(ItemName.super_star_active, player) or
                             state.has(ItemName.progressive_powerup, player, 1))))
-    connect(multiworld, player, names, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_2,
+    connect(world, LocationName.vanilla_dome_1_region, LocationName.vanilla_dome_1_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            ((state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_climb, player)) or
                             (state.has(ItemName.yoshi_activate, player) and state.has(ItemName.red_switch_palace, player)) or
                             (state.has(ItemName.red_switch_palace, player) and state.has(ItemName.mario_climb, player)))))
-    connect(multiworld, player, names, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_exit_1,
+    connect(world, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_exit_1,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            (state.has(ItemName.mario_climb, player) or state.has(ItemName.yoshi_activate, player))))
-    connect(multiworld, player, names, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_exit_2,
+    connect(world, LocationName.vanilla_dome_2_region, LocationName.vanilla_dome_2_exit_2,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.p_switch, player) and
                            state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.mario_climb, player) or state.has(ItemName.yoshi_activate, player))))
-    connect(multiworld, player, names, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_1,
+    connect(world, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_1,
             lambda state: state.has(ItemName.mario_climb, player))
-    connect(multiworld, player, names, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_2,
+    connect(world, LocationName.vanilla_secret_1_region, LocationName.vanilla_secret_1_exit_2,
             lambda state: (state.has(ItemName.mario_climb, player) and
                            (state.has(ItemName.mario_carry, player) and state.has(ItemName.blue_switch_palace, player))))
-    connect(multiworld, player, names, LocationName.vanilla_ghost_house_region, LocationName.vanilla_ghost_house_exit_1,
+    connect(world, LocationName.vanilla_ghost_house_region, LocationName.vanilla_ghost_house_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.vanilla_dome_3_region, LocationName.vanilla_dome_3_exit_1)
-    connect(multiworld, player, names, LocationName.vanilla_dome_4_region, LocationName.vanilla_dome_4_exit_1)
-    connect(multiworld, player, names, LocationName.vanilla_secret_2_region, LocationName.vanilla_secret_2_exit_1)
-    connect(multiworld, player, names, LocationName.vanilla_secret_3_region, LocationName.vanilla_secret_3_exit_1,
+    connect(world, LocationName.vanilla_dome_3_region, LocationName.vanilla_dome_3_exit_1)
+    connect(world, LocationName.vanilla_dome_4_region, LocationName.vanilla_dome_4_exit_1)
+    connect(world, LocationName.vanilla_secret_2_region, LocationName.vanilla_secret_2_exit_1)
+    connect(world, LocationName.vanilla_secret_3_region, LocationName.vanilla_secret_3_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.vanilla_fortress_region, LocationName.vanilla_fortress,
+    connect(world, LocationName.vanilla_fortress_region, LocationName.vanilla_fortress,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.vanilla_dome_castle_region, LocationName.vanilla_dome_castle)
+    connect(world, LocationName.vanilla_dome_castle_region, LocationName.vanilla_dome_castle)
     
-    connect(multiworld, player, names, LocationName.butter_bridge_1_region, LocationName.butter_bridge_1_exit_1)
-    connect(multiworld, player, names, LocationName.butter_bridge_2_region, LocationName.butter_bridge_2_exit_1)
-    connect(multiworld, player, names, LocationName.cheese_bridge_region, LocationName.cheese_bridge_exit_1,
+    connect(world, LocationName.butter_bridge_1_region, LocationName.butter_bridge_1_exit_1)
+    connect(world, LocationName.butter_bridge_2_region, LocationName.butter_bridge_2_exit_1)
+    connect(world, LocationName.cheese_bridge_region, LocationName.cheese_bridge_exit_1,
             lambda state: state.has(ItemName.mario_climb, player))
-    connect(multiworld, player, names, LocationName.cheese_bridge_region, LocationName.cheese_bridge_exit_2,
+    connect(world, LocationName.cheese_bridge_region, LocationName.cheese_bridge_exit_2,
             lambda state: (state.has(ItemName.mario_run, player) and
                            (state.has(ItemName.progressive_powerup, player, 3) or
                            state.has(ItemName.yoshi_activate, player))))
-    connect(multiworld, player, names, LocationName.soda_lake_region, LocationName.soda_lake_exit_1,
+    connect(world, LocationName.soda_lake_region, LocationName.soda_lake_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.cookie_mountain_region, LocationName.cookie_mountain_exit_1)
-    connect(multiworld, player, names, LocationName.twin_bridges_castle_region, LocationName.twin_bridges_castle,
+    connect(world, LocationName.cookie_mountain_region, LocationName.cookie_mountain_exit_1)
+    connect(world, LocationName.twin_bridges_castle_region, LocationName.twin_bridges_castle,
             lambda state: (state.has(ItemName.mario_run, player) and
                            state.has(ItemName.mario_climb, player)))
                            
-    connect(multiworld, player, names, LocationName.forest_of_illusion_1_region, LocationName.forest_of_illusion_1_exit_1)
-    connect(multiworld, player, names, LocationName.forest_of_illusion_1_region, LocationName.forest_of_illusion_1_exit_2,
+    connect(world, LocationName.forest_of_illusion_1_region, LocationName.forest_of_illusion_1_exit_1)
+    connect(world, LocationName.forest_of_illusion_1_region, LocationName.forest_of_illusion_1_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.p_balloon, player)))
-    connect(multiworld, player, names, LocationName.forest_of_illusion_2_region, LocationName.forest_of_illusion_2_exit_1,
+    connect(world, LocationName.forest_of_illusion_2_region, LocationName.forest_of_illusion_2_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.forest_of_illusion_2_region, LocationName.forest_of_illusion_2_exit_2,
+    connect(world, LocationName.forest_of_illusion_2_region, LocationName.forest_of_illusion_2_exit_2,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.mario_carry, player)))
-    connect(multiworld, player, names, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_1,
+    connect(world, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_1,
             lambda state: (state.has(ItemName.mario_carry, player) or
                            state.has(ItemName.yoshi_activate, player)))
-    connect(multiworld, player, names, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_2,
+    connect(world, LocationName.forest_of_illusion_3_region, LocationName.forest_of_illusion_3_exit_2,
             lambda state: (state.has(ItemName.mario_spin_jump, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.progressive_powerup, player, 1)))
-    connect(multiworld, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_1)
-    connect(multiworld, player, names, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_2,
+    connect(world, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_1)
+    connect(world, LocationName.forest_of_illusion_4_region, LocationName.forest_of_illusion_4_exit_2,
             lambda state: state.has(ItemName.mario_carry, player))
-    connect(multiworld, player, names, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_1,
+    connect(world, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_2,
+    connect(world, LocationName.forest_ghost_house_region, LocationName.forest_ghost_house_exit_2,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.forest_secret_region, LocationName.forest_secret_exit_1)
-    connect(multiworld, player, names, LocationName.forest_fortress_region, LocationName.forest_fortress)
-    connect(multiworld, player, names, LocationName.forest_castle_region, LocationName.forest_castle)
+    connect(world, LocationName.forest_secret_region, LocationName.forest_secret_exit_1)
+    connect(world, LocationName.forest_fortress_region, LocationName.forest_fortress)
+    connect(world, LocationName.forest_castle_region, LocationName.forest_castle)
     
-    connect(multiworld, player, names, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_exit_1,
+    connect(world, LocationName.chocolate_island_1_region, LocationName.chocolate_island_1_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_exit_1)
-    connect(multiworld, player, names, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_exit_2,
+    connect(world, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_exit_1)
+    connect(world, LocationName.chocolate_island_2_region, LocationName.chocolate_island_2_exit_2,
             lambda state: state.has(ItemName.mario_carry, player))
-    connect(multiworld, player, names, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_exit_1,
+    connect(world, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_exit_1,
             lambda state: (state.has(ItemName.mario_climb, player) or
                            (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3))))
-    connect(multiworld, player, names, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_exit_2,
+    connect(world, LocationName.chocolate_island_3_region, LocationName.chocolate_island_3_exit_2,
             lambda state: (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3)))
-    connect(multiworld, player, names, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_exit_1)
-    connect(multiworld, player, names, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_exit_1)
-    connect(multiworld, player, names, LocationName.chocolate_ghost_house_region, LocationName.chocolate_ghost_house_exit_1)
-    connect(multiworld, player, names, LocationName.chocolate_fortress_region, LocationName.chocolate_fortress)
-    connect(multiworld, player, names, LocationName.chocolate_secret_region, LocationName.chocolate_secret_exit_1,
+    connect(world, LocationName.chocolate_island_4_region, LocationName.chocolate_island_4_exit_1)
+    connect(world, LocationName.chocolate_island_5_region, LocationName.chocolate_island_5_exit_1)
+    connect(world, LocationName.chocolate_ghost_house_region, LocationName.chocolate_ghost_house_exit_1)
+    connect(world, LocationName.chocolate_fortress_region, LocationName.chocolate_fortress)
+    connect(world, LocationName.chocolate_secret_region, LocationName.chocolate_secret_exit_1,
             lambda state: state.has(ItemName.mario_run, player))
-    connect(multiworld, player, names, LocationName.chocolate_castle_region, LocationName.chocolate_castle,
+    connect(world, LocationName.chocolate_castle_region, LocationName.chocolate_castle,
             lambda state: (state.has(ItemName.progressive_powerup, player, 1)))
             
-    connect(multiworld, player, names, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship,
+    connect(world, LocationName.sunken_ghost_ship_region, LocationName.sunken_ghost_ship,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_exit_1)
-    connect(multiworld, player, names, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_1)
-    connect(multiworld, player, names, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_2,
+    connect(world, LocationName.valley_of_bowser_1_region, LocationName.valley_of_bowser_1_exit_1)
+    connect(world, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_1)
+    connect(world, LocationName.valley_of_bowser_2_region, LocationName.valley_of_bowser_2_exit_2,
             lambda state: state.has(ItemName.mario_carry, player))
-    connect(multiworld, player, names, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_exit_1)
-    connect(multiworld, player, names, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_1,
+    connect(world, LocationName.valley_of_bowser_3_region, LocationName.valley_of_bowser_3_exit_1)
+    connect(world, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_1,
             lambda state: state.has(ItemName.mario_climb, player))
-    connect(multiworld, player, names, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_2,
+    connect(world, LocationName.valley_of_bowser_4_region, LocationName.valley_of_bowser_4_exit_2,
             lambda state: (state.has(ItemName.mario_climb, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.yoshi_activate, player)))
-    connect(multiworld, player, names, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_exit_1,
+    connect(world, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_exit_2,
+    connect(world, LocationName.valley_ghost_house_region, LocationName.valley_ghost_house_exit_2,
             lambda state: (state.has(ItemName.p_switch, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.mario_run, player)))
-    connect(multiworld, player, names, LocationName.valley_fortress_region, LocationName.valley_fortress,
+    connect(world, LocationName.valley_fortress_region, LocationName.valley_fortress,
             lambda state: state.has(ItemName.progressive_powerup, player, 1))
-    connect(multiworld, player, names, LocationName.valley_castle_region, LocationName.valley_castle)
-    connect(multiworld, player, names, LocationName.front_door, LocationName.bowser_region,
+    connect(world, LocationName.valley_castle_region, LocationName.valley_castle)
+    connect(world, LocationName.front_door, LocationName.bowser_region,
             lambda state: (state.has(ItemName.mario_climb, player) and
                            state.has(ItemName.mario_run, player) and
                            state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.progressive_powerup, player, 1) and
                            state.has(ItemName.koopaling, player, world.options.bosses_required.value)))
-    connect(multiworld, player, names, LocationName.back_door, LocationName.bowser_region,
+    connect(world, LocationName.back_door, LocationName.bowser_region,
             lambda state: state.has(ItemName.koopaling, player, world.options.bosses_required.value))
 
-    connect(multiworld, player, names, LocationName.star_road_1_region, LocationName.star_road_1_exit_1,
+    connect(world, LocationName.star_road_1_region, LocationName.star_road_1_exit_1,
             lambda state: (state.has(ItemName.mario_spin_jump, player) and
                            state.has(ItemName.progressive_powerup, player, 1)))
-    connect(multiworld, player, names, LocationName.star_road_1_region, LocationName.star_road_1_exit_2,
+    connect(world, LocationName.star_road_1_region, LocationName.star_road_1_exit_2,
             lambda state: (state.has(ItemName.mario_spin_jump, player) and
                            state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.progressive_powerup, player, 1)))
-    connect(multiworld, player, names, LocationName.star_road_2_region, LocationName.star_road_2_exit_1,
+    connect(world, LocationName.star_road_2_region, LocationName.star_road_2_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.star_road_2_region, LocationName.star_road_2_exit_2,
+    connect(world, LocationName.star_road_2_region, LocationName.star_road_2_exit_2,
             lambda state: (state.has(ItemName.mario_swim, player) and
                            state.has(ItemName.mario_carry, player)))
-    connect(multiworld, player, names, LocationName.star_road_3_region, LocationName.star_road_3_exit_1)
-    connect(multiworld, player, names, LocationName.star_road_3_region, LocationName.star_road_3_exit_2,
+    connect(world, LocationName.star_road_3_region, LocationName.star_road_3_exit_1)
+    connect(world, LocationName.star_road_3_region, LocationName.star_road_3_exit_2,
             lambda state: state.has(ItemName.mario_carry, player))
-    connect(multiworld, player, names, LocationName.star_road_4_region, LocationName.star_road_4_exit_1)
-    connect(multiworld, player, names, LocationName.star_road_4_region, LocationName.star_road_4_exit_2,
+    connect(world, LocationName.star_road_4_region, LocationName.star_road_4_exit_1)
+    connect(world, LocationName.star_road_4_region, LocationName.star_road_4_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            (state.has(ItemName.yoshi_activate, player) or
                             (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.red_switch_palace, player)))))
-    connect(multiworld, player, names, LocationName.star_road_5_region, LocationName.star_road_5_exit_1,
+    connect(world, LocationName.star_road_5_region, LocationName.star_road_5_exit_1,
             lambda state: state.has(ItemName.p_switch, player))
-    connect(multiworld, player, names, LocationName.star_road_5_region, LocationName.star_road_5_exit_2,
+    connect(world, LocationName.star_road_5_region, LocationName.star_road_5_exit_2,
             lambda state: (state.has(ItemName.mario_carry, player) and
                            state.has(ItemName.mario_climb, player) and
                            state.has(ItemName.p_switch, player) and
@@ -2058,25 +2057,25 @@ def connect_regions(world: World, level_to_tile_dict):
                            state.has(ItemName.red_switch_palace, player) and
                            state.has(ItemName.blue_switch_palace, player)))
 
-    connect(multiworld, player, names, LocationName.special_zone_1_region, LocationName.special_zone_1_exit_1,
+    connect(world, LocationName.special_zone_1_region, LocationName.special_zone_1_exit_1,
             lambda state: (state.has(ItemName.mario_climb, player) and
                            (state.has(ItemName.p_switch, player) or
                             (state.has(ItemName.mario_run, player) and state.has(ItemName.progressive_powerup, player, 3)))))
-    connect(multiworld, player, names, LocationName.special_zone_2_region, LocationName.special_zone_2_exit_1,
+    connect(world, LocationName.special_zone_2_region, LocationName.special_zone_2_exit_1,
             lambda state: state.has(ItemName.p_balloon, player))
-    connect(multiworld, player, names, LocationName.special_zone_3_region, LocationName.special_zone_3_exit_1,
+    connect(world, LocationName.special_zone_3_region, LocationName.special_zone_3_exit_1,
             lambda state: (state.has(ItemName.mario_climb, player) or
                            state.has(ItemName.yoshi_activate, player)))
-    connect(multiworld, player, names, LocationName.special_zone_4_region, LocationName.special_zone_4_exit_1,
+    connect(world, LocationName.special_zone_4_region, LocationName.special_zone_4_exit_1,
             lambda state: (state.has(ItemName.progressive_powerup, player, 2) or
                            state.has(ItemName.super_star_active, player)))
-    connect(multiworld, player, names, LocationName.special_zone_5_region, LocationName.special_zone_5_exit_1,
+    connect(world, LocationName.special_zone_5_region, LocationName.special_zone_5_exit_1,
             lambda state: state.has(ItemName.progressive_powerup, player, 1))
-    connect(multiworld, player, names, LocationName.special_zone_6_region, LocationName.special_zone_6_exit_1,
+    connect(world, LocationName.special_zone_6_region, LocationName.special_zone_6_exit_1,
             lambda state: state.has(ItemName.mario_swim, player))
-    connect(multiworld, player, names, LocationName.special_zone_7_region, LocationName.special_zone_7_exit_1,
+    connect(world, LocationName.special_zone_7_region, LocationName.special_zone_7_exit_1,
             lambda state: state.has(ItemName.progressive_powerup, player, 1))
-    connect(multiworld, player, names, LocationName.special_zone_8_region, LocationName.special_zone_8_exit_1,
+    connect(world, LocationName.special_zone_8_region, LocationName.special_zone_8_exit_1,
             lambda state: ((state.has(ItemName.progressive_powerup, player, 1) and state.has(ItemName.mario_spin_jump, player)) or
                            state.has(ItemName.progressive_powerup, player, 3) or
                            state.has(ItemName.yoshi_activate, player) or
@@ -2096,7 +2095,7 @@ def connect_regions(world: World, level_to_tile_dict):
         current_tile_name = current_tile_data.levelName
         if ("Star Road - " not in current_tile_name) and (" - Star Road" not in current_tile_name):
             current_tile_name += " - Tile"
-            connect(multiworld, player, names, current_tile_name, current_level_data.levelName)
+            connect(world, current_tile_name, current_level_data.levelName)
         # Connect Exit regions to next tile regions
         if current_tile_data.exit1Path:
             next_tile_id = current_tile_data.exit1Path.otherLevelID
@@ -2106,7 +2105,7 @@ def connect_regions(world: World, level_to_tile_dict):
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
                 next_tile_name += " - Tile"
             current_exit_name = (current_level_data.levelName + " - Normal Exit")
-            connect(multiworld, player, names, current_exit_name, next_tile_name)
+            connect(world, current_exit_name, next_tile_name)
         if current_tile_data.exit2Path:
             next_tile_id = current_tile_data.exit2Path.otherLevelID
             if world.options.swap_donut_gh_exits and current_tile_id == 0x04:
@@ -2115,28 +2114,28 @@ def connect_regions(world: World, level_to_tile_dict):
             if ("Star Road - " not in next_tile_name) and (" - Star Road" not in next_tile_name):
                 next_tile_name += " - Tile"
             current_exit_name = (current_level_data.levelName + " - Secret Exit")
-            connect(multiworld, player, names, current_exit_name, next_tile_name)
+            connect(world, current_exit_name, next_tile_name)
 
-    connect(multiworld, player, names, LocationName.donut_plains_star_road, LocationName.star_road_donut)
-    connect(multiworld, player, names, LocationName.star_road_donut, LocationName.donut_plains_star_road)
-    connect(multiworld, player, names, LocationName.star_road_donut, LocationName.star_road_1_tile)
-    connect(multiworld, player, names, LocationName.vanilla_dome_star_road, LocationName.star_road_vanilla)
-    connect(multiworld, player, names, LocationName.star_road_vanilla, LocationName.vanilla_dome_star_road)
-    connect(multiworld, player, names, LocationName.star_road_vanilla, LocationName.star_road_2_tile)
-    connect(multiworld, player, names, LocationName.twin_bridges_star_road, LocationName.star_road_twin_bridges)
-    connect(multiworld, player, names, LocationName.star_road_twin_bridges, LocationName.twin_bridges_star_road)
-    connect(multiworld, player, names, LocationName.star_road_twin_bridges, LocationName.star_road_3_tile)
-    connect(multiworld, player, names, LocationName.forest_star_road, LocationName.star_road_forest)
-    connect(multiworld, player, names, LocationName.star_road_forest, LocationName.forest_star_road)
-    connect(multiworld, player, names, LocationName.star_road_forest, LocationName.star_road_4_tile)
-    connect(multiworld, player, names, LocationName.valley_star_road, LocationName.star_road_valley)
-    connect(multiworld, player, names, LocationName.star_road_valley, LocationName.valley_star_road)
-    connect(multiworld, player, names, LocationName.star_road_valley, LocationName.star_road_5_tile)
-    connect(multiworld, player, names, LocationName.star_road_special, LocationName.special_star_road)
-    connect(multiworld, player, names, LocationName.special_star_road, LocationName.star_road_special)
-    connect(multiworld, player, names, LocationName.special_star_road, LocationName.special_zone_1_tile)
+    connect(world, LocationName.donut_plains_star_road, LocationName.star_road_donut)
+    connect(world, LocationName.star_road_donut, LocationName.donut_plains_star_road)
+    connect(world, LocationName.star_road_donut, LocationName.star_road_1_tile)
+    connect(world, LocationName.vanilla_dome_star_road, LocationName.star_road_vanilla)
+    connect(world, LocationName.star_road_vanilla, LocationName.vanilla_dome_star_road)
+    connect(world, LocationName.star_road_vanilla, LocationName.star_road_2_tile)
+    connect(world, LocationName.twin_bridges_star_road, LocationName.star_road_twin_bridges)
+    connect(world, LocationName.star_road_twin_bridges, LocationName.twin_bridges_star_road)
+    connect(world, LocationName.star_road_twin_bridges, LocationName.star_road_3_tile)
+    connect(world, LocationName.forest_star_road, LocationName.star_road_forest)
+    connect(world, LocationName.star_road_forest, LocationName.forest_star_road)
+    connect(world, LocationName.star_road_forest, LocationName.star_road_4_tile)
+    connect(world, LocationName.valley_star_road, LocationName.star_road_valley)
+    connect(world, LocationName.star_road_valley, LocationName.valley_star_road)
+    connect(world, LocationName.star_road_valley, LocationName.star_road_5_tile)
+    connect(world, LocationName.star_road_special, LocationName.special_star_road)
+    connect(world, LocationName.special_star_road, LocationName.star_road_special)
+    connect(world, LocationName.special_star_road, LocationName.special_zone_1_tile)
     
-    connect(multiworld, player, names, LocationName.star_road_valley, LocationName.front_door_tile)
+    connect(world, LocationName.star_road_valley, LocationName.front_door_tile)
 
 
 
@@ -2162,23 +2161,10 @@ def add_location_to_region(multiworld: MultiWorld, player: int, active_locations
             add_rule(location, rule)
 
 
-
-def connect(multiworld: MultiWorld, player: int, used_names: typing.Dict[str, int], source: str, target: str,
+def connect(world: World, source: str, target: str,
             rule: typing.Optional[typing.Callable] = None):
-    source_region = multiworld.get_region(source, player)
-    target_region = multiworld.get_region(target, player)
-
-    if target not in used_names:
-        used_names[target] = 1
-        name = target
-    else:
-        used_names[target] += 1
-        name = target + (' ' * used_names[target])
-
-    connection = Entrance(player, name, source_region)
-
+    source_region: Region = world.multiworld.get_region(source, world.player)
+    connection_rules: typing.Dict[str, typing.Callable[[CollectionState], bool]] = dict()
     if rule:
-        connection.access_rule = rule
-
-    source_region.exits.append(connection)
-    connection.connect(target_region)
+        connection_rules[target] = rule
+    source_region.add_exits([target], connection_rules)
