@@ -322,7 +322,7 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
-def try_getting_location_group_other_world(world: "WitnessWorld", location: Location) -> Optional[str]:
+def try_getting_location_group_other_world(world: "WitnessWorld", location: Location) -> str:
     possible_location_groups = world.multiworld.worlds[location.player].location_name_groups
 
     locations_in_that_world = {
@@ -347,7 +347,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
             valid_location_groups[location.parent_region.name] = parent_region_location_amount
 
     if not valid_location_groups:
-        return None
+        return "Everywhere"
 
     location_groups_with_weights = {
         location_group: x ** 0.6 * math.e ** - (x / 7) ** 0.6 if x > 6 else x
