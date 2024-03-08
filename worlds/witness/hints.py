@@ -343,7 +343,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
         parent_region_location_amount = sum(
             location.address is not None for location in location.parent_region.locations
         )
-        if parent_region_location_amount > 2:
+        if 101 > parent_region_location_amount > 2:
             valid_location_groups[location.parent_region.name] = parent_region_location_amount
 
     if not valid_location_groups:
