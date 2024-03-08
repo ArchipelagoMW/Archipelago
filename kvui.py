@@ -38,11 +38,13 @@ from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.metrics import dp
+from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
@@ -116,6 +118,17 @@ class ToolTip(Label):
 
 class ServerToolTip(ToolTip):
     pass
+
+
+class ScrollBox(ScrollView):
+    layout: BoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = BoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.effect_cls = ScrollEffect
 
 
 class HovererableLabel(HoverBehavior, Label):
