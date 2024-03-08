@@ -515,7 +515,7 @@ class Factorio(World):
             if name in self.advancement_technologies:
                 classification = ItemClassification.progression
             else:
-                classification = ItemClassification.useful if technology_table[name].is_useful else ItemClassification.filler
+                classification = ItemClassification.useful if technology_table[name].useful() else ItemClassification.filler
             item = FactorioItem(name,
                                 classification,
                                 tech_table[name], self.player)
