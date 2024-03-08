@@ -326,7 +326,7 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
     possible_location_groups = world.multiworld.worlds[location.player].location_name_groups
 
     locations_in_that_world = {
-        location.name for location in world.multiworld.get_locations(location.player)
+        location.name for location in world.multiworld.get_locations(location.player) if location.address is not None
     }
 
     valid_location_groups = dict()
@@ -339,11 +339,12 @@ def try_getting_location_group_other_world(world: "WitnessWorld", location: Loca
     if len(valid_location_groups) > 1 and valid_location_groups["Everywhere"] > 100:
         del valid_location_groups["Everywhere"]
 
-    if location.parent_region.name not in possible_location_groups:
+    parent_region = location.parent_region
+    if parent_region.name not in possible_location_groups:
         parent_region_location_amount = sum(
-            location.address is not None for location in location.parent_region.locations
+            location.address is not None for location in parent_region.locations
         )
-        if 101 > parent_region_location_amount > 2:
+        if len(locations_in_that_world) / 2 > parent_region_location_amount > 2 and parent_region.nameg != "Menu":
             valid_location_groups[location.parent_region.name] = parent_region_location_amount
 
     if not valid_location_groups:
