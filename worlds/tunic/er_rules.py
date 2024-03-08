@@ -135,7 +135,6 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["East Overworld"],
         rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
-        or state.has(laurels, player)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["East Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
