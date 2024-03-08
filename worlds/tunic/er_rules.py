@@ -343,7 +343,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Forest Belltower Main"])
 
     regions["Forest Belltower Main"].connect(
-        connecting_region=regions["Forest Belltower Lower"])
+        connecting_region=regions["Forest Belltower Lower"],
+        rule=lambda state: has_ladder("Ladder Drop to East Forest", state, player, options))
 
     # nmg: ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(

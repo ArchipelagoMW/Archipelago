@@ -20,11 +20,14 @@ class TunicERLocation(Location):
 
 def create_er_regions(world: "TunicWorld") -> Dict[Portal, Portal]:
     regions: Dict[str, Region] = {}
-    portal_pairs: Dict[Portal, Portal] = pair_portals(world)
+    if world.options.entrance_rando:
+        portal_pairs: Dict[Portal, Portal] = pair_portals(world)
 
-    # output the entrances to the spoiler log here for convenience
-    for portal1, portal2 in portal_pairs.items():
-        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        # output the entrances to the spoiler log here for convenience
+        for portal1, portal2 in portal_pairs.items():
+            world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+    else:
+        portal_pairs: Dict[Portal, Portal] = vanilla_portals()
 
     for region_name, region_data in tunic_er_regions.items():
         regions[region_name] = Region(region_name, world.player, world.multiworld)
@@ -82,13 +85,45 @@ def place_event_items(world: "TunicWorld", regions: Dict[str, Region]) -> None:
         region.locations.append(location)
 
 
+def vanilla_portals() -> Dict[Portal, Portal]:
+    portal_pairs: Dict[Portal, Portal] = {}
+    portal_map = portal_mapping.copy()
+    shop_num = 1
+
+    while portal_map:
+        portal1 = portal_map[0]
+        portal2 = None
+        # portal2 scene destination tag is portal1's destination scene tag
+        portal2_sdt = portal1.destination_scene()
+
+        if portal2_sdt.startswith("Shop,"):
+            portal2 = Portal(name=f"Shop", region=f"Shop Entrance {shop_num}",
+                             destination="Previous Region", tag="_")
+            shop_num += 1
+
+        if portal2_sdt == "Purgatory, Purgatory_bottom":
+            portal2_sdt = "Purgatory, Purgatory_top"
+
+        for portal in portal_map:
+            if portal.scene_destination() == portal2_sdt:
+                portal2 = portal
+                break
+
+        portal_pairs[portal1] = portal2
+        portal_map.remove(portal1)
+        if not portal2_sdt.startswith("Shop,"):
+            if portal2 not in portal_map:
+                print(portal1.scene_destination())
+                print(portal1.destination_scene())
+            portal_map.remove(portal2)
+
+    return portal_pairs
+
+
 # pairing off portals, starting with dead ends
 def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # separate the portals into dead ends and non-dead ends
     portal_pairs: Dict[Portal, Portal] = {}
-
-    # todo: if not er, return vanilla connections
-    
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
     plando_connections: List[PlandoConnection] = []
@@ -183,7 +218,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
-        portal2 = Portal(name="Shop Portal", region=f"Shop Entrance 2", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop Entrance 2", destination="Previous Region", tag="_")
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
@@ -257,7 +292,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong")
-        portal2 = Portal(name=f"Shop Portal {i + 1}", region=f"Shop Entrance {i + 1}", destination="Previous Region_")
+        portal2 = Portal(name=f"Shop Portal {i + 1}", region=f"Shop Entrance {i + 1}", destination="Previous Region", tag="_")
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends
@@ -287,7 +322,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
         region2 = regions[portal2.region]
         region1.connect(connecting_region=region2, name=portal1.name)
         # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if portal2.name != "Shop":
+        if portal2.name not in ["Shop", "Shop Portal"]:
             region2.connect(connecting_region=region1, name=portal2.name)
 
 
@@ -453,7 +488,7 @@ def create_plando_connections(plando_connections: List[PlandoConnection],
                     portal2 = portal
                     break
             if p_exit == "Shop Portal":
-                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region_")
+                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region", tag="_")
                 shop_num += 1
             else:
                 dead_ends.remove(portal2)

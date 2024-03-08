@@ -5,8 +5,7 @@ from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, fi
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
 from .er_rules import set_er_location_rules
-from .ladder_rules import set_ladder_region_rules, set_ladder_location_rules
-from .regions import tunic_regions, tunic_ladder_regions
+from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .er_data import portal_mapping
 from .options import TunicOptions
@@ -193,16 +192,14 @@ class TunicWorld(World):
                 self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
                 self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
             
-        if self.options.entrance_rando:
+        if self.options.entrance_rando or self.options.shuffle_ladders:
             portal_pairs = create_er_regions(self)
-            for portal1, portal2 in portal_pairs.items():
-                self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
+            if self.options.entrance_rando:
+                for portal1, portal2 in portal_pairs.items():
+                    self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
 
         else:
-            if self.options.shuffle_ladders:
-                region_list = tunic_ladder_regions
-            else:
-                region_list = tunic_regions
+            region_list = tunic_regions
 
             for region_name in region_list:
                 region = Region(region_name, self.player, self.multiworld)
@@ -213,10 +210,7 @@ class TunicWorld(World):
                 region.add_exits(exits)
 
             for location_name, location_id in self.location_name_to_id.items():
-                if self.options.shuffle_ladders:
-                    region = self.multiworld.get_region(location_table[location_name].ladders_region(), self.player)
-                else:
-                    region = self.multiworld.get_region(location_table[location_name].region, self.player)
+                region = self.multiworld.get_region(location_table[location_name].region, self.player)
                 location = TunicLocation(self.player, location_name, location_id, region)
                 region.locations.append(location)
 
@@ -227,11 +221,8 @@ class TunicWorld(World):
             victory_region.locations.append(victory_location)
 
     def set_rules(self) -> None:
-        if self.options.entrance_rando:
+        if self.options.entrance_rando or self.options.shuffle_ladders:
             set_er_location_rules(self, self.ability_unlocks)
-        elif self.options.shuffle_ladders:
-            set_ladder_region_rules(self, self.ability_unlocks)
-            set_ladder_location_rules(self, self.ability_unlocks)
         else:
             set_region_rules(self, self.ability_unlocks)
             set_location_rules(self, self.ability_unlocks)
