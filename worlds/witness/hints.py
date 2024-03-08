@@ -384,15 +384,14 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
         else:
             chosen_group = try_getting_location_group_other_world(world, hint.location)
 
-            if chosen_group is not None:
-                player_name = world.multiworld.get_player_name(hint.location.player)
+            player_name = world.multiworld.get_player_name(hint.location.player)
 
-                if chosen_group == "Everywhere":
-                    location_name = f"a location in {player_name}'s world"
-                else:
-                    location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
+            if chosen_group == "Everywhere":
+                location_name = f"a location in {player_name}'s world"
+            else:
+                location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
 
-    if hint_text == "":  # Something went wrong, default back to a direct location hint
+    if hint_text == "":
         if hint.hint_came_from_location:
             hint_text = f"{location_name} contains {item_name}."
         else:
