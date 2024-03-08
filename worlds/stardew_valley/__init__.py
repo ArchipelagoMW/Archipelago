@@ -89,8 +89,8 @@ class StardewValleyWorld(World):
 
     # all_progression_items: Dict[str, int] # If you need to debug total_progression_items, uncommenting this will help tremendously
 
-    def __init__(self, world: MultiWorld, player: int):
-        super().__init__(world, player)
+    def __init__(self, multiworld: MultiWorld, player: int):
+        super().__init__(multiworld, player)
         self.filler_item_pool_names = []
         self.total_progression_items = 0
         # self.all_progression_items = dict()
