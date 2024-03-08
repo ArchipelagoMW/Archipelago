@@ -1,4 +1,4 @@
-from typing import Dict, List, NamedTuple, Optional, Set
+from typing import List, NamedTuple, Optional
 
 
 class RoomAndDoor(NamedTuple):

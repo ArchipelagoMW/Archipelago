@@ -1,8 +1,13 @@
-from typing import Dict, List, NamedTuple, Optional, Set
-from worlds.lingo.datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
+from typing import Dict, List, Set
+
+import os
+import sys
+
+sys.path.append(os.path.join("worlds", "lingo"))
+sys.path.append(".")
+from datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
 
 import hashlib
-import os
 import pickle
 import sys
 import Utils
@@ -425,7 +430,7 @@ if __name__ == '__main__':
         output_path = os.path.join("worlds", "lingo", "data", "generated.dat")
     elif len(sys.argv) != 4:
         print("")
-        print("Usage: python3 -m worlds.lingo.utils.pickle_static_data [args]")
+        print("Usage: python worlds/lingo/utils/pickle_static_data.py [args]")
         print("Arguments:")
         print(" - Path to LL1.yaml")
         print(" - Path to ids.yaml")
