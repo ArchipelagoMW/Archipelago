@@ -74,7 +74,8 @@ class MegaMan2Client(BizHawkClient):
     system = "NES"
     item_queue: typing.List = []
     pending_death_link: bool = False
-    sending_death_link: bool = False
+    # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
+    sending_death_link: bool = True
     death_link: bool = False
     rom: typing.Optional[bytes] = None
 
