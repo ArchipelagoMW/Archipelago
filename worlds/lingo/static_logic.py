@@ -1,3 +1,6 @@
+import os
+import pkgutil
+from io import BytesIO
 from typing import Dict, List, Set
 
 import pickle
@@ -72,46 +75,36 @@ def get_progressive_item_id(name: str):
 
 def load_static_data_from_file():
     global HASHES, PAINTINGS, ALL_ROOMS, DOORS_BY_ROOM, PANELS_BY_ROOM, PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS, PAINTING_EXITS, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
-    
-    try:
-        from importlib.resources import files
-    except ImportError:
-        from importlib_resources import files
 
-    from . import data
-    
-    if not files(data).joinpath("generated.dat").exists():
-        return
+    class RenameUnpickler(pickle.Unpickler):
+        def find_class(self, module, name):
+            renamed_module = module
+            if module == "datatypes":
+                renamed_module = "worlds.lingo.datatypes"
 
-    with files(data).joinpath("generated.dat").open("rb") as file:
-        class RenameUnpickler(pickle.Unpickler):
-            def find_class(self, module, name):
-                renamed_module = module
-                if module == "datatypes":
-                    renamed_module = "worlds.lingo.datatypes"
+            return super(RenameUnpickler, self).find_class(renamed_module, name)
 
-                return super(RenameUnpickler, self).find_class(renamed_module, name)
-
-        pickdata = RenameUnpickler(file).load()
+    file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
+    pickdata = RenameUnpickler(BytesIO(file)).load()
         
-        HASHES = pickdata["HASHES"]
-        PAINTINGS = pickdata["PAINTINGS"]
-        ALL_ROOMS = pickdata["ALL_ROOMS"]
-        DOORS_BY_ROOM = pickdata["DOORS_BY_ROOM"]
-        PANELS_BY_ROOM = pickdata["PANELS_BY_ROOM"]
-        PROGRESSIVE_ITEMS = pickdata["PROGRESSIVE_ITEMS"]
-        PROGRESSION_BY_ROOM = pickdata["PROGRESSION_BY_ROOM"]
-        PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]
-        PAINTING_EXIT_ROOMS = pickdata["PAINTING_EXIT_ROOMS"]
-        PAINTING_EXITS = pickdata["PAINTING_EXITS"]
-        REQUIRED_PAINTING_ROOMS = pickdata["REQUIRED_PAINTING_ROOMS"]
-        REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS = pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"]
-        SPECIAL_ITEM_IDS = pickdata["SPECIAL_ITEM_IDS"]
-        PANEL_LOCATION_IDS = pickdata["PANEL_LOCATION_IDS"]
-        DOOR_LOCATION_IDS = pickdata["DOOR_LOCATION_IDS"]
-        DOOR_ITEM_IDS = pickdata["DOOR_ITEM_IDS"]
-        DOOR_GROUP_ITEM_IDS = pickdata["DOOR_GROUP_ITEM_IDS"]
-        PROGRESSIVE_ITEM_IDS = pickdata["PROGRESSIVE_ITEM_IDS"]
+    HASHES = pickdata["HASHES"]
+    PAINTINGS = pickdata["PAINTINGS"]
+    ALL_ROOMS = pickdata["ALL_ROOMS"]
+    DOORS_BY_ROOM = pickdata["DOORS_BY_ROOM"]
+    PANELS_BY_ROOM = pickdata["PANELS_BY_ROOM"]
+    PROGRESSIVE_ITEMS = pickdata["PROGRESSIVE_ITEMS"]
+    PROGRESSION_BY_ROOM = pickdata["PROGRESSION_BY_ROOM"]
+    PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]
+    PAINTING_EXIT_ROOMS = pickdata["PAINTING_EXIT_ROOMS"]
+    PAINTING_EXITS = pickdata["PAINTING_EXITS"]
+    REQUIRED_PAINTING_ROOMS = pickdata["REQUIRED_PAINTING_ROOMS"]
+    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS = pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"]
+    SPECIAL_ITEM_IDS = pickdata["SPECIAL_ITEM_IDS"]
+    PANEL_LOCATION_IDS = pickdata["PANEL_LOCATION_IDS"]
+    DOOR_LOCATION_IDS = pickdata["DOOR_LOCATION_IDS"]
+    DOOR_ITEM_IDS = pickdata["DOOR_ITEM_IDS"]
+    DOOR_GROUP_ITEM_IDS = pickdata["DOOR_GROUP_ITEM_IDS"]
+    PROGRESSIVE_ITEM_IDS = pickdata["PROGRESSIVE_ITEM_IDS"]
 
 
 # Initialize the static data at module scope.
