@@ -613,7 +613,7 @@ def generate_shuffled_level_music(world: World):
 def generate_shuffled_ow_music(world: World):
     shuffled_ow_music = ow_music_value_data.copy()
 
-    if world.options.music_shuffle == "consistent" or world.options.music_shuffle == "full":
+    if world.options.music_shuffle in {"consistent", "full"}:
         world.random.shuffle(shuffled_ow_music)
     elif world.options.music_shuffle == "singularity":
         single_song = world.random.choice(shuffled_ow_music)
@@ -628,7 +628,7 @@ def generate_shuffled_ow_palettes(rom, world: World):
             rom.write_byte(address, chosen_palette)
 
 def generate_shuffled_header_data(rom, world: World):
-    if world.options.music_shuffle != "full" and world.options.level_palette_shuffle != "on_curated":
+    if world.options.music_shuffle not in {"full", "on_curated"}:
         return
 
     for level_id in range(0, 0x200):

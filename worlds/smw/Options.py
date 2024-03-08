@@ -326,8 +326,7 @@ class LevelPaletteShuffle(Choice):
     Whether to shuffle level palettes
     Off: Do not shuffle palettes
     On Legacy: Uses only the palette sets from the original game
-    On Curated: Uses custom palette sets created by some people
-                Setting this option will also force Backgrounds to use those palettes
+    On Curated: Uses custom, hand-crafted palette sets
     """
     display_name = "Level Palette Shuffle"
     option_off = 0
@@ -341,7 +340,7 @@ class OverworldPaletteShuffle(Choice):
     Whether to shuffle overworld palettes
     Off: Do not shuffle palettes
     On Legacy: Uses only the palette sets from the original game
-    On Curated: Uses custom palette sets created by some people
+    On Curated: Uses custom, hand-crafted palette sets
     """
     display_name = "Overworld Palette Shuffle"
     option_off = 0

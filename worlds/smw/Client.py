@@ -196,6 +196,11 @@ class SMWSNIClient(SNIClient):
 
         self.trap_queue.append((trap_item, trap_msg))
 
+    def should_show_message(self, ctx, next_item):
+        return ctx.receive_option == 1 or \
+                (ctx.receive_option == 2 and ((next_item.flags & 1) != 0)) or \
+                (ctx.receive_option == 3 and ((next_item.flags & 1) != 0 and next_item.item != 0xBC0002))
+
 
     async def handle_trap_queue(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
@@ -263,7 +268,7 @@ class SMWSNIClient(SNIClient):
             if active_boss[0] != 0x00:
                 return
 
-            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((next_trap.flags & 1) != 0)) or (ctx.receive_option == 3 and ((next_trap.flags & 1) != 0 and next_trap.item != 0xBC0002)):
+            if self.should_show_message(ctx, next_trap):
                 self.add_message_to_queue(message)
 
 
@@ -324,7 +329,7 @@ class SMWSNIClient(SNIClient):
         elif goal[0] == 1 and egg_count[0] > display_count[0]:
             snes_buffered_write(ctx, SMW_BONUS_STAR_ADDR, bytes([egg_count[0]]))
             await snes_flush_writes(ctx)
-        
+
         await self.handle_message_queue(ctx)
         await self.handle_trap_queue(ctx)
 
@@ -498,7 +503,7 @@ class SMWSNIClient(SNIClient):
                 color(ctx.player_names[item.player], 'yellow'),
                 ctx.location_names[item.location], recv_index, len(ctx.items_received)))
 
-            if ctx.receive_option == 1 or (ctx.receive_option == 2 and ((item.flags & 1) != 0)) or (ctx.receive_option == 3 and ((item.flags & 1) != 0 and item.item != 0xBC0002)):
+            if self.should_show_message(ctx, item):
                 if item.item != 0xBC0012 and item.item not in trap_rom_data:
                     # Don't send messages for Boss Tokens
                     item_name = ctx.item_names[item.item]
@@ -586,7 +591,7 @@ class SMWSNIClient(SNIClient):
         new_bonus_block = False
         new_blocksanity = False
         new_blocksanity_flags = False
-        i = 0
+
         for loc_id in ctx.checked_locations:
             if loc_id not in ctx.locations_checked:
                 ctx.locations_checked.add(loc_id)
@@ -594,9 +599,6 @@ class SMWSNIClient(SNIClient):
 
                 if loc_name not in location_id_to_level_id:
                     continue
-
-                logging.info(f"Recovered checks ({i:03}): {loc_name}")
-                i += 1
 
                 level_data = location_id_to_level_id[loc_name]
 

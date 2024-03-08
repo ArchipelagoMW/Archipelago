@@ -980,24 +980,19 @@ location_table = {}
 def setup_locations(world: World):
     location_table = {**level_location_table}
 
-    # Dragon Coins here
-    if world.options.dragon_coin_checks.value:
+    if world.options.dragon_coin_checks:
         location_table.update({**dragon_coin_location_table})
 
-    # 3up Moons here
-    if world.options.moon_checks.value:
+    if world.options.moon_checks:
         location_table.update({**moon_location_table})
 
-    # Hidden 1-Ups here
-    if world.options.hidden_1up_checks.value:
+    if world.options.hidden_1up_checks:
         location_table.update({**hidden_1ups_location_table})
 
-    # Green Star Blocks here
-    if world.options.bonus_block_checks.value:
+    if world.options.bonus_block_checks:
         location_table.update({**bonus_block_location_table})
 
-    # Blocksanity here
-    if world.options.blocksanity.value:
+    if world.options.blocksanity:
         location_table.update({**blocksanity_location_table})
 
     if world.options.goal == "yoshi_egg_hunt":
