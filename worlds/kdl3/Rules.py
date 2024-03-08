@@ -206,13 +206,19 @@ def set_rules(world: "KDL3World") -> None:
                  lambda state: can_reach_needle(state, world.player))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
                  lambda state: can_reach_ice(state, world.player) and
-                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                  or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                  or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
                  lambda state: can_reach_ice(state, world.player) and
-                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                  or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                  or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
                  lambda state: can_reach_ice(state, world.player) and
-                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                  or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                  or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
                  lambda state: can_reach_cutter(state, world.player))
 
@@ -242,7 +248,9 @@ def set_rules(world: "KDL3World") -> None:
         for i in range(12, 18):
             set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                      lambda state: can_reach_ice(state, world.player) and
-                     (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                     (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                      or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                      or can_reach_nago(state, world.player)))
         for i in range(21, 23):
             set_rule(world.multiworld.get_location(f"Sand Canyon 5 - Star {i}", world.player),
                      lambda state: can_reach_chuchu(state, world.player))
@@ -267,32 +275,32 @@ def set_rules(world: "KDL3World") -> None:
     # Kirby cannot eat enemies fully submerged in water. Vast majority of cases, the enemy can be brought to the surface
     # and eaten by inhaling while falling on top of them
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_2_E3, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_3_E6, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     # Ripple Field 4 E5, E7, and E8 are doable, but too strict to leave in logic
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E5, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E7, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_4_E8, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E1, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E2, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E3, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Ripple_Field_5_E4, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E7, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E8, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E9, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
     set_rule(world.multiworld.get_location(EnemyAbilities.Sand_Canyon_4_E10, world.player),
-             lambda state: can_reach_kine(state, world.player))
+             lambda state: can_reach_kine(state, world.player) or can_reach_chuchu(state, world.player))
 
     for boss_flag, purification, i in zip(["Level 1 Boss - Purified", "Level 2 Boss - Purified",
                                            "Level 3 Boss - Purified", "Level 4 Boss - Purified",
