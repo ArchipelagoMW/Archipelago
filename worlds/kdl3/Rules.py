@@ -206,7 +206,9 @@ def set_rules(world: "KDL3World") -> None:
                  lambda state: can_reach_needle(state, world.player))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u2, world.player),
                  lambda state: can_reach_ice(state, world.player) and
-                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                  or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                  or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u3, world.player),
                  lambda state: can_reach_ice(state, world.player) and
                  (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
@@ -214,7 +216,9 @@ def set_rules(world: "KDL3World") -> None:
                   or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.sand_canyon_5_u4, world.player),
                  lambda state: can_reach_ice(state, world.player) and
-                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)))
+                 (can_reach_rick(state, world.player) or can_reach_coo(state, world.player)
+                  or can_reach_chuchu(state, world.player) or can_reach_pitch(state, world.player)
+                  or can_reach_nago(state, world.player)))
         set_rule(world.multiworld.get_location(LocationName.cloudy_park_6_u1, world.player),
                  lambda state: can_reach_cutter(state, world.player))
 
