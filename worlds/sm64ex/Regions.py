@@ -148,10 +148,11 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
         create_locs(regLLL, "LLL: 100 Coins")
 
     regSSL = create_region("Shifting Sand Land", player, world)
-    create_locs(regSSL, "SSL: In the Talons of the Big Bird", "SSL: Shining Atop the Pyramid", "SSL: Inside the Ancient Pyramid",
+    create_locs(regSSL, "SSL: In the Talons of the Big Bird", "SSL: Shining Atop the Pyramid",
                         "SSL: Free Flying for 8 Red Coins", "SSL: Bob-omb Buddy",
                         "SSL: 1Up Block Outside Pyramid", "SSL: 1Up Block Pyramid Left Path", "SSL: 1Up Block Pyramid Back")
-    ssl_upper_pyramid = create_subregion(regSSL, "SSL: Upper Pyramid", "SSL: Stand Tall on the Four Pillars", "SSL: Pyramid Puzzle")
+    ssl_upper_pyramid = create_subregion(regSSL, "SSL: Upper Pyramid", "SSL: Inside the Ancient Pyramid",
+                                         "SSL: Stand Tall on the Four Pillars", "SSL: Pyramid Puzzle")
     subregion_map[regSSL] = [ssl_upper_pyramid]
     if (world.EnableCoinStars[player].value):
         create_locs(regSSL, "SSL: 100 Coins")
