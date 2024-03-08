@@ -56,7 +56,7 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
     unlocks: Union[Set[str], bool]  # bool case is for progressive technologies
 
     def __init__(self, name: str, ingredients: Set[str], factorio_id: int, progressive: Tuple[str] = (),
-                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None, is_useful: bool = False):
+                 has_modifier: bool = False, unlocks: Union[Set[str], bool] = None):
         self.name = name
         self.factorio_id = factorio_id
         self.ingredients = ingredients
@@ -66,7 +66,6 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
             self.unlocks = unlocks
         else:
             self.unlocks = set()
-        self.is_useful = is_useful
 
     def build_rule(self, player: int):
         logging.debug(f"Building rules for {self.name}")
@@ -88,7 +87,7 @@ class Technology(FactorioElement):  # maybe make subclass of Location?
         return CustomTechnology(self, world, allowed_packs, player)
 
     def useful(self) -> bool:
-        return self.has_modifier or self.unlocks or self.is_useful
+        return self.has_modifier or self.unlocks
 
 
 class CustomTechnology(Technology):
@@ -195,8 +194,7 @@ recipe_sources: Dict[str, Set[str]] = {}  # recipe_name -> technology source
 for technology_name, data in sorted(techs_future.result().items()):
     current_ingredients = set(data["ingredients"])
     technology = Technology(technology_name, current_ingredients, factorio_tech_id,
-                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]),
-                            is_useful=data.get("is_useful", False))
+                            has_modifier=data["has_modifier"], unlocks=set(data["unlocks"]))
     factorio_tech_id += 1
     tech_table[technology_name] = technology.factorio_id
     technology_table[technology_name] = technology
@@ -424,8 +422,7 @@ for root in sorted_rows:
     progressive_technology = Technology(root, technology_table[progressive[0]].ingredients, factorio_tech_id,
                                         progressive,
                                         has_modifier=any(technology_table[tech].has_modifier for tech in progressive),
-                                        unlocks=any(technology_table[tech].unlocks for tech in progressive),
-                                        is_useful=any(technology_table[tech].is_useful for tech in progressive))
+                                        unlocks=any(technology_table[tech].unlocks for tech in progressive))
     progressive_tech_table[root] = progressive_technology.factorio_id
     progressive_technology_table[root] = progressive_technology
 
