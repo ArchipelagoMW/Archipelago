@@ -377,7 +377,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         patched_rom,
         options_address + 0x00,
         2,
-        world.random.choice([species.species_id for species in data.species if species is not None])
+        world.random.choice(list(data.species.keys()))
     )
 
     # Set hold A to advance text
@@ -621,24 +621,23 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
 
 
 def _set_species_info(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
-    for species in world.modified_species:
-        if species is not None:
-            _set_bytes_little_endian(rom, species.address + 6, 1, species.types[0])
-            _set_bytes_little_endian(rom, species.address + 7, 1, species.types[1])
-            _set_bytes_little_endian(rom, species.address + 8, 1, species.catch_rate)
-            _set_bytes_little_endian(rom, species.address + 22, 1, species.abilities[0])
-            _set_bytes_little_endian(rom, species.address + 23, 1, species.abilities[1])
+    for species in world.modified_species.values():
+        _set_bytes_little_endian(rom, species.address + 6, 1, species.types[0])
+        _set_bytes_little_endian(rom, species.address + 7, 1, species.types[1])
+        _set_bytes_little_endian(rom, species.address + 8, 1, species.catch_rate)
+        _set_bytes_little_endian(rom, species.address + 22, 1, species.abilities[0])
+        _set_bytes_little_endian(rom, species.address + 23, 1, species.abilities[1])
 
-            if easter_egg[0] == 3:
-                _set_bytes_little_endian(rom, species.address + 22, 1, easter_egg[1])
-                _set_bytes_little_endian(rom, species.address + 23, 1, easter_egg[1])
+        if easter_egg[0] == 3:
+            _set_bytes_little_endian(rom, species.address + 22, 1, easter_egg[1])
+            _set_bytes_little_endian(rom, species.address + 23, 1, easter_egg[1])
 
-            for i, learnset_move in enumerate(species.learnset):
-                level_move = learnset_move.level << 9 | learnset_move.move_id
-                if easter_egg[0] == 2:
-                    level_move = learnset_move.level << 9 | easter_egg[1]
+        for i, learnset_move in enumerate(species.learnset):
+            level_move = learnset_move.level << 9 | learnset_move.move_id
+            if easter_egg[0] == 2:
+                level_move = learnset_move.level << 9 | easter_egg[1]
 
-                _set_bytes_little_endian(rom, species.learnset_address + (i * 2), 2, level_move)
+            _set_bytes_little_endian(rom, species.learnset_address + (i * 2), 2, level_move)
 
 
 def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
@@ -717,9 +716,8 @@ def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tupl
 def _set_tmhm_compatibility(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
-    for species in world.modified_species:
-        if species is not None:
-            _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
+    for species in world.modified_species.values():
+        _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 
 
 def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
@@ -768,10 +766,7 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
-        for species in data.species:
-            if species is None:
-                continue
-
+        for species in data.species.values():
             _set_bytes_little_endian(
                 rom,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),

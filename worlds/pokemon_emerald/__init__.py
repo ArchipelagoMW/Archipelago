@@ -101,7 +101,7 @@ class PokemonEmeraldWorld(World):
     hm_requirements: Dict[str, Union[int, List[str]]]
     auth: bytes
 
-    modified_species: List[Optional[SpeciesData]]
+    modified_species: Dict[int, SpeciesData]
     modified_maps: Dict[str, MapData]
     modified_tmhm_moves: List[int]
     modified_legendary_encounters: List[int]
@@ -421,7 +421,7 @@ class PokemonEmeraldWorld(World):
 
     def generate_basic(self) -> None:
         # Create auth
-        # self.auth = self.random.randbytes(16)
+        # self.auth = self.random.randbytes(16)  # Requires >=3.9
         self.auth = self.random.getrandbits(16 * 8).to_bytes(16, "little")
 
         # Randomize types
@@ -434,19 +434,17 @@ class PokemonEmeraldWorld(World):
             mystery_type_index = type_map.index(9)
             type_map[mystery_type_index], type_map[9] = type_map[9], type_map[mystery_type_index]
 
-            for species in self.modified_species:
-                if species is not None:
-                    species.types = (type_map[species.types[0]], type_map[species.types[1]])
+            for species in self.modified_species.values():
+                species.types = (type_map[species.types[0]], type_map[species.types[1]])
         elif self.options.types == RandomizeTypes.option_completely_random:
-            for species in self.modified_species:
-                if species is not None:
-                    new_type_1 = get_random_type(self.random)
-                    new_type_2 = new_type_1
-                    if species.types[0] != species.types[1]:
-                        while new_type_1 == new_type_2:
-                            new_type_2 = get_random_type(self.random)
+            for species in self.modified_species.values():
+                new_type_1 = get_random_type(self.random)
+                new_type_2 = new_type_1
+                if species.types[0] != species.types[1]:
+                    while new_type_1 == new_type_2:
+                        new_type_2 = get_random_type(self.random)
 
-                    species.types = (new_type_1, new_type_2)
+                species.types = (new_type_1, new_type_2)
         elif self.options.types == RandomizeTypes.option_follow_evolutions:
             already_modified: Set[int] = set()
 
@@ -460,9 +458,7 @@ class PokemonEmeraldWorld(World):
             # - Onyx (Rock/Ground) -> Steelix (Steel/Ground)
             # - Nincada (Bug/Ground) -> Ninjask (Bug/Flying) && Shedinja (Bug/Ghost)
             # - Azurill (Normal/Normal) -> Marill (Water/Water)
-            for species in self.modified_species:
-                if species is None:
-                    continue
+            for species in self.modified_species.values():
                 if species.species_id in already_modified:
                     continue
                 if species.pre_evolution is not None and species.pre_evolution not in already_modified:
@@ -553,8 +549,8 @@ class PokemonEmeraldWorld(World):
                                     if should_match_type:
                                         blacklists[3].append({
                                             species.species_id
-                                            for species in self.modified_species
-                                            if species is not None and not bool(set(species.types) & set(original_species.types))
+                                            for species in self.modified_species.values()
+                                            if not bool(set(species.types) & set(original_species.types))
                                         })
 
                                     merged_blacklist: Set[int] = set()
@@ -572,8 +568,8 @@ class PokemonEmeraldWorld(World):
 
                                     candidates = [
                                         species
-                                        for species in self.modified_species
-                                        if species is not None and species.species_id not in merged_blacklist
+                                        for species in self.modified_species.values()
+                                        if species.species_id not in merged_blacklist
                                     ]
 
                                     if should_match_bst:
@@ -835,9 +831,7 @@ class PokemonEmeraldWorld(World):
                 # Hitmonlee/Hitmonchan, and once to verify that there's nothing left to do.
                 while True:
                     had_clean_pass = True
-                    for species in self.modified_species:
-                        if species is None:
-                            continue
+                    for species in self.modified_species.values():
                         if species.species_id in already_modified:
                             continue
                         if species.pre_evolution is not None and species.pre_evolution not in already_modified:
@@ -869,10 +863,7 @@ class PokemonEmeraldWorld(World):
                     if had_clean_pass:
                         break
             else:  # Not following evolutions
-                for species in self.modified_species:
-                    if species is None:
-                        continue
-
+                for species in self.modified_species.values():
                     old_abilities = species.abilities
                     # 0 is the value for "no ability"; species with only 1 ability have the other set to 0
                     new_abilities = (
@@ -886,10 +877,7 @@ class PokemonEmeraldWorld(World):
             type_bias = self.options.move_match_type_bias.value
             normal_bias = self.options.move_normal_type_bias.value
 
-            for species in self.modified_species:
-                if species is None:
-                    continue
-
+            for species in self.modified_species.values():
                 old_learnset = species.learnset
                 new_learnset: List[LearnsetMove] = []
 
@@ -922,10 +910,7 @@ class PokemonEmeraldWorld(World):
                 species.learnset = new_learnset
 
         def randomize_tm_hm_compatibility() -> None:
-            for species in self.modified_species:
-                if species is None:
-                    continue
-
+            for species in self.modified_species.values():
                 # TM and HM compatibility is stored as a 64-bit bitfield
                 combatibility_array = int_to_bool_array(species.tm_hm_compatibility)
 
@@ -974,7 +959,7 @@ class PokemonEmeraldWorld(World):
                 for encounter in emerald_data.legendary_encounters:
                     original_species = self.modified_species[encounter.species_id]
 
-                    candidates = [species for species in self.modified_species if species is not None]
+                    candidates = list(self.modified_species.values())
                     if should_match_type:
                         candidates = [
                             species
@@ -1014,7 +999,7 @@ class PokemonEmeraldWorld(World):
                 for encounter in emerald_data.misc_pokemon:
                     original_species = self.modified_species[encounter.species_id]
 
-                    candidates = [species for species in self.modified_species if species is not None]
+                    candidates = list(self.modified_species.values())
                     if should_match_type:
                         candidates = [
                             species
@@ -1073,8 +1058,8 @@ class PokemonEmeraldWorld(World):
                     if should_match_type:
                         blacklists[3].append({
                             species.species_id
-                            for species in self.modified_species
-                            if species is not None and not bool(set(species.types) & set(original_species.types))
+                            for species in self.modified_species.values()
+                            if not bool(set(species.types) & set(original_species.types))
                         })
 
                     merged_blacklist: Set[int] = set()
@@ -1092,8 +1077,8 @@ class PokemonEmeraldWorld(World):
 
                     candidates = [
                         species
-                        for species in self.modified_species
-                        if species is not None and species.species_id not in merged_blacklist
+                        for species in self.modified_species.values()
+                        if species.species_id not in merged_blacklist
                     ]
 
                     if should_match_bst:
@@ -1164,8 +1149,8 @@ class PokemonEmeraldWorld(World):
                     original_starter = emerald_data.species[starter_id]
                     type_blacklist = {
                         species.species_id
-                        for species in self.modified_species
-                        if species is not None and not bool(set(species.types) & set(original_starter.types))
+                        for species in self.modified_species.values()
+                        if not bool(set(species.types) & set(original_starter.types))
                     } if should_match_type else set()
 
                     merged_blacklist = set(s.species_id for s in new_starters) | self.blacklisted_starters | type_blacklist
@@ -1176,8 +1161,8 @@ class PokemonEmeraldWorld(World):
 
                     candidates = [
                         species
-                        for species in self.modified_species
-                        if species is not None and species.species_id not in merged_blacklist
+                        for species in self.modified_species.values()
+                        if species.species_id not in merged_blacklist
                     ]
 
                     if should_match_bst:
@@ -1258,9 +1243,8 @@ class PokemonEmeraldWorld(World):
         randomize_tm_hm_compatibility()  # Options are checked within this function
 
         min_catch_rate = min(self.options.min_catch_rate.value, 255)
-        for species in self.modified_species:
-            if species is not None:
-                species.catch_rate = max(species.catch_rate, min_catch_rate)
+        for species in self.modified_species.values():
+            species.catch_rate = max(species.catch_rate, min_catch_rate)
 
         if self.options.tm_tutor_moves:
             randomize_tm_moves()

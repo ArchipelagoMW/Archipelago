@@ -107,15 +107,19 @@ LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
     "SPECIES_JIRACHI",
     "SPECIES_DEOXYS"
 ]])
-UNEVOLVED_POKEMON = {species.species_id for species in data.species if species is not None and len(species.evolutions) > 0}
+UNEVOLVED_POKEMON = {
+    species.species_id
+    for species in data.species.values()
+    if len(species.evolutions) > 0
+}
 
 
-national_id_to_species_id_map = {species.national_dex_number: i for i, species in enumerate(data.species) if species is not None}
+national_id_to_species_id_map = {species.national_dex_number: i for i, species in data.species.items()}
 
 
 @functools.lru_cache(maxsize=386)
 def get_species_id_by_label(label: str) -> int:
-    return next(species.species_id for species in data.species if species is not None and species.label == label)
+    return next(species.species_id for species in data.species.values() if species.label == label)
 
 
 def get_random_type(random: "Random") -> int:

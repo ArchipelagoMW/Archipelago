@@ -299,7 +299,7 @@ class PokemonEmeraldData:
     regions: Dict[str, RegionData]
     locations: Dict[str, LocationData]
     items: Dict[int, ItemData]
-    species: List[Optional[SpeciesData]]
+    species: Dict[int, SpeciesData]
     legendary_encounters: List[MiscPokemonData]
     misc_pokemon: List[MiscPokemonData]
     tmhm_moves: List[int]
@@ -318,7 +318,7 @@ class PokemonEmeraldData:
         self.regions = {}
         self.locations = {}
         self.items = {}
-        self.species = []
+        self.species = {}
         self.legendary_encounters = []
         self.misc_pokemon = []
         self.tmhm_moves = []
@@ -892,7 +892,7 @@ def _init() -> None:
 
         learnset = [LearnsetMove(item["level"], item["move_id"]) for item in species_data["learnset"]["moves"]]
 
-        species_list.append(SpeciesData(
+        data.species[species_id] = SpeciesData(
             species_name,
             species_label,
             species_id,
@@ -919,17 +919,11 @@ def _init() -> None:
             int(species_data["tmhm_learnset"], 16),
             species_data["learnset"]["address"],
             species_data["address"]
-        ))
+        )
 
-    data.species = [None for i in range(max_species_id + 1)]
-
-    for species_data in species_list:
-        data.species[species_data.species_id] = species_data
-
-    for species in data.species:
-        if species is not None:
-            for evolution in species.evolutions:
-                data.species[evolution.species_id].pre_evolution = species.species_id
+    for species in data.species.values():
+        for evolution in species.evolutions:
+            data.species[evolution.species_id].pre_evolution = species.species_id
 
     # Replace default item for dex entry locations based on evo stage of species
     evo_stage_to_ball_map = {
@@ -937,10 +931,7 @@ def _init() -> None:
         1: data.constants["ITEM_GREAT_BALL"],
         2: data.constants["ITEM_ULTRA_BALL"]
     }
-    for species in data.species:
-        if species is None:
-            continue
-
+    for species in data.species.values():
         evo_stage = 0
         pre_evolution = species.pre_evolution
         while pre_evolution is not None:

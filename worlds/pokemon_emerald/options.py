@@ -309,7 +309,7 @@ class WildEncounterBlacklist(OptionSet):
     Use "_Legendaries" as a shortcut for legendary pokemon.
     """
     display_name = "Wild Encounter Blacklist"
-    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
+    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
 
 
 class RandomizeStarters(Choice):
@@ -340,7 +340,7 @@ class StarterBlacklist(OptionSet):
     Use "_Legendaries" as a shortcut for legendary pokemon.
     """
     display_name = "Starter Blacklist"
-    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
+    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
 
 
 class RandomizeTrainerParties(Choice):
@@ -371,7 +371,7 @@ class TrainerPartyBlacklist(OptionSet):
     Use "_Legendaries" as a shortcut for legendary pokemon.
     """
     display_name = "Trainer Party Blacklist"
-    valid_keys = frozenset(species.label for species in data.species if species is not None) | {"_Legendaries"}
+    valid_keys = frozenset(species.label for species in data.species.values()) | {"_Legendaries"}
 
 
 class ForceFullyEvolved(Range):
