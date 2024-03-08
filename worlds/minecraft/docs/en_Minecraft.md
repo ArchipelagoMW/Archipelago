@@ -64,12 +64,15 @@ sequence either by skipping it or watching hit play out.
         * Diamond Axe
 * Progessive Tools
     * Tier I
+        * Stone Pickaxe
         * Stone Shovel
         * Stone Hoe
     * Tier II
+        * Iron Pickaxe
         * Iron Shovel
         * Iron Hoe
     * Tier III
+        * Diamond Pickaxe
         * Diamond Shovel
         * Diamond Hoe
         * Netherite Ingot
