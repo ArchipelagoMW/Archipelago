@@ -116,10 +116,10 @@ class StardewValleyWorld(World):
             region.exits = [Entrance(self.player, exit_name, region) for exit_name in exits]
             return region
 
-        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.multiworld.random, self.options)
+        world_regions, world_entrances, self.randomized_entrances = create_regions(create_region, self.random, self.options)
 
         self.logic = StardewLogic(self.player, self.options, world_regions.keys())
-        self.modified_bundles = get_all_bundles(self.multiworld.random,
+        self.modified_bundles = get_all_bundles(self.random,
                                                 self.logic,
                                                 self.options)
 
@@ -128,7 +128,7 @@ class StardewValleyWorld(World):
             location = StardewLocation(self.player, name, code, region)
             region.locations.append(location)
 
-        create_locations(add_location, self.modified_bundles, self.options, self.multiworld.random)
+        create_locations(add_location, self.modified_bundles, self.options, self.random)
         self.multiworld.regions.extend(world_regions.values())
 
     def create_items(self):
@@ -147,11 +147,11 @@ class StardewValleyWorld(World):
                                if not location.event])
 
         created_items = create_items(self.create_item, self.delete_item, locations_count, items_to_exclude, self.options,
-                                     self.multiworld.random)
+                                     self.random)
 
         self.multiworld.itempool += created_items
 
-        setup_early_items(self.multiworld, self.options, self.player, self.multiworld.random)
+        setup_early_items(self.multiworld, self.options, self.player, self.random)
         self.setup_player_events()
         self.setup_victory()
 
@@ -173,7 +173,7 @@ class StardewValleyWorld(World):
         if self.options.season_randomization == SeasonRandomization.option_randomized_not_winter:
             season_pool = [season for season in season_pool if season.name != "Winter"]
 
-        starting_season = self.create_starting_item(self.multiworld.random.choice(season_pool))
+        starting_season = self.create_starting_item(self.random.choice(season_pool))
         self.multiworld.push_precollected(starting_season)
 
     def setup_player_events(self):
@@ -385,7 +385,7 @@ class StardewValleyWorld(World):
         included_option_names: List[str] = [option_name for option_name in self.options_dataclass.type_hints if option_name not in excluded_option_names]
         slot_data = self.options.as_dict(*included_option_names)
         slot_data.update({
-            "seed": self.multiworld.per_slot_randoms[self.player].randrange(1000000000),  # Seed should be max 9 digits
+            "seed": self.random.randrange(1000000000),  # Seed should be max 9 digits
             "randomized_entrances": self.randomized_entrances,
             "modified_bundles": bundles,
             "client_version": "5.0.0",
