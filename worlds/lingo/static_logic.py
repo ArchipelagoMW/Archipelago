@@ -74,7 +74,7 @@ def get_progressive_item_id(name: str):
 
 
 def load_static_data_from_file():
-    global HASHES, PAINTINGS, ALL_ROOMS, DOORS_BY_ROOM, PANELS_BY_ROOM, PROGRESSIVE_ITEMS, PROGRESSION_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXIT_ROOMS, PAINTING_EXITS, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, SPECIAL_ITEM_IDS, PANEL_LOCATION_IDS, DOOR_LOCATION_IDS, DOOR_ITEM_IDS, DOOR_GROUP_ITEM_IDS, PROGRESSIVE_ITEM_IDS
+    global PAINTING_ENTRANCES, PAINTING_EXITS
 
     class RenameUnpickler(pickle.Unpickler):
         def find_class(self, module, name):
@@ -87,24 +87,24 @@ def load_static_data_from_file():
     file = pkgutil.get_data(__name__, os.path.join("data", "generated.dat"))
     pickdata = RenameUnpickler(BytesIO(file)).load()
         
-    HASHES = pickdata["HASHES"]
-    PAINTINGS = pickdata["PAINTINGS"]
-    ALL_ROOMS = pickdata["ALL_ROOMS"]
-    DOORS_BY_ROOM = pickdata["DOORS_BY_ROOM"]
-    PANELS_BY_ROOM = pickdata["PANELS_BY_ROOM"]
-    PROGRESSIVE_ITEMS = pickdata["PROGRESSIVE_ITEMS"]
-    PROGRESSION_BY_ROOM = pickdata["PROGRESSION_BY_ROOM"]
+    HASHES.update(pickdata["HASHES"])
+    PAINTINGS.update(pickdata["PAINTINGS"])
+    ALL_ROOMS.extend(pickdata["ALL_ROOMS"])
+    DOORS_BY_ROOM.update(pickdata["DOORS_BY_ROOM"])
+    PANELS_BY_ROOM.update(pickdata["PANELS_BY_ROOM"])
+    PROGRESSIVE_ITEMS.extend(pickdata["PROGRESSIVE_ITEMS"])
+    PROGRESSION_BY_ROOM.update(pickdata["PROGRESSION_BY_ROOM"])
     PAINTING_ENTRANCES = pickdata["PAINTING_ENTRANCES"]
-    PAINTING_EXIT_ROOMS = pickdata["PAINTING_EXIT_ROOMS"]
+    PAINTING_EXIT_ROOMS.update(pickdata["PAINTING_EXIT_ROOMS"])
     PAINTING_EXITS = pickdata["PAINTING_EXITS"]
-    REQUIRED_PAINTING_ROOMS = pickdata["REQUIRED_PAINTING_ROOMS"]
-    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS = pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"]
-    SPECIAL_ITEM_IDS = pickdata["SPECIAL_ITEM_IDS"]
-    PANEL_LOCATION_IDS = pickdata["PANEL_LOCATION_IDS"]
-    DOOR_LOCATION_IDS = pickdata["DOOR_LOCATION_IDS"]
-    DOOR_ITEM_IDS = pickdata["DOOR_ITEM_IDS"]
-    DOOR_GROUP_ITEM_IDS = pickdata["DOOR_GROUP_ITEM_IDS"]
-    PROGRESSIVE_ITEM_IDS = pickdata["PROGRESSIVE_ITEM_IDS"]
+    REQUIRED_PAINTING_ROOMS.extend(pickdata["REQUIRED_PAINTING_ROOMS"])
+    REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS.extend(pickdata["REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS"])
+    SPECIAL_ITEM_IDS.update(pickdata["SPECIAL_ITEM_IDS"])
+    PANEL_LOCATION_IDS.update(pickdata["PANEL_LOCATION_IDS"])
+    DOOR_LOCATION_IDS.update(pickdata["DOOR_LOCATION_IDS"])
+    DOOR_ITEM_IDS.update(pickdata["DOOR_ITEM_IDS"])
+    DOOR_GROUP_ITEM_IDS.update(pickdata["DOOR_GROUP_ITEM_IDS"])
+    PROGRESSIVE_ITEM_IDS.update(pickdata["PROGRESSIVE_ITEM_IDS"])
 
 
 # Initialize the static data at module scope.
