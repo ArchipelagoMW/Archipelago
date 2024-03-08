@@ -1,4 +1,5 @@
 import logging
+import math
 from dataclasses import dataclass
 from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
 from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
@@ -321,6 +322,44 @@ def get_priority_hint_locations(world: "WitnessWorld") -> List[str]:
     return priority
 
 
+def try_getting_location_group_other_world(world: "WitnessWorld", location: Location) -> Optional[str]:
+    possible_location_groups = world.multiworld.worlds[location.player].location_name_groups
+
+    locations_in_that_world = {
+        location.name for location in world.multiworld.get_locations(location.player)
+    }
+
+    valid_location_groups = dict()
+
+    for group, locations in possible_location_groups.items():
+        present_locations = sum(location in locations_in_that_world for location in locations)
+        if present_locations > 1:
+            valid_location_groups[group] = present_locations
+
+    if len(valid_location_groups) > 1 and valid_location_groups["Everywhere"] > 100:
+        del valid_location_groups["Everywhere"]
+
+    if location.parent_region.name not in possible_location_groups:
+        parent_region_location_amount = sum(
+            location.address is not None for location in location.parent_region.locations
+        )
+        if parent_region_location_amount > 2:
+            valid_location_groups[location.parent_region.name] = parent_region_location_amount
+
+    if not valid_location_groups:
+        return None
+
+    location_groups_with_weights = {
+        location_group: x ** 0.6 * math.e ** - (x / 7) ** 0.6 if x > 6 else x
+        for location_group, x in valid_location_groups.items()
+    }
+
+    location_groups = list(location_groups_with_weights.keys())
+    weights = list(location_groups_with_weights.values())
+
+    return world.random.choices(location_groups, weights, k=1)[0]
+
+
 def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
     location_name = hint.location.name
     if hint.location.player != world.player:
@@ -328,13 +367,36 @@ def word_direct_hint(world: "WitnessWorld", hint: WitnessLocationHint):
 
     item = hint.location.item
     item_name = item.name
+
     if item.player != world.player:
         item_name += " (" + world.multiworld.get_player_name(item.player) + ")"
 
-    if hint.hint_came_from_location:
-        hint_text = f"{location_name} contains {item_name}."
-    else:
-        hint_text = f"{item_name} can be found at {location_name}."
+    hint_text = ""
+
+    if world.options.vague_hints:
+        if hint.location.player == world.player:
+            area = try_getting_location_group_other_world(world, hint.location)
+
+            if hint.hint_came_from_location:
+                hint_text = f"In the {area} area, you can find \"{item_name}\"."
+            else:
+                hint_text = f"{item_name} can be found in the {area} area."
+        else:
+            chosen_group = try_getting_location_group_other_world(world, hint.location)
+
+            if chosen_group is not None:
+                player_name = world.multiworld.get_player_name(hint.location.player)
+
+                if chosen_group == "Everywhere":
+                    location_name = f"a location in {player_name}'s world"
+                else:
+                    location_name = f"a \"{chosen_group}\" location in {player_name}'s world"
+
+    if hint_text == "":  # Something went wrong, default back to a direct location hint
+        if hint.hint_came_from_location:
+            hint_text = f"{location_name} contains {item_name}."
+        else:
+            hint_text = f"{item_name} can be found at {location_name}."
 
     return WitnessWordedHint(hint_text, hint.location)
 
@@ -365,26 +427,35 @@ def hint_from_location(world: "WitnessWorld", location: str) -> Optional[Witness
     return WitnessLocationHint(location_obj, True)
 
 
-def get_items_and_locations_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
-    prog_items_in_this_world = sorted(
+def get_item_and_location_names_in_random_order(world: "WitnessWorld", own_itempool: List[Item]):
+    prog_item_names_in_this_world = sorted(
         item.name for item in own_itempool
         if item.advancement and item.code and item.location
     )
+    world.random.shuffle(prog_item_names_in_this_world)
+
     locations_in_this_world = sorted(
-        location.name for location in world.multiworld.get_locations(world.player)
-        if location.address and location.progress_type != LocationProgressType.EXCLUDED
+        location for location in world.multiworld.get_locations(world.player)
+        if location.item and location.address and location.progress_type != LocationProgressType.EXCLUDED
     )
 
-    world.random.shuffle(prog_items_in_this_world)
     world.random.shuffle(locations_in_this_world)
 
-    return prog_items_in_this_world, locations_in_this_world
+    if world.options.vague_hints:
+        locations_in_this_world.sort(key=lambda location: location.item.advancement)
+
+    location_names_in_this_world = [location.name for location in locations_in_this_world]
+
+    return prog_item_names_in_this_world, location_names_in_this_world
 
 
 def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List[Item],
                                    already_hinted_locations: Set[Location]
                                    ) -> Tuple[List[WitnessLocationHint], List[WitnessLocationHint]]:
-    prog_items_in_this_world, loc_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
+    if world.options.vague_hints:
+        return [], []
+
+    prog_items_in_this_world, loc_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
 
     always_locations = [
         location for location in get_always_hint_locations(world)
@@ -431,7 +502,7 @@ def make_always_and_priority_hints(world: "WitnessWorld", own_itempool: List[Ite
 def make_extra_location_hints(world: "WitnessWorld", hint_amount: int, own_itempool: List[Item],
                               already_hinted_locations: Set[Location], hints_to_use_first: List[WitnessLocationHint],
                               unhinted_locations_for_hinted_areas: Dict[str, Set[Location]]) -> List[WitnessWordedHint]:
-    prog_items_in_this_world, locations_in_this_world = get_items_and_locations_in_random_order(world, own_itempool)
+    prog_items_in_this_world, locations_in_this_world = get_item_and_location_names_in_random_order(world, own_itempool)
 
     next_random_hint_is_location = world.random.randrange(0, 2)
 

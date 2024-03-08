@@ -213,6 +213,12 @@ class HintAmount(Range):
     default = 12
 
 
+class VagueHints(DefaultOnToggle):
+    """Make Location Hints a bit more vague, where they only tell you about the general area the item is in.
+    Area Hints will be generated as normal."""
+    display_name = "Vague Hints"
+
+
 class AreaHintPercentage(Range):
     """There are two types of hints for The Witness.
     "Location hints" hint one location in your world / containing an item for your world.
@@ -269,6 +275,7 @@ class TheWitnessOptions(PerGameCommonOptions):
     trap_weights: TrapWeights
     puzzle_skip_amount: PuzzleSkipAmount
     hint_amount: HintAmount
+    vague_hints: VagueHints
     area_hint_percentage: AreaHintPercentage
     laser_hints: LaserHints
     death_link: DeathLink
