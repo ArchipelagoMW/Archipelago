@@ -1158,26 +1158,26 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando and options.shuffle_ladders:
                 continue
             # if no ladder items are required, just do the basic stick only lambda
-            elif not ladders:
+            elif not ladders or not options.shuffle_ladders:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player))
-            # if one ladder is required, use has_ladder
+            # one ladder required
             elif len(ladders) == 1:
                 ladder = ladders.pop()
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and has_ladder(ladder, state, player, options))
-            # if multiple ladders can be used, use has_any_ladder
+                    and state.has(ladder, player))
+            # if multiple ladders can be used
             else:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and has_any_ladder(ladders, state, player, options))
+                    and state.has_any(ladders, player))
 
 
 def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> None:
