@@ -146,7 +146,7 @@ def set_rules(world, player: int, area_connections: dict, star_costs: dict, move
     rf.assign_rule("LLL: Upper Volcano", "CL")
     # Shifting Sand Land
     rf.assign_rule("SSL: Upper Pyramid", "CL & TJ/BF/SF/LG | MOVELESS")
-    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS")
+    rf.assign_rule("SSL: Free Flying for 8 Red Coins", "TJ/SF/BF & TJ+WC | TJ/SF/BF & CAPLESS | MOVELESS & CAPLESS")
     # Dire, Dire Docks
     rf.assign_rule("DDD: Moving Poles", "CL & {{Bowser in the Fire Sea Key}} | TJ+DV+LG+WK & MOVELESS")
     rf.assign_rule("DDD: Through the Jet Stream", "MC | CAPLESS")
