@@ -182,17 +182,19 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
         OpponentData(23, "Sacred Phoenix of Nephthys", [], 5, 4, 6236, 8023, "deck/LV5_nephthys.ydc\x00", 6),
         OpponentData(24, "Cyber End Dragon", ["Goal"], 5, 5, 6397, 8024, "deck/LV5_cyber.ydc\x00\x00\x00\x00", 7),
     ]
+    world = multiworld.worlds[player]
     if not randomize:
         return tuple(opponents_table)
     opponents = opponents_table + challenge_opponents
-    start = multiworld.random.choice([o for o in opponents if o.tier == 1 and len(o.additional_info) == 0])
+    start = world.random.choice([o for o in opponents if o.tier == 1 and len(o.additional_info) == 0])
     opponents.remove(start)
-    goal = multiworld.random.choice([o for o in opponents if "Goal" in o.campaignInfo])
+    goal = world.random.choice([o for o in opponents if "Goal" in o.campaignInfo])
     opponents.remove(goal)
-    multiworld.random.shuffle(opponents)
+    world.random.shuffle(opponents)
     chosen_ones = opponents[:23]
     for item in (multiworld.precollected_items[player]):
         if item.name in tier_1_opponents:
+            # convert item index to opponent index
             chosen_ones.insert(item_to_index[item.name] - item_to_index["Campaign Tier 1 Column 1"], start)
             continue
     chosen_ones.append(goal)
@@ -202,10 +204,10 @@ def get_opponents(multiworld: Optional[MultiWorld], player: Optional[int], rando
     for opp in chosen_ones:
         recreation.append(OpponentData(opp.id, opp.name, opp.campaignInfo, tier, column, opp.card_id,
                                        opp.deck_name_id, opp.deck_file, opp.difficulty))
-        column = column + 1
+        column += 1
         if column > 5:
             column = 1
-            tier = tier + 1
+            tier += 1
 
     return tuple(recreation)
 

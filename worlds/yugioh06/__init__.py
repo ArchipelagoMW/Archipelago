@@ -72,7 +72,6 @@ class Yugioh06World(World):
         item_name_to_id[k] = v + start_id
 
     location_name_to_id = {}
-    start_id = 5730000
     for k, v in Bonuses.items():
         location_name_to_id[k] = v + start_id
 
@@ -328,11 +327,11 @@ class Yugioh06World(World):
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
         challenge = list((Limited_Duels | Theme_Duels).keys())
         noc = len(challenge) - max(self.options.third_tier_5_campaign_boss_challenges.value
-                                   if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
+                                   if self.options.third_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
                                    self.options.fourth_tier_5_campaign_boss_challenges.value
-                                   if self.options.fourth_tier_5_campaign_boss_unlock_condition.value == 1 else 0,
+                                   if self.options.fourth_tier_5_campaign_boss_unlock_condition == "challenges" else 0,
                                    self.options.final_campaign_boss_challenges.value
-                                   if self.options.final_campaign_boss_unlock_condition.value == 1 else 0,
+                                   if self.options.final_campaign_boss_unlock_condition == "challenges" else 0,
                                    self.options.number_of_challenges.value,
                                    91 if hasattr(self.multiworld, "generation_is_fake") else 0)
 
@@ -377,16 +376,6 @@ class Yugioh06World(World):
             "number_of_challenges": self.options.number_of_challenges.value,
         }
 
-        for plando_item in self.multiworld.plando_items[self.player]:
-            if plando_item["from_pool"]:
-                items_to_find = set()
-                for item_type in [key for key in ["item", "items"] if key in plando_item]:
-                    for item in plando_item[item_type]:
-                        items_to_find.add(item)
-                for item in items_to_find:
-                    slot_data[item] = []
-                    for item_location in self.multiworld.find_item_locations(item, self.player):
-                        slot_data[item].extend([item_location.name, item_location.player])
         slot_data["removed challenges"] = self.removed_challenges
         slot_data["starting_booster"] = self.starting_booster
         slot_data["starting_opponent"] = self.starting_opponent
@@ -425,11 +414,14 @@ class Yugioh06World(World):
             rom_data = self.apply_base_patch(rom)
 
         structure_deck = self.options.structure_deck
+        # set structure deck
         structure_deck_data_location = 0x000fd0aa
         rom_data[structure_deck_data_location] = structure_deck_selection.get(structure_deck.value)
+        # set banlist
         banlist = self.options.banlist
         banlist_data_location = 0xf4496
         rom_data[banlist_data_location] = banlist_ids.get(banlist.value)
+        # set items to locations map
         randomizer_data_start = 0x0000f310
         for location in self.multiworld.get_locations(self.player):
             item = location.item.name
@@ -440,6 +432,7 @@ class Yugioh06World(World):
                 continue
             location_id = self.location_name_to_id[location.name] - 5730000
             rom_data[randomizer_data_start + location_id] = item_id
+        # set starting inventory
         inventory_map = [0 for i in range(32)]
         starting_inventory = list(map(lambda i: i.name, self.multiworld.precollected_items[self.player]))
         starting_inventory += self.options.start_inventory.value
@@ -450,6 +443,7 @@ class Yugioh06World(World):
             inventory_map[index] = inventory_map[index] | (1 << bit)
 
         rom_data[0xe9dc:0xe9fc] = inventory_map
+        # set unlock conditions for the last 3 campaign opponents
         rom_data[0xeefa] = self.options.third_tier_5_campaign_boss_challenges.value \
             if self.options.third_tier_5_campaign_boss_unlock_condition.value == 1 \
             else self.options.third_tier_5_campaign_boss_campaign_opponents.value
@@ -465,9 +459,11 @@ class Yugioh06World(World):
             int((function_addresses.get(self.options.fourth_tier_5_campaign_boss_unlock_condition.value) - 0xef10) / 2)
         rom_data[0xef20] = \
             int((function_addresses.get(self.options.final_campaign_boss_unlock_condition.value) - 0xef22) / 2)
+        # set starting money
         rom_data[0xf4734:0xf4738] = self.options.starting_money.value.to_bytes(4, 'little')
         rom_data[0xe70c] = self.options.money_reward_multiplier.value
         rom_data[0xe6e4] = self.options.money_reward_multiplier.value
+        # normalize booster packs if option is set
         if self.options.normalize_boosters_packs.value:
             booster_pack_price = self.options.booster_pack_prices.value.to_bytes(2, 'little')
             for booster in range(51):
@@ -475,6 +471,7 @@ class Yugioh06World(World):
                 rom_data[0x1e5e2e8 + space] = booster_pack_price[0]
                 rom_data[0x1e5e2e9 + space] = booster_pack_price[1]
                 rom_data[0x1e5e2ea + space] = 5
+        # set shuffled campaign opponents if option is set
         if self.options.campaign_opponents_shuffle.value:
             i = 0
             for opp in self.campaign_opponents:
