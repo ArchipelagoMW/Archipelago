@@ -280,7 +280,7 @@ The brown circular machine in the invention room, close to the middle of the wal
 #### Inside nitro hallway flamethrower
 The lower flamethrower in the hallway between the Nitro room from the Spike Crusher Room, near the two doors to said rooms.
 
-#### Torture chamber instrument rack:
+#### Torture chamber instrument rack
 The shelf full of torture instruments in the torture chamber, to the right of the Mandragora shelf.
 
 ### 3-Hit Breakables
@@ -376,7 +376,7 @@ hit this diamond with good timing.
 Above the large platform after the yellow ones from whence you can reach the first of the series of tiny blue platforms.
 This diamond is low enough that you can reach it by simply jumping straight up to it.
 
-#### Invisible bridge platform:
+#### Invisible bridge platform
 Located at the very end of the stage, off to the side. Use the invisible bridge to reach it. The Special2 that unlocks
 Carrie's costume can be normally found here (or Special3, depending on if you are playing the PAL version or not).
 
@@ -386,7 +386,7 @@ Carrie's costume can be normally found here (or Special3, depending on if you ar
 All the normal items here and in Room of Clocks are self-explanatory, but the 3HBs in Clock Tower are a whoooooooole 'nother story. So buckle up...
 
 ### 3-Hit Breakables
-#### Gear climb room battery underside slab:
+#### Gear climb room battery underside slab
 In the first room, on the side you initially climb up, go up until you find a battery-like object that you can stand on
 as a platform. From the platform right after this, you can hit this 3HB that can be found on the underside of the structure
 in the corner, above the structure before the first set of gears that you initially start the climb on. 3 chickens/checks
@@ -408,7 +408,7 @@ Simply next to the entrance when you come into the third and final room from the
 which funnily normally have their item IDs shared with the other 3HB in this room's items, so I had to separate those for
 the rando.
 
-#### Renon's final offers slab:
+#### Renon's final offers slab
 At the top of the final room, on a platform near the Renon contract that would normally be the very last in the game.
 This 3HB drops a whopping 8 items, more than any other 3HB in the entire game, and 6 of those are all moneybags. They
 *really* shower you in gold in preparation for the finale, huh?
@@ -416,7 +416,7 @@ This 3HB drops a whopping 8 items, more than any other 3HB in the entire game, a
 
 
 ## Castle Keep
-#### Behind Dracula's chamber/Dracula's floating cube:
+#### Behind Dracula's chamber/Dracula's floating cube
 This game continues the CV tradition of having a hidden secret around Dracula's chamber that you can get helpful things
 from before the final battle begins. Jump onto the torch ledges and use the thin walkway to reach the backside of Dracula's
 chamber where these can both be found. The floating cube, in question, can be reached with an invisible bridge. The other
