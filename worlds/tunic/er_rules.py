@@ -727,16 +727,16 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Lower Quarry"],
         rule=lambda state: has_mask(state, player, options))
 
-    # nmg: bring a scav over, then ice grapple through the door
+    # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
     regions["Lower Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: state.has("Activate Quarry Fuse", player)
-        or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
+        or (has_ice_grapple_logic(False, state, player, options, ability_unlocks) and options.entrance_rando))
 
-    # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask
+    # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
     regions["Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
-        rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+        rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks) and options.entrance_rando)
 
     regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
@@ -773,10 +773,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: can ice grapple on the voidlings to the double admin fight, still need to pray at the fuse
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Lower Front"],
-        rule=lambda state: ((state.has(laurels, player) or
-                            has_ice_grapple_logic(True, state, player, options, ability_unlocks)) and
-                            has_ability(state, player, prayer, options, ability_unlocks)
-                            and has_sword(state, player)) or can_ladder_storage(state, player, options))
+        rule=lambda state: ((state.has(laurels, player) 
+                             or has_ice_grapple_logic(True, state, player, options, ability_unlocks)) 
+                            and has_ability(state, player, prayer, options, ability_unlocks)
+                            and has_sword(state, player))
+        or can_ladder_storage(state, player, options))
 
     regions["Rooted Ziggurat Lower Back"].connect(
         connecting_region=regions["Rooted Ziggurat Portal Room Entrance"],
@@ -806,7 +807,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through cathedral door, can do it both ways
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: (has_ability(state, player, prayer, options, ability_unlocks) and state.has(laurels, player))
+        rule=lambda state: (has_ability(state, player, prayer, options, ability_unlocks) 
+                            and state.has(laurels, player))
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
@@ -894,7 +896,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Far Shore to Library Region"].connect(
         connecting_region=regions["Far Shore"])
 
-    # Misc
+    # Misc, to be consolidated when that plando connections pr gets merged
     regions["Shop Entrance 1"].connect(
         connecting_region=regions["Shop"])
     regions["Shop Entrance 2"].connect(
@@ -906,6 +908,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Shop Entrance 5"].connect(
         connecting_region=regions["Shop"])
     regions["Shop Entrance 6"].connect(
+        connecting_region=regions["Shop"])
+    regions["Shop Entrance 7"].connect(
+        connecting_region=regions["Shop"])
+    regions["Shop Entrance 8"].connect(
         connecting_region=regions["Shop"])
 
     regions["Spirit Arena"].connect(
@@ -926,9 +932,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             raise Exception("no matches found in get_paired_region")
 
         ladder_storages: List[Tuple[str, str, Set[str]]] = [
+            # LS from Overworld main
             # The upper Swamp entrance
             ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
              {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
+            # Upper atoll entrance
             ("Overworld", "Overworld Redux, Atoll Redux_upper",
              {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders"}),
             # Furnace entrance, next to the sign that leads to West Garden
@@ -949,38 +957,34 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # Quarry entry
             ("Overworld", "Overworld Redux, Darkwoods Tunnel_",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well"}),
-
             # East Forest entry
             ("Overworld", "Overworld Redux, Forest Belltower_",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-
             # Fortress entry
             ("Overworld", "Overworld Redux, Fortress Courtyard_",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-
             # Patrol Cave entry
             ("Overworld", "Overworld Redux, PatrolCave_",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladder to Quarry", "Ladders near Dark Tomb"}),
-
-            # Special Shop entry
+            # Special Shop entry, excluded in non-ER due to soft lock potential
             ("Overworld", "Overworld Redux, ShopSpecial_",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladders near Patrol Cave", "Ladder to Quarry",
                  "Ladders near Dark Tomb"}),
-
-            # Temple Rafters
+            # Temple Rafters, excluded in non-ER + ladder rando due to soft lock potential
             ("Overworld", "Overworld Redux, Temple_rafters",
                 {"Ladders near Weathervane", "Ladder to Swamp", "Overworld Town Ladders", "Ladder to Well",
                  "Overworld Shortcut Ladders", "Ladders near Patrol Cave", "Ladder to Quarry",
                  "Ladders near Dark Tomb"}),
-
-            # Mountain Stairs
+            # Spot above the Quarry entrance,
+            # only gets you to the mountain stairs
             ("Overworld above Quarry Entrance", "Overworld Redux, Mountain_",
                 {"Ladders near Dark Tomb"}),
 
+            # LS from the Overworld Beach
             # West Garden entry by the Furnace
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lower",
                 {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
@@ -1016,6 +1020,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             ("Overworld Beach", "Overworld Redux, Darkwoods Tunnel_",
                 {"Ladder to Ruined Atoll"}),
 
+            # LS from that low spot where you normally walk to swamp
+            # Only has low ones you can't get to from main Overworld
             # West Garden main entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
                 {"Ladder to Swamp"}),
@@ -1054,13 +1060,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # Patrol Cave entry
             ("Overworld to West Garden Upper", "Overworld Redux, PatrolCave_",
                 {"Ladders to West Bell"}),
-            # Special Shop entry
+            # Special Shop entry, excluded in non-ER due to soft lock potential
             ("Overworld to West Garden Upper", "Overworld Redux, ShopSpecial_",
                 {"Ladders to West Bell"}),
-            # Temple Rafters
+            # Temple Rafters, excluded in non-ER and ladder rando due to soft lock potential
             ("Overworld to West Garden Upper", "Overworld Redux, Temple_rafters",
                 {"Ladders to West Bell"}),
 
+            # In the furnace
             # Furnace ladder to the fuse entrance
             ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_upper_north", set()),
             # Furnace ladder to Dark Tomb
@@ -1068,25 +1075,29 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # Furnace ladder to the West Garden connector
             ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_west", set()),
 
+            # West Garden
             # West Garden exit after Garden Knight
             ("West Garden", "Archipelagos Redux, Overworld Redux_upper", set()),
             # West Garden laurels exit
             ("West Garden", "Archipelagos Redux, Overworld Redux_lowest", set()),
 
-            # Frog mouth entrance
+            # Atoll to Frog Stairs, use the little ladder you fix at the start
             ("Ruined Atoll", "Atoll Redux, Frog Stairs_mouth", set()),
+            ("Ruined Atoll", "Atoll Redux, Frog Stairs_eye", set()),
 
+            # East Forest
             # Entrance by the dancing fox holy cross spot
             ("East Forest", "East Forest Redux, East Forest Redux Laddercave_upper", set()),
 
-            # From the west side of guard house 1 to the east side
+            # From the west side of Guard House 1 to the east side
             ("Guard House 1 West", "East Forest Redux Laddercave, East Forest Redux_gate", set()),
             ("Guard House 1 West", "East Forest Redux Laddercave, Forest Boss Room_", set()),
 
-            # Upper exit from the Forest Grave Path, use ls at the ladder by the gate switch
+            # Upper exit from the Forest Grave Path, use LS at the ladder by the gate switch
             ("Forest Grave Path Main", "Sword Access, East Forest Redux_upper", set()),
 
-            # Fortress exterior shop, ls at the ladder by the telescope
+            # Fortress Exterior
+            # Fortress Exterior shop, ls at the ladder by the telescope
             ("Fortress Exterior from Overworld", "Fortress Courtyard, Shop_", set()),
             # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
             ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door", set()),
@@ -1111,6 +1122,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             ("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_", set()),
 
             # ls at the ladder, need to gain a little height to get up the stairs
+            # excluded in non-ER due to soft lock potential
             ("Lower Mountain", "Mountain, Mountaintop_", set()),
 
             # Where the rope is behind Monastery. Connecting here since, if you have this region, you don't need a sword
@@ -1139,6 +1151,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     rule=lambda state: has_stick(state, player)
                     and has_ability(state, player, holy_cross, options, ability_unlocks)
                     and has_ladder("Swamp Ladders", state, player, options))
+            # soft lock potential
+            elif portal_name in ["Special Shop Entrance", "Stairs to Top of the Mountain"] and not options.entrance_rando:
+                continue
+            # soft lock if you don't have the ladder, just exclude it for simplicity
+            elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando and options.shuffle_ladders:
+                continue
             # if no ladder items are required, just do the basic stick only lambda
             elif not ladders:
                 regions[region_name].connect(
