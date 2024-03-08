@@ -8,7 +8,10 @@ from worlds.generic.Rules import add_rule, set_rule
 from worlds.AutoWorld import World
 
 
-def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
+def create_regions(world: World, active_locations):
+    multiworld: MultiWorld = world.multiworld
+    player: int = world.player
+
     menu_region = create_region(multiworld, player, active_locations, 'Menu', None)
 
     yoshis_island_region = create_region(multiworld, player, active_locations, LocationName.yoshis_island_region, None)
@@ -1846,7 +1849,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.star_road_5_region, LocationName.star_road_5_green_block_20,
                         lambda state: (state.has(ItemName.green_switch_palace, player) and state.has(ItemName.yoshi_activate, player) and state.has(ItemName.mario_carry, player) and state.has(ItemName.special_world_clear, player)))
 
-def connect_regions(multiworld: MultiWorld, player: int, world: World, level_to_tile_dict):
+def connect_regions(world: World, level_to_tile_dict):
+    multiworld: MultiWorld = world.multiworld
+    player: int = world.player
+
     names: typing.Dict[str, int] = {}
 
     connect(multiworld, player, names, "Menu", LocationName.yoshis_island_region)

@@ -1,5 +1,4 @@
 import logging
-import asyncio
 import time
 
 from NetUtils import ClientStatus, color
@@ -450,7 +449,7 @@ class SMWSNIClient(SNIClient):
 
         # Send Current Room for Tracker
         current_sublevel_data = await snes_read(ctx, SMW_CURRENT_SUBLEVEL_ADDR, 2)
-        current_sublevel_value = current_sublevel_data[0]+(current_sublevel_data[1]<<8)
+        current_sublevel_value = current_sublevel_data[0] + (current_sublevel_data[1] << 8)
 
         if game_state[0] != 0x14:
             current_sublevel_value = 0
@@ -531,7 +530,7 @@ class SMWSNIClient(SNIClient):
                 snes_buffered_write(ctx, WRAM_START + item_rom_data[item.item][0], bytes([new_item_count]))
             elif item.item in icon_rom_data:
                 queue_addr = await snes_read(ctx, WRAM_START + icon_rom_data[item.item][0], 2)
-                queue_addr = queue_addr[0]+(queue_addr[1]<<8)
+                queue_addr = queue_addr[0] + (queue_addr[1] << 8)
                 queue_addr += 1
                 snes_buffered_write(ctx, WRAM_START + icon_rom_data[item.item][0], bytes([queue_addr&0xFF, (queue_addr>>8)&0xFF]))
                 if (goal[0] == 0 and item.item == 0xBC0012) or (goal[0] == 1 and item.item == 0xBC0002):

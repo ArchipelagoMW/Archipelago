@@ -6,7 +6,6 @@ import settings
 import threading
 
 from BaseClasses import Item, MultiWorld, Tutorial, ItemClassification
-from Options import PerGameCommonOptions
 from .Items import SMWItem, ItemData, item_table, junk_table
 from .Locations import SMWLocation, all_locations, setup_locations, special_zone_level_names, special_zone_dragon_coin_names, special_zone_hidden_1up_names, special_zone_blocksanity_names
 from .Options import SMWOptions
@@ -77,17 +76,15 @@ class SMWWorld(World):
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def _get_slot_data(self):
-        return {
-            "active_levels": self.active_level_dict,
-        }
-
     def fill_slot_data(self) -> dict:
-        slot_data = self._get_slot_data()
-        for option_name in (attr.name for attr in dataclasses.fields(SMWOptions)
-                            if attr not in dataclasses.fields(PerGameCommonOptions)):
-            option = getattr(self.options, option_name)
-            slot_data[option_name] = option.value
+        slot_data = self.options.as_dict(
+            "dragon_coin_checks",
+            "moon_checks",
+            "hidden_1up_checks",
+            "bonus_block_checks",
+            "blocksanity",
+        )
+        slot_data["active_levels"] = self.active_level_dict
 
         return slot_data
 
@@ -97,7 +94,7 @@ class SMWWorld(World):
 
     def create_regions(self):
         location_table = setup_locations(self)
-        create_regions(self.multiworld, self.player, self, location_table)
+        create_regions(self, location_table)
 
         # Not generate basic
         itempool: typing.List[SMWItem] = []
@@ -105,8 +102,8 @@ class SMWWorld(World):
         self.active_level_dict = dict(zip(generate_level_list(self), full_level_list))
         self.topology_present = self.options.level_shuffle
 
-        connect_regions(self.multiworld, self.player, self, self.active_level_dict)
-        
+        connect_regions(self, self.active_level_dict)
+
         # Add Boss Token amount requirements for Worlds
         add_rule(self.multiworld.get_region(LocationName.donut_plains_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 1))
         add_rule(self.multiworld.get_region(LocationName.vanilla_dome_1_tile, self.player).entrances[0], lambda state: state.has(ItemName.koopaling, self.player, 2))
@@ -184,7 +181,7 @@ class SMWWorld(World):
 
         trap_pool = []
         for i in range(trap_count):
-            trap_item = self.multiworld.random.choice(trap_weights)
+            trap_item = self.random.choice(trap_weights)
             trap_pool.append(self.create_item(trap_item))
 
         itempool += trap_pool
@@ -196,10 +193,7 @@ class SMWWorld(World):
         junk_weights += ([ItemName.fifty_coins] * 25)
         junk_weights += ([ItemName.one_up_mushroom] * 20)
 
-        junk_pool = []
-        for i in range(junk_count):
-            junk_item = self.random.choice(junk_weights)
-            junk_pool.append(self.create_item(junk_item))
+        junk_pool = [self.create_item(self.random.choice(junk_weights)) for _ in range(junk_count)]
         
         itempool += junk_pool
 
@@ -283,17 +277,16 @@ class SMWWorld(World):
                     if level_index >= world_cutoffs[i]:
                         continue
 
-                    if self.options.dragon_coin_checks.value == 0 and "Dragon Coins" in loc_name:
+                    if not self.options.dragon_coin_checks and "Dragon Coins" in loc_name:
                         continue
-                    if self.options.moon_checks.value == 0 and "3-Up Moon" in loc_name:
+                    if not self.options.moon_checks and "3-Up Moon" in loc_name:
                         continue
-                    if self.options.hidden_1up_checks.value == 0 and "Hidden 1-Up" in loc_name:
+                    if not self.options.hidden_1up_checks and "Hidden 1-Up" in loc_name:
                         continue
-                    if self.options.bonus_block_checks.value == 0 and "1-Up from Bonus Block" in loc_name:
+                    if not self.options.bonus_block_checks and "1-Up from Bonus Block" in loc_name:
                         continue
-                    if self.options.blocksanity.value == 0 and "Block #" in loc_name:
+                    if not self.options.blocksanity and "Block #" in loc_name:
                         continue
-
 
                     location = self.multiworld.get_location(loc_name, self.player)
                     er_hint_data[location.address] = world_names[i]
@@ -318,16 +311,9 @@ class SMWWorld(World):
         created_item = SMWItem(name, classification, data.code, self.player)
 
         return created_item
-    
+
     def get_filler_item_name(self) -> str:
         return self.random.choice(list(junk_table.keys()))
 
     def set_rules(self):
         set_rules(self)
-
-    @classmethod
-    def stage_fill_hook(cls, multiworld: MultiWorld, progitempool, usefulitempool, filleritempool, fill_locations):
-        return
-        if multiworld.get_game_players("Super Mario World"):
-            progitempool.sort(
-                key=lambda item: 0 if (item.name != 'Yoshi Egg') else 1)

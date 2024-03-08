@@ -1,5 +1,4 @@
 
-from BaseClasses import MultiWorld
 from worlds.AutoWorld import World
 
 import math

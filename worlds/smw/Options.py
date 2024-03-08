@@ -1,7 +1,6 @@
 from dataclasses import dataclass
-import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, PerGameCommonOptions
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -162,16 +161,6 @@ class SwapDonutGhostHouseExits(Toggle):
     True: Normal Exit goes right, Secret Exit goes up.
     """
     display_name = "Swap Donut GH Exits"
-
-
-class DisplaySentItemPopups(Choice):
-    """
-    What messages to display in-game for items sent
-    """
-    display_name = "Display Sent Item Popups"
-    option_none = 0
-    option_all = 1
-    default = 1
 
 
 class DisplayReceivedItemPopups(Choice):
@@ -335,9 +324,9 @@ class MarioPalette(Choice):
 class LevelPaletteShuffle(Choice):
     """
     Whether to shuffle level palettes
-    off: Do not shuffle palettes
-    on_legacy: Uses only the palette sets from the original game
-    on_curated: Uses custom palette sets created by some people
+    Off: Do not shuffle palettes
+    On Legacy: Uses only the palette sets from the original game
+    On Curated: Uses custom palette sets created by some people
                 Setting this option will also force Backgrounds to use those palettes
     """
     display_name = "Level Palette Shuffle"
@@ -350,9 +339,9 @@ class LevelPaletteShuffle(Choice):
 class OverworldPaletteShuffle(Choice):
     """
     Whether to shuffle overworld palettes
-    off: Do not shuffle palettes
-    on_legacy: Uses only the palette sets from the original game
-    on_curated: Uses custom palette sets created by some people
+    Off: Do not shuffle palettes
+    On Legacy: Uses only the palette sets from the original game
+    On Curated: Uses custom palette sets created by some people
     """
     display_name = "Overworld Palette Shuffle"
     option_off = 0
@@ -389,7 +378,6 @@ class SMWOptions(PerGameCommonOptions):
     exclude_special_zone: ExcludeSpecialZone
     boss_shuffle: BossShuffle
     swap_donut_gh_exits: SwapDonutGhostHouseExits
-    #display_sent_item_popups: DisplaySentItemPopups
     display_received_item_popups: DisplayReceivedItemPopups
     junk_fill_percentage: JunkFillPercentage
     trap_fill_percentage: TrapFillPercentage
