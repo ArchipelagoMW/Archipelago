@@ -71,7 +71,7 @@ class WitnessWorld(World):
     items_placed_early: List[str]
     own_itempool: List[WitnessItem]
 
-    def _get_slot_data(self) -> Dict[str, Any]:
+    def _get_slot_data(self):
         return {
             "seed": self.random.randrange(0, 1000000),
             "victory_location": int(self.player_logic.VICTORY_LOCATION, 16),
