@@ -1093,7 +1093,7 @@ class PokemonEmeraldWorld(World):
                             if is_compatible
                         })
 
-                    # TMs and HMs compatible with the species. Could cache this per species
+                    # TMs and HMs compatible with the species
                     tm_hm_movepool = per_species_tmhm_moves[new_species.species_id]
 
                     # Moves the pokemon could have learned by now
@@ -1392,7 +1392,7 @@ class PokemonEmeraldWorld(World):
     def create_event(self, name: str) -> PokemonEmeraldItem:
         return PokemonEmeraldItem(
             name,
-            ItemClassification.progression_skip_balancing,
+            ItemClassification.progression,
             None,
             self.player
         )
