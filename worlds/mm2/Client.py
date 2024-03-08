@@ -24,6 +24,7 @@ MM2_LIVES = 0xA8
 MM2_WEAPON_ENERGY = 0x9C
 MM2_HEALTH = 0x6C0
 MM2_DEATHLINK = 0x8F
+MM2_DIFFICULTY = 0xCB
 
 MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
     # Item: (byte offset, bit mask)
@@ -130,7 +131,7 @@ class MegaMan2Client(BizHawkClient):
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks,\
-            e_tanks, lives, weapon_energy, health = await read(ctx.bizhawk_ctx, [
+            e_tanks, lives, weapon_energy, health, difficulty = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -143,8 +144,11 @@ class MegaMan2Client(BizHawkClient):
                 (MM2_LIVES, 1, "RAM"),
                 (MM2_WEAPON_ENERGY, 11, "RAM"),
                 (MM2_HEALTH, 1, "RAM"),
-
+                (MM2_DIFFICULTY, 1, "RAM")
             ])
+
+        if difficulty[0] not in (0, 1):
+            return  # Game is not initialized
 
         if not ctx.finished_game and completed_stages[0xD] != 0:
             # this sets on credits fade, no real better way to do this
