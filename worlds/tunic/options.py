@@ -134,7 +134,7 @@ class LaurelsLocation(Choice):
 class ShuffleLadders(Toggle):
     """Turns several ladders in the game into items that must be found before they can be climbed on.
     Adds more layers of progression to the game by blocking access to many areas early on.
-    "Ladders were a mistake." -Andrew Shouldice"""
+    "Ladders were a mistake." —Andrew Shouldice"""
     internal_name = "shuffle_ladders"
     display_name = "Shuffle Ladders"
 
