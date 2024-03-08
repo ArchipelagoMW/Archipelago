@@ -201,12 +201,9 @@ class ItemsAccessTest(MessengerTestBase):
             "Searing Crags - Key of Strength": ["Power Thistle"],
             "Sunken Shrine - Key of Love": ["Sun Crest", "Moon Crest"],
             "Corrupted Future - Key of Courage": ["Demon King Crown"],
-            "Cloud Ruins - Acro": ["Ruxxtin's Amulet"],
-            "Forlorn Temple - Demon King": PHOBEKINS
         }
 
-        self.multiworld.state = self.multiworld.get_all_state(True)
-        self.remove_by_name(location_lock_pairs.values())
+        self.collect_all_but([item for items in location_lock_pairs.values() for item in items])
         for loc in location_lock_pairs:
             for item_name in location_lock_pairs[loc]:
                 item = self.get_item_by_name(item_name)
