@@ -139,7 +139,7 @@ class CarrieLogic(Toggle):
 class HardLogic(Toggle):
     """Properly considers sequence break tricks in logic (i.e. maze skip). Can be combined with Carrie Logic to include
     Carrie-only tricks.
-    See the FAQ page for a full list of tricks and glitches that may be logically required."""
+    See the Game Page for a full list of tricks and glitches that may be logically required."""
     display_name = "Hard Logic"
 
 
