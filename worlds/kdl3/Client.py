@@ -97,6 +97,7 @@ def cmd_gift(self: "SNIClientCommandProcessor"):
 
 class KDL3SNIClient(SNIClient):
     game = "Kirby's Dream Land 3"
+    patch_suffix = ".apkdl3"
     levels = None
     consumables = None
     stars = None
@@ -406,7 +407,8 @@ class KDL3SNIClient(SNIClient):
                 ctx.locations_checked.add(new_check_id)
                 location = ctx.location_names[new_check_id]
                 snes_logger.info(
-                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    f'New Check: {location} ({len(ctx.locations_checked)}/'
+                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
         except Exception as ex:
             # we crashed, so print log and clean up
