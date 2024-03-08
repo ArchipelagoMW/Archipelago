@@ -656,7 +656,8 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False,
+                     recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -685,12 +686,13 @@ class Context:
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
-            clients = self.clients[team].get(slot)
-            if not clients:
-                continue
-            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-            for client in clients:
-                async_start(self.send_msgs(client, client_hints))
+            if recipients is None or slot in recipients:
+                clients = self.clients[team].get(slot)
+                if not clients:
+                    continue
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                for client in clients:
+                    async_start(self.send_msgs(client, client_hints))
 
     # "events"
 
@@ -1429,9 +1431,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            self.ctx.notify_hints(self.client.team, list(hints))
+            self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
+            if hints and Utils.version_tuple < (0, 5, 0):
+                self.output("It was recently changed, so that the above hints are only shown to you. "
+                            "If you meant to alert another player of an above hint, "
+                            "please let them know of the content or to run !hint themselves.")
             return True
 
         elif input_text.isnumeric():
