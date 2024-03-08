@@ -806,7 +806,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: ice grapple through cathedral door, can do it both ways
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp to Cathedral Main Entrance Region"],
-        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
+        rule=lambda state: (has_ability(state, player, prayer, options, ability_unlocks) and state.has(laurels, player))
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Swamp to Cathedral Main Entrance Region"].connect(
         connecting_region=regions["Swamp Mid"],
