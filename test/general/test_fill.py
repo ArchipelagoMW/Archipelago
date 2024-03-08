@@ -518,6 +518,7 @@ class TestFillRestrictive(unittest.TestCase):
         )
 
         test_multiworld, test_player, _, _ = setup_multiple_swap_multiworld()
+        test_player.prog_items.reverse()
 
         # Fill order will place items 0-2 on locations 0-2, then realize it can't place item 3 onto location 3.
         # There is a valid item placement, but it needs TWO items to be swapped:
