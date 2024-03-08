@@ -334,9 +334,6 @@ def load_json_data(data_name: str) -> Union[List[Any], Dict[str, Any]]:
     return orjson.loads(pkgutil.get_data(__name__, "data/" + data_name).decode("utf-8-sig"))
 
 
-data = PokemonEmeraldData()
-
-
 def _init() -> None:
     extracted_data: Dict[str, Any] = load_json_data("extracted_data.json")
     data.constants = extracted_data["constants"]
@@ -1430,4 +1427,5 @@ def _init() -> None:
         ))
 
 
+data = PokemonEmeraldData()
 _init()

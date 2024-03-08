@@ -4,13 +4,13 @@ Functions related to pokemon species and moves
 import functools
 from typing import TYPE_CHECKING, Dict, List, Set, Optional, Tuple
 
-from .data import SpeciesData, data
+from .data import data
 
 if TYPE_CHECKING:
     from random import Random
 
 
-_damaging_moves = frozenset({
+_DAMAGING_MOVES = frozenset({
       1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  13,
      16,  17,  20,  21,  22,  23,  24,  25,  26,  27,  29,  30,
      31,  33,  34,  35,  36,  37,  38,  40,  41,  42,  44,  51,
@@ -28,8 +28,11 @@ _damaging_moves = frozenset({
     323, 324, 325, 326, 327, 328, 330, 331, 332, 333, 337, 338,
     340, 341, 342, 343, 344, 345, 348, 350, 351, 352, 353, 354
 })
+"""IDs for moves that safely deal direct damage, for avoiding putting the
+player in a situation where they can only use status moves, or are forced
+to faint themselves, or something of that nature."""
 
-_move_types = [
+_MOVE_TYPES = [
      0,  0,  1,  0,  0,  0,  0, 10, 15, 13,  0,  0,  0,  0,  0,
      0,  2,  2,  0,  2,  0,  0, 12,  0,  1,  0,  1,  1,  4,  0,
      0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  3,  6,  6,  0, 17,
@@ -55,12 +58,14 @@ _move_types = [
     11, 12,  2, 15,  8,  0,  0, 16, 12,  1,  2,  4,  3,  0, 13,
     12, 11, 14, 12, 16,  5, 13, 11,  8, 14
 ]
+"""Maps move ids to the type of that move"""
 
-_moves_by_type: Dict[int, List[int]] = {}
-for move, type in enumerate(_move_types):
-    _moves_by_type.setdefault(type, []).append(move)
-    
-HM_MOVES = {
+_MOVES_BY_TYPE: Dict[int, List[int]] = {}
+"""Categorizes move ids by their type"""
+for move, type in enumerate(_MOVE_TYPES):
+    _MOVES_BY_TYPE.setdefault(type, []).append(move)
+
+HM_MOVES = frozenset({
     data.constants["MOVE_CUT"],
     data.constants["MOVE_FLY"],
     data.constants["MOVE_SURF"],
@@ -69,20 +74,12 @@ HM_MOVES = {
     data.constants["MOVE_ROCK_SMASH"],
     data.constants["MOVE_WATERFALL"],
     data.constants["MOVE_DIVE"]
-}
+})
 
-_move_blacklist = frozenset({
+_MOVE_BLACKLIST = frozenset({
     0,    # MOVE_NONE
     165,  # Struggle
-    15,   # Cut
-    148,  # Flash
-    249,  # Rock Smash
-    70,   # Strength
-    57,   # Surf
-    19,   # Fly
-    291,  # Dive
-    127   # Waterfall
-})
+} | HM_MOVES)
 
 LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
     "SPECIES_ARTICUNO",
@@ -107,14 +104,17 @@ LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
     "SPECIES_JIRACHI",
     "SPECIES_DEOXYS"
 ]])
-UNEVOLVED_POKEMON = {
+"""Species IDs of legendary pokemon"""
+
+UNEVOLVED_POKEMON = frozenset({
     species.species_id
     for species in data.species.values()
     if len(species.evolutions) > 0
-}
+})
+"""Species IDs of pokemon which have further evolution stages in the vanilla game"""
 
 
-national_id_to_species_id_map = {species.national_dex_number: i for i, species in data.species.items()}
+NATIONAL_ID_TO_SPECIES_ID = {species.national_dex_number: i for i, species in data.species.items()}
 
 
 @functools.lru_cache(maxsize=386)
@@ -136,7 +136,7 @@ def get_random_move(
         type_bias: int = 0,
         normal_bias: int = 0,
         type_target: Optional[Tuple[int, int]] = None) -> int:
-    expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
+    expanded_blacklist = _MOVE_BLACKLIST | (blacklist if blacklist is not None else set())
 
     bias = random.random() * 100
     if bias < type_bias:
@@ -166,8 +166,8 @@ def get_random_move(
     if type_target is None:
         possible_moves = [i for i in range(data.constants["MOVES_COUNT"]) if i not in expanded_blacklist]
     else:
-        possible_moves = [move for move in _moves_by_type[type_target[0]] if move not in expanded_blacklist] + \
-                            [move for move in _moves_by_type[type_target[1]] if move not in expanded_blacklist]
+        possible_moves = [move for move in _MOVES_BY_TYPE[type_target[0]] if move not in expanded_blacklist] + \
+                         [move for move in _MOVES_BY_TYPE[type_target[1]] if move not in expanded_blacklist]
 
     if len(possible_moves) == 0:
         return get_random_move(random, None, type_bias, normal_bias, type_target)
@@ -176,9 +176,8 @@ def get_random_move(
 
 
 def get_random_damaging_move(random: "Random", blacklist: Optional[Set[int]] = None) -> int:
-    expanded_blacklist = _move_blacklist | (blacklist if blacklist is not None else set())
-
-    move_options = list(_damaging_moves)
+    expanded_blacklist = _MOVE_BLACKLIST | (blacklist if blacklist is not None else set())
+    move_options = list(_DAMAGING_MOVES)
 
     move = random.choice(move_options)
     while move in expanded_blacklist:

@@ -26,7 +26,7 @@ from .options import (Goal, ItemPoolType, RandomizeWildPokemon, RandomizeBadges,
                       PokemonEmeraldOptions, HmRequirements, RandomizeMiscPokemon, DarkCavesRequireFlash)
 from .pokemon import (LEGENDARY_POKEMON, UNEVOLVED_POKEMON, get_random_move,
                       get_random_damaging_move, get_random_type, get_species_id_by_label)
-from .rom import PokemonEmeraldDeltaPatch, generate_output, location_visited_event_to_id_map
+from .rom import PokemonEmeraldDeltaPatch, generate_output, VISITED_EVENT_NAME_TO_ID
 from .util import int_to_bool_array, bool_array_to_int, get_easter_egg
 
 
@@ -636,7 +636,7 @@ class PokemonEmeraldWorld(World):
                 "EVENT_VISITED_EVER_GRANDE_CITY"
             ])
 
-        self.free_fly_location_id = location_visited_event_to_id_map[fly_location_name]
+        self.free_fly_location_id = VISITED_EVENT_NAME_TO_ID[fly_location_name]
 
         free_fly_location_location = self.multiworld.get_location("FREE_FLY_LOCATION", self.player)
         free_fly_location_location.item = None

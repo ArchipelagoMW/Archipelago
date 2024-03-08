@@ -76,19 +76,7 @@ _FANFARES: Dict[str, int] = {
     "MUS_REGISTER_MATCH_CALL": 135,
 }
 
-
-class PokemonEmeraldDeltaPatch(APDeltaPatch):
-    game = "Pokemon Emerald"
-    hash = "605b89b67018abcea91e693a4dd25be3"
-    patch_file_ending = ".apemerald"
-    result_file_ending = ".gba"
-
-    @classmethod
-    def get_source_data(cls) -> bytes:
-        return get_base_rom_as_bytes()
-
-
-location_visited_event_to_id_map = {
+VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_LITTLEROOT_TOWN": 0,
     "EVENT_VISITED_OLDALE_TOWN": 1,
     "EVENT_VISITED_PETALBURG_CITY": 2,
@@ -109,7 +97,7 @@ location_visited_event_to_id_map = {
     "EVENT_VISITED_SOUTHERN_ISLAND": 17
 }
 
-cave_event_to_id_map = {
+CAVE_EVENT_NAME_TO_ID = {
     "TERRA_CAVE_ROUTE_114_1": 1,
     "TERRA_CAVE_ROUTE_114_2": 2,
     "TERRA_CAVE_ROUTE_115_1": 3,
@@ -129,6 +117,26 @@ cave_event_to_id_map = {
 }
 
 
+def _set_bytes_le(byte_array: bytearray, address: int, size: int, value: int) -> None:
+    offset = 0
+    while size > 0:
+        byte_array[address + offset] = value & 0xFF
+        value = value >> 8
+        offset += 1
+        size -= 1
+
+
+class PokemonEmeraldDeltaPatch(APDeltaPatch):
+    game = "Pokemon Emerald"
+    hash = "605b89b67018abcea91e693a4dd25be3"
+    patch_file_ending = ".apemerald"
+    result_file_ending = ".gba"
+
+    @classmethod
+    def get_source_data(cls) -> bytes:
+        return get_base_rom_as_bytes()
+
+
 def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
@@ -136,7 +144,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
     # Set free fly location
     if world.options.free_fly_location:
-        _set_bytes_little_endian(
+        _set_bytes_le(
             patched_rom,
             data.rom_addresses["gArchipelagoOptions"] + 0x20,
             1,
@@ -154,7 +162,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         # Set local item values
         if not world.options.remote_items and location.item.player == world.player:
             if type(location.item_address) is int:
-                _set_bytes_little_endian(
+                _set_bytes_le(
                     patched_rom,
                     location.item_address,
                     2,
@@ -162,10 +170,10 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                 )
             elif type(location.item_address) is list:
                 for address in location.item_address:
-                    _set_bytes_little_endian(patched_rom, address, 2, reverse_offset_item_value(location.item.code))
+                    _set_bytes_le(patched_rom, address, 2, reverse_offset_item_value(location.item.code))
         else:
             if type(location.item_address) is int:
-                _set_bytes_little_endian(
+                _set_bytes_le(
                     patched_rom,
                     location.item_address,
                     2,
@@ -173,7 +181,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                 )
             elif type(location.item_address) is list:
                 for address in location.item_address:
-                    _set_bytes_little_endian(patched_rom, address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
+                    _set_bytes_le(patched_rom, address, 2, data.constants["ITEM_ARCHIPELAGO_PROGRESSION"])
 
             # Creates a list of item information to store in tables later. Those tables are used to display the item and
             # player name in a text box. In the case of not enough space, the game will default to "found an ARCHIPELAGO
@@ -207,9 +215,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         # message (the message for receiving an item will pop up when the client eventually gives it to them).
         # In race mode, no item location data is included, and only recieved (or own) items will show any text box.
         if item_player == world.player or world.multiworld.is_race:
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, 0)
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, 0)
         else:
             player_name = world.multiworld.player_name[item_player]
 
@@ -220,7 +228,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
 
                 player_name_ids[player_name] = len(player_name_ids)
                 for j, b in enumerate(encode_string(player_name, 17)):
-                    _set_bytes_little_endian(
+                    _set_bytes_le(
                         patched_rom,
                         data.rom_addresses["gArchipelagoPlayerNames"] + (player_name_ids[player_name] * 17) + j,
                         1,
@@ -238,7 +246,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                 item_name_offsets[item_name] = next_item_name_offset
                 next_item_name_offset += len(item_name) + 1
                 for j, b in enumerate(encode_string(item_name) + b"\xFF"):
-                    _set_bytes_little_endian(
+                    _set_bytes_le(
                         patched_rom,
                         data.rom_addresses["gArchipelagoItemNames"] + (item_name_offsets[item_name]) + j,
                         1,
@@ -246,9 +254,9 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                     )
 
             # There should always be enough space for one entry per location
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
-            _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 0, 2, flag)
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 2, 2, item_name_offsets[item_name])
+            _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoNameTable"] + (i * 5) + 4, 1, player_name_ids[player_name])
 
     easter_egg = get_easter_egg(world.options.easter_egg.value)
 
@@ -295,8 +303,8 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     for i, slot in enumerate(pc_slots):
         address = data.rom_addresses["sNewGamePCItems"] + (i * 4)
         item = reverse_offset_item_value(world.item_name_to_id[slot[0]])
-        _set_bytes_little_endian(patched_rom, address + 0, 2, item)
-        _set_bytes_little_endian(patched_rom, address + 2, 2, slot[1])
+        _set_bytes_le(patched_rom, address + 0, 2, item)
+        _set_bytes_le(patched_rom, address + 2, 2, slot[1])
 
     # Set species data
     _set_species_info(world, patched_rom, easter_egg)
@@ -373,7 +381,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     options_address = data.rom_addresses["gArchipelagoOptions"]
 
     # Set Birch pokemon
-    _set_bytes_little_endian(
+    _set_bytes_le(
         patched_rom,
         options_address + 0x00,
         2,
@@ -381,43 +389,43 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     )
 
     # Set hold A to advance text
-    _set_bytes_little_endian(patched_rom, options_address + 0x02, 1, 1 if world.options.turbo_a else 0)
+    _set_bytes_le(patched_rom, options_address + 0x02, 1, 1 if world.options.turbo_a else 0)
 
     # Set receive item messages type
-    _set_bytes_little_endian(patched_rom, options_address + 0x03, 1, world.options.receive_item_messages.value)
+    _set_bytes_le(patched_rom, options_address + 0x03, 1, world.options.receive_item_messages.value)
 
     # Set better shops
-    _set_bytes_little_endian(patched_rom, options_address + 0x04, 1, 1 if world.options.better_shops else 0)
+    _set_bytes_le(patched_rom, options_address + 0x04, 1, 1 if world.options.better_shops else 0)
 
     # Set reusable TMs
-    _set_bytes_little_endian(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms_tutors else 0)
+    _set_bytes_le(patched_rom, options_address + 0x05, 1, 1 if world.options.reusable_tms_tutors else 0)
 
     # Set guaranteed catch
-    _set_bytes_little_endian(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
+    _set_bytes_le(patched_rom, options_address + 0x06, 1, 1 if world.options.guaranteed_catch else 0)
 
     # Set purge spinners
-    _set_bytes_little_endian(patched_rom, options_address + 0x07, 1, 1 if world.options.purge_spinners else 0)
+    _set_bytes_le(patched_rom, options_address + 0x07, 1, 1 if world.options.purge_spinners else 0)
 
     # Set blind trainers
-    _set_bytes_little_endian(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
+    _set_bytes_le(patched_rom, options_address + 0x08, 1, 1 if world.options.blind_trainers else 0)
 
     # Set exp modifier
-    _set_bytes_little_endian(patched_rom, options_address + 0x09, 2, min(max(world.options.exp_modifier.value, 0), 2**16 - 1))
-    _set_bytes_little_endian(patched_rom, options_address + 0x0B, 2, 100)
+    _set_bytes_le(patched_rom, options_address + 0x09, 2, min(max(world.options.exp_modifier.value, 0), 2**16 - 1))
+    _set_bytes_le(patched_rom, options_address + 0x0B, 2, 100)
 
     # Set match trainer levels
-    _set_bytes_little_endian(patched_rom, options_address + 0x0D, 1, 1 if world.options.match_trainer_levels else 0)
+    _set_bytes_le(patched_rom, options_address + 0x0D, 1, 1 if world.options.match_trainer_levels else 0)
 
     # Set match trainer levels bonus
     if world.options.match_trainer_levels == MatchTrainerLevels.option_additive:
         match_trainer_levels_bonus = max(min(world.options.match_trainer_levels_bonus.value, 100), -100)
-        _set_bytes_little_endian(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
+        _set_bytes_le(patched_rom, options_address + 0x0E, 1, match_trainer_levels_bonus)  # Works with negatives
     elif world.options.match_trainer_levels == MatchTrainerLevels.option_multiplicative:
-        _set_bytes_little_endian(patched_rom, options_address + 0x2E, 2, world.options.match_trainer_levels_bonus.value + 100)
-        _set_bytes_little_endian(patched_rom, options_address + 0x30, 2, 100)
+        _set_bytes_le(patched_rom, options_address + 0x2E, 2, world.options.match_trainer_levels_bonus.value + 100)
+        _set_bytes_le(patched_rom, options_address + 0x30, 2, 100)
 
     # Set elite four requirement
-    _set_bytes_little_endian(
+    _set_bytes_le(
         patched_rom,
         options_address + 0x0F,
         1,
@@ -425,10 +433,10 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     )
 
     # Set elite four count
-    _set_bytes_little_endian(patched_rom, options_address + 0x10, 1, min(max(world.options.elite_four_count.value, 0), 8))
+    _set_bytes_le(patched_rom, options_address + 0x10, 1, min(max(world.options.elite_four_count.value, 0), 8))
 
     # Set norman requirement
-    _set_bytes_little_endian(
+    _set_bytes_le(
         patched_rom,
         options_address + 0x111,
         1,
@@ -436,10 +444,10 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     )
 
     # Set norman count
-    _set_bytes_little_endian(patched_rom, options_address + 0x12, 1, min(max(world.options.norman_count.value, 0), 8))
+    _set_bytes_le(patched_rom, options_address + 0x12, 1, min(max(world.options.norman_count.value, 0), 8))
 
     # Set starting badges
-    _set_bytes_little_endian(patched_rom, options_address + 0x13, 1, starting_badges)
+    _set_bytes_le(patched_rom, options_address + 0x13, 1, starting_badges)
 
     # Set HM badge requirements
     field_move_order = [
@@ -468,7 +476,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     hm_badge_counts = 0
     for i, hm in enumerate(field_move_order):
         hm_badge_counts |= (world.hm_requirements[hm] if isinstance(world.hm_requirements[hm], int) else 0xF) << (i * 4)
-    _set_bytes_little_endian(patched_rom, options_address + 0x14, 4, hm_badge_counts)
+    _set_bytes_le(patched_rom, options_address + 0x14, 4, hm_badge_counts)
 
     # Specific badges
     for i, hm in enumerate(field_move_order):
@@ -476,21 +484,21 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
             bitfield = 0
             for badge in world.hm_requirements:
                 bitfield |= badge_to_bit[badge]
-            _set_bytes_little_endian(patched_rom, options_address + 0x18 + i, 1, bitfield)
+            _set_bytes_le(patched_rom, options_address + 0x18 + i, 1, bitfield)
 
     # Set terra/marine cave locations
-    terra_cave_id = cave_event_to_id_map[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
-    marine_cave_id = cave_event_to_id_map[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
-    _set_bytes_little_endian(patched_rom, options_address + 0x21, 1, terra_cave_id | (marine_cave_id << 4))
+    terra_cave_id = CAVE_EVENT_NAME_TO_ID[world.multiworld.get_location("TERRA_CAVE_LOCATION", world.player).item.name]
+    marine_cave_id = CAVE_EVENT_NAME_TO_ID[world.multiworld.get_location("MARINE_CAVE_LOCATION", world.player).item.name]
+    _set_bytes_le(patched_rom, options_address + 0x21, 1, terra_cave_id | (marine_cave_id << 4))
 
     # Set route 115 boulders
-    _set_bytes_little_endian(patched_rom, options_address + 0x22, 1, 1 if world.options.extra_boulders else 0)
+    _set_bytes_le(patched_rom, options_address + 0x22, 1, 1 if world.options.extra_boulders else 0)
 
     # Swap route 115 layout if bumpy slope enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x23, 1, 1 if world.options.extra_bumpy_slope else 0)
+    _set_bytes_le(patched_rom, options_address + 0x23, 1, 1 if world.options.extra_bumpy_slope else 0)
 
     # Swap route 115 layout if bumpy slope enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x24, 1, 1 if world.options.modify_118 else 0)
+    _set_bytes_le(patched_rom, options_address + 0x24, 1, 1 if world.options.modify_118 else 0)
 
     # Set removed blockers
     removed_roadblocks = world.options.remove_roadblocks.value
@@ -502,44 +510,44 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     removed_roadblocks_bitfield |= (1 << 4) if "Route 119 Aqua Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 5) if "Route 112 Magma Grunts" in removed_roadblocks else 0
     removed_roadblocks_bitfield |= (1 << 6) if "Seafloor Cavern Aqua Grunt" in removed_roadblocks else 0
-    _set_bytes_little_endian(patched_rom, options_address + 0x25, 2, removed_roadblocks_bitfield)
+    _set_bytes_le(patched_rom, options_address + 0x25, 2, removed_roadblocks_bitfield)
 
     # Mark berry trees as randomized
-    _set_bytes_little_endian(patched_rom, options_address + 0x27, 1, 1 if world.options.berry_trees else 0)
+    _set_bytes_le(patched_rom, options_address + 0x27, 1, 1 if world.options.berry_trees else 0)
 
     # Mark dexsanity as enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x28, 1, 1 if world.options.dexsanity else 0)
+    _set_bytes_le(patched_rom, options_address + 0x28, 1, 1 if world.options.dexsanity else 0)
 
     # Mark trainersanity as enabled
-    _set_bytes_little_endian(patched_rom, options_address + 0x29, 1, 1 if world.options.trainersanity else 0)
+    _set_bytes_le(patched_rom, options_address + 0x29, 1, 1 if world.options.trainersanity else 0)
 
     # Set easter egg data
-    _set_bytes_little_endian(patched_rom, options_address + 0x2B, 1, easter_egg[0])
+    _set_bytes_le(patched_rom, options_address + 0x2B, 1, easter_egg[0])
 
     # Set normalize encounter rates
-    _set_bytes_little_endian(patched_rom, options_address + 0x2C, 1, 1 if world.options.normalize_encounter_rates else 0)
+    _set_bytes_le(patched_rom, options_address + 0x2C, 1, 1 if world.options.normalize_encounter_rates else 0)
 
     # Set allow wonder trading
-    _set_bytes_little_endian(patched_rom, options_address + 0x2D, 1, 1 if world.options.enable_wonder_trading else 0)
+    _set_bytes_le(patched_rom, options_address + 0x2D, 1, 1 if world.options.enable_wonder_trading else 0)
 
     # Set allowed to skip fanfares
-    _set_bytes_little_endian(patched_rom, options_address + 0x32, 1, 1 if world.options.fanfares else 0)
+    _set_bytes_le(patched_rom, options_address + 0x32, 1, 1 if world.options.fanfares else 0)
 
     if easter_egg[0] == 2:
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_CUT"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLY"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_SURF"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_STRENGTH"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLASH"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_ROCK_SMASH"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_WATERFALL"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (easter_egg[1] * 12) + 4, 1, 50)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_CUT"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLY"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_SURF"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_STRENGTH"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_FLASH"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_ROCK_SMASH"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_WATERFALL"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIVE"] * 12) + 4, 1, 1)
+        _set_bytes_le(patched_rom, data.rom_addresses["gBattleMoves"] + (data.constants["MOVE_DIG"] * 12) + 4, 1, 1)
 
     # Set slot auth
     for i, byte in enumerate(world.auth):
-        _set_bytes_little_endian(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
+        _set_bytes_le(patched_rom, data.rom_addresses["gArchipelagoInfo"] + i, 1, byte)
 
     # Randomize music
     if world.options.music:
@@ -547,7 +555,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         randomized_looping_music = copy.copy(_LOOPING_MUSIC)
         world.random.shuffle(randomized_looping_music)
         for original_music, randomized_music in zip(_LOOPING_MUSIC, randomized_looping_music):
-            _set_bytes_little_endian(
+            _set_bytes_le(
                 patched_rom,
                 data.rom_addresses["gRandomizedSoundTable"] + (data.constants[original_music] * 2),
                 2,
@@ -560,13 +568,13 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         randomized_fanfares = [fanfare_name for fanfare_name in _FANFARES]
         world.random.shuffle(randomized_fanfares)
         for i, fanfare_pair in enumerate(zip(_FANFARES.keys(), randomized_fanfares)):
-            _set_bytes_little_endian(
+            _set_bytes_le(
                 patched_rom,
                 data.rom_addresses["gRandomizedSoundTable"] + (data.constants[fanfare_pair[0]] * 2),
                 2,
                 data.constants[fanfare_pair[1]]
             )
-            _set_bytes_little_endian(
+            _set_bytes_le(
                 patched_rom,
                 data.rom_addresses["sFanfares"] + (i * 4) + 2,
                 2,
@@ -593,15 +601,6 @@ def get_base_rom_as_bytes() -> bytes:
     return base_rom_bytes
 
 
-def _set_bytes_little_endian(byte_array: bytearray, address: int, size: int, value: int) -> None:
-    offset = 0
-    while size > 0:
-        byte_array[address + offset] = value & 0xFF
-        value = value >> 8
-        offset += 1
-        size -= 1
-
-
 def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     """
     Encounter tables are lists of
@@ -617,27 +616,27 @@ def _set_encounter_tables(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
             if table is not None:
                 for i, species_id in enumerate(table.slots):
                     address = table.address + 2 + (4 * i)
-                    _set_bytes_little_endian(rom, address, 2, species_id)
+                    _set_bytes_le(rom, address, 2, species_id)
 
 
 def _set_species_info(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     for species in world.modified_species.values():
-        _set_bytes_little_endian(rom, species.address + 6, 1, species.types[0])
-        _set_bytes_little_endian(rom, species.address + 7, 1, species.types[1])
-        _set_bytes_little_endian(rom, species.address + 8, 1, species.catch_rate)
-        _set_bytes_little_endian(rom, species.address + 22, 1, species.abilities[0])
-        _set_bytes_little_endian(rom, species.address + 23, 1, species.abilities[1])
+        _set_bytes_le(rom, species.address + 6, 1, species.types[0])
+        _set_bytes_le(rom, species.address + 7, 1, species.types[1])
+        _set_bytes_le(rom, species.address + 8, 1, species.catch_rate)
+        _set_bytes_le(rom, species.address + 22, 1, species.abilities[0])
+        _set_bytes_le(rom, species.address + 23, 1, species.abilities[1])
 
         if easter_egg[0] == 3:
-            _set_bytes_little_endian(rom, species.address + 22, 1, easter_egg[1])
-            _set_bytes_little_endian(rom, species.address + 23, 1, easter_egg[1])
+            _set_bytes_le(rom, species.address + 22, 1, easter_egg[1])
+            _set_bytes_le(rom, species.address + 23, 1, easter_egg[1])
 
         for i, learnset_move in enumerate(species.learnset):
             level_move = learnset_move.level << 9 | learnset_move.move_id
             if easter_egg[0] == 2:
                 level_move = learnset_move.level << 9 | easter_egg[1]
 
-            _set_bytes_little_endian(rom, species.learnset_address + (i * 2), 2, level_move)
+            _set_bytes_le(rom, species.learnset_address + (i * 2), 2, level_move)
 
 
 def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
@@ -654,50 +653,50 @@ def _set_opponents(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tup
             pokemon_address = party_address + (i * pokemon_data_size)
 
             # Replace species
-            _set_bytes_little_endian(rom, pokemon_address + 0x04, 2, pokemon.species_id)
+            _set_bytes_le(rom, pokemon_address + 0x04, 2, pokemon.species_id)
 
             # Replace custom moves if applicable
             if trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.NO_ITEM_CUSTOM_MOVES:
                 if easter_egg[0] == 2:
-                    _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x06, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x08, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, easter_egg[1])
                 else:
-                    _set_bytes_little_endian(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
+                    _set_bytes_le(rom, pokemon_address + 0x06, 2, pokemon.moves[0])
+                    _set_bytes_le(rom, pokemon_address + 0x08, 2, pokemon.moves[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, pokemon.moves[2])
+                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, pokemon.moves[3])
             elif trainer.party.pokemon_data_type == TrainerPokemonDataTypeEnum.ITEM_CUSTOM_MOVES:
                 if easter_egg[0] == 2:
-                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, easter_egg[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x08, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, easter_egg[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0E, 2, easter_egg[1])
                 else:
-                    _set_bytes_little_endian(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
-                    _set_bytes_little_endian(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
+                    _set_bytes_le(rom, pokemon_address + 0x08, 2, pokemon.moves[0])
+                    _set_bytes_le(rom, pokemon_address + 0x0A, 2, pokemon.moves[1])
+                    _set_bytes_le(rom, pokemon_address + 0x0C, 2, pokemon.moves[2])
+                    _set_bytes_le(rom, pokemon_address + 0x0E, 2, pokemon.moves[3])
 
 
 def _set_legendary_encounters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     for encounter in world.modified_legendary_encounters:
-        _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
+        _set_bytes_le(rom, encounter.address, 2, encounter.species_id)
 
 
 def _set_misc_pokemon(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     for encounter in world.modified_misc_pokemon:
-        _set_bytes_little_endian(rom, encounter.address, 2, encounter.species_id)
+        _set_bytes_le(rom, encounter.address, 2, encounter.species_id)
 
 
 def _set_starters(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     address = data.rom_addresses["sStarterMon"]
     (starter_1, starter_2, starter_3) = world.modified_starters
 
-    _set_bytes_little_endian(rom, address + 0, 2, starter_1)
-    _set_bytes_little_endian(rom, address + 2, 2, starter_2)
-    _set_bytes_little_endian(rom, address + 4, 2, starter_3)
+    _set_bytes_le(rom, address + 0, 2, starter_1)
+    _set_bytes_le(rom, address + 2, 2, starter_2)
+    _set_bytes_le(rom, address + 4, 2, starter_3)
 
 
 def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
@@ -708,16 +707,16 @@ def _set_tm_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tupl
         if i >= 50:
             break
 
-        _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, move)
+        _set_bytes_le(rom, tmhm_list_address + (i * 2), 2, move)
         if easter_egg[0] == 2:
-            _set_bytes_little_endian(rom, tmhm_list_address + (i * 2), 2, easter_egg[1])
+            _set_bytes_le(rom, tmhm_list_address + (i * 2), 2, easter_egg[1])
 
 
 def _set_tmhm_compatibility(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
     learnsets_address = data.rom_addresses["gTMHMLearnsets"]
 
     for species in world.modified_species.values():
-        _set_bytes_little_endian(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
+        _set_bytes_le(rom, learnsets_address + (species.species_id * 8), 8, species.tm_hm_compatibility)
 
 
 def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray) -> None:
@@ -736,11 +735,11 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
             if original_battle_type in battle_type_map:  # Don't touch anything other than regular single battles
                 if world.random.random() < probability:
                     # Set the trainer to be a double battle
-                    _set_bytes_little_endian(rom, trainer_data.address + 0x18, 1, 1)
+                    _set_bytes_le(rom, trainer_data.address + 0x18, 1, 1)
 
                     # Swap the battle type in the script for the purpose of loading the right text
                     # and setting data to the right places
-                    _set_bytes_little_endian(
+                    _set_bytes_le(
                         rom,
                         trainer_data.script_address + 1,
                         1,
@@ -751,7 +750,7 @@ def _randomize_opponent_battle_type(world: "PokemonEmeraldWorld", rom: bytearray
 def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, easter_egg: Tuple[int, int]) -> None:
     if easter_egg[0] == 2:
         for i in range(30):
-            _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
+            _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, easter_egg[1])
     else:
         if world.options.tm_tutor_moves:
             new_tutor_moves = []
@@ -759,15 +758,15 @@ def _randomize_move_tutor_moves(world: "PokemonEmeraldWorld", rom: bytearray, ea
                 new_move = get_random_move(world.random, set(new_tutor_moves) | world.blacklisted_moves | HM_MOVES)
                 new_tutor_moves.append(new_move)
 
-                _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, new_move)
+                _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (i * 2), 2, new_move)
 
     # Always set Fortree move tutor to Dig
-    _set_bytes_little_endian(rom, data.rom_addresses["gTutorMoves"] + (24 * 2), 2, data.constants["MOVE_DIG"])
+    _set_bytes_le(rom, data.rom_addresses["gTutorMoves"] + (24 * 2), 2, data.constants["MOVE_DIG"])
 
     # Modify compatibility
     if world.options.tm_tutor_compatibility.value != -1:
         for species in data.species.values():
-            _set_bytes_little_endian(
+            _set_bytes_le(
                 rom,
                 data.rom_addresses["sTutorLearnsets"] + (species.species_id * 4),
                 4,

@@ -8,7 +8,7 @@ from typing import List
 from .data import load_json_data, data
 
 
-_ignorable_locations = {
+_IGNORABLE_LOCATIONS = frozenset({
     "HIDDEN_ITEM_TRICK_HOUSE_NUGGET",  # Is permanently mssiable and has special behavior that sets the flag early
 
     # Duplicate rival fights. All variations are represented by the Brandon + Mudkip version
@@ -37,10 +37,9 @@ _ignorable_locations = {
     "TRAINER_MAY_LILYCOVE_MUDKIP_REWARD",
     "TRAINER_MAY_LILYCOVE_TREECKO_REWARD",
     "TRAINER_MAY_LILYCOVE_TORCHIC_REWARD",
+})
 
-}
-
-_ignorable_warps = {
+_IGNORABLE_WARPS = frozenset({
     # Trick House
     "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2:0,1/MAP_ROUTE110_TRICK_HOUSE_ENTRANCE:2!",
     "MAP_ROUTE110_TRICK_HOUSE_PUZZLE2:2/MAP_ROUTE110_TRICK_HOUSE_END:0!",
@@ -245,7 +244,7 @@ _ignorable_warps = {
     "MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3:0/MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP2:1",
     "MAP_CAVE_OF_ORIGIN_UNUSED_RUBY_SAPPHIRE_MAP3:1/MAP_CAVE_OF_ORIGIN_B1F:0!",
     "MAP_LILYCOVE_CITY_UNUSED_MART:0,1/MAP_LILYCOVE_CITY:0!"
-}
+})
 
 
 def validate_regions() -> bool:
@@ -275,7 +274,7 @@ def validate_regions() -> bool:
 
     # Check warps
     for warp_source, warp_dest in data.warp_map.items():
-        if warp_source in _ignorable_warps:
+        if warp_source in _IGNORABLE_WARPS:
             continue
 
         if warp_dest is None:
@@ -292,7 +291,7 @@ def validate_regions() -> bool:
         claimed_locations_set.add(location_name)
 
     for location_name in extracted_data_json["locations"]:
-        if location_name not in claimed_locations and location_name not in _ignorable_locations:
+        if location_name not in claimed_locations and location_name not in _IGNORABLE_LOCATIONS:
             warn(f"Pokemon Emerald: Location [{location_name}] was not claimed by any region")
 
     warn_messages.sort()

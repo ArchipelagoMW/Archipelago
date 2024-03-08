@@ -2,10 +2,10 @@ import json
 from typing import Any, Dict, List, Optional, Tuple, Iterable
 
 from .data import data
-from .pokemon import national_id_to_species_id_map
+from .pokemon import NATIONAL_ID_TO_SPECIES_ID
 
 
-character_decoding_map = {
+CHARACTER_DECODING_MAP = {
     0x00: " ", 0x01: "À", 0x02: "Á", 0x03: "Â", 0x04: "Ç",
     0x05: "È", 0x06: "É", 0x07: "Ê", 0x08: "Ë", 0x09: "Ì",
     0x0B: "Î", 0x0C: "Ï", 0x0D: "Ò", 0x0E: "Ó", 0x0F: "Ô",
@@ -36,14 +36,14 @@ character_decoding_map = {
     0xEC: "x", 0xED: "y", 0xEE: "z", 0xEF: "▶", 0xF0: ":"
 }
 
-character_encoding_map = {value: key for key, value in character_decoding_map.items()}
-character_encoding_map.update({
-    "'": character_encoding_map["’"],
-    "\"": character_encoding_map["”"],
-    "_": character_encoding_map[" "]
+CHARACTER_ENCODING_MAP = {value: key for key, value in CHARACTER_DECODING_MAP.items()}
+CHARACTER_ENCODING_MAP.update({
+    "'": CHARACTER_ENCODING_MAP["’"],
+    "\"": CHARACTER_ENCODING_MAP["”"],
+    "_": CHARACTER_ENCODING_MAP[" "]
 })
 
-valid_name_characters = {
+ALLOWED_TRAINER_NAME_CHARACTERS = frozenset({
     " ", "0", "1", "2", "3", "4", "5", "6", "7", "8",
     "9", "!", "?", ".", "-", "…", "“", "”", "‘", "’",    
     "♂", "♀", ",", "/", "A", "B", "C", "D", "E", "F",
@@ -52,10 +52,10 @@ valid_name_characters = {
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
     "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
     "u", "v", "w", "x", "y", "z"
-}
+})
 
 
-def encode_string(string: str, length: Optional[int] = None) -> bytearray:
+def encode_string(string: str, length: Optional[int] = None) -> bytes:
     arr = []
     length = len(string) if length is None else length
 
@@ -65,23 +65,22 @@ def encode_string(string: str, length: Optional[int] = None) -> bytearray:
             continue
 
         char = string[i]
-        if char in character_encoding_map:
-            arr.append(character_encoding_map[char])
+        if char in CHARACTER_ENCODING_MAP:
+            arr.append(CHARACTER_ENCODING_MAP[char])
         else:
-            arr.append(character_encoding_map["?"])
+            arr.append(CHARACTER_ENCODING_MAP["?"])
+
+    return bytes(arr)
 
 
-    return bytearray(arr)
-
-
-def decode_string(string_data: Iterable[int]):
+def decode_string(string_data: Iterable[int]) -> str:
     string = ""
     for code in string_data:
         if code == 0xFF:
             break
 
-        if code in character_decoding_map:
-            string += character_decoding_map[code]
+        if code in CHARACTER_DECODING_MAP:
+            string += CHARACTER_DECODING_MAP[code]
         else:
             raise KeyError(f"The following value does not correspond to a character in Pokemon Emerald: {code}")
 
@@ -110,6 +109,7 @@ def get_easter_egg(easter_egg: str) -> Tuple[int, int]:
             return (3, value)
     elif result1 == 0xA7850E45 and (result1 ^ result2) & 0xFF == 96:
         return (4, 0)
+
     return (0, 0)
 
 
@@ -117,13 +117,13 @@ def location_name_to_label(name: str) -> str:
     return data.locations[name].label
 
 
-def int_to_bool_array(num) -> List[bool]:
+def int_to_bool_array(num: int) -> List[bool]:
     binary_string = format(num, "064b")
     bool_array = [bit == "1" for bit in reversed(binary_string)]
     return bool_array
 
 
-def bool_array_to_int(bool_array) -> int:
+def bool_array_to_int(bool_array: List[int]) -> int:
     binary_string = "".join(["1" if bit else "0" for bit in reversed(bool_array)])
     num = int(binary_string, 2)
     return num
@@ -138,7 +138,7 @@ _SUBSTRUCT_ORDERS = [
     [2, 1, 3, 0], [3, 1, 2, 0], [2, 3, 1, 0], [3, 2, 1, 0]
 ]
 
-_LANGUAGE_TO_INT = {
+_LANGUAGE_IDS = {
     "Japanese": 1,
     "English": 2,
     "French": 3,
@@ -154,7 +154,7 @@ _MODERN_ITEM_TO_EMERALD_ITEM = {
 }
 
 
-def _encrypt_or_decrypt_substruct(substruct_data: Iterable[int], key: int):
+def _encrypt_or_decrypt_substruct(substruct_data: Iterable[int], key: int) -> bytearray:
     modified_data = bytearray()
     for i in range(int(len(substruct_data) / 4)):
         modified_data.extend((int.from_bytes(substruct_data[i * 4 : (i + 1) * 4], "little") ^ key).to_bytes(4, "little"))
@@ -182,7 +182,7 @@ def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
         "version": "1",
         "personality": personality,
         "nickname": decode_string(pokemon_data[8:18]),
-        "language": {v: k for k, v in _LANGUAGE_TO_INT.items()}[pokemon_data[18]],
+        "language": {v: k for k, v in _LANGUAGE_IDS.items()}[pokemon_data[18]],
         "species": data.species[int.from_bytes(decrypted_substructs[0][0:2], "little")].national_dex_number,
         "experience": int.from_bytes(decrypted_substructs[0][4:8], "little"),
         "ability": iv_ability_info >> 31,
@@ -260,7 +260,7 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     substructs = [bytearray([0 for _ in range(12)]) for _ in range(4)]
 
     # Substruct type 0
-    for i, byte in enumerate(national_id_to_species_id_map[pokemon_json["species"]].to_bytes(2, "little")):
+    for i, byte in enumerate(NATIONAL_ID_TO_SPECIES_ID[pokemon_json["species"]].to_bytes(2, "little")):
         substructs[0][0 + i] = byte
 
     if "item" in pokemon_json:
@@ -274,7 +274,7 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     for i, move_info in enumerate(pokemon_json["moves"]):
         substructs[0][8] |= ((move_info[2] & 0b11) << (2 * i))
 
-    substructs[0][9] = data.species[national_id_to_species_id_map[pokemon_json["species"]]].friendship
+    substructs[0][9] = data.species[NATIONAL_ID_TO_SPECIES_ID[pokemon_json["species"]]].friendship
 
     # Substruct type 1
     for i, move_info in enumerate(pokemon_json["moves"]):
@@ -317,7 +317,7 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
     for i, byte in enumerate(encode_string(pokemon_json["nickname"], 10)):
         pokemon_data[8 + i] = byte
 
-    pokemon_data[18] = _LANGUAGE_TO_INT[pokemon_json["language"]]
+    pokemon_data[18] = _LANGUAGE_IDS[pokemon_json["language"]]
     pokemon_data[19] = 0b00000010  # Flags for Bad Egg, Has Species, Is Egg, padding bits (low to high)
 
     for i, byte in enumerate(encode_string(pokemon_json["trainer"]["name"], 7)):
