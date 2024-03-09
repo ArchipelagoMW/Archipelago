@@ -1275,108 +1275,187 @@ item_table = {
         ItemData(704 + SC2WOL_ITEM_ID_OFFSET, "Unit", 4, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Assault strider. Can use Barrier to absorb damage."),
-    ItemNames.COLOSSUS: ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS, 
+    ItemNames.COLOSSUS:
+        ItemData(705 + SC2WOL_ITEM_ID_OFFSET, "Unit", 5, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Battle strider with a powerful area attack. Can walk up and down cliffs. Attacks set fire to the ground, dealing extra damage to enemies over time."),
-    ItemNames.PHOENIX: ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS,
+    ItemNames.PHOENIX:
+        ItemData(706 + SC2WOL_ITEM_ID_OFFSET, "Unit", 6, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Air superiority starfighter. Can use Graviton Beam and Phasing Armor abilities."),
-    ItemNames.VOID_RAY: ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS,
+    ItemNames.VOID_RAY:
+        ItemData(707 + SC2WOL_ITEM_ID_OFFSET, "Unit", 7, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Surgical strike craft. Has the Prismatic Alignment and Prismatic Range abilities."),
-    ItemNames.CARRIER: ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS, 
+    ItemNames.CARRIER:
+        ItemData(708 + SC2WOL_ITEM_ID_OFFSET, "Unit", 8, SC2Race.PROTOSS,
                  classification=ItemClassification.progression, origin={"wol", "lotv"},
                  description="Capital ship. Builds and launches Interceptors that attack enemy targets. Repair Drones heal nearby mechanical units."),
 
     # Filler items to fill remaining spots
-    ItemNames.STARTING_MINERALS: ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0, 
+    ItemNames.STARTING_MINERALS:
+        ItemData(800 + SC2WOL_ITEM_ID_OFFSET, "Minerals", 15, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler,
                  description="Increases the starting minerals for all missions."),
-    ItemNames.STARTING_VESPENE: ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, SC2Race.ANY, quantity=0, 
+    ItemNames.STARTING_VESPENE:
+        ItemData(801 + SC2WOL_ITEM_ID_OFFSET, "Vespene", 15, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler,
                  description="Increases the starting vespene for all missions."),
-    # This Filler item isn't placed by the generator yet unless plando'd
-    ItemNames.STARTING_SUPPLY: ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, SC2Race.ANY, quantity=0,
+    ItemNames.STARTING_SUPPLY:
+        ItemData(802 + SC2WOL_ITEM_ID_OFFSET, "Supply", 2, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.filler,
                  description="Increases the starting supply for all missions."),
     # This item is used to "remove" location from the game. Never placed unless plando'd
-    ItemNames.NOTHING: ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0,
+    ItemNames.NOTHING:
+        ItemData(803 + SC2WOL_ITEM_ID_OFFSET, "Nothing Group", 2, SC2Race.ANY, quantity=0,
                  classification=ItemClassification.trap,
                  description="Does nothing. Used to remove a location from the game."),
 
     # Nova gear
-    ItemNames.NOVA_GHOST_VISOR: ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"}, description="Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units."),
-    ItemNames.NOVA_RANGEFINDER_OCULUS: ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"}, description="Increaases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1."),
-    ItemNames.NOVA_DOMINATION: ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to mind-control a target enemy unit."),
-    ItemNames.NOVA_BLINK: ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to teleport a short distance and cloak for 10s."),
-    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE: ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, quantity=2, origin={"nco"}, classification=ItemClassification.progression, description=inspect.cleandoc("""
-    Level 1: Gives Nova the ability to cloak.
-    Level 2: Nova is permanently cloaked.
-    """)),
-    ItemNames.NOVA_ENERGY_SUIT_MODULE: ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"}, description="Increases Nova's maximum energy and energy regeneration rate."),
-    ItemNames.NOVA_ARMORED_SUIT_MODULE: ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Increases Nova's health by 100 and armour by 1. Nova also regeneratives life quickly out of combat."),
-    ItemNames.NOVA_JUMP_SUIT_MODULE: ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Increases Nova's movement speed and allows her to jump up and down cliffs."),
-    ItemNames.NOVA_C20A_CANISTER_RIFLE: ItemData(908 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 7, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the C20A Canister Rifle, which has a ranged attack and allows Nova to cast Snipe."),
-    ItemNames.NOVA_HELLFIRE_SHOTGUN: ItemData(909 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 8, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Hellfire Shotgun, which has a short-range area attack in a cone and allows Nova to cast Penetrating Blast."),
-    ItemNames.NOVA_PLASMA_RIFLE: ItemData(910 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 9, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Plasma Rifle, which has a rapidfire ranged attack and allows Nova to cast Plasma Shot."),
-    ItemNames.NOVA_MONOMOLECULAR_BLADE: ItemData(911 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 10, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Monomolecular Blade, which has a melee attack and allows Nova to cast Dash Attack."),
-    ItemNames.NOVA_BLAZEFIRE_GUNBLADE: ItemData(912 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 11, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Allows Nova to equip the Blazefire Gunblade, which has a melee attack and allows Nova to cast Fury of One."),
-    ItemNames.NOVA_STIM_INFUSION: ItemData(913 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 12, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to heal and temporarily increase her movement and attack speeds."),
-    ItemNames.NOVA_PULSE_GRENADES: ItemData(914 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 13, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to throw a grenade dealing large damage in an area."),
-    ItemNames.NOVA_FLASHBANG_GRENADES: ItemData(915 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 14, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to throw a grenade to stun enemies and disable detection in a large area."),
-    ItemNames.NOVA_IONIC_FORCE_FIELD: ItemData(916 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 15, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to shield herself temporarily."),
-    ItemNames.NOVA_HOLO_DECOY: ItemData(917 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 16, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to summon a decoy unit which enemies will prefer to target and takes reduced damage."),
-    ItemNames.NOVA_NUKE: ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"}, classification=ItemClassification.progression, description="Gives Nova the ability to launch tactical nukes built from the Shadow Ops."),
+    ItemNames.NOVA_GHOST_VISOR:
+        ItemData(900 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 0, SC2Race.TERRAN, origin={"nco"},
+                 description="Reveals the locations of enemy units in the fog of war around Nova. Can detect cloaked units."),
+    ItemNames.NOVA_RANGEFINDER_OCULUS:
+        ItemData(901 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 1, SC2Race.TERRAN, origin={"nco"},
+                 description="Increaases Nova's vision range and non-melee weapon attack range by 2. Also increases range of melee weapons by 1."),
+    ItemNames.NOVA_DOMINATION:
+        ItemData(902 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 2, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to mind-control a target enemy unit."),
+    ItemNames.NOVA_BLINK:
+        ItemData(903 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 3, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to teleport a short distance and cloak for 10s."),
+    ItemNames.NOVA_PROGRESSIVE_STEALTH_SUIT_MODULE:
+        ItemData(904 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 0, SC2Race.TERRAN, quantity=2, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description=inspect.cleandoc(
+                     """
+                     Level 1: Gives Nova the ability to cloak.
+                     Level 2: Nova is permanently cloaked.
+                     """
+                 )),
+    ItemNames.NOVA_ENERGY_SUIT_MODULE:
+        ItemData(905 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 4, SC2Race.TERRAN, origin={"nco"},
+                 description="Increases Nova's maximum energy and energy regeneration rate."),
+    ItemNames.NOVA_ARMORED_SUIT_MODULE:
+        ItemData(906 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 5, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Increases Nova's health by 100 and armour by 1. Nova also regenerates life quickly out of combat."),
+    ItemNames.NOVA_JUMP_SUIT_MODULE:
+        ItemData(907 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 6, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Increases Nova's movement speed and allows her to jump up and down cliffs."),
+    ItemNames.NOVA_C20A_CANISTER_RIFLE:
+        ItemData(908 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 7, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Allows Nova to equip the C20A Canister Rifle, which has a ranged attack and allows Nova to cast Snipe."),
+    ItemNames.NOVA_HELLFIRE_SHOTGUN:
+        ItemData(909 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 8, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Allows Nova to equip the Hellfire Shotgun, which has a short-range area attack in a cone and allows Nova to cast Penetrating Blast."),
+    ItemNames.NOVA_PLASMA_RIFLE:
+        ItemData(910 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 9, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Allows Nova to equip the Plasma Rifle, which has a rapidfire ranged attack and allows Nova to cast Plasma Shot."),
+    ItemNames.NOVA_MONOMOLECULAR_BLADE:
+        ItemData(911 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 10, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Allows Nova to equip the Monomolecular Blade, which has a melee attack and allows Nova to cast Dash Attack."),
+    ItemNames.NOVA_BLAZEFIRE_GUNBLADE:
+        ItemData(912 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 11, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Allows Nova to equip the Blazefire Gunblade, which has a melee attack and allows Nova to cast Fury of One."),
+    ItemNames.NOVA_STIM_INFUSION:
+        ItemData(913 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 12, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to heal herself and temporarily increase her movement and attack speeds."),
+    ItemNames.NOVA_PULSE_GRENADES:
+        ItemData(914 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 13, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to throw a grenade dealing large damage in an area."),
+    ItemNames.NOVA_FLASHBANG_GRENADES:
+        ItemData(915 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 14, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to throw a grenade to stun enemies and disable detection in a large area."),
+    ItemNames.NOVA_IONIC_FORCE_FIELD:
+        ItemData(916 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 15, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to shield herself temporarily."),
+    ItemNames.NOVA_HOLO_DECOY:
+        ItemData(917 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 16, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to summon a decoy unit which enemies will prefer to target and takes reduced damage."),
+    ItemNames.NOVA_NUKE:
+        ItemData(918 + SC2WOL_ITEM_ID_OFFSET, "Nova Gear", 17, SC2Race.TERRAN, origin={"nco"},
+                 classification=ItemClassification.progression,
+                 description="Gives Nova the ability to launch tactical nukes built from the Shadow Ops."),
 
     # HotS
-    ItemNames.ZERGLING: ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Fast inexpensive melee attacker. Hatches in pairs from a single larva. Can morph into a Baneling."),
-    ItemNames.SWARM_QUEEN: ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Ranged support caster. Can use the Spawn Creep Tumor and Rapid Transfusion abilities."),
-    ItemNames.ROACH: ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Durable short ranged attacker. Regenerates life quickly when burrowed."),
-    ItemNames.HYDRALISK: ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="High-damage generalist ranged attacker."),
-    ItemNames.ZERGLING_BANELING_ASPECT: ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 5, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Anti-ground suicide unit. Does damage over a small area on death."),
-    ItemNames.ABERRATION: ItemData(5 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 5, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Durable melee attacker that deals heavy damage and can walk over other units."),
-    ItemNames.MUTALISK: ItemData(6 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 6, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Fragile flying attacker. Attacks bounce between targets."),
-    ItemNames.SWARM_HOST: ItemData(7 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 7, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Siege unit that attacks by rooting in place and continually spawning Locusts."),
-    ItemNames.INFESTOR: ItemData(8 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 8, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Support caster that can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities."),
-    ItemNames.ULTRALISK: ItemData(9 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 9, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Massive melee attacker. Has an area-damage cleave attack."),
-    ItemNames.SPORE_CRAWLER: ItemData(10 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 10, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Anti-air defensive structure that can detect cloaked units."),
-    ItemNames.SPINE_CRAWLER: ItemData(11 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 11, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"hots"}, 
-                     description="Anti-ground defensive structure."),
-    ItemNames.CORRUPTOR: ItemData(12 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"ext"}, 
-                     description="Anti-air flying attacker specializing in taking down enemy capital ships."),
-    ItemNames.SCOURGE: ItemData(13 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 13, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"bw", "ext"}, 
-                     description="Flying anti-air suicide unit. Hatches in pairs from a single larva."),
-    ItemNames.BROOD_QUEEN: ItemData(14 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"bw", "ext"}, 
-                     description="Flying support caster. Can cast the Ocular Symbiote and Spawn Broodlings abilities."),
-    ItemNames.DEFILER: ItemData(15 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 14, SC2Race.ZERG, 
-                     classification=ItemClassification.progression, origin={"bw"}, 
-                     description="Support caster. Can use the Dark Swarm, Consume, and Plague abilities."),
+    ItemNames.ZERGLING:
+        ItemData(0 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 0, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Fast inexpensive melee attacker. Hatches in pairs from a single larva. Can morph into a Baneling."),
+    ItemNames.SWARM_QUEEN:
+        ItemData(1 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 1, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Ranged support caster. Can use the Spawn Creep Tumor and Rapid Transfusion abilities."),
+    ItemNames.ROACH:
+        ItemData(2 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 2, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Durable short ranged attacker. Regenerates life quickly when burrowed."),
+    ItemNames.HYDRALISK:
+        ItemData(3 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 3, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="High-damage generalist ranged attacker."),
+    ItemNames.ZERGLING_BANELING_ASPECT:
+        ItemData(4 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 5, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Anti-ground suicide unit. Does damage over a small area on death."),
+    ItemNames.ABERRATION:
+        ItemData(5 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 5, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Durable melee attacker that deals heavy damage and can walk over other units."),
+    ItemNames.MUTALISK:
+        ItemData(6 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 6, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Fragile flying attacker. Attacks bounce between targets."),
+    ItemNames.SWARM_HOST:
+        ItemData(7 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 7, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Siege unit that attacks by rooting in place and continually spawning Locusts."),
+    ItemNames.INFESTOR:
+        ItemData(8 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 8, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Support caster that can move while burrowed. Can use the Fungal Growth, Parasitic Domination, and Consumption abilities."),
+    ItemNames.ULTRALISK:
+        ItemData(9 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 9, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Massive melee attacker. Has an area-damage cleave attack."),
+    ItemNames.SPORE_CRAWLER:
+        ItemData(10 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 10, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Anti-air defensive structure that can detect cloaked units."),
+    ItemNames.SPINE_CRAWLER:
+        ItemData(11 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 11, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"hots"},
+                 description="Anti-ground defensive structure."),
+    ItemNames.CORRUPTOR:
+        ItemData(12 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 12, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"ext"},
+                 description="Anti-air flying attacker specializing in taking down enemy capital ships."),
+    ItemNames.SCOURGE:
+        ItemData(13 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 13, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"bw", "ext"},
+                 description="Flying anti-air suicide unit. Hatches in pairs from a single larva."),
+    ItemNames.BROOD_QUEEN:
+        ItemData(14 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 4, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"bw", "ext"},
+                 description="Flying support caster. Can cast the Ocular Symbiote and Spawn Broodlings abilities."),
+    ItemNames.DEFILER:
+        ItemData(15 + SC2HOTS_ITEM_ID_OFFSET, "Unit", 14, SC2Race.ZERG,
+                 classification=ItemClassification.progression, origin={"bw"},
+                 description="Support caster. Can use the Dark Swarm, Consume, and Plague abilities."),
 
     ItemNames.PROGRESSIVE_ZERG_MELEE_ATTACK: ItemData(100 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 0, SC2Race.ZERG, quantity=3, origin={"hots"}),
     ItemNames.PROGRESSIVE_ZERG_MISSILE_ATTACK: ItemData(101 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 2, SC2Race.ZERG, quantity=3, origin={"hots"}),
@@ -1390,98 +1469,308 @@ item_table = {
     ItemNames.PROGRESSIVE_ZERG_FLYER_UPGRADE: ItemData(108 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 9, SC2Race.ZERG, quantity=3, origin={"hots"}),
     ItemNames.PROGRESSIVE_ZERG_WEAPON_ARMOR_UPGRADE: ItemData(109 + SC2HOTS_ITEM_ID_OFFSET, "Upgrade", 10, SC2Race.ZERG, quantity=3, origin={"hots"}),
 
-    ItemNames.ZERGLING_HARDENED_CARAPACE: ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 0, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"hots"}, description="Increases Zergling health by +10."),
-    ItemNames.ZERGLING_ADRENAL_OVERLOAD: ItemData(201 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 1, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"hots"}, description="Increases Zergling attack speed."),
-    ItemNames.ZERGLING_METABOLIC_BOOST: ItemData(202 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 2, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"hots"}, classification=ItemClassification.filler, description="Increases Zergling movement speed."),
-    ItemNames.ROACH_HYDRIODIC_BILE: ItemData(203 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 3, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"}, description="Roaches deal +8 damage to light targets."),
-    ItemNames.ROACH_ADAPTIVE_PLATING: ItemData(204 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 4, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"}, description="Roaches gain +3 armour when their life is below 50%."),
-    ItemNames.ROACH_TUNNELING_CLAWS: ItemData(205 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 5, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"}, classification=ItemClassification.filler, description="Allows Roaches to move while burrowed."),
-    ItemNames.HYDRALISK_FRENZY: ItemData(206 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 6, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK, origin={"hots"}, description="Allows Hydralisks to use the Frenzy ability, which increases their attack speed by 50%."),
-    ItemNames.HYDRALISK_ANCILLARY_CARAPACE: ItemData(207 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 7, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK, origin={"hots"}, classification=ItemClassification.filler, description="Hydralisks gain +20 health."),
-    ItemNames.HYDRALISK_GROOVED_SPINES: ItemData(208 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 8, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK, origin={"hots"}, description="Hydralisks gain +1 range."),
-    ItemNames.BANELING_CORROSIVE_ACID: ItemData(209 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 9, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"}, description="Increases the damage banelings deal to their primary target. Splash damage remains the same."),
-    ItemNames.BANELING_RUPTURE: ItemData(210 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 10, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"}, classification=ItemClassification.filler, description="Increases the splash radius of baneling attacks."),
-    ItemNames.BANELING_REGENERATIVE_ACID: ItemData(211 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 11, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"}, classification=ItemClassification.filler, description="Banelings will heal nearby friendly units when they explode."),
-    ItemNames.MUTALISK_VICIOUS_GLAVE: ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 12, SC2Race.ZERG, parent_item=ItemNames.MUTALISK, origin={"hots"}, description="Mutalisks attacks will bounce an additional 3 times."),
-    ItemNames.MUTALISK_RAPID_REGENERATION: ItemData(213 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 13, SC2Race.ZERG, parent_item=ItemNames.MUTALISK, origin={"hots"}, description="Mutalisks will regenerate quickly when out of combat."),
-    ItemNames.MUTALISK_SUNDERING_GLAVE: ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 14, SC2Race.ZERG, parent_item=ItemNames.MUTALISK, origin={"hots"}, description="Mutalisks deal increased damage to their primary target."),
-    ItemNames.SWARM_HOST_BURROW: ItemData(215 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 15, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"hots"}, classification=ItemClassification.filler, description="Allows Swarm Hosts to burrow instead of root to spawn locusts."),
-    ItemNames.SWARM_HOST_RAPID_INCUBATION: ItemData(216 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 16, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"hots"}, description="Swarm Hosts will spawn locusts 20% faster."),
-    ItemNames.SWARM_HOST_PRESSURIZED_GLANDS: ItemData(217 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 17, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"hots"}, classification=ItemClassification.progression, description="Allows Swarm Host Locusts to attack air targets."),
-    ItemNames.ULTRALISK_BURROW_CHARGE: ItemData(218 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 18, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"hots"}, description="Allows Ultralisks to burrow and charge at enemy units, knocking back and stunning units when it emerges."),
-    ItemNames.ULTRALISK_TISSUE_ASSIMILATION: ItemData(219 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 19, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"hots"}, description="Ultralisks recover health when they deal damage."),
-    ItemNames.ULTRALISK_MONARCH_BLADES: ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 20, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"hots"}, description="Ultralisks gain increased splash damage."),
-    ItemNames.CORRUPTOR_CAUSTIC_SPRAY: ItemData(221 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 21, SC2Race.ZERG, parent_item=ItemNames.CORRUPTOR, origin={"ext"}, description="Allows Corruptors to use the Caustic Spray ability, which deals ramping damage to buildings over time."),
-    ItemNames.CORRUPTOR_CORRUPTION: ItemData(222 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 22, SC2Race.ZERG, parent_item=ItemNames.CORRUPTOR, origin={"ext"}, description="Allows Corruptors to use the Corruption ability, which causes a target enemy unit to take increased damage."),
-    ItemNames.SCOURGE_VIRULENT_SPORES: ItemData(223 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 23, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}, description="Scourge will deal splash damage."),
-    ItemNames.SCOURGE_RESOURCE_EFFICIENCY: ItemData(224 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 24, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}, classification=ItemClassification.progression, description="Reduces the cost of Scourge by 50 gas per egg."),
-    ItemNames.SCOURGE_SWARM_SCOURGE: ItemData(225 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 25, SC2Race.ZERG, parent_item=ItemNames.SCOURGE, origin={"ext"}, description="An extra Scourge will be built from each egg at no additional cost."),
-    ItemNames.ZERGLING_SHREDDING_CLAWS: ItemData(226 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 26, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"ext"}, description="Zergling attacks will temporarily reduce their target's armour to 0."),
-    ItemNames.ROACH_GLIAL_RECONSTITUTION: ItemData(227 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 27, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"ext"}, description="Increases Roach movement speed."),
-    ItemNames.ROACH_ORGANIC_CARAPACE: ItemData(228 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 28, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"ext"}, description="Increases Roach health by +25."),
-    ItemNames.HYDRALISK_MUSCULAR_AUGMENTS: ItemData(229 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 29, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK, origin={"bw"}, description="Increases Hydralisk movement speed."),
-    ItemNames.HYDRALISK_RESOURCE_EFFICIENCY: ItemData(230 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 0, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK, origin={"bw"}, description="Reduces Hydralisk resource cost by 25/25 and supply cost by 1."),
-    ItemNames.BANELING_CENTRIFUGAL_HOOKS: ItemData(231 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 1, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Increases the movement speed of Banelings."),
-    ItemNames.BANELING_TUNNELING_JAWS: ItemData(232 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 2, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Allows Banelings to move while burrowed."),
-    ItemNames.BANELING_RAPID_METAMORPH: ItemData(233 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 3, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Banelings morph faster."),
-    ItemNames.MUTALISK_SEVERING_GLAIVE: ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 4, SC2Race.ZERG, parent_item=ItemNames.MUTALISK, origin={"ext"}, description="Mutalisk bounce attacks will deal full damage."),
-    ItemNames.MUTALISK_AERODYNAMIC_GLAVE_SHAPE: ItemData(235 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 5, SC2Race.ZERG, parent_item=ItemNames.MUTALISK, origin={"ext"}, description="Increases the attack range of Mutalisks by 2."),
-    ItemNames.SWARM_HOST_LOCUST_METABOLIC_BOOST: ItemData(236 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 6, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"ext"}, classification=ItemClassification.filler, description="Increases Locust movement speed."),
-    ItemNames.SWARM_HOST_ENDURING_LOCUSTS: ItemData(237 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 7, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"ext"}, description="Increases the duration of Swarm Hosts' Locusts by 10s."),
-    ItemNames.SWARM_HOST_ORGANIC_CARAPACE: ItemData(238 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 8, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"ext"}, description="Increases Swarm Host health by +40."),
-    ItemNames.SWARM_HOST_RESOURCE_EFFICIENCY: ItemData(239 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 9, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"ext"}, description="Reduces Swarm Host resource cost by 100/25."),
-    ItemNames.ULTRALISK_ANABOLIC_SYNTHESIS: ItemData(240 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 10, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"bw"}, classification=ItemClassification.filler),
-    ItemNames.ULTRALISK_CHITINOUS_PLATING: ItemData(241 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 11, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"bw"}),
-    ItemNames.ULTRALISK_ORGANIC_CARAPACE: ItemData(242 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 12, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"ext"}),
-    ItemNames.ULTRALISK_RESOURCE_EFFICIENCY: ItemData(243 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 13, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"bw"}),
-    ItemNames.DEVOURER_CORROSIVE_SPRAY: ItemData(244 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 14, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
-    ItemNames.DEVOURER_GAPING_MAW: ItemData(245 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 15, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
-    ItemNames.DEVOURER_IMPROVED_OSMOSIS: ItemData(246 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 16, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}, classification=ItemClassification.filler),
-    ItemNames.DEVOURER_PRESCIENT_SPORES: ItemData(247 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 17, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
-    ItemNames.GUARDIAN_PROLONGED_DISPERSION: ItemData(248 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 18, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
-    ItemNames.GUARDIAN_PRIMAL_ADAPTATION: ItemData(249 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 19, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
-    ItemNames.GUARDIAN_SORONAN_ACID: ItemData(250 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 20, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
-    ItemNames.IMPALER_ADAPTIVE_TALONS: ItemData(251 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 21, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"}, classification=ItemClassification.filler),
-    ItemNames.IMPALER_SECRETION_GLANDS: ItemData(252 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 22, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
-    ItemNames.IMPALER_HARDENED_TENTACLE_SPINES: ItemData(253 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 23, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
-    ItemNames.LURKER_SEISMIC_SPINES: ItemData(254 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 24, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
-    ItemNames.LURKER_ADAPTED_SPINES: ItemData(255 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 25, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
-    ItemNames.RAVAGER_POTENT_BILE: ItemData(256 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 26, SC2Race.ZERG, parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
-    ItemNames.RAVAGER_BLOATED_BILE_DUCTS: ItemData(257 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 27, SC2Race.ZERG, parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
-    ItemNames.RAVAGER_DEEP_TUNNEL: ItemData(258 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 28, SC2Race.ZERG, parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
-    ItemNames.VIPER_PARASITIC_BOMB: ItemData(259 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 29, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
-    ItemNames.VIPER_PARALYTIC_BARBS: ItemData(260 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 0, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
-    ItemNames.VIPER_VIRULENT_MICROBES: ItemData(261 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 1, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
-    ItemNames.BROOD_LORD_POROUS_CARTILAGE: ItemData(262 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 2, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
-    ItemNames.BROOD_LORD_EVOLVED_CARAPACE: ItemData(263 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 3, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
-    ItemNames.BROOD_LORD_SPLITTER_MITOSIS: ItemData(264 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 4, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
-    ItemNames.BROOD_LORD_RESOURCE_EFFICIENCY: ItemData(265 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 5, SC2Race.ZERG, parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
-    ItemNames.INFESTOR_INFESTED_TERRAN: ItemData(266 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 6, SC2Race.ZERG, parent_item=ItemNames.INFESTOR, origin={"ext"}),
-    ItemNames.INFESTOR_MICROBIAL_SHROUD: ItemData(267 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 7, SC2Race.ZERG, parent_item=ItemNames.INFESTOR, origin={"ext"}),
-    ItemNames.SWARM_QUEEN_SPAWN_LARVAE: ItemData(268 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 8, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}),
-    ItemNames.SWARM_QUEEN_DEEP_TUNNEL: ItemData(269 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 9, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}),
-    ItemNames.SWARM_QUEEN_ORGANIC_CARAPACE: ItemData(270 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 10, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}, classification=ItemClassification.filler),
-    ItemNames.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION: ItemData(271 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 11, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}),
-    ItemNames.SWARM_QUEEN_RESOURCE_EFFICIENCY: ItemData(272 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 12, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}),
-    ItemNames.SWARM_QUEEN_INCUBATOR_CHAMBER: ItemData(273 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 13, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN, origin={"ext"}),
-    ItemNames.BROOD_QUEEN_FUNGAL_GROWTH: ItemData(274 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 14, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN, origin={"ext"}),
-    ItemNames.BROOD_QUEEN_ENSNARE: ItemData(275 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 15, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN, origin={"ext"}),
-    ItemNames.BROOD_QUEEN_ENHANCED_MITOCHONDRIA: ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 16, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN, origin={"ext"}),
+    ItemNames.ZERGLING_HARDENED_CARAPACE:
+        ItemData(200 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 0, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"hots"}, description="Increases Zergling health by +10."),
+    ItemNames.ZERGLING_ADRENAL_OVERLOAD:
+        ItemData(201 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 1, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"hots"}, description="Increases Zergling attack speed."),
+    ItemNames.ZERGLING_METABOLIC_BOOST:
+        ItemData(202 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 2, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"hots"}, classification=ItemClassification.filler,
+                 description="Increases Zergling movement speed."),
+    ItemNames.ROACH_HYDRIODIC_BILE:
+        ItemData(203 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 3, SC2Race.ZERG, parent_item=ItemNames.ROACH,
+                 origin={"hots"}, description="Roaches deal +8 damage to light targets."),
+    ItemNames.ROACH_ADAPTIVE_PLATING:
+        ItemData(204 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 4, SC2Race.ZERG, parent_item=ItemNames.ROACH,
+                 origin={"hots"}, description="Roaches gain +3 armour when their life is below 50%."),
+    ItemNames.ROACH_TUNNELING_CLAWS:
+        ItemData(205 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 5, SC2Race.ZERG, parent_item=ItemNames.ROACH,
+                 origin={"hots"}, classification=ItemClassification.filler,
+                 description="Allows Roaches to move while burrowed."),
+    ItemNames.HYDRALISK_FRENZY:
+        ItemData(206 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 6, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK,
+                 origin={"hots"},
+                 description="Allows Hydralisks to use the Frenzy ability, which increases their attack speed by 50%."),
+    ItemNames.HYDRALISK_ANCILLARY_CARAPACE:
+        ItemData(207 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 7, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK,
+                 origin={"hots"}, classification=ItemClassification.filler, description="Hydralisks gain +20 health."),
+    ItemNames.HYDRALISK_GROOVED_SPINES:
+        ItemData(208 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 8, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK,
+                 origin={"hots"}, description="Hydralisks gain +1 range."),
+    ItemNames.BANELING_CORROSIVE_ACID:
+        ItemData(209 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 9, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
+                 description="Increases the damage banelings deal to their primary target. Splash damage remains the same."),
+    ItemNames.BANELING_RUPTURE:
+        ItemData(210 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 10, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
+                 classification=ItemClassification.filler,
+                 description="Increases the splash radius of baneling attacks."),
+    ItemNames.BANELING_REGENERATIVE_ACID:
+        ItemData(211 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 11, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
+                 classification=ItemClassification.filler,
+                 description="Banelings will heal nearby friendly units when they explode."),
+    ItemNames.MUTALISK_VICIOUS_GLAVE:
+        ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 12, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
+                 origin={"hots"}, description="Mutalisks attacks will bounce an additional 3 times."),
+    ItemNames.MUTALISK_RAPID_REGENERATION:
+        ItemData(213 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 13, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
+                 origin={"hots"}, description="Mutalisks will regenerate quickly when out of combat."),
+    ItemNames.MUTALISK_SUNDERING_GLAVE:
+        ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 14, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
+                 origin={"hots"}, description="Mutalisks deal increased damage to their primary target."),
+    ItemNames.SWARM_HOST_BURROW:
+        ItemData(215 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 15, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"hots"}, classification=ItemClassification.filler,
+                 description="Allows Swarm Hosts to burrow instead of root to spawn locusts."),
+    ItemNames.SWARM_HOST_RAPID_INCUBATION:
+        ItemData(216 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 16, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"hots"}, description="Swarm Hosts will spawn locusts 20% faster."),
+    ItemNames.SWARM_HOST_PRESSURIZED_GLANDS:
+        ItemData(217 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 17, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"hots"}, classification=ItemClassification.progression,
+                 description="Allows Swarm Host Locusts to attack air targets."),
+    ItemNames.ULTRALISK_BURROW_CHARGE:
+        ItemData(218 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 18, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"hots"},
+                 description="Allows Ultralisks to burrow and charge at enemy units, knocking back and stunning units when it emerges."),
+    ItemNames.ULTRALISK_TISSUE_ASSIMILATION:
+        ItemData(219 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 19, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"hots"}, description="Ultralisks recover health when they deal damage."),
+    ItemNames.ULTRALISK_MONARCH_BLADES:
+        ItemData(220 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 20, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"hots"}, description="Ultralisks gain increased splash damage."),
+    ItemNames.CORRUPTOR_CAUSTIC_SPRAY:
+        ItemData(221 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 21, SC2Race.ZERG, parent_item=ItemNames.CORRUPTOR,
+                 origin={"ext"},
+                 description="Allows Corruptors to use the Caustic Spray ability, which deals ramping damage to buildings over time."),
+    ItemNames.CORRUPTOR_CORRUPTION:
+        ItemData(222 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 22, SC2Race.ZERG, parent_item=ItemNames.CORRUPTOR,
+                 origin={"ext"},
+                 description="Allows Corruptors to use the Corruption ability, which causes a target enemy unit to take increased damage."),
+    ItemNames.SCOURGE_VIRULENT_SPORES:
+        ItemData(223 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 23, SC2Race.ZERG, parent_item=ItemNames.SCOURGE,
+                 origin={"ext"}, description="Scourge will deal splash damage."),
+    ItemNames.SCOURGE_RESOURCE_EFFICIENCY:
+        ItemData(224 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 24, SC2Race.ZERG, parent_item=ItemNames.SCOURGE,
+                 origin={"ext"}, classification=ItemClassification.progression,
+                 description="Reduces the cost of Scourge by 50 gas per egg."),
+    ItemNames.SCOURGE_SWARM_SCOURGE:
+        ItemData(225 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 25, SC2Race.ZERG, parent_item=ItemNames.SCOURGE,
+                 origin={"ext"}, description="An extra Scourge will be built from each egg at no additional cost."),
+    ItemNames.ZERGLING_SHREDDING_CLAWS:
+        ItemData(226 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 26, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"ext"}, description="Zergling attacks will temporarily reduce their target's armour to 0."),
+    ItemNames.ROACH_GLIAL_RECONSTITUTION:
+        ItemData(227 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 27, SC2Race.ZERG, parent_item=ItemNames.ROACH,
+                 origin={"ext"}, description="Increases Roach movement speed."),
+    ItemNames.ROACH_ORGANIC_CARAPACE:
+        ItemData(228 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 28, SC2Race.ZERG, parent_item=ItemNames.ROACH,
+                 origin={"ext"}, description="Increases Roach health by +25."),
+    ItemNames.HYDRALISK_MUSCULAR_AUGMENTS:
+        ItemData(229 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 29, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK,
+                 origin={"bw"}, description="Increases Hydralisk movement speed."),
+    ItemNames.HYDRALISK_RESOURCE_EFFICIENCY:
+        ItemData(230 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 0, SC2Race.ZERG, parent_item=ItemNames.HYDRALISK,
+                 origin={"bw"}, description="Reduces Hydralisk resource cost by 25/25 and supply cost by 1."),
+    ItemNames.BANELING_CENTRIFUGAL_HOOKS:
+        ItemData(231 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 1, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"},
+                 description="Increases the movement speed of Banelings."),
+    ItemNames.BANELING_TUNNELING_JAWS:
+        ItemData(232 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 2, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"},
+                 description="Allows Banelings to move while burrowed."),
+    ItemNames.BANELING_RAPID_METAMORPH:
+        ItemData(233 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 3, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Banelings morph faster."),
+    ItemNames.MUTALISK_SEVERING_GLAIVE:
+        ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 4, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
+                 origin={"ext"}, description="Mutalisk bounce attacks will deal full damage."),
+    ItemNames.MUTALISK_AERODYNAMIC_GLAVE_SHAPE:
+        ItemData(235 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 5, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
+                 origin={"ext"}, description="Increases the attack range of Mutalisks by 2."),
+    ItemNames.SWARM_HOST_LOCUST_METABOLIC_BOOST:
+        ItemData(236 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 6, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"ext"}, classification=ItemClassification.filler,
+                 description="Increases Locust movement speed."),
+    ItemNames.SWARM_HOST_ENDURING_LOCUSTS:
+        ItemData(237 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 7, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"ext"}, description="Increases the duration of Swarm Hosts' Locusts by 10s."),
+    ItemNames.SWARM_HOST_ORGANIC_CARAPACE:
+        ItemData(238 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 8, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"ext"}, description="Increases Swarm Host health by +40."),
+    ItemNames.SWARM_HOST_RESOURCE_EFFICIENCY:
+        ItemData(239 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 9, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"ext"}, description="Reduces Swarm Host resource cost by 100/25."),
+    ItemNames.ULTRALISK_ANABOLIC_SYNTHESIS:
+        ItemData(240 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 10, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"bw"}, classification=ItemClassification.filler),
+    ItemNames.ULTRALISK_CHITINOUS_PLATING:
+        ItemData(241 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 11, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"bw"}),
+    ItemNames.ULTRALISK_ORGANIC_CARAPACE:
+        ItemData(242 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 12, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"ext"}),
+    ItemNames.ULTRALISK_RESOURCE_EFFICIENCY:
+        ItemData(243 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 13, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"bw"}),
+    ItemNames.DEVOURER_CORROSIVE_SPRAY:
+        ItemData(244 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 14, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
+    ItemNames.DEVOURER_GAPING_MAW:
+        ItemData(245 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 15, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
+    ItemNames.DEVOURER_IMPROVED_OSMOSIS:
+        ItemData(246 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 16, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"},
+                 classification=ItemClassification.filler),
+    ItemNames.DEVOURER_PRESCIENT_SPORES:
+        ItemData(247 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 17, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_DEVOURER_ASPECT, origin={"ext"}),
+    ItemNames.GUARDIAN_PROLONGED_DISPERSION:
+        ItemData(248 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 18, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    ItemNames.GUARDIAN_PRIMAL_ADAPTATION:
+        ItemData(249 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 19, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    ItemNames.GUARDIAN_SORONAN_ACID:
+        ItemData(250 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 20, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_GUARDIAN_ASPECT, origin={"ext"}),
+    ItemNames.IMPALER_ADAPTIVE_TALONS:
+        ItemData(251 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 21, SC2Race.ZERG,
+                 parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"},
+                 classification=ItemClassification.filler),
+    ItemNames.IMPALER_SECRETION_GLANDS:
+        ItemData(252 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 22, SC2Race.ZERG,
+                 parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
+    ItemNames.IMPALER_HARDENED_TENTACLE_SPINES:
+        ItemData(253 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 23, SC2Race.ZERG,
+                 parent_item=ItemNames.HYDRALISK_IMPALER_ASPECT, origin={"ext"}),
+    ItemNames.LURKER_SEISMIC_SPINES:
+        ItemData(254 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 24, SC2Race.ZERG,
+                 parent_item=ItemNames.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
+    ItemNames.LURKER_ADAPTED_SPINES:
+        ItemData(255 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 25, SC2Race.ZERG,
+                 parent_item=ItemNames.HYDRALISK_LURKER_ASPECT, origin={"ext"}),
+    ItemNames.RAVAGER_POTENT_BILE:
+        ItemData(256 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 26, SC2Race.ZERG,
+                 parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
+    ItemNames.RAVAGER_BLOATED_BILE_DUCTS:
+        ItemData(257 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 27, SC2Race.ZERG,
+                 parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
+    ItemNames.RAVAGER_DEEP_TUNNEL:
+        ItemData(258 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 28, SC2Race.ZERG,
+                 parent_item=ItemNames.ROACH_RAVAGER_ASPECT, origin={"ext"}),
+    ItemNames.VIPER_PARASITIC_BOMB:
+        ItemData(259 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 29, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
+    ItemNames.VIPER_PARALYTIC_BARBS:
+        ItemData(260 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 0, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
+    ItemNames.VIPER_VIRULENT_MICROBES:
+        ItemData(261 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 1, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT, origin={"ext"}),
+    ItemNames.BROOD_LORD_POROUS_CARTILAGE:
+        ItemData(262 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 2, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
+    ItemNames.BROOD_LORD_EVOLVED_CARAPACE:
+        ItemData(263 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 3, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
+    ItemNames.BROOD_LORD_SPLITTER_MITOSIS:
+        ItemData(264 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 4, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
+    ItemNames.BROOD_LORD_RESOURCE_EFFICIENCY:
+        ItemData(265 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 5, SC2Race.ZERG,
+                 parent_item=ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT, origin={"ext"}),
+    ItemNames.INFESTOR_INFESTED_TERRAN:
+        ItemData(266 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 6, SC2Race.ZERG, parent_item=ItemNames.INFESTOR,
+                 origin={"ext"}),
+    ItemNames.INFESTOR_MICROBIAL_SHROUD:
+        ItemData(267 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 7, SC2Race.ZERG, parent_item=ItemNames.INFESTOR,
+                 origin={"ext"}),
+    ItemNames.SWARM_QUEEN_SPAWN_LARVAE:
+        ItemData(268 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 8, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}),
+    ItemNames.SWARM_QUEEN_DEEP_TUNNEL:
+        ItemData(269 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 9, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}),
+    ItemNames.SWARM_QUEEN_ORGANIC_CARAPACE:
+        ItemData(270 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 10, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}, classification=ItemClassification.filler),
+    ItemNames.SWARM_QUEEN_BIO_MECHANICAL_TRANSFUSION:
+        ItemData(271 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 11, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}),
+    ItemNames.SWARM_QUEEN_RESOURCE_EFFICIENCY:
+        ItemData(272 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 12, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}),
+    ItemNames.SWARM_QUEEN_INCUBATOR_CHAMBER:
+        ItemData(273 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 13, SC2Race.ZERG, parent_item=ItemNames.SWARM_QUEEN,
+                 origin={"ext"}),
+    ItemNames.BROOD_QUEEN_FUNGAL_GROWTH:
+        ItemData(274 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 14, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN,
+                 origin={"ext"}),
+    ItemNames.BROOD_QUEEN_ENSNARE:
+        ItemData(275 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 15, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN,
+                 origin={"ext"}),
+    ItemNames.BROOD_QUEEN_ENHANCED_MITOCHONDRIA:
+        ItemData(276 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 3", 16, SC2Race.ZERG, parent_item=ItemNames.BROOD_QUEEN,
+                 origin={"ext"}),
 
-    ItemNames.ZERGLING_RAPTOR_STRAIN: ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 0, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"hots"}, description="Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2."),
-    ItemNames.ZERGLING_SWARMLING_STRAIN: ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 1, SC2Race.ZERG, parent_item=ItemNames.ZERGLING, origin={"hots"}, description="Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost."),
-    ItemNames.ROACH_VILE_STRAIN: ItemData(302 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 2, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"}, description="Roach attacks will slow the movement and attack speed of enemies."),
-    ItemNames.ROACH_CORPSER_STRAIN: ItemData(303 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 3, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"}, description="Units killed after being attacked by Roaches will spawn 2 Roachlings."),
-    ItemNames.HYDRALISK_IMPALER_ASPECT: ItemData(304 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression, description="Allows Hydralisks to morph into Impalers."),
-    ItemNames.HYDRALISK_LURKER_ASPECT: ItemData(305 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression, description="Allows Hydralisks to morph into Lurkers."),
-    ItemNames.BANELING_SPLITTER_STRAIN: ItemData(306 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 6, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"}, description="Banelings will split into two smaller Splitterlings on exploding."),
-    ItemNames.BANELING_HUNTER_STRAIN: ItemData(307 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 7, SC2Race.ZERG, parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"}, description="Allows Banelings to jump up and down cliffs and leap onto enemies."),
-    ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT: ItemData(308 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 2, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression, description="Allows Mutalisks and Corruptors to morph into Brood Lords."),
-    ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT: ItemData(309 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 3, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression, description="Allows Mutalisks and Corruptors to morph into Vipers."),
-    ItemNames.SWARM_HOST_CARRION_STRAIN: ItemData(310 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 10, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"hots"}, description="Swarm Hosts will spawn Flying Locusts."),
-    ItemNames.SWARM_HOST_CREEPER_STRAIN: ItemData(311 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 11, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST, origin={"hots"}, classification=ItemClassification.filler, description="Allows Swarm Hosts to teleport to any creep on the map in vision. Swarm Hosts will spread creep around them when rooted or burrowed."),
-    ItemNames.ULTRALISK_NOXIOUS_STRAIN: ItemData(312 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 12, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"hots"}, classification=ItemClassification.filler, description="Ultralisks will periodically spread poison, damaging nearby biological enemies."),
-    ItemNames.ULTRALISK_TORRASQUE_STRAIN: ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 13, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK, origin={"hots"}, description="Ultralisks will revive after being killed."),
+    ItemNames.ZERGLING_RAPTOR_STRAIN:
+        ItemData(300 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 0, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"hots"},
+                 description="Allows Zerglings to jump up and down cliffs and leap onto enemies. Also increases Zergling attack damage by 2."),
+    ItemNames.ZERGLING_SWARMLING_STRAIN:
+        ItemData(301 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 1, SC2Race.ZERG, parent_item=ItemNames.ZERGLING,
+                 origin={"hots"},
+                 description="Zerglings will spawn instantly and with an extra Zergling per egg at no additional cost."),
+    ItemNames.ROACH_VILE_STRAIN:
+        ItemData(302 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 2, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"},
+                 description="Roach attacks will slow the movement and attack speed of enemies."),
+    ItemNames.ROACH_CORPSER_STRAIN:
+        ItemData(303 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 3, SC2Race.ZERG, parent_item=ItemNames.ROACH, origin={"hots"},
+                 description="Units killed after being attacked by Roaches will spawn 2 Roachlings."),
+    ItemNames.HYDRALISK_IMPALER_ASPECT:
+        ItemData(304 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 0, SC2Race.ZERG, origin={"hots"},
+                 classification=ItemClassification.progression,
+                 description="Allows Hydralisks to morph into Impalers."),
+    ItemNames.HYDRALISK_LURKER_ASPECT:
+        ItemData(305 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 1, SC2Race.ZERG, origin={"hots"},
+                 classification=ItemClassification.progression, description="Allows Hydralisks to morph into Lurkers."),
+    ItemNames.BANELING_SPLITTER_STRAIN:
+        ItemData(306 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 6, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
+                 description="Banelings will split into two smaller Splitterlings on exploding."),
+    ItemNames.BANELING_HUNTER_STRAIN:
+        ItemData(307 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 7, SC2Race.ZERG,
+                 parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
+                 description="Allows Banelings to jump up and down cliffs and leap onto enemies."),
+    ItemNames.MUTALISK_CORRUPTOR_BROOD_LORD_ASPECT:
+        ItemData(308 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 2, SC2Race.ZERG, origin={"hots"},
+                 classification=ItemClassification.progression,
+                 description="Allows Mutalisks and Corruptors to morph into Brood Lords."),
+    ItemNames.MUTALISK_CORRUPTOR_VIPER_ASPECT:
+        ItemData(309 + SC2HOTS_ITEM_ID_OFFSET, "Morph", 3, SC2Race.ZERG, origin={"hots"},
+                 classification=ItemClassification.progression,
+                 description="Allows Mutalisks and Corruptors to morph into Vipers."),
+    ItemNames.SWARM_HOST_CARRION_STRAIN:
+        ItemData(310 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 10, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"hots"}, description="Swarm Hosts will spawn Flying Locusts."),
+    ItemNames.SWARM_HOST_CREEPER_STRAIN:
+        ItemData(311 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 11, SC2Race.ZERG, parent_item=ItemNames.SWARM_HOST,
+                 origin={"hots"}, classification=ItemClassification.filler,
+                 description="Allows Swarm Hosts to teleport to any creep on the map in vision. Swarm Hosts will spread creep around them when rooted or burrowed."),
+    ItemNames.ULTRALISK_NOXIOUS_STRAIN:
+        ItemData(312 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 12, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"hots"}, classification=ItemClassification.filler,
+                 description="Ultralisks will periodically spread poison, damaging nearby biological enemies."),
+    ItemNames.ULTRALISK_TORRASQUE_STRAIN:
+        ItemData(313 + SC2HOTS_ITEM_ID_OFFSET, "Strain", 13, SC2Race.ZERG, parent_item=ItemNames.ULTRALISK,
+                 origin={"hots"}, description="Ultralisks will revive after being killed."),
 
     ItemNames.KERRIGAN_KINETIC_BLAST: ItemData(400 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 0, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
     ItemNames.KERRIGAN_HEROIC_FORTITUDE: ItemData(401 + SC2HOTS_ITEM_ID_OFFSET, "Ability", 1, SC2Race.ZERG, origin={"hots"}, classification=ItemClassification.progression),
@@ -1679,18 +1968,30 @@ item_table = {
     ItemNames.ARBITER_SPACETIME_ANCHOR: ItemData(330 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 0, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.ARBITER),
     ItemNames.ARBITER_RESOURCE_EFFICIENCY: ItemData(331 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 1, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.ARBITER),
     ItemNames.ARBITER_ENHANCED_CLOAK_FIELD: ItemData(332 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 2, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.ARBITER),
-    ItemNames.CARRIER_GRAVITON_CATAPULT: ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 3, SC2Race.PROTOSS, origin={"wol"}, parent_item=ItemNames.CARRIER,
-        description="Carriers can launch Interceptors more quickly."),
-    ItemNames.CARRIER_HULL_OF_PAST_GLORIES: ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 4, SC2Race.PROTOSS, origin={"bw"}, parent_item=ItemNames.CARRIER,
-        description="Carriers gain +2 armour."),
-    ItemNames.VOID_RAY_DESTROYER_FLUX_VANES: ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"},
-        description="Increases Void Ray and Destroyer movement speed."),
-    ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE: ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.DESTROYER,
-        description="When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets."),
-    ItemNames.WARP_PRISM_GRAVITIC_DRIVE: ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 7, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
-        description="Increases the movement speed of Warp Prisms."),
-    ItemNames.WARP_PRISM_PHASE_BLASTER: ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
-        description="Equips Warp Prisms with an auto-attack that can hit ground and air targets."),
+    ItemNames.CARRIER_GRAVITON_CATAPULT:
+        ItemData(333 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 3, SC2Race.PROTOSS, origin={"wol"},
+                 parent_item=ItemNames.CARRIER,
+                 description="Carriers can launch Interceptors more quickly."),
+    ItemNames.CARRIER_HULL_OF_PAST_GLORIES:
+        ItemData(334 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 4, SC2Race.PROTOSS, origin={"bw"},
+                 parent_item=ItemNames.CARRIER,
+                 description="Carriers gain +2 armour."),
+    ItemNames.VOID_RAY_DESTROYER_FLUX_VANES:
+        ItemData(335 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 5, SC2Race.PROTOSS, classification=ItemClassification.filler,
+                 origin={"ext"},
+                 description="Increases Void Ray and Destroyer movement speed."),
+    ItemNames.DESTROYER_REFORGED_BLOODSHARD_CORE:
+        ItemData(336 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 6, SC2Race.PROTOSS, origin={"ext"},
+                 parent_item=ItemNames.DESTROYER,
+                 description="When fully charged, the Destroyer's Destruction Beam weapon does full damage to secondary targets."),
+    ItemNames.WARP_PRISM_GRAVITIC_DRIVE:
+        ItemData(337 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 7, SC2Race.PROTOSS, classification=ItemClassification.filler,
+                 origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
+                 description="Increases the movement speed of Warp Prisms."),
+    ItemNames.WARP_PRISM_PHASE_BLASTER:
+        ItemData(338 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 8, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"ext"}, parent_item=ItemNames.WARP_PRISM,
+                 description="Equips Warp Prisms with an auto-attack that can hit ground and air targets."),
     ItemNames.WARP_PRISM_WAR_CONFIGURATION: ItemData(339 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 9, SC2Race.PROTOSS, origin={"ext"}, parent_item=ItemNames.WARP_PRISM),
     ItemNames.OBSERVER_GRAVITIC_BOOSTERS: ItemData(340 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 10, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
     ItemNames.OBSERVER_SENSOR_ARRAY: ItemData(341 + SC2LOTV_ITEM_ID_OFFSET, "Forge 2", 11, SC2Race.PROTOSS, classification=ItemClassification.filler, origin={"bw"}, parent_item=ItemNames.OBSERVER),
@@ -1746,19 +2047,46 @@ item_table = {
     ItemNames.SOA_SOLAR_BOMBARDMENT: ItemData(711 + SC2LOTV_ITEM_ID_OFFSET, "Spear of Adun", 10, SC2Race.PROTOSS, origin={"lotv"}),
 
     # Generic Protoss Upgrades
-    ItemNames.MATRIX_OVERLOAD: ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 0, SC2Race.PROTOSS, origin={"lotv"}, description=r"All friendly units gain 25% movement speed and 15% attack speed within a Pylon's power field and for 15 seconds after leaving it."),
-    ItemNames.QUATRO: ItemData(801 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 1, SC2Race.PROTOSS, origin={"ext"}, description="All friendly Protoss units gain the equivalent of their +1 armour, attack, and shield upgrades."),
-    ItemNames.NEXUS_OVERCHARGE: ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 2, SC2Race.PROTOSS, origin={"lotv"}, important_for_filtering=True, description="The Protoss Nexus gains a long-range auto-attack."),
-    ItemNames.ORBITAL_ASSIMILATORS: ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 3, SC2Race.PROTOSS, origin={"lotv"}, description="Assimilators automatically harvest Vespene Gas without the need for Probes."),
-    ItemNames.WARP_HARMONIZATION: ItemData(804 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 4, SC2Race.PROTOSS, origin={"lotv"}, description=r"Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times."),
-    ItemNames.GUARDIAN_SHELL: ItemData(805 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 5, SC2Race.PROTOSS, origin={"lotv"}, description="The Spear of Adun passively shields friendly Protoss units before death, making them invulnerable for 5 seconds. Each unit can only be shielded once every 60 seconds."),
-    ItemNames.RECONSTRUCTION_BEAM: ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 6, SC2Race.PROTOSS, classification=ItemClassification.progression, origin={"lotv"}, description="The Spear of Adun will passively heal mechanical units for 5 and non-biological structures for 10 life per second. Up to 3 targets can be repaired at once."),
-    ItemNames.OVERWATCH: ItemData(807 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 7, SC2Race.PROTOSS, origin={"ext"}, description="Once per second, the Spear of Adun will last-hit a damaged enemy unit that is below 50 health."),
-    ItemNames.SUPERIOR_WARP_GATES: ItemData(808 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 8, SC2Race.PROTOSS, origin={"ext"}, description="Protoss Warp Gates can hold up to 3 charges of unit warp-ins."),
-    ItemNames.ENHANCED_TARGETING: ItemData(809 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 9, SC2Race.PROTOSS, origin={"ext"}, description="Protoss defensive structures gain +2 range."),
-    ItemNames.OPTIMIZED_ORDNANCE: ItemData(810 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 10, SC2Race.PROTOSS, origin={"ext"}, description="Increases the attack speed of Protoss defensive structures by 25%."),
-    ItemNames.KHALAI_INGENUITY: ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 11, SC2Race.PROTOSS, origin={"ext"}, description="Pylons, Photon Cannons, Monoliths, and Shield Batteries warp in near-instantly."),
-    ItemNames.AMPLIFIED_ASSIMILATORS: ItemData(812 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 12, SC2Race.PROTOSS, origin={"ext"}, description=r"Assimilators produce Vespene gas 25% faster."),
+    ItemNames.MATRIX_OVERLOAD:
+        ItemData(800 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 0, SC2Race.PROTOSS, origin={"lotv"},
+                 description=r"All friendly units gain 25% movement speed and 15% attack speed within a Pylon's power field and for 15 seconds after leaving it."),
+    ItemNames.QUATRO:
+        ItemData(801 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 1, SC2Race.PROTOSS, origin={"ext"},
+                 description="All friendly Protoss units gain the equivalent of their +1 armour, attack, and shield upgrades."),
+    ItemNames.NEXUS_OVERCHARGE:
+        ItemData(802 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 2, SC2Race.PROTOSS, origin={"lotv"},
+                 important_for_filtering=True, description="The Protoss Nexus gains a long-range auto-attack."),
+    ItemNames.ORBITAL_ASSIMILATORS:
+        ItemData(803 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 3, SC2Race.PROTOSS, origin={"lotv"},
+                 description="Assimilators automatically harvest Vespene Gas without the need for Probes."),
+    ItemNames.WARP_HARMONIZATION:
+        ItemData(804 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 4, SC2Race.PROTOSS, origin={"lotv"},
+                 description=r"Stargates and Robotics Facilities can transform to utilize Warp In technology. Warp In cooldowns are 20% faster than original build times."),
+    ItemNames.GUARDIAN_SHELL:
+        ItemData(805 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 5, SC2Race.PROTOSS, origin={"lotv"},
+                 description="The Spear of Adun passively shields friendly Protoss units before death, making them invulnerable for 5 seconds. Each unit can only be shielded once every 60 seconds."),
+    ItemNames.RECONSTRUCTION_BEAM:
+        ItemData(806 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 6, SC2Race.PROTOSS,
+                 classification=ItemClassification.progression, origin={"lotv"},
+                 description="The Spear of Adun will passively heal mechanical units for 5 and non-biological structures for 10 life per second. Up to 3 targets can be repaired at once."),
+    ItemNames.OVERWATCH:
+        ItemData(807 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 7, SC2Race.PROTOSS, origin={"ext"},
+                 description="Once per second, the Spear of Adun will last-hit a damaged enemy unit that is below 50 health."),
+    ItemNames.SUPERIOR_WARP_GATES:
+        ItemData(808 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 8, SC2Race.PROTOSS, origin={"ext"},
+                 description="Protoss Warp Gates can hold up to 3 charges of unit warp-ins."),
+    ItemNames.ENHANCED_TARGETING:
+        ItemData(809 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 9, SC2Race.PROTOSS, origin={"ext"},
+                 description="Protoss defensive structures gain +2 range."),
+    ItemNames.OPTIMIZED_ORDNANCE:
+        ItemData(810 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 10, SC2Race.PROTOSS, origin={"ext"},
+                 description="Increases the attack speed of Protoss defensive structures by 25%."),
+    ItemNames.KHALAI_INGENUITY:
+        ItemData(811 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 11, SC2Race.PROTOSS, origin={"ext"},
+                 description="Pylons, Photon Cannons, Monoliths, and Shield Batteries warp in near-instantly."),
+    ItemNames.AMPLIFIED_ASSIMILATORS:
+        ItemData(812 + SC2LOTV_ITEM_ID_OFFSET, "Solarite Core", 12, SC2Race.PROTOSS, origin={"ext"},
+                 description=r"Assimilators produce Vespene gas 25% faster."),
 }
 
 
