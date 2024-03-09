@@ -11,11 +11,11 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 
-def get_locations(world) -> Tuple[LocationData, ...]:
+def get_locations(world) -> List[LocationData]:
     if world:
         logic = YoshiLogic(world)
 
-    location_table: List[LocationData, ...] = (
+    location_table: List[LocationData, ...] = [
 
     LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, 0x00),
     LocationData('1-1', 'Make Eggs, Throw Eggs: Flowers', 0x305021, 0x00),
@@ -277,7 +277,7 @@ def get_locations(world) -> Tuple[LocationData, ...]:
     LocationData("6-8", "King Bowser's Castle: Red Coins", 0x3050DD, 0x43),
     LocationData("6-8", "King Bowser's Castle: Flowers", 0x3050DE, 0x43),
     LocationData("6-8", "King Bowser's Castle: Stars", 0x3050DF, 0x43)
-    )
+    ]
 
     if not world or world.options.extras_enabled.value == 1:
         location_table += ( 
@@ -313,7 +313,7 @@ def get_locations(world) -> Tuple[LocationData, ...]:
         )
 
     if not world or world.options.minigame_checks.value == 1 or world.options.minigame_checks.value == 3:
-        location_table += ( 
+        location_table += [
             LocationData("1-3", "The Cave Of Chomp Rock: Bandit Game", 0x3050F8, 0x02, lambda state: logic._13Game(state)),
             LocationData("1-7", "Touch Fuzzy Get Dizzy: Bandit Game", 0x3050F9, 0x06, lambda state: logic._17Game(state)),
             LocationData("2-1", "Visit Koopa And Para-Koopa: Bandit Game", 0x3050FA, 0x0C, lambda state: logic._21Game(state)),
@@ -328,25 +328,24 @@ def get_locations(world) -> Tuple[LocationData, ...]:
             LocationData("5-1", "BLIZZARD!!!: Bandit Game", 0x305103, 0x30, lambda state: logic._51Game(state)),
             LocationData("6-1", "Scary Skeleton Goonies!: Bandit Game", 0x305104, 0x3C, lambda state: logic._61Game(state)),
             LocationData("6-7", "KEEP MOVING!!!!: Bandit Game", 0x305105, 0x42, lambda state: logic._67Game(state)),
-        )
+        ]
 
     if not world or world.options.minigame_checks.value >= 2:
-        location_table += ( 
+        location_table += [
             LocationData("1-Bonus", "Flip Cards: Victory", 0x305106, 0x09),
             LocationData("2-Bonus", "Scratch And Match: Victory", 0x305107, 0x15),
             LocationData("3-Bonus", "Drawing Lots: Victory", 0x305108, 0x21),
             LocationData("4-Bonus", "Match Cards: Victory", 0x305109, 0x2D),
             LocationData("5-Bonus", "Roulette: Victory", 0x30510A, 0x39),
             LocationData("6-Bonus", "Slot Machine: Victory", 0x30510B, 0x45),
-        )
-
+        ]
     if not world or world.options.goal.value == 1:
-        location_table += ( 
+        location_table += [
             LocationData("Overworld", 'Reconstituted Luigi', None, 0x00, lambda state: logic.ReconstituteLuigi(state)),
-        )
+        ]
     if not world or world.options.goal.value == 0:
-        location_table += ( 
+        location_table += [
             LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, 0x43, lambda state: logic._68Clear(state)),
-        )
+        ]
         
     return location_table

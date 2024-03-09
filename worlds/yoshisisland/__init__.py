@@ -73,6 +73,11 @@ class YIWorld(World):
     boss_burt: int
     luigi_pieces: int
 
+    item_classifications = {"filler": ItemClassification.filler,
+                            "useful": ItemClassification.useful,
+                            "progression": ItemClassification.progression,
+                            "trap": ItemClassification.trap}
+
     def __init__(self, multiworld: MultiWorld, player: int):
         self.rom_name_available_event = threading.Event()
         super().__init__(multiworld, player)
@@ -163,15 +168,7 @@ class YIWorld(World):
 
     def create_item(self, name: str) -> Item:
         data = item_table[name]
-
-        if data.useful:
-            classification = ItemClassification.useful
-        elif data.progression:
-            classification = ItemClassification.progression
-        elif data.trap:
-            classification = ItemClassification.trap
-        else:
-            classification = ItemClassification.filler
+        classification = self.item_classifications[data.classification]
 
         item = Item(name, classification, data.code, self.player)
 
@@ -277,14 +274,7 @@ class YIWorld(World):
 
     def create_item_with_correct_settings(self, player: int, name: str) -> Item:
         data = item_table[name]
-        if data.useful:
-            classification = ItemClassification.useful
-        elif data.progression:
-            classification = ItemClassification.progression
-        elif data.trap:
-            classification = ItemClassification.trap
-        else:
-            classification = ItemClassification.filler
+        classification = self.item_classifications[data.classification]
         item = Item(name, classification, data.code, player)
 
         if not item.advancement:

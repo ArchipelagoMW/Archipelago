@@ -218,7 +218,7 @@ def connect_starting_region(world):
     world_main.connect(starting_region, "Overworld")
 
 
-def get_locations_per_region(locations: Tuple[LocationData, ...]) -> Dict[str, List[LocationData]]:
+def get_locations_per_region(locations: List[LocationData]) -> Dict[str, List[LocationData]]:
     per_region: Dict[str, List[LocationData]] = {}
 
     for location in locations:
