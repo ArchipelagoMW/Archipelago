@@ -310,9 +310,12 @@ class KDL3SNIClient(SNIClient):
                 return  # null, title screen, opening, save select, true and false endings
             game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
             current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
+            current_world = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_WORLD, 2))[0]
+            current_level = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_LEVEL, 2))[0]
             if "DeathLink" in ctx.tags and game_state[0] == 0x00 and ctx.last_death_link + 1 < time.time():
                 currently_dead = current_hp[0] == 0x00
-                await ctx.handle_deathlink_state(currently_dead)
+                message = deathlink_messages[self.levels[current_world][current_level - 1]]
+                await ctx.handle_deathlink_state(currently_dead, f"{ctx.player_names[ctx.slot]}{message}")
 
             recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
             recv_amount = unpack("H", recv_count)[0]
