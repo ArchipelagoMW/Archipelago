@@ -6,11 +6,10 @@ from asyncio import StreamReader, StreamWriter, CancelledError
 from typing import NamedTuple
 
 import Utils
-from settings import get_settings
 from CommonClient import CommonContext, server_loop, gui_enabled, ClientCommandProcessor, logger, \
     get_base_parser
 from NetUtils import ClientStatus
-from Utils import async_start
+from Utils import async_start, user_path
 from worlds import network_data_package, AutoWorldRegister
 from worlds.sotn.Items import base_item_id, ItemData, get_item_data, IType
 from worlds.sotn.Locations import location_table, LocationData, base_location_id, zones_dict, ZoneData, \
@@ -31,17 +30,6 @@ CONNECTION_INITIAL_STATUS = "Connection has not been initiated"
 
 SCRIPT_VERSION = 1
 
-"""
-Payload: lua -> client
-{
-    locations: dict,
-}
-
-Payload: client -> lua
-{
-    items: list,
-}
-"""
 
 sotn_loc_name_to_id = network_data_package["games"]["Symphony of the Night"]["location_name_to_id"]
 
@@ -133,7 +121,6 @@ class SotnContext(CommonContext):
         self.checked_locations_sent: bool = False
         self.misplaced_items = []
         self.finished_game = False
-        # self.username = "Lockmau"
 
     async def server_auth(self, password_requested: bool = False):
         if password_requested and not self.password:
@@ -159,9 +146,16 @@ class SotnContext(CommonContext):
         elif cmd == "PrintJSON":
             if 'item' in args:
                 message_type: NamedTuple = args['type']
+                player: NamedTuple = args['receiving']
                 received: NamedTuple = args['item']
 
-                if message_type != "Hint":
+                if message_type != "Hint" and (received.location == 127083080 or received.location == 127020003):
+                    # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
+                    # If there are 2 SOTN players at the same time, both might receive a free library card
+                    self.misplaced_items.append(166)
+                    print("Sending Library Card")
+
+                if message_type != "Hint" and received.player == player:
                     # Check if it's our item first
                     if base_item_id <= received.item <= base_item_id + 423:
                         # Check if the item came from offworld
@@ -171,10 +165,10 @@ class SotnContext(CommonContext):
                             loc_data = None
 
                         item_data: ItemData = get_item_data(received.item)
-
-                        if received.location == 127083080 or received.location == 127020003:
-                            # Holy glasses and CAT - Mormegil, send a library card, so player won't get stuck
-                            self.misplaced_items.append(166)
+                        # Is a exploration token?
+                        if 127110031 <= received.location <= 127110050:
+                            self.misplaced_items.append(received.item - base_item_id)
+                            print("Exploration token")
 
                         if loc_data is not None:
                             if loc_data.can_be_relic:
@@ -393,7 +387,7 @@ def diff_handler(diff_file: str):
             source2 = "Castlevania - Symphony of the Night (USA) (Track 2).bin"
             destination = os.path.splitext(diff_file)[0] + ".cue"
 
-            pos_patch(os.path.splitext(diff_file)[0])
+            logger.info(pos_patch(os.path.splitext(diff_file)[0]))
 
             cue_file = f'FILE "{source1}" BINARY\n  TRACK 01 MODE2/2352\n\tINDEX 01 00:00:00\n'
             cue_file += f'FILE "{source2}" BINARY\n  TRACK 02 AUDIO\n'
