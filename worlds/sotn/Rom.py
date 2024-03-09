@@ -2,6 +2,7 @@ import Utils
 import random
 from sys import platform
 from worlds.Files import APDeltaPatch
+from Utils import home_path
 from settings import get_settings
 from worlds.AutoWorld import World
 from .Items import ItemData, item_table, IType, get_item_data_shop
@@ -12,7 +13,8 @@ import os
 import subprocess
 import bsdiff4
 
-USHASH = 'acbb3a2e4a8f865f363dc06df147afa2'
+USHASH = "acbb3a2e4a8f865f363dc06df147afa2"
+AUDIOHASH = "8f4b1df20c0173f7c2e6a30bd3109ac8"
 
 shop_stock = {
         "Potion": 0x047a309c,
@@ -74,10 +76,19 @@ def get_base_rom_bytes() -> bytes:
     with open(get_settings().sotn_settings.rom_file, "rb") as infile:
         base_rom_bytes = bytes(infile.read())
 
+    with open(get_settings().sotn_settings.audio_file, "rb") as infile:
+        audio_rom_bytes = bytes(infile.read())
+
     basemd5 = hashlib.md5()
     basemd5.update(base_rom_bytes)
     if USHASH != basemd5.hexdigest():
-        raise Exception('Supplied Base Rom does not match known MD5 for SLU067 release. '
+        raise Exception('Supplied Track 1 Base Rom does not match known MD5 for SLU067 release. '
+                        'Get the correct game and version, then dump it')
+
+    audiomd5 = hashlib.md5()
+    audiomd5.update(audio_rom_bytes)
+    if AUDIOHASH != audiomd5.hexdigest():
+        raise Exception('Supplied Track 2 Audio Rom does not match known MD5 for SLU067 release. '
                         'Get the correct game and version, then dump it')
 
     return base_rom_bytes
@@ -137,8 +148,13 @@ def patch_rom(world: World, output_directory: str) -> None:
     shop = world.options.rng_shop
     prices = world.options.rng_prices
     bosses = world.options.bosses_need
+    exp = world.options.exp_need
     if bosses > 20:
         bosses = 20
+    if exp > 20:
+        exp = 20
+    # Convert exploration to rooms
+    exp = int((exp * 10) / 0.107)
 
     relics_vlad = ["Heart of Vlad", "Tooth of Vlad", "Rib of Vlad", "Ring of Vlad", "Eye of Vlad"]
 
@@ -234,8 +250,10 @@ def patch_rom(world: World, output_directory: str) -> None:
 
     if no2:
         write_word(patched_rom, 0x046c0968, 0x1400000b)
-    # Write bosses need it on index -1 of RNO0 4f85afc
+    # Write bosses need it on index -1 of RNO0
     write_char(patched_rom, 0x04f85ae3, bosses)
+    # Write exploration need it on index -3 of RNO0
+    write_short(patched_rom, 0x04f85ae1, exp)
     """
     The instruction that check relics of Vlad is jnz r2, 801c1790 we gonna change to je r0, r0 so it's always 
     branch. ROM is @ 0x4fcf7b4 and RAM is @ 0x801c132c
@@ -256,8 +274,8 @@ def patch_rom(world: World, output_directory: str) -> None:
         randomize_prices(patched_rom, prices)
 
     # Guess I don't need this anymore
-    filename = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.bin")
-    write_to_file(patched_rom, filename)
+    # filename = os.path.join(output_directory, f"{world.multiworld.get_out_file_name_base(world.player)}.bin")
+    # write_to_file(patched_rom, filename)
 
     music_slice = original_rom[0x000affd0:0x000b0c2c]
     music_patched = patched_rom[0x000affd0:0x000b0c2c]
@@ -275,11 +293,11 @@ def patch_rom(world: World, output_directory: str) -> None:
         outfile.write(patch)
 
     # Delete created files
-    if os.path.exists(filename):
-        os.unlink(filename)
+    # if os.path.exists(filename):
+    #    os.unlink(filename)
 
 
-def write_seed(buffer, seed):
+def write_seed(buffer, seed) -> str:
     write_short(buffer, 0x043930c4, 0x78b4)
     write_short(buffer, 0x043930d4, 0x78d4)
     write_short(buffer, 0x0439312c, 0x78b4)
@@ -311,11 +329,16 @@ def write_to_file(buffer, filename=""):
 
 
 def pos_patch(seed_name):
+    error_msg = "No error message"
+
     with open(get_settings().sotn_settings.rom_file, "rb") as infile:
         original_rom = bytearray(infile.read())
 
     with open(seed_name + ".apsotn", "rb") as infile:
         diff_patch = bytes(infile.read())
+
+    with open(get_settings().sotn_settings.audio_file, "rb") as infile:
+        audio_rom = bytearray(infile.read())
 
     patched_rom = original_rom.copy()
     music_slice = original_rom[0x000affd0:0x000b0c2c]  # Size 0xc5c / 3164
@@ -337,11 +360,36 @@ def pos_patch(seed_name):
     with open(file_name, "wb") as stream:
         stream.write(patched_rom)
 
+    audio_name = file_name[0:file_name.rfind('\\') + 1]
+    audio_name += "Castlevania - Symphony of the Night (USA) (Track 2).bin"
+
+    if os.path.exists(audio_name):
+        print("Track 2 already exists!")
+    else:
+        print("Creating audio file!")
+        with open(audio_name, "wb") as stream:
+            stream.write(audio_rom)
+
     if platform == "win32":
         print("ERROR RECALC started. Please wait")
-        subprocess.call(["error_recalc", f"{file_name}"])
+        if os.path.exists("error_recalc.exe"):
+            error_recalc_path = "error_recalc.exe"
+        elif os.path.exists(f"{home_path('lib')}\\error_recalc.exe"):
+            error_recalc_path = f"{home_path('lib')}\\error_recalc.exe"
+        else:
+            error_recalc_path = ""
+
+        print(f"Path: {error_recalc_path}")
+        if error_recalc_path != "":
+            subprocess.call([error_recalc_path, f"{file_name}"])
+        else:
+            error_msg = "Couldn't find error_recalc.exe"
+            print("Couldn't find error_recalc.exe")
     else:
+        error_msg = "EDC/ECC isn't implement on your OS"
         print("ERROR RECALC FAILED!!!")
+
+    return error_msg
 
 
 def randomize_music(buffer):
@@ -404,8 +452,7 @@ def randomize_music(buffer):
 
 def randomize_shop(buffer):
     for key, value in shop_stock.items():
-        rng_item = random.choice([i for i in range(1, 258) if i not in [169, 195, 226]])
-        print(rng_item)
+        rng_item = random.choice([i for i in range(1, 259) if i not in [169, 195, 217, 226]])
         item_name: str
         item_data: ItemData
         item_name, item_data = get_item_data_shop(rng_item)
