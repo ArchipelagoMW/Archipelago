@@ -377,7 +377,7 @@ class TrainerPartyBlacklist(OptionSet):
 
 class ForceFullyEvolved(Range):
     """
-    Enemy trainers will only use fully evolved pokemon starting at the specified level.
+    When an opponent uses a pokemon of the specified level or higher, restricts the species to only fully evolved pokemon.
     """
     display_name = "Force Fully Evolved"
     range_start = 1
@@ -767,7 +767,7 @@ class RemoteItems(Toggle):
     Instead of placing your own items directly into the ROM, all items are received from the server, including items you find for yourself.
 
     This enables co-op of a single slot and recovering more items after a lost save file (if you're so unlucky).
-    But it changes pickup behavior slightly and obviously requires connection to the server to receive any items.
+    But it changes pickup behavior slightly and requires connection to the server to receive any items.
     """
     display_name = "Remote Items"
 
@@ -797,7 +797,7 @@ class WonderTrading(DefaultOnToggle):
     Certain aspects of a pokemon species are per-game, not per-pokemon.
     As a result, some things are not retained during a trade, including type, ability, level up learnset, and so on.
     Receiving a pokemon this way does not mark it as found in your pokedex.
-    Trade evolutions do not evolve this way; they remain changed to level ups and item use.
+    Trade evolutions do not evolve this way; they retain their modified methods (level ups and item use).
     """
     display_name = "Wonder Trading"
 
