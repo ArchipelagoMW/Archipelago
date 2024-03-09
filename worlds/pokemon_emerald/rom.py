@@ -438,7 +438,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
     # Set norman requirement
     _set_bytes_le(
         patched_rom,
-        options_address + 0x111,
+        options_address + 0x11,
         1,
         1 if world.options.norman_requirement == NormanRequirement.option_gyms else 0
     )
