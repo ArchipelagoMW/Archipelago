@@ -1,7 +1,6 @@
+from typing import ClassVar, Dict, Tuple
 
-from typing import ClassVar, Dict, Tuple, List
-
-import settings, typing, random, os
+import settings, typing, random
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Tutorial, MultiWorld, ItemClassification, Item
 from worlds.LauncherComponents import Component, components, SuffixIdentifier, launch_subprocess, Type
@@ -9,12 +8,11 @@ from Options import AssembleOptions
 
 
 from .Items import item_table, relic_table, SotnItem, ItemData, base_item_id, event_table, IType, vanilla_list
-from .Locations import location_table, SotnLocation
+from .Locations import location_table, SotnLocation, exp_locations_token
 from .Regions import create_regions
 from .Rules import set_rules
 from .Options import sotn_option_definitions
-from .Rom import (get_base_rom_path, get_base_rom_bytes, write_char, write_short, write_word, write_to_file,
-                  SOTNDeltaPatch, write_seed, patch_rom)
+from .Rom import SOTNDeltaPatch, patch_rom
 
 
 def run_client():
@@ -98,6 +96,8 @@ class SotnWorld(World):
         return SotnItem(name, data.ic, data.index, self.player)
 
     def create_items(self) -> None:
+        exp = self.options.exp_need
+        added_items = 0
 
         self.multiworld.get_location("NZ0 - Slogra and Gaibon kill", self.player).place_locked_item(
             self.create_item("Boss token"))
@@ -140,14 +140,23 @@ class SotnWorld(World):
         self.multiworld.get_location("RNZ1 - Darkwing bat kill", self.player).place_locked_item(
             self.create_item("Boss token"))
 
+        for k, v in exp_locations_token.items():
+            self.multiworld.get_location(k, self.player).place_locked_item(
+                self.create_item("Exploration token"))
+
+        for i in range(exp + 1, 20 + 1):
+            exp_location = f"Exploration {i * 10} item"
+            self.multiworld.get_location(exp_location, self.player).place_locked_item(self.create_random_junk())
+            added_items += 1
+
         itempool: typing.List[SotnItem] = []
         # TODO: Learn about item weights for difficult
         difficult = self.multiworld.difficult[self.player]
-        added_items = 0
         # Last generate 278 Items 386 Locations with all relics
         # Removed bump librarian
         # 28 Relic location filled with pre_fill (Not anymore)
-        total_location = 385
+        # total_location = 385 added 20 exploration locations
+        total_location = 405
 
         # Add progression items
         itempool += [self.create_item("Spike breaker")]
@@ -250,12 +259,18 @@ class SotnWorld(World):
 
     def generate_basic(self) -> None:
         required = self.options.bosses_need
+        exp = self.options.exp_need
+
         if required > 20:
             required = 20
+        if exp > 20:
+            exp = 20
+
         self.multiworld.get_location("RCEN - Kill Dracula", self.player).place_locked_item(
             self.create_event("Victory"))
         self.multiworld.completion_condition[self.player] = lambda state: \
-            state.has("Victory", self.player) and state.has("Boss token", self.player, required)
+            (state.has("Victory", self.player) and state.has("Boss token", self.player, required) and
+             state.has("Exploration token", self.player, exp))
 
     def create_event(self, name: str) -> Item:
         return SotnItem(name, ItemClassification.progression, None, self.player)
