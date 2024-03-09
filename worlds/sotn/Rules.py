@@ -262,17 +262,17 @@ def set_rules(world: MultiWorld, player: int) -> None:
              state.has("Gravity boots", player) or (state.has("Form of mist", player) and
              state.has("Power of mist", player)))
 
-    # If the player got here with only leap stone, he might need more to get to the upper part
-    set_rule(world.get_location("LIB - Stone mask", player), lambda
-             state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+    # If the player got here with only leap stone, leap jump on flea man
+    set_rule(world.get_location("LIB - Stone mask", player), lambda state: state.has("Leap stone", player) or
+             state.has("Gravity boots", player) or state.has("Soul of bat", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
-    set_rule(world.get_location("LIB - Holy rod", player), lambda
-             state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+    set_rule(world.get_location("LIB - Holy rod", player), lambda state: state.has("Leap stone", player) or
+             state.has("Gravity boots", player) or state.has("Soul of bat", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
-    set_rule(world.get_location("LIB - Topaz circlet", player), lambda
-             state: state.has("Gravity boots", player) or state.has("Soul of bat", player) or
+    set_rule(world.get_location("LIB - Topaz circlet", player), lambda state: state.has("Leap stone", player) or
+             state.has("Gravity boots", player) or state.has("Soul of bat", player) or
              (state.has("Form of mist", player) and state.has("Power of mist", player)))
 
     # NO0 - Marble Gallery
@@ -1089,4 +1089,207 @@ def set_rules(world: MultiWorld, player: int) -> None:
              (state.has("Form of mist", player) and state.has("Power of mist", player)) or
              (state.has("Spike Breaker", player) and (state.has("Leap stone", player) or
                                                       state.has("Gravity boots", player))))
+
+    # Exploration rules
+    set_rule(world.get_location("Exploration 40", player), lambda state: state.has("Jewel of open", player) or
+             state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player))
+
+    set_rule(world.get_location("Exploration 50", player), lambda state: state.has("Jewel of open", player) or
+             state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player))
+
+    set_rule(world.get_location("Exploration 60", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player)))
+
+    set_rule(world.get_location("Exploration 70", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player)))
+
+    set_rule(world.get_location("Exploration 80", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
+              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
+               state.has("Form of mist", player)) or
+               (state.has("Form of mist", player) and state.has("Power of mist", player)))))
+
+    set_rule(world.get_location("Exploration 90", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
+              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
+               state.has("Form of mist", player)) or
+               (state.has("Form of mist", player) and state.has("Power of mist", player)))))
+
+    set_rule(world.get_location("Exploration 100", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+              (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                       state.has("Soul of wolf", player) or
+                                                       state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 110", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+              (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                       state.has("Soul of wolf", player) or
+                                                       state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 120", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 130", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 140", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 150", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 160", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 170", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 180", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 190", player), lambda state:
+             state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
+             state.has("Form of mist", player) and state.has("Merman statue", player) and
+             state.has("Spike breaker", player) and state.has("Demon card", player) and
+             state.has("Holy symbol", player) and state.has("Holy glasses", player) and
+             state.has("Silver ring", player) and state.has("Gold ring", player))
+
+    set_rule(world.get_location("Exploration 200", player), lambda state:
+             state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
+             state.has("Form of mist", player) and state.has("Merman statue", player) and
+             state.has("Spike breaker", player) and state.has("Demon card", player) and
+             state.has("Holy symbol", player) and state.has("Holy glasses", player) and
+             state.has("Silver ring", player) and state.has("Gold ring", player))
+
+    set_rule(world.get_location("Exploration 40 item", player), lambda state: state.has("Jewel of open", player) or
+             state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player))
+
+    set_rule(world.get_location("Exploration 50 item", player), lambda state: state.has("Jewel of open", player) or
+             state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player))
+
+    set_rule(world.get_location("Exploration 60 item", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player)))
+
+    set_rule(world.get_location("Exploration 70 item", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Leap stone", player) or state.has("Gravity boots", player) or state.has("Soul of bat", player)))
+
+    set_rule(world.get_location("Exploration 80 item", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
+              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
+               state.has("Form of mist", player)) or
+               (state.has("Form of mist", player) and state.has("Power of mist", player)))))
+
+    set_rule(world.get_location("Exploration 90 item", player), lambda state: state.has("Jewel of open", player) and
+             (state.has("Soul of bat", player) or (state.has("Gravity boots", player) and
+              (state.has("Leap stone", player) or state.has("Soul of wolf", player) or
+               state.has("Form of mist", player)) or
+               (state.has("Form of mist", player) and state.has("Power of mist", player)))))
+
+    set_rule(world.get_location("Exploration 100 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+              (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                       state.has("Soul of wolf", player) or
+                                                       state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 110 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+              (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                       state.has("Soul of wolf", player) or
+                                                       state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 120 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 130 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 140 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 150 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 160 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 170 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 180 item", player), lambda state: state.has("Holy glasses", player) and
+             state.has("Jewel of open", player) and (state.has("Soul of bat", player) or
+             (state.has("Form of mist", player) and state.has("Power of mist", player)) or
+             (state.has("Gravity boots", player) and (state.has("Leap stone", player) or
+                                                      state.has("Soul of wolf", player) or
+                                                      state.has("Form of mist", player)))))
+
+    set_rule(world.get_location("Exploration 190 item", player), lambda state:
+             state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
+             state.has("Form of mist", player) and state.has("Merman statue", player) and
+             state.has("Spike breaker", player) and state.has("Demon card", player) and
+             state.has("Holy symbol", player) and state.has("Holy glasses", player) and
+             state.has("Silver ring", player) and state.has("Gold ring", player))
+
+    set_rule(world.get_location("Exploration 200 item", player), lambda state:
+             state.has("Soul of bat", player) and state.has("Soul of wolf", player) and
+             state.has("Form of mist", player) and state.has("Merman statue", player) and
+             state.has("Spike breaker", player) and state.has("Demon card", player) and
+             state.has("Holy symbol", player) and state.has("Holy glasses", player) and
+             state.has("Silver ring", player) and state.has("Gold ring", player))
 
