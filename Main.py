@@ -388,6 +388,9 @@ def main(args, seed=None, baked_server_options: Optional[Dict[str, object]] = No
                         elif any([location.item.name in multiworld.worlds[player].options.start_hints
                                   for player in multiworld.groups.get(location.item.player, {}).get("players", [])]):
                             precollect_hint(location)
+                    elif __debug__ and location.item.code is not None:
+                        raise Exception(f"Intended to be sendable item {location.item}, "
+                                        f"was placed on never sendable location {location} of {location.game}.")
 
                 # embedded data package
                 data_package = {

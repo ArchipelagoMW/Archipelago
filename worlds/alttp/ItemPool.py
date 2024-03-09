@@ -272,6 +272,7 @@ def generate_itempool(world):
     for location_name, event_name in event_pairs:
         location = multiworld.get_location(location_name, player)
         event = ItemFactory(event_name, player)
+        event.code = None
         multiworld.push_item(location, event, False)
         location.event = location.locked = True
 

@@ -450,7 +450,6 @@ def mark_light_world_regions(world, player: int):
                 queue.append(exit.connected_region)
 
 
-
 old_location_address_to_new_location_address = {
     0x2eb18: 0x18001b,   # Bottle Merchant
     0x33d68: 0x18001a,   # Purple Chest
