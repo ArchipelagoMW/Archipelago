@@ -200,7 +200,7 @@ class SM64World(World):
         with open(os.path.join(output_directory, filename), 'w') as f:
             json.dump(data, f)
 
-    def modify_multidata(self, multidata):
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
         if self.topology_present:
             er_hint_data = {}
             for entrance, destination in self.area_connections.items():
@@ -217,4 +217,4 @@ class SM64World(World):
                 for region in regions:
                     for location in region.locations:
                         er_hint_data[location.address] = entrance_name
-            multidata['er_hint_data'][self.player] = er_hint_data
+            hint_data[self.player] = er_hint_data
