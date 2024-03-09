@@ -624,6 +624,52 @@ rtop_locations = {
     "RTOP - Library card": LocationData("Reverse Castle Keep", 24, [0x57e0190]),
 }
 
+exp_locations_item = {
+    "Exploration 10 item": LocationData("Castle Entrance", 31, []),
+    "Exploration 20 item": LocationData("Castle Entrance", 32, []),
+    "Exploration 30 item": LocationData("Castle Entrance", 33, []),
+    "Exploration 40 item": LocationData("Castle Entrance", 34, []),
+    "Exploration 50 item": LocationData("Castle Entrance", 35, []),
+    "Exploration 60 item": LocationData("Castle Entrance", 36, []),
+    "Exploration 70 item": LocationData("Castle Entrance", 37, []),
+    "Exploration 80 item": LocationData("Castle Entrance", 38, []),
+    "Exploration 90 item": LocationData("Castle Entrance", 39, []),
+    "Exploration 100 item": LocationData("Castle Entrance", 40, []),
+    "Exploration 110 item": LocationData("Castle Entrance", 41, []),
+    "Exploration 120 item": LocationData("Castle Entrance", 42, []),
+    "Exploration 130 item": LocationData("Castle Entrance", 43, []),
+    "Exploration 140 item": LocationData("Castle Entrance", 44, []),
+    "Exploration 150 item": LocationData("Castle Entrance", 45, []),
+    "Exploration 160 item": LocationData("Castle Entrance", 46, []),
+    "Exploration 170 item": LocationData("Castle Entrance", 47, []),
+    "Exploration 180 item": LocationData("Castle Entrance", 48, []),
+    "Exploration 190 item": LocationData("Castle Entrance", 49, []),
+    "Exploration 200 item": LocationData("Castle Entrance", 50, []),
+}
+
+exp_locations_token = {
+    "Exploration 10": LocationData("Castle Entrance", 11, []),
+    "Exploration 20": LocationData("Castle Entrance", 12, []),
+    "Exploration 30": LocationData("Castle Entrance", 13, []),
+    "Exploration 40": LocationData("Castle Entrance", 14, []),
+    "Exploration 50": LocationData("Castle Entrance", 15, []),
+    "Exploration 60": LocationData("Castle Entrance", 16, []),
+    "Exploration 70": LocationData("Castle Entrance", 17, []),
+    "Exploration 80": LocationData("Castle Entrance", 18, []),
+    "Exploration 90": LocationData("Castle Entrance", 19, []),
+    "Exploration 100": LocationData("Castle Entrance", 20, []),
+    "Exploration 110": LocationData("Castle Entrance", 21, []),
+    "Exploration 120": LocationData("Castle Entrance", 22, []),
+    "Exploration 130": LocationData("Castle Entrance", 23, []),
+    "Exploration 140": LocationData("Castle Entrance", 24, []),
+    "Exploration 150": LocationData("Castle Entrance", 25, []),
+    "Exploration 160": LocationData("Castle Entrance", 26, []),
+    "Exploration 170": LocationData("Castle Entrance", 27, []),
+    "Exploration 180": LocationData("Castle Entrance", 28, []),
+    "Exploration 190": LocationData("Castle Entrance", 29, []),
+    "Exploration 200": LocationData("Castle Entrance", 30, []),
+}
+
 normal_locations = {
     **are_locations,
     **cat_locations,
@@ -659,7 +705,9 @@ reverse_locations = {
 
 location_table = {
     **normal_locations,
-    **reverse_locations
+    **reverse_locations,
+    **exp_locations_item,
+    **exp_locations_token
 }
 
 
