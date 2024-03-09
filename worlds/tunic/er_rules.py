@@ -45,12 +45,15 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld Holy Cross"],
         rule=lambda state: has_ability(state, player, holy_cross, options, ability_unlocks))
 
+    # grapple on the west side, down the stairs from moss wall, across from ruined shop
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Beach"],
-        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options) or state.has(laurels, player))
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options)
+        or state.has_any({laurels, grapple}, player))
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options) or state.has(laurels, player))
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options)
+        or state.has_any({laurels, grapple}, player))
 
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld West Garden Laurels Entry"],
