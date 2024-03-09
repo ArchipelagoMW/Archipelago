@@ -368,6 +368,7 @@ relic_table = {
 event_table = {
     "Victory": ItemData(350, IType.EVENT, ItemClassification.progression),
     "Boss token": ItemData(351, IType.EVENT, ItemClassification.progression),
+    "Exploration token": ItemData(352, IType.EVENT, ItemClassification.progression)
 }
 
 item_table = {
