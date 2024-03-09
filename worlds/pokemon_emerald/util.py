@@ -95,8 +95,8 @@ def get_easter_egg(easter_egg: str) -> Tuple[int, int]:
         result1 = ((result1 << 5) - result1 + ord(c)) & 0xFFFFFFFF
         result2 = ((result2 << 4) - result2 + ord(c)) & 0xFF
 
-    if result1 == 0x46F9647A:
-        value = (result2 + 88) & 0xFF
+    if result1 == 0x9137C17B:
+        value = (result2 + 23) & 0xFF
         if value > 0 and (value < 252 or (value > 276 and value < 412)):
             return (1, value)
     elif result1 == 0x9AECC7C6:
