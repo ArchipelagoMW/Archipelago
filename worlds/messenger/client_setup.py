@@ -25,11 +25,11 @@ def launch_game(url: Optional[str] = None) -> None:
 
     def courier_installed() -> bool:
         """Check if Courier is installed"""
-        return os.path.exists(os.path.join(folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.Courier.mm.dll"))
+        return os.path.exists(os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.Courier.mm.dll"))
 
     def mod_installed() -> bool:
         """Check if the mod is installed"""
-        return os.path.exists(os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml"))
+        return os.path.exists(os.path.join(game_folder, "Mods", "TheMessengerRandomizerAP", "courier.toml"))
 
     def request_data(request_url: str) -> Any:
         """Fetches json response from given url"""
@@ -53,10 +53,9 @@ def launch_game(url: Optional[str] = None) -> None:
         with urllib.request.urlopen(latest_download) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
                 for member in zf.infolist():
-                    zf.extract(member, path=folder)
+                    zf.extract(member, path=game_folder)
     
-        working_directory = os.getcwd()
-        os.chdir(folder)
+        os.chdir(game_folder)
         # linux handling
         if is_linux:
             mono_exe = which("mono")
@@ -77,9 +76,9 @@ def launch_game(url: Optional[str] = None) -> None:
                 #                               os.path.join(folder, "MiniInstaller.exe")], shell=False)
                 # os.remove(target)
             else:
-                installer = subprocess.Popen([mono_exe, os.path.join(folder, "MiniInstaller.exe")], shell=False)
+                installer = subprocess.Popen([mono_exe, os.path.join(game_folder, "MiniInstaller.exe")], shell=False)
         else:
-            installer = subprocess.Popen(os.path.join(folder, "MiniInstaller.exe"), shell=False)
+            installer = subprocess.Popen(os.path.join(game_folder, "MiniInstaller.exe"), shell=False)
 
         failure = installer.wait()
         if failure:
@@ -108,7 +107,7 @@ def launch_game(url: Optional[str] = None) -> None:
                 messagebox("Failure", "Failed to find latest mod download", True)
                 raise RuntimeError("Failed to install Mod")
 
-        mod_folder = os.path.join(folder, "Mods")
+        mod_folder = os.path.join(game_folder, "Mods")
         os.makedirs(mod_folder, exist_ok=True)
         with urllib.request.urlopen(release_url) as download:
             with ZipFile(io.BytesIO(download.read()), "r") as zf:
@@ -120,16 +119,17 @@ def launch_game(url: Optional[str] = None) -> None:
     def available_mod_update(latest_version: str) -> bool:
         """Check if there's an available update"""
         latest_version = latest_version.lstrip("v")
-        toml_path = os.path.join(folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
+        toml_path = os.path.join(game_folder, "Mods", "TheMessengerRandomizerAP", "courier.toml")
         with open(toml_path, "r") as f:
             installed_version = f.read().splitlines()[1].strip("version = \"")
 
         logging.info(f"Installed version: {installed_version}. Latest version: {latest_version}")
         # one of the alpha builds
-        return not latest_version.isnumeric() or tuplize_version(latest_version) > tuplize_version(installed_version)
+        return "alpha" in latest_version or tuplize_version(latest_version) > tuplize_version(installed_version)
 
     from . import MessengerWorld
-    folder = os.path.dirname(MessengerWorld.settings.game_path)
+    game_folder = os.path.dirname(MessengerWorld.settings.game_path)
+    working_directory = os.getcwd()
     if not courier_installed():
         should_install = askyesnocancel("Install Courier",
                                         "No Courier installation detected. Would you like to install now?")
@@ -160,8 +160,9 @@ def launch_game(url: Optional[str] = None) -> None:
         else:
             open_file("steam://rungameid/764790")
     else:
-        os.chdir(Path(MessengerWorld.settings.game_path).parent)
+        os.chdir(game_folder)
         if url:
             subprocess.Popen([MessengerWorld.settings.game_path, str(url)])
         else:
             subprocess.Popen(MessengerWorld.settings.game_path)
+        os.chdir(working_directory)

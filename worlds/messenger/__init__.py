@@ -138,7 +138,8 @@ class MessengerWorld(World):
             if self.options.logic_level < Logic.option_hard:
                 self.options.logic_level.value = Logic.option_hard
 
-        self.multiworld.early_items[self.player]["Meditation"] = self.options.early_meditation.value
+        if self.options.early_meditation:
+            self.multiworld.early_items[self.player]["Meditation"] = 1
 
         self.shop_prices, self.figurine_prices = shuffle_shop_prices(self)
 
@@ -160,19 +161,20 @@ class MessengerWorld(World):
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
         # create simple regions
-        for level in LEVELS:
-            MessengerRegion(level, self)
-        # create and connect complex regions that have sub-regions
-        for region in [MessengerRegion(f"{parent} - {reg_name}", self, parent)
-                       for parent, sub_region in CONNECTIONS.items()
-                       for reg_name in sub_region]:
+        simple_regions = [MessengerRegion(level, self) for level in LEVELS]
+        # create complex regions that have sub-regions
+        complex_regions = [MessengerRegion(f"{parent} - {reg_name}", self, parent)
+                           for parent, sub_region in CONNECTIONS.items()
+                           for reg_name in sub_region]
+
+        for region in complex_regions:
             region_name = region.name.replace(f"{region.parent} - ", "")
             connection_data = CONNECTIONS[region.parent][region_name]
             for exit_region in connection_data:
                 region.connect(self.multiworld.get_region(exit_region, self.player))
+
         # all regions need to be created before i can do these connections so we create and connect the complex first
-        for region_name in [level for level in LEVELS if level in REGION_CONNECTIONS]:
-            region = self.multiworld.get_region(region_name, self.player)
+        for region in [level for level in simple_regions if level.name in REGION_CONNECTIONS]:
             region.add_exits(REGION_CONNECTIONS[region.name])
 
     def create_items(self) -> None:
@@ -181,10 +183,10 @@ class MessengerWorld(World):
         itempool: List[MessengerItem] = [
             self.create_item(item)
             for item in self.item_name_to_id
-            if item not in {
-                   "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
-                   *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
-               } and "Time Shard" not in item
+            if "Time Shard" not in item and item not in {
+                "Power Seal", *NOTES, *FIGURINES, *main_movement_items,
+                *{collected_item.name for collected_item in self.multiworld.precollected_items[self.player]},
+            }
         ]
 
         if self.options.limited_movement:

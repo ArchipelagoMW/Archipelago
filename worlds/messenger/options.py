@@ -17,8 +17,8 @@ class Logic(Choice):
     """
     The level of logic to use when determining what locations in your world are accessible.
 
-    Normal: can require damage boosts, but otherwise approachable for someone who has beaten the game.
-    Hard: expects more knowledge and tighter execution. has leashing, normal clips and much tighter d-boosting in logic.
+    Normal: Can require damage boosts, but otherwise approachable for someone who has beaten the game.
+    Hard: Expects more knowledge and tighter execution. Has leashing, normal clips and much tighter d-boosting in logic.
     """
     display_name = "Logic Level"
     option_normal = 0
@@ -45,7 +45,7 @@ class EarlyMed(Toggle):
 
 
 class AvailablePortals(Range):
-    """Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are currently always available. If portal outputs are not randomized, Searing Crags will also be available."""
+    """Number of portals that are available from the start. Autumn Hills, Howling Grotto, and Glacial Peak are always available. If portal outputs are not randomized, Searing Crags will also be available."""
     display_name = "Available Starting Portals"
     range_start = 3
     range_end = 6

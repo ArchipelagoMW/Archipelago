@@ -69,7 +69,7 @@ for it. The groups you can use for The Messenger are:
 * Sometimes upon teleporting back to HQ, Ninja will run left and enter a different portal than the one entered by the
   player. This may also cause a softlock.
 * Text entry menus don't accept controller input
-* In power seal hunt mode the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
+* In power seal hunt mode, the chest must be opened by entering the shop from a level. Teleporting to HQ and opening the
   chest will not work.
 
 ## What do I do if I have a problem?
