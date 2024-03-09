@@ -33,14 +33,14 @@ CHARACTER_DECODING_MAP = {
     0xDD: "i", 0xDE: "j", 0xDF: "k", 0xE0: "l", 0xE1: "m",
     0xE2: "n", 0xE3: "o", 0xE4: "p", 0xE5: "q", 0xE6: "r",
     0xE7: "s", 0xE8: "t", 0xE9: "u", 0xEA: "v", 0xEB: "w",
-    0xEC: "x", 0xED: "y", 0xEE: "z", 0xEF: "▶", 0xF0: ":"
+    0xEC: "x", 0xED: "y", 0xEE: "z", 0xEF: "▶", 0xF0: ":",
 }
 
 CHARACTER_ENCODING_MAP = {value: key for key, value in CHARACTER_DECODING_MAP.items()}
 CHARACTER_ENCODING_MAP.update({
     "'": CHARACTER_ENCODING_MAP["’"],
     "\"": CHARACTER_ENCODING_MAP["”"],
-    "_": CHARACTER_ENCODING_MAP[" "]
+    "_": CHARACTER_ENCODING_MAP[" "],
 })
 
 ALLOWED_TRAINER_NAME_CHARACTERS = frozenset({
@@ -51,7 +51,7 @@ ALLOWED_TRAINER_NAME_CHARACTERS = frozenset({
     "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
     "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
-    "u", "v", "w", "x", "y", "z"
+    "u", "v", "w", "x", "y", "z",
 })
 
 
@@ -135,7 +135,7 @@ _SUBSTRUCT_ORDERS = [
     [2, 0, 1, 3], [3, 0, 1, 2], [2, 0, 3, 1], [3, 0, 2, 1],
     [1, 2, 0, 3], [1, 3, 0, 2], [2, 1, 0, 3], [3, 1, 0, 2],
     [2, 3, 0, 1], [3, 2, 0, 1], [1, 2, 3, 0], [1, 3, 2, 0],
-    [2, 1, 3, 0], [3, 1, 2, 0], [2, 3, 1, 0], [3, 2, 1, 0]
+    [2, 1, 3, 0], [3, 1, 2, 0], [2, 3, 1, 0], [3, 2, 1, 0],
 ]
 
 _LANGUAGE_IDS = {
@@ -205,7 +205,7 @@ def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
             "name": decode_string(pokemon_data[20:27]),
             "id": tid,
             "female": (met_info & 0b1000000000000000) != 0,
-        }
+        },
     }
 
     if held_item != 0:
@@ -232,13 +232,13 @@ def json_to_pokemon_data(json_str: str) -> bytearray:
         "location_met": 0,
         "level_met": 1,
         "ball": 4,
-        "moves": [[33, 35, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]
+        "moves": [[33, 35, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
     }
 
     default_trainer = {
         "name": "A",
         "id": 0,
-        "female": False
+        "female": False,
     }
 
     pokemon_json = {**default_pokemon, **{k: v for k, v in pokemon_json.items()}}

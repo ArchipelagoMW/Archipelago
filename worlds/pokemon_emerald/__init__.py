@@ -145,7 +145,7 @@ class PokemonEmeraldWorld(World):
             "HM05 Flash": ["Knuckle Badge"],
             "HM06 Rock Smash": ["Dynamo Badge"],
             "HM07 Waterfall": ["Rain Badge"],
-            "HM08 Dive": ["Mind Badge"]
+            "HM08 Dive": ["Mind Badge"],
         }
         if self.options.hm_requirements == HmRequirements.option_fly_without_badge:
             self.hm_requirements["HM02 Fly"] = 0
@@ -271,7 +271,7 @@ class PokemonEmeraldWorld(World):
                 "Littleroot Town - Old Sea Map from Norman",
                 "Ever Grande City - Champion Wallace",
                 "Meteor Falls 1F - Rival Steven",
-                "Trick House Puzzle 8 - Item"
+                "Trick House Puzzle 8 - Item",
             ])
 
             # Construction workers don't move until champion is defeated
@@ -282,7 +282,7 @@ class PokemonEmeraldWorld(World):
                     "Safari Zone NE - Item on Ledge",
                     "Safari Zone SE - Hidden Item in South Grass 1",
                     "Safari Zone SE - Hidden Item in South Grass 2",
-                    "Safari Zone SE - Item in Grass"
+                    "Safari Zone SE - Item in Grass",
                 ])
         elif self.options.goal == Goal.option_steven:
             exclude_locations([
@@ -307,7 +307,7 @@ class PokemonEmeraldWorld(World):
                 "Petalburg City - HM03 from Wally's Uncle",
                 "Dewford Town - TM36 from Sludge Bomb Man",
                 "Mauville City - Basement Key from Wattson",
-                "Mauville City - TM24 from Wattson"
+                "Mauville City - TM24 from Wattson",
             ])
 
     def create_items(self) -> None:
@@ -485,11 +485,11 @@ class PokemonEmeraldWorld(World):
 
             should_match_bst = self.options.wild_pokemon in {
                 RandomizeWildPokemon.option_match_base_stats,
-                RandomizeWildPokemon.option_match_base_stats_and_type
+                RandomizeWildPokemon.option_match_base_stats_and_type,
             }
             should_match_type = self.options.wild_pokemon in {
                 RandomizeWildPokemon.option_match_type,
-                RandomizeWildPokemon.option_match_base_stats_and_type
+                RandomizeWildPokemon.option_match_base_stats_and_type,
             }
             catch_em_all = self.options.dexsanity == Toggle.option_true
 
@@ -593,7 +593,7 @@ class PokemonEmeraldWorld(World):
                         slot_category: Tuple[str, List[Tuple[Optional[str], range]]] = [
                             ("LAND", [(None, range(0, 12))]),
                             ("WATER", [(None, range(0, 5))]),
-                            ("FISHING", [("OLD_ROD", range(0, 2)), ("GOOD_ROD", range(2, 5)), ("SUPER_ROD", range(5, 10))])
+                            ("FISHING", [("OLD_ROD", range(0, 2)), ("GOOD_ROD", range(2, 5)), ("SUPER_ROD", range(5, 10))]),
                         ][i]
                         for j, new_species_id in enumerate(new_slots):
                             # Get the subcategory for rods
@@ -633,7 +633,7 @@ class PokemonEmeraldWorld(World):
                 "EVENT_VISITED_LILYCOVE_CITY",
                 "EVENT_VISITED_MOSSDEEP_CITY",
                 "EVENT_VISITED_SOOTOPOLIS_CITY",
-                "EVENT_VISITED_EVER_GRANDE_CITY"
+                "EVENT_VISITED_EVER_GRANDE_CITY",
             ])
 
         self.free_fly_location_id = VISITED_EVENT_NAME_TO_ID[fly_location_name]
@@ -651,7 +651,7 @@ class PokemonEmeraldWorld(World):
             "TERRA_CAVE_ROUTE_116_1",
             "TERRA_CAVE_ROUTE_116_2",
             "TERRA_CAVE_ROUTE_118_1",
-            "TERRA_CAVE_ROUTE_118_2"
+            "TERRA_CAVE_ROUTE_118_2",
         ])
 
         terra_cave_location_location = self.multiworld.get_location("TERRA_CAVE_LOCATION", self.player)
@@ -666,7 +666,7 @@ class PokemonEmeraldWorld(World):
             "MARINE_CAVE_ROUTE_127_1",
             "MARINE_CAVE_ROUTE_127_2",
             "MARINE_CAVE_ROUTE_129_1",
-            "MARINE_CAVE_ROUTE_129_2"
+            "MARINE_CAVE_ROUTE_129_2",
         ])
 
         marine_cave_location_location = self.multiworld.get_location("MARINE_CAVE_LOCATION", self.player)
@@ -713,7 +713,7 @@ class PokemonEmeraldWorld(World):
                 "Heat Badge": 2,
                 "Rain Badge": 3,
                 "Stone Badge": 4,
-                "Feather Badge": 5
+                "Feather Badge": 5,
             }
             # In the case of vanilla HMs, navigating Granite Cave is required to access more than 2 gyms,
             # so Knuckle Badge deserves highest priority if Flash is logically required.
@@ -772,7 +772,7 @@ class PokemonEmeraldWorld(World):
                 "HM04 Strength": 2,
                 "HM07 Waterfall": 3,
                 "HM01 Cut": 4,
-                "HM02 Fly": 5
+                "HM02 Fly": 5,
             }
             # In the case of vanilla badges, navigating Granite Cave is required to access more than 2 gyms,
             # so Flash deserves highest priority if it's logically required.
@@ -989,11 +989,11 @@ class PokemonEmeraldWorld(World):
             else:
                 should_match_bst = self.options.misc_pokemon in {
                     RandomizeMiscPokemon.option_match_base_stats,
-                    RandomizeMiscPokemon.option_match_base_stats_and_type
+                    RandomizeMiscPokemon.option_match_base_stats_and_type,
                 }
                 should_match_type = self.options.misc_pokemon in {
                     RandomizeMiscPokemon.option_match_type,
-                    RandomizeMiscPokemon.option_match_base_stats_and_type
+                    RandomizeMiscPokemon.option_match_base_stats_and_type,
                 }
 
                 for encounter in emerald_data.misc_pokemon:
@@ -1027,11 +1027,11 @@ class PokemonEmeraldWorld(World):
 
             should_match_bst = self.options.trainer_parties in {
                 RandomizeTrainerParties.option_match_base_stats,
-                RandomizeTrainerParties.option_match_base_stats_and_type
+                RandomizeTrainerParties.option_match_base_stats_and_type,
             }
             should_match_type = self.options.trainer_parties in {
                 RandomizeTrainerParties.option_match_type,
-                RandomizeTrainerParties.option_match_base_stats_and_type
+                RandomizeTrainerParties.option_match_base_stats_and_type,
             }
 
             per_species_tmhm_moves: Dict[int, List[int]] = {}
@@ -1128,11 +1128,11 @@ class PokemonEmeraldWorld(World):
         def randomize_starters() -> None:
             should_match_bst = self.options.starters in {
                 RandomizeStarters.option_match_base_stats,
-                RandomizeStarters.option_match_base_stats_and_type
+                RandomizeStarters.option_match_base_stats_and_type,
             }
             should_match_type = self.options.starters in {
                 RandomizeStarters.option_match_type,
-                RandomizeStarters.option_match_base_stats_and_type
+                RandomizeStarters.option_match_base_stats_and_type,
             }
 
             new_starters: List[SpeciesData] = []
@@ -1142,7 +1142,7 @@ class PokemonEmeraldWorld(World):
                 new_starters = [
                     self.modified_species[easter_egg_value],
                     self.modified_species[easter_egg_value],
-                    self.modified_species[easter_egg_value],
+                    self.modified_species[easter_egg_value]
                 ]
             else:
                 for i, starter_id in enumerate(emerald_data.starters):
@@ -1189,7 +1189,7 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_MAY_RUSTBORO_TREECKO",      1, False),
                     ("TRAINER_MAY_ROUTE_110_TREECKO",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_TREECKO",     2, True ),
-                    ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True )
+                    ("TRAINER_MAY_LILYCOVE_TREECKO",      3, True ),
                 ],
                 [
                     ("TRAINER_BRENDAN_ROUTE_103_TORCHIC", 0, False),
@@ -1201,7 +1201,7 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_MAY_RUSTBORO_TORCHIC",      1, False),
                     ("TRAINER_MAY_ROUTE_110_TORCHIC",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_TORCHIC",     2, True ),
-                    ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True )
+                    ("TRAINER_MAY_LILYCOVE_TORCHIC",      3, True ),
                 ],
                 [
                     ("TRAINER_BRENDAN_ROUTE_103_MUDKIP", 0, False),
@@ -1213,8 +1213,8 @@ class PokemonEmeraldWorld(World):
                     ("TRAINER_MAY_RUSTBORO_MUDKIP",      1, False),
                     ("TRAINER_MAY_ROUTE_110_MUDKIP",     2, True ),
                     ("TRAINER_MAY_ROUTE_119_MUDKIP",     2, True ),
-                    ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True )
-                ]
+                    ("TRAINER_MAY_LILYCOVE_MUDKIP",      3, True ),
+                ],
             ]
 
             for i, starter in enumerate([new_starters[1], new_starters[2], new_starters[0]]):
@@ -1316,7 +1316,7 @@ class PokemonEmeraldWorld(World):
                 6: "_SUPER_ROD",
                 7: "_SUPER_ROD",
                 8: "_SUPER_ROD",
-                9: "_SUPER_ROD"
+                9: "_SUPER_ROD",
             }
 
             species_maps = defaultdict(set)

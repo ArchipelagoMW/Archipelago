@@ -26,8 +26,8 @@ def create_regions(world: "PokemonEmeraldWorld") -> Dict[str, Region]:
         "FISHING": [
             ("OLD_ROD", range(0, 2), lambda state: state.has("Old Rod", world.player)),
             ("GOOD_ROD", range(2, 5), lambda state: state.has("Good Rod", world.player)),
-            ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", world.player))
-        ]
+            ("SUPER_ROD", range(5, 10), lambda state: state.has("Super Rod", world.player)),
+        ],
     }
 
     def connect_to_map_encounters(region: Region, map_name: str, include_slots: Tuple[bool, bool, bool]):

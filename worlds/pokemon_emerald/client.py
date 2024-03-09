@@ -99,7 +99,7 @@ LEGENDARY_NAMES = {
     "Mew": "MEW",
     "Deoxys": "DEOXYS",
     "Ho-oh": "HO_OH",
-    "Lugia": "LUGIA"
+    "Lugia": "LUGIA",
 }
 
 DEFEATED_LEGENDARY_FLAG_MAP = {data.constants[f"FLAG_DEFEATED_{name}"]: name for name in LEGENDARY_NAMES.values()}
@@ -215,7 +215,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 ctx.bizhawk_ctx,
                 [
                     (data.ram_addresses["gSaveBlock1Ptr"], 4, "System Bus"),
-                    (data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus")
+                    (data.ram_addresses["gSaveBlock2Ptr"], 4, "System Bus"),
                 ]
             )
 
@@ -326,14 +326,14 @@ class PokemonEmeraldClient(BizHawkClient):
                 if local_checked_locations is not None:
                     await ctx.send_msgs([{
                         "cmd": "LocationChecks",
-                        "locations": list(local_checked_locations)
+                        "locations": list(local_checked_locations),
                     }])
 
             # Send game clear
             if not ctx.finished_game and game_clear:
                 await ctx.send_msgs([{
                     "cmd": "StatusUpdate",
-                    "status": ClientStatus.CLIENT_GOAL
+                    "status": ClientStatus.CLIENT_GOAL,
                 }])
 
             # Send tracker event flags
@@ -348,7 +348,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     "key": f"pokemon_emerald_events_{ctx.team}_{ctx.slot}",
                     "default": 0,
                     "want_reply": False,
-                    "operations": [{"operation": "or", "value": event_bitfield}]
+                    "operations": [{"operation": "or", "value": event_bitfield}],
                 }])
                 self.local_set_events = local_set_events
 
@@ -363,7 +363,7 @@ class PokemonEmeraldClient(BizHawkClient):
                     "key": f"pokemon_emerald_keys_{ctx.team}_{ctx.slot}",
                     "default": 0,
                     "want_reply": False,
-                    "operations": [{"operation": "or", "value": key_bitfield}]
+                    "operations": [{"operation": "or", "value": key_bitfield}],
                 }])
                 self.local_found_key_items = local_found_key_items
 
@@ -379,7 +379,7 @@ class PokemonEmeraldClient(BizHawkClient):
                         "key": f"pokemon_emerald_legendaries_{ctx.team}_{ctx.slot}",
                         "default": 0,
                         "want_reply": False,
-                        "operations": [{"operation": "or", "value": legendary_bitfield}]
+                        "operations": [{"operation": "or", "value": legendary_bitfield}],
                     }])
                     self.local_defeated_legendaries = caught_legendaries
         except bizhawk.RequestFailedError:
@@ -546,7 +546,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "default": {"_lock": 0},
                 "want_reply": True,
                 "operations": [{"operation": "update", "value": {"_lock": lock}}],
-                "uuid": message_uuid
+                "uuid": message_uuid,
             }])
 
             self.wonder_trade_update_event.clear()
@@ -605,8 +605,8 @@ class PokemonEmeraldClient(BizHawkClient):
             "default": {"_lock": 0},
             "operations": [{"operation": "update", "value": {
                 "_lock": 0,
-                str(wonder_trade_slot): (ctx.slot, data)
-            }}]
+                str(wonder_trade_slot): (ctx.slot, data),
+            }}],
         }])
 
         logger.info("Wonder trade sent! We'll notify you here when a trade has been found.")
@@ -634,7 +634,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 "cmd": "Set",
                 "key": f"pokemon_wonder_trades_{ctx.team}",
                 "default": {"_lock": 0},
-                "operations": [{"operation": "update", "value": {"_lock": 0}}]
+                "operations": [{"operation": "update", "value": {"_lock": 0}}],
             }])
             return None
 
@@ -646,7 +646,7 @@ class PokemonEmeraldClient(BizHawkClient):
             "default": {"_lock": 0},
             "operations": [
                 {"operation": "update", "value": {"_lock": 0}},
-                {"operation": "pop", "value": str(wonder_trade_slot)}
+                {"operation": "pop", "value": str(wonder_trade_slot)},
             ]
         }])
 
@@ -656,10 +656,10 @@ class PokemonEmeraldClient(BizHawkClient):
         if cmd == "Connected":
             Utils.async_start(ctx.send_msgs([{
                 "cmd": "SetNotify",
-                "keys": [f"pokemon_wonder_trades_{ctx.team}"]
+                "keys": [f"pokemon_wonder_trades_{ctx.team}"],
             }, {
                 "cmd": "Get",
-                "keys": [f"pokemon_wonder_trades_{ctx.team}"]
+                "keys": [f"pokemon_wonder_trades_{ctx.team}"],
             }]))
         elif cmd == "SetReply":
             if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":

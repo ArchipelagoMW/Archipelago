@@ -52,7 +52,7 @@ _LOOPING_MUSIC = [
     "MUS_RG_UNION_ROOM", "MUS_RG_NET_CENTER", "MUS_RG_MYSTERY_GIFT", "MUS_RG_BERRY_PICK", "MUS_RG_SEVII_CAVE",
     "MUS_RG_TEACHY_TV_SHOW", "MUS_RG_SEVII_ROUTE", "MUS_RG_SEVII_DUNGEON", "MUS_RG_SEVII_123", "MUS_RG_SEVII_45",
     "MUS_RG_SEVII_67", "MUS_RG_VS_DEOXYS", "MUS_RG_VS_MEWTWO", "MUS_RG_VS_LEGEND", "MUS_RG_ENCOUNTER_GYM_LEADER",
-    "MUS_RG_ENCOUNTER_DEOXYS", "MUS_RG_TRAINER_TOWER", "MUS_RG_SLOW_PALLET", "MUS_RG_TEACHY_TV_MENU"
+    "MUS_RG_ENCOUNTER_DEOXYS", "MUS_RG_TRAINER_TOWER", "MUS_RG_SLOW_PALLET", "MUS_RG_TEACHY_TV_MENU",
 ]
 
 _FANFARES: Dict[str, int] = {
@@ -94,7 +94,7 @@ VISITED_EVENT_NAME_TO_ID = {
     "EVENT_VISITED_PACIFIDLOG_TOWN": 14,
     "EVENT_VISITED_EVER_GRANDE_CITY": 15,
     "EVENT_VISITED_BATTLE_FRONTIER": 16,
-    "EVENT_VISITED_SOUTHERN_ISLAND": 17
+    "EVENT_VISITED_SOUTHERN_ISLAND": 17,
 }
 
 CAVE_EVENT_NAME_TO_ID = {
@@ -113,7 +113,7 @@ CAVE_EVENT_NAME_TO_ID = {
     "MARINE_CAVE_ROUTE_127_1": 13,
     "MARINE_CAVE_ROUTE_127_2": 14,
     "MARINE_CAVE_ROUTE_129_1": 15,
-    "MARINE_CAVE_ROUTE_129_2": 16
+    "MARINE_CAVE_ROUTE_129_2": 16,
 }
 
 
@@ -199,7 +199,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
                 f"TRAINER_BRENDAN_{locale}_TORCHIC",
                 f"TRAINER_MAY_{locale}_MUDKIP",
                 f"TRAINER_MAY_{locale}_TREECKO",
-                f"TRAINER_MAY_{locale}_TORCHIC"
+                f"TRAINER_MAY_{locale}_TORCHIC",
             ]
             location_info.extend((
                 data.constants["TRAINER_FLAGS_START"] + data.constants[trainer],
@@ -458,7 +458,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         "HM03 Surf",
         "HM02 Fly",
         "HM08 Dive",
-        "HM07 Waterfall"
+        "HM07 Waterfall",
     ]
     badge_to_bit = {
         "Stone Badge": 1 << 0,
@@ -468,7 +468,7 @@ def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None
         "Balance Badge": 1 << 4,
         "Feather Badge": 1 << 5,
         "Mind Badge": 1 << 6,
-        "Rain Badge": 1 << 7
+        "Rain Badge": 1 << 7,
     }
 
     # Number of badges

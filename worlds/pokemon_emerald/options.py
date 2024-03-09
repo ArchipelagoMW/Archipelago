@@ -266,20 +266,7 @@ class AllowedLegendaryHuntEncounters(OptionSet):
         "Deoxys",
         "Mew",
     ])
-    default = frozenset([
-        "Groudon",
-        "Kyogre",
-        "Rayquaza",
-        "Latios",
-        "Latias",
-        "Regirock",
-        "Registeel",
-        "Regice",
-        "Ho-oh",
-        "Lugia",
-        "Deoxys",
-        "Mew",
-    ])
+    default = valid_keys.copy()
 
 
 class RandomizeWildPokemon(Choice):
@@ -695,7 +682,7 @@ class RemoveRoadblocks(OptionSet):
         "Safari Zone Construction Workers",
         "Lilycove City Wailmer",
         "Aqua Hideout Grunts",
-        "Seafloor Cavern Aqua Grunt"
+        "Seafloor Cavern Aqua Grunt",
     ])
 
 

@@ -926,7 +926,7 @@ def _init() -> None:
     evo_stage_to_ball_map = {
         0: data.constants["ITEM_POKE_BALL"],
         1: data.constants["ITEM_GREAT_BALL"],
-        2: data.constants["ITEM_ULTRA_BALL"]
+        2: data.constants["ITEM_ULTRA_BALL"],
     }
     for species in data.species.values():
         evo_stage = 0
@@ -1397,7 +1397,7 @@ def _init() -> None:
         ("MOVE_SHOCK_WAVE", "Shock Wave"),
         ("MOVE_WATER_PULSE", "Water Pulse"),
         ("MOVE_DOOM_DESIRE", "Doom Desire"),
-        ("MOVE_PSYCHO_BOOST", "Psycho Boost")
+        ("MOVE_PSYCHO_BOOST", "Psycho Boost"),
     ]}
 
     # Create warp map

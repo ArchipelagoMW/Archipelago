@@ -26,7 +26,7 @@ _DAMAGING_MOVES = frozenset({
     276, 279, 280, 282, 284, 290, 292, 295, 296, 299, 301, 302,
     304, 305, 306, 307, 308, 309, 310, 311, 314, 315, 317, 318,
     323, 324, 325, 326, 327, 328, 330, 331, 332, 333, 337, 338,
-    340, 341, 342, 343, 344, 345, 348, 350, 351, 352, 353, 354
+    340, 341, 342, 343, 344, 345, 348, 350, 351, 352, 353, 354,
 })
 """IDs for moves that safely deal direct damage, for avoiding putting the
 player in a situation where they can only use status moves, or are forced
@@ -56,7 +56,7 @@ _MOVE_TYPES = [
      4, 15, 12,  0,  0,  3,  0, 10, 11,  8,  7,  0, 12, 17,  2,
     10,  0,  5,  6,  8, 12,  0, 14, 11,  6,  7, 14,  1,  4, 15,
     11, 12,  2, 15,  8,  0,  0, 16, 12,  1,  2,  4,  3,  0, 13,
-    12, 11, 14, 12, 16,  5, 13, 11,  8, 14
+    12, 11, 14, 12, 16,  5, 13, 11,  8, 14,
 ]
 """Maps move ids to the type of that move"""
 
@@ -73,7 +73,7 @@ HM_MOVES = frozenset({
     data.constants["MOVE_FLASH"],
     data.constants["MOVE_ROCK_SMASH"],
     data.constants["MOVE_WATERFALL"],
-    data.constants["MOVE_DIVE"]
+    data.constants["MOVE_DIVE"],
 })
 
 _MOVE_BLACKLIST = frozenset({
@@ -102,7 +102,7 @@ LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
     "SPECIES_GROUDON",
     "SPECIES_RAYQUAZA",
     "SPECIES_JIRACHI",
-    "SPECIES_DEOXYS"
+    "SPECIES_DEOXYS",
 ]])
 """Species IDs of legendary pokemon"""
 

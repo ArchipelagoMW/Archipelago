@@ -41,7 +41,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "EVENT_DEFEAT_NORMAN",
             "EVENT_DEFEAT_WINONA",
             "EVENT_DEFEAT_TATE_AND_LIZA",
-            "EVENT_DEFEAT_JUAN"
+            "EVENT_DEFEAT_JUAN",
         ]]) >= n
 
     huntable_legendary_events = [
@@ -58,7 +58,7 @@ def set_rules(world: "PokemonEmeraldWorld") -> None:
             "Mew": "MEW",
             "Deoxys": "DEOXYS",
             "Ho-oh": "HO_OH",
-            "Lugia": "LUGIA"
+            "Lugia": "LUGIA",
         }.items()
         if name in world.options.allowed_legendary_hunt_encounters.value
     ]
