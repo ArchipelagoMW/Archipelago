@@ -66,7 +66,7 @@ def set_rules(world: "MM2World") -> None:
                     world.weapon_damage[weapon][i] = 0
         # handle atomic fire
         for boss in range(14):
-            if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] for i in range(2, 8)):
+            if world.weapon_damage[1][boss] >= 4 and not any(world.weapon_damage[i][boss] > 0 for i in range(2, 8)):
                 # Atomic Fire can only shoot two fully powered shots
                 # So we need to be able to kill the boss in 2 hits
                 world.weapon_damage[1][boss] = 14
@@ -100,7 +100,7 @@ def set_rules(world: "MM2World") -> None:
                     continue  # Atomic Fire can only be considered logical for bosses it can kill in 2 hits
                 weapons.append(weapons_to_name[weapon])
         if not weapons:
-            raise Exception(f"Attempted to have boss {i} with no weakness!")
+            raise Exception(f"Attempted to have boss {i} with no weakness! Seed: {world.multiworld.seed}")
         for location in boss:
             add_rule(world.multiworld.get_location(location, world.player),
                      lambda state, weps=tuple(weapons): state.has_any(weps, world.player))
