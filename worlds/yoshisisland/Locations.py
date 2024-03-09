@@ -279,8 +279,8 @@ def get_locations(world) -> List[LocationData]:
     LocationData("6-8", "King Bowser's Castle: Stars", 0x3050DF, 0x43)
     ]
 
-    if not world or world.options.extras_enabled.value == 1:
-        location_table += ( 
+    if not world or world.options.extras_enabled:
+        location_table += [
             LocationData("1-Extra", "Poochy Ain't Stupid: Red Coins", 0x3050E0, 0x08),
             LocationData("1-Extra", "Poochy Ain't Stupid: Flowers", 0x3050E1, 0x08),
             LocationData("1-Extra", "Poochy Ain't Stupid: Stars", 0x3050E2, 0x08),
@@ -310,7 +310,7 @@ def get_locations(world) -> List[LocationData]:
             LocationData("6-Extra", "Castles - Masterpiece Set: Flowers", 0x3050F5, 0x44),
             LocationData("6-Extra", "Castles - Masterpiece Set: Stars", 0x3050F6, 0x44),
             LocationData("6-Extra", "Castles - Masterpiece Set: Level Clear", 0x3050F7, 0x44),
-        )
+        ]
 
     if not world or world.options.minigame_checks.value == 1 or world.options.minigame_checks.value == 3:
         location_table += [
