@@ -70,6 +70,14 @@ class RngPrices(Choice):
     default = 0
 
 
+class ExpNeed(Range):
+    """Exploration tokens required to beat Dracula."""
+    display_name = "Required Exploration Tokens"
+    range_start = 0
+    range_end = 20
+    default = 0
+
+
 sotn_option_definitions: Dict[str, type(Option)] = {
     "opened_no4": OpenedNO4NO3,
     "opened_are": OpenedDAIARE,
@@ -78,7 +86,8 @@ sotn_option_definitions: Dict[str, type(Option)] = {
     "bosses_need": BossesNeed,
     "rng_songs": RngSongs,
     "rng_shop": RngShop,
-    "rng_prices": RngPrices
+    "rng_prices": RngPrices,
+    "exp_need": ExpNeed
 }
 
 
