@@ -1161,7 +1161,37 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
                     and has_ability(state, player, holy_cross, options, ability_unlocks)
-                    and has_ladder("Swamp Ladders", state, player, options))
+                    and (has_ladder("Swamp Ladders", state, player, options) or not options.entrance_rando))
+            elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and (state.has_any({"Ladders to West Bell", "Dark Tomb Ladder"}, player)))
+            # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
+            elif portal_name in ["Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"] \
+                    and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has_any({"Dark Tomb Ladder", "Ladders to West Bell"}, player))
+            # soft locked for the same reasons as above
+            elif portal_name in ["Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"] \
+                    and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has_any(ladders, player)
+                    and state.has_any({"Dark Tomb Ladder", "Ladders to West Bell"}, player))
+            # soft locked if you can't get past garden knight backwards or up the belltower ladders
+            elif portal_name == "West Garden Entrance near Belltower" and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
+                    and state.has_any({"Ladders to West Bell", laurels}, player))
             # soft lock potential
             elif portal_name in ["Special Shop Entrance", "Stairs to Top of the Mountain"] \
                     and not options.entrance_rando:
