@@ -64,6 +64,8 @@ local got_data = true
 local last_status = 0  -- 1 game connect / 2 in-game / 4 on Richter / 8 just left STO / 10 Alucard
 local goal_met = false
 local not_patched = true
+local relic_name = ""
+local relic_timer = 0
 
 
 local player_name = ""
@@ -165,7 +167,8 @@ function grant_item_byid(num_id)
 	end
 	if address ~= 0 then
 		if itemid >= 300 and itemid < 400 then
-			if mainmemory.read_u8(address) == 0 then
+			relic_value = mainmemory.read_u8(address)
+			if relic_value == 0 or relic_value == 2 or relic_value > 3 then
 				if itemid >= 318 and itemid <= 322 then mainmemory.write_u8(address, 1)
 				else mainmemory.write_u8(address, 3) end
 			end
@@ -174,10 +177,13 @@ function grant_item_byid(num_id)
 				max_hp = mainmemory.read_u32_le(0x097ba4)
 				max_hp = max_hp + 5
 				mainmemory.write_u32_le(0x097ba4, max_hp)
+				mainmemory.write_u32_le(0x097ba0, max_hp)
 			elseif itemid == 412 then
 				max_heart = mainmemory.read_u32_le(0x097bac)
 				max_heart = max_heart + 5
-				mainmemory.write_u32_le(0x097bac, max_heart)
+				cur_heart = mainmemory.read_u32_le(0x097ba8)
+				cur_heart = cur_heart + 5
+				mainmemory.write_u32_le(0x097ba8, cur_heart)
 			end
 		else
 			itemqty = mainmemory.read_u8(address)
@@ -398,7 +404,10 @@ function checkARE()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 222)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Form of Mist"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Form of Mist"] = true
+				relic_name = "Form of Mist"
+			end
 		end
 	end
 
@@ -465,7 +474,10 @@ function checkCHI()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 88)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Demon Card"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Demon Card"] = true
+				relic_name = "Demon Card"
+			end
 		end
 	end
 
@@ -523,25 +535,37 @@ function checkLIB()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1051)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 919)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= 5 then checks["Soul of Bat"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= 5 then
+				checks["Soul of Bat"] = true
+				relic_name = "Soul of Bat"
+			end
 		end
 		if room == 0x2f0c then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1681)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 80 -- Increased offset
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Faerie Scroll"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Faerie Scroll"] = true
+				relic_name = "Faerie Scroll"
+			end
 		end
 		if room == 0x2ee4 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 230)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Jewel of Open"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Jewel of Open"] = true
+				relic_name = "Jewel of Open"
+			end
 		end
 		if room == 0x2efc then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 48)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Faerie Card"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Faerie Card"] = true
+				relic_name = "Faerie Card"
+			end
 		end
 	end
 
@@ -572,13 +596,19 @@ function checkNO0()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 130)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 1080)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Spirit Orb"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Spirit Orb"] = true
+				relic_name = "Spirit Orb"
+			end
 		end
 		if room == 0x2884 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 1170)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Gravity Boots"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Gravity Boots"] = true
+				relic_name = "Gravity Boots"
+			end
 		end
 	end
 
@@ -607,7 +637,10 @@ function checkNO1()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 360)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 807)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Soul of Wolf"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Soul of Wolf"] = true
+				relic_name = "Soul of Wolf"
+			end
 		end
 	end
 
@@ -638,13 +671,19 @@ function checkNO2()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 130)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Echo of Bat"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Echo of Bat"] = true
+				relic_name = "Echo of Bat"
+			end
 		end
 		if room == 0x3314 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 367)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 135)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Sword Card"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Sword Card"] = true
+				relic_name = "Sword Card"
+			end
 		end
 	end
 
@@ -672,7 +711,10 @@ function checkNO3()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 270)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 103)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Cube of Zoe"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Cube of Zoe"] = true
+				relic_name = "Cube of Zoe"
+			end
 		end
 		if room == 0x3cc8 or room == 0x3a80 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 245)
@@ -680,7 +722,10 @@ function checkNO3()
 			-- NP3 seens a bit offset
 			local x2 = math.abs(mainmemory.read_u16_le(0x0973f0) - 270)
 			local o = 10
-			if (x >= 0 and x <= o and y >= 0 and y <= o) or (x2 >= 0 and x2 <= o and y >= 0 and y <= o) then checks["Power of Wolf"] = true end
+			if (x >= 0 and x <= o and y >= 0 and y <= o) or (x2 >= 0 and x2 <= o and y >= 0 and y <= o) then
+				checks["Power of Wolf"] = true
+				relic_name = "Power of Wolf"
+			end
 		end
 	end
 
@@ -726,7 +771,7 @@ function checkNO4()
 	checks["NO4 - Toadstool(Waterfall)"] = bit.check(flag2, 1)
 	checks["NO4 - Shiitake(Near entrance passage)"] = bit.check(flag2, 3)
 	checks["NO4 - Nunchaku"] = bit.check(flag2, 4)
-	if mainmemory.read_u16_le(0x03ca4c) ~= 0 then -- Succubus kill, TODO: Look for gold ring looted flag
+	if mainmemory.read_u16_le(0x03ca4c) ~= 0 then
 		checks["NO4 - Succubus kill"] = true
 	else
 		checks["NO4 - Succubus kill"] = false
@@ -742,13 +787,19 @@ function checkNO4()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 141)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Holy Symbol"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Holy Symbol"] = true
+				relic_name = "Holy Symbol"
+			end
 		end
 		if room == 0x319c then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 92)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Merman Statue"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Merman Statue"] = true
+				relic_name = "Merman Statue"
+			end
 		end
 	end
 
@@ -778,13 +829,19 @@ function checkNZ0()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 120)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 25
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Skill of Wolf"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Skill of Wolf"] = true
+				relic_name = "Skill of Wolf"
+			end
 		end
 		if room == 0x2730 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 114)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 25
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Bat Card"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Bat Card"] = true
+				relic_name = "Bat Card"
+			end
 		end
 	end
 
@@ -820,7 +877,10 @@ function checkNZ1()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 198)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 183)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Fire of Bat"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Fire of Bat"] = true
+				relic_name = "Fire of Bat"
+			end
 		end
 	end
 
@@ -856,14 +916,23 @@ function checkTOP()
 			local xm = math.abs(mainmemory.read_u16_le(0x0973f0) - 417)
 			local ym = math.abs(mainmemory.read_u16_le(0x0973f4) - 1207)
 			local o = 10
-			if xl >= 0 and xl <= o and yl >= 0 and yl <= o then checks["Leap Stone"] = true end
-			if xm >= 0 and xm <= o and ym >= 0 and ym <= o then checks["Power of Mist"] = true end
+			if xl >= 0 and xl <= o and yl >= 0 and yl <= o then
+				checks["Leap Stone"] = true
+				relic_name = "Leap Stone"
+			end
+			if xm >= 0 and xm <= o and ym >= 0 and ym <= o then
+				checks["Power of Mist"] = true
+				relic_name = "Power of Mist"
+			end
 		end
 		if room == 0x1b94 then
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 350)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 663)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Ghost Card"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Ghost Card"] = true
+				relic_name = "Ghost Card"
+			end
 		end
 	end
 
@@ -922,7 +991,10 @@ function checkRCAT()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 38)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 173)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Gas Cloud"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Gas Cloud"] = true
+				relic_name = "Gas Cloud"
+			end
 		end
 	end
 
@@ -1006,6 +1078,7 @@ end
 function checkRNO0(f)
 	local checks = {}
 	local flag = mainmemory.read_u16_le(0x03bf13)
+
 	checks["RNO0 - Library card"] = bit.check(flag, 0)
 	checks["RNO0 - Potion"] = bit.check(flag, 1)
 	checks["RNO0 - Antivenom"] = bit.check(flag, 2)
@@ -1026,7 +1099,7 @@ function checkRNO0(f)
 		end
 		if delay_timer == 0 then delay_timer = f end
 	end
-	gui.drawText(0, client.bufferheight() - 20, cur_zone .. "->" .. bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b))
+	gui.drawText(0, client.bufferheight() - 20, cur_zone .. "->" .. bosses_dead .. " - " .. mainmemory.read_u8(0x180f8b) .. "\\" .. mainmemory.read_u16_le(0x180f89))
 	gui.drawText(0, client.bufferheight() - 30, memory.read_u32_le(0x801c132c, "System Bus"))
 
 	if cur_zone == "RNO0" and last_zone ~= "RNO0" then
@@ -1034,8 +1107,9 @@ function checkRNO0(f)
 		if delay_timer ~=0 and f - delay_timer >= 900 then
 			checkBosses()
 			local goal = mainmemory.read_u8(0x180f8b)
-			-- goal = mainmemory.read_u8(0x180f98) on index 12
-			if bosses_dead >= goal then
+			local r_goal = mainmemory.read_u16_le(0x180f89)
+			local rooms = mainmemory.read_u16_le(0x3c760)
+			if bosses_dead >= goal and rooms >= r_goal then
 				last_zone = cur_zone
 				last_zoneid = cur_zoneid
 				delay_timer = 0
@@ -1154,7 +1228,10 @@ function checkRNO4()
 			local x = math.abs(mainmemory.read_u16_le(0x0973f0) - 110)
 			local y = math.abs(mainmemory.read_u16_le(0x0973f4) - 167)
 			local o = 10
-			if x >= 0 and x <= o and y >= 0 and y <= o then checks["Force of Echo"] = true end
+			if x >= 0 and x <= o and y >= 0 and y <= o then
+				checks["Force of Echo"] = true
+				relic_name = "Force of Echo"
+			end
 		end
 	end
 
@@ -1279,6 +1356,7 @@ end
 function checkOneLocation(f)
 	if mainmemory.read_u16_le(0x180000) == 0xeed8 or mainmemory.read_u16_le(0x180000) == 0x0000 then return end
 	local current_table = {}
+	local rooms = mainmemory.read_u16_le(0x3c760)
 
 	if last_zone == "RNO0" and cur_zone ~= "RNO0" then
 		gui.clearGraphics()
@@ -1317,6 +1395,79 @@ function checkOneLocation(f)
 	if cur_zone == "RNZ0" or cur_zone == "RBO1" then current_table = checkRNZ0() end
 	if cur_zone == "RNZ1" then current_table = checkRNZ1() end
 	if cur_zone == "RTOP" then current_table = checkRTOP() end
+
+	if rooms >= 93 then
+		current_table["Exploration 10"] = true
+		current_table["Exploration 10 item"] = true
+	end
+	if rooms >= 186 then
+		current_table["Exploration 20"] = true
+		current_table["Exploration 20 item"] = true
+	end
+	if rooms >= 280 then
+		current_table["Exploration 30"] = true
+		current_table["Exploration 30 item"] = true
+	end
+	if rooms >= 373 then
+		current_table["Exploration 40"] = true
+		current_table["Exploration 40 item"] = true
+	end
+	if rooms >= 467 then
+		current_table["Exploration 50"] = true
+		current_table["Exploration 50 item"] = true
+	end
+	if rooms >= 560 then
+		current_table["Exploration 60"] = true
+		current_table["Exploration 60 item"] = true
+	end
+	if rooms >= 654 then
+		current_table["Exploration 70"] = true
+		current_table["Exploration 70 item"] = true
+	end
+	if rooms >= 747 then
+		current_table["Exploration 80"] = true
+		current_table["Exploration 80 item"] = true
+	end
+	if rooms >= 841 then
+		current_table["Exploration 90"] = true
+		current_table["Exploration 90 item"] = true
+	end
+	if rooms >= 934 then
+		current_table["Exploration 100"] = true
+		current_table["Exploration 100 item"] = true
+	end
+	if rooms >= 1028 then
+		current_table["Exploration 110"] = true
+		current_table["Exploration 110 item"] = true
+	end
+	if rooms >= 1121 then
+		current_table["Exploration 120"] = true
+		current_table["Exploration 120 item"] = true
+	end
+	if rooms >= 1214 then
+		current_table["Exploration 130"] = true
+		current_table["Exploration 130 item"] = true
+	end
+	if rooms >= 1308 then
+		current_table["Exploration 140"] = true
+		current_table["Exploration 140 item"] = true
+	end
+	if rooms >= 1401 then
+		current_table["Exploration 150"] = true
+		current_table["Exploration 150 item"] = true
+	end
+	if rooms >= 1495 then
+		current_table["Exploration 160"] = true
+		current_table["Exploration 160 item"] = true
+	end
+	if rooms >= 1588 then
+		current_table["Exploration 170"] = true
+		current_table["Exploration 170 item"] = true
+	end
+	if rooms >= 1682 then
+		current_table["Exploration 180"] = true
+		current_table["Exploration 180 item"] = true
+	end
 
 	-- Check if the main table needs update
 	if next(current_table) ~= nil then
@@ -1876,6 +2027,18 @@ function main()
 								table.insert(misplaced_items, v)
 								table.remove(misplaced_items_queue, k)
 							end
+						end
+					end
+
+					-- Did we check a relic?
+					if relic_name ~= "" then
+						if relic_timer == 0 then relic_timer = frame end
+						if relic_timer ~= 0 then
+							gui.drawText(0, client.bufferheight() / 2, relic_name .. " checked", "red")
+						end
+						if frame - relic_timer >= 180 then
+							relic_timer = 0
+							relic_name = ""
 						end
 					end
 
