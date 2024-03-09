@@ -1468,6 +1468,14 @@ function checkOneLocation(f)
 		current_table["Exploration 180"] = true
 		current_table["Exploration 180 item"] = true
 	end
+	if rooms >= 1775 then
+		current_table["Exploration 190"] = true
+		current_table["Exploration 190 item"] = true
+	end
+	if rooms >= 1869 then
+		current_table["Exploration 200"] = true
+		current_table["Exploration 200 item"] = true
+	end
 
 	-- Check if the main table needs update
 	if next(current_table) ~= nil then
