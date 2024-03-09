@@ -36,6 +36,11 @@ class SM64Levels(int, Enum):
     BOWSER_IN_THE_FIRE_SEA = 191
     WING_MARIO_OVER_THE_RAINBOW = 311
 
+
+class SM64Region(Region):
+    subregions: typing.List[Region] = []
+
+
 # sm64paintings is a dict of entrances, format LEVEL | AREA
 sm64_level_to_paintings: typing.Dict[SM64Levels, str] = {
     SM64Levels.BOB_OMB_BATTLEFIELD: "Bob-omb Battlefield",
@@ -73,7 +78,7 @@ sm64_secrets_to_level = {secret: level for (level,secret) in sm64_level_to_secre
 sm64_entrances_to_level = {**sm64_paintings_to_level, **sm64_secrets_to_level }
 sm64_level_to_entrances = {**sm64_level_to_paintings, **sm64_level_to_secrets }
 
-def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Region, typing.List[Region]]):
+def create_regions(world: MultiWorld, player: int):
     regSS = Region("Menu", player, world, "Castle Area")
     create_default_locs(regSS, locSS_table)
     world.regions.append(regSS)
@@ -82,7 +87,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_locs(regBoB, "BoB: Big Bob-Omb on the Summit", "BoB: Footrace with Koopa The Quick",
                         "BoB: Mario Wings to the Sky", "BoB: Behind Chain Chomp's Gate", "BoB: Bob-omb Buddy")
     bob_island = create_subregion(regBoB, "BoB: Island", "BoB: Shoot to the Island in the Sky", "BoB: Find the 8 Red Coins")
-    subregion_map[regBoB] = [bob_island]
+    regBoB.subregions = [bob_island]
     if (world.EnableCoinStars[player].value):
         create_locs(regBoB, "BoB: 100 Coins")
 
@@ -90,7 +95,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_locs(regWhomp, "WF: Chip Off Whomp's Block", "WF: Shoot into the Wild Blue", "WF: Red Coins on the Floating Isle",
                           "WF: Fall onto the Caged Island", "WF: Blast Away the Wall")
     wf_tower = create_subregion(regWhomp, "WF: Tower", "WF: To the Top of the Fortress", "WF: Bob-omb Buddy")
-    subregion_map[regWhomp] = [wf_tower]
+    regWhomp.subregions = [wf_tower]
     if (world.EnableCoinStars[player].value):
         create_locs(regWhomp, "WF: 100 Coins")
 
@@ -98,7 +103,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_locs(regJRB, "JRB: Plunder in the Sunken Ship", "JRB: Can the Eel Come Out to Play?", "JRB: Treasure of the Ocean Cave",
                         "JRB: Blast to the Stone Pillar", "JRB: Through the Jet Stream", "JRB: Bob-omb Buddy")
     jrb_upper = create_subregion(regJRB, 'JRB: Upper', "JRB: Red Coins on the Ship Afloat")
-    subregion_map[regJRB] = [jrb_upper]
+    regJRB.subregions = [jrb_upper]
     if (world.EnableCoinStars[player].value):
         create_locs(jrb_upper, "JRB: 100 Coins")
 
@@ -112,7 +117,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
                         "BBH: Secret of the Haunted Books", "BBH: Seek the 8 Red Coins")
     bbh_third_floor = create_subregion(regBBH, "BBH: Third Floor", "BBH: Eye to Eye in the Secret Room")
     bbh_roof = create_subregion(bbh_third_floor, "BBH: Roof", "BBH: Big Boo's Balcony", "BBH: 1Up Block Top of Mansion")
-    subregion_map[regBBH] = [bbh_third_floor, bbh_roof]
+    regBBH.subregions = [bbh_third_floor, bbh_roof]
     if (world.EnableCoinStars[player].value):
         create_locs(regBBH, "BBH: 100 Coins")
 
@@ -135,7 +140,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
                         "HMC: Watch for Rolling Rocks", "HMC: Navigating the Toxic Maze","HMC: 1Up Block Past Rolling Rocks")
     hmc_red_coin_area = create_subregion(regHMC, "HMC: Red Coin Area", "HMC: Elevate for 8 Red Coins")
     hmc_pit_islands = create_subregion(regHMC, "HMC: Pit Islands", "HMC: A-Maze-Ing Emergency Exit", "HMC: 1Up Block above Pit")
-    subregion_map[regHMC] = [hmc_red_coin_area, hmc_pit_islands]
+    regHMC.subregions = [hmc_red_coin_area, hmc_pit_islands]
     if (world.EnableCoinStars[player].value):
         create_locs(hmc_red_coin_area, "HMC: 100 Coins")
 
@@ -143,7 +148,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_locs(regLLL, "LLL: Boil the Big Bully", "LLL: Bully the Bullies",
                         "LLL: 8-Coin Puzzle with 15 Pieces", "LLL: Red-Hot Log Rolling")
     lll_upper_volcano = create_subregion(regLLL, "LLL: Upper Volcano", "LLL: Hot-Foot-It into the Volcano", "LLL: Elevator Tour in the Volcano")
-    subregion_map[regLLL] = [lll_upper_volcano]
+    regLLL.subregions = [lll_upper_volcano]
     if (world.EnableCoinStars[player].value):
         create_locs(regLLL, "LLL: 100 Coins")
 
@@ -153,7 +158,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
                         "SSL: 1Up Block Outside Pyramid", "SSL: 1Up Block Pyramid Left Path", "SSL: 1Up Block Pyramid Back")
     ssl_upper_pyramid = create_subregion(regSSL, "SSL: Upper Pyramid", "SSL: Inside the Ancient Pyramid",
                                          "SSL: Stand Tall on the Four Pillars", "SSL: Pyramid Puzzle")
-    subregion_map[regSSL] = [ssl_upper_pyramid]
+    regSSL.subregions = [ssl_upper_pyramid]
     if (world.EnableCoinStars[player].value):
         create_locs(regSSL, "SSL: 100 Coins")
 
@@ -161,7 +166,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     create_locs(regDDD, "DDD: Board Bowser's Sub", "DDD: Chests in the Current", "DDD: Through the Jet Stream",
                         "DDD: The Manta Ray's Reward", "DDD: Collect the Caps...")
     ddd_moving_poles = create_subregion(regDDD, "DDD: Moving Poles", "DDD: Pole-Jumping for Red Coins")
-    subregion_map[regDDD] = [ddd_moving_poles]
+    regDDD.subregions = [ddd_moving_poles]
     if (world.EnableCoinStars[player].value):
         create_locs(ddd_moving_poles, "DDD: 100 Coins")
 
@@ -173,7 +178,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
 
     regBitFS = create_region("Bowser in the Fire Sea", player, world)
     bitfs_upper = create_subregion(regBitFS, "BitFS: Upper", *locBitFS_table.keys())
-    subregion_map[regBitFS] = [bitfs_upper]
+    regBitFS.subregions = [bitfs_upper]
 
     create_region("Second Floor", player, world)
 
@@ -187,7 +192,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     wdw_top = create_subregion(regWDW, "WDW: Top", "WDW: Shocking Arrow Lifts!", "WDW: Top o' the Town",
                                                    "WDW: Secrets in the Shallows & Sky", "WDW: Bob-omb Buddy")
     wdw_downtown = create_subregion(regWDW, "WDW: Downtown", "WDW: Go to Town for Red Coins", "WDW: Quick Race Through Downtown!", "WDW: 1Up Block in Downtown")
-    subregion_map[regWDW] = [wdw_top, wdw_downtown]
+    regWDW.subregions = [wdw_top, wdw_downtown]
     if (world.EnableCoinStars[player].value):
         create_locs(wdw_top, "WDW: 100 Coins")
 
@@ -196,7 +201,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
                                                          "TTM: Bob-omb Buddy", "TTM: 1Up Block on Red Mushroom")
     ttm_top = create_subregion(ttm_middle, "TTM: Top", "TTM: Scale the Mountain", "TTM: Mystery of the Monkey Cage",
                                                        "TTM: Mysterious Mountainside", "TTM: Breathtaking View from Bridge")
-    subregion_map[regTTM] = [ttm_middle, ttm_top]
+    regTTM.subregions = [ttm_middle, ttm_top]
     if (world.EnableCoinStars[player].value):
         create_locs(ttm_top, "TTM: 100 Coins")
 
@@ -208,7 +213,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
                                                        "THI: Five Itty Bitty Secrets", "THI: Wiggler's Red Coins", "THI: Bob-omb Buddy",
                                                        "THI: 1Up Block THI Large near Start", "THI: 1Up Block Windy Area")
     thi_large_top = create_subregion(thi_pipes, "THI: Large Top", "THI: Make Wiggler Squirm")
-    subregion_map[regTHI] = [thi_pipes, thi_large_top]
+    regTHI.subregions = [thi_pipes, thi_large_top]
     if (world.EnableCoinStars[player].value):
         create_locs(thi_large_top, "THI: 100 Coins")
 
@@ -219,7 +224,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     ttc_lower = create_subregion(regTTC, "TTC: Lower", "TTC: Roll into the Cage", "TTC: Get a Hand", "TTC: 1Up Block Midway Up")
     ttc_upper = create_subregion(ttc_lower, "TTC: Upper", "TTC: Timed Jumps on Moving Bars", "TTC: The Pit and the Pendulums")
     ttc_top = create_subregion(ttc_upper, "TTC: Top", "TTC: Stomp on the Thwomp", "TTC: 1Up Block at the Top")
-    subregion_map[regTTC] = [ttc_lower, ttc_upper, ttc_top]
+    regTTC.subregions = [ttc_lower, ttc_upper, ttc_top]
     if (world.EnableCoinStars[player].value):
         create_locs(ttc_top, "TTC: 100 Coins")
 
@@ -229,7 +234,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     rr_maze = create_subregion(regRR, "RR: Maze", "RR: Coins Amassed in a Maze")
     rr_cruiser = create_subregion(regRR, "RR: Cruiser", "RR: Cruiser Crossing the Rainbow", "RR: Somewhere Over the Rainbow")
     rr_house = create_subregion(regRR, "RR: House", "RR: The Big House in the Sky", "RR: 1Up Block On House in the Sky")
-    subregion_map[regRR] = [rr_maze, rr_cruiser, rr_house]
+    regRR.subregions = [rr_maze, rr_cruiser, rr_house]
     if (world.EnableCoinStars[player].value):
         create_locs(rr_maze, "RR: 100 Coins")
 
@@ -239,7 +244,7 @@ def create_regions(world: MultiWorld, player: int, subregion_map: typing.Dict[Re
     regBitS = create_region("Bowser in the Sky", player, world)
     create_locs(regBitS, "Bowser in the Sky 1Up Block")
     bits_top = create_subregion(regBitS, "BitS: Top", "Bowser in the Sky Red Coins")
-    subregion_map[regBitS] = [bits_top]
+    regBitS.subregions = [bits_top]
 
 
 def connect_regions(world: MultiWorld, player: int, source: str, target: str, rule=None):
@@ -248,14 +253,14 @@ def connect_regions(world: MultiWorld, player: int, source: str, target: str, ru
     sourceRegion.connect(targetRegion, rule=rule)
 
 
-def create_region(name: str, player: int, world: MultiWorld) -> Region:
-    region = Region(name, player, world)
+def create_region(name: str, player: int, world: MultiWorld) -> SM64Region:
+    region = SM64Region(name, player, world)
     world.regions.append(region)
     return region
 
 
-def create_subregion(source_region: Region, name: str, *locs: str) -> Region:
-    region = Region(name, source_region.player, source_region.multiworld)
+def create_subregion(source_region: Region, name: str, *locs: str) -> SM64Region:
+    region = SM64Region(name, source_region.player, source_region.multiworld)
     connection = Entrance(source_region.player, name, source_region)
     source_region.exits.append(connection)
     connection.connect(region)

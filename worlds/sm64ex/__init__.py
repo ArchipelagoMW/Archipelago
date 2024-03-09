@@ -39,7 +39,6 @@ class SM64World(World):
     required_client_version = (0, 3, 5)
 
     area_connections: typing.Dict[int, int]
-    subregion_map: typing.Dict[Region, typing.List[Region]]
 
     option_definitions = sm64_options
 
@@ -77,8 +76,7 @@ class SM64World(World):
         self.topology_present = self.multiworld.AreaRandomizer[self.player].value
 
     def create_regions(self):
-        self.subregion_map = {}
-        create_regions(self.multiworld, self.player, self.subregion_map)
+        create_regions(self.multiworld, self.player)
 
     def set_rules(self):
         self.area_connections = {}
@@ -215,7 +213,7 @@ class SM64World(World):
                     regions[0] = self.multiworld.get_region("Tiny-Huge Island", self.player)
                 else:
                     entrance_name = sm64_level_to_entrances[entrance]
-                regions += self.subregion_map.get(regions[0], [])
+                regions += regions[0].subregions
                 for region in regions:
                     for location in region.locations:
                         er_hint_data[location.address] = entrance_name
