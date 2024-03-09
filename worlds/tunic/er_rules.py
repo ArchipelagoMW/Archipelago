@@ -994,7 +994,6 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # Rotating Lights entrance
             ("Overworld Beach", "Overworld Redux, Overworld Cave_",
                 {"Overworld Town Ladders", "Ladder to Ruined Atoll"}),
-            # todo: verify the ones below from the atoll ladder, see if there's any missing
             # Swamp upper entrance
             ("Overworld Beach", "Overworld Redux, Swamp Redux 2_wall",
                 {"Ladder to Ruined Atoll"}),
