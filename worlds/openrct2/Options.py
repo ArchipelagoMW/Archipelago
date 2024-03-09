@@ -295,7 +295,7 @@ class SelectedScenario(Choice):
     option_mothball_mountain = Scenario.mothball_mountain.value
     option_pacific_pyramids = Scenario.pacific_pyramids.value
     option_crumbly_woods = Scenario.crumbly_woods.value
-    option_big_pier = Scenario.big_pier.value
+    # option_big_pier = Scenario.big_pier.value
     option_lightning_peaks = Scenario.lightning_peaks.value
     option_ivory_towers = Scenario.ivory_towers.value
     option_rainbow_valley = Scenario.rainbow_valley.value
@@ -337,7 +337,7 @@ class SelectedScenario(Choice):
     option_razor_rocks = Scenario.razor_rocks.value
     option_crater_lake = Scenario.crater_lake.value
     option_vertigo_views = Scenario.vertigo_views.value
-    option_big_pier_2 = Scenario.big_pier_2.value
+    # option_big_pier_2 = Scenario.big_pier_2.value
     option_dragons_cove = Scenario.dragons_cove.value
     option_good_knight_park = Scenario.good_knight_park.value
     option_wacky_warren = Scenario.wacky_warren.value
@@ -653,7 +653,7 @@ class Shop_Minimum_Nausea(Range):
     """
     display_name = "Minimum Shop Nausea Requirement"
     range_start = 0
-    range_end = 7
+    range_end = 4
     default = 0
 
 class Shop_Maximum_Excitement(Range):
@@ -677,7 +677,7 @@ class Shop_Maximum_Nausea(Range):
     """
     display_name = "Maximum Shop Nausea Requirement"
     range_start = 0
-    range_end = 7
+    range_end = 4
     default = 4
 
 
