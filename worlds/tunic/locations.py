@@ -133,7 +133,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Overworld - [Northwest] Shadowy Corner Chest": TunicLocationData("Overworld", "Overworld"),
     "Overworld - [Southwest] Obscured In Tunnel To Beach": TunicLocationData("Overworld", "Overworld"),
     "Overworld - [Southwest] Grapple Chest Over Walkway": TunicLocationData("Overworld", "Overworld"),
-    "Overworld - [Northwest] Chest Beneath Quarry Gate": TunicLocationData("Overworld", "Overworld"),
+    "Overworld - [Northwest] Chest Beneath Quarry Gate": TunicLocationData("Overworld", "Overworld after Envoy"),
     "Overworld - [Southeast] Chest Near Swamp": TunicLocationData("Overworld", "Overworld Swamp Lower Entry"),
     "Overworld - [Southwest] From West Garden": TunicLocationData("Overworld", "Overworld Beach"),
     "Overworld - [East] Grapple Chest": TunicLocationData("Overworld", "Overworld above Patrol Cave"),

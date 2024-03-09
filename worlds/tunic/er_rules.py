@@ -218,14 +218,26 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: has_ladder("Ladders near Dark Tomb", state, player, options))
 
     regions["Overworld"].connect(
+        connecting_region=regions["Overworld after Envoy"],
+        rule=lambda state: state.has_any({laurels, grapple}, player) or options.logic_rules)
+    regions["Overworld after Envoy"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has_any({laurels, grapple}, player) or options.logic_rules)
+
+    regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
-        rule=lambda state: (has_ladder("Ladder to Quarry", state, player, options)
-                            and state.has_any({laurels, grapple}, player))
-        or has_ice_grapple_logic(False, state, player, options, ability_unlocks))
+        rule=lambda state: has_ladder("Ladder to Quarry", state, player, options))
+    regions["Overworld Quarry Entry"].connect(
+        connecting_region=regions["Overworld after Envoy"],
+        rule=lambda state: has_ladder("Ladder to Quarry", state, player, options))
+
+    # ice grapple through the gate
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld Quarry Entry"],
+        rule=lambda state: has_ice_grapple_logic(False, state, player, options, ability_unlocks))
     regions["Overworld Quarry Entry"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladder to Quarry", state, player, options) and state.has(laurels, player)
-        or state.has(grapple, player))
+        rule=lambda state: has_ice_grapple_logic(False, state, player, options, ability_unlocks))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Upper Entry"],
