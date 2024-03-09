@@ -132,7 +132,7 @@ class MegaMan2Client(BizHawkClient):
         robot_masters_unlocked, robot_masters_defeated, items_acquired, \
             weapons_unlocked, items_unlocked, items_received, \
             completed_stages, consumable_checks,\
-            e_tanks, lives, weapon_energy, health, difficulty = await read(ctx.bizhawk_ctx, [
+            e_tanks, lives, weapon_energy, health, difficulty, death_link_status = await read(ctx.bizhawk_ctx, [
                 (MM2_ROBOT_MASTERS_UNLOCKED, 1, "RAM"),
                 (MM2_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
                 (MM2_ITEMS_ACQUIRED, 1, "RAM"),
@@ -145,7 +145,8 @@ class MegaMan2Client(BizHawkClient):
                 (MM2_LIVES, 1, "RAM"),
                 (MM2_WEAPON_ENERGY, 11, "RAM"),
                 (MM2_HEALTH, 1, "RAM"),
-                (MM2_DIFFICULTY, 1, "RAM")
+                (MM2_DIFFICULTY, 1, "RAM"),
+                (MM2_DEATHLINK, 1, "RAM")
             ])
 
         if difficulty[0] not in (0, 1):
@@ -171,7 +172,7 @@ class MegaMan2Client(BizHawkClient):
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
             if health[0] == 0x00 and not self.sending_death_link:
                 await self.send_deathlink(ctx)
-            elif health[0] != 0x00:
+            elif health[0] != 0x00 and not death_link_status[0]:
                 self.sending_death_link = False
 
         # handle receiving items
