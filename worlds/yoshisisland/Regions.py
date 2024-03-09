@@ -126,14 +126,10 @@ def init_areas(world, locations: Tuple[LocationData, ...]):
                                                         'World 4': lambda state: state.has('World 4 Gate', player),
                                                         'World 5': lambda state: state.has('World 5 Gate', player),
                                                         'World 6': lambda state: state.has('World 6 Gate', player)})
-    cur_world = 1
-    cur_level = 1
-    for i in range(47):
-        multiworld.get_region(f'World {cur_world}', player).add_exits([world.level_location_list[i]])
-        if cur_level > 7:
-            cur_level = 1
-            cur_world += 1
-        else: cur_level += 1
+    for cur_world in range(1, 7):
+        for cur_level in range(8):
+            if cur_world != 6 or cur_level != 7:
+                multiworld.get_region(f"World {cur_world}", player).add_exits([world.level_location_list[(cur_world - 1) * 8 + cur_level]])
 
     multiworld.get_region('1-4', player).add_exits([world.boss_order[0]],{world.boss_order[0]: lambda state: logic._14Clear(state)})
     multiworld.get_region('1-8', player).add_exits([world.boss_order[1]],{world.boss_order[1]: lambda state: logic._18Clear(state)})

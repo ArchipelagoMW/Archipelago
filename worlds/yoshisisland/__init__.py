@@ -215,13 +215,6 @@ class YIWorld(World):
         self.multiworld.get_location("Lakitu's Wall: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
         self.multiworld.get_location("Ride Like The Wind: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
 
-    def place_locked_item(self, excluded_items: Set[str], location: str, item: str) -> None:
-        excluded_items.add(item)
-
-        item = self.create_item(item)
-
-        self.multiworld.get_location(location, self.player).place_locked_item(item)
-
     def generate_early(self):
         setup_gamevars(self)
 
