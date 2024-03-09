@@ -1,11 +1,11 @@
-from BaseClasses import MultiWorld, Region, CollectionState
-
+from BaseClasses import MultiWorld, Region
 
 from .Locations import are_locations, cat_locations, chi_locations, dai_locations, lib_locations, no0_locations, \
                         no1_locations, no2_locations, no3_locations, no4_locations, nz0_locations, nz1_locations, \
                         top_locations, SotnLocation, rare_locations, rcat_locations, rcen_locations, rchi_locations, \
                         rdai_locations, rlib_locations, rno0_locations, rno1_locations, rno2_locations, \
-                        rno3_locations, rno4_locations, rnz0_locations, rnz1_locations, rtop_locations
+                        rno3_locations, rno4_locations, rnz0_locations, rnz1_locations, rtop_locations, \
+                        exp_locations_item, exp_locations_token
 
 
 def create_regions(multiworld: MultiWorld, player: int) -> None:
@@ -42,6 +42,10 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
         no2.locations.append(SotnLocation(player, k, v.location_id, no2))
     no3 = Region("Castle Entrance", player, multiworld)
     for k, v in no3_locations.items():
+        no3.locations.append(SotnLocation(player, k, v.location_id, no3))
+    for k, v in exp_locations_token.items():
+        no3.locations.append(SotnLocation(player, k, v.location_id, no3))
+    for k, v in exp_locations_item.items():
         no3.locations.append(SotnLocation(player, k, v.location_id, no3))
     no4 = Region("Underground Caverns", player, multiworld)
     for k, v in no4_locations.items():
@@ -290,6 +294,3 @@ def create_regions(multiworld: MultiWorld, player: int) -> None:
     rchi.connect(rcat)
     # Floating Catacombs
     rcat.connect(rchi)
-
-# TODO: REMEMBER TO SET RULES ON NEED IT ITEMS
-
