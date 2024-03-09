@@ -732,7 +732,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # nmg: use ice grapple to get from the beginning of Quarry to the door without really needing mask only with ER on
     regions["Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
-        rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks) and options.entrance_rando)
+        rule=lambda state: has_ice_grapple_logic(True, state, player, options, ability_unlocks)
+        and options.entrance_rando)
 
     regions["Monastery Front"].connect(
         connecting_region=regions["Monastery Back"])
@@ -1072,7 +1073,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             ("Furnace Ladder Area", "Furnace, Overworld Redux_gyro_west", set()),
 
             # West Garden
-            # West Garden exit after Garden Knight
+            # exit after Garden Knight
             ("West Garden", "Archipelagos Redux, Overworld Redux_upper", set()),
             # West Garden laurels exit
             ("West Garden", "Archipelagos Redux, Overworld Redux_lowest", set()),
@@ -1093,7 +1094,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             ("Forest Grave Path Main", "Sword Access, East Forest Redux_upper", set()),
 
             # Fortress Exterior
-            # Fortress Exterior shop, ls at the ladder by the telescope
+            # shop, ls at the ladder by the telescope
             ("Fortress Exterior from Overworld", "Fortress Courtyard, Shop_", set()),
             # Fortress main entry and grave path lower entry, ls at the ladder by the telescope
             ("Fortress Exterior from Overworld", "Fortress Courtyard, Fortress Main_Big Door", set()),
@@ -1148,7 +1149,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     and has_ability(state, player, holy_cross, options, ability_unlocks)
                     and has_ladder("Swamp Ladders", state, player, options))
             # soft lock potential
-            elif portal_name in ["Special Shop Entrance", "Stairs to Top of the Mountain"] and not options.entrance_rando:
+            elif portal_name in ["Special Shop Entrance", "Stairs to Top of the Mountain"] \
+                    and not options.entrance_rando:
                 continue
             # soft lock if you don't have the ladder, just exclude it for simplicity
             elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando and options.shuffle_ladders:

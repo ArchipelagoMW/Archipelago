@@ -292,7 +292,8 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong")
-        portal2 = Portal(name=f"Shop Portal {i + 1}", region=f"Shop Entrance {i + 1}", destination="Previous Region", tag="_")
+        portal2 = Portal(name=f"Shop Portal {i + 1}", region=f"Shop Entrance {i + 1}",
+                         destination="Previous Region", tag="_")
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends
@@ -392,7 +393,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
     elif check_portal.scene_destination() == "Swamp Redux 2, Cathedral Redux_main":
         i = 0
         for portal in two_plus:
-            if portal.region in ["Swamp Front", "Swamp to Cathedral Treasure Room", "Swamp to Cathedral Main Entrance Region"]:
+            if portal.region in ["Swamp Front", "Swamp to Cathedral Treasure Room",
+                                 "Swamp to Cathedral Main Entrance Region"]:
                 i += 1
         if i == 4:
             return True
@@ -488,7 +490,8 @@ def create_plando_connections(plando_connections: List[PlandoConnection],
                     portal2 = portal
                     break
             if p_exit == "Shop Portal":
-                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}", destination="Previous Region", tag="_")
+                portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {shop_num}",
+                                 destination="Previous Region", tag="_")
                 shop_num += 1
             else:
                 dead_ends.remove(portal2)
