@@ -124,8 +124,7 @@ def setup_solo_multiworld(test_options=None, seed=None,
     if frozen_options in _cache:
         return _cache[frozen_options]
 
-    multiworld = setup_base_solo_multiworld(StardewValleyWorld, ())
-    multiworld.set_seed(seed)
+    multiworld = setup_base_solo_multiworld(StardewValleyWorld, (), seed=seed)
     # print(f"Seed: {multiworld.seed}") # Uncomment to print the seed for every test
     args = Namespace()
     for name, option in StardewValleyWorld.options_dataclass.type_hints.items():
