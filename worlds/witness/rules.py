@@ -70,6 +70,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     For Expert PP2, you need a way to access PP2 from the front, and a separate way from the back.
     This condition is quite complicated. We'll attempt to evaluate it as lazily as possible.
     """
+    
     player = world.player
     regio = world.regio
 
