@@ -1,5 +1,5 @@
 from argparse import Namespace
-from typing import Type, Tuple
+from typing import Optional, Tuple, Type
 
 from BaseClasses import MultiWorld, CollectionState
 from worlds.AutoWorld import call_all, World
@@ -7,7 +7,9 @@ from worlds.AutoWorld import call_all, World
 gen_steps = ("generate_early", "create_regions", "create_items", "set_rules", "generate_basic", "pre_fill")
 
 
-def setup_solo_multiworld(world_type: Type[World], steps: Tuple[str, ...] = gen_steps) -> MultiWorld:
+def setup_solo_multiworld(
+    world_type: Type[World], steps: Tuple[str, ...] = gen_steps, seed: Optional[int] = None
+) -> MultiWorld:
     """
     Creates a multiworld with a single player of `world_type`, sets default options, and calls provided gen steps.
     
