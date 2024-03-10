@@ -8,7 +8,7 @@ from BaseClasses import Region, Entrance
 from . import rules
 from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
-from .options import Difficulty, OpenDoors
+from .options import Difficulty, Goal, OpenDoors
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -237,9 +237,9 @@ def connect_regions(world: WL4World):
 
     connect('Menu', 'Entry Passage')
     connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
-    connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
-    connect('Entry Minigame Shop', 'Entry Passage Boss',
-            rules.make_boss_access_rule(world, Passage.ENTRY, required_jewels_entry))
+    # connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
+    # connect('Entry Minigame Shop', 'Entry Passage Boss',
+    #         rules.make_boss_access_rule(world, Passage.ENTRY, required_jewels_entry))
 
     connect('Menu', 'Emerald Passage')
     connect('Emerald Passage', 'Palm Tree Paradise (entrance)')
@@ -281,9 +281,10 @@ def connect_regions(world: WL4World):
             lambda state: state.has_all({'Emerald Passage Clear', 'Ruby Passage Clear',
                                      'Topaz Passage Clear', 'Sapphire Passage Clear'}, world.player))
     connect('Golden Pyramid', 'Golden Passage (entrance)')
-    connect_level_exit('Golden Passage', 'Golden Minigame Shop')
-    connect('Golden Minigame Shop', 'Golden Pyramid Boss',
-            rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
+    if world.options.goal != Goal.option_golden_treasure_hunt:
+        connect_level_exit('Golden Passage', 'Golden Minigame Shop')
+        connect('Golden Minigame Shop', 'Golden Pyramid Boss',
+                rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
 
 
 def create_region(world: WL4World, location_table: Set[str], name: str,

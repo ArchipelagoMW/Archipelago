@@ -76,15 +76,16 @@ class WL4World(World):
         set_access_rules(self)
         connect_regions(self)
 
-        passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
+        passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
         for passage in passages:
             location = self.multiworld.get_region(f'{passage} Passage Boss', self.player).locations[0]
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
-        golden_diva = self.multiworld.get_location('Golden Diva', self.player)
-        golden_diva.place_locked_item(self.create_item('Escape the Pyramid'))
-        golden_diva.show_in_spoiler = False
+        if self.options.goal != Goal.option_golden_treasure_hunt:
+            golden_diva = self.multiworld.get_location('Golden Diva', self.player)
+            golden_diva.place_locked_item(self.create_item('Escape the Pyramid'))
+            golden_diva.show_in_spoiler = False
 
     def create_items(self):
         difficulty = self.options.difficulty
@@ -101,15 +102,18 @@ class WL4World(World):
         required_jewels = self.options.required_jewels.value
         pool_jewels = self.options.pool_jewels.value
         for name, item in filter_items(type=ItemType.JEWEL):
+            force_non_progression = required_jewels == 0
             if item.passage() == Passage.ENTRY:
                 copies = min(pool_jewels, 1)
             elif item.passage() == Passage.GOLDEN:
                 copies = self.options.golden_jewels.value
+                if self.options.goal == Goal.option_golden_treasure_hunt:
+                    force_non_progression = True
             else:
                 copies = pool_jewels
 
             for _ in range(copies):
-                itempool.append(self.create_item(name, required_jewels == 0))
+                itempool.append(self.create_item(name, force_non_progression))
 
         for name in filter_item_names(type=ItemType.CD):
             itempool.append(self.create_item(name))
@@ -191,6 +195,8 @@ class WL4World(World):
     def setup_locations(self):
         checks = filter(lambda p: self.options.difficulty in p[1].difficulties,
                                   locations.location_table.items())
-        if (self.options.goal != Goal.option_golden_treasure_hunt):
+        if (self.options.goal == Goal.option_golden_treasure_hunt):
+            checks = filter(lambda p: p[0] != 'Golden Diva', checks)
+        else:
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
         return {name for name, _ in checks}
