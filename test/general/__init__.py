@@ -16,11 +16,12 @@ def setup_solo_multiworld(
     :param world_type: Type of the world to generate a multiworld for
     :param steps: The gen steps that should be called on the generated multiworld before returning. Default calls
     steps through pre_fill
+    :param seed: The seed to be used when creating this multiworld
     """
     multiworld = MultiWorld(1)
     multiworld.game[1] = world_type.game
     multiworld.player_name = {1: "Tester"}
-    multiworld.set_seed()
+    multiworld.set_seed(seed)
     multiworld.state = CollectionState(multiworld)
     args = Namespace()
     for name, option in world_type.options_dataclass.type_hints.items():
