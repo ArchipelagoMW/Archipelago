@@ -642,6 +642,10 @@ item_table = {
         ItemData(280 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 15, SC2Race.TERRAN,
                  parent_item=ItemNames.VIKING, origin={"ext"},
                  description="Increases Viking damage to mechanical units while in Assault Mode."),
+    ItemNames.DIAMONDBACK_ION_THRUSTERS:
+        ItemData(281 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
+                 parent_item=ItemNames.DIAMONDBACK,
+                 description="Increases Diamondback movement speed."),
 
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, SC2Race.TERRAN,
@@ -672,10 +676,15 @@ item_table = {
         ItemData(305 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 20, SC2Race.TERRAN,
                  parent_item=ItemNames.GOLIATH,
                  description="Increases Goliath ground attack range by 1 and air by 3."),
-    ItemNames.DIAMONDBACK_TRI_LITHIUM_POWER_CELL:
-        ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
-                 classification=ItemClassification.filler, parent_item=ItemNames.DIAMONDBACK,
-                 description="Increases Diamondback attack range by 1."),
+    ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL:
+        ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 4, SC2Race.TERRAN,
+                 parent_item=ItemNames.DIAMONDBACK,
+                 description=inspect.cleandoc(
+                     """
+                     Level 1: Tri-Lithium Power Cell: Increases Diamondback attack range by 1.
+                     Level 2: Tungsten Spikes: Increases Diamondback attack range by 3.
+                     """
+                 )),
     ItemNames.DIAMONDBACK_SHAPED_HULL:
         ItemData(307 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 22, SC2Race.TERRAN,
                  classification=ItemClassification.filler, parent_item=ItemNames.DIAMONDBACK,
@@ -701,9 +710,9 @@ item_table = {
                  classification=ItemClassification.filler, parent_item=ItemNames.WRAITH, quantity=2,
                  description=inspect.cleandoc(
                      """
-                    Level 1: Increases Wraith starting energy by 100.
-                    Level 2: Wraiths do not require energy to cloak and remain cloaked.
-                 """
+                     Level 1: Tomahawk Power Cells: Increases Wraith starting energy by 100.
+                     Level 2: Unregistered Cloaking Module: Wraiths do not require energy to cloak and remain cloaked.
+                     """
                  )),
     ItemNames.WRAITH_DISPLACEMENT_FIELD:
         ItemData(313 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 27, SC2Race.TERRAN,
