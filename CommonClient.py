@@ -80,7 +80,7 @@ class ClientCommandProcessor(CommandProcessor):
             add_json_text(parts, " from ")
             add_json_location(parts, item.location, item.player)
             add_json_text(parts, " by ")
-            add_json_text(parts, str(item.player), type=JSONTypes.player_id)
+            add_json_text(parts, item.player, type=JSONTypes.player_id)
             self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
