@@ -2,7 +2,7 @@ import hashlib
 import logging
 import typing
 
-from BaseClasses import Tutorial, ItemClassification, MultiWorld, Region, Entrance
+from BaseClasses import Tutorial, ItemClassification, MultiWorld, Region, Entrance, Item
 from worlds.AutoWorld import World, WebWorld
 from worlds.generic.Rules import set_rule, add_rule
 from .Names import *
@@ -13,7 +13,7 @@ from .Rom import get_base_rom_bytes, get_base_rom_path, RomData, patch_rom, extr
     MM2LCHASH, PROTEUSHASH, MM2VCHASH, MM2NESHASH
 from .Options import MM2Options
 from .Client import MegaMan2Client
-from .Rules import set_rules, weapon_damage
+from .Rules import set_rules, weapon_damage, robot_masters, weapons_to_name
 import os
 import threading
 import base64
@@ -21,10 +21,8 @@ import settings
 from worlds.LauncherComponents import components, SuffixIdentifier
 logger = logging.getLogger("Mega Man 2")
 
-for component in components:
-    if component.script_name == "BizHawkClient":
-        component.file_identifier = SuffixIdentifier(*(*component.file_identifier.suffixes, ".apmm2"))
-        break
+if typing.TYPE_CHECKING:
+    from BaseClasses import CollectionState
 
 
 class MM2Settings(settings.Group):
@@ -216,3 +214,26 @@ class MM2World(World):
         if rom_name:
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
+
+    def collect(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().collect(state, item)
+        if change and item.name in self.item_name_groups["Weapons"]:
+            # need to evaluate robot master access
+            weapon = next((wp for wp in weapons_to_name if weapons_to_name[wp] == item.name), None)
+            if weapon:
+                for rbm in robot_masters:
+                    if (weapon != 1 and self.weapon_damage[weapon][rbm] > 0) or self.weapon_damage[weapon][rbm] >= 14:
+                        state.prog_items[self.player][robot_masters[rbm]] = 1
+        return change
+
+    def remove(self, state: "CollectionState", item: "Item") -> bool:
+        change = super().remove(state, item)
+        if change and item.name in self.item_name_groups["Weapons"]:
+            weapon = next((weapons_to_name[weapon] == item.name for weapon in weapons_to_name), None)
+            received_weapons = {weapon for weapon in weapons_to_name if weapons_to_name[weapon] in state.prog_items}
+            if weapon:
+                for rbm in robot_masters:
+                    if self.weapon_damage[weapon][rbm] > 0 and not any(self.weapon_damage[wp][rbm] > 0
+                                                                       for wp in received_weapons):
+                        state.prog_items[self.player][robot_masters[rbm]] = 0
+        return change

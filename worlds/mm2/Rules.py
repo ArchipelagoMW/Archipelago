@@ -7,6 +7,7 @@ from worlds.generic.Rules import set_rule, add_rule
 
 if typing.TYPE_CHECKING:
     from . import MM2World
+    from BaseClasses import CollectionState
 
 weapon_damage: typing.Dict[int, typing.List[int]] = {
     0: [2, 2, 1, 1, 2, 2, 1, 1, 1, 7, 1, 0, 1, -1],  # Mega Buster
@@ -29,11 +30,22 @@ weapons_to_name = {
     7: Names.metal_blade
 }
 
+robot_masters = {
+    0: "Heat Man Defeated",
+    1: "Air Man Defeated",
+    2: "Wood Man Defeated",
+    3: "Bubble Man Defeated",
+    4: "Quick Man Defeated",
+    5: "Flash Man Defeated",
+    6: "Metal Man Defeated",
+    7: "Crash Man Defeated"
+}
 
-def can_defeat_enough_rbms(required: int, weapon_damage: typing.Dict[int, typing.List[int]]):
+
+def can_defeat_enough_rbms(state: "CollectionState", player: int, required: int):
     can_defeat = 0
-    for boss in range(8):
-        if any(weapon_damage[weapon][boss] > 0 for weapon in weapon_damage):
+    for boss in robot_masters:
+        if state.has(robot_masters[boss], player):
             can_defeat += 1
     return can_defeat >= required
 
@@ -113,9 +125,9 @@ def set_rules(world: "MM2World") -> None:
 
     # Need to defeat x amount of robot masters for Wily 5
     add_rule(world.multiworld.get_location(Names.wily_5, world.player),
-             lambda state: can_defeat_enough_rbms(world.options.wily_5_requirement.value, world.weapon_damage))
+             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
     add_rule(world.multiworld.get_location(Names.wily_stage_5, world.player),
-             lambda state: can_defeat_enough_rbms(world.options.wily_5_requirement.value, world.weapon_damage))
+             lambda state: can_defeat_enough_rbms(state, world.player, world.options.wily_5_requirement.value))
 
     if not world.options.yoku_jumps:
         add_rule(world.multiworld.get_entrance("To Heat Man Stage", world.player),

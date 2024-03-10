@@ -1,4 +1,5 @@
 from . import MM2TestBase
+import typing
 
 
 class StrictWeaknessTests(MM2TestBase):
