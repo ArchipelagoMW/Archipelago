@@ -1184,8 +1184,8 @@ def patch_rom(world, rom, player: int, multiworld):
         rom.write_bytes(0x06FC86, bytearray([0xFF])) #Boss clear goal = 255, renders bowser inaccessible
 
     from Main import __version__
-    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:15]
-    rom.name.extend([0] * (15 - len(rom.name)))
+    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)
 
 class YIDeltaPatch(APDeltaPatch):
