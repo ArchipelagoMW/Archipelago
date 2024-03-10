@@ -1,6 +1,6 @@
 ## New Behaviors
 
-- The union room receptionist on the second floor of pokemon centers was reworked for wonder trading via Archipelago
+- The union room receptionist on the second floor of Pokemon Centers was reworked for wonder trading via Archipelago
 - Norman will give you all event ticket items when he gives you the S.S. Ticket
 - Use of event tickets is streamlined and the scripts are refactored to skip "first time use" stuff
 - The roaming pokemon is forced to Latios
