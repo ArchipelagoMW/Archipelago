@@ -352,8 +352,11 @@ class MessengerWorld(World):
 
     @classmethod
     def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str) -> None:
+        # using stage_generate_output because it doesn't increase the logged player count for players without output
+        # only generate output if there's a single player
         if multiworld.players > 1:
             return
+        # the messenger client calls into AP with specific args, so check the out path matches what the client sends
         out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
         if "The Messenger\\Archipelago\\output" not in out_path:
             return
