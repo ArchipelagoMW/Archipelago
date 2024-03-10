@@ -116,12 +116,12 @@ class BumpStikWorld(World):
         self.multiworld.itempool += item_pool
 
     def set_rules(self):
-        for x in range(1, 32):
-            self.multiworld.get_location(f"Treasure Bumper {x + 1}", self.player).access_rule = \
-                lambda state, x = x: state.has("Treasure Bumper", self.player, x)
-        for x in range(1, 5):
-            self.multiworld.get_location(f"Bonus Booster {x + 1}", self.player).access_rule = \
-                lambda state, x = x: state.has("Booster Bumper", self.player, x)
+        for treasure_count in range(1, 33):
+            self.multiworld.get_location(f"Treasure Bumper {treasure_count}", self.player).access_rule = \
+                lambda state, treasure_held = treasure_count: state.has("Treasure Bumper", self.player, treasure_held)
+        for booster_count in range(1, 6):
+            self.multiworld.get_location(f"Bonus Booster {booster_count}", self.player).access_rule = \
+                lambda state, booster_held = booster_count: state.has("Booster Bumper", self.player, booster_held)
         self.multiworld.get_location("Level 5 - Cleared all Hazards", self.player).access_rule = \
             lambda state: state.has("Hazard Bumper", self.player, 25)
             
