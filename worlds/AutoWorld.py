@@ -296,6 +296,7 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
+        assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
 
