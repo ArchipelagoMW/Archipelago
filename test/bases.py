@@ -10,7 +10,7 @@ from worlds import AutoWorld
 from worlds.AutoWorld import World, call_all
 
 from BaseClasses import Location, MultiWorld, CollectionState, ItemClassification, Item
-from worlds.alttp.Items import ItemFactory
+from worlds.alttp.Items import item_factory
 
 
 class TestBase(unittest.TestCase):
@@ -91,15 +91,15 @@ class TestBase(unittest.TestCase):
             items = self.multiworld.itempool[:]
             items = [item for item in items if
                      item.name not in all_except and not ("Bottle" in item.name and "AnyBottle" in all_except)]
-            items.extend(ItemFactory(item_pool[0], 1))
+            items.extend(item_factory(item_pool[0], self.multiworld.worlds[1]))
         else:
-            items = ItemFactory(item_pool[0], 1)
+            items = item_factory(item_pool[0], self.multiworld.worlds[1])
         return self.get_state(items)
 
     def _get_items_partial(self, item_pool, missing_item):
         new_items = item_pool[0].copy()
         new_items.remove(missing_item)
-        items = ItemFactory(new_items, 1)
+        items = item_factory(new_items, self.multiworld.worlds[1])
         return self.get_state(items)
 
 
