@@ -138,13 +138,16 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
         or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Theater"])
     )
 
+    if not theater_from_town:
+        return False
+
     tunnels_from_town = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
         and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Windmill Interior"])
         or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Town"])
     )
 
-    return theater_from_town and tunnels_from_town
+    return tunnels_from_town
 
 
 def _has_item(item: str, world: "WitnessWorld", player: int,
