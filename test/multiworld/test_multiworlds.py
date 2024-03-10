@@ -6,7 +6,6 @@ from BaseClasses import CollectionState, Location, MultiWorld
 from Fill import distribute_items_restrictive
 from Options import Accessibility
 from worlds.AutoWorld import AutoWorldRegister, call_all, call_single
-from worlds.alttp import ALTTPWorld
 from ..general import gen_steps, setup_multiworld
 
 
@@ -49,8 +48,8 @@ class MultiworldTestBase(TestCase):
                         stage_callable(self.multiworld)
 
 
+@unittest.skip("too slow for main")
 class TestAllGamesMultiworld(MultiworldTestBase):
-    @unittest.skip("too slow for main")
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
         all_worlds = list(AutoWorldRegister.world_types.values())
