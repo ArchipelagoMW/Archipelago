@@ -179,6 +179,22 @@ class ShuffleStoneBeaks(DungeonItemShuffle):
     display_name = "Shuffle Stone Beaks"
     ladxr_item = "STONE_BEAK"
 
+class ShuffleInstruments(DungeonItemShuffle):
+    """
+    Shuffle Instruments
+    [Original Dungeon] The item will be within its original dungeon
+    [Own Dungeons] The item will be within a dungeon in your world
+    [Own World] The item will be somewhere in your world
+    [Any World] The item could be anywhere
+    [Different World] The item will be somewhere in another world
+    [Vanilla] The item will be in its vanilla location in your world
+    """
+    display_name = "Shuffle Instruments"
+    ladxr_item = "INSTRUMENT"
+    default = 100
+    option_vanilla = 100
+    alias_false = 100
+
 class Goal(Choice, LADXROption):
     """
     The Goal of the game
@@ -465,6 +481,7 @@ links_awakening_options: typing.Dict[str, typing.Type[Option]] = {
     'shuffle_compasses': ShuffleCompasses,
     'shuffle_stone_beaks': ShuffleStoneBeaks,
     'music': Music,
+    'shuffle_instruments': ShuffleInstruments,
     'music_change_condition': MusicChangeCondition,
     'nag_messages': NagMessages,
     'ap_title_screen': APTitleScreen,
