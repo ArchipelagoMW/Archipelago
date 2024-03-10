@@ -45,7 +45,6 @@ class TunicWorld(World):
     game = "TUNIC"
     web = TunicWeb()
 
-    data_version = 2
     options: TunicOptions
     options_dataclass = TunicOptions
     item_name_groups = item_name_groups
