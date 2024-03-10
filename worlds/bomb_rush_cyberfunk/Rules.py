@@ -409,7 +409,7 @@ def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) ->
     total: int = 0
 
     if glitched:
-        total += 73
+        total += 75
 
         if brink_terminal_entrance(state, player):
             total += 13
@@ -529,7 +529,7 @@ def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, gl
     total: int = 0
 
     if glitched:
-        total += 98
+        total += 99
 
         if brink_terminal_entrance(state, player):
             total += 21
@@ -668,7 +668,7 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
     total: int = 0
 
     if glitched:
-        total += 85
+        total += 90
 
         if brink_terminal_entrance(state, player):
             total += 18
@@ -821,7 +821,7 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
     total: int = 0
 
     if glitched:
-        total += 48
+        total += 50
 
         if brink_terminal_entrance(state, player):
             total += 8
@@ -1457,5 +1457,9 @@ def rules(brcworld):
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 375))
     set_rule(world.get_location("Tagged 380 Graffiti Spots", player),
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 380))
-    set_rule(world.get_location("Tagged 381 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 381))
+    set_rule(world.get_location("Tagged 385 Graffiti Spots", player),
+        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 385))
+    set_rule(world.get_location("Tagged 389 Graffiti Spots", player),
+        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 389))
+    
+    

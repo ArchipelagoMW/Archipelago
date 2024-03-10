@@ -757,9 +757,12 @@ location_table: List[LocationDict] = [
     {'name': "Tagged 380 Graffiti Spots",
         'stage': BRCStage.Misc,
         'game_id': "graf380"},
-    {'name': "Tagged 381 Graffiti Spots",
+    {'name': "Tagged 385 Graffiti Spots",
         'stage': BRCStage.Misc,
-        'game_id': "graf381"},
+        'game_id': "graf385"},
+    {'name': "Tagged 389 Graffiti Spots",
+        'stage': BRCStage.Misc,
+        'game_id': "graf379"},
 ]
 
 
