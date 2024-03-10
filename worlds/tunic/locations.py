@@ -1,10 +1,11 @@
-from typing import Dict, NamedTuple, Set, Optional
+from typing import Dict, NamedTuple, Set, Optional, List
 
 
 class TunicLocationData(NamedTuple):
     region: str
     er_region: str  # entrance rando region
     location_group: Optional[str] = None
+    location_groups: Optional[List[str]] = None
 
 
 location_base_id = 509342400
@@ -141,7 +142,7 @@ location_table: Dict[str, TunicLocationData] = {
     "Overworld - [Southwest] Beach Chest Near Flowers": TunicLocationData("Overworld", "Overworld Beach"),
     "Overworld - [Southwest] Bombable Wall Near Fountain": TunicLocationData("Overworld", "Overworld"),
     "Overworld - [West] Chest After Bell": TunicLocationData("Overworld", "Overworld Belltower"),
-    "Overworld - [Southwest] Tunnel Guarded By Turret": TunicLocationData("Overworld", "Overworld"),
+    "Overworld - [Southwest] Tunnel Guarded By Turret": TunicLocationData("Overworld", "Overworld Tunnel Turret"),
     "Overworld - [East] Between Ladders Near Ruined Passage": TunicLocationData("Overworld", "After Ruined Passage"),
     "Overworld - [Northeast] Chest Above Patrol Cave": TunicLocationData("Overworld", "Upper Overworld"),
     "Overworld - [Southwest] Beach Chest Beneath Guard": TunicLocationData("Overworld", "Overworld Beach"),

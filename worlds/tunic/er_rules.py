@@ -309,6 +309,23 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld above Patrol Cave"],
         rule=lambda state: state.has(grapple, player))
 
+    regions["Overworld Tunnel Turret"].connect(
+        connecting_region=regions["Overworld Beach"],
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options)
+        or state.has(grapple, player))
+    regions["Overworld Beach"].connect(
+        connecting_region=regions["Overworld Tunnel Turret"],
+        rule=lambda state: has_ladder("Overworld Town Ladders", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+
+    regions["Overworld"].connect(
+        connecting_region=regions["Overworld Tunnel Turret"],
+        rule=lambda state: state.has(laurels, player)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+    regions["Overworld Tunnel Turret"].connect(
+        connecting_region=regions["Overworld"],
+        rule=lambda state: state.has_any({grapple, laurels}, player))
+
     # Overworld side areas
     regions["Old House Front"].connect(
         connecting_region=regions["Old House Back"])

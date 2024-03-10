@@ -37,7 +37,7 @@ portal_mapping: List[Portal] = [
            destination="Furnace", tag="_gyro_upper_east"),
     Portal(name="Entrance to Furnace near West Garden", region="Overworld to West Garden from Furnace",
            destination="Furnace", tag="_gyro_west"),
-    Portal(name="Entrance to Furnace from Beach", region="Overworld",
+    Portal(name="Entrance to Furnace from Beach", region="Overworld Tunnel Turret",
            destination="Furnace", tag="_gyro_lower"),
     Portal(name="Caustic Light Cave Entrance", region="Overworld Swamp Lower Entry",
            destination="Overworld Cave", tag="_"),
@@ -558,6 +558,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Town Portal": RegionInfo("Overworld Redux"),
     "Overworld Spawn Portal": RegionInfo("Overworld Redux"),
+    "Overworld Tunnel Turret": RegionInfo("Overworld Redux"),  # the tunnel turret by the southwest beach ladder
     "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
