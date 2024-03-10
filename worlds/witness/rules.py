@@ -2,8 +2,7 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
-from functools import lru_cache
-from typing import TYPE_CHECKING, FrozenSet, List
+from typing import TYPE_CHECKING, FrozenSet, Generator
 
 from BaseClasses import CollectionState, Entrance
 from .player_logic import WitnessPlayerLogic
@@ -66,15 +65,11 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
         return make_lambda(panel, world)
 
 
-@lru_cache
-def _get_both_entrances(source: str, target: str, regio: WitnessRegions) -> List[Entrance]:
-    entrances = []
+def _get_both_entrances(source: str, target: str, regio: WitnessRegions) -> Generator[Entrance, None, None]:
     if (source, target) in regio.created_entrances:
-        entrances.append(regio.created_entrances[source, target])
+        yield regio.created_entrances[source, target]
     if (target, source) in regio.created_entrances:
-        entrances.append(regio.created_entrances[source, target])
-
-    return entrances
+        yield regio.created_entrances[target, source]
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
