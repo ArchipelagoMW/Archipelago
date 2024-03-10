@@ -654,6 +654,18 @@ item_table = {
         ItemData(283 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 14, SC2Race.TERRAN,
                  parent_item=ItemNames.WARHOUND,
                  description="Increases Warhound armor by 2."),
+    ItemNames.HERC_RESOURCE_EFFICIENCY:
+        ItemData(284 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 15, SC2Race.TERRAN,
+                 parent_item=ItemNames.HERC,
+                 description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("HERC")),
+    ItemNames.HERC_JUGGERNAUT_PLATING:
+        ItemData(285 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 16, SC2Race.TERRAN,
+                 parent_item=ItemNames.WARHOUND,
+                 description="Increases HERC armor by 2."),
+    ItemNames.HERC_KINETIC_FOAM:
+        ItemData(286 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 17, SC2Race.TERRAN,
+                 parent_item=ItemNames.WARHOUND,
+                 description="Increases HERC life by 50."),
 
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, SC2Race.TERRAN,
