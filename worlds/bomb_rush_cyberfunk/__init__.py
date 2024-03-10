@@ -26,6 +26,7 @@ class BombRushCyberfunkWorld(World):
 
     game = "Bomb Rush Cyberfunk"
     web = BombRushCyberfunkWeb()
+    data_version = 1
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
     item_name_to_type = {item["name"]: item["type"] for item in item_table}
