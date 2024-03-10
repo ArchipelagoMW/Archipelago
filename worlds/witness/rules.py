@@ -177,8 +177,8 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     This condition is a little tricky. We'll attempt to evaluate it as lazily as possible.
     """
 
-    if not state.can_reach_region("Theater", world.player):
-        return False
+    # Checking for access to Theater is not necessary, as solvability of Tutorial Video is checked in the other half
+    # of the Theater Flowers EP condition.
 
     direct_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
