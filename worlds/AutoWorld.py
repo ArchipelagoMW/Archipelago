@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import random
 import re
 import sys
 import time
@@ -299,6 +300,8 @@ class World(metaclass=AutoWorldRegister):
         assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
+        self.random = random.Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
