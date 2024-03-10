@@ -234,8 +234,8 @@ def generate_itempool(world):
         raise NotImplementedError(f"Goal {multiworld.goal[player]} for player {player}")
     if multiworld.mode[player] not in ('open', 'standard', 'inverted'):
         raise NotImplementedError(f"Mode {multiworld.mode[player]} for player {player}")
-    if multiworld.timer[player] not in {False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'}:
-        raise NotImplementedError(f"Timer {multiworld.mode[player]} for player {player}")
+    if multiworld.timer[player] not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
+        raise NotImplementedError(f"Timer {multiworld.timer[player]} for player {player}")
 
     if multiworld.timer[player] in ['ohko', 'timed_ohko']:
         multiworld.can_take_damage[player] = False
