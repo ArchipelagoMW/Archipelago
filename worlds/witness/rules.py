@@ -2,14 +2,14 @@
 Defines the rules by which locations can be accessed,
 depending on the items received
 """
+from functools import lru_cache
+from typing import TYPE_CHECKING, FrozenSet, List
 
-from typing import TYPE_CHECKING, Callable, FrozenSet
-
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, Entrance
 from .player_logic import WitnessPlayerLogic
 from .locations import WitnessPlayerLocations
 from . import StaticWitnessLogic, WitnessRegions
-from worlds.generic.Rules import set_rule
+from worlds.generic.Rules import set_rule, CollectionRule
 
 if TYPE_CHECKING:
     from . import WitnessWorld
@@ -30,7 +30,7 @@ laser_hexes = [
 
 
 def _has_laser(laser_hex: str, world: "WitnessWorld", player: int,
-               redirect_required: bool) -> Callable[[CollectionState], bool]:
+               redirect_required: bool) -> CollectionRule:
     if laser_hex == "0x012FB" and redirect_required:
         return lambda state: (
             _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)(state)
@@ -40,7 +40,7 @@ def _has_laser(laser_hex: str, world: "WitnessWorld", player: int,
         return _can_solve_panel(laser_hex, world, world.player, world.player_logic, world.locat)
 
 
-def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> Callable[[CollectionState], bool]:
+def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> CollectionRule:
     laser_lambdas = []
 
     for laser_hex in laser_hexes:
@@ -52,7 +52,7 @@ def _has_lasers(amount: int, world: "WitnessWorld", redirect_required: bool) -> 
 
 
 def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logic: WitnessPlayerLogic,
-                     locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
+                     locat: WitnessPlayerLocations) -> CollectionRule:
     """
     Determines whether a panel can be solved
     """
@@ -66,64 +66,66 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
         return make_lambda(panel, world)
 
 
-def _can_move_either_direction(state: CollectionState, source: str, target: str, regio: WitnessRegions) -> bool:
-    entrance_forward = regio.created_entrances[source, target]
-    entrance_backward = regio.created_entrances[target, source]
+@lru_cache
+def _get_both_entrances(source: str, target: str, regio: WitnessRegions) -> List[Entrance]:
+    entrances = []
+    if (source, target) in regio.created_entrances:
+        entrances.append(regio.created_entrances[source, target])
+    if (target, source) in regio.created_entrances:
+        entrances.append(regio.created_entrances[source, target])
 
-    return (
-        any(entrance.can_reach(state) for entrance in entrance_forward)
-        or
-        any(entrance.can_reach(state) for entrance in entrance_backward)
-    )
+    return entrances
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     player = world.player
 
     hedge_2_access = (
-        _can_move_either_direction(state, "Keep 2nd Maze", "Keep", world.regio)
+        any(e.can_reach(state) for e in _get_both_entrances("Keep 2nd Maze", "Keep", world.regio))
     )
 
     hedge_3_access = (
-            _can_move_either_direction(state, "Keep 3rd Maze", "Keep", world.regio)
-            or _can_move_either_direction(state, "Keep 3rd Maze", "Keep 2nd Maze", world.regio)
-            and hedge_2_access
+        any(e.can_reach(state) for e in _get_both_entrances("Keep 3rd Maze", "Keep", world.regio))
+        or any(e.can_reach(state) for e in _get_both_entrances("Keep 3rd Maze", "Keep 2nd Maze", world.regio))
+        and hedge_2_access
     )
 
     hedge_4_access = (
-            _can_move_either_direction(state, "Keep 4th Maze", "Keep", world.regio)
-            or _can_move_either_direction(state, "Keep 4th Maze", "Keep 3rd Maze", world.regio)
-            and hedge_3_access
+        any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep", world.regio))
+        or any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep 3rd Maze", world.regio))
+        and hedge_3_access
     )
 
     hedge_access = (
-            _can_move_either_direction(state, "Keep 4th Maze", "Keep Tower", world.regio)
-            and state.can_reach("Keep", "Region", player)
-            and hedge_4_access
+        any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep Tower", world.regio))
+        and state.can_reach("Keep", "Region", player)
+        and hedge_4_access
     )
 
     backwards_to_fourth = (
-            state.can_reach("Keep", "Region", player)
-            and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Keep Tower", world.regio)
-            and (
-                    _can_move_either_direction(state, "Keep", "Keep Tower", world.regio)
-                    or hedge_access
-            )
+        state.can_reach("Keep", "Region", player)
+        and any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Pressure Plate", "Keep Tower", world.regio))
+        and (
+            any(e.can_reach(state) for e in _get_both_entrances("Keep", "Keep Tower", world.regio))
+            or hedge_access
+        )
     )
 
     shadows_shortcut = (
-            state.can_reach("Main Island", "Region", player)
-            and _can_move_either_direction(state, "Keep 4th Pressure Plate", "Shadows", world.regio)
+        state.can_reach("Main Island", "Region", player)
+        and any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Pressure Plate", "Shadows", world.regio))
     )
 
     backwards_access = (
-            _can_move_either_direction(state, "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
-            and (backwards_to_fourth or shadows_shortcut)
+        any(e.can_reach(state) for e in _get_both_entrances(
+            "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
+            )
+        and (backwards_to_fourth or shadows_shortcut)
     )
 
     front_access = (
-            _can_move_either_direction(state, "Keep 2nd Pressure Plate", "Keep", world.regio)
-            and state.can_reach("Keep", "Region", player)
+        any(e.can_reach(state) for e in _get_both_entrances("Keep 2nd Pressure Plate", "Keep", world.regio))
+        and state.can_reach("Keep", "Region", player)
     )
 
     return front_access and backwards_access
@@ -131,27 +133,30 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
     direct_access = (
-            _can_move_either_direction(state, "Tunnels", "Windmill Interior", world.regio)
-            and _can_move_either_direction(state, "Theater", "Windmill Interior", world.regio)
+        any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Windmill Interior", world.regio))
+        and any(e.can_reach(state) for e in _get_both_entrances("Theater", "Windmill Interior", world.regio))
     )
 
+    if direct_access:
+        return True
+
     theater_from_town = (
-            _can_move_either_direction(state, "Town", "Windmill Interior", world.regio)
-            and _can_move_either_direction(state, "Theater", "Windmill Interior", world.regio)
-            or _can_move_either_direction(state, "Town", "Theater", world.regio)
+        any(e.can_reach(state) for e in _get_both_entrances("Town", "Windmill Interior", world.regio))
+        and any(e.can_reach(state) for e in _get_both_entrances("Theater", "Windmill Interior", world.regio))
+        or any(e.can_reach(state) for e in _get_both_entrances("Town", "Theater", world.regio))
     )
 
     tunnels_from_town = (
-            _can_move_either_direction(state, "Tunnels", "Windmill Interior", world.regio)
-            and _can_move_either_direction(state, "Town", "Windmill Interior", world.regio)
-            or _can_move_either_direction(state, "Tunnels", "Town", world.regio)
+        any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Windmill Interior", world.regio))
+        and any(e.can_reach(state) for e in _get_both_entrances("Town", "Windmill Interior", world.regio))
+        or any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Town", world.regio))
     )
 
-    return direct_access or theater_from_town and tunnels_from_town
+    return theater_from_town and tunnels_from_town
 
 
 def _has_item(item: str, world: "WitnessWorld", player: int,
-              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
+              player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> CollectionRule:
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
         region = world.get_region(item)
         return region.can_reach
@@ -179,7 +184,7 @@ def _has_item(item: str, world: "WitnessWorld", player: int,
 
 
 def _meets_item_requirements(requirements: FrozenSet[FrozenSet[str]],
-                             world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+                             world: "WitnessWorld") -> CollectionRule:
     """
     Checks whether item and panel requirements are met for
     a panel
@@ -196,7 +201,7 @@ def _meets_item_requirements(requirements: FrozenSet[FrozenSet[str]],
     )
 
 
-def make_lambda(entity_hex: str, world: "WitnessWorld") -> Callable[[CollectionState], bool]:
+def make_lambda(entity_hex: str, world: "WitnessWorld") -> CollectionRule:
     """
     Lambdas are created in a for loop so values need to be captured
     """
