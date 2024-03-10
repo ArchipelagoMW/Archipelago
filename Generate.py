@@ -325,20 +325,20 @@ def update_weights(weights: dict, new_weights: dict, update_type: str, name: str
     logging.debug(f'Applying {new_weights}')
     cleaned_weights = {}
     for option in new_weights:
-        if option.startswith("+"):
-            option_name = option[1:]
+        option_name = option.lstrip("+")
+        if option.startswith("+") and option_name in weights:
+            cleaned_value = weights[option_name]
             new_value = new_weights[option]
-            if option_name in weights:
-                if isinstance(new_value, (set, dict)):
-                    new_value.update(weights[option_name])
-                elif isinstance(new_value, list):
-                    new_value.extend(weights[option_name])
-                else:
-                    raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
-                                    f" received {type(new_value).__name__}.")
-            cleaned_weights[option_name] = new_value
+            if isinstance(new_value, (set, dict)):
+                cleaned_value.update(new_value)
+            elif isinstance(new_value, list):
+                cleaned_value.extend(new_value)
+            else:
+                raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                f" received {type(new_value).__name__}.")
+            cleaned_weights[option_name] = cleaned_value
         else:
-            cleaned_weights[option] = new_weights[option]
+            cleaned_weights[option_name] = new_weights[option]
     new_options = set(cleaned_weights) - set(weights)
     weights.update(cleaned_weights)
     if new_options:
