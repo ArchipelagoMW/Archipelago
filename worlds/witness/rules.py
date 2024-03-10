@@ -95,17 +95,17 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
     hedge_access = (
         any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep Tower"])
-        and state.can_reach("Keep", "Region", player)
+        # and state.can_reach("Keep", "Region", player)  # Implicit! :)
         and hedge_4_access
     )
 
     backwards_to_fourth = (
-        state.can_reach("Keep", "Region", player)
-        and any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
         and (
             any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep", "Keep Tower"])
             or hedge_access
         )
+        # and state.can_reach("Keep", "Region", player)  # Implicit! :)
     )
 
     shadows_shortcut = (
