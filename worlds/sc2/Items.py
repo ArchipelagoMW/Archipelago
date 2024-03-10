@@ -1530,13 +1530,13 @@ item_table = {
                  parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"hots"},
                  classification=ItemClassification.filler,
                  description="Banelings will heal nearby friendly units when they explode."),
-    ItemNames.MUTALISK_VICIOUS_GLAVE:
+    ItemNames.MUTALISK_VICIOUS_GLAIVE:
         ItemData(212 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 12, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"hots"}, description="Mutalisks attacks will bounce an additional 3 times."),
     ItemNames.MUTALISK_RAPID_REGENERATION:
         ItemData(213 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 13, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"hots"}, description="Mutalisks will regenerate quickly when out of combat."),
-    ItemNames.MUTALISK_SUNDERING_GLAVE:
+    ItemNames.MUTALISK_SUNDERING_GLAIVE:
         ItemData(214 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 1", 14, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"hots"}, description="Mutalisks deal increased damage to their primary target."),
     ItemNames.SWARM_HOST_BURROW:
@@ -1604,10 +1604,10 @@ item_table = {
     ItemNames.BANELING_RAPID_METAMORPH:
         ItemData(233 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 3, SC2Race.ZERG,
                  parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Banelings morph faster."),
-    ItemNames.MUTALISK_SEVERING_GLAVE:
+    ItemNames.MUTALISK_SEVERING_GLAIVE:
         ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 4, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"ext"}, description="Mutalisk bounce attacks will deal full damage."),
-    ItemNames.MUTALISK_AERODYNAMIC_GLAVE_SHAPE:
+    ItemNames.MUTALISK_AERODYNAMIC_GLAIVE_SHAPE:
         ItemData(235 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 5, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"ext"}, description="Increases the attack range of Mutalisks by 2."),
     ItemNames.SWARM_HOST_LOCUST_METABOLIC_BOOST:
