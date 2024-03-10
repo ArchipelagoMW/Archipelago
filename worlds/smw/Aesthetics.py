@@ -622,10 +622,12 @@ def generate_shuffled_ow_music(world: World):
     return shuffled_ow_music
 
 def generate_shuffled_ow_palettes(rom, world: World):
-    if world.options.overworld_palette_shuffle:
-        for address, valid_palettes in valid_ow_palettes.items():
-            chosen_palette = world.random.choice(valid_palettes)
-            rom.write_byte(address, chosen_palette)
+    if world.options.overworld_palette_shuffle != "on_legacy":
+        return
+
+    for address, valid_palettes in valid_ow_palettes.items():
+        chosen_palette = world.random.choice(valid_palettes)
+        rom.write_byte(address, chosen_palette)
 
 def generate_shuffled_header_data(rom, world: World):
     if world.options.music_shuffle != "full" and world.options.level_palette_shuffle != "on_legacy":
