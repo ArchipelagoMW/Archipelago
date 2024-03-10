@@ -77,6 +77,13 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     if not front_access:
         return False
 
+    fourth_to_third = any(e.can_reach(state) for e in world.regio.two_way_entrance_register[
+        "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate"
+    ])
+
+    if not fourth_to_third:
+        return False
+
     hedge_2_access = (
         any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 2nd Maze", "Keep"])
     )
@@ -109,18 +116,11 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     )
 
     shadows_shortcut = (
-        state.can_reach("Main Island", "Region", player)
-        and any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
+        # and state.can_reach("Main Island", "Region", player)  # Implicit, watch out if there's ever entrance rando
     )
 
-    backwards_access = (
-        any(e.can_reach(state) for e in world.regio.two_way_entrance_register[
-            "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate"
-        ])
-        and (backwards_to_fourth or shadows_shortcut)
-    )
-
-    return backwards_access
+    return backwards_to_fourth or shadows_shortcut  # PP4 -> PP3 is checked further up as guard condition
 
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
