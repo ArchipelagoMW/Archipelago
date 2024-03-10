@@ -59,8 +59,7 @@ def setup_gamevars(world):
     world.boss_order = []
 
     if world.options.boss_shuffle == 1:
-        for i in range(11):
-            world.random.shuffle(boss_list)
+        world.random.shuffle(boss_list)
     world.boss_order = boss_list
 
     burt_pointers = [0x3D, 0x05, 0x63, 0x00]
@@ -75,19 +74,19 @@ def setup_gamevars(world):
     raph_pointers = [0xC4, 0x03, 0x4B, 0x05]
     tap_pointers = [0xCC, 0x49, 0x64, 0x02]
 
-    pointer_dict = {
-        0: burt_pointers,
-        1: slime_pointers,
-        2: boo_pointers,
-        3: pot_pointers,
-        4: frog_pointers,
-        5: plant_pointers,
-        6: milde_pointers,
-        7: koop_pointers,
-        8: slug_pointers,
-        9: raph_pointers,
-        10: tap_pointers
-    }
+    pointer_dict = [
+        burt_pointers,
+        slime_pointers,
+        boo_pointers,
+        pot_pointers,
+        frog_pointers,
+        plant_pointers,
+        milde_pointers,
+        koop_pointers,
+        slug_pointers,
+        raph_pointers,
+        tap_pointers
+    ]
 
     boss_levels = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
 

@@ -12,7 +12,6 @@
         NOTE: RetroArch and FXPakPro are not currently supported.
 - Your legally obtained Yoshi's Island English 1.0 ROM file, probably named `Super Mario World 2 - Yoshi's Island (U).sfc`
 
-## Optional Software
 
 ## Installation Procedures
 

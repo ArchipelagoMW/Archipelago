@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .level_logic import YoshiLogic
@@ -8,12 +8,12 @@ class YILocation(Location):
     game: str = "Yoshi's Island"
     LevelID: int
 
-def __init__(self, player: int, name: str = " ", address: int = None, parent=None, LevelID: int = None):
-    super().__init__(player, name, address, parent)
-    self.LevelID = LevelID
+    def __init__(self, player: int, name: str = " ", address: int = None, parent=None, LevelID: int = None):
+        super().__init__(player, name, address, parent)
+        self.LevelID = LevelID
 
 
-def init_areas(world, locations: Tuple[LocationData, ...]):
+def init_areas(world, locations: List[LocationData]):
     multiworld = world.multiworld
     player = world.player
     location_cache = world.location_cache

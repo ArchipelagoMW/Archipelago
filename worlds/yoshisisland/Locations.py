@@ -1,5 +1,4 @@
-from typing import List, Tuple, Optional, Callable, NamedTuple
-from BaseClasses import MultiWorld
+from typing import List, Optional, Callable, NamedTuple
 from .level_logic import YoshiLogic
 
 

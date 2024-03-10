@@ -2,7 +2,7 @@ from typing import Dict, Set, Tuple, NamedTuple, Optional
 
 class ItemData(NamedTuple):
     category: str
-    code: int
+    code: Optional[int]
     classification: str
     amount: Optional[int] = 1
 
