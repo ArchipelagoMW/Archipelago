@@ -1,12 +1,14 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional
+from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
 from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
 from . import StaticWitnessLogic
 from .utils import weighted_sample
 
 if TYPE_CHECKING:
     from . import WitnessWorld
+
+CompactItemData = Tuple[str, Union[str, int], int]
 
 joke_hints = [
     "Quaternions break my brain",
@@ -634,14 +636,15 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     return hints, unhinted_locations_per_area
 
 
-def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -> List[WitnessWordedHint]:
+def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
+                     already_hinted_locations: Set[Location]) -> List[WitnessWordedHint]:
     generated_hints: List[WitnessWordedHint] = []
 
     state = CollectionState(world.multiworld)
 
     # Keep track of already hinted locations. Consider early Tutorial as "already hinted"
 
-    already_hinted_locations = {
+    already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
         if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }
@@ -721,3 +724,29 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
                         f"Generated {len(generated_hints)} instead.")
 
     return generated_hints
+
+
+def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactItemData:
+    location = hint.location
+    area_amount = hint.area_amount
+
+    # None if junk hint, address if location hint, area string if area hint
+    arg_1 = location.address if location else (hint.area if hint.area else None)
+
+    # self.player if junk hint, player if location hint, progression amount if area hint
+    arg_2 = area_amount if area_amount is not None else (location.player if location else local_player_number)
+
+    return hint.wording, arg_1, arg_2
+
+
+def make_laser_hints(world: "WitnessWorld", laser_names: List[str]) -> Dict[str, WitnessWordedHint]:
+    laser_hints_by_name = dict()
+
+    for item_name in laser_names:
+        location_hint = hint_from_item(world, item_name, world.own_itempool)
+        if not location_hint:
+            continue
+
+        laser_hints_by_name[item_name] = word_direct_hint(world, location_hint)
+
+    return laser_hints_by_name
