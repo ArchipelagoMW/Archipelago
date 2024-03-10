@@ -453,28 +453,28 @@ def randomize_learnsets(world: "PokemonEmeraldWorld") -> None:
         # All species have 4 moves at level 0. Up to 3 of them are blank spaces reserved for the
         # start with four moves option. This either replaces those moves or leaves it blank
         # and moves the cursor.
-        i = 0
-        while old_learnset[i].move_id == 0:
+        cursor = 0
+        while old_learnset[cursor].move_id == 0:
             if world.options.level_up_moves == LevelUpMoves.option_start_with_four_moves:
                 new_move = get_random_move(world.random,
                                            {move.move_id for move in new_learnset} | world.blacklisted_moves,
                                            type_bias, normal_bias, species.types)
             else:
                 new_move = 0
-            new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
-            i += 1
+            new_learnset.append(LearnsetMove(old_learnset[cursor].level, new_move))
+            cursor += 1
 
         # All moves from here onward are actual moves.
-        while i < len(old_learnset):
+        while cursor < len(old_learnset):
             # Guarantees the starter has a good damaging move; i will always be <=3 when entering this loop
-            if i == 3:
+            if cursor == 3:
                 new_move = get_random_damaging_move(world.random, {move.move_id for move in new_learnset})
             else:
                 new_move = get_random_move(world.random,
                                            {move.move_id for move in new_learnset} | world.blacklisted_moves,
                                            type_bias, normal_bias, species.types)
-            new_learnset.append(LearnsetMove(old_learnset[i].level, new_move))
-            i += 1
+            new_learnset.append(LearnsetMove(old_learnset[cursor].level, new_move))
+            cursor += 1
 
         species.learnset = new_learnset
 
