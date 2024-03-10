@@ -70,7 +70,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     For Expert PP2, you need a way to access PP2 from the front, and a separate way from the back.
     This condition is quite complicated. We'll attempt to evaluate it as lazily as possible.
     """
-    
+
     player = world.player
     regio = world.regio
 
@@ -172,7 +172,10 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
-    # This evaluates the condition "direct_access or theater_from_town and tunnels_from_town" lazily using guards.
+    """
+    To do Tunnels Theater Flowers EP, you need to quickly move from Theater to Tunnels.
+    This condition is a little tricky. We'll attempt to evaluate it as lazily as possible.
+    """
 
     direct_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
@@ -182,14 +185,15 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     if direct_access:
         return True
 
-    theater_from_town = (
-        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Windmill Interior"])
-        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
-        or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Theater"])
-    )
+    # We don't have direct access through the shortest path.
+    # This means we somehow need to exit Theater to the Main Island, and then enter Tunnels from the Main Island.
+    # Getting to Tunnels through Mountain -> Caves -> Tunnels is way too slow, so we only expect paths through Town.
 
-    if not theater_from_town:
-        return False
+    # We need a way from Theater to Town. This is actually guaranteed, otherwise we wouldn't be in Theater.
+    # The only ways to Theater are through Town and Tunnels. We just checked the Tunnels way.
+    # This might need to be changed when warps are implemented.
+
+    # We also need a way from Town to Tunnels.
 
     tunnels_from_town = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
