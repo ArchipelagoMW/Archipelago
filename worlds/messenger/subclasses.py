@@ -12,22 +12,6 @@ if TYPE_CHECKING:
 class MessengerEntrance(Entrance):
     world: Optional["MessengerWorld"] = None
 
-    # def can_connect_to(self, other: Entrance, state: "ERPlacementState") -> bool:
-    #     from . import MessengerWorld
-    #     world = getattr(self, "world", None)
-    #     if not world:
-    #         return super().can_connect_to(other, state)
-    #     assert isinstance(world, MessengerWorld)
-    #     # arbitrary minimum number
-    #     if world.reachable_locs >= 5:
-    #         return super().can_connect_to(other, state)
-    #     empty_state = CollectionState(world.multiworld, True)
-    #     self.connected_region = other.connected_region
-    #     empty_state.update_reachable_regions(world.player)
-    #     world.reachable_locs = sum(loc.can_reach(empty_state) for loc in world.multiworld.get_locations(world.player))
-    #     self.connected_region = None
-    #     return world.reachable_locs >= 5 and super().can_connect_to(other, state)
-
 
 class MessengerRegion(Region):
     parent: str
