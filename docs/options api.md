@@ -102,7 +102,8 @@ or if I need a boolean object, such as in my slot_data I can access it as:
 start_with_sword = bool(self.options.starting_sword.value)
 ```
 All numeric options (i.e. Toggle, Choice, Range) can be compared to integers, strings that match their attributes,
-strings that match the option attributes after "option_" is stripped, and the attributes themselves.
+strings that match the option attributes after "option_" is stripped, and the attributes themselves. The option can
+also be checked to see if it exists within a collection, but this will fail for a set of strings due to hashing.
 ```python
 # options.py
 class Logic(Choice):
@@ -113,6 +114,12 @@ class Logic(Choice):
     option_insane = 4
     alias_extra_hard = 2
     crazy = 4  # won't be listed as an option and only exists as an attribute on the class
+
+class Weapon(Choice):
+    option_none = 0
+    option_sword = 1
+    option_bow = 2
+    option_hammer = 3
 
 # __init__.py
 from .options import Logic
@@ -127,6 +134,13 @@ elif self.options.logic == Logic.option_extreme:
     do_extreme_things()
 elif self.options.logic == "crazy":
     do_insane_things()
+
+# check if the current option is in a collection of integers using the class attributes
+if self.options.weapon in {Weapon.option_bow, Weapon.option_sword}:
+    do_stuff()
+# if we want to use a collection of strings a set won't work so use a tuple here
+elif self.options.weapon in ("none", "hammer"):
+    do_something_else()
 ```
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
