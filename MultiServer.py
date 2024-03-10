@@ -1055,7 +1055,7 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
         elif dif > 5:
             return picks[0][0], True, "Close Match"
         else:
-            return picks[0][0], False, f"Too many close matches to '{input_text}', " \
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
                                        f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
     else:
         if picks[0][1] > 90:
