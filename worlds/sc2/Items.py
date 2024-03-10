@@ -1587,7 +1587,7 @@ item_table = {
     ItemNames.BANELING_RAPID_METAMORPH:
         ItemData(233 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 3, SC2Race.ZERG,
                  parent_item=ItemNames.ZERGLING_BANELING_ASPECT, origin={"ext"}, description="Banelings morph faster."),
-    ItemNames.MUTALISK_SEVERING_GLAIVE:
+    ItemNames.MUTALISK_SEVERING_GLAVE:
         ItemData(234 + SC2HOTS_ITEM_ID_OFFSET, "Mutation 2", 4, SC2Race.ZERG, parent_item=ItemNames.MUTALISK,
                  origin={"ext"}, description="Mutalisk bounce attacks will deal full damage."),
     ItemNames.MUTALISK_AERODYNAMIC_GLAVE_SHAPE:
