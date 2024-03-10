@@ -65,61 +65,55 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
         return make_lambda(panel, world)
 
 
-def _get_both_entrances(source: str, target: str, regio: WitnessRegions) -> Generator[Entrance, None, None]:
-    if (source, target) in regio.created_entrances:
-        yield regio.created_entrances[source, target]
-    if (target, source) in regio.created_entrances:
-        yield regio.created_entrances[target, source]
-
-
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     player = world.player
+    regio = world.regio
 
     hedge_2_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Keep 2nd Maze", "Keep", world.regio))
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 2nd Maze", "Keep"])
     )
 
     hedge_3_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Keep 3rd Maze", "Keep", world.regio))
-        or any(e.can_reach(state) for e in _get_both_entrances("Keep 3rd Maze", "Keep 2nd Maze", world.regio))
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 3rd Maze", "Keep"])
+        or any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 3rd Maze", "Keep 2nd Maze"])
         and hedge_2_access
     )
 
     hedge_4_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep", world.regio))
-        or any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep 3rd Maze", world.regio))
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep"])
+        or any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"])
         and hedge_3_access
     )
 
     hedge_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Maze", "Keep Tower", world.regio))
+        any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep Tower"])
         and state.can_reach("Keep", "Region", player)
         and hedge_4_access
     )
 
     backwards_to_fourth = (
         state.can_reach("Keep", "Region", player)
-        and any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Pressure Plate", "Keep Tower", world.regio))
+        and any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Keep Tower"])
         and (
-            any(e.can_reach(state) for e in _get_both_entrances("Keep", "Keep Tower", world.regio))
+            any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep", "Keep Tower"])
             or hedge_access
         )
     )
 
     shadows_shortcut = (
         state.can_reach("Main Island", "Region", player)
-        and any(e.can_reach(state) for e in _get_both_entrances("Keep 4th Pressure Plate", "Shadows", world.regio))
+        and any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Pressure Plate", "Shadows"])
     )
 
     backwards_access = (
-        any(e.can_reach(state) for e in _get_both_entrances(
-            "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate", world.regio)
-            )
+        any(e.can_reach(state) for e in world.regio.two_way_entrance_register[
+            "Keep 3rd Pressure Plate", "Keep 4th Pressure Plate"
+        ])
         and (backwards_to_fourth or shadows_shortcut)
     )
 
     front_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Keep 2nd Pressure Plate", "Keep", world.regio))
+        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
         and state.can_reach("Keep", "Region", player)
     )
 
@@ -128,23 +122,23 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
     direct_access = (
-        any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Windmill Interior", world.regio))
-        and any(e.can_reach(state) for e in _get_both_entrances("Theater", "Windmill Interior", world.regio))
+        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
     )
 
     if direct_access:
         return True
 
     theater_from_town = (
-        any(e.can_reach(state) for e in _get_both_entrances("Town", "Windmill Interior", world.regio))
-        and any(e.can_reach(state) for e in _get_both_entrances("Theater", "Windmill Interior", world.regio))
-        or any(e.can_reach(state) for e in _get_both_entrances("Town", "Theater", world.regio))
+        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Windmill Interior"])
+        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
+        or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Theater"])
     )
 
     tunnels_from_town = (
-        any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Windmill Interior", world.regio))
-        and any(e.can_reach(state) for e in _get_both_entrances("Town", "Windmill Interior", world.regio))
-        or any(e.can_reach(state) for e in _get_both_entrances("Tunnels", "Town", world.regio))
+        any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
+        and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Town", "Windmill Interior"])
+        or any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Town"])
     )
 
     return theater_from_town and tunnels_from_town

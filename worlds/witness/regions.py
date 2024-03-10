@@ -2,11 +2,10 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
-import logging
+from collections import defaultdict
 from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List, Set
 
 from BaseClasses import Entrance, Region
-from Utils import KeyedDefaultDict
 from .static_logic import StaticWitnessLogic
 from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
@@ -69,11 +68,8 @@ class WitnessRegions:
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-        if (source, target) in self.created_entrances:
-            player_name = world.multiworld.get_player_name(world.player)
-            raise ValueError(f"Trying to add an Entrance for region pair ({source}, {target}) in {player_name}'s world,"
-                             f" but one was already present. Something went wrong here.")
-        self.created_entrances[source, target] = connection
+        self.two_way_entrance_register[source, target].append(connection)
+        self.two_way_entrance_register[target, source].append(connection)
 
         # Register any necessary indirect connections
         mentioned_regions = {
@@ -133,5 +129,5 @@ class WitnessRegions:
             self.reference_logic = StaticWitnessLogic.vanilla
 
         self.locat = locat
-        self.created_entrances: Dict[Tuple[str, str], Entrance] = dict()
+        self.two_way_entrance_register: Dict[Tuple[str, str], List[Entrance]] = defaultdict(lambda: [])
         self.created_region_names: Set[str] = set()
