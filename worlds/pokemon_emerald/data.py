@@ -491,7 +491,7 @@ def _init() -> None:
     # Create species data
 
     # Excludes extras like copies of Unown and special species values like SPECIES_EGG.
-    all_species: List[Tuple[str, str]] = [
+    all_species: List[Tuple[str, str, int]] = [
         ("SPECIES_BULBASAUR", "Bulbasaur", 1),
         ("SPECIES_IVYSAUR", "Ivysaur", 2),
         ("SPECIES_VENUSAUR", "Venusaur", 3),
@@ -880,7 +880,6 @@ def _init() -> None:
         ("SPECIES_CHIMECHO", "Chimecho", 358),
     ]
 
-    species_list: List[SpeciesData] = []
     max_species_id = 0
     for species_name, species_label, species_dex_number in all_species:
         species_id = data.constants[species_name]
