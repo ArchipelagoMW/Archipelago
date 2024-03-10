@@ -698,7 +698,7 @@ item_table = {
                  description="Increases Goliath ground attack range by 1 and air by 3."),
     ItemNames.DIAMONDBACK_PROGRESSIVE_TRI_LITHIUM_POWER_CELL:
         ItemData(306 + SC2WOL_ITEM_ID_OFFSET, "Progressive Upgrade 2", 4, SC2Race.TERRAN,
-                 parent_item=ItemNames.DIAMONDBACK,
+                 parent_item=ItemNames.DIAMONDBACK, quantity=2,
                  description=inspect.cleandoc(
                      """
                      Level 1: Tri-Lithium Power Cell: Increases Diamondback attack range by 1.
