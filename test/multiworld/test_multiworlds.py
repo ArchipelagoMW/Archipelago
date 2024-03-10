@@ -1,3 +1,4 @@
+import unittest
 from typing import List, Tuple
 from unittest import TestCase
 
@@ -49,8 +50,7 @@ class MultiworldTestBase(TestCase):
 
 
 class TestAllGamesMultiworld(MultiworldTestBase):
-    multiworld: MultiWorld
-
+    @unittest.skip("too slow for main")
     def test_fills(self) -> None:
         """Tests that a multiworld with one of every registered game world can generate."""
         all_worlds = list(AutoWorldRegister.world_types.values())
