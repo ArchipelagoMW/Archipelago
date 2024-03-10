@@ -36,6 +36,7 @@ class TotalRep(Range):
     """Change the total amount of REP in your world.
     At least 960 REP is needed to finish the game.
     Will be rounded to the nearest number divisible by 8."""
+    display_name = "Total REP"
     range_start = 1000
     range_end = 2000
     default = 1400
