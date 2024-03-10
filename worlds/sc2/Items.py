@@ -646,6 +646,14 @@ item_table = {
         ItemData(281 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
                  parent_item=ItemNames.DIAMONDBACK,
                  description="Increases Diamondback movement speed."),
+    ItemNames.WARHOUND_RESOURCE_EFFICIENCY:
+        ItemData(282 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 13, SC2Race.TERRAN,
+                 parent_item=ItemNames.WARHOUND,
+                 description=RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE.format("Warhound")),
+    ItemNames.WARHOUND_REINFORCED_PLATING:
+        ItemData(283 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 14, SC2Race.TERRAN,
+                 parent_item=ItemNames.WARHOUND,
+                 description="Increases Warhound armor by 2."),
 
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
         ItemData(300 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 16, SC2Race.TERRAN,
