@@ -166,7 +166,7 @@ class SC2Mission(Enum):
     FLASHPOINT = 80, "Flashpoint", SC2Campaign.NCO, "_2", SC2Race.TERRAN, MissionPools.HARD, "ap_flashpoint"
     IN_THE_ENEMY_S_SHADOW = 81, "In the Enemy's Shadow", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.MEDIUM, "ap_in_the_enemy_s_shadow", False
     DARK_SKIES = 82, "Dark Skies", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.HARD, "ap_dark_skies"
-    END_GAME = 83, "End Game", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.HARD, "ap_end_game"
+    END_GAME = 83, "End Game", SC2Campaign.NCO, "_3", SC2Race.TERRAN, MissionPools.VERY_HARD, "ap_end_game"
 
 
 class MissionConnection:
@@ -691,7 +691,6 @@ campaign_alt_final_mission_locations: Dict[SC2Campaign, Dict[SC2Mission, str]] =
     }
 }
 
-# In the future, use this to store Epilogue mission races
 campaign_race_exceptions: Dict[SC2Mission, SC2Race] = {
     SC2Mission.WITH_FRIENDS_LIKE_THESE: SC2Race.TERRAN
 }
