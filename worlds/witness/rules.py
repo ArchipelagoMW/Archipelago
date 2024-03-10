@@ -69,6 +69,9 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     player = world.player
     regio = world.regio
 
+    # This evaluates the condition "front_access and fourth_to_third and (backwards_to_fourth or shadows_shortcut)"
+    # but lazily, using guards.
+
     front_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
         and state.can_reach("Keep", "Region", player)
@@ -124,6 +127,8 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
 
 
 def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") -> bool:
+    # This evaluates the condition "direct_access or theater_from_town and tunnels_from_town" lazily using guards.
+
     direct_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
         and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
