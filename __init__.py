@@ -76,7 +76,7 @@ class WL4World(World):
         set_access_rules(self)
         connect_regions(self)
 
-        passages = ('Entry', 'Emerald', 'Ruby', 'Topaz', 'Sapphire')
+        passages = ('Emerald', 'Ruby', 'Topaz', 'Sapphire')
         for passage in passages:
             location = self.multiworld.get_region(f'{passage} Passage Boss', self.player).locations[0]
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))

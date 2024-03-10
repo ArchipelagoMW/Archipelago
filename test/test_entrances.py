@@ -26,16 +26,16 @@ class TestEntrances(WL4TestBase):
 class TestEntrancesBasic(TestEntrances):
     options = {'open_doors': options.OpenDoors.option_off}
 
-    def test_entry_levels(self):
-        self.starting_regions = ['Hall of Hieroglyphs (entrance)']
-        self.run_entrance_tests([
-            ['Hall of Hieroglyphs Gate', False, []],
-            ['Hall of Hieroglyphs Gate', False, [], ['Dash Attack']],
-            ['Hall of Hieroglyphs Gate', False, [], ['Progressive Grab']],
-            ['Hall of Hieroglyphs Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
-            ['Hall of Hieroglyphs Gate', True,
-             ['Dash Attack', 'Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound']],
-        ])
+#   def test_entry_levels(self):
+#       self.starting_regions = ['Hall of Hieroglyphs (entrance)']
+#       self.run_entrance_tests([
+#           ['Hall of Hieroglyphs Gate', False, []],
+#           ['Hall of Hieroglyphs Gate', False, [], ['Dash Attack']],
+#           ['Hall of Hieroglyphs Gate', False, [], ['Progressive Grab']],
+#           ['Hall of Hieroglyphs Gate', False, ['Progressive Ground Pound'], ['Progressive Ground Pound']],
+#           ['Hall of Hieroglyphs Gate', True,
+#            ['Dash Attack', 'Progressive Grab', 'Progressive Ground Pound', 'Progressive Ground Pound']],
+#       ])
 
     def test_emerald_levels(self):
         self.starting_regions = ['Palm Tree Paradise (entrance)', 'Wildflower Fields (entrance)',
@@ -193,11 +193,11 @@ class TestEntrancesOpenPortal(TestEntrances):
 class TestEntrancesOpenDoors(TestEntrances):
     options = {'open_doors': options.OpenDoors.option_open}
 
-    def test_entry_levels(self):
-        self.starting_regions = []
-        self.run_entrance_tests([
-            ['Hall of Hieroglyphs Gate', True, []],
-        ])
+#   def test_entry_levels(self):
+#       self.starting_regions = []
+#       self.run_entrance_tests([
+#           ['Hall of Hieroglyphs Gate', True, []],
+#       ])
 
     def test_emerald_levels(self):
         self.starting_regions = []
@@ -263,22 +263,22 @@ class TestBossAccess(TestEntrances):
     options = {}
 
     def test_bosses(self):
-        self.starting_regions = ['Entry Minigame Shop', 'Emerald Minigame Shop',
+        self.starting_regions = ['Emerald Minigame Shop',
                                  'Ruby Minigame Shop', 'Topaz Minigame Shop',
                                  'Sapphire Minigame Shop', 'Golden Minigame Shop']
         self.run_entrance_tests([
-            ['Entry Minigame Shop -> Entry Passage Boss', False, []],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Top Right Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Top Left Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Bottom Right Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', False,
-             [], ['Bottom Left Entry Jewel Piece']],
-            ['Entry Minigame Shop -> Entry Passage Boss', True,
-             ['Top Right Entry Jewel Piece', 'Top Left Entry Jewel Piece',
-              'Bottom Right Entry Jewel Piece', 'Bottom Left Entry Jewel Piece']],
+#           ['Entry Minigame Shop -> Entry Passage Boss', False, []],
+#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#            [], ['Top Right Entry Jewel Piece']],
+#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#            [], ['Top Left Entry Jewel Piece']],
+#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#            [], ['Bottom Right Entry Jewel Piece']],
+#           ['Entry Minigame Shop -> Entry Passage Boss', False,
+#            [], ['Bottom Left Entry Jewel Piece']],
+#           ['Entry Minigame Shop -> Entry Passage Boss', True,
+#            ['Top Right Entry Jewel Piece', 'Top Left Entry Jewel Piece',
+#             'Bottom Right Entry Jewel Piece', 'Bottom Left Entry Jewel Piece']],
 
             ['Emerald Minigame Shop -> Emerald Passage Boss', False, []],
             ['Emerald Minigame Shop -> Emerald Passage Boss', False,
@@ -355,7 +355,7 @@ class TestBossAccessNoJewels(TestEntrances):
                                  'Ruby Minigame Shop', 'Topaz Minigame Shop',
                                  'Sapphire Minigame Shop', 'Golden Minigame Shop']
         self.run_entrance_tests([
-            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+#           ['Entry Minigame Shop -> Entry Passage Boss', True, []],
             ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
             ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
             ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],
@@ -372,7 +372,7 @@ class TestBossAccessNoJewelsKeysy(TestEntrances):
     def test_bosses(self):
         self.starting_regions = ['Golden Pyramid']
         self.run_entrance_tests([
-            ['Entry Minigame Shop -> Entry Passage Boss', True, []],
+#           ['Entry Minigame Shop -> Entry Passage Boss', True, []],
             ['Emerald Minigame Shop -> Emerald Passage Boss', True, []],
             ['Ruby Minigame Shop -> Ruby Passage Boss', True, []],
             ['Topaz Minigame Shop -> Topaz Passage Boss', True, []],

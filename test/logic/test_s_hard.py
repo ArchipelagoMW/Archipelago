@@ -4,10 +4,9 @@ class TestSHard(WL4TestBase):
     options = {'difficulty': 2}
 
     def test_entry_passage(self):
-        self.starting_regions = ['Hall of Hieroglyphs (entrance)',
-                                 'Entry Passage Boss']
+        self.starting_regions = ['Hall of Hieroglyphs (entrance)']
         self._test_hall_of_hieroglyphs()
-        self._test_spoiled_rotten()
+        # self._test_spoiled_rotten()
 
     def test_emerald_passage(self):
         self.starting_regions = ['Palm Tree Paradise (entrance)',

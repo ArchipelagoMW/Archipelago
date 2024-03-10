@@ -8,7 +8,7 @@ from BaseClasses import Region, Entrance
 from . import rules
 from .locations import WL4Location, get_level_location_data
 from .types import AccessRule, Passage
-from .options import Difficulty, OpenDoors
+from .options import OpenDoors
 
 if TYPE_CHECKING:
     from . import WL4World
@@ -236,9 +236,9 @@ def connect_regions(world: WL4World):
 
     connect('Menu', 'Entry Passage')
     connect('Entry Passage', 'Hall of Hieroglyphs (entrance)')
-    connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
-    connect('Entry Minigame Shop', 'Entry Passage Boss',
-            rules.make_boss_access_rule(world, Passage.ENTRY, required_jewels_entry))
+    # connect_level_exit('Hall of Hieroglyphs', 'Entry Minigame Shop')
+    # connect('Entry Minigame Shop', 'Entry Passage Boss',
+    #         rules.make_boss_access_rule(world, Passage.ENTRY, required_jewels_entry))
 
     connect('Menu', 'Emerald Passage')
     connect('Emerald Passage', 'Palm Tree Paradise (entrance)')

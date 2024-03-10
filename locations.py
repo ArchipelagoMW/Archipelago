@@ -44,7 +44,7 @@ location_table = {
     'Hall of Hieroglyphs - Fourth Jewel Box':             LocationData(LocationType.BOX,  (Passage.ENTRY,    0, ItemFlag.JEWEL_NW),       None,              _ALL),
     'Hall of Hieroglyphs - Full Health Item Box':         LocationData(LocationType.BOX,  (Passage.ENTRY,    0, ItemFlag.FULL_HEALTH),    None,              _ALL),
 
-    'Spoiled Rotten':                                     LocationData(LocationType.BOSS, (Passage.ENTRY,    4, ItemFlag.KEYZER),         None,              _ALL),
+#   'Spoiled Rotten':                                     LocationData(LocationType.BOSS, (Passage.ENTRY,    4, ItemFlag.KEYZER),         None,              _ALL),
 
     # Emerald Passage
     # Palm Tree Paradise
