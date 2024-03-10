@@ -110,7 +110,7 @@ class BombRushCyberfunkWorld(World):
 
     def create_items(self):
         self.options.total_rep.round_to_nearest_step()
-        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, 85)
+        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, 86)
         #print(sum([8*rep_counts[0], 16*rep_counts[1], 24*rep_counts[2], 32*rep_counts[3], 48*rep_counts[4]]), \
         #    rep_counts)
 

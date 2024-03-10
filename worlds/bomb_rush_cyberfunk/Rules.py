@@ -757,7 +757,7 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
                                                     # pyramid island area 1
                                                     if current_chapter(state, player, 4):
                                                         # 1 in square, 4 in pyramid
-                                                        total += 1
+                                                        total += 5
 
                                                         # pyramid island area 2
                                                         if pyramid_island_gate(state, player, glitched):
@@ -848,7 +848,7 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
                     # chapter 2
                     # millennium square + mataan
                     if current_chapter(state, player, 2):
-                        # 4 in square, 4 in mataan
+                        # 4 in square, 5 in mataan
                         total += 9
                         
                         # brink terminal area 1
