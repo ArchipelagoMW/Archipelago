@@ -1457,9 +1457,5 @@ def rules(brcworld):
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 375))
     set_rule(world.get_location("Tagged 380 Graffiti Spots", player),
         lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 380))
-    set_rule(world.get_location("Tagged 385 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 385))
-    set_rule(world.get_location("Tagged 389 Graffiti Spots", player),
-        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 389))
-    
-    
+    set_rule(world.get_location("Tagged 381 Graffiti Spots", player),
+        lambda state: graffiti_spots(state, player, movestyle, limit, glitched, 381))

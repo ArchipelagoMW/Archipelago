@@ -1,7 +1,7 @@
 from typing import Any, Dict
 from BaseClasses import MultiWorld, Region, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from .Items import base_id, item_table, group_table, postgame_items, BRCType
+from .Items import base_id, item_table, group_table, BRCType
 from .Locations import location_table, event_table
 from .Regions import region_names, region_exits, BRCStage
 from .Rules import rules
@@ -40,41 +40,24 @@ class BombRushCyberfunkWorld(World):
         super(BombRushCyberfunkWorld, self).__init__(multiworld, player)
         self.item_classification: Dict[BRCType, ItemClassification] = {
             BRCType.Music: ItemClassification.filler,
+            BRCType.GraffitiM: ItemClassification.progression,
+            BRCType.GraffitiL: ItemClassification.progression,
+            BRCType.GraffitiXL: ItemClassification.progression,
             BRCType.Outfit: ItemClassification.filler,
             BRCType.Character: ItemClassification.progression,
             BRCType.REP: ItemClassification.progression_skip_balancing,
             BRCType.Camera: ItemClassification.progression
         }
-        self.selectedM: str
-        self.selectedL: str
-        self.selectedXL: str
 
 
     def set_rules(self):
         rules(self)
 
 
-    def get_item_classification(self, name: str, item_type: BRCType) -> ItemClassification:
+    def get_item_classification(self, item_type: BRCType) -> ItemClassification:
         classification = ItemClassification.filler
         if item_type in self.item_classification.keys():
             classification = self.item_classification[item_type]
-        elif name in group_table["girl"]:
-            classification = ItemClassification.progression
-        elif item_type == BRCType.GraffitiM:
-            if name == self.selectedM or self.options.limited_graffiti:
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.filler
-        elif item_type == BRCType.GraffitiL:
-            if name == self.selectedL or self.options.limited_graffiti:
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.filler
-        elif item_type == BRCType.GraffitiXL:
-            if name == self.selectedXL or self.options.limited_graffiti:
-                classification = ItemClassification.progression
-            else:
-                classification = ItemClassification.filler
 
         return classification
 
@@ -82,7 +65,7 @@ class BombRushCyberfunkWorld(World):
     def create_item(self, name: str) -> "BombRushCyberfunkItem":
         item_id: int = self.item_name_to_id[name]
         item_type: BRCType = self.item_name_to_type[name]
-        classification = self.get_item_classification(name, item_type)
+        classification = self.get_item_classification(item_type)
 
         return BombRushCyberfunkItem(name, classification, item_id, self.player)
 
@@ -94,7 +77,7 @@ class BombRushCyberfunkWorld(World):
     def get_filler_item_name(self) -> str:
         item = self.random.choice(item_table)
 
-        while self.get_item_classification(item["name"], item["type"]) == ItemClassification.progression:
+        while self.get_item_classification(item["type"]) == ItemClassification.progression:
             item = self.random.choice(item_table)
 
         return item["name"]
@@ -104,14 +87,6 @@ class BombRushCyberfunkWorld(World):
         grafM = group_table["graffitim"]
         grafL = group_table["graffitil"]
         grafXL = group_table["graffitixl"]
-
-        for item in postgame_items:
-            if item in grafM:
-                grafM.remove(item)
-            elif item in grafL:
-                grafL.remove(item)
-            elif item in grafXL:
-                grafXL.remove(item)
 
         self.selectedM = self.random.choice(grafM)
         self.selectedL = self.random.choice(grafL)
@@ -135,16 +110,13 @@ class BombRushCyberfunkWorld(World):
 
     def create_items(self):
         self.options.total_rep.round_to_nearest_step()
-        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, 87)
+        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, 85)
         #print(sum([8*rep_counts[0], 16*rep_counts[1], 24*rep_counts[2], 32*rep_counts[3], 48*rep_counts[4]]), \
         #    rep_counts)
 
         pool = []
 
         for item in item_table:
-            if item["name"] in postgame_items:
-                continue
-            
             if "REP" in item["name"]:
                 count: int = 0
 
