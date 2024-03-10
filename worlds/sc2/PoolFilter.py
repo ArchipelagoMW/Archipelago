@@ -267,15 +267,15 @@ class ValidInventory:
             return True
 
         # Limit the maximum number of upgrades
-        maxUpgrad = get_option_value(self.multiworld, self.player,
+        maxNbUpgrade = get_option_value(self.multiworld, self.player,
                             "max_number_of_upgrades")
-        if maxUpgrad != -1:
+        if maxNbUpgrade != -1:
             unit_avail_upgrades = {}
             # Needed to take into account locked/existing items
             unit_nb_upgrades = {}
             for item in inventory:
                 cItem = item_list[item.name]
-                if cItem.parent_item in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                if item.name in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:
@@ -288,7 +288,7 @@ class ValidInventory:
             # For those two categories, we count them but dont include them in removal
             for item in locked_items + self.existing_items:
                 cItem = item_list[item.name]
-                if cItem.parent_item in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
+                if item.name in UPGRADABLE_ITEMS and item.name not in unit_avail_upgrades:
                     unit_avail_upgrades[item.name] = []
                     unit_nb_upgrades[item.name] = 0
                 elif cItem.parent_item is not None:
@@ -297,11 +297,10 @@ class ValidInventory:
                     else:
                         unit_nb_upgrades[cItem.parent_item] += 1
             # Making sure that the upgrades being removed is random
-            # Currently, only for combat shield vs Stabilizer Medpacks...
             shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
             self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
             for unit in shuffled_unit_upgrade_list:
-                while (unit_nb_upgrades[unit] > maxUpgrad) \
+                while (unit_nb_upgrades[unit] > maxNbUpgrade) \
                          and (len(unit_avail_upgrades[unit]) > 0):
                     itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
                     success = attempt_removal(itemCandidate)
