@@ -66,11 +66,12 @@ def _can_solve_panel(panel: str, world: "WitnessWorld", player: int, player_logi
 
 
 def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
+    """
+    For Expert PP2, you need a way to access PP2 from the front, and a separate way from the back.
+    This condition is quite complicated. We'll attempt to evaluate it as lazily as possible.
+    """
     player = world.player
     regio = world.regio
-
-    # For Expert PP2, you need a way to access PP2 from the front, and a separate way from the back.
-    # This condition is quite complicated. We'll attempt to evaluate it as lazily as possible.
 
     front_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Keep 2nd Pressure Plate", "Keep"])
