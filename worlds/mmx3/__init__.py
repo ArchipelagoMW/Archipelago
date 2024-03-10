@@ -67,7 +67,7 @@ class MMX3World(World):
 
         total_required_locations = 54
         if self.options.pickupsanity:
-            total_required_locations += 57
+            total_required_locations += 58
         
         # Setup item pool
         itempool += [self.create_item(ItemName.stage_toxic_seahorse)]
@@ -96,8 +96,7 @@ class MMX3World(World):
         itempool += [self.create_item(ItemName.ride_hawk)]
         itempool += [self.create_item(ItemName.ride_frog)]
         
-        #itempool += [self.create_item(ItemName.auth_gold_armor)]
-        #itempool += [self.create_item(ItemName.auth_z_saber)]
+        itempool += [self.create_item(ItemName.z_saber)]
 
         itempool += [self.create_item(ItemName.third_armor_helmet) for _ in range(2)]
         itempool += [self.create_item(ItemName.third_armor_body) for _ in range(2)]
@@ -111,9 +110,9 @@ class MMX3World(World):
         junk_count = total_required_locations - len(itempool)
 
         junk_weights = []
-        junk_weights += ([ItemName.small_hp] * 50)
-        junk_weights += ([ItemName.large_hp] * 30)
-        junk_weights += ([ItemName.life] * 20)
+        junk_weights += ([ItemName.small_hp] * 30)
+        junk_weights += ([ItemName.large_hp] * 40)
+        junk_weights += ([ItemName.life] * 30)
 
         junk_pool = []
         for i in range(junk_count):

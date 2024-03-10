@@ -24,15 +24,13 @@ triad_thunder = "Triad Thunder"
 spinning_blade = "Spinning Blade"
 ray_splasher = "Ray Splasher"
 gravity_well = "Gravity Well"
+z_saber = "Z-Saber"
 
 # Ride Armors
 ride_chimera = "Chimera Ride Armor"
 ride_kangaroo = "Kangaroo Ride Armor"
 ride_hawk = "Hawk Ride Armor"
 ride_frog = "Frog Ride Armor"
-
-# Auths
-auth_z_saber = "Z-Saber Authorization"
 
 # Tanks
 heart_tank = "Heart Tank"

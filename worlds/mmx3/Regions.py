@@ -8,6 +8,9 @@ from worlds.AutoWorld import World
 
 
 def create_regions(multiworld: MultiWorld, player: int, world: World, active_locations):
+
+    logic_z_saber = world.options.logic_z_saber.value
+
     menu_region = create_region(multiworld, player, active_locations, 'Menu', None)
 
     intro_stage_region = create_region(multiworld, player, active_locations, LocationName.intro_stage_region, None)
@@ -56,17 +59,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Blizzard Buffalo
     add_location_to_region(multiworld, player, active_locations, LocationName.blizzard_buffalo_region, LocationName.blizzard_buffalo_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.parasitic_bomb, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.blizzard_buffalo_region, LocationName.blizzard_buffalo_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.parasitic_bomb, player)
                 )
             ))
@@ -85,17 +88,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Toxic Seahorse
     add_location_to_region(multiworld, player, active_locations, LocationName.toxic_seahorse_region, LocationName.toxic_seahorse_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.frost_shield, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.toxic_seahorse_region, LocationName.toxic_seahorse_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.frost_shield, player)
                 )
             ))
@@ -104,7 +107,6 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.toxic_seahorse_region, LocationName.toxic_seahorse_kangaroo_ride,
         lambda state: (
                 (
-                    state.has(ItemName.ride_chimera, player) and
                     state.has(ItemName.ride_frog, player)
                 ) or (   
                     state.has(ItemName.frost_shield, player) and
@@ -114,7 +116,6 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.toxic_seahorse_region, LocationName.toxic_seahorse_leg,
         lambda state: (
                 (
-                    state.has(ItemName.ride_chimera, player) and
                     state.has(ItemName.ride_frog, player)
                 ) or (   
                     state.has(ItemName.frost_shield, player) and
@@ -126,17 +127,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Tunnel Rhino
     add_location_to_region(multiworld, player, active_locations, LocationName.tunnel_rhino_region, LocationName.tunnel_rhino_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.acid_burst, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.tunnel_rhino_region, LocationName.tunnel_rhino_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.acid_burst, player)
                 )
             ))
@@ -157,17 +158,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Volt Catfish
     add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.tornado_fang, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.tornado_fang, player)
                 )
             ))
@@ -186,17 +187,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Crush Crawfish
     add_location_to_region(multiworld, player, active_locations, LocationName.crush_crawfish_region, LocationName.crush_crawfish_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.triad_thunder, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.crush_crawfish_region, LocationName.crush_crawfish_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.triad_thunder, player)
                 )
             ))
@@ -218,17 +219,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Neon Tiger
     add_location_to_region(multiworld, player, active_locations, LocationName.neon_tiger_region, LocationName.neon_tiger_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.spinning_blade, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.neon_tiger_region, LocationName.neon_tiger_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.spinning_blade, player)
                 )
             ))
@@ -244,17 +245,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Gravity Beetle
     add_location_to_region(multiworld, player, active_locations, LocationName.gravity_beetle_region, LocationName.gravity_beetle_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.ray_splasher, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.gravity_beetle_region, LocationName.gravity_beetle_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.ray_splasher, player)
                 )
             ))
@@ -275,17 +276,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     # Blast Hornet
     add_location_to_region(multiworld, player, active_locations, LocationName.blast_hornet_region, LocationName.blast_hornet_boss,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.gravity_well, player)
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.blast_hornet_region, LocationName.blast_hornet_clear,
         lambda state: (
-                world.options.boss_weakness_logic == False
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     state.has(ItemName.gravity_well, player)
                 )
             ))
@@ -309,10 +310,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
 
     # Dr. Doppler Lab 1
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_1_region, LocationName.doppler_lab_1_clear,
-        lambda state: (
-                world.options.boss_weakness_logic == False
+        lambda state:  (
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     (
                         state.has(ItemName.tornado_fang, player) or
                         state.has(ItemName.ray_splasher, player) or
@@ -321,10 +322,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_1_region, LocationName.doppler_lab_1_boss,
-        lambda state: (
-                world.options.boss_weakness_logic == False
+        lambda state:  (
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     (
                         state.has(ItemName.tornado_fang, player) or
                         state.has(ItemName.ray_splasher, player) or
@@ -333,23 +334,14 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_1_region, LocationName.doppler_lab_1_mini_boss)
-    #add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_region, LocationName.doppler_lab_1_gold_armor,
-    #    lambda state: (
-    #            state.has(ItemName.heart_tank, player, 8) and
-    #            state.has(ItemName.sub_tank, player, 8) and
-    #            state.has(ItemName.third_armor_helmet, player, 1) and
-    #            state.has(ItemName.third_armor_body, player, 1) and
-    #            state.has(ItemName.third_armor_arms, player, 1) and
-    #            state.has(ItemName.third_armor_legs, player, 1)
-    #        ))
-    
+
 
     # Dr. Doppler Lab 2
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_2_region, LocationName.doppler_lab_2_clear,
-        lambda state: (
-                world.options.boss_weakness_logic == False
+        lambda state:  (
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     (
                         state.has(ItemName.triad_thunder, player) or
                         state.has(ItemName.frost_shield, player) or
@@ -360,12 +352,17 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_2_region, LocationName.doppler_lab_2_boss)
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_2_region, LocationName.doppler_lab_2_mini_boss)
-    #add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_region, LocationName.doppler_lab_2_z_saber)
 
 
     # Dr. Doppler Lab 3
-    add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_boss)
-    add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_clear)
+    add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_boss,
+            lambda state: (
+                    check_z_saber(state, player, logic_z_saber, 3)
+                ))
+    add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_clear,
+            lambda state: (
+                    check_z_saber(state, player, logic_z_saber, 3)
+                ))
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_blizzard_buffalo)
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_toxic_seahorse)
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_tunnel_rhino)
@@ -374,7 +371,6 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_neon_tiger)
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_gravity_beetle)
     add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_3_region, LocationName.doppler_lab_3_blast_hornet)
-    #add_location_to_region(multiworld, player, active_locations, LocationName.dr_doppler_lab_region, LocationName.doppler_lab_3_energy_dispenser)
 
 
     # Dr. Doppler Lab 4
@@ -497,6 +493,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         # Dr. Doppler Lab 4
 
         # Vile
+        add_location_to_region(multiworld, player, active_locations, LocationName.vile_region, LocationName.vile_stage_energy)
         add_location_to_region(multiworld, player, active_locations, LocationName.vile_region, LocationName.vile_stage_1up)
         add_location_to_region(multiworld, player, active_locations, LocationName.vile_region, LocationName.vile_stage_hp_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.vile_region, LocationName.vile_stage_hp_2)
@@ -511,6 +508,8 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
 
 def connect_regions(multiworld: MultiWorld, player: int, world: World):
     names: typing.Dict[str, int] = {}
+
+    logic_z_saber = world.options.logic_z_saber.value
 
     connect(multiworld, player, names, "Menu", LocationName.intro_stage_region)
 
@@ -581,6 +580,7 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
     elif world.options.doppler_open == "weapons":
         connect(multiworld, player, names, LocationName.intro_stage_region, LocationName.dr_doppler_lab_region,
                 lambda state: (
+                    check_z_saber(state, player, logic_z_saber, 0) and
                     state.has_group("BossWeapons", player, world.options.doppler_weapon_count.value)
                 ))
     elif world.options.doppler_open == "armor_upgrades":
@@ -602,9 +602,10 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
     # Connect Dr. Doppler Lab levels
     connect(multiworld, player, names, LocationName.dr_doppler_lab_region, LocationName.dr_doppler_lab_1_region,
             lambda state: (
-                world.options.boss_weakness_logic == False
+                check_z_saber(state, player, logic_z_saber, 0) and
+                not world.options.logic_boss_weakness.value
                 or (
-                    world.options.boss_weakness_logic == True and
+                    world.options.logic_boss_weakness.value and
                     (
                         state.has(ItemName.tornado_fang, player) or
                         state.has(ItemName.ray_splasher, player) or
@@ -614,9 +615,10 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
             ))
     connect(multiworld, player, names, LocationName.dr_doppler_lab_1_region, LocationName.dr_doppler_lab_2_region,
             lambda state: (
-                    world.options.boss_weakness_logic == False
+                    check_z_saber(state, player, logic_z_saber, 1) and
+                    not world.options.logic_boss_weakness.value
                     or (
-                        world.options.boss_weakness_logic == True and
+                        world.options.logic_boss_weakness.value and
                         (
                             state.has(ItemName.triad_thunder, player) or
                             state.has(ItemName.frost_shield, player) or
@@ -625,14 +627,25 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
                         )
                     )
                 ))
-    connect(multiworld, player, names, LocationName.dr_doppler_lab_2_region, LocationName.dr_doppler_lab_3_region)
-    connect(multiworld, player, names, LocationName.dr_doppler_lab_3_region, LocationName.dr_doppler_lab_4_region)
-
+    connect(multiworld, player, names, LocationName.dr_doppler_lab_2_region, LocationName.dr_doppler_lab_3_region,
+            lambda state: (
+                    check_z_saber(state, player, logic_z_saber, 2)
+                ))
+    connect(multiworld, player, names, LocationName.dr_doppler_lab_3_region, LocationName.dr_doppler_lab_4_region,
+            lambda state: (
+                    check_z_saber(state, player, logic_z_saber, 4)
+                ))
     
     connect(multiworld, player, names, LocationName.blast_hornet_region, LocationName.bit_byte_region,
             lambda state: (state.has(ItemName.maverick_medal, player, 2)))
+    
 
-
+def check_z_saber(state: "CollectionState", player: int, logic_z_saber: int, option_level: int) -> bool:
+    if logic_z_saber >= option_level:
+        return state.has(ItemName.z_saber, player)
+    else:
+        return True
+    
 def create_region(multiworld: MultiWorld, player: int, active_locations, name: str, locations=None):
     ret = Region(name, player, multiworld)
     if locations:

@@ -41,7 +41,6 @@ stage_location_table = {
     LocationName.doppler_lab_3_neon_tiger:          starting_id + 0x0018,
     LocationName.doppler_lab_3_gravity_beetle:      starting_id + 0x0019,
     LocationName.doppler_lab_3_blast_hornet:        starting_id + 0x001A,
-    #LocationName.doppler_lab_3_energy_dispenser:    starting_id + 0x001B,
     LocationName.victory:                           starting_id + 0x001C,
     LocationName.vile_stage_boss:                   starting_id + 0x001D,
     LocationName.bit_defeat:                        starting_id + 0x001E,

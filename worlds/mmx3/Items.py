@@ -35,7 +35,7 @@ access_codes_table = {
     ItemName.stage_doppler_lab:         ItemData(0xBD000A, True),
 }
 
-boss_weapons = {
+weapons = {
     ItemName.frost_shield:      ItemData(0xBD000B, True),
     ItemName.acid_burst:        ItemData(0xBD000C, True),
     ItemName.tornado_fang:      ItemData(0xBD000D, True),
@@ -43,7 +43,8 @@ boss_weapons = {
     ItemName.spinning_blade:    ItemData(0xBD000F, True),
     ItemName.ray_splasher:      ItemData(0xBD0010, True),
     ItemName.gravity_well:      ItemData(0xBD0011, True),
-    ItemName.parasitic_bomb:    ItemData(0xBD0012, True)
+    ItemName.parasitic_bomb:    ItemData(0xBD0012, True),
+    ItemName.z_saber:           ItemData(0xBD001A, True)
 }
 
 tanks_table = {
@@ -58,12 +59,6 @@ ride_table = {
     ItemName.ride_frog:         ItemData(0xBD0018, True),
 }
 
-authorization_table = {
-    #ItemName.auth_gold_armor:   ItemData(0xBD0019, True),
-    #ItemName.auth_z_saber:      ItemData(0xBD001A, True),
-    #ItemName.zero:              ItemData(0xBD001B, True)
-}
-
 third_armor_table = {
     ItemName.third_armor_helmet:    ItemData(0xBD001C, True), 
     ItemName.third_armor_body:      ItemData(0xBD001D, True), 
@@ -74,13 +69,11 @@ third_armor_table = {
 junk_table = {
     ItemName.small_hp:      ItemData(0xBD0030, False),
     ItemName.large_hp:      ItemData(0xBD0031, False),
-    #ItemName.small_wep:     ItemData(0xBD0032, False),
-    #ItemName.large_wep:     ItemData(0xBD0033, False),
     ItemName.life:          ItemData(0xBD0034, False),
 }
 
 item_groups = {
-    "BossWeapons": {
+    "Weapons": {
         ItemName.frost_shield,
         ItemName.acid_burst,
         ItemName.tornado_fang,
@@ -88,15 +81,16 @@ item_groups = {
         ItemName.spinning_blade,
         ItemName.ray_splasher,
         ItemName.gravity_well,
-        ItemName.parasitic_bomb
+        ItemName.parasitic_bomb,
+        ItemName.z_saber
     },
-    "ArmorUpgrades": {
+    "Armor Upgrades": {
         ItemName.third_armor_helmet,
         ItemName.third_armor_body,
         ItemName.third_armor_arms,
         ItemName.third_armor_legs
     },
-    "AccessCodes": {
+    "Access Codes": {
         ItemName.stage_toxic_seahorse,
         ItemName.stage_volt_catfish,
         ItemName.stage_tunnel_rhino,
@@ -113,10 +107,9 @@ item_groups = {
 item_table = {
     **event_table,
     **access_codes_table,
-    **boss_weapons,
+    **weapons,
     **tanks_table,
     **ride_table,
-    **authorization_table,
     **third_armor_table,
     **junk_table
 }

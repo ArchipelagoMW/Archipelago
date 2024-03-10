@@ -58,7 +58,7 @@ location_id_to_level_id = {
     LocationName.volt_catfish_boss:             [0x05, 0x208, 0x00],
     LocationName.volt_catfish_heart_tank:       [0x05, 0x002, 0x10],
     LocationName.volt_catfish_sub_tank:         [0x05, 0x003, 0x20],
-    LocationName.volt_catfish_body:             [0x05, 0x004, 0x40],
+    LocationName.volt_catfish_body:             [0x05, 0x004, 0x04],
     LocationName.volt_catfish_hp_1:             [0x05, 0x115, 0x00],
     LocationName.volt_catfish_hp_2:             [0x05, 0x116, 0x00],
     LocationName.volt_catfish_hp_3:             [0x05, 0x117, 0x00],

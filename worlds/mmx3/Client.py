@@ -24,7 +24,11 @@ MMX3_SUB_TANK_ARRAY     = WRAM_START + 0x01FB7
 MMX3_RIDE_CHIPS         = WRAM_START + 0x01FD7
 MMX3_UPGRADES           = WRAM_START + 0x01FD1
 MMX3_CURRENT_HP         = WRAM_START + 0x009FF
+MMX3_MAX_HP             = WRAM_START + 0x01FD2
 MMX3_LIFE_COUNT         = WRAM_START + 0x01FB4
+MMX3_ACTIVE_CHARACTER   = WRAM_START + 0x00A8E
+MMX3_ZSABER             = WRAM_START + 0x01FB2
+MMX3_CAN_MOVE           = WRAM_START + 0x01F45
 
 MMX3_ENABLE_HEART_TANK  = WRAM_START + 0x0F4E0
 MMX3_ENABLE_HP_REFILL   = WRAM_START + 0x0F4E4
@@ -51,10 +55,7 @@ MMX3_RECV_INDEX = WRAM_START + 0x0F460
 MMX3_ROMHASH_START = 0x7FC0
 ROMHASH_SIZE = 0x15
 
-MMX3_SUB_TANK_LEVELS = [0x02, 0x05, 0x07, 0x08]
-MMX3_CHIP_LEVELS = [0x01, 0x03, 0x04, 0x06]
-MMX3_UPGRADE_LEVELS = [0x02, 0x05, 0x07, 0x08]
-MMX3_RIDE_LEVELS = [0x01, 0x03, 0x04, 0x06]
+X_Z_ITEMS = ["small hp refill", "large hp refill", "1up"]
 
 class MMX3SNIClient(SNIClient):
     game = "Mega Man X3"
@@ -131,18 +132,51 @@ class MMX3SNIClient(SNIClient):
         validation = validation[0] | (validation[1] << 8)
         if validation != 0xDEAD:
             return
-        menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
-        if menu_state[0] != 0x04:
-            return
-        gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
-        if gameplay_state[0] != 0x04:
-            return
-        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
-        if pause_state[0] != 0x00:
-            return
 
         next_item = self.item_queue[0]
         item_id = next_item[1]
+        
+        if next_item[0] == "boss access":
+            self.item_queue.pop(0)
+            return
+        
+        # Do not give items if you can't move, are in pause state, not in the correct mode or not in gameplay state
+        menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
+        gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
+        can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
+        pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
+        if menu_state[0] != 0x04 or gameplay_state[0] != 0x04 or can_move[0] != 0x00 or pause_state[0] != 0x00:
+            return
+        
+        # Handle items that Zero can also get
+        if next_item[0] in X_Z_ITEMS:
+            backup_item = self.item_queue.pop(0)
+            if next_item[0] == "small hp refill" or next_item[0] == "large hp refill":
+                current_hp = await snes_read(ctx, MMX3_CURRENT_HP, 0x1)
+                max_hp = await snes_read(ctx, MMX3_MAX_HP, 0x1)
+
+                if current_hp[0] < max_hp[0]:
+                    snes_buffered_write(ctx, MMX3_ENABLE_HP_REFILL, bytearray([0x02]))
+                    if next_item[0] == "small hp refill":
+                        snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x02]))
+                    else:
+                        snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x08]))
+                else:
+                    # TODO: Sub Tank logic
+                    self.item_queue.append(backup_item)
+
+            elif next_item[0] == "1up":
+                life_count = await snes_read(ctx, MMX3_LIFE_COUNT, 0x1)
+                if life_count[0] < 9:
+                    snes_buffered_write(ctx, MMX3_ENABLE_GIVE_1UP, bytearray([0x01]))
+                else:
+                    self.item_queue.append(backup_item)
+
+        # Ignore Zero for the following items
+        active_character = await snes_read(ctx, MMX3_ACTIVE_CHARACTER, 0x1)
+        if active_character[0] != 0x00:
+            await snes_flush_writes(ctx)
+            return
 
         if next_item[0] == "weapon":
             weapon = weapon_rom_data[item_id]
@@ -165,12 +199,18 @@ class MMX3SNIClient(SNIClient):
             sub_tanks = await snes_read(ctx, MMX3_SUB_TANK_ARRAY, 0x4)
             sub_tanks = list(sub_tanks)
             upgrade = upgrades[0]
+            snes_logger.info(f"upgrade 1: {upgrade:02X}")
             upgrade = upgrade & 0xF0
             sub_tank_count = upgrade.bit_count()
+            snes_logger.info(f"sub_tanks 1: {sub_tanks}")
+            snes_logger.info(f"sub_tank_count: {sub_tank_count:02X}")
             if sub_tank_count < 4:
                 upgrade = upgrades[0]
+                snes_logger.info(f"upgrade 2: {upgrade:02X}")
                 upgrade |= 0x10 << sub_tank_count
+                snes_logger.info(f"upgrade 3: {upgrade:02X}")
                 sub_tanks[sub_tank_count] = 0x8E
+                snes_logger.info(f"sub_tanks 2: {sub_tanks}")
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrade]))
                 snes_buffered_write(ctx, MMX3_SUB_TANK_ARRAY, bytearray(sub_tanks))
             self.item_queue.pop(0)
@@ -205,23 +245,6 @@ class MMX3SNIClient(SNIClient):
             if check == 0:
                 ride |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([ride]))
-            self.item_queue.pop(0)
-
-        elif next_item[0] == "boss access":
-            self.item_queue.pop(0)
-
-        elif next_item[0] == "small hp refill":
-            snes_buffered_write(ctx, MMX3_ENABLE_HP_REFILL, bytearray([0x02]))
-            snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x02]))
-            self.item_queue.pop(0)
-        
-        elif next_item[0] == "large hp refill":
-            snes_buffered_write(ctx, MMX3_ENABLE_HP_REFILL, bytearray([0x02]))
-            snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x08]))
-            self.item_queue.pop(0)
-
-        elif next_item[0] == "1up":
-            snes_buffered_write(ctx, MMX3_ENABLE_GIVE_1UP, bytearray([0x01]))
             self.item_queue.pop(0)
 
         await snes_flush_writes(ctx)
