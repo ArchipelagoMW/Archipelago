@@ -2,7 +2,7 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
-from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List
+from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List, Set
 
 from BaseClasses import Entrance, Region
 from Utils import KeyedDefaultDict
@@ -109,13 +109,13 @@ class WitnessRegions:
 
             regions_by_name[region_name] = new_region
 
+        self.created_region_names = set(regions_by_name)
+
+        world.multiworld.regions += regions_by_name.values()
+
         for region_name, region in regions_to_create.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
                 self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
-
-        self.created_regions = {k: v for k, v in regions_by_name.items()}
-
-        world.multiworld.regions += self.created_regions.values()
 
     def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
         difficulty = world.options.puzzle_randomization
@@ -129,4 +129,4 @@ class WitnessRegions:
 
         self.locat = locat
         self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = KeyedDefaultDict(lambda _: [])
-        self.created_regions: Dict[str, Region] = dict()
+        self.created_region_names: Set[str] = set()

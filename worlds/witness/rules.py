@@ -153,7 +153,8 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
 def _has_item(item: str, world: "WitnessWorld", player: int,
               player_logic: WitnessPlayerLogic, locat: WitnessPlayerLocations) -> Callable[[CollectionState], bool]:
     if item in player_logic.REFERENCE_LOGIC.ALL_REGIONS_BY_NAME:
-        return lambda state: state.can_reach(item, "Region", player)
+        region = world.get_region(item)
+        return region.can_reach
     if item == "7 Lasers":
         laser_req = world.options.mountain_lasers.value
         return _has_lasers(laser_req, world, False)
