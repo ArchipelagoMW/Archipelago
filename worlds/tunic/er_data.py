@@ -211,7 +211,7 @@ portal_mapping: List[Portal] = [
            destination="Shop_"),
     Portal(name="Atoll to Far Shore", region="Ruined Atoll Portal",
            destination="Transit_teleporter_atoll"),
-    Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Portal",
+    Portal(name="Atoll Statue Teleporter", region="Ruined Atoll Statue",
            destination="Library Exterior_"),
     Portal(name="Frog Stairs Eye Entrance", region="Ruined Atoll",
            destination="Frog Stairs_eye"),
@@ -600,6 +600,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Ruined Atoll Lower Entry Area": RegionInfo("Atoll Redux"),
     "Ruined Atoll Frog Mouth": RegionInfo("Atoll Redux"),
     "Ruined Atoll Portal": RegionInfo("Atoll Redux"),
+    "Ruined Atoll Statue": RegionInfo("Atoll Redux"),
     "Frog's Domain Entry": RegionInfo("Frog Stairs"),
     "Frog's Domain": RegionInfo("frog cave main", hint=Hint.region),
     "Frog's Domain Back": RegionInfo("frog cave main", hint=Hint.scene),
@@ -730,7 +731,7 @@ for p1, p2 in hallways_ur.items():
 
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information
-dependent_regions: Dict[Tuple[str, ...], List[str]] = {
+dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
     ("Overworld", "Overworld Belltower", "Overworld Swamp Upper Entry", "Overworld Special Shop Entry",
      "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door", "Overworld Temple Door",
      "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal"):
@@ -749,6 +750,8 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Forest Grave Path by Grave", "Forest Hero's Grave"):
@@ -762,8 +765,10 @@ dependent_regions: Dict[Tuple[str, ...], List[str]] = {
     ("West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave"],
     ("West Garden Portal", "West Garden Portal Item"): ["West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
@@ -842,6 +847,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
     ("Beneath the Well Front", "Beneath the Well Main", "Beneath the Well Back"):
@@ -854,8 +861,10 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
      "West Garden Portal", "West Garden Portal Item"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
@@ -934,6 +943,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Forest Belltower Main", "Forest Belltower Lower"],
     ("East Forest", "East Forest Dance Fox Spot", "East Forest Portal"):
         ["East Forest", "East Forest Dance Fox Spot", "East Forest Portal"],
+    ("Guard House 1 East", "Guard House 1 West"):
+        ["Guard House 1 East", "Guard House 1 West"],
     # can use laurels, ice grapple, or ladder storage to traverse
     ("Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"):
         ["Forest Grave Path Main", "Forest Grave Path Upper", "Forest Grave Path by Grave", "Forest Hero's Grave"],
@@ -948,8 +959,10 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
      "West Garden Portal", "West Garden Portal Item"):
         ["West Garden", "West Garden Laurels Exit", "West Garden after Boss", "West Garden Hero's Grave",
          "West Garden Portal", "West Garden Portal Item"],
-    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"):
-        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal"],
+    ("Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+     "Ruined Atoll Statue"):
+        ["Ruined Atoll", "Ruined Atoll Lower Entry Area", "Ruined Atoll Frog Mouth", "Ruined Atoll Portal",
+         "Ruined Atoll Statue"],
     ("Frog's Domain",):
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder", "Library Exterior Tree"):
