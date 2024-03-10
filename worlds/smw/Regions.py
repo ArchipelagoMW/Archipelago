@@ -2163,8 +2163,6 @@ def add_location_to_region(multiworld: MultiWorld, player: int, active_locations
 
 def connect(world: World, source: str, target: str,
             rule: typing.Optional[typing.Callable] = None):
-    source_region: Region = world.multiworld.get_region(source, world.player)
-    connection_rules: typing.Dict[str, typing.Callable[[CollectionState], bool]] = dict()
-    if rule:
-        connection_rules[target] = rule
-    source_region.add_exits([target], connection_rules)
+    source_region: Region = world.get_region(source)
+    target_region: Region = world.get_region(target)
+    source_region.connect(target_region, rule=rule)
