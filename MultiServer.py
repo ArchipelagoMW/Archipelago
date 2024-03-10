@@ -1964,7 +1964,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_forbid_release(self, player_name: str) -> bool:
-        """"Disallow the specified player from using the !release command."""
+        """Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
