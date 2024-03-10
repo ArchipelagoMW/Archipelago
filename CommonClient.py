@@ -115,6 +115,15 @@ class ClientCommandProcessor(CommandProcessor):
         for item_name in AutoWorldRegister.world_types[self.ctx.game].item_name_to_id:
             self.output(item_name)
 
+    def _cmd_item_groups(self):
+        """List all item group names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing item groups.")
+            return False
+        self.output(f"Item Group Names for {self.ctx.game}")
+        for group_name in AutoWorldRegister.world_types[self.ctx.game].item_name_groups:
+            self.output(group_name)
+
     def _cmd_locations(self):
         """List all location names for the currently running game."""
         if not self.ctx.game:
@@ -123,6 +132,15 @@ class ClientCommandProcessor(CommandProcessor):
         self.output(f"Location Names for {self.ctx.game}")
         for location_name in AutoWorldRegister.world_types[self.ctx.game].location_name_to_id:
             self.output(location_name)
+
+    def _cmd_location_groups(self):
+        """List all location group names for the currently running game."""
+        if not self.ctx.game:
+            self.output("No game set, cannot determine existing location groups.")
+            return False
+        self.output(f"Location Group Names for {self.ctx.game}")
+        for group_name in AutoWorldRegister.world_types[self.ctx.game].location_name_groups:
+            self.output(group_name)
 
     def _cmd_ready(self):
         """Send ready status to server."""
