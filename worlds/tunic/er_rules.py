@@ -1092,7 +1092,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # West Garden laurels exit
             ("West Garden", "Archipelagos Redux, Overworld Redux_lowest", set()),
 
-            # Atoll to Frog Stairs, use the little ladder you fix at the start
+            # Atoll, use the little ladder you fix at the beginning
+            ("Ruined Atoll", "Atoll Redux, Overworld Redux_lower", set()),
             ("Ruined Atoll", "Atoll Redux, Frog Stairs_mouth", set()),
             ("Ruined Atoll", "Atoll Redux, Frog Stairs_eye", set()),
 
