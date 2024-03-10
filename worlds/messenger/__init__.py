@@ -161,12 +161,6 @@ class MessengerWorld(World):
         self.spoiler_portal_mapping = {}
         self.transitions = []
 
-    @classmethod
-    def stage_generate_early(cls, multiworld: MultiWorld):
-        if multiworld.players > 1:
-            return
-        cls.generate_output = generate_output
-
     def create_regions(self) -> None:
         # MessengerRegion adds itself to the multiworld
         # create simple regions
@@ -247,9 +241,11 @@ class MessengerWorld(World):
         logic = self.options.logic_level
         if logic == Logic.option_normal:
             MessengerRules(self).set_messenger_rules()
-        else:
+        elif logic == Logic.option_hard:
             MessengerHardRules(self).set_messenger_rules()
-        # else:
+        else:
+            raise ValueError(f"Somehow you have a logic option that's currently invalid."
+                             f" {logic} for {self.multiworld.get_player_name(self.player)}")
         #     MessengerOOBRules(self).set_messenger_rules()
 
         add_closed_portal_reqs(self)
@@ -401,19 +397,21 @@ class MessengerWorld(World):
             state.prog_items[self.player]["Shards"] -= int(item.name.strip("Time Shard ()"))
         return change
 
-
-def generate_output(world: MessengerWorld, output_directory: str) -> None:
-    out_path = output_path(world.multiworld.get_out_file_name_base(1) + ".aptm")
-    if "The Messenger\\Archipelago\\output" not in out_path:
-        return
-    import orjson
-    data = {
-        "name": world.multiworld.get_player_name(world.player),
-        "slot_data": world.fill_slot_data(),
-        "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
-                     for loc in world.multiworld.get_filled_locations() if loc.address},
-    }
-
-    output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
-    with open(out_path, "wb") as f:
-        f.write(output)
+    @classmethod
+    def stage_generate_output(cls, multiworld: MultiWorld, output_directory: str) -> None:
+        if multiworld.players > 1:
+            return
+        out_path = output_path(multiworld.get_out_file_name_base(1) + ".aptm")
+        if "The Messenger\\Archipelago\\output" not in out_path:
+            return
+        import orjson
+        data = {
+            "name": multiworld.get_player_name(1),
+            "slot_data": multiworld.worlds[1].fill_slot_data(),
+            "loc_data": {loc.address: {loc.item.name: [loc.item.code, loc.item.flags]}
+                         for loc in multiworld.get_filled_locations() if loc.address},
+        }
+    
+        output = orjson.dumps(data, option=orjson.OPT_NON_STR_KEYS)
+        with open(out_path, "wb") as f:
+            f.write(output)

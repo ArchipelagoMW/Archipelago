@@ -3,7 +3,6 @@ import logging
 import os.path
 import subprocess
 import urllib.request
-from pathlib import Path
 from shutil import which
 from tkinter.messagebox import askyesnocancel
 from typing import Any, Optional
@@ -12,7 +11,7 @@ from Utils import open_file
 
 import requests
 
-from Utils import is_linux, is_windows, messagebox, tuplize_version
+from Utils import is_windows, messagebox, tuplize_version
 
 
 MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerModAP/releases/latest"
@@ -20,9 +19,6 @@ MOD_URL = "https://api.github.com/repos/alwaysintreble/TheMessengerRandomizerMod
 
 def launch_game(url: Optional[str] = None) -> None:
     """Check the game installation, then launch it"""
-    if not (is_linux or is_windows):
-        return
-
     def courier_installed() -> bool:
         """Check if Courier is installed"""
         return os.path.exists(os.path.join(game_folder, "TheMessenger_Data", "Managed", "Assembly-CSharp.Courier.mm.dll"))
@@ -56,8 +52,8 @@ def launch_game(url: Optional[str] = None) -> None:
                     zf.extract(member, path=game_folder)
     
         os.chdir(game_folder)
-        # linux handling
-        if is_linux:
+        # linux and mac handling
+        if not is_windows:
             mono_exe = which("mono")
             if not mono_exe:
                 # steam deck support but doesn't currently work
@@ -154,7 +150,7 @@ def launch_game(url: Optional[str] = None) -> None:
                 install_mod()
             elif should_update is None:
                 return
-    if is_linux:
+    if not is_windows:
         if url:
             open_file(f"steam://rungameid/764790//{url}/")
         else:
