@@ -177,6 +177,9 @@ def _can_do_theater_to_tunnels(state: CollectionState, world: "WitnessWorld") ->
     This condition is a little tricky. We'll attempt to evaluate it as lazily as possible.
     """
 
+    if not state.can_reach_region("Theater", world.player):
+        return False
+
     direct_access = (
         any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Tunnels", "Windmill Interior"])
         and any(e.can_reach(state) for e in world.regio.two_way_entrance_register["Theater", "Windmill Interior"])
