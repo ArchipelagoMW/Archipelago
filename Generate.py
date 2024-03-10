@@ -302,7 +302,9 @@ def handle_name(name: str, player: int, name_counter: Counter):
                                                                  NUMBER=(number if number > 1 else ''),
                                                                  player=player,
                                                                  PLAYER=(player if player > 1 else '')))
-    new_name = new_name.strip()[:16]
+    # Run .strip twice for edge case where after the initial .slice new_name has a leading whitespace.
+    # Could cause issues for some clients that cannot handle the additional whitespace.
+    new_name = new_name.strip()[:16].strip()
     if new_name == "Archipelago":
         raise Exception(f"You cannot name yourself \"{new_name}\"")
     return new_name

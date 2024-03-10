@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import random
 import re
 import sys
 import time
@@ -296,8 +297,11 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
+        assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
+        self.random = random.Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -422,9 +426,9 @@ class World(metaclass=AutoWorldRegister):
         An example case is ItemLinks creating these."""
         # TODO remove loop when worlds use options dataclass
         for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
-        group.options = cls.options_dataclass(**{option_key: option(option.default)
+        group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
 
         return group
