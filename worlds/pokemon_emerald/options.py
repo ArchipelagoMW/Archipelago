@@ -3,7 +3,7 @@ Option definitions for Pokemon Emerald
 """
 from dataclasses import dataclass
 
-from Options import (Choice, DeathLink, DefaultOnToggle, TextChoice, OptionSet, NamedRange, Range, Toggle, FreeText, \
+from Options import (Choice, DeathLink, DefaultOnToggle, TextChoice, OptionSet, NamedRange, Range, Toggle, FreeText,
                      PerGameCommonOptions)
 
 from .data import data

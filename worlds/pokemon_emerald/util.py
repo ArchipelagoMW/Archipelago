@@ -1,8 +1,7 @@
 import json
 from typing import Any, Dict, List, Optional, Tuple, Iterable
 
-from .data import data
-from .pokemon import NATIONAL_ID_TO_SPECIES_ID
+from .data import NATIONAL_ID_TO_SPECIES_ID, data
 
 
 CHARACTER_DECODING_MAP = {

@@ -1429,3 +1429,37 @@ def _init() -> None:
 
 data = PokemonEmeraldData()
 _init()
+
+LEGENDARY_POKEMON = frozenset([data.constants[species] for species in [
+    "SPECIES_ARTICUNO",
+    "SPECIES_ZAPDOS",
+    "SPECIES_MOLTRES",
+    "SPECIES_MEWTWO",
+    "SPECIES_MEW",
+    "SPECIES_RAIKOU",
+    "SPECIES_ENTEI",
+    "SPECIES_SUICUNE",
+    "SPECIES_LUGIA",
+    "SPECIES_HO_OH",
+    "SPECIES_CELEBI",
+    "SPECIES_REGIROCK",
+    "SPECIES_REGICE",
+    "SPECIES_REGISTEEL",
+    "SPECIES_LATIAS",
+    "SPECIES_LATIOS",
+    "SPECIES_KYOGRE",
+    "SPECIES_GROUDON",
+    "SPECIES_RAYQUAZA",
+    "SPECIES_JIRACHI",
+    "SPECIES_DEOXYS",
+]])
+"""Species IDs of legendary pokemon"""
+
+UNEVOLVED_POKEMON = frozenset({
+    species.species_id
+    for species in data.species.values()
+    if len(species.evolutions) > 0
+})
+"""Species IDs of pokemon which have further evolution stages in the vanilla game"""
+
+NATIONAL_ID_TO_SPECIES_ID = {species.national_dex_number: i for i, species in data.species.items()}

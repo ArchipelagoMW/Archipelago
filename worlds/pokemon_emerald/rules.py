@@ -6,9 +6,8 @@ from typing import TYPE_CHECKING, Callable, Dict
 from BaseClasses import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 
-from .data import NUM_REAL_SPECIES, data
+from .data import NATIONAL_ID_TO_SPECIES_ID, NUM_REAL_SPECIES, data
 from .options import DarkCavesRequireFlash, EliteFourRequirement, NormanRequirement, Goal
-from .pokemon import NATIONAL_ID_TO_SPECIES_ID
 
 if TYPE_CHECKING:
     from . import PokemonEmeraldWorld

@@ -76,27 +76,6 @@ _FANFARES: Dict[str, int] = {
     "MUS_REGISTER_MATCH_CALL": 135,
 }
 
-VISITED_EVENT_NAME_TO_ID = {
-    "EVENT_VISITED_LITTLEROOT_TOWN": 0,
-    "EVENT_VISITED_OLDALE_TOWN": 1,
-    "EVENT_VISITED_PETALBURG_CITY": 2,
-    "EVENT_VISITED_RUSTBORO_CITY": 3,
-    "EVENT_VISITED_DEWFORD_TOWN": 4,
-    "EVENT_VISITED_SLATEPORT_CITY": 5,
-    "EVENT_VISITED_MAUVILLE_CITY": 6,
-    "EVENT_VISITED_VERDANTURF_TOWN": 7,
-    "EVENT_VISITED_FALLARBOR_TOWN": 8,
-    "EVENT_VISITED_LAVARIDGE_TOWN": 9,
-    "EVENT_VISITED_FORTREE_CITY": 10,
-    "EVENT_VISITED_LILYCOVE_CITY": 11,
-    "EVENT_VISITED_MOSSDEEP_CITY": 12,
-    "EVENT_VISITED_SOOTOPOLIS_CITY": 13,
-    "EVENT_VISITED_PACIFIDLOG_TOWN": 14,
-    "EVENT_VISITED_EVER_GRANDE_CITY": 15,
-    "EVENT_VISITED_BATTLE_FRONTIER": 16,
-    "EVENT_VISITED_SOUTHERN_ISLAND": 17,
-}
-
 CAVE_EVENT_NAME_TO_ID = {
     "TERRA_CAVE_ROUTE_114_1": 1,
     "TERRA_CAVE_ROUTE_114_2": 2,
@@ -137,7 +116,7 @@ class PokemonEmeraldDeltaPatch(APDeltaPatch):
         return get_base_rom_as_bytes()
 
 
-def generate_output(world: "PokemonEmeraldWorld", output_directory: str) -> None:
+def create_patch(world: "PokemonEmeraldWorld", output_directory: str) -> None:
     base_rom = get_base_rom_as_bytes()
     base_patch = pkgutil.get_data(__name__, "data/base_patch.bsdiff4")
     patched_rom = bytearray(bsdiff4.patch(base_rom, base_patch))
