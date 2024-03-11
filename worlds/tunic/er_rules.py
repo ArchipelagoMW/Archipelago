@@ -649,7 +649,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
         and has_ladder("Ladders in Library", state, player, options))
     regions["Library Portal"].connect(
-        connecting_region=regions["Library Lab"])
+        connecting_region=regions["Library Lab"],
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options)
+        or state.has(laurels, player))
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab to Librarian"],
