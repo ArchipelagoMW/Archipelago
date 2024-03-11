@@ -253,11 +253,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Overworld"],
         rule=lambda state: has_ladder("Ladder to Swamp", state, player, options))
 
-    regions["Overworld"].connect(
+    regions["East Overworld"].connect(
         connecting_region=regions["Overworld Special Shop Entry"],
         rule=lambda state: state.has(laurels, player))
     regions["Overworld Special Shop Entry"].connect(
-        connecting_region=regions["Overworld"],
+        connecting_region=regions["East Overworld"],
         rule=lambda state: state.has(laurels, player))
 
     regions["Overworld"].connect(
