@@ -1,7 +1,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
-from BaseClasses import CollectionState, Item, ItemClassification, Tutorial
+from BaseClasses import CollectionState, Item, ItemClassification, Location, MultiWorld, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .constants import ALL_ITEMS, ALWAYS_LOCATIONS, BOSS_LOCATIONS, FILLER, NOTES, PHOBEKINS
 from .options import Goal, Logic, MessengerOptions, NotesNeeded, PowerSeals
@@ -145,6 +145,26 @@ class MessengerWorld(World):
             MessengerHardRules(self).set_messenger_rules()
         else:
             MessengerOOBRules(self).set_messenger_rules()
+
+    @classmethod
+    def stage_fill_hook(cls, multiworld: MultiWorld, prog_items: List[Item], useful_items: List[Item],
+                        filler_items: List[Item], locations: List[Location]) -> None:
+        # it's possible for both items to get placed near the end of the itempool causing swap to be entered early
+        # as more than half of the player's locations become unavailable immediately.
+        # Please don't copy this nightmare
+        players = multiworld.get_game_players(cls.game)
+        total_items = len(prog_items)
+        items = {}
+        for index in range(int((total_items * .9)), total_items):
+            item = prog_items[index]
+            if item.player in players and item.name in {"Wingsuit", "Rope Dart"}:
+                items.setdefault(item.player, []).append((index, item))
+        for player, item_pairs in items.items():
+            if len(item_pairs) > 1:
+                item_to_move = multiworld.random.choice(item_pairs)
+                new_index = multiworld.random.randrange(0, int((total_items * .1)))
+                prog_items.pop(item_to_move[0])
+                prog_items.insert(new_index, item_to_move[1])
 
     def fill_slot_data(self) -> Dict[str, Any]:
         return {
