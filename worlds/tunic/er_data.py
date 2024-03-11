@@ -793,10 +793,10 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
     ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
         ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
-    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"):
-        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"],
-    ("Library Lab", "Library Lab Lower", "Library Portal"):
-        ["Library Lab", "Library Lab Lower", "Library Portal"],
+    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
+        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
+    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
+        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
     ("Fortress Courtyard Upper",):
         ["Fortress Courtyard Upper", "Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
          "Fortress Exterior near cave", "Fortress Courtyard"],
@@ -910,10 +910,10 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
     ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
         ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
-    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"):
-        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"],
-    ("Library Lab", "Library Lab Lower", "Library Portal"):
-        ["Library Lab", "Library Lab Lower", "Library Portal"],
+    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
+        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
+    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
+        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
      "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
         ["Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
