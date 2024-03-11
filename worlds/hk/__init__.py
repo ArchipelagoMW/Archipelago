@@ -277,30 +277,31 @@ class HKWorld(World):
 
         for option_key, option in hollow_knight_randomize_options.items():
             randomized = getattr(self.multiworld, option_key)[self.player]
-            if randomized or option_key not in logicless_options or self.multiworld.SharedItems[self.player]:
-                for item_name, location_name in zip(option.items, option.locations):
-                    if item_name in junk_replace:
-                        item_name = self.get_filler_item_name()
+            if all([not randomized, option_key in logicless_options, not self.multiworld.SharedItems[self.player]]):
+                continue
+            for item_name, location_name in zip(option.items, option.locations):
+                if item_name in junk_replace:
+                    item_name = self.get_filler_item_name()
 
-                    if (item_name == "Crystal_Heart" and self.multiworld.SplitCrystalHeart[self.player]) or \
-                            (item_name == "Mothwing_Cloak" and self.multiworld.SplitMothwingCloak[self.player]):
-                        _add("Left_" + item_name, location_name, randomized)
-                        _add("Right_" + item_name, "Split_" + location_name, randomized)
-                        continue
-                    if item_name == "Mantis_Claw" and self.multiworld.SplitMantisClaw[self.player]:
-                        _add("Left_" + item_name, "Left_" + location_name, randomized)
-                        _add("Right_" + item_name, "Right_" + location_name, randomized)
-                        continue
-                    if item_name == "Shade_Cloak" and self.multiworld.SplitMothwingCloak[self.player]:
-                        if self.multiworld.random.randint(0, 1):
-                            item_name = "Left_Mothwing_Cloak"
-                        else:
-                            item_name = "Right_Mothwing_Cloak"
-                    if item_name == "Grimmchild2" and self.multiworld.RandomizeGrimmkinFlames[self.player] and self.multiworld.RandomizeCharms[self.player]:
-                        _add("Grimmchild1", location_name, randomized)
-                        continue
+                if (item_name == "Crystal_Heart" and self.multiworld.SplitCrystalHeart[self.player]) or \
+                        (item_name == "Mothwing_Cloak" and self.multiworld.SplitMothwingCloak[self.player]):
+                    _add("Left_" + item_name, location_name, randomized)
+                    _add("Right_" + item_name, "Split_" + location_name, randomized)
+                    continue
+                if item_name == "Mantis_Claw" and self.multiworld.SplitMantisClaw[self.player]:
+                    _add("Left_" + item_name, "Left_" + location_name, randomized)
+                    _add("Right_" + item_name, "Right_" + location_name, randomized)
+                    continue
+                if item_name == "Shade_Cloak" and self.multiworld.SplitMothwingCloak[self.player]:
+                    if self.multiworld.random.randint(0, 1):
+                        item_name = "Left_Mothwing_Cloak"
+                    else:
+                        item_name = "Right_Mothwing_Cloak"
+                if item_name == "Grimmchild2" and self.multiworld.RandomizeGrimmkinFlames[self.player] and self.multiworld.RandomizeCharms[self.player]:
+                    _add("Grimmchild1", location_name, randomized)
+                    continue
 
-                    _add(item_name, location_name, randomized)
+                _add(item_name, location_name, randomized)
 
         if self.multiworld.RandomizeElevatorPass[self.player]:
             randomized = True
