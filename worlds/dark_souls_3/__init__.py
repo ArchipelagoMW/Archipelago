@@ -935,7 +935,7 @@ class DarkSouls3World(World):
 
         self._add_location_rule("FS: Pestilent Mist - Orbeck for any scroll", self._has_any_scroll)
         self._add_location_rule("FS: Young Dragon Ring - Orbeck for one scroll and buying three spells", self._has_any_scroll)
-        
+
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
         # before killing Abyss Watchers.
         self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
