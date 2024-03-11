@@ -1,17 +1,17 @@
 # Running Using Docker
 
-This Dockerfile is used to build a docker container for Archipelago (currently 0.4.4) that fulfills all the requirements in [Running from Source](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20source.md). The end user ideally just needs to download the container and configure a few things and the Webhost will run as expected.
+This Dockerfile is used to build a docker container for the latest release of Archipelago that fulfills all the requirements in [Running from Source](https://github.com/ArchipelagoMW/Archipelago/blob/main/docs/running%20from%20source.md). The end user ideally just needs to download the container and configure a few things and the Webhost will run as expected.
 
 ## Requirements
 
-* This Docker container must be run as a host so that it has access to all of its ports. This is so the WebHost can use any port to host a game.
-* The user must provide their own Link to the Past ROM and map it to /Archipelago/Zelda no Densetsu - Kamigami no Triforce (Japan).sfc.
-* The user must map /Archipelago/ap.db3 if they want their data to persist when the container is restarted.
+* This Docker container must be run as a host so that it has access to all of its ports. This is done by adding the `--network host` command line argument to the `docker run` command. This is so the WebHost can use any port to host a game.
+* The user must provide their own Link to the Past ROM and [map it](https://docs.docker.com/storage/bind-mounts/) to /Archipelago/Zelda no Densetsu - Kamigami no Triforce (Japan).sfc.
+* The user must [map](https://docs.docker.com/storage/bind-mounts/) /Archipelago/ap.db3 if they want their data to persist when the container is restarted.
 
 ### Options
 
-* If the user wants to configure their Archipelago server, they must provide a config.yaml file and map it to /Archipelago/config.yaml
-* If the user wants to avoid redownloading all of the Link to the Past sprites every time the container starts, they should map a directory to /Archipelago/data/sprites/alttpr/. This will make the server only redownload sprites when it needs to.
+* If the user wants to configure their Archipelago server, they must provide a config.yaml file and [map it](https://docs.docker.com/storage/bind-mounts/) to /Archipelago/config.yaml
+* If the user wants to avoid redownloading all of the Link to the Past sprites every time the container starts, they should [map a directory](https://docs.docker.com/storage/bind-mounts/) to /Archipelago/data/sprites/alttpr/. This will make the server only redownload sprites when it needs to.
 
 ## Building the container
 
