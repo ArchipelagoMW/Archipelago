@@ -523,7 +523,7 @@ class MessengerOOBRules(MessengerRules):
 
 def set_self_locking_items(world: "MessengerWorld", player: int) -> None:
     # locations where these placements are always valid
-    allow_self_locking_items(world.get_location("Searing Crags - Key of Strength"), "Power Thistle")
+    allow_self_locking_items(world.get_location("Searing Crags - Key of Strength").parent_region, "Power Thistle")
     allow_self_locking_items(world.get_location("Sunken Shrine - Key of Love"), "Sun Crest", "Moon Crest")
-    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage"), "Demon King Crown")
+    allow_self_locking_items(world.get_location("Corrupted Future - Key of Courage").parent_region, "Demon King Crown")
     allow_self_locking_items(world.get_location("Elemental Skylands Seal - Water"), "Currents Master")
