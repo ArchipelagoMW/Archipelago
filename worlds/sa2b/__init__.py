@@ -344,11 +344,6 @@ class SA2BWorld(World):
 
         self.multiworld.itempool += itempool
 
-        # VERY TESTING, DON'T PUSH
-        self.multiworld.push_precollected(self.create_item("Five Rings"))
-        self.multiworld.push_precollected(self.create_item("Ten Rings"))
-        self.multiworld.push_precollected(self.create_item("Twenty Rings"))
-
 
 
     def create_item(self, name: str, force_non_progression=False, goal=0) -> Item:
