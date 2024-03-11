@@ -112,7 +112,7 @@ class DarkSouls3World(World):
                 )
             ):
                 self.multiworld.early_items[self.player]['Storm Ruler'] = 1
-                self.multiworld.worlds[self.player].options.local_items.value.add('Storm Ruler')
+                self.options.local_items.value.add('Storm Ruler')
         else:
             self.yhorm_location = default_yhorm_location
 
@@ -535,7 +535,7 @@ class DarkSouls3World(World):
                 and self._has_any_scroll(state)
             ))
             if self.options.late_basin_of_vows == "after_small_doll":
-                self._add_entrance_rule("Lothric Castle", "Small Doll")
+                self._add_location_rule("HWL: Soul of the Dancer", "Small Doll")
 
         self._add_location_rule([
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
