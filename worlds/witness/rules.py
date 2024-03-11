@@ -151,7 +151,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
     # We can get to Hedge 4 from Hedge 3. If we have the Hedge 3 Shortcut, we're good.
 
     hedge_3_shortcut = any(
-        e.can_reach(state) for e in regio.two_way_entrance_register["Keep 4th Maze", "Keep 3rd Maze"]
+        e.can_reach(state) for e in regio.two_way_entrance_register["Keep 3rd Maze", "Keep"]
     )
 
     if hedge_3_shortcut:
