@@ -300,15 +300,15 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
 
 
 def create_museum_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
-    if options.museumsanity == Museumsanity.option_none:
-        return
-    items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 5)
-    items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
-    items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
-    items.append(item_factory("Ancient Seeds Recipe"))
-    items.append(item_factory("Stardrop"))
     items.append(item_factory("Rusty Key"))
     items.append(item_factory("Dwarvish Translation Guide"))
+    items.append(item_factory("Ancient Seeds Recipe"))
+    if options.museumsanity == Museumsanity.option_none:
+        return
+    items.extend(item_factory(item) for item in ["Magic Rock Candy"] * 10)
+    items.extend(item_factory(item) for item in ["Ancient Seeds"] * 5)
+    items.extend(item_factory(item) for item in ["Traveling Merchant Metal Detector"] * 4)
+    items.append(item_factory("Stardrop"))
 
 
 def create_friendsanity_items(item_factory: StardewItemFactory, options: StardewValleyOptions, items: List[Item]):
@@ -468,10 +468,6 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
                                        items_already_added: List[Item],
                                        number_locations: int) -> List[Item]:
     include_traps = options.trap_items != TrapItems.option_no_traps
-    all_filler_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
-    all_filler_packs.extend(items_by_group[Group.TRASH])
-    if include_traps:
-        all_filler_packs.extend(items_by_group[Group.TRAP])
     items_already_added_names = [item.name for item in items_already_added]
     useful_resource_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK_USEFUL]
                              if pack.name not in items_already_added_names]
@@ -484,8 +480,9 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     if include_traps:
         priority_filler_items.extend(trap_items)
 
-    all_filler_packs = remove_excluded_packs(all_filler_packs, options)
-    priority_filler_items = remove_excluded_packs(priority_filler_items, options)
+    exclude_ginger_island = options.exclude_ginger_island == ExcludeGingerIsland.option_true
+    all_filler_packs = get_all_filler_items(include_traps, exclude_ginger_island)
+    priority_filler_items = remove_excluded_packs(priority_filler_items, exclude_ginger_island)
 
     number_priority_items = len(priority_filler_items)
     required_resource_pack = number_locations - len(items_already_added)
@@ -519,8 +516,21 @@ def fill_with_resource_packs_and_traps(item_factory: StardewItemFactory, options
     return items
 
 
-def remove_excluded_packs(packs, options: StardewValleyOptions):
+def remove_excluded_packs(packs, exclude_ginger_island: bool):
     included_packs = [pack for pack in packs if Group.DEPRECATED not in pack.groups]
-    if options.exclude_ginger_island == ExcludeGingerIsland.option_true:
+    if exclude_ginger_island:
         included_packs = [pack for pack in included_packs if Group.GINGER_ISLAND not in pack.groups]
     return included_packs
+
+
+def remove_limited_amount_packs(packs):
+    return [pack for pack in packs if Group.MAXIMUM_ONE not in pack.groups and Group.EXACTLY_TWO not in pack.groups]
+
+
+def get_all_filler_items(include_traps: bool, exclude_ginger_island: bool):
+    all_filler_packs = [pack for pack in items_by_group[Group.RESOURCE_PACK]]
+    all_filler_packs.extend(items_by_group[Group.TRASH])
+    if include_traps:
+        all_filler_packs.extend(items_by_group[Group.TRAP])
+    all_filler_packs = remove_excluded_packs(all_filler_packs, exclude_ginger_island)
+    return all_filler_packs

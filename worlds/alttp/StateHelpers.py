@@ -10,7 +10,7 @@ def is_not_bunny(state: CollectionState, region: LTTPRegion, player: int) -> boo
 
 
 def can_bomb_clip(state: CollectionState, region: LTTPRegion, player: int) -> bool:
-    return is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
+    return can_use_bombs(state, player) and is_not_bunny(state, region, player) and state.has('Pegasus Boots', player)
 
 
 def can_buy_unlimited(state: CollectionState, item: str, player: int) -> bool:
@@ -31,7 +31,7 @@ def can_shoot_arrows(state: CollectionState, player: int) -> bool:
 
 def has_triforce_pieces(state: CollectionState, player: int) -> bool:
     count = state.multiworld.treasure_hunt_count[player]
-    return state.item_count('Triforce Piece', player) + state.item_count('Power Star', player) >= count
+    return state.count('Triforce Piece', player) + state.count('Power Star', player) >= count
 
 
 def has_crystals(state: CollectionState, count: int, player: int) -> bool:
@@ -60,9 +60,9 @@ def has_hearts(state: CollectionState, player: int, count: int) -> int:
 def heart_count(state: CollectionState, player: int) -> int:
     # Warning: This only considers items that are marked as advancement items
     diff = state.multiworld.difficulty_requirements[player]
-    return min(state.item_count('Boss Heart Container', player), diff.boss_heart_container_limit) \
-            + state.item_count('Sanctuary Heart Container', player) \
-            + min(state.item_count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
+    return min(state.count('Boss Heart Container', player), diff.boss_heart_container_limit) \
+            + state.count('Sanctuary Heart Container', player) \
+        + min(state.count('Piece of Heart', player), diff.heart_piece_limit) // 4 \
             + 3  # starting hearts
 
 
@@ -83,13 +83,47 @@ def can_extend_magic(state: CollectionState, player: int, smallmagic: int = 16,
     return basemagic >= smallmagic
 
 
+def can_hold_arrows(state: CollectionState, player: int, quantity: int):
+    arrows = 30 + ((state.count("Arrow Upgrade (+5)", player) * 5) + (state.count("Arrow Upgrade (+10)", player) * 10)
+                   + (state.count("Bomb Upgrade (50)", player) * 50))
+    # Arrow Upgrade (+5) beyond the 6th gives +10
+    arrows += max(0, ((state.count("Arrow Upgrade (+5)", player) - 6) * 10))
+    return min(70, arrows) >= quantity
+
+
+def can_use_bombs(state: CollectionState, player: int, quantity: int = 1) -> bool:
+    bombs = 0 if state.multiworld.bombless_start[player] else 10
+    bombs += ((state.count("Bomb Upgrade (+5)", player) * 5) + (state.count("Bomb Upgrade (+10)", player) * 10)
+              + (state.count("Bomb Upgrade (50)", player) * 50))
+    # Bomb Upgrade (+5) beyond the 6th gives +10
+    bombs += max(0, ((state.count("Bomb Upgrade (+5)", player) - 6) * 10))
+    if (not state.multiworld.shuffle_capacity_upgrades[player]) and state.has("Capacity Upgrade Shop", player):
+        bombs += 40
+    return bombs >= min(quantity, 50)
+
+
+def can_bomb_or_bonk(state: CollectionState, player: int) -> bool:
+    return state.has("Pegasus Boots", player) or can_use_bombs(state, player)
+
+
 def can_kill_most_things(state: CollectionState, player: int, enemies: int = 5) -> bool:
-    return (has_melee_weapon(state, player)
-            or state.has('Cane of Somaria', player)
-            or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
-            or can_shoot_arrows(state, player)
-            or state.has('Fire Rod', player)
-            or (state.has('Bombs (10)', player) and enemies < 6))
+    if state.multiworld.enemy_shuffle[player]:
+        # I don't fully understand Enemizer's logic for placing enemies in spots where they need to be killable, if any.
+        # Just go with maximal requirements for now.
+        return (has_melee_weapon(state, player)
+                and state.has('Cane of Somaria', player)
+                and state.has('Cane of Byrna', player) and can_extend_magic(state, player)
+                and can_shoot_arrows(state, player)
+                and state.has('Fire Rod', player)
+                and can_use_bombs(state, player, enemies * 4))
+    else:
+        return (has_melee_weapon(state, player)
+                or state.has('Cane of Somaria', player)
+                or (state.has('Cane of Byrna', player) and (enemies < 6 or can_extend_magic(state, player)))
+                or can_shoot_arrows(state, player)
+                or state.has('Fire Rod', player)
+                or (state.multiworld.enemy_health[player] in ("easy", "default")
+                    and can_use_bombs(state, player, enemies * 4)))
 
 
 def can_get_good_bee(state: CollectionState, player: int) -> bool:

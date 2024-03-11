@@ -471,6 +471,7 @@ async def track_locations(ctx, roomid, roomdata) -> bool:
 
 class ALTTPSNIClient(SNIClient):
     game = "A Link to the Past"
+    patch_suffix = [".aplttp", ".apz3"]
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_read, snes_buffered_write, snes_flush_writes
@@ -520,7 +521,8 @@ class ALTTPSNIClient(SNIClient):
         gamemode = await snes_read(ctx, WRAM_START + 0x10, 1)
         if "DeathLink" in ctx.tags and gamemode and ctx.last_death_link + 1 < time.time():
             currently_dead = gamemode[0] in DEATH_MODES
-            await ctx.handle_deathlink_state(currently_dead)
+            await ctx.handle_deathlink_state(currently_dead,
+                                             ctx.player_names[ctx.slot] + " ran out of hearts." if ctx.slot else "")
 
         gameend = await snes_read(ctx, SAVEDATA_START + 0x443, 1)
         game_timer = await snes_read(ctx, SAVEDATA_START + 0x42E, 4)

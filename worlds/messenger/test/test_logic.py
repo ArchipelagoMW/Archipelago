@@ -41,7 +41,7 @@ class HardLogicTest(MessengerTestBase):
             # cloud ruins
             "Cloud Ruins - Acro", "Cloud Ruins Seal - Ghost Pit",
             "Cloud Ruins Seal - Toothbrush Alley", "Cloud Ruins Seal - Saw Pit", "Cloud Ruins Seal - Money Farm Room",
-            "Cloud Entrance Mega Shard", "Time Warp Mega Shard", "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
+            "Money Farm Room Mega Shard 1", "Money Farm Room Mega Shard 2",
             # underworld
             "Underworld Seal - Rising Fanta", "Underworld Seal - Sharp and Windy Climb",
             # elemental skylands
@@ -80,18 +80,6 @@ class HardLogicTest(MessengerTestBase):
         self.collect(item)
         self.assertTrue(self.can_reach_location(special_loc))
 
-    def test_glacial(self) -> None:
-        """Test Glacial Peak locations."""
-        self.assertAccessDependency(["Glacial Peak Seal - Ice Climbers"],
-                                    [["Second Wind", "Meditation"], ["Rope Dart"], ["Wingsuit"]],
-                                    True)
-        self.assertAccessDependency(["Glacial Peak Seal - Projectile Spike Pit"],
-                                    [["Strike of the Ninja"], ["Windmill Shuriken"], ["Rope Dart"], ["Wingsuit"]],
-                                    True)
-        self.assertAccessDependency(["Glacial Peak Seal - Glacial Air Swag", "Glacial Peak Mega Shard"],
-                                    [["Windmill Shuriken"], ["Wingsuit"], ["Rope Dart"]],
-                                    True)
-
 
 class NoLogicTest(MessengerTestBase):
     options = {
@@ -111,4 +99,3 @@ class NoLogicTest(MessengerTestBase):
         for loc in all_locations:
             with self.subTest("Default unreachables", location=loc):
                 self.assertFalse(self.can_reach_location(loc))
-        self.assertBeatable(True)

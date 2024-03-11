@@ -92,7 +92,7 @@ class OOTSettings(settings.Group):
 
 class OOTWeb(WebWorld):
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
         "English",
         "setup_en.md",
@@ -118,7 +118,16 @@ class OOTWeb(WebWorld):
         ["TheLynk"]
     )
 
-    tutorials = [setup, setup_es, setup_fr]
+    setup_de = Tutorial(
+        setup.tutorial_name,
+        setup.description,
+        "Deutsch",
+        "setup_de.md",
+        "setup/de",
+        ["Held_der_Zeit"]
+    )
+
+    tutorials = [setup, setup_es, setup_fr, setup_de]
 
 
 class OOTWorld(World):
@@ -829,8 +838,8 @@ class OOTWorld(World):
         # Kill unreachable events that can't be gotten even with all items
         # Make sure to only kill actual internal events, not in-game "events"
         all_state = self.get_state_with_complete_itempool()
-        all_state.sweep_for_events()
         all_locations = self.get_locations()
+        all_state.sweep_for_events(locations=all_locations)
         reachable = self.multiworld.get_reachable_locations(all_state, self.player)
         unreachable = [loc for loc in all_locations if
                        (loc.internal or loc.type == 'Drop') and loc.event and loc.locked and loc not in reachable]
@@ -858,7 +867,7 @@ class OOTWorld(World):
             state = base_state.copy()
             for item in self.get_pre_fill_items():
                 self.collect(state, item)
-            state.sweep_for_events(self.get_locations())
+            state.sweep_for_events(locations=self.get_locations())
             return state
 
         # Prefill shops, songs, and dungeon items
@@ -870,7 +879,7 @@ class OOTWorld(World):
         state = CollectionState(self.multiworld)
         for item in self.itempool:
             self.collect(state, item)
-        state.sweep_for_events(self.get_locations())
+        state.sweep_for_events(locations=self.get_locations())
 
         # Place dungeon items
         special_fill_types = ['GanonBossKey', 'BossKey', 'SmallKey', 'HideoutSmallKey', 'Map', 'Compass']
@@ -1260,16 +1269,16 @@ class OOTWorld(World):
     def collect(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
-            state.prog_items[alt_item_name, self.player] += count
+            state.prog_items[self.player][alt_item_name] += count
             return True
         return super().collect(state, item)
 
     def remove(self, state: CollectionState, item: OOTItem) -> bool:
         if item.advancement and item.special and item.special.get('alias', False):
             alt_item_name, count = item.special.get('alias')
-            state.prog_items[alt_item_name, self.player] -= count
-            if state.prog_items[alt_item_name, self.player] < 1:
-                del (state.prog_items[alt_item_name, self.player])
+            state.prog_items[self.player][alt_item_name] -= count
+            if state.prog_items[self.player][alt_item_name] < 1:
+                del (state.prog_items[self.player][alt_item_name])
             return True
         return super().remove(state, item)
 

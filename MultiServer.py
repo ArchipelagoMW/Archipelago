@@ -2,14 +2,15 @@ from __future__ import annotations
 
 import argparse
 import asyncio
-import copy
 import collections
+import copy
 import datetime
 import functools
 import hashlib
 import inspect
 import itertools
 import logging
+import math
 import operator
 import pickle
 import random
@@ -67,21 +68,25 @@ def update_dict(dictionary, entries):
 
 # functions callable on storable data on the server by clients
 modify_functions = {
-    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
-    "mul": operator.mul,
-    "mod": operator.mod,
-    "max": max,
-    "min": min,
+    # generic:
     "replace": lambda old, new: new,
     "default": lambda old, new: old,
+    # numeric:
+    "add": operator.add,  # add together two objects, using python's "+" operator (works on strings and lists as append)
+    "mul": operator.mul,
     "pow": operator.pow,
+    "mod": operator.mod,
+    "floor": lambda value, _: math.floor(value),
+    "ceil": lambda value, _: math.ceil(value),
+    "max": max,
+    "min": min,
     # bitwise:
     "xor": operator.xor,
     "or": operator.or_,
     "and": operator.and_,
     "left_shift": operator.lshift,
     "right_shift": operator.rshift,
-    # lists/dicts
+    # lists/dicts:
     "remove": remove_from_list,
     "pop": pop_from_container,
     "update": update_dict,
@@ -412,6 +417,8 @@ class Context:
             self.player_name_lookup[slot_info.name] = 0, slot_id
             self.read_data[f"hints_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
                 list(self.get_rechecked_hints(local_team, local_player))
+            self.read_data[f"client_status_{0}_{slot_id}"] = lambda local_team=0, local_player=slot_id: \
+                self.client_game_state[local_team, local_player]
 
         self.seed_name = decoded_obj["seed_name"]
         self.random.seed(self.seed_name)
@@ -649,7 +656,8 @@ class Context:
         else:
             return self.player_names[team, slot]
 
-    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False):
+    def notify_hints(self, team: int, hints: typing.List[NetUtils.Hint], only_new: bool = False,
+                     recipients: typing.Sequence[int] = None):
         """Send and remember hints."""
         if only_new:
             hints = [hint for hint in hints if hint not in self.hints[team, hint.finding_player]]
@@ -678,12 +686,13 @@ class Context:
         for slot in new_hint_events:
             self.on_new_hint(team, slot)
         for slot, hint_data in concerns.items():
-            clients = self.clients[team].get(slot)
-            if not clients:
-                continue
-            client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
-            for client in clients:
-                async_start(self.send_msgs(client, client_hints))
+            if recipients is None or slot in recipients:
+                clients = self.clients[team].get(slot)
+                if not clients:
+                    continue
+                client_hints = [datum[1] for datum in sorted(hint_data, key=lambda x: x[0].finding_player == slot)]
+                for client in clients:
+                    async_start(self.send_msgs(client, client_hints))
 
     # "events"
 
@@ -706,6 +715,12 @@ class Context:
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_client_status_change(self, team: int, slot: int):
+        key: str = f"_read_client_status_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.client_game_state[team, slot]}])
 
 
 def update_aliases(ctx: Context, team: int):
@@ -1037,17 +1052,19 @@ def get_intended_text(input_text: str, possible_answers) -> typing.Tuple[str, bo
         if picks[0][1] == 100:
             return picks[0][0], True, "Perfect Match"
         elif picks[0][1] < 75:
-            return picks[0][0], False, f"Didn't find something that closely matches, " \
-                                       f"did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
         elif dif > 5:
             return picks[0][0], True, "Close Match"
         else:
-            return picks[0][0], False, f"Too many close matches, did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Too many close matches for '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
     else:
         if picks[0][1] > 90:
             return picks[0][0], True, "Only Option Match"
         else:
-            return picks[0][0], False, f"Did you mean {picks[0][0]}? ({picks[0][1]}% sure)"
+            return picks[0][0], False, f"Didn't find something that closely matches '{input_text}', " \
+                                       f"did you mean '{picks[0][0]}'? ({picks[0][1]}% sure)"
 
 
 class CommandMeta(type):
@@ -1416,9 +1433,13 @@ class ClientMessageProcessor(CommonCommandProcessor):
             hints = {hint.re_check(self.ctx, self.client.team) for hint in
                      self.ctx.hints[self.client.team, self.client.slot]}
             self.ctx.hints[self.client.team, self.client.slot] = hints
-            self.ctx.notify_hints(self.client.team, list(hints))
+            self.ctx.notify_hints(self.client.team, list(hints), recipients=(self.client.slot,))
             self.output(f"A hint costs {self.ctx.get_hint_cost(self.client.slot)} points. "
                         f"You have {points_available} points.")
+            if hints and Utils.version_tuple < (0, 5, 0):
+                self.output("It was recently changed, so that the above hints are only shown to you. "
+                            "If you meant to alert another player of an above hint, "
+                            "please let them know of the content or to run !hint themselves.")
             return True
 
         elif input_text.isnumeric():
@@ -1814,6 +1835,7 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
             ctx.on_goal_achieved(client)
 
         ctx.client_game_state[client.team, client.slot] = new_status
+        ctx.on_client_status_change(client.team, client.slot)
         ctx.save()
 
 
@@ -1944,7 +1966,7 @@ class ServerCommandProcessor(CommonCommandProcessor):
 
     @mark_raw
     def _cmd_forbid_release(self, player_name: str) -> bool:
-        """"Disallow the specified player from using the !release command."""
+        """Disallow the specified player from using the !release command."""
         player = self.resolve_player(player_name)
         if player:
             team, slot, name = player
@@ -2196,25 +2218,24 @@ def parse_args() -> argparse.Namespace:
 
 async def auto_shutdown(ctx, to_cancel=None):
     await asyncio.sleep(ctx.auto_shutdown)
+
+    def inactivity_shutdown():
+        ctx.server.ws_server.close()
+        ctx.exit_event.set()
+        if to_cancel:
+            for task in to_cancel:
+                task.cancel()
+        logging.info("Shutting down due to inactivity.")
+
     while not ctx.exit_event.is_set():
         if not ctx.client_activity_timers.values():
-            ctx.server.ws_server.close()
-            ctx.exit_event.set()
-            if to_cancel:
-                for task in to_cancel:
-                    task.cancel()
-            logging.info("Shutting down due to inactivity.")
+            inactivity_shutdown()
         else:
             newest_activity = max(ctx.client_activity_timers.values())
             delta = datetime.datetime.now(datetime.timezone.utc) - newest_activity
             seconds = ctx.auto_shutdown - delta.total_seconds()
             if seconds < 0:
-                ctx.server.ws_server.close()
-                ctx.exit_event.set()
-                if to_cancel:
-                    for task in to_cancel:
-                        task.cancel()
-                logging.info("Shutting down due to inactivity.")
+                inactivity_shutdown()
             else:
                 await asyncio.sleep(seconds)
 

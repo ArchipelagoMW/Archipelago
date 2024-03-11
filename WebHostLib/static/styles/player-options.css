@@ -90,6 +90,31 @@ html{
     flex-direction: row;
 }
 
+#player-options #meta-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 3px;
+}
+
+#player-options div {
+    display: flex;
+    flex-grow: 1;
+}
+
+#player-options #meta-options label {
+    display: inline-block;
+    min-width: 180px;
+    flex-grow: 1;
+}
+
+#player-options #meta-options input,
+#player-options #meta-options select {
+    box-sizing: border-box;
+    min-width: 150px;
+    width: 50%;
+}
+
 #player-options .left, #player-options .right{
     flex-grow: 1;
 }
@@ -135,18 +160,18 @@ html{
     margin-left: 0.25rem;
 }
 
-#player-options table .special-range-container{
+#player-options table .named-range-container{
     display: flex;
     flex-direction: column;
 }
 
-#player-options table .special-range-wrapper{
+#player-options table .named-range-wrapper{
     display: flex;
     flex-direction: row;
     margin-top: 0.25rem;
 }
 
-#player-options table .special-range-wrapper input[type=range]{
+#player-options table .named-range-wrapper input[type=range]{
     flex-grow: 1;
 }
 
@@ -186,6 +211,12 @@ html{
 @media all and (max-width: 1024px) {
     #player-options {
         border-radius: 0;
+    }
+
+    #player-options #meta-options {
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 6px;
     }
 
     #player-options #game-options{

@@ -5,12 +5,7 @@ from ..generic.Rules import set_rule
 
 class ArchipIDLELogic(LogicMixin):
     def _archipidle_location_is_accessible(self, player_id, items_required):
-        items_received = 0
-        for item in self.prog_items:
-            if item[1] == player_id:
-                items_received += 1
-
-        return items_received >= items_required
+        return sum(self.prog_items[player_id].values()) >= items_required
 
 
 def set_rules(world: MultiWorld, player: int):

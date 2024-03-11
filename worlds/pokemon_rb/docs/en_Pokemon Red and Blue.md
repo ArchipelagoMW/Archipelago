@@ -41,6 +41,8 @@ and repeatable source of money.
 * You can disable and re-enable experience gains by talking to an aide in Oak's Lab.
 * You can reset static encounters (Poké Flute encounter, legendaries, and the trap Poké Ball battles in Power Plant)
 for any Pokémon you have defeated but not caught, by talking to an aide in Oak's Lab.
+* Dungeons normally hidden on the Town Map are now present, and the "Sea Cottage" has been removed. This is to allow
+Simple Door Shuffle to update the locations of all of the dungeons on the Town Map.
 
 ## What items and locations get shuffled?
 
@@ -80,3 +82,12 @@ All items for other games will display simply as "AP ITEM," including those for 
 A "received item" sound effect will play. Currently, there is no in-game message informing you of what the item is.
 If you are in battle, have menus or text boxes opened, or scripted events are occurring, the items will not be given to
 you until these have ended.
+
+## Unique Local Commands
+
+You can use `/bank` commands to deposit and withdraw money from the server's EnergyLink storage. This can be accessed by
+any players playing games that use the EnergyLink feature.
+
+- `/bank` - check the amount of money available on the server.
+- `/bank withdraw #` - withdraw money from the server.
+- `/bank deposit #` - deposit money into the server. 25% of the amount will be lost to taxation.

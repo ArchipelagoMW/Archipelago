@@ -124,13 +124,13 @@ class GameStateAdapater:
         # Don't allow any money usage if you can't get back wasted rupees
         if item == "RUPEES":
             if can_farm_rupees(self.state, self.player):
-                return self.state.prog_items["RUPEES", self.player]
+                return self.state.prog_items[self.player]["RUPEES"]
             return 0
         elif item.endswith("_USED"):
             return 0
         else:
             item = ladxr_item_to_la_item_name[item]
-        return self.state.prog_items.get((item, self.player), default)
+        return self.state.prog_items[self.player].get(item, default)
 
 
 class LinksAwakeningEntrance(Entrance):

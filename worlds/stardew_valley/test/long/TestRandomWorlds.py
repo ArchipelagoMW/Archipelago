@@ -2,7 +2,7 @@ from typing import Dict
 import random
 
 from BaseClasses import MultiWorld
-from Options import SpecialRange, Range
+from Options import NamedRange, Range
 from .option_names import options_to_include
 from .. import setup_solo_multiworld, SVTestCase
 from ..checks.goal_checks import assert_perfection_world_is_valid, assert_goal_world_is_valid
@@ -12,7 +12,7 @@ from ..checks.world_checks import assert_same_number_items_locations, assert_vic
 
 
 def get_option_choices(option) -> Dict[str, int]:
-    if issubclass(option, SpecialRange):
+    if issubclass(option, NamedRange):
         return option.special_range_names
     if issubclass(option, Range):
         return {f"{val}": val for val in range(option.range_start, option.range_end + 1)}
