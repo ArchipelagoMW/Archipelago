@@ -1,6 +1,7 @@
 import asyncio
 import copy
 import orjson
+import random
 import time
 from typing import TYPE_CHECKING, Optional, Dict, Set, Tuple
 import uuid
@@ -512,6 +513,7 @@ class PokemonEmeraldClient(BizHawkClient):
                         if received_trade is None:
                             self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
                             self.wonder_trade_cooldown *= 2
+                            self.wonder_trade_cooldown += random.randrange(0, 500)
                         else:
                             await bizhawk.write(ctx.bizhawk_ctx, [
                                 (sb1_address + 0x377C, json_to_pokemon_data(received_trade), "System Bus"),
@@ -547,7 +549,13 @@ class PokemonEmeraldClient(BizHawkClient):
             }])
 
             self.wonder_trade_update_event.clear()
-            await self.wonder_trade_update_event.wait()
+            try:
+                await asyncio.wait_for(self.wonder_trade_update_event.wait(), 5)
+            except asyncio.TimeoutError:
+                if not keep_trying:
+                    return None
+                continue
+
             reply = copy.deepcopy(self.latest_wonder_trade_reply)
 
             # Make sure the most recently received update was triggered by our lock attempt
@@ -573,6 +581,7 @@ class PokemonEmeraldClient(BizHawkClient):
                 # too new when we replaced it, we should wait for increasingly longer periods so that
                 # eventually the lock will expire and a client will acquire it.
                 self.wonder_trade_cooldown *= 2
+                self.wonder_trade_cooldown += random.randrange(0, 500)
 
                 if not keep_trying:
                     self.wonder_trade_cooldown_timer = self.wonder_trade_cooldown
