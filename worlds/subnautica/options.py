@@ -41,6 +41,12 @@ class FreeSamples(Toggle):
     display_name = "Free Samples"
 
 
+class IgnorePrawnDepth(Toggle):
+    """Whether to include the prawn suit when determining logical depth.
+    Makes it less likely to do Prawn suit Lost River runs."""
+    display_name = "Ignore Prawn Depth"
+
+
 class Goal(Choice):
     """Goal to complete.
     Launch: Leave the planet.
@@ -107,6 +113,7 @@ option_definitions = {
     "swim_rule": SwimRule,
     "early_seaglide": EarlySeaglide,
     "free_samples": FreeSamples,
+    "ignore_prawn_depth": IgnorePrawnDepth,
     "goal": Goal,
     "creature_scans": CreatureScans,
     "creature_scan_logic": AggressiveScanLogic,

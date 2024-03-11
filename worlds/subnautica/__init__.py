@@ -160,6 +160,7 @@ class SubnauticaWorld(World):
         slot_data: Dict[str, Any] = {
             "goal": self.options.goal.current_key,
             "swim_rule": self.options.swim_rule.current_key,
+            "ignore_prawn_depth": self.options.ignore_prawn_depth.value,
             "vanilla_tech": vanilla_tech,
             "creatures_to_scan": self.creatures_to_scan,
             "death_link": self.options.death_link.value,

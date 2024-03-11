@@ -214,11 +214,15 @@ def get_prawn_max_depth(state: "CollectionState", player):
 
 
 def get_max_depth(state: "CollectionState", player: int):
-    return get_max_swim_depth(state, player) + max(
+    max_depth: int = get_max_swim_depth(state, player) + max(
         get_seamoth_max_depth(state, player),
-        get_cyclops_max_depth(state, player),
-        get_prawn_max_depth(state, player)
+        get_cyclops_max_depth(state, player)
     )
+
+    if not state.multiworld.ignore_prawn_depth[player]:
+        return max(max_depth, get_prawn_max_depth(state, player))
+
+    return max_depth
 
 
 def is_radiated(x: float, y: float, z: float) -> bool:
