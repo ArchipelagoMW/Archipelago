@@ -11,7 +11,7 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, filler):
+def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler):
     # print("\nThis is the selected scenario:")
     # print(scenario)
     # print("And these items will be randomized:")
@@ -42,6 +42,10 @@ def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, 
     count = 0
     while count < bathroom_traps:
         openRCT2_items.append("Bathroom Trap")
+        count +=1
+    count = 0
+    while count < skips:
+        openRCT2_items.append("Skip")
         count +=1
 
     for number, rule in enumerate(item_info["park_rules"]):#Check every rule type

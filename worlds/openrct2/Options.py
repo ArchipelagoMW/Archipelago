@@ -736,6 +736,13 @@ class Filler(Range):
     range_end = 50
     default = 10
 
+class Skips(Range):
+    """By default, every game starts with a single skip to ignore a shop requirement. This will add additional skips to 
+    be found in the item pool."""
+    display_name = "Skips"
+    range_start = 0
+    range_end = 10
+    default = 3
 @dataclass
 class openRCT2Options(PerGameCommonOptions):
     # generator options
@@ -751,6 +758,7 @@ class openRCT2Options(PerGameCommonOptions):
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
     filler: Filler
+    skips: Skips
 
     # deathlink
     deathlink: DeathLink
