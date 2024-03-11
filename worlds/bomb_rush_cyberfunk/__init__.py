@@ -26,7 +26,6 @@ class BombRushCyberfunkWorld(World):
 
     game = "Bomb Rush Cyberfunk"
     web = BombRushCyberfunkWeb()
-    data_version = 1
 
     item_name_to_id = {item["name"]: (base_id + index) for index, item in enumerate(item_table)}
     item_name_to_type = {item["name"]: item["type"] for item in item_table}
@@ -85,14 +84,6 @@ class BombRushCyberfunkWorld(World):
 
 
     def generate_early(self):
-        grafM = group_table["graffitim"]
-        grafL = group_table["graffitil"]
-        grafXL = group_table["graffitixl"]
-
-        self.selectedM = self.random.choice(grafM)
-        self.selectedL = self.random.choice(grafL)
-        self.selectedXL = self.random.choice(grafXL)
-
         if self.options.starting_movestyle == StartStyle.option_skateboard:
             self.item_classification[BRCType.Skateboard] = ItemClassification.filler
         else:
@@ -150,14 +141,14 @@ class BombRushCyberfunkWorld(World):
 
 
     def create_regions(self):
-        world = self.multiworld
+        multiworld = self.multiworld
         player = self.player
 
-        menu = Region("Menu", player, world)
-        world.regions.append(menu)
+        menu = Region("Menu", player, multiworld)
+        multiworld.regions.append(menu)
 
         for _, n in region_names.items():
-            world.regions += [Region(n, player, world)]
+            multiworld.regions += [Region(n, player, multiworld)]
 
         menu.add_exits({"Hideout": "New Game"})
 
@@ -178,7 +169,7 @@ class BombRushCyberfunkWorld(World):
             event.place_locked_item(self.create_event(e["item"]))
             stage.locations += [event]
 
-        world.completion_condition[player] = lambda state: state.has("Victory", player)
+        multiworld.completion_condition[player] = lambda state: state.has("Victory", player)
 
     def fill_slot_data(self) -> Dict[str, Any]:
         options = self.options
