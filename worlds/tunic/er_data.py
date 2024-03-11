@@ -676,6 +676,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Monastery Hero's Grave Region": RegionInfo("Monastery"),
     "Monastery Rope": RegionInfo("Quarry Redux"),
     "Lower Quarry": RegionInfo("Quarry Redux"),
+    "Even Lower Quarry": RegionInfo("Quarry Redux"),
     "Lower Quarry Zig Door": RegionInfo("Quarry Redux"),
     "Rooted Ziggurat Entry": RegionInfo("ziggurat2020_0"),
     "Rooted Ziggurat Upper Entry": RegionInfo("ziggurat2020_1"),
@@ -818,11 +819,12 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
     ("Monastery Back", "Monastery Hero's Grave Region"):
         ["Monastery Back", "Monastery Hero's Grave Region"],
-    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry"):
+    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
+     "Even Lower Quarry"):
         ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Lower Quarry Zig Door"],
+         "Lower Quarry Zig Door", "Even Lower Quarry"],
     ("Monastery Rope",): ["Monastery Rope", "Quarry", "Quarry Entry", "Quarry Back", "Quarry Portal", "Lower Quarry",
-                          "Lower Quarry Zig Door"],
+                          "Lower Quarry Zig Door", "Even Lower Quarry"],
     ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
         ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
     ("Rooted Ziggurat Middle Top",):
@@ -932,11 +934,12 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Lower Mountain", "Lower Mountain Stairs"],
     ("Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"):
         ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
-    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry"):
+    ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
+     "Even Lower Quarry"):
         ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Lower Quarry Zig Door"],
+         "Lower Quarry Zig Door", "Even Lower Quarry"],
     ("Monastery Rope",): ["Monastery Rope", "Quarry", "Quarry Entry", "Quarry Back", "Quarry Portal", "Lower Quarry",
-                          "Lower Quarry Zig Door"], 
+                          "Lower Quarry Zig Door", "Even Lower Quarry"],
     ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
         ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
     ("Rooted Ziggurat Middle Top",):
@@ -1056,9 +1059,9 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Monastery Front", "Monastery Back", "Monastery Hero's Grave Region"],
     # can use ladder storage at any of the Quarry ladders to get to Monastery Rope
     ("Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-     "Monastery Rope"):
+     "Monastery Rope", "Even Lower Quarry"):
         ["Quarry", "Quarry Portal", "Lower Quarry", "Quarry Entry", "Quarry Back", "Quarry Monastery Entry",
-         "Monastery Rope", "Lower Quarry Zig Door"],
+         "Monastery Rope", "Lower Quarry Zig Door", "Even Lower Quarry"],
     ("Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front"):
         ["Rooted Ziggurat Upper Entry", "Rooted Ziggurat Upper Front", "Rooted Ziggurat Upper Back"],
     ("Rooted Ziggurat Middle Top",):

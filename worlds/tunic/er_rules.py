@@ -795,8 +795,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Lower Quarry"],
         rule=lambda state: has_mask(state, player, options))
 
-    # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
+    # need the ladder, or you can ice grapple down in nmg
     regions["Lower Quarry"].connect(
+        connecting_region=regions["Even Lower Quarry"],
+        rule=lambda state: has_ladder("Ladder - Lower Quarry", state, player, options)
+        or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
+
+    # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
+    regions["Even Lower Quarry"].connect(
         connecting_region=regions["Lower Quarry Zig Door"],
         rule=lambda state: state.has("Activate Quarry Fuse", player)
         or (has_ice_grapple_logic(False, state, player, options, ability_unlocks) and options.entrance_rando))
