@@ -128,6 +128,7 @@ if __name__ == "__main__":
     app = get_app()
     create_options_files()
     create_ordered_tutorials_file()
+    Utils.build_sphinx_docs(True)
     if app.config["SELFLAUNCH"]:
         autohost(app.config)
     if app.config["SELFGEN"]:

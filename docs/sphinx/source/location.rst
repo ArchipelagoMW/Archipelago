@@ -1,0 +1,2 @@
+.. autoclass:: BaseClasses.Location
+    :members:
