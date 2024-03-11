@@ -101,11 +101,8 @@ class CV64World(World):
 
         # If there are more S1s needed to unlock the whole warp menu than there are S1s in total, drop S1s per warp to
         # something manageable.
-        while self.s1s_per_warp * 7 > self.total_s1s:
-            self.s1s_per_warp -= 1
-
-        # Adjust the option and log a warning if the S1s per warp changed.
-        if self.s1s_per_warp != self.options.special1s_per_warp.value:
+        if self.s1s_per_warp * 7 > self.total_s1s:
+            self.s1s_per_warp = self.total_s1s // 7
             logging.warning(f"[{self.multiworld.player_name[self.player]}] Too many required Special1s "
                             f"({self.options.special1s_per_warp.value * 7}) for Special1s Per Warp setting: "
                             f"{self.options.special1s_per_warp.value} with Total Special1s setting: "
