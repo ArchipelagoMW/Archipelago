@@ -39,8 +39,10 @@ class ShuffleLasers(Choice):
     be redirected as normal, for both applications of redirection."""
     display_name = "Shuffle Lasers"
     option_off = 0
+    alias_false = 0
     option_local = 1
     option_anywhere = 2
+    alias_true = 2
 
 
 class ShuffleDoors(Choice):
