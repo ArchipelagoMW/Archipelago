@@ -1187,7 +1187,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     rule=lambda state: has_stick(state, player)
                     and (state.has_any({"Ladders - To West Bell", "Ladder - Dark Tomb under Casket"}, player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
-            elif portal_name in ["Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"] \
+            elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
                     and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
@@ -1195,7 +1195,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     rule=lambda state: has_stick(state, player)
                     and state.has_any({"Ladder - Dark Tomb under Casket", "Ladders - To West Bell"}, player))
             # soft locked for the same reasons as above
-            elif portal_name in ["Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"] \
+            elif portal_name in {"Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"} \
                     and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
@@ -1211,7 +1211,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and state.has_any({"Ladders - To West Bell", laurels}, player))
             # soft lock potential
-            elif portal_name in ["Special Shop Entrance", "Stairs to Top of the Mountain"] \
+            elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain"} \
                     and not options.entrance_rando:
                 continue
             # soft lock if you don't have the ladder, just exclude it for simplicity

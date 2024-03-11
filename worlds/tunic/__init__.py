@@ -87,7 +87,7 @@ class TunicWorld(World):
         self.slot_data_items = []
 
         items_to_create: Dict[str, int] = {item: data.quantity_in_item_pool for item, data in item_table.items()}
-        
+
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
@@ -131,6 +131,8 @@ class TunicWorld(World):
                     fill = "Fool Trap"
                 else:
                     fill = self.random.choice(available_filler)
+                if items_to_create[fill] == 0:
+                    raise Exception("No filler items left to accommodate options selected. Turn down fool trap amount.")
                 items_to_create[fill] -= 1
                 if items_to_create[fill] == 0:
                     available_filler.remove(fill)
@@ -142,7 +144,7 @@ class TunicWorld(World):
                     items_to_create[item_name] = 1
                     ladder_count += 1
             remove_filler(ladder_count)
-            
+
         if hexagon_quest:
             # Calculate number of hexagons in item pool
             hexagon_goal = self.options.hexagon_goal
@@ -199,14 +201,12 @@ class TunicWorld(World):
                 for portal1, portal2 in portal_pairs.items():
                     self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
         else:
-            # for non-ER, non-ladder
-            region_list = tunic_regions
-
-            for region_name in region_list:
+            # for non-ER, non-ladders
+            for region_name in tunic_regions:
                 region = Region(region_name, self.player, self.multiworld)
                 self.multiworld.regions.append(region)
 
-            for region_name, exits in region_list.items():
+            for region_name, exits in tunic_regions.items():
                 region = self.multiworld.get_region(region_name, self.player)
                 region.add_exits(exits)
 

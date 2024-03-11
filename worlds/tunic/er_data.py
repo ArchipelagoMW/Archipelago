@@ -726,6 +726,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
 
 # the key is the region you have, the value is the regions you get for having that region
 # this is mostly so we don't have to do something overly complex to get this information
+# really want to get rid of this, but waiting on item plando being workable with ER
 dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
     ("Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
      "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
@@ -733,7 +734,7 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
      "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld", "Upper Overworld",
      "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
      "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
-     "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy"):
+     "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy", "Overworld Tunnel Turret"):
          ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
           "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
           "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
@@ -742,7 +743,7 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
           "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
           "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
           "Overworld to Atoll Upper", "Overworld Temple Door", "Overworld above Quarry Entrance",
-          "Overworld after Envoy"],
+          "Overworld after Envoy", "Overworld Tunnel Turret"],
     ("Hourglass Cave",):
         ["Hourglass Cave", "Hourglass Cave Tower"],
     ("Old House Front",):
@@ -847,7 +848,7 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
      "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
      "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
      "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance",
-     "Overworld after Envoy"):
+     "Overworld after Envoy", "Overworld Tunnel Turret"):
          ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
           "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Ruined Passage Door",
           "Overworld Southeast Cross Door", "Overworld Old House Door", "Overworld Temple Door",
@@ -855,7 +856,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
           "Overworld Swamp Lower Entry", "After Ruined Passage", "Above Ruined Passage", "East Overworld",
           "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry", "Overworld above Patrol Cave",
           "Overworld at Patrol Cave", "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach",
-          "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy"],
+          "Overworld to Atoll Upper", "Overworld above Quarry Entrance", "Overworld after Envoy",
+          "Overworld Tunnel Turret"],
     # can laurels through the gate
     ("Old House Front", "Old House Back"):
         ["Old House Front", "Old House Back"],
@@ -962,7 +964,7 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
      "East Overworld", "Upper Overworld", "Overworld after Temple Rafters", "Overworld Quarry Entry",
      "Overworld above Patrol Cave", "Overworld at Patrol Cave", "Overworld to West Garden Upper",
      "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper", "Overworld above Quarry Entrance",
-     "Overworld after Envoy"):
+     "Overworld after Envoy", "Overworld Tunnel Turret"):
          ["Overworld", "Overworld Belltower", "Overworld Belltower at Bell", "Overworld Swamp Upper Entry",
           "Overworld Special Shop Entry", "Overworld West Garden Laurels Entry", "Overworld Southeast Cross Door",
           "Overworld Temple Door", "Overworld Fountain Cross Door", "Overworld Town Portal", "Overworld Spawn Portal",
@@ -970,7 +972,7 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
           "Above Ruined Passage", "East Overworld", "Upper Overworld", "Overworld after Temple Rafters",
           "Overworld Quarry Entry", "Overworld above Patrol Cave", "Overworld at Patrol Cave",
           "Overworld to West Garden Upper", "Overworld Well Ladder", "Overworld Beach", "Overworld to Atoll Upper",
-          "Overworld above Quarry Entrance", "Overworld after Envoy"],
+          "Overworld above Quarry Entrance", "Overworld after Envoy", "Overworld Tunnel Turret"],
     # can laurels through the gate
     ("Old House Front", "Old House Back"):
         ["Old House Front", "Old House Back"],
