@@ -1,7 +1,6 @@
 # This file exists in both the client and the server projects.
 # Please make sure that it matches in both places.
 
-# one item MUST be called 'goal'
 items:
   goal: 'Lockheed SR-71 Blackbird'
   masterful_longsword: 'Masterful Longsword'
@@ -355,137 +354,181 @@ items:
           - 'Abigail''s Birth Certificate'
           - 'Mayor''s Tax Returns'
 
-# one location MUST be called 'goal'. ability_check_with_dc is intended to make
-# intuitive sense to those who are familiar with the basic concept outlined on:
+# exit to the automatic region 'goal' to win. one MUST be called 'menu'
+# ability_check_with_dc is intended to make intuitive sense to those who are
+# familiar with the basic concept outlined on:
 # https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
 # game "feel" more "difficult" as the "player" enters the later stages.
-locations:
-  goal:
-    name: 'Captured Goldfish'
-    requires:
-      ability_check_with_dc: 20
-      locations:
+regions:
+  landmarks:
+    captured_goldfish:
+      name: 'Captured Goldfish'
+      unrandomized_item: goal
+      requires:
+        - item: masterful_longsword
+        - ability_check_with_dc: 20
+      exits:
+        - goal
+
+    bowling_ball_door:
+      name: 'Bowling Ball Door'
+      unrandomized_item: rat_pack
+      requires:
+        - rat_count: 20
+        - ability_check_with_dc: 17
+      exits:
+        - before_captured_goldfish
+
+    restaurant:
+      name: 'Restaurant'
+      unrandomized_item: chef_rat
+      requires:
+        - item: a_cookie
+        - ability_check_with_dc: 14
+      exits:
+        - after_restaurant
+
+    pirate_bake_sale:
+      name: 'Pirate Bake Sale'
+      unrandomized_item: pie_rat
+      requires:
+        - item: bribe
+        - ability_check_with_dc: 14
+      exits:
+        - after_pirate_bake_sale
+
+    minotaur:
+      name: 'Minotaur'
+      unrandomized_item: acro_rat
+      requires:
+        - item: red_matador_cape
+        - ability_check_with_dc: 12
+      exits:
+        - before_restaurant
+
+    prawn_stars:
+      name: 'Prawn Stars'
+      unrandomized_item: ziggu_rat
+      requires:
+        - item: premium_can_of_prawn_food
+        - ability_check_with_dc: 12
+      exits:
+        - before_pirate_bake_sale
+
+    basketball:
+      name: 'Basketball'
+      unrandomized_item: gym_rat
+      requires:
+        - rat_count: 5
+        - ability_check_with_dc: 12
+      exits:
+        - before_minotaur
+        - before_prawn_stars
+
+  fillers:
+    before_captured_goldfish:
+      name_template: 'Before Goldfish #{n}'
+      unrandomized_items:
+        key:
+          - masterful_longsword
+          - item: normal_rat
+            count: 10
+        useful_nonprogression: 3
+        filler: 6
+      each_requires:
+        - ability_check_with_dc: 18
+      exits:
+        - captured_goldfish
+
+    after_restaurant:
+      name_template: 'After Restaurant #{n}'
+      unrandomized_items:
+        key:
+          - item: normal_rat
+            count: 2
+        useful_nonprogression: 3
+        filler: 5
+      each_requires:
+        - ability_check_with_dc: 16
+      exits:
         - bowling_ball_door
-      items:
-        - masterful_longsword
 
-  bowling_ball_door:
-    name: 'Bowling Ball Door'
-    requires:
-      ability_check_with_dc: 17
-      rat_count: 20
-      locations:
-        - or:
-          - restaurant
-          - pirate_bake_sale
+    after_pirate_bake_sale:
+      name_template: 'After Pirate Bake Sale #{n}'
+      unrandomized_items:
+        key:
+          - item: normal_rat
+            count: 2
+        useful_nonprogression: 3
+        filler: 5
+      each_requires:
+        - ability_check_with_dc: 16
+      exits:
+        - bowling_ball_door
 
-  restaurant:
-    name: 'Restaurant'
-    requires:
-      ability_check_with_dc: 14
-      locations:
+    before_restaurant:
+      name_template: 'Before Restaurant #{n}'
+      unrandomized_items:
+        key:
+          - a_cookie
+          - normal_rat
+        useful_nonprogression: 3
+        filler: 5
+      each_requires:
+        - ability_check_with_dc: 14
+      exits:
+        - restaurant
+
+    before_pirate_bake_sale:
+      name_template: 'Before Pirate Bake Sale #{n}'
+      unrandomized_items:
+        key:
+          - bribe
+          - normal_rat
+        useful_nonprogression: 3
+        filler: 5
+      each_requires:
+        - ability_check_with_dc: 14
+      exits:
+        - pirate_bake_sale
+
+    before_minotaur:
+      name_template: 'Before Minotaur #{n}'
+      unrandomized_items:
+        key:
+          - red_matador_cape
+          - item: normal_rat
+            count: 2
+        useful_nonprogression: 3
+        filler: 4
+      each_requires:
+        - ability_check_with_dc: 12
+      exits:
         - minotaur
-      items:
-        - a_cookie
 
-  pirate_bake_sale:
-    name: 'Pirate Bake Sale'
-    requires:
-      ability_check_with_dc: 14
-      locations:
+    before_prawn_stars:
+      name_template: 'Before Prawn Stars #{n}'
+      unrandomized_items:
+        key:
+          - premium_can_of_prawn_food
+          - item: normal_rat
+            count: 2
+        useful_nonprogression: 3
+        filler: 4
+      each_requires:
+        - ability_check_with_dc: 12
+      exits:
         - prawn_stars
-      items:
-        - bribe
 
-  minotaur:
-    name: 'Minotaur'
-    requires:
-      ability_check_with_dc: 12
-      locations:
+    menu:
+      name_template: 'Before Basketball #{n}'
+      unrandomized_items:
+        key:
+          - item: normal_rat
+            count: 5
+        useful_nonprogression: 8
+        filler: 27
+      each_requires:
+        - ability_check_with_dc: 10
+      exits:
         - basketball
-      items:
-        - red_matador_cape
-
-  prawn_stars:
-    name: 'Prawn Stars'
-    requires:
-      ability_check_with_dc: 12
-      locations:
-        - basketball
-      items:
-        - premium_can_of_prawn_food
-
-  basketball:
-    name: 'Basketball'
-    requires:
-      ability_check_with_dc: 11
-      rat_count: 5
-
-  filler_groups:
-    - before: goal
-      count: 20
-      ability_check_dc: 18
-
-    - after: restaurant
-      count: 10
-      ability_check_dc: 16
-
-    - after: pirate_bake_sale
-      count: 10
-      ability_check_dc: 16
-
-    - before: restaurant
-      count: 10
-      ability_check_dc: 14
-
-    - before: pirate_bake_sale
-      count: 10
-      ability_check_dc: 14
-
-    - before: minotaur
-      count: 10
-      ability_check_dc: 12
-
-    - before: prawn_stars
-      count: 10
-      ability_check_dc: 12
-
-    - before: basketball
-      count: 40
-      ability_check_dc: 10
-
-# travel distances are relative to the distance from the special start location
-# to its single successor, i.e., a value of 1 means that the distance is equal
-# to the 'distance' from the menu screen to the first real location. everything
-# else with a direct connection in the logic is treated like 0 unless it has an
-# override below. do not list distances between things that aren't directly
-# connected in the logic. distances are treated as symmetrical unless specific
-# reverse-direction overrides are given.
-relative_travel_distances:
-  - from: basketball
-    to: minotaur.before
-    d: 1
-
-  - from: basketball
-    to: prawn_stars.before
-    d: 1
-
-  - from: minotaur
-    to: restaurant.before
-    d: 1
-
-  - from: prawn_stars
-    to: pirate_bake_sale.before
-    d: 1
-
-  - from: restaurant
-    to: restaurant.after
-    d: 1
-
-  - from: pirate_bake_sale
-    to: pirate_bake_sale.after
-    d: 1
-
-  - from: bowling_ball_door
-    to: goal.before
-    d: 1
