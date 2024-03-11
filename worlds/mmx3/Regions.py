@@ -1,7 +1,8 @@
 import typing
 
-from BaseClasses import MultiWorld, Region, Entrance
+from BaseClasses import MultiWorld, Region, Entrance, ItemClassification
 from .Locations import MMX3Location
+from .Items import MMX3Item
 from .Names import LocationName, ItemName
 from worlds.generic.Rules import add_rule, set_rule
 from worlds.AutoWorld import World
@@ -261,7 +262,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.gravity_beetle_region, LocationName.gravity_beetle_heart_tank,
         lambda state: (
-                state.has(ItemName.blast_hornet_core, player)
+                state.has(ItemName.event_blast_hornet_defeated, player)
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.gravity_beetle_region, LocationName.gravity_beetle_frog_ride,
         lambda state: (
@@ -283,6 +284,14 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
                 )
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.blast_hornet_region, LocationName.blast_hornet_clear,
+        lambda state: (
+                not world.options.logic_boss_weakness.value
+                or (
+                    world.options.logic_boss_weakness.value and
+                    state.has(ItemName.gravity_well, player)
+                )
+            ))
+    add_event_to_region(multiworld, player, LocationName.blast_hornet_region, LocationName.event_blast_hornet_defeated, ItemName.event_blast_hornet_defeated,
         lambda state: (
                 not world.options.logic_boss_weakness.value
                 or (
@@ -656,6 +665,16 @@ def create_region(multiworld: MultiWorld, player: int, active_locations, name: s
                 ret.locations.append(location)
 
     return ret
+
+
+def add_event_to_region(multiworld: MultiWorld, player: int, region_name: str, event_name: str, event_item: str,
+                        rule: typing.Optional[typing.Callable] = None):
+    region = multiworld.get_region(region_name, player)
+    event = MMX3Location(player, event_name, None, region)
+    event.place_locked_item(MMX3Item(event_item, ItemClassification.progression, None, player))
+    region.locations.append(event)
+    if rule:
+        add_rule(event, rule)
 
 
 def add_location_to_region(multiworld: MultiWorld, player: int, active_locations, region_name: str, location_name: str,

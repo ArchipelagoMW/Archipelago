@@ -20,7 +20,6 @@ class MMX3Item(Item):
 event_table = {
     ItemName.victory:           ItemData(0xBD0000, True),
     ItemName.maverick_medal:    ItemData(0xBD0001, True),
-    ItemName.blast_hornet_core: ItemData(None, True)
 }
 
 access_codes_table = {
