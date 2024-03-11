@@ -65,7 +65,7 @@ portal_mapping: List[Portal] = [
            destination="Archipelagos Redux", tag="_lowest"),
     Portal(name="Temple Door Entrance", region="Overworld Temple Door",
            destination="Temple", tag="_main"),
-    Portal(name="Temple Rafters Entrance", region="Upper Overworld",
+    Portal(name="Temple Rafters Entrance", region="Overworld after Temple Rafters",
            destination="Temple", tag="_rafters"),
     Portal(name="Ruined Shop Entrance", region="Overworld",
            destination="Ruined Shop", tag="_"),
@@ -231,7 +231,7 @@ portal_mapping: List[Portal] = [
     Portal(name="Frog Stairs to Frog's Domain's Exit", region="Frog Stairs Lower",
            destination="frog cave main", tag="_Exit"),
     
-    Portal(name="Frog's Domain Ladder Exit", region="Frog's Domain",
+    Portal(name="Frog's Domain Ladder Exit", region="Frog's Domain Entry",
            destination="Frog Stairs", tag="_Entrance"),
     Portal(name="Frog's Domain Orb Exit", region="Frog's Domain Back",
            destination="Frog Stairs", tag="_Exit"),
@@ -626,6 +626,7 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Frog Stairs Upper": RegionInfo("Frog Stairs"),
     "Frog Stairs Lower": RegionInfo("Frog Stairs"),
     "Frog Stairs to Frog's Domain": RegionInfo("Frog Stairs"),
+    "Frog's Domain Entry": RegionInfo("frog cave main"),
     "Frog's Domain": RegionInfo("frog cave main"),
     "Frog's Domain Back": RegionInfo("frog cave main"),
     "Library Exterior Tree Region": RegionInfo("Library Exterior"),
@@ -786,8 +787,8 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
          "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain",):
-        ["Frog's Domain", "Frog's Domain Back"],
+    ("Frog's Domain", "Frog's Domain Entry"):
+        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
     ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
@@ -903,8 +904,8 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
          "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain",):
-        ["Frog's Domain", "Frog's Domain Back"],
+    ("Frog's Domain", "Frog's Domain Entry"):
+        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
     ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
@@ -1023,8 +1024,8 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
          "Ruined Atoll Statue", "Ruined Atoll Ladder Tops", "Ruined Atoll Frog Eye", "Ruined Atoll Ladder Tops"],
     ("Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"):
         ["Frog Stairs Upper", "Frog Stairs Lower", "Frog Stairs to Frog's Domain"],
-    ("Frog's Domain",):
-        ["Frog's Domain", "Frog's Domain Back"],
+    ("Frog's Domain", "Frog's Domain Entry"):
+        ["Frog's Domain", "Frog's Domain Back", "Frog's Domain Entry"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
     ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):

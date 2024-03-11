@@ -582,6 +582,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         connecting_region=regions["Frog Stairs Lower"],
         rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
 
+    regions["Frog's Domain Entry"].connect(
+        connecting_region=regions["Frog's Domain"],
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
+
     regions["Frog's Domain"].connect(
         connecting_region=regions["Frog's Domain Back"],
         rule=lambda state: state.has(grapple, player))
