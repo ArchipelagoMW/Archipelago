@@ -2,16 +2,18 @@
 
 ## Required Software
 
-- SNI from: [SNI Releases Page](https://github.com/alttpo/sni/releases)
-    - v0.0.59 or newer (included in Archipelago 0.2.1 setup)
-- Hardware or software capable of loading and playing SNES ROM files
-    - An emulator capable of connecting to SNI with ROM access. Any one of the following will work:
-        - snes9x-rr from: [snes9x-rr Releases Page](https://github.com/gocha/snes9x-rr/releases)
-        - BizHawk from: [TASVideos](https://tasvideos.org/BizHawk)
-        - bsnes-plus-nwa from: [bsnes-plus GitHub](https://github.com/black-sliver/bsnes-plus)
-        - RetroArch from: [RetroArch Website](https://retroarch.com?page=platforms). Or,
-    - Or SD2SNES, FXPak Pro ([FXPak Pro Store Page](https://krikzz.com/store/home/54-fxpak-pro.html)), or other
-      compatible hardware.
+- [Archipelago](https://github.com/ArchipelagoMW/Archipelago/releases).
+- [SNI](https://github.com/alttpo/sni/releases). This is automatically included with your Archipelago installation above.
+- SNI is not compatible with (Q)Usb2Snes.
+- Hardware or software capable of loading and playing SNES ROM files, including:
+    - An emulator capable of connecting to SNI
+      ([snes9x-nwa](https://github.com/Skarsnik/snes9x-emunwa/releases), [snes9x-rr](https://github.com/gocha/snes9x-rr/releases),
+      [BSNES-plus](https://github.com/black-sliver/bsnes-plus),
+      [BizHawk](http://tasvideos.org/BizHawk.html), or
+      [RetroArch](https://retroarch.com?page=platforms) 1.10.1 or newer)
+    - An SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), or other compatible hardware. **note:
+      modded SNES minis are currently not supported by SNI. Some users have claimed success with QUsb2Snes for this system,
+      but it is not supported.**
 - Your legally obtained Secret of Evermore US ROM file, probably named `Secret of Evermore (USA).sfc`
 
 ## Create a Config (.yaml) File
@@ -62,6 +64,11 @@ page: [Evermizer apbpatch Page](https://evermizer.com/apbpatch)
 
 Start SNI either from the Archipelago install folder or the stand-alone version. If this is its first time launching,
 you may be prompted to allow it to communicate through the Windows Firewall.
+
+#### snes9x-nwa
+
+1. Click on the Network Menu and check **Enable Emu Network Control**
+2. Load your ROM file if it hasn't already been loaded.
 
 ##### snes9x-rr
 
