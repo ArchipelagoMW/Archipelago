@@ -1454,7 +1454,8 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
              lambda state: has_sword(state, player))
     # nmg - kill Librarian with a lure, or gun I guess
     set_rule(multiworld.get_location("Librarian - Hexagon Green", player),
-             lambda state: has_sword(state, player) or options.logic_rules)
+             lambda state: (has_sword(state, player) or options.logic_rules)
+             and has_ladder("Ladders in Library", state, player, options))
     # nmg - kill boss scav with orb + firecracker, or similar
     set_rule(multiworld.get_location("Rooted Ziggurat Lower - Hexagon Blue", player),
              lambda state: has_sword(state, player) or (state.has(grapple, player) and options.logic_rules))
