@@ -255,10 +255,7 @@ class TunicWorld(World):
                     if name in portal_names and name != previous_name:
                         previous_name = name
                         path_to_loc.append(name)
-                hint_text = ""
-                for transition in reversed(path_to_loc):
-                    hint_text += f"{transition} -> "
-                hint_text = hint_text.rstrip("-> ")
+                hint_text = " -> ".join(reversed(path_to_loc))
                 if hint_text:
                     hint_data[self.player][location.address] = hint_text
 
