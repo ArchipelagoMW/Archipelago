@@ -970,7 +970,7 @@ class RepeatableChain:
 
 
 def is_iterable_except_str(obj: object) -> TypeGuard[typing.Iterable[typing.Any]]:
-    """ `str` and `bytes` are `Iterable`, but that's not what we want """
-    if isinstance(obj, (str, bytes)):
+    """ `str` is `Iterable`, but that's not what we want """
+    if isinstance(obj, str):
         return False
     return isinstance(obj, typing.Iterable)
