@@ -7,7 +7,6 @@ checking or launching the client, otherwise it will probably cause circular impo
 import asyncio
 import enum
 import subprocess
-import traceback
 from typing import Any, Dict, Optional
 
 from CommonClient import CommonContext, ClientCommandProcessor, get_base_parser, server_loop, logger, gui_enabled
@@ -260,7 +259,7 @@ def launch() -> None:
         try:
             await watcher_task
         except Exception as e:
-            logger.error("".join(traceback.format_exception(e)))
+            logger.exception(e)
 
         await ctx.exit_event.wait()
         await ctx.shutdown()
