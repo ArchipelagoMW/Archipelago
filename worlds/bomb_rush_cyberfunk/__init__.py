@@ -101,7 +101,7 @@ class BombRushCyberfunkWorld(World):
 
 
     def create_items(self):
-        rep_locations: int = 86
+        rep_locations: int = 87
         if self.options.skip_polo_photos:
             rep_locations -= 18
 
