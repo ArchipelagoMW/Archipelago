@@ -589,11 +589,20 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # Library
     regions["Library Exterior Tree Region"].connect(
         connecting_region=regions["Library Exterior Ladder Region"],
-        rule=lambda state: state.has(grapple, player) or state.has(laurels, player))
+        rule=lambda state: state.has_any({grapple, laurels}, player)
+        and has_ladder("Ladders - Library", state, player, options))
     regions["Library Exterior Ladder Region"].connect(
         connecting_region=regions["Library Exterior Tree Region"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
-        and (state.has(grapple, player) or state.has(laurels, player)))
+        and state.has_any({grapple, laurels}, player)
+        and has_ladder("Ladders - Library", state, player, options))
+
+    regions["Library Hall Bookshelf"].connect(
+        connecting_region=regions["Library Hall"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+    regions["Library Hall"].connect(
+        connecting_region=regions["Library Hall Bookshelf"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
 
     regions["Library Hall"].connect(
         connecting_region=regions["Library Hero's Grave Region"],
@@ -601,18 +610,49 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Library Hero's Grave Region"].connect(
         connecting_region=regions["Library Hall"])
 
+    regions["Library Hall to Rotunda"].connect(
+        connecting_region=regions["Library Hall"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+    regions["Library Hall"].connect(
+        connecting_region=regions["Library Hall to Rotunda"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+
+    regions["Library Rotunda to Hall"].connect(
+        connecting_region=regions["Library Rotunda"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+    regions["Library Rotunda"].connect(
+        connecting_region=regions["Library Rotunda to Hall"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+
+    regions["Library Rotunda"].connect(
+        connecting_region=regions["Library Rotunda to Lab"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+    regions["Library Rotunda to Lab"].connect(
+        connecting_region=regions["Library Rotunda"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+
     regions["Library Lab Lower"].connect(
         connecting_region=regions["Library Lab"],
-        rule=lambda state: state.has(laurels, player) or state.has(grapple, player))
+        rule=lambda state: state.has_any({grapple, laurels}, player)
+        and has_ladder("Ladders - Library", state, player, options))
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab Lower"],
-        rule=lambda state: state.has(laurels, player))
+        rule=lambda state: state.has(laurels, player)
+        and has_ladder("Ladders - Library", state, player, options))
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Portal"],
-        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks))
+        rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
+        and has_ladder("Ladders - Library", state, player, options))
     regions["Library Portal"].connect(
         connecting_region=regions["Library Lab"])
+
+    regions["Library Lab"].connect(
+        connecting_region=regions["Library Lab to Librarian"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+    regions["Library Lab to Librarian"].connect(
+        connecting_region=regions["Library Lab"],
+        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
 
     # Eastern Vault Fortress
     regions["Fortress Exterior from East Forest"].connect(

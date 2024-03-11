@@ -241,23 +241,23 @@ portal_mapping: List[Portal] = [
     Portal(name="Library Exterior Ladder", region="Library Exterior Ladder Region",
            destination="Library Hall", tag="_"),
     
-    Portal(name="Library Hall Bookshelf Exit", region="Library Hall",
+    Portal(name="Library Hall Bookshelf Exit", region="Library Hall Bookshelf",
            destination="Library Exterior", tag="_"),
     Portal(name="Library Hero's Grave", region="Library Hero's Grave Region",
            destination="RelicVoid", tag="_teleporter_relic plinth"),
-    Portal(name="Library Hall to Rotunda", region="Library Hall",
+    Portal(name="Library Hall to Rotunda", region="Library Hall to Rotunda",
            destination="Library Rotunda", tag="_"),
     
-    Portal(name="Library Rotunda Lower Exit", region="Library Rotunda",
+    Portal(name="Library Rotunda Lower Exit", region="Library Rotunda to Hall",
            destination="Library Hall", tag="_"),
-    Portal(name="Library Rotunda Upper Exit", region="Library Rotunda",
+    Portal(name="Library Rotunda Upper Exit", region="Library Rotunda to Lab",
            destination="Library Lab", tag="_"),
     
     Portal(name="Library Lab to Rotunda", region="Library Lab Lower",
            destination="Library Rotunda", tag="_"),
     Portal(name="Library to Far Shore", region="Library Portal",
            destination="Transit", tag="_teleporter_library teleporter"),
-    Portal(name="Library Lab to Librarian Arena", region="Library Lab",
+    Portal(name="Library Lab to Librarian Arena", region="Library Lab to Librarian",
            destination="Library Arena", tag="_"),
     
     Portal(name="Librarian Arena Exit", region="Library Arena",
@@ -630,12 +630,17 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Frog's Domain Back": RegionInfo("frog cave main"),
     "Library Exterior Tree Region": RegionInfo("Library Exterior"),
     "Library Exterior Ladder Region": RegionInfo("Library Exterior"),
+    "Library Hall Bookshelf": RegionInfo("Library Hall"),
     "Library Hall": RegionInfo("Library Hall"),
     "Library Hero's Grave Region": RegionInfo("Library Hall"),
+    "Library Hall to Rotunda": RegionInfo("Library Hall"),
+    "Library Rotunda to Hall": RegionInfo("Library Rotunda"),
     "Library Rotunda": RegionInfo("Library Rotunda"),
+    "Library Rotunda to Lab": RegionInfo("Library Rotunda"),
     "Library Lab": RegionInfo("Library Lab"),
     "Library Lab Lower": RegionInfo("Library Lab"),
     "Library Portal": RegionInfo("Library Lab"),
+    "Library Lab to Librarian": RegionInfo("Library Lab"),
     "Library Arena": RegionInfo("Library Arena", dead_end=DeadEnd.all_cats),
     "Fortress Exterior from East Forest": RegionInfo("Fortress Courtyard"),
     "Fortress Exterior from Overworld": RegionInfo("Fortress Courtyard"),
@@ -784,8 +789,10 @@ dependent_regions_restricted: Dict[Tuple[str, ...], List[str]] = {
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region"):
-        ["Library Hall", "Library Hero's Grave Region"],
+    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
+        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
+    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"):
+        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"],
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     ("Fortress Courtyard Upper",):
@@ -898,8 +905,10 @@ dependent_regions_nmg: Dict[Tuple[str, ...], List[str]] = {
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region"):
-        ["Library Hall", "Library Hero's Grave Region"],
+    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
+        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
+    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"):
+        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab", "Library Lab to Librarian"],
     ("Library Lab", "Library Lab Lower", "Library Portal"):
         ["Library Lab", "Library Lab Lower", "Library Portal"],
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
@@ -1015,10 +1024,12 @@ dependent_regions_ur: Dict[Tuple[str, ...], List[str]] = {
         ["Frog's Domain", "Frog's Domain Back"],
     ("Library Exterior Ladder Region", "Library Exterior Tree Region"):
         ["Library Exterior Ladder Region", "Library Exterior Tree Region"],
-    ("Library Hall", "Library Hero's Grave Region"):
-        ["Library Hall", "Library Hero's Grave Region"],
-    ("Library Lab", "Library Lab Lower", "Library Portal"):
-        ["Library Lab", "Library Lab Lower", "Library Portal"],
+    ("Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"):
+        ["Library Hall", "Library Hero's Grave Region", "Library Hall Bookshelf", "Library Hall to Rotunda"],
+    ("Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"):
+        ["Library Rotunda to Hall", "Library Rotunda", "Library Rotunda to Lab"],
+    ("Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"):
+        ["Library Lab", "Library Lab Lower", "Library Portal", "Library Lab to Librarian"],
     # can use ice grapple or ladder storage to get from any ladder to upper
     ("Fortress Exterior from East Forest", "Fortress Exterior from Overworld",
      "Fortress Exterior near cave", "Fortress Courtyard", "Fortress Courtyard Upper", "Beneath the Vault Entry"):
