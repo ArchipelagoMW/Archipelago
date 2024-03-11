@@ -144,28 +144,27 @@ item_table: Dict[str, TunicItemData] = {
     "Pages 52-53 (Icebolt)": TunicItemData(ItemClassification.progression, 1, 128, "pages"),
     "Pages 54-55": TunicItemData(ItemClassification.useful, 1, 129, "pages"),
 
-    "Ladders - Near Weathervane": TunicItemData(ItemClassification.progression, 0, 130, "ladders"),
-    "Ladders - Overworld Shortcut": TunicItemData(ItemClassification.progression, 0, 131, "ladders"),
-    "Ladder - Drop to East Forest": TunicItemData(ItemClassification.progression, 0, 132, "ladders"),
-    "Ladders - To Lower Forest": TunicItemData(ItemClassification.progression, 0, 133, "ladders"),
-    "Ladders - Near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 134, "ladders"),
-    "Ladder - To Well": TunicItemData(ItemClassification.progression, 0, 135, "ladders"),
-    "Ladder - Back of Well": TunicItemData(ItemClassification.progression, 0, 136, "ladders"),
-    "Ladders - To West Bell": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
-    "Ladder - To Quarry": TunicItemData(ItemClassification.progression, 0, 138, "ladders"),
-    "Ladder - Dark Tomb under Casket": TunicItemData(ItemClassification.progression, 0, 139, "ladders"),
-    "Ladders - Near Dark Tomb": TunicItemData(ItemClassification.progression, 0, 140, "ladders"),
-    "Ladder - Near Temple Rafters": TunicItemData(ItemClassification.progression, 0, 141, "ladders"),
-    "Ladder - To Swamp": TunicItemData(ItemClassification.progression, 0, 142, "ladders"),
-    "Ladders - Swamp": TunicItemData(ItemClassification.progression, 0, 143, "ladders"),
-    "Ladder - To Ruined Atoll": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
-    "Ladders - South Atoll": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
-    "Ladders - To Frog's Domain": TunicItemData(ItemClassification.progression, 0, 146, "ladders"),
-    "Ladders - Hourglass Cave": TunicItemData(ItemClassification.progression, 0, 147, "ladders"),
-    "Ladders - Overworld Town": TunicItemData(ItemClassification.progression, 0, 148, "ladders"),
-    "Ladder - To Beneath the Vault": TunicItemData(ItemClassification.progression, 0, 149, "ladders"),
-    "Ladders - Library": TunicItemData(ItemClassification.progression, 0, 150, "ladders"),
-    "Ladder - Lower Quarry": TunicItemData(ItemClassification.progression, 0, 151, "ladders")
+    "Ladders near Weathervane": TunicItemData(ItemClassification.progression, 0, 130, "ladders"),
+    "Ladders near Overworld Checkpoint": TunicItemData(ItemClassification.progression, 0, 131, "ladders"),
+    "Ladder to East Forest": TunicItemData(ItemClassification.progression, 0, 132, "ladders"),
+    "Ladders to Lower Forest": TunicItemData(ItemClassification.progression, 0, 133, "ladders"),
+    "Ladders near Patrol Cave": TunicItemData(ItemClassification.progression, 0, 134, "ladders"),
+    "Ladders in Well": TunicItemData(ItemClassification.progression, 0, 135, "ladders"),
+    "Ladders in Lower Quarry": TunicItemData(ItemClassification.progression, 0, 136, "ladders"),
+    "Ladders to West Bell": TunicItemData(ItemClassification.progression, 0, 137, "ladders"),
+    "Ladder to Quarry": TunicItemData(ItemClassification.progression, 0, 138, "ladders"),
+    "Ladder in Dark Tomb": TunicItemData(ItemClassification.progression, 0, 139, "ladders"),
+    "Ladders near Dark Tomb": TunicItemData(ItemClassification.progression, 0, 140, "ladders"),
+    "Ladder near Temple Rafters": TunicItemData(ItemClassification.progression, 0, 141, "ladders"),
+    "Ladder to Swamp": TunicItemData(ItemClassification.progression, 0, 142, "ladders"),
+    "Ladders in Swamp": TunicItemData(ItemClassification.progression, 0, 143, "ladders"),
+    "Ladder to Ruined Atoll": TunicItemData(ItemClassification.progression, 0, 144, "ladders"),
+    "Ladders in South Atoll": TunicItemData(ItemClassification.progression, 0, 145, "ladders"),
+    "Ladders to Frog's Domain": TunicItemData(ItemClassification.progression, 0, 146, "ladders"),
+    "Ladders in Hourglass Cave": TunicItemData(ItemClassification.progression, 0, 147, "ladders"),
+    "Ladders in Overworld Town": TunicItemData(ItemClassification.progression, 0, 148, "ladders"),
+    "Ladder to Beneath the Vault": TunicItemData(ItemClassification.progression, 0, 149, "ladders"),
+    "Ladders in Library": TunicItemData(ItemClassification.progression, 0, 150, "ladders"),
 }
 
 fool_tiers: List[List[str]] = [
@@ -233,7 +232,7 @@ extra_groups: Dict[str, Set[str]] = {
     "progressive sword": {"Sword Upgrade"},
     "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
     "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
-    "ladder - to atoll": {"Ladder - To Ruined Atoll"},  # fuzzy matching made it hint Ladder - To Well, now it won't
+    "ladder - to atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
 }
 
 item_name_groups.update(extra_groups)

@@ -48,11 +48,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # grapple on the west side, down the stairs from moss wall, across from ruined shop
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Beach"],
-        rule=lambda state: has_ladder("Ladders - Overworld Town", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Overworld Town", state, player, options)
         or state.has_any({laurels, grapple}, player))
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Overworld Town", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Overworld Town", state, player, options)
         or state.has_any({laurels, grapple}, player))
 
     regions["Overworld Beach"].connect(
@@ -64,10 +64,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld to Atoll Upper"],
-        rule=lambda state: has_ladder("Ladder - To Ruined Atoll", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Ruined Atoll", state, player, options))
     regions["Overworld to Atoll Upper"].connect(
         connecting_region=regions["Overworld Beach"],
-        rule=lambda state: has_ladder("Ladder - To Ruined Atoll", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Ruined Atoll", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld to Atoll Upper"],
@@ -84,14 +84,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld to West Garden Upper"],
-        rule=lambda state: has_ladder("Ladders - To West Bell", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
     regions["Overworld to West Garden Upper"].connect(
         connecting_region=regions["Overworld Belltower"],
-        rule=lambda state: has_ladder("Ladders - To West Bell", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
 
     regions["Overworld Belltower"].connect(
         connecting_region=regions["Overworld Belltower at Bell"],
-        rule=lambda state: has_ladder("Ladders - To West Bell", state, player, options))
+        rule=lambda state: has_ladder("Ladders to West Bell", state, player, options))
 
     # long dong, do not make a reverse connection here or to belltower
     regions["Overworld above Patrol Cave"].connect(
@@ -109,35 +109,35 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["After Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["After Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
         or state.has(laurels, player))
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
         or state.has(laurels, player))
 
     regions["After Ruined Passage"].connect(
         connecting_region=regions["Above Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["After Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options))
 
     regions["Above Ruined Passage"].connect(
         connecting_region=regions["East Overworld"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["East Overworld"].connect(
         connecting_region=regions["Above Ruined Passage"],
-        rule=lambda state: has_ladder("Ladders - Near Weathervane", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Weathervane", state, player, options)
         or state.has(laurels, player))
 
     # nmg: ice grapple the slimes, works both ways consistently
@@ -150,11 +150,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["East Overworld"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options))
 
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld at Patrol Cave"])
@@ -164,35 +164,35 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld at Patrol Cave"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
-        rule=lambda state: has_ladder("Ladders - Near Patrol Cave", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["Overworld at Patrol Cave"],
-        rule=lambda state: has_ladder("Ladders - Near Patrol Cave", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options)
         or state.has(grapple, player))
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options))
 
     regions["East Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["East Overworld"],
-        rule=lambda state: has_ladder("Ladders - Overworld Shortcut", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Overworld Checkpoint", state, player, options))
 
     regions["Overworld above Patrol Cave"].connect(
         connecting_region=regions["Upper Overworld"],
-        rule=lambda state: has_ladder("Ladders - Near Patrol Cave", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld above Patrol Cave"],
-        rule=lambda state: has_ladder("Ladders - Near Patrol Cave", state, player, options)
+        rule=lambda state: has_ladder("Ladders near Patrol Cave", state, player, options)
         or state.has(grapple, player))
 
     regions["Upper Overworld"].connect(
@@ -204,18 +204,18 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Upper Overworld"].connect(
         connecting_region=regions["Overworld after Temple Rafters"],
-        rule=lambda state: has_ladder("Ladder - Near Temple Rafters", state, player, options))
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, player, options))
     regions["Overworld after Temple Rafters"].connect(
         connecting_region=regions["Upper Overworld"],
-        rule=lambda state: has_ladder("Ladder - Near Temple Rafters", state, player, options)
+        rule=lambda state: has_ladder("Ladder near Temple Rafters", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
 
     regions["Overworld above Quarry Entrance"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladders - Near Dark Tomb", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Dark Tomb", state, player, options))
     regions["Overworld"].connect(
         connecting_region=regions["Overworld above Quarry Entrance"],
-        rule=lambda state: has_ladder("Ladders - Near Dark Tomb", state, player, options))
+        rule=lambda state: has_ladder("Ladders near Dark Tomb", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
@@ -226,10 +226,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
-        rule=lambda state: has_ladder("Ladder - To Quarry", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Quarry", state, player, options))
     regions["Overworld Quarry Entry"].connect(
         connecting_region=regions["Overworld after Envoy"],
-        rule=lambda state: has_ladder("Ladder - To Quarry", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Quarry", state, player, options))
 
     # ice grapple through the gate
     regions["Overworld"].connect(
@@ -248,10 +248,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Swamp Lower Entry"],
-        rule=lambda state: has_ladder("Ladder - To Swamp", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Swamp", state, player, options))
     regions["Overworld Swamp Lower Entry"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: has_ladder("Ladder - To Swamp", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Swamp", state, player, options))
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Special Shop Entry"],
@@ -262,7 +262,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld Well Ladder"],
-        rule=lambda state: has_ladder("Ladder - To Well", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Overworld Well Ladder"].connect(
         connecting_region=regions["Overworld"])
 
@@ -311,11 +311,11 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld Tunnel Turret"].connect(
         connecting_region=regions["Overworld Beach"],
-        rule=lambda state: has_ladder("Ladders - Overworld Town", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Overworld Town", state, player, options)
         or state.has(grapple, player))
     regions["Overworld Beach"].connect(
         connecting_region=regions["Overworld Tunnel Turret"],
-        rule=lambda state: has_ladder("Ladders - Overworld Town", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Overworld Town", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
 
     regions["Overworld"].connect(
@@ -363,7 +363,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Hourglass Cave"].connect(
         connecting_region=regions["Hourglass Cave Tower"],
-        rule=lambda state: has_ladder("Ladders - Hourglass Cave", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Hourglass Cave", state, player, options))
 
     # East Forest
     regions["Forest Belltower Upper"].connect(
@@ -371,7 +371,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Forest Belltower Main"].connect(
         connecting_region=regions["Forest Belltower Lower"],
-        rule=lambda state: has_ladder("Ladder - Drop to East Forest", state, player, options))
+        rule=lambda state: has_ladder("Ladder to East Forest", state, player, options))
 
     # nmg: ice grapple up to dance fox spot, and vice versa
     regions["East Forest"].connect(
@@ -391,12 +391,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["East Forest"].connect(
         connecting_region=regions["Lower Forest"],
-        rule=lambda state: has_ladder("Ladders - To Lower Forest", state, player, options)
+        rule=lambda state: has_ladder("Ladders to Lower Forest", state, player, options)
         or (state.has_all({grapple, fire_wand, ice_dagger}, player)  # do ice slime, then go to the lower hook
             and has_ability(state, player, icebolt, options, ability_unlocks)))
     regions["Lower Forest"].connect(
         connecting_region=regions["East Forest"],
-        rule=lambda state: has_ladder("Ladders - To Lower Forest", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Lower Forest", state, player, options))
 
     regions["Guard House 1 East"].connect(
         connecting_region=regions["Guard House 1 West"])
@@ -406,10 +406,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Guard House 2 Upper"].connect(
         connecting_region=regions["Guard House 2 Lower"],
-        rule=lambda state: has_ladder("Ladders - To Lower Forest", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Lower Forest", state, player, options))
     regions["Guard House 2 Lower"].connect(
         connecting_region=regions["Guard House 2 Upper"],
-        rule=lambda state: has_ladder("Ladders - To Lower Forest", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Lower Forest", state, player, options))
 
     # nmg: ice grapple from upper grave path exit to the rest of it
     regions["Forest Grave Path Upper"].connect(
@@ -438,10 +438,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # don't need the ladder when entering at the ladder spot
     regions["Beneath the Well Ladder Exit"].connect(
         connecting_region=regions["Beneath the Well Front"],
-        rule=lambda state: has_ladder("Ladder - To Well", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Beneath the Well Front"].connect(
         connecting_region=regions["Beneath the Well Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder - To Well", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
 
     regions["Beneath the Well Front"].connect(
         connecting_region=regions["Beneath the Well Main"],
@@ -452,10 +452,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Beneath the Well Main"].connect(
         connecting_region=regions["Beneath the Well Back"],
-        rule=lambda state: has_ladder("Ladder - Back of Well", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options))
     regions["Beneath the Well Back"].connect(
         connecting_region=regions["Beneath the Well Main"],
-        rule=lambda state: has_ladder("Ladder - Back of Well", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Well", state, player, options)
         and (has_stick(state, player) or state.has(fire_wand, player)))
 
     regions["Well Boss"].connect(
@@ -473,10 +473,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Dark Tomb Upper"].connect(
         connecting_region=regions["Dark Tomb Main"],
-        rule=lambda state: has_ladder("Ladder - Dark Tomb under Casket", state, player, options))
+        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, player, options))
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Upper"],
-        rule=lambda state: has_ladder("Ladder - Dark Tomb under Casket", state, player, options))
+        rule=lambda state: has_ladder("Ladder in Dark Tomb", state, player, options))
 
     regions["Dark Tomb Main"].connect(
         connecting_region=regions["Dark Tomb Dark Exit"])
@@ -532,7 +532,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Ladder Tops"],
-        rule=lambda state: has_ladder("Ladders - South Atoll", state, player, options))
+        rule=lambda state: has_ladder("Ladders in South Atoll", state, player, options))
 
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Frog Mouth"],
@@ -543,10 +543,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Frog Eye"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
     regions["Ruined Atoll Frog Eye"].connect(
         connecting_region=regions["Ruined Atoll"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
 
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Portal"],
@@ -557,30 +557,30 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Ruined Atoll"].connect(
         connecting_region=regions["Ruined Atoll Statue"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
-        and has_ladder("Ladders - South Atoll", state, player, options))
+        and has_ladder("Ladders in South Atoll", state, player, options))
     regions["Ruined Atoll Statue"].connect(
         connecting_region=regions["Ruined Atoll"])
 
     regions["Frog Stairs Eye Exit"].connect(
         connecting_region=regions["Frog Stairs Upper"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
     regions["Frog Stairs Upper"].connect(
         connecting_region=regions["Frog Stairs Eye Exit"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
 
     regions["Frog Stairs Upper"].connect(
         connecting_region=regions["Frog Stairs Lower"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
     regions["Frog Stairs Lower"].connect(
         connecting_region=regions["Frog Stairs Upper"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
 
     regions["Frog Stairs Lower"].connect(
         connecting_region=regions["Frog Stairs to Frog's Domain"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
     regions["Frog Stairs to Frog's Domain"].connect(
         connecting_region=regions["Frog Stairs Lower"],
-        rule=lambda state: has_ladder("Ladders - To Frog's Domain", state, player, options))
+        rule=lambda state: has_ladder("Ladders to Frog's Domain", state, player, options))
 
     regions["Frog's Domain"].connect(
         connecting_region=regions["Frog's Domain Back"],
@@ -590,19 +590,19 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Library Exterior Tree Region"].connect(
         connecting_region=regions["Library Exterior Ladder Region"],
         rule=lambda state: state.has_any({grapple, laurels}, player)
-        and has_ladder("Ladders - Library", state, player, options))
+        and has_ladder("Ladders in Library", state, player, options))
     regions["Library Exterior Ladder Region"].connect(
         connecting_region=regions["Library Exterior Tree Region"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
         and state.has_any({grapple, laurels}, player)
-        and has_ladder("Ladders - Library", state, player, options))
+        and has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Hall Bookshelf"].connect(
         connecting_region=regions["Library Hall"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
     regions["Library Hall"].connect(
         connecting_region=regions["Library Hall Bookshelf"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Hall"].connect(
         connecting_region=regions["Library Hero's Grave Region"],
@@ -612,47 +612,47 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Library Hall to Rotunda"].connect(
         connecting_region=regions["Library Hall"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
     regions["Library Hall"].connect(
         connecting_region=regions["Library Hall to Rotunda"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Rotunda to Hall"].connect(
         connecting_region=regions["Library Rotunda"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
     regions["Library Rotunda"].connect(
         connecting_region=regions["Library Rotunda to Hall"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Rotunda"].connect(
         connecting_region=regions["Library Rotunda to Lab"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
     regions["Library Rotunda to Lab"].connect(
         connecting_region=regions["Library Rotunda"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Lab Lower"].connect(
         connecting_region=regions["Library Lab"],
         rule=lambda state: state.has_any({grapple, laurels}, player)
-        and has_ladder("Ladders - Library", state, player, options))
+        and has_ladder("Ladders in Library", state, player, options))
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab Lower"],
         rule=lambda state: state.has(laurels, player)
-        and has_ladder("Ladders - Library", state, player, options))
+        and has_ladder("Ladders in Library", state, player, options))
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Portal"],
         rule=lambda state: has_ability(state, player, prayer, options, ability_unlocks)
-        and has_ladder("Ladders - Library", state, player, options))
+        and has_ladder("Ladders in Library", state, player, options))
     regions["Library Portal"].connect(
         connecting_region=regions["Library Lab"])
 
     regions["Library Lab"].connect(
         connecting_region=regions["Library Lab to Librarian"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
     regions["Library Lab to Librarian"].connect(
         connecting_region=regions["Library Lab"],
-        rule=lambda state: has_ladder("Ladders - Library", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Library", state, player, options))
 
     # Eastern Vault Fortress
     regions["Fortress Exterior from East Forest"].connect(
@@ -671,10 +671,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Fortress Exterior near cave"].connect(
         connecting_region=regions["Beneath the Vault Entry"],
-        rule=lambda state: has_ladder("Ladder - To Beneath the Vault", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
     regions["Beneath the Vault Entry"].connect(
         connecting_region=regions["Fortress Exterior near cave"],
-        rule=lambda state: has_ladder("Ladder - To Beneath the Vault", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
     regions["Fortress Courtyard"].connect(
         connecting_region=regions["Fortress Exterior from Overworld"],
@@ -697,10 +697,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Beneath the Vault Ladder Exit"].connect(
         connecting_region=regions["Beneath the Vault Front"],
-        rule=lambda state: has_ladder("Ladder - To Beneath the Vault", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
     regions["Beneath the Vault Front"].connect(
         connecting_region=regions["Beneath the Vault Ladder Exit"],
-        rule=lambda state: has_ladder("Ladder - To Beneath the Vault", state, player, options))
+        rule=lambda state: has_ladder("Ladder to Beneath the Vault", state, player, options))
 
     regions["Beneath the Vault Front"].connect(
         connecting_region=regions["Beneath the Vault Back"],
@@ -798,7 +798,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # need the ladder, or you can ice grapple down in nmg
     regions["Lower Quarry"].connect(
         connecting_region=regions["Even Lower Quarry"],
-        rule=lambda state: has_ladder("Ladder - Lower Quarry", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Lower Quarry", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))
 
     # nmg: bring a scav over, then ice grapple through the door, only with ER on to avoid soft lock
@@ -870,12 +870,12 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     # Swamp and Cathedral
     regions["Swamp Front"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: has_ladder("Ladders - Swamp", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Swamp", state, player, options)
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))  # nmg: ice grapple through gate
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Front"],
-        rule=lambda state: has_ladder("Ladders - Swamp", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Swamp", state, player, options)
         or state.has(laurels, player)
         or has_ice_grapple_logic(False, state, player, options, ability_unlocks))  # nmg: ice grapple through gate
 
@@ -891,10 +891,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Swamp Mid"].connect(
         connecting_region=regions["Swamp Ledge under Cathedral Door"],
-        rule=lambda state: has_ladder("Ladders - Swamp", state, player, options))
+        rule=lambda state: has_ladder("Ladders in Swamp", state, player, options))
     regions["Swamp Ledge under Cathedral Door"].connect(
         connecting_region=regions["Swamp Mid"],
-        rule=lambda state: has_ladder("Ladders - Swamp", state, player, options)
+        rule=lambda state: has_ladder("Ladders in Swamp", state, player, options)
         or has_ice_grapple_logic(True, state, player, options, ability_unlocks))  # nmg: ice grapple the enemy at door
 
     regions["Swamp Ledge under Cathedral Door"].connect(
@@ -1010,136 +1010,136 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             # LS from Overworld main
             # The upper Swamp entrance
             ("Overworld", "Overworld Redux, Swamp Redux 2_wall",
-             {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town"}),
+             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
             # Upper atoll entrance
             ("Overworld", "Overworld Redux, Atoll Redux_upper",
-             {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town"}),
+             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
             # Furnace entrance, next to the sign that leads to West Garden
             ("Overworld", "Overworld Redux, Furnace_gyro_west",
-             {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town"}),
+             {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
             # Upper West Garden entry, by the belltower
             ("Overworld", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
             # Ruined Passage
             ("Overworld", "Overworld Redux, Ruins Passage_east",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town"}),
             # Well rail, west side. Can ls in town, get extra height by going over the portal pad
             ("Overworld", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Quarry"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
             # Well rail, east side. Need some height from the temple stairs
             ("Overworld", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Quarry"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladder to Quarry"}),
             # Quarry entry
             ("Overworld", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well"}),
             # East Forest entry
             ("Overworld", "Overworld Redux, Forest Belltower_",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well",
-                 "Ladders - Near Patrol Cave", "Ladder - To Quarry", "Ladders - Near Dark Tomb"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
+                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
             # Fortress entry
             ("Overworld", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well",
-                 "Ladders - Near Patrol Cave", "Ladder - To Quarry", "Ladders - Near Dark Tomb"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
+                 "Ladders near Patrol Cave", "Ladder to Quarry", "Ladders near Dark Tomb"}),
             # Patrol Cave entry
             ("Overworld", "Overworld Redux, PatrolCave_",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well",
-                 "Ladders - Overworld Shortcut", "Ladder - To Quarry", "Ladders - Near Dark Tomb"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
+                 "Ladders near Overworld Checkpoint", "Ladder to Quarry", "Ladders near Dark Tomb"}),
             # Special Shop entry, excluded in non-ER due to soft lock potential
             ("Overworld", "Overworld Redux, ShopSpecial_",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well",
-                 "Ladders - Overworld Shortcut", "Ladders - Near Patrol Cave", "Ladder - To Quarry",
-                 "Ladders - Near Dark Tomb"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
+                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
+                 "Ladders near Dark Tomb"}),
             # Temple Rafters, excluded in non-ER + ladder rando due to soft lock potential
             ("Overworld", "Overworld Redux, Temple_rafters",
-                {"Ladders - Near Weathervane", "Ladder - To Swamp", "Ladders - Overworld Town", "Ladder - To Well",
-                 "Ladders - Overworld Shortcut", "Ladders - Near Patrol Cave", "Ladder - To Quarry",
-                 "Ladders - Near Dark Tomb"}),
+                {"Ladders near Weathervane", "Ladder to Swamp", "Ladders in Overworld Town", "Ladders in Well",
+                 "Ladders near Overworld Checkpoint", "Ladders near Patrol Cave", "Ladder to Quarry",
+                 "Ladders near Dark Tomb"}),
             # Spot above the Quarry entrance,
             # only gets you to the mountain stairs
             ("Overworld above Quarry Entrance", "Overworld Redux, Mountain_",
-                {"Ladders - Near Dark Tomb"}),
+                {"Ladders near Dark Tomb"}),
 
             # LS from the Overworld Beach
             # West Garden entry by the Furnace
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladders - Overworld Town", "Ladder - To Ruined Atoll"}),
+                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
             # West Garden laurels entry
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladders - Overworld Town", "Ladder - To Ruined Atoll"}),
+                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
             # Swamp lower entrance
             ("Overworld Beach", "Overworld Redux, Swamp Redux 2_conduit",
-                {"Ladders - Overworld Town", "Ladder - To Ruined Atoll"}),
+                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
             # Rotating Lights entrance
             ("Overworld Beach", "Overworld Redux, Overworld Cave_",
-                {"Ladders - Overworld Town", "Ladder - To Ruined Atoll"}),
+                {"Ladders in Overworld Town", "Ladder to Ruined Atoll"}),
             # Swamp upper entrance
             ("Overworld Beach", "Overworld Redux, Swamp Redux 2_wall",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Furnace entrance, next to the sign that leads to West Garden
             ("Overworld Beach", "Overworld Redux, Furnace_gyro_west",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Upper West Garden entry, by the belltower
             ("Overworld Beach", "Overworld Redux, Archipelagos Redux_upper",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Ruined Passage
             ("Overworld Beach", "Overworld Redux, Ruins Passage_east",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Well rail, west side. Can ls in town, get extra height by going over the portal pad
             ("Overworld Beach", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Well rail, east side. Need some height from the temple stairs
             ("Overworld Beach", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
             # Quarry entry
             ("Overworld Beach", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladder - To Ruined Atoll"}),
+                {"Ladder to Ruined Atoll"}),
 
             # LS from that low spot where you normally walk to swamp
             # Only has low ones you can't get to from main Overworld
             # West Garden main entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lower",
-                {"Ladder - To Swamp"}),
+                {"Ladder to Swamp"}),
             # Maze Cave entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Maze Room_",
-                {"Ladder - To Swamp"}),
+                {"Ladder to Swamp"}),
             # Hourglass Cave entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Town Basement_beach",
-                {"Ladder - To Swamp"}),
+                {"Ladder to Swamp"}),
             # Lower Atoll entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Atoll Redux_lower",
-                {"Ladder - To Swamp"}),
+                {"Ladder to Swamp"}),
             # Lowest West Garden entry from swamp ladder
             ("Overworld Swamp Lower Entry", "Overworld Redux, Archipelagos Redux_lowest",
-                {"Ladder - To Swamp"}),
+                {"Ladder to Swamp"}),
 
             # from the ladders by the belltower
             # Ruined Passage
             ("Overworld to West Garden Upper", "Overworld Redux, Ruins Passage_east",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Well rail, west side. Can ls in town, get extra height by going over the portal pad
             ("Overworld to West Garden Upper", "Overworld Redux, Sewer_west_aqueduct",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Well rail, east side. Need some height from the temple stairs
             ("Overworld to West Garden Upper", "Overworld Redux, Furnace_gyro_upper_north",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Quarry entry
             ("Overworld to West Garden Upper", "Overworld Redux, Darkwoods Tunnel_",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # East Forest entry
             ("Overworld to West Garden Upper", "Overworld Redux, Forest Belltower_",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Fortress entry
             ("Overworld to West Garden Upper", "Overworld Redux, Fortress Courtyard_",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Patrol Cave entry
             ("Overworld to West Garden Upper", "Overworld Redux, PatrolCave_",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Special Shop entry, excluded in non-ER due to soft lock potential
             ("Overworld to West Garden Upper", "Overworld Redux, ShopSpecial_",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
             # Temple Rafters, excluded in non-ER and ladder rando due to soft lock potential
             ("Overworld to West Garden Upper", "Overworld Redux, Temple_rafters",
-                {"Ladders - To West Bell"}),
+                {"Ladders to West Bell"}),
 
             # In the furnace
             # Furnace ladder to the fuse entrance
@@ -1205,10 +1205,10 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
             # Swamp to Gauntlet
             ("Swamp Mid", "Swamp Redux 2, Cathedral Arena_",
-                {"Ladders - Swamp"}),
+                {"Ladders in Swamp"}),
             # Swamp to Overworld upper
             ("Swamp Mid", "Swamp Redux 2, Overworld Redux_wall",
-                {"Ladders - Swamp"}),
+                {"Ladders in Swamp"}),
             # Ladder by the hero grave
             ("Back of Swamp", "Swamp Redux 2, Overworld Redux_conduit", set()),
             ("Back of Swamp", "Swamp Redux 2, Shop_", set()),
@@ -1225,13 +1225,13 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
                     and has_ability(state, player, holy_cross, options, ability_unlocks)
-                    and (has_ladder("Ladders - Swamp", state, player, options) or not options.entrance_rando))
+                    and (has_ladder("Ladders in Swamp", state, player, options) or not options.entrance_rando))
             elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and (state.has_any({"Ladders - To West Bell", "Ladder - Dark Tomb under Casket"}, player)))
+                    and (state.has_any({"Ladders to West Bell", "Ladder in Dark Tomb"}, player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
             elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
                     and not options.entrance_rando:
@@ -1239,7 +1239,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has_any({"Ladder - Dark Tomb under Casket", "Ladders - To West Bell"}, player))
+                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
             # soft locked for the same reasons as above
             elif portal_name in {"Entrance to Furnace near West Garden", "West Garden Entrance from Furnace"} \
                     and not options.entrance_rando:
@@ -1248,14 +1248,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
                     and state.has_any(ladders, player)
-                    and state.has_any({"Ladder - Dark Tomb under Casket", "Ladders - To West Bell"}, player))
+                    and state.has_any({"Ladder in Dark Tomb", "Ladders to West Bell"}, player))
             # soft locked if you can't get past garden knight backwards or up the belltower ladders
             elif portal_name == "West Garden Entrance near Belltower" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
-                    and state.has_any({"Ladders - To West Bell", laurels}, player))
+                    and state.has_any({"Ladders to West Bell", laurels}, player))
             # soft lock potential
             elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain"} \
                     and not options.entrance_rando:
