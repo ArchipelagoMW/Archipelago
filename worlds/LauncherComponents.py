@@ -85,7 +85,7 @@ components: List[Component] = [
               file_identifier=SuffixIdentifier('.archipelago', '.zip')),
     Component('Generate', 'Generate', cli=True),
     Component('Text Client', 'CommonClient', 'ArchipelagoTextClient', func=launch_textclient),
-    Component('Color Picker', 'ColorPicker', 'ArchipelagoColorPicker'),
+    Component('Text Color Picker', 'ColorPicker', 'ArchipelagoColorPicker'),
     Component('Links Awakening DX Client', 'LinksAwakeningClient',
               file_identifier=SuffixIdentifier('.apladx')),
     Component('LttP Adjuster', 'LttPAdjuster'),

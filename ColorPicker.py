@@ -24,13 +24,14 @@ def hex_color_to_tuple(color: str):
     red = color[:2]
     green = color[2:4]
     blue = color[4:]
-    r_ratio = int(red, 16) / 256
-    g_ratio = int(green, 16) / 256
-    b_ratio = int(blue, 16) / 256
+    r_ratio = int(red, 16) / 255
+    g_ratio = int(green, 16) / 255
+    b_ratio = int(blue, 16) / 255
     return r_ratio, g_ratio, b_ratio, 1.0
 
 
 default_colors = {
+        "white": "FFFFFF",
         "black": "000000",
         "red": "EE0000",
         "green": "00FF7F",  # typically a location
@@ -123,6 +124,7 @@ class ColorPickerApp(App):
         user_colors.write("<TextColors>:\n")
         for color in self.text_colors:
             user_colors.write(f"\t{color}: \"{self.text_colors[color].upper()}\"\n")
+        user_colors.write(f"<Label>:\n\tcolor: \"{self.text_colors['white']}\"")
         super().on_stop()
 
 
