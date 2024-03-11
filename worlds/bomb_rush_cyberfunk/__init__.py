@@ -110,8 +110,12 @@ class BombRushCyberfunkWorld(World):
 
 
     def create_items(self):
+        rep_locations: int = 86
+        if self.options.skip_polo_photos:
+            rep_locations -= 18
+
         self.options.total_rep.round_to_nearest_step()
-        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, 86)
+        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, rep_locations)
         #print(sum([8*rep_counts[0], 16*rep_counts[1], 24*rep_counts[2], 32*rep_counts[3], 48*rep_counts[4]]), \
         #    rep_counts)
 
@@ -162,10 +166,10 @@ class BombRushCyberfunkWorld(World):
             self.get_stage(r, player).add_exits(exits)
 
         for index, loc in enumerate(location_table):
+            if self.options.skip_polo_photos and "Polo" in loc["name"]:
+                continue
             stage: Region = self.get_stage(loc["stage"], player)
             stage.add_locations({loc["name"]: base_id + index})
-            if self.options.skip_polo_photos and "Polo" in loc["name"]:
-                self.options.exclude_locations.value.add(loc["name"])
 
         for e in event_table:
             stage: Region = self.get_stage(loc["stage"], player)

@@ -966,6 +966,7 @@ def rules(brcworld):
     limit = brcworld.options.limited_graffiti
     glitched = brcworld.options.logic
     extra = brcworld.options.extra_rep_required
+    photos = not brcworld.options.skip_polo_photos
 
     # entrances
     for e in world.get_region("Versum Hill", player).entrances:
@@ -1039,19 +1040,21 @@ def rules(brcworld):
         lambda state: current_chapter(state, player, 2))
     set_rule(world.get_location("Versum Hill: Rietveld joins the crew", player),
         lambda state: current_chapter(state, player, 2))
-    set_rule(world.get_location("Versum Hill: Big Polo", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Versum Hill: Trash Polo", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Versum Hill: Fruit stand Polo", player),
-        lambda state: (
-            camera(state, player)
-            and versum_hill_oldhead(state, player, limit, glitched)
-        ))
+    if photos:
+        set_rule(world.get_location("Versum Hill: Big Polo", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Versum Hill: Trash Polo", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Versum Hill: Fruit stand Polo", player),
+            lambda state: (
+                camera(state, player)
+                and versum_hill_oldhead(state, player, limit, glitched)
+            ))
     
     # millennium square
-    set_rule(world.get_location("Millennium Square: Half pipe Polo", player),
-        lambda state: camera(state, player))
+    if photos:
+        set_rule(world.get_location("Millennium Square: Half pipe Polo", player),
+            lambda state: camera(state, player))
     
     # brink terminal
     set_rule(world.get_location("Brink Terminal: Upside grind challenge reward", player),
@@ -1091,8 +1094,9 @@ def rules(brcworld):
         lambda state: brink_terminal_mesh(state, player, limit, glitched))
     set_rule(world.get_location("Brink Terminal: Eclipse joins the crew", player),
         lambda state: current_chapter(state, player, 3))
-    set_rule(world.get_location("Brink Terminal: Behind glass Polo", player),
-        lambda state: camera(state, player))
+    if photos:
+        set_rule(world.get_location("Brink Terminal: Behind glass Polo", player),
+            lambda state: camera(state, player))
     
     # millennium mall
     set_rule(world.get_location("Millennium Mall: Glass cylinder CD", player),
@@ -1191,44 +1195,45 @@ def rules(brcworld):
             lambda state: camera(state, player))
     set_rule(world.get_location("Pyramid Island: Devil Theory joins the crew", player),
         lambda state: current_chapter(state, player, 5))
-    set_rule(world.get_location("Pyramid Island: Polo pile 1", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Pyramid Island: Polo pile 2", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Pyramid Island: Polo pile 3", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Pyramid Island: Polo pile 4", player),
-        lambda state: camera(state, player))
-    set_rule(world.get_location("Pyramid Island: Maze glass Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
-    set_rule(world.get_location("Pyramid Island: Maze classroom Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
-    set_rule(world.get_location("Pyramid Island: Maze vent Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
-    set_rule(world.get_location("Pyramid Island: Big maze Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
-    set_rule(world.get_location("Pyramid Island: Maze desk Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
-    set_rule(world.get_location("Pyramid Island: Maze forklift Polo", player),
-        lambda state: (
-            camera(state, player)
-            and pyramid_island_oldhead(state, player, glitched)
-        ))
+    if photos:
+        set_rule(world.get_location("Pyramid Island: Polo pile 1", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Pyramid Island: Polo pile 2", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Pyramid Island: Polo pile 3", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Pyramid Island: Polo pile 4", player),
+            lambda state: camera(state, player))
+        set_rule(world.get_location("Pyramid Island: Maze glass Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
+        set_rule(world.get_location("Pyramid Island: Maze classroom Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
+        set_rule(world.get_location("Pyramid Island: Maze vent Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
+        set_rule(world.get_location("Pyramid Island: Big maze Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
+        set_rule(world.get_location("Pyramid Island: Maze desk Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
+        set_rule(world.get_location("Pyramid Island: Maze forklift Polo", player),
+            lambda state: (
+                camera(state, player)
+                and pyramid_island_oldhead(state, player, glitched)
+            ))
 
     # mataan
     set_rule(world.get_location("Mataan: Trash CD", player),
@@ -1277,16 +1282,17 @@ def rules(brcworld):
         lambda state: mataan_crew_battle(state, player, limit, glitched))
     set_rule(world.get_location("Mataan: Futurism joins the crew", player),
         lambda state: mataan_crew_battle(state, player, limit, glitched))
-    set_rule(world.get_location("Mataan: Trash Polo", player),
-        lambda state: (
-            camera(state, player)
-            and mataan_smoke_wall(state, player, glitched)
-        ))
-    set_rule(world.get_location("Mataan: Shopping Polo", player),
-        lambda state: (
-            camera(state, player)
-            and mataan_deepest(state, player, limit, glitched)
-        ))
+    if photos:
+        set_rule(world.get_location("Mataan: Trash Polo", player),
+            lambda state: (
+                camera(state, player)
+                and mataan_smoke_wall(state, player, glitched)
+            ))
+        set_rule(world.get_location("Mataan: Shopping Polo", player),
+            lambda state: (
+                camera(state, player)
+                and mataan_deepest(state, player, limit, glitched)
+            ))
 
     # events
     set_rule(world.get_location("Versum Hill: Complete Chapter 1", player),
