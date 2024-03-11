@@ -117,7 +117,6 @@ class PokemonEmeraldClient(BizHawkClient):
 
     wonder_trade_update_event: asyncio.Event
     latest_wonder_trade_reply: dict
-    wonder_trade_task: Optional[asyncio.Task]
     wonder_trade_cooldown: int
     wonder_trade_cooldown_timer: int
 
@@ -133,7 +132,6 @@ class PokemonEmeraldClient(BizHawkClient):
         self.local_defeated_legendaries = {}
         self.goal_flag = None
         self.wonder_trade_update_event = asyncio.Event()
-        self.wonder_trade_task = None
         self.wonder_trade_cooldown = 5000
         self.wonder_trade_cooldown_timer = 0
         self.death_counter = None
@@ -663,6 +661,4 @@ class PokemonEmeraldClient(BizHawkClient):
         elif cmd == "SetReply":
             if args.get("key", "") == f"pokemon_wonder_trades_{ctx.team}":
                 self.latest_wonder_trade_reply = args
-
-                if not self.wonder_trade_update_event.is_set():
-                    self.wonder_trade_update_event.set()
+                self.wonder_trade_update_event.set()
