@@ -1,3 +1,5 @@
+import logging
+
 from .data import rname
 from .regions import get_region_info
 from .locations import get_location_info
@@ -325,11 +327,14 @@ def shuffle_stages(world: "CV64World", stage_1_blacklist: List[str]) \
             verify_character_stage(world, vanilla_stage_order[starting_stage_value]):
         starting_stage = vanilla_stage_order[starting_stage_value]
     else:
+        logging.warning(f"[{world.multiworld.player_name[world.player]}] {vanilla_stage_order[starting_stage_value]} "
+                        f"cannot be the starting stage with the chosen settings. Picking a different stage instead...")
         possible_stages = []
         for stage in vanilla_stage_order:
             if stage in world.active_stage_exits and stage != rname.castle_keep:
                 possible_stages.append(stage)
         starting_stage = world.random.choice(possible_stages)
+        world.options.starting_stage.value = vanilla_stage_order.index(starting_stage)
 
     remaining_stage_pool = [stage for stage in world.active_stage_exits]
     remaining_stage_pool.remove(rname.castle_keep)

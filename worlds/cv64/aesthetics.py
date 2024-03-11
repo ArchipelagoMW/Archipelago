@@ -1,3 +1,5 @@
+import logging
+
 from BaseClasses import ItemClassification, Location, Item
 from .data import iname, rname
 from .options import CV64Options, BackgroundMusic, Countdown, IceTrapAppearance, InvisibleItems, CharacterStages
@@ -354,6 +356,10 @@ def randomize_shop_prices(world: "CV64World") -> Dict[int, int]:
 
     if min_price > max_price:
         min_price = world.random.randint(0, max_price)
+        logging.warning(f"[{world.multiworld.player_name[world.player]}] The Minimum Gold Price "
+                        f"({world.options.minimum_gold_price.value * 100}) is higher than the "
+                        f"Maximum Gold Price ({max_price * 100}). Lowering the minimum to: {min_price * 100}")
+        world.options.minimum_gold_price.value = min_price
 
     shop_price_list = [world.random.randint(min_price * 100, max_price * 100) for _ in range(7)]
 

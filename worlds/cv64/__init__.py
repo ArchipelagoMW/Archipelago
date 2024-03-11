@@ -2,6 +2,7 @@ import os
 import typing
 import settings
 import base64
+import logging
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
 from .items import CV64Item, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
@@ -103,6 +104,15 @@ class CV64World(World):
         while self.s1s_per_warp * 7 > self.total_s1s:
             self.s1s_per_warp -= 1
 
+        # Adjust the option and log a warning if the S1s per warp changed.
+        if self.s1s_per_warp != self.options.special1s_per_warp.value:
+            logging.warning(f"[{self.multiworld.player_name[self.player]}] Too many required Special1s "
+                            f"({self.options.special1s_per_warp.value * 7}) for Special1s Per Warp setting: "
+                            f"{self.options.special1s_per_warp.value} with Total Special1s setting: "
+                            f"{self.options.total_special1s.value}. Lowering Special1s Per Warp to: "
+                            f"{self.s1s_per_warp}")
+            self.options.special1s_per_warp.value = self.s1s_per_warp
+
         # Set the total and required Special2s to 1 if the drac condition is the Crystal, to the specified YAML numbers
         # if it's Specials, or to 0 if it's None or Bosses. The boss totals will be figured out later.
         if self.drac_condition == DraculasCondition.option_crystal:
@@ -184,6 +194,15 @@ class CV64World(World):
                     self.total_s2s += 1
                     if self.required_s2s < self.options.bosses_required.value:
                         self.required_s2s += 1
+
+        # If Dracula's Condition is Bosses and there are less calculated required S2s than the value specified by the
+        # player (meaning there weren't enough bosses to reach the player's setting), throw a warning and lower the
+        # option value.
+        if self.options.draculas_condition == DraculasCondition.option_bosses and self.required_s2s < \
+                self.options.bosses_required.value:
+            logging.warning(f"[{self.multiworld.player_name[self.player]}] Not enough bosses for Bosses Required "
+                            f"setting: {self.options.bosses_required.value}. Lowering to: {self.required_s2s}")
+            self.options.bosses_required.value = self.required_s2s
 
     def create_item(self, name: str, force_classification: typing.Optional[str] = None) -> Item:
         if force_classification is not None:

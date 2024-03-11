@@ -83,7 +83,7 @@ class Special1sPerWarp(Range):
 
 class TotalSpecial1s(Range):
     """Sets how many Speical1 jewels are in the pool in total.
-    If this is set to be less than Special1s Required x 7, it will increase by 1 until it isn't."""
+    If this is set to be less than Special1s Required x 7, it will decrease by 1 until it isn't."""
     range_start = 1
     range_end = 70
     default = 7
