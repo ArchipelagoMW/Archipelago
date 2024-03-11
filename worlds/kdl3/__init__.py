@@ -297,6 +297,8 @@ class KDL3World(World):
                 self.boss_butch_bosses = [True for _ in range(6)]
             else:
                 self.boss_butch_bosses = [self.random.choice([True, False]) for _ in range(6)]
+        else:
+            self.boss_butch_bosses = [False for _ in range(6)]
 
     def generate_output(self, output_directory: str):
         rom_path = ""
