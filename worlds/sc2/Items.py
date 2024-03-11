@@ -644,27 +644,27 @@ item_table = {
                  description="Increases Viking damage to mechanical units while in Assault Mode."),
     ItemNames.DIAMONDBACK_ION_THRUSTERS:
         ItemData(281 + SC2WOL_ITEM_ID_OFFSET, "Armory 3", 21, SC2Race.TERRAN,
-                 parent_item=ItemNames.DIAMONDBACK,
+                 parent_item=ItemNames.DIAMONDBACK, origin={"ext"},
                  description="Increases Diamondback movement speed."),
     ItemNames.WARHOUND_RESOURCE_EFFICIENCY:
         ItemData(282 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 13, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND,
+                 parent_item=ItemNames.WARHOUND, origin={"ext"},
                  description=RESOURCE_EFFICIENCY_NO_SUPPLY_DESCRIPTION_TEMPLATE.format("Warhound")),
     ItemNames.WARHOUND_REINFORCED_PLATING:
         ItemData(283 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 14, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND,
+                 parent_item=ItemNames.WARHOUND, origin={"ext"},
                  description="Increases Warhound armor by 2."),
     ItemNames.HERC_RESOURCE_EFFICIENCY:
         ItemData(284 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 15, SC2Race.TERRAN,
-                 parent_item=ItemNames.HERC,
+                 parent_item=ItemNames.HERC, origin={"ext"},
                  description=RESOURCE_EFFICIENCY_DESCRIPTION_TEMPLATE.format("HERC")),
     ItemNames.HERC_JUGGERNAUT_PLATING:
         ItemData(285 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 16, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND,
+                 parent_item=ItemNames.WARHOUND, origin={"ext"},
                  description="Increases HERC armor by 2."),
     ItemNames.HERC_KINETIC_FOAM:
         ItemData(286 + SC2WOL_ITEM_ID_OFFSET, "Armory 6", 17, SC2Race.TERRAN,
-                 parent_item=ItemNames.WARHOUND,
+                 parent_item=ItemNames.WARHOUND, origin={"ext"},
                  description="Increases HERC life by 50."),
 
     ItemNames.HELLION_TWIN_LINKED_FLAMETHROWER:
