@@ -20,7 +20,10 @@ To build the container, follow the following steps:
 * Make sure the Docker daemon is running
 * Enter this directory
 * Run `docker build -t [docker registry/username of your choice]/[container name of your choice] --network=host .`
->e.g. `docker build -t ArchipelagoAP/ArchipelagoWebHost --network=host .`
+
+>e.g. `docker build -t archipelagoap/archipelagowebhost --network=host .`
+
+The docker container name and registry/username must all be lowercase.
 * The container will then build. This process will do the following:
   * Pull the 0.4.4 source of Archipelago to /Archipelago
   * Download EnemizerCLI and unzip it into /Archipelago/EnemizerCLI
