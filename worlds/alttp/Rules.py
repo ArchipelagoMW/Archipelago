@@ -89,7 +89,7 @@ def set_rules(world):
 
     if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.glitches_required[player].current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player].current_key not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.multiworld.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:

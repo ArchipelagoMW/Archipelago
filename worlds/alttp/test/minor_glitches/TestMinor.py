@@ -3,6 +3,7 @@ from worlds.alttp.InvertedRegions import mark_dark_world_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
 from test.TestBase import TestBase
+from worlds.alttp.Options import GlitchesRequired
 
 from worlds.alttp.test import LTTPTestBase
 
@@ -10,7 +11,7 @@ from worlds.alttp.test import LTTPTestBase
 class TestMinor(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
-        self.multiworld.glitches_required[1] = "minor_glitches"
+        self.multiworld.glitches_required[1] = GlitchesRequired.from_any("minor_glitches")
         self.multiworld.bombless_start[1].value = True
         self.multiworld.shuffle_capacity_upgrades[1].value = True
         self.multiworld.difficulty_requirements[1] = difficulties['normal']

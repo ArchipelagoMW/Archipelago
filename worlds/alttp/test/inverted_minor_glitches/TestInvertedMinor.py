@@ -1,8 +1,9 @@
-from worlds.alttp.Dungeons import create_dungeons, get_dungeon_item_pool
+from worlds.alttp.Dungeons import get_dungeon_item_pool
 from worlds.alttp.EntranceShuffle import link_inverted_entrances
 from worlds.alttp.InvertedRegions import create_inverted_regions
 from worlds.alttp.ItemPool import difficulties
 from worlds.alttp.Items import item_factory
+from worlds.alttp.Options import GlitchesRequired
 from worlds.alttp.Regions import mark_light_world_regions
 from worlds.alttp.Shops import create_shops
 from test.TestBase import TestBase
@@ -14,7 +15,7 @@ class TestInvertedMinor(TestBase, LTTPTestBase):
     def setUp(self):
         self.world_setup()
         self.multiworld.mode[1].value = 2
-        self.multiworld.glitches_required[1] = "minor_glitches"
+        self.multiworld.glitches_required[1] = GlitchesRequired.from_any("minor_glitches")
         self.multiworld.bombless_start[1].value = True
         self.multiworld.shuffle_capacity_upgrades[1].value = True
         self.multiworld.difficulty_requirements[1] = difficulties['normal']
