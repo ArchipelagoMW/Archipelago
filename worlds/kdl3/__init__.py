@@ -129,6 +129,7 @@ class KDL3World(World):
             # randomize copy abilities
             valid_abilities = list(copy_ability_access_table.keys())
             enemies_to_set = list(self.copy_abilities.keys())
+            unplaced_abilities = set(key for key in copy_ability_access_table.keys() if key != "No Ability")
             # now for the edge cases
             for abilities, enemies in enemy_restrictive:
                 available_enemies = list()
@@ -143,6 +144,8 @@ class KDL3World(World):
                     chosen_ability = self.random.choice(abilities)
                     self.copy_abilities[chosen_enemy] = chosen_ability
                     enemies_to_set.remove(chosen_enemy)
+                    if chosen_ability in unplaced_abilities:
+                        unplaced_abilities.remove(chosen_ability)
             # two less restrictive ones, we need to ensure Cutter and Burning appear before their required stages
             sand_canyon_5 = self.get_region("Sand Canyon 5 - 9")
             # this is primarily for typing, but if this ever hits it's fine to crash
@@ -152,6 +155,8 @@ class KDL3World(World):
             if cutter_enemy:
                 self.copy_abilities[cutter_enemy] = "Cutter Ability"
                 enemies_to_set.remove(cutter_enemy)
+                if "Cutter Ability" in unplaced_abilities:
+                    unplaced_abilities.remove("Cutter Ability")
             iceberg_4 = self.get_region("Iceberg 4 - 7")
             # this is primarily for typing, but if this ever hits it's fine to crash
             assert isinstance(iceberg_4, KDL3Room)
@@ -160,6 +165,15 @@ class KDL3World(World):
             if burning_enemy:
                 self.copy_abilities[burning_enemy] = "Burning Ability"
                 enemies_to_set.remove(burning_enemy)
+                if "Burning Ability" in unplaced_abilities:
+                    unplaced_abilities.remove("Burning Ability")
+            # ensure we place one of every ability
+            if unplaced_abilities and self.options.accessibility != self.options.accessibility.option_minimal:
+                # failsafe, on non-minimal we need to guarantee every copy ability exists
+                for ability in sorted(unplaced_abilities):
+                    enemy = self.random.choice(enemies_to_set)
+                    self.copy_abilities[enemy] = ability
+                    enemies_to_set.remove(enemy)
             # place remaining
             for enemy in enemies_to_set:
                 self.copy_abilities[enemy] = self.random.choice(valid_abilities)
