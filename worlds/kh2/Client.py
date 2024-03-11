@@ -71,6 +71,8 @@ class KH2Context(CommonContext):
                                   dic.items()}
         self.location_name_to_worlddata = {name: data for name, data, in all_world_locations.items()}
 
+        self.slot_name = None
+
         self.sending = []
         # list used to keep track of locations+items player has. Used for disoneccting
         self.kh2_seed_save_cache = {
@@ -277,7 +279,13 @@ class KH2Context(CommonContext):
         if password_requested and not self.password:
             await super(KH2Context, self).server_auth(password_requested)
         await self.get_username()
-        await self.send_connect()
+        if self.slot_name not in {None, self.auth}:
+            logger.info(f"You are trying to connect with data still cached in the client. Close client or connect to the correct slot {self.slot_name}")
+            self.serverconnected = False
+            asyncio.create_task(super(KH2Context, self).shutdown())
+        else:
+            await self.send_connect()
+
 
     async def connection_closed(self):
         self.kh2connected = False
@@ -432,7 +440,7 @@ class KH2Context(CommonContext):
                 new_locations = set(args["checked_locations"])
                 self.locations_checked |= new_locations
 
-        if cmd == "PrintJSON":
+        if cmd in {"PrintJSON"}:
             # shamelessly stolen from kh1
             if args["type"] == "ItemSend":
                 item = args["item"]
@@ -502,6 +510,7 @@ class KH2Context(CommonContext):
                 if self.kh2connected:
                     self.kh2connected = False
                 logger.info("Game is not open.")
+            self.slot_name = self.auth
             self.serverconnected = True
             asyncio.create_task(self.send_msgs([{'cmd': 'Sync'}]))
 

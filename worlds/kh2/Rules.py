@@ -435,11 +435,11 @@ class KH2PuzzlePiecesRules(KH2Rules):
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
         self.puzzle_pieces_location_rules = {
-            LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state),
-            LocationName.SunsetPuzzleTT3TSunsetTerrace1:      lambda state: self.has_vertical(state) and self.has_glide(state),  # one over the water fall
-            LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state),
-            LocationName.DaylightPuzzleTT3MansionFoyer2:      lambda state: self.has_vertical(state) and self.has_glide(state, 3),  # one over the door
-            LocationName.HeartPuzzleHB1MarketplaceItem:       lambda state: self.has_vertical(state),
+            LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state), #af
+            LocationName.SunsetPuzzleTT3TSunsetTerrace1:      lambda state: self.has_vertical(state) and self.has_glide(state),  # one over the water fall #af
+            LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state), #af
+            LocationName.DaylightPuzzleTT3MansionFoyer2:      lambda state: self.has_vertical(state) and self.has_glide(state, 3),  # one over the door #af
+            LocationName.HeartPuzzleHB1MarketplaceItem:       lambda state: self.has_vertical(state), # hj2 or ad 1 or any has final,master,limit,valor
             LocationName.SunsetPuzzleHB1Borough:              lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.SunsetPuzzleHB2Corridors:            lambda state: self.has_vertical(state) and self.has_glide(state),
             LocationName.FrontierPuzzleHB2PosternDoorway:     lambda state: self.has_vertical(state) and self.has_glide(state),
