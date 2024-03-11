@@ -165,7 +165,7 @@ def _can_do_expert_pp2(state: CollectionState, world: "WitnessWorld") -> bool:
         return False
 
     # We can get to Hedge 3 from Hedge 2. If we can get from Keep to Hedge 2, we're good.
-    # This covers both Hedge 1 -> Hedge 2 and Keep -> Hedge 2, because Hedge 1 is just part of the Keep region.
+    # This covers both Hedge 1 Exit and Hedge 2 Shortcut, because Hedge 1 is just part of the Keep region.
 
     hedge_2_from_keep = any(e.can_reach(state) for e in regio.two_way_entrance_register["Keep 2nd Maze", "Keep"])
 
