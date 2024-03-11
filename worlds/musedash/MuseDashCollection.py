@@ -37,6 +37,12 @@ class MuseDashCollections:
         "PeroPero in the Universe",
         "umpopoff"
     ]
+    
+    REMOVED_SONGS = [
+        "CHAOS Glitch",
+        "FM 17314 SUGAR RADIO",
+        "Yume Ou Mono Yo Secret"
+    ]
 
     album_items: Dict[str, AlbumData] = {}
     album_locations: Dict[str, int] = {}
@@ -129,6 +135,9 @@ class MuseDashCollections:
 
         for songKey, songData in self.song_items.items():
             if not self.song_matches_dlc_filter(songData, dlc_songs):
+                continue
+                
+            if songKey in self.REMOVED_SONGS:
                 continue
 
             if streamer_mode_active and not songData.streamer_mode:
