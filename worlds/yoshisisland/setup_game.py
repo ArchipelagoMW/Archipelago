@@ -1,7 +1,7 @@
 import struct
 
 
-def setup_gamevars(world):
+def setup_gamevars(world: "YIWorld") -> None:
     world.playergoal = world.options.goal.value
     if world.options.luigi_pieces_in_pool.value < world.options.luigi_pieces_required.value:
         world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)
@@ -74,7 +74,7 @@ def setup_gamevars(world):
     raph_pointers = [0xC4, 0x03, 0x4B, 0x05]
     tap_pointers = [0xCC, 0x49, 0x64, 0x02]
 
-    pointer_dict = [
+    boss_data_list = [
         burt_pointers,
         slime_pointers,
         boo_pointers,
@@ -123,27 +123,27 @@ def setup_gamevars(world):
     world.boss_ap_loc = [boss_check_list[roomnum] for roomnum in world.boss_order]
 
 
-    world.boss_burt_data = pointer_dict[world.boss_room_id[0]]
+    world.boss_burt_data = boss_data_list[world.boss_room_id[0]]
 
-    world.boss_slime_data = pointer_dict[world.boss_room_id[1]]
+    world.boss_slime_data = boss_data_list[world.boss_room_id[1]]
 
-    world.boss_boo_data = pointer_dict[world.boss_room_id[2]]
+    world.boss_boo_data = boss_data_list[world.boss_room_id[2]]
 
-    world.boss_pot_data = pointer_dict[world.boss_room_id[3]]
+    world.boss_pot_data = boss_data_list[world.boss_room_id[3]]
 
-    world.boss_frog_data = pointer_dict[world.boss_room_id[4]]
+    world.boss_frog_data = boss_data_list[world.boss_room_id[4]]
 
-    world.boss_plant_data = pointer_dict[world.boss_room_id[5]]
+    world.boss_plant_data = boss_data_list[world.boss_room_id[5]]
 
-    world.boss_milde_data = pointer_dict[world.boss_room_id[6]]
+    world.boss_milde_data = boss_data_list[world.boss_room_id[6]]
 
-    world.boss_koop_data = pointer_dict[world.boss_room_id[7]]
+    world.boss_koop_data = boss_data_list[world.boss_room_id[7]]
 
-    world.boss_slug_data = pointer_dict[world.boss_room_id[8]]
+    world.boss_slug_data = boss_data_list[world.boss_room_id[8]]
 
-    world.boss_raph_data = pointer_dict[world.boss_room_id[9]]
+    world.boss_raph_data = boss_data_list[world.boss_room_id[9]]
 
-    world.boss_tap_data = pointer_dict[world.boss_room_id[10]]
+    world.boss_tap_data = boss_data_list[world.boss_room_id[10]]
 
     world.global_level_list = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
                               0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13,

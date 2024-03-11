@@ -13,7 +13,7 @@ class YILocation(Location):
         self.LevelID = LevelID
 
 
-def init_areas(world, locations: List[LocationData]):
+def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
     multiworld = world.multiworld
     player = world.player
     location_cache = world.location_cache
@@ -22,97 +22,97 @@ def init_areas(world, locations: List[LocationData]):
     locations_per_region = get_locations_per_region(locations)
 
     regions = [
-        create_region(multiworld, player, locations_per_region, location_cache, 'Menu'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'Overworld'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 1'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 2'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 3'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 4'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 5'),
-        create_region(multiworld, player, locations_per_region, location_cache, 'World 6'),
+        create_region(world, player, locations_per_region, location_cache, 'Menu'),
+        create_region(world, player, locations_per_region, location_cache, 'Overworld'),
+        create_region(world, player, locations_per_region, location_cache, 'World 1'),
+        create_region(world, player, locations_per_region, location_cache, 'World 2'),
+        create_region(world, player, locations_per_region, location_cache, 'World 3'),
+        create_region(world, player, locations_per_region, location_cache, 'World 4'),
+        create_region(world, player, locations_per_region, location_cache, 'World 5'),
+        create_region(world, player, locations_per_region, location_cache, 'World 6'),
 
-        create_region(multiworld, player, locations_per_region, location_cache, '1-1'),
-        create_region(multiworld, player, locations_per_region, location_cache, '1-2'),
-        create_region(multiworld, player, locations_per_region, location_cache, '1-3'),
-        create_region(multiworld, player, locations_per_region, location_cache, "1-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Burt The Bashful's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, '1-5'),
-        create_region(multiworld, player, locations_per_region, location_cache, '1-6'),
-        create_region(multiworld, player, locations_per_region, location_cache, '1-7'),
-        create_region(multiworld, player, locations_per_region, location_cache, "1-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Salvo The Slime's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, '1-1'),
+        create_region(world, player, locations_per_region, location_cache, '1-2'),
+        create_region(world, player, locations_per_region, location_cache, '1-3'),
+        create_region(world, player, locations_per_region, location_cache, "1-4"),
+        create_region(world, player, locations_per_region, location_cache, "Burt The Bashful's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, '1-5'),
+        create_region(world, player, locations_per_region, location_cache, '1-6'),
+        create_region(world, player, locations_per_region, location_cache, '1-7'),
+        create_region(world, player, locations_per_region, location_cache, "1-8"),
+        create_region(world, player, locations_per_region, location_cache, "Salvo The Slime's Boss Room"),
 
-        create_region(multiworld, player, locations_per_region, location_cache, "2-1"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-2"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-3"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Bigger Boo's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-5"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-6"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-7"),
-        create_region(multiworld, player, locations_per_region, location_cache, "2-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Roger The Ghost's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "2-1"),
+        create_region(world, player, locations_per_region, location_cache, "2-2"),
+        create_region(world, player, locations_per_region, location_cache, "2-3"),
+        create_region(world, player, locations_per_region, location_cache, "2-4"),
+        create_region(world, player, locations_per_region, location_cache, "Bigger Boo's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "2-5"),
+        create_region(world, player, locations_per_region, location_cache, "2-6"),
+        create_region(world, player, locations_per_region, location_cache, "2-7"),
+        create_region(world, player, locations_per_region, location_cache, "2-8"),
+        create_region(world, player, locations_per_region, location_cache, "Roger The Ghost's Boss Room"),
 
-        create_region(multiworld, player, locations_per_region, location_cache, "3-1"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-2"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-3"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Prince Froggy's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-5"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-6"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-7"),
-        create_region(multiworld, player, locations_per_region, location_cache, "3-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Naval Piranha's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "3-1"),
+        create_region(world, player, locations_per_region, location_cache, "3-2"),
+        create_region(world, player, locations_per_region, location_cache, "3-3"),
+        create_region(world, player, locations_per_region, location_cache, "3-4"),
+        create_region(world, player, locations_per_region, location_cache, "Prince Froggy's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "3-5"),
+        create_region(world, player, locations_per_region, location_cache, "3-6"),
+        create_region(world, player, locations_per_region, location_cache, "3-7"),
+        create_region(world, player, locations_per_region, location_cache, "3-8"),
+        create_region(world, player, locations_per_region, location_cache, "Naval Piranha's Boss Room"),
 
-        create_region(multiworld, player, locations_per_region, location_cache, "4-1"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-2"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-3"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Marching Milde's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-5"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-6"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-7"),
-        create_region(multiworld, player, locations_per_region, location_cache, "4-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Hookbill The Koopa's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "4-1"),
+        create_region(world, player, locations_per_region, location_cache, "4-2"),
+        create_region(world, player, locations_per_region, location_cache, "4-3"),
+        create_region(world, player, locations_per_region, location_cache, "4-4"),
+        create_region(world, player, locations_per_region, location_cache, "Marching Milde's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "4-5"),
+        create_region(world, player, locations_per_region, location_cache, "4-6"),
+        create_region(world, player, locations_per_region, location_cache, "4-7"),
+        create_region(world, player, locations_per_region, location_cache, "4-8"),
+        create_region(world, player, locations_per_region, location_cache, "Hookbill The Koopa's Boss Room"),
 
-        create_region(multiworld, player, locations_per_region, location_cache, "5-1"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-2"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-3"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Sluggy The Unshaven's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-5"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-6"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-7"),
-        create_region(multiworld, player, locations_per_region, location_cache, "5-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Raphael The Raven's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "5-1"),
+        create_region(world, player, locations_per_region, location_cache, "5-2"),
+        create_region(world, player, locations_per_region, location_cache, "5-3"),
+        create_region(world, player, locations_per_region, location_cache, "5-4"),
+        create_region(world, player, locations_per_region, location_cache, "Sluggy The Unshaven's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "5-5"),
+        create_region(world, player, locations_per_region, location_cache, "5-6"),
+        create_region(world, player, locations_per_region, location_cache, "5-7"),
+        create_region(world, player, locations_per_region, location_cache, "5-8"),
+        create_region(world, player, locations_per_region, location_cache, "Raphael The Raven's Boss Room"),
 
-        create_region(multiworld, player, locations_per_region, location_cache, "6-1"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-2"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-3"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-4"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Tap-Tap The Red Nose's Boss Room"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-5"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-6"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-7"),
-        create_region(multiworld, player, locations_per_region, location_cache, "6-8"),
-        create_region(multiworld, player, locations_per_region, location_cache, "Bowser's Room"),
+        create_region(world, player, locations_per_region, location_cache, "6-1"),
+        create_region(world, player, locations_per_region, location_cache, "6-2"),
+        create_region(world, player, locations_per_region, location_cache, "6-3"),
+        create_region(world, player, locations_per_region, location_cache, "6-4"),
+        create_region(world, player, locations_per_region, location_cache, "Tap-Tap The Red Nose's Boss Room"),
+        create_region(world, player, locations_per_region, location_cache, "6-5"),
+        create_region(world, player, locations_per_region, location_cache, "6-6"),
+        create_region(world, player, locations_per_region, location_cache, "6-7"),
+        create_region(world, player, locations_per_region, location_cache, "6-8"),
+        create_region(world, player, locations_per_region, location_cache, "Bowser's Room"),
 
     ]
     if world.options.extras_enabled.value == 1:
-        regions.insert(68, create_region(multiworld, player, locations_per_region, location_cache, "6-Extra"))
-        regions.insert(58, create_region(multiworld, player, locations_per_region, location_cache, "5-Extra"))
-        regions.insert(48, create_region(multiworld, player, locations_per_region, location_cache, "4-Extra"))
-        regions.insert(38, create_region(multiworld, player, locations_per_region, location_cache, "3-Extra"))
-        regions.insert(28, create_region(multiworld, player, locations_per_region, location_cache, "2-Extra"))
-        regions.insert(18, create_region(multiworld, player, locations_per_region, location_cache, "1-Extra"))
+        regions.insert(68, create_region(world, player, locations_per_region, location_cache, "6-Extra"))
+        regions.insert(58, create_region(world, player, locations_per_region, location_cache, "5-Extra"))
+        regions.insert(48, create_region(world, player, locations_per_region, location_cache, "4-Extra"))
+        regions.insert(38, create_region(world, player, locations_per_region, location_cache, "3-Extra"))
+        regions.insert(28, create_region(world, player, locations_per_region, location_cache, "2-Extra"))
+        regions.insert(18, create_region(world, player, locations_per_region, location_cache, "1-Extra"))
 
     if world.options.minigame_checks.value >= 2:
-        regions.insert(74, create_region(multiworld, player, locations_per_region, location_cache, "6-Bonus"))
-        regions.insert(63, create_region(multiworld, player, locations_per_region, location_cache, "5-Bonus"))
-        regions.insert(52, create_region(multiworld, player, locations_per_region, location_cache, "4-Bonus"))
-        regions.insert(41, create_region(multiworld, player, locations_per_region, location_cache, "3-Bonus"))
-        regions.insert(29, create_region(multiworld, player, locations_per_region, location_cache, "2-Bonus"))
-        regions.insert(19, create_region(multiworld, player, locations_per_region, location_cache, "1-Bonus"))
+        regions.insert(74, create_region(world, player, locations_per_region, location_cache, "6-Bonus"))
+        regions.insert(63, create_region(world, player, locations_per_region, location_cache, "5-Bonus"))
+        regions.insert(52, create_region(world, player, locations_per_region, location_cache, "4-Bonus"))
+        regions.insert(41, create_region(world, player, locations_per_region, location_cache, "3-Bonus"))
+        regions.insert(29, create_region(world, player, locations_per_region, location_cache, "2-Bonus"))
+        regions.insert(19, create_region(world, player, locations_per_region, location_cache, "1-Bonus"))
     multiworld.regions += regions
 
     connect_starting_region(world)
@@ -186,9 +186,8 @@ def create_location(player: int, location_data: LocationData, region: Region, lo
 
     return location
 
-def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
-    region = Region(name, player, multiworld)
-    region.world = multiworld
+def create_region(world: "YIWorld", player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
+    region = Region(name, player, world.multiworld)
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
@@ -197,7 +196,7 @@ def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dic
 
     return region
 
-def connect_starting_region(world):
+def connect_starting_region(world: "YIWorld") -> None:
     multiworld = world.multiworld
     player = world.player
     menu = multiworld.get_region('Menu', player)

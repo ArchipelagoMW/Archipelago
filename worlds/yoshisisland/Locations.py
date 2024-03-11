@@ -10,7 +10,7 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 
-def get_locations(world) -> List[LocationData]:
+def get_locations(world: Optional["YIWorld"]) -> List[LocationData]:
     if world:
         logic = YoshiLogic(world)
 

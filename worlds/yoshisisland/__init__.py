@@ -2,7 +2,7 @@ import os
 import typing
 import threading
 
-from typing import List, Set, TextIO
+from typing import List, Set, TextIO, Dict
 from BaseClasses import Item, MultiWorld, Location, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
 import settings
@@ -85,12 +85,12 @@ class YIWorld(World):
         self.location_cache= []
 
     @classmethod
-    def stage_assert_generate(cls, multiworld):
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         rom_file = get_base_rom_path()
         if not os.path.exists(rom_file):
             raise FileNotFoundError(rom_file)
 
-    def fill_slot_data(self):
+    def fill_slot_data(self) -> Dict[str, List[int]]:
         return {
             "world_1": self.world_1_stages,
             "world_2": self.world_2_stages,
@@ -174,7 +174,7 @@ class YIWorld(World):
 
         return item
 
-    def create_regions(self):
+    def create_regions(self) -> None:
         init_areas(self, get_locations(self))
 
     def get_filler_item_name(self) -> str:
@@ -185,7 +185,7 @@ class YIWorld(World):
         else:
             return self.random.choice(filler_items)
 
-    def set_rules(self):
+    def set_rules(self) -> None:
         if self.options.stage_logic == 0:
             set_easy_rules(self)
         elif self.options.stage_logic == 1:
@@ -215,7 +215,7 @@ class YIWorld(World):
         self.multiworld.get_location("Lakitu's Wall: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
         self.multiworld.get_location("Ride Like The Wind: Gather Coins", self.player).place_locked_item(self.create_item("Bandit Consumables"))
 
-    def generate_early(self):
+    def generate_early(self) -> None:
         setup_gamevars(self)
 
 
@@ -295,7 +295,7 @@ class YIWorld(World):
         return item
 
     def generate_filler(self, multiworld: MultiWorld, player: int,
-                                        pool: List[Item]):
+                                        pool: List[Item]) -> None:
         if self.playergoal == 1:
             for _ in range(self.options.luigi_pieces_in_pool.value):
                 item = self.create_item_with_correct_settings(player, "Piece of Luigi")
@@ -318,7 +318,7 @@ class YIWorld(World):
 
 
 
-    def create_items(self):
+    def create_items(self) -> None:
         self.luigi_count = 0
 
         if self.options.minigame_checks.value >= 2:
@@ -335,14 +335,14 @@ class YIWorld(World):
 
         self.multiworld.itempool += pool
 
-    def generate_output(self, output_directory: str):
+    def generate_output(self, output_directory: str) -> None:
 
         rompath = ""  # if variable is not declared finally clause may fail
         try:
             world = self.multiworld
             player = self.player
             rom = LocalRom(get_base_rom_path())
-            patch_rom(self, rom, self.player, self.multiworld)
+            patch_rom(self, rom, self.player)
 
             rompath = os.path.join(output_directory,
                                    f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
@@ -358,7 +358,7 @@ class YIWorld(World):
             if os.path.exists(rompath):
                 os.unlink(rompath)
 
-    def modify_multidata(self, multidata: dict):
+    def modify_multidata(self, multidata: dict) -> None:
         import base64
         # wait for self.rom_name to be available.
         self.rom_name_available_event.wait()
@@ -367,7 +367,7 @@ class YIWorld(World):
             new_name = base64.b64encode(bytes(self.rom_name)).decode()
             multidata["connect_names"][new_name] = multidata["connect_names"][self.multiworld.player_name[self.player]]
 
-    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]):
+    def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]) -> None:
         stage_pos_data = {}
         for loc in self.multiworld.get_locations(self.player):
             if loc.LevelID is not None and loc.address is not None:

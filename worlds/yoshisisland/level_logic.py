@@ -1,4 +1,5 @@
 from BaseClasses import CollectionState
+from typing import Optional
 
 class YoshiLogic:
     player: int
@@ -9,7 +10,7 @@ class YoshiLogic:
     luigi_pieces: int
 
 
-    def __init__(self, world):
+    def __init__(self, world: Optional["YIWorld"]) -> None:
         self.player = world.player
         self.boss_order = world.boss_order
         self.luigi_pieces = world.luigi_pieces

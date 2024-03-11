@@ -40,7 +40,7 @@ VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 class YISNIClient(SNIClient):
     game = "Yoshi's Island"
 
-    async def deathlink_kill_player(self, ctx):
+    async def deathlink_kill_player(self, ctx: SNIContext) -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         game_state = await snes_read(ctx, GAME_MODE, 0x1)
         if game_state[0] != 0x0F:
@@ -57,7 +57,7 @@ class YISNIClient(SNIClient):
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
-    async def validate_rom(self, ctx):
+    async def validate_rom(self, ctx: SNIContext) -> None:
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, YOSHISISLAND_ROMHASH_START, ROMHASH_SIZE)
@@ -73,7 +73,7 @@ class YISNIClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
-    async def game_watcher(self, ctx):
+    async def game_watcher(self, ctx: SNIContext) -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
 
