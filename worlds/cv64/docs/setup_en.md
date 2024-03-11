@@ -29,7 +29,7 @@ the White Jewels.
 ## Generating and Patching a Game
 
 1. Create your settings file (YAML). You can make one on the
-[Castlevania 64 settings page](../../../games/Castlevania64/player-settings).
+[Castlevania 64 settings page](../../../games/Castlevania 64/player-settings).
 2. Follow the general Archipelago instructions for [generating a game](../../Archipelago/setup/en#generating-a-game).
 This will generate an output file for you. Your patch file will have the `.apcv64` file extension.
 3. Open `ArchipelagoLauncher.exe`
