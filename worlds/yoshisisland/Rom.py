@@ -3,6 +3,9 @@ import os
 import Utils
 from worlds.Files import APDeltaPatch
 from settings import get_settings
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import YIWorld
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535
 

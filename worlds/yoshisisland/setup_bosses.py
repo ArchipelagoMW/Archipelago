@@ -1,4 +1,8 @@
 from BaseClasses import CollectionState
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import YIWorld
+
 
 class BossReqs:
     player: int

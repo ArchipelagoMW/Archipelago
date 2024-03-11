@@ -1,6 +1,9 @@
 from .level_logic import YoshiLogic
 from worlds.generic.Rules import set_rule
 from BaseClasses import MultiWorld
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import YIWorld
 
 def set_easy_rules(world: "YIWorld") -> None:
     logic = YoshiLogic(world)

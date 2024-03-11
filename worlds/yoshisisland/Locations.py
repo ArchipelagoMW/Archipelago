@@ -1,4 +1,6 @@
-from typing import List, Optional, Callable, NamedTuple
+from typing import List, Optional, Callable, NamedTuple, TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import YIWorld
 from .level_logic import YoshiLogic
 
 

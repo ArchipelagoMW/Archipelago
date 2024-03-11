@@ -1,5 +1,7 @@
 from BaseClasses import CollectionState
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
+if TYPE_CHECKING:
+    from . import YIWorld
 
 class YoshiLogic:
     player: int

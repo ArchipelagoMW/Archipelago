@@ -1,8 +1,10 @@
-from typing import List, Dict
+from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import MultiWorld, Region, Entrance, Location
 from .Locations import LocationData
 from .level_logic import YoshiLogic
 from .setup_bosses import BossReqs
+if TYPE_CHECKING:
+    from . import YIWorld
 
 class YILocation(Location):
     game: str = "Yoshi's Island"
