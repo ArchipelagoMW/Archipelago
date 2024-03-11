@@ -1044,10 +1044,9 @@ class Location:
         self.parent_region = parent
 
     def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
-        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
-                or ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
-                    and self.item_rule(item)
-                    and (not check_access or self.can_reach(state))))
+        return ((self.progress_type != LocationProgressType.EXCLUDED or not (item.advancement or item.useful))
+                and self.item_rule(item)
+                and (not check_access or self.can_reach(state)))
 
     def can_reach(self, state: CollectionState) -> bool:
         # self.access_rule computes faster on average, so placing it first for faster abort
@@ -1083,6 +1082,15 @@ class Location:
     @property
     def hint_text(self) -> str:
         return "at " + self.name.replace("_", " ").replace("-", " ")
+
+
+class AlwaysAllowLocation(Location):
+    """Subclass of Location that allows an always_allow item rule, which overrides all other requirements."""
+    always_allow: Callable[[Item], bool] = staticmethod(lambda item, state: False)
+
+    def can_fill(self, state: CollectionState, item: Item, check_access=True) -> bool:
+        return ((self.always_allow(state, item) and item.name not in state.multiworld.non_local_items[item.player])
+                or super().can_fill(state, item, check_access))
 
 
 class ItemClassification(IntFlag):

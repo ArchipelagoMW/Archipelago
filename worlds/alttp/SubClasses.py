@@ -2,14 +2,14 @@
 from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
 
-from BaseClasses import Location, Item, ItemClassification, Region, MultiWorld
+from BaseClasses import AlwaysAllowLocation, Item, ItemClassification, Region, MultiWorld
 
 if TYPE_CHECKING:
     from .Dungeons import Dungeon
     from .Regions import LTTPRegion
 
 
-class ALttPLocation(Location):
+class ALttPLocation(AlwaysAllowLocation):
     game: str = "A Link to the Past"
     crystal: bool
     player_address: Optional[int]

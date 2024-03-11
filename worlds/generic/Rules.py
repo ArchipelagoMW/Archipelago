@@ -172,7 +172,8 @@ def allow_self_locking_items(spot: typing.Union[Location, Region], *item_names: 
     """
     This function sets rules on the supplied spot, such that the supplied item_name(s) can possibly be placed there.
 
-    spot: Location or Region that the item(s) are allowed to be placed in
+    spot: Location or Region that the item(s) are allowed to be placed in.
+    Affected Locations must subclass AlwaysAllowLocation.
     item_names: item name or names that are allowed to be placed in the Location or Region
     """
     player = spot.player
