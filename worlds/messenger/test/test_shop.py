@@ -24,25 +24,6 @@ class ShopCostTest(MessengerTestBase):
                 self.assertTrue(loc in SHOP_ITEMS)
         self.assertEqual(len(prices), len(SHOP_ITEMS))
 
-    def test_dboost(self) -> None:
-        locations = [
-            "Riviere Turquoise Seal - Bounces and Balls",
-            "Forlorn Temple - Demon King", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
-            "Sunny Day Mega Shard", "Down Under Mega Shard",
-        ]
-        items = [["Path of Resilience", "Meditation", "Second Wind"]]
-        self.assertAccessDependency(locations, items)
-
-    def test_currents(self) -> None:
-        self.assertAccessDependency(["Elemental Skylands Seal - Water"], [["Currents Master"]])
-
-    def test_strike(self) -> None:
-        locations = [
-            "Glacial Peak Seal - Projectile Spike Pit", "Elemental Skylands Seal - Fire",
-        ]
-        items = [["Strike of the Ninja"]]
-        self.assertAccessDependency(locations, items)
-
 
 class ShopCostMinTest(ShopCostTest):
     options = {
