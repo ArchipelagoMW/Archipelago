@@ -52,15 +52,22 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
     id_to_items: Dict[int, ZorkGrandInquisitorItems] = id_to_items()
     id_to_locations: Dict[int, ZorkGrandInquisitorLocations] = id_to_locations()
 
+    game_controller: GameController
+
+    controller_task: Optional[asyncio.Task]
+
+    process_attached_at_least_once: bool
+    can_display_process_message: bool
+
     def __init__(self, server_address: Optional[str], password: Optional[str]) -> None:
         super().__init__(server_address, password)
 
-        self.game_controller: GameController = GameController(logger=CommonClient.logger)
+        self.game_controller = GameController(logger=CommonClient.logger)
 
-        self.controller_task: Optional[asyncio.Task] = None
+        self.controller_task = None
 
-        self.process_attached_at_least_once: bool = False
-        self.can_display_process_message: bool = True
+        self.process_attached_at_least_once = False
+        self.can_display_process_message = True
 
     def run_gui(self) -> None:
         from kvui import GameManager
@@ -83,7 +90,7 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
 
-        CommonClient.async_start(process_package(self, cmd, _args))
+        Utils.async_start(process_package(self, cmd, _args))
 
     async def controller(self):
         while not self.exit_event.is_set():

@@ -7,15 +7,24 @@ from pymem.process import close_handle
 class GameStateManager:
     process_name = "scummvm.exe"
 
+    process: Optional[Pymem]
+    is_process_running: bool
+
+    script_manager_struct_address: int
+    render_manager_struct_address: int
+
+    game_location: Optional[str]
+    game_location_offset: Optional[int]
+
     def __init__(self) -> None:
-        self.process: Optional[Pymem] = None
-        self.is_process_running: bool = False
+        self.process = None
+        self.is_process_running = False
 
-        self.script_manager_struct_address: int = 0x0
-        self.render_manager_struct_address: int = 0x0
+        self.script_manager_struct_address = 0x0
+        self.render_manager_struct_address = 0x0
 
-        self.game_location: Optional[str] = None
-        self.game_location_offset: Optional[int] = None
+        self.game_location = None
+        self.game_location_offset = None
 
     @property
     def game_state_storage_pointer_address(self) -> int:
@@ -191,7 +200,7 @@ class GameStateManager:
             statemap_deleted_key_count: int = self.process.read_int(deleted_key_count_address)
 
             if value == 0:
-                if is_existing_node is False:
+                if not is_existing_node:
                     return False
 
                 self.process.write_longlong(storage_address + offset, 1)
@@ -340,7 +349,7 @@ class GameStateManager:
             if offset_value == 0:  # Null Pointer
                 break
             elif offset_value == 1:  # Dummy Node
-                if dummy_node_found is False:
+                if not dummy_node_found:
                     dummy_node_offset = offset
                     dummy_node_found = True
             elif offset_value > 1:  # Existing Node
@@ -353,9 +362,9 @@ class GameStateManager:
 
             perturb >>= perturb_shift
 
-        if node_found is False and dummy_node_found is True:  # We should reuse the dummy node
+        if not node_found and dummy_node_found:  # We should reuse the dummy node
             return dummy_node_offset, False, True
-        elif node_found is False and dummy_node_found is False:  # We should allocate a new node
+        elif not node_found and not dummy_node_found:  # We should allocate a new node
             return offset, False, False
 
         return offset, True, False  # We should update the existing node

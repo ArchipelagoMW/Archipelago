@@ -121,7 +121,7 @@ def locations_by_region(include_deathsanity: bool = False) -> Dict[
     location: ZorkGrandInquisitorLocations
     data: ZorkGrandInquisitorLocationData
     for location, data in location_data.items():
-        if include_deathsanity is False and ZorkGrandInquisitorTags.DEATHSANITY in (
+        if not include_deathsanity and ZorkGrandInquisitorTags.DEATHSANITY in (
             data.tags or tuple()
         ):
             continue

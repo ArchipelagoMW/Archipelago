@@ -68,8 +68,6 @@ class ZorkGrandInquisitorWorld(World):
 
     game = "Zork Grand Inquisitor"
 
-    topology_present = False
-
     item_name_to_id = item_names_to_id()
     location_name_to_id = location_names_to_id()
 
@@ -169,7 +167,7 @@ class ZorkGrandInquisitorWorld(World):
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.ROPE.value] = 1
             self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.LANTERN.value] = 1
 
-            if start_with_hotspot_items is False:
+            if not start_with_hotspot_items:
                 self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_WELL.value] = 1
                 self.multiworld.early_items[self.player][ZorkGrandInquisitorItems.HOTSPOT_JACKS_DOOR.value] = 1
 

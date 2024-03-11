@@ -25,38 +25,62 @@ from .game_state_manager import GameStateManager
 
 
 class GameController:
+    logger: Optional[logging.Logger]
+
+    game_state_manager: GameStateManager
+
+    received_items: Set[ZorkGrandInquisitorItems]
+    completed_locations: Set[ZorkGrandInquisitorLocations]
+
+    completed_locations_queue: collections.deque
+    received_items_queue: collections.deque
+
+    all_hotspot_items: Set[ZorkGrandInquisitorItems]
+
+    game_id_to_items: Dict[int, ZorkGrandInquisitorItems]
+
+    possible_inventory_items: Set[ZorkGrandInquisitorItems]
+
+    available_inventory_slots: Set[int]
+
+    goal_completed: bool
+
+    option_goal: Optional[ZorkGrandInquisitorGoals]
+    option_deathsanity: Optional[bool]
+    option_grant_missable_location_checks: Optional[bool]
+
     def __init__(self, logger=None) -> None:
-        self.logger: Optional[logging.Logger] = logger
+        self.logger = logger
 
-        self.game_state_manager: GameStateManager = GameStateManager()
+        self.game_state_manager = GameStateManager()
 
-        self.received_items: Set[ZorkGrandInquisitorItems] = set()
-        self.completed_locations: Set[ZorkGrandInquisitorLocations] = set()
+        self.received_items = set()
+        self.completed_locations = set()
 
-        self.completed_locations_queue: collections.deque = collections.deque()
-        self.received_items_queue: collections.deque = collections.deque()
+        self.completed_locations_queue = collections.deque()
+        self.received_items_queue = collections.deque()
 
-        self.all_hotspot_items: Set[ZorkGrandInquisitorItems] = (
+        self.all_hotspot_items = (
             items_with_tag(ZorkGrandInquisitorTags.HOTSPOT)
             | items_with_tag(ZorkGrandInquisitorTags.SUBWAY_DESTINATION)
             | items_with_tag(ZorkGrandInquisitorTags.TOTEMIZER_DESTINATION)
         )
 
-        self.game_id_to_items: Dict[int, ZorkGrandInquisitorItems] = game_id_to_items()
+        self.game_id_to_items = game_id_to_items()
 
-        self.possible_inventory_items: Set[ZorkGrandInquisitorItems] = (
+        self.possible_inventory_items = (
             items_with_tag(ZorkGrandInquisitorTags.INVENTORY_ITEM)
             | items_with_tag(ZorkGrandInquisitorTags.SPELL)
             | items_with_tag(ZorkGrandInquisitorTags.TOTEM)
         )
 
-        self.available_inventory_slots: Set[int] = set()
+        self.available_inventory_slots = set()
 
-        self.goal_completed: bool = False
+        self.goal_completed = False
 
-        self.option_goal: Optional[ZorkGrandInquisitorGoals] = None
-        self.option_deathsanity: Optional[bool] = None
-        self.option_grant_missable_location_checks: Optional[bool] = None
+        self.option_goal = None
+        self.option_deathsanity = None
+        self.option_grant_missable_location_checks = None
 
     @functools.cached_property
     def brog_items(self) -> Set[ZorkGrandInquisitorItems]:
@@ -176,7 +200,7 @@ class GameController:
 
                 self._check_for_completed_locations()
 
-                if self.option_grant_missable_location_checks is True:
+                if self.option_grant_missable_location_checks:
                     self._check_for_missable_locations_to_grant()
 
                 self._process_received_items()
@@ -368,7 +392,7 @@ class GameController:
 
             data: ZorkGrandInquisitorLocationData = location_data[missable_location]
 
-            if ZorkGrandInquisitorTags.DEATHSANITY in data.tags and self.option_deathsanity is False:
+            if ZorkGrandInquisitorTags.DEATHSANITY in data.tags and not self.option_deathsanity:
                 continue
 
             condition_data: ZorkGrandInquisitorMissableLocationGrantConditionsData = (
