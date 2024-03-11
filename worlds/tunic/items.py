@@ -232,7 +232,8 @@ extra_groups: Dict[str, Set[str]] = {
     "progressive sword": {"Sword Upgrade"},
     "abilities": {"Pages 24-25 (Prayer)", "Pages 42-43 (Holy Cross)", "Pages 52-53 (Icebolt)"},
     "questagons": {"Red Questagon", "Green Questagon", "Blue Questagon", "Gold Questagon"},
-    "ladder - to atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
+    "ladder to atoll": {"Ladder to Ruined Atoll"},  # fuzzy matching made it hint Ladders in Well, now it won't
+    "ladders to bell": {"Ladders to West Bell"},
 }
 
 item_name_groups.update(extra_groups)

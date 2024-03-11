@@ -1190,11 +1190,16 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
             ("Fortress Exterior from East Forest", "Fortress Courtyard, Fortress East_", set()),
 
             # same as above, except from the Beneath the Vault entrance ladder
-            ("Fortress Exterior near cave", "Fortress Courtyard, Overworld Redux_", set()),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Main_Big Door", set()),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Lower", set()),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper", set()),
-            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_", set()),
+            ("Fortress Exterior near cave", "Fortress Courtyard, Overworld Redux_",
+             {"Ladder to Beneath the Vault"}),
+            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Main_Big Door",
+             {"Ladder to Beneath the Vault"}),
+            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Lower",
+             {"Ladder to Beneath the Vault"}),
+            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress Reliquary_Upper",
+             {"Ladder to Beneath the Vault"}),
+            ("Fortress Exterior near cave", "Fortress Courtyard, Fortress East_",
+             {"Ladder to Beneath the Vault"}),
 
             # ls at the ladder, need to gain a little height to get up the stairs
             # excluded in non-ER due to soft lock potential
@@ -1256,6 +1261,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and state.has_any({"Ladders to West Bell", laurels}, player))
+            # soft locked if you can't get back out
+            elif portal_name == "Fortress Courtyard to Beneath the Vault" \
+                    and not options.entrance_rando and options.shuffle_ladders:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has_all({ladder, "Ladder to Beneath the Vault"}, player))
             # soft lock potential
             elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain"} \
                     and not options.entrance_rando:
