@@ -477,6 +477,8 @@ class DarkSouls3World(World):
                 # useful for smooth item placement.
                 and self._has_any_scroll(state)
             ))
+            if self.options.late_basin_of_vows == "after_small_doll":
+                self._add_entrance_rule("Lothric Castle", "Small Doll")
 
         # DLC Access Rules Below
         if self.options.enable_dlc:
@@ -532,6 +534,8 @@ class DarkSouls3World(World):
                 # useful for smooth item placement.
                 and self._has_any_scroll(state)
             ))
+            if self.options.late_basin_of_vows == "after_small_doll":
+                self._add_entrance_rule("Lothric Castle", "Small Doll")
 
         self._add_location_rule([
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
@@ -779,12 +783,25 @@ class DarkSouls3World(World):
         ], "Pale Tongue")
 
         self._add_location_rule([
+            "AL: Crescent Moon Sword - Leonhard drop",
+            "AL: Silver Mask - Leonhard drop",
+            "AL: Soul of Rosaria - Leonhard drop"
+        ], "Black Eye Orb")
+
+        self._add_location_rule([
             f"FS: {item} - shop after killing Leonhard"
             for item in ["Leonhard's Garb", "Leonhard's Gauntlets", "Leonhard's Trousers"]
         ], "Black Eye Orb")
 
         ## Hawkwood
 
+        # Hawkwood only leaves after defating Abyss Watchers, Curse-Rotted Greatwood, Deacons of the Deep and Crystal Sage
+        # All of these are covered by the Farron Keep placement except for Abyss Watchers
+        self._add_location_rule(
+            "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
+            lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
+        )
+        
         # After Hawkwood leaves and once you have the Torso Stone, you can fight him for dragon
         # stones. Andre will give Swordgrass as a hint as well
         self._add_location_rule([
@@ -916,6 +933,9 @@ class DarkSouls3World(World):
             and state.has("Sage's Scroll", self.player)
         ))
 
+        self._add_location_rule("FS: Pestilent Mist - Orbeck for any scroll", self._has_any_scroll)
+        self._add_location_rule("FS: Young Dragon Ring - Orbeck for one scroll and buying three spells", self._has_any_scroll)
+        
         # Make sure that the player can keep Orbeck around by giving him at least one scroll
         # before killing Abyss Watchers.
         self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
