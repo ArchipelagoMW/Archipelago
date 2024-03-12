@@ -56,6 +56,10 @@ class EarlyLightning(Toggle):
     """
     display_name = "Early Lightning"
 
+class IxupiCapturesPriority(Toggle):
+    """Ixupi captures are set to priority locations. This forces a progression item into these locations if possible."""
+    display_name = "Ixupi Captures are Priority"
+
 class LocationPotPieces(Choice):
     """Chooses where pot pieces will be located within the multiworld.
     - Own World: Pot pieces will be located within your own world
@@ -78,3 +82,4 @@ class ShiversOptions(PerGameCommonOptions):
     early_beth: EarlyBeth
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
+    ixupi_captures_priority: IxupiCapturesPriority

@@ -144,6 +144,10 @@ class ShiversWorld(World):
         if self.options.location_pot_pieces == 1:
             self.options.non_local_items.value.update({name for name, data in item_table.items() if data.type == "pot"})
 
+        #Ixupi Captures priority locations
+        if self.options.ixupi_captures_priority == 1:
+            self.options.priority_locations.value.update({name for name in self.location_names if name.startswith('Ixupi Captured')})
+
     def pre_fill(self) -> None:
         # Prefills event storage locations with duplicate pots
         storagelocs = []
