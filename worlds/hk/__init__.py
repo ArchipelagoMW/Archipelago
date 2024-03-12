@@ -252,7 +252,7 @@ class HKWorld(World):
             if item_name in junk_replace:
                 item_name = self.get_filler_item_name()
 
-            item = self.create_item(item_name) if not vanilla or location_name == "Start" or self.multiworld.SharedItems[self.player] else self.create_event(item_name)
+            item = self.create_item(item_name) if not vanilla or location_name == "Start" or self.multiworld.AddUnshuffledLocations[self.player] else self.create_event(item_name)
 
             if location_name == "Start":
                 if item_name in randomized_starting_items:
@@ -277,7 +277,7 @@ class HKWorld(World):
 
         for option_key, option in hollow_knight_randomize_options.items():
             randomized = getattr(self.multiworld, option_key)[self.player]
-            if all([not randomized, option_key in logicless_options, not self.multiworld.SharedItems[self.player]]):
+            if all([not randomized, option_key in logicless_options, not self.multiworld.AddUnshuffledLocations[self.player]]):
                 continue
             for item_name, location_name in zip(option.items, option.locations):
                 if item_name in junk_replace:
@@ -503,7 +503,7 @@ class HKWorld(World):
 
         region = self.multiworld.get_region("Menu", self.player)
 
-        if vanilla and not self.multiworld.SharedItems[self.player]:
+        if vanilla and not self.multiworld.AddUnshuffledLocations[self.player]:
             loc = HKLocation(self.player, name,
                              None, region, costs=costs, vanilla=vanilla,
                              basename=basename)
