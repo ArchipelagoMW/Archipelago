@@ -590,7 +590,7 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
         connect(multiworld, player, names, LocationName.intro_stage_region, LocationName.dr_doppler_lab_region,
                 lambda state: (
                     check_z_saber(state, player, logic_z_saber, 0) and
-                    state.has_group("Boss Weapons", player, world.options.doppler_weapon_count.value)
+                    state.has_group("Weapons", player, world.options.doppler_weapon_count.value)
                 ))
     elif world.options.doppler_open == "armor_upgrades":
         connect(multiworld, player, names, LocationName.intro_stage_region, LocationName.dr_doppler_lab_region,
