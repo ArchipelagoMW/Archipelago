@@ -106,6 +106,7 @@ class ExtraHexagonPercentage(Range):
 
 class EntranceRando(TextChoice):
     """Randomize the connections between scenes.
+    You can choose a custom seed by editing this option.
     A small, very lost fox on a big adventure."""
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
