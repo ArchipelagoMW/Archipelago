@@ -77,7 +77,7 @@ def randomize_opponent_parties(world: "PokemonEmeraldWorld") -> None:
             new_species = world.random.choice(candidates)
 
             if new_species.species_id not in per_species_tmhm_moves:
-                per_species_tmhm_moves[new_species.species_id] = list({
+                per_species_tmhm_moves[new_species.species_id] = sorted({
                     world.modified_tmhm_moves[i]
                     for i, is_compatible in enumerate(int_to_bool_array(new_species.tm_hm_compatibility))
                     if is_compatible
@@ -87,7 +87,7 @@ def randomize_opponent_parties(world: "PokemonEmeraldWorld") -> None:
             tm_hm_movepool = per_species_tmhm_moves[new_species.species_id]
 
             # Moves the pokemon could have learned by now
-            level_up_movepool = list({
+            level_up_movepool = sorted({
                 move.move_id
                 for move in new_species.learnset
                 if move.move_id != 0 and move.level <= pokemon.level
