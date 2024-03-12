@@ -121,7 +121,7 @@ class MMX3SNIClient(SNIClient):
             
     async def handle_item_queue(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
-        from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data, boss_access_rom_data, refill_rom_data
+        from worlds.mmx3.Rom import weapon_rom_data, ride_armor_rom_data, upgrades_rom_data
 
         if not hasattr(self, "item_queue") or len(self.item_queue) == 0:
             return
