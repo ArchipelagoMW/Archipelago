@@ -750,8 +750,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + \
-                        "<br> ".join(self.ctx.player_names[player] for player in slot_info.group_members)
+                text += f"<br>Members:<br> " + "<br> ".join(
+                    escape_markup(self.ctx.player_names[player])
+                    for player in slot_info.group_members
+                )
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
