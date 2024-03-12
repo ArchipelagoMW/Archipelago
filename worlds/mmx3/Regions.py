@@ -541,23 +541,88 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
             lambda state: (state.has(ItemName.stage_blast_hornet, player)))
     
     # Connect Vile
-    connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
-            lambda state: (
-                state.has(ItemName.stage_blizzard_buffalo, player) and
-                state.has(ItemName.maverick_medal, player, 2)
-            ))
-    connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
-            lambda state: (
-                state.has(ItemName.stage_toxic_seahorse, player) and
-                state.has(ItemName.maverick_medal, player, 2)
-            ))
-    connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
-            lambda state: (
-                state.has(ItemName.stage_crush_crawfish, player) and
-                state.has(ItemName.maverick_medal, player, 2)
-            ))
-    
+    if world.options.vile_open == "multiworld":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.stage_vile, player)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.stage_vile, player)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.stage_vile, player)
+                ))
+    elif world.options.vile_open == "medals":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.maverick_medal, player, world.options.vile_medal_count.value)
+                ))
+    elif world.options.vile_open == "weapons":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Weapons", player, world.options.vile_weapon_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Weapons", player, world.options.vile_weapon_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Weapons", player, world.options.vile_weapon_count.value)
+                ))
+    elif world.options.vile_open == "armor_upgrades":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has_group("Armor Upgrades", player, world.options.vile_upgrade_count.value)
+                ))
+    elif world.options.vile_open == "heart_tanks":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.heart_tank, player, world.options.vile_heart_tank_count.value)
+                ))
+    elif world.options.vile_open == "sub_tanks":
+        connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value)
+                ))
+        connect(multiworld, player, names, LocationName.crush_crawfish_region, LocationName.vile_region,
+                lambda state: (
+                    state.has(ItemName.sub_tank, player, world.options.vile_sub_tank_count.value)
+                ))
+
     # Connect Bit & Byte
+    connect(multiworld, player, names, LocationName.blast_hornet_region, LocationName.bit_byte_region,
+            lambda state: (state.has(ItemName.maverick_medal, player, 2)))
     connect(multiworld, player, names, LocationName.blizzard_buffalo_region, LocationName.bit_byte_region,
             lambda state: (state.has(ItemName.maverick_medal, player, 2)))
     connect(multiworld, player, names, LocationName.toxic_seahorse_region, LocationName.bit_byte_region,
@@ -571,8 +636,6 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
     connect(multiworld, player, names, LocationName.neon_tiger_region, LocationName.bit_byte_region,
             lambda state: (state.has(ItemName.maverick_medal, player, 2)))
     connect(multiworld, player, names, LocationName.gravity_beetle_region, LocationName.bit_byte_region,
-            lambda state: (state.has(ItemName.maverick_medal, player, 2)))
-    connect(multiworld, player, names, LocationName.blast_hornet_region, LocationName.bit_byte_region,
             lambda state: (state.has(ItemName.maverick_medal, player, 2)))
     
     # Connect Dr. Doppler Lab
@@ -589,7 +652,6 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
     elif world.options.doppler_open == "weapons":
         connect(multiworld, player, names, LocationName.intro_stage_region, LocationName.dr_doppler_lab_region,
                 lambda state: (
-                    check_z_saber(state, player, logic_z_saber, 0) and
                     state.has_group("Weapons", player, world.options.doppler_weapon_count.value)
                 ))
     elif world.options.doppler_open == "armor_upgrades":
@@ -645,8 +707,6 @@ def connect_regions(multiworld: MultiWorld, player: int, world: World):
                     check_z_saber(state, player, logic_z_saber, 4)
                 ))
     
-    connect(multiworld, player, names, LocationName.blast_hornet_region, LocationName.bit_byte_region,
-            lambda state: (state.has(ItemName.maverick_medal, player, 2)))
     
 
 def check_z_saber(state: "CollectionState", player: int, logic_z_saber: int, option_level: int) -> bool:

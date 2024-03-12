@@ -123,7 +123,7 @@ doppler_lab_3_blast_hornet = "Dr. Doppler's Lab 3 - Blast Hornet Rematch"
 doppler_lab_3_energy_dispenser = "Dr. Doppler's Lab 3 - Energy Dispenser Destroyed"
 doppler_lab_3_hp = "Dr. Doppler's Lab 3 - HP Pickup"
 
-victory = "Sigma Defeated"
+victory = "Dr. Doppler's Lab 4 - Sigma Defeated"
 
 vile_stage_boss = "Vile Defeated"
 vile_stage_energy = "Vile's Stage - Weapon Energy Pickup"

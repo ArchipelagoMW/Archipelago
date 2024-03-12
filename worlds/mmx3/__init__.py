@@ -81,6 +81,8 @@ class MMX3World(World):
 
         if self.options.doppler_open == "multiworld":
             itempool += [self.create_item(ItemName.stage_doppler_lab)]
+        if self.options.vile_open == "multiworld":
+            itempool += [self.create_item(ItemName.stage_vile)]
 
         itempool += [self.create_item(ItemName.parasitic_bomb)]
         itempool += [self.create_item(ItemName.frost_shield)]

@@ -7,7 +7,8 @@ stage_crush_crawfish = "Crush Crawfish Access Codes"
 stage_neon_tiger = "Neon Tiger Access Codes"
 stage_gravity_beetle = "Gravity Beetle Access Codes"
 stage_blast_hornet = "Blast Hornet Access Codes"
-stage_doppler_lab = "Dr. Doppler Lab Access Codes"
+stage_vile = "Vile Access Codes"
+stage_doppler_lab = "Dr. Doppler's Lab Access Codes"
 
 # Third Armor
 third_armor_helmet = "Progressive Third Armor Helmet"
@@ -38,7 +39,7 @@ sub_tank = "Sub Tank"
 
 # Medals
 maverick_medal = "Maverick Medal"
-victory = "Ganaste we"
+victory = "Sigma Defeated"
 
 # Zero
 zero = "Zero"
