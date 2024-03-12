@@ -8,11 +8,13 @@ on:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
+      - '*.iss'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
       - 'setup.py'
       - 'requirements.txt'
+      - '*.iss'
   workflow_dispatch:
 
 env:
