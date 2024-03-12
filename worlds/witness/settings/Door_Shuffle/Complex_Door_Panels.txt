@@ -1,7 +1,7 @@
 Items:
 Glass Factory Entry (Panel)
-Tutorial Outpost Entry (Panel)
-Tutorial Outpost Exit (Panel)
+Outside Tutorial Outpost Entry (Panel)
+Outside Tutorial Outpost Exit (Panel)
 Symmetry Island Lower (Panel)
 Symmetry Island Upper (Panel)
 Desert Light Room Entry (Panel)

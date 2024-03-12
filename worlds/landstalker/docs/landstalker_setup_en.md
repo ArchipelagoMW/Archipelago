@@ -30,8 +30,8 @@ guide: [Basic Multiworld Setup Guide](/tutorial/Archipelago/setup/en)
 
 ### Where do I get a config file?
 
-The [Player Settings Page](../player-settings) on the website allows you to easily configure your personal settings 
-and export a config file from them.
+The [Player Settings Page](/games/Landstalker%20-%20The%20Treasures%20of%20King%20Nole/player-settings) on the website allows
+you to easily configure your personal settings 
 
 ## How-to-play
 
