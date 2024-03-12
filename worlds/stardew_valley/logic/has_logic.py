@@ -1,5 +1,5 @@
 from .base_logic import BaseLogic
-from ..stardew_rule import StardewRule, And, Or, Has, Count
+from ..stardew_rule import StardewRule, And, Or, Has, Count, true_
 
 
 class HasLogicMixin(BaseLogic[None]):
@@ -10,12 +10,12 @@ class HasLogicMixin(BaseLogic[None]):
     def has_all(self, *items: str):
         assert items, "Can't have all of no items."
 
-        return And(*(self.has(item) for item in items))
+        return self.logic.and_(*(self.has(item) for item in items))
 
     def has_any(self, *items: str):
         assert items, "Can't have any of no items."
 
-        return Or(*(self.has(item) for item in items))
+        return self.logic.or_(*(self.has(item) for item in items))
 
     def has_n(self, *items: str, count: int):
         return self.count(count, *(self.has(item) for item in items))
@@ -25,6 +25,12 @@ class HasLogicMixin(BaseLogic[None]):
         assert rules, "Can't create a Count conditions without rules"
         assert len(rules) >= count, "Count need at least as many rules as the count"
 
+        if count == 0:
+            return true_
+
+        if len(rules) == 1:
+            return rules[0]
+
         if count == 1:
             return Or(*rules)
 
@@ -32,3 +38,21 @@ class HasLogicMixin(BaseLogic[None]):
             return And(*rules)
 
         return Count(list(rules), count)
+
+    @staticmethod
+    def and_(*rules: StardewRule) -> StardewRule:
+        assert rules, "Can't create a And conditions without rules"
+
+        if len(rules) == 1:
+            return rules[0]
+
+        return And(*rules)
+
+    @staticmethod
+    def or_(*rules: StardewRule) -> StardewRule:
+        assert rules, "Can't create a Or conditions without rules"
+
+        if len(rules) == 1:
+            return rules[0]
+
+        return Or(*rules)

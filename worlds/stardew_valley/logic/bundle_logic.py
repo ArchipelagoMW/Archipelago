@@ -9,7 +9,7 @@ from .money_logic import MoneyLogicMixin
 from .region_logic import RegionLogicMixin
 from .skill_logic import SkillLogicMixin
 from ..bundles.bundle import Bundle
-from ..stardew_rule import StardewRule, And, True_
+from ..stardew_rule import StardewRule, True_
 from ..strings.currency_names import Currency
 from ..strings.machine_names import Machine
 from ..strings.quality_names import CropQuality, ForageQuality, FishQuality, ArtisanQuality
@@ -54,7 +54,7 @@ class BundleLogic(BaseLogic[Union[HasLogicMixin, RegionLogicMixin, MoneyLogicMix
             quality_rules.append(self.logic.has(Machine.cask))
         if not quality_rules:
             return True_()
-        return And(*quality_rules)
+        return self.logic.and_(*quality_rules)
 
     @cached_property
     def can_complete_community_center(self) -> StardewRule:

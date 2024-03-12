@@ -12,7 +12,7 @@ from .season_logic import SeasonLogicMixin
 from .time_logic import TimeLogicMixin
 from ..content.feature import friendsanity
 from ..data.villagers_data import Villager
-from ..stardew_rule import StardewRule, True_, And, Or, false_, true_
+from ..stardew_rule import StardewRule, True_, false_, true_
 from ..strings.ap_names.mods.mod_items import SVEQuestItem
 from ..strings.crop_names import Fruit
 from ..strings.generic_names import Generic
@@ -37,8 +37,8 @@ class RelationshipLogicMixin(BaseLogicMixin):
         self.relationship = RelationshipLogic(*args, **kwargs)
 
 
-class RelationshipLogic(BaseLogic[Union[
-    RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin, ReceivedLogicMixin, HasLogicMixin]]):
+class RelationshipLogic(BaseLogic[Union[RelationshipLogicMixin, BuildingLogicMixin, SeasonLogicMixin, TimeLogicMixin, GiftLogicMixin, RegionLogicMixin,
+ReceivedLogicMixin, HasLogicMixin]]):
 
     def can_date(self, npc: str) -> StardewRule:
         return self.logic.relationship.has_hearts(npc, 8) & self.logic.has(Gift.bouquet)
@@ -69,7 +69,7 @@ class RelationshipLogic(BaseLogic[Union[
                       self.logic.relationship.has_hearts_with_any_bachelor(12),
                       self.logic.relationship.has_children(number_children - 1)]
 
-        return And(*baby_rules)
+        return self.logic.and_(*baby_rules)
 
     @cache_self1
     def has_hearts_with_any_bachelor(self, hearts: int = 1) -> StardewRule:
@@ -77,9 +77,9 @@ class RelationshipLogic(BaseLogic[Union[
         if hearts == 0:
             return True_()
 
-        return Or(*(self.logic.relationship.has_hearts(name)
-                    for name, villager in self.content.villagers.items()
-                    if villager.bachelor))
+        return self.logic.or_(*(self.logic.relationship.has_hearts(name)
+                                for name, villager in self.content.villagers.items()
+                                if villager.bachelor))
 
     @cache_self1
     def has_hearts_with_any(self, hearts: int = 1) -> StardewRule:
@@ -87,8 +87,8 @@ class RelationshipLogic(BaseLogic[Union[
         if hearts == 0:
             return True_()
 
-        return Or(*(self.logic.relationship.has_hearts(name)
-                    for name, villager in self.content.villagers.items()))
+        return self.logic.or_(*(self.logic.relationship.has_hearts(name)
+                                for name, villager in self.content.villagers.items()))
 
     def has_hearts_with_n(self, amount: int, hearts: int = 1) -> StardewRule:
         assert hearts >= 0, f"Can't have a negative hearts with any npc."
@@ -156,7 +156,7 @@ class RelationshipLogic(BaseLogic[Union[
         elif npc == ModNPC.goblin:
             rules.append(self.logic.region.can_reach_all((Region.witch_hut, Region.wizard_tower)))
 
-        return And(*rules)
+        return self.logic.and_(*rules)
 
     def can_give_loved_gifts_to_everyone(self) -> StardewRule:
         rules = []
@@ -167,7 +167,7 @@ class RelationshipLogic(BaseLogic[Union[
 
         rules.append(self.logic.gifts.has_any_universal_love)
 
-        return And(*rules)
+        return self.logic.and_(*rules)
 
     # Should be cached
     def can_earn_relationship(self, npc: str, hearts: int = 0) -> StardewRule:
@@ -199,4 +199,4 @@ class RelationshipLogic(BaseLogic[Union[
             elif hearts > 8:
                 rules.append(self.logic.relationship.can_date(npc))
 
-        return And(*rules)
+        return self.logic.and_(*rules)

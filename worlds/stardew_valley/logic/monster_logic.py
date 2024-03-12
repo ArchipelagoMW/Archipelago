@@ -4,11 +4,12 @@ from typing import Iterable, Union, Hashable
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
 from .combat_logic import CombatLogicMixin
+from .has_logic import HasLogicMixin
 from .region_logic import RegionLogicMixin
 from .time_logic import TimeLogicMixin, MAX_MONTHS
 from .. import options
 from ..data import monster_data
-from ..stardew_rule import StardewRule, Or, And
+from ..stardew_rule import StardewRule
 from ..strings.region_names import Region
 
 
@@ -18,7 +19,7 @@ class MonsterLogicMixin(BaseLogicMixin):
         self.monster = MonsterLogic(*args, **kwargs)
 
 
-class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLogicMixin, TimeLogicMixin]]):
+class MonsterLogic(BaseLogic[Union[HasLogicMixin, MonsterLogicMixin, RegionLogicMixin, CombatLogicMixin, TimeLogicMixin]]):
 
     @cached_property
     def all_monsters_by_name(self):
@@ -49,12 +50,12 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
     # Should be cached
     def can_kill_any(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
         rules = [self.logic.monster.can_kill(monster, amount_tier) for monster in monsters]
-        return Or(*rules)
+        return self.logic.or_(*rules)
 
     # Should be cached
     def can_kill_all(self, monsters: (Iterable[monster_data.StardewMonster], Hashable), amount_tier: int = 0) -> StardewRule:
         rules = [self.logic.monster.can_kill(monster, amount_tier) for monster in monsters]
-        return And(*rules)
+        return self.logic.and_(*rules)
 
     def can_complete_all_monster_slaying_goals(self) -> StardewRule:
         rules = [self.logic.time.has_lived_max_months]
@@ -66,4 +67,4 @@ class MonsterLogic(BaseLogic[Union[MonsterLogicMixin, RegionLogicMixin, CombatLo
                 continue
             rules.append(self.logic.monster.can_kill_any(self.all_monsters_by_category[category]))
 
-        return And(*rules)
+        return self.logic.and_(*rules)

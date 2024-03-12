@@ -2,7 +2,7 @@ from typing import Optional
 
 from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
-from ..stardew_rule import StardewRule, Received, And, Or, TotalReceived
+from ..stardew_rule import StardewRule, Received, TotalReceived
 
 
 class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
@@ -15,12 +15,12 @@ class ReceivedLogicMixin(BaseLogic[HasLogicMixin], BaseLogicMixin):
     def received_all(self, *items: str):
         assert items, "Can't receive all of no items."
 
-        return And(*(self.received(item) for item in items))
+        return self.logic.and_(*(self.received(item) for item in items))
 
     def received_any(self, *items: str):
         assert items, "Can't receive any of no items."
 
-        return Or(*(self.received(item) for item in items))
+        return self.logic.or_(*(self.received(item) for item in items))
 
     def received_once(self, *items: str, count: int):
         assert items, "Can't receive once of no items."

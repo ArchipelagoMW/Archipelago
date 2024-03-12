@@ -19,7 +19,7 @@ from ..data.recipe_source import CutsceneSource, ShopTradeSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Chefsanity
 from ..options import ExcludeGingerIsland
-from ..stardew_rule import StardewRule, True_, False_, And
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.region_names import Region
 from ..strings.skill_names import Skill
 from ..strings.tv_channel_names import Channel
@@ -105,4 +105,4 @@ BuildingLogicMixin, RelationshipLogicMixin, SkillLogicMixin, CookingLogicMixin]]
                 continue
             all_recipes_names.append(location.name[len(cooksanity_prefix):])
         all_recipes = [all_cooking_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
-        return And(*(self.logic.cooking.can_cook(recipe) for recipe in all_recipes))
+        return self.logic.and_(*(self.logic.cooking.can_cook(recipe) for recipe in all_recipes))

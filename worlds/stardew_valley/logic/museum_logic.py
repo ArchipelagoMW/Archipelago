@@ -8,7 +8,7 @@ from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .. import options
 from ..data.museum_data import MuseumItem, all_museum_items, all_museum_artifacts, all_museum_minerals
-from ..stardew_rule import StardewRule, And, False_
+from ..stardew_rule import StardewRule, False_
 from ..strings.region_names import Region
 
 
@@ -33,7 +33,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
         else:
             region_rule = False_()
         if item.geodes:
-            geodes_rule = And(*(self.logic.action.can_open_geode(geode) for geode in item.geodes))
+            geodes_rule = self.logic.and_(*(self.logic.action.can_open_geode(geode) for geode in item.geodes))
         else:
             geodes_rule = False_()
         # monster_rule = self.can_farm_monster(item.monsters)
@@ -74,7 +74,7 @@ class MuseumLogic(BaseLogic[Union[ReceivedLogicMixin, HasLogicMixin, RegionLogic
 
         for donation in all_museum_items:
             rules.append(self.logic.museum.can_find_museum_item(donation))
-        return And(*rules) & self.logic.region.can_reach(Region.museum)
+        return self.logic.and_(*rules) & self.logic.region.can_reach(Region.museum)
 
     def can_donate(self, item: str) -> StardewRule:
         return self.logic.has(item) & self.logic.region.can_reach(Region.museum)

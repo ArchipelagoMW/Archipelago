@@ -15,7 +15,7 @@ from .. import options
 from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, Or, False_
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
@@ -109,7 +109,7 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         crop_rules = []
         for crop in all_crops:
             crop_rules.append(self.logic.crop.can_grow(crop))
-        return Or(*crop_rules)
+        return self.logic.or_(*crop_rules)
 
     @cached_property
     def can_get_foraging_xp(self) -> StardewRule:

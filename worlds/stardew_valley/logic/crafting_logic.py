@@ -18,7 +18,7 @@ from ..data.recipe_source import CutsceneSource, ShopTradeSource, ArchipelagoSou
     FestivalShopSource, QuestSource
 from ..locations import locations_by_tag, LocationTags
 from ..options import Craftsanity, SpecialOrderLocations, ExcludeGingerIsland
-from ..stardew_rule import StardewRule, True_, False_, And
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.region_names import Region
 
 
@@ -108,4 +108,4 @@ SkillLogicMixin, SpecialOrderLogicMixin, CraftingLogicMixin, QuestLogicMixin]]):
                 continue
             all_recipes_names.append(location.name[len(craftsanity_prefix):])
         all_recipes = [all_crafting_recipes_by_name[recipe_name] for recipe_name in all_recipes_names]
-        return And(*(self.logic.crafting.can_craft(recipe) for recipe in all_recipes))
+        return self.logic.and_(*(self.logic.crafting.can_craft(recipe) for recipe in all_recipes))

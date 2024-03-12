@@ -47,7 +47,7 @@ from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
 from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, StardewValleyOptions
-from ..stardew_rule import False_, Or, True_, And, StardewRule
+from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
 from ..strings.ap_names.ap_weapon_names import APWeapon
@@ -240,7 +240,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
             Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
-            Fish.any: Or(*(self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value))),
+            Fish.any: self.logic.or_(*(self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value))),
             Fish.crab: self.skill.can_crab_pot_at(Region.beach),
             Fish.crayfish: self.skill.can_crab_pot_at(Region.town),
             Fish.lobster: self.skill.can_crab_pot_at(Region.beach),
@@ -539,7 +539,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
                              Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
                              Vegetable.hops, Vegetable.wheat]
         keg_rules = [self.artisan.can_keg(kegable) for kegable in eligible_kegables]
-        aged_rule = self.has(Machine.cask) & Or(*keg_rules)
+        aged_rule = self.has(Machine.cask) & self.logic.or_(*keg_rules)
         # There are a few other valid items, but I don't feel like coding them all
         return fish_rule | aged_rule
 
@@ -584,28 +584,28 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         reach_southeast = self.region.can_reach(Region.island_south_east)
         reach_field_office = self.region.can_reach(Region.field_office)
         reach_pirate_cove = self.region.can_reach(Region.pirate_cove)
-        reach_outside_areas = And(reach_south, reach_north, reach_west, reach_hut)
+        reach_outside_areas = self.logic.and_(reach_south, reach_north, reach_west, reach_hut)
         reach_volcano_regions = [self.region.can_reach(Region.volcano),
                                  self.region.can_reach(Region.volcano_secret_beach),
                                  self.region.can_reach(Region.volcano_floor_5),
                                  self.region.can_reach(Region.volcano_floor_10)]
-        reach_volcano = Or(*reach_volcano_regions)
-        reach_all_volcano = And(*reach_volcano_regions)
+        reach_volcano = self.logic.or_(*reach_volcano_regions)
+        reach_all_volcano = self.logic.and_(*reach_volcano_regions)
         reach_walnut_regions = [reach_south, reach_north, reach_west, reach_volcano, reach_field_office]
-        reach_caves = And(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
-                          self.region.can_reach(Region.gourmand_frog_cave),
-                          self.region.can_reach(Region.colored_crystals_cave),
-                          self.region.can_reach(Region.shipwreck), self.received(APWeapon.slingshot))
-        reach_entire_island = And(reach_outside_areas, reach_all_volcano,
-                                  reach_caves, reach_southeast, reach_field_office, reach_pirate_cove)
+        reach_caves = self.logic.and_(self.region.can_reach(Region.qi_walnut_room), self.region.can_reach(Region.dig_site),
+                                      self.region.can_reach(Region.gourmand_frog_cave),
+                                      self.region.can_reach(Region.colored_crystals_cave),
+                                      self.region.can_reach(Region.shipwreck), self.received(APWeapon.slingshot))
+        reach_entire_island = self.logic.and_(reach_outside_areas, reach_all_volcano,
+                                              reach_caves, reach_southeast, reach_field_office, reach_pirate_cove)
         if number <= 5:
-            return Or(reach_south, reach_north, reach_west, reach_volcano)
+            return self.logic.or_(reach_south, reach_north, reach_west, reach_volcano)
         if number <= 10:
             return self.count(2, *reach_walnut_regions)
         if number <= 15:
             return self.count(3, *reach_walnut_regions)
         if number <= 20:
-            return And(*reach_walnut_regions)
+            return self.logic.and_(*reach_walnut_regions)
         if number <= 50:
             return reach_entire_island
         gems = (Mineral.amethyst, Mineral.aquamarine, Mineral.emerald, Mineral.ruby, Mineral.topaz)
@@ -643,7 +643,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         if not other_rules:
             return self.received("Stardrop", number_of_stardrops_to_receive)
 
-        return self.received("Stardrop", number_of_stardrops_to_receive) & And(*other_rules)
+        return self.received("Stardrop", number_of_stardrops_to_receive) & self.logic.and_(*other_rules)
 
     def has_prismatic_jelly_reward_access(self) -> StardewRule:
         if self.options.special_order_locations == SpecialOrderLocations.option_disabled:
@@ -654,7 +654,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         rules = []
         for rarecrow_number in range(1, 9):
             rules.append(self.received(f"Rarecrow #{rarecrow_number}"))
-        return And(*rules)
+        return self.logic.and_(*rules)
 
     def has_abandoned_jojamart(self) -> StardewRule:
         return self.received(CommunityUpgrade.movie_theater, 1)

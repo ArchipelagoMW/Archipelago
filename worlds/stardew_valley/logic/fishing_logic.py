@@ -2,6 +2,7 @@ from typing import Union, List
 
 from Utils import cache_self1
 from .base_logic import BaseLogicMixin, BaseLogic
+from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
 from .season_logic import SeasonLogicMixin
@@ -11,7 +12,7 @@ from ..data import FishItem, fish_data
 from ..locations import LocationTags, locations_by_tag
 from ..options import ExcludeGingerIsland, Fishsanity
 from ..options import SpecialOrderLocations
-from ..stardew_rule import StardewRule, True_, False_, And
+from ..stardew_rule import StardewRule, True_, False_
 from ..strings.fish_names import SVEFish
 from ..strings.quality_names import FishQuality
 from ..strings.region_names import Region
@@ -24,7 +25,7 @@ class FishingLogicMixin(BaseLogicMixin):
         self.fishing = FishingLogic(*args, **kwargs)
 
 
-class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin, SkillLogicMixin]]):
+class FishingLogic(BaseLogic[Union[HasLogicMixin, FishingLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, ToolLogicMixin, SkillLogicMixin]]):
     def can_fish_in_freshwater(self) -> StardewRule:
         return self.logic.skill.can_fish() & self.logic.region.can_reach_any((Region.forest, Region.town, Region.mountain))
 
@@ -61,7 +62,8 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             return False_()
         if self.options.special_order_locations != SpecialOrderLocations.option_board_qi:
             return False_()
-        return self.logic.region.can_reach(Region.qi_walnut_room) & And(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.legendary_fish))
+        return (self.logic.region.can_reach(Region.qi_walnut_room) &
+                self.logic.and_(*(self.logic.fishing.can_catch_fish(fish) for fish in fish_data.legendary_fish)))
 
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
@@ -86,7 +88,7 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             if exclude_extended_family and fish in fish_data.extended_family:
                 continue
             rules.append(self.logic.fishing.can_catch_fish(fish))
-        return And(*rules)
+        return self.logic.and_(*rules)
 
     def can_catch_every_fish_in_slot(self, all_location_names_in_slot: List[str]) -> StardewRule:
         if self.options.fishsanity == Fishsanity.option_none:
@@ -98,4 +100,4 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
             if fishsanity_location.name not in all_location_names_in_slot:
                 continue
             rules.append(self.logic.region.can_reach_location(fishsanity_location.name))
-        return And(*rules)
+        return self.logic.and_(*rules)

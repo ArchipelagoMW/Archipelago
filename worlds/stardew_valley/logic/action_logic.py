@@ -5,7 +5,7 @@ from .base_logic import BaseLogic, BaseLogicMixin
 from .has_logic import HasLogicMixin
 from .received_logic import ReceivedLogicMixin
 from .region_logic import RegionLogicMixin
-from ..stardew_rule import StardewRule, True_, Or
+from ..stardew_rule import StardewRule, True_
 from ..strings.generic_names import Generic
 from ..strings.geode_names import Geode
 from ..strings.region_names import Region
@@ -36,5 +36,5 @@ class ActionLogic(BaseLogic[Union[ActionLogicMixin, RegionLogicMixin, ReceivedLo
         blacksmith_access = self.logic.region.can_reach(Region.blacksmith)
         geodes = [Geode.geode, Geode.frozen, Geode.magma, Geode.omni]
         if geode == Generic.any:
-            return blacksmith_access & Or(*(self.logic.has(geode_type) for geode_type in geodes))
+            return blacksmith_access & self.logic.or_(*(self.logic.has(geode_type) for geode_type in geodes))
         return blacksmith_access & self.logic.has(geode)
