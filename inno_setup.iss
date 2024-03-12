@@ -31,8 +31,11 @@ ArchitecturesAllowed=x64 arm64
 AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
+#ifndef NO_SIGNTOOL
+; You will likely have to remove the SignTool= line when testing/debugging locally or run with iscc.exe /DNO_SIGNTOOL.
+; Don't include that change in PRs.
 SignTool= signtool
+#endif
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
