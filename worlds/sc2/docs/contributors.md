@@ -20,14 +20,23 @@ Contibutors are listed with preferred or Discord names first, with github userna
 * BicolourSnake (@Bicoloursnake)
 * @NobleXenon
 * Severencir (@Severencir)
-* neocerber (@neocerber @MaxTousss)
-* @Matiya-star
+* neocerber (@neocerber)
+* Mati (@Matiya-star)
 * Ixzine
 * sweetox
 * 8thDaughterOfFrost
+* The M8
+* Berserker (@Berserker66)
+* KaitoKid
+* Sheen
+* ProfBytes
+* IncoherentOrange
+* eudaimonistic
+* Figment
 
 ## Older versions
 Not all contributors to older versions of Archipelago Starcraft 2 are known.
 
-TheCondor (@TheCondor07) is the original maintainer of the project.
+TheCondor (@TheCondor07) is the original maintainer of the project. Other known contributors include:
+* soldieroforder
 
