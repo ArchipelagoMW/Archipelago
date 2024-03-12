@@ -103,6 +103,7 @@ class AutopelagoWorld(World):
             for exit in region.exits:
                 connection = Entrance(self.player, parent=r)
                 connection.access_rule = lambda state: self._is_satisfied(region.requires, state)
+                r.exits.append(connection)
                 connection.connect(new_regions[exit])
 
         self.multiworld.regions += new_regions.values()
