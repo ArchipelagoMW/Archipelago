@@ -27,6 +27,7 @@ class EarlyCaves(Choice):
     option_add_to_pool = 1
     option_starting_inventory = 2
     alias_true = 2
+    alias_on = 2
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -45,6 +46,7 @@ class ShuffleLasers(Choice):
     option_local = 1
     option_anywhere = 2
     alias_true = 2
+    alias_on = 2
 
 
 class ShuffleDoors(Choice):
