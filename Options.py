@@ -180,6 +180,14 @@ class FreeText(Option[str]):
     def get_option_name(cls, value: str) -> str:
         return value
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.value
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
