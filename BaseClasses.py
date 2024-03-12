@@ -1032,7 +1032,7 @@ class Location:
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    always_allow = staticmethod(lambda item, state: False)
+    always_allow = staticmethod(lambda state, item: False)
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
