@@ -123,6 +123,104 @@ class PokemonRedBlueWorld(World):
             if not os.path.exists(get_base_rom_path(version)):
                 raise FileNotFoundError(get_base_rom_path(version))
 
+    @classmethod
+    def stage_generate_early(cls, multiworld: MultiWorld):
+
+        seed_groups = {}
+        pokemon_rb_worlds = multiworld.get_game_worlds("Pokemon Red and Blue")
+
+        for world in pokemon_rb_worlds:
+            if not (world.options.type_chart_seed.value.isdigit() or world.options.type_chart_seed.value == "random"):
+                seed_groups[world.options.type_chart_seed.value] = seed_groups.get(world.options.type_chart_seed.value,
+                                                                                   []) + [world]
+
+        copy_chart_worlds = {}
+
+        for worlds in seed_groups.values():
+            chosen_world = multiworld.random.choice(worlds)
+            for world in worlds:
+                if world is not chosen_world:
+                    copy_chart_worlds[world.player] = chosen_world
+
+        for world in pokemon_rb_worlds:
+            if world.player in copy_chart_worlds:
+                continue
+            tc_random = world.random
+            if world.options.type_chart_seed.value.isdigit():
+                tc_random = random.Random()
+                tc_random.seed(int(world.options.type_chart_seed.value))
+
+            if world.options.randomize_type_chart == "vanilla":
+                chart = deepcopy(poke_data.type_chart)
+            elif world.options.randomize_type_chart == "randomize":
+                types = poke_data.type_names.values()
+                matchups = []
+                for type1 in types:
+                    for type2 in types:
+                        matchups.append([type1, type2])
+                tc_random.shuffle(matchups)
+                immunities = world.options.immunity_matchups.value
+                super_effectives = world.options.super_effective_matchups.value
+                not_very_effectives = world.options.not_very_effective_matchups.value
+                normals = world.options.normal_matchups.value
+                while super_effectives + not_very_effectives + normals < 225 - immunities:
+                    if super_effectives == not_very_effectives == normals == 0:
+                        super_effectives = 225
+                        not_very_effectives = 225
+                        normals = 225
+                    else:
+                        super_effectives += world.options.super_effective_matchups.value
+                        not_very_effectives += world.options.not_very_effective_matchups.value
+                        normals += world.options.normal_matchups.value
+                if super_effectives + not_very_effectives + normals > 225 - immunities:
+                    total = super_effectives + not_very_effectives + normals
+                    excess = total - (225 - immunities)
+                    subtract_amounts = (
+                        int((excess / (super_effectives + not_very_effectives + normals)) * super_effectives),
+                        int((excess / (super_effectives + not_very_effectives + normals)) * not_very_effectives),
+                        int((excess / (super_effectives + not_very_effectives + normals)) * normals))
+                    super_effectives -= subtract_amounts[0]
+                    not_very_effectives -= subtract_amounts[1]
+                    normals -= subtract_amounts[2]
+                    while super_effectives + not_very_effectives + normals > 225 - immunities:
+                        r = tc_random.randint(0, 2)
+                        if r == 0 and super_effectives:
+                            super_effectives -= 1
+                        elif r == 1 and not_very_effectives:
+                            not_very_effectives -= 1
+                        elif normals:
+                            normals -= 1
+                chart = []
+                for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
+                                                       [0, 10, 20, 5]):
+                    for _ in range(matchup_list):
+                        matchup = matchups.pop()
+                        matchup.append(matchup_value)
+                        chart.append(matchup)
+            elif world.options.randomize_type_chart == "chaos":
+                types = poke_data.type_names.values()
+                matchups = []
+                for type1 in types:
+                    for type2 in types:
+                        matchups.append([type1, type2])
+                chart = []
+                values = list(range(21))
+                tc_random.shuffle(matchups)
+                tc_random.shuffle(values)
+                for matchup in matchups:
+                    value = values.pop(0)
+                    values.append(value)
+                    matchup.append(value)
+                    chart.append(matchup)
+            # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
+            # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
+            # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
+            # to the way effectiveness messages are generated.
+            world.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
+
+        for player in copy_chart_worlds:
+            multiworld.worlds[player].type_chart = copy_chart_worlds[player].type_chart
+
     def generate_early(self):
         def encode_name(name, t):
             try:
@@ -164,82 +262,6 @@ class PokemonRedBlueWorld(World):
 
         process_move_data(self)
         process_pokemon_data(self)
-
-        tc_random = self.random
-        if self.options.type_chart_seed.value != "random":
-            tc_random = random.Random()
-            if self.options.type_chart_seed.value.isdigit():
-                tc_random.seed(int(self.options.type_chart_seed.value))
-            else:
-                tc_random.seed(int(hash(self.options.type_chart_seed.value)) + int(self.multiworld.seed))
-
-        if self.options.randomize_type_chart == "vanilla":
-            chart = deepcopy(poke_data.type_chart)
-        elif self.options.randomize_type_chart == "randomize":
-            types = poke_data.type_names.values()
-            matchups = []
-            for type1 in types:
-                for type2 in types:
-                    matchups.append([type1, type2])
-            tc_random.shuffle(matchups)
-            immunities = self.options.immunity_matchups.value
-            super_effectives = self.options.super_effective_matchups.value
-            not_very_effectives = self.options.not_very_effective_matchups.value
-            normals = self.options.normal_matchups.value
-            while super_effectives + not_very_effectives + normals < 225 - immunities:
-                if super_effectives == not_very_effectives == normals == 0:
-                    super_effectives = 225
-                    not_very_effectives = 225
-                    normals = 225
-                else:
-                    super_effectives += self.options.super_effective_matchups.value
-                    not_very_effectives += self.options.not_very_effective_matchups.value
-                    normals += self.options.normal_matchups.value
-            if super_effectives + not_very_effectives + normals > 225 - immunities:
-                total = super_effectives + not_very_effectives + normals
-                excess = total - (225 - immunities)
-                subtract_amounts = (
-                    int((excess / (super_effectives + not_very_effectives + normals)) * super_effectives),
-                    int((excess / (super_effectives + not_very_effectives + normals)) * not_very_effectives),
-                    int((excess / (super_effectives + not_very_effectives + normals)) * normals))
-                super_effectives -= subtract_amounts[0]
-                not_very_effectives -= subtract_amounts[1]
-                normals -= subtract_amounts[2]
-                while super_effectives + not_very_effectives + normals > 225 - immunities:
-                    r = tc_random.randint(0, 2)
-                    if r == 0 and super_effectives:
-                        super_effectives -= 1
-                    elif r == 1 and not_very_effectives:
-                        not_very_effectives -= 1
-                    elif normals:
-                        normals -= 1
-            chart = []
-            for matchup_list, matchup_value in zip([immunities, normals, super_effectives, not_very_effectives],
-                                                   [0, 10, 20, 5]):
-                for _ in range(matchup_list):
-                    matchup = matchups.pop()
-                    matchup.append(matchup_value)
-                    chart.append(matchup)
-        elif self.options.randomize_type_chart == "chaos":
-            types = poke_data.type_names.values()
-            matchups = []
-            for type1 in types:
-                for type2 in types:
-                    matchups.append([type1, type2])
-            chart = []
-            values = list(range(21))
-            tc_random.shuffle(matchups)
-            tc_random.shuffle(values)
-            for matchup in matchups:
-                value = values.pop(0)
-                values.append(value)
-                matchup.append(value)
-                chart.append(matchup)
-        # sort so that super-effective matchups occur first, to prevent dual "not very effective" / "super effective"
-        # matchups from leading to damage being ultimately divided by 2 and then multiplied by 2, which can lead to
-        # damage being reduced by 1 which leads to a "not very effective" message appearing due to my changes
-        # to the way effectiveness messages are generated.
-        self.type_chart = sorted(chart, key=lambda matchup: -matchup[2])
 
         self.dexsanity_table = [
             *(True for _ in range(round(self.options.dexsanity.value * 1.51))),

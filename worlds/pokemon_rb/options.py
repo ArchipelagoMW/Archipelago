@@ -713,8 +713,9 @@ class RandomizeTypeChart(Choice):
 
 class TypeChartSeed(FreeText):
     """You can enter a number to use as a seed for the type chart. If you enter anything besides a number or "random",
-    it will be used as a type chart group name, and everyone using the same group name will get the same type chart.
-    If a group name is used, the type matchup information will not be made available for trackers."""
+    it will be used as a type chart group name, and everyone using the same group name will get the same type chart,
+    made using the type chart options of one random player within the group. If a group name is used, the type matchup
+    information will not be made available for trackers."""
     display_name = "Type Chart Seed"
     default = "random"
 
