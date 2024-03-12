@@ -1390,13 +1390,13 @@ class Spoiler:
 
             AutoWorld.call_all(self.multiworld, "write_spoiler", outfile)
 
-            precollected_items = [f'{item.name} ({self.multiworld.get_player_name(item.player)})'
+            precollected_items = [f"{item.name} ({self.multiworld.get_player_name(item.player)})"
                                   if self.multiworld.players > 1
                                   else item.name
                                   for item in chain.from_iterable(self.multiworld.precollected_items.values())]
             if precollected_items:
-                outfile.write('\n\nPrecollected Items:\n\n')
-                outfile.write('\n'.join([item for item in precollected_items]))
+                outfile.write("\n\nPrecollected Items:\n\n")
+                outfile.write("\n".join([item for item in precollected_items]))
 
             locations = [(str(location), str(location.item) if location.item is not None else "Nothing")
                          for location in self.multiworld.get_locations() if location.show_in_spoiler]
