@@ -707,14 +707,17 @@ class Context:
         self.save()  # save goal completion flag
 
     def on_new_hint(self, team: int, slot: int):
-        key: str = f"_read_hints_{team}_{slot}"
-        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
-        if targets:
-            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
+        self.on_changed_hints(team, slot)
         self.broadcast(self.clients[team][slot], [{
             "cmd": "RoomUpdate",
             "hint_points": get_slot_points(self, team, slot)
         }])
+
+    def on_changed_hints(self, team: int, slot: int):
+        key: str = f"_read_hints_{team}_{slot}"
+        targets: typing.Set[Client] = set(self.stored_data_notification_clients[key])
+        if targets:
+            self.broadcast(targets, [{"cmd": "SetReply", "key": key, "value": self.hints[team, slot]}])
 
     def on_client_status_change(self, team: int, slot: int):
         key: str = f"_read_client_status_{team}_{slot}"
@@ -975,7 +978,10 @@ def register_location_checks(ctx: Context, team: int, slot: int, locations: typi
             "hint_points": get_slot_points(ctx, team, slot),
             "checked_locations": new_locations,  # send back new checks only
         }])
-
+        old_hints = ctx.hints[team, slot].copy()
+        ctx.recheck_hints(team, slot)
+        if old_hints != ctx.hints[team, slot]:
+            ctx.on_changed_hints(team, slot)
         ctx.save()
 
 
