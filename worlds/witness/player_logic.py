@@ -63,26 +63,30 @@ class WitnessPlayerLogic:
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
-            all_options = set()
+            all_options: Set[FrozenSet[str]] = set()
 
             for dependentItem in door_items:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependentItem)
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
-            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
-            # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
-            # In the future, it would be wise to make a distinction between "power dependencies" and other dependencies.
-            if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
-                these_items = all_options
+            # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
+            if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] != "EP":
+                # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
+                # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
+                # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
+                if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
+                    these_items = all_options
 
-            # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
-            elif panel_hex == "0x1C349":
-                these_items = all_options
+                # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
+                elif panel_hex == "0x1C349":
+                    these_items = all_options
 
-            # For any other door entity, we just return a set with the item that opens it & disregard power dependencies
+                else:
+                    return frozenset(all_options)
+
             else:
-                return frozenset(all_options)
+                these_items = all_options
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
@@ -429,6 +433,9 @@ class WitnessPlayerLogic:
         if lasers:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
+        if world.options.shuffle_EPs and world.options.obelisk_keys:
+            adjustment_linesets_in_order.append(get_obelisk_keys())
+
         if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
@@ -442,7 +449,7 @@ class WitnessPlayerLogic:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
