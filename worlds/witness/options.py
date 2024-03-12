@@ -23,8 +23,11 @@ class EarlyCaves(Choice):
     If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing."""
     display_name = "Early Caves"
     option_off = 0
+    alias_false = 0
     option_add_to_pool = 1
     option_starting_inventory = 2
+    alias_true = 2
+    alias_on = 2
 
 
 class ShuffleSymbols(DefaultOnToggle):
@@ -39,8 +42,11 @@ class ShuffleLasers(Choice):
     be redirected as normal, for both applications of redirection."""
     display_name = "Shuffle Lasers"
     option_off = 0
+    alias_false = 0
     option_local = 1
     option_anywhere = 2
+    alias_true = 2
+    alias_on = 2
 
 
 class ShuffleDoors(Choice):
