@@ -12,7 +12,7 @@ def level_scaling(multiworld):
         for world in multiworld.get_game_worlds("Pokemon Red and Blue"):
             if (multiworld.worlds[world.player].options.level_scaling != "by_spheres_and_distance"
                     and (multiworld.worlds[world.player].options.level_scaling != "auto"
-                         or multiworld.worlds[world.player].options.door_shuffle[world.player] in ("off", "simple"))):
+                         or multiworld.worlds[world.player].options.door_shuffle in ("off", "simple"))):
                 continue
             regions = {multiworld.get_region("Menu", world.player)}
             checked_regions = set()
@@ -95,9 +95,9 @@ def level_scaling(multiworld):
             if (location.item.game == "Pokemon Red and Blue" and (location.item.name.startswith("Missable ") or
                     location.item.name.startswith("Static ")) and location.name !=
                     "Pokemon Tower 6F - Restless Soul"):
-                # Normally, missable Pokemon (starters, the dojo rewards) are not considered in logic static Pokemon
-                # are not considered for moves or evolutions, as you could release them and potentially soft lock
-                # the game. However, for level scaling purposes, we will treat them as not missable or static.
+                # Normally, missable Pokemon (starters, the dojo rewards) are not considered in logic, and static
+                # Pokemon are not considered for moves or evolutions, as you could release them and potentially soft
+                # lock the game. However, for level scaling purposes, we will treat them as not missable or static.
                 # We would not want someone playing a minimal accessibility Dexsanity game to get what would be
                 # technically an "out of logic" Mansion Key from selecting Bulbasaur at the beginning of the game
                 # and end up in the Mansion early and encountering level 67 Pokémon
