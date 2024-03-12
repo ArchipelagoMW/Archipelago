@@ -185,7 +185,6 @@ location_name_to_unrandomized_nonprogression_item: dict[str, Optional[Literal['u
 _id_gen = _gen_ids()
 for k, r in _defs['regions']['landmarks'].items():
     location_name_to_unrandomized_progression_item_name[r['name']] = item_key_to_name[r['unrandomized_item']]
-    location_name_to_unrandomized_nonprogression_item[r['name']] = None
     location_name_to_requirement[r['name']] = { 'all': r['requires'] }
     location_name_to_id[r['name']] = next(_id_gen)
     regions[k] = AutopelagoRegionDefinition(k, r['exits'], [r['name']], r['requires'])
@@ -198,7 +197,6 @@ for rk, r in _defs['regions']['fillers'].items():
         if isinstance(k, str):
             _name = r['name_template'].replace('{n}', f'{_cur}')
             location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[k]
-            location_name_to_unrandomized_nonprogression_item[_name] = None
             location_name_to_requirement[_name] = { 'all': r['each_requires'] }
             location_name_to_id[_name] = next(_id_gen)
             _locations.append(_name)
@@ -207,14 +205,12 @@ for rk, r in _defs['regions']['fillers'].items():
             for i in range(k['count']):
                 _name = r['name_template'].replace('{n}', f'{_cur}')
                 location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[k['item']]
-                location_name_to_unrandomized_nonprogression_item[_name] = None
                 location_name_to_requirement[_name] = { 'all': r['each_requires'] }
                 location_name_to_id[_name] = next(_id_gen)
                 _locations.append(_name)
                 _cur += 1
     for i in range(r['unrandomized_items']['useful_nonprogression']):
         _name = r['name_template'].replace('{n}', f'{_cur}')
-        location_name_to_unrandomized_progression_item_name[_name] = None
         location_name_to_unrandomized_nonprogression_item[_name] = 'useful_nonprogression'
         location_name_to_requirement[_name] = { 'all': r['each_requires'] }
         location_name_to_id[_name] = next(_id_gen)
@@ -222,7 +218,6 @@ for rk, r in _defs['regions']['fillers'].items():
         _cur += 1
     for i in range(r['unrandomized_items']['filler']):
         _name = r['name_template'].replace('{n}', f'{_cur}')
-        location_name_to_unrandomized_progression_item_name[_name] = None
         location_name_to_unrandomized_nonprogression_item[_name] = 'filler'
         location_name_to_requirement[_name] = { 'all': r['each_requires'] }
         location_name_to_id[_name] = next(_id_gen)

@@ -63,7 +63,7 @@ class AutopelagoWorld(World):
             return True
 
     def create_item(self, name: str, classification: ItemClassification | None = None):
-        id = self.item_name_to_id[name]
+        id = item_name_to_id[name]
         classification = classification or item_name_to_defined_classification[name]
         assert classification is not None, 'Classification should either be defined, calculated during generate_early, or hardcoded.'
         item = AutopelagoItem(name, classification, id, self.player)
@@ -97,13 +97,13 @@ class AutopelagoWorld(World):
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        new_regions = { r.key: self.create_region(r) for r in regions }
+        new_regions = { r.key: self.create_region(r) for r in regions.values() }
         for r in new_regions.values():
             region = regions[r.name]
             for exit in region.exits:
                 connection = Entrance(self.player, parent=r)
                 connection.access_rule = lambda state: self._is_satisfied(region.requires, state)
-                connection.connect(regions[exit])
+                connection.connect(new_regions[exit])
 
         self.multiworld.regions += new_regions.values()
         self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(new_regions['goal'], self.player)
