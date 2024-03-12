@@ -31,7 +31,7 @@ To downpatch DS3 for use with Archipelago, use the following instructions from t
 6. Back up your existing game executable (`DarkSoulsIII.exe`) found in `\Steam\steamapps\common\DARK SOULS III\Game`. Easiest way to do this is to move it to another directory. If you have file extensions enabled, you can instead rename the executable to `DarkSoulsIII.exe.bak`.
 7. Return to the Steam console. Once the download is complete, it should say so along with the temporary local directory in which the depot has been stored. This is usually something like `\Steam\steamapps\content\app_XXXXXX\depot_XXXXXX`.
 8. Take the `DarkSoulsIII.exe` from that folder and place it in `\Steam\steamapps\common\DARK SOULS III\Game`.
-9. Back up and delete your save file (`DS30000.sl2`) in AppData. AppData is hidden by default. To locate it, press Windows Key + R, type `%appdata%` and hit enter. Alternatively: open File Explorer > View > Hidden Items and follow `C:\Users\<your_username>\AppData\Roaming\DarkSoulsIII\numbers`.
+9. Back up and delete your save file (`DS30000.sl2`) in AppData. AppData is hidden by default. To locate it, press Windows Key + R, type `%appdata%` and hit enter. Alternatively: open File Explorer > View > Hidden Items and follow `C:\Users\<your_username>\AppData\Roaming\DarkSoulsIII\<numbers>`.
 10. If you did all these steps correctly, you should be able to confirm your game version in the upper-left corner after launching Dark Souls III.
 
 
