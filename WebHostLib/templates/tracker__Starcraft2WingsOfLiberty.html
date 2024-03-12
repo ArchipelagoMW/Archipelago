@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+{% macro sc2_icon(name) -%}
+    <img src="{{ icons[name] }}" class="{{ 'acquired' if name in acquired_items }}" title="{{ name }}" />
+{% endmacro -%}
+{% macro sc2_progressive_icon(name, url, level) -%}
+    <img src="{{ url }}" class="{{ 'acquired' if name in acquired_items }}" title="{{ name }}{% if level > 0 %} (Level {{ level }}){% endif %}" />
+{% endmacro -%}
+{% macro sc2_progressive_icon_with_custom_name(item_name, url, title) -%}
+    <img src="{{ url }}" class="{{ 'acquired' if item_name in acquired_items }}" title="{{ title }}" />
+{% endmacro -%}
+{%+ macro sc2_tint_level(level) %}
+    tint-level-{{ level }}
+{%+ endmacro %}
 <html lang="en">
 <head>
     <title>{{ player_name }}&apos;s Tracker</title>
@@ -25,10 +37,10 @@
                 <td colspan="2"><div class="item-count">+{{ minerals_count }}</div></td>
                 <td><img src="{{ icons['Starting Vespene'] }}" class="{{ 'acquired' if '+15 Starting Vespene' in acquired_items }}" title="Starting Vespene" /></td>
                 <td colspan="2"><div class="item-count">+{{ vespene_count }}</div></td>
-                <!--
+                {#
                 <td><img src="{{ icons['Starting Supply'] }}" class="{{ 'acquired' if '+2 Starting Supply' in acquired_items }}" title="Starting Supply" /></td>
                 <td colspan="2"><div class="item-count">+{{ supply_count }}</div></td>
-                -->
+                #}
             </tr>
             <tr>
                 <td colspan="15" class="title">
@@ -36,15 +48,16 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ infantry_weapon_url }}" class="{{ 'acquired' if 'Progressive Infantry Weapon' in acquired_items }}" title="Progressive Infantry Weapons{% if infantry_weapon_level > 0 %} (Level {{ infantry_weapon_level }}){% endif %}" /></td>
-                <td><img src="{{ infantry_armor_url }}" class="{{ 'acquired' if 'Progressive Infantry Armor' in acquired_items }}" title="Progressive Infantry Armor{% if infantry_armor_level > 0 %} (Level {{ infantry_armor_level }}){% endif %}" /></td>
-                <td><img src="{{ vehicle_weapon_url }}" class="{{ 'acquired' if 'Progressive Vehicle Weapon' in acquired_items }}" title="Progressive Vehicle Weapons{% if vehicle_weapon_level > 0 %} (Level {{ vehicle_weapon_level }}){% endif %}" /></td>
-                <td><img src="{{ vehicle_armor_url }}" class="{{ 'acquired' if 'Progressive Vehicle Armor' in acquired_items }}" title="Progressive Vehicle Armor{% if vehicle_armor_level > 0 %} (Level {{ vehicle_armor_level }}){% endif %}" /></td>
-                <td><img src="{{ ship_weapon_url }}" class="{{ 'acquired' if 'Progressive Ship Weapon' in acquired_items }}" title="Progressive Ship Weapons{% if ship_weapon_level > 0 %} (Level {{ ship_weapon_level }}){% endif %}" /></td>
-                <td><img src="{{ ship_armor_url }}" class="{{ 'acquired' if 'Progressive Ship Armor' in acquired_items }}" title="Progressive Ship Armor{% if ship_armor_level > 0 %} (Level {{ ship_armor_level }}){% endif %}" /></td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Infantry Weapon', terran_infantry_weapon_url, terran_infantry_weapon_level) }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Infantry Armor', terran_infantry_armor_url, terran_infantry_armor_level) }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Vehicle Weapon', terran_vehicle_weapon_url, terran_vehicle_weapon_level) }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Vehicle Armor', terran_vehicle_armor_url, terran_vehicle_armor_level) }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Ship Weapon', terran_ship_weapon_url, terran_ship_weapon_level) }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Terran Ship Armor', terran_ship_armor_url, terran_ship_armor_level) }}</td>
+
                 <td colspan="2"></td>
-                <td><img src="{{ icons['Ultra-Capacitors'] }}" class="{{ 'acquired' if 'Ultra-Capacitors' in acquired_items }}" title="Ultra-Capacitors" /></td>
-                <td><img src="{{ icons['Vanadium Plating'] }}" class="{{ 'acquired' if 'Vanadium Plating' in acquired_items }}" title="Vanadium Plating" /></td>
+                <td>{{ sc2_icon('Ultra-Capacitors') }}</td>
+                <td>{{ sc2_icon('Vanadium Plating') }}</td>
             </tr>
             <tr>
                 <td colspan="15" class="title">
@@ -52,39 +65,41 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Bunker'] }}" class="{{ 'acquired' if 'Bunker' in acquired_items }}" title="Bunker" /></td>
-                <td><img src="{{ icons['Projectile Accelerator (Bunker)'] }}" class="{{ 'acquired' if 'Projectile Accelerator (Bunker)' in acquired_items }}" title="Projectile Accelerator (Bunker)" /></td>
-                <td><img src="{{ icons['Neosteel Bunker (Bunker)'] }}" class="{{ 'acquired' if 'Neosteel Bunker (Bunker)' in acquired_items }}" title="Neosteel Bunker (Bunker)" /></td>
-                <td><img src="{{ icons['Shrike Turret (Bunker)'] }}" class="{{ 'acquired' if 'Shrike Turret (Bunker)' in acquired_items }}" title="Shrike Turret (Bunker)" /></td>
-                <td><img src="{{ icons['Fortified Bunker (Bunker)'] }}" class="{{ 'acquired' if 'Fortified Bunker (Bunker)' in acquired_items }}" title="Fortified Bunker (Bunker)" /></td>
+                <td>{{ sc2_icon('Bunker') }}</td>
+                <td>{{ sc2_icon('Projectile Accelerator (Bunker)') }}</td>
+                <td>{{ sc2_icon('Neosteel Bunker (Bunker)') }}</td>
+                <td>{{ sc2_icon('Shrike Turret (Bunker)') }}</td>
+                <td>{{ sc2_icon('Fortified Bunker (Bunker)') }}</td>
                 <td colspan="3"></td>
-                <td><img src="{{ icons['Missile Turret'] }}" class="{{ 'acquired' if 'Missile Turret' in acquired_items }}" title="Missile Turret" /></td>
-                <td><img src="{{ icons['Titanium Housing (Missile Turret)'] }}" class="{{ 'acquired' if 'Titanium Housing (Missile Turret)' in acquired_items }}" title="Titanium Housing (Missile Turret)" /></td>
-                <td><img src="{{ icons['Hellstorm Batteries (Missile Turret)'] }}" class="{{ 'acquired' if 'Hellstorm Batteries (Missile Turret)' in acquired_items }}" title="Hellstorm Batteries (Missile Turret)" /></td>
+                <td>{{ sc2_icon('Missile Turret') }}</td>
+                <td>{{ sc2_icon('Titanium Housing (Missile Turret)') }}</td>
+                <td>{{ sc2_icon('Hellstorm Batteries (Missile Turret)') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Tech Reactor') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Orbital Depots') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Orbital Command (Building)'] }}" class="{{ 'acquired' if 'Orbital Command (Building)' in acquired_items }}" title="Orbital Command (Building)" /></td>
-                <td><img src="{{ icons['Command Center Reactor'] }}" class="{{ 'acquired' if 'Command Center Reactor' in acquired_items }}" title="Command Center Reactor" /></td>
-                <td><img src="{{ icons['Planetary Fortress'] }}" class="{{ 'acquired' if 'Planetary Fortress' in acquired_items }}" title="Planetary Fortress" /></td>
+                <td>{{ sc2_icon('Command Center Reactor') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Orbital Command', orbital_command_url, orbital_command_name) }}</td>
+                <td>{{ sc2_icon('Planetary Fortress') }}</td>
+                <td {% if augmented_thrusters_planetary_fortress_level == 1 %}class="tint-terran"{% endif %}>{{ sc2_progressive_icon_with_custom_name('Progressive Augmented Thrusters (Planetary Fortress)', augmented_thrusters_planetary_fortress_url, augmented_thrusters_planetary_fortress_name) }}</td>
+                <td>{{ sc2_icon('Advanced Targeting (Planetary Fortress)') }}</td>
                 <td></td>
-                <td><img src="{{ icons['Advanced Construction (SCV)'] }}" class="{{ 'acquired' if 'Advanced Construction (SCV)' in acquired_items }}" title="Advanced Construction (SCV)" /></td>
-                <td><img src="{{ icons['Dual-Fusion Welders (SCV)'] }}" class="{{ 'acquired' if 'Dual-Fusion Welders (SCV)' in acquired_items }}" title="Dual-Fusion Welders (SCV)" /></td>
+                <td>{{ sc2_icon('Advanced Construction (SCV)') }}</td>
+                <td>{{ sc2_icon('Dual-Fusion Welders (SCV)') }}</td>
                 <td></td>
-                <td><img src="{{ icons['Micro-Filtering'] }}" class="{{ 'acquired' if 'Micro-Filtering' in acquired_items }}" title="Micro-Filtering" /></td>
-                <td><img src="{{ icons['Automated Refinery'] }}" class="{{ 'acquired' if 'Automated Refinery' in acquired_items }}" title="Automated Refinery" /></td>
-                <td></td>
-                <td><img src="{{ icons['Tech Reactor'] }}" class="{{ 'acquired' if 'Tech Reactor' in acquired_items }}" title="Tech Reactor" /></td>
-                <td></td>
-                <td><img src="{{ icons['Orbital Depots'] }}" class="{{ 'acquired' if 'Orbital Depots' in acquired_items }}" title="Orbital Depots" /></td>
+                <td>{{ sc2_icon('Micro-Filtering') }}</td>
+                <td>{{ sc2_icon('Automated Refinery') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Sensor Tower'] }}" class="{{ 'acquired' if 'Sensor Tower' in acquired_items }}" title="Sensor Tower" /></td>
+                <td>{{ sc2_icon('Sensor Tower') }}</td>
                 <td></td>
-                <td><img src="{{ icons['Perdition Turret'] }}" class="{{ 'acquired' if 'Perdition Turret' in acquired_items }}" title="Perdition Turret" /></td>
+                <td>{{ sc2_icon('Perdition Turret') }}</td>
                 <td></td>
-                <td><img src="{{ icons['Hive Mind Emulator'] }}" class="{{ 'acquired' if 'Hive Mind Emulator' in acquired_items }}" title="Hive Mind Emulator" /></td>
+                <td>{{ sc2_icon('Hive Mind Emulator') }}</td>
                 <td></td>
-                <td><img src="{{ icons['Psi Disrupter'] }}" class="{{ 'acquired' if 'Psi Disrupter' in acquired_items }}" title="Psi Disrupter" /></td>
+                <td>{{ sc2_icon('Psi Disrupter') }}</td>
             </tr>
             <tr>
                 <td colspan="7" class="title">
@@ -96,133 +111,174 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Marine'] }}" class="{{ 'acquired' if 'Marine' in acquired_items }}" title="Marine" /></td>
-                <td><img src="{{ stimpack_marine_url }}" class="{{ 'acquired' if 'Progressive Stimpack (Marine)' in acquired_items }}" title="{{ stimpack_marine_name }}" /></td>
-                <td><img src="{{ icons['Combat Shield (Marine)'] }}" class="{{ 'acquired' if 'Combat Shield (Marine)' in acquired_items }}" title="Combat Shield (Marine)" /></td>
-                <td><img src="{{ icons['Laser Targeting System (Marine)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Marine)' in acquired_items }}" title="Laser Targeting System (Marine)" /></td>
-                <td><img src="{{ icons['Magrail Munitions (Marine)'] }}" class="{{ 'acquired' if 'Magrail Munitions (Marine)' in acquired_items }}" title="Magrail Munitions (Marine)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Marine)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Marine)' in acquired_items }}" title="Optimized Logistics (Marine)" /></td>
+                <td>{{ sc2_icon('Marine') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stimpack (Marine)', stimpack_marine_url, stimpack_marine_name) }}</td>
+                <td>{{ sc2_icon('Combat Shield (Marine)') }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Marine)') }}</td>
+                <td>{{ sc2_icon('Magrail Munitions (Marine)') }}</td>
+                <td>{{ sc2_icon('Optimized Logistics (Marine)') }}</td>
                 <td colspan="2"></td>
-                <td><img src="{{ icons['Hellion'] }}" class="{{ 'acquired' if 'Hellion' in acquired_items }}" title="Hellion" /></td>
-                <td><img src="{{ icons['Twin-Linked Flamethrower (Hellion)'] }}" class="{{ 'acquired' if 'Twin-Linked Flamethrower (Hellion)' in acquired_items }}" title="Twin-Linked Flamethrower (Hellion)" /></td>
-                <td><img src="{{ icons['Thermite Filaments (Hellion)'] }}" class="{{ 'acquired' if 'Thermite Filaments (Hellion)' in acquired_items }}" title="Thermite Filaments (Hellion)" /></td>
-                <td><img src="{{ icons['Hellbat Aspect (Hellion)'] }}" class="{{ 'acquired' if 'Hellbat Aspect (Hellion)' in acquired_items }}" title="Hellbat Aspect (Hellion)" /></td>
-                <td><img src="{{ icons['Smart Servos (Hellion)'] }}" class="{{ 'acquired' if 'Smart Servos (Hellion)' in acquired_items }}" title="Smart Servos (Hellion)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Hellion)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Hellion)' in acquired_items }}" title="Optimized Logistics (Hellion)" /></td>
-                <td><img src="{{ icons['Jump Jets (Hellion)'] }}" class="{{ 'acquired' if 'Jump Jets (Hellion)' in acquired_items }}" title="Jump Jets (Hellion)" /></td>
+                <td>{{ sc2_icon('Hellion') }}</td>
+                <td>{{ sc2_icon('Twin-Linked Flamethrower (Hellion)') }}</td>
+                <td>{{ sc2_icon('Thermite Filaments (Hellion)') }}</td>
+                <td>{{ sc2_icon('Hellbat Aspect (Hellion)') }}</td>
+                <td>{{ sc2_icon('Smart Servos (Hellion)') }}</td>
+                <td>{{ sc2_icon('Optimized Logistics (Hellion)') }}</td>
+                <td>{{ sc2_icon('Jump Jets (Hellion)') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Medic'] }}" class="{{ 'acquired' if 'Medic' in acquired_items }}" title="Medic" /></td>
-                <td><img src="{{ icons['Advanced Medic Facilities (Medic)'] }}" class="{{ 'acquired' if 'Advanced Medic Facilities (Medic)' in acquired_items }}" title="Advanced Medic Facilities (Medic)" /></td>
-                <td><img src="{{ icons['Stabilizer Medpacks (Medic)'] }}" class="{{ 'acquired' if 'Stabilizer Medpacks (Medic)' in acquired_items }}" title="Stabilizer Medpacks (Medic)" /></td>
-                <td><img src="{{ icons['Restoration (Medic)'] }}" class="{{ 'acquired' if 'Restoration (Medic)' in acquired_items }}" title="Restoration (Medic)" /></td>
-                <td><img src="{{ icons['Optical Flare (Medic)'] }}" class="{{ 'acquired' if 'Optical Flare (Medic)' in acquired_items }}" title="Optical Flare (Medic)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Medic)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Medic)' in acquired_items }}" title="Optimized Logistics (Medic)" /></td>
-                <td colspan="2"></td>
+                <td>{{ sc2_icon('Medic') }}</td>
+                <td>{{ sc2_icon('Advanced Medic Facilities (Medic)') }}</td>
+                <td>{{ sc2_icon('Stabilizer Medpacks (Medic)') }}</td>
+                <td>{{ sc2_icon('Restoration (Medic)') }}</td>
+                <td>{{ sc2_icon('Optical Flare (Medic)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Medic)') }}</td>
+                <td>{{ sc2_icon('Adaptive Medpacks (Medic)') }}</td>
                 <td></td>
-                <td><img src="{{ stimpack_hellion_url }}" class="{{ 'acquired' if 'Progressive Stimpack (Hellion)' in acquired_items }}" title="{{ stimpack_hellion_name }}" /></td>
-            </tr>
-            <tr>
-                <td><img src="{{ icons['Firebat'] }}" class="{{ 'acquired' if 'Firebat' in acquired_items }}" title="Firebat" /></td>
-                <td><img src="{{ icons['Incinerator Gauntlets (Firebat)'] }}" class="{{ 'acquired' if 'Incinerator Gauntlets (Firebat)' in acquired_items }}" title="Incinerator Gauntlets (Firebat)" /></td>
-                <td><img src="{{ icons['Juggernaut Plating (Firebat)'] }}" class="{{ 'acquired' if 'Juggernaut Plating (Firebat)' in acquired_items }}" title="Juggernaut Plating (Firebat)" /></td>
-                <td><img src="{{ stimpack_firebat_url }}" class="{{ 'acquired' if 'Progressive Stimpack (Firebat)' in acquired_items }}" title="{{ stimpack_firebat_name }}" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Firebat)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Firebat)' in acquired_items }}" title="Optimized Logistics (Firebat)" /></td>
-                <td colspan="3"></td>
-                <td><img src="{{ icons['Vulture'] }}" class="{{ 'acquired' if 'Vulture' in acquired_items }}" title="Vulture" /></td>
-                <td><img src="{{ icons['Replenishable Magazine (Vulture)'] }}" class="{{ 'acquired' if 'Replenishable Magazine (Vulture)' in acquired_items }}" title="Replenishable Magazine (Vulture)" /></td>
-                <td><img src="{{ icons['Ion Thrusters (Vulture)'] }}" class="{{ 'acquired' if 'Ion Thrusters (Vulture)' in acquired_items }}" title="Ion Thrusters (Vulture)" /></td>
-                <td><img src="{{ icons['Auto Launchers (Vulture)'] }}" class="{{ 'acquired' if 'Auto Launchers (Vulture)' in acquired_items }}" title="Auto Launchers (Vulture)" /></td>
                 <td></td>
-                <td><img src="{{ icons['Cerberus Mine (Spider Mine)'] }}" class="{{ 'acquired' if 'Cerberus Mine (Spider Mine)' in acquired_items }}" title="Cerberus Mine (Spider Mine)" /></td>
-                <td><img src="{{ icons['High Explosive Munition (Spider Mine)'] }}" class="{{ 'acquired' if 'High Explosive Munition (Spider Mine)' in acquired_items }}" title="High Explosive Munition (Spider Mine)" /></td>
-            </tr>
-            <tr>
-                <td><img src="{{ icons['Marauder'] }}" class="{{ 'acquired' if 'Marauder' in acquired_items }}" title="Marauder" /></td>
-                <td><img src="{{ icons['Concussive Shells (Marauder)'] }}" class="{{ 'acquired' if 'Concussive Shells (Marauder)' in acquired_items }}" title="Concussive Shells (Marauder)" /></td>
-                <td><img src="{{ icons['Kinetic Foam (Marauder)'] }}" class="{{ 'acquired' if 'Kinetic Foam (Marauder)' in acquired_items }}" title="Kinetic Foam (Marauder)" /></td>
-                <td><img src="{{ stimpack_marauder_url }}" class="{{ 'acquired' if 'Progressive Stimpack (Marauder)' in acquired_items }}" title="{{ stimpack_marauder_name }}" /></td>
-                <td><img src="{{ icons['Laser Targeting System (Marauder)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Marauder)' in acquired_items }}" title="Laser Targeting System (Marauder)" /></td>
-                <td><img src="{{ icons['Magrail Munitions (Marauder)'] }}" class="{{ 'acquired' if 'Magrail Munitions (Marauder)' in acquired_items }}" title="Magrail Munitions (Marauder)" /></td>
-                <td><img src="{{ icons['Internal Tech Module (Marauder)'] }}" class="{{ 'acquired' if 'Internal Tech Module (Marauder)' in acquired_items }}" title="Internal Tech Module (Marauder)" /></td>
-                <td></td>
-                <td><img src="{{ icons['Goliath'] }}" class="{{ 'acquired' if 'Goliath' in acquired_items }}" title="Goliath" /></td>
-                <td><img src="{{ icons['Multi-Lock Weapons System (Goliath)'] }}" class="{{ 'acquired' if 'Multi-Lock Weapons System (Goliath)' in acquired_items }}" title="Multi-Lock Weapons System (Goliath)" /></td>
-                <td><img src="{{ icons['Ares-Class Targeting System (Goliath)'] }}" class="{{ 'acquired' if 'Ares-Class Targeting System (Goliath)' in acquired_items }}" title="Ares-Class Targeting System (Goliath)" /></td>
-                <td><img src="{{ icons['Jump Jets (Goliath)'] }}" class="{{ 'acquired' if 'Jump Jets (Goliath)' in acquired_items }}" title="Jump Jets (Goliath)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Goliath)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Goliath)' in acquired_items }}" title="Optimized Logistics (Goliath)" /></td>
-            </tr>
-            <tr>
-                <td><img src="{{ icons['Reaper'] }}" class="{{ 'acquired' if 'Reaper' in acquired_items }}" title="Reaper" /></td>
-                <td><img src="{{ icons['U-238 Rounds (Reaper)'] }}" class="{{ 'acquired' if 'U-238 Rounds (Reaper)' in acquired_items }}" title="U-238 Rounds (Reaper)" /></td>
-                <td><img src="{{ icons['G-4 Clusterbomb (Reaper)'] }}" class="{{ 'acquired' if 'G-4 Clusterbomb (Reaper)' in acquired_items }}" title="G-4 Clusterbomb (Reaper)" /></td>
-                <td><img src="{{ stimpack_reaper_url }}" class="{{ 'acquired' if 'Progressive Stimpack (Reaper)' in acquired_items }}" title="{{ stimpack_reaper_name }}" /></td>
-                <td><img src="{{ icons['Laser Targeting System (Reaper)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Reaper)' in acquired_items }}" title="Laser Targeting System (Reaper)" /></td>
-                <td><img src="{{ icons['Advanced Cloaking Field (Reaper)'] }}" class="{{ 'acquired' if 'Advanced Cloaking Field (Reaper)' in acquired_items }}" title="Advanced Cloaking Field (Reaper)" /></td>
-                <td><img src="{{ icons['Spider Mines (Reaper)'] }}" class="{{ 'acquired' if 'Spider Mines (Reaper)' in acquired_items }}" title="Spider Mines (Reaper)" /></td>
-                <td></td>
-                <td><img src="{{ icons['Diamondback'] }}" class="{{ 'acquired' if 'Diamondback' in acquired_items }}" title="Diamondback" /></td>
-                <td><img src="{{ icons['Tri-Lithium Power Cell (Diamondback)'] }}" class="{{ 'acquired' if 'Tri-Lithium Power Cell (Diamondback)' in acquired_items }}" title="Tri-Lithium Power Cell (Diamondback)" /></td>
-                <td><img src="{{ icons['Shaped Hull (Diamondback)'] }}" class="{{ 'acquired' if 'Shaped Hull (Diamondback)' in acquired_items }}" title="Shaped Hull (Diamondback)" /></td>
-                <td><img src="{{ icons['Hyperfluxor (Diamondback)'] }}" class="{{ 'acquired' if 'Hyperfluxor (Diamondback)' in acquired_items }}" title="Hyperfluxor (Diamondback)" /></td>
-                <td><img src="{{ icons['Burst Capacitors (Diamondback)'] }}" class="{{ 'acquired' if 'Burst Capacitors (Diamondback)' in acquired_items }}" title="Burst Capacitors (Diamondback)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Diamondback)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Diamondback)' in acquired_items }}" title="Optimized Logistics (Diamondback)" /></td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stimpack (Hellion)', stimpack_hellion_url, stimpack_hellion_name) }}</td>
+                <td>{{ sc2_icon('Infernal Plating (Hellion)') }}</td>
             </tr>
             <tr>
                 <td></td>
-                <td><img src="{{ icons['Combat Drugs (Reaper)'] }}" class="{{ 'acquired' if 'Combat Drugs (Reaper)' in acquired_items }}" title="Combat Drugs (Reaper)" /></td>
+                <td>{{ sc2_icon('Nano Projector (Medic)') }}</td>
                 <td colspan="6"></td>
-                <td><img src="{{ icons['Siege Tank'] }}" class="{{ 'acquired' if 'Siege Tank' in acquired_items }}" title="Siege Tank" /></td>
-                <td><img src="{{ icons['Maelstrom Rounds (Siege Tank)'] }}" class="{{ 'acquired' if 'Maelstrom Rounds (Siege Tank)' in acquired_items }}" title="Maelstrom Rounds (Siege Tank)" /></td>
-                <td><img src="{{ icons['Shaped Blast (Siege Tank)'] }}" class="{{ 'acquired' if 'Shaped Blast (Siege Tank)' in acquired_items }}" title="Shaped Blast (Siege Tank)" /></td>
-                <td><img src="{{ icons['Jump Jets (Siege Tank)'] }}" class="{{ 'acquired' if 'Jump Jets (Siege Tank)' in acquired_items }}" title="Jump Jets (Siege Tank)" /></td>
-                <td><img src="{{ icons['Spider Mines (Siege Tank)'] }}" class="{{ 'acquired' if 'Spider Mines (Siege Tank)' in acquired_items }}" title="Spider Mines (Siege Tank)" /></td>
-                <td><img src="{{ icons['Smart Servos (Siege Tank)'] }}" class="{{ 'acquired' if 'Smart Servos (Siege Tank)' in acquired_items }}" title="Smart Servos (Siege Tank)" /></td>
-                <td><img src="{{ icons['Graduating Range (Siege Tank)'] }}" class="{{ 'acquired' if 'Graduating Range (Siege Tank)' in acquired_items }}" title="Graduating Range (Siege Tank)" /></td>
+                <td>{{ sc2_icon('Vulture') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Replenishable Magazine (Vulture)', replenishable_magazine_vulture_url, replenishable_magazine_vulture_name) }}</td>
+                <td class="tint-terran">{{ sc2_icon('Ion Thrusters (Vulture)') }}</td>
+                <td>{{ sc2_icon('Auto Launchers (Vulture)') }}</td>
+                <td>{{ sc2_icon('Auto-Repair (Vulture)') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Ghost'] }}" class="{{ 'acquired' if 'Ghost' in acquired_items }}" title="Ghost" /></td>
-                <td><img src="{{ icons['Ocular Implants (Ghost)'] }}" class="{{ 'acquired' if 'Ocular Implants (Ghost)' in acquired_items }}" title="Ocular Implants (Ghost)" /></td>
-                <td><img src="{{ icons['Crius Suit (Ghost)'] }}" class="{{ 'acquired' if 'Crius Suit (Ghost)' in acquired_items }}" title="Crius Suit (Ghost)" /></td>
-                <td><img src="{{ icons['EMP Rounds (Ghost)'] }}" class="{{ 'acquired' if 'EMP Rounds (Ghost)' in acquired_items }}" title="EMP Rounds (Ghost)" /></td>
-                <td><img src="{{ icons['Lockdown (Ghost)'] }}" class="{{ 'acquired' if 'Lockdown (Ghost)' in acquired_items }}" title="Lockdown (Ghost)" /></td>
-                <td colspan="3"></td>
+                <td>{{ sc2_icon('Firebat') }}</td>
+                <td>{{ sc2_icon('Incinerator Gauntlets (Firebat)') }}</td>
+                <td>{{ sc2_icon('Juggernaut Plating (Firebat)') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stimpack (Firebat)', stimpack_firebat_url, stimpack_firebat_name) }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Firebat)') }}</td>
+                <td>{{ sc2_icon('Infernal Pre-Igniter (Firebat)') }}</td>
+                <td>{{ sc2_icon('Kinetic Foam (Firebat)') }}</td>
+                <td colspan="6"></td>
+                <td>{{ sc2_icon('Cerberus Mine (Spider Mine)') }}</td>
+                <td>{{ sc2_icon('High Explosive Munition (Spider Mine)') }}</td>
+            </tr>
+            <tr>
                 <td></td>
-                <td><img src="{{ icons['Laser Targeting System (Siege Tank)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Siege Tank)' in acquired_items }}" title="Laser Targeting System (Siege Tank)" /></td>
-                <td><img src="{{ icons['Advanced Siege Tech (Siege Tank)'] }}" class="{{ 'acquired' if 'Advanced Siege Tech (Siege Tank)' in acquired_items }}" title="Advanced Siege Tech (Siege Tank)" /></td>
-                <td><img src="{{ icons['Internal Tech Module (Siege Tank)'] }}" class="{{ 'acquired' if 'Internal Tech Module (Siege Tank)' in acquired_items }}" title="Internal Tech Module (Siege Tank)" /></td>
+                <td>{{ sc2_icon('Nano Projectors (Firebat)') }}</td>
+                <td colspan="6"></td>
+                <td>{{ sc2_icon('Goliath') }}</td>
+                <td>{{ sc2_icon('Multi-Lock Weapons System (Goliath)') }}</td>
+                <td>{{ sc2_icon('Ares-Class Targeting System (Goliath)') }}</td>
+                <td>{{ sc2_icon('Jump Jets (Goliath)') }}</td>
+                <td>{{ sc2_icon('Shaped Hull (Goliath)') }}</td>
+                <td>{{ sc2_icon('Optimized Logistics (Goliath)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Goliath)') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Spectre'] }}" class="{{ 'acquired' if 'Spectre' in acquired_items }}" title="Spectre" /></td>
-                <td><img src="{{ icons['Psionic Lash (Spectre)'] }}" class="{{ 'acquired' if 'Psionic Lash (Spectre)' in acquired_items }}" title="Psionic Lash (Spectre)" /></td>
-                <td><img src="{{ icons['Nyx-Class Cloaking Module (Spectre)'] }}" class="{{ 'acquired' if 'Nyx-Class Cloaking Module (Spectre)' in acquired_items }}" title="Nyx-Class Cloaking Module (Spectre)" /></td>
-                <td><img src="{{ icons['Impaler Rounds (Spectre)'] }}" class="{{ 'acquired' if 'Impaler Rounds (Spectre)' in acquired_items }}" title="Impaler Rounds (Spectre)" /></td>
-                <td colspan="4"></td>
-                <td><img src="{{ icons['Thor'] }}" class="{{ 'acquired' if 'Thor' in acquired_items }}" title="Thor" /></td>
-                <td><img src="{{ icons['330mm Barrage Cannon (Thor)'] }}" class="{{ 'acquired' if '330mm Barrage Cannon (Thor)' in acquired_items }}" title="330mm Barrage Cannon (Thor)" /></td>
-                <td><img src="{{ icons['Immortality Protocol (Thor)'] }}" class="{{ 'acquired' if 'Immortality Protocol (Thor)' in acquired_items }}" title="Immortality Protocol (Thor)" /></td>
-                <td><img src="{{ high_impact_payload_thor_url }}" class="{{ 'acquired' if 'Progressive High Impact Payload (Thor)' in acquired_items }}" title="{{ high_impact_payload_thor_name }}" /></td>
+                <td>{{ sc2_icon('Marauder') }}</td>
+                <td>{{ sc2_icon('Concussive Shells (Marauder)') }}</td>
+                <td>{{ sc2_icon('Kinetic Foam (Marauder)') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stimpack (Marauder)', stimpack_marauder_url, stimpack_marauder_name) }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Marauder)') }}</td>
+                <td>{{ sc2_icon('Magrail Munitions (Marauder)') }}</td>
+                <td>{{ sc2_icon('Internal Tech Module (Marauder)') }}</td>
+                <td colspan="2"></td>
+                <td>{{ sc2_icon('Internal Tech Module (Goliath)') }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{ sc2_icon('Juggernaut Plating (Marauder)') }}</td>
+                <td colspan="6"></td>
+                <td>{{ sc2_icon('Diamondback') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Tri-Lithium Power Cell (Diamondback)', trilithium_power_cell_diamondback_url, trilithium_power_cell_diamondback_name) }}</td>
+                <td>{{ sc2_icon('Shaped Hull (Diamondback)') }}</td>
+                <td>{{ sc2_icon('Hyperfluxor (Diamondback)') }}</td>
+                <td>{{ sc2_icon('Burst Capacitors (Diamondback)') }}</td>
+                <td class="tint-terran">{{ sc2_icon('Ion Thrusters (Diamondback)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Diamondback)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('Reaper') }}</td>
+                <td>{{ sc2_icon('U-238 Rounds (Reaper)') }}</td>
+                <td>{{ sc2_icon('G-4 Clusterbomb (Reaper)') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stimpack (Reaper)', stimpack_reaper_url, stimpack_reaper_name) }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Reaper)') }}</td>
+                <td>{{ sc2_icon('Advanced Cloaking Field (Reaper)') }}</td>
+                <td>{{ sc2_icon('Spider Mines (Reaper)') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Siege Tank') }}</td>
+                <td>{{ sc2_icon('Maelstrom Rounds (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Shaped Blast (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Jump Jets (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Spider Mines (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Smart Servos (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Graduating Range (Siege Tank)') }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{ sc2_icon('Combat Drugs (Reaper)') }}</td>
+                <td>{{ sc2_icon('Jet Pack Overdrive (Reaper)') }}</td>
+                <td colspan="6"></td>
+                <td>{{ sc2_icon('Laser Targeting System (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Advanced Siege Tech (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Internal Tech Module (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Shaped Hull (Siege Tank)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Siege Tank)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('Ghost') }}</td>
+                <td>{{ sc2_icon('Ocular Implants (Ghost)') }}</td>
+                <td>{{ sc2_icon('Crius Suit (Ghost)') }}</td>
+                <td>{{ sc2_icon('EMP Rounds (Ghost)') }}</td>
+                <td>{{ sc2_icon('Lockdown (Ghost)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Ghost)') }}</td>
+                <td colspan="2"></td>
+                <td>{{ sc2_icon('Thor') }}</td>
+                <td>{{ sc2_icon('330mm Barrage Cannon (Thor)') }}</td>
+                <td class="{{ sc2_tint_level(immortality_protocol_thor_level) }}">{{ sc2_progressive_icon_with_custom_name('Progressive Immortality Protocol (Thor)', immortality_protocol_thor_url, immortality_protocol_thor_name) }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive High Impact Payload (Thor)', high_impact_payload_thor_url, high_impact_payload_thor_name) }}</td>
+                <td>{{ sc2_icon('Button With a Skull on It (Thor)') }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Thor)') }}</td>
+                <td>{{ sc2_icon('Large Scale Field Construction (Thor)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('Spectre') }}</td>
+                <td>{{ sc2_icon('Psionic Lash (Spectre)') }}</td>
+                <td>{{ sc2_icon('Nyx-Class Cloaking Module (Spectre)') }}</td>
+                <td class="tint-terran">{{ sc2_icon('Impaler Rounds (Spectre)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Spectre)') }}</td>
+                <td colspan="3"></td>
+                <td>{{ sc2_icon('Predator') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Predator)') }}</td>
+                <td>{{ sc2_icon('Cloak (Predator)') }}</td>
+                <td>{{ sc2_icon('Charge (Predator)') }}</td>
+                <td>{{ sc2_icon('Predator\'s Fury (Predator)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('HERC') }}</td>
+                <td>{{ sc2_icon('Juggernaut Plating (HERC)') }}</td>
+                <td>{{ sc2_icon('Kinetic Foam (HERC)') }}</td>
+                <td colspan="5"></td>
+                <td>{{ sc2_icon('Widow Mine') }}</td>
+                <td>{{ sc2_icon('Drilling Claws (Widow Mine)') }}</td>
+                <td>{{ sc2_icon('Concealment (Widow Mine)') }}</td>
+                <td>{{ sc2_icon('Black Market Launchers (Widow Mine)') }}</td>
+                <td>{{ sc2_icon('Executioner Missiles (Widow Mine)') }}</td>
             </tr>
             <tr>
                 <td colspan="8"></td>
-                <td><img src="{{ icons['Predator'] }}" class="{{ 'acquired' if 'Predator' in acquired_items }}" title="Predator" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Predator)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Predator)' in acquired_items }}" title="Optimized Logistics (Predator)" /></td>
+                <td>{{ sc2_icon('Cyclone') }}</td>
+                <td>{{ sc2_icon('Mag-Field Accelerators (Cyclone)') }}</td>
+                <td>{{ sc2_icon('Mag-Field Launchers (Cyclone)') }}</td>
+                <td>{{ sc2_icon('Targeting Optics (Cyclone)') }}</td>
+                <td>{{ sc2_icon('Rapid Fire Launchers (Cyclone)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Cyclone)') }}</td>
+                <td>{{ sc2_icon('Internal Tech Module (Cyclone)') }}</td>
             </tr>
             <tr>
                 <td colspan="8"></td>
-                <td><img src="{{ icons['Widow Mine'] }}" class="{{ 'acquired' if 'Widow Mine' in acquired_items }}" title="Widow Mine" /></td>
-                <td><img src="{{ icons['Drilling Claws (Widow Mine)'] }}" class="{{ 'acquired' if 'Drilling Claws (Widow Mine)' in acquired_items }}" title="Drilling Claws (Widow Mine)" /></td>
-                <td><img src="{{ icons['Concealment (Widow Mine)'] }}" class="{{ 'acquired' if 'Concealment (Widow Mine)' in acquired_items }}" title="Concealment (Widow Mine)" /></td>
-                <td><img src="{{ icons['Black Market Launchers (Widow Mine)'] }}" class="{{ 'acquired' if 'Black Market Launchers (Widow Mine)' in acquired_items }}" title="Black Market Launchers (Widow Mine)" /></td>
-                <td><img src="{{ icons['Executioner Missiles (Widow Mine)'] }}" class="{{ 'acquired' if 'Executioner Missiles (Widow Mine)' in acquired_items }}" title="Executioner Missiles (Widow Mine)" /></td>
-            </tr>
-            <tr>
-                <td colspan="8"></td>
-                <td><img src="{{ icons['Cyclone'] }}" class="{{ 'acquired' if 'Cyclone' in acquired_items }}" title="Cyclone" /></td>
-                <td><img src="{{ icons['Mag-Field Accelerators (Cyclone)'] }}" class="{{ 'acquired' if 'Mag-Field Accelerators (Cyclone)' in acquired_items }}" title="Mag-Field Accelerators (Cyclone)" /></td>
-                <td><img src="{{ icons['Mag-Field Launchers (Cyclone)'] }}" class="{{ 'acquired' if 'Mag-Field Launchers (Cyclone)' in acquired_items }}" title="Mag-Field Launchers (Cyclone)" /></td>
-                <td><img src="{{ icons['Targeting Optics (Cyclone)'] }}" class="{{ 'acquired' if 'Targeting Optics (Cyclone)' in acquired_items }}" title="Targeting Optics (Cyclone)" /></td>
-                <td><img src="{{ icons['Rapid Fire Launchers (Cyclone)'] }}" class="{{ 'acquired' if 'Rapid Fire Launchers (Cyclone)' in acquired_items }}" title="Rapid Fire Launchers (Cyclone)" /></td>
+                <td>{{ sc2_icon('Warhound') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Warhound)') }}</td>
+                <td>{{ sc2_icon('Reinforced Plating (Warhound)') }}</td>
             </tr>
             <tr>
                 <td colspan="15" class="title">
@@ -230,75 +286,102 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Medivac'] }}" class="{{ 'acquired' if 'Medivac' in acquired_items }}" title="Medivac" /></td>
-                <td><img src="{{ icons['Rapid Deployment Tube (Medivac)'] }}" class="{{ 'acquired' if 'Rapid Deployment Tube (Medivac)' in acquired_items }}" title="Rapid Deployment Tube (Medivac)" /></td>
-                <td><img src="{{ icons['Advanced Healing AI (Medivac)'] }}" class="{{ 'acquired' if 'Advanced Healing AI (Medivac)' in acquired_items }}" title="Advanced Healing AI (Medivac)" /></td>
-                <td><img src="{{ icons['Expanded Hull (Medivac)'] }}" class="{{ 'acquired' if 'Expanded Hull (Medivac)' in acquired_items }}" title="Expanded Hull (Medivac)" /></td>
-                <td><img src="{{ icons['Afterburners (Medivac)'] }}" class="{{ 'acquired' if 'Afterburners (Medivac)' in acquired_items }}" title="Afterburners (Medivac)" /></td>
-                <td colspan="3"></td>
-                <td><img src="{{ icons['Raven'] }}" class="{{ 'acquired' if 'Raven' in acquired_items }}" title="Raven" /></td>
-                <td><img src="{{ icons['Bio Mechanical Repair Drone (Raven)'] }}" class="{{ 'acquired' if 'Bio Mechanical Repair Drone (Raven)' in acquired_items }}" title="Bio Mechanical Repair Drone (Raven)" /></td>
-                <td><img src="{{ icons['Spider Mines (Raven)'] }}" class="{{ 'acquired' if 'Spider Mines (Raven)' in acquired_items }}" title="Spider Mines (Raven)" /></td>
-                <td><img src="{{ icons['Railgun Turret (Raven)'] }}" class="{{ 'acquired' if 'Railgun Turret (Raven)' in acquired_items }}" title="Railgun Turret (Raven)" /></td>
-                <td><img src="{{ icons['Hunter-Seeker Weapon (Raven)'] }}" class="{{ 'acquired' if 'Hunter-Seeker Weapon (Raven)' in acquired_items }}" title="Hunter-Seeker Weapon (Raven)" /></td>
-                <td><img src="{{ icons['Interference Matrix (Raven)'] }}" class="{{ 'acquired' if 'Interference Matrix (Raven)' in acquired_items }}" title="Interference Matrix (Raven)" /></td>
-                <td><img src="{{ icons['Anti-Armor Missile (Raven)'] }}" class="{{ 'acquired' if 'Anti-Armor Missile (Raven)' in acquired_items }}" title="Anti-Armor Missile (Raven)" /></td>
+                <td>{{ sc2_icon('Medivac') }}</td>
+                <td>{{ sc2_icon('Rapid Deployment Tube (Medivac)') }}</td>
+                <td>{{ sc2_icon('Advanced Healing AI (Medivac)') }}</td>
+                <td>{{ sc2_icon('Expanded Hull (Medivac)') }}</td>
+                <td>{{ sc2_icon('Afterburners (Medivac)') }}</td>
+                <td>{{ sc2_icon('Scatter Veil (Medivac)') }}</td>
+                <td>{{ sc2_icon('Advanced Cloaking Field (Medivac)') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Raven') }}</td>
+                <td>{{ sc2_icon('Bio Mechanical Repair Drone (Raven)') }}</td>
+                <td>{{ sc2_icon('Spider Mines (Raven)') }}</td>
+                <td>{{ sc2_icon('Railgun Turret (Raven)') }}</td>
+                <td>{{ sc2_icon('Hunter-Seeker Weapon (Raven)') }}</td>
+                <td>{{ sc2_icon('Interference Matrix (Raven)') }}</td>
+                <td>{{ sc2_icon('Anti-Armor Missile (Raven)') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Wraith'] }}" class="{{ 'acquired' if 'Wraith' in acquired_items }}" title="Wraith" /></td>
-                <td><img src="{{ icons['Tomahawk Power Cells (Wraith)'] }}" class="{{ 'acquired' if 'Tomahawk Power Cells (Wraith)' in acquired_items }}" title="Tomahawk Power Cells (Wraith)" /></td>
-                <td><img src="{{ icons['Displacement Field (Wraith)'] }}" class="{{ 'acquired' if 'Displacement Field (Wraith)' in acquired_items }}" title="Displacement Field (Wraith)" /></td>
-                <td><img src="{{ icons['Advanced Laser Technology (Wraith)'] }}" class="{{ 'acquired' if 'Advanced Laser Technology (Wraith)' in acquired_items }}" title="Advanced Laser Technology (Wraith)" /></td>
+                <td>{{ sc2_icon('Wraith') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Tomahawk Power Cells (Wraith)', tomahawk_power_cells_wraith_url, tomahawk_power_cells_wraith_name) }}</td>
+                <td>{{ sc2_icon('Displacement Field (Wraith)') }}</td>
+                <td>{{ sc2_icon('Advanced Laser Technology (Wraith)') }}</td>
+                <td>{{ sc2_icon('Trigger Override (Wraith)') }}</td>
+                <td>{{ sc2_icon('Internal Tech Module (Wraith)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Wraith)') }}</td>
+                <td></td>
+                <td></td>
+                <td>{{ sc2_icon('Internal Tech Module (Raven)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Raven)') }}</td>
+                <td>{{ sc2_icon('Durable Materials (Raven)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('Viking') }}</td>
+                <td>{{ sc2_icon('Ripwave Missiles (Viking)') }}</td>
+                <td>{{ sc2_icon('Phobos-Class Weapons System (Viking)') }}</td>
+                <td>{{ sc2_icon('Smart Servos (Viking)') }}</td>
+                <td>{{ sc2_icon('Anti-Mechanical Munition (Viking)') }}</td>
+                <td>{{ sc2_icon('Shredder Rounds (Viking)') }}</td>
+                <td>{{ sc2_icon('W.I.L.D. Missiles (Viking)') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Science Vessel') }}</td>
+                <td>{{ sc2_icon('EMP Shockwave (Science Vessel)') }}</td>
+                <td>{{ sc2_icon('Defensive Matrix (Science Vessel)') }}</td>
+                <td>{{ sc2_icon('Improved Nano-Repair (Science Vessel)') }}</td>
+                <td>{{ sc2_icon('Advanced AI Systems (Science Vessel)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_icon('Banshee') }}</td>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Cross-Spectrum Dampeners (Banshee)', crossspectrum_dampeners_banshee_url, crossspectrum_dampeners_banshee_name) }}</td>
+                <td>{{ sc2_icon('Shockwave Missile Battery (Banshee)') }}</td>
+                <td>{{ sc2_icon('Hyperflight Rotors (Banshee)') }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Banshee)') }}</td>
+                <td>{{ sc2_icon('Internal Tech Module (Banshee)') }}</td>
+                <td>{{ sc2_icon('Shaped Hull (Banshee)') }}</td>
+                <td></td>
+                <td>{{ sc2_icon('Hercules') }}</td>
+                <td>{{ sc2_icon('Internal Fusion Module (Hercules)') }}</td>
+                <td>{{ sc2_icon('Tactical Jump (Hercules)') }}</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>{{ sc2_icon('Advanced Targeting Optics (Banshee)') }}</td>
+                <td class="tint-terran">{{ sc2_icon('Distortion Blasters (Banshee)') }}</td>
+                <td>{{ sc2_icon('Rocket Barrage (Banshee)') }}</td>
                 <td colspan="4"></td>
-                <td></td>
-                <td><img src="{{ icons['Internal Tech Module (Raven)'] }}" class="{{ 'acquired' if 'Internal Tech Module (Raven)' in acquired_items }}" title="Internal Tech Module (Raven)" /></td>
+                <td>{{ sc2_icon('Liberator') }}</td>
+                <td>{{ sc2_icon('Advanced Ballistics (Liberator)') }}</td>
+                <td>{{ sc2_icon('Raid Artillery (Liberator)') }}</td>
+                <td>{{ sc2_icon('Cloak (Liberator)') }}</td>
+                <td>{{ sc2_icon('Laser Targeting System (Liberator)') }}</td>
+                <td>{{ sc2_icon('Optimized Logistics (Liberator)') }}</td>
+                <td>{{ sc2_icon('Smart Servos (Liberator)') }}</td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Viking'] }}" class="{{ 'acquired' if 'Viking' in acquired_items }}" title="Viking" /></td>
-                <td><img src="{{ icons['Ripwave Missiles (Viking)'] }}" class="{{ 'acquired' if 'Ripwave Missiles (Viking)' in acquired_items }}" title="Ripwave Missiles (Viking)" /></td>
-                <td><img src="{{ icons['Phobos-Class Weapons System (Viking)'] }}" class="{{ 'acquired' if 'Phobos-Class Weapons System (Viking)' in acquired_items }}" title="Phobos-Class Weapons System (Viking)" /></td>
-                <td><img src="{{ icons['Smart Servos (Viking)'] }}" class="{{ 'acquired' if 'Smart Servos (Viking)' in acquired_items }}" title="Smart Servos (Viking)" /></td>
-                <td><img src="{{ icons['Magrail Munitions (Viking)'] }}" class="{{ 'acquired' if 'Magrail Munitions (Viking)' in acquired_items }}" title="Magrail Munitions (Viking)" /></td>
-                <td colspan="3"></td>
-                <td><img src="{{ icons['Science Vessel'] }}" class="{{ 'acquired' if 'Science Vessel' in acquired_items }}" title="Science Vessel" /></td>
-                <td><img src="{{ icons['EMP Shockwave (Science Vessel)'] }}" class="{{ 'acquired' if 'EMP Shockwave (Science Vessel)' in acquired_items }}" title="EMP Shockwave (Science Vessel)" /></td>
-                <td><img src="{{ icons['Defensive Matrix (Science Vessel)'] }}" class="{{ 'acquired' if 'Defensive Matrix (Science Vessel)' in acquired_items }}" title="Defensive Matrix (Science Vessel)" /></td>
-            </tr>
-            <tr>
-                <td><img src="{{ icons['Banshee'] }}" class="{{ 'acquired' if 'Banshee' in acquired_items }}" title="Banshee" /></td>
-                <td><img src="{{ crossspectrum_dampeners_banshee_url }}" class="{{ 'acquired' if 'Progressive Cross-Spectrum Dampeners (Banshee)' in acquired_items }}" title="{{ crossspectrum_dampeners_banshee_name }}" /></td>
-                <td><img src="{{ icons['Shockwave Missile Battery (Banshee)'] }}" class="{{ 'acquired' if 'Shockwave Missile Battery (Banshee)' in acquired_items }}" title="Shockwave Missile Battery (Banshee)" /></td>
-                <td><img src="{{ icons['Hyperflight Rotors (Banshee)'] }}" class="{{ 'acquired' if 'Hyperflight Rotors (Banshee)' in acquired_items }}" title="Hyperflight Rotors (Banshee)" /></td>
-                <td><img src="{{ icons['Laser Targeting System (Banshee)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Banshee)' in acquired_items }}" title="Laser Targeting System (Banshee)" /></td>
-                <td><img src="{{ icons['Internal Tech Module (Banshee)'] }}" class="{{ 'acquired' if 'Internal Tech Module (Banshee)' in acquired_items }}" title="Internal Tech Module (Banshee)" /></td>
+                <td>{{ sc2_icon('Battlecruiser') }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Missile Pods (Battlecruiser)', missile_pods_battlecruiser_url, missile_pods_battlecruiser_level) }}</td>
+                <td class="{{ sc2_tint_level(defensive_matrix_battlecruiser_level) }}">{{ sc2_progressive_icon_with_custom_name('Progressive Defensive Matrix (Battlecruiser)', defensive_matrix_battlecruiser_url, defensive_matrix_battlecruiser_name) }}</td>
+                <td>{{ sc2_icon('Tactical Jump (Battlecruiser)') }}</td>
+                <td>{{ sc2_icon('Cloak (Battlecruiser)') }}</td>
+                <td>{{ sc2_icon('ATX Laser Battery (Battlecruiser)') }}</td>
+                <td>{{ sc2_icon('Optimized Logistics (Battlecruiser)') }}</td>
                 <td colspan="2"></td>
-                <td><img src="{{ icons['Hercules'] }}" class="{{ 'acquired' if 'Hercules' in acquired_items }}" title="Hercules" /></td>
-            </tr>
-            <tr>
-                <td><img src="{{ icons['Battlecruiser'] }}" class="{{ 'acquired' if 'Battlecruiser' in acquired_items }}" title="Battlecruiser" /></td>
-                <td><img src="{{ icons['Missile Pods (Battlecruiser)'] }}" class="{{ 'acquired' if 'Missile Pods (Battlecruiser)' in acquired_items }}" title="Missile Pods (Battlecruiser)" /></td>
-                <td><img src="{{ icons['Defensive Matrix (Battlecruiser)'] }}" class="{{ 'acquired' if 'Defensive Matrix (Battlecruiser)' in acquired_items }}" title="Defensive Matrix (Battlecruiser)" /></td>
-                <td><img src="{{ icons['Tactical Jump (Battlecruiser)'] }}" class="{{ 'acquired' if 'Tactical Jump (Battlecruiser)' in acquired_items }}" title="Tactical Jump (Battlecruiser)" /></td>
-                <td><img src="{{ icons['Cloak (Battlecruiser)'] }}" class="{{ 'acquired' if 'Cloak (Battlecruiser)' in acquired_items }}" title="Cloak (Battlecruiser)" /></td>
-                <td><img src="{{ icons['ATX Laser Battery (Battlecruiser)'] }}" class="{{ 'acquired' if 'ATX Laser Battery (Battlecruiser)' in acquired_items }}" title="ATX Laser Battery (Battlecruiser)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Battlecruiser)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Battlecruiser)' in acquired_items }}" title="Optimized Logistics (Battlecruiser)" /></td>
-                <td></td>
-                <td><img src="{{ icons['Liberator'] }}" class="{{ 'acquired' if 'Liberator' in acquired_items }}" title="Liberator" /></td>
-                <td><img src="{{ icons['Advanced Ballistics (Liberator)'] }}" class="{{ 'acquired' if 'Advanced Ballistics (Liberator)' in acquired_items }}" title="Advanced Ballistics (Liberator)" /></td>
-                <td><img src="{{ icons['Raid Artillery (Liberator)'] }}" class="{{ 'acquired' if 'Raid Artillery (Liberator)' in acquired_items }}" title="Raid Artillery (Liberator)" /></td>
-                <td><img src="{{ icons['Cloak (Liberator)'] }}" class="{{ 'acquired' if 'Cloak (Liberator)' in acquired_items }}" title="Cloak (Liberator)" /></td>
-                <td><img src="{{ icons['Laser Targeting System (Liberator)'] }}" class="{{ 'acquired' if 'Laser Targeting System (Liberator)' in acquired_items }}" title="Laser Targeting System (Liberator)" /></td>
-                <td><img src="{{ icons['Optimized Logistics (Liberator)'] }}" class="{{ 'acquired' if 'Optimized Logistics (Liberator)' in acquired_items }}" title="Optimized Logistics (Liberator)" /></td>
+                <td>{{ sc2_icon('Resource Efficiency (Liberator)') }}</td>
             </tr>
             <tr>
                 <td></td>
-                <td><img src="{{ icons['Internal Tech Module (Battlecruiser)'] }}" class="{{ 'acquired' if 'Internal Tech Module (Battlecruiser)' in acquired_items }}" title="Internal Tech Module (Battlecruiser)" /></td>
-                <td colspan="6"></td>
-                <td><img src="{{ icons['Valkyrie'] }}" class="{{ 'acquired' if 'Valkyrie' in acquired_items }}" title="Valkyrie" /></td>
-                <td><img src="{{ icons['Enhanced Cluster Launchers (Valkyrie)'] }}" class="{{ 'acquired' if 'Enhanced Cluster Launchers (Valkyrie)' in acquired_items }}" title="Enhanced Cluster Launchers (Valkyrie)" /></td>
-                <td><img src="{{ icons['Shaped Hull (Valkyrie)'] }}" class="{{ 'acquired' if 'Shaped Hull (Valkyrie)' in acquired_items }}" title="Shaped Hull (Valkyrie)" /></td>
-                <td><img src="{{ icons['Burst Lasers (Valkyrie)'] }}" class="{{ 'acquired' if 'Burst Lasers (Valkyrie)' in acquired_items }}" title="Burst Lasers (Valkyrie)" /></td>
-                <td><img src="{{ icons['Afterburners (Valkyrie)'] }}" class="{{ 'acquired' if 'Afterburners (Valkyrie)' in acquired_items }}" title="Afterburners (Valkyrie)" /></td>
+                <td>{{ sc2_icon('Internal Tech Module (Battlecruiser)') }}</td>
+                <td>{{ sc2_icon('Behemoth Plating (Battlecruiser)') }}</td>
+                <td>{{ sc2_icon('Covert Ops Engines (Battlecruiser)') }}</td>
+                <td colspan="4"></td>
+                <td>{{ sc2_icon('Valkyrie') }}</td>
+                <td>{{ sc2_icon('Enhanced Cluster Launchers (Valkyrie)') }}</td>
+                <td>{{ sc2_icon('Shaped Hull (Valkyrie)') }}</td>
+                <td>{{ sc2_icon('Flechette Missiles (Valkyrie)') }}</td>
+                <td>{{ sc2_icon('Afterburners (Valkyrie)') }}</td>
+                <td>{{ sc2_icon('Launching Vector Compensator (Valkyrie)') }}</td>
+                <td>{{ sc2_icon('Resource Efficiency (Valkyrie)') }}</td>
             </tr>
             <tr>
                 <td colspan="15" class="title">
@@ -306,14 +389,20 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['War Pigs'] }}" class="{{ 'acquired' if 'War Pigs' in acquired_items }}" title="War Pigs" /></td>
-                <td><img src="{{ icons['Devil Dogs'] }}" class="{{ 'acquired' if 'Devil Dogs' in acquired_items }}" title="Devil Dogs" /></td>
-                <td><img src="{{ icons['Hammer Securities'] }}" class="{{ 'acquired' if 'Hammer Securities' in acquired_items }}" title="Hammer Securities" /></td>
-                <td><img src="{{ icons['Spartan Company'] }}" class="{{ 'acquired' if 'Spartan Company' in acquired_items }}" title="Spartan Company" /></td>
-                <td><img src="{{ icons['Siege Breakers'] }}" class="{{ 'acquired' if 'Siege Breakers' in acquired_items }}" title="Siege Breakers" /></td>
-                <td><img src="{{ icons['Hel\'s Angel'] }}" class="{{ 'acquired' if 'Hel\'s Angel' in acquired_items }}" title="Hel's Angel" /></td>
-                <td><img src="{{ icons['Dusk Wings'] }}" class="{{ 'acquired' if 'Dusk Wings' in acquired_items }}" title="Dusk Wings" /></td>
-                <td><img src="{{ icons['Jackson\'s Revenge'] }}" class="{{ 'acquired' if 'Jackson\'s Revenge' in acquired_items }}" title="Jackson's Revenge" /></td>
+                <td>{{ sc2_icon('War Pigs') }}</td>
+                <td>{{ sc2_icon('Devil Dogs') }}</td>
+                <td>{{ sc2_icon('Hammer Securities') }}</td>
+                <td>{{ sc2_icon('Spartan Company') }}</td>
+                <td>{{ sc2_icon('Siege Breakers') }}</td>
+                <td>{{ sc2_icon('Hel\'s Angels') }}</td>
+                <td>{{ sc2_icon('Dusk Wings') }}</td>
+                <td>{{ sc2_icon('Jackson\'s Revenge') }}</td>
+                <td>{{ sc2_icon('Skibi\'s Angels') }}</td>
+                <td>{{ sc2_icon('Death Heads') }}</td>
+                <td>{{ sc2_icon('Winged Nightmares') }}</td>
+                <td>{{ sc2_icon('Midnight Riders') }}</td>
+                <td>{{ sc2_icon('Brynhilds') }}</td>
+                <td>{{ sc2_icon('Jotun') }}</td>
             </tr>
             <tr>
                 <td colspan="15" class="title">
@@ -321,26 +410,44 @@
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Fire-Suppression System (Building)'] }}" class="{{ 'acquired' if 'Fire-Suppression System (Building)' in acquired_items }}" title="Fire-Suppression System (Building)" /></td>
-                <td><img src="{{ icons['Orbital Strike'] }}" class="{{ 'acquired' if 'Orbital Strike' in acquired_items }}" title="Orbital Strike" /></td>
-                <td><img src="{{ icons['Cellular Reactor'] }}" class="{{ 'acquired' if 'Cellular Reactor' in acquired_items }}" title="Cellular Reactor" /></td>
-                <td><img src="{{ regenerative_biosteel_url }}" class="{{ 'acquired' if 'Progressive Regenerative Bio-Steel' in acquired_items }}" title="Progressive Regenerative Bio-Steel{% if regenerative_biosteel_level > 0 %} (Level {{ regenerative_biosteel_level }}){% endif %}" /></td>
+                <td>{{ sc2_progressive_icon('Progressive Fire-Suppression System', firesuppression_system_url, firesuppression_system_level) }}</td>
+                <td>{{ sc2_icon('Orbital Strike') }}</td>
+                <td>{{ sc2_icon('Cellular Reactor') }}</td>
+                <td>{{ sc2_progressive_icon('Progressive Regenerative Bio-Steel', regenerative_biosteel_url, regenerative_biosteel_level) }}</td>
+                <td>{{ sc2_icon('Structure Armor') }}</td>
+                <td>{{ sc2_icon('Hi-Sec Auto Tracking') }}</td>
+                <td>{{ sc2_icon('Advanced Optics') }}</td>
+                <td>{{ sc2_icon('Rogue Forces') }}</td>
             </tr>
             <tr>
                 <td colspan="15" class="title">
-                    Protoss Units
+                    Nova Equipment
                 </td>
             </tr>
             <tr>
-                <td><img src="{{ icons['Zealot'] }}" class="{{ 'acquired' if 'Zealot' in acquired_items }}" title="Zealot" /></td>
-                <td><img src="{{ icons['Stalker'] }}" class="{{ 'acquired' if 'Stalker' in acquired_items }}" title="Stalker" /></td>
-                <td><img src="{{ icons['High Templar'] }}" class="{{ 'acquired' if 'High Templar' in acquired_items }}" title="High Templar" /></td>
-                <td><img src="{{ icons['Dark Templar'] }}" class="{{ 'acquired' if 'Dark Templar' in acquired_items }}" title="Dark Templar" /></td>
-                <td><img src="{{ icons['Immortal'] }}" class="{{ 'acquired' if 'Immortal' in acquired_items }}" title="Immortal" /></td>
-                <td><img src="{{ icons['Colossus'] }}" class="{{ 'acquired' if 'Colossus' in acquired_items }}" title="Colossus" /></td>
-                <td><img src="{{ icons['Phoenix'] }}" class="{{ 'acquired' if 'Phoenix' in acquired_items }}" title="Phoenix" /></td>
-                <td><img src="{{ icons['Void Ray'] }}" class="{{ 'acquired' if 'Void Ray' in acquired_items }}" title="Void Ray" /></td>
-                <td><img src="{{ icons['Carrier'] }}" class="{{ 'acquired' if 'Carrier' in acquired_items }}" title="Carrier" /></td>
+                <td>{{ sc2_icon('C20A Canister Rifle (Nova Weapon)') }}</td>
+                <td>{{ sc2_icon('Hellfire Shotgun (Nova Weapon)') }}</td>
+                <td>{{ sc2_icon('Plasma Rifle (Nova Weapon)') }}</td>
+                <td>{{ sc2_icon('Monomolecular Blade (Nova Weapon)') }}</td>
+                <td>{{ sc2_icon('Blazefire Gunblade (Nova Weapon)') }}</td>
+                <td colspan="3"></td>
+                <td>{{ sc2_icon('Stim Infusion (Nova Gadget)') }}</td>
+                <td>{{ sc2_icon('Pulse Grenades (Nova Gadget)') }}</td>
+                <td>{{ sc2_icon('Flashbang Grenades (Nova Gadget)') }}</td>
+                <td>{{ sc2_icon('Ionic Force Field (Nova Gadget)') }}</td>
+                <td>{{ sc2_icon('Holo Decoy (Nova Gadget)') }}</td>
+            </tr>
+            <tr>
+                <td>{{ sc2_progressive_icon_with_custom_name('Progressive Stealth Suit Module (Nova Suit Module)', stealth_suit_module_nova_suit_module_url, stealth_suit_module_nova_suit_module_name) }}</td>
+                <td>{{ sc2_icon('Energy Suit Module (Nova Suit Module)') }}</td>
+                <td>{{ sc2_icon('Armored Suit Module (Nova Suit Module)') }}</td>
+                <td>{{ sc2_icon('Jump Suit Module (Nova Suit Module)') }}</td>
+                <td colspan="4"></td>
+                <td>{{ sc2_icon('Ghost Visor (Nova Equipment)') }}</td>
+                <td>{{ sc2_icon('Rangefinder Oculus (Nova Equipment)') }}</td>
+                <td>{{ sc2_icon('Domination (Nova Ability)') }}</td>
+                <td>{{ sc2_icon('Blink (Nova Ability)') }}</td>
+                <td>{{ sc2_icon('Tac Nuke Strike (Nova Ability)') }}</td>
             </tr>
         </table>
         <table id="location-table">
