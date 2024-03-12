@@ -865,8 +865,8 @@ class BicycleGateSkips(Choice):
 
 
 class RandomizePokemonPalettes(Choice):
-    """Modify palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type, Follow
-    Evolutions will randomize palettes but palettes will remain the same through evolutions (except Eeveelutions),
+    """Modify Super Gameboy palettes of Pokemon. Primary Type will set Pokemons' palettes based on their primary type,
+    Follow Evolutions will randomize palettes but they will remain the same through evolutions (except Eeveelutions),
     Completely Random will randomize all Pokemons' palettes individually"""
     display_name = "Randomize Pokemon Palettes"
     option_vanilla = 0
