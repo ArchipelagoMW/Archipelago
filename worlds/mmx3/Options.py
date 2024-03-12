@@ -5,7 +5,8 @@ from Options import Choice, Range, Toggle, DefaultOnToggle, DeathLink, PerGameCo
 
 class StartingLifeCount(Range):
     """
-    How many extra lives to start the game with
+    How many lives to start the game with. 
+    This number becomes the new default life count, meaning that it will persist after a game over.
     """
     display_name = "Starting Life Count"
     range_start = 0
@@ -14,13 +15,13 @@ class StartingLifeCount(Range):
 
 class LogicBossWeakness(DefaultOnToggle):
     """
-    Los jefes requieren que tengas el arma a la que son debiles para poder pelearlos
+    Every main boss will logically expect you to have its weakness.
     """
     display_name = "Boss Weakness Logic"
 
 class LogicZSaber(Choice):
     """
-    Añade el Z-Saber a la logica
+    Adds the Z-Saber to the game's logic.
     """
     display_name = "Z-Saber Logic"
     option_not_required = 5
@@ -29,23 +30,23 @@ class LogicZSaber(Choice):
     option_required_for_lab_3 = 2
     option_required_for_doppler = 3
     option_only_sigma = 4
-    default = 3
+    default = 2
 
 class PickupSanity(Toggle):
     """
-    Whether collecting freestanding HP & Weapon Energy capsules will grant a check
+    Whether collecting freestanding 1ups, HP and Weapon Energy capsules will grant a check.
     """
     display_name = "Pickupsanity"
 
 class DopplerOpen(Choice):
     """
-    Bajo que regla se abre el Dr. Doppler Lab
-    multiworld: El acceso se encuentra donde sea
-    medals: Obtienes acceso al tener cierto numero de medallas
-    weapons: Obtienes acceso al tener cierto numero de armas
-    armor_upgrades: Obtienes acceso al tener cierto numero de upgrades
-    heart_tanks: Obtienes acceso al tener cierto numero de  Heart Tanks
-    sub_tanks: Obtienes acceso al tener cierto numero de los Sub Tanks
+    Under what conditions will Dr. Doppler's lab open.
+      multiworld: Access will require an Access Code multiworld item, similar to the main stages.
+      medals: Access will be granted after collecting a certain amount of Maverick Medals.
+      weapons: Access will be granted after collecting a certain amount of weapons.
+      armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
+      heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
+      sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
     """
     display_name = "Doppler Lab rules"
     option_multiworld = 0
@@ -58,7 +59,7 @@ class DopplerOpen(Choice):
 
 class DopplerMedalCount(Range):
     """
-    Cuantas medallas se ocupan para abrir el Dr. Doppler Lab
+    How many Maverick Medals are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Medal Count"
     range_start = 1
@@ -67,7 +68,7 @@ class DopplerMedalCount(Range):
 
 class DopplerWeaponCount(Range):
     """
-    Cuantas armas se ocupan para abrir el Dr. Doppler Lab
+    How many weapons are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Weapon Count"
     range_start = 1
@@ -76,7 +77,7 @@ class DopplerWeaponCount(Range):
 
 class DopplerArmorUpgradeCount(Range):
     """
-    Cuantos upgrades de armadura se ocupan para abrir el Dr. Doppler Lab
+    How many armor upgrades are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Armor Upgrade Count"
     range_start = 1
@@ -85,7 +86,7 @@ class DopplerArmorUpgradeCount(Range):
 
 class DopplerHeartTankCount(Range):
     """
-    Cuantos Heart Tank se ocupan para abrir el Dr. Doppler Lab
+    How many Heart Tanks are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Heart Tank Count"
     range_start = 1
@@ -94,7 +95,7 @@ class DopplerHeartTankCount(Range):
 
 class DopplerSubTankCount(Range):
     """
-    Cuantos Sub Tank se ocupan para abrir el Dr. Doppler Lab
+    How many Sub Tanks are required to access Dr. Doppler's Lab.
     """
     display_name = "Doppler Sub Tank Count"
     range_start = 1
@@ -103,14 +104,13 @@ class DopplerSubTankCount(Range):
 
 class VileOpen(Range):
     """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Bajo que regla se abre el nivel de Vile
-    multiworld: El acceso se encuentra donde sea
-    medals: Obtienes acceso al tener cierto numero de medallas
-    weapons: Obtienes acceso al tener cierto numero de armas
-    armor_upgrades: Obtienes acceso al tener cierto numero de upgrades
-    heart_tanks: Obtienes acceso al tener cierto numero de  Heart Tanks
-    sub_tanks: Obtienes acceso al tener cierto numero de los Sub Tanks
+    Under what conditions will Vile's Stage open.
+      multiworld: Access will require an Access Code multiworld item, similar to the main stages.
+      medals: Access will be granted after collecting a certain amount of Maverick Medals.
+      weapons: Access will be granted after collecting a certain amount of weapons.
+      armor_upgrades: Access will be granted after collecting a certain amount of armor upgrades.
+      heart_tanks: Access will be granted after collecting a certain amount of Heart Tanks.
+      sub_tanks: Access will be granted after collecting a certain amount of Sub Tanks.
     """
     display_name = "Vile Stage rules"
     option_multiworld = 0
@@ -123,51 +123,46 @@ class VileOpen(Range):
 
 class VileMedalCount(Range):
     """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Cuantas medallas se ocupan para abrir el Vile Stage
+    How many Maverick Medals are required to access Vile's Stage.
     """
     display_name = "Vile Medal Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 2
 
 class VileWeaponCount(Range):
     """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Cuantas armas se ocupan para abrir el Vile Stage
+    How many weapons are required to access Vile's Stage.
     """
     display_name = "Vile Weapon Count"
-    range_start = 1
-    range_end = 8
-    default = 8
-
-class VileArmorUpgradeCount(Range):
-    """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Cuantos upgrades de armadura se ocupan para abrir el Vile Stage
-    """
-    display_name = "Vile Armor Upgrade Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 2
 
+class VileArmorUpgradeCount(Range):
+    """
+    How many armor upgrades are required to access Vile's Stage.
+    """
+    display_name = "Vile Armor Upgrade Count"
+    range_start = 0
+    range_end = 8
+    default = 3
+
 class VileHeartTankCount(Range):
     """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Cuantos Heart Tank se ocupan para abrir el Vile Stage
+    How many Heart Tanks are required to access Vile's Stage.
     """
     display_name = "Vile Heart Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 8
     default = 4
 
 class VileSubTankCount(Range):
     """
-    AUN NO SIRVE (DOES NOT WORK YET)
-    Cuantos Sub Tank se ocupan para abrir el Vile Stage
+    How many Sub Tanks are required to access Vile's Stage.
     """
     display_name = "Vile Sub Tank Count"
-    range_start = 1
+    range_start = 0
     range_end = 4
     default = 2
 
