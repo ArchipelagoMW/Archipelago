@@ -968,7 +968,7 @@ def distribute_planned(multiworld: MultiWorld) -> None:
                     placement['force'])
 
             # Sort indices in reverse so we can remove them one by one
-            successful_pairs = sorted(successful_pairs, key=lambda successful_pair: successful_pair[0], reverse=True)
+            successful_pairs = sorted(successful_pairs, key=lambda successful_pair: successful_pair[0] or 0, reverse=True)
 
             for (index, item, location) in successful_pairs:
                 multiworld.push_item(location, item, collect=False)
