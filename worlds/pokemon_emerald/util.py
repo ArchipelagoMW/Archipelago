@@ -1,4 +1,4 @@
-import json
+import orjson
 from typing import Any, Dict, List, Optional, Tuple, Iterable
 
 from .data import NATIONAL_ID_TO_SPECIES_ID, data
@@ -210,11 +210,11 @@ def pokemon_data_to_json(pokemon_data: Iterable[int]) -> str:
     if held_item != 0:
         json_object["item"] = data.items[held_item].modern_id
 
-    return json.dumps(json_object)
+    return orjson.dumps(json_object).decode("utf-8")
 
 
 def json_to_pokemon_data(json_str: str) -> bytearray:
-    pokemon_json: Dict[str, Any] = json.loads(json_str)
+    pokemon_json: Dict[str, Any] = orjson.loads(json_str)
 
     # Default values to cover for optional or accidentally missed fields
     default_pokemon = {
