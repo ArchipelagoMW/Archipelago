@@ -1,21 +1,8 @@
-from typing import Callable, Literal
+# TODO: stabilize the imports, don't just import *
+from .AutopelagoDefinitions import *
 
-from BaseClasses import CollectionState, Entrance, Item, ItemClassification, Location, MultiWorld, Region, Tutorial
+from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
-
-from .ArbitraryGameDefs import \
-    BASE_ID, GAME_NAME, AutopelagoRegion, num_locations_in, \
-    rat_item_count_for_balancing, rat_item_count_skip_balancing, useful_item_count, filler_item_count, trap_item_count
-
-from .Items import \
-    normal_rat_item_name, goal_item_name, all_item_names, generic_item_table, \
-    game_specific_items, item_name_to_defined_classification, item_name_to_rat_count
-
-def _gen_ids():
-    next_id = BASE_ID
-    while True:
-        yield next_id
-        next_id += 1
 
 
 class AutopelagoItem(Item):
@@ -49,19 +36,11 @@ class AutopelagoWorld(World):
     data_version = 0
     web = AutopelagoWebWorld()
 
-    # location_name_to_id and item_name_to_id must be filled VERY early, but seemingly only because
+    # item_name_to_id and location_name_to_id must be filled VERY early, but seemingly only because
     # they are used in Main.main to log the ID ranges in use. if not for that, we probably could've
     # been able to get away with populating these just based on what we actually need.
-    location_name_to_id = { }
-    _id_gen = _gen_ids()
-    for r in AutopelagoRegion:
-        for i in range(num_locations_in[r]):
-            location_name_to_id[r.get_location_name(i)] = next(_id_gen)
-    item_name_to_id = { }
-    _id_gen = _gen_ids()
-    for item_name in all_item_names:
-        item_name_to_id[item_name] = next(_id_gen)
-    del _id_gen
+    item_name_to_id = item_name_to_id
+    location_name_to_id = location_name_to_id
 
     # insert other ClassVar values... suggestions include:
     # - item_name_groups
@@ -70,129 +49,70 @@ class AutopelagoWorld(World):
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
-    # other variables we use are INSTANCE variables that depend on the specific multiworld.
-    _item_name_to_classification: dict[str, ItemClassification]
-    _all_live_items_excluding_goal_and_normal_rats: list[str]
-    _normal_rats_balancing_count: int | None
-    _normal_rats_skip_balancing_count: int | None
-    def __init__(self, multiworld: MultiWorld, player: int):
-        super().__init__(multiworld, player)
-        self._item_name_to_classification = { item_name: classification for item_name, classification in item_name_to_defined_classification.items() if classification is not None }
-        self._all_live_items_excluding_goal_and_normal_rats: list[str] = [
-            'Red Matador\'s Cape',
-            'Premium Can of Prawn Food',
-            'A Cookie',
-            'Bribe',
-            'Masterful Longsword',
-        ]
-        self._normal_rats_balancing_count = None
-        self._normal_rats_skip_balancing_count = None
-
-    def generate_early(self):
-        # finalize the list of possible items, based on which games are present in this multiworld.
-        full_item_table = { c: [item_name for item_name in items] for c, items in generic_item_table.items() }
-        dlc_games = { game for game in game_specific_items }
-        for category, items in full_item_table.items():
-            if category not in { 'useful_nonprogression', 'filler', 'trap', 'uncategorized' }:
-                continue
-            replacements_made = 0
-            for game_name in self.multiworld.game.values():
-                if game_name not in dlc_games:
-                    continue
-                dlc_games.remove(game_name)
-                for item in game_specific_items[game_name][category]:
-                    items[replacements_made] = item
-                    replacements_made += 1
-
-        category_to_next_offset = { category: 0 for category in full_item_table }
-        category_to_next_offset['rat'] += 1
-        def append_next_n_item_names(category: Literal['rat', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], n: int, classification: ItemClassification):
-            def next_up_to_n_item_names(category: Literal['rat', 'useful_nonprogression', 'filler', 'trap', 'uncategorized'], n: int):
-                items = full_item_table[category]
-                offset = category_to_next_offset[category]
-                avail = len(items) - offset
-                if avail < n:
-                    n = avail
-                yield from (items[offset + i] for i in range(n))
-                category_to_next_offset[category] += n
-
-            for item_name in next_up_to_n_item_names(category, n):
-                self._all_live_items_excluding_goal_and_normal_rats.append(item_name)
-                self._item_name_to_classification[item_name] = classification
-                n -= 1
-
-            assert n == 0 or category == 'rat', f'Only normal rats should use the overflow ({n=}, {category=}, {classification=})'
-            match classification:
-                case ItemClassification.progression:
-                    assert self._normal_rats_balancing_count is None, 'Normal rats should only be added once for balancing.'
-                    self._normal_rats_balancing_count = n
-                case ItemClassification.progression_skip_balancing:
-                    assert self._normal_rats_skip_balancing_count is None, 'Normal rats should only be added once for non-balancing.'
-                    self._normal_rats_skip_balancing_count = n
-
-        append_next_n_item_names('rat', rat_item_count_for_balancing, ItemClassification.progression)
-        append_next_n_item_names('rat', rat_item_count_skip_balancing, ItemClassification.progression_skip_balancing)
-        append_next_n_item_names('useful_nonprogression', useful_item_count, ItemClassification.useful)
-        append_next_n_item_names('filler', filler_item_count, ItemClassification.filler)
-        append_next_n_item_names('trap', trap_item_count, ItemClassification.trap)
-
-    def set_rules(self):
-        def _connect(r_from: AutopelagoRegion, r_to: AutopelagoRegion, access_rule: Callable[[CollectionState], bool] | None = None):
-            r_from_real = self.multiworld.get_region(r_from.name, self.player)
-            r_to_real = self.multiworld.get_region(r_to.name, self.player)
-            connection = Entrance(self.player, '', r_from_real)
-            if access_rule:
-                connection.access_rule = access_rule
-            r_from_real.exits.append(connection)
-            connection.connect(r_to_real)
-
-        _connect(AutopelagoRegion.BeforeBasketball, AutopelagoRegion.Basketball, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 5)
-        _connect(AutopelagoRegion.Basketball, AutopelagoRegion.BeforeMinotaur)
-        _connect(AutopelagoRegion.Basketball, AutopelagoRegion.BeforePrawnStars)
-        _connect(AutopelagoRegion.BeforeMinotaur, AutopelagoRegion.Minotaur, lambda state: state.has('Red Matador\'s Cape', self.player))
-        _connect(AutopelagoRegion.BeforePrawnStars, AutopelagoRegion.PrawnStars, lambda state: state.has('Premium Can of Prawn Food', self.player))
-        _connect(AutopelagoRegion.Minotaur, AutopelagoRegion.BeforeRestaurant)
-        _connect(AutopelagoRegion.PrawnStars, AutopelagoRegion.BeforePirateBakeSale)
-        _connect(AutopelagoRegion.BeforeRestaurant, AutopelagoRegion.Restaurant, lambda state: state.has('A Cookie', self.player))
-        _connect(AutopelagoRegion.BeforePirateBakeSale, AutopelagoRegion.PirateBakeSale, lambda state: state.has('Bribe', self.player))
-        _connect(AutopelagoRegion.Restaurant, AutopelagoRegion.AfterRestaurant)
-        _connect(AutopelagoRegion.PirateBakeSale, AutopelagoRegion.AfterPirateBakeSale)
-        _connect(AutopelagoRegion.AfterRestaurant, AutopelagoRegion.BowlingBallDoor, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.AfterPirateBakeSale, AutopelagoRegion.BowlingBallDoor, lambda state: sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= 20)
-        _connect(AutopelagoRegion.BowlingBallDoor, AutopelagoRegion.BeforeGoldfish)
-        _connect(AutopelagoRegion.BeforeGoldfish, AutopelagoRegion.Goldfish, lambda state: state.has('Masterful Longsword', self.player))
-
-        self.multiworld.get_location("goldfish", self.player).place_locked_item(self.create_item(goal_item_name))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has(goal_item_name, self.player)
+    def _is_satisfied(self, req: AutopelagoGameRequirement, state: CollectionState):
+        if 'all' in req:
+            return all(self._is_satisfied(sub_req) for sub_req in req['all'])
+        elif 'any' in req:
+            return any(self._is_satisfied(sub_req) for sub_req in req['any'])
+        elif 'item' in req:
+            return state.has(item_key_to_name[req['item']])
+        elif 'rat_count' in req:
+            return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
+        else:
+            assert 'ability_check_with_dc' in req, 'Only AutopelagoAbilityCheckRequirement is expected here'
+            return True
 
     def create_item(self, name: str, classification: ItemClassification | None = None):
         id = self.item_name_to_id[name]
-        classification = classification or self._item_name_to_classification[name]
+        classification = classification or item_name_to_defined_classification[name]
         assert classification is not None, 'Classification should either be defined, calculated during generate_early, or hardcoded.'
         item = AutopelagoItem(name, classification, id, self.player)
         return item
 
     def create_items(self):
-        self.multiworld.itempool += (self.create_item(name) for name in self._all_live_items_excluding_goal_and_normal_rats)
-        self.multiworld.itempool += (self.create_item(normal_rat_item_name, ItemClassification.progression) for _ in range(self._normal_rats_balancing_count))
-        self.multiworld.itempool += (self.create_item(normal_rat_item_name, ItemClassification.progression_skip_balancing) for _ in range(self._normal_rats_skip_balancing_count))
+        self.multiworld.itempool += (self.create_item(item) for item in location_name_to_unrandomized_progression_item_name.values())
+
+        nonprogression_item_table = { c: [item_name for item_name in items] for c, items in generic_nonprogression_item_table.items() }
+        dlc_games = { game for game in game_specific_nonprogression_items }
+        for category, items in nonprogression_item_table.items():
+            self.multiworld.random.shuffle(items)
+            replacements_made = 0
+            for game_name in self.multiworld.game.values():
+                if game_name not in dlc_games:
+                    continue
+                dlc_games.remove(game_name)
+                for item in game_specific_nonprogression_items[game_name][category]:
+                    items[replacements_made] = item
+                    replacements_made += 1
+
+        category_to_next_offset = { category: 0 for category in generic_nonprogression_item_table }
+        for nonprog_type in location_name_to_unrandomized_nonprogression_item.values():
+            if nonprog_type == 'filler' and bool(self.multiworld.random.getrandbits(1)):
+                nonprog_type = 'trap'
+            classification = autopelago_item_classification_of(nonprog_type)
+            if category_to_next_offset[nonprog_type] > len(nonprogression_item_table[nonprog_type]):
+                nonprog_type = 'uncategorized'
+            next_item = nonprogression_item_table[nonprog_type][category_to_next_offset[nonprog_type]]
+            self.multiworld.itempool.append(self.create_item(next_item, classification))
+            category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        self.multiworld.regions += (self.create_region(r) for r in AutopelagoRegion)
+        new_regions = { r.key: self.create_region(r) for r in regions }
+        for r in new_regions.values():
+            region = regions[r.name]
+            for exit in region.exits:
+                connection = Entrance(self.player, parent=r)
+                connection.access_rule = lambda state: self._is_satisfied(region.requires, state)
+                connection.connect(regions[exit])
 
-        # logic assumes that the player starts in a special hardcoded "Menu" region
-        menu = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(menu)
-        entrance = Entrance(self.player, '', menu)
-        menu.exits.append(entrance)
-        entrance.connect(self.multiworld.get_region(AutopelagoRegion.BeforeBasketball.name, self.player))
+        self.multiworld.regions += new_regions.values()
+        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(new_regions['goal'], self.player)
 
-    def create_region(self, r: AutopelagoRegion):
-        region = Region(r.name, self.player, self.multiworld)
-        for i in range(num_locations_in[r]):
-            location_name = r.get_location_name(i)
-            location_id = self.location_name_to_id[location_name]
-            location = AutopelagoLocation(self.player, location_name, location_id, region)
+    def create_region(self, r: AutopelagoRegionDefinition):
+        region = Region(r.key, self.player, self.multiworld)
+        for loc in r.locations:
+            location_id = self.location_name_to_id[loc]
+            location = AutopelagoLocation(self.player, loc, location_id, region)
             region.locations.append(location)
         return region
 

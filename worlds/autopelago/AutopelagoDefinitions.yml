@@ -2,7 +2,7 @@
 # Please make sure that it matches in both places.
 
 items:
-  goal: 'Lockheed SR-71 Blackbird'
+  blackbird: 'Lockheed SR-71 Blackbird'
   masterful_longsword: 'Masterful Longsword'
 
   # if you want to add something extra onto an item, you have to do it like:
@@ -363,7 +363,7 @@ regions:
   landmarks:
     captured_goldfish:
       name: 'Captured Goldfish'
-      unrandomized_item: goal
+      unrandomized_item: blackbird
       requires:
         - item: masterful_longsword
         - ability_check_with_dc: 20
