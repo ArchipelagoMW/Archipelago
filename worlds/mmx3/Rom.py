@@ -47,6 +47,7 @@ boss_access_rom_data = {
     0xBD0004: [0x08],
     0xBD0007: [0x09],
     0xBD000A: [0x0A],
+    0xBD0019: [0x0B],
 }
 
 refill_rom_data = {

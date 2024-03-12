@@ -32,6 +32,7 @@ access_codes_table = {
     ItemName.stage_gravity_beetle:      ItemData(0xBD0008, True),
     ItemName.stage_blast_hornet:        ItemData(0xBD0009, True),
     ItemName.stage_doppler_lab:         ItemData(0xBD000A, True),
+    ItemName.stage_vile:                ItemData(0xBD0019, True),
 }
 
 weapons = {
@@ -81,13 +82,13 @@ item_groups = {
         ItemName.ray_splasher,
         ItemName.gravity_well,
         ItemName.parasitic_bomb,
-        ItemName.z_saber
+        ItemName.z_saber,
     },
     "Armor Upgrades": {
         ItemName.third_armor_helmet,
         ItemName.third_armor_body,
         ItemName.third_armor_arms,
-        ItemName.third_armor_legs
+        ItemName.third_armor_legs,
     },
     "Access Codes": {
         ItemName.stage_toxic_seahorse,
@@ -98,7 +99,8 @@ item_groups = {
         ItemName.stage_neon_tiger,
         ItemName.stage_gravity_beetle,
         ItemName.stage_blast_hornet,
-        ItemName.stage_doppler_lab
+        ItemName.stage_doppler_lab,
+        ItemName.stage_vile,
     }
 }
 
@@ -110,7 +112,7 @@ item_table = {
     **tanks_table,
     **ride_table,
     **third_armor_table,
-    **junk_table
+    **junk_table,
 }
 
 lookup_id_to_name: typing.Dict[int, str] = {data.code: item_name for item_name, data in item_table.items() if data.code}
