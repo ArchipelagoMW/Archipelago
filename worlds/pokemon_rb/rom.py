@@ -13,22 +13,22 @@ from .regions import PokemonRBWarp, map_ids, town_map_coords
 from . import poke_data
 
 
-def write_quizzes(self, data, random):
+def write_quizzes(world, data, random):
 
     def get_quiz(q, a):
         if q == 0:
             r = random.randint(0, 3)
             if r == 0:
-                mon = self.trade_mons["Trade_Dux"]
+                mon = world.trade_mons["Trade_Dux"]
                 text = "A woman in<LINE>Vermilion City<CONT>"
             elif r == 1:
-                mon = self.trade_mons["Trade_Lola"]
+                mon = world.trade_mons["Trade_Lola"]
                 text = "A man in<LINE>Cerulean City<CONT>"
             elif r == 2:
-                mon = self.trade_mons["Trade_Marcel"]
+                mon = world.trade_mons["Trade_Marcel"]
                 text = "Someone on Route 2<LINE>"
             elif r == 3:
-                mon = self.trade_mons["Trade_Spot"]
+                mon = world.trade_mons["Trade_Spot"]
                 text = "Someone on Route 5<LINE>"
             if not a:
                 answers.append(0)
@@ -38,25 +38,30 @@ def write_quizzes(self, data, random):
 
             return encode_text(f"{text}was looking for<CONT>{mon}?<DONE>")
         elif q == 1:
-            for location in self.multiworld.get_filled_locations():
-                if location.item.name == "Secret Key" and location.item.player == self.player:
+            for location in world.multiworld.get_filled_locations():
+                if location.item.name == "Secret Key" and location.item.player == world.player:
                     break
-            player_name = self.multiworld.player_name[location.player]
+            player_name = world.multiworld.player_name[location.player]
             if not a:
-                if len(self.multiworld.player_name) > 1:
+                if len(world.multiworld.player_name) > 1:
                     old_name = player_name
                     while old_name == player_name:
-                        player_name = random.choice(list(self.multiworld.player_name.values()))
+                        player_name = random.choice(list(world.multiworld.player_name.values()))
                 else:
                     return encode_text("You're playing<LINE>in a multiworld<CONT>with other<CONT>players?<DONE>")
-            if player_name == self.multiworld.player_name[self.player]:
-                player_name = "yourself"
-            player_name = encode_text(player_name, force=True, safety=True)
-            if self.multiworld.get_entrance(
-                    "Cinnabar Island-G to Cinnabar Gym").connected_region.name == "Cinnabar Gym":
-                return encode_text(f"The Secret Key was<LINE>found by<CONT>{player_name}?<DONE>")
-            # Might not have found it yet
-            return encode_text(f"The Secret Key was<LINE>placed in<CONT>{player_name}'s<CONT>world?<DONE>")
+            if world.multiworld.get_entrance(
+                    "Cinnabar Island-G to Cinnabar Gym", world.player).connected_region.name == "Cinnabar Gym":
+                if player_name == world.multiworld.player_name[world.player]:
+                    player_name = "yourself"
+                player_name = encode_text(player_name, force=True, safety=True)
+                return encode_text(f"The Secret Key was<LINE>found by<CONT>") + player_name + encode_text("?<DONE>")
+            else:
+                # Might not have found it yet
+                if player_name == world.multiworld.player_name[world.player]:
+                    return encode_text(f"The Secret Key was<LINE>placed in<CONT>your own world?<DONE>")
+                player_name = encode_text(player_name, force=True, safety=True)
+                return (encode_text(f"The Secret Key was<LINE>placed in<CONT>") + player_name
+                        + encode_text("'s<CONT>world?<DONE>"))
         elif q == 2:
             if a:
                 return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kay-mon?<DONE>")
@@ -66,8 +71,8 @@ def write_quizzes(self, data, random):
                 else:
                     return encode_text(f"#mon is<LINE>pronounced<CONT>Po-kuh-mon?<DONE>")
         elif q == 3:
-            starters = [" ".join(self.multiworld.get_location(
-                f"Oak's Lab - Starter {i}", self.player).item.name.split(" ")[1:]) for i in range(1, 4)]
+            starters = [" ".join(world.multiworld.get_location(
+                f"Oak's Lab - Starter {i}", world.player).item.name.split(" ")[1:]) for i in range(1, 4)]
             mon = random.choice(starters)
             nots = random.choice(range(8, 16, 2))
             if random.randint(0, 1):
@@ -86,10 +91,10 @@ def write_quizzes(self, data, random):
             return encode_text(text)
         elif q == 4:
             if a:
-                tm_text = self.local_tms[27]
+                tm_text = world.local_tms[27]
             else:
-                if self.options.randomize_tm_moves:
-                    wrong_tms = self.local_tms.copy()
+                if world.options.randomize_tm_moves:
+                    wrong_tms = world.local_tms.copy()
                     wrong_tms.pop(27)
                     tm_text = random.choice(wrong_tms)
                 else:
@@ -143,17 +148,17 @@ def write_quizzes(self, data, random):
                 level += random.choice(range(1, 6)) * random.choice((-1, 1))
             return encode_text(f"{mon} evolves<LINE>at level {level}?<DONE>")
         elif q == 9:
-            move = random.choice(list(self.local_move_data.keys()))
-            actual_type = self.local_move_data[move]["type"]
+            move = random.choice(list(world.local_move_data.keys()))
+            actual_type = world.local_move_data[move]["type"]
             question_type = actual_type
             while question_type == actual_type and not a:
                 question_type = random.choice(list(poke_data.type_ids.keys()))
             return encode_text(f"{move} is<LINE>{question_type} type?<DONE>")
         elif q == 10:
             mon = random.choice(list(poke_data.pokemon_data.keys()))
-            actual_type = self.local_poke_data[mon][random.choice(("type1", "type2"))]
+            actual_type = world.local_poke_data[mon][random.choice(("type1", "type2"))]
             question_type = actual_type
-            while question_type in [self.local_poke_data[mon]["type1"], self.local_poke_data[mon]["type2"]] and not a:
+            while question_type in [world.local_poke_data[mon]["type1"], world.local_poke_data[mon]["type2"]] and not a:
                 question_type = random.choice(list(poke_data.type_ids.keys()))
             return encode_text(f"{mon} is<LINE>{question_type} type?<DONE>")
         elif q == 11:
@@ -175,8 +180,8 @@ def write_quizzes(self, data, random):
             return encode_text(f"{equation}<LINE>= {question_result}?<DONE>")
         elif q == 12:
             route = random.choice((12, 16))
-            actual_mon = self.multiworld.get_location(f"Route {route} - Sleeping Pokemon",
-                                                      self.player).item.name.split("Static ")[1]
+            actual_mon = world.multiworld.get_location(f"Route {route} - Sleeping Pokemon",
+                                                       world.player).item.name.split("Static ")[1]
             question_mon = actual_mon
             while question_mon == actual_mon and not a:
                 question_mon = random.choice(list(poke_data.pokemon_data.keys()))
@@ -185,7 +190,7 @@ def write_quizzes(self, data, random):
             type1 = random.choice(list(poke_data.type_ids.keys()))
             type2 = random.choice(list(poke_data.type_ids.keys()))
             eff_msgs = ["super effective<CONT>", "no ", "not very<CONT>effective<CONT>", "normal "]
-            for matchup in self.type_chart:
+            for matchup in world.type_chart:
                 if matchup[0] == type1 and matchup[1] == type2:
                     if matchup[2] > 10:
                         eff = eff_msgs[0]
@@ -203,8 +208,8 @@ def write_quizzes(self, data, random):
                 eff = random.choice(eff_msgs)
             return encode_text(f"{type1} deals<LINE>{eff}damage to<CONT>{type2} type?<DONE>")
         elif q == 14:
-            fossil_level = self.multiworld.get_location("Fossil Level - Trainer Parties",
-                                                        self.player).party_data[0]['level']
+            fossil_level = world.multiworld.get_location("Fossil Level - Trainer Parties",
+                                                         world.player).party_data[0]['level']
             if not a:
                 fossil_level += random.choice((-5, 5))
             return encode_text(f"Fossil #MON<LINE>revive at level<CONT>{fossil_level}?<DONE>")
