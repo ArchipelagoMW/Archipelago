@@ -5,6 +5,7 @@ from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, h
     dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
 from worlds.generic import PlandoConnection
+from random import Random
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -361,8 +362,11 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
+    random_object: Random = world.random
+    if world.options.entrance_rando.value != 1:
+        random_object = Random(world.options.entrance_rando.value)
     # we want to start by making sure every region is accessible
-    world.random.shuffle(two_plus)
+    random_object.shuffle(two_plus)
     check_success = 0
     portal1 = None
     portal2 = None
@@ -387,7 +391,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if portal.region in connected_regions:
                     # if there's risk of self-locking, start over
                     if gate_before_switch(portal, two_plus):
-                        world.random.shuffle(two_plus)
+                        random_object.shuffle(two_plus)
                         break
                     portal1 = portal
                     two_plus.remove(portal)
@@ -400,7 +404,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if portal.region not in connected_regions:
                     # if there's risk of self-locking, shuffle and try again
                     if gate_before_switch(portal, two_plus):
-                        world.random.shuffle(two_plus)
+                        random_object.shuffle(two_plus)
                         break
                     portal2 = portal
                     two_plus.remove(portal)
@@ -412,7 +416,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             connected_regions.update(add_dependent_regions(portal2.region, logic_rules))
             portal_pairs[portal1] = portal2
             check_success = 0
-            world.random.shuffle(two_plus)
+            random_object.shuffle(two_plus)
 
     # for universal tracker, we want to skip shop gen
     if hasattr(world.multiworld, "re_gen_passthrough"):

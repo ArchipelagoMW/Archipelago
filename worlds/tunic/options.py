@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, PerGameCommonOptions
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
 
 
 class SwordProgression(DefaultOnToggle):
@@ -104,11 +104,14 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
-class EntranceRando(Toggle):
+class EntranceRando(TextChoice):
     """Randomize the connections between scenes.
     A small, very lost fox on a big adventure."""
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
+    option_false = 0
+    option_true = 1
+    default = 0
 
 
 class FixedShop(Toggle):
