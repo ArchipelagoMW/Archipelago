@@ -527,38 +527,38 @@ class DeadEnd(IntEnum):
 # key is the AP region name. "Fake" in region info just means the mod won't receive that info at all
 tunic_er_regions: Dict[str, RegionInfo] = {
     "Menu": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
-    "Overworld": RegionInfo("Overworld Redux"),
-    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),
+    "Overworld": RegionInfo("Overworld Redux"),  # main overworld, the central area
+    "Overworld Holy Cross": RegionInfo("Fake", dead_end=DeadEnd.all_cats),  # main overworld holy cross checks
     "Overworld Belltower": RegionInfo("Overworld Redux"),  # the area with the belltower and chest
-    "Overworld Belltower at Bell": RegionInfo("Overworld Redux"),  # the belltower itself, being able to ring it
+    "Overworld Belltower at Bell": RegionInfo("Overworld Redux"),  # being able to ring the belltower, basically
     "Overworld Swamp Upper Entry": RegionInfo("Overworld Redux"),  # upper swamp entry spot
-    "Overworld Swamp Lower Entry": RegionInfo("Overworld Redux"),  # lower swamp entrance, rotating lights
+    "Overworld Swamp Lower Entry": RegionInfo("Overworld Redux"),  # lower swamp entrance, rotating lights entrance
     "After Ruined Passage": RegionInfo("Overworld Redux"),  # just the door and chest
-    "Above Ruined Passage": RegionInfo("Overworld Redux"),  # one ladder up, just the chest in the trees
+    "Above Ruined Passage": RegionInfo("Overworld Redux"),  # one ladder up from ruined passage
     "East Overworld": RegionInfo("Overworld Redux"),  # where the east forest and fortress entrances are
     "Overworld Special Shop Entry": RegionInfo("Overworld Redux"),  # special shop entry spot
     "Upper Overworld": RegionInfo("Overworld Redux"),  # where the mountain stairs are
     "Overworld above Quarry Entrance": RegionInfo("Overworld Redux"),  # top of the ladder where the chest is
-    "Overworld after Temple Rafters": RegionInfo("Overworld Redux"),  # the ledge after the rafter exit, before ladder
-    "Overworld Quarry Entry": RegionInfo("Overworld Redux"),  # at the top of the ladder to darkwoods
-    "Overworld after Envoy": RegionInfo("Overworld Redux"),  # after the envoy on the bridge to quarry
-    "Overworld above Patrol Cave": RegionInfo("Overworld Redux"),  # where the hook is, and one ladder up from patrol
+    "Overworld after Temple Rafters": RegionInfo("Overworld Redux"),  # the ledge after the rafters exit, before ladder
+    "Overworld Quarry Entry": RegionInfo("Overworld Redux"),  # at the top of the ladder, to darkwoods
+    "Overworld after Envoy": RegionInfo("Overworld Redux"),  # after the envoy on the thin bridge to quarry
     "Overworld at Patrol Cave": RegionInfo("Overworld Redux"),  # right at the patrol cave entrance
+    "Overworld above Patrol Cave": RegionInfo("Overworld Redux"),  # where the hook is, and one ladder up from patrol
     "Overworld West Garden Laurels Entry": RegionInfo("Overworld Redux"),  # west garden laurels entry
     "Overworld to West Garden Upper": RegionInfo("Overworld Redux"),  # usually leads to garden knight
-    "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux"),
-    "Overworld Well Ladder": RegionInfo("Overworld Redux"),  # just the ladder entrance
-    "Overworld Beach": RegionInfo("Overworld Redux"),
-    "Overworld to Atoll Upper": RegionInfo("Overworld Redux"),
-    "Overworld Well to Furnace Rail": RegionInfo("Overworld Redux"),  # the tiny rail passageway
+    "Overworld to West Garden from Furnace": RegionInfo("Overworld Redux"),  # isolated stairway with one chest
+    "Overworld Well Ladder": RegionInfo("Overworld Redux"),  # just the ladder entrance itself as a region
+    "Overworld Beach": RegionInfo("Overworld Redux"),  # from the two turrets to invisble maze, and lower atoll entry
+    "Overworld Tunnel Turret": RegionInfo("Overworld Redux"),  # the tunnel turret by the southwest beach ladder
+    "Overworld to Atoll Upper": RegionInfo("Overworld Redux"),  # the little ledge before the ladder
+    "Overworld Well to Furnace Rail": RegionInfo("Overworld Redux"),  # the rail hallway, bane of unrestricted logic
     "Overworld Ruined Passage Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
     "Overworld Old House Door": RegionInfo("Overworld Redux"),  # the too-small space between the door and the portal
     "Overworld Southeast Cross Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
-    "Overworld Fountain Cross Door": RegionInfo("Overworld Redux"),
+    "Overworld Fountain Cross Door": RegionInfo("Overworld Redux"),  # the small space between the door and the portal
     "Overworld Temple Door": RegionInfo("Overworld Redux"),  # the small space betweeen the door and the portal
-    "Overworld Town Portal": RegionInfo("Overworld Redux"),
-    "Overworld Spawn Portal": RegionInfo("Overworld Redux"),
-    "Overworld Tunnel Turret": RegionInfo("Overworld Redux"),  # the tunnel turret by the southwest beach ladder
+    "Overworld Town Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
+    "Overworld Spawn Portal": RegionInfo("Overworld Redux"),  # being able to go to or come from the portal
     "Stick House": RegionInfo("Sword Cave", dead_end=DeadEnd.all_cats),
     "Windmill": RegionInfo("Windmill"),
     "Old House Back": RegionInfo("Overworld Interiors"),  # part with the hc door
@@ -602,8 +602,8 @@ tunic_er_regions: Dict[str, RegionInfo] = {
     "Dark Tomb Upper": RegionInfo("Crypt Redux"),  # the part with the casket and the top of the ladder
     "Dark Tomb Main": RegionInfo("Crypt Redux"),
     "Dark Tomb Dark Exit": RegionInfo("Crypt Redux"),
-    "Dark Tomb Checkpoint": RegionInfo("Sewer_Boss"),  # can laurels backwards
-    "Well Boss": RegionInfo("Sewer_Boss"),  # can walk through (with bombs at least)
+    "Dark Tomb Checkpoint": RegionInfo("Sewer_Boss"),
+    "Well Boss": RegionInfo("Sewer_Boss"),
     "Beneath the Well Ladder Exit": RegionInfo("Sewer"),  # just the ladder
     "Beneath the Well Front": RegionInfo("Sewer"),  # the front, to separate it from the weapon requirement in the mid
     "Beneath the Well Main": RegionInfo("Sewer"),  # the main section of it, requires a weapon
