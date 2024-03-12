@@ -56,7 +56,7 @@ class EarlyLightning(Toggle):
     """
     display_name = "Early Lightning"
 
-class IxupiCapturesPriority(Toggle):
+class IxupiCapturesPriority(DefaultOnToggle):
     """Ixupi captures are set to priority locations. This forces a progression item into these locations if possible."""
     display_name = "Ixupi Captures are Priority"
 
