@@ -323,13 +323,29 @@ def roll_percentage(percentage: Union[int, float]) -> bool:
     return random.random() < (float(percentage) / 100)
 
 
-def update_weights(weights: dict, new_weights: dict, type: str, name: str) -> dict:
+def update_weights(weights: dict, new_weights: dict, update_type: str, name: str) -> dict:
     logging.debug(f'Applying {new_weights}')
-    new_options = set(new_weights) - set(weights)
-    weights.update(new_weights)
+    cleaned_weights = {}
+    for option in new_weights:
+        option_name = option.lstrip("+")
+        if option.startswith("+") and option_name in weights:
+            cleaned_value = weights[option_name]
+            new_value = new_weights[option]
+            if isinstance(new_value, (set, dict)):
+                cleaned_value.update(new_value)
+            elif isinstance(new_value, list):
+                cleaned_value.extend(new_value)
+            else:
+                raise Exception(f"Cannot apply merge to non-dict, set, or list type {option_name},"
+                                f" received {type(new_value).__name__}.")
+            cleaned_weights[option_name] = cleaned_value
+        else:
+            cleaned_weights[option_name] = new_weights[option]
+    new_options = set(cleaned_weights) - set(weights)
+    weights.update(cleaned_weights)
     if new_options:
         for new_option in new_options:
-            logging.warning(f'{type} Suboption "{new_option}" of "{name}" did not '
+            logging.warning(f'{update_type} Suboption "{new_option}" of "{name}" did not '
                             f'overwrite a root option. '
                             f'This is probably in error.')
     return weights
@@ -451,6 +467,10 @@ def roll_settings(weights: dict, plando_options: PlandoOptions = PlandoOptions.b
 
     world_type = AutoWorldRegister.world_types[ret.game]
     game_weights = weights[ret.game]
+
+    if any(weight.startswith("+") for weight in game_weights) or \
+       any(weight.startswith("+") for weight in weights):
+        raise Exception(f"Merge tag cannot be used outside of trigger contexts.")
 
     if "triggers" in game_weights:
         weights = roll_triggers(weights, game_weights["triggers"])
