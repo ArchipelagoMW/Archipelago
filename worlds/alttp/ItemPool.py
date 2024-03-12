@@ -605,7 +605,7 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.glitch_boots[player]:
+    if logic.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.glitch_boots[player]:
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
