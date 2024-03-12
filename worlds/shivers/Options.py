@@ -13,13 +13,16 @@ class LobbyAccess(Choice):
     option_local = 2
 
 class PuzzleHintsRequired(DefaultOnToggle):
-    """If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Tiki
+    """If turned on puzzle hints will be available before the corresponding puzzle is required. For example: The Shaman
     Drums puzzle will be placed after access to the security cameras which give you the solution. Turning this off
     allows for greater randomization."""
     display_name = "Puzzle Hints Required"
 
 class InformationPlaques(Toggle):
-    """Adds Information Plaques as checks."""
+    """
+    Adds Information Plaques as checks.
+    (40 Locations)
+    """
     display_name = "Include Information Plaques"
 
 class FrontDoorUsable(Toggle):
@@ -27,7 +30,10 @@ class FrontDoorUsable(Toggle):
     display_name = "Front Door Usable"
 
 class ElevatorsStaySolved(DefaultOnToggle):
-    """Adds elevators as checks and will remain open upon solving them."""
+    """
+    Adds elevators as checks and will remain open upon solving them.
+    (3 Locations)
+    """
     display_name = "Elevators Stay Solved"
 
 class EarlyBeth(DefaultOnToggle):
@@ -35,7 +41,10 @@ class EarlyBeth(DefaultOnToggle):
     display_name = "Early Beth"
 
 class EarlyLightning(Toggle):
-    """Allows lightning to be captured at any point in the game. You will still need to capture all ten Ixupi for victory."""
+    """
+    Allows lightning to be captured at any point in the game. You will still need to capture all ten Ixupi for victory.
+    (1 Location)
+    """
     display_name = "Early Lightning"
 
 
