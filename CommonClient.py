@@ -19,7 +19,7 @@ import Utils
 if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
-from MultiServer import CommandProcessor
+from MultiServer import CommandProcessor, mark_raw
 from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
     ClientStatus, Permission, NetworkSlot, RawJSONtoTextParser
 from Utils import Version, stream_input, async_start
@@ -77,7 +77,8 @@ class ClientCommandProcessor(CommandProcessor):
             self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
         return True
 
-    def _cmd_missing(self, filter_text = "") -> bool:
+    @mark_raw
+    def _cmd_missing(self, filter_text="") -> bool:
         """List all missing location checks, from your local game state.
         Can be given text, which will be used as filter."""
         if not self.ctx.game:
