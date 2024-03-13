@@ -1,3 +1,5 @@
+import logging
+
 # TODO: stabilize the imports, don't just import *
 from .AutopelagoDefinitions import *
 
@@ -42,6 +44,10 @@ class AutopelagoWorld(World):
     item_name_to_id = item_name_to_id
     location_name_to_id = location_name_to_id
 
+    def __init__(self, multiworld, player):
+        super().__init__(multiworld, player)
+        self.logger = logging.getLogger(GAME_NAME)
+
     # insert other ClassVar values... suggestions include:
     # - item_name_groups
     # - item_descriptions
@@ -51,13 +57,13 @@ class AutopelagoWorld(World):
 
     def _is_satisfied(self, req: AutopelagoGameRequirement, state: CollectionState):
         if 'all' in req:
-            return all(self._is_satisfied(sub_req) for sub_req in req['all'])
+            return all(self._is_satisfied(sub_req, state) for sub_req in req['all'])
         elif 'any' in req:
-            return any(self._is_satisfied(sub_req) for sub_req in req['any'])
+            return any(self._is_satisfied(sub_req, state) for sub_req in req['any'])
         elif 'item' in req:
-            return state.has(item_key_to_name[req['item']])
+            return state.has(item_key_to_name[req['item']], self.player)
         elif 'rat_count' in req:
-            return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
+            return sum(item_name_to_rat_count[k] * (i or 0) for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
         else:
             assert 'ability_check_with_dc' in req, 'Only AutopelagoAbilityCheckRequirement is expected here'
             return True
@@ -86,9 +92,11 @@ class AutopelagoWorld(World):
                     replacements_made += 1
 
         category_to_next_offset = { category: 0 for category in generic_nonprogression_item_table }
+        next_is_trap = False
         for nonprog_type in location_name_to_unrandomized_nonprogression_item.values():
-            if nonprog_type == 'filler' and bool(self.multiworld.random.getrandbits(1)):
+            if nonprog_type == 'filler' and next_is_trap:
                 nonprog_type = 'trap'
+            next_is_trap = not next_is_trap
             classification = autopelago_item_classification_of(nonprog_type)
             if category_to_next_offset[nonprog_type] > len(nonprogression_item_table[nonprog_type]):
                 nonprog_type = 'uncategorized'
@@ -97,25 +105,29 @@ class AutopelagoWorld(World):
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        new_regions = { r.key: self.create_region(r) for r in regions.values() }
-        for r in new_regions.values():
-            region = regions[r.name]
-            for exit in region.exits:
-                connection = Entrance(self.player, parent=r)
-                connection.access_rule = lambda state: self._is_satisfied(region.requires, state)
-                r.exits.append(connection)
-                connection.connect(new_regions[exit])
-
-        self.multiworld.regions += new_regions.values()
-        self.multiworld.completion_condition[self.player] = lambda state: state.can_reach(new_regions['goal'], self.player)
+        self.multiworld.regions += (self.create_region(r) for r in autopelago_regions.values())
 
     def create_region(self, r: AutopelagoRegionDefinition):
         region = Region(r.key, self.player, self.multiworld)
         for loc in r.locations:
             location_id = self.location_name_to_id[loc]
             location = AutopelagoLocation(self.player, loc, location_id, region)
+            requires = location_name_to_requirement[loc]
+            location.access_rule = lambda state: self._is_satisfied(requires, state)
             region.locations.append(location)
         return region
+
+    def set_rules(self):
+        for ar in autopelago_regions.values():
+            r = self.multiworld.get_region(ar.key, self.player)
+            for exit in ar.exits:
+                connection = Entrance(self.player, '', r)
+                connection.access_rule = lambda state: self._is_satisfied(ar.requires, state)
+                r.exits.append(connection)
+                connection.connect(self.multiworld.get_region(exit, self.player))
+
+        self.multiworld.get_location('goal', self.player).place_locked_item(self.create_item('goal', ItemClassification.progression))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('goal', self.player)
 
     def get_filler_item_name(self) -> str:
         return "Monkey's Paw"

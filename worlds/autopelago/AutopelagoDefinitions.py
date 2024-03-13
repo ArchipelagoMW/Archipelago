@@ -115,7 +115,7 @@ class AutopelagoRegionDefinition:
     locations: list[str]
     requires: AutopelagoAllRequirement
 
-    def __init__(self, key: str, exits: list[str], locations: list[str], requires: list[AutopelagoGameRequirement] = []):
+    def __init__(self, key: str, exits: list[str], locations: list[str], requires: list[AutopelagoGameRequirement]):
         self.key = key
         self.exits = exits
         self.locations = locations
@@ -137,17 +137,20 @@ item_name_to_defined_classification: dict[str, Optional[ItemClassification]] = {
 item_name_to_rat_count: dict[str, int] = { }
 game_specific_nonprogression_items: dict[str, dict[AutopelagoNonProgressionItemType, list[str]]] = { }
 item_key_to_name: dict[str, str] = { }
-_id_gen = _gen_ids()
+_item_id_gen = _gen_ids()
+
 for k, v in ((k, v) for k, v in _defs['items'].items() if k not in { 'rats', 'useful_nonprogression', 'trap', 'filler', 'uncategorized' }):
     _name = _name_of(v)
-    item_name_to_id[_name] = next(_id_gen)
+    item_name_to_id[_name] = next(_item_id_gen)
     item_name_to_defined_classification[_name] = ItemClassification.progression
-    item_name_to_rat_count[_name] = _rat_count_of(v)
+    rat_count = _rat_count_of(v)
+    if rat_count and rat_count > 0:
+        item_name_to_rat_count[_name] = rat_count
     item_key_to_name[k] = _name
 
 for k, v in _defs['items']['rats'].items():
     _name = _name_of(v)
-    item_name_to_id[_name] = next(_id_gen)
+    item_name_to_id[_name] = next(_item_id_gen)
     item_name_to_defined_classification[_name] = ItemClassification.progression
     item_name_to_rat_count[_name] = _rat_count_of(v) or 1
     item_key_to_name[k] = _name
@@ -157,9 +160,8 @@ def _append_nonprogression(k: AutopelagoNonProgressionItemType):
     for i in _defs['items'][k]:
         if isinstance(i, str):
             generic_nonprogression_item_table[k].append(i)
-            item_name_to_id[i] = next(_id_gen)
+            item_name_to_id[i] = next(_item_id_gen)
             item_name_to_defined_classification[i] = item_classification
-            item_name_to_rat_count[_name] = 0
             continue
 
         for g, v in i['game_specific'].items():
@@ -168,26 +170,27 @@ def _append_nonprogression(k: AutopelagoNonProgressionItemType):
             game_specific_nonprogression_items[g][k] = []
             for it in v:
                 game_specific_nonprogression_items[g][k].append(it)
-                item_name_to_id[it] = next(_id_gen)
+                item_name_to_id[it] = next(_item_id_gen)
                 item_name_to_defined_classification[it] = item_classification
-                item_name_to_rat_count[_name] = 0
 
 _append_nonprogression('useful_nonprogression')
 _append_nonprogression('trap')
 _append_nonprogression('filler')
 _append_nonprogression('uncategorized')
 
-regions: dict[str, AutopelagoRegionDefinition] = { 'goal': AutopelagoRegionDefinition('goal', [], []) }
-location_name_to_id: dict[str, int] = { }
-location_name_to_requirement: dict[str, AutopelagoGameRequirement] = { }
+autopelago_regions: dict[str, AutopelagoRegionDefinition] = { }
 location_name_to_unrandomized_progression_item_name: dict[str, Optional[str]] = { }
 location_name_to_unrandomized_nonprogression_item: dict[str, Optional[Literal['useful_nonprogression', 'filler']]] = { }
-_id_gen = _gen_ids()
+location_name_to_requirement: dict[str, AutopelagoGameRequirement] = { }
+location_name_to_id: dict[str, int] = { }
+_location_id_gen = _gen_ids()
+
 for k, r in _defs['regions']['landmarks'].items():
-    location_name_to_unrandomized_progression_item_name[r['name']] = item_key_to_name[r['unrandomized_item']]
-    location_name_to_requirement[r['name']] = { 'all': r['requires'] }
-    location_name_to_id[r['name']] = next(_id_gen)
-    regions[k] = AutopelagoRegionDefinition(k, r['exits'], [r['name']], r['requires'])
+    _name = r['name']
+    location_name_to_id[_name] = next(_location_id_gen)
+    location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[r['unrandomized_item']]
+    location_name_to_requirement[_name] = { 'all': r['requires'] }
+    autopelago_regions[k] = AutopelagoRegionDefinition(k, r['exits'], [_name], r['requires'])
 for rk, r in _defs['regions']['fillers'].items():
     if rk == 'menu':
         rk = 'Menu'
@@ -196,39 +199,51 @@ for rk, r in _defs['regions']['fillers'].items():
     for k in r['unrandomized_items']['key']:
         if isinstance(k, str):
             _name = r['name_template'].replace('{n}', f'{_cur}')
+            location_name_to_id[_name] = next(_location_id_gen)
             location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[k]
             location_name_to_requirement[_name] = { 'all': r['each_requires'] }
-            location_name_to_id[_name] = next(_id_gen)
             _locations.append(_name)
             _cur += 1
         else:
             for i in range(k['count']):
                 _name = r['name_template'].replace('{n}', f'{_cur}')
+                location_name_to_id[_name] = next(_location_id_gen)
                 location_name_to_unrandomized_progression_item_name[_name] = item_key_to_name[k['item']]
                 location_name_to_requirement[_name] = { 'all': r['each_requires'] }
-                location_name_to_id[_name] = next(_id_gen)
                 _locations.append(_name)
                 _cur += 1
     for i in range(r['unrandomized_items']['useful_nonprogression']):
         _name = r['name_template'].replace('{n}', f'{_cur}')
+        location_name_to_id[_name] = next(_location_id_gen)
         location_name_to_unrandomized_nonprogression_item[_name] = 'useful_nonprogression'
         location_name_to_requirement[_name] = { 'all': r['each_requires'] }
-        location_name_to_id[_name] = next(_id_gen)
         _locations.append(_name)
         _cur += 1
     for i in range(r['unrandomized_items']['filler']):
         _name = r['name_template'].replace('{n}', f'{_cur}')
+        location_name_to_id[_name] = next(_location_id_gen)
         location_name_to_unrandomized_nonprogression_item[_name] = 'filler'
         location_name_to_requirement[_name] = { 'all': r['each_requires'] }
-        location_name_to_id[_name] = next(_id_gen)
         _locations.append(_name)
         _cur += 1
-    regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations)
+    autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, [])
+
+# I still can't figure out how to get Archipelago to generate a proper playthrough without a token
+# "item" to have the player "collect"...
+item_name_to_id['goal'] = next(_item_id_gen)
+item_name_to_defined_classification['goal'] = ItemClassification.progression
+item_key_to_name['goal'] = 'goal'
+
+location_name_to_id['goal'] = next(_location_id_gen)
+location_name_to_requirement['goal'] = { 'all': [] }
+
+autopelago_regions['goal'] = AutopelagoRegionDefinition('goal', [], ['goal'], [])
 
 del _append_nonprogression
 del _cur
 del _defs
-del _id_gen
+del _item_id_gen
+del _location_id_gen
 del _locations
 del _name
 del _name_of
