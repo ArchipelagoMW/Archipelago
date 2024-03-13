@@ -38,13 +38,13 @@
 ### Quality of Life:
 
 - Chao Save Data is now separate per-slot in addition to per-seed
-- This allows a single player to have multiple slots in the same seed, each having separate Chao progress
+	- This allows a single player to have multiple slots in the same seed, each having separate Chao progress
 - Chao Race/Karate progress is now displayed on Stage Select (when hovering over Chao World)
 - All Chao can now enter the Hero and Dark races
 - Chao Karate difficulty can be set separately from Chao Race difficulty
 - Chao Aging can be sped up at will, up to 15×
 - New mod config option to fine-tune Chao Stat multiplication
-- Note: This does not mix well with the Mod Manager "Chao Stat Multiplier" code
+	- Note: This does not mix well with the Mod Manager "Chao Stat Multiplier" code
 - Pong Traps can now activate in Chao World
 - Maximum range for possible number of Emblems is now 1000
 - General APWorld cleanup and optimization
