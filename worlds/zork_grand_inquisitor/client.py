@@ -90,7 +90,13 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
         if cmd == "Connected":
             self.game = self.slot_info[self.slot].game
 
-        Utils.async_start(process_package(self, cmd, _args))
+            # Options
+            self.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
+            self.game_controller.option_deathsanity = (_args["slot_data"]["deathsanity"] == 1)
+
+            self.game_controller.option_grant_missable_location_checks = (
+                    _args["slot_data"]["grant_missable_location_checks"] == 1
+            )
 
     async def controller(self):
         while not self.exit_event.is_set():
@@ -150,17 +156,6 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
                         "status": CommonClient.ClientStatus.CLIENT_GOAL
                     }
                 ])
-
-
-async def process_package(ctx: ZorkGrandInquisitorContext, cmd: str, _args: Any):
-    if cmd == "Connected":
-        # Slot Data - Options
-        ctx.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
-        ctx.game_controller.option_deathsanity = _args["slot_data"]["deathsanity"] == 1
-
-        ctx.game_controller.option_grant_missable_location_checks = (
-            _args["slot_data"]["grant_missable_location_checks"] == 1
-        )
 
 
 def main() -> None:
