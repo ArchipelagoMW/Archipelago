@@ -56,7 +56,7 @@ An empty list is just a matching pair of square brackets: `[]`. That's the defau
 
 #### How do I specify items for the starting inventory?
 
-The starting inventory is a YAML mapping rather than a list, which associates an item with the amount you start with. The syntax looks they item name, followed by a colon, then a whitespace character, and then the value:
+The starting inventory is a YAML mapping rather than a list, which associates an item with the amount you start with. The syntax looks like the item name, followed by a colon, then a whitespace character, and then the value:
 
 ```yaml
 start_inventory:
