@@ -166,7 +166,7 @@ class DraculaSpecialTest(CV64TestBase):
                       self.get_item_by_name("Clocktower Key3")] * 2)
         self.assertTrue(self.can_reach_entrance("Clocktower Door 3"))
         self.assertFalse(self.can_reach_entrance("Dracula's door"))
-        self.collect([self.get_item_by_name("Special2")] * 9)
+        self.collect([self.get_item_by_name("Special2")] * 19)
         self.assertFalse(self.can_reach_entrance("Dracula's door"))
         self.collect([self.get_item_by_name("Special2")] * 1)
         self.assertTrue(self.can_reach_entrance("Dracula's door"))

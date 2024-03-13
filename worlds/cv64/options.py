@@ -116,7 +116,7 @@ class TotalSpecial2s(Range):
     """How many Speical2 jewels are in the pool in total when Dracula's Condition is Special2s."""
     range_start = 1
     range_end = 70
-    default = 10
+    default = 25
     display_name = "Total Special2s"
 
 
