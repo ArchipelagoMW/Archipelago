@@ -110,8 +110,10 @@ class EntranceRando(TextChoice):
     A small, very lost fox on a big adventure."""
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
-    option_false = 0
-    option_true = 1
+    alias_false = 0
+    option_no = 0
+    alias_true = 1
+    option_yes = 1
     default = 0
 
 
