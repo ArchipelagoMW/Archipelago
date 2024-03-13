@@ -9,10 +9,20 @@
 
 ## Installation
 
-1. Read the [Game Info Page](/games/The%20Messenger/info/en) for how the game works, caveats and known issues
-2. Download and install Courier Mod Loader using the instructions on the release page
+Read changes to the base game on the [Game Info Page](/games/The%20Messenger/info/en)
+
+### Automated Installation
+
+1. Download and install the latest [Archipelago release](https://github.com/ArchipelagoMW/Archipelago/releases/latest)
+2. Launch the Archipelago Launcher (ArchipelagoLauncher.exe)
+3. Click on "The Messenger"
+4. Follow the prompts
+
+### Manual Installation
+
+1. Download and install Courier Mod Loader using the instructions on the release page
    * [Latest release is currently 0.7.1](https://github.com/Brokemia/Courier/releases)
-3. Download and install the randomizer mod
+2. Download and install the randomizer mod
    1. Download the latest TheMessengerRandomizerAP.zip from
       [The Messenger Randomizer Mod AP releases page](https://github.com/alwaysintreble/TheMessengerRandomizerModAP/releases)
    2. Extract the zip file to `TheMessenger/Mods/` of your game's install location
@@ -32,19 +42,17 @@
 ## Joining a MultiWorld Game
 
 1. Launch the game
-2. Navigate to `Options > Third Party Mod Options`
-3. Select `Reset Randomizer File Slots`
-   * This will set up all of your save slots with new randomizer save files. You can have up to 3 randomizer files at a
-     time, but must do this step again to start new runs afterward.
-4. Enter connection info using the relevant option buttons
+2. Navigate to `Options > Archipelago Options`
+3. Enter connection info using the relevant option buttons
    * **The game is limited to alphanumerical characters, `.`, and `-`.**
    * This defaults to `archipelago.gg` and does not need to be manually changed if connecting to a game hosted on the
      website.
    * If using a name that cannot be entered in the in game menus, there is a config file (APConfig.toml) in the game
      directory. When using this, all connection information must be entered in the file. 
-5. Select the `Connect to Archipelago` button
-6. Navigate to save file selection
-7. Select a new valid randomizer save
+4. Select the `Connect to Archipelago` button
+5. Navigate to save file selection
+6. Start a new game
+   * If you're already connected, deleting a save will not disconnect you and is completely safe. 
 
 ## Continuing a MultiWorld Game
 
@@ -52,6 +60,5 @@ At any point while playing, it is completely safe to quit. Returning to the titl
 disconnect you from the server. To reconnect to an in progress MultiWorld, simply load the correct save file for that
 MultiWorld.
 
-If the reconnection fails, the message on screen will state you are disconnected. If this happens, you can return to the
-main menu and connect to the server as in [Joining a Multiworld Game](#joining-a-multiworld-game), then load the correct
-save file.
+If the reconnection fails, the message on screen will state you are disconnected. If this happens, the game will attempt
+to reconnect in the background. An option will also be added to the in game menu to change the port, if necessary.
