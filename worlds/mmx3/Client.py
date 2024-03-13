@@ -34,6 +34,7 @@ MMX3_ENABLE_HEART_TANK  = WRAM_START + 0x0F4E0
 MMX3_ENABLE_HP_REFILL   = WRAM_START + 0x0F4E4
 MMX3_HP_REFILL_AMOUNT   = WRAM_START + 0x0F4E5
 MMX3_ENABLE_GIVE_1UP    = WRAM_START + 0x0F4E7
+MMX3_RECEIVING_ITEM     = WRAM_START + 0x0F4FF
 
 MMX3_VALIDATION_CHECK = WRAM_START + 0x0F43D
 
@@ -42,6 +43,7 @@ MMX3_LEVEL_CLEARED          = WRAM_START + 0x0F400
 MMX3_UNLOCKED_LEVELS        = WRAM_START + 0x0F420
 MMX3_DEFEATED_BOSSES        = WRAM_START + 0x0F440
 MMX3_DOPPLER_ACCESS         = WRAM_START + 0x0F461
+MMX3_VILE_ACCESS            = WRAM_START + 0x0F466
 MMX3_COLLECTED_HEART_TANKS  = WRAM_START + 0x0F462
 MMX3_COLLECTED_UPGRADES     = WRAM_START + 0x0F463
 MMX3_COLLECTED_RIDE_CHIPS   = WRAM_START + 0x0F464
@@ -89,7 +91,7 @@ class MMX3SNIClient(SNIClient):
         ctx.last_death_link = time.time()
 
     async def validate_rom(self, ctx):
-        from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
+        from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, MMX3_ROMHASH_START, ROMHASH_SIZE)
         if rom_name is None or rom_name == bytes([0] * ROMHASH_SIZE) or rom_name[:4] != b"MMX3":
@@ -137,15 +139,17 @@ class MMX3SNIClient(SNIClient):
         item_id = next_item[1]
         
         if next_item[0] == "boss access":
+            # TODO: Send a signal to playback a SFX
             self.item_queue.pop(0)
             return
         
         # Do not give items if you can't move, are in pause state, not in the correct mode or not in gameplay state
+        receiving_item = await snes_read(ctx, MMX3_RECEIVING_ITEM, 0x1)
         menu_state = await snes_read(ctx, MMX3_MENU_STATE, 0x1)
         gameplay_state = await snes_read(ctx, MMX3_GAMEPLAY_STATE, 0x1)
         can_move = await snes_read(ctx, MMX3_CAN_MOVE, 0x1)
         pause_state = await snes_read(ctx, MMX3_PAUSE_STATE, 0x1)
-        if menu_state[0] != 0x04 or gameplay_state[0] != 0x04 or can_move[0] != 0x00 or pause_state[0] != 0x00:
+        if menu_state[0] != 0x04 or gameplay_state[0] != 0x04 or can_move[0] != 0x00 or pause_state[0] != 0x00 or receiving_item[0] != 0x00:
             return
         
         # Handle items that Zero can also get
@@ -161,6 +165,7 @@ class MMX3SNIClient(SNIClient):
                         snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x02]))
                     else:
                         snes_buffered_write(ctx, MMX3_HP_REFILL_AMOUNT, bytearray([0x08]))
+                    snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
                 else:
                     # TODO: Sub Tank logic
                     self.item_queue.append(backup_item)
@@ -169,6 +174,7 @@ class MMX3SNIClient(SNIClient):
                 life_count = await snes_read(ctx, MMX3_LIFE_COUNT, 0x1)
                 if life_count[0] < 9:
                     snes_buffered_write(ctx, MMX3_ENABLE_GIVE_1UP, bytearray([0x01]))
+                    snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
                 else:
                     self.item_queue.append(backup_item)
 
@@ -179,6 +185,7 @@ class MMX3SNIClient(SNIClient):
             return
 
         if next_item[0] == "weapon":
+            # TODO: Send a signal to play back a SFX
             weapon = weapon_rom_data[item_id]
             snes_buffered_write(ctx, WRAM_START + weapon[0], bytearray([weapon[1]]))
             self.item_queue.pop(0)
@@ -187,11 +194,11 @@ class MMX3SNIClient(SNIClient):
             heart_tanks = await snes_read(ctx, MMX3_HEART_TANKS, 0x1)
             heart_tanks = heart_tanks[0]
             heart_tank_count = heart_tanks.bit_count()
-            snes_logger.info(f"heart_tank_count: {heart_tank_count:02X}")
             if heart_tank_count < 8:
                 heart_tanks |= 1 << heart_tank_count
                 snes_buffered_write(ctx, MMX3_HEART_TANKS, bytearray([heart_tanks]))
                 snes_buffered_write(ctx, MMX3_ENABLE_HEART_TANK, bytearray([0x02]))
+                snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
 
         elif next_item[0] == "sub tank":
@@ -199,23 +206,19 @@ class MMX3SNIClient(SNIClient):
             sub_tanks = await snes_read(ctx, MMX3_SUB_TANK_ARRAY, 0x4)
             sub_tanks = list(sub_tanks)
             upgrade = upgrades[0]
-            snes_logger.info(f"upgrade 1: {upgrade:02X}")
             upgrade = upgrade & 0xF0
             sub_tank_count = upgrade.bit_count()
-            snes_logger.info(f"sub_tanks 1: {sub_tanks}")
-            snes_logger.info(f"sub_tank_count: {sub_tank_count:02X}")
             if sub_tank_count < 4:
                 upgrade = upgrades[0]
-                snes_logger.info(f"upgrade 2: {upgrade:02X}")
                 upgrade |= 0x10 << sub_tank_count
-                snes_logger.info(f"upgrade 3: {upgrade:02X}")
                 sub_tanks[sub_tank_count] = 0x8E
-                snes_logger.info(f"sub_tanks 2: {sub_tanks}")
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrade]))
                 snes_buffered_write(ctx, MMX3_SUB_TANK_ARRAY, bytearray(sub_tanks))
+                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
         
         elif next_item[0] == "upgrade":
+            # TODO: Send a signal to play back a SFX and fix visual bugs
             upgrades = await snes_read(ctx, MMX3_UPGRADES, 0x1)
             chips = await snes_read(ctx, MMX3_RIDE_CHIPS, 0x1)
 
@@ -228,15 +231,18 @@ class MMX3SNIClient(SNIClient):
                 upgrades = upgrades[0]
                 upgrades |= bit
                 snes_buffered_write(ctx, MMX3_UPGRADES, bytearray([upgrades]))
+                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             else:
                 # Chip
                 bit = bit << 4
                 chips = chips[0]
                 chips |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([chips]))
+                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
 
         elif next_item[0] == "ride":
+            # TODO: Send a signal to play back a SFX
             ride = await snes_read(ctx, MMX3_RIDE_CHIPS, 0x1)
             ride = ride[0]
             upgrade = ride_armor_rom_data[item_id]
@@ -245,6 +251,7 @@ class MMX3SNIClient(SNIClient):
             if check == 0:
                 ride |= bit
                 snes_buffered_write(ctx, MMX3_RIDE_CHIPS, bytearray([ride]))
+                #snes_buffered_write(ctx, MMX3_RECEIVING_ITEM, bytearray([0x01]))
             self.item_queue.pop(0)
 
         await snes_flush_writes(ctx)
@@ -260,7 +267,7 @@ class MMX3SNIClient(SNIClient):
 
         # Discard uninitialized ROMs
         if menu_state is None:
-            ctx.heart_tank_queue = []
+            ctx.item_queue = []
             return
     
         if game_state[0] == 0:
@@ -269,7 +276,7 @@ class MMX3SNIClient(SNIClient):
         validation = await snes_read(ctx, MMX3_VALIDATION_CHECK, 0x2)
         validation = validation[0] | (validation[1] << 8)
         if validation != 0xDEAD:
-            snes_logger.info(f'No valido wea.')
+            snes_logger.info(f'ROM not properly validated.')
             return
         
         if "DeathLink" in ctx.tags and menu_state == 0x04 and ctx.last_death_link + 1 < time.time():
@@ -296,7 +303,6 @@ class MMX3SNIClient(SNIClient):
         collected_heart_tanks_data = await snes_read(ctx, MMX3_COLLECTED_HEART_TANKS, 0x01)
         collected_ride_chips_data = await snes_read(ctx, MMX3_COLLECTED_RIDE_CHIPS, 0x01)
         collected_upgrades_data = await snes_read(ctx, MMX3_COLLECTED_UPGRADES, 0x01)
-        collected_sub_tanks = await snes_read(ctx, MMX3_COLLECTED_SUB_TANKS, 0x04)
         collected_pickups_data = await snes_read(ctx, MMX3_COLLECTED_PICKUPS, 0x40)
         collected_pickups = list(collected_pickups_data)
         pickupsanity_enabled = await snes_read(ctx, MMX3_PICKUPSANITY_ACTIVE, 0x1)
@@ -426,6 +432,13 @@ class MMX3SNIClient(SNIClient):
                 level = boss_access_rom_data[item.item]
                 boss_access[level[0] * 2] = 0x01
                 snes_buffered_write(ctx, MMX3_UNLOCKED_LEVELS, boss_access)
+                if item.item == 0xBD000A:
+                    snes_buffered_write(ctx, MMX3_DOPPLER_ACCESS, bytearray([0x00]))
+                self.add_item_to_queue("boss access", item.item)
+
+            elif item.item == 0xBD0019:
+                # Unlock vile stage
+                snes_buffered_write(ctx, MMX3_VILE_ACCESS, bytearray([0x01]))
                 self.add_item_to_queue("boss access", item.item)
                 
             elif item.item in refill_rom_data:

@@ -46,8 +46,6 @@ boss_access_rom_data = {
     0xBD000A: [0x07],
     0xBD0004: [0x08],
     0xBD0007: [0x09],
-    0xBD000A: [0x0A],
-    0xBD0019: [0x0B],
 }
 
 refill_rom_data = {
@@ -123,17 +121,23 @@ def patch_rom(world: World, rom, player):
     rom.write_bytes(0x7FC0, rom.name)
 
     # Write options to the ROM
-    rom.write_byte(0x17FFF0, world.options.doppler_open.value)
-    rom.write_byte(0x17FFF1, world.options.doppler_medal_count.value)
-    rom.write_byte(0x17FFF2, world.options.doppler_weapon_count.value)
-    rom.write_byte(0x17FFF3, world.options.doppler_upgrade_count.value)
-    rom.write_byte(0x17FFF4, world.options.doppler_heart_tank_count.value)
-    rom.write_byte(0x17FFF5, world.options.doppler_sub_tank_count.value)
-    rom.write_byte(0x17FFF6, world.options.starting_life_count.value)
+    rom.write_byte(0x17FFE0, world.options.doppler_open.value)
+    rom.write_byte(0x17FFE1, world.options.doppler_medal_count.value)
+    rom.write_byte(0x17FFE2, world.options.doppler_weapon_count.value)
+    rom.write_byte(0x17FFE3, world.options.doppler_upgrade_count.value)
+    rom.write_byte(0x17FFE4, world.options.doppler_heart_tank_count.value)
+    rom.write_byte(0x17FFE5, world.options.doppler_sub_tank_count.value)
+    rom.write_byte(0x17FFE6, world.options.starting_life_count.value)
     if world.options.pickupsanity.value:
-        rom.write_byte(0x17FFF7, 0x01)
+        rom.write_byte(0x17FFE7, 0x01)
     else:
-        rom.write_byte(0x17FFF7, 0x00)
+        rom.write_byte(0x17FFE7, 0x00)
+    rom.write_byte(0x17FFE8, world.options.vile_open.value)
+    rom.write_byte(0x17FFE9, world.options.vile_medal_count.value)
+    rom.write_byte(0x17FFEA, world.options.vile_weapon_count.value)
+    rom.write_byte(0x17FFEB, world.options.vile_upgrade_count.value)
+    rom.write_byte(0x17FFEC, world.options.vile_heart_tank_count.value)
+    rom.write_byte(0x17FFED, world.options.vile_sub_tank_count.value)
 
     # Setup starting life count
     rom.write_byte(0x0019B1, world.options.starting_life_count.value)
