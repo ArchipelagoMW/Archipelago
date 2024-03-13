@@ -63,7 +63,7 @@ class AutopelagoWorld(World):
         elif 'item' in req:
             return state.has(item_key_to_name[req['item']], self.player)
         elif 'rat_count' in req:
-            return sum(item_name_to_rat_count[k] * (i or 0) for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
+            return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
         else:
             assert 'ability_check_with_dc' in req, 'Only AutopelagoAbilityCheckRequirement is expected here'
             return True
@@ -105,7 +105,19 @@ class AutopelagoWorld(World):
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        self.multiworld.regions += (self.create_region(r) for r in autopelago_regions.values())
+        new_regions = { r.key: self.create_region(r) for r in autopelago_regions.values() }
+        for new_r in new_regions.values():
+            self.multiworld.regions.append(new_r)
+
+            old_r = autopelago_regions[new_r.name]
+            for exit in old_r.exits:
+                connection = Entrance(self.player, exit, new_r)
+                connection.access_rule = lambda state: self._is_satisfied(old_r.requires, state)
+                new_r.exits.append(connection)
+                connection.connect(new_regions[exit])
+
+        new_regions['goal'].locations[0].place_locked_item(self.create_item('goal', ItemClassification.progression))
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('goal', self.player)
 
     def create_region(self, r: AutopelagoRegionDefinition):
         region = Region(r.key, self.player, self.multiworld)
@@ -116,18 +128,6 @@ class AutopelagoWorld(World):
             location.access_rule = lambda state: self._is_satisfied(requires, state)
             region.locations.append(location)
         return region
-
-    def set_rules(self):
-        for ar in autopelago_regions.values():
-            r = self.multiworld.get_region(ar.key, self.player)
-            for exit in ar.exits:
-                connection = Entrance(self.player, '', r)
-                connection.access_rule = lambda state: self._is_satisfied(ar.requires, state)
-                r.exits.append(connection)
-                connection.connect(self.multiworld.get_region(exit, self.player))
-
-        self.multiworld.get_location('goal', self.player).place_locked_item(self.create_item('goal', ItemClassification.progression))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('goal', self.player)
 
     def get_filler_item_name(self) -> str:
         return "Monkey's Paw"
