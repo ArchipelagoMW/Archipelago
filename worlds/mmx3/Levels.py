@@ -88,7 +88,7 @@ location_id_to_level_id = {
     LocationName.tunnel_rhino_mini_boss:        [0x07, 0x20B, 0x00],
     LocationName.tunnel_rhino_heart_tank:       [0x07, 0x002, 0x40],
     LocationName.tunnel_rhino_sub_tank:         [0x07, 0x003, 0x40],
-    LocationName.tunnel_rhino_helmet:           [0x07, 0x004, 0x10],
+    LocationName.tunnel_rhino_helmet:           [0x07, 0x004, 0x01],
     LocationName.tunnel_rhino_energy_1:         [0x07, 0x126, 0x00],
     LocationName.tunnel_rhino_hp_1:             [0x07, 0x127, 0x00],
 
@@ -97,7 +97,7 @@ location_id_to_level_id = {
     LocationName.neon_tiger_mini_boss:          [0x08, 0x20D, 0x00],
     LocationName.neon_tiger_heart_tank:         [0x08, 0x002, 0x80],
     LocationName.neon_tiger_sub_tank:           [0x08, 0x003, 0x80],
-    LocationName.neon_tiger_arms:               [0x08, 0x004, 0x20],
+    LocationName.neon_tiger_arms:               [0x08, 0x004, 0x02],
     LocationName.neon_tiger_hp_1:               [0x08, 0x128, 0x00],
     LocationName.neon_tiger_hp_2:               [0x08, 0x129, 0x00],
     LocationName.neon_tiger_hp_3:               [0x08, 0x12A, 0x00],
@@ -117,14 +117,12 @@ location_id_to_level_id = {
 
     LocationName.doppler_lab_1_boss:            [0x0A, 0x20E, 0x00],
     LocationName.doppler_lab_1_mini_boss:       [0x0A, 0x20F, 0x00],
-    #LocationName.doppler_lab_1_gold_armor:      [0x0A, 0x00E, 0x00],
     LocationName.doppler_lab_1_hp_1:            [0x0A, 0x136, 0x00],
     LocationName.doppler_lab_1_energy:          [0x0A, 0x137, 0x00],
     LocationName.doppler_lab_1_hp_2:            [0x0A, 0x138, 0x00],
 
     LocationName.doppler_lab_2_boss:            [0x0B, 0x210, 0x00],
     LocationName.doppler_lab_2_mini_boss:       [0x0B, 0x211, 0x00],
-    #LocationName.doppler_lab_2_z_saber:        [0x0B, 0x00D, 0x00],
 
     LocationName.doppler_lab_3_boss:            [0x0C, 0x212, 0x00],
     LocationName.doppler_lab_3_blizzard_buffalo: [0x0C, 0x213, 0x00],
