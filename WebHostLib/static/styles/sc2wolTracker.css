@@ -22,6 +22,11 @@
     background-color: #9d60d2;
 }
 
+.inventory-table-area:has(.inventory-table-protoss) {
+    width: 400px;
+    background-color: #d2b260;
+}
+
 #inventory-table .inventory-table td{
     width: 40px;
     height: 40px;

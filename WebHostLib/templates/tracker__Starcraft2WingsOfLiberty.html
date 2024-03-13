@@ -721,6 +721,318 @@
                         </tr>
                     </table>
                 </td>
+                <td class="inventory-table-area">
+                    <table class="inventory-table inventory-table-protoss">
+                        <tr>
+                            <td colspan="9" class="title">
+                                Protoss
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Weapon & Armor Upgrades
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_progressive_icon('Progressive Protoss Ground Weapon', protoss_ground_weapon_url, protoss_ground_weapon_level) }}</td>
+                            <td>{{ sc2_progressive_icon('Progressive Protoss Ground Armor', protoss_ground_armor_url, protoss_ground_armor_level) }}</td>
+                            <td></td>
+                            <td>{{ sc2_progressive_icon('Progressive Protoss Air Weapon', protoss_air_weapon_url, protoss_air_weapon_level) }}</td>
+                            <td>{{ sc2_progressive_icon('Progressive Protoss Air Armor', protoss_air_armor_url, protoss_air_armor_level) }}</td>
+                            <td></td>
+                            <td>{{ sc2_progressive_icon('Progressive Protoss Shields', protoss_shields_url, protoss_shields_level) }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Quatro') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Base
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_icon('Photon Cannon') }}</td>
+                            <td>{{ sc2_icon('Khaydarin Monolith') }}</td>
+                            <td>{{ sc2_icon('Shield Battery') }}</td>
+                            <td>{{ sc2_icon('Enhanced Targeting') }}</td>
+                            <td>{{ sc2_icon('Optimized Ordnance') }}</td>
+                            <td>{{ sc2_icon('Khalai Ingenuity') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Orbital Assimilators') }}</td>
+                            <td>{{ sc2_icon('Amplified Assimilators') }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_icon('Warp Harmonization') }}</td>
+                            <td>{{ sc2_icon('Superior Warp Gates') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Nexus Overcharge') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Gateway
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>{{ sc2_icon('Zealot') }}</td>
+                            <td>{{ sc2_icon('Centurion') }}</td>
+                            <td>{{ sc2_icon('Sentinel') }}</td>
+                            <td>{{ sc2_icon('Leg Enhancements (Zealot/Sentinel/Centurion)') }}</td>
+                            <td>{{ sc2_icon('Shield Capacity (Zealot/Sentinel/Centurion)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Supplicant') }}</td>
+                            <td>{{ sc2_icon('Blood Shield (Supplicant)') }}</td>
+                            <td>{{ sc2_icon('Soul Augmentation (Supplicant)') }}</td>
+                            <td>{{ sc2_icon('Shield Regeneration (Supplicant)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Sentry') }}</td>
+                            <td>{{ sc2_icon('Force Field (Sentry)') }}</td>
+                            <td>{{ sc2_icon('Hallucination (Sentry)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Energizer') }}</td>
+                            <td>{{ sc2_icon('Reclamation (Energizer)') }}</td>
+                            <td>{{ sc2_icon('Forged Chassis (Energizer)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Cloaking Module (Sentry/Energizer/Havoc)') }}</td>
+                            <td>{{ sc2_icon('Rapid Recharging (Sentry/Energizer/Havoc/Shield Battery)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Havoc') }}</td>
+                            <td>{{ sc2_icon('Detect Weakness (Havoc)') }}</td>
+                            <td>{{ sc2_icon('Bloodshard Resonance (Havoc)') }}</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>{{ sc2_icon('Stalker') }}</td>
+                            <td>{{ sc2_icon('Instigator') }}</td>
+                            <td>{{ sc2_icon('Slayer') }}</td>
+                            <td>{{ sc2_icon('Disintegrating Particles (Stalker/Instigator/Slayer)') }}</td>
+                            <td>{{ sc2_icon('Particle Reflection (Stalker/Instigator/Slayer)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Dragoon') }}</td>
+                            <td>{{ sc2_icon('High Impact Phase Disruptor (Dragoon)') }}</td>
+                            <td>{{ sc2_icon('Trillic Compression System (Dragoon)') }}</td>
+                            <td>{{ sc2_icon('Singularity Charge (Dragoon)') }}</td>
+                            <td>{{ sc2_icon('Enhanced Strider Servos (Dragoon)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Adept') }}</td>
+                            <td>{{ sc2_icon('Shockwave (Adept)') }}</td>
+                            <td>{{ sc2_icon('Resonating Glaives (Adept)') }}</td>
+                            <td>{{ sc2_icon('Phase Bulwark (Adept)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>{{ sc2_icon('High Templar') }}</td>
+                            <td>{{ sc2_icon('Signifier') }}</td>
+                            <td class="tint-protoss">{{ sc2_icon('Unshackled Psionic Storm (High Templar/Signifier)') }}</td>
+                            <td>{{ sc2_icon('Hallucination (High Templar/Signifier)') }}</td>
+                            <td>{{ sc2_icon('Khaydarin Amulet (High Templar/Signifier)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('High Archon (Archon)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Ascendant') }}</td>
+                            <td>{{ sc2_icon('Power Overwhelming (Ascendant)') }}</td>
+                            <td>{{ sc2_icon('Chaotic Attunement (Ascendant)') }}</td>
+                            <td>{{ sc2_icon('Blood Amulet (Ascendant)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Dark Archon') }}</td>
+                            <td>{{ sc2_icon('Feedback (Dark Archon)') }}</td>
+                            <td>{{ sc2_icon('Maelstrom (Dark Archon)') }}</td>
+                            <td>{{ sc2_icon('Argus Talisman (Dark Archon)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Dark Templar') }}</td>
+                            <td>{{ sc2_icon('Dark Archon Meld (Dark Templar)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>{{ sc2_icon('Avenger') }}</td>
+                            <td>{{ sc2_icon('Blood Hunter') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Shroud of Adun (Dark Templar/Avenger/Blood Hunter)') }}</td>
+                            <td>{{ sc2_icon('Shadow Guard Training (Dark Templar/Avenger/Blood Hunter)') }}</td>
+                            <td>{{ sc2_icon('Blink (Dark Templar/Avenger/Blood Hunter)') }}</td>
+                            <td>{{ sc2_icon('Resource Efficiency (Dark Templar/Avenger/Blood Hunter)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Robotics Facility
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Warp Prism') }}</td>
+                            <td>{{ sc2_icon('Gravitic Drive (Warp Prism)') }}</td>
+                            <td>{{ sc2_icon('Phase Blaster (Warp Prism)') }}</td>
+                            <td>{{ sc2_icon('War Configuration (Warp Prism)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>{{ sc2_icon('Immortal') }}</td>
+                            <td>{{ sc2_icon('Annihilator') }}</td>
+                            <td>{{ sc2_icon('Singularity Charge (Immortal/Annihilator)') }}</td>
+                            <td>{{ sc2_icon('Advanced Targeting Mechanics (Immortal/Annihilator)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Vanguard') }}</td>
+                            <td>{{ sc2_icon('Agony Launchers (Vanguard)') }}</td>
+                            <td>{{ sc2_icon('Matter Dispersion (Vanguard)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Colossus') }}</td>
+                            <td>{{ sc2_icon('Pacification Protocol (Colossus)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Wrathwalker') }}</td>
+                            <td>{{ sc2_icon('Rapid Power Cycling (Wrathwalker)') }}</td>
+                            <td>{{ sc2_icon('Eye of Wrath (Wrathwalker)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Observer') }}</td>
+                            <td>{{ sc2_icon('Gravitic Boosters (Observer)') }}</td>
+                            <td>{{ sc2_icon('Sensor Array (Observer)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Reaver') }}</td>
+                            <td>{{ sc2_icon('Scarab Damage (Reaver)') }}</td>
+                            <td>{{ sc2_icon('Solarite Payload (Reaver)') }}</td>
+                            <td>{{ sc2_icon('Reaver Capacity (Reaver)') }}</td>
+                            <td>{{ sc2_icon('Resource Efficiency (Reaver)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Disruptor') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Stargate
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"></td>
+                            <td>{{ sc2_icon('Phoenix') }}</td>
+                            <td>{{ sc2_icon('Mirage') }}</td>
+                            <td>{{ sc2_icon('Ionic Wavelength Flux (Phoenix/Mirage)') }}</td>
+                            <td>{{ sc2_icon('Anion Pulse-Crystals (Phoenix/Mirage)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Corsair') }}</td>
+                            <td>{{ sc2_icon('Stealth Drive (Corsair)') }}</td>
+                            <td>{{ sc2_icon('Argus Jewel (Corsair)') }}</td>
+                            <td>{{ sc2_icon('Sustaining Disruption (Corsair)') }}</td>
+                            <td>{{ sc2_icon('Neutron Shields (Corsair)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Destroyer') }}</td>
+                            <td>{{ sc2_icon('Reforged Bloodshard Core (Destroyer)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Void Ray') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Flux Vanes (Void Ray/Destroyer)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Carrier') }}</td>
+                            <td>{{ sc2_icon('Graviton Catapult (Carrier)') }}</td>
+                            <td>{{ sc2_icon('Hull of Past Glories (Carrier)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Scout') }}</td>
+                            <td>{{ sc2_icon('Combat Sensor Array (Scout)') }}</td>
+                            <td>{{ sc2_icon('Apial Sensors (Scout)') }}</td>
+                            <td>{{ sc2_icon('Gravitic Thrusters (Scout)') }}</td>
+                            <td>{{ sc2_icon('Advanced Photon Blasters (Scout)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Tempest') }}</td>
+                            <td>{{ sc2_icon('Tectonic Destabilizers (Tempest)') }}</td>
+                            <td>{{ sc2_icon('Quantic Reactor (Tempest)') }}</td>
+                            <td>{{ sc2_icon('Gravity Sling (Tempest)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Mothership') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Arbiter') }}</td>
+                            <td>{{ sc2_icon('Chronostatic Reinforcement (Arbiter)') }}</td>
+                            <td>{{ sc2_icon('Khaydarin Core (Arbiter)') }}</td>
+                            <td>{{ sc2_icon('Spacetime Anchor (Arbiter)') }}</td>
+                            <td>{{ sc2_icon('Resource Efficiency (Arbiter)') }}</td>
+                            <td>{{ sc2_icon('Enhanced Cloak Field (Arbiter)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"></td>
+                            <td>{{ sc2_icon('Oracle') }}</td>
+                            <td>{{ sc2_icon('Stealth Drive (Oracle)') }}</td>
+                            <td>{{ sc2_icon('Stasis Calibration (Oracle)') }}</td>
+                            <td>{{ sc2_icon('Temporal Acceleration Beam (Oracle)') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                General Upgrades
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_icon('Matrix Overload') }}</td>
+                            <td>{{ sc2_icon('Guardian Shell') }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="9" class="title">
+                                Spear of Adun
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_icon('Chrono Surge (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_progressive_icon_with_custom_name('Progressive Proxy Pylon (Spear of Adun Calldown)', proxy_pylon_spear_of_adun_calldown_url, proxy_pylon_spear_of_adun_calldown_name) }}</td>
+                            <td>{{ sc2_icon('Pylon Overcharge (Spear of Adun Calldown)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Mass Recall (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Shield Overcharge (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Deploy Fenix (Spear of Adun Calldown)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Reconstruction Beam (Spear of Adun Auto-Cast)') }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ sc2_icon('Orbital Strike (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Temporal Field (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Solar Lance (Spear of Adun Calldown)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Purifier Beam (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Time Stop (Spear of Adun Calldown)') }}</td>
+                            <td>{{ sc2_icon('Solar Bombardment (Spear of Adun Calldown)') }}</td>
+                            <td></td>
+                            <td>{{ sc2_icon('Overwatch (Spear of Adun Auto-Cast)') }}</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
         <table id="location-table">
