@@ -3,7 +3,7 @@
 
 ## v1.1
 
-### Features
+### Features:
 
 - KONGsanity option (Collect all KONG letters in each level for a check)
 - Autosave option
@@ -11,7 +11,7 @@
 - MERRY option
 - Handle collected/co-op locations
 
-### Bugfixes:
+### Bug Fixes:
 
 - Fixed Mekanos softlock
 - Prevent Brothers Bear giving extra Banana Birds
@@ -21,7 +21,7 @@
 
 ## v1.0
 
-### Features
+### Features:
 
 - Goal
 	- Knautilus
