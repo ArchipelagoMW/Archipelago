@@ -3,7 +3,7 @@
 
 ## v2.0
 
-### Features
+### Features:
 
 - New optional Location Checks
 	- 3-Up Moons
@@ -49,7 +49,7 @@
 
 ## v1.1
 
-### Features
+### Features:
 
 - New Item
 	- Timer Trap
@@ -71,9 +71,9 @@
 - Fixed a Literature Trap typo
 
 
-## v1.0
+## v1.0 - First Stable Release
 
-### Features
+### Features:
 
 - Goal
 	- Bowser
