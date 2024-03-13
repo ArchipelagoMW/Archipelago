@@ -92,10 +92,10 @@ class ZorkGrandInquisitorContext(CommonClient.CommonContext):
 
             # Options
             self.game_controller.option_goal = id_to_goals()[_args["slot_data"]["goal"]]
-            self.game_controller.option_deathsanity = (_args["slot_data"]["deathsanity"] == 1)
+            self.game_controller.option_deathsanity = _args["slot_data"]["deathsanity"] == 1
 
             self.game_controller.option_grant_missable_location_checks = (
-                    _args["slot_data"]["grant_missable_location_checks"] == 1
+                _args["slot_data"]["grant_missable_location_checks"] == 1
             )
 
     async def controller(self):
