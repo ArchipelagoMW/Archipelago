@@ -324,8 +324,8 @@ class SkipWaterwayBlocks(Toggle):
 
 
 class Countdown(Choice):
-    """Displays, below the HUD clock, the number of unobtained progression-marked items or the total check
-    locations remaining in the stage you are currently in."""
+    """Displays, near the HUD clock and below the health bar, the number of unobtained progression-marked items
+    or the total check locations remaining in the stage you are currently in."""
     display_name = "Countdown"
     option_none = 0
     option_majors = 1
