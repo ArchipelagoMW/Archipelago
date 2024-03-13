@@ -253,21 +253,30 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 if not local_basic_unit:
                     raise Exception("Early Unit: At least one basic unit must be included")
 
-            starter_items.append(add_starter_item(multiworld, player, excluded_items, local_basic_unit))
+            unit: Item = add_starter_item(multiworld, player, excluded_items, local_basic_unit)
+            starter_items.append(unit)
 
             # NCO-only specific rules
             if first_mission == SC2Mission.SUDDEN_STRIKE.mission_name:
                 support_item: Union[str, None] = None
-                if local_basic_unit == ItemNames.REAPER:
+                if unit.name == ItemNames.REAPER:
                     support_item = ItemNames.REAPER_SPIDER_MINES
-                elif local_basic_unit == ItemNames.GOLIATH:
+                elif unit.name == ItemNames.GOLIATH:
                     support_item = ItemNames.GOLIATH_JUMP_JETS
-                elif local_basic_unit == ItemNames.SIEGE_TANK:
+                elif unit.name == ItemNames.SIEGE_TANK:
                     support_item = ItemNames.SIEGE_TANK_JUMP_JETS
-                elif local_basic_unit == ItemNames.VIKING:
+                elif unit.name == ItemNames.VIKING:
                     support_item = ItemNames.VIKING_SMART_SERVOS
                 if support_item is not None:
                     starter_items.append(add_starter_item(multiworld, player, excluded_items, [support_item]))
+                starter_items.append(add_starter_item(multiworld, player, excluded_items, [ItemNames.NOVA_JUMP_SUIT_MODULE]))
+                starter_items.append(
+                    add_starter_item(multiworld, player, excluded_items,
+                                     [
+                                         ItemNames.NOVA_HELLFIRE_SHOTGUN,
+                                         ItemNames.NOVA_PLASMA_RIFLE,
+                                         ItemNames.NOVA_PULSE_GRENADES
+                                     ]))
             if enabled_campaigns == {SC2Campaign.NCO}:
                 starter_items.append(add_starter_item(multiworld, player, excluded_items, [ItemNames.LIBERATOR_RAID_ARTILLERY]))
     

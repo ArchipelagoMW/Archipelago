@@ -764,7 +764,9 @@ class SC2Logic:
         return self.sudden_strike_can_reach_objectives(state) \
             and self.terran_able_to_snipe_defiler(state) \
             and state.has_any({ItemNames.SIEGE_TANK, ItemNames.VULTURE}, self.player) \
-            and self.terran_defense_rating(state, True, False) > 5
+            and self.nova_splash(state) \
+            and (self.terran_defense_rating(state, True, False) >= 2
+                 or state.has(ItemNames.NOVA_JUMP_SUIT_MODULE, self.player))
 
     def sudden_strike_can_reach_objectives(self, state: CollectionState) -> bool:
         return self.terran_cliffjumper(state) \
