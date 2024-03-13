@@ -9,8 +9,8 @@ from .Shops import TakeAny, total_shop_slots, set_up_shops, shop_table_by_locati
 from .Bosses import place_bosses
 from .Dungeons import get_dungeon_item_pool_player
 from .EntranceShuffle import connect_entrance
-from .Items import ItemFactory, GetBeemizerItem, trap_replaceable, item_name_groups
-from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, TriforcePiecesMode
+from .Items import item_factory, GetBeemizerItem, trap_replaceable, item_name_groups
+from .Options import small_key_shuffle, compass_shuffle, big_key_shuffle, map_shuffle, TriforcePiecesMode, LTTPBosses
 from .StateHelpers import has_triforce_pieces, has_melee_weapon
 from .Regions import key_drop_data
 
@@ -234,15 +234,15 @@ def generate_itempool(world):
         raise NotImplementedError(f"Goal {multiworld.goal[player]} for player {player}")
     if multiworld.mode[player] not in ('open', 'standard', 'inverted'):
         raise NotImplementedError(f"Mode {multiworld.mode[player]} for player {player}")
-    if multiworld.timer[player] not in {False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'}:
-        raise NotImplementedError(f"Timer {multiworld.mode[player]} for player {player}")
+    if multiworld.timer[player] not in (False, 'display', 'timed', 'timed_ohko', 'ohko', 'timed_countdown'):
+        raise NotImplementedError(f"Timer {multiworld.timer[player]} for player {player}")
 
     if multiworld.timer[player] in ['ohko', 'timed_ohko']:
         multiworld.can_take_damage[player] = False
     if multiworld.goal[player] in ['pedestal', 'triforce_hunt', 'local_triforce_hunt']:
-        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Nothing', player), False)
+        multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Nothing', world), False)
     else:
-        multiworld.push_item(multiworld.get_location('Ganon', player), ItemFactory('Triforce', player), False)
+        multiworld.push_item(multiworld.get_location('Ganon', player), item_factory('Triforce', world), False)
 
     if multiworld.goal[player] in ['triforce_hunt', 'local_triforce_hunt']:
         region = multiworld.get_region('Light World', player)
@@ -252,7 +252,7 @@ def generate_itempool(world):
 
         region.locations.append(loc)
 
-        multiworld.push_item(loc, ItemFactory('Triforce', player), False)
+        multiworld.push_item(loc, item_factory('Triforce', world), False)
         loc.event = True
         loc.locked = True
 
@@ -271,7 +271,7 @@ def generate_itempool(world):
     ]
     for location_name, event_name in event_pairs:
         location = multiworld.get_location(location_name, player)
-        event = ItemFactory(event_name, player)
+        event = item_factory(event_name, world)
         multiworld.push_item(location, event, False)
         location.event = location.locked = True
 
@@ -287,7 +287,7 @@ def generate_itempool(world):
         treasure_hunt_icon, additional_triforce_pieces = get_pool_core(multiworld, player)
 
     for item in precollected_items:
-        multiworld.push_precollected(ItemFactory(item, player))
+        multiworld.push_precollected(item_factory(item, world))
 
     if multiworld.mode[player] == 'standard' and not has_melee_weapon(multiworld.state, player):
         if "Link's Uncle" not in placed_items:
@@ -326,9 +326,9 @@ def generate_itempool(world):
                 multiworld.escape_assist[player].append('bombs')
 
     for (location, item) in placed_items.items():
-        multiworld.get_location(location, player).place_locked_item(ItemFactory(item, player))
+        multiworld.get_location(location, player).place_locked_item(item_factory(item, world))
 
-    items = ItemFactory(pool, player)
+    items = item_factory(pool, world)
     # convert one Progressive Bow into Progressive Bow (Alt), in ID only, for ganon silvers hint text
     if multiworld.worlds[player].has_progressive_bows:
         for item in items:
@@ -349,7 +349,7 @@ def generate_itempool(world):
 
     for key_loc in key_drop_data:
         key_data = key_drop_data[key_loc]
-        drop_item = ItemFactory(key_data[3], player)
+        drop_item = item_factory(key_data[3], world)
         if not multiworld.key_drop_shuffle[player]:
             if drop_item in dungeon_items:
                 dungeon_items.remove(drop_item)
@@ -370,7 +370,7 @@ def generate_itempool(world):
             loc.address = None
         elif "Small" in key_data[3] and multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal:
             # key drop shuffle and universal keys are on. Add universal keys in place of key drop keys.
-            multiworld.itempool.append(ItemFactory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), player))
+            multiworld.itempool.append(item_factory(GetBeemizerItem(multiworld, player, 'Small Key (Universal)'), world))
     dungeon_item_replacements = sum(difficulties[multiworld.difficulty[player]].extras, []) * 2
     multiworld.random.shuffle(dungeon_item_replacements)
 
@@ -382,7 +382,7 @@ def generate_itempool(world):
                 or (multiworld.map_shuffle[player] == map_shuffle.option_start_with and item.type == 'Map')):
             dungeon_items.pop(x)
             multiworld.push_precollected(item)
-            multiworld.itempool.append(ItemFactory(dungeon_item_replacements.pop(), player))
+            multiworld.itempool.append(item_factory(dungeon_item_replacements.pop(), world))
     multiworld.itempool.extend([item for item in dungeon_items])
 
     set_up_shops(multiworld, player)
@@ -394,7 +394,7 @@ def generate_itempool(world):
                           location.shop_slot is not None]
         for location in shop_locations:
             if location.shop.inventory[location.shop_slot]["item"] == "Single Arrow":
-                location.place_locked_item(ItemFactory("Single Arrow", player))
+                location.place_locked_item(item_factory("Single Arrow", world))
             else:
                 shop_items += 1
     else:
@@ -406,9 +406,9 @@ def generate_itempool(world):
         multiworld.small_key_shuffle[player] == small_key_shuffle.option_universal) * 0.5
     for _ in range(shop_items):
         if multiworld.random.random() < chance_100:
-            items.append(ItemFactory(GetBeemizerItem(multiworld, player, "Rupees (100)"), player))
+            items.append(item_factory(GetBeemizerItem(multiworld, player, "Rupees (100)"), world))
         else:
-            items.append(ItemFactory(GetBeemizerItem(multiworld, player, "Rupees (50)"), player))
+            items.append(item_factory(GetBeemizerItem(multiworld, player, "Rupees (50)"), world))
 
     multiworld.random.shuffle(items)
     pool_count = len(items)
@@ -431,7 +431,7 @@ def generate_itempool(world):
                 new_items += ["Arrow Upgrade (+5)"] * 6
                 new_items.append("Arrow Upgrade (+5)" if progressive else "Arrow Upgrade (+10)")
 
-    items += [ItemFactory(item, player) for item in new_items]
+    items += [item_factory(item, world) for item in new_items]
     removed_filler = []
 
     multiworld.random.shuffle(items)  # Decide what gets tossed randomly.
@@ -444,22 +444,22 @@ def generate_itempool(world):
         else:
             # no more junk to remove, condense progressive items
             def condense_items(items, small_item, big_item, rem, add):
-                small_item = ItemFactory(small_item, player)
+                small_item = item_factory(small_item, world)
                 # while (len(items) >= pool_count + rem - 1  # minus 1 to account for the replacement item
                 #         and items.count(small_item) >= rem):
                 if items.count(small_item) >= rem:
                     for _ in range(rem):
                         items.remove(small_item)
-                        removed_filler.append(ItemFactory(small_item.name, player))
-                    items += [ItemFactory(big_item, player) for _ in range(add)]
+                        removed_filler.append(item_factory(small_item.name, world))
+                    items += [item_factory(big_item, world) for _ in range(add)]
                     return True
                 return False
 
             def cut_item(items, item_to_cut, minimum_items):
-                item_to_cut = ItemFactory(item_to_cut, player)
+                item_to_cut = item_factory(item_to_cut, world)
                 if items.count(item_to_cut) > minimum_items:
                     items.remove(item_to_cut)
-                    removed_filler.append(ItemFactory(item_to_cut.name, player))
+                    removed_filler.append(item_factory(item_to_cut.name, world))
                     return True
                 return False
 
@@ -551,7 +551,7 @@ def set_up_take_anys(world, player):
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)
-        world.itempool.append(ItemFactory('Rupees (20)', player))
+        world.itempool.append(item_factory('Rupees (20)', world))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
         location = ALttPLocation(player, loc_name, shop_table_by_location[loc_name], parent=old_man_take_any)
@@ -577,7 +577,7 @@ def set_up_take_anys(world, player):
         location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)
         location.shop_slot = 1
         take_any.locations.append(location)
-        location.place_locked_item(ItemFactory("Boss Heart Container", player))
+        location.place_locked_item(item_factory("Boss Heart Container", world))
 
 
 def get_pool_core(world, player: int):
@@ -605,7 +605,7 @@ def get_pool_core(world, player: int):
         placed_items[loc] = item
 
     # provide boots to major glitch dependent seeds
-    if logic in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.glitch_boots[player]:
+    if logic.current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.glitch_boots[player]:
         precollected_items.append('Pegasus Boots')
         pool.remove('Pegasus Boots')
         pool.append('Rupees (20)')
