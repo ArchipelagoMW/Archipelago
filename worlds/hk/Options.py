@@ -406,6 +406,15 @@ class ExtraPlatforms(DefaultOnToggle):
     """Places additional platforms to make traveling throughout Hallownest more convenient."""
 
 
+class AddUnshuffledLocations(Toggle):
+    """Adds non-randomized locations to the location pool, which allows syncing
+    of location state with co-op or automatic collection via collect.
+
+    Note: This will increase the number of location checks required to purchase
+    hints to the total maximum.
+    """
+
+
 class DeathLinkShade(Choice):
     """Sets whether to create a shade when you are killed by a DeathLink and how to handle your existing shade, if any.
 
@@ -488,7 +497,7 @@ hollow_knight_options: typing.Dict[str, type(Option)] = {
     **{
         option.__name__: option
         for option in (
-            StartLocation, Goal, WhitePalace, ExtraPlatforms, StartingGeo,
+            StartLocation, Goal, WhitePalace, ExtraPlatforms, AddUnshuffledLocations, StartingGeo,
             DeathLink, DeathLinkShade, DeathLinkBreaksFragileCharms,
             MinimumGeoPrice, MaximumGeoPrice,
             MinimumGrubPrice, MaximumGrubPrice,
