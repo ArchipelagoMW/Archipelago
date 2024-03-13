@@ -213,7 +213,7 @@ def set_easy_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> No
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Flowers", player), lambda state: state.has_all({'Poochy'}, player))
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Stars", player), lambda state: state.has('Poochy', player))
-    set_rule(world.world.multiworld.get_location("Poochy Ain't Stupid: Level Clear", player), lambda state: state.has('Poochy', player))
+    set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Level Clear", player), lambda state: state.has('Poochy', player))
 
     set_rule(world.multiworld.get_location("Hit That Switch!!: Red Coins", player), lambda state: state.has_all({'Large Spring Ball', '! Switch'}, player))
     set_rule(world.multiworld.get_location("Hit That Switch!!: Flowers", player), lambda state: state.has_all({'Large Spring Ball', '! Switch'}, player))
