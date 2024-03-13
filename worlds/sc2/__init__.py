@@ -22,24 +22,22 @@ from .MissionTables import MissionInfo, SC2Campaign, lookup_name_to_mission, SC2
 
 
 class Starcraft2WebWorld(WebWorld):
-    # TODO update the guide
     setup = Tutorial(
         "Multiworld Setup Guide",
         "A guide to setting up the Starcraft 2 randomizer connected to an Archipelago Multiworld",
         "English",
         "setup_en.md",
         "setup/en",
-        ["TheCondor"]
+        ["TheCondor", "Phaneros"]
     )
 
     tutorials = [setup]
 
 
 class SC2World(World):
-    # TODO update this description
     """
-    StarCraft II: Wings of Liberty is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
-    Command Raynor's Raiders in collecting pieces of the Keystone in order to stop the zerg threat posed by the Queen of Blades.
+    StarCraft II is a science fiction real-time strategy video game developed and published by Blizzard Entertainment.
+    Play as one of three factions across four campaigns in a battle for supremacy of the Koprulu Sector.
     """
 
     game = "Starcraft 2"
