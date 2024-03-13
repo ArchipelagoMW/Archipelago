@@ -11,19 +11,6 @@ if TYPE_CHECKING:
 CompactItemData = Tuple[str, Union[str, int], int]
 
 joke_hints = [
-    "Quaternions break my brain",
-    "Eclipse has nothing, but you should do it anyway.",
-    "Beep",
-    "Putting in custom subtitles shouldn't have been as hard as it was...",
-    "BK mode is right around the corner.",
-    "You can do it!",
-    "I believe in you!",
-    "The person playing is cute. <3",
-    "dash dot, dash dash dash,\ndash, dot dot dot dot, dot dot,\ndash dot, dash dash dot",
-    "When you think about it, there are actually a lot of bubbles in a stream.",
-    "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you",
-    "Thanks to the Archipelago developers for making this possible.",
-
     "Have you tried Adventure?\n...Holy crud, that game is 17 years older than me.",
     "Have you tried A Link to the Past?\nThe Archipelago game that started it all!",
     "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
@@ -86,6 +73,18 @@ joke_hints = [
     "Have you tried The Witness?\nOh. I guess you already have. Thanks for playing!",
     "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
 
+    "Quaternions break my brain",
+    "Eclipse has nothing, but you should do it anyway.",
+    "Beep",
+    "Putting in custom subtitles shouldn't have been as hard as it was...",
+    "BK mode is right around the corner.",
+    "You can do it!",
+    "I believe in you!",
+    "The person playing is cute. <3",
+    "dash dot, dash dash dash,\ndash, dot dot dot dot, dot dot,\ndash dot, dash dash dot",
+    "When you think about it, there are actually a lot of bubbles in a stream.",
+    "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you",
+    "Thanks to the Archipelago developers for making this possible.",
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
     "Where are you right now?\nI'm at soup!\nWhat do you mean you're at soup?",
@@ -165,9 +164,24 @@ joke_hints = [
     "Welcome Back! (:",
     "R R R U L L U L U R U R D R D R U U",
     "Have you tried checking your tracker?",
-    
+    "Lines are drawn on grids\nAll symbols must be obeyed\nIt's snowing on Mt. Fuji",
+    "If you're BK, you could try today's Wittle:\nhttps://www.fourisland.com/wittle/",
+    "They say that plundering Outside Ganon's Castle is a foolish choice.",
+    "You should try to BLJ. Maybe that'll get you through that door.",
+    "Error: Witness Randomizer disconnected from Archipelago.\n(lmao gottem)",
+    "You have found: One (1) Audio Log!\nSeries of 49! Collect them all!",
+    "In the Town area, you will find 1 good boi.\nGo pet him.",
+    "If you're ever stuck on a panel, feel free to ask Rever.\nSurely you'll understand his drawing!",
+    "[This hint has been removed as part of the Witness Protection Program]",
+    "Panel Diddle",
+    "Witness AP when",
+    "This game is my favorite walking simulator.",
+    "Did you hear that? It said --\n\nCosmic background radiation is a riot!",
+    "Well done solving those puzzles.\nPray return to the Waking Sands.",
+    "Having trouble finding your checks?\nTry the PopTracker pack!\nIt's got auto-tracking and a detailed map.",
+
     "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady,"
-    "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid.",
+    "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid, blueperson2.",
 ]
 
 
