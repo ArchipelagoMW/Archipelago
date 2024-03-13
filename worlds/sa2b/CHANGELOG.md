@@ -204,8 +204,19 @@
 
 - Unlocking each gate of levels requires beating a random boss
 - Chao Races and Karate are now available as an option for checks
-- Junk items (rings, shields, etc) can now be put into the itempool
+- Junk items can now be put into the itempool
+	- Five Rings
+	- Ten Rings
+	- Twenty Rings
+	- Extra Life
+	- Shield
+	- Magnetic Shield
+	- Invincibility
 - Traps can now be put into the itempool
+	- Omotrap
+	- Chaos Control Trap
+	- Confusion Trap
+	- Tiny Trap
 - The Credits now display a few stats about the run
 - An Option for the minimum required rank for mission checks is now available
 - An Option for influencing the costs of level gates is now available
@@ -223,10 +234,10 @@
 ### Features
 
 - Goal is to beat Cannon's Core and defeat the Biolizard
-- Locations include
+- Locations included:
 	- Upgrade Pickups
 	- Mission Clears
-- Items include
+- Items included:
 	- Character Upgrades
 	- Emblems
 - Levels are unlocked by certain amounts of emblems
