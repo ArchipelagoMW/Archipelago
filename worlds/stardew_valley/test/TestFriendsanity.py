@@ -1,3 +1,4 @@
+import unittest
 from collections import Counter
 from typing import ClassVar, Set
 
@@ -37,7 +38,7 @@ class SVFriendsanityTestBase(SVTestBase):
 
     def test_friendsanity(self):
         if not self.run_test:
-            return
+            raise unittest.SkipTest("Base tests disabled")
 
         with self.subTest("Items are valid"):
             self.check_all_items_match_expected_npcs()

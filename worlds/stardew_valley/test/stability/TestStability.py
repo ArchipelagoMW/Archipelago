@@ -2,6 +2,7 @@ import json
 import re
 import subprocess
 import sys
+import unittest
 
 from BaseClasses import get_seed
 from .. import SVTestCase
@@ -18,7 +19,7 @@ class TestGenerationIsStable(SVTestCase):
 
     def test_all_locations_and_items_are_the_same_between_two_generations(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
 
         # seed = get_seed(33778671150797368040) # troubleshooting seed
         seed = get_seed()

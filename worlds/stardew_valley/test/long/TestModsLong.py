@@ -15,7 +15,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_mod_pairs_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
 
         for mod_pair in combinations(all_mods, 2):
             world_options = {
@@ -28,7 +28,7 @@ class TestGenerateModsOptions(WorldAssertMixin, ModAssertMixin, SVTestCase):
 
     def test_given_mod_names_when_generate_paired_with_other_options_then_basic_checks(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
 
         for mod, (option, value) in product(all_mods, all_option_choices):
             world_options = {

@@ -1,3 +1,4 @@
+import unittest
 from itertools import combinations
 
 from .option_names import all_option_choices
@@ -9,7 +10,7 @@ from ... import options
 class TestGenerateDynamicOptions(WorldAssertMixin, SVTestCase):
     def test_given_option_pair_when_generate_then_basic_checks(self):
         if self.skip_long_tests:
-            return
+            raise unittest.SkipTest("Long tests disabled")
 
         for (option1, option1_choice), (option2, option2_choice) in combinations(all_option_choices, 2):
             if option1 is option2:

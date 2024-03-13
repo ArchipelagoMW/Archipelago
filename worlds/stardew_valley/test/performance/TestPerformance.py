@@ -144,7 +144,7 @@ class TestDefaultOptions(SVPerformanceTestCase):
 
     def test_solo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 1
         multiworld_options = [self.options] * number_players
@@ -152,7 +152,7 @@ class TestDefaultOptions(SVPerformanceTestCase):
 
     def test_duo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 2
         multiworld_options = [self.options] * number_players
@@ -160,7 +160,7 @@ class TestDefaultOptions(SVPerformanceTestCase):
 
     def test_5_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 5
         multiworld_options = [self.options] * number_players
@@ -169,7 +169,7 @@ class TestDefaultOptions(SVPerformanceTestCase):
     @unittest.skip
     def test_10_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 10
         multiworld_options = [self.options] * number_players
@@ -183,7 +183,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
     def test_solo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 1
         multiworld_options = [self.options] * number_players
@@ -191,7 +191,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
     def test_duo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 2
         multiworld_options = [self.options] * number_players
@@ -199,7 +199,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
     def test_5_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 5
         multiworld_options = [self.options] * number_players
@@ -207,7 +207,7 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
 
     def test_10_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 10
         multiworld_options = [self.options] * number_players
@@ -221,7 +221,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
 
     def test_solo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 1
         multiworld_options = [self.options] * number_players
@@ -229,7 +229,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
 
     def test_duo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 2
         multiworld_options = [self.options] * number_players
@@ -238,7 +238,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
     @unittest.skip
     def test_5_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 5
         multiworld_options = [self.options] * number_players
@@ -247,7 +247,7 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
     @unittest.skip
     def test_10_player(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 10
         multiworld_options = [self.options] * number_players
@@ -261,7 +261,7 @@ class TestAllsanityWithMods(SVPerformanceTestCase):
 
     def test_solo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 1
         multiworld_options = [self.options] * number_players
@@ -269,7 +269,7 @@ class TestAllsanityWithMods(SVPerformanceTestCase):
 
     def test_duo(self):
         if self.skip_performance_tests:
-            return
+            raise unittest.SkipTest("Performance tests disabled")
 
         number_players = 2
         multiworld_options = [self.options] * number_players
