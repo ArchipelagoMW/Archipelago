@@ -11,8 +11,8 @@
 	- Bonus Blocks
 	- Blocksanity
 		- All blocks that contain coins or items are included, with the exception of:
-		- Blocks in Top Secret Area & Front Door/Bowser Castle
-		- Blocks that are unreachable without glitches/unreasonable movement
+			- Blocks in Top Secret Area & Front Door/Bowser Castle
+			- Blocks that are unreachable without glitches/unreasonable movement
 - New Items
 	- Special Zone Clear
 	- New Filler Items
@@ -39,7 +39,7 @@
 - SMW can now handle receiving more than 255 items
 - Significant World Code cleanup
 	- New Options API
-	- Removal of `orld: MultiWorld` across the world
+	- Removal of `world: MultiWorld` across the world
 - The PopTracker pack now has tabs for every level/sublevel, and can automatically swap tabs while playing if connected to the server
 
 ### Bug Fixes:
