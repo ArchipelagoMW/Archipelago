@@ -1858,8 +1858,8 @@ if "Starcraft 2" in network_data_package["games"]:
             "Planetary Fortress":                          "https://static.wikia.nocookie.net/starcraft/images/0/0b/SC2_Lab_PlanetFortress_Icon.png",
             "Perdition Turret":                            "https://static.wikia.nocookie.net/starcraft/images/a/af/SC2_Lab_PerdTurret_Icon.png",
             "Cellular Reactor":                            "https://static.wikia.nocookie.net/starcraft/images/d/d8/SC2_Lab_CellReactor_Icon.png",
-            "Regenerative Bio-Steel Level 1":              "/static/static/icons/sc2/SC2_Lab_BioSteel_L1.png", # FIXME: Relocate
-            "Regenerative Bio-Steel Level 2":              "/static/static/icons/sc2/SC2_Lab_BioSteel_L2.png", # FIXME: Relocate
+            "Regenerative Bio-Steel Level 1":              github_icon_base_url + "original/btn-regenerativebiosteel-green.png",
+            "Regenerative Bio-Steel Level 2":              github_icon_base_url + "original/btn-regenerativebiosteel-blue.png",
             "Regenerative Bio-Steel Level 3":              github_icon_base_url + "blizzard/btn-research-zerg-regenerativebio-steel.png",
             "Hive Mind Emulator":                          "https://static.wikia.nocookie.net/starcraft/images/b/bc/SC2_Lab_Hive_Emulator_Icon.png",
             "Psi Disrupter":                               "https://static.wikia.nocookie.net/starcraft/images/c/cf/SC2_Lab_Psi_Disruptor_Icon.png",
