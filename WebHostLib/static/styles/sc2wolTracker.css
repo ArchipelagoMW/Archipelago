@@ -2,25 +2,34 @@
     margin: 0;
 }
 
-#inventory-table{
-    border-top: 2px solid #000000;
-    border-left: 2px solid #000000;
-    border-right: 2px solid #000000;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    padding: 3px 3px 10px;
-    width: 710px;
+#inventory-table td {
+    vertical-align: top;
+}
+
+.inventory-table-area{
+    border: 2px solid #000000;
+    border-radius: 4px;
+    padding: 3px 10px 3px 10px;
+}
+
+.inventory-table-area:has(.inventory-table-terran) {
+    width: 690px;
     background-color: #525494;
 }
 
-#inventory-table td{
+.inventory-table-area:has(.inventory-table-zerg) {
+    width: 360px;
+    background-color: #9d60d2;
+}
+
+#inventory-table .inventory-table td{
     width: 40px;
     height: 40px;
     text-align: center;
     vertical-align: middle;
 }
 
-#inventory-table td.title{
+.inventory-table td.title{
     padding-top: 10px;
     height: 20px;
     font-family: "JuraBook", monospace;
@@ -28,7 +37,7 @@
     font-weight: bold;
 }
 
-#inventory-table img{
+.inventory-table img{
     height: 100%;
     max-width: 40px;
     max-height: 40px;
@@ -37,36 +46,37 @@
     background-color: black;
 }
 
-#inventory-table img.acquired{
+.inventory-table img.acquired{
     filter: none;
     background-color: black;
 }
 
-#inventory-table .tint-terran img.acquired {
+.inventory-table .tint-terran img.acquired {
     filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg)
 }
 
-#inventory-table .tint-protoss img.acquired {
+.inventory-table .tint-protoss img.acquired {
     filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(120deg)
 }
 
-#inventory-table .tint-level-1 img.acquired {
+.inventory-table .tint-level-1 img.acquired {
     filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg)
 }
 
-#inventory-table .tint-level-2 img.acquired {
+.inventory-table .tint-level-2 img.acquired {
     filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(120deg)
 }
 
-#inventory-table .tint-level-3 img.acquired {
+.inventory-table .tint-level-3 img.acquired {
     filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(240deg)
 }
 
-#inventory-table div.counted-item {
+.inventory-table div.counted-item {
     position: relative;
 }
 
-#inventory-table div.item-count {
+.inventory-table div.item-count {
+    width: 160px;
     text-align: left;
     color: black;
     font-family: "JuraBook", monospace;
