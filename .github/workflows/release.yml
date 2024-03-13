@@ -18,7 +18,7 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV  # tag x.y.z will become "Archipelago x.y.z"
       - name: Create Release
-        uses: softprops/action-gh-release@b7e450da2a4b4cb4bfbae528f788167786cfcedf
+        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
           draft: true  # don't publish right away, especially since windows build is added by hand
           prerelease: false
@@ -35,14 +35,14 @@ jobs:
       - name: Set env
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       # - code below copied from build.yml -
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install base dependencies
         run: |
           sudo apt update
           sudo apt -y install build-essential p7zip xz-utils wget libglib2.0-0
           sudo apt -y install python3-gi libgirepository1.0-dev  # should pull dependencies for gi installation below
       - name: Get a recent python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
       - name: Install build-time dependencies
@@ -74,7 +74,7 @@ jobs:
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -
       - name: Add to Release
-        uses: softprops/action-gh-release@b7e450da2a4b4cb4bfbae528f788167786cfcedf
+        uses: softprops/action-gh-release@975c1b265e11dd76618af1c374e7981f9a6ff44a
         with:
           draft: true  # see above
           prerelease: false
