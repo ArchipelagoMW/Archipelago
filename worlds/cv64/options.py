@@ -108,7 +108,7 @@ class PercentSpecial2sRequired(Range):
     """Percentage of Special2s required to enter Dracula's chamber when Dracula's Condition is Special2s."""
     range_start = 1
     range_end = 100
-    default = 100
+    default = 80
     display_name = "Percent Special2s Required"
 
 
