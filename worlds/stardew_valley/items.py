@@ -13,7 +13,7 @@ from .content.game_content import StardewContent
 from .mods.mod_data import ModNames
 from .options import StardewValleyOptions, TrapItems, FestivalLocations, ExcludeGingerIsland, SpecialOrderLocations, SeasonRandomization, Cropsanity, \
     Museumsanity, \
-    Fishsanity, BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
+    BuildingProgression, SkillProgression, ToolProgression, ElevatorProgression, BackpackProgression, ArcadeMachineLocations, Monstersanity, Goal, \
     Chefsanity, Craftsanity, BundleRandomization, EntranceRandomization, Shipsanity
 from .strings.ap_names.ap_weapon_names import APWeapon
 from .strings.ap_names.buff_names import Buff
@@ -383,7 +383,7 @@ def create_stardrops(item_factory: StardewItemFactory, options: StardewValleyOpt
     items.append(item_factory("Stardrop", stardrops_classification))  # The Mines level 100
     items.append(item_factory("Stardrop", stardrops_classification))  # Old Master Cannoli
     items.append(item_factory("Stardrop", stardrops_classification))  # Krobus Stardrop
-    if options.fishsanity != Fishsanity.option_none:
+    if content.features.fishsanity.is_enabled:
         items.append(item_factory("Stardrop", stardrops_classification))  # Master Angler Stardrop
     if ModNames.deepwoods in options.mods:
         items.append(item_factory("Stardrop", stardrops_classification))  # Petting the Unicorn
@@ -538,6 +538,7 @@ def create_special_order_qi_rewards(item_factory: StardewItemFactory, options: S
         qi_gem_rewards.append("15 Qi Gems")
         qi_gem_rewards.append("15 Qi Gems")
 
+    # Add test to
     if options.special_order_locations == SpecialOrderLocations.option_board_qi:
         qi_gem_rewards.extend(["100 Qi Gems", "10 Qi Gems", "40 Qi Gems", "25 Qi Gems", "25 Qi Gems",
                                "40 Qi Gems", "20 Qi Gems", "50 Qi Gems", "40 Qi Gems", "35 Qi Gems"])

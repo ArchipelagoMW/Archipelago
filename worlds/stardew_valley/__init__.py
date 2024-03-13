@@ -214,7 +214,7 @@ class StardewValleyWorld(World):
                                        Event.victory)
         elif self.options.goal == Goal.option_master_angler:
             self.create_event_location(location_table[GoalName.master_angler],
-                                       self.logic.fishing.can_catch_every_fish_in_slot(self.get_all_location_names()),
+                                       self.logic.fishing.can_catch_every_fish_for_fishsanity(),
                                        Event.victory)
         elif self.options.goal == Goal.option_complete_collection:
             self.create_event_location(location_table[GoalName.complete_museum],

@@ -7,10 +7,12 @@ from .mod_registry import by_mod
 from .vanilla.base import base_game
 from .vanilla.ginger_island import ginger_island
 from .vanilla.pelican_town import pelican_town
+from .vanilla.qi_board import qi_board
 
 assert base_game
 assert ginger_island
 assert pelican_town
+assert qi_board
 
 # Dynamically register everything currently in the mods folder. This would ideally be done through a metaclass, but I have not looked into that yet.
 mod_folder = pathlib.Path(next(iter(mods.__path__)))

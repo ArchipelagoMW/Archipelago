@@ -48,6 +48,12 @@ class FriendsanityFeature(ABC):
 
     heart_size: int
 
+    to_item_name = staticmethod(to_item_name)
+    to_location_name = staticmethod(to_location_name)
+    pet_heart_item_name = pet_heart_item_name
+    extract_npc_from_item_name = staticmethod(extract_npc_from_item_name)
+    extract_npc_from_location_name = staticmethod(extract_npc_from_location_name)
+
     @abstractmethod
     def get_randomized_hearts(self, villager: Villager) -> Tuple[int, ...]:
         ...

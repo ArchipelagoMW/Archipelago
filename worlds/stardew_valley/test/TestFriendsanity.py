@@ -23,23 +23,19 @@ all_vanilla_npc = {
 
 
 class SVFriendsanityTestBase(SVTestBase):
-    expected_npcs: ClassVar[Set[str]] = {}
-    expected_pet_heart_size: ClassVar[Set[str]] = {}
-    expected_bachelor_heart_size: ClassVar[Set[str]] = {}
-    expected_other_heart_size: ClassVar[Set[str]] = {}
+    expected_npcs: ClassVar[Set[str]] = set()
+    expected_pet_heart_size: ClassVar[Set[str]] = set()
+    expected_bachelor_heart_size: ClassVar[Set[str]] = set()
+    expected_other_heart_size: ClassVar[Set[str]] = set()
 
-    @property
-    def run_test(self):
-        return type(self) is not SVFriendsanityTestBase
-
-    @property
-    def run_default_tests(self) -> bool:
-        return self.run_test and super().run_default_tests
-
-    def test_friendsanity(self):
-        if not self.run_test:
+    @classmethod
+    def setUpClass(cls) -> None:
+        if cls is SVFriendsanityTestBase:
             raise unittest.SkipTest("Base tests disabled")
 
+        super().setUpClass()
+
+    def test_friendsanity(self):
         with self.subTest("Items are valid"):
             self.check_all_items_match_expected_npcs()
         with self.subTest("Correct number of items"):
@@ -50,12 +46,13 @@ class SVFriendsanityTestBase(SVTestBase):
             self.check_all_locations_match_heart_size()
 
     def check_all_items_match_expected_npcs(self):
-        for item in self.multiworld.itempool:
-            name = friendsanity.extract_npc_from_item_name(item.name)
-            if name is None:
-                continue
+        npc_names = {
+            name
+            for item in self.multiworld.itempool
+            if (name := friendsanity.extract_npc_from_item_name(item.name)) is not None
+        }
 
-            self.assertIn(name, self.expected_npcs)
+        self.assertEqual(npc_names, self.expected_npcs)
 
     def check_correct_number_of_items(self):
         item_by_npc = Counter()
@@ -76,12 +73,13 @@ class SVFriendsanityTestBase(SVTestBase):
                 self.assertEqual(count, len(self.expected_other_heart_size))
 
     def check_all_locations_match_expected_npcs(self):
-        for location_name in self.get_real_location_names():
-            name, _ = friendsanity.extract_npc_from_location_name(location_name)
-            if name is None:
-                continue
+        npc_names = {
+            name_and_heart[0]
+            for location_name in self.get_real_location_names()
+            if (name_and_heart := friendsanity.extract_npc_from_location_name(location_name))[0] is not None
+        }
 
-            self.assertIn(name, self.expected_npcs)
+        self.assertEqual(npc_names, self.expected_npcs)
 
     def check_all_locations_match_heart_size(self):
         for location_name in self.get_real_location_names():
@@ -99,7 +97,7 @@ class SVFriendsanityTestBase(SVTestBase):
 
 class TestFriendsanityNone(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_none,
+        Friendsanity: Friendsanity.option_none,
     }
 
     @property
@@ -110,52 +108,52 @@ class TestFriendsanityNone(SVFriendsanityTestBase):
 
 class TestFriendsanityBachelors(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_bachelors,
-        FriendsanityHeartSize.internal_name: 1,
+        Friendsanity: Friendsanity.option_bachelors,
+        FriendsanityHeartSize: 1,
     }
     expected_npcs = all_vanilla_bachelor
-    expected_bachelor_heart_size = set(range(1, 8 + 1))
+    expected_bachelor_heart_size = {1, 2, 3, 4, 5, 6, 7, 8}
 
 
 class TestFriendsanityStartingNpcs(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_starting_npcs,
-        FriendsanityHeartSize.internal_name: 1,
+        Friendsanity: Friendsanity.option_starting_npcs,
+        FriendsanityHeartSize: 1,
     }
     expected_npcs = all_vanilla_starting_npc
-    expected_pet_heart_size = set(range(1, 5 + 1))
-    expected_bachelor_heart_size = set(range(1, 8 + 1))
-    expected_other_heart_size = set(range(1, 10 + 1))
+    expected_pet_heart_size = {1, 2, 3, 4, 5}
+    expected_bachelor_heart_size = {1, 2, 3, 4, 5, 6, 7, 8}
+    expected_other_heart_size = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 
 class TestFriendsanityAllNpcs(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all,
-        FriendsanityHeartSize.internal_name: 4,
+        Friendsanity: Friendsanity.option_all,
+        FriendsanityHeartSize: 4,
     }
     expected_npcs = all_vanilla_npc
-    expected_pet_heart_size = set(range(4, 5 + 1, 4)) | {5}
-    expected_bachelor_heart_size = set(range(4, 8 + 1, 4)) | {8}
-    expected_other_heart_size = set(range(4, 10 + 1, 4)) | {10}
+    expected_pet_heart_size = {4, 5}
+    expected_bachelor_heart_size = {4, 8}
+    expected_other_heart_size = {4, 8, 10}
 
 
 class TestFriendsanityHeartSize3(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
-        FriendsanityHeartSize.internal_name: 3,
+        Friendsanity: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize: 3,
     }
     expected_npcs = all_vanilla_npc
-    expected_pet_heart_size = set(range(3, 5 + 1, 3)) | {5}
-    expected_bachelor_heart_size = set(range(3, 14 + 1, 3)) | {14}
-    expected_other_heart_size = set(range(3, 10 + 1, 3)) | {10}
+    expected_pet_heart_size = {3, 5}
+    expected_bachelor_heart_size = {3, 6, 9, 12, 14}
+    expected_other_heart_size = {3, 6, 9, 10}
 
 
 class TestFriendsanityHeartSize5(SVFriendsanityTestBase):
     options = {
-        Friendsanity.internal_name: Friendsanity.option_all_with_marriage,
-        FriendsanityHeartSize.internal_name: 5,
+        Friendsanity: Friendsanity.option_all_with_marriage,
+        FriendsanityHeartSize: 5,
     }
     expected_npcs = all_vanilla_npc
-    expected_pet_heart_size = set(range(5, 5 + 1, 5)) | {5}
-    expected_bachelor_heart_size = set(range(5, 14 + 1, 5)) | {14}
-    expected_other_heart_size = set(range(5, 10 + 1, 5)) | {10}
+    expected_pet_heart_size = {5}
+    expected_bachelor_heart_size = {5, 10, 14}
+    expected_other_heart_size = {5, 10}

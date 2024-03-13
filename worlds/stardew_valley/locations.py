@@ -6,12 +6,10 @@ from typing import Optional, Dict, Protocol, List, FrozenSet, Iterable
 
 from . import data
 from .bundles.bundle_room import BundleRoom
-from .content.feature import friendsanity
 from .content.game_content import StardewContent
-from .data.fish_data import special_fish, get_fish_for_mods
 from .data.museum_data import all_museum_items
 from .mods.mod_data import ModNames
-from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Fishsanity, Museumsanity, FestivalLocations, \
+from .options import ExcludeGingerIsland, ArcadeMachineLocations, SpecialOrderLocations, Cropsanity, Museumsanity, FestivalLocations, \
     SkillProgression, BuildingProgression, ToolProgression, ElevatorProgression, BackpackProgression
 from .options import StardewValleyOptions, Craftsanity, Chefsanity, Cooksanity, Shipsanity, Monstersanity
 from .strings.goal_names import Goal
@@ -200,32 +198,19 @@ def extend_quests_locations(randomized_locations: List[LocationData], options: S
             randomized_locations.append(location_table[f"Help Wanted: Gathering {batch + 1}"])
 
 
-def extend_fishsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
-    prefix = "Fishsanity: "
-    fishsanity = options.fishsanity
-    active_fish = get_fish_for_mods(options.mods.value)
-    if fishsanity == Fishsanity.option_none:
+def extend_fishsanity_locations(randomized_locations: List[LocationData], content: StardewContent, random: Random):
+    fishsanity = content.features.fishsanity
+    if not fishsanity.is_enabled:
         return
-    elif fishsanity == Fishsanity.option_legendaries:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.legendary]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
-    elif fishsanity == Fishsanity.option_special:
-        randomized_locations.extend(location_table[f"{prefix}{special.name}"] for special in special_fish)
-    elif fishsanity == Fishsanity.option_randomized:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if random.random() < 0.4]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
-    elif fishsanity == Fishsanity.option_all:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
-    elif fishsanity == Fishsanity.option_exclude_legendaries:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if not fish.legendary]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
-    elif fishsanity == Fishsanity.option_exclude_hard_fish:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.difficulty < 80]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
-    elif options.fishsanity == Fishsanity.option_only_easy_fish:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.difficulty < 50]
-        randomized_locations.extend(filter_disabled_locations(options, fish_locations))
+
+    for fish in content.fishes.values():
+        if not fishsanity.is_included(fish):
+            continue
+
+        if fishsanity.is_randomized and random.random() >= fishsanity.randomization_ratio:
+            continue
+
+        randomized_locations.append(location_table[fishsanity.to_location_name(fish.name)])
 
 
 def extend_museumsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, random: Random):
@@ -241,18 +226,19 @@ def extend_museumsanity_locations(randomized_locations: List[LocationData], opti
         randomized_locations.extend(location_table[f"{prefix}{museum_item.item_name}"] for museum_item in all_museum_items)
 
 
-def extend_friendsanity_locations(randomized_locations: List[LocationData], options: StardewValleyOptions, content: StardewContent):
-    if not content.features.friendsanity.is_enabled:
+def extend_friendsanity_locations(randomized_locations: List[LocationData], content: StardewContent):
+    friendsanity = content.features.friendsanity
+    if not friendsanity.is_enabled:
         return
 
     randomized_locations.append(location_table[f"Spouse Stardrop"])
     extend_baby_locations(randomized_locations)
 
     for villager in content.villagers.values():
-        for heart in content.features.friendsanity.get_randomized_hearts(villager):
+        for heart in friendsanity.get_randomized_hearts(villager):
             randomized_locations.append(location_table[friendsanity.to_location_name(villager.name, heart)])
 
-    for heart in content.features.friendsanity.get_pet_randomized_hearts():
+    for heart in friendsanity.get_pet_randomized_hearts():
         randomized_locations.append(location_table[friendsanity.to_location_name(NPC.pet, heart)])
 
 
@@ -459,9 +445,9 @@ def create_locations(location_collector: StardewLocationCollector,
         randomized_locations.extend(locations_by_tag[LocationTags.ARCADE_MACHINE])
 
     extend_cropsanity_locations(randomized_locations, options)
-    extend_fishsanity_locations(randomized_locations, options, random)
+    extend_fishsanity_locations(randomized_locations, content, random)
     extend_museumsanity_locations(randomized_locations, options, random)
-    extend_friendsanity_locations(randomized_locations, options, content)
+    extend_friendsanity_locations(randomized_locations, content)
 
     extend_festival_locations(randomized_locations, options)
     extend_special_order_locations(randomized_locations, options)

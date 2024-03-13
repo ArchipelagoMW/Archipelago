@@ -40,13 +40,12 @@ from ..content.game_content import StardewContent
 from ..data import all_purchasable_seeds, all_crops
 from ..data.craftable_data import all_crafting_recipes
 from ..data.crops_data import crops_by_name
-from ..data.fish_data import get_fish_for_mods
 from ..data.museum_data import all_museum_items
 from ..data.recipe_data import all_cooking_recipes
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_logic import ModLogicMixin
 from ..mods.mod_data import ModNames
-from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, Fishsanity, StardewValleyOptions
+from ..options import Cropsanity, SpecialOrderLocations, ExcludeGingerIsland, FestivalLocations, StardewValleyOptions
 from ..stardew_rule import False_, True_, StardewRule
 from ..strings.animal_names import Animal
 from ..strings.animal_product_names import AnimalProduct
@@ -99,7 +98,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         self.registry = LogicRegistry()
         super().__init__(player, self.registry, options, content, regions, self)
 
-        self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value)})
+        self.registry.fish_rules.update({fish.name: self.fishing.can_catch_fish(fish) for fish in content.fishes.values()})
         self.registry.museum_rules.update({donation.item_name: self.museum.can_find_museum_item(donation) for donation in all_museum_items})
 
         for recipe in all_cooking_recipes:
@@ -240,7 +239,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Fertilizer.basic: self.money.can_spend_at(Region.pierre_store, 100),
             Fertilizer.quality: self.time.has_year_two & self.money.can_spend_at(Region.pierre_store, 150),
             Fertilizer.tree: self.skill.has_level(Skill.foraging, 7) & self.has(Material.fiber) & self.has(Material.stone),
-            Fish.any: self.logic.or_(*(self.fishing.can_catch_fish(fish) for fish in get_fish_for_mods(self.options.mods.value))),
+            Fish.any: self.logic.or_(*(self.fishing.can_catch_fish(fish) for fish in content.fishes.values())),
             Fish.crab: self.skill.can_crab_pot_at(Region.beach),
             Fish.crayfish: self.skill.can_crab_pot_at(Region.town),
             Fish.lobster: self.skill.can_crab_pot_at(Region.beach),
@@ -533,7 +532,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             return True_()
         eligible_fish = [Fish.blobfish, Fish.crimsonfish, "Ice Pip", Fish.lava_eel, Fish.legend, Fish.angler, Fish.catfish, Fish.glacierfish, Fish.mutant_carp,
                          Fish.spookfish, Fish.stingray, Fish.sturgeon, "Super Cucumber"]
-        fish_rule = self.has_any(*eligible_fish)
+        fish_rule = self.has_any(*(f for f in eligible_fish if f in self.content.fishes))  # To filter stingray
         eligible_kegables = [Fruit.ancient_fruit, Fruit.apple, Fruit.banana, Forageable.coconut, Forageable.crystal_fruit, Fruit.mango, Fruit.melon,
                              Fruit.orange, Fruit.peach, Fruit.pineapple, Fruit.pomegranate, Fruit.rhubarb, Fruit.starfruit, Fruit.strawberry,
                              Forageable.cactus_fruit, Fruit.cherry, Fruit.cranberries, Fruit.grape, Forageable.spice_berry, Forageable.wild_plum,
@@ -621,10 +620,11 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
         number_of_stardrops_to_receive += 1  # Museum Stardrop
         number_of_stardrops_to_receive += 1  # Krobus Stardrop
 
-        if self.options.fishsanity == Fishsanity.option_none:  # Master Angler Stardrop
-            other_rules.append(self.fishing.can_catch_every_fish())
-        else:
+        # Master Angler Stardrop
+        if self.content.features.fishsanity.is_enabled:
             number_of_stardrops_to_receive += 1
+        else:
+            other_rules.append(self.fishing.can_catch_every_fish())
 
         if self.options.festival_locations == FestivalLocations.option_disabled:  # Fair Stardrop
             other_rules.append(self.season.has(Season.fall))

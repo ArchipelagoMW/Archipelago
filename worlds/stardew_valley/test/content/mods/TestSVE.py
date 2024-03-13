@@ -3,6 +3,7 @@ from ... import SVTestBase
 from .... import options
 from ....content import content_packs
 from ....mods.mod_data import ModNames
+from ....strings.fish_names import SVEFish
 from ....strings.villager_names import ModNPC, NPC
 
 
@@ -40,6 +41,30 @@ class TestSVE(SVContentPackTestBase):
         # 33 vanilla + 13 SVE
         self.assertEqual(33 + 13, len(self.content.villagers))
 
+    def test_sve_has_sve_fish(self):
+        fish_names = self.content.fishes.keys()
+
+        self.assertIn(SVEFish.bonefish, fish_names)
+        self.assertIn(SVEFish.bull_trout, fish_names)
+        self.assertIn(SVEFish.butterfish, fish_names)
+        self.assertIn(SVEFish.frog, fish_names)
+        self.assertIn(SVEFish.goldenfish, fish_names)
+        self.assertIn(SVEFish.grass_carp, fish_names)
+        self.assertIn(SVEFish.king_salmon, fish_names)
+        self.assertIn(SVEFish.kittyfish, fish_names)
+        self.assertIn(SVEFish.meteor_carp, fish_names)
+        self.assertIn(SVEFish.minnow, fish_names)
+        self.assertIn(SVEFish.puppyfish, fish_names)
+        self.assertIn(SVEFish.radioactive_bass, fish_names)
+        self.assertIn(SVEFish.snatcher_worm, fish_names)
+        self.assertIn(SVEFish.undeadfish, fish_names)
+        self.assertIn(SVEFish.void_eel, fish_names)
+        self.assertIn(SVEFish.water_grub, fish_names)
+        self.assertIn(SVEFish.dulse_seaweed, fish_names)
+
+        # 62 pelican town  + 17 sve pelican town
+        self.assertEqual(62 + 17, len(self.content.fishes))
+
 
 class TestSVEWithGingerIsland(SVContentPackTestBase):
     vanilla_packs = (content_packs.pelican_town, content_packs.ginger_island)
@@ -65,6 +90,40 @@ class TestSVEWithGingerIsland(SVContentPackTestBase):
 
         # 34 vanilla + 14 SVE
         self.assertEqual(34 + 14, len(self.content.villagers))
+
+    def test_sve_has_sve_fish(self):
+        fish_names = self.content.fishes.keys()
+
+        self.assertIn(SVEFish.baby_lunaloo, fish_names)
+        self.assertIn(SVEFish.bonefish, fish_names)
+        self.assertIn(SVEFish.bull_trout, fish_names)
+        self.assertIn(SVEFish.butterfish, fish_names)
+        self.assertIn(SVEFish.clownfish, fish_names)
+        self.assertIn(SVEFish.daggerfish, fish_names)
+        self.assertIn(SVEFish.frog, fish_names)
+        self.assertIn(SVEFish.gemfish, fish_names)
+        self.assertIn(SVEFish.goldenfish, fish_names)
+        self.assertIn(SVEFish.grass_carp, fish_names)
+        self.assertIn(SVEFish.king_salmon, fish_names)
+        self.assertIn(SVEFish.kittyfish, fish_names)
+        self.assertIn(SVEFish.lunaloo, fish_names)
+        self.assertIn(SVEFish.meteor_carp, fish_names)
+        self.assertIn(SVEFish.minnow, fish_names)
+        self.assertIn(SVEFish.puppyfish, fish_names)
+        self.assertIn(SVEFish.radioactive_bass, fish_names)
+        self.assertIn(SVEFish.seahorse, fish_names)
+        self.assertIn(SVEFish.shiny_lunaloo, fish_names)
+        self.assertIn(SVEFish.snatcher_worm, fish_names)
+        self.assertIn(SVEFish.starfish, fish_names)
+        self.assertIn(SVEFish.torpedo_trout, fish_names)
+        self.assertIn(SVEFish.undeadfish, fish_names)
+        self.assertIn(SVEFish.void_eel, fish_names)
+        self.assertIn(SVEFish.water_grub, fish_names)
+        self.assertIn(SVEFish.sea_sponge, fish_names)
+        self.assertIn(SVEFish.dulse_seaweed, fish_names)
+
+        # 62 pelican town + 3 ginger island + 17 sve pelican town + 10 sve ginger island
+        self.assertEqual(62 + 3 + 17 + 10, len(self.content.fishes))
 
 
 class TestSVEWithoutGingerIslandE2E(SVTestBase):

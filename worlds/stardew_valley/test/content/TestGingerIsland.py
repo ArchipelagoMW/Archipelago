@@ -2,14 +2,8 @@ from . import SVContentPackTestBase
 from .. import SVTestBase
 from ... import options
 from ...content import content_packs
+from ...strings.fish_names import Fish
 from ...strings.villager_names import NPC
-
-
-class TestWithoutGingerIsland(SVContentPackTestBase):
-    vanilla_packs = (content_packs.pelican_town,)
-
-    def test_leo_is_not_included(self):
-        self.assertNotIn(NPC.leo, self.content.villagers)
 
 
 class TestGingerIsland(SVContentPackTestBase):
@@ -17,6 +11,16 @@ class TestGingerIsland(SVContentPackTestBase):
 
     def test_leo_is_included(self):
         self.assertIn(NPC.leo, self.content.villagers)
+
+    def test_ginger_island_fishes_are_included(self):
+        fish_names = self.content.fishes.keys()
+
+        self.assertIn(Fish.blue_discus, fish_names)
+        self.assertIn(Fish.lionfish, fish_names)
+        self.assertIn(Fish.stingray, fish_names)
+
+        # 67 from pelican town + 3 ginger island exclusive
+        self.assertEqual(62 + 3, len(self.content.fishes))
 
 
 class TestWithoutGingerIslandE2E(SVTestBase):

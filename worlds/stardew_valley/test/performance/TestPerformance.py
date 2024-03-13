@@ -45,8 +45,6 @@ class SVPerformanceTestCase(SVTestCase):
     acceptable_time_per_player: float
     results: List[PerformanceResults]
 
-    # Set False to run tests that take long
-    skip_performance_tests: bool = True
     # Set False to not call the fill in the tests"""
     skip_fill: bool = True
     # Set True to print results as CSV"""
@@ -54,10 +52,11 @@ class SVPerformanceTestCase(SVTestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        super().setUpClass()
         performance_tests_key = "performance"
-        if performance_tests_key in os.environ:
-            cls.skip_performance_tests = not bool(os.environ[performance_tests_key])
+        if performance_tests_key not in os.environ or os.environ[performance_tests_key] != "True":
+            raise unittest.SkipTest("Performance tests disabled")
+
+        super().setUpClass()
 
         fill_tests_key = "fill"
         if fill_tests_key in os.environ:
@@ -143,34 +142,22 @@ class TestDefaultOptions(SVPerformanceTestCase):
     results = []
 
     def test_solo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 1
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_duo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 2
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_5_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 5
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     @unittest.skip
     def test_10_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 10
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
@@ -182,33 +169,21 @@ class TestMinLocationMaxItems(SVPerformanceTestCase):
     results = []
 
     def test_solo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 1
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_duo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 2
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_5_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 5
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_10_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 10
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
@@ -220,35 +195,23 @@ class TestAllsanityWithoutMods(SVPerformanceTestCase):
     results = []
 
     def test_solo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 1
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_duo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 2
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     @unittest.skip
     def test_5_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 5
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     @unittest.skip
     def test_10_player(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 10
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
@@ -260,17 +223,11 @@ class TestAllsanityWithMods(SVPerformanceTestCase):
     results = []
 
     def test_solo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 1
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)
 
     def test_duo(self):
-        if self.skip_performance_tests:
-            raise unittest.SkipTest("Performance tests disabled")
-
         number_players = 2
         multiworld_options = [self.options] * number_players
         self.performance_test_multiworld(multiworld_options)

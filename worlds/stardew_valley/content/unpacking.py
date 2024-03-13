@@ -44,6 +44,10 @@ def register_pack(content: StardewContent, pack: ContentPack):
 
     # register entrances
 
+    for fish in pack.fishes:
+        content.fishes[fish.name] = fish
+    pack.fish_hook(content)
+
     for villager in pack.villagers:
         content.villagers[villager.name] = villager
     pack.villager_hook(content)
