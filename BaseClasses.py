@@ -765,7 +765,7 @@ class CollectionState():
         return all(self.prog_items[player][item] >= count for item, count in item_counts.items())
 
     def has_any_count(self, item_counts: Dict[str, int], player: int) -> bool:
-        """Returns True if at least one item name is in the state at least as many times as specified."""
+        """Returns True if at least one item name is in state at least as many times as specified."""
         return any(self.prog_items[player][item] >= count for item, count in item_counts.items())
 
     def count(self, item: str, player: int) -> int:
