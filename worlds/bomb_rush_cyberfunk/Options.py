@@ -105,7 +105,7 @@ class SGraffiti(Choice):
 
 
 class JunkPhotos(Toggle):
-    """Forces the items from taking pictures of Polo to be junk."""
+    """Skip taking pictures of Polo for items."""
     display_name = "Skip Polo Photos"
 
 
@@ -128,7 +128,9 @@ class ScoreDifficulty(Choice):
 
 
 class DamageMultiplier(Range):
-    """Multiplies all damage received. At 6x, all attacks will OHKO the player.
+    """Multiplies all damage received. 
+    At 3x, most damage will OHKO the player, including falling into pits.
+    At 6x, all damage will OHKO the player.
     This can be changed later in the options menu inside the Archipelago phone app."""
     display_name = "Damage Multiplier"
     range_start = 1
