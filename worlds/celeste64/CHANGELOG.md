@@ -3,12 +3,12 @@
 
 ## v1.1 - First Stable Release
 
-### Features
+### Features:
 
 - Goal is to collect a certain amount of Strawberries and visit Badeline on her island
 - Locations included:
 	- Strawberries
-- Items included
+- Items included:
 	- Strawberries
 	- Dash Refills
 	- Double Dash Refills
