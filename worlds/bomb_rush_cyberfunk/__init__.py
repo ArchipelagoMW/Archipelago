@@ -106,7 +106,7 @@ class BombRushCyberfunkWorld(World):
             rep_locations -= 18
 
         self.options.total_rep.round_to_nearest_step()
-        rep_counts = self.options.total_rep.get_rep_item_counts(self.multiworld.random, rep_locations)
+        rep_counts = self.options.total_rep.get_rep_item_counts(self.random, rep_locations)
         #print(sum([8*rep_counts[0], 16*rep_counts[1], 24*rep_counts[2], 32*rep_counts[3], 48*rep_counts[4]]), \
         #    rep_counts)
 
@@ -163,7 +163,7 @@ class BombRushCyberfunkWorld(World):
             stage.add_locations({loc["name"]: base_id + index})
 
         for e in event_table:
-            stage: Region = self.get_stage(loc["stage"], player)
+            stage: Region = self.get_stage(e["stage"], player)
             event = BombRushCyberfunkLocation(player, e["name"], None, stage)
             event.show_in_spoiler = False
             event.place_locked_item(self.create_event(e["item"]))

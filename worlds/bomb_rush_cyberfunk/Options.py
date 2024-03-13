@@ -50,7 +50,7 @@ class TotalRep(Range):
     
     def get_rep_item_counts(self, random_source: Random, location_count: int) -> typing.List[int]:
         def increment_item(item: int) -> int:
-            if item == 32:
+            if item >= 32:
                 item = 48
             else:
                 item += 8
@@ -65,7 +65,7 @@ class TotalRep(Range):
 
         while sum(items) > self.value:
             index = random_source.randint(0, location_count-1)
-            if not (items[index] == 16 or items[index] == 24 or items[index] == 32):
+            while not (items[index] == 16 or items[index] == 24 or items[index] == 32):
                 index = random_source.randint(0, location_count-1)
             items[index] -= 8
 
