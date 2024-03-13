@@ -22,18 +22,18 @@
 		- These locations are unlocked by acquiring Chao Coins
 		- Ring costs for these items can be adjusted
 	- Chao Karate can now be set to one location per fight, instead of one per tournament
-- Items
+- New Items
 	- If any Chao locations are active, the following will be in the item pool:
 		- Chao Eggs
 		- Garden Seeds
 		- Garden Fruit
 		- Chao Hats
 		- Chaos Drives
+	- New Trap
+		- Reverse Trap
 - The starting eggs in the garden can be a random color
 - Chao World entrances can be shuffled
 - Chao are given default names
-- New Traps
-	- Reverse Trap
 
 ### Quality of Life:
 
@@ -54,9 +54,9 @@
 ### Bug Fixes:
 
 - Dry Lagoon now has all 11 Animals
-- Eternal Engine - 2 (Standard and Hard Logic) now requires only Tails - Booster
-- Lost Colony - 2 (Hard Logic) now requires no upgrades
-- Lost Colony - Animal 9 (Hard Logic) now requires either Eggman - Jet Engine or Eggman - Large Cannon
+- `Eternal Engine - 2` (Standard and Hard Logic) now requires only `Tails - Booster`
+- `Lost Colony - 2` (Hard Logic) now requires no upgrades
+- `Lost Colony - Animal 9` (Hard Logic) now requires either `Eggman - Jet Engine` or `Eggman - Large Cannon`
 
 
 ## v2.2
@@ -126,7 +126,7 @@
 
 ### Quality of Life:
 
-- SA2B is now distributed as an .apworld
+- SA2B is now distributed as an `.apworld`
 - Maximum possible number of Emblems in item pool is increased from 180 to 250
 - An indicator now shows on the Stage Select screen when Cannon's Core is available
 - Certain traps (Exposition and Pong) are now possible to receive on Route 101 and Route 280
@@ -139,11 +139,11 @@
 - Ensure upgrades are applied properly, even when received while dying
 - Fix the Message Queue getting disordered when receiving many messages in quick succession
 - Fix Logic errors
-	- City Escape - 3 (Hard Logic) now requires no upgrades
-	- Mission Street - Pipe 2 (Hard Logic) now requires no upgrades
-	- Crazy Gadget - Pipe 3 (Hard Logic) now requires no upgrades
-	- Egg Quarters - 3 (Hard Logic) now requires only Rouge - Mystic Melody
-	- Mad Space - 5 (Hard Logic) now requires no upgrades
+	- `City Escape - 3` (Hard Logic) now requires no upgrades
+	- `Mission Street - Pipe 2` (Hard Logic) now requires no upgrades
+	- `Crazy Gadget - Pipe 3` (Hard Logic) now requires no upgrades
+	- `Egg Quarters - 3` (Hard Logic) now requires only `Rouge - Mystic Melody`
+	- `Mad Space - 5` (Hard Logic) now requires no upgrades
 	
 	
 ## v2.0
@@ -194,13 +194,13 @@
 
 - Fixed bug where game stops properly tracking items after 127 have been received.
 - Several logic fixes
-- Game now refers to Knuckles - Shovel Claws correctly
+- Game now refers to `Knuckles - Shovel Claws` correctly
 - Minor AP World code cleanup
 
 
 ## v1.1
 
-### Features
+### Features:
 
 - Unlocking each gate of levels requires beating a random boss
 - Chao Races and Karate are now available as an option for checks
@@ -221,7 +221,7 @@
 - An Option for the minimum required rank for mission checks is now available
 - An Option for influencing the costs of level gates is now available
 
-### Bugfixes
+### Bug Fixes:
 
 - A message will display if the game loses connection to Archipelago
 - The game will gracefully reconnect to Archipelago
@@ -231,7 +231,7 @@
 
 ## v1.0 - First Stable Release
 
-### Features
+### Features:
 
 - Goal is to beat Cannon's Core and defeat the Biolizard
 - Locations included:
