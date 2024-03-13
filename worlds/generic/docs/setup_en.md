@@ -48,7 +48,7 @@ validity of your YAML file you may check the file by uploading it to the check p
 ### Creating a YAML
 
 YAML files may be generated on the Archipelago website by visiting the [games page](/games) and clicking the
-"Options Page" link under the relevant game. Clicking "Export Options" in a game's optionss page will download the
+"Options Page" link under the relevant game. Clicking "Export Options" in a game's options page will download the
 YAML to your system.
 
 Alternatively, you can run `ArchipelagoLauncher.exe` and click on `Generate Template Options` to create a set of template 
