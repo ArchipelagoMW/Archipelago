@@ -109,6 +109,7 @@
 		- Literature Trap
 - `Bowser Castle Doors` option
 	- Whether the Front Door and Back Door map tiles lead to the Front Door or Back Door levels
+- DeathLink is supported
 - Level Shuffle is supported
 - Autosave is supported
 - Music Shuffle is supported
