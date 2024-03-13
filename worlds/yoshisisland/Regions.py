@@ -100,7 +100,7 @@ def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
         create_region(world, player, locations_per_region, location_cache, "Bowser's Room"),
 
     ]
-    if world.options.extras_enabled.value == 1:
+    if world.options.extras_enabled:
         regions.insert(68, create_region(world, player, locations_per_region, location_cache, "6-Extra"))
         regions.insert(58, create_region(world, player, locations_per_region, location_cache, "5-Extra"))
         regions.insert(48, create_region(world, player, locations_per_region, location_cache, "4-Extra"))
@@ -108,7 +108,7 @@ def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
         regions.insert(28, create_region(world, player, locations_per_region, location_cache, "2-Extra"))
         regions.insert(18, create_region(world, player, locations_per_region, location_cache, "1-Extra"))
 
-    if world.options.minigame_checks.value >= 2:
+    if world.options.minigame_checks >= 2:
         regions.insert(74, create_region(world, player, locations_per_region, location_cache, "6-Bonus"))
         regions.insert(63, create_region(world, player, locations_per_region, location_cache, "5-Bonus"))
         regions.insert(52, create_region(world, player, locations_per_region, location_cache, "4-Bonus"))
@@ -147,7 +147,7 @@ def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
     multiworld.get_region('6-4', player).add_exits([world.boss_order[10]],{world.boss_order[10]: lambda state: logic._64Clear(state)})
     multiworld.get_region('6-8', player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
 
-    if world.options.extras_enabled == 1:
+    if world.options.extras_enabled:
         multiworld.get_region('World 1', player).add_exits(['1-Extra'],
             {'1-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 1'}, player)})
         multiworld.get_region('World 2', player).add_exits(['2-Extra'],
@@ -161,7 +161,7 @@ def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
         multiworld.get_region('World 6', player).add_exits(['6-Extra'],
             {'6-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 6'}, player)})
 
-    if world.options.minigame_checks.value >= 2:
+    if world.options.minigame_checks >= 2:
         multiworld.get_region('World 1', player).add_exits(['1-Bonus'],
             {'1-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 1'}, player)})
         multiworld.get_region('World 2', player).add_exits(['2-Bonus'],
@@ -204,7 +204,7 @@ def connect_starting_region(world: "YIWorld") -> None:
     menu = multiworld.get_region('Menu', player)
     world_main = multiworld.get_region('Overworld', player)
 
-    starting_region = multiworld.get_region(f'World {world.options.starting_world.value + 1}', player)
+    starting_region = multiworld.get_region(f'World {world.options.starting_world + 1}', player)
 
     load_file = Entrance(player, 'Overworld', menu)
     load_file.connect(world_main)

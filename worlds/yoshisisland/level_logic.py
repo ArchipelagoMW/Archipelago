@@ -18,25 +18,25 @@ class YoshiLogic:
         self.luigi_pieces = world.luigi_pieces
 
         if world:
-            if world.options.stage_logic.value == 0:
+            if world.options.stage_logic == 0:
                 self.game_logic = "Easy"
-            elif world.options.stage_logic.value == 1:
+            elif world.options.stage_logic == 1:
                 self.game_logic = "Normal"
             else:
                 self.game_logic = "Hard"
 
         if world:
-            self.midring_start = world.options.shuffle_midrings.value == 0
-            self.consumable_logic = world.options.item_logic.value != 0
+            self.midring_start = world.options.shuffle_midrings == 0
+            self.consumable_logic = world.options.item_logic != 0
 
         if world:
-            if world.options.hidden_object_visibility.value >= 2:
+            if world.options.hidden_object_visibility >= 2:
                 self.clouds_always_visible = True
             else:
                 self.clouds_always_visible = False
 
         if world:
-            self.bowser_door = world.options.bowser_door_mode.value
+            self.bowser_door = world.options.bowser_door_mode
             if self.bowser_door not in {0, 1, 2, 5}:
                 self.bowser_door = 3
 
