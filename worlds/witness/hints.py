@@ -180,7 +180,7 @@ joke_hints = [
     "Well done solving those puzzles.\nPray return to the Waking Sands.",
     "Having trouble finding your checks?\nTry the PopTracker pack!\nIt's got auto-tracking and a detailed map.",
 
-    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady,"
+    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady, "
     "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid.",
 ]
 
