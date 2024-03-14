@@ -154,15 +154,15 @@ music_choices = [
     40,  # Animal Friend 3
 ]
 # extra room pointers we don't want to track other than for music
-room_pointers = [
-    3079990,  # Zero
-    2983409,  # BB Whispy
-    3150688,  # BB Acro
-    2991071,  # BB PonCon
-    2998969,  # BB Ado
-    2980927,  # BB Dedede
-    2894290  # BB Zero
-]
+room_music = {
+    3079990: 23,  # Zero
+    2983409: 2,  # BB Whispy
+    3150688: 2,  # BB Acro
+    2991071: 2,  # BB PonCon
+    2998969: 2,  # BB Ado
+    2980927: 7,  # BB Dedede
+    2894290: 23  # BB Zero
+}
 
 enemy_remap = {
     "Waddle Dee": 0,
@@ -281,6 +281,7 @@ class RomData:
     def get_bytes(self) -> bytes:
         return bytes(self.file)
 
+
 def handle_level_sprites(stages, sprites, palettes):
     palette_by_level = list()
     for palette in palettes:
@@ -340,8 +341,9 @@ def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool):
 
 
 class KDL3PatchExtensions(APPatchExtension):
+    game = "Kirby's Dream Land 3"
     @staticmethod
-    def patch(caller: APProcedurePatch, rom: bytes):
+    def apply_post_patch(caller: APProcedurePatch, rom: bytes):
         rom_data = RomData(rom)
         target_language = rom_data.read_byte(0x3C020)
         rom_data.write_byte(0x7FD9, target_language)
@@ -357,7 +359,7 @@ class KDL3PatchExtensions(APPatchExtension):
             for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
                 rom_data.write_bytes(addr, level_sprite)
             rom_data.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
-                                     0x50, 0xC4, 0x39])
+                                          0x50, 0xC4, 0x39])
         write_consumable_sprites(rom_data, rom_data.read_byte(0x3D018) > 0, rom_data.read_byte(0x3D01A) > 0)
         rom_name = rom_data.read_bytes(0x3C000, 21)
         rom_data.write_bytes(0x7FC0, rom_name)
@@ -365,38 +367,32 @@ class KDL3PatchExtensions(APPatchExtension):
         return rom_data.get_bytes()
 
 
-    @staticmethod
-    def apply_raw(caller: APProcedurePatch, rom: bytes, file: str, offset: int) -> bytes:
-        # I should build this into the basepatch, but we'll wait a moment to do that
-        data = caller.get_file(file)
-        rom_data = bytearray(rom)
-        rom_data[offset: offset + len(data)] = data
-        return bytes(rom_data)
-
-class KDL3ProcedurePatch(APProcedurePatch):
+class KDL3ProcedurePatch(APProcedurePatch, APTokenMixin):
     hash = [KDL3UHASH, KDL3JHASH]
     game = "Kirby's Dream Land 3"
     patch_file_ending = ".apkdl3"
     procedure = [
         ("apply_bsdiff4", ["kdl3_basepatch.bsdiff4"]),
-        ("apply_tokens", ["tokens.bin"]),
-        ("apply_raw", ["APPauseIcons.dat", 0x3F000]),
+        ("apply_tokens", ["token_patch.bin"]),
         ("apply_post_patch", []),
     ]
+    name: bytes  # used to pass to init
 
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
 
 
-def patch_rom(world: "KDL3World", rom: RomData):
-    rom.apply_patch(get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
+def patch_rom(world: "KDL3World", patch: KDL3ProcedurePatch):
+    patch.write_file("kdl3_basepatch.bsdiff4",
+                     get_data(__name__, os.path.join("data", "kdl3_basepatch.bsdiff4")))
+
     tiles = get_data(__name__, os.path.join("data", "APPauseIcons.dat"))
-    rom.write_bytes(0x3F000, tiles)
+    patch.write_token(APTokenTypes.WRITE, 0x3F000, tiles)
 
     # Write open world patch
     if world.options.open_world:
-        rom.write_bytes(0x143C7, [0xAD, 0xC1, 0x5A, 0xCD, 0xC1, 0x5A, ])
+        patch.write_token(APTokenTypes.WRITE, 0x143C7, bytes([0xAD, 0xC1, 0x5A, 0xCD, 0xC1, 0x5A, ]))
         # changes the stage flag function to compare $5AC1 to $5AC1,
         # always running the "new stage" function
         # This has further checks present for bosses already, so we just
@@ -405,13 +401,14 @@ def patch_rom(world: "KDL3World", rom: RomData):
 
     if world.options.consumables:
         # reroute maxim tomatoes to use the 1-UP function, then null out the function
-        rom.write_bytes(0x3002F, [0x37, 0x00])
-        rom.write_bytes(0x30037, [0xA9, 0x26, 0x00,  # LDA #$0026
-                                  0x22, 0x27, 0xD9, 0x00,  # JSL $00D927
-                                  0xA4, 0xD2,  # LDY $D2
-                                  0x6B,  # RTL
-                                  0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,  # NOP #10
-                                  ])
+        patch.write_token(APTokenTypes.WRITE, 0x3002F, bytes([0x37, 0x00]))
+        patch.write_token(APTokenTypes.WRITE, 0x30037, bytes([0xA9, 0x26, 0x00,  # LDA #$0026
+                                                              0x22, 0x27, 0xD9, 0x00,  # JSL $00D927
+                                                              0xA4, 0xD2,  # LDY $D2
+                                                              0x6B,  # RTL
+                                                              0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,
+                                                              0xEA,  # NOP #10
+                                                              ]))
 
     # stars handling is built into the rom, so no changes there
 
@@ -427,136 +424,157 @@ def patch_rom(world: "KDL3World", rom: RomData):
             music_map[8] = world.random.choice(music_choices)
             for room in rooms:
                 room.music = music_map[room.music]
-            for room in room_pointers:
-                old_music = rom.read_byte(room + 2)
-                rom.write_byte(room + 2, music_map[old_music])
-            for i in range(5):
+            for room in room_music:
+                patch.write_token(APTokenTypes.WRITE, room + 2, bytes([music_map[room_music[room]]]))
+            for i, old_music in zip(range(5), [25, 26, 28, 27, 30]):
                 # level themes
-                old_music = rom.read_byte(0x133F2 + i)
-                rom.write_byte(0x133F2 + i, music_map[old_music])
+                patch.write_token(APTokenTypes.WRITE, 0x133F2 + i, bytes([music_map[old_music]]))
             # Zero
-            rom.write_byte(0x9AE79, music_map[0x18])
+            patch.write_token(APTokenTypes.WRITE, 0x9AE79, music_map[0x18].to_bytes(1, "little"))
             # Heart Star success and fail
-            rom.write_byte(0x4A388, music_map[0x08])
-            rom.write_byte(0x4A38D, music_map[0x1D])
+            patch.write_token(APTokenTypes.WRITE, 0x4A388, music_map[0x08].to_bytes(1, "little"))
+            patch.write_token(APTokenTypes.WRITE, 0x4A38D, music_map[0x1D].to_bytes(1, "little"))
         elif world.options.music_shuffle == 2:
             for room in rooms:
                 room.music = world.random.choice(music_choices)
-            for room in room_pointers:
-                rom.write_byte(room + 2, world.random.choice(music_choices))
+            for room in room_music:
+                patch.write_token(APTokenTypes.WRITE, room + 2, world.random.choice(music_choices).to_bytes(1, "little"))
             for i in range(5):
                 # level themes
-                rom.write_byte(0x133F2 + i, world.random.choice(music_choices))
+                patch.write_token(APTokenTypes.WRITE, 0x133F2 + i, world.random.choice(music_choices).to_bytes(1, "little"))
             # Zero
-            rom.write_byte(0x9AE79, world.random.choice(music_choices))
+            patch.write_token(APTokenTypes.WRITE, 0x9AE79, world.random.choice(music_choices).to_bytes(1, "little"))
             # Heart Star success and fail
-            rom.write_byte(0x4A388, world.random.choice(music_choices))
-            rom.write_byte(0x4A38D, world.random.choice(music_choices))
+            patch.write_token(APTokenTypes.WRITE, 0x4A388, world.random.choice(music_choices).to_bytes(1, "little"))
+            patch.write_token(APTokenTypes.WRITE, 0x4A38D, world.random.choice(music_choices).to_bytes(1, "little"))
 
     for room in rooms:
-        room.patch(rom)
+        room.patch(patch)
 
     if world.options.virtual_console in [1, 3]:
         # Flash Reduction
-        rom.write_byte(0x9AE68, 0x10)
-        rom.write_bytes(0x9AE8E, [0x08, 0x00, 0x22, 0x5D, 0xF7, 0x00, 0xA2, 0x08, ])
-        rom.write_byte(0x9AEA1, 0x08)
-        rom.write_byte(0x9AEC9, 0x01)
-        rom.write_bytes(0x9AED2, [0xA9, 0x1F])
-        rom.write_byte(0x9AEE1, 0x08)
+        patch.write_token(APTokenTypes.WRITE, 0x9AE68, 0x10.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AE8E, bytes([0x08, 0x00, 0x22, 0x5D, 0xF7, 0x00, 0xA2, 0x08, ]))
+        patch.write_token(APTokenTypes.WRITE, 0x9AEA1, 0x08.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AEC9, 0x01.to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x9AED2, bytes([0xA9, 0x1F]))
+        patch.write_token(APTokenTypes.WRITE, 0x9AEE1, 0x08.to_bytes(1, "little"))
 
     if world.options.virtual_console in [2, 3]:
         # Hyper Zone BB colors
-        rom.write_bytes(0x2C5E16, [0xEE, 0x1B, 0x18, 0x5B, 0xD3, 0x4A, 0xF4, 0x3B, ])
-        rom.write_bytes(0x2C8217, [0xFF, 0x1E, ])
+        patch.write_token(APTokenTypes.WRITE, 0x2C5E16, bytes([0xEE, 0x1B, 0x18, 0x5B, 0xD3, 0x4A, 0xF4, 0x3B, ]))
+        patch.write_token(APTokenTypes.WRITE, 0x2C8217, bytes([0xFF, 0x1E, ]))
 
     # boss requirements
-    rom.write_bytes(0x3D000, struct.pack("HHHHH", world.boss_requirements[0], world.boss_requirements[1],
-                                         world.boss_requirements[2], world.boss_requirements[3],
-                                         world.boss_requirements[4]))
-    rom.write_bytes(0x3D00A, struct.pack("H", world.required_heart_stars if world.options.goal_speed == 1 else 0xFFFF))
-    rom.write_byte(0x3D00C, world.options.goal_speed.value)
-    rom.write_byte(0x3D00E, world.options.open_world.value)
-    rom.write_byte(0x3D010, world.options.death_link.value)
-    rom.write_byte(0x3D012, world.options.goal.value)
-    rom.write_byte(0x3D014, world.options.stage_shuffle.value)
-    rom.write_byte(0x3D016, world.options.ow_boss_requirement.value)
-    rom.write_byte(0x3D018, world.options.consumables.value)
-    rom.write_byte(0x3D01A, world.options.starsanity.value)
-    rom.write_byte(0x3D01C, world.options.gifting.value if world.multiworld.players > 1 else 0)
-    rom.write_byte(0x3D01E, world.options.strict_bosses.value)
+    patch.write_token(APTokenTypes.WRITE, 0x3D000,
+                      struct.pack("HHHHH", world.boss_requirements[0], world.boss_requirements[1],
+                                  world.boss_requirements[2], world.boss_requirements[3],
+                                  world.boss_requirements[4]))
+    patch.write_token(APTokenTypes.WRITE, 0x3D00A,
+                      struct.pack("H", world.required_heart_stars if world.options.goal_speed == 1 else 0xFFFF))
+    patch.write_token(APTokenTypes.WRITE, 0x3D00C, world.options.goal_speed.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D00E, world.options.open_world.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D010, world.options.death_link.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D012, world.options.goal.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D014, world.options.stage_shuffle.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D016, world.options.ow_boss_requirement.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D018, world.options.consumables.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D01A, world.options.starsanity.value.to_bytes(2, "little"))
+    patch.write_token(APTokenTypes.WRITE, 0x3D01C, world.options.gifting.value.to_bytes(2, "little")
+                                                         if world.multiworld.players > 1 else bytes([0]))
+    patch.write_token(APTokenTypes.WRITE, 0x3D01E, world.options.strict_bosses.value.to_bytes(2, "little"))
     # don't write gifting for solo game, since there's no one to send anything to
 
     for level in world.player_levels:
         for i in range(len(world.player_levels[level])):
-            rom.write_bytes(0x3F002E + ((level - 1) * 14) + (i * 2),
-                            struct.pack("H", level_pointers[world.player_levels[level][i]]))
-            rom.write_bytes(0x3D020 + (level - 1) * 14 + (i * 2),
-                            struct.pack("H", world.player_levels[level][i] & 0x00FFFF))
+            patch.write_token(APTokenTypes.WRITE, 0x3F002E + ((level - 1) * 14) + (i * 2),
+                              struct.pack("H", level_pointers[world.player_levels[level][i]]))
+            patch.write_token(APTokenTypes.WRITE, 0x3D020 + (level - 1) * 14 + (i * 2),
+                              struct.pack("H", world.player_levels[level][i] & 0x00FFFF))
             if (i == 0) or (i > 0 and i % 6 != 0):
-                rom.write_bytes(0x3D080 + (level - 1) * 12 + (i * 2),
-                                struct.pack("H", (world.player_levels[level][i] & 0x00FFFF) % 6))
+                patch.write_token(APTokenTypes.WRITE, 0x3D080 + (level - 1) * 12 + (i * 2),
+                                  struct.pack("H", (world.player_levels[level][i] & 0x00FFFF) % 6))
 
     for i in range(6):
         if world.boss_butch_bosses[i]:
-            rom.write_bytes(0x3F0000 + (level_pointers[0x770200 + i]), struct.pack("I", bb_bosses[0x770200 + i]))
+            patch.write_token(APTokenTypes.WRITE, 0x3F0000 + (level_pointers[0x770200 + i]),
+                              struct.pack("I", bb_bosses[0x770200 + i]))
 
     # copy ability shuffle
     if world.options.copy_ability_randomization.value > 0:
         for enemy in world.copy_abilities:
             if enemy in miniboss_remap:
-                rom.write_bytes(0xB417E + (miniboss_remap[enemy] << 1),
-                                struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
+                patch.write_token(APTokenTypes.WRITE, 0xB417E + (miniboss_remap[enemy] << 1),
+                                  struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
             else:
-                rom.write_bytes(0xB3CAC + (enemy_remap[enemy] << 1),
-                                struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
+                patch.write_token(APTokenTypes.WRITE, 0xB3CAC + (enemy_remap[enemy] << 1),
+                                  struct.pack("H", ability_remap[world.copy_abilities[enemy]]))
         # following only needs done on non-door rando
         # incredibly lucky this follows the same order (including 5E == star block)
-        rom.write_byte(0x2F77EA, 0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1))
-        rom.write_byte(0x2F7811, 0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1))
-        rom.write_byte(0x2F9BC4, 0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1))
-        rom.write_byte(0x2F9BEB, 0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1))
-        rom.write_byte(0x2FAC06, 0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1))
-        rom.write_byte(0x2FAC2D, 0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1))
-        rom.write_byte(0x2F9E7B, 0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1))
-        rom.write_byte(0x2F9EA2, 0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1))
-        rom.write_byte(0x2FA951, 0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1))
-        rom.write_byte(0x2FA978, 0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1))
-        rom.write_byte(0x2FA132, 0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1))
-        rom.write_byte(0x2FA159, 0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1))
-        rom.write_byte(0x2FA3E8, 0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1))
-        rom.write_byte(0x2FA40F, 0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1))
-        rom.write_byte(0x2F90E2, 0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1))
-        rom.write_byte(0x2F9109, 0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1))
+        patch.write_token(APTokenTypes.WRITE, 0x2F77EA,
+                          (0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F7811,
+                          (0x5E + (ability_remap[world.copy_abilities["Sparky"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F9BC4,
+                          (0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F9BEB,
+                          (0x5E + (ability_remap[world.copy_abilities["Blocky"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FAC06,
+                          (0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FAC2D,
+                          (0x5E + (ability_remap[world.copy_abilities["Jumper Shoot"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F9E7B,
+                          (0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F9EA2,
+                          (0x5E + (ability_remap[world.copy_abilities["Yuki"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA951,
+                          (0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA978,
+                          (0x5E + (ability_remap[world.copy_abilities["Sir Kibble"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA132,
+                          (0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA159,
+                          (0x5E + (ability_remap[world.copy_abilities["Haboki"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA3E8,
+                          (0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2FA40F,
+                          (0x5E + (ability_remap[world.copy_abilities["Boboo"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F90E2,
+                          (0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1)).to_bytes(1, "little"))
+        patch.write_token(APTokenTypes.WRITE, 0x2F9109,
+                          (0x5E + (ability_remap[world.copy_abilities["Captain Stitch"]] << 1)).to_bytes(1, "little"))
 
         if world.options.copy_ability_randomization == 2:
             for enemy in enemy_remap:
                 # we just won't include it for minibosses
-                rom.write_bytes(0xB3E40 + (enemy_remap[enemy] << 1), struct.pack("h", world.random.randint(-1, 2)))
+                patch.write_token(APTokenTypes.WRITE, 0xB3E40 + (enemy_remap[enemy] << 1),
+                                  struct.pack("h", world.random.randint(-1, 2)))
 
     # write jumping goal
-    rom.write_bytes(0x94F8, struct.pack("H", world.options.jumping_target))
-    rom.write_bytes(0x944E, struct.pack("H", world.options.jumping_target))
+    patch.write_token(APTokenTypes.WRITE, 0x94F8, struct.pack("H", world.options.jumping_target))
+    patch.write_token(APTokenTypes.WRITE, 0x944E, struct.pack("H", world.options.jumping_target))
 
     from Utils import __version__
-    rom.name = bytearray(
+    patch.name = bytearray(
         f'KDL3{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
-    rom.name.extend([0] * (21 - len(rom.name)))
-    rom.write_bytes(0x3C000, rom.name)
-    rom.write_byte(0x3C020, world.options.game_language.value)
+    patch.name.extend([0] * (21 - len(patch.name)))
+    patch.write_token(APTokenTypes.WRITE, 0x3C000, bytes(patch.name))
+    patch.write_token(APTokenTypes.WRITE, 0x3C020, world.options.game_language.value.to_bytes(1, "little"))
 
     # handle palette
     if world.options.kirby_flavor_preset.value != 0:
         for addr in kirby_target_palettes:
             target = kirby_target_palettes[addr]
             palette = get_kirby_palette(world)
-            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+            patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
 
     if world.options.gooey_flavor_preset.value != 0:
         for addr in gooey_target_palettes:
             target = gooey_target_palettes[addr]
             palette = get_gooey_palette(world)
-            rom.write_bytes(addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+            patch.write_token(APTokenTypes.WRITE, addr, get_palette_bytes(palette, target[0], target[1], target[2]))
+
+    patch.write_file("token_patch.bin", patch.get_token_binary())
 
 
 def get_base_rom_bytes() -> bytes:

@@ -16,7 +16,7 @@ from .Presets import kdl3_options_presets
 from .Names import LocationName
 from .Room import KDL3Room
 from .Rules import set_rules
-from .Rom import KDL3DeltaPatch, get_base_rom_path, RomData, patch_rom, KDL3JHASH, KDL3UHASH
+from .Rom import KDL3ProcedurePatch, get_base_rom_path, patch_rom, KDL3JHASH, KDL3UHASH
 from .Client import KDL3SNIClient
 
 from typing import Dict, TextIO, Optional, List
@@ -80,12 +80,6 @@ class KDL3World(World):
         self.stage_shuffle_enabled = False
         self.boss_butch_bosses: List[Optional[bool]] = list()
         self.rooms: Optional[List[KDL3Room]] = None
-
-    @classmethod
-    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-        rom_file: str = get_base_rom_path()
-        if not os.path.exists(rom_file):
-            raise FileNotFoundError(f"Could not find base ROM for {cls.game}: {rom_file}")
 
     create_regions = create_levels
 
@@ -297,24 +291,18 @@ class KDL3World(World):
             self.boss_butch_bosses = [False for _ in range(6)]
 
     def generate_output(self, output_directory: str):
-        rom_path = ""
         try:
-            rom = RomData(get_base_rom_path())
-            patch_rom(self, rom)
+            patch = KDL3ProcedurePatch()
+            patch_rom(self, patch)
 
-            rom_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.sfc")
-            rom.write_to_file(rom_path)
-            self.rom_name = rom.name
+            self.rom_name = patch.name
 
-            patch = KDL3DeltaPatch(os.path.splitext(rom_path)[0] + KDL3DeltaPatch.patch_file_ending, player=self.player,
-                                   player_name=self.multiworld.player_name[self.player], patched_path=rom_path)
-            patch.write()
+            patch.write(os.path.join(output_directory,
+                                     f"{self.multiworld.get_out_file_name_base(self.player)}{patch.patch_file_ending}"))
         except Exception:
             raise
         finally:
             self.rom_name_available_event.set()  # make sure threading continues and errors are collected
-            if os.path.exists(rom_path):
-                os.unlink(rom_path)
 
     def modify_multidata(self, multidata: dict):
         # wait for self.rom_name to be available.

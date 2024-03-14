@@ -1,9 +1,10 @@
 import struct
 import typing
 from BaseClasses import Region, ItemClassification
+from worlds.Files import APTokenTypes
 
 if typing.TYPE_CHECKING:
-    from .Rom import RomData
+    from .Rom import KDL3ProcedurePatch
 
 animal_map = {
     "Rick Spawn": 0,
@@ -42,12 +43,13 @@ class KDL3Room(Region):
         self.consumables = consumables
         self.consumable_pointer = consumable_pointer
 
-    def patch(self, rom: "RomData"):
-        rom.write_byte(self.pointer + 2, self.music)
+    def patch(self, patch: "KDL3ProcedurePatch"):
+        patch.write_token(APTokenTypes.WRITE, self.pointer + 2, self.music.to_bytes(1, "little"))
         animals = [x.item.name for x in self.locations if "Animal" in x.name]
         if len(animals) > 0:
             for current_animal, address in zip(animals, self.animal_pointers):
-                rom.write_byte(self.pointer + address + 7, animal_map[current_animal])
+                patch.write_token(APTokenTypes.WRITE, self.pointer + address + 7,
+                                  animal_map[current_animal].to_bytes(1, "little"))
         if self.multiworld.worlds[self.player].options.consumables:
             load_len = len(self.entity_load)
             for consumable in self.consumables:
@@ -64,7 +66,8 @@ class KDL3Room(Region):
                             vtype = 0
                         else:
                             vtype = 2
-                        rom.write_byte(self.pointer + 88 + (replacement_target * 2), vtype)
+                        patch.write_token(APTokenTypes.WRITE, self.pointer + 88 + (replacement_target * 2),
+                                          vtype.to_bytes(1, "little"))
                         self.entity_load[replacement_target] = [vtype, 22]
                 else:
                     if is_progression:
@@ -79,9 +82,10 @@ class KDL3Room(Region):
                             else:
                                 self.entity_load.append([2, 22])
                 if load_len < len(self.entity_load):
-                    rom.write_bytes(self.pointer + 88 + (load_len * 2), bytes(self.entity_load[load_len]))
-                    rom.write_bytes(self.pointer + 104 + (load_len * 2),
-                                    bytes(struct.pack("H", self.consumable_pointer)))
+                    patch.write_token(APTokenTypes.WRITE, self.pointer + 88 + (load_len * 2),
+                                      bytes(self.entity_load[load_len]))
+                    patch.write_token(APTokenTypes.WRITE, self.pointer + 104 + (load_len * 2),
+                                      bytes(struct.pack("H", self.consumable_pointer)))
                 if is_progression:
                     if [1, 22] in self.entity_load:
                         vtype = 1
@@ -92,4 +96,5 @@ class KDL3Room(Region):
                         vtype = 3
                     else:
                         vtype = 2
-                rom.write_byte(self.pointer + consumable["pointer"] + 7, vtype)
+                patch.write_token(APTokenTypes.WRITE, self.pointer + consumable["pointer"] + 7,
+                                  vtype.to_bytes(1, "little"))
