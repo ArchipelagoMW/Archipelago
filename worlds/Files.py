@@ -214,8 +214,8 @@ class APProcedurePatch(APAutoPatchInterface):
         manifest["result_file_ending"] = self.result_file_ending
         manifest["patch_file_ending"] = self.patch_file_ending
         manifest["procedure"] = self.procedure
-        if self.procedure != APDeltaPatch.procedure:
-            manifest["compatible_version"] = 6
+        if self.procedure == APDeltaPatch.procedure:
+            manifest["compatible_version"] = 5
         return manifest
 
     def read_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
