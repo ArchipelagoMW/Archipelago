@@ -405,7 +405,7 @@ def mataan_faux(state: CollectionState, player: int, limit: bool, glitched: bool
 
 
 def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("characters", player) * 5
+    sprayable: int = 5 + (state.count_group("characters", player) * 5)
     total: int = 0
 
     if glitched:
@@ -824,7 +824,10 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
         total += 50
 
         if brink_terminal_entrance(state, player):
-            total += 8
+            total += 7
+
+            if current_chapter(state, player, 4):
+                total += 1
 
         if current_chapter(state, player, 3):
             total += 3
