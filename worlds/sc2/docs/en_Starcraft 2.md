@@ -20,7 +20,7 @@ Except for mission completion, these categories can be disabled in the game's se
 When you receive items, they will immediately become available, even during a mission, and you will be
 notified via a text box in the top-right corner of the game screen. Item unlocks are also logged in the Archipelago client.
 
-Missions are launched through the Starcraft 2 Archipelago client, through the Starcraft 2 Launcher tab. The between mission segments on the Hyperion, the Leviathon, and the Spear of Adun are not included. Additionally, metaprogression currencies such as credits and Solarite are not used.
+Missions are launched through the Starcraft 2 Archipelago client, through the Starcraft 2 Launcher tab. The between mission segments on the Hyperion, the Leviathan, and the Spear of Adun are not included. Additionally, metaprogression currencies such as credits and Solarite are not used.
 
 ## What is the goal of this game when randomized?
 
