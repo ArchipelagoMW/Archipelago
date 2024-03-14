@@ -90,7 +90,7 @@ class SC2World(World):
         self.multiworld.completion_condition[self.player] = lambda state: state.has(self.victory_item, self.player)
 
     def get_filler_item_name(self) -> str:
-        return self.multiworld.random.choice(filler_items)
+        return self.random.choice(filler_items)
 
     def fill_slot_data(self):
         slot_data = {}
@@ -137,6 +137,7 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
 
 
 def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
+    world: World = multiworld.worlds[player]
     excluded_items: Set[str] = set(get_option_value(multiworld, player, 'excluded_items'))
     for item in multiworld.precollected_items[player]:
         excluded_items.add(item.name)
@@ -168,7 +169,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
         candidates = sorted(item_choices)
         exclude_amount = min(expected_choices - choices_to_keep - len(excluded_choices) + len(starter_choices), len(candidates))
         if exclude_amount > 0:
-            excluded_items.update(multiworld.random.sample(candidates, exclude_amount))
+            excluded_items.update(world.random.sample(candidates, exclude_amount))
 
     # Nova gear exclusion if NCO not in campaigns
     if SC2Campaign.NCO not in enabled_campaigns:
@@ -204,6 +205,7 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
 
 
 def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], location_cache: typing.List[Location]) -> List[Item]:
+    world: World = multiworld.worlds[player]
     starter_items: List[Item] = []
     non_local_items = get_option_value(multiworld, player, "non_local_items")
     starter_unit = get_option_value(multiworld, player, "starter_unit")
@@ -231,7 +233,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 first_race = lookup_name_to_mission[first_mission].campaign.race
             elif len(races) > 0:
                 # The campaign only has logic-less no-build missions. Find any other valid race
-                first_race = multiworld.random.choice(list(races))
+                first_race = world.random.choice(list(races))
 
         if first_race != SC2Race.ANY:
             # The race of the early unit has been chosen
@@ -285,7 +287,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
     if starter_abilities:
         ability_count = starter_abilities
         ability_tiers = [0, 1, 3]
-        multiworld.random.shuffle(ability_tiers)
+        world.random.shuffle(ability_tiers)
         if ability_count > 3:
             ability_tiers.append(6)
         for tier in ability_tiers:
@@ -311,8 +313,9 @@ def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo
 
 
 def add_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], item_list: Sequence[str]) -> Item:
+    world: World = multiworld.worlds[player]
 
-    item_name = multiworld.random.choice(sorted(item_list))
+    item_name = world.random.choice(sorted(item_list))
 
     excluded_items.add(item_name)
 
@@ -422,6 +425,7 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
     :param location_cache:
     :return:
     """
+    world: World = multiworld.worlds[player]
     open_locations = [location for location in location_cache if location.item is None]
     plando_locations = get_plando_locations(multiworld, player)
     resource_location_types = get_location_types(multiworld, player, LocationInclusion.option_resources)
@@ -432,7 +436,7 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
             # The location is not plando'd
             sc2_location = location_data[location.name]
             if sc2_location.type in resource_location_types:
-                item_name = multiworld.random.choice(filler_items)
+                item_name = world.random.choice(filler_items)
                 item = create_item_with_correct_settings(player, item_name)
                 location.place_locked_item(item)
                 locked_locations.append(location.name)

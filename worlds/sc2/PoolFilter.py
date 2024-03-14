@@ -11,6 +11,7 @@ from .Options import get_option_value, MissionOrder, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
     ShuffleCampaigns, get_excluded_missions, ExcludeVeryHardMissions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
 from . import ItemNames
+from ..AutoWorld import World
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}
@@ -35,7 +36,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     """
     Returns a semi-randomly pruned tuple of no-build, easy, medium, and hard mission sets
     """
-
+    world: World = multiworld.worlds[player]
     mission_order_type = get_option_value(multiworld, player, "mission_order")
     shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
     enabled_campaigns = get_enabled_campaigns(multiworld, player)
@@ -58,7 +59,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         goal_priorities: Dict[SC2Campaign, SC2CampaignGoalPriority] = {campaign: get_campaign_goal_priority(campaign) for campaign in enabled_campaigns}
         goal_level = max(goal_priorities.values())
         candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-        goal_campaign = multiworld.random.choice(candidate_campaigns)
+        goal_campaign = world.random.choice(candidate_campaigns)
         if campaign_final_mission_locations[goal_campaign] is not None:
             mission_pools[MissionPools.FINAL] = [campaign_final_mission_locations[goal_campaign].mission]
         else:
@@ -70,7 +71,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
     goal_priorities = {campaign: get_campaign_goal_priority(campaign, excluded_missions) for campaign in enabled_campaigns}
     goal_level = max(goal_priorities.values())
     candidate_campaigns = [campaign for campaign, goal_priority in goal_priorities.items() if goal_priority == goal_level]
-    goal_campaign = multiworld.random.choice(candidate_campaigns)
+    goal_campaign = world.random.choice(candidate_campaigns)
     primary_goal = campaign_final_mission_locations[goal_campaign]
     if primary_goal is None or primary_goal.mission in excluded_missions:
         # No primary goal or its mission is excluded
@@ -78,7 +79,7 @@ def filter_missions(multiworld: MultiWorld, player: int) -> Dict[MissionPools, L
         candidate_missions = [mission for mission in candidate_missions if mission not in excluded_missions]
         if len(candidate_missions) == 0:
             raise Exception("There are no valid goal missions. Please exclude fewer missions.")
-        goal_mission = multiworld.random.choice(candidate_missions)
+        goal_mission = world.random.choice(candidate_missions)
     else:
         goal_mission = primary_goal.mission
 
@@ -298,11 +299,11 @@ class ValidInventory:
                         unit_nb_upgrades[cItem.parent_item] += 1
             # Making sure that the upgrades being removed is random
             shuffled_unit_upgrade_list = list(unit_avail_upgrades.keys())
-            self.multiworld.random.shuffle(shuffled_unit_upgrade_list)
+            self.world.random.shuffle(shuffled_unit_upgrade_list)
             for unit in shuffled_unit_upgrade_list:
                 while (unit_nb_upgrades[unit] > maxNbUpgrade) \
                          and (len(unit_avail_upgrades[unit]) > 0):
-                    itemCandidate = self.multiworld.random.choice(unit_avail_upgrades[unit])
+                    itemCandidate = self.world.random.choice(unit_avail_upgrades[unit])
                     success = attempt_removal(itemCandidate)
                     # Whatever it succeed to remove the iventory or it fails and thus
                     # lock it, the upgrade is no longer available for removal
@@ -318,7 +319,7 @@ class ValidInventory:
                 child_items = self.item_children[parent]
                 removable_upgrades = [item for item in inventory if item in child_items]
                 locked_upgrade_count = sum(1 if item in child_items else 0 for item in known_items)
-                self.multiworld.random.shuffle(removable_upgrades)
+                self.world.random.shuffle(removable_upgrades)
                 while len(removable_upgrades) > 0 and locked_upgrade_count < minimum_upgrades:
                     item_to_lock = removable_upgrades.pop()
                     inventory.remove(item_to_lock)
@@ -338,7 +339,7 @@ class ValidInventory:
         reserved_generic_percent = get_option_value(self.multiworld, self.player, "ensure_generic_items") / 100
         reserved_generic_amount = int(len(generic_items) * reserved_generic_percent)
         removable_generic_items = []
-        self.multiworld.random.shuffle(generic_items)
+        self.world.random.shuffle(generic_items)
         for item in generic_items[:reserved_generic_amount]:
             locked_items.append(copy_item(item))
             inventory.remove(item)
@@ -355,13 +356,13 @@ class ValidInventory:
                     removed_item = removable_generic_items.pop()
                     locked_items.remove(removed_item)
                 # If there still isn't enough space, push locked items into start inventory
-                self.multiworld.random.shuffle(locked_items)
+                self.world.random.shuffle(locked_items)
                 while len(locked_items) > inventory_size:
                     item: Item = locked_items.pop()
                     self.multiworld.push_precollected(item)
                 break
             # Select random item from removable items
-            item = self.multiworld.random.choice(inventory)
+            item = self.world.random.choice(inventory)
             # Do not remove item if it would drop upgrades below minimum
             if minimum_upgrades > 0:
                 parent_item = parent_lookup.get(item, None)
@@ -481,7 +482,7 @@ class ValidInventory:
                                  and (
                                      item.name in second_pass_placeable_items
                                      or item.name in unused_items))]
-        self.multiworld.random.shuffle(replacement_items)
+        self.world.random.shuffle(replacement_items)
         while len(inventory) < inventory_size and len(replacement_items) > 0:
             item = replacement_items.pop()
             inventory.append(item)
@@ -493,6 +494,7 @@ class ValidInventory:
                  used_races: Set[SC2Race], nova_equipment_used: bool):
         self.multiworld = multiworld
         self.player = player
+        self.world: World = multiworld.worlds[player]
         self.logical_inventory = list()
         self.locked_items = locked_items[:]
         self.existing_items = existing_items

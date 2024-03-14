@@ -8,6 +8,7 @@ from .Options import get_option_value, MissionOrder, get_enabled_campaigns, camp
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
+from ..AutoWorld import World
 
 
 class SC2MissionSlot(NamedTuple):
@@ -272,6 +273,7 @@ def create_grid_regions(
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
+    world: World = multiworld.worlds[player]
     locations_per_region = get_locations_per_region(locations)
 
     mission_pools = filter_missions(multiworld, player)
@@ -312,7 +314,7 @@ def create_grid_regions(
             elif grid_coords == (0, grid_size_y - 1) and num_corners_to_remove >= 1:
                 pass
             else:
-                mission_index = multiworld.random.randint(0, len(missions_to_add) - 1)
+                mission_index = world.random.randint(0, len(missions_to_add) - 1)
                 missions[grid_coords] = missions_to_add.pop(mission_index)
 
         if diagonal_difficulty < MissionPools.VERY_HARD:
@@ -382,6 +384,7 @@ def create_structured_regions(
     location_cache: List[Location],
     mission_order_type: int,
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
+    world: World = multiworld.worlds[player]
     locations_per_region = get_locations_per_region(locations)
 
     mission_order = mission_orders[mission_order_type]()
@@ -464,7 +467,7 @@ def create_structured_regions(
     def pick_mission(slot):
         if shuffle_campaigns or mission_order_type not in campaign_depending_orders:
             # Pick a mission from any campaign
-            filler = multiworld.random.randint(0, len(missions_to_add) - 1)
+            filler = world.random.randint(0, len(missions_to_add) - 1)
             mission = missions_to_add.pop(filler)
             slot_campaign = mission_slots[slot].campaign
             mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
@@ -472,7 +475,7 @@ def create_structured_regions(
             # Pick a mission from required campaign
             slot_campaign = mission_slots[slot].campaign
             campaign_mission_candidates = [mission for mission in missions_to_add if mission.campaign == slot_campaign]
-            mission = multiworld.random.choice(campaign_mission_candidates)
+            mission = world.random.choice(campaign_mission_candidates)
             missions_to_add.remove(mission)
             mission_slots[slot] = SC2MissionSlot(slot_campaign, mission)
 
