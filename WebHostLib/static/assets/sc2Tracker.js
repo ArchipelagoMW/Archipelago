@@ -24,7 +24,7 @@ window.addEventListener('load', () => {
   }, 15000)
 
   // Collapsible advancement sections
-  const categories= document.getElementsByClassName("location-category");
+  const categories = document.getElementsByClassName("location-category");
   for (let category of categories) {
     let hide_id = category.id.split('_')[0];
     if (hide_id === 'Total') {
