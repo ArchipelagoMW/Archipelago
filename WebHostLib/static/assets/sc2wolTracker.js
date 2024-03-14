@@ -26,7 +26,7 @@ window.addEventListener('load', () => {
   // Collapsible advancement sections
   const categories = document.getElementsByClassName("location-category");
   for (let i = 0; i < categories.length; i++) {
-    let hide_id = categories[i].id.split('-')[0];
+    let hide_id = categories[i].id.split('_')[0];
     if (hide_id == 'Total') {
       continue;
     }
@@ -34,7 +34,7 @@ window.addEventListener('load', () => {
       // Toggle the advancement list
       document.getElementById(hide_id).classList.toggle("hide");
       // Change text of the header
-      const tab_header = document.getElementById(hide_id+'-header').children[0];
+      const tab_header = document.getElementById(hide_id+'_header').children[0];
       const orig_text = tab_header.innerHTML;
       let new_text;
       if (orig_text.includes("▼")) {

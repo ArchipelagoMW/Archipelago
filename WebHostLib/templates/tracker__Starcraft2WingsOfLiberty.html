@@ -1039,7 +1039,7 @@
         <table id="location-table">
             {% for area in checks_in_area %}
             {% if checks_in_area[area] > 0 %}
-            <tr class="location-category" id="{{area}}-header">
+            <tr class="location-category" id="{{area}}_header">
                 <td>{{ area }} {{'▼' if area != 'Total'}}</td>
                 <td class="counter">{{ checks_done[area] }} / {{ checks_in_area[area] }}</td>
             </tr>
