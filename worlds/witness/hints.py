@@ -53,7 +53,7 @@ joke_hints = [
     "Have you tried Risk of Rain 2?\nI haven't either. But I hear it's incredible!",
     "Have you tried Sonic Adventure 2?\nIf the silence on this island is getting to you, there aren't many games more energetic.",
     "Have you tried Starcraft 2?\nUse strategy and management to crush your enemies!",
-    "Have you tried Shivers?\nWitness 2 should totally feature a haunted Museum.",
+    "Have you tried Shivers?\nWitness 2 should totally feature a haunted museum.",
     "Have you tried Super Metroid?\nA classic game, yet still one of the best in the genre.",
     "Have you tried Super Mario 64?\n3-dimensional games like this owe everything to that game.",
     "Have you tried Super Mario World?\nI don't think I need to tell you that it is beloved by many.",
