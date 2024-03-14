@@ -8,7 +8,7 @@ import os
 import struct
 
 import settings
-from worlds.Files import APDeltaPatch
+from worlds.Files import APProcedurePatch, APTokenMixin, APTokenTypes, APPatchExtension
 from .Aesthetics import get_palette_bytes, kirby_target_palettes, get_kirby_palette, gooey_target_palettes, \
     get_gooey_palette
 from .Compression import hal_decompress
@@ -257,9 +257,8 @@ ability_remap = {
 
 
 class RomData:
-    def __init__(self, file: str, name: typing.Optional[str] = None):
-        self.file = bytearray()
-        self.read_from_file(file)
+    def __init__(self, file: bytes, name: typing.Optional[str] = None):
+        self.file = bytearray(file)
         self.name = name
 
     def read_byte(self, offset: int):
@@ -274,22 +273,13 @@ class RomData:
     def write_bytes(self, offset: int, values: typing.Sequence) -> None:
         self.file[offset:offset + len(values)] = values
 
-    def write_to_file(self, file: str):
-        with open(file, 'wb') as outfile:
-            outfile.write(self.file)
-
-    def read_from_file(self, file: str):
-        with open(file, 'rb') as stream:
-            self.file = bytearray(stream.read())
-
-    def apply_patch(self, patch: bytes):
-        self.file = bytearray(bsdiff4.patch(bytes(self.file), patch))
-
-    def write_crc(self):
+    def write_crc(self) -> None:
         crc = (sum(self.file[:0x7FDC] + self.file[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         self.write_bytes(0x7FDC, [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF])
 
+    def get_bytes(self) -> bytes:
+        return bytes(self.file)
 
 def handle_level_sprites(stages, sprites, palettes):
     palette_by_level = list()
@@ -349,38 +339,54 @@ def write_consumable_sprites(rom: RomData, consumables: bool, stars: bool):
     rom.write_bytes(0x3F0DAE, [0x00, 0xD5, 0x39])
 
 
-class KDL3DeltaPatch(APDeltaPatch):
+class KDL3PatchExtensions(APPatchExtension):
+    @staticmethod
+    def patch(caller: APProcedurePatch, rom: bytes):
+        rom_data = RomData(rom)
+        target_language = rom_data.read_byte(0x3C020)
+        rom_data.write_byte(0x7FD9, target_language)
+        write_heart_star_sprites(rom_data)
+        if rom_data.read_bytes(0x3D014, 1)[0] > 0:
+            stages = [struct.unpack("HHHHHHH", rom_data.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
+            palettes = [rom_data.read_bytes(full_pal, 512) for full_pal in stage_palettes]
+            palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
+            sprites = [rom_data.read_bytes(offset, level_sprites[offset]) for offset in level_sprites]
+            sprites, palettes = handle_level_sprites(stages, sprites, palettes)
+            for addr, palette in zip(stage_palettes, palettes):
+                rom_data.write_bytes(addr, palette)
+            for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
+                rom_data.write_bytes(addr, level_sprite)
+            rom_data.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
+                                     0x50, 0xC4, 0x39])
+        write_consumable_sprites(rom_data, rom_data.read_byte(0x3D018) > 0, rom_data.read_byte(0x3D01A) > 0)
+        rom_name = rom_data.read_bytes(0x3C000, 21)
+        rom_data.write_bytes(0x7FC0, rom_name)
+        rom_data.write_crc()
+        return rom_data.get_bytes()
+
+
+    @staticmethod
+    def apply_raw(caller: APProcedurePatch, rom: bytes, file: str, offset: int) -> bytes:
+        # I should build this into the basepatch, but we'll wait a moment to do that
+        data = caller.get_file(file)
+        rom_data = bytearray(rom)
+        rom_data[offset: offset + len(data)] = data
+        return bytes(rom_data)
+
+class KDL3ProcedurePatch(APProcedurePatch):
     hash = [KDL3UHASH, KDL3JHASH]
     game = "Kirby's Dream Land 3"
     patch_file_ending = ".apkdl3"
+    procedure = [
+        ("apply_bsdiff4", ["kdl3_basepatch.bsdiff4"]),
+        ("apply_tokens", ["tokens.bin"]),
+        ("apply_raw", ["APPauseIcons.dat", 0x3F000]),
+        ("apply_post_patch", []),
+    ]
 
     @classmethod
     def get_source_data(cls) -> bytes:
         return get_base_rom_bytes()
-
-    def patch(self, target: str):
-        super().patch(target)
-        rom = RomData(target)
-        target_language = rom.read_byte(0x3C020)
-        rom.write_byte(0x7FD9, target_language)
-        write_heart_star_sprites(rom)
-        if rom.read_bytes(0x3D014, 1)[0] > 0:
-            stages = [struct.unpack("HHHHHHH", rom.read_bytes(0x3D020 + x * 14, 14)) for x in range(5)]
-            palettes = [rom.read_bytes(full_pal, 512) for full_pal in stage_palettes]
-            palettes = [[palette[i:i + 32] for i in range(0, 512, 32)] for palette in palettes]
-            sprites = [rom.read_bytes(offset, level_sprites[offset]) for offset in level_sprites]
-            sprites, palettes = handle_level_sprites(stages, sprites, palettes)
-            for addr, palette in zip(stage_palettes, palettes):
-                rom.write_bytes(addr, palette)
-            for addr, level_sprite in zip([0x1CA000, 0x1CA920, 0x1CB230, 0x1CBB40, 0x1CC450], sprites):
-                rom.write_bytes(addr, level_sprite)
-            rom.write_bytes(0x460A, [0x00, 0xA0, 0x39, 0x20, 0xA9, 0x39, 0x30, 0xB2, 0x39, 0x40, 0xBB, 0x39,
-                                     0x50, 0xC4, 0x39])
-        write_consumable_sprites(rom, rom.read_byte(0x3D018) > 0, rom.read_byte(0x3D01A) > 0)
-        rom_name = rom.read_bytes(0x3C000, 21)
-        rom.write_bytes(0x7FC0, rom_name)
-        rom.write_crc()
-        rom.write_to_file(target)
 
 
 def patch_rom(world: "KDL3World", rom: RomData):
