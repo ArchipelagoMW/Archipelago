@@ -219,10 +219,14 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     regions["Overworld"].connect(
         connecting_region=regions["Overworld after Envoy"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) or options.logic_rules)
+        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        or state.has("Sword Upgrade", player, 4)
+        or options.logic_rules)
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld"],
-        rule=lambda state: state.has_any({laurels, grapple}, player) or options.logic_rules)
+        rule=lambda state: state.has_any({laurels, grapple}, player) 
+        or state.has("Sword Upgrade", player, 4)
+        or options.logic_rules)
 
     regions["Overworld after Envoy"].connect(
         connecting_region=regions["Overworld Quarry Entry"],
