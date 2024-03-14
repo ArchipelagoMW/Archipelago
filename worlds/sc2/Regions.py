@@ -17,7 +17,7 @@ class SC2MissionSlot(NamedTuple):
 
 
 def create_regions(
-    multiworld: MultiWorld, player: int, locations: Tuple[LocationData, ...], location_cache: List[Location]
+    world: World, locations: Tuple[LocationData, ...], location_cache: List[Location]
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     """
     Creates region connections by calling the multiworld's `connect()` methods
@@ -26,238 +26,238 @@ def create_regions(
     * int The number of missions in the world
     * str The name of the goal location
     """
-    mission_order_type: int = get_option_value(multiworld, player, "mission_order")
+    mission_order_type: int = get_option_value(world, "mission_order")
 
     if mission_order_type == MissionOrder.option_vanilla:
-        return create_vanilla_regions(multiworld, player, locations, location_cache)
+        return create_vanilla_regions(world, locations, location_cache)
     elif mission_order_type == MissionOrder.option_grid:
-        return create_grid_regions(multiworld, player, locations, location_cache)
+        return create_grid_regions(world, locations, location_cache)
     else:
-        return create_structured_regions(multiworld, player, locations, location_cache, mission_order_type)
+        return create_structured_regions(world, locations, location_cache, mission_order_type)
 
 def create_vanilla_regions(
-    multiworld: MultiWorld,
-    player: int,
+    world: World,
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
     locations_per_region = get_locations_per_region(locations)
-    regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
+    regions = [create_region(world, locations_per_region, location_cache, "Menu")]
 
-    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(multiworld, player)
+    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(world)
     final_mission = mission_pools[MissionPools.FINAL][0]
 
-    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    enabled_campaigns = get_enabled_campaigns(world)
     names: Dict[str, int] = {}
 
     # Generating all regions and locations for each enabled campaign
     for campaign in enabled_campaigns:
         for region_name in vanilla_mission_req_table[campaign].keys():
-            regions.append(create_region(multiworld, player, locations_per_region, location_cache, region_name))
-    multiworld.regions += regions
+            regions.append(create_region(world, locations_per_region, location_cache, region_name))
+    world.multiworld.regions += regions
     vanilla_mission_reqs = {campaign: missions for campaign, missions in vanilla_mission_req_table.items() if campaign in enabled_campaigns}
 
     def wol_cleared_missions(state: CollectionState, mission_count: int) -> bool:
-        return state.has_group("WoL Missions", player, mission_count)
+        return state.has_group("WoL Missions", world.player, mission_count)
     
+    player: int = world.player
     if SC2Campaign.WOL in enabled_campaigns:
-        connect(multiworld, player, names, 'Menu', 'Liberation Day')
-        connect(multiworld, player, names, 'Liberation Day', 'The Outlaws',
+        connect(world, names, 'Menu', 'Liberation Day')
+        connect(world, names, 'Liberation Day', 'The Outlaws',
                 lambda state: state.has("Beat Liberation Day", player))
-        connect(multiworld, player, names, 'The Outlaws', 'Zero Hour',
+        connect(world, names, 'The Outlaws', 'Zero Hour',
                 lambda state: state.has("Beat The Outlaws", player))
-        connect(multiworld, player, names, 'Zero Hour', 'Evacuation',
+        connect(world, names, 'Zero Hour', 'Evacuation',
                 lambda state: state.has("Beat Zero Hour", player))
-        connect(multiworld, player, names, 'Evacuation', 'Outbreak',
+        connect(world, names, 'Evacuation', 'Outbreak',
                 lambda state: state.has("Beat Evacuation", player))
-        connect(multiworld, player, names, "Outbreak", "Safe Haven",
+        connect(world, names, "Outbreak", "Safe Haven",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(multiworld, player, names, "Outbreak", "Haven's Fall",
+        connect(world, names, "Outbreak", "Haven's Fall",
                 lambda state: wol_cleared_missions(state, 7) and state.has("Beat Outbreak", player))
-        connect(multiworld, player, names, 'Zero Hour', 'Smash and Grab',
+        connect(world, names, 'Zero Hour', 'Smash and Grab',
                 lambda state: state.has("Beat Zero Hour", player))
-        connect(multiworld, player, names, 'Smash and Grab', 'The Dig',
+        connect(world, names, 'Smash and Grab', 'The Dig',
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Smash and Grab", player))
-        connect(multiworld, player, names, 'The Dig', 'The Moebius Factor',
+        connect(world, names, 'The Dig', 'The Moebius Factor',
                 lambda state: wol_cleared_missions(state, 11) and state.has("Beat The Dig", player))
-        connect(multiworld, player, names, 'The Moebius Factor', 'Supernova',
+        connect(world, names, 'The Moebius Factor', 'Supernova',
                 lambda state: wol_cleared_missions(state, 14) and state.has("Beat The Moebius Factor", player))
-        connect(multiworld, player, names, 'Supernova', 'Maw of the Void',
+        connect(world, names, 'Supernova', 'Maw of the Void',
                 lambda state: state.has("Beat Supernova", player))
-        connect(multiworld, player, names, 'Zero Hour', "Devil's Playground",
+        connect(world, names, 'Zero Hour', "Devil's Playground",
                 lambda state: wol_cleared_missions(state, 4) and state.has("Beat Zero Hour", player))
-        connect(multiworld, player, names, "Devil's Playground", 'Welcome to the Jungle',
+        connect(world, names, "Devil's Playground", 'Welcome to the Jungle',
                 lambda state: state.has("Beat Devil's Playground", player))
-        connect(multiworld, player, names, "Welcome to the Jungle", 'Breakout',
+        connect(world, names, "Welcome to the Jungle", 'Breakout',
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(multiworld, player, names, "Welcome to the Jungle", 'Ghost of a Chance',
+        connect(world, names, "Welcome to the Jungle", 'Ghost of a Chance',
                 lambda state: wol_cleared_missions(state, 8) and state.has("Beat Welcome to the Jungle", player))
-        connect(multiworld, player, names, "Zero Hour", 'The Great Train Robbery',
+        connect(world, names, "Zero Hour", 'The Great Train Robbery',
                 lambda state: wol_cleared_missions(state, 6) and state.has("Beat Zero Hour", player))
-        connect(multiworld, player, names, 'The Great Train Robbery', 'Cutthroat',
+        connect(world, names, 'The Great Train Robbery', 'Cutthroat',
                 lambda state: state.has("Beat The Great Train Robbery", player))
-        connect(multiworld, player, names, 'Cutthroat', 'Engine of Destruction',
+        connect(world, names, 'Cutthroat', 'Engine of Destruction',
                 lambda state: state.has("Beat Cutthroat", player))
-        connect(multiworld, player, names, 'Engine of Destruction', 'Media Blitz',
+        connect(world, names, 'Engine of Destruction', 'Media Blitz',
                 lambda state: state.has("Beat Engine of Destruction", player))
-        connect(multiworld, player, names, 'Media Blitz', 'Piercing the Shroud',
+        connect(world, names, 'Media Blitz', 'Piercing the Shroud',
                 lambda state: state.has("Beat Media Blitz", player))
-        connect(multiworld, player, names, 'Maw of the Void', 'Gates of Hell',
+        connect(world, names, 'Maw of the Void', 'Gates of Hell',
                 lambda state: state.has("Beat Maw of the Void", player))
-        connect(multiworld, player, names, 'Gates of Hell', 'Belly of the Beast',
+        connect(world, names, 'Gates of Hell', 'Belly of the Beast',
                 lambda state: state.has("Beat Gates of Hell", player))
-        connect(multiworld, player, names, 'Gates of Hell', 'Shatter the Sky',
+        connect(world, names, 'Gates of Hell', 'Shatter the Sky',
                 lambda state: state.has("Beat Gates of Hell", player))
-        connect(multiworld, player, names, 'Gates of Hell', 'All-In',
+        connect(world, names, 'Gates of Hell', 'All-In',
                 lambda state: state.has('Beat Gates of Hell', player) and (
                         state.has('Beat Shatter the Sky', player) or state.has('Beat Belly of the Beast', player)))
 
     if SC2Campaign.PROPHECY in enabled_campaigns:
         if SC2Campaign.WOL in enabled_campaigns:
-            connect(multiworld, player, names, 'The Dig', 'Whispers of Doom',
+            connect(world, names, 'The Dig', 'Whispers of Doom',
                     lambda state: state.has("Beat The Dig", player)),
         else:
             vanilla_mission_reqs[SC2Campaign.PROPHECY] = vanilla_mission_reqs[SC2Campaign.PROPHECY].copy()
             vanilla_mission_reqs[SC2Campaign.PROPHECY][SC2Mission.WHISPERS_OF_DOOM.mission_name] = MissionInfo(
                 SC2Mission.WHISPERS_OF_DOOM, [], SC2Mission.WHISPERS_OF_DOOM.area)
-            connect(multiworld, player, names, 'Menu', 'Whispers of Doom'),
-        connect(multiworld, player, names, 'Whispers of Doom', 'A Sinister Turn',
+            connect(world, names, 'Menu', 'Whispers of Doom'),
+        connect(world, names, 'Whispers of Doom', 'A Sinister Turn',
                 lambda state: state.has("Beat Whispers of Doom", player))
-        connect(multiworld, player, names, 'A Sinister Turn', 'Echoes of the Future',
+        connect(world, names, 'A Sinister Turn', 'Echoes of the Future',
                 lambda state: state.has("Beat A Sinister Turn", player))
-        connect(multiworld, player, names, 'Echoes of the Future', 'In Utter Darkness',
+        connect(world, names, 'Echoes of the Future', 'In Utter Darkness',
                 lambda state: state.has("Beat Echoes of the Future", player))
 
     if SC2Campaign.HOTS in enabled_campaigns:
-        connect(multiworld, player, names, 'Menu', 'Lab Rat'),
-        connect(multiworld, player, names, 'Lab Rat', 'Back in the Saddle',
+        connect(world, names, 'Menu', 'Lab Rat'),
+        connect(world, names, 'Lab Rat', 'Back in the Saddle',
                 lambda state: state.has("Beat Lab Rat", player)),
-        connect(multiworld, player, names, 'Back in the Saddle', 'Rendezvous',
+        connect(world, names, 'Back in the Saddle', 'Rendezvous',
                 lambda state: state.has("Beat Back in the Saddle", player)),
-        connect(multiworld, player, names, 'Rendezvous', 'Harvest of Screams',
+        connect(world, names, 'Rendezvous', 'Harvest of Screams',
                 lambda state: state.has("Beat Rendezvous", player)),
-        connect(multiworld, player, names, 'Harvest of Screams', 'Shoot the Messenger',
+        connect(world, names, 'Harvest of Screams', 'Shoot the Messenger',
                 lambda state: state.has("Beat Harvest of Screams", player)),
-        connect(multiworld, player, names, 'Shoot the Messenger', 'Enemy Within',
+        connect(world, names, 'Shoot the Messenger', 'Enemy Within',
                 lambda state: state.has("Beat Shoot the Messenger", player)),
-        connect(multiworld, player, names, 'Rendezvous', 'Domination',
+        connect(world, names, 'Rendezvous', 'Domination',
                 lambda state: state.has("Beat Rendezvous", player)),
-        connect(multiworld, player, names, 'Domination', 'Fire in the Sky',
+        connect(world, names, 'Domination', 'Fire in the Sky',
                 lambda state: state.has("Beat Domination", player)),
-        connect(multiworld, player, names, 'Fire in the Sky', 'Old Soldiers',
+        connect(world, names, 'Fire in the Sky', 'Old Soldiers',
                 lambda state: state.has("Beat Fire in the Sky", player)),
-        connect(multiworld, player, names, 'Old Soldiers', 'Waking the Ancient',
+        connect(world, names, 'Old Soldiers', 'Waking the Ancient',
                 lambda state: state.has("Beat Old Soldiers", player)),
-        connect(multiworld, player, names, 'Enemy Within', 'Waking the Ancient',
+        connect(world, names, 'Enemy Within', 'Waking the Ancient',
                 lambda state: state.has("Beat Enemy Within", player)),
-        connect(multiworld, player, names, 'Waking the Ancient', 'The Crucible',
+        connect(world, names, 'Waking the Ancient', 'The Crucible',
                 lambda state: state.has("Beat Waking the Ancient", player)),
-        connect(multiworld, player, names, 'The Crucible', 'Supreme',
+        connect(world, names, 'The Crucible', 'Supreme',
                 lambda state: state.has("Beat The Crucible", player)),
-        connect(multiworld, player, names, 'Supreme', 'Infested',
+        connect(world, names, 'Supreme', 'Infested',
                 lambda state: state.has("Beat Supreme", player) and
                             state.has("Beat Old Soldiers", player) and
                             state.has("Beat Enemy Within", player)),
-        connect(multiworld, player, names, 'Infested', 'Hand of Darkness',
+        connect(world, names, 'Infested', 'Hand of Darkness',
                 lambda state: state.has("Beat Infested", player)),
-        connect(multiworld, player, names, 'Hand of Darkness', 'Phantoms of the Void',
+        connect(world, names, 'Hand of Darkness', 'Phantoms of the Void',
                 lambda state: state.has("Beat Hand of Darkness", player)),
-        connect(multiworld, player, names, 'Supreme', 'With Friends Like These',
+        connect(world, names, 'Supreme', 'With Friends Like These',
                 lambda state: state.has("Beat Supreme", player) and
                             state.has("Beat Old Soldiers", player) and
                             state.has("Beat Enemy Within", player)),
-        connect(multiworld, player, names, 'With Friends Like These', 'Conviction',
+        connect(world, names, 'With Friends Like These', 'Conviction',
                 lambda state: state.has("Beat With Friends Like These", player)),
-        connect(multiworld, player, names, 'Conviction', 'Planetfall',
+        connect(world, names, 'Conviction', 'Planetfall',
                 lambda state: state.has("Beat Conviction", player) and
                             state.has("Beat Phantoms of the Void", player)),
-        connect(multiworld, player, names, 'Planetfall', 'Death From Above',
+        connect(world, names, 'Planetfall', 'Death From Above',
                 lambda state: state.has("Beat Planetfall", player)),
-        connect(multiworld, player, names, 'Death From Above', 'The Reckoning',
+        connect(world, names, 'Death From Above', 'The Reckoning',
                 lambda state: state.has("Beat Death From Above", player)),
 
     if SC2Campaign.PROLOGUE in enabled_campaigns:
-        connect(multiworld, player, names, "Menu", "Dark Whispers")
-        connect(multiworld, player, names, "Dark Whispers", "Ghosts in the Fog",
+        connect(world, names, "Menu", "Dark Whispers")
+        connect(world, names, "Dark Whispers", "Ghosts in the Fog",
                 lambda state: state.has("Beat Dark Whispers", player))
-        connect(multiworld, player, names, "Dark Whispers", "Evil Awoken",
+        connect(world, names, "Dark Whispers", "Evil Awoken",
                 lambda state: state.has("Beat Ghosts in the Fog", player))
 
     if SC2Campaign.LOTV in enabled_campaigns:
-        connect(multiworld, player, names, "Menu", "For Aiur!")
-        connect(multiworld, player, names, "For Aiur!", "The Growing Shadow",
+        connect(world, names, "Menu", "For Aiur!")
+        connect(world, names, "For Aiur!", "The Growing Shadow",
                 lambda state: state.has("Beat For Aiur!", player)),
-        connect(multiworld, player, names, "The Growing Shadow", "The Spear of Adun",
+        connect(world, names, "The Growing Shadow", "The Spear of Adun",
                 lambda state: state.has("Beat The Growing Shadow", player)),
-        connect(multiworld, player, names, "The Spear of Adun", "Sky Shield",
+        connect(world, names, "The Spear of Adun", "Sky Shield",
                 lambda state: state.has("Beat The Spear of Adun", player)),
-        connect(multiworld, player, names, "Sky Shield", "Brothers in Arms",
+        connect(world, names, "Sky Shield", "Brothers in Arms",
                 lambda state: state.has("Beat Sky Shield", player)),
-        connect(multiworld, player, names, "Brothers in Arms", "Forbidden Weapon",
+        connect(world, names, "Brothers in Arms", "Forbidden Weapon",
                 lambda state: state.has("Beat Brothers in Arms", player)),
-        connect(multiworld, player, names, "The Spear of Adun", "Amon's Reach",
+        connect(world, names, "The Spear of Adun", "Amon's Reach",
                 lambda state: state.has("Beat The Spear of Adun", player)),
-        connect(multiworld, player, names, "Amon's Reach", "Last Stand",
+        connect(world, names, "Amon's Reach", "Last Stand",
                 lambda state: state.has("Beat Amon's Reach", player)),
-        connect(multiworld, player, names, "Last Stand", "Forbidden Weapon",
+        connect(world, names, "Last Stand", "Forbidden Weapon",
                 lambda state: state.has("Beat Last Stand", player)),
-        connect(multiworld, player, names, "Forbidden Weapon", "Temple of Unification",
+        connect(world, names, "Forbidden Weapon", "Temple of Unification",
                 lambda state: state.has("Beat Brothers in Arms", player)
                               and state.has("Beat Last Stand", player)
                               and state.has("Beat Forbidden Weapon", player)),
-        connect(multiworld, player, names, "Temple of Unification", "The Infinite Cycle",
+        connect(world, names, "Temple of Unification", "The Infinite Cycle",
                 lambda state: state.has("Beat Temple of Unification", player)),
-        connect(multiworld, player, names, "The Infinite Cycle", "Harbinger of Oblivion",
+        connect(world, names, "The Infinite Cycle", "Harbinger of Oblivion",
                 lambda state: state.has("Beat The Infinite Cycle", player)),
-        connect(multiworld, player, names, "Harbinger of Oblivion", "Unsealing the Past",
+        connect(world, names, "Harbinger of Oblivion", "Unsealing the Past",
                 lambda state: state.has("Beat Harbinger of Oblivion", player)),
-        connect(multiworld, player, names, "Unsealing the Past", "Purification",
+        connect(world, names, "Unsealing the Past", "Purification",
                 lambda state: state.has("Beat Unsealing the Past", player)),
-        connect(multiworld, player, names, "Purification", "Templar's Charge",
+        connect(world, names, "Purification", "Templar's Charge",
                 lambda state: state.has("Beat Purification", player)),
-        connect(multiworld, player, names, "Harbinger of Oblivion", "Steps of the Rite",
+        connect(world, names, "Harbinger of Oblivion", "Steps of the Rite",
                 lambda state: state.has("Beat Harbinger of Oblivion", player)),
-        connect(multiworld, player, names, "Steps of the Rite", "Rak'Shir",
+        connect(world, names, "Steps of the Rite", "Rak'Shir",
                 lambda state: state.has("Beat Steps of the Rite", player)),
-        connect(multiworld, player, names, "Rak'Shir", "Templar's Charge",
+        connect(world, names, "Rak'Shir", "Templar's Charge",
                 lambda state: state.has("Beat Rak'Shir", player)),
-        connect(multiworld, player, names, "Templar's Charge", "Templar's Return",
+        connect(world, names, "Templar's Charge", "Templar's Return",
                 lambda state: state.has("Beat Purification", player)
                               and state.has("Beat Rak'Shir", player)
                               and state.has("Beat Templar's Charge", player)),
-        connect(multiworld, player, names, "Templar's Return", "The Host",
+        connect(world, names, "Templar's Return", "The Host",
                 lambda state: state.has("Beat Templar's Return", player)),
-        connect(multiworld, player, names, "The Host", "Salvation",
+        connect(world, names, "The Host", "Salvation",
                 lambda state: state.has("Beat The Host", player)),
 
     if SC2Campaign.EPILOGUE in enabled_campaigns:
         # TODO: Make this aware about excluded campaigns
-        connect(multiworld, player, names, "Salvation", "Into the Void",
+        connect(world, names, "Salvation", "Into the Void",
                 lambda state: state.has("Beat Salvation", player)
                               and state.has("Beat The Reckoning", player)
                               and state.has("Beat All-In", player)),
-        connect(multiworld, player, names, "Into the Void", "The Essence of Eternity",
+        connect(world, names, "Into the Void", "The Essence of Eternity",
                 lambda state: state.has("Beat Into the Void", player)),
-        connect(multiworld, player, names, "The Essence of Eternity", "Amon's Fall",
+        connect(world, names, "The Essence of Eternity", "Amon's Fall",
                 lambda state: state.has("Beat The Essence of Eternity", player)),
 
     if SC2Campaign.NCO in enabled_campaigns:
-        connect(multiworld, player, names, "Menu", "The Escape")
-        connect(multiworld, player, names, "The Escape", "Sudden Strike",
+        connect(world, names, "Menu", "The Escape")
+        connect(world, names, "The Escape", "Sudden Strike",
                 lambda state: state.has("Beat The Escape", player))
-        connect(multiworld, player, names, "Sudden Strike", "Enemy Intelligence",
+        connect(world, names, "Sudden Strike", "Enemy Intelligence",
                 lambda state: state.has("Beat Sudden Strike", player))
-        connect(multiworld, player, names, "Enemy Intelligence", "Trouble In Paradise",
+        connect(world, names, "Enemy Intelligence", "Trouble In Paradise",
                 lambda state: state.has("Beat Enemy Intelligence", player))
-        connect(multiworld, player, names, "Trouble In Paradise", "Night Terrors",
+        connect(world, names, "Trouble In Paradise", "Night Terrors",
                 lambda state: state.has("Beat Evacuation", player))
-        connect(multiworld, player, names, "Night Terrors", "Flashpoint",
+        connect(world, names, "Night Terrors", "Flashpoint",
                 lambda state: state.has("Beat Night Terrors", player))
-        connect(multiworld, player, names, "Flashpoint", "In the Enemy's Shadow",
+        connect(world, names, "Flashpoint", "In the Enemy's Shadow",
                 lambda state: state.has("Beat Flashpoint", player))
-        connect(multiworld, player, names, "In the Enemy's Shadow", "Dark Skies",
+        connect(world, names, "In the Enemy's Shadow", "Dark Skies",
                 lambda state: state.has("Beat In the Enemy's Shadow", player))
-        connect(multiworld, player, names, "Dark Skies", "End Game",
+        connect(world, names, "Dark Skies", "End Game",
                 lambda state: state.has("Beat Dark Skies", player))
 
     goal_location = get_goal_location(final_mission)
@@ -268,23 +268,21 @@ def create_vanilla_regions(
 
 
 def create_grid_regions(
-    multiworld: MultiWorld,
-    player: int,
+    world: World,
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
-    world: World = multiworld.worlds[player]
     locations_per_region = get_locations_per_region(locations)
 
-    mission_pools = filter_missions(multiworld, player)
+    mission_pools = filter_missions(world)
     final_mission = mission_pools[MissionPools.FINAL][0]
 
     mission_pool = [mission for mission_pool in mission_pools.values() for mission in mission_pool]
 
-    num_missions = min(len(mission_pool), get_option_value(multiworld, player, "maximum_campaign_size"))
-    remove_top_left: bool = get_option_value(multiworld, player, "grid_two_start_positions") == GridTwoStartPositions.option_true
+    num_missions = min(len(mission_pool), get_option_value(world, "maximum_campaign_size"))
+    remove_top_left: bool = get_option_value(world, "grid_two_start_positions") == GridTwoStartPositions.option_true
 
-    regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
+    regions = [create_region(world, locations_per_region, location_cache, "Menu")]
     names: Dict[str, int] = {}
     missions: Dict[Tuple[int, int], SC2Mission] = {}
 
@@ -325,8 +323,8 @@ def create_grid_regions(
     for x in range(grid_size_x):
         for y in range(grid_size_y):
             if missions.get((x, y)):
-                regions.append(create_region(multiworld, player, locations_per_region, location_cache, missions[(x, y)].mission_name))
-    multiworld.regions += regions
+                regions.append(create_region(world, locations_per_region, location_cache, missions[(x, y)].mission_name))
+    world.multiworld.regions += regions
 
     # This pattern is horrifying, why are we using the dict as an ordered dict???
     slot_map: Dict[Tuple[int, int], int] = {}
@@ -341,15 +339,15 @@ def create_grid_regions(
         connections: List[MissionConnection] = []
         if coords == (0, 0) or (remove_top_left and sum(coords) == 1):
             # Connect to the "Menu" starting region
-            connect(multiworld, player, names, "Menu", mission.mission_name)
+            connect(world, names, "Menu", mission.mission_name)
         else:
             for dx, dy in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                 connected_coords = (coords[0] + dx, coords[1] + dy)
                 if connected_coords in missions:
                     # connections.append(missions[connected_coords])
                     connections.append(MissionConnection(slot_map[connected_coords]))
-                    connect(multiworld, player, names, missions[connected_coords].mission_name, mission.mission_name,
-                            make_grid_connect_rule(missions, connected_coords, player),
+                    connect(world, names, missions[connected_coords].mission_name, mission.mission_name,
+                            make_grid_connect_rule(missions, connected_coords, world.player),
                             )
         if coords[1] == 1 and not missions.get((coords[0], 0)):
             prepend_vertical = 1
@@ -378,23 +376,21 @@ def make_grid_connect_rule(
 
 
 def create_structured_regions(
-    multiworld: MultiWorld,
-    player: int,
+    world: World,
     locations: Tuple[LocationData, ...],
     location_cache: List[Location],
     mission_order_type: int,
 ) -> Tuple[Dict[SC2Campaign, Dict[str, MissionInfo]], int, str]:
-    world: World = multiworld.worlds[player]
     locations_per_region = get_locations_per_region(locations)
 
     mission_order = mission_orders[mission_order_type]()
-    enabled_campaigns = get_enabled_campaigns(multiworld, player)
-    shuffle_campaigns = get_option_value(multiworld, player, "shuffle_campaigns")
+    enabled_campaigns = get_enabled_campaigns(world)
+    shuffle_campaigns = get_option_value(world, "shuffle_campaigns")
 
-    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(multiworld, player)
+    mission_pools: Dict[MissionPools, List[SC2Mission]] = filter_missions(world)
     final_mission = mission_pools[MissionPools.FINAL][0]
 
-    regions = [create_region(multiworld, player, locations_per_region, location_cache, "Menu")]
+    regions = [create_region(world, locations_per_region, location_cache, "Menu")]
 
     names: Dict[str, int] = {}
 
@@ -517,8 +513,8 @@ def create_structured_regions(
     # Generating regions and locations from selected missions
     for mission_slot in mission_slots:
         if isinstance(mission_slot.slot, SC2Mission):
-            regions.append(create_region(multiworld, player, locations_per_region, location_cache, mission_slot.slot.mission_name))
-    multiworld.regions += regions
+            regions.append(create_region(world, locations_per_region, location_cache, mission_slot.slot.mission_name))
+    world.multiworld.regions += regions
 
     campaigns: List[SC2Campaign]
     if mission_order_type in campaign_depending_orders:
@@ -547,6 +543,7 @@ def create_structured_regions(
                 slot_offset += 1
 
     def build_connection_rule(mission_names: List[str], missions_req: int) -> Callable:
+        player = world.player
         if len(mission_names) > 1:
             return lambda state: state.has_all({f"Beat {name}" for name in mission_names}, player) \
                                  and state.has_group("Missions", player, missions_req)
@@ -574,7 +571,7 @@ def create_structured_regions(
                 all_connections.append(campaign_mission_slots[connection.campaign][connection.connect_to])
             for connection in mission_order[campaign][i].connect_to:
                 if connection.connect_to == -1:
-                    connect(multiworld, player, names, "Menu", mission.slot.mission_name)
+                    connect(world, names, "Menu", mission.slot.mission_name)
                 else:
                     required_mission = campaign_mission_slots[connection.campaign][connection.connect_to]
                     if ((required_mission is None or required_mission.slot is None)
@@ -587,7 +584,7 @@ def create_structured_regions(
                     if isinstance(required_mission.slot, SC2Mission):
                         required_mission_name = required_mission.slot.mission_name
                         required_missions_names = [mission.slot.mission_name for mission in required_missions]
-                        connect(multiworld, player, names, required_mission_name, mission.slot.mission_name,
+                        connect(world, names, required_mission_name, mission.slot.mission_name,
                                 build_connection_rule(required_missions_names, mission_order[campaign][i].number))
                         connections.append(MissionConnection(slot_map[connection.campaign][connection.connect_to], connection.campaign))
 
@@ -623,22 +620,22 @@ def create_location(player: int, location_data: LocationData, region: Region,
     return location
 
 
-def create_region(multiworld: MultiWorld, player: int, locations_per_region: Dict[str, List[LocationData]],
+def create_region(world: World, locations_per_region: Dict[str, List[LocationData]],
                   location_cache: List[Location], name: str) -> Region:
-    region = Region(name, player, multiworld)
+    region = Region(name, world.player, world.multiworld)
 
     if name in locations_per_region:
         for location_data in locations_per_region[name]:
-            location = create_location(player, location_data, region, location_cache)
+            location = create_location(world.player, location_data, region, location_cache)
             region.locations.append(location)
 
     return region
 
 
-def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: str, target: str,
+def connect(world: World, used_names: Dict[str, int], source: str, target: str,
             rule: Optional[Callable] = None):
-    source_region = world.get_region(source, player)
-    target_region = world.get_region(target, player)
+    source_region = world.get_region(source)
+    target_region = world.get_region(target)
 
     if target not in used_names:
         used_names[target] = 1
@@ -647,7 +644,7 @@ def connect(world: MultiWorld, player: int, used_names: Dict[str, int], source: 
         used_names[target] += 1
         name = target + (' ' * used_names[target])
 
-    connection = Entrance(player, name, source_region)
+    connection = Entrance(world.player, name, source_region)
 
     if rule:
         connection.access_rule = rule

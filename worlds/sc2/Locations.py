@@ -3,10 +3,11 @@ from typing import List, Tuple, Optional, Callable, NamedTuple, Set, Any
 from BaseClasses import MultiWorld
 from . import ItemNames
 from .Options import get_option_value, kerrigan_unit_available, RequiredTactics, GrantStoryTech, LocationInclusion, \
-    TakeOverAIAllies, get_enabled_campaigns, EnableHotsMissions
+    EnableHotsMissions
 from .Rules import SC2Logic
 
 from BaseClasses import Location
+from ..AutoWorld import World
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
@@ -34,7 +35,7 @@ class LocationData(NamedTuple):
     rule: Optional[Callable[[Any], bool]] = Location.access_rule
 
 
-def get_location_types(multiworld: MultiWorld, player: int, inclusion_type: LocationInclusion) -> Set[LocationType]:
+def get_location_types(world: World, inclusion_type: LocationInclusion) -> Set[LocationType]:
     """
 
     :param multiworld:
@@ -50,22 +51,22 @@ def get_location_types(multiworld: MultiWorld, player: int, inclusion_type: Loca
     ]
     excluded_location_types = set()
     for option_name, location_type in exclusion_options:
-        if get_option_value(multiworld, player, option_name) is inclusion_type:
+        if get_option_value(world, option_name) is inclusion_type:
             excluded_location_types.add(location_type)
     return excluded_location_types
 
 
-def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
+def get_plando_locations(world: World) -> List[str]:
     """
 
     :param multiworld:
     :param player:
     :return: A list of locations affected by a plando in a world
     """
-    if multiworld is None:
+    if world is None:
         return []
     plando_locations = []
-    for plando_setting in multiworld.plando_items[player]:
+    for plando_setting in world.multiworld.plando_items[world.player]:
         plando_locations += plando_setting.get("locations", [])
         plando_setting_location = plando_setting.get("location", None)
         if plando_setting_location is not None:
@@ -74,14 +75,15 @@ def get_plando_locations(multiworld: MultiWorld, player) -> List[str]:
     return plando_locations
 
 
-def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tuple[LocationData, ...]:
+def get_locations(world: Optional[World]) -> Tuple[LocationData, ...]:
     # Note: rules which are ended with or True are rules identified as needed later when restricted units is an option
-    logic_level = get_option_value(multiworld, player, 'required_tactics')
+    logic_level = get_option_value(world, 'required_tactics')
     adv_tactics = logic_level != RequiredTactics.option_standard
-    kerriganless = get_option_value(multiworld, player, 'kerrigan_presence') not in kerrigan_unit_available \
-        or get_option_value(multiworld, player, "enable_hots_missions") == EnableHotsMissions.option_false
-    story_tech_granted = get_option_value(multiworld, player, "grant_story_tech") == GrantStoryTech.option_true
-    logic = SC2Logic(multiworld, player)
+    kerriganless = get_option_value(world, 'kerrigan_presence') not in kerrigan_unit_available \
+        or get_option_value(world, "enable_hots_missions") == EnableHotsMissions.option_false
+    story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
+    logic = SC2Logic(world)
+    player = None if world is None else world.player
     location_table: List[LocationData] = [
         # WoL
         LocationData("Liberation Day", "Liberation Day: Victory", SC2WOL_LOC_ID_OFFSET + 100, LocationType.VICTORY),
@@ -1613,10 +1615,10 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
 
     beat_events = []
     # Filtering out excluded locations
-    if multiworld is not None:
-        excluded_location_types = get_location_types(multiworld, player, LocationInclusion.option_disabled)
-        plando_locations = get_plando_locations(multiworld, player)
-        exclude_locations = get_option_value(multiworld, player, "exclude_locations")
+    if world is not None:
+        excluded_location_types = get_location_types(world, LocationInclusion.option_disabled)
+        plando_locations = get_plando_locations(world)
+        exclude_locations = get_option_value(world, "exclude_locations")
         location_table = [location for location in location_table
                           if (LocationType is LocationType.VICTORY or location.name not in exclude_locations)
                           and location.type not in excluded_location_types
@@ -1633,4 +1635,4 @@ def get_locations(multiworld: Optional[MultiWorld], player: Optional[int]) -> Tu
             )
     return tuple(location_table + beat_events)
 
-lookup_location_id_to_type = {loc.code: loc.type for loc in get_locations(None, None) if loc.code is not None}
+lookup_location_id_to_type = {loc.code: loc.type for loc in get_locations(None) if loc.code is not None}

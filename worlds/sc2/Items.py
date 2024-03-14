@@ -7,6 +7,7 @@ import typing
 from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
+from ..AutoWorld import World
 
 
 class ItemData(typing.NamedTuple):
@@ -2119,7 +2120,7 @@ item_table = {
 }
 
 
-def get_item_table(multiworld: MultiWorld, player: int):
+def get_item_table():
     return item_table
 
 
@@ -2217,8 +2218,8 @@ not_balanced_starting_units = {
 }
 
 
-def get_basic_units(multiworld: MultiWorld, player: int, race: SC2Race) -> typing.Set[str]:
-    logic_level = get_option_value(multiworld, player, 'required_tactics')
+def get_basic_units(world: World, race: SC2Race) -> typing.Set[str]:
+    logic_level = get_option_value(world, 'required_tactics')
     if logic_level == RequiredTactics.option_no_logic:
         return no_logic_starting_units[race]
     elif logic_level == RequiredTactics.option_advanced:

@@ -1,10 +1,10 @@
 from dataclasses import dataclass, fields, Field
 from typing import FrozenSet, Union, Set
 
-from BaseClasses import MultiWorld
 from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
+from ..AutoWorld import World
 
 
 class GameDifficulty(Choice):
@@ -826,60 +826,60 @@ class Starcraft2Options(PerGameCommonOptions):
     starting_supply_per_item: StartingSupplyPerItem
 
 
-def get_option_value(multiworld: MultiWorld, player: int, name: str) -> Union[int,  FrozenSet]:
-    if multiworld is None:
+def get_option_value(world: World, name: str) -> Union[int,  FrozenSet]:
+    if world is None:
         field: Field = [class_field for class_field in fields(Starcraft2Options) if class_field.name == name][0]
         return field.type.default
 
-    player_option = getattr(multiworld.worlds[player].options, name)
+    player_option = getattr(world.options, name)
 
     return player_option.value
 
 
-def get_enabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaign]:
+def get_enabled_campaigns(world: World) -> Set[SC2Campaign]:
     enabled_campaigns = set()
-    if get_option_value(multiworld, player, "enable_wol_missions"):
+    if get_option_value(world, "enable_wol_missions"):
         enabled_campaigns.add(SC2Campaign.WOL)
-    if get_option_value(multiworld, player, "enable_prophecy_missions"):
+    if get_option_value(world, "enable_prophecy_missions"):
         enabled_campaigns.add(SC2Campaign.PROPHECY)
-    if get_option_value(multiworld, player, "enable_hots_missions"):
+    if get_option_value(world, "enable_hots_missions"):
         enabled_campaigns.add(SC2Campaign.HOTS)
-    if get_option_value(multiworld, player, "enable_lotv_prologue_missions"):
+    if get_option_value(world, "enable_lotv_prologue_missions"):
         enabled_campaigns.add(SC2Campaign.PROLOGUE)
-    if get_option_value(multiworld, player, "enable_lotv_missions"):
+    if get_option_value(world, "enable_lotv_missions"):
         enabled_campaigns.add(SC2Campaign.LOTV)
-    if get_option_value(multiworld, player, "enable_epilogue_missions"):
+    if get_option_value(world, "enable_epilogue_missions"):
         enabled_campaigns.add(SC2Campaign.EPILOGUE)
-    if get_option_value(multiworld, player, "enable_nco_missions"):
+    if get_option_value(world, "enable_nco_missions"):
         enabled_campaigns.add(SC2Campaign.NCO)
     return enabled_campaigns
 
 
-def get_disabled_campaigns(multiworld: MultiWorld, player: int) -> Set[SC2Campaign]:
+def get_disabled_campaigns(world: World) -> Set[SC2Campaign]:
     all_campaigns = set(SC2Campaign)
-    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    enabled_campaigns = get_enabled_campaigns(world)
     disabled_campaigns = all_campaigns.difference(enabled_campaigns)
     disabled_campaigns.remove(SC2Campaign.GLOBAL)
     return disabled_campaigns
 
 
-def get_excluded_missions(multiworld: MultiWorld, player: int) -> Set[SC2Mission]:
-    mission_order_type = get_option_value(multiworld, player, "mission_order")
-    excluded_mission_names = get_option_value(multiworld, player, "excluded_missions")
-    shuffle_no_build = get_option_value(multiworld, player, "shuffle_no_build")
-    disabled_campaigns = get_disabled_campaigns(multiworld, player)
+def get_excluded_missions(world: World) -> Set[SC2Mission]:
+    mission_order_type = get_option_value(world, "mission_order")
+    excluded_mission_names = get_option_value(world, "excluded_missions")
+    shuffle_no_build = get_option_value(world, "shuffle_no_build")
+    disabled_campaigns = get_disabled_campaigns(world)
 
     excluded_missions: Set[SC2Mission] = set([lookup_name_to_mission[name] for name in excluded_mission_names])
 
     # Excluding Very Hard missions depending on options
-    if (get_option_value(multiworld, player, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_true
+    if (get_option_value(world, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_true
         ) or (
-            get_option_value(multiworld, player, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_default
+            get_option_value(world, "exclude_very_hard_missions") == ExcludeVeryHardMissions.option_default
             and (
                     mission_order_type not in [MissionOrder.option_vanilla_shuffled, MissionOrder.option_grid]
                     or (
                             mission_order_type == MissionOrder.option_grid
-                            and get_option_value(multiworld, player, "maximum_campaign_size") < 20
+                            and get_option_value(world, "maximum_campaign_size") < 20
                     )
             )
     ):

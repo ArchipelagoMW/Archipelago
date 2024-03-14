@@ -1,6 +1,6 @@
 from typing import Set
 
-from BaseClasses import MultiWorld, CollectionState
+from BaseClasses import  CollectionState
 from .Options import get_option_value, RequiredTactics, kerrigan_unit_available, AllInMap, \
     GrantStoryTech, GrantStoryLevels, TakeOverAIAllies, SpearOfAdunAutonomouslyCastAbilityPresence, \
     get_enabled_campaigns, MissionOrder
@@ -8,6 +8,7 @@ from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerri
     kerrigan_levels, get_full_item_list
 from .MissionTables import SC2Race, SC2Campaign
 from . import ItemNames
+from ..AutoWorld import World
 
 
 class SC2Logic:
@@ -324,7 +325,7 @@ class SC2Logic:
         :return:
         """
         beats_kerrigan = state.has_any({ItemNames.MARINE, ItemNames.BANSHEE, ItemNames.GHOST}, self.player) or self.advanced_tactics
-        if get_option_value(self.multiworld, self.player, 'all_in_map') == AllInMap.option_ground:
+        if get_option_value(self.world, 'all_in_map') == AllInMap.option_ground:
             # Ground
             defense_rating = self.terran_defense_rating(state, True, False)
             if state.has_any({ItemNames.BATTLECRUISER, ItemNames.BANSHEE}, self.player):
@@ -930,22 +931,22 @@ class SC2Logic:
                      )
                  )
 
-    def __init__(self, multiworld: MultiWorld, player: int):
-        self.multiworld = multiworld
-        self.player = player
-        self.logic_level = get_option_value(multiworld, self.player, 'required_tactics')
+    def __init__(self, world: World):
+        self.world: World = world
+        self.player = None if world is None else world.player
+        self.logic_level = get_option_value(world, 'required_tactics')
         self.advanced_tactics = self.logic_level != RequiredTactics.option_standard
-        self.take_over_ai_allies = get_option_value(multiworld, self.player, "take_over_ai_allies") == TakeOverAIAllies.option_true
-        self.kerrigan_unit_available = get_option_value(multiworld, self.player, 'kerrigan_presence') in kerrigan_unit_available \
-            and SC2Campaign.HOTS in get_enabled_campaigns(multiworld, self.player)
-        self.kerrigan_levels_per_mission_completed = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed")
-        self.kerrigan_levels_per_mission_completed_cap = get_option_value(multiworld, self.player, "kerrigan_levels_per_mission_completed_cap")
-        self.kerrigan_total_level_cap = get_option_value(multiworld, self.player, "kerrigan_total_level_cap")
-        self.story_tech_granted = get_option_value(multiworld, self.player, "grant_story_tech") == GrantStoryTech.option_true
-        self.story_levels_granted = get_option_value(multiworld, self.player, "grant_story_levels") != GrantStoryLevels.option_disabled
-        self.basic_terran_units = get_basic_units(self.multiworld, self.player, SC2Race.TERRAN)
-        self.basic_zerg_units = get_basic_units(self.multiworld, self.player, SC2Race.ZERG)
-        self.basic_protoss_units = get_basic_units(self.multiworld, self.player, SC2Race.PROTOSS)
-        self.spear_of_adun_autonomously_cast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
-        self.enabled_campaigns = get_enabled_campaigns(multiworld, player)
-        self.mission_order = get_option_value(multiworld, player, "mission_order")
+        self.take_over_ai_allies = get_option_value(world, "take_over_ai_allies") == TakeOverAIAllies.option_true
+        self.kerrigan_unit_available = get_option_value(world, 'kerrigan_presence') in kerrigan_unit_available \
+            and SC2Campaign.HOTS in get_enabled_campaigns(world)
+        self.kerrigan_levels_per_mission_completed = get_option_value(world, "kerrigan_levels_per_mission_completed")
+        self.kerrigan_levels_per_mission_completed_cap = get_option_value(world, "kerrigan_levels_per_mission_completed_cap")
+        self.kerrigan_total_level_cap = get_option_value(world, "kerrigan_total_level_cap")
+        self.story_tech_granted = get_option_value(world, "grant_story_tech") == GrantStoryTech.option_true
+        self.story_levels_granted = get_option_value(world, "grant_story_levels") != GrantStoryLevels.option_disabled
+        self.basic_terran_units = get_basic_units(world, SC2Race.TERRAN)
+        self.basic_zerg_units = get_basic_units(world, SC2Race.ZERG)
+        self.basic_protoss_units = get_basic_units(world, SC2Race.PROTOSS)
+        self.spear_of_adun_autonomously_cast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
+        self.enabled_campaigns = get_enabled_campaigns(world)
+        self.mission_order = get_option_value(world, "mission_order")

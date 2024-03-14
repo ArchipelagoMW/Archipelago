@@ -45,7 +45,7 @@ class SC2World(World):
     data_version = 6
 
     item_name_to_id = {name: data.code for name, data in get_full_item_list().items()}
-    location_name_to_id = {location.name: location.code for location in get_locations(None, None)}
+    location_name_to_id = {location.name: location.code for location in get_locations(None)}
     options_dataclass = Starcraft2Options
     options: Starcraft2Options
 
@@ -68,21 +68,21 @@ class SC2World(World):
 
     def create_regions(self):
         self.mission_req_table, self.final_mission_id, self.victory_item = create_regions(
-            self.multiworld, self.player, get_locations(self.multiworld, self.player), self.location_cache
+            self, get_locations(self), self.location_cache
         )
 
     def create_items(self):
         setup_events(self.player, self.locked_locations, self.location_cache)
 
-        excluded_items = get_excluded_items(self.multiworld, self.player)
+        excluded_items = get_excluded_items(self)
 
-        starter_items = assign_starter_items(self.multiworld, self.player, excluded_items, self.locked_locations, self.location_cache)
+        starter_items = assign_starter_items(self, excluded_items, self.locked_locations, self.location_cache)
 
-        fill_resource_locations(self.multiworld, self.player, self.locked_locations, self.location_cache)
+        fill_resource_locations(self, self.locked_locations, self.location_cache)
 
-        pool = get_item_pool(self.multiworld, self.player, self.mission_req_table, starter_items, excluded_items, self.location_cache)
+        pool = get_item_pool(self, self.mission_req_table, starter_items, excluded_items, self.location_cache)
 
-        fill_item_pool_with_dummy_items(self, self.multiworld, self.player, self.locked_locations, self.location_cache, pool)
+        fill_item_pool_with_dummy_items(self, self.locked_locations, self.location_cache, pool)
 
         self.multiworld.itempool += pool
 
@@ -95,7 +95,7 @@ class SC2World(World):
     def fill_slot_data(self):
         slot_data = {}
         for option_name in [field.name for field in fields(Starcraft2Options)]:
-            option = get_option_value(self.multiworld, self.player, option_name)
+            option = get_option_value(self, option_name)
             if type(option) in {str, int}:
                 slot_data[option_name] = int(option)
         slot_req_table = {}
@@ -114,8 +114,8 @@ class SC2World(World):
                     if not isinstance(slot_req_table[campaign.id][mission]["required_world"][index], dict):
                         slot_req_table[campaign.id][mission]["required_world"][index] = slot_req_table[campaign.id][mission]["required_world"][index]._asdict()
 
-        enabled_campaigns = get_enabled_campaigns(self.multiworld, self.player)
-        slot_data["plando_locations"] = get_plando_locations(self.multiworld, self.player)
+        enabled_campaigns = get_enabled_campaigns(self)
+        slot_data["plando_locations"] = get_plando_locations(self)
         slot_data["nova_covert_ops_only"] = (enabled_campaigns == {SC2Campaign.NCO})
         slot_data["mission_req"] = slot_req_table
         slot_data["final_mission"] = self.final_mission_id
@@ -136,18 +136,17 @@ def setup_events(player: int, locked_locations: typing.List[str], location_cache
             location.place_locked_item(item)
 
 
-def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
-    world: World = multiworld.worlds[player]
-    excluded_items: Set[str] = set(get_option_value(multiworld, player, 'excluded_items'))
-    for item in multiworld.precollected_items[player]:
+def get_excluded_items(world: World) -> Set[str]:
+    excluded_items: Set[str] = set(get_option_value(world, 'excluded_items'))
+    for item in world.multiworld.precollected_items[world.player]:
         excluded_items.add(item.name)
-    locked_items: Set[str] = set(get_option_value(multiworld, player, 'locked_items'))
+    locked_items: Set[str] = set(get_option_value(world, 'locked_items'))
     # Starter items are also excluded items
-    starter_items: Set[str] = set(get_option_value(multiworld, player, 'start_inventory'))
+    starter_items: Set[str] = set(get_option_value(world, 'start_inventory'))
     item_table = get_full_item_list()
-    soa_presence = get_option_value(multiworld, player, "spear_of_adun_presence")
-    soa_autocast_presence = get_option_value(multiworld, player, "spear_of_adun_autonomously_cast_ability_presence")
-    enabled_campaigns = get_enabled_campaigns(multiworld, player)
+    soa_presence = get_option_value(world, "spear_of_adun_presence")
+    soa_autocast_presence = get_option_value(world, "spear_of_adun_autonomously_cast_ability_presence")
+    enabled_campaigns = get_enabled_campaigns(world)
 
     # Ensure no item is both guaranteed and excluded
     invalid_items = excluded_items.intersection(locked_items)
@@ -175,9 +174,9 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     if SC2Campaign.NCO not in enabled_campaigns:
         excluded_items = excluded_items.union(nova_equipment)
 
-    kerrigan_presence = get_option_value(multiworld, player, "kerrigan_presence")
+    kerrigan_presence = get_option_value(world, "kerrigan_presence")
     # Exclude Primal Form item if option is not set or Kerrigan is unavailable
-    if get_option_value(multiworld, player, "kerrigan_primal_status") != KerriganPrimalStatus.option_item or \
+    if get_option_value(world, "kerrigan_primal_status") != KerriganPrimalStatus.option_item or \
         (kerrigan_presence in {KerriganPresence.option_not_present, KerriganPresence.option_not_present_and_no_passives}):
         excluded_items.add(ItemNames.KERRIGAN_PRIMAL_FORM)
 
@@ -204,13 +203,12 @@ def get_excluded_items(multiworld: MultiWorld, player: int) -> Set[str]:
     return excluded_items
 
 
-def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Set[str], locked_locations: List[str], location_cache: typing.List[Location]) -> List[Item]:
-    world: World = multiworld.worlds[player]
+def assign_starter_items(world: World, excluded_items: Set[str], locked_locations: List[str], location_cache: typing.List[Location]) -> List[Item]:
     starter_items: List[Item] = []
-    non_local_items = get_option_value(multiworld, player, "non_local_items")
-    starter_unit = get_option_value(multiworld, player, "starter_unit")
-    enabled_campaigns = get_enabled_campaigns(multiworld, player)
-    first_mission = get_first_mission(multiworld.worlds[player].mission_req_table)
+    non_local_items = get_option_value(world, "non_local_items")
+    starter_unit = get_option_value(world, "starter_unit")
+    enabled_campaigns = get_enabled_campaigns(world)
+    first_mission = get_first_mission(world.mission_req_table)
     # Ensuring that first mission is completable
     if starter_unit == StarterUnit.option_off:
         starter_mission_locations = [location.name for location in location_cache
@@ -225,8 +223,8 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
         if first_race == SC2Race.ANY:
             # If the first mission is a logic-less no-build
-            mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = multiworld.worlds[player].mission_req_table
-            races = get_used_races(mission_req_table, multiworld, player)
+            mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]] = world.mission_req_table
+            races = get_used_races(mission_req_table, world)
             races.remove(SC2Race.ANY)
             if lookup_name_to_mission[first_mission].race in races:
                 # The campaign's race is in (At least one mission that's not logic-less no-build exists)
@@ -237,7 +235,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
 
         if first_race != SC2Race.ANY:
             # The race of the early unit has been chosen
-            basic_units = get_basic_units(multiworld, player, first_race)
+            basic_units = get_basic_units(world, first_race)
             if starter_unit == StarterUnit.option_balanced:
                 basic_units = basic_units.difference(not_balanced_starting_units)
             if first_mission == SC2Mission.DARK_WHISPERS.mission_name:
@@ -255,7 +253,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 if not local_basic_unit:
                     raise Exception("Early Unit: At least one basic unit must be included")
 
-            unit: Item = add_starter_item(multiworld, player, excluded_items, local_basic_unit)
+            unit: Item = add_starter_item(world, excluded_items, local_basic_unit)
             starter_items.append(unit)
 
             # NCO-only specific rules
@@ -270,19 +268,19 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 elif unit.name == ItemNames.VIKING:
                     support_item = ItemNames.VIKING_SMART_SERVOS
                 if support_item is not None:
-                    starter_items.append(add_starter_item(multiworld, player, excluded_items, [support_item]))
-                starter_items.append(add_starter_item(multiworld, player, excluded_items, [ItemNames.NOVA_JUMP_SUIT_MODULE]))
+                    starter_items.append(add_starter_item(world, excluded_items, [support_item]))
+                starter_items.append(add_starter_item(world, excluded_items, [ItemNames.NOVA_JUMP_SUIT_MODULE]))
                 starter_items.append(
-                    add_starter_item(multiworld, player, excluded_items,
+                    add_starter_item(world, excluded_items,
                                      [
                                          ItemNames.NOVA_HELLFIRE_SHOTGUN,
                                          ItemNames.NOVA_PLASMA_RIFLE,
                                          ItemNames.NOVA_PULSE_GRENADES
                                      ]))
             if enabled_campaigns == {SC2Campaign.NCO}:
-                starter_items.append(add_starter_item(multiworld, player, excluded_items, [ItemNames.LIBERATOR_RAID_ARTILLERY]))
+                starter_items.append(add_starter_item(world, excluded_items, [ItemNames.LIBERATOR_RAID_ARTILLERY]))
     
-    starter_abilities = get_option_value(multiworld, player, 'start_primary_abilities')
+    starter_abilities = get_option_value(world, 'start_primary_abilities')
     assert isinstance(starter_abilities, int)
     if starter_abilities:
         ability_count = starter_abilities
@@ -296,7 +294,7 @@ def assign_starter_items(multiworld: MultiWorld, player: int, excluded_items: Se
                 abilities = kerrigan_actives[tier].union(kerrigan_passives[tier]).difference(excluded_items)
             if abilities:
                 ability_count -= 1
-                starter_items.append(add_starter_item(multiworld, player, excluded_items, list(abilities)))
+                starter_items.append(add_starter_item(world, excluded_items, list(abilities)))
                 if ability_count == 0:
                     break
 
@@ -312,21 +310,20 @@ def get_first_mission(mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo
     return first_mission
 
 
-def add_starter_item(multiworld: MultiWorld, player: int, excluded_items: Set[str], item_list: Sequence[str]) -> Item:
-    world: World = multiworld.worlds[player]
+def add_starter_item(world: World, excluded_items: Set[str], item_list: Sequence[str]) -> Item:
 
     item_name = world.random.choice(sorted(item_list))
 
     excluded_items.add(item_name)
 
-    item = create_item_with_correct_settings(player, item_name)
+    item = create_item_with_correct_settings(world.player, item_name)
 
-    multiworld.push_precollected(item)
+    world.multiworld.push_precollected(item)
 
     return item
 
 
-def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
+def get_item_pool(world: World, mission_req_table: Dict[SC2Campaign, Dict[str, MissionInfo]],
                   starter_items: List[Item], excluded_items: Set[str], location_cache: List[Location]) -> List[Item]:
     pool: List[Item] = []
 
@@ -334,22 +331,22 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
     locked_items = []
 
     # YAML items
-    yaml_locked_items = get_option_value(multiworld, player, 'locked_items')
+    yaml_locked_items = get_option_value(world, 'locked_items')
     assert not isinstance(yaml_locked_items, int)
 
     # Adjust generic upgrade availability based on options
-    include_upgrades = get_option_value(multiworld, player, 'generic_upgrade_missions') == 0
-    upgrade_items = get_option_value(multiworld, player, 'generic_upgrade_items')
+    include_upgrades = get_option_value(world, 'generic_upgrade_missions') == 0
+    upgrade_items = get_option_value(world, 'generic_upgrade_items')
     assert isinstance(upgrade_items, int)
 
     # Include items from outside main campaigns
     item_sets = {'wol', 'hots', 'lotv'}
-    if get_option_value(multiworld, player, 'nco_items') \
-            or SC2Campaign.NCO in get_enabled_campaigns(multiworld, player):
+    if get_option_value(world, 'nco_items') \
+            or SC2Campaign.NCO in get_enabled_campaigns(world):
         item_sets.add('nco')
-    if get_option_value(multiworld, player, 'bw_items'):
+    if get_option_value(world, 'bw_items'):
         item_sets.add('bw')
-    if get_option_value(multiworld, player, 'ext_items'):
+    if get_option_value(world, 'ext_items'):
         item_sets.add('ext')
 
     def allowed_quantity(name: str, data: ItemData) -> int:
@@ -364,15 +361,15 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
         else:
             return data.quantity
 
-    for name, data in get_item_table(multiworld, player).items():
+    for name, data in get_item_table().items():
         for _ in range(allowed_quantity(name, data)):
-            item = create_item_with_correct_settings(player, name)
+            item = create_item_with_correct_settings(world.player, name)
             if name in yaml_locked_items:
                 locked_items.append(item)
             else:
                 pool.append(item)
 
-    existing_items = starter_items + [item for item in multiworld.precollected_items[player] if item not in starter_items]
+    existing_items = starter_items + [item for item in world.multiworld.precollected_items[world.player] if item not in starter_items]
     existing_names = [item.name for item in existing_items]
 
     # Check the parent item integrity, exclude items
@@ -386,15 +383,15 @@ def get_item_pool(multiworld: MultiWorld, player: int, mission_req_table: Dict[S
         for invalid_upgrade in invalid_upgrades:
             pool.remove(invalid_upgrade)
 
-    fill_pool_with_kerrigan_levels(multiworld, player, pool)
-    filtered_pool = filter_items(multiworld, player, mission_req_table, location_cache, pool, existing_items, locked_items)
+    fill_pool_with_kerrigan_levels(world, pool)
+    filtered_pool = filter_items(world, mission_req_table, location_cache, pool, existing_items, locked_items)
     return filtered_pool
 
 
-def fill_item_pool_with_dummy_items(self: SC2World, multiworld: MultiWorld, player: int, locked_locations: List[str],
+def fill_item_pool_with_dummy_items(self: SC2World, locked_locations: List[str],
                                     location_cache: List[Location], pool: List[Item]):
     for _ in range(len(location_cache) - len(locked_locations) - len(pool)):
-        item = create_item_with_correct_settings(player, self.get_filler_item_name())
+        item = create_item_with_correct_settings(self.player, self.get_filler_item_name())
         pool.append(item)
 
 
@@ -416,7 +413,7 @@ def pool_contains_parent(item: Item, pool: Iterable[Item]):
     return parent_item in [pool_item.name for pool_item in pool]
 
 
-def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: List[str], location_cache: List[Location]):
+def fill_resource_locations(world: World, locked_locations: List[str], location_cache: List[Location]):
     """
     Filters the locations in the world using a trash or Nothing item
     :param multiworld:
@@ -425,11 +422,10 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
     :param location_cache:
     :return:
     """
-    world: World = multiworld.worlds[player]
     open_locations = [location for location in location_cache if location.item is None]
-    plando_locations = get_plando_locations(multiworld, player)
-    resource_location_types = get_location_types(multiworld, player, LocationInclusion.option_resources)
-    location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(multiworld, player)}
+    plando_locations = get_plando_locations(world)
+    resource_location_types = get_location_types(world, LocationInclusion.option_resources)
+    location_data = {sc2_location.name: sc2_location for sc2_location in get_locations(world)}
     for location in open_locations:
         # Go through the locations that aren't locked yet (early unit, etc)
         if location.name not in plando_locations:
@@ -437,7 +433,7 @@ def fill_resource_locations(multiworld: MultiWorld, player, locked_locations: Li
             sc2_location = location_data[location.name]
             if sc2_location.type in resource_location_types:
                 item_name = world.random.choice(filler_items)
-                item = create_item_with_correct_settings(player, item_name)
+                item = create_item_with_correct_settings(world.player, item_name)
                 location.place_locked_item(item)
                 locked_locations.append(location.name)
 
@@ -448,11 +444,11 @@ def place_exclusion_item(item_name, location, locked_locations, player):
     locked_locations.append(location.name)
 
 
-def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_pool: List[Item]):
-    total_levels = get_option_value(multiworld, player, "kerrigan_level_item_sum")
-    if get_option_value(multiworld, player, "kerrigan_presence") not in kerrigan_unit_available \
+def fill_pool_with_kerrigan_levels(world: World, item_pool: List[Item]):
+    total_levels = get_option_value(world, "kerrigan_level_item_sum")
+    if get_option_value(world, "kerrigan_presence") not in kerrigan_unit_available \
             or total_levels == 0 \
-            or SC2Campaign.HOTS not in get_enabled_campaigns(multiworld, player):
+            or SC2Campaign.HOTS not in get_enabled_campaigns(world):
         return
     
     def add_kerrigan_level_items(level_amount: int, item_amount: int):
@@ -460,10 +456,10 @@ def fill_pool_with_kerrigan_levels(multiworld: MultiWorld, player: int, item_poo
         if level_amount > 1:
             name += "s"
         for _ in range(item_amount):
-            item_pool.append(create_item_with_correct_settings(player, name))
+            item_pool.append(create_item_with_correct_settings(world.player, name))
 
     sizes = [70, 35, 14, 10, 7, 5, 2, 1]
-    option = get_option_value(multiworld, player, "kerrigan_level_item_distribution")
+    option = get_option_value(world, "kerrigan_level_item_distribution")
 
     assert isinstance(option, int)
     assert isinstance(total_levels, int)
