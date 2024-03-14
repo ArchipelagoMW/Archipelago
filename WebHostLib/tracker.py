@@ -2649,7 +2649,7 @@ if "Starcraft 2" in network_data_package["games"]:
 
         lookup_any_item_id_to_name = tracker_data.item_id_to_name["Starcraft 2"]
         return render_template(
-            "tracker__Starcraft2WingsOfLiberty.html",
+            "tracker__Starcraft2.html",
             inventory=inventory,
             icons=icons,
             acquired_items={lookup_any_item_id_to_name[id] for id, count in inventory.items() if count > 0},
