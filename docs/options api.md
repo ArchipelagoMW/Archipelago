@@ -24,17 +24,21 @@ display as `Value1` on the webhost.
 (i.e. `alias_value_1 = option_value1`) which will allow users to use either `value_1` or `value1` in their yaml
 files, and both will resolve as `value1`. This should be used when changing options around, i.e. changing a Toggle to a
 Choice, and defining `alias_true = option_full`.
-- All options support `random` as a generic option. `random` chooses from any of the available values for that option,
-and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+- All options with a fixed set of possible values (i.e. those which inherit from `Toggle`, `(Text)Choice` or
+`(Named/Special)Range`) support `random` as a generic option. `random` chooses from any of the available values for that
+option, and is reserved by AP. You can set this as your default value, but you cannot define your own `option_random`.
+However, you can override `from_text` and handle `text == "random"` to customize its behavior or
+implement it for additional option types.
 
-As an example, suppose we want an option that lets the user start their game with a sword in their inventory. Let's
-create our option class (with a docstring), give it a `display_name`, and add it to our game's options dataclass:
+As an example, suppose we want an option that lets the user start their game with a sword in their inventory, an option
+to let the player choose the difficulty, and an option to choose how much health the final boss has. Let's create our
+option classes (with a docstring), give them a `display_name`, and add them to our game's options dataclass:
 
 ```python
-# Options.py
+# options.py
 from dataclasses import dataclass
 
-from Options import Toggle, PerGameCommonOptions
+from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 
 class StartingSword(Toggle):
@@ -42,13 +46,33 @@ class StartingSword(Toggle):
     display_name = "Start With Sword"
 
 
+class Difficulty(Choice):
+    """Sets overall game difficulty."""
+    display_name = "Difficulty"
+    option_easy = 0
+    option_normal = 1
+    option_hard = 2
+    alias_beginner = 0  # same as easy but allows the player to use beginner as an alternative for easy in the result in their options
+    alias_expert = 2  # same as hard
+    default = 1  # default to normal
+
+
+class FinalBossHP(Range):
+    """Sets the HP of the final boss"""
+    display_name = "Final Boss HP"
+    range_start = 100
+    range_end = 10000
+    default = 2000
+
+
 @dataclass
 class ExampleGameOptions(PerGameCommonOptions):
     starting_sword: StartingSword
+    difficulty: Difficulty
+    final_boss_health: FinalBossHP
 ```
 
-This will create a `Toggle` option, internally called `starting_sword`. To then submit this to the multiworld, we add it
-to our world's `__init__.py`:
+To then submit this to the multiworld, we add it to our world's `__init__.py`:
 
 ```python
 from worlds.AutoWorld import World
@@ -77,7 +101,33 @@ or if I need a boolean object, such as in my slot_data I can access it as:
 ```python
 start_with_sword = bool(self.options.starting_sword.value)
 ```
+All numeric options (i.e. Toggle, Choice, Range) can be compared to integers, strings that match their attributes,
+strings that match the option attributes after "option_" is stripped, and the attributes themselves.
+```python
+# options.py
+class Logic(Choice):
+    option_normal = 0
+    option_hard = 1
+    option_challenging = 2
+    option_extreme = 3
+    option_insane = 4
+    alias_extra_hard = 2
+    crazy = 4  # won't be listed as an option and only exists as an attribute on the class
 
+# __init__.py
+from .options import Logic
+
+if self.options.logic:
+    do_things_for_all_non_normal_logic()
+if self.options.logic == 1:
+    do_hard_things()
+elif self.options.logic == "challenging":
+    do_challenging_things()
+elif self.options.logic == Logic.option_extreme:
+    do_extreme_things()
+elif self.options.logic == "crazy":
+    do_insane_things()
+```
 ## Generic Option Classes
 These options are generically available to every game automatically, but can be overridden for slightly different
 behavior, if desired. See `worlds/soe/Options.py` for an example.
@@ -144,13 +194,20 @@ A numeric option allowing a variety of integers including the endpoints. Has a d
 `range_end` of 1. Allows for negative values as well. This will always be an integer and has no methods for string
 comparisons.
 
-### SpecialRange
+### NamedRange
 Like range but also allows you to define a dictionary of special names the user can use to equate to a specific value.
+`special_range_names` can be used to
+- give descriptive names to certain values from within the range 
+- add option values above or below the regular range, to be associated with a special meaning 
+
 For example:
 ```python
+range_start = 1
+range_end = 99
 special_range_names: {
     "normal": 20,
     "extreme": 99,
+    "unlimited": -1,
 }
 ```
 

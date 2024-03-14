@@ -1,0 +1,325 @@
+{
+  "all_locations": [
+    "Puzzle Solved Gears",
+    "Puzzle Solved Stone Henge",
+    "Puzzle Solved Workshop Drawers",
+    "Puzzle Solved Library Statue",
+    "Puzzle Solved Theater Door",
+    "Puzzle Solved Clock Tower Door",
+    "Puzzle Solved Clock Chains",
+    "Puzzle Solved Atlantis",
+    "Puzzle Solved Organ",
+    "Puzzle Solved Maze Door",
+    "Puzzle Solved Columns of RA",
+    "Puzzle Solved Burial Door",
+    "Puzzle Solved Chinese Solitaire",
+    "Puzzle Solved Shaman Drums",
+    "Puzzle Solved Lyre",
+    "Puzzle Solved Red Door",
+    "Puzzle Solved Fortune Teller Door",
+    "Puzzle Solved Alchemy",
+    "Puzzle Solved UFO Symbols",
+    "Puzzle Solved Anansi Musicbox",
+    "Puzzle Solved Gallows",
+    "Puzzle Solved Mastermind",
+    "Puzzle Solved Marble Flipper",
+    "Puzzle Solved Skull Dial Door",
+    "Flashback Memory Obtained Beth's Ghost",
+    "Flashback Memory Obtained Merrick's Ghost",
+    "Flashback Memory Obtained Windlenot's Ghost",
+    "Flashback Memory Obtained Ancient Astrology",
+    "Flashback Memory Obtained Scrapbook",
+    "Flashback Memory Obtained Museum Brochure",
+    "Flashback Memory Obtained In Search of the Unexplained",
+    "Flashback Memory Obtained Egyptian Hieroglyphics Explained",
+    "Flashback Memory Obtained South American Pictographs",
+    "Flashback Memory Obtained Mythology of the Stars",
+    "Flashback Memory Obtained Black Book",
+    "Flashback Memory Obtained Theater Movie",
+    "Flashback Memory Obtained Museum Blueprints",
+    "Flashback Memory Obtained Beth's Address Book",
+    "Flashback Memory Obtained Merrick's Notebook",
+    "Flashback Memory Obtained Professor Windlenot's Diary",
+    "Ixupi Captured Water",
+    "Ixupi Captured Wax",
+    "Ixupi Captured Ash",
+    "Ixupi Captured Oil",
+    "Ixupi Captured Cloth",
+    "Ixupi Captured Wood",
+    "Ixupi Captured Crystal",
+    "Ixupi Captured Sand",
+    "Ixupi Captured Metal",
+    "Final Riddle: Fortune Teller",
+    "Final Riddle: Planets Aligned",
+    "Final Riddle: Norse God Stone Message",
+    "Final Riddle: Beth's Body Page 17",
+    "Final Riddle: Guillotine Dropped",
+    "Puzzle Hint Found: Combo Lock in Mailbox",
+    "Puzzle Hint Found: Orange Symbol",
+    "Puzzle Hint Found: Silver Symbol",
+    "Puzzle Hint Found: Green Symbol",
+    "Puzzle Hint Found: White Symbol",
+    "Puzzle Hint Found: Brown Symbol",
+    "Puzzle Hint Found: Tan Symbol",
+    "Puzzle Hint Found: Basilisk Bone Fragments",
+    "Puzzle Hint Found: Atlantis Map",
+    "Puzzle Hint Found: Sirens Song Heard",
+    "Puzzle Hint Found: Egyptian Sphinx Heard",
+    "Puzzle Hint Found: Gallows Information Plaque",
+    "Puzzle Hint Found: Mastermind Information Plaque",
+    "Puzzle Hint Found: Elevator Writing",
+    "Puzzle Hint Found: Shaman Security Camera",
+    "Puzzle Hint Found: Tape Recorder Heard",
+    "Information Plaque: (Lobby) Transforming Masks",
+    "Information Plaque: (Lobby) Jade Skull",
+    "Information Plaque: (Prehistoric) Bronze Unicorn",
+    "Information Plaque: (Prehistoric) Griffin",
+    "Information Plaque: (Prehistoric) Eagles Nest",
+    "Information Plaque: (Prehistoric) Large Spider",
+    "Information Plaque: (Prehistoric) Starfish",
+    "Information Plaque: (Ocean) Quartz Crystal",
+    "Information Plaque: (Ocean) Poseidon",
+    "Information Plaque: (Ocean) Colossus of Rhodes",
+    "Information Plaque: (Ocean) Poseidon's Temple",
+    "Information Plaque: (Underground Maze) Subterranean World",
+    "Information Plaque: (Underground Maze) Dero",
+    "Information Plaque: (Egypt) Tomb of the Ixupi",
+    "Information Plaque: (Egypt) The Sphinx",
+    "Information Plaque: (Egypt) Curse of Anubis",
+    "Information Plaque: (Burial) Norse Burial Ship",
+    "Information Plaque: (Burial) Paracas Burial Bundles",
+    "Information Plaque: (Burial) Spectacular Coffins of Ghana",
+    "Information Plaque: (Burial) Cremation",
+    "Information Plaque: (Burial) Animal Crematorium",
+    "Information Plaque: (Shaman) Witch Doctors of the Congo",
+    "Information Plaque: (Shaman) Sarombe doctor of Mozambique",
+    "Information Plaque: (Gods) Fisherman's Canoe God",
+    "Information Plaque: (Gods) Mayan Gods",
+    "Information Plaque: (Gods) Thor",
+    "Information Plaque: (Gods) Celtic Janus Sculpture",
+    "Information Plaque: (Gods) Sumerian Bull God - An",
+    "Information Plaque: (Gods) Sumerian Lyre",
+    "Information Plaque: (Gods) Chuen",
+    "Information Plaque: (Anansi) African Creation Myth",
+    "Information Plaque: (Anansi) Apophis the Serpent",
+    "Information Plaque: (Anansi) Death",
+    "Information Plaque: (Pegasus) Cyclops",
+    "Information Plaque: (Werewolf) Lycanthropy",
+    "Information Plaque: (UFO) Coincidence or Extraterrestrial Visits?",
+    "Information Plaque: (UFO) Planets",
+    "Information Plaque: (UFO) Astronomical Construction",
+    "Information Plaque: (Torture) Guillotine",
+    "Information Plaque: (UFO) Aliens",
+    "Puzzle Solved Office Elevator",
+    "Puzzle Solved Bedroom Elevator",
+    "Puzzle Solved Three Floor Elevator",
+    "Ixupi Captured Lightning"
+  ],
+  "locations_by_region": {
+    "Outside": [
+      "Puzzle Solved Gears",
+      "Puzzle Solved Stone Henge",
+      "Ixupi Captured Water",
+      "Ixupi Captured Wax",
+      "Ixupi Captured Ash",
+      "Ixupi Captured Oil",
+      "Ixupi Captured Cloth",
+      "Ixupi Captured Wood",
+      "Ixupi Captured Crystal",
+      "Ixupi Captured Sand",
+      "Ixupi Captured Metal",
+      "Ixupi Captured Lightning",
+      "Puzzle Solved Office Elevator",
+      "Puzzle Solved Three Floor Elevator",
+      "Puzzle Hint Found: Combo Lock in Mailbox",
+      "Puzzle Hint Found: Orange Symbol",
+      "Puzzle Hint Found: Silver Symbol",
+      "Puzzle Hint Found: Green Symbol",
+      "Puzzle Hint Found: White Symbol",
+      "Puzzle Hint Found: Brown Symbol",
+      "Puzzle Hint Found: Tan Symbol"
+    ],
+    "Underground Lake": [
+      "Flashback Memory Obtained Windlenot's Ghost",
+      "Flashback Memory Obtained Egyptian Hieroglyphics Explained"
+    ],
+    "Office": [
+      "Flashback Memory Obtained Scrapbook",
+      "Accessible: Storage: Desk Drawer",
+      "Puzzle Hint Found: Atlantis Map",
+      "Puzzle Hint Found: Tape Recorder Heard",
+      "Puzzle Solved Bedroom Elevator"
+    ],
+    "Workshop": [
+      "Puzzle Solved Workshop Drawers",
+      "Accessible: Storage: Workshop Drawers",
+      "Puzzle Hint Found: Basilisk Bone Fragments"
+    ],
+    "Bedroom": [
+      "Flashback Memory Obtained Professor Windlenot's Diary"
+    ],
+    "Library": [
+      "Puzzle Solved Library Statue",
+      "Flashback Memory Obtained In Search of the Unexplained",
+      "Flashback Memory Obtained South American Pictographs",
+      "Flashback Memory Obtained Mythology of the Stars",
+      "Flashback Memory Obtained Black Book",
+      "Accessible: Storage: Library Cabinet",
+      "Accessible: Storage: Library Statue"
+    ],
+    "Maintenance Tunnels": [
+      "Flashback Memory Obtained Beth's Address Book"
+    ],
+    "Three Floor Elevator": [
+      "Puzzle Hint Found: Elevator Writing"
+    ],
+    "Lobby": [
+      "Puzzle Solved Theater Door",
+      "Flashback Memory Obtained Museum Brochure",
+      "Information Plaque: (Lobby) Jade Skull",
+      "Information Plaque: (Lobby) Transforming Masks",
+      "Accessible: Storage: Slide",
+      "Accessible: Storage: Transforming Mask"
+    ],
+    "Generator": [
+      "Final Riddle: Beth's Body Page 17"
+    ],
+    "Theater Back Hallways": [
+      "Puzzle Solved Clock Tower Door"
+    ],
+    "Clock Tower Staircase": [
+      "Puzzle Solved Clock Chains"
+    ],
+    "Clock Tower": [
+      "Flashback Memory Obtained Beth's Ghost",
+      "Accessible: Storage: Clock Tower",
+      "Puzzle Hint Found: Shaman Security Camera"
+    ],
+    "Projector Room": [
+      "Flashback Memory Obtained Theater Movie"
+    ],
+    "Ocean": [
+      "Puzzle Solved Atlantis",
+      "Puzzle Solved Organ",
+      "Flashback Memory Obtained Museum Blueprints",
+      "Accessible: Storage: Ocean",
+      "Puzzle Hint Found: Sirens Song Heard",
+      "Information Plaque: (Ocean) Quartz Crystal",
+      "Information Plaque: (Ocean) Poseidon",
+      "Information Plaque: (Ocean) Colossus of Rhodes",
+      "Information Plaque: (Ocean) Poseidon's Temple"
+    ],
+    "Maze Staircase": [
+      "Puzzle Solved Maze Door"
+    ],
+    "Egypt": [
+      "Puzzle Solved Columns of RA",
+      "Puzzle Solved Burial Door",
+      "Accessible: Storage: Egypt",
+      "Puzzle Hint Found: Egyptian Sphinx Heard",
+      "Information Plaque: (Egypt) Tomb of the Ixupi",
+      "Information Plaque: (Egypt) The Sphinx",
+      "Information Plaque: (Egypt) Curse of Anubis"
+    ],
+    "Burial": [
+      "Puzzle Solved Chinese Solitaire",
+      "Flashback Memory Obtained Merrick's Notebook",
+      "Accessible: Storage: Chinese Solitaire",
+      "Information Plaque: (Burial) Norse Burial Ship",
+      "Information Plaque: (Burial) Paracas Burial Bundles",
+      "Information Plaque: (Burial) Spectacular Coffins of Ghana",
+      "Information Plaque: (Burial) Animal Crematorium",
+      "Information Plaque: (Burial) Cremation"
+    ],
+    "Shaman": [
+      "Puzzle Solved Shaman Drums",
+      "Accessible: Storage: Shaman Hut",
+      "Information Plaque: (Shaman) Witch Doctors of the Congo",
+      "Information Plaque: (Shaman) Sarombe doctor of Mozambique"
+    ],
+    "Gods Room": [
+      "Puzzle Solved Lyre",
+      "Puzzle Solved Red Door",
+      "Accessible: Storage: Lyre",
+      "Final Riddle: Norse God Stone Message",
+      "Information Plaque: (Gods) Fisherman's Canoe God",
+      "Information Plaque: (Gods) Mayan Gods",
+      "Information Plaque: (Gods) Thor",
+      "Information Plaque: (Gods) Celtic Janus Sculpture",
+      "Information Plaque: (Gods) Sumerian Bull God - An",
+      "Information Plaque: (Gods) Sumerian Lyre",
+      "Information Plaque: (Gods) Chuen"
+    ],
+    "Blue Maze": [
+      "Puzzle Solved Fortune Teller Door"
+    ],
+    "Fortune Teller": [
+      "Flashback Memory Obtained Merrick's Ghost",
+      "Final Riddle: Fortune Teller"
+    ],
+    "Inventions": [
+      "Puzzle Solved Alchemy",
+      "Accessible: Storage: Alchemy"
+    ],
+    "UFO": [
+      "Puzzle Solved UFO Symbols",
+      "Accessible: Storage: UFO",
+      "Final Riddle: Planets Aligned",
+      "Information Plaque: (UFO) Coincidence or Extraterrestrial Visits?",
+      "Information Plaque: (UFO) Planets",
+      "Information Plaque: (UFO) Astronomical Construction",
+      "Information Plaque: (UFO) Aliens"
+    ],
+    "Anansi": [
+      "Puzzle Solved Anansi Musicbox",
+      "Flashback Memory Obtained Ancient Astrology",
+      "Accessible: Storage: Skeleton",
+      "Accessible: Storage: Anansi",
+      "Information Plaque: (Anansi) African Creation Myth",
+      "Information Plaque: (Anansi) Apophis the Serpent",
+      "Information Plaque: (Anansi) Death",
+      "Information Plaque: (Pegasus) Cyclops",
+      "Information Plaque: (Werewolf) Lycanthropy"
+    ],
+    "Torture": [
+      "Puzzle Solved Gallows",
+      "Accessible: Storage: Gallows",
+      "Final Riddle: Guillotine Dropped",
+      "Puzzle Hint Found: Gallows Information Plaque",
+      "Information Plaque: (Torture) Guillotine"
+    ],
+    "Puzzle Room Mastermind": [
+      "Puzzle Solved Mastermind",
+      "Puzzle Hint Found: Mastermind Information Plaque"
+    ],
+    "Puzzle Room Marbles": [
+      "Puzzle Solved Marble Flipper"
+    ],
+    "Prehistoric": [
+      "Information Plaque: (Prehistoric) Bronze Unicorn",
+      "Information Plaque: (Prehistoric) Griffin",
+      "Information Plaque: (Prehistoric) Eagles Nest",
+      "Information Plaque: (Prehistoric) Large Spider",
+      "Information Plaque: (Prehistoric) Starfish",
+      "Accessible: Storage: Eagles Nest"
+    ],
+    "Tar River": [
+      "Accessible: Storage: Tar River",
+      "Information Plaque: (Underground Maze) Subterranean World",
+      "Information Plaque: (Underground Maze) Dero"
+    ],
+    "Theater": [
+      "Accessible: Storage: Theater"
+    ],
+    "Greenhouse": [
+      "Accessible: Storage: Greenhouse"
+    ],
+    "Janitor Closet": [
+      "Accessible: Storage: Janitor Closet"
+    ],
+    "Skull Dial Bridge": [
+      "Accessible: Storage: Skull Bridge",
+      "Puzzle Solved Skull Dial Door"
+    ]
+  }
+}   

@@ -76,7 +76,7 @@ Your Party Leader will hold up the item they received when not in a fight or in 
 
 ###### Bug fixes:
 
-- Vanilla game bugs that could result in softlocks or save file corruption have been fixed
+- Vanilla game bugs that could result in anomalous floors, softlocks, or save file corruption have been fixed
 - (optional) Bugfix for the algorithm that determines the item pool for red chest gear. Enabling this allows the cave to
   generate shields, headgear, rings, and jewels in red chests even after floor B9
 - (optional) Bugfix for the outlandish cravings of capsule monsters in the US version. Enabling this makes feeding work

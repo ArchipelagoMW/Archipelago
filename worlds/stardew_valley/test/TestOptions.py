@@ -1,10 +1,11 @@
 import itertools
+import unittest
 from random import random
 from typing import Dict
 
 from BaseClasses import ItemClassification, MultiWorld
-from Options import SpecialRange
-from . import setup_solo_multiworld, SVTestBase
+from Options import NamedRange
+from . import setup_solo_multiworld, SVTestBase, SVTestCase, allsanity_options_without_mods, allsanity_options_with_mods
 from .. import StardewItem, items_by_group, Group, StardewValleyWorld
 from ..locations import locations_by_tag, LocationTags, location_table
 from ..options import ExcludeGingerIsland, ToolProgression, Goal, SeasonRandomization, TrapItems, SpecialOrderLocations, ArcadeMachineLocations
@@ -17,21 +18,21 @@ SEASONS = {Season.spring, Season.summer, Season.fall, Season.winter}
 TOOLS = {"Hoe", "Pickaxe", "Axe", "Watering Can", "Trash Can", "Fishing Rod"}
 
 
-def assert_can_win(tester: SVTestBase, multiworld: MultiWorld):
+def assert_can_win(tester: unittest.TestCase, multiworld: MultiWorld):
     for item in multiworld.get_items():
         multiworld.state.collect(item)
 
     tester.assertTrue(multiworld.find_item("Victory", 1).can_reach(multiworld.state))
 
 
-def basic_checks(tester: SVTestBase, multiworld: MultiWorld):
+def basic_checks(tester: unittest.TestCase, multiworld: MultiWorld):
     tester.assertIn(StardewItem("Victory", ItemClassification.progression, None, 1), multiworld.get_items())
     assert_can_win(tester, multiworld)
     non_event_locations = [location for location in multiworld.get_locations() if not location.event]
     tester.assertEqual(len(multiworld.itempool), len(non_event_locations))
 
 
-def check_no_ginger_island(tester: SVTestBase, multiworld: MultiWorld):
+def check_no_ginger_island(tester: unittest.TestCase, multiworld: MultiWorld):
     ginger_island_items = [item_data.name for item_data in items_by_group[Group.GINGER_ISLAND]]
     ginger_island_locations = [location_data.name for location_data in locations_by_tag[LocationTags.GINGER_ISLAND]]
     for item in multiworld.get_items():
@@ -41,18 +42,18 @@ def check_no_ginger_island(tester: SVTestBase, multiworld: MultiWorld):
 
 
 def get_option_choices(option) -> Dict[str, int]:
-    if issubclass(option, SpecialRange):
+    if issubclass(option, NamedRange):
         return option.special_range_names
     elif option.options:
         return option.options
     return {}
 
 
-class TestGenerateDynamicOptions(SVTestBase):
+class TestGenerateDynamicOptions(SVTestCase):
     def test_given_special_range_when_generate_then_basic_checks(self):
-        options = self.world.options_dataclass.type_hints
+        options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
-            if not isinstance(option, SpecialRange):
+            if not isinstance(option, NamedRange):
                 continue
             for value in option.special_range_names:
                 with self.subTest(f"{option_name}: {value}"):
@@ -62,7 +63,7 @@ class TestGenerateDynamicOptions(SVTestBase):
 
     def test_given_choice_when_generate_then_basic_checks(self):
         seed = int(random() * pow(10, 18) - 1)
-        options = self.world.options_dataclass.type_hints
+        options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
             if not option.options:
                 continue
@@ -73,7 +74,7 @@ class TestGenerateDynamicOptions(SVTestBase):
                     basic_checks(self, multiworld)
 
 
-class TestGoal(SVTestBase):
+class TestGoal(SVTestCase):
     def test_given_goal_when_generate_then_victory_is_in_correct_location(self):
         for goal, location in [("community_center", GoalName.community_center),
                                ("grandpa_evaluation", GoalName.grandpa_evaluation),
@@ -90,7 +91,7 @@ class TestGoal(SVTestBase):
                 self.assertEqual(victory.name, location)
 
 
-class TestSeasonRandomization(SVTestBase):
+class TestSeasonRandomization(SVTestCase):
     def test_given_disabled_when_generate_then_all_seasons_are_precollected(self):
         world_options = {SeasonRandomization.internal_name: SeasonRandomization.option_disabled}
         multi_world = setup_solo_multiworld(world_options)
@@ -114,7 +115,7 @@ class TestSeasonRandomization(SVTestBase):
         self.assertEqual(items.count(Season.progressive), 3)
 
 
-class TestToolProgression(SVTestBase):
+class TestToolProgression(SVTestCase):
     def test_given_vanilla_when_generate_then_no_tool_in_pool(self):
         world_options = {ToolProgression.internal_name: ToolProgression.option_vanilla}
         multi_world = setup_solo_multiworld(world_options)
@@ -147,11 +148,11 @@ class TestToolProgression(SVTestBase):
         self.assertIn("Purchase Iridium Rod", locations)
 
 
-class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
+class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestCase):
     def test_given_special_range_when_generate_exclude_ginger_island(self):
-        options = self.world.options_dataclass.type_hints
+        options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
-            if not isinstance(option, SpecialRange) or option_name == ExcludeGingerIsland.internal_name:
+            if not isinstance(option, NamedRange) or option_name == ExcludeGingerIsland.internal_name:
                 continue
             for value in option.special_range_names:
                 with self.subTest(f"{option_name}: {value}"):
@@ -162,7 +163,7 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
 
     def test_given_choice_when_generate_exclude_ginger_island(self):
         seed = int(random() * pow(10, 18) - 1)
-        options = self.world.options_dataclass.type_hints
+        options = StardewValleyWorld.options_dataclass.type_hints
         for option_name, option in options.items():
             if not option.options or option_name == ExcludeGingerIsland.internal_name:
                 continue
@@ -191,9 +192,9 @@ class TestGenerateAllOptionsWithExcludeGingerIsland(SVTestBase):
                     basic_checks(self, multiworld)
 
 
-class TestTraps(SVTestBase):
+class TestTraps(SVTestCase):
     def test_given_no_traps_when_generate_then_no_trap_in_pool(self):
-        world_options = self.allsanity_options_without_mods()
+        world_options = allsanity_options_without_mods()
         world_options.update({TrapItems.internal_name: TrapItems.option_no_traps})
         multi_world = setup_solo_multiworld(world_options)
 
@@ -209,7 +210,7 @@ class TestTraps(SVTestBase):
         for value in trap_option.options:
             if value == "no_traps":
                 continue
-            world_options = self.allsanity_options_with_mods()
+            world_options = allsanity_options_with_mods()
             world_options.update({TrapItems.internal_name: trap_option.options[value]})
             multi_world = setup_solo_multiworld(world_options)
             trap_items = [item_data.name for item_data in items_by_group[Group.TRAP] if Group.DEPRECATED not in item_data.groups and item_data.mod_name is None]
@@ -219,7 +220,7 @@ class TestTraps(SVTestBase):
                     self.assertIn(item, multiworld_items)
 
 
-class TestSpecialOrders(SVTestBase):
+class TestSpecialOrders(SVTestCase):
     def test_given_disabled_then_no_order_in_pool(self):
         world_options = {SpecialOrderLocations.internal_name: SpecialOrderLocations.option_disabled}
         multi_world = setup_solo_multiworld(world_options)

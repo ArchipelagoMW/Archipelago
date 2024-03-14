@@ -2,7 +2,7 @@ import random
 import sys
 import unittest
 
-from . import SVTestBase, setup_solo_multiworld
+from . import SVTestCase, setup_solo_multiworld
 from .. import options, StardewValleyWorld, StardewValleyOptions
 from ..options import EntranceRandomization, ExcludeGingerIsland
 from ..regions import vanilla_regions, vanilla_connections, randomize_connections, RandomizationFlag
@@ -88,7 +88,7 @@ class TestEntranceRando(unittest.TestCase):
                                  f"Connections are duplicated in randomization. Seed = {seed}")
 
 
-class TestEntranceClassifications(SVTestBase):
+class TestEntranceClassifications(SVTestCase):
 
     def test_non_progression_are_all_accessible_with_empty_inventory(self):
         for option, flag in [(options.EntranceRandomization.option_pelican_town, RandomizationFlag.PELICAN_TOWN),

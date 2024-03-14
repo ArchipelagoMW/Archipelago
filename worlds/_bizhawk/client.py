@@ -16,12 +16,22 @@ else:
     BizHawkClientContext = object
 
 
+def launch_client(*args) -> None:
+    from .context import launch
+    launch_subprocess(launch, name="BizHawkClient")
+
+component = Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
+                      file_identifier=SuffixIdentifier())
+components.append(component)
+
+
 class AutoBizHawkClientRegister(abc.ABCMeta):
     game_handlers: ClassVar[Dict[Tuple[str, ...], Dict[str, BizHawkClient]]] = {}
 
     def __new__(cls, name: str, bases: Tuple[type, ...], namespace: Dict[str, Any]) -> AutoBizHawkClientRegister:
         new_class = super().__new__(cls, name, bases, namespace)
 
+        # Register handler
         if "system" in namespace:
             systems = (namespace["system"],) if type(namespace["system"]) is str else tuple(sorted(namespace["system"]))
             if systems not in AutoBizHawkClientRegister.game_handlers:
@@ -29,6 +39,19 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
             if "game" in namespace:
                 AutoBizHawkClientRegister.game_handlers[systems][namespace["game"]] = new_class()
+
+        # Update launcher component's suffixes
+        if "patch_suffix" in namespace:
+            if namespace["patch_suffix"] is not None:
+                existing_identifier: SuffixIdentifier = component.file_identifier
+                new_suffixes = [*existing_identifier.suffixes]
+
+                if type(namespace["patch_suffix"]) is str:
+                    new_suffixes.append(namespace["patch_suffix"])
+                else:
+                    new_suffixes.extend(namespace["patch_suffix"])
+
+                component.file_identifier = SuffixIdentifier(*new_suffixes)
 
         return new_class
 
@@ -45,10 +68,13 @@ class AutoBizHawkClientRegister(abc.ABCMeta):
 
 class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     system: ClassVar[Union[str, Tuple[str, ...]]]
-    """The system that the game this client is for runs on"""
+    """The system(s) that the game this client is for runs on"""
 
     game: ClassVar[str]
     """The game this client is for"""
+
+    patch_suffix: ClassVar[Optional[Union[str, Tuple[str, ...]]]]
+    """The file extension(s) this client is meant to open and patch (e.g. ".apz3")"""
 
     @abc.abstractmethod
     async def validate_rom(self, ctx: BizHawkClientContext) -> bool:
@@ -75,13 +101,3 @@ class BizHawkClient(abc.ABC, metaclass=AutoBizHawkClientRegister):
     def on_package(self, ctx: BizHawkClientContext, cmd: str, args: dict) -> None:
         """For handling packages from the server. Called from `BizHawkClientContext.on_package`."""
         pass
-
-
-def launch_client(*args) -> None:
-    from .context import launch
-    launch_subprocess(launch, name="BizHawkClient")
-
-
-if not any(component.script_name == "BizHawkClient" for component in components):
-    components.append(Component("BizHawk Client", "BizHawkClient", component_type=Type.CLIENT, func=launch_client,
-                                file_identifier=SuffixIdentifier()))

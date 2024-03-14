@@ -1,19 +1,18 @@
 from __future__ import annotations
 
 import abc
-import logging
-from copy import deepcopy
-from dataclasses import dataclass
 import functools
+import logging
 import math
 import numbers
 import random
 import typing
 from copy import deepcopy
+from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results
+from Utils import get_fuzzy_results, is_iterable_except_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -46,6 +45,11 @@ class AssembleOptions(abc.ABCMeta):
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
+        assert (
+            name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
+            "default" in attrs or
+            any(hasattr(base, "default") for base in bases)
+        ), f"Option class {name} needs default value"
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
         # auto-alias Off and On being parsed as True and False
@@ -63,6 +67,7 @@ class AssembleOptions(abc.ABCMeta):
                 def verify(self, *args, **kwargs) -> None:
                     for f in verifiers:
                         f(self, *args, **kwargs)
+
                 attrs["verify"] = verify
             else:
                 assert verifiers, "class Option is supposed to implement def verify"
@@ -100,7 +105,7 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    default = 0
+    default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -110,8 +115,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     supports_weighting = True
 
     # filled by AssembleOptions:
-    name_lookup: typing.Dict[T, str]
-    options: typing.Dict[str, int]
+    name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
+    # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
+    options: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
@@ -164,6 +170,8 @@ class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
 
+    default = ""
+
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
         self.value = value
@@ -184,9 +192,18 @@ class FreeText(Option[str]):
     def get_option_name(cls, value: str) -> str:
         return value
 
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.value
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
+
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
     default = 0
+
     # note: some of the `typing.Any`` here is a result of unresolved issue in python standards
     # `int` is not a `numbers.Integral` according to the official typestubs
     # (even though isinstance(5, numbers.Integral) == True)
@@ -602,7 +619,7 @@ class PlandoBosses(TextChoice, metaclass=BossMeta):
         if isinstance(self.value, int):
             return
         from BaseClasses import PlandoOptions
-        if not(PlandoOptions.bosses & plando_options):
+        if not (PlandoOptions.bosses & plando_options):
             # plando is disabled but plando options were given so pull the option and change it to an int
             option = self.value.split(";")[-1]
             self.value = self.options[option]
@@ -700,10 +717,18 @@ class Range(NumericOption):
         return int(round(random.triangular(lower, end, tri), 0))
 
 
-class SpecialRange(Range):
-    special_range_cutoff = 0
+class NamedRange(Range):
     special_range_names: typing.Dict[str, int] = {}
     """Special Range names have to be all lowercase as matching is done with text.lower()"""
+
+    def __init__(self, value: int) -> None:
+        if value < self.range_start and value not in self.special_range_names.values():
+            raise Exception(f"{value} is lower than minimum {self.range_start} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        elif value > self.range_end and value not in self.special_range_names.values():
+            raise Exception(f"{value} is higher than maximum {self.range_end} for option {self.__class__.__name__} " +
+                            f"and is also not one of the supported named special values: {self.special_range_names}")
+        self.value = value
 
     @classmethod
     def from_text(cls, text: str) -> Range:
@@ -711,6 +736,19 @@ class SpecialRange(Range):
         if text in cls.special_range_names:
             return cls(cls.special_range_names[text])
         return super().from_text(text)
+
+
+class SpecialRange(NamedRange):
+    special_range_cutoff = 0
+
+    # TODO: remove class SpecialRange, earliest 3 releases after 0.4.3
+    def __new__(cls, value: int) -> SpecialRange:
+        from Utils import deprecate
+        deprecate(f"Option type {cls.__name__} is a subclass of SpecialRange, which is deprecated and pending removal. "
+                  "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
+                  "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
+                  "placed anywhere (below, inside, or above the regular range).")
+        return super().__new__(cls)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -748,7 +786,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
     value: typing.Any
 
     @classmethod
-    def verify_keys(cls, data: typing.List[str]):
+    def verify_keys(cls, data: typing.Iterable[str]) -> None:
         if cls.valid_keys:
             data = set(data)
             dataset = set(word.casefold() for word in data) if cls.valid_keys_casefold else set(data)
@@ -785,7 +823,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.Dict[str, typing.Any] = {}
+    default = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -826,11 +864,11 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.List[typing.Any] = []
+    default = ()
     supports_weighting = False
 
-    def __init__(self, value: typing.List[typing.Any]):
-        self.value = deepcopy(value)
+    def __init__(self, value: typing.Iterable[typing.Any]):
+        self.value = list(deepcopy(value))
         super(OptionList, self).__init__()
 
     @classmethod
@@ -839,7 +877,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if type(data) == list:
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -852,7 +890,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
+    default = frozenset()
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
@@ -865,7 +903,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if isinstance(data, (list, set, frozenset)):
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -895,7 +933,7 @@ class Accessibility(Choice):
     default = 1
 
 
-class ProgressionBalancing(SpecialRange):
+class ProgressionBalancing(NamedRange):
     """A system that can move progression earlier, to try and prevent the player from getting stuck and bored early.
     A lower setting means more getting stuck. A higher setting means less getting stuck."""
     default = 50
@@ -915,7 +953,7 @@ class OptionsMetaProperty(type):
                 bases: typing.Tuple[type, ...],
                 attrs: typing.Dict[str, typing.Any]) -> "OptionsMetaProperty":
         for attr_type in attrs.values():
-            assert not isinstance(attr_type, AssembleOptions),\
+            assert not isinstance(attr_type, AssembleOptions), \
                 f"Options for {name} should be type hinted on the class, not assigned"
         return super().__new__(mcs, name, bases, attrs)
 
@@ -954,7 +992,10 @@ class CommonOptions(metaclass=OptionsMetaProperty):
                 else:
                     raise ValueError(f"{casing} is invalid casing for as_dict. "
                                      "Valid names are 'snake', 'camel', 'pascal', 'kebab'.")
-                option_results[display_name] = getattr(self, option_name).value
+                value = getattr(self, option_name).value
+                if isinstance(value, set):
+                    value = sorted(value)
+                option_results[display_name] = value
             else:
                 raise ValueError(f"{option_name} not found in {tuple(type(self).type_hints)}")
         return option_results
@@ -1090,6 +1131,11 @@ class PerGameCommonOptions(CommonOptions):
     item_links: ItemLinks
 
 
+@dataclass
+class DeathLinkMixin:
+    death_link: DeathLink
+
+
 def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], generate_hidden: bool = True):
     import os
 
@@ -1109,7 +1155,7 @@ def generate_yaml_templates(target_folder: typing.Union[str, "pathlib.Path"], ge
         if os.path.isfile(full_path) and full_path.endswith(".yaml"):
             os.unlink(full_path)
 
-    def dictify_range(option: typing.Union[Range, SpecialRange]):
+    def dictify_range(option: Range):
         data = {option.default: 50}
         for sub_option in ["random", "random-low", "random-high"]:
             if sub_option != option.default:

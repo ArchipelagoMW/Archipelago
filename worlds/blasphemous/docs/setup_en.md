@@ -15,7 +15,6 @@ Optional:
 - Quick Prie Dieu warp mod: [GitHub](https://github.com/BadMagic100/Blasphemous-PrieWarp)
 - Boots of Pleading mod: [GitHub](https://github.com/BrandenEK/Blasphemous-Boots-of-Pleading)
 - Double Jump mod: [GitHub](https://github.com/BrandenEK/Blasphemous-Double-Jump)
-- PopTracker pack: [GitHub](https://github.com/sassyvania/Blasphemous-Randomizer-Maptracker) 
 
 ## Mod Installer (Recommended)
 

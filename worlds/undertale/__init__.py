@@ -29,7 +29,7 @@ def data_path(file_name: str):
 
 class UndertaleWeb(WebWorld):
     tutorials = [Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Undertale software on your computer. This guide covers "
         "single-player, multiworld, and related software.",
         "English",
@@ -193,7 +193,7 @@ class UndertaleWorld(World):
     def create_regions(self):
         def UndertaleRegion(region_name: str, exits=[]):
             ret = Region(region_name, self.player, self.multiworld)
-            ret.locations = [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
+            ret.locations += [UndertaleAdvancement(self.player, loc_name, loc_data.id, ret)
                              for loc_name, loc_data in advancement_table.items()
                              if loc_data.region == region_name and
                              (loc_name not in exclusion_table["NoStats"] or
