@@ -3,15 +3,15 @@ from BaseClasses import CollectionState
 
 
 def graffitiM(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group("graffitim", player) * 9 >= spots if limit else state.has_group("graffitim", player)
+    return state.count_group("graffitim", player) * 7 >= spots if limit else state.has_group("graffitim", player)
 
 
 def graffitiL(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group("graffitil", player) * 8 >= spots if limit else state.has_group("graffitil", player)
+    return state.count_group("graffitil", player) * 6 >= spots if limit else state.has_group("graffitil", player)
 
 
 def graffitiXL(state: CollectionState, player: int, limit: bool, spots: int) -> bool:
-    return state.count_group("graffitixl", player) * 6 >= spots if limit else state.has_group("graffitixl", player)
+    return state.count_group("graffitixl", player) * 4 >= spots if limit else state.has_group("graffitixl", player)
 
 
 def skateboard(state: CollectionState, player: int, movestyle: int) -> bool:
@@ -199,11 +199,11 @@ def millennium_mall_entrance(state: CollectionState, player: int, glitched: bool
         return rep(state, player, 380) and current_chapter(state, player, 3)
     
 
-def millennium_mall_oldhead_ceiling(state: CollectionState, player: int, glitched: bool) -> bool:
+def millennium_mall_oldhead_ceiling(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
     if glitched:
         return True
     else:
-        return rep(state, player, 580)
+        return rep(state, player, 580) or millennium_mall_theater(state, player, limit, glitched)
     
 
 def millennium_mall_switch(state: CollectionState, player: int, limit: bool, glitched: bool) -> bool:
@@ -525,7 +525,7 @@ def spots_s(state: CollectionState, player: int, limit: bool, glitched: bool) ->
 
 
 def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitim", player) * 9
+    sprayable: int = state.count_group("graffitim", player) * 7
     total: int = 0
 
     if glitched:
@@ -592,7 +592,7 @@ def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, gl
                                             total += 5
 
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, glitched):
+                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
                                                 total += 1
 
                                             # millennium mall area 2
@@ -664,7 +664,7 @@ def spots_m(state: CollectionState, player: int, movestyle: int, limit: bool, gl
         
 
 def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitil", player) * 8
+    sprayable: int = state.count_group("graffitil", player) * 6
     total: int = 0
 
     if glitched:
@@ -742,7 +742,7 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
                                             total += 3
                                             
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, glitched):
+                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
                                                 total += 3
 
                                             # millennium mall area 2
@@ -817,7 +817,7 @@ def spots_l(state: CollectionState, player: int, movestyle: int, limit: bool, gl
         
 
 def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, glitched: bool) -> int:
-    sprayable: int = state.count_group("graffitixl", player) * 6
+    sprayable: int = state.count_group("graffitixl", player) * 4
     total: int = 0
 
     if glitched:
@@ -884,7 +884,7 @@ def spots_xl(state: CollectionState, player: int, movestyle: int, limit: bool, g
                                             total += 2
 
                                             # millennium mall OldHeadArea
-                                            if millennium_mall_oldhead_ceiling(state, player, glitched):
+                                            if millennium_mall_oldhead_ceiling(state, player, limit, glitched):
                                                 total += 1
 
                                             # millennium mall area 2
@@ -1140,7 +1140,7 @@ def rules(brcworld):
     set_rule(world.get_location("Millennium Mall: Race track Robo Post CD", player),
         lambda state: millennium_mall_oldhead_race(state, player, limit, glitched))
     set_rule(world.get_location("Millennium Mall: Hanging lights CD", player),
-        lambda state: millennium_mall_oldhead_ceiling(state, player, glitched))
+        lambda state: millennium_mall_oldhead_ceiling(state, player, limit, glitched))
     set_rule(world.get_location("Millennium Mall: Shine joins the crew", player),
         lambda state: current_chapter(state, player, 4))
     set_rule(world.get_location("Millennium Mall: DOT.EXE joins the crew", player),
