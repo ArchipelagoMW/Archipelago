@@ -43,7 +43,7 @@ class Door(NamedTuple):
     name: str
     item_name: str
     location_name: Optional[str]
-    panels: Optional[List[RoomAndPanel]]
+    panels: List[RoomAndPanel]
     skip_location: bool
     skip_item: bool
     door_ids: List[str]
@@ -404,7 +404,7 @@ def process_door(room_name, door_name, door_data):
                 panels.append(RoomAndPanel(None, panel))
     else:
         skip_location = True
-        panels = None
+        panels = []
 
     # The location name associated with a door can be explicitly specified in the configuration. If it is not, then the
     # name is generated using a combination of all of the panels that would ordinarily open the door. This can get quite

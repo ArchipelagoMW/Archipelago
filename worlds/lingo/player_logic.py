@@ -456,12 +456,11 @@ class LingoPlayerLogic:
             access_reqs = AccessRequirements()
             door_object = DOORS_BY_ROOM[room][door]
 
-            if door_object.panels is not None:
-                for req_panel in door_object.panels:
-                    panel_room = room if req_panel.room is None else req_panel.room
-                    access_reqs.rooms.add(panel_room)
-                    sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)
-                    access_reqs.merge(sub_access_reqs)
+            for req_panel in door_object.panels:
+                panel_room = room if req_panel.room is None else req_panel.room
+                access_reqs.rooms.add(panel_room)
+                sub_access_reqs = self.calculate_panel_requirements(panel_room, req_panel.panel, world)
+                access_reqs.merge(sub_access_reqs)
 
             self.door_reqs[room][door] = access_reqs
 
