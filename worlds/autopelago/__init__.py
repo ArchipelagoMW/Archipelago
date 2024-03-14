@@ -147,7 +147,7 @@ class AutopelagoWorld(World):
             self.multiworld.regions.append(r)
             req = r.autopelago_definition.requires
             for exit in r.autopelago_definition.exits:
-                rule = lambda state,req=req: _is_satisfied(self.player, req, state)
+                rule = (lambda req_: lambda state: _is_satisfied(self.player, req_, state))(req)
                 r.connect(new_regions[exit], rule=None if _is_trivial(req) else rule)
 
         self.multiworld.get_location('Victory', self.player).place_locked_item(self.create_item('Victory', ItemClassification.progression))
