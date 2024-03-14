@@ -37,6 +37,7 @@ SM_REMOTE_ITEM_FLAG_ADDR = ROM_START + 0x277F06    # 1 byte
 
 class SMSNIClient(SNIClient):
     game = "Super Metroid"
+    patch_suffix = [".apsm", ".apm3"]
 
     async def deathlink_kill_player(self, ctx):
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
@@ -61,7 +62,7 @@ class SMSNIClient(SNIClient):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
         rom_name = await snes_read(ctx, SM_ROMNAME_START, ROMNAME_SIZE)
-        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[:3] == b"SMW":
+        if rom_name is None or rom_name == bytes([0] * ROMNAME_SIZE) or rom_name[:2] != b"SM" or rom_name[2] not in b"1234567890":
             return False
 
         ctx.game = self.game
@@ -118,7 +119,7 @@ class SMSNIClient(SNIClient):
             snes_buffered_write(ctx, SM_SEND_QUEUE_RCOUNT,
                                 bytes([recv_index & 0xFF, (recv_index >> 8) & 0xFF]))
 
-            from worlds.sm import locations_start_id
+            from . import locations_start_id
             location_id = locations_start_id + item_index
 
             ctx.locations_checked.add(location_id)
@@ -133,8 +134,8 @@ class SMSNIClient(SNIClient):
 
         item_out_ptr = data[0] | (data[1] << 8)
 
-        from worlds.sm import items_start_id
-        from worlds.sm import locations_start_id
+        from . import items_start_id
+        from . import locations_start_id
         if item_out_ptr < len(ctx.items_received):
             item = ctx.items_received[item_out_ptr]
             item_id = item.item - items_start_id

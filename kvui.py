@@ -1,7 +1,18 @@
 import os
 import logging
+import sys
 import typing
-import asyncio
+import re
+
+if sys.platform == "win32":
+    import ctypes
+
+    # kivy 2.2.0 introduced DPI awareness on Windows, but it makes the UI enter an infinitely recursive re-layout
+    # by setting the application to not DPI Aware, Windows handles scaling the entire window on its own, ignoring kivy's
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(0)
+    except FileNotFoundError:  # shcore may not be found on <= Windows 7
+        pass  # TODO: remove silent except when Python 3.8 is phased out.
 
 os.environ["KIVY_NO_CONSOLELOG"] = "1"
 os.environ["KIVY_NO_FILELOG"] = "1"
@@ -9,14 +20,15 @@ os.environ["KIVY_NO_ARGS"] = "1"
 os.environ["KIVY_LOG_ENABLE"] = "0"
 
 import Utils
+
 if Utils.is_frozen():
     os.environ["KIVY_DATA_DIR"] = Utils.local_path("data")
 
 from kivy.config import Config
 
 Config.set("input", "mouse", "mouse,disable_multitouch")
-Config.set('kivy', 'exit_on_escape', '0')
-Config.set('graphics', 'multisamples', '0')  # multisamples crash old intel drivers
+Config.set("kivy", "exit_on_escape", "0")
+Config.set("graphics", "multisamples", "0")  # multisamples crash old intel drivers
 
 from kivy.app import App
 from kivy.core.window import Window
@@ -26,10 +38,14 @@ from kivy.base import ExceptionHandler, ExceptionManager
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
+from kivy.metrics import dp
+from kivy.effects.scroll import ScrollEffect
+from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
@@ -47,7 +63,6 @@ from kivy.uix.popup import Popup
 
 fade_in_animation = Animation(opacity=0, duration=0) + Animation(opacity=1, duration=0.25)
 
-
 from NetUtils import JSONtoTextParser, JSONMessagePart, SlotType
 from Utils import async_start
 
@@ -58,6 +73,8 @@ if typing.TYPE_CHECKING:
 else:
     context_type = object
 
+remove_between_brackets = re.compile(r"\[.*?]")
+
 
 # I was surprised to find this didn't already exist in kivy :(
 class HoverBehavior(object):
@@ -66,8 +83,8 @@ class HoverBehavior(object):
     border_point = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        self.register_event_type('on_enter')
-        self.register_event_type('on_leave')
+        self.register_event_type("on_enter")
+        self.register_event_type("on_leave")
         Window.bind(mouse_pos=self.on_mouse_pos)
         Window.bind(on_cursor_leave=self.on_cursor_leave)
         super(HoverBehavior, self).__init__(**kwargs)
@@ -95,7 +112,7 @@ class HoverBehavior(object):
         self.dispatch("on_leave")
 
 
-Factory.register('HoverBehavior', HoverBehavior)
+Factory.register("HoverBehavior", HoverBehavior)
 
 
 class ToolTip(Label):
@@ -106,8 +123,73 @@ class ServerToolTip(ToolTip):
     pass
 
 
+class ScrollBox(ScrollView):
+    layout: BoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = BoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.effect_cls = ScrollEffect
+
+
 class HovererableLabel(HoverBehavior, Label):
     pass
+
+
+class TooltipLabel(HovererableLabel):
+    tooltip = None
+
+    def create_tooltip(self, text, x, y):
+        text = text.replace("<br>", "\n").replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]")
+        if self.tooltip:
+            # update
+            self.tooltip.children[0].text = text
+        else:
+            self.tooltip = FloatLayout()
+            tooltip_label = ToolTip(text=text)
+            self.tooltip.add_widget(tooltip_label)
+            fade_in_animation.start(self.tooltip)
+            App.get_running_app().root.add_widget(self.tooltip)
+
+        # handle left-side boundary to not render off-screen
+        x = max(x, 3 + self.tooltip.children[0].texture_size[0] / 2)
+
+        # position float layout
+        self.tooltip.x = x - self.tooltip.width / 2
+        self.tooltip.y = y - self.tooltip.height / 2 + 48
+
+    def remove_tooltip(self):
+        if self.tooltip:
+            App.get_running_app().root.remove_widget(self.tooltip)
+            self.tooltip = None
+
+    def on_mouse_pos(self, window, pos):
+        if not self.get_root_window():
+            return  # Abort if not displayed
+        super().on_mouse_pos(window, pos)
+        if self.refs and self.hovered:
+
+            tx, ty = self.to_widget(*pos, relative=True)
+            # Why TF is Y flipped *within* the texture?
+            ty = self.texture_size[1] - ty
+            hit = False
+            for uid, zones in self.refs.items():
+                for zone in zones:
+                    x, y, w, h = zone
+                    if x <= tx <= w and y <= ty <= h:
+                        self.create_tooltip(uid.split("|", 1)[1], *pos)
+                        hit = True
+                        break
+            if not hit:
+                self.remove_tooltip()
+
+    def on_enter(self):
+        pass
+
+    def on_leave(self):
+        self.remove_tooltip()
 
 
 class ServerLabel(HovererableLabel):
@@ -148,12 +230,14 @@ class ServerLabel(HovererableLabel):
                     for permission_name, permission_data in ctx.permissions.items():
                         text += f"\n    {permission_name}: {permission_data}"
                 if ctx.hint_cost is not None and ctx.total_locations:
+                    min_cost = int(ctx.server_version >= (0, 3, 9))
                     text += f"\nA new !hint <itemname> costs {ctx.hint_cost}% of checks made. " \
-                            f"For you this means every {max(0, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
-                            "location checks."
+                            f"For you this means every " \
+                            f"{max(min_cost, int(ctx.hint_cost * 0.01 * ctx.total_locations))} " \
+                            "location checks." \
+                            f"\nYou currently have {ctx.hint_points} points."
                 elif ctx.hint_cost == 0:
                     text += "\n!hint is free to use."
-
             else:
                 text += f"\nYou are not authenticated yet."
 
@@ -176,67 +260,16 @@ class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
     """ Adds selection and focus behaviour to the view. """
 
 
-class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
+class SelectableLabel(RecycleDataViewBehavior, TooltipLabel):
     """ Add selection support to the Label """
     index = None
     selected = BooleanProperty(False)
-    tooltip = None
 
     def refresh_view_attrs(self, rv, index, data):
         """ Catch and handle the view changes """
         self.index = index
         return super(SelectableLabel, self).refresh_view_attrs(
             rv, index, data)
-
-    def create_tooltip(self, text, x, y):
-        text = text.replace("<br>", "\n").replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']')
-        if self.tooltip:
-            # update
-            self.tooltip.children[0].text = text
-        else:
-            self.tooltip = FloatLayout()
-            tooltip_label = ToolTip(text=text)
-            self.tooltip.add_widget(tooltip_label)
-            fade_in_animation.start(self.tooltip)
-            App.get_running_app().root.add_widget(self.tooltip)
-
-        # handle left-side boundary to not render off-screen
-        x = max(x, 3+self.tooltip.children[0].texture_size[0] / 2)
-
-        # position float layout
-        self.tooltip.x = x - self.tooltip.width / 2
-        self.tooltip.y = y - self.tooltip.height / 2 + 48
-
-    def remove_tooltip(self):
-        if self.tooltip:
-            App.get_running_app().root.remove_widget(self.tooltip)
-            self.tooltip = None
-
-    def on_mouse_pos(self, window, pos):
-        if not self.get_root_window():
-            return  # Abort if not displayed
-        super().on_mouse_pos(window, pos)
-        if self.refs and self.hovered:
-
-            tx, ty = self.to_widget(*pos, relative=True)
-            # Why TF is Y flipped *within* the texture?
-            ty = self.texture_size[1] - ty
-            hit = False
-            for uid, zones in self.refs.items():
-                for zone in zones:
-                    x, y, w, h = zone
-                    if x <= tx <= w and y <= ty <= h:
-                        self.create_tooltip(uid.split("|", 1)[1], *pos)
-                        hit = True
-                        break
-            if not hit:
-                self.remove_tooltip()
-
-    def on_enter(self):
-        pass
-
-    def on_leave(self):
-        self.remove_tooltip()
 
     def on_touch_down(self, touch):
         """ Add selection on touch down """
@@ -261,7 +294,7 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
                 elif not cmdinput.text and text.startswith("Missing: "):
                     cmdinput.text = text.replace("Missing: ", "!hint_location ")
 
-                Clipboard.copy(text.replace('&amp;', '&').replace('&bl;', '[').replace('&br;', ']'))
+                Clipboard.copy(text.replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                 return self.parent.select_with_touch(self.index, touch)
 
     def apply_selection(self, rv, index, is_selected):
@@ -269,9 +302,85 @@ class SelectableLabel(RecycleDataViewBehavior, HovererableLabel):
         self.selected = is_selected
 
 
+class HintLabel(RecycleDataViewBehavior, BoxLayout):
+    selected = BooleanProperty(False)
+    striped = BooleanProperty(False)
+    index = None
+
+    def __init__(self):
+        super(HintLabel, self).__init__()
+        self.receiving_text = ""
+        self.item_text = ""
+        self.finding_text = ""
+        self.location_text = ""
+        self.entrance_text = ""
+        self.found_text = ""
+        for child in self.children:
+            child.bind(texture_size=self.set_height)
+
+    def set_height(self, instance, value):
+        self.height = max([child.texture_size[1] for child in self.children])
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        self.striped = data.get("striped", False)
+        self.receiving_text = data["receiving"]["text"]
+        self.item_text = data["item"]["text"]
+        self.finding_text = data["finding"]["text"]
+        self.location_text = data["location"]["text"]
+        self.entrance_text = data["entrance"]["text"]
+        self.found_text = data["found"]["text"]
+        self.height = self.minimum_height
+        return super(HintLabel, self).refresh_view_attrs(rv, index, data)
+
+    def on_touch_down(self, touch):
+        """ Add selection on touch down """
+        if super(HintLabel, self).on_touch_down(touch):
+            return True
+        if self.index:  # skip header
+            if self.collide_point(*touch.pos):
+                if self.selected:
+                    self.parent.clear_selection()
+                else:
+                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                                    self.finding_text, "\'s World", (" at " + self.entrance_text)
+                                    if self.entrance_text != "Vanilla"
+                                    else "", ". (", self.found_text.lower(), ")"))
+                    temp = MarkupLabel(text).markup
+                    text = "".join(
+                        part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
+                    Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
+                    return self.parent.select_with_touch(self.index, touch)
+        else:
+            parent = self.parent
+            parent.clear_selection()
+            parent: HintLog = parent.parent
+            # find correct column
+            for child in self.children:
+                if child.collide_point(*touch.pos):
+                    key = child.sort_key
+                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == parent.sort_key:
+                        # second click reverses order
+                        parent.reversed = not parent.reversed
+                    else:
+                        parent.sort_key = key
+                        parent.reversed = False
+                    break
+            else:
+                logging.warning("Did not find clicked header for sorting.")
+
+            App.get_running_app().update_hints()
+
+    def apply_selection(self, rv, index, is_selected):
+        """ Respond to the selection of items in the view. """
+        if self.index:
+            self.selected = is_selected
+
+
 class ConnectBarTextInput(TextInput):
     def insert_text(self, substring, from_undo=False):
-        s = substring.replace('\n', '').replace('\r', '')
+        s = substring.replace("\n", "").replace("\r", "")
         return super(ConnectBarTextInput, self).insert_text(s, from_undo=from_undo)
 
 
@@ -289,7 +398,7 @@ class MessageBox(Popup):
     def __init__(self, title, text, error=False, **kwargs):
         label = MessageBox.MessageBoxLabel(text=text)
         separator_color = [217 / 255, 129 / 255, 122 / 255, 1.] if error else [47 / 255., 167 / 255., 212 / 255, 1.]
-        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width)+40),
+        super().__init__(title=title, content=label, size_hint=(None, None), width=max(100, int(label.width) + 40),
                          separator_color=separator_color, **kwargs)
         self.height += max(0, label.height - 18)
 
@@ -330,23 +439,32 @@ class GameManager(App):
 
         super(GameManager, self).__init__()
 
+    @property
+    def tab_count(self):
+        if hasattr(self, "tabs"):
+            return max(1, len(self.tabs.tab_list))
+        return 1
+
     def build(self) -> Layout:
         self.container = ContainerLayout()
 
         self.grid = MainLayout()
         self.grid.cols = 1
-        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
+        self.connect_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
         # top part
         server_label = ServerLabel()
         self.connect_layout.add_widget(server_label)
-        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:", size_hint_y=None,
-                                                      height=30, multiline=False, write_tab=False)
+        self.server_connect_bar = ConnectBarTextInput(text=self.ctx.suggested_address or "archipelago.gg:",
+                                                      size_hint_y=None,
+                                                      height=dp(30), multiline=False, write_tab=False)
+
         def connect_bar_validate(sender):
             if not self.ctx.server:
                 self.connect_button_action(sender)
+
         self.server_connect_bar.bind(on_text_validate=connect_bar_validate)
         self.connect_layout.add_widget(self.server_connect_bar)
-        self.server_connect_button = Button(text="Connect", size=(100, 30), size_hint_y=None, size_hint_x=None)
+        self.server_connect_button = Button(text="Connect", size=(dp(100), dp(30)), size_hint_y=None, size_hint_x=None)
         self.server_connect_button.bind(on_press=self.connect_button_action)
         self.connect_layout.add_widget(self.server_connect_button)
         self.grid.add_widget(self.connect_layout)
@@ -364,26 +482,28 @@ class GameManager(App):
             bridge_logger = logging.getLogger(logger_name)
             panel = TabbedPanelItem(text=display_name)
             self.log_panels[display_name] = panel.content = UILog(bridge_logger)
-            self.tabs.add_widget(panel)
+            if len(self.logging_pairs) > 1:
+                # show Archipelago tab if other logging is present
+                self.tabs.add_widget(panel)
+
+        hint_panel = TabbedPanelItem(text="Hints")
+        self.log_panels["Hints"] = hint_panel.content = HintLog(self.json_to_kivy_parser)
+        self.tabs.add_widget(hint_panel)
+
+        if len(self.logging_pairs) == 1:
+            self.tabs.default_tab_text = "Archipelago"
 
         self.main_area_container = GridLayout(size_hint_y=1, rows=1)
         self.main_area_container.add_widget(self.tabs)
 
         self.grid.add_widget(self.main_area_container)
 
-        if len(self.logging_pairs) == 1:
-            # Hide Tab selection if only one tab
-            self.tabs.clear_tabs()
-            self.tabs.do_default_tab = False
-            self.tabs.current_tab.height = 0
-            self.tabs.tab_height = 0
-
         # bottom part
-        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=30)
-        info_button = Button(height=30, text="Command:", size_hint_x=None)
+        bottom_layout = BoxLayout(orientation="horizontal", size_hint_y=None, height=dp(30))
+        info_button = Button(size=(dp(100), dp(30)), text="Command:", size_hint_x=None)
         info_button.bind(on_release=self.command_button_action)
         bottom_layout.add_widget(info_button)
-        self.textinput = TextInput(size_hint_y=None, height=30, multiline=False, write_tab=False)
+        self.textinput = TextInput(size_hint_y=None, height=dp(30), multiline=False, write_tab=False)
         self.textinput.bind(on_text_validate=self.on_message)
         self.textinput.text_validate_unfocus = False
         bottom_layout.add_widget(self.textinput)
@@ -392,16 +512,18 @@ class GameManager(App):
         Clock.schedule_interval(self.update_texts, 1 / 30)
         self.container.add_widget(self.grid)
 
+        # If the address contains a port, select it; otherwise, select the host.
+        s = self.server_connect_bar.text
+        host_start = s.find("@") + 1
+        ipv6_end = s.find("]", host_start) + 1
+        port_start = s.find(":", ipv6_end if ipv6_end > 0 else host_start) + 1
         self.server_connect_bar.focus = True
-        self.server_connect_bar.select_text(
-            self.server_connect_bar.text.find(":") + 1,
-            len(self.server_connect_bar.text)
-        )
+        self.server_connect_bar.select_text(port_start if port_start > 0 else host_start, len(s))
 
         return self.container
 
     def update_texts(self, dt):
-        if hasattr(self.tabs.content.children[0], 'fix_heights'):
+        if hasattr(self.tabs.content.children[0], "fix_heights"):
             self.tabs.content.children[0].fix_heights()  # TODO: remove this when Kivy fixes this upstream
         if self.ctx.server:
             self.title = self.base_title + " " + Utils.__version__ + \
@@ -478,6 +600,14 @@ class GameManager(App):
         if hasattr(self, "energy_link_label"):
             self.energy_link_label.text = f"EL: {Utils.format_SI_prefix(self.ctx.current_energy_link_value)}J"
 
+    def update_hints(self):
+        hints = self.ctx.stored_data[f"_read_hints_{self.ctx.team}_{self.ctx.slot}"]
+        self.log_panels["Hints"].refresh_hints(hints)
+
+    # default F1 keybind, opens a settings menu, that seems to break the layout engine once closed
+    def open_settings(self, *largs):
+        pass
+
 
 class LogtoUI(logging.Handler):
     def __init__(self, on_log):
@@ -488,19 +618,19 @@ class LogtoUI(logging.Handler):
     def format_compact(record: logging.LogRecord) -> str:
         if isinstance(record.msg, Exception):
             return str(record.msg)
-        return (f'{record.exc_info[1]}\n' if record.exc_info else '') + str(record.msg).split("\n")[0]
+        return (f"{record.exc_info[1]}\n" if record.exc_info else "") + str(record.msg).split("\n")[0]
 
     def handle(self, record: logging.LogRecord) -> None:
-        if getattr(record, 'skip_gui', False):
+        if getattr(record, "skip_gui", False):
             pass  # skip output
-        elif getattr(record, 'compact_gui', False):
+        elif getattr(record, "compact_gui", False):
             self.on_log(self.format_compact(record))
         else:
             self.on_log(self.format(record))
 
 
 class UILog(RecycleView):
-    cols = 1
+    messages: typing.ClassVar[int]  # comes from kv file
 
     def __init__(self, *loggers_to_handle, **kwargs):
         super(UILog, self).__init__(**kwargs)
@@ -510,15 +640,68 @@ class UILog(RecycleView):
 
     def on_log(self, record: str) -> None:
         self.data.append({"text": escape_markup(record)})
+        self.clean_old()
 
     def on_message_markup(self, text):
         self.data.append({"text": text})
+        self.clean_old()
+
+    def clean_old(self):
+        if len(self.data) > self.messages:
+            self.data.pop(0)
 
     def fix_heights(self):
         """Workaround fix for divergent texture and layout heights"""
         for element in self.children[0].children:
             if element.height != element.texture_size[1]:
                 element.height = element.texture_size[1]
+
+
+class HintLog(RecycleView):
+    header = {
+        "receiving": {"text": "[u]Receiving Player[/u]"},
+        "item": {"text": "[u]Item[/u]"},
+        "finding": {"text": "[u]Finding Player[/u]"},
+        "location": {"text": "[u]Location[/u]"},
+        "entrance": {"text": "[u]Entrance[/u]"},
+        "found": {"text": "[u]Status[/u]"},
+        "striped": True,
+    }
+
+    sort_key: str = ""
+    reversed: bool = False
+
+    def __init__(self, parser):
+        super(HintLog, self).__init__()
+        self.data = [self.header]
+        self.parser = parser
+
+    def refresh_hints(self, hints):
+        data = []
+        for hint in hints:
+            data.append({
+                "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
+                "item": {"text": self.parser.handle_node(
+                    {"type": "item_id", "text": hint["item"], "flags": hint["item_flags"]})},
+                "finding": {"text": self.parser.handle_node({"type": "player_id", "text": hint["finding_player"]})},
+                "location": {"text": self.parser.handle_node({"type": "location_id", "text": hint["location"]})},
+                "entrance": {"text": self.parser.handle_node({"type": "color" if hint["entrance"] else "text",
+                                                              "color": "blue", "text": hint["entrance"]
+                                                              if hint["entrance"] else "Vanilla"})},
+                "found": {
+                    "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
+                                                     "text": "Found" if hint["found"] else "Not Found"})},
+            })
+
+        data.sort(key=self.hint_sorter, reverse=self.reversed)
+        for i in range(0, len(data), 2):
+            data[i]["striped"] = True
+        data.insert(0, self.header)
+        self.data = data
+
+    @staticmethod
+    def hint_sorter(element: dict) -> str:
+        return ""
 
 
 class E(ExceptionHandler):
@@ -530,6 +713,19 @@ class E(ExceptionHandler):
 
 
 class KivyJSONtoTextParser(JSONtoTextParser):
+    # dummy class to absorb kvlang definitions
+    class TextColors(Widget):
+        pass
+
+    def __init__(self, *args, **kwargs):
+        # we grab the color definitions from the .kv file, then overwrite the JSONtoTextParser default entries
+        colors = self.TextColors()
+        color_codes = self.color_codes.copy()
+        for name, code in color_codes.items():
+            color_codes[name] = getattr(colors, name, code)
+        self.color_codes = color_codes
+        super().__init__(*args, **kwargs)
+
     def __call__(self, *args, **kwargs):
         self.ref_count = 0
         return super(KivyJSONtoTextParser, self).__call__(*args, **kwargs)
@@ -554,8 +750,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + \
-                        '<br> '.join(self.ctx.player_names[player] for player in slot_info.group_members)
+                text += f"<br>Members:<br> " + "<br> ".join(
+                    escape_markup(self.ctx.player_names[player])
+                    for player in slot_info.group_members
+                )
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
@@ -579,3 +777,7 @@ class KivyJSONtoTextParser(JSONtoTextParser):
 ExceptionManager.add_handler(E())
 
 Builder.load_file(Utils.local_path("data", "client.kv"))
+user_file = Utils.user_path("data", "user.kv")
+if os.path.exists(user_file):
+    logging.info("Loading user.kv into builder.")
+    Builder.load_file(user_file)

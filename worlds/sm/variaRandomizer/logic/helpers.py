@@ -1,11 +1,11 @@
 
 import math
 
-from logic.cache import Cache
-from logic.smbool import SMBool, smboolFalse
-from utils.parameters import Settings, easy, medium, diff2text
-from rom.rom_patches import RomPatches
-from utils.utils import normalizeRounding
+from ..logic.cache import Cache
+from ..logic.smbool import SMBool, smboolFalse
+from ..utils.parameters import Settings, easy, medium, diff2text
+from ..rom.rom_patches import RomPatches
+from ..utils.utils import normalizeRounding
 
 
 class Helpers(object):
@@ -281,14 +281,23 @@ class Helpers(object):
     def canMorphJump(self):
         # small hop in morph ball form
         sm = self.smbm
-        return sm.wor(sm.canPassBombPassages(), sm.haveItem('SpringBall'))
+        return sm.wor(sm.canPassBombPassages(), sm.canUseSpringBall())
 
     def canCrystalFlash(self, n=1):
         sm = self.smbm
-        return sm.wand(sm.canUsePowerBombs(),
-                       sm.itemCountOk('Missile', 2*n),
-                       sm.itemCountOk('Super', 2*n),
-                       sm.itemCountOk('PowerBomb', 2*n+1))
+        if not RomPatches.has(sm.player, RomPatches.RoundRobinCF).bool:
+            ret = sm.wand(sm.canUsePowerBombs(),
+                          sm.itemCountOk('Missile', 2*n),
+                          sm.itemCountOk('Super', 2*n),
+                          sm.itemCountOk('PowerBomb', 2*n+1))
+        else:
+            # simplified view of actual patch behavior: only count full refills to stick with base CF logic
+            nAmmo = 5 * (sm.itemCount('Missile') + sm.itemCount('Super') + sm.itemCount('PowerBomb'))
+            ret = sm.wand(sm.canUsePowerBombs(),
+                          SMBool(nAmmo >= 30*n))
+        if ret:
+            ret._items.append("{}-CrystalFlash".format(n))
+        return ret
 
     @Cache.decorator
     def canCrystalFlashClip(self):
@@ -363,7 +372,7 @@ class Helpers(object):
     # - estimation of the fight duration in seconds (well not really, it
     # is if you fire and land shots perfectly and constantly), giving info
     # to compute boss fight difficulty
-    def canInflictEnoughDamages(self, bossEnergy, doubleSuper=False, charge=True, power=False, givesDrops=True, ignoreMissiles=False, ignoreSupers=False):
+    def canInflictEnoughDamages(self, bossEnergy, doubleSuper=False, charge=True, power=False, givesDrops=True, ignoreMissiles=False, ignoreSupers=False, missilesOffset=0, supersOffset=0, powerBombsOffset=0):
         # TODO: handle special beam attacks ? (http://deanyd.net/sm/index.php?title=Charge_Beam_Combos)
         sm = self.smbm
         items = []
@@ -379,14 +388,14 @@ class Helpers(object):
             chargeDamage *= 3.0
 
         # missile 100 damages, super missile 300 damages, PBs 200 dmg, 5 in each extension
-        missilesAmount = sm.itemCount('Missile') * 5
+        missilesAmount = max(0, (sm.itemCount('Missile') - missilesOffset)) * 5
         if ignoreMissiles == True:
             missilesDamage = 0
         else:
             missilesDamage = missilesAmount * 100
             if missilesAmount > 0:
                 items.append('Missile')
-        supersAmount = sm.itemCount('Super') * 5
+        supersAmount = max(0, (sm.itemCount('Super') - supersOffset)) * 5
         if ignoreSupers == True:
             oneSuper = 0
         else:
@@ -399,7 +408,7 @@ class Helpers(object):
         powerDamage = 0
         powerAmount = 0
         if power == True and sm.haveItem('PowerBomb') == True:
-            powerAmount = sm.itemCount('PowerBomb') * 5
+            powerAmount = max(0, (sm.itemCount('PowerBomb') - powerBombsOffset)) * 5
             powerDamage = powerAmount * 200
             items.append('PowerBomb')
 
@@ -607,7 +616,9 @@ class Helpers(object):
         # some ammo to destroy the turrets during the fight
         if not sm.haveMissileOrSuper():
             return smboolFalse
-        (ammoMargin, secs, ammoItems) = self.canInflictEnoughDamages(6000)
+        (ammoMargin, secs, ammoItems) = self.canInflictEnoughDamages(6000,
+                                                                     # underestimate missiles/supers in case a CF exit is needed
+                                                                     missilesOffset=2, supersOffset=2)
         # print('DRAY', ammoMargin, secs)
         if ammoMargin > 0:
             (diff, defenseItems) = self.computeBossDifficulty(ammoMargin, secs,
@@ -749,16 +760,20 @@ class Helpers(object):
 class Pickup:
     def __init__(self, itemsPickup):
         self.itemsPickup = itemsPickup
+        self.endGameLocations = ["Mother Brain", "Gunship"]
 
+    # don't count end game location in the mix as it's now in the available locations
     def enoughMinors(self, smbm, minorLocations):
-        if self.itemsPickup == 'all':
-            return len(minorLocations) == 0
+        if self.itemsPickup in ('all', 'all_strict'):
+            return (len(minorLocations) == 0
+                    or (len(minorLocations) == 1 and minorLocations[0].Name in self.endGameLocations))
         else:
             return True
 
     def enoughMajors(self, smbm, majorLocations):
-        if self.itemsPickup == 'all':
-            return len(majorLocations) == 0
+        if self.itemsPickup in ('all', 'all_strict'):
+            return (len(majorLocations) == 0
+                    or (len(majorLocations) == 1 and majorLocations[0].Name in self.endGameLocations))
         else:
             return True
 
@@ -811,9 +826,24 @@ class Bosses:
         'WreckedShip Top': 'Phantoon'
     }
 
+    accessPoints = {
+        "Kraid": "KraidRoomIn",
+        "Phantoon": "PhantoonRoomIn",
+        "Draygon": "Draygon Room Bottom",
+        "Ridley": "RidleyRoomIn",
+        "SporeSpawn": "Big Pink",
+        "Crocomire": "Crocomire Room Top",
+        "Botwoon": "Aqueduct Bottom",
+        "GoldenTorizo": "Screw Attack Bottom"
+    }
+
     @staticmethod
     def Golden4():
         return ['Draygon', 'Kraid', 'Phantoon', 'Ridley']
+    
+    @staticmethod
+    def miniBosses():
+        return ['SporeSpawn', 'Crocomire', 'Botwoon', 'GoldenTorizo']
 
     @staticmethod
     def bossDead(sm, boss):
@@ -831,6 +861,23 @@ class Bosses:
                          Bosses.bossDead(smbm, 'Phantoon'),
                          Bosses.bossDead(smbm, 'Draygon'),
                          Bosses.bossDead(smbm, 'Ridley'))
+    
+    @staticmethod
+    def allMiniBossesDead(smbm):
+        return smbm.wand(Bosses.bossDead(smbm, 'SporeSpawn'),
+                         Bosses.bossDead(smbm, 'Botwoon'),
+                         Bosses.bossDead(smbm, 'Crocomire'),
+                         Bosses.bossDead(smbm, 'GoldenTorizo'))
+
+    @staticmethod
+    def xBossesDead(smbm, target):
+        count = sum([1 for boss in Bosses.Golden4() if Bosses.bossDead(smbm, boss)])
+        return SMBool(count >= target)
+
+    @staticmethod
+    def xMiniBossesDead(smbm, target):
+        count = sum([1 for miniboss in Bosses.miniBosses() if Bosses.bossDead(smbm, miniboss)])
+        return SMBool(count >= target)
 
 def diffValue2txt(diff):
     last = 0

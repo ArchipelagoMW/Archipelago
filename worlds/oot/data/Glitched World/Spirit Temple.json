@@ -18,6 +18,13 @@
                 (Sticks or has_explosives or 
                     ( (Nuts or can_use(Boomerang)) and 
                         (can_use(Kokiri_Sword) or Slingshot) ) ))",
+            "Deku Shield Pot": "
+                fix_broken_drops and
+                (is_adult or (
+                (can_use(Boomerang) or Slingshot or has_bombchus or can_mega) and 
+                (Sticks or has_explosives or 
+                    ( (Nuts or can_use(Boomerang)) and 
+                        (can_use(Kokiri_Sword) or Slingshot) ) )))",
             "Spirit Temple Child Early Torches Chest": "(is_adult and has_fire_source) or 
                 (has_fire_source_with_torch and (here(is_adult) or
                 (
@@ -94,7 +101,7 @@
                 can_hover or
                 can_use(Hookshot)) and has_explosives",
             "Child Spirit Temple Climb": "True",
-            "Spirit Temple Boss": "can_use(Hookshot) and can_live_dmg(0.5) and Mirror_Shield and has_explosives",
+            "Spirit Temple Boss Door": "can_use(Hookshot) and can_live_dmg(0.5) and Mirror_Shield and has_explosives",
             "Early Adult Spirit Temple": "can_jumpslash or can_hover or can_use(Hookshot)"
         }
     },
@@ -156,12 +163,20 @@
             "Spirit Temple Topmost Chest": "can_use(Mirror_Shield)"
         },
         "exits": {
-            "Spirit Temple Boss": "can_use(Mirror_Shield)",
+            "Spirit Temple Boss Door": "can_use(Mirror_Shield)",
             "Spirit Temple Central Chamber": "can_use(Mirror_Shield) or can_use(Hookshot)"
         }
     },
     {
-        "region_name": "Spirit Temple Boss",
+        "region_name": "Spirit Temple Boss Door",
+        "scene": "Spirit Temple",
+        "dungeon": "Spirit Temple",
+        "exits": {
+            "Twinrova Boss Room": "True"
+        }
+    },
+    {
+        "region_name": "Twinrova Boss Room",
         "dungeon": "Spirit Temple",
         "locations": {
             "Spirit Temple Twinrova Heart": "True",

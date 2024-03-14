@@ -1,4 +1,4 @@
-from logic.smbool import SMBool
+from ..logic.smbool import SMBool
 
 # layout patches added by randomizers
 class RomPatches:
@@ -61,6 +61,8 @@ class RomPatches:
     CrabShaftBlueDoor         = 107
     # wrap door from sand halls left to under botwoon
     MaridiaSandWarp           = 108
+    # Replace PB blocks at Aqueduct entrance with bomb blocks
+    AqueductBombBlocks        = 109
     ## Minimizer Patches
     NoGadoras                 = 200
     TourianSpeedup            = 201
@@ -81,6 +83,12 @@ class RomPatches:
     NerfedRainbowBeam       = 1005
     # Red doors open with one missile, and don't react to supers: part of door color rando
     RedDoorsMissileOnly     = 1006
+    # Escape auto-trigger on objectives completion (no Tourian)
+    NoTourian               = 1007
+    # BT wakes up on its item instead of bombs
+    BombTorizoWake          = 1008
+    # Round-Robin Crystal Flash patch
+    RoundRobinCF            = 1009
 
     ### Hacks
     # rotation hack
@@ -103,11 +111,11 @@ class RomPatches:
     AreaBaseSet = [ SingleChamberNoCrumble, AreaRandoGatesBase,
                     AreaRandoBlueDoors, AreaRandoMoreBlueDoors,
                     CrocBlueDoors, CrabShaftBlueDoor, MaridiaSandWarp ]
-    AreaComfortSet = [ AreaRandoGatesOther, SpongeBathBlueDoor, EastOceanPlatforms ]
+    AreaComfortSet = [ AreaRandoGatesOther, SpongeBathBlueDoor, EastOceanPlatforms, AqueductBombBlocks ]
     AreaSet = AreaBaseSet + AreaComfortSet
 
     # VARIA specific patch set
-    VariaTweaks = [ WsEtankPhantoonAlive, LNChozoSJCheckDisabled ]
+    VariaTweaks = [ WsEtankPhantoonAlive, LNChozoSJCheckDisabled, BombTorizoWake ]
 
     # Tourian speedup in minimizer mode
     MinimizerTourian = [ TourianSpeedup, OpenZebetites ]
@@ -125,6 +133,6 @@ class RomPatches:
     @staticmethod
     def setDefaultPatches(startLocation):
         # called by the isolver in seedless mode.
-        # activate only layout patch (the most common one), red tower blue doors and the startLocation's patches.
+        # activate only layout patch (the most common one), red tower blue doors, startLocation's patches and balanced suits.
         from graph.graph_utils import GraphUtils
-        RomPatches.ActivePatches[0] = [RomPatches.RedTowerBlueDoors] + RomPatches.TotalLayout + GraphUtils.getGraphPatches(startLocation)
+        RomPatches.ActivePatches[0] = [RomPatches.RedTowerBlueDoors] + RomPatches.TotalLayout + GraphUtils.getGraphPatches(startLocation) + [RomPatches.NoGravityEnvProtection]

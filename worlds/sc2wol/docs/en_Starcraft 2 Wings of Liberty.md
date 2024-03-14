@@ -32,3 +32,23 @@ The goal is to beat the final mission: 'All In'. The config file determines whic
 By default, any of StarCraft 2's items (specified above) can be in another player's world. See the
 [Advanced YAML Guide](https://archipelago.gg/tutorial/Archipelago/advanced_settings/en)
 for more information on how to change this.
+
+## Unique Local Commands
+
+The following commands are only available when using the Starcraft 2 Client to play with Archipelago.
+
+- `/difficulty [difficulty]` Overrides the difficulty set for the world.
+  - Options: casual, normal, hard, brutal
+- `/game_speed [game_speed]` Overrides the game speed for the world
+  - Options: default, slower, slow, normal, fast, faster
+- `/color [color]` Changes your color (Currently has no effect)
+  - Options: white, red, blue, teal, purple, yellow, orange, green, lightpink, violet, lightgrey, darkgreen, brown,
+    lightgreen, darkgrey, pink, rainbow, random, default
+- `/disable_mission_check` Disables the check to see if a mission is available to play. Meant for co-op runs where one
+  player can play the next mission in a chain the other player is doing.
+- `/play [mission_id]` Starts a Starcraft 2 mission based off of the mission_id provided
+- `/available` Get what missions are currently available to play
+- `/unfinished` Get what missions are currently available to play and have not had all locations checked
+- `/set_path [path]` Menually set the SC2 install directory (if the automatic detection fails)
+- `/download_data` Download the most recent release of the necassry files for playing SC2 with Archipelago. Will
+  overwrite existing files

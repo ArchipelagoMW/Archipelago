@@ -1,0 +1,1 @@
+importlib_resources; python_version <= '3.8'

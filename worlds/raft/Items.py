@@ -13,15 +13,12 @@ with open(os.path.join(os.path.dirname(__file__), 'resourcepacks.json'), 'r') as
 
 lookup_id_to_name = {}
 lookup_name_to_item = {}
-advancement_item_names = set()
 
 lastItemId = -1
 for item in item_table:
     item_name = item["name"]
     lookup_id_to_name[item["id"]] = item_name
     lookup_name_to_item[item_name] = item
-    if item["progression"]:
-        advancement_item_names.add(item_name)
     lastItemId = max(lastItemId, item["id"])
 
 progressive_item_list = {}

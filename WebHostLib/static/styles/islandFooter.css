@@ -15,3 +15,33 @@
     padding-left: 0.5rem;
     color: #dfedc6;
 }
+@media all and (max-width: 900px) {
+    #island-footer{
+        font-size: 17px;
+        font-size: 2vw;
+    }
+}
+@media all and (max-width: 768px) {
+    #island-footer{
+        font-size: 15px;
+        font-size: 2vw;
+    }
+}
+@media all and (max-width: 650px) {
+    #island-footer{
+        font-size: 13px;
+        font-size: 2vw;
+    }
+}
+@media all and (max-width: 580px) {
+    #island-footer{
+        font-size: 11px;
+        font-size: 2vw;
+    }
+}
+@media all and (max-width: 512px) {
+    #island-footer{
+        font-size: 9px;
+        font-size: 2vw;
+    }
+}

@@ -8,4 +8,4 @@ We conduct ourselves openly and inclusively here. Please do not contribute to an
 
 These guidelines apply to all channels of communication within this GitHub repository. Please be respectful in both public channels, such as issues, and private ones, such as private messaging or emails.
 
-Any incidents of abuse may be reported directly to ijwu at hmfarran@gmail.com.
+Any incidents of abuse may be reported directly to eudaimonistic at eudaimonistic42@gmail.com

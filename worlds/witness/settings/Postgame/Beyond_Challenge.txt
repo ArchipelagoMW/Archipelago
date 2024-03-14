@@ -1,0 +1,4 @@
+Disabled Locations:
+0x03549 (Challenge Video)
+
+0x339B6 (Eclipse EP)

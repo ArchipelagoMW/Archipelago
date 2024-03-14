@@ -22,7 +22,7 @@ def get_db_data(known_games: typing.Set[str]) -> typing.Tuple[typing.Counter[str
                                                               typing.DefaultDict[datetime.date, typing.Dict[str, int]]]:
     games_played = defaultdict(Counter)
     total_games = Counter()
-    cutoff = date.today()-timedelta(days=30)
+    cutoff = date.today() - timedelta(days=30)
     room: Room
     for room in select(room for room in Room if room.creation_time >= cutoff):
         for slot in room.seed.slots:

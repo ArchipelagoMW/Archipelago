@@ -13,7 +13,7 @@
 - Hardware o software capaz de cargar y ejecutar archivos de ROM de SNES
     - Un emulador capaz de ejecutar scripts Lua
       ([snes9x rr](https://github.com/gocha/snes9x-rr/releases),
-       [BizHawk](http://tasvideos.org/BizHawk.html), o
+       [BizHawk](https://tasvideos.org/BizHawk), o
        [RetroArch](https://retroarch.com?page=platforms) 1.10.1 o más nuevo). O,
     - Un flashcart SD2SNES, [FXPak Pro](https://krikzz.com/store/home/54-fxpak-pro.html), o otro hardware compatible
 - Tu archivo ROM japones v1.0, probablemente se llame `Zelda no Densetsu - Kamigami no Triforce (Japan).sfc`
@@ -82,7 +82,7 @@ debe tener al menos un valor mayor que cero, si no la generación fallará.
 ### Verificando tu archivo YAML
 
 Si quieres validar que tu fichero YAML para asegurarte que funciona correctamente, puedes hacerlo en la pagina
-[YAML Validator](/mysterycheck).
+[YAML Validator](/check).
 
 ## Generar una partida para un jugador
 
@@ -126,7 +126,7 @@ ejecutas, puedes ser que el firewall de Windows te pregunte si le permites la co
 
 1. Asegurate que se ha cargado el nucleo BSNES. Debes hacer esto en el menu Tools y siguiento estas opciones:
    `Config --> Cores --> SNES --> BSNES`  
-   Una vez cambiado el nucleo cargado, Bizhawk ha de ser reiniciado.
+   Una vez cambiado el nucleo cargado, BizHawk ha de ser reiniciado.
 2. Carga tu fichero de ROM, si no lo has hecho ya.
 3. Haz click en el menu Tools y en la opción **Lua Console**
 4. Haz click en el botón para abrir un nuevo script Lua.

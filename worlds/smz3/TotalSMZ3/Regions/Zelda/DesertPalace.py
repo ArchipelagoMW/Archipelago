@@ -1,7 +1,7 @@
-﻿from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType, IReward
-from worlds.smz3.TotalSMZ3.Config import Config
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import ItemType, Progression
+﻿from ...Region import Z3Region, RewardType, IReward
+from ...Config import Config
+from ...Location import Location, LocationType
+from ...Item import ItemType, Progression
 
 class DesertPalace(Z3Region, IReward):
     Name = "Desert Palace"

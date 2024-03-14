@@ -1,0 +1,28 @@
+{
+    "regions": [
+        ["Menu", ["New World"]],
+        ["Overworld", ["Nether Portal", "End Portal", "Overworld Structure 1", "Overworld Structure 2"]],
+        ["The Nether", ["Nether Structure 1", "Nether Structure 2"]],
+        ["The End", ["The End Structure"]],
+        ["Village", []],
+        ["Pillager Outpost", []],
+        ["Nether Fortress", []],
+        ["Bastion Remnant", []],
+        ["End City", []]
+    ],
+    "mandatory_connections": [
+        ["New World", "Overworld"],
+        ["Nether Portal", "The Nether"],
+        ["End Portal", "The End"]
+    ],
+    "default_connections": [
+        ["Overworld Structure 1", "Village"],
+        ["Overworld Structure 2", "Pillager Outpost"],
+        ["Nether Structure 1", "Nether Fortress"],
+        ["Nether Structure 2", "Bastion Remnant"],
+        ["The End Structure", "End City"]
+    ],
+    "illegal_connections": {
+        "Nether Fortress": ["The End Structure"]
+    }
+}

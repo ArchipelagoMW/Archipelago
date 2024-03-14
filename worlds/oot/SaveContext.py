@@ -1,4 +1,37 @@
 from itertools import chain
+from enum import IntEnum
+from .ItemPool import IGNORE_LOCATION
+
+class Scenes(IntEnum):
+    # Dungeons
+    DEKU_TREE = 0x00
+    DODONGOS_CAVERN = 0x01
+    KING_DODONGO_LOBBY = 0x12
+    JABU_JABU = 0x02
+    FOREST_TEMPLE = 0x03
+    FIRE_TEMPLE = 0x04
+    WATER_TEMPLE = 0x05
+    SPIRIT_TEMPLE = 0x06
+    SHADOW_TEMPLE = 0x07
+    # Bean patch scenes
+    GRAVEYARD = 0x53
+    ZORAS_RIVER = 0x54
+    KOKIRI_FOREST = 0x55
+    LAKE_HYLIA = 0x57
+    GERUDO_VALLEY = 0x5A
+    LOST_WOODS = 0x5B
+    DESERT_COLOSSUS = 0x5C
+    DEATH_MOUNTAIN_TRAIL = 0x60
+    DEATH_MOUNTAIN_CRATER = 0x61
+
+class FlagType(IntEnum):
+    CHEST = 0x00
+    SWITCH = 0x01
+    CLEAR = 0x02
+    COLLECT = 0x03
+    # 0x04 unused
+    VISITED_ROOM = 0x05
+    VISITED_FLOOR = 0x06
 
 class Address():
     prev_address = None
@@ -156,6 +189,14 @@ class SaveContext():
         else:
             address.get_writes(self)
 
+    def write_permanent_flag(self, scene, type, byte_offset, bit_values):
+        # Save format is described here: https://wiki.cloudmodding.com/oot/Save_Format
+        # Permanent flags start at offset 0x00D4. Each scene has 7 types of flags, one
+        # of which is unused. Each flag type is 4 bytes wide per-scene, thus each scene
+        # takes 28 (0x1C) bytes.
+        # Scenes and FlagType enums are defined for increased readability when using
+        # this function.
+        self.write_bits(0x00D4 + scene * 0x1C + type * 0x04 + byte_offset, bit_values)
 
     def set_ammo_max(self):
         ammo_maxes = {
@@ -218,18 +259,16 @@ class SaveContext():
 
         self.addresses['health_capacity'].value       = int(health) * 0x10
         self.addresses['health'].value                = int(health) * 0x10
-        self.addresses['quest']['heart_pieces'].value = int((health % 1) * 4)
+        self.addresses['quest']['heart_pieces'].value = int((health % 1) * 4) * 0x10
 
 
-    def give_raw_item(self, item):
+    def give_item(self, world, item, count=1):
         if item.endswith(')'):
-            item_base, count = item[:-1].split(' (', 1)
-            if count.isdigit():
-                return self.give_item(item_base, count=int(count))
-        return self.give_item(item)
+            item_base, implicit_count = item[:-1].split(' (', 1)
+            if implicit_count.isdigit():
+                item = item_base
+                count *= int(implicit_count)
 
-
-    def give_item(self, item, count=1):
         if item in SaveContext.bottle_types:
             self.give_bottle(item, count)
         elif item in ["Piece of Heart", "Piece of Heart (Treasure Chest Game)"]:
@@ -237,9 +276,53 @@ class SaveContext():
         elif item == "Heart Container":
             self.give_health(count)
         elif item == "Bombchu Item":
-            self.give_bombchu_item()
+            self.give_bombchu_item(world)
+        elif item == IGNORE_LOCATION:
+            pass # used to disable some skipped and inaccessible locations
         elif item in SaveContext.save_writes_table:
-            for address, value in SaveContext.save_writes_table[item].items():
+            if item.startswith('Small Key Ring ('):
+                dungeon = item[:-1].split(' (', 1)[1]
+                save_writes = {
+                    "Forest Temple"          : {
+                        'keys.forest': 6 if world.dungeon_mq[dungeon] else 5,
+                        'total_keys.forest': 6 if world.dungeon_mq[dungeon] else 5,
+                    },
+                    "Fire Temple"            : {
+                        'keys.fire': 5 if world.dungeon_mq[dungeon] else 8,
+                        'total_keys.fire': 5 if world.dungeon_mq[dungeon] else 8,
+                    },
+                    "Water Temple"           : {
+                        'keys.water': 2 if world.dungeon_mq[dungeon] else 6,
+                        'total_keys.water': 2 if world.dungeon_mq[dungeon] else 6,
+                    },
+                    "Spirit Temple"          : {
+                        'keys.spirit': 7 if world.dungeon_mq[dungeon] else 5,
+                        'total_keys.spirit': 7 if world.dungeon_mq[dungeon] else 5,
+                    },
+                    "Shadow Temple"          : {
+                        'keys.shadow': 6 if world.dungeon_mq[dungeon] else 5,
+                        'total_keys.shadow': 6 if world.dungeon_mq[dungeon] else 5,
+                    },
+                    "Bottom of the Well"     : {
+                        'keys.botw': 2 if world.dungeon_mq[dungeon] else 3,
+                        'total_keys.botw': 2 if world.dungeon_mq[dungeon] else 3,
+                    },
+                    "Gerudo Training Ground" : {
+                        'keys.gtg': 3 if world.dungeon_mq[dungeon] else 9,
+                        'total_keys.gtg': 3 if world.dungeon_mq[dungeon] else 9,
+                    },
+                    "Thieves Hideout"        : {
+                        'keys.fortress': 4,
+                        'total_keys.fortress': 4,
+                    },
+                    "Ganons Castle"          : {
+                        'keys.gc': 3 if world.dungeon_mq[dungeon] else 2,
+                        'total_keys.gc': 3 if world.dungeon_mq[dungeon] else 2,
+                    },
+                }[dungeon]
+            else:
+                save_writes = SaveContext.save_writes_table[item]
+            for address, value in save_writes.items():
                 if value is None:
                     value = count
                 elif isinstance(value, list):
@@ -269,8 +352,8 @@ class SaveContext():
             raise ValueError("Cannot give unknown starting item %s" % item)
 
 
-    def give_bombchu_item(self):
-        self.give_item("Bombchus", 0)
+    def give_bombchu_item(self, world):
+        self.give_item(world, "Bombchus", 0)
 
 
     def equip_default_items(self, age):
@@ -455,7 +538,7 @@ class SaveContext():
                 'kokiri_sword'           : Address(0x009C, size=2, mask=0x0001),
                 'master_sword'           : Address(0x009C, size=2, mask=0x0002),
                 'biggoron_sword'         : Address(0x009C, size=2, mask=0x0004),
-                'broken_knife'           : Address(0x009C, size=2, mask=0x0008),
+                'broken_giants_knife'    : Address(0x009C, size=2, mask=0x0008),
                 'deku_shield'            : Address(0x009C, size=2, mask=0x0010),
                 'hylian_shield'          : Address(0x009C, size=2, mask=0x0020),
                 'mirror_shield'          : Address(0x009C, size=2, mask=0x0040),
@@ -610,7 +693,24 @@ class SaveContext():
             },
             'defense_hearts'             : Address(size=1, max=20),
             'gs_tokens'                  : Address(size=2, max=100),
+            'total_keys' : { # Upper half of unused word in own scene
+                'deku'                   : Address(0xD4 + 0x1C * 0x00 + 0x10, size=2),
+                'dodongo'                : Address(0xD4 + 0x1C * 0x01 + 0x10, size=2),
+                'jabu'                   : Address(0xD4 + 0x1C * 0x02 + 0x10, size=2),
+                'forest'                 : Address(0xD4 + 0x1C * 0x03 + 0x10, size=2),
+                'fire'                   : Address(0xD4 + 0x1C * 0x04 + 0x10, size=2),
+                'water'                  : Address(0xD4 + 0x1C * 0x05 + 0x10, size=2),
+                'spirit'                 : Address(0xD4 + 0x1C * 0x06 + 0x10, size=2),
+                'shadow'                 : Address(0xD4 + 0x1C * 0x07 + 0x10, size=2),
+                'botw'                   : Address(0xD4 + 0x1C * 0x08 + 0x10, size=2),
+                'ice'                    : Address(0xD4 + 0x1C * 0x09 + 0x10, size=2),
+                'gt'                     : Address(0xD4 + 0x1C * 0x0A + 0x10, size=2),
+                'gtg'                    : Address(0xD4 + 0x1C * 0x0B + 0x10, size=2),
+                'fortress'               : Address(0xD4 + 0x1C * 0x0C + 0x10, size=2),
+                'gc'                     : Address(0xD4 + 0x1C * 0x0D + 0x10, size=2),
+            },
             'triforce_pieces'            : Address(0xD4 + 0x1C * 0x48 + 0x10, size=4), # Unused word in scene x48
+            'pending_freezes'            : Address(0xD4 + 0x1C * 0x49 + 0x10, size=4), # Unused word in scene x49
         }
 
 
@@ -667,7 +767,7 @@ class SaveContext():
         'odd_mushroom'        : 0x30,
         'odd_potion'          : 0x31,
         'poachers_saw'        : 0x32,
-        'broken_gorons_sword' : 0x33,
+        'broken_sword'        : 0x33,
         'prescription'        : 0x34,
         'eyeball_frog'        : 0x35,
         'eye_drops'           : 0x36,
@@ -789,6 +889,11 @@ class SaveContext():
             'item_slot.stick'            : 'stick',
             'upgrades.stick_upgrade'     : [2,3],
         },
+        "Deku Stick": {
+            'item_slot.stick'            : 'stick',
+            'upgrades.stick_upgrade'     : 1,
+            'ammo.stick'                 : None,
+        },
         "Deku Sticks": {
             'item_slot.stick'            : 'stick',
             'upgrades.stick_upgrade'     : 1,
@@ -849,7 +954,7 @@ class SaveContext():
         "Cojiro"         : {'item_slot.adult_trade'     : 'cojiro'},
         "Odd Mushroom"   : {'item_slot.adult_trade'     : 'odd_mushroom'},
         "Poachers Saw"   : {'item_slot.adult_trade'     : 'poachers_saw'},
-        "Broken Sword"   : {'item_slot.adult_trade'     : 'broken_knife'},
+        "Broken Sword"   : {'item_slot.adult_trade'     : 'broken_sword'},
         "Prescription"   : {'item_slot.adult_trade'     : 'prescription'},
         "Eyeball Frog"   : {'item_slot.adult_trade'     : 'eyeball_frog'},
         "Eyedrops"       : {'item_slot.adult_trade'     : 'eye_drops'},
@@ -916,16 +1021,115 @@ class SaveContext():
             'double_magic'          : [False, True],
         },
         "Rupee"                     : {'rupees' : None},
+        "Rupee (Treasure Chest Game)" : {'rupees' : None},
         "Rupees"                    : {'rupees' : None},
         "Magic Bean Pack" : {
             'item_slot.beans'       : 'beans',
             'ammo.beans'            : 10
         },
+        "Ice Trap"                  : {'pending_freezes': None},
         "Triforce Piece"            : {'triforce_pieces': None},
+        "Boss Key (Forest Temple)"                : {'dungeon_items.forest.boss_key': True},
+        "Boss Key (Fire Temple)"                  : {'dungeon_items.fire.boss_key': True},
+        "Boss Key (Water Temple)"                 : {'dungeon_items.water.boss_key': True},
+        "Boss Key (Spirit Temple)"                : {'dungeon_items.spirit.boss_key': True},
+        "Boss Key (Shadow Temple)"                : {'dungeon_items.shadow.boss_key': True},
+        "Boss Key (Ganons Castle)"                : {'dungeon_items.gt.boss_key': True},
+        "Compass (Deku Tree)"                     : {'dungeon_items.deku.compass': True},
+        "Compass (Dodongos Cavern)"               : {'dungeon_items.dodongo.compass': True},
+        "Compass (Jabu Jabus Belly)"              : {'dungeon_items.jabu.compass': True},
+        "Compass (Forest Temple)"                 : {'dungeon_items.forest.compass': True},
+        "Compass (Fire Temple)"                   : {'dungeon_items.fire.compass': True},
+        "Compass (Water Temple)"                  : {'dungeon_items.water.compass': True},
+        "Compass (Spirit Temple)"                 : {'dungeon_items.spirit.compass': True},
+        "Compass (Shadow Temple)"                 : {'dungeon_items.shadow.compass': True},
+        "Compass (Bottom of the Well)"            : {'dungeon_items.botw.compass': True},
+        "Compass (Ice Cavern)"                    : {'dungeon_items.ice.compass': True},
+        "Map (Deku Tree)"                         : {'dungeon_items.deku.map': True},
+        "Map (Dodongos Cavern)"                   : {'dungeon_items.dodongo.map': True},
+        "Map (Jabu Jabus Belly)"                  : {'dungeon_items.jabu.map': True},
+        "Map (Forest Temple)"                     : {'dungeon_items.forest.map': True},
+        "Map (Fire Temple)"                       : {'dungeon_items.fire.map': True},
+        "Map (Water Temple)"                      : {'dungeon_items.water.map': True},
+        "Map (Spirit Temple)"                     : {'dungeon_items.spirit.map': True},
+        "Map (Shadow Temple)"                     : {'dungeon_items.shadow.map': True},
+        "Map (Bottom of the Well)"                : {'dungeon_items.botw.map': True},
+        "Map (Ice Cavern)"                        : {'dungeon_items.ice.map': True},
+        "Small Key (Forest Temple)"               : {
+            'keys.forest': None,
+            'total_keys.forest': None,
+        },
+        "Small Key (Fire Temple)"                 : {
+            'keys.fire': None,
+            'total_keys.fire': None,
+        },
+        "Small Key (Water Temple)"                : {
+            'keys.water': None,
+            'total_keys.water': None,
+        },
+        "Small Key (Spirit Temple)"               : {
+            'keys.spirit': None,
+            'total_keys.spirit': None,
+        },
+        "Small Key (Shadow Temple)"               : {
+            'keys.shadow': None,
+            'total_keys.shadow': None,
+        },
+        "Small Key (Bottom of the Well)"          : {
+            'keys.botw': None,
+            'total_keys.botw': None,
+        },
+        "Small Key (Gerudo Training Ground)"      : {
+            'keys.gtg': None,
+            'total_keys.gtg': None,
+        },
+        "Small Key (Thieves Hideout)"             : {
+            'keys.fortress': None,
+            'total_keys.fortress': None,
+        },
+        "Small Key (Ganons Castle)"               : {
+            'keys.gc': None,
+            'total_keys.gc': None,
+        },
+        #HACK: these counts aren't used since exact counts based on whether the dungeon is MQ are defined above,
+        # but the entries need to be there for key rings to be valid starting items
+        "Small Key Ring (Forest Temple)"          : {
+            'keys.forest': 6,
+            'total_keys.forest': 6,
+        },
+        "Small Key Ring (Fire Temple)"            : {
+            'keys.fire': 8,
+            'total_keys.fire': 8,
+        },
+        "Small Key Ring (Water Temple)"           : {
+            'keys.water': 6,
+            'total_keys.water': 6,
+        },
+        "Small Key Ring (Spirit Temple)"          : {
+            'keys.spirit': 7,
+            'total_keys.spirit': 7,
+        },
+        "Small Key Ring (Shadow Temple)"          : {
+            'keys.shadow': 6,
+            'total_keys.shadow': 6,
+        },
+        "Small Key Ring (Bottom of the Well)"     : {
+            'keys.botw': 3,
+            'total_keys.botw': 3,
+        },
+        "Small Key Ring (Gerudo Training Ground)" : {
+            'keys.gtg': 9,
+            'total_keys.gtg': 9,
+        },
+        "Small Key Ring (Thieves Hideout)"        : {
+            'keys.fortress': 4,
+            'total_keys.fortress': 4,
+        },
+        "Small Key Ring (Ganons Castle)"          : {
+            'keys.gc': 3,
+            'total_keys.gc': 3,
+        },
     }
-
-    giveable_items = set(chain(save_writes_table.keys(), bottle_types.keys(),
-        ["Piece of Heart", "Piece of Heart (Treasure Chest Game)", "Heart Container", "Rupee (1)"]))
 
 
     equipable_items = {
@@ -977,7 +1181,6 @@ class SaveContext():
                 'bombchu',
                 'nayrus_love',
                 'beans',
-                'child_trade',
                 'bottle_1',
                 'bottle_2',
                 'bottle_3',

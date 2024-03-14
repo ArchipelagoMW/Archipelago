@@ -14,7 +14,7 @@ as different Items from within SM64.
 As in most Mario Games, save the Princess!
 
 ## Which items can be in another player's world?
-Any of the 120 Stars, and the two Caste Keys. Additionally, Cap Switches are also considered "Items" and the "!"-Boxes will only be active
+Any of the 120 Stars, and the two Castle Keys. Additionally, Cap Switches are also considered "Items" and the "!"-Boxes will only be active
 when someone collects the corresponding Cap Switch Item.
 
 ## What does another world's item look like in SM64EX?

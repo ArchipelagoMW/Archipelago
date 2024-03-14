@@ -1,6 +1,6 @@
-import itertools
+import itertools, math
 
-from utils.utils import range_union
+from ..utils.utils import range_union, openFile
 
 # adapted from ips-util for python 3.2 (https://pypi.org/project/ips-util/)
 class IPS_Patch(object):
@@ -9,9 +9,14 @@ class IPS_Patch(object):
         self.truncate_length = None
         self.max_size = 0
         if patchDict is not None:
+            recMaxSize = 0xffff
             for addr, data in patchDict.items():
-                byteData = bytearray(data)
-                self.add_record(addr, byteData)
+                nrecs = int(math.ceil(float(len(data))/recMaxSize))
+                for i in range(nrecs):
+                    start = i*recMaxSize
+                    end = min((i+1)*recMaxSize, len(data))
+                    byteData = bytearray(data[start:end])
+                    self.add_record(addr+start, byteData)
 
     def toDict(self):
         ret = {}
@@ -25,7 +30,7 @@ class IPS_Patch(object):
     @staticmethod
     def load(filename):
         loaded_patch = IPS_Patch()
-        with open(filename, 'rb') as file:
+        with openFile(filename, 'rb') as file:
             header = file.read(5)
             if header != b'PATCH':
                 raise Exception('Not a valid IPS patch file!')

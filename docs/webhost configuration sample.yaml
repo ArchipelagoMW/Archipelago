@@ -48,5 +48,5 @@
 # TODO
 #JSON_AS_ASCII: false
 
-# Patch target.  This is the address encoded into the patch that will be used for client auto-connect.
-#PATCH_TARGET: archipelago.gg
+# Host Address.  This is the address encoded into the patch that will be used for client auto-connect.
+#HOST_ADDRESS: archipelago.gg

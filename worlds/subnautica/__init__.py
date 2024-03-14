@@ -1,14 +1,17 @@
-import logging
-from typing import List, Dict, Any
+from __future__ import annotations
 
-from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification, RegionType
+import logging
+import itertools
+from typing import List, Dict, Any, cast
+
+from BaseClasses import Region, Entrance, Location, Item, Tutorial, ItemClassification
 from worlds.AutoWorld import World, WebWorld
-from . import Items
-from . import Locations
-from . import Creatures
-from . import Options
-from .Items import item_table
-from .Rules import set_rules
+from . import items
+from . import locations
+from . import creatures
+from . import options
+from .items import item_table, group_items, items_by_type, ItemType
+from .rules import set_rules
 
 logger = logging.getLogger("Subnautica")
 
@@ -24,8 +27,8 @@ class SubnaticaWeb(WebWorld):
     )]
 
 
-all_locations = {data["name"]: loc_id for loc_id, data in Locations.location_table.items()}
-all_locations.update(Creatures.creature_locations)
+all_locations = {data["name"]: loc_id for loc_id, data in locations.location_table.items()}
+all_locations.update(creatures.creature_locations)
 
 
 class SubnauticaWorld(World):
@@ -34,118 +37,146 @@ class SubnauticaWorld(World):
     an unknown bacteria. The planet's automatic quarantine will shoot you down if you try to leave.
     You must find a cure for yourself, build an escape rocket, and leave the planet.
     """
-    game: str = "Subnautica"
+    game = "Subnautica"
     web = SubnaticaWeb()
 
-    item_name_to_id = {data["name"]: item_id for item_id, data in Items.item_table.items()}
+    item_name_to_id = {data.name: item_id for item_id, data in items.item_table.items()}
     location_name_to_id = all_locations
-    option_definitions = Options.options
+    option_definitions = options.option_definitions
 
-    data_version = 7
-    required_client_version = (0, 3, 5)
+    data_version = 10
+    required_client_version = (0, 4, 1)
 
     creatures_to_scan: List[str]
 
     def generate_early(self) -> None:
-        if "Seaglide Fragment" not in self.multiworld.early_items[self.player]:
-            self.multiworld.early_items[self.player].value["Seaglide Fragment"] = 2
+        if self.options.early_seaglide:
+            self.multiworld.local_early_items[self.player]["Seaglide Fragment"] = 2
 
-        scan_option: Options.AggressiveScanLogic = self.multiworld.creature_scan_logic[self.player]
+        scan_option: options.AggressiveScanLogic = self.options.creature_scan_logic
         creature_pool = scan_option.get_pool()
 
-        self.multiworld.creature_scans[self.player].value = min(
+        self.options.creature_scans.value = min(
             len(creature_pool),
-            self.multiworld.creature_scans[self.player].value
+            self.options.creature_scans.value
         )
 
-        self.creatures_to_scan = self.multiworld.random.sample(creature_pool,
-                                                          self.multiworld.creature_scans[self.player].value)
+        self.creatures_to_scan = self.random.sample(
+            creature_pool, self.options.creature_scans.value)
 
     def create_regions(self):
+        # Create Regions
+        menu_region = Region("Menu", self.player, self.multiworld)
+        planet_region = Region("Planet 4546B", self.player, self.multiworld)
+
+        # Link regions together
+        menu_region.connect(planet_region, "Lifepod 5")
+
+        # Create regular locations
+        location_names = itertools.chain((location["name"] for location in locations.location_table.values()),
+                                         (creature + creatures.suffix for creature in self.creatures_to_scan))
+        for location_name in location_names:
+            loc_id = self.location_name_to_id[location_name]
+            location = SubnauticaLocation(self.player, location_name, loc_id, planet_region)
+            planet_region.locations.append(location)
+
+        # Create events
+        goal_event_name = self.options.goal.get_event_name()
+
+        for event in locations.events:
+            location = SubnauticaLocation(self.player, event, None, planet_region)
+            planet_region.locations.append(location)
+            location.place_locked_item(
+                SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
+            if event == goal_event_name:
+                # make the goal event the victory "item"
+                location.item.name = "Victory"
+
+        # Register regions to multiworld
         self.multiworld.regions += [
-            self.create_region("Menu", None, ["Lifepod 5"]),
-            self.create_region("Planet 4546B",
-                               Locations.events +
-                               [location["name"] for location in Locations.location_table.values()] +
-                               [creature+Creatures.suffix for creature in self.creatures_to_scan])
+            menu_region,
+            planet_region
         ]
 
     # refer to Rules.py
     set_rules = set_rules
 
-    def generate_basic(self):
-        # Link regions
-        self.multiworld.get_entrance("Lifepod 5", self.player).connect(self.multiworld.get_region("Planet 4546B", self.player))
-
+    def create_items(self):
         # Generate item pool
-        pool = []
-        neptune_launch_platform = None
-        extras = self.multiworld.creature_scans[self.player].value
-        valuable = self.multiworld.item_pool[self.player] == Options.ItemPool.option_valuable
-        for item in item_table.values():
-            for i in range(item["count"]):
-                subnautica_item = self.create_item(item["name"])
-                if item["name"] == "Neptune Launch Platform":
-                    neptune_launch_platform = subnautica_item
-                elif valuable and ItemClassification.filler == item["classification"]:
-                    extras += 1
-                else:
-                    pool.append(subnautica_item)
+        pool: List[SubnauticaItem] = []
+        extras = self.options.creature_scans.value
 
-        for item_name in self.multiworld.random.choices(sorted(Items.advancement_item_names - {"Neptune Launch Platform"}),
-                                                        k=extras):
+        grouped = set(itertools.chain.from_iterable(group_items.values()))
+
+        for item_id, item in item_table.items():
+            if item_id in grouped:
+                extras += item.count
+            else:
+                for i in range(item.count):
+                    subnautica_item = self.create_item(item.name)
+                    if item.name == "Neptune Launch Platform":
+                        self.get_location("Aurora - Captain Data Terminal").place_locked_item(
+                            subnautica_item)
+                    else:
+                        pool.append(subnautica_item)
+
+        group_amount: int = 2
+        assert len(group_items) * group_amount <= extras
+        for item_id in group_items:
+            name = item_table[item_id].name
+            for _ in range(group_amount):
+                pool.append(self.create_item(name))
+            extras -= group_amount
+
+        for item_name in self.random.sample(
+            # list of high-count important fragments as priority filler
+                [
+                    "Cyclops Engine Fragment",
+                    "Cyclops Hull Fragment",
+                    "Cyclops Bridge Fragment",
+                    "Seamoth Fragment",
+                    "Prawn Suit Fragment",
+                    "Mobile Vehicle Bay Fragment",
+                    "Modification Station Fragment",
+                    "Moonpool Fragment",
+                    "Laser Cutter Fragment",
+                 ],
+                k=min(extras, 9)):
             item = self.create_item(item_name)
-            item.classification = ItemClassification.filler  # as it's an extra, just fast-fill it somewhere
+            pool.append(item)
+            extras -= 1
+
+        # resource bundle filler
+        for _ in range(extras):
+            item = self.create_filler()
+            item = cast(SubnauticaItem, item)
             pool.append(item)
 
         self.multiworld.itempool += pool
 
-        # Victory item
-        self.multiworld.get_location("Aurora - Captain Data Terminal", self.player).place_locked_item(
-            neptune_launch_platform)
-        for event in Locations.events:
-            self.multiworld.get_location(event, self.player).place_locked_item(
-                SubnauticaItem(event, ItemClassification.progression, None, player=self.player))
-        # make the goal event the victory "item"
-        self.multiworld.get_location(self.multiworld.goal[self.player].get_event_name(), self.player).item.name = "Victory"
-
     def fill_slot_data(self) -> Dict[str, Any]:
-        goal: Options.Goal = self.multiworld.goal[self.player]
-        item_pool: Options.ItemPool = self.multiworld.item_pool[self.player]
         vanilla_tech: List[str] = []
-        if item_pool == Options.ItemPool.option_valuable:
-            for item in Items.item_table.values():
-                if item["classification"] == ItemClassification.filler:
-                    vanilla_tech.append(item["tech_type"])
 
         slot_data: Dict[str, Any] = {
-            "goal": goal.current_key,
+            "goal": self.options.goal.current_key,
+            "swim_rule": self.options.swim_rule.current_key,
             "vanilla_tech": vanilla_tech,
             "creatures_to_scan": self.creatures_to_scan,
-            "death_link": self.multiworld.death_link[self.player].value,
+            "death_link": self.options.death_link.value,
+            "free_samples": self.options.free_samples.value,
         }
 
         return slot_data
 
-    def create_item(self, name: str) -> Item:
+    def create_item(self, name: str) -> SubnauticaItem:
         item_id: int = self.item_name_to_id[name]
 
         return SubnauticaItem(name,
-                              item_table[item_id]["classification"],
+                              item_table[item_id].classification,
                               item_id, player=self.player)
 
-    def create_region(self, name: str, locations=None, exits=None):
-        ret = Region(name, RegionType.Generic, name, self.player)
-        ret.multiworld = self.multiworld
-        if locations:
-            for location in locations:
-                loc_id = self.location_name_to_id.get(location, None)
-                location = SubnauticaLocation(self.player, location, loc_id, ret)
-                ret.locations.append(location)
-        if exits:
-            for region_exit in exits:
-                ret.exits.append(Entrance(self.player, region_exit, ret))
-        return ret
+    def get_filler_item_name(self) -> str:
+        return item_table[self.multiworld.random.choice(items_by_type[ItemType.resource])].name
 
 
 class SubnauticaLocation(Location):

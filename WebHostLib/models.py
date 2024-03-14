@@ -21,7 +21,7 @@ class Slot(db.Entity):
 class Room(db.Entity):
     id = PrimaryKey(UUID, default=uuid4)
     last_activity = Required(datetime, default=lambda: datetime.utcnow(), index=True)
-    creation_time = Required(datetime, default=lambda: datetime.utcnow())
+    creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
     owner = Required(UUID, index=True)
     commands = Set('Command')
     seed = Required('Seed', index=True)
@@ -38,7 +38,7 @@ class Seed(db.Entity):
     rooms = Set(Room)
     multidata = Required(bytes, lazy=True)
     owner = Required(UUID, index=True)
-    creation_time = Required(datetime, default=lambda: datetime.utcnow())
+    creation_time = Required(datetime, default=lambda: datetime.utcnow(), index=True)  # index used by landing page
     slots = Set(Slot)
     spoiler = Optional(LongStr, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")  # additional meta information/tags
@@ -56,3 +56,8 @@ class Generation(db.Entity):
     options = Required(buffer, lazy=True)
     meta = Required(LongStr, default=lambda: "{\"race\": false}")
     state = Required(int, default=0, index=True)
+
+
+class GameDataPackage(db.Entity):
+    checksum = PrimaryKey(str)
+    data = Required(bytes)

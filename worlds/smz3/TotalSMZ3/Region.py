@@ -1,7 +1,6 @@
 ﻿from enum import Enum
 from typing import Dict, List
-from worlds.smz3.TotalSMZ3.Config import *
-from worlds.smz3.TotalSMZ3.Item import Item, ItemType
+from .Config import *
 
 class RewardType(Enum):
     Null = 0
@@ -28,7 +27,7 @@ class IMedallionAccess:
     Medallion = None
 
 class Region:
-    import worlds.smz3.TotalSMZ3.Location as Location
+    from . import Location
     Name: str
     Area: str
 

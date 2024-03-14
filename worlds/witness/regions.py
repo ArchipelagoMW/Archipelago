@@ -2,12 +2,16 @@
 Defines Region for The Witness, assigns locations to them,
 and connects them with the proper requirements
 """
+from typing import FrozenSet, TYPE_CHECKING, Dict, Tuple, List
 
-from BaseClasses import MultiWorld, Entrance
+from BaseClasses import Entrance, Region
+from Utils import KeyedDefaultDict
 from .static_logic import StaticWitnessLogic
-from .Options import get_option_value
-from .locations import WitnessPlayerLocations
+from .locations import WitnessPlayerLocations, StaticWitnessLocations
 from .player_logic import WitnessPlayerLogic
+
+if TYPE_CHECKING:
+    from . import WitnessWorld
 
 
 class WitnessRegions:
@@ -16,93 +20,129 @@ class WitnessRegions:
     locat = None
     logic = None
 
-    def make_lambda(self, panel_hex_to_solve_set, world, player, player_logic):
+    @staticmethod
+    def make_lambda(item_requirement: FrozenSet[FrozenSet[str]], world: "WitnessWorld"):
+        from .rules import _meets_item_requirements
+
         """
         Lambdas are made in a for loop, so the values have to be captured
         This function is for that purpose
         """
 
-        return lambda state: state._witness_can_solve_panels(
-            panel_hex_to_solve_set, world, player, player_logic, self.locat
-        )
+        return _meets_item_requirements(item_requirement, world)
 
-    def connect(self, world: MultiWorld, player: int, source: str, target: str, player_logic: WitnessPlayerLogic,
-                panel_hex_to_solve_set=None):
+    def connect_if_possible(self, world: "WitnessWorld", source: str, target: str, req: FrozenSet[FrozenSet[str]],
+                            regions_by_name: Dict[str, Region], backwards: bool = False):
         """
         connect two regions and set the corresponding requirement
         """
-        source_region = world.get_region(source, player)
-        target_region = world.get_region(target, player)
 
-        #print(source_region)
-        #print(target_region)
-        #print("---")
+        # Remove any possibilities where being in the target region would be required anyway.
+        real_requirement = frozenset({option for option in req if target not in option})
+
+        # There are some connections that should only be done one way. If this is a backwards connection, check for that
+        if backwards:
+            real_requirement = frozenset({option for option in real_requirement if "TrueOneWay" not in option})
+
+        # Dissolve any "True" or "TrueOneWay"
+        real_requirement = frozenset({option - {"True", "TrueOneWay"} for option in real_requirement})
+
+        # If there is no way to actually use this connection, don't even bother making it.
+        if not real_requirement:
+            return
+
+        # We don't need to check for the accessibility of the source region.
+        final_requirement = frozenset({option - frozenset({source}) for option in real_requirement})
+
+        source_region = regions_by_name[source]
+        target_region = regions_by_name[target]
+
+        backwards = " Backwards" if backwards else ""
+        connection_name = source + " to " + target + backwards
 
         connection = Entrance(
-            player,
-            source + " to " + target,
+            world.player,
+            connection_name,
             source_region
         )
 
-        connection.access_rule = self.make_lambda(panel_hex_to_solve_set, world, player, player_logic)
+        connection.access_rule = self.make_lambda(final_requirement, world)
 
         source_region.exits.append(connection)
         connection.connect(target_region)
 
-    def create_regions(self, world, player: int, player_logic: WitnessPlayerLogic):
+        self.created_entrances[source, target].append(connection)
+
+        # Register any necessary indirect connections
+        mentioned_regions = {
+            single_unlock for option in final_requirement for single_unlock in option
+            if single_unlock in self.reference_logic.ALL_REGIONS_BY_NAME
+        }
+
+        for dependent_region in mentioned_regions:
+            world.multiworld.register_indirect_condition(regions_by_name[dependent_region], connection)
+
+    def create_regions(self, world: "WitnessWorld", player_logic: WitnessPlayerLogic):
         """
         Creates all the regions for The Witness
         """
         from . import create_region
 
-        world.regions += [
-            create_region(world, player, 'Menu', self.locat, None, ["The Splashscreen?"]),
-        ]
-
-        difficulty = get_option_value(world, player, "puzzle_randomization")
-
-        if difficulty == 1:
-            reference_logic = StaticWitnessLogic.sigma_expert
-        else:
-            reference_logic = StaticWitnessLogic.sigma_normal
-
         all_locations = set()
+        regions_by_name = dict()
 
-        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
+        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             locations_for_this_region = [
-                reference_logic.CHECKS_BY_HEX[panel]["checkName"] for panel in region["panels"]
-                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
+                self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] for panel in region["panels"]
+                if self.reference_logic.ENTITIES_BY_HEX[panel]["checkName"] in self.locat.CHECK_LOCATION_TABLE
             ]
             locations_for_this_region += [
-                reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" for panel in region["panels"]
-                if reference_logic.CHECKS_BY_HEX[panel]["checkName"] + " Solved" in self.locat.EVENT_LOCATION_TABLE
+                StaticWitnessLocations.get_event_name(panel) for panel in region["panels"]
+                if StaticWitnessLocations.get_event_name(panel) in self.locat.EVENT_LOCATION_TABLE
             ]
 
             all_locations = all_locations | set(locations_for_this_region)
 
-            world.regions += [
-                create_region(world, player, region_name, self.locat, locations_for_this_region)
-            ]
+            new_region = create_region(world, region_name, self.locat, locations_for_this_region)
 
-        for region_name, region in reference_logic.ALL_REGIONS_BY_NAME.items():
+            regions_by_name[region_name] = new_region
+
+        for region_name, region in self.reference_logic.ALL_REGIONS_BY_NAME.items():
             for connection in player_logic.CONNECTIONS_BY_REGION_NAME[region_name]:
-                if connection[0] == "Entry":
+                self.connect_if_possible(world, region_name, connection[0], connection[1], regions_by_name)
+                self.connect_if_possible(world, connection[0], region_name, connection[1], regions_by_name, True)
+
+        # find regions that are completely disconnected from the start node and remove them
+        regions_to_check = {"Menu"}
+        reachable_regions = {"Menu"}
+
+        while regions_to_check:
+            next_region = regions_to_check.pop()
+            region_obj = regions_by_name[next_region]
+
+            for exit in region_obj.exits:
+                target = exit.connected_region
+
+                if target.name in reachable_regions:
                     continue
 
-                if connection[1] == frozenset({frozenset(["TrueOneWay"])}):
-                    self.connect(world, player, region_name, connection[0], player_logic, frozenset({frozenset()}))
-                    continue
+                regions_to_check.add(target.name)
+                reachable_regions.add(target.name)
 
-                for subset in connection[1]:
-                    if all({panel in player_logic.DOOR_ITEMS_BY_ID for panel in subset}):
-                        if all({reference_logic.CHECKS_BY_HEX[panel]["id"] is None for panel in subset}):
-                            self.connect(world, player, connection[0], region_name, player_logic, frozenset({subset}))
+        self.created_regions = {k: v for k, v in regions_by_name.items() if k in reachable_regions}
 
-                self.connect(world, player, region_name, connection[0], player_logic, connection[1])
+        world.multiworld.regions += self.created_regions.values()
 
-        world.get_entrance("The Splashscreen?", player).connect(
-            world.get_region('First Hallway', player)
-        )
+    def __init__(self, locat: WitnessPlayerLocations, world: "WitnessWorld"):
+        difficulty = world.options.puzzle_randomization
 
-    def __init__(self, locat: WitnessPlayerLocations):
+        if difficulty == "sigma_normal":
+            self.reference_logic = StaticWitnessLogic.sigma_normal
+        elif difficulty == "sigma_expert":
+            self.reference_logic = StaticWitnessLogic.sigma_expert
+        elif difficulty == "none":
+            self.reference_logic = StaticWitnessLogic.vanilla
+
         self.locat = locat
+        self.created_entrances: Dict[Tuple[str, str], List[Entrance]] = KeyedDefaultDict(lambda _: [])
+        self.created_regions: Dict[str, Region] = dict()

@@ -1,7 +1,8 @@
 
 The MIT License (MIT)
 
-Copyright (c) 2021 Berserker55 and Dewiniaid
+Copyright (c) 2023 Berserker55
+Copyright (c) 2021 Dewiniaid
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,82 +1,132 @@
 import base64
 import json
+import pickle
 import typing
 import uuid
 import zipfile
-from io import BytesIO
+import zlib
 
+from io import BytesIO
 from flask import request, flash, redirect, url_for, session, render_template
-from pony.orm import flush, select
+from markupsafe import Markup
+from pony.orm import commit, flush, select, rollback
+from pony.orm.core import TransactionIntegrityError
+import schema
 
 import MultiServer
-from NetUtils import NetworkSlot, SlotType
+from NetUtils import SlotType
 from Utils import VersionException, __version__
+from worlds import GamesPackage
 from worlds.Files import AutoPatchRegister
+from worlds.AutoWorld import data_package_checksum
 from . import app
-from .models import Seed, Room, Slot
+from .models import Seed, Room, Slot, GameDataPackage
 
-banned_zip_contents = (".sfc",)
+banned_extensions = (".sfc", ".z64", ".n64", ".nes", ".smc", ".sms", ".gb", ".gbc", ".gba")
+allowed_options_extensions = (".yaml", ".json", ".yml", ".txt", ".zip")
+allowed_generation_extensions = (".archipelago", ".zip")
+
+games_package_schema = schema.Schema({
+    "item_name_groups": {str: [str]},
+    "item_name_to_id": {str: int},
+    "location_name_groups": {str: [str]},
+    "location_name_to_id": {str: int},
+    schema.Optional("checksum"): str,
+    schema.Optional("version"): int,
+})
+
+
+def allowed_options(filename: str) -> bool:
+    return filename.endswith(allowed_options_extensions)
+
+
+def allowed_generation(filename: str) -> bool:
+    return filename.endswith(allowed_generation_extensions)
+
+
+def banned_file(filename: str) -> bool:
+    return filename.endswith(banned_extensions)
+
+
+def process_multidata(compressed_multidata, files={}):
+    game_data: GamesPackage
+
+    decompressed_multidata = MultiServer.Context.decompress(compressed_multidata)
+
+    slots: typing.Set[Slot] = set()
+    if "datapackage" in decompressed_multidata:
+        # strip datapackage from multidata, leaving only the checksums
+        game_data_packages: typing.List[GameDataPackage] = []
+        for game, game_data in decompressed_multidata["datapackage"].items():
+            if game_data.get("checksum"):
+                original_checksum = game_data.pop("checksum")
+                game_data = games_package_schema.validate(game_data)
+                game_data = {key: value for key, value in sorted(game_data.items())}
+                game_data["checksum"] = data_package_checksum(game_data)
+                game_data_package = GameDataPackage(checksum=game_data["checksum"],
+                                                    data=pickle.dumps(game_data))
+                if original_checksum != game_data["checksum"]:
+                    raise Exception(f"Original checksum {original_checksum} != "
+                                    f"calculated checksum {game_data['checksum']} "
+                                    f"for game {game}.")
+                decompressed_multidata["datapackage"][game] = {
+                    "version": game_data.get("version", 0),
+                    "checksum": game_data["checksum"],
+                }
+                try:
+                    commit()  # commit game data package
+                    game_data_packages.append(game_data_package)
+                except TransactionIntegrityError:
+                    del game_data_package
+                    rollback()
+
+    if "slot_info" in decompressed_multidata:
+        for slot, slot_info in decompressed_multidata["slot_info"].items():
+            # Ignore Player Groups (e.g. item links)
+            if slot_info.type == SlotType.group:
+                continue
+            slots.add(Slot(data=files.get(slot, None),
+                           player_name=slot_info.name,
+                           player_id=slot,
+                           game=slot_info.game))
+        flush()  # commit slots
+
+    compressed_multidata = compressed_multidata[0:1] + zlib.compress(pickle.dumps(decompressed_multidata), 9)
+    return slots, compressed_multidata
 
 
 def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, sid=None):
     if not owner:
         owner = session["_id"]
     infolist = zfile.infolist()
-    slots: typing.Set[Slot] = set()
+    if all(allowed_options(file.filename) or file.is_dir() for file in infolist):
+        flash(Markup("Error: Your .zip file only contains options files. "
+                     'Did you mean to <a href="/generate">generate a game</a>?'))
+        return
+
     spoiler = ""
+    files = {}
     multidata = None
+
+    # Load files.
     for file in infolist:
         handler = AutoPatchRegister.get_handler(file.filename)
-        if file.filename.endswith(banned_zip_contents):
+        if banned_file(file.filename):
             return "Uploaded data contained a rom file, which is likely to contain copyrighted material. " \
                    "Your file was deleted."
+
+        # AP Container
         elif handler:
-            raw = zfile.open(file, "r").read()
-            patch = handler(BytesIO(raw))
-            patch.read()
-            slots.add(Slot(data=raw,
-                           player_name=patch.player_name,
-                           player_id=patch.player,
-                           game=patch.game))
-
-        elif file.filename.endswith(".apmc"):
             data = zfile.open(file, "r").read()
-            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
-            slots.add(Slot(data=data,
-                           player_name=metadata["player_name"],
-                           player_id=metadata["player_id"],
-                           game="Minecraft"))
+            patch = handler(BytesIO(data))
+            patch.read()
+            files[patch.player] = data
 
-        elif file.filename.endswith(".apv6"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="VVVVVV"))
-
-        elif file.filename.endswith(".apsm64ex"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Super Mario 64"))
-
-        elif file.filename.endswith(".zip"):
-            # Factorio mods need a specific name or they do not function
-            _, seed_name, slot_id, slot_name = file.filename.rsplit("_", 1)[0].split("-", 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Factorio"))
-
-        elif file.filename.endswith(".apz5"):
-            # .apz5 must be named specifically since they don't contain any metadata
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('_', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Ocarina of Time"))
-
-        elif file.filename.endswith(".json"):
-            _, seed_name, slot_id, slot_name = file.filename.split('.')[0].split('-', 3)
-            slots.add(Slot(data=zfile.open(file, "r").read(), player_name=slot_name,
-                           player_id=int(slot_id[1:]), game="Dark Souls III"))
-
+        # Spoiler
         elif file.filename.endswith(".txt"):
             spoiler = zfile.open(file, "r").read().decode("utf-8-sig")
 
+        # Multi-data
         elif file.filename.endswith(".archipelago"):
             try:
                 multidata = zfile.open(file).read()
@@ -84,19 +134,35 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
                 flash("Could not load multidata. File may be corrupted or incompatible.")
                 multidata = None
 
-    if multidata:
-        decompressed_multidata = MultiServer.Context.decompress(multidata)
-        if "slot_info" in decompressed_multidata:
-            player_names = {slot.player_name for slot in slots}
-            leftover_names: typing.Dict[int, NetworkSlot] = {
-                slot_id: slot_info for slot_id, slot_info in decompressed_multidata["slot_info"].items()
-                if slot_info.name not in player_names and slot_info.type != SlotType.group}
-            newslots = [(Slot(data=None, player_name=slot_info.name, player_id=slot, game=slot_info.game))
-                        for slot, slot_info in leftover_names.items()]
-            for slot in newslots:
-                slots.add(slot)
+        # Minecraft
+        elif file.filename.endswith(".apmc"):
+            data = zfile.open(file, "r").read()
+            metadata = json.loads(base64.b64decode(data).decode("utf-8"))
+            files[metadata["player_id"]] = data
 
-            flush()  # commit slots
+        # Factorio
+        elif file.filename.endswith(".zip"):
+            try:
+                _, _, slot_id, *_ = file.filename.split('_')[0].split('-', 3)
+            except ValueError:
+                flash("Error: Unexpected file found in .zip: " + file.filename)
+                return
+            data = zfile.open(file, "r").read()
+            files[int(slot_id[1:])] = data
+
+        # All other files using the standard MultiWorld.get_out_file_name_base method
+        else:
+            try:
+                _, _, slot_id, *_ = file.filename.split('.')[0].split('_', 3)
+            except ValueError:
+                flash("Error: Unexpected file found in .zip: " + file.filename)
+                return
+            data = zfile.open(file, "r").read()
+            files[int(slot_id[1:])] = data
+
+    # Load multi data.
+    if multidata:
+        slots, multidata = process_multidata(multidata, files)
 
         seed = Seed(multidata=multidata, spoiler=spoiler, slots=slots, owner=owner, meta=json.dumps(meta),
                     id=sid if sid else uuid.uuid4())
@@ -108,40 +174,39 @@ def upload_zip_to_db(zfile: zipfile.ZipFile, owner=None, meta={"race": False}, s
         flash("No multidata was found in the zip file, which is required.")
 
 
-@app.route('/uploads', methods=['GET', 'POST'])
+@app.route("/uploads", methods=["GET", "POST"])
 def uploads():
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
+    if request.method == "POST":
+        # check if the POST request has a file part.
+        if "file" not in request.files:
+            flash("No file part in POST request.")
         else:
-            file = request.files['file']
-            # if user does not select file, browser also
-            # submit an empty part without filename
-            if file.filename == '':
-                flash('No selected file')
-            elif file and allowed_file(file.filename):
-                if zipfile.is_zipfile(file):
-                    with zipfile.ZipFile(file, 'r') as zfile:
+            uploaded_file = request.files["file"]
+            # If the user does not select file, the browser will still submit an empty string without a file name.
+            if uploaded_file.filename == "":
+                flash("No selected file.")
+            elif uploaded_file and allowed_generation(uploaded_file.filename):
+                if zipfile.is_zipfile(uploaded_file):
+                    with zipfile.ZipFile(uploaded_file, "r") as zfile:
                         try:
                             res = upload_zip_to_db(zfile)
                         except VersionException:
                             flash(f"Could not load multidata. Wrong Version detected.")
                         else:
-                            if type(res) == str:
+                            if res is str:
                                 return res
                             elif res:
                                 return redirect(url_for("view_seed", seed=res.id))
                 else:
-                    file.seek(0)  # offset from is_zipfile check
+                    uploaded_file.seek(0)  # offset from is_zipfile check
                     # noinspection PyBroadException
                     try:
-                        multidata = file.read()
-                        MultiServer.Context.decompress(multidata)
+                        multidata = uploaded_file.read()
+                        slots, multidata = process_multidata(multidata)
                     except Exception as e:
                         flash(f"Could not load multidata. File may be corrupted or incompatible. ({e})")
                     else:
-                        seed = Seed(multidata=multidata, owner=session["_id"])
+                        seed = Seed(multidata=multidata, slots=slots, owner=session["_id"])
                         flush()  # place into DB and generate ids
                         return redirect(url_for("view_seed", seed=seed.id))
             else:
@@ -154,7 +219,3 @@ def user_content():
     rooms = select(room for room in Room if room.owner == session["_id"])
     seeds = select(seed for seed in Seed if seed.owner == session["_id"])
     return render_template("userContent.html", rooms=rooms, seeds=seeds)
-
-
-def allowed_file(filename):
-    return filename.endswith(('.archipelago', ".zip"))

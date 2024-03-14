@@ -9,19 +9,54 @@
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     padding: 3px 3px 10px;
-    width: 384px;
+    width: 374px;
     background-color: #8d60a7;
-}
 
-#inventory-table td{
-    width: 40px;
-    height: 40px;
-    text-align: center;
-    vertical-align: middle;
+    display: grid;
+    grid-template-rows: repeat(5, 48px);
 }
 
 #inventory-table img{
-    height: 100%;
+    display: block;
+}
+
+#inventory-table div.table-row{
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+#inventory-table div.C1{
+    grid-column: 1;
+    place-content: center;
+    place-items: center;
+    display: flex;
+}
+#inventory-table div.C2{
+    grid-column: 2;
+    place-content: center;
+    place-items: center;
+    display: flex;
+}
+#inventory-table div.C3{
+    grid-column: 3;
+    place-content: center;
+    place-items: center;
+    display: flex;
+}
+#inventory-table div.C4{
+    grid-column: 4;
+    place-content: center;
+    place-items: center;
+    display: flex;
+}
+#inventory-table div.C5{
+    grid-column: 5;
+    place-content: center;
+    place-items: center;
+    display: flex;
+}
+
+#inventory-table img{
     max-width: 40px;
     max-height: 40px;
     filter: grayscale(100%) contrast(75%) brightness(30%);
@@ -31,11 +66,70 @@
     filter: none;
 }
 
-#inventory-table div.counted-item {
+#inventory-table img.acquired.purple{ /*00FFFF*/
+    filter: hue-rotate(270deg) saturate(6) brightness(0.8);
+}
+#inventory-table img.acquired.cyan{ /*FF00FF*/
+    filter: hue-rotate(138deg) saturate(10) brightness(0.8);
+}
+#inventory-table img.acquired.green{ /*32CD32*/
+    filter: hue-rotate(84deg) saturate(10) brightness(0.7);
+}
+
+#inventory-table div.image-stack{
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+#inventory-table div.image-stack div.stack-back{
+    grid-column: 1;
+    grid-row: 1;
+}
+
+#inventory-table div.image-stack div.stack-front{
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 20px 20px;
+    grid-template-rows: 20px 20px;
+}
+
+#inventory-table div.image-stack div.stack-top-left{
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+}
+
+#inventory-table div.image-stack div.stack-top-right{
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 1;
+}
+
+#inventory-table div.image-stack div.stack-bottum-left{
+    grid-column: 1;
+    grid-row: 2;
+    z-index: 1;
+}
+
+#inventory-table div.image-stack div.stack-bottum-right{
+    grid-column: 2;
+    grid-row: 2;
+    z-index: 1;
+}
+
+#inventory-table div.image-stack div.stack-front img{
+    width: 20px;
+    height: 20px;
+}
+
+#inventory-table div.counted-item{
     position: relative;
 }
 
-#inventory-table div.item-count {
+#inventory-table div.item-count{
     position: absolute;
     color: white;
     font-family: "Minecraftia", monospace;
@@ -69,16 +163,16 @@
     line-height: 20px;
 }
 
-#location-table td.counter {
+#location-table td.counter{
     text-align: right;
     font-size: 14px;
 }
 
-#location-table td.toggle-arrow {
+#location-table td.toggle-arrow{
     text-align: right;
 }
 
-#location-table tr#Total-header {
+#location-table tr#Total-header{
     font-weight: bold;
 }
 
@@ -88,14 +182,14 @@
     max-height: 30px;
 }
 
-#location-table tbody.locations {
+#location-table tbody.locations{
     font-size: 12px;
 }
 
-#location-table td.location-name {
+#location-table td.location-name{
     padding-left: 16px;
 }
 
-.hide {
+.hide{
     display: none;
 }

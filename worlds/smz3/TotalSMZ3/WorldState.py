@@ -2,9 +2,9 @@ from enum import Enum
 from typing import List
 from copy import copy
 
-from worlds.smz3.TotalSMZ3.Patch import DropPrize
-from worlds.smz3.TotalSMZ3.Region import RewardType
-from worlds.smz3.TotalSMZ3.Config import OpenTower, GanonVulnerable, OpenTourian
+from .Patch import DropPrize
+from .Region import RewardType
+from .Config import OpenTower, GanonVulnerable, OpenTourian
 
 class Medallion(Enum):
     Bombos = 0

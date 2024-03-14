@@ -1,5 +1,6 @@
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="styles/themes/base.css") }}" />
+    <script type="application/ecmascript" src="{{ url_for('static', filename="assets/baseHeader.js") }}"></script>
 {% endblock %}
 
 {% block header %}
@@ -10,10 +11,32 @@
             </a>
         </div>
         <div id="base-header-right">
+            <div id="base-header-popover-text">
+                <img id="base-header-popover-icon" src="/static/static/button-images/popover.png" alt="Popover Menu" />
+                get started
+            </div>
+            <div id="base-header-popover-menu">
+                <a href="/games">supported games</a>
+                <a href="/tutorial">setup guides</a>
+                <a href="/generate">generate game</a>
+                <a href="/uploads">host game</a>
+                <a href="/user-content">user content</a>
+            </div>
+            <a href="/faq/en">f.a.q</a>
+            <a href="https://discord.gg/8Z65BR2" target="_blank">discord</a>
+        </div>
+        <div id="base-header-right-mobile">
+            <a id="base-header-mobile-menu-button" href="#">
+                <img src="/static/static/button-images/hamburger-menu-icon.png" alt="Menu" />
+            </a>
+        </div>
+        <div id="base-header-mobile-menu">
             <a href="/games">supported games</a>
             <a href="/tutorial">setup guides</a>
-            <a href="/start-playing">start playing</a>
             <a href="/faq/en">f.a.q.</a>
+            <a href="/generate">generate game</a>
+            <a href="/uploads">host game</a>
+            <a href="/user-content">user content</a>
             <a href="https://discord.gg/8Z65BR2" target="_blank">discord</a>
         </div>
     </header>

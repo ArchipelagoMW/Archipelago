@@ -1,8 +1,8 @@
 ﻿from typing import List
-from worlds.smz3.TotalSMZ3.Region import Z3Region, RewardType
-from worlds.smz3.TotalSMZ3.Config import Config, GameMode, KeyShuffle
-from worlds.smz3.TotalSMZ3.Location import Location, LocationType
-from worlds.smz3.TotalSMZ3.Item import Item, Progression, ItemType
+from ...Region import Z3Region, RewardType
+from ...Config import Config, GameMode, KeyShuffle
+from ...Location import Location, LocationType
+from ...Item import Item, Progression, ItemType
 
 class GanonsTower(Z3Region):
     Name = "Ganon's Tower"
@@ -136,7 +136,7 @@ class GanonsTower(Z3Region):
     def CanEnter(self, items: Progression):
         return items.MoonPearl and self.world.CanEnter("Dark World Death Mountain East", items) and \
             self.world.CanAcquireAtLeast(self.world.TowerCrystals, items, RewardType.AnyCrystal) and \
-            self.world.CanAcquireAtLeast(self.world.TourianBossTokens * (self.world.TowerCrystals / 7), items, RewardType.AnyBossToken)
+            self.world.CanAcquireAtLeast((self.world.TourianBossTokens * self.world.TowerCrystals) / 7, items, RewardType.AnyBossToken)
 
     # added for AP completion_condition when TowerCrystals is lower than GanonCrystals
     def CanComplete(self, items: Progression):
@@ -144,7 +144,8 @@ class GanonsTower(Z3Region):
 
     def CanFill(self, item: Item):
         if (self.Config.Multiworld):
-            if (item.World != self.world or item.Progression):
+            # item.World will be None for item created by create_item for item links
+            if (item.World is not None and (item.World != self.world or item.Progression)):
                 return False
             if (self.Config.Keysanity and not ((item.Type == ItemType.BigKeyGT or item.Type == ItemType.KeyGT) and item.World == self.world) and (item.IsKey() or item.IsBigKey() or item.IsKeycard())):
                 return False

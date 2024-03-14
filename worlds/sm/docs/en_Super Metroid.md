@@ -30,3 +30,10 @@ a small up arrow on the sprite and non-progression don't.
 
 When the player receives an item, a text box will appear to show which item was received, and from whom.
 
+## I can't get back to my starting position with a required item (softlocked), what can I do?
+
+It can happen that a required item is in a place where you cant get back from. While in normal gameplay state, by holding
+Start+Select+L+R at the same time, the game will save your progress and put you back at your original starting position.
+This can be required by the logic. Since the addition of that feature, VARIA's automatic backup saves are disabled since 
+you can't softlock anymore.
+

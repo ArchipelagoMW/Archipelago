@@ -51,8 +51,29 @@ patches = {
     "Enable_Backup_Saves": {
         0xef20: [0x1]
     },
-    'Escape_Scavenger' : {
-        0x10F5FC: [0x1]
+    'Escape_Trigger' : {
+        0x10F5FE: [0x1]
+    },
+    'Escape_Trigger_Disable' : {
+        0x10F5FE: [0x0]
+    },
+    # actually a bitmask:
+    # high bit is for sfx play on obj completion, low bit for trigger escape
+    # only in crateria (standard in rando, default in the patch) for nothing objectives.
+    # we want to play sfx on objective completion only with non-standard objectives
+    'Objectives_sfx' : {
+        0x10F5FF: [0x81]
+    },
+    # see above, used in plandos so trigger escape whatever the start loc is
+    # with nothing objective. With this, we'll play sfx even in plandos
+    # with standard objectives, but it'll prevent to handle these patches
+    # as anything else that just bytes.
+    'Escape_Trigger_Nothing_Objective_Anywhere' : {
+        0x10F5FF: [0x80]
+    },
+    # for development/quickmet: disable clear save files on 1st boot
+    "Disable_Clear_Save_Boot": {
+        0x7E39: [0x4c, 0x7c, 0xfe]
     },
     # vanilla data to restore setup asm for plandos
     "Escape_Animals_Disable": {
@@ -95,6 +116,9 @@ patches = {
     },
     "SpriteSomething_Disable_Spin_Attack": {
         0xD93FE: [0x0, 0x0]
+    },
+    "Ship_Takeoff_Disable_Hide_Samus": {
+        0x112B13: [0x6B]
     },
     # custom load points for non standard start APs
     "Save_G4": {
@@ -314,6 +338,32 @@ patches = {
         0x78A34: [0x48, 0xc8, 0x01, 0x16, 0x47, 0x8c],
         0x109F37: [0x0]
     },
+    # only set blinking in "zebes asleep" room state to avoid having
+    # the door blink when not needed
+    # (only needed for escape peek in Crateria-less minimizer with disabled Tourian)
+    'Blinking[Climb Bottom Left]': {
+        0x782FE: [0x48, 0xc8, 0x01, 0x86, 0x12, 0x8c],
+        0x108683: [0x0]
+    },
+    # Climb always in "zebes asleep" state, except during escape
+    # (for escape peek in Crateria-less minimizer with disabled Tourian)
+    'Climb_Asleep': {
+        # replace "zebes awake" event ID with an unused event
+        0x796CC: [0x7F],
+        # put "Statues Hall" tension music
+        0x796D6: [0x04]
+    },
+    # Indicator PLM IDs set to ffff because they're set dynamically
+    'Indicator[KihunterBottom]': {
+        0x78256: [0xff, 0xff, 0x06, 0x02, 0x0e, 0x00]
+    },
+    'Indicator[GreenHillZoneTopRight]': {
+        0x78746: [0xff, 0xff, 0x01, 0x26, 0x30, 0x00]
+    },
+    # cancels the gamestate change by new_game.asm
+    "Restore_Intro": {
+        0x16EDA: [0x1E]
+    }
 }
 
 additional_PLMs = {
@@ -550,4 +600,101 @@ additional_PLMs = {
             [0x48, 0xc8, 0x01, 0x16, 0x63, 0x8c]
         ]
     },
+    # Indicator PLM IDs set to ffff because they're set dynamically
+    'Indicator[LandingSiteRight]': {
+        'room': 0x948c,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x00, 0x00]
+        ]
+    },
+    'Indicator[KihunterRight]': {
+        'room': 0x95ff,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x0d, 0x00]
+        ]
+    },
+    'Indicator[NoobBridgeRight]': {
+        'room': 0xa253,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x46, 0x33, 0x00]
+        ]
+    },
+    'Indicator[MainShaftBottomRight]': {
+        'room': 0x9cb3,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x22, 0x00]
+        ]
+    },
+    'Indicator[BigPinkBottomRight]': {
+        'room': 0x9e52,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x29, 0x00]
+        ]
+    },
+    'Indicator[RedTowerElevatorLeft]': {
+        'room': 0xa2f7,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x2e, 0x06, 0x3c, 0x00]
+        ]
+    },
+    'Indicator[WestOceanRight]': {
+        'room': 0xca08,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x0c, 0x00]
+        ]
+    },
+    'Indicator[LeCoudeBottom]': {
+        'room': 0x94cc,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x06, 0x02, 0x0f, 0x00]
+        ]
+    },
+    'Indicator[WreckedShipMainShaftBottom]': {
+        'room': 0xcc6f,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x26, 0x02, 0x84, 0x00]
+        ]
+    },
+    'Indicator[CathedralEntranceRight]': {
+        'room': 0xa788,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x4a, 0x00]
+        ]
+    },
+    'Indicator[CathedralRight]': {
+        'room': 0xafa3,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x49, 0x00]
+        ]
+    },
+    'Indicator[RedKihunterShaftBottom]': {
+        'room': 0xb5d5,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x56, 0x02, 0x5e, 0x00]
+        ]
+    },
+    'Indicator[WastelandLeft]': {
+        'room': 0xb62b,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x2e, 0x06, 0x5f, 0x00]
+        ]
+    },
+    'Indicator[MainStreetBottomRight]': {
+        'room': 0xd08a,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x8d, 0x00]
+        ]
+    },
+    'Indicator[CrabShaftRight]': {
+        'room': 0xd5a7,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x16, 0x8f, 0x00]
+        ]
+    },
+    'Indicator[ColosseumBottomRight]': {
+        'room': 0xd78f,
+        'plm_bytes_list': [
+            [0xff, 0xff, 0x01, 0x06, 0x9a, 0x00]
+        ]
+    }
 }
