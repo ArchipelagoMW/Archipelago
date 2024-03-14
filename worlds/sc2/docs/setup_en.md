@@ -19,7 +19,7 @@ to obtain a config file for StarCraft 2.
 
 ## Where do I get a config file (aka "YAML") for this game?
 
-Yaml files are configuration files that tell Archipelago how you'd like your game to be randomized, even if you're only using default settings.
+Yaml files are configuration files that tell Archipelago how you'd like your game to be randomized, even if you're only using default options.
 When you're setting up a multiworld, every world needs its own yaml file.
 
 There are three basic ways to get a yaml:
