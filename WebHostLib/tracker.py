@@ -1556,7 +1556,9 @@ if "ChecksFinder" in network_data_package["games"]:
 if "Starcraft 2" in network_data_package["games"]:
     def render_Starcraft2_tracker(tracker_data: TrackerData, team: int, player: int) -> str:
         SC2WOL_LOC_ID_OFFSET = 1000
-
+        SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
+        SC2LOTV_LOC_ID_OFFSET = SC2HOTS_LOC_ID_OFFSET + 2000
+        SC2NCO_LOC_ID_OFFSET = SC2LOTV_LOC_ID_OFFSET + 2500
 
         SC2WOL_ITEM_ID_OFFSET = 1000
         SC2HOTS_ITEM_ID_OFFSET = SC2WOL_ITEM_ID_OFFSET + 1000
@@ -2256,6 +2258,65 @@ if "Starcraft 2" in network_data_package["games"]:
             "Belly of the Beast":      range(SC2WOL_LOC_ID_OFFSET + 2700, SC2WOL_LOC_ID_OFFSET + 2800),
             "Shatter the Sky":         range(SC2WOL_LOC_ID_OFFSET + 2800, SC2WOL_LOC_ID_OFFSET + 2900),
             "All-In":                  range(SC2WOL_LOC_ID_OFFSET + 2900, SC2WOL_LOC_ID_OFFSET + 3000),
+
+            "Lab Rat":                 range(SC2HOTS_LOC_ID_OFFSET + 100, SC2HOTS_LOC_ID_OFFSET + 200),
+            "Back in the Saddle":      range(SC2HOTS_LOC_ID_OFFSET + 200, SC2HOTS_LOC_ID_OFFSET + 300),
+            "Rendezvous":              range(SC2HOTS_LOC_ID_OFFSET + 300, SC2HOTS_LOC_ID_OFFSET + 400),
+            "Harvest of Screams":      range(SC2HOTS_LOC_ID_OFFSET + 400, SC2HOTS_LOC_ID_OFFSET + 500),
+            "Shoot the Messenger":     range(SC2HOTS_LOC_ID_OFFSET + 500, SC2HOTS_LOC_ID_OFFSET + 600),
+            "Enemy Within":            range(SC2HOTS_LOC_ID_OFFSET + 600, SC2HOTS_LOC_ID_OFFSET + 700),
+            "Domination":              range(SC2HOTS_LOC_ID_OFFSET + 700, SC2HOTS_LOC_ID_OFFSET + 800),
+            "Fire in the Sky":         range(SC2HOTS_LOC_ID_OFFSET + 800, SC2HOTS_LOC_ID_OFFSET + 900),
+            "Old Soldiers":            range(SC2HOTS_LOC_ID_OFFSET + 900, SC2HOTS_LOC_ID_OFFSET + 1000),
+            "Waking the Ancient":      range(SC2HOTS_LOC_ID_OFFSET + 1000, SC2HOTS_LOC_ID_OFFSET + 1100),
+            "The Crucible":            range(SC2HOTS_LOC_ID_OFFSET + 1100, SC2HOTS_LOC_ID_OFFSET + 1200),
+            "Supreme":                 range(SC2HOTS_LOC_ID_OFFSET + 1200, SC2HOTS_LOC_ID_OFFSET + 1300),
+            "Infested":                range(SC2HOTS_LOC_ID_OFFSET + 1300, SC2HOTS_LOC_ID_OFFSET + 1400),
+            "Hand of Darkness":        range(SC2HOTS_LOC_ID_OFFSET + 1400, SC2HOTS_LOC_ID_OFFSET + 1500),
+            "Phantoms of the Void":    range(SC2HOTS_LOC_ID_OFFSET + 1500, SC2HOTS_LOC_ID_OFFSET + 1600),
+            "With Friends Like These": range(SC2HOTS_LOC_ID_OFFSET + 1600, SC2HOTS_LOC_ID_OFFSET + 1700),
+            "Conviction":              range(SC2HOTS_LOC_ID_OFFSET + 1700, SC2HOTS_LOC_ID_OFFSET + 1800),
+            "Planetfall":              range(SC2HOTS_LOC_ID_OFFSET + 1800, SC2HOTS_LOC_ID_OFFSET + 1900),
+            "Death From Above":        range(SC2HOTS_LOC_ID_OFFSET + 1900, SC2HOTS_LOC_ID_OFFSET + 2000),
+            "The Reckoning":           range(SC2HOTS_LOC_ID_OFFSET + 2000, SC2HOTS_LOC_ID_OFFSET + 2100),
+
+            "Dark Whispers":           range(SC2LOTV_LOC_ID_OFFSET + 100, SC2LOTV_LOC_ID_OFFSET + 200),
+            "Ghosts in the Fog":       range(SC2LOTV_LOC_ID_OFFSET + 200, SC2LOTV_LOC_ID_OFFSET + 300),
+            "Evil Awoken":             range(SC2LOTV_LOC_ID_OFFSET + 300, SC2LOTV_LOC_ID_OFFSET + 400),
+
+            "For Aiur!":               range(SC2LOTV_LOC_ID_OFFSET + 400, SC2LOTV_LOC_ID_OFFSET + 500),
+            "The Growing Shadow":      range(SC2LOTV_LOC_ID_OFFSET + 500, SC2LOTV_LOC_ID_OFFSET + 600),
+            "The Spear of Adun":       range(SC2LOTV_LOC_ID_OFFSET + 600, SC2LOTV_LOC_ID_OFFSET + 700),
+            "Sky Shield":              range(SC2LOTV_LOC_ID_OFFSET + 700, SC2LOTV_LOC_ID_OFFSET + 800),
+            "Brothers in Arms":        range(SC2LOTV_LOC_ID_OFFSET + 800, SC2LOTV_LOC_ID_OFFSET + 900),
+            "Amon's Reach":            range(SC2LOTV_LOC_ID_OFFSET + 900, SC2LOTV_LOC_ID_OFFSET + 1000),
+            "Last Stand":              range(SC2LOTV_LOC_ID_OFFSET + 1000, SC2LOTV_LOC_ID_OFFSET + 1100),
+            "Forbidden Weapon":        range(SC2LOTV_LOC_ID_OFFSET + 1100, SC2LOTV_LOC_ID_OFFSET + 1200),
+            "Temple of Unification":   range(SC2LOTV_LOC_ID_OFFSET + 1200, SC2LOTV_LOC_ID_OFFSET + 1300),
+            "The Infinite Cycle":      range(SC2LOTV_LOC_ID_OFFSET + 1300, SC2LOTV_LOC_ID_OFFSET + 1400),
+            "Harbinger of Oblivion":   range(SC2LOTV_LOC_ID_OFFSET + 1400, SC2LOTV_LOC_ID_OFFSET + 1500),
+            "Unsealing the Past":      range(SC2LOTV_LOC_ID_OFFSET + 1500, SC2LOTV_LOC_ID_OFFSET + 1600),
+            "Purification":            range(SC2LOTV_LOC_ID_OFFSET + 1600, SC2LOTV_LOC_ID_OFFSET + 1700),
+            "Steps of the Rite":       range(SC2LOTV_LOC_ID_OFFSET + 1700, SC2LOTV_LOC_ID_OFFSET + 1800),
+            "Rak'Shir":                range(SC2LOTV_LOC_ID_OFFSET + 1800, SC2LOTV_LOC_ID_OFFSET + 1900),
+            "Templar's Charge":        range(SC2LOTV_LOC_ID_OFFSET + 1900, SC2LOTV_LOC_ID_OFFSET + 2000),
+            "Templar's Return":        range(SC2LOTV_LOC_ID_OFFSET + 2000, SC2LOTV_LOC_ID_OFFSET + 2100),
+            "The Host":                range(SC2LOTV_LOC_ID_OFFSET + 2100, SC2LOTV_LOC_ID_OFFSET + 2200),
+            "Salvation":               range(SC2LOTV_LOC_ID_OFFSET + 2200, SC2LOTV_LOC_ID_OFFSET + 2300),
+
+            "Into the Void":           range(SC2LOTV_LOC_ID_OFFSET + 2300, SC2LOTV_LOC_ID_OFFSET + 2400),
+            "The Essence of Eternity": range(SC2LOTV_LOC_ID_OFFSET + 2400, SC2LOTV_LOC_ID_OFFSET + 2500),
+            "Amon's Fall":             range(SC2LOTV_LOC_ID_OFFSET + 2500, SC2LOTV_LOC_ID_OFFSET + 2600),
+
+            "The Escape":              range(SC2NCO_LOC_ID_OFFSET + 100, SC2NCO_LOC_ID_OFFSET + 200),
+            "Sudden Strike":           range(SC2NCO_LOC_ID_OFFSET + 200, SC2NCO_LOC_ID_OFFSET + 300),
+            "Enemy Intelligence":      range(SC2NCO_LOC_ID_OFFSET + 300, SC2NCO_LOC_ID_OFFSET + 400),
+            "Trouble In Paradise":     range(SC2NCO_LOC_ID_OFFSET + 400, SC2NCO_LOC_ID_OFFSET + 500),
+            "Night Terrors":           range(SC2NCO_LOC_ID_OFFSET + 500, SC2NCO_LOC_ID_OFFSET + 600),
+            "Flashpoint":              range(SC2NCO_LOC_ID_OFFSET + 600, SC2NCO_LOC_ID_OFFSET + 700),
+            "In the Enemy's Shadow":   range(SC2NCO_LOC_ID_OFFSET + 700, SC2NCO_LOC_ID_OFFSET + 800),
+            "Dark Skies":              range(SC2NCO_LOC_ID_OFFSET + 800, SC2NCO_LOC_ID_OFFSET + 900),
+            "End Game":                range(SC2NCO_LOC_ID_OFFSET + 900, SC2NCO_LOC_ID_OFFSET + 1000),
         }
 
         display_data = {}
