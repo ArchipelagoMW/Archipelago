@@ -57,11 +57,11 @@
 }
 
 .inventory-table .tint-terran img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg)
+    filter: sepia(100%) saturate(300%) brightness(130%) hue-rotate(120deg)
 }
 
 .inventory-table .tint-protoss img.acquired {
-    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(60deg) hue-rotate(120deg)
+    filter: sepia(100%) saturate(1000%) brightness(110%) hue-rotate(180deg)
 }
 
 .inventory-table .tint-level-1 img.acquired {
