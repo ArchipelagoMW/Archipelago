@@ -354,7 +354,7 @@ items:
           - 'Abigail''s Birth Certificate'
           - 'Mayor''s Tax Returns'
 
-# exit to the automatic region 'goal' to win. one MUST be called 'menu'
+# exit to the automatic region 'Victory' to win. one MUST be called 'Menu'
 # ability_check_with_dc is intended to make intuitive sense to those who are
 # familiar with the basic concept outlined on:
 # https://www.5esrd.com/using-ability-scores#Ability_Checks so we can make the
@@ -368,7 +368,7 @@ regions:
         - item: masterful_longsword
         - ability_check_with_dc: 20
       exits:
-        - goal
+        - Victory
 
     bowling_ball_door:
       name: 'Bowling Ball Door'
@@ -520,7 +520,7 @@ regions:
       exits:
         - prawn_stars
 
-    menu:
+    Menu:
       name_template: 'Before Basketball #{n}'
       unrandomized_items:
         key:

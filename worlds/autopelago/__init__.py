@@ -3,8 +3,31 @@ import logging
 # TODO: stabilize the imports, don't just import *
 from .AutopelagoDefinitions import *
 
-from BaseClasses import CollectionState, Entrance, Item, Location, Region, Tutorial
+from BaseClasses import CollectionState, Item, Location, MultiWorld, Region, Tutorial
 from worlds.AutoWorld import World, WebWorld
+
+def _is_trivial(req: AutopelagoGameRequirement):
+    if 'all' in req:
+        return not req['all']
+    elif 'rat_count' in req:
+        return req['rat_count'] == 0
+    elif 'ability_check_with_dc' in req:
+        return True
+    else:
+        return False
+
+def _is_satisfied(player: int, req: AutopelagoGameRequirement, state: CollectionState):
+    if 'all' in req:
+        return all(_is_satisfied(player, sub_req, state) for sub_req in req['all'])
+    elif 'any' in req:
+        return any(_is_satisfied(player, sub_req, state) for sub_req in req['any'])
+    elif 'item' in req:
+        return state.has(item_key_to_name[req['item']], player)
+    elif 'rat_count' in req:
+        return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[player].items() if k in item_name_to_rat_count) >= req['rat_count']
+    else:
+        assert 'ability_check_with_dc' in req, 'Only AutopelagoAbilityCheckRequirement is expected here'
+        return True
 
 
 class AutopelagoItem(Item):
@@ -13,6 +36,23 @@ class AutopelagoItem(Item):
 
 class AutopelagoLocation(Location):
     game = GAME_NAME
+
+    def __init__(self, player: int, name: str, parent: Region):
+        super().__init__(player, name, location_name_to_id[name] if name in location_name_to_id else None, parent)
+        if name in location_name_to_requirement:
+            req = location_name_to_requirement[name]
+            if not _is_trivial(req):
+                self.access_rule = lambda state: _is_satisfied(player, req, state)
+
+
+class AutopelagoRegion(Region):
+    game = GAME_NAME
+    autopelago_definition: AutopelagoRegionDefinition
+
+    def __init__(self, autopelago_definition: AutopelagoRegionDefinition, player: int, multiworld: MultiWorld, hint: Optional[str] = None):
+        super().__init__(autopelago_definition.key, player, multiworld, hint)
+        self.autopelago_definition = autopelago_definition
+        self.locations += (AutopelagoLocation(player, loc, self) for loc in autopelago_definition.locations)
 
 
 class AutopelagoWebWorld(WebWorld):
@@ -55,21 +95,8 @@ class AutopelagoWorld(World):
     # - location_descriptions
     # - hint_blacklist (should it include the goal item?)
 
-    def _is_satisfied(self, req: AutopelagoGameRequirement, state: CollectionState):
-        if 'all' in req:
-            return all(self._is_satisfied(sub_req, state) for sub_req in req['all'])
-        elif 'any' in req:
-            return any(self._is_satisfied(sub_req, state) for sub_req in req['any'])
-        elif 'item' in req:
-            return state.has(item_key_to_name[req['item']], self.player)
-        elif 'rat_count' in req:
-            return sum(item_name_to_rat_count[k] * i for k, i in state.prog_items[self.player].items() if k in item_name_to_rat_count) >= req['rat_count']
-        else:
-            assert 'ability_check_with_dc' in req, 'Only AutopelagoAbilityCheckRequirement is expected here'
-            return True
-
     def create_item(self, name: str, classification: ItemClassification | None = None):
-        id = item_name_to_id[name]
+        id = item_name_to_id[name] if name in item_name_to_id else None
         classification = classification or item_name_to_defined_classification[name]
         assert classification is not None, 'Classification should either be defined, calculated during generate_early, or hardcoded.'
         item = AutopelagoItem(name, classification, id, self.player)
@@ -91,12 +118,14 @@ class AutopelagoWorld(World):
                     items[replacements_made] = item
                     replacements_made += 1
 
-        category_to_next_offset = { category: 0 for category in generic_nonprogression_item_table }
-        next_is_trap = False
+        category_to_next_offset: dict[AutopelagoNonProgressionItemType, int] = { category: 0 for category in generic_nonprogression_item_table }
+        next_filler_becomes_trap = False
         for nonprog_type in location_name_to_unrandomized_nonprogression_item.values():
-            if nonprog_type == 'filler' and next_is_trap:
-                nonprog_type = 'trap'
-            next_is_trap = not next_is_trap
+            if nonprog_type == 'filler':
+                if next_filler_becomes_trap:
+                    nonprog_type = 'trap'
+                next_filler_becomes_trap = not next_filler_becomes_trap
+
             classification = autopelago_item_classification_of(nonprog_type)
             if category_to_next_offset[nonprog_type] > len(nonprogression_item_table[nonprog_type]):
                 nonprog_type = 'uncategorized'
@@ -105,29 +134,16 @@ class AutopelagoWorld(World):
             category_to_next_offset[nonprog_type] += 1
 
     def create_regions(self):
-        new_regions = { r.key: self.create_region(r) for r in autopelago_regions.values() }
-        for new_r in new_regions.values():
-            self.multiworld.regions.append(new_r)
+        new_regions = { r.key: AutopelagoRegion(r, self.player, self.multiworld) for r in autopelago_regions.values() }
+        for r in new_regions.values():
+            self.multiworld.regions.append(r)
+            req = r.autopelago_definition.requires
+            for exit in r.autopelago_definition.exits:
+                rule = lambda state: _is_satisfied(self.player, req, state)
+                r.connect(new_regions[exit], '', None if _is_trivial(req) else rule)
 
-            old_r = autopelago_regions[new_r.name]
-            for exit in old_r.exits:
-                connection = Entrance(self.player, exit, new_r)
-                connection.access_rule = lambda state: self._is_satisfied(old_r.requires, state)
-                new_r.exits.append(connection)
-                connection.connect(new_regions[exit])
-
-        new_regions['goal'].locations[0].place_locked_item(self.create_item('goal', ItemClassification.progression))
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('goal', self.player)
-
-    def create_region(self, r: AutopelagoRegionDefinition):
-        region = Region(r.key, self.player, self.multiworld)
-        for loc in r.locations:
-            location_id = self.location_name_to_id[loc]
-            location = AutopelagoLocation(self.player, loc, location_id, region)
-            requires = location_name_to_requirement[loc]
-            location.access_rule = lambda state: self._is_satisfied(requires, state)
-            region.locations.append(location)
-        return region
+        self.multiworld.get_location('Victory', self.player).place_locked_item(self.create_item('Victory'), ItemClassification.progression)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has('Victory', self.player)
 
     def get_filler_item_name(self) -> str:
         return "Monkey's Paw"
