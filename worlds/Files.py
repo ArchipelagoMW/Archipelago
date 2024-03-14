@@ -141,6 +141,7 @@ class APPatch(APContainer):
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APPatch, self).get_manifest()
         manifest["procedure"] = self.procedure
+        manifest["compatible_version"] = 6
         return manifest
 
 
@@ -164,6 +165,7 @@ class APDeltaPatch(APAutoPatchInterface):
     patch_file_ending: str = ""
     delta: Optional[bytes] = None
     source_data: bytes
+    procedure = None  # delete this line when APPP is added
 
     def __init__(self, *args: Any, patched_path: str = "", **kwargs: Any) -> None:
         self.patched_path = patched_path
@@ -174,6 +176,7 @@ class APDeltaPatch(APAutoPatchInterface):
         manifest["base_checksum"] = self.hash
         manifest["result_file_ending"] = self.result_file_ending
         manifest["patch_file_ending"] = self.patch_file_ending
+        manifest["compatible_version"] = 5  # delete this line when APPP is added
         return manifest
 
     @classmethod
