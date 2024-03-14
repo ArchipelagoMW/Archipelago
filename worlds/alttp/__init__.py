@@ -256,6 +256,7 @@ class ALTTPWorld(World):
         self.dungeon_local_item_names = set()
         self.dungeon_specific_item_names = set()
         self.rom_name_available_event = threading.Event()
+        self.pushed_shop_inventories = threading.Event()
         self.has_progressive_bows = False
         self.dungeons = {}
         self.waterfall_fairy_bottle_fill = "Bottle"
@@ -508,8 +509,8 @@ class ALTTPWorld(World):
         fill_dungeons_restrictive(world)
 
     @classmethod
-    def stage_post_fill(cls, world):
-        push_shop_inventories(world)
+    def stage_generate_output(cls, multiworld, output_directory):
+        push_shop_inventories(multiworld)
 
     @property
     def use_enemizer(self) -> bool:
@@ -523,6 +524,9 @@ class ALTTPWorld(World):
     def generate_output(self, output_directory: str):
         multiworld = self.multiworld
         player = self.player
+
+        self.pushed_shop_inventories.wait()
+
         try:
             use_enemizer = self.use_enemizer
 
@@ -638,17 +642,18 @@ class ALTTPWorld(World):
         return ALttPItem(name, self.player, **item_init_table[name])
 
     @classmethod
-    def stage_fill_hook(cls, world, progitempool, usefulitempool, filleritempool, fill_locations):
+    def stage_fill_hook(cls, multiworld, progitempool, usefulitempool, filleritempool, fill_locations):
         trash_counts = {}
-        for player in world.get_game_players("A Link to the Past"):
-            if not world.ganonstower_vanilla[player] or \
-                    world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
+        for player in multiworld.get_game_players("A Link to the Past"):
+            world = multiworld.worlds[player]
+            if not multiworld.ganonstower_vanilla[player] or \
+                    world.options.glitches_required.current_key in {'overworld_glitches', 'hybrid_major_glitches', "no_logic"}:
                 pass
-            elif 'triforce_hunt' in world.goal[player].current_key and ('local' in world.goal[player].current_key or world.players == 1):
-                trash_counts[player] = world.random.randint(world.crystals_needed_for_gt[player] * 2,
-                                                            world.crystals_needed_for_gt[player] * 4)
+            elif 'triforce_hunt' in world.options.goal.current_key and ('local' in world.options.goal.current_key or world.players == 1):
+                trash_counts[player] = multiworld.random.randint(world.options.crystals_needed_for_gt * 2,
+                                                            world.options.crystals_needed_for_gt * 4)
             else:
-                trash_counts[player] = world.random.randint(0, world.crystals_needed_for_gt[player] * 2)
+                trash_counts[player] = multiworld.random.randint(0, world.options.crystals_needed_for_gt * 2)
 
         if trash_counts:
             locations_mapping = {player: [] for player in trash_counts}
@@ -658,14 +663,14 @@ class ALTTPWorld(World):
 
             for player, trash_count in trash_counts.items():
                 gtower_locations = locations_mapping[player]
-                world.random.shuffle(gtower_locations)
+                multiworld.random.shuffle(gtower_locations)
 
                 while gtower_locations and filleritempool and trash_count > 0:
                     spot_to_fill = gtower_locations.pop()
                     for index, item in enumerate(filleritempool):
                         if spot_to_fill.item_rule(item):
                             filleritempool.pop(index)  # remove from outer fill
-                            world.push_item(spot_to_fill, item, False)
+                            multiworld.push_item(spot_to_fill, item, False)
                             fill_locations.remove(spot_to_fill)  # very slow, unfortunately
                             trash_count -= 1
                             break

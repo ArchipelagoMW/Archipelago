@@ -112,6 +112,7 @@
       HI:
         id: Entry Room/Panel_hi_hi
         tag: midwhite
+        check: True
       HIDDEN:
         id: Entry Room/Panel_hidden_hidden
         tag: midwhite

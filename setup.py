@@ -68,7 +68,6 @@ non_apworlds: set = {
     "Archipelago",
     "ChecksFinder",
     "Clique",
-    "DLCQuest",
     "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -80,7 +79,6 @@ non_apworlds: set = {
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
-    "Zillion",
 }
 
 # LogicMixin is broken before 3.10 import revamp
