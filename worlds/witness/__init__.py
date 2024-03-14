@@ -89,6 +89,46 @@ class WitnessWorld(World):
             'entity_to_name': StaticWitnessLogic.ENTITY_ID_TO_NAME,
         }
 
+    def determine_sufficient_progression(self):
+        """
+        Determine whether there are enough progression items in this world to consider it "interactive".
+        In the case of singleplayer, this just outputs a warning.
+        In the case of multiplayer, the requirements are a bit stricter and an Exception is raised.
+        """
+
+        # A note on Obelisk Keys:
+        # Obelisk Keys are never relevant in singleplayer, because the locations they lock are irrelevant to in-game
+        # progress and irrelevant to all victory conditions. Thus, I consider them "fake progression" for singleplayer.
+        # However, those locations could obviously contain big items needed for other players, so I consider
+        # "Obelisk Keys only" valid for multiworld.
+
+        # A note on Laser Shuffle:
+        # In singleplayer, I don't mind "Ice Rod Hunt" type gameplay, so "laser shuffle only" is valid.
+        # However, I do not want to allow "Ice Rod Hunt" style gameplay in multiworld, so "laser shuffle only" is
+        # not considered interactive enough for multiworld.
+
+        interacts_sufficiently_with_multiworld = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.obelisk_keys and self.options.shuffle_EPs
+        )
+
+        has_locally_relevant_progression = (
+            self.options.shuffle_symbols
+            or self.options.shuffle_doors
+            or self.options.shuffle_lasers
+            or self.options.shuffle_boat
+            or self.options.early_caves == "add_to_pool" and self.options.victory_condition == "challenge"
+        )
+
+        if not has_locally_relevant_progression and self.multiworld.players == 1:
+            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
+                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
+        elif not interacts_sufficiently_with_multiworld and self.multiworld.players > 1:
+            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
+                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
+                            f" Shuffle, Door Shuffle or Obelisk Keys.")
+
     def generate_early(self):
         disabled_locations = self.options.exclude_locations.value
 
@@ -102,26 +142,9 @@ class WitnessWorld(World):
         )
         self.regio: WitnessRegions = WitnessRegions(self.locat, self)
 
-        interacts_with_multiworld = (
-                self.options.shuffle_symbols or
-                self.options.shuffle_doors or
-                self.options.shuffle_lasers == "anywhere"
-        )
+        self.log_ids_to_hints = dict()
 
-        has_progression = (
-                interacts_with_multiworld
-                or self.options.shuffle_lasers == "local"
-                or self.options.shuffle_boat
-                or self.options.early_caves == "add_to_pool"
-        )
-
-        if not has_progression and self.multiworld.players == 1:
-            warning(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have any progression"
-                    f" items. Please turn on Symbol Shuffle, Door Shuffle or Laser Shuffle if that doesn't seem right.")
-        elif not interacts_with_multiworld and self.multiworld.players > 1:
-            raise Exception(f"{self.multiworld.get_player_name(self.player)}'s Witness world doesn't have enough"
-                            f" progression items that can be placed in other players' worlds. Please turn on Symbol"
-                            f" Shuffle, Door Shuffle or non-local Laser Shuffle.")
+        self.determine_sufficient_progression()
 
         if self.options.shuffle_lasers == "local":
             self.options.local_items.value |= self.item_name_groups["Lasers"]
