@@ -20,7 +20,7 @@ if typing.TYPE_CHECKING:
     import pathlib
 
 
-class OptionError(RuntimeError):
+class OptionError(ValueError):
     pass
 
 
