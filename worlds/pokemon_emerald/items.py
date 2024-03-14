@@ -51,13 +51,13 @@ ITEM_GROUPS = {
         "Stone Badge", "Knuckle Badge",
         "Dynamo Badge", "Heat Badge",
         "Balance Badge", "Feather Badge",
-        "Mind Badge", "Rain Badge"
+        "Mind Badge", "Rain Badge",
     },
     "HMs": {
         "HM01 Cut", "HM02 Fly",
         "HM03 Surf", "HM04 Strength",
         "HM05 Flash", "HM06 Rock Smash",
-        "HM07 Waterfall", "HM08 Dive"
+        "HM07 Waterfall", "HM08 Dive",
     },
     "HM01": {"HM01 Cut"},
     "HM02": {"HM02 Fly"},
@@ -66,7 +66,7 @@ ITEM_GROUPS = {
     "HM05": {"HM05 Flash"},
     "HM06": {"HM06 Rock Smash"},
     "HM07": {"HM07 Waterfall"},
-    "HM08": {"HM08 Dive"}
+    "HM08": {"HM08 Dive"},
 }
 
 

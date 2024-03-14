@@ -32,35 +32,35 @@
     "tags": ["Badge"]
   },
 
-  "NPC_GIFT_RECEIVED_HM01": {
+  "NPC_GIFT_RECEIVED_HM_CUT": {
     "label": "Rustboro City - HM01 from Cutter's House",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM02": {
+  "NPC_GIFT_RECEIVED_HM_FLY": {
     "label": "Route 119 - HM02 from Rival Battle",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM03": {
+  "NPC_GIFT_RECEIVED_HM_SURF": {
     "label": "Petalburg City - HM03 from Wally's Uncle",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM04": {
+  "NPC_GIFT_RECEIVED_HM_STRENGTH": {
     "label": "Rusturf Tunnel - HM04 from Tunneler",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM05": {
+  "NPC_GIFT_RECEIVED_HM_FLASH": {
     "label": "Granite Cave 1F - HM05 from Hiker",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM06": {
+  "NPC_GIFT_RECEIVED_HM_ROCK_SMASH": {
     "label": "Mauville City - HM06 from Rock Smash Guy",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM07": {
+  "NPC_GIFT_RECEIVED_HM_WATERFALL": {
     "label": "Sootopolis City - HM07 from Wallace",
     "tags": ["HM"]
   },
-  "NPC_GIFT_RECEIVED_HM08": {
+  "NPC_GIFT_RECEIVED_HM_DIVE": {
     "label": "Mossdeep City - HM08 from Steven's House",
     "tags": ["HM"]
   },
@@ -119,23 +119,23 @@
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_4_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 1",
+    "label": "Abandoned Ship HF - Room 4 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_1_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 3",
+    "label": "Abandoned Ship HF - Room 1 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_6_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 4",
+    "label": "Abandoned Ship HF - Room 6 Key",
     "tags": ["KeyItem"]
   },
   "HIDDEN_ITEM_ABANDONED_SHIP_RM_2_KEY": {
-    "label": "Abandoned Ship HF - Hidden Item in Room 5",
+    "label": "Abandoned Ship HF - Room 2 Key",
     "tags": ["KeyItem"]
   },
-  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_4_SCANNER": {
-    "label": "Abandoned Ship HF - Item in Room 2",
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_2_SCANNER": {
+    "label": "Abandoned Ship HF - Scanner",
     "tags": ["KeyItem"]
   },
   "NPC_GIFT_RECEIVED_POKEBLOCK_CASE": {
@@ -144,7 +144,23 @@
   },
   "NPC_GIFT_RECEIVED_SS_TICKET": {
     "label": "Littleroot Town - S.S. Ticket from Norman",
-    "tags": ["Ferry"]
+    "tags": ["KeyItem"]
+  },
+  "NPC_GIFT_RECEIVED_AURORA_TICKET": {
+    "label": "Littleroot Town - Aurora Ticket from Norman",
+    "tags": ["EventTicket"]
+  },
+  "NPC_GIFT_RECEIVED_EON_TICKET": {
+    "label": "Littleroot Town - Eon Ticket from Norman",
+    "tags": ["EventTicket"]
+  },
+  "NPC_GIFT_RECEIVED_MYSTIC_TICKET": {
+    "label": "Littleroot Town - Mystic Ticket from Norman",
+    "tags": ["EventTicket"]
+  },
+  "NPC_GIFT_RECEIVED_OLD_SEA_MAP": {
+    "label": "Littleroot Town - Old Sea Map from Norman",
+    "tags": ["EventTicket"]
   },
 
   "NPC_GIFT_RECEIVED_OLD_ROD": {
@@ -226,10 +242,6 @@
   },
   "HIDDEN_ITEM_MT_PYRE_SUMMIT_ZINC": {
     "label": "Mt Pyre Summit - Hidden Item Grave",
-    "tags": ["HiddenItem"]
-  },
-  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
-    "label": "Navel Rock Top - Hidden Item Sacred Ash",
     "tags": ["HiddenItem"]
   },
   "HIDDEN_ITEM_PETALBURG_CITY_RARE_CANDY": {
@@ -356,7 +368,7 @@
     "label": "Route 113 - Hidden Item Mound Between Trainers",
     "tags": ["HiddenItem"]
   },
-  "HIDDEN_ITEM_ROUTE_113_TM32": {
+  "HIDDEN_ITEM_ROUTE_113_TM_DOUBLE_TEAM": {
     "label": "Route 113 - Hidden Item Mound West of Workshop",
     "tags": ["HiddenItem"]
   },
@@ -492,10 +504,6 @@
     "label": "SS Tidal - Hidden Item in Lower Deck Trash Can",
     "tags": ["HiddenItem"]
   },
-  "HIDDEN_ITEM_TRICK_HOUSE_NUGGET": {
-    "label": "Trick House - Hidden Item",
-    "tags": ["HiddenItem"]
-  },
   "HIDDEN_ITEM_UNDERWATER_124_GREEN_SHARD": {
     "label": "Route 124 UW - Hidden Item in Big Area",
     "tags": ["HiddenItem"]
@@ -592,8 +600,12 @@
     "label": "Victory Road B2F - Hidden Item in Northeast Corner",
     "tags": ["HiddenItem"]
   },
+  "HIDDEN_ITEM_NAVEL_ROCK_TOP_SACRED_ASH": {
+    "label": "Navel Rock Top - Hidden Item Sacred Ash",
+    "tags": ["HiddenItem"]
+  },
 
-  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM18": {
+  "ITEM_ABANDONED_SHIP_HIDDEN_FLOOR_ROOM_1_TM_RAIN_DANCE": {
     "label": "Abandoned Ship HF - Item in Room 1",
     "tags": ["OverworldItem"]
   },
@@ -617,7 +629,7 @@
     "label": "Abandoned Ship B1F - Item in South Rooms",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM13": {
+  "ITEM_ABANDONED_SHIP_ROOMS_B1F_TM_ICE_BEAM": {
     "label": "Abandoned Ship B1F - Item in Storage Room",
     "tags": ["OverworldItem"]
   },
@@ -653,7 +665,7 @@
     "label": "Fiery Path - Item Behind Boulders 1",
     "tags": ["OverworldItem"]
   },
-  "ITEM_FIERY_PATH_TM06": {
+  "ITEM_FIERY_PATH_TM_TOXIC": {
     "label": "Fiery Path - Item Behind Boulders 2",
     "tags": ["OverworldItem"]
   },
@@ -725,11 +737,11 @@
     "label": "Meteor Falls 1F - Item Below Waterfall",
     "tags": ["OverworldItem"]
   },
-  "ITEM_METEOR_FALLS_1F_1R_TM23": {
+  "ITEM_METEOR_FALLS_1F_1R_TM_IRON_TAIL": {
     "label": "Meteor Falls 1F - Item Before Steven's Cave",
     "tags": ["OverworldItem"]
   },
-  "ITEM_METEOR_FALLS_B1F_2R_TM02": {
+  "ITEM_METEOR_FALLS_B1F_2R_TM_DRAGON_CLAW": {
     "label": "Meteor Falls B1F - Item in North Cave",
     "tags": ["OverworldItem"]
   },
@@ -753,11 +765,11 @@
     "label": "Mt Pyre 5F - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_MT_PYRE_6F_TM30": {
+  "ITEM_MT_PYRE_6F_TM_SHADOW_BALL": {
     "label": "Mt Pyre 6F - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_MT_PYRE_EXTERIOR_TM48": {
+  "ITEM_MT_PYRE_EXTERIOR_TM_SKILL_SWAP": {
     "label": "Mt Pyre Exterior - Item 1",
     "tags": ["OverworldItem"]
   },
@@ -881,7 +893,7 @@
     "label": "Route 111 - Item Desert Near Tower",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ROUTE_111_TM37": {
+  "ITEM_ROUTE_111_TM_SANDSTORM": {
     "label": "Route 111 - Item Desert South",
     "tags": ["OverworldItem"]
   },
@@ -929,7 +941,7 @@
     "label": "Route 115 - Item North Near Trainers",
     "tags": ["OverworldItem"]
   },
-  "ITEM_ROUTE_115_TM01": {
+  "ITEM_ROUTE_115_TM_FOCUS_PUNCH": {
     "label": "Route 115 - Item Near Mud Slope",
     "tags": ["OverworldItem"]
   },
@@ -1137,7 +1149,7 @@
     "label": "Safari Zone NE - Item on Ledge",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SAFARI_ZONE_NORTH_WEST_TM22": {
+  "ITEM_SAFARI_ZONE_NORTH_WEST_TM_SOLAR_BEAM": {
     "label": "Safari Zone NW - Item Behind Pond",
     "tags": ["OverworldItem"]
   },
@@ -1149,11 +1161,11 @@
     "label": "Safari Zone SW - Item Behind Pond",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SCORCHED_SLAB_TM11": {
+  "ITEM_SCORCHED_SLAB_TM_SUNNY_DAY": {
     "label": "Scorched Slab - Item",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM26": {
+  "ITEM_SEAFLOOR_CAVERN_ROOM_9_TM_EARTHQUAKE": {
     "label": "Seafloor Cavern Room 9 - Item Before Kyogre",
     "tags": ["OverworldItem"]
   },
@@ -1165,7 +1177,7 @@
     "label": "Shoal Cave Ice Room - Item 1",
     "tags": ["OverworldItem"]
   },
-  "ITEM_SHOAL_CAVE_ICE_ROOM_TM07": {
+  "ITEM_SHOAL_CAVE_ICE_ROOM_TM_HAIL": {
     "label": "Shoal Cave Ice Room - Item 2",
     "tags": ["OverworldItem"]
   },
@@ -1225,7 +1237,7 @@
     "label": "Victory Road B1F - Item Behind Boulders",
     "tags": ["OverworldItem"]
   },
-  "ITEM_VICTORY_ROAD_B1F_TM29": {
+  "ITEM_VICTORY_ROAD_B1F_TM_PSYCHIC": {
     "label": "Victory Road B1F - Item on Northeast Ledge",
     "tags": ["OverworldItem"]
   },
@@ -1234,7 +1246,7 @@
     "tags": ["OverworldItem"]
   },
 
-  "NPC_GIFT_GOT_TM24_FROM_WATTSON": {
+  "NPC_GIFT_GOT_TM_THUNDERBOLT_FROM_WATTSON": {
     "label": "Mauville City - TM24 from Wattson",
     "tags": ["NpcGift"]
   },
@@ -1275,7 +1287,7 @@
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_KINGS_ROCK": {
-    "label": "Mossdeep City - King's Rock from Kid",
+    "label": "Mossdeep City - King's Rock from Boy",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_MACHO_BRACE": {
@@ -1322,112 +1334,120 @@
     "label": "Route 109 - Soft Sand from Tuber",
     "tags": ["NpcGift"]
   },
+  "NPC_GIFT_RECEIVED_SOOT_SACK": {
+    "label": "Route 113 - Soot Sack from Glass Blower",
+    "tags": ["NpcGift"]
+  },
   "NPC_GIFT_RECEIVED_SOOTHE_BELL": {
     "label": "Slateport City - Soothe Bell from Woman in Fan Club",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_SUN_STONE_MOSSDEEP": {
-    "label": "Mossdeep City - Gift from Man in Museum",
+    "label": "Space Center - Gift from Man",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM03": {
+  "NPC_GIFT_RECEIVED_TM_WATER_PULSE": {
     "label": "Sootopolis Gym - TM03 from Juan",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM04": {
+  "NPC_GIFT_RECEIVED_TM_CALM_MIND": {
     "label": "Mossdeep Gym - TM04 from Tate and Liza",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM05": {
+  "NPC_GIFT_RECEIVED_TM_ROAR": {
     "label": "Route 114 - TM05 from Roaring Man",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM08": {
+  "NPC_GIFT_RECEIVED_TM_BULK_UP": {
     "label": "Dewford Gym - TM08 from Brawly",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM09": {
+  "NPC_GIFT_RECEIVED_TM_BULLET_SEED": {
     "label": "Route 104 - TM09 from Boy",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM10": {
+  "NPC_GIFT_RECEIVED_TM_HIDDEN_POWER": {
     "label": "Fortree City - TM10 from Hidden Power Lady",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM19": {
+  "NPC_GIFT_RECEIVED_TM_GIGA_DRAIN": {
     "label": "Route 123 - TM19 from Girl near Berries",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM21": {
+  "NPC_GIFT_RECEIVED_TM_FRUSTRATION": {
     "label": "Pacifidlog Town - TM21 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM27": {
+  "NPC_GIFT_RECEIVED_TM_RETURN": {
     "label": "Fallarbor Town - TM27 from Cozmo",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM27_2": {
+  "NPC_GIFT_RECEIVED_TM_RETURN_2": {
     "label": "Pacifidlog Town - TM27 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM28": {
-    "label": "Route 114 - TM28 from Fossil Maniac",
+  "NPC_GIFT_RECEIVED_TM_DIG": {
+    "label": "Route 114 - TM28 from Fossil Maniac's Brother",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM31": {
+  "NPC_GIFT_RECEIVED_TM_BRICK_BREAK": {
     "label": "Sootopolis City - TM31 from Black Belt in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM34": {
+  "NPC_GIFT_RECEIVED_TM_SHOCK_WAVE": {
     "label": "Mauville Gym - TM34 from Wattson",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM36": {
+  "NPC_GIFT_RECEIVED_TM_SLUDGE_BOMB": {
     "label": "Dewford Town - TM36 from Sludge Bomb Man",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM39": {
+  "NPC_GIFT_RECEIVED_TM_ROCK_TOMB": {
     "label": "Rustboro Gym - TM39 from Roxanne",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM40": {
+  "NPC_GIFT_RECEIVED_TM_AERIAL_ACE": {
     "label": "Fortree Gym - TM40 from Winona",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM41": {
+  "NPC_GIFT_RECEIVED_TM_TORMENT": {
     "label": "Slateport City - TM41 from Sailor in Battle Tent",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM42": {
+  "NPC_GIFT_RECEIVED_TM_FACADE": {
     "label": "Petalburg Gym - TM42 from Norman",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM44": {
+  "NPC_GIFT_RECEIVED_TM_REST": {
     "label": "Lilycove City - TM44 from Man in House",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM45": {
+  "NPC_GIFT_RECEIVED_TM_ATTRACT": {
     "label": "Verdanturf Town - TM45 from Woman in Battle Tent",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM46": {
-    "label": "Slateport City - TM46 from Aqua Grunt in Museum",
+  "NPC_GIFT_RECEIVED_TM_THIEF": {
+    "label": "Oceanic Museum - TM46 from Aqua Grunt in Museum",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM47": {
+  "NPC_GIFT_RECEIVED_TM_STEEL_WING": {
     "label": "Granite Cave 1F - TM47 from Steven",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM49": {
+  "NPC_GIFT_RECEIVED_TM_SNATCH": {
     "label": "SS Tidal - TM49 from Thief",
     "tags": ["NpcGift"]
   },
-  "NPC_GIFT_RECEIVED_TM50": {
+  "NPC_GIFT_RECEIVED_TM_OVERHEAT": {
     "label": "Lavaridge Gym - TM50 from Flannery",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_WHITE_HERB": {
     "label": "Route 104 - White Herb from Lady Near Flower Shop",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_FLOWER_SHOP_RECEIVED_BERRY": {
+    "label": "Route 104 - Berry from Girl in Flower Shop",
     "tags": ["NpcGift"]
   },
   "NPC_GIFT_RECEIVED_DEEP_SEA_SCALE": {
@@ -1437,5 +1457,3908 @@
   "NPC_GIFT_RECEIVED_DEEP_SEA_TOOTH": {
     "label": "Slateport City - Deep Sea Tooth from Capt. Stern",
     "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_1": {
+    "label": "Trick House Puzzle 1 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_2": {
+    "label": "Trick House Puzzle 2 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_3": {
+    "label": "Trick House Puzzle 3 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_4": {
+    "label": "Trick House Puzzle 4 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_5": {
+    "label": "Trick House Puzzle 5 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_6": {
+    "label": "Trick House Puzzle 6 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_TRICK_HOUSE_REWARD_7": {
+    "label": "Trick House Puzzle 7 - Reward",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_RECEIVED_FIRST_POKEBALLS": {
+    "label": "Littleroot Town - Pokeballs from Rival",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_1": {
+    "label": "Sootopolis City - Berry from Girl on Grass 1",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_SOOTOPOLIS_RECEIVED_BERRY_2": {
+    "label": "Sootopolis City - Berry from Girl on Grass 2",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_111_RECEIVED_BERRY": {
+    "label": "Route 111 - Berry from Girl Near Berry Trees",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_114_RECEIVED_BERRY": {
+    "label": "Route 114 - Berry from Man Near House",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_ROUTE_120_RECEIVED_BERRY": {
+    "label": "Route 120 - Berry from Lady Near Berry Trees",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_1": {
+    "label": "Route 123 - Berry from Berry Master 1",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTER_RECEIVED_BERRY_2": {
+    "label": "Route 123 - Berry from Berry Master 2",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_BERRY_MASTERS_WIFE": {
+    "label": "Route 123 - Berry from Berry Master's Wife",
+    "tags": ["NpcGift"]
+  },
+  "NPC_GIFT_LILYCOVE_RECEIVED_BERRY": {
+    "label": "Lilycove City - Berry from Gentleman Above Ledges",
+    "tags": ["NpcGift"]
+  },
+
+  "BERRY_TREE_01": {
+    "label": "Route 102 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_02": {
+    "label": "Route 102 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_03": {
+    "label": "Route 104 - Berry Tree Flower Shop 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_04": {
+    "label": "Route 104 - Berry Tree Flower Shop 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_05": {
+    "label": "Route 103 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_06": {
+    "label": "Route 103 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_07": {
+    "label": "Route 103 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_08": {
+    "label": "Route 104 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_09": {
+    "label": "Route 104 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_10": {
+    "label": "Route 104 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_11": {
+    "label": "Route 104 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_12": {
+    "label": "Route 104 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_13": {
+    "label": "Route 104 - Berry Tree South 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_14": {
+    "label": "Route 123 - Berry Tree Berry Master 6",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_15": {
+    "label": "Route 123 - Berry Tree Berry Master 7",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_16": {
+    "label": "Route 110 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_17": {
+    "label": "Route 110 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_18": {
+    "label": "Route 110 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_19": {
+    "label": "Route 111 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_20": {
+    "label": "Route 111 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_21": {
+    "label": "Route 112 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_22": {
+    "label": "Route 112 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_23": {
+    "label": "Route 112 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_24": {
+    "label": "Route 112 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_25": {
+    "label": "Route 116 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_26": {
+    "label": "Route 116 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_27": {
+    "label": "Route 117 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_28": {
+    "label": "Route 117 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_29": {
+    "label": "Route 117 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_30": {
+    "label": "Route 123 - Berry Tree Berry Master 8",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_31": {
+    "label": "Route 118 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_32": {
+    "label": "Route 118 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_33": {
+    "label": "Route 118 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_34": {
+    "label": "Route 119 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_35": {
+    "label": "Route 119 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_36": {
+    "label": "Route 119 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_37": {
+    "label": "Route 120 - Berry Tree in Side Area 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_38": {
+    "label": "Route 120 - Berry Tree in Side Area 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_39": {
+    "label": "Route 120 - Berry Tree in Side Area 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_40": {
+    "label": "Route 120 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_41": {
+    "label": "Route 120 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_42": {
+    "label": "Route 120 - Berry Tree South 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_43": {
+    "label": "Route 120 - Berry Tree Pond 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_44": {
+    "label": "Route 120 - Berry Tree Pond 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_45": {
+    "label": "Route 120 - Berry Tree Pond 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_46": {
+    "label": "Route 120 - Berry Tree Pond 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_47": {
+    "label": "Route 121 - Berry Tree West 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_48": {
+    "label": "Route 121 - Berry Tree West 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_49": {
+    "label": "Route 121 - Berry Tree West 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_50": {
+    "label": "Route 121 - Berry Tree West 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_51": {
+    "label": "Route 121 - Berry Tree East 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_52": {
+    "label": "Route 121 - Berry Tree East 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_53": {
+    "label": "Route 121 - Berry Tree East 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_54": {
+    "label": "Route 121 - Berry Tree East 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_55": {
+    "label": "Route 115 - Berry Tree Behind Smashable Rock 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_56": {
+    "label": "Route 115 - Berry Tree Behind Smashable Rock 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_57": {
+    "label": "Route 123 - Berry Tree East 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_58": {
+    "label": "Route 123 - Berry Tree Berry Master 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_59": {
+    "label": "Route 123 - Berry Tree Berry Master 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_60": {
+    "label": "Route 123 - Berry Tree Berry Master 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_61": {
+    "label": "Route 123 - Berry Tree Berry Master 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_62": {
+    "label": "Route 123 - Berry Tree East 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_63": {
+    "label": "Route 123 - Berry Tree East 5",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_64": {
+    "label": "Route 123 - Berry Tree East 6",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_65": {
+    "label": "Route 123 - Berry Master Berry Tree 9",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_66": {
+    "label": "Route 116 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_67": {
+    "label": "Route 116 - Berry Tree 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_68": {
+    "label": "Route 114 - Berry Tree 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_69": {
+    "label": "Route 115 - Berry Tree North 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_70": {
+    "label": "Route 115 - Berry Tree North 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_71": {
+    "label": "Route 115 - Berry Tree North 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_72": {
+    "label": "Route 123 - Berry Tree Berry Master 10",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_73": {
+    "label": "Route 123 - Berry Tree Berry Master 11",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_74": {
+    "label": "Route 123 - Berry Tree Berry Master 12",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_75": {
+    "label": "Route 104 - Berry Tree Flower Shop 3",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_76": {
+    "label": "Route 104 - Berry Tree Flower Shop 4",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_77": {
+    "label": "Route 114 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_78": {
+    "label": "Route 114 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_79": {
+    "label": "Route 123 - Berry Tree Berry Master 5",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_80": {
+    "label": "Route 111 - Berry Tree 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_81": {
+    "label": "Route 111 - Berry Tree 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_82": {
+    "label": "Route 130 - Berry Tree on Mirage Island",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_83": {
+    "label": "Route 119 - Berry Tree Above Waterfall 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_84": {
+    "label": "Route 119 - Berry Tree Above Waterfall 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_85": {
+    "label": "Route 119 - Berry Tree South 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_86": {
+    "label": "Route 119 - Berry Tree South 2",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_87": {
+    "label": "Route 123 - Berry Tree East 1",
+    "tags": ["BerryTree"]
+  },
+  "BERRY_TREE_88": {
+    "label": "Route 123 - Berry Tree East 2",
+    "tags": ["BerryTree"]
+  },
+
+  "POKEDEX_REWARD_001": {
+    "label": "Pokedex - Bulbasaur",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_002": {
+    "label": "Pokedex - Ivysaur",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_003": {
+    "label": "Pokedex - Venusaur",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_004": {
+    "label": "Pokedex - Charmander",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_005": {
+    "label": "Pokedex - Charmeleon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_006": {
+    "label": "Pokedex - Charizard",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_007": {
+    "label": "Pokedex - Squirtle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_008": {
+    "label": "Pokedex - Wartortle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_009": {
+    "label": "Pokedex - Blastoise",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_010": {
+    "label": "Pokedex - Caterpie",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_011": {
+    "label": "Pokedex - Metapod",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_012": {
+    "label": "Pokedex - Butterfree",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_013": {
+    "label": "Pokedex - Weedle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_014": {
+    "label": "Pokedex - Kakuna",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_015": {
+    "label": "Pokedex - Beedrill",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_016": {
+    "label": "Pokedex - Pidgey",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_017": {
+    "label": "Pokedex - Pidgeotto",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_018": {
+    "label": "Pokedex - Pidgeot",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_019": {
+    "label": "Pokedex - Rattata",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_020": {
+    "label": "Pokedex - Raticate",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_021": {
+    "label": "Pokedex - Spearow",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_022": {
+    "label": "Pokedex - Fearow",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_023": {
+    "label": "Pokedex - Ekans",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_024": {
+    "label": "Pokedex - Arbok",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_025": {
+    "label": "Pokedex - Pikachu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_026": {
+    "label": "Pokedex - Raichu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_027": {
+    "label": "Pokedex - Sandshrew",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_028": {
+    "label": "Pokedex - Sandslash",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_029": {
+    "label": "Pokedex - Nidoran Female",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_030": {
+    "label": "Pokedex - Nidorina",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_031": {
+    "label": "Pokedex - Nidoqueen",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_032": {
+    "label": "Pokedex - Nidoran Male",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_033": {
+    "label": "Pokedex - Nidorino",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_034": {
+    "label": "Pokedex - Nidoking",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_035": {
+    "label": "Pokedex - Clefairy",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_036": {
+    "label": "Pokedex - Clefable",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_037": {
+    "label": "Pokedex - Vulpix",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_038": {
+    "label": "Pokedex - Ninetales",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_039": {
+    "label": "Pokedex - Jigglypuff",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_040": {
+    "label": "Pokedex - Wigglytuff",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_041": {
+    "label": "Pokedex - Zubat",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_042": {
+    "label": "Pokedex - Golbat",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_043": {
+    "label": "Pokedex - Oddish",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_044": {
+    "label": "Pokedex - Gloom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_045": {
+    "label": "Pokedex - Vileplume",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_046": {
+    "label": "Pokedex - Paras",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_047": {
+    "label": "Pokedex - Parasect",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_048": {
+    "label": "Pokedex - Venonat",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_049": {
+    "label": "Pokedex - Venomoth",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_050": {
+    "label": "Pokedex - Diglett",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_051": {
+    "label": "Pokedex - Dugtrio",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_052": {
+    "label": "Pokedex - Meowth",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_053": {
+    "label": "Pokedex - Persian",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_054": {
+    "label": "Pokedex - Psyduck",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_055": {
+    "label": "Pokedex - Golduck",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_056": {
+    "label": "Pokedex - Mankey",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_057": {
+    "label": "Pokedex - Primeape",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_058": {
+    "label": "Pokedex - Growlithe",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_059": {
+    "label": "Pokedex - Arcanine",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_060": {
+    "label": "Pokedex - Poliwag",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_061": {
+    "label": "Pokedex - Poliwhirl",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_062": {
+    "label": "Pokedex - Poliwrath",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_063": {
+    "label": "Pokedex - Abra",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_064": {
+    "label": "Pokedex - Kadabra",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_065": {
+    "label": "Pokedex - Alakazam",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_066": {
+    "label": "Pokedex - Machop",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_067": {
+    "label": "Pokedex - Machoke",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_068": {
+    "label": "Pokedex - Machamp",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_069": {
+    "label": "Pokedex - Bellsprout",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_070": {
+    "label": "Pokedex - Weepinbell",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_071": {
+    "label": "Pokedex - Victreebel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_072": {
+    "label": "Pokedex - Tentacool",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_073": {
+    "label": "Pokedex - Tentacruel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_074": {
+    "label": "Pokedex - Geodude",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_075": {
+    "label": "Pokedex - Graveler",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_076": {
+    "label": "Pokedex - Golem",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_077": {
+    "label": "Pokedex - Ponyta",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_078": {
+    "label": "Pokedex - Rapidash",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_079": {
+    "label": "Pokedex - Slowpoke",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_080": {
+    "label": "Pokedex - Slowbro",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_081": {
+    "label": "Pokedex - Magnemite",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_082": {
+    "label": "Pokedex - Magneton",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_083": {
+    "label": "Pokedex - Farfetch'd",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_084": {
+    "label": "Pokedex - Doduo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_085": {
+    "label": "Pokedex - Dodrio",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_086": {
+    "label": "Pokedex - Seel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_087": {
+    "label": "Pokedex - Dewgong",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_088": {
+    "label": "Pokedex - Grimer",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_089": {
+    "label": "Pokedex - Muk",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_090": {
+    "label": "Pokedex - Shellder",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_091": {
+    "label": "Pokedex - Cloyster",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_092": {
+    "label": "Pokedex - Gastly",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_093": {
+    "label": "Pokedex - Haunter",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_094": {
+    "label": "Pokedex - Gengar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_095": {
+    "label": "Pokedex - Onix",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_096": {
+    "label": "Pokedex - Drowzee",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_097": {
+    "label": "Pokedex - Hypno",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_098": {
+    "label": "Pokedex - Krabby",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_099": {
+    "label": "Pokedex - Kingler",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_100": {
+    "label": "Pokedex - Voltorb",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_101": {
+    "label": "Pokedex - Electrode",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_102": {
+    "label": "Pokedex - Exeggcute",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_103": {
+    "label": "Pokedex - Exeggutor",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_104": {
+    "label": "Pokedex - Cubone",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_105": {
+    "label": "Pokedex - Marowak",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_106": {
+    "label": "Pokedex - Hitmonlee",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_107": {
+    "label": "Pokedex - Hitmonchan",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_108": {
+    "label": "Pokedex - Lickitung",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_109": {
+    "label": "Pokedex - Koffing",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_110": {
+    "label": "Pokedex - Weezing",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_111": {
+    "label": "Pokedex - Rhyhorn",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_112": {
+    "label": "Pokedex - Rhydon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_113": {
+    "label": "Pokedex - Chansey",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_114": {
+    "label": "Pokedex - Tangela",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_115": {
+    "label": "Pokedex - Kangaskhan",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_116": {
+    "label": "Pokedex - Horsea",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_117": {
+    "label": "Pokedex - Seadra",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_118": {
+    "label": "Pokedex - Goldeen",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_119": {
+    "label": "Pokedex - Seaking",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_120": {
+    "label": "Pokedex - Staryu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_121": {
+    "label": "Pokedex - Starmie",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_122": {
+    "label": "Pokedex - Mr. Mime",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_123": {
+    "label": "Pokedex - Scyther",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_124": {
+    "label": "Pokedex - Jynx",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_125": {
+    "label": "Pokedex - Electabuzz",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_126": {
+    "label": "Pokedex - Magmar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_127": {
+    "label": "Pokedex - Pinsir",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_128": {
+    "label": "Pokedex - Tauros",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_129": {
+    "label": "Pokedex - Magikarp",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_130": {
+    "label": "Pokedex - Gyarados",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_131": {
+    "label": "Pokedex - Lapras",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_132": {
+    "label": "Pokedex - Ditto",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_133": {
+    "label": "Pokedex - Eevee",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_134": {
+    "label": "Pokedex - Vaporeon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_135": {
+    "label": "Pokedex - Jolteon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_136": {
+    "label": "Pokedex - Flareon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_137": {
+    "label": "Pokedex - Porygon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_138": {
+    "label": "Pokedex - Omanyte",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_139": {
+    "label": "Pokedex - Omastar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_140": {
+    "label": "Pokedex - Kabuto",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_141": {
+    "label": "Pokedex - Kabutops",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_142": {
+    "label": "Pokedex - Aerodactyl",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_143": {
+    "label": "Pokedex - Snorlax",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_144": {
+    "label": "Pokedex - Articuno",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_145": {
+    "label": "Pokedex - Zapdos",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_146": {
+    "label": "Pokedex - Moltres",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_147": {
+    "label": "Pokedex - Dratini",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_148": {
+    "label": "Pokedex - Dragonair",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_149": {
+    "label": "Pokedex - Dragonite",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_150": {
+    "label": "Pokedex - Mewtwo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_151": {
+    "label": "Pokedex - Mew",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_152": {
+    "label": "Pokedex - Chikorita",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_153": {
+    "label": "Pokedex - Bayleef",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_154": {
+    "label": "Pokedex - Meganium",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_155": {
+    "label": "Pokedex - Cindaquil",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_156": {
+    "label": "Pokedex - Quilava",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_157": {
+    "label": "Pokedex - Typhlosion",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_158": {
+    "label": "Pokedex - Totodile",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_159": {
+    "label": "Pokedex - Croconaw",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_160": {
+    "label": "Pokedex - Feraligatr",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_161": {
+    "label": "Pokedex - Sentret",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_162": {
+    "label": "Pokedex - Furret",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_163": {
+    "label": "Pokedex - Hoothoot",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_164": {
+    "label": "Pokedex - Noctowl",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_165": {
+    "label": "Pokedex - Ledyba",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_166": {
+    "label": "Pokedex - Ledian",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_167": {
+    "label": "Pokedex - Spinarak",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_168": {
+    "label": "Pokedex - Ariados",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_169": {
+    "label": "Pokedex - Crobat",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_170": {
+    "label": "Pokedex - Chinchou",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_171": {
+    "label": "Pokedex - Lanturn",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_172": {
+    "label": "Pokedex - Pichu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_173": {
+    "label": "Pokedex - Cleffa",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_174": {
+    "label": "Pokedex - Igglybuff",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_175": {
+    "label": "Pokedex - Togepi",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_176": {
+    "label": "Pokedex - Togetic",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_177": {
+    "label": "Pokedex - Natu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_178": {
+    "label": "Pokedex - Xatu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_179": {
+    "label": "Pokedex - Mareep",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_180": {
+    "label": "Pokedex - Flaaffy",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_181": {
+    "label": "Pokedex - Ampharos",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_182": {
+    "label": "Pokedex - Bellossom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_183": {
+    "label": "Pokedex - Marill",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_184": {
+    "label": "Pokedex - Azumarill",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_185": {
+    "label": "Pokedex - Sudowoodo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_186": {
+    "label": "Pokedex - Politoed",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_187": {
+    "label": "Pokedex - Hoppip",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_188": {
+    "label": "Pokedex - Skiploom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_189": {
+    "label": "Pokedex - Jumpluff",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_190": {
+    "label": "Pokedex - Aipom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_191": {
+    "label": "Pokedex - Sunkern",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_192": {
+    "label": "Pokedex - Sunflora",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_193": {
+    "label": "Pokedex - Yanma",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_194": {
+    "label": "Pokedex - Wooper",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_195": {
+    "label": "Pokedex - Quagsire",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_196": {
+    "label": "Pokedex - Espeon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_197": {
+    "label": "Pokedex - Umbreon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_198": {
+    "label": "Pokedex - Murkrow",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_199": {
+    "label": "Pokedex - Slowking",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_200": {
+    "label": "Pokedex - Misdreavus",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_201": {
+    "label": "Pokedex - Unown",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_202": {
+    "label": "Pokedex - Wobbuffet",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_203": {
+    "label": "Pokedex - Girafarig",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_204": {
+    "label": "Pokedex - Pineco",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_205": {
+    "label": "Pokedex - Forretress",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_206": {
+    "label": "Pokedex - Dunsparce",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_207": {
+    "label": "Pokedex - Gligar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_208": {
+    "label": "Pokedex - Steelix",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_209": {
+    "label": "Pokedex - Snubbull",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_210": {
+    "label": "Pokedex - Granbull",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_211": {
+    "label": "Pokedex - Qwilfish",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_212": {
+    "label": "Pokedex - Scizor",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_213": {
+    "label": "Pokedex - Shuckle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_214": {
+    "label": "Pokedex - Heracross",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_215": {
+    "label": "Pokedex - Sneasel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_216": {
+    "label": "Pokedex - Teddiursa",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_217": {
+    "label": "Pokedex - Ursaring",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_218": {
+    "label": "Pokedex - Slugma",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_219": {
+    "label": "Pokedex - Magcargo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_220": {
+    "label": "Pokedex - Swinub",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_221": {
+    "label": "Pokedex - Piloswine",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_222": {
+    "label": "Pokedex - Corsola",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_223": {
+    "label": "Pokedex - Remoraid",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_224": {
+    "label": "Pokedex - Octillery",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_225": {
+    "label": "Pokedex - Delibird",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_226": {
+    "label": "Pokedex - Mantine",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_227": {
+    "label": "Pokedex - Skarmory",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_228": {
+    "label": "Pokedex - Houndour",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_229": {
+    "label": "Pokedex - Houndoom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_230": {
+    "label": "Pokedex - Kingdra",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_231": {
+    "label": "Pokedex - Phanpy",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_232": {
+    "label": "Pokedex - Donphan",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_233": {
+    "label": "Pokedex - Porygon2",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_234": {
+    "label": "Pokedex - Stantler",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_235": {
+    "label": "Pokedex - Smeargle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_236": {
+    "label": "Pokedex - Tyrogue",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_237": {
+    "label": "Pokedex - Hitmontop",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_238": {
+    "label": "Pokedex - Smoochum",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_239": {
+    "label": "Pokedex - Elekid",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_240": {
+    "label": "Pokedex - Magby",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_241": {
+    "label": "Pokedex - Miltank",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_242": {
+    "label": "Pokedex - Blissey",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_243": {
+    "label": "Pokedex - Raikou",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_244": {
+    "label": "Pokedex - Entei",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_245": {
+    "label": "Pokedex - Suicune",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_246": {
+    "label": "Pokedex - Larvitar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_247": {
+    "label": "Pokedex - Pupitar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_248": {
+    "label": "Pokedex - Tyranitar",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_249": {
+    "label": "Pokedex - Lugia",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_250": {
+    "label": "Pokedex - Ho-oh",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_251": {
+    "label": "Pokedex - Celebi",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_252": {
+    "label": "Pokedex - Treecko",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_253": {
+    "label": "Pokedex - Grovyle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_254": {
+    "label": "Pokedex - Sceptile",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_255": {
+    "label": "Pokedex - Torchic",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_256": {
+    "label": "Pokedex - Combusken",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_257": {
+    "label": "Pokedex - Blaziken",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_258": {
+    "label": "Pokedex - Mudkip",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_259": {
+    "label": "Pokedex - Marshtomp",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_260": {
+    "label": "Pokedex - Swampert",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_261": {
+    "label": "Pokedex - Poochyena",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_262": {
+    "label": "Pokedex - Mightyena",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_263": {
+    "label": "Pokedex - Zigzagoon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_264": {
+    "label": "Pokedex - Linoone",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_265": {
+    "label": "Pokedex - Wurmple",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_266": {
+    "label": "Pokedex - Silcoon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_267": {
+    "label": "Pokedex - Beautifly",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_268": {
+    "label": "Pokedex - Cascoon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_269": {
+    "label": "Pokedex - Dustox",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_270": {
+    "label": "Pokedex - Lotad",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_271": {
+    "label": "Pokedex - Lombre",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_272": {
+    "label": "Pokedex - Ludicolo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_273": {
+    "label": "Pokedex - Seedot",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_274": {
+    "label": "Pokedex - Nuzleaf",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_275": {
+    "label": "Pokedex - Shiftry",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_276": {
+    "label": "Pokedex - Taillow",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_277": {
+    "label": "Pokedex - Swellow",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_278": {
+    "label": "Pokedex - Wingull",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_279": {
+    "label": "Pokedex - Pelipper",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_280": {
+    "label": "Pokedex - Ralts",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_281": {
+    "label": "Pokedex - Kirlia",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_282": {
+    "label": "Pokedex - Gardevoir",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_283": {
+    "label": "Pokedex - Surskit",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_284": {
+    "label": "Pokedex - Masquerain",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_285": {
+    "label": "Pokedex - Shroomish",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_286": {
+    "label": "Pokedex - Breloom",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_287": {
+    "label": "Pokedex - Slakoth",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_288": {
+    "label": "Pokedex - Vigoroth",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_289": {
+    "label": "Pokedex - Slaking",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_290": {
+    "label": "Pokedex - Nincada",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_291": {
+    "label": "Pokedex - Ninjask",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_292": {
+    "label": "Pokedex - Shedinja",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_293": {
+    "label": "Pokedex - Whismur",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_294": {
+    "label": "Pokedex - Loudred",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_295": {
+    "label": "Pokedex - Exploud",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_296": {
+    "label": "Pokedex - Makuhita",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_297": {
+    "label": "Pokedex - Hariyama",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_298": {
+    "label": "Pokedex - Azurill",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_299": {
+    "label": "Pokedex - Nosepass",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_300": {
+    "label": "Pokedex - Skitty",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_301": {
+    "label": "Pokedex - Delcatty",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_302": {
+    "label": "Pokedex - Sableye",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_303": {
+    "label": "Pokedex - Mawile",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_304": {
+    "label": "Pokedex - Aron",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_305": {
+    "label": "Pokedex - Lairon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_306": {
+    "label": "Pokedex - Aggron",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_307": {
+    "label": "Pokedex - Meditite",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_308": {
+    "label": "Pokedex - Medicham",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_309": {
+    "label": "Pokedex - Electrike",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_310": {
+    "label": "Pokedex - Manectric",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_311": {
+    "label": "Pokedex - Plusle",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_312": {
+    "label": "Pokedex - Minun",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_313": {
+    "label": "Pokedex - Volbeat",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_314": {
+    "label": "Pokedex - Illumise",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_315": {
+    "label": "Pokedex - Roselia",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_316": {
+    "label": "Pokedex - Gulpin",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_317": {
+    "label": "Pokedex - Swalot",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_318": {
+    "label": "Pokedex - Carvanha",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_319": {
+    "label": "Pokedex - Sharpedo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_320": {
+    "label": "Pokedex - Wailmer",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_321": {
+    "label": "Pokedex - Wailord",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_322": {
+    "label": "Pokedex - Numel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_323": {
+    "label": "Pokedex - Camerupt",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_324": {
+    "label": "Pokedex - Torkoal",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_325": {
+    "label": "Pokedex - Spoink",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_326": {
+    "label": "Pokedex - Grumpig",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_327": {
+    "label": "Pokedex - Spinda",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_328": {
+    "label": "Pokedex - Trapinch",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_329": {
+    "label": "Pokedex - Vibrava",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_330": {
+    "label": "Pokedex - Flygon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_331": {
+    "label": "Pokedex - Cacnea",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_332": {
+    "label": "Pokedex - Cacturne",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_333": {
+    "label": "Pokedex - Swablu",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_334": {
+    "label": "Pokedex - Altaria",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_335": {
+    "label": "Pokedex - Zangoose",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_336": {
+    "label": "Pokedex - Seviper",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_337": {
+    "label": "Pokedex - Lunatone",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_338": {
+    "label": "Pokedex - Solrock",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_339": {
+    "label": "Pokedex - Barboach",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_340": {
+    "label": "Pokedex - Whiscash",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_341": {
+    "label": "Pokedex - Corphish",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_342": {
+    "label": "Pokedex - Crawdaunt",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_343": {
+    "label": "Pokedex - Baltoy",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_344": {
+    "label": "Pokedex - Claydol",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_345": {
+    "label": "Pokedex - Lileep",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_346": {
+    "label": "Pokedex - Cradily",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_347": {
+    "label": "Pokedex - Anorith",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_348": {
+    "label": "Pokedex - Armaldo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_349": {
+    "label": "Pokedex - Feebas",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_350": {
+    "label": "Pokedex - Milotic",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_351": {
+    "label": "Pokedex - Castform",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_352": {
+    "label": "Pokedex - Kecleon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_353": {
+    "label": "Pokedex - Shuppet",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_354": {
+    "label": "Pokedex - Banette",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_355": {
+    "label": "Pokedex - Duskull",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_356": {
+    "label": "Pokedex - Dusclops",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_357": {
+    "label": "Pokedex - Tropius",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_358": {
+    "label": "Pokedex - Chimecho",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_359": {
+    "label": "Pokedex - Absol",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_360": {
+    "label": "Pokedex - Wynaut",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_361": {
+    "label": "Pokedex - Snorunt",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_362": {
+    "label": "Pokedex - Glalie",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_363": {
+    "label": "Pokedex - Spheal",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_364": {
+    "label": "Pokedex - Sealeo",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_365": {
+    "label": "Pokedex - Walrein",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_366": {
+    "label": "Pokedex - Clamperl",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_367": {
+    "label": "Pokedex - Huntail",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_368": {
+    "label": "Pokedex - Gorebyss",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_369": {
+    "label": "Pokedex - Relicanth",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_370": {
+    "label": "Pokedex - Luvdisc",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_371": {
+    "label": "Pokedex - Bagon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_372": {
+    "label": "Pokedex - Shelgon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_373": {
+    "label": "Pokedex - Salamence",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_374": {
+    "label": "Pokedex - Beldum",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_375": {
+    "label": "Pokedex - Metang",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_376": {
+    "label": "Pokedex - Metagross",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_377": {
+    "label": "Pokedex - Regirock",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_378": {
+    "label": "Pokedex - Regice",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_379": {
+    "label": "Pokedex - Registeel",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_380": {
+    "label": "Pokedex - Latias",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_381": {
+    "label": "Pokedex - Latios",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_382": {
+    "label": "Pokedex - Kyogre",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_383": {
+    "label": "Pokedex - Groudon",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_384": {
+    "label": "Pokedex - Rayquaza",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_385": {
+    "label": "Pokedex - Jirachi",
+    "tags": ["Pokedex"]
+  },
+  "POKEDEX_REWARD_386": {
+    "label": "Pokedex - Deoxys",
+    "tags": ["Pokedex"]
+  },
+
+  "TRAINER_AARON_REWARD": {
+    "label": "Route 134 - Dragon Tamer Aaron",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ABIGAIL_1_REWARD": {
+    "label": "Route 110 - Triathlete Abigail",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AIDAN_REWARD": {
+    "label": "Route 127 - Bird Keeper Aidan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AISHA_REWARD": {
+    "label": "Route 117 - Battle Girl Aisha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALBERTO_REWARD": {
+    "label": "Route 123 - Bird Keeper Alberto",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALBERT_REWARD": {
+    "label": "Victory Road 1F - Cooltrainer Albert",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEXA_REWARD": {
+    "label": "Route 128 - Cooltrainer Alexa",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEXIA_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Alexia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALEX_REWARD": {
+    "label": "Route 134 - Bird Keeper Alex",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALICE_REWARD": {
+    "label": "Route 109 - Swimmer Alice",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALIX_REWARD": {
+    "label": "Route 115 - Psychic Alix",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALLEN_REWARD": {
+    "label": "Route 102 - Youngster Allen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALLISON_REWARD": {
+    "label": "Route 129 - Triathlete Allison",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ALYSSA_REWARD": {
+    "label": "Route 110 - Triathlete Alyssa",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AMY_AND_LIV_1_REWARD": {
+    "label": "Route 103 - Twins Amy and Liv",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANNA_AND_MEG_1_REWARD": {
+    "label": "Route 117 - Sr. and Jr. Anna and Meg",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDREA_REWARD": {
+    "label": "Sootopolis Gym - Lass Andrea",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDRES_1_REWARD": {
+    "label": "Route 105 - Ruin Maniac Andres",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANDREW_REWARD": {
+    "label": "Route 103 - Fisherman Andrew",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELICA_REWARD": {
+    "label": "Route 120 - Parasol Lady Angelica",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELINA_REWARD": {
+    "label": "Route 114 - Picnicker Angelina",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANGELO_REWARD": {
+    "label": "Mauville Gym - Bug Maniac Angelo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANNIKA_REWARD": {
+    "label": "Sootopolis Gym - Pokefan Annika",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ANTHONY_REWARD": {
+    "label": "Route 110 - Triathlete Anthony",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ARCHIE_REWARD": {
+    "label": "Seafloor Cavern Room 9 - Aqua Leader Archie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ASHLEY_REWARD": {
+    "label": "Fortree Gym - Picnicker Ashley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ATHENA_REWARD": {
+    "label": "Route 127 - Cooltrainer Athena",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ATSUSHI_REWARD": {
+    "label": "Mt Pyre 5F - Black Belt Atsushi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AURON_REWARD": {
+    "label": "Route 125 - Expert Auron",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AUSTINA_REWARD": {
+    "label": "Route 109 - Tuber Austina",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AUTUMN_REWARD": {
+    "label": "Jagged Pass - Picnicker Autumn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_AXLE_REWARD": {
+    "label": "Lavaridge Gym - Kindler Axle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BARNY_REWARD": {
+    "label": "Route 118 - Fisherman Barny",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BARRY_REWARD": {
+    "label": "Route 126 - Swimmer Barry",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEAU_REWARD": {
+    "label": "Route 111 - Camper Beau",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BECKY_REWARD": {
+    "label": "Route 111 - Picnicker Becky",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BECK_REWARD": {
+    "label": "Route 133 - Bird Keeper Beck",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BENJAMIN_1_REWARD": {
+    "label": "Route 110 - Triathlete Benjamin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEN_REWARD": {
+    "label": "Mauville Gym - Youngster Ben",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BERKE_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Berke",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BERNIE_1_REWARD": {
+    "label": "Route 114 - Kindler Bernie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BETHANY_REWARD": {
+    "label": "Sootopolis Gym - Pokefan Bethany",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BETH_REWARD": {
+    "label": "Route 107 - Swimmer Beth",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BEVERLY_REWARD": {
+    "label": "Route 105 - Swimmer Beverly",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BIANCA_REWARD": {
+    "label": "Route 111 - Picnicker Bianca",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BILLY_REWARD": {
+    "label": "Route 104 - Youngster Billy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BLAKE_REWARD": {
+    "label": "Mossdeep Gym - Psychic Blake",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRANDEN_REWARD": {
+    "label": "Route 111 - Camper Branden",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRANDI_REWARD": {
+    "label": "Route 117 - Psychic Brandi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRAWLY_1_REWARD": {
+    "label": "Dewford Gym - Leader Brawly",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRAXTON_REWARD": {
+    "label": "Route 123 - Cooltrainer Braxton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_LILYCOVE_MUDKIP_REWARD": {
+    "label": "Lilycove City - Rival Brendan/May",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_103_MUDKIP_REWARD": {
+    "label": "Route 103 - Rival Brendan/May",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_110_MUDKIP_REWARD": {
+    "label": "Route 110 - Rival Brendan/May",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_ROUTE_119_MUDKIP_REWARD": {
+    "label": "Route 119 - Rival Brendan/May",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDAN_RUSTBORO_MUDKIP_REWARD": {
+    "label": "Rustboro City - Rival Brendan/May",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDA_REWARD": {
+    "label": "Route 126 - Swimmer Brenda",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENDEN_REWARD": {
+    "label": "Dewford Gym - Sailor Brenden",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRENT_REWARD": {
+    "label": "Route 119 - Bug Maniac Brent",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRIANNA_REWARD": {
+    "label": "Sootopolis Gym - Lady Brianna",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRICE_REWARD": {
+    "label": "Route 112 - Hiker Brice",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRIDGET_REWARD": {
+    "label": "Sootopolis Gym - Beauty Bridget",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BROOKE_1_REWARD": {
+    "label": "Route 111 - Cooltrainer Brooke",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRYANT_REWARD": {
+    "label": "Route 112 - Kindler Bryant",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_BRYAN_REWARD": {
+    "label": "Route 111 - Ruin Maniac Bryan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALE_REWARD": {
+    "label": "Route 121 - Bug Maniac Cale",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALLIE_REWARD": {
+    "label": "Route 120 - Battle Girl Callie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CALVIN_1_REWARD": {
+    "label": "Route 102 - Youngster Calvin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMDEN_REWARD": {
+    "label": "Route 127 - Triathlete Camden",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMERON_1_REWARD": {
+    "label": "Route 123 - Psychic Cameron",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAMRON_REWARD": {
+    "label": "Route 107 - Triathlete Camron",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CARLEE_REWARD": {
+    "label": "Route 128 - Swimmer Carlee",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROLINA_REWARD": {
+    "label": "Route 108 - Cooltrainer Carolina",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROLINE_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Caroline",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CAROL_REWARD": {
+    "label": "Route 112 - Picnicker Carol",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CARTER_REWARD": {
+    "label": "Route 109 - Fisherman Carter",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CATHERINE_1_REWARD": {
+    "label": "Route 119 - Pokemon Ranger Catherine",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CEDRIC_REWARD": {
+    "label": "Mt Pyre 6F - Psychic Cedric",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CELIA_REWARD": {
+    "label": "Route 111 - Picnicker Celia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CELINA_REWARD": {
+    "label": "Route 111 - Aroma Lady Celina",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHAD_REWARD": {
+    "label": "Route 124 - Swimmer Chad",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHANDLER_REWARD": {
+    "label": "Route 109 - Tuber Chandler",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHARLIE_REWARD": {
+    "label": "Abandoned Ship 1F - Tuber Charlie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHARLOTTE_REWARD": {
+    "label": "Route 114 - Picnicker Charlotte",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHASE_REWARD": {
+    "label": "Route 129 - Triathlete Chase",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHESTER_REWARD": {
+    "label": "Route 118 - Bird Keeper Chester",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHIP_REWARD": {
+    "label": "Route 120 - Ruin Maniac Chip",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CHRIS_REWARD": {
+    "label": "Route 119 - Fisherman Chris",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CINDY_1_REWARD": {
+    "label": "Route 104 - Lady Cindy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARENCE_REWARD": {
+    "label": "Route 129 - Swimmer Clarence",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARISSA_REWARD": {
+    "label": "Route 120 - Parasol Lady Clarissa",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLARK_REWARD": {
+    "label": "Route 116 - Hiker Clark",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLAUDE_REWARD": {
+    "label": "Route 114 - Fisherman Claude",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CLIFFORD_REWARD": {
+    "label": "Mossdeep Gym - Gentleman Clifford",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COBY_REWARD": {
+    "label": "Route 113 - Bird Keeper Coby",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLE_REWARD": {
+    "label": "Lavaridge Gym - Kindler Cole",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLIN_REWARD": {
+    "label": "Route 120 - Bird Keeper Colin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_COLTON_REWARD": {
+    "label": "SS Tidal - Pokefan Colton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CONNIE_REWARD": {
+    "label": "Sootopolis Gym - Beauty Connie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CONOR_REWARD": {
+    "label": "Route 133 - Expert Conor",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CORY_1_REWARD": {
+    "label": "Route 108 - Sailor Cory",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISSY_REWARD": {
+    "label": "Sootopolis Gym - Lass Crissy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISTIAN_REWARD": {
+    "label": "Dewford Gym - Black Belt Cristian",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CRISTIN_1_REWARD": {
+    "label": "Route 121 - Cooltrainer Cristin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_CYNDY_1_REWARD": {
+    "label": "Route 115 - Battle Girl Cyndy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAISUKE_REWARD": {
+    "label": "Route 111 - Black Belt Daisuke",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAISY_REWARD": {
+    "label": "Route 103 - Aroma Lady Daisy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DALE_REWARD": {
+    "label": "Route 110 - Fisherman Dale",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DALTON_1_REWARD": {
+    "label": "Route 118 - Guitarist Dalton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DANA_REWARD": {
+    "label": "Route 132 - Swimmer Dana",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DANIELLE_REWARD": {
+    "label": "Lavaridge Gym - Battle Girl Danielle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAPHNE_REWARD": {
+    "label": "Sootopolis Gym - Lady Daphne",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARCY_REWARD": {
+    "label": "Route 132 - Cooltrainer Darcy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARIAN_REWARD": {
+    "label": "Route 104 - Fisherman Darian",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARIUS_REWARD": {
+    "label": "Fortree Gym - Bird Keeper Darius",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DARRIN_REWARD": {
+    "label": "Route 107 - Swimmer Darrin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAVID_REWARD": {
+    "label": "Route 109 - Swimmer David",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAVIS_REWARD": {
+    "label": "Route 123 - Bug Catcher Davis",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAWSON_REWARD": {
+    "label": "Route 116 - Rich Boy Dawson",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DAYTON_REWARD": {
+    "label": "Route 119 - Kindler Dayton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEANDRE_REWARD": {
+    "label": "Route 118 - Youngster Deandre",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEAN_REWARD": {
+    "label": "Route 126 - Swimmer Dean",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEBRA_REWARD": {
+    "label": "Route 133 - Swimmer Debra",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DECLAN_REWARD": {
+    "label": "Route 124 - Swimmer Declan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEMETRIUS_REWARD": {
+    "label": "Abandoned Ship 1F - Youngster Demetrius",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DENISE_REWARD": {
+    "label": "Route 107 - Swimmer Denise",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEREK_REWARD": {
+    "label": "Route 117 - Bug Maniac Derek",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEVAN_REWARD": {
+    "label": "Route 116 - Hiker Devan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DIANA_1_REWARD": {
+    "label": "Jagged Pass - Picnicker Diana",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DIANNE_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Dianne",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DILLON_REWARD": {
+    "label": "Route 113 - Youngster Dillon",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOMINIK_REWARD": {
+    "label": "Route 105 - Swimmer Dominik",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DONALD_REWARD": {
+    "label": "Route 119 - Bug Maniac Donald",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DONNY_REWARD": {
+    "label": "Route 127 - Triathlete Donny",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOUGLAS_REWARD": {
+    "label": "Route 106 - Swimmer Douglas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DOUG_REWARD": {
+    "label": "Route 119 - Bug Catcher Doug",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DRAKE_REWARD": {
+    "label": "Ever Grande City - Elite Four Drake",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DREW_REWARD": {
+    "label": "Route 111 - Camper Drew",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DUNCAN_REWARD": {
+    "label": "Abandoned Ship B1F - Sailor Duncan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DUSTY_1_REWARD": {
+    "label": "Route 111 - Ruin Maniac Dusty",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DWAYNE_REWARD": {
+    "label": "Route 109 - Sailor Dwayne",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DYLAN_1_REWARD": {
+    "label": "Route 117 - Triathlete Dylan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_DEZ_AND_LUKE_REWARD": {
+    "label": "Mt Pyre 2F - Young Couple Dez and Luke",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDGAR_REWARD": {
+    "label": "Victory Road 1F - Cooltrainer Edgar",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDMOND_REWARD": {
+    "label": "Route 109 - Sailor Edmond",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWARDO_REWARD": {
+    "label": "Fortree Gym - Bird Keeper Edwardo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWARD_REWARD": {
+    "label": "Route 110 - Psychic Edward",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_EDWIN_1_REWARD": {
+    "label": "Route 110 - Collector Edwin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ED_REWARD": {
+    "label": "Route 123 - Collector Ed",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELIJAH_REWARD": {
+    "label": "Route 109 - Bird Keeper Elijah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELI_REWARD": {
+    "label": "Lavaridge Gym - Hiker Eli",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ELLIOT_1_REWARD": {
+    "label": "Route 106 - Fisherman Elliot",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ERIC_REWARD": {
+    "label": "Jagged Pass - Hiker Eric",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ERNEST_1_REWARD": {
+    "label": "Route 125 - Sailor Ernest",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ETHAN_1_REWARD": {
+    "label": "Jagged Pass - Camper Ethan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FABIAN_REWARD": {
+    "label": "Route 119 - Guitarist Fabian",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FELIX_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Felix",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FERNANDO_1_REWARD": {
+    "label": "Route 123 - Guitarist Fernando",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FLANNERY_1_REWARD": {
+    "label": "Lavaridge Gym - Leader Flannery",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FLINT_REWARD": {
+    "label": "Fortree Gym - Camper Flint",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FOSTER_REWARD": {
+    "label": "Route 105 - Ruin Maniac Foster",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FRANKLIN_REWARD": {
+    "label": "Route 133 - Swimmer Franklin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_FREDRICK_REWARD": {
+    "label": "Route 123 - Expert Fredrick",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GABRIELLE_1_REWARD": {
+    "label": "Mt Pyre 3F - Pokemon Breeder Gabrielle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GARRET_REWARD": {
+    "label": "SS Tidal - Rich Boy Garret",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GARRISON_REWARD": {
+    "label": "Abandoned Ship 1F - Ruin Maniac Garrison",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GEORGE_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer George",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GERALD_REWARD": {
+    "label": "Lavaridge Gym - Cooltrainer Gerald",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GILBERT_REWARD": {
+    "label": "Route 132 - Swimmer Gilbert",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GINA_AND_MIA_1_REWARD": {
+    "label": "Route 104 - Twins Gina and Mia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GLACIA_REWARD": {
+    "label": "Ever Grande City - Elite Four Glacia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRACE_REWARD": {
+    "label": "Route 124 - Swimmer Grace",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GREG_REWARD": {
+    "label": "Route 119 - Bug Catcher Greg",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_1_REWARD": {
+    "label": "Aqua Hideout 1F - Team Aqua Grunt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_2_REWARD": {
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_3_REWARD": {
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 4",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_4_REWARD": {
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_5_REWARD": {
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_6_REWARD": {
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_7_REWARD": {
+    "label": "Aqua Hideout B1F - Team Aqua Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_AQUA_HIDEOUT_8_REWARD": {
+    "label": "Aqua Hideout B2F - Team Aqua Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_10_REWARD": {
+    "label": "Magma Hideout 3F - Team Magma Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_11_REWARD": {
+    "label": "Magma Hideout 4F - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_12_REWARD": {
+    "label": "Magma Hideout 4F - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_13_REWARD": {
+    "label": "Magma Hideout 4F - Team Magma Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_14_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_15_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 5",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_16_REWARD": {
+    "label": "Magma Hideout 3F - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_1_REWARD": {
+    "label": "Magma Hideout 1F - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_2_REWARD": {
+    "label": "Magma Hideout 1F - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_3_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_4_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 4",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_5_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_6_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 6",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_7_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 7",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_8_REWARD": {
+    "label": "Magma Hideout 2F - Team Magma Grunt 8",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MAGMA_HIDEOUT_9_REWARD": {
+    "label": "Magma Hideout 3F - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_CHIMNEY_1_REWARD": {
+    "label": "Mt Chimney - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_CHIMNEY_2_REWARD": {
+    "label": "Mt Chimney - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_1_REWARD": {
+    "label": "Mt Pyre Summit - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_2_REWARD": {
+    "label": "Mt Pyre Summit - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_3_REWARD": {
+    "label": "Mt Pyre Summit - Team Aqua Grunt 4",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MT_PYRE_4_REWARD": {
+    "label": "Mt Pyre Summit - Team Aqua Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MUSEUM_1_REWARD": {
+    "label": "Oceanic Museum - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_MUSEUM_2_REWARD": {
+    "label": "Oceanic Museum - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_PETALBURG_WOODS_REWARD": {
+    "label": "Petalburg Woods - Team Aqua Grunt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_RUSTURF_TUNNEL_REWARD": {
+    "label": "Rusturf Tunnel - Team Aqua Grunt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_1_REWARD": {
+    "label": "Seafloor Cavern Room 1 - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_2_REWARD": {
+    "label": "Seafloor Cavern Room 1 - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_3_REWARD": {
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_4_REWARD": {
+    "label": "Seafloor Cavern Room 4 - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SEAFLOOR_CAVERN_5_REWARD": {
+    "label": "Seafloor Cavern Room 3 - Team Aqua Grunt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_1_REWARD": {
+    "label": "Space Center - Team Magma Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_2_REWARD": {
+    "label": "Space Center - Team Magma Grunt 4",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_3_REWARD": {
+    "label": "Space Center - Team Magma Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_4_REWARD": {
+    "label": "Space Center - Team Magma Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_5_REWARD": {
+    "label": "Space Center - Team Magma Grunt 5",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_6_REWARD": {
+    "label": "Space Center - Team Magma Grunt 6",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_SPACE_CENTER_7_REWARD": {
+    "label": "Space Center - Team Magma Grunt 7",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_1_REWARD": {
+    "label": "Weather Institute 1F - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_2_REWARD": {
+    "label": "Weather Institute 2F - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_3_REWARD": {
+    "label": "Weather Institute 2F - Team Aqua Grunt 3",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_4_REWARD": {
+    "label": "Weather Institute 1F - Team Aqua Grunt 1",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GRUNT_WEATHER_INST_5_REWARD": {
+    "label": "Weather Institute 2F - Team Aqua Grunt 2",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_GWEN_REWARD": {
+    "label": "Route 109 - Tuber Gwen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HAILEY_REWARD": {
+    "label": "Route 109 - Tuber Hailey",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HALEY_1_REWARD": {
+    "label": "Route 104 - Lass Haley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HALLE_REWARD": {
+    "label": "Victory Road B1F - Cooltrainer Halle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HANNAH_REWARD": {
+    "label": "Mossdeep Gym - Psychic Hannah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HARRISON_REWARD": {
+    "label": "Route 128 - Swimmer Harrison",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HAYDEN_REWARD": {
+    "label": "Route 111 - Kindler Hayden",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HECTOR_REWARD": {
+    "label": "Route 115 - Collector Hector",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HEIDI_REWARD": {
+    "label": "Route 111 - Picnicker Heidi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HELENE_REWARD": {
+    "label": "Route 115 - Battle Girl Helene",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HENRY_REWARD": {
+    "label": "Route 127 - Fisherman Henry",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HERMAN_REWARD": {
+    "label": "Route 131 - Swimmer Herman",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HIDEO_REWARD": {
+    "label": "Route 119 - Ninja Boy Hideo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HITOSHI_REWARD": {
+    "label": "Route 134 - Black Belt Hitoshi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HOPE_REWARD": {
+    "label": "Victory Road 1F - Cooltrainer Hope",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUDSON_REWARD": {
+    "label": "Route 134 - Sailor Hudson",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUEY_REWARD": {
+    "label": "Route 109 - Sailor Huey",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUGH_REWARD": {
+    "label": "Route 119 - Bird Keeper Hugh",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_HUMBERTO_REWARD": {
+    "label": "Fortree Gym - Bird Keeper Humberto",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IMANI_REWARD": {
+    "label": "Route 105 - Swimmer Imani",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IRENE_REWARD": {
+    "label": "Route 111 - Picnicker Irene",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISAAC_1_REWARD": {
+    "label": "Route 117 - Pokemon Breeder Isaac",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABELLA_REWARD": {
+    "label": "Route 124 - Triathlete Isabella",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABELLE_REWARD": {
+    "label": "Route 103 - Swimmer Isabelle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISABEL_1_REWARD": {
+    "label": "Route 110 - Pokefan Isabel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISAIAH_1_REWARD": {
+    "label": "Route 128 - Triathlete Isaiah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ISOBEL_REWARD": {
+    "label": "Route 126 - Triathlete Isobel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_IVAN_REWARD": {
+    "label": "Route 104 - Fisherman Ivan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACE_REWARD": {
+    "label": "Lavaridge Gym - Kindler Jace",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACKI_1_REWARD": {
+    "label": "Route 123 - Psychic Jacki",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACKSON_1_REWARD": {
+    "label": "Route 119 - Pokemon Ranger Jackson",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACK_REWARD": {
+    "label": "Route 134 - Swimmer Jack",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACLYN_REWARD": {
+    "label": "Route 110 - Psychic Jaclyn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JACOB_REWARD": {
+    "label": "Route 110 - Triathlete Jacob",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAIDEN_REWARD": {
+    "label": "Route 115 - Ninja Boy Jaiden",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAMES_1_REWARD": {
+    "label": "Petalburg Woods - Bug Catcher James",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JANICE_REWARD": {
+    "label": "Route 116 - Lass Janice",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JANI_REWARD": {
+    "label": "Abandoned Ship 1F - Tuber Jani",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JARED_REWARD": {
+    "label": "Fortree Gym - Bird Keeper Jared",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JASMINE_REWARD": {
+    "label": "Route 110 - Triathlete Jasmine",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAYLEN_REWARD": {
+    "label": "Route 113 - Youngster Jaylen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JAZMYN_REWARD": {
+    "label": "Route 123 - Cooltrainer Jazmyn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEFFREY_1_REWARD": {
+    "label": "Route 120 - Bug Maniac Jeffrey",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEFF_REWARD": {
+    "label": "Lavaridge Gym - Kindler Jeff",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNA_REWARD": {
+    "label": "Route 120 - Pokemon Ranger Jenna",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNIFER_REWARD": {
+    "label": "Route 120 - Cooltrainer Jennifer",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JENNY_1_REWARD": {
+    "label": "Route 124 - Swimmer Jenny",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JEROME_REWARD": {
+    "label": "Route 108 - Swimmer Jerome",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JERRY_1_REWARD": {
+    "label": "Route 116 - School Kid Jerry",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JESSICA_1_REWARD": {
+    "label": "Route 121 - Beauty Jessica",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOCELYN_REWARD": {
+    "label": "Dewford Gym - Battle Girl Jocelyn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JODY_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Jody",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOEY_REWARD": {
+    "label": "Route 116 - Youngster Joey",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHANNA_REWARD": {
+    "label": "Route 109 - Beauty Johanna",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHN_AND_JAY_1_REWARD": {
+    "label": "Meteor Falls 1F - Old Couple John and Jay",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOHNSON_REWARD": {
+    "label": "Route 116 - Youngster Johnson",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONAH_REWARD": {
+    "label": "Route 127 - Fisherman Jonah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONAS_REWARD": {
+    "label": "Route 123 - Ninja Boy Jonas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JONATHAN_REWARD": {
+    "label": "Route 132 - Cooltrainer Jonathan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSEPH_REWARD": {
+    "label": "Route 110 - Guitarist Joseph",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSE_REWARD": {
+    "label": "Route 116 - Bug Catcher Jose",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSH_REWARD": {
+    "label": "Rustboro Gym - Youngster Josh",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JOSUE_REWARD": {
+    "label": "Route 105 - Bird Keeper Josue",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JUAN_1_REWARD": {
+    "label": "Sootopolis Gym - Leader Juan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JULIE_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Julie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_JULIO_REWARD": {
+    "label": "Jagged Pass - Triathlete Julio",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAI_REWARD": {
+    "label": "Route 114 - Fisherman Kai",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KALEB_REWARD": {
+    "label": "Route 110 - Pokefan Kaleb",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KARA_REWARD": {
+    "label": "Route 131 - Swimmer Kara",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAREN_1_REWARD": {
+    "label": "Route 116 - School Kid Karen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATE_AND_JOY_REWARD": {
+    "label": "Route 121 - Sr. and Jr. Kate and Joy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATELYNN_REWARD": {
+    "label": "Victory Road 1F - Cooltrainer Katelynn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATELYN_1_REWARD": {
+    "label": "Route 128 - Triathlete Katelyn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATHLEEN_REWARD": {
+    "label": "Mossdeep Gym - Hex Maniac Kathleen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KATIE_REWARD": {
+    "label": "Route 130 - Swimmer Katie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAYLA_REWARD": {
+    "label": "Mt Pyre 3F - Psychic Kayla",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KAYLEY_REWARD": {
+    "label": "Route 123 - Parasol Lady Kayley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEEGAN_REWARD": {
+    "label": "Lavaridge Gym - Kindler Keegan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEIGO_REWARD": {
+    "label": "Route 120 - Ninja Boy Keigo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KELVIN_REWARD": {
+    "label": "Route 134 - Sailor Kelvin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KENT_REWARD": {
+    "label": "Route 119 - Bug Catcher Kent",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KEVIN_REWARD": {
+    "label": "Route 131 - Swimmer Kevin",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIM_AND_IRIS_REWARD": {
+    "label": "Route 125 - Sr. and Jr. Kim and Iris",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KINDRA_REWARD": {
+    "label": "Route 123 - Hex Maniac Kindra",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIRA_AND_DAN_1_REWARD": {
+    "label": "Abandoned Ship 1F - Young Couple Kira and Dan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIRK_REWARD": {
+    "label": "Mauville Gym - Guitarist Kirk",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KIYO_REWARD": {
+    "label": "Route 132 - Black Belt Kiyo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KOICHI_REWARD": {
+    "label": "Route 115 - Black Belt Koichi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KOJI_1_REWARD": {
+    "label": "Route 127 - Black Belt Koji",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KYLA_REWARD": {
+    "label": "Route 106 - Swimmer Kyla",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_KYRA_REWARD": {
+    "label": "Route 115 - Triathlete Kyra",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAO_1_REWARD": {
+    "label": "Route 113 - Ninja Boy Lao",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LARRY_REWARD": {
+    "label": "Route 112 - Camper Larry",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAURA_REWARD": {
+    "label": "Dewford Gym - Battle Girl Laura",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAUREL_REWARD": {
+    "label": "Route 134 - Swimmer Laurel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LAWRENCE_REWARD": {
+    "label": "Route 113 - Camper Lawrence",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEA_AND_JED_REWARD": {
+    "label": "SS Tidal - Young Couple Lea and Jed",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEAH_REWARD": {
+    "label": "Mt Pyre 2F - Hex Maniac Leah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LENNY_REWARD": {
+    "label": "Route 114 - Hiker Lenny",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONARDO_REWARD": {
+    "label": "Route 126 - Swimmer Leonardo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONARD_REWARD": {
+    "label": "SS Tidal - Sailor Leonard",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LEONEL_REWARD": {
+    "label": "Route 120 - Cooltrainer Leonel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LILA_AND_ROY_1_REWARD": {
+    "label": "Route 124 - Sis and Bro Lila and Roy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LILITH_REWARD": {
+    "label": "Dewford Gym - Battle Girl Lilith",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LINDA_REWARD": {
+    "label": "Route 133 - Swimmer Linda",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LISA_AND_RAY_REWARD": {
+    "label": "Route 107 - Sis and Bro Lisa and Ray",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LOLA_1_REWARD": {
+    "label": "Route 109 - Tuber Lola",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LORENZO_REWARD": {
+    "label": "Route 120 - Pokemon Ranger Lorenzo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUCAS_1_REWARD": {
+    "label": "Route 114 - Hiker Lucas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUIS_REWARD": {
+    "label": "Route 105 - Swimmer Luis",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LUNG_REWARD": {
+    "label": "Route 113 - Ninja Boy Lung",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LYDIA_1_REWARD": {
+    "label": "Route 117 - Pokemon Breeder Lydia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_LYLE_REWARD": {
+    "label": "Petalburg Woods - Bug Catcher Lyle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MACEY_REWARD": {
+    "label": "Mossdeep Gym - Psychic Macey",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MADELINE_1_REWARD": {
+    "label": "Route 113 - Parasol Lady Madeline",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAKAYLA_REWARD": {
+    "label": "Route 132 - Expert Makayla",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARCEL_REWARD": {
+    "label": "Route 121 - Cooltrainer Marcel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARCOS_REWARD": {
+    "label": "Route 103 - Guitarist Marcos",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARC_REWARD": {
+    "label": "Rustboro Gym - Hiker Marc",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARIA_1_REWARD": {
+    "label": "Route 117 - Triathlete Maria",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARK_REWARD": {
+    "label": "Mt Pyre 2F - Pokemaniac Mark",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARLENE_REWARD": {
+    "label": "Route 115 - Psychic Marlene",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARLEY_REWARD": {
+    "label": "Route 134 - Cooltrainer Marley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MARY_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Mary",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MATTHEW_REWARD": {
+    "label": "Route 108 - Swimmer Matthew",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MATT_REWARD": {
+    "label": "Aqua Hideout B2F - Aqua Admin Matt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAURA_REWARD": {
+    "label": "Mossdeep Gym - Psychic Maura",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAXIE_MAGMA_HIDEOUT_REWARD": {
+    "label": "Magma Hideout 4F - Magma Leader Maxie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MAXIE_MT_CHIMNEY_REWARD": {
+    "label": "Mt Chimney - Magma Leader Maxie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MEL_AND_PAUL_REWARD": {
+    "label": "Route 109 - Young Couple Mel and Paul",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MELINA_REWARD": {
+    "label": "Route 117 - Triathlete Melina",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MELISSA_REWARD": {
+    "label": "Mt Chimney - Beauty Melissa",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MICAH_REWARD": {
+    "label": "SS Tidal - Gentleman Micah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MICHELLE_REWARD": {
+    "label": "Victory Road B1F - Cooltrainer Michelle",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MIGUEL_1_REWARD": {
+    "label": "Route 103 - Pokefan Miguel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MIKE_2_REWARD": {
+    "label": "Rusturf Tunnel - Hiker Mike",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MISSY_REWARD": {
+    "label": "Route 108 - Swimmer Missy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MITCHELL_REWARD": {
+    "label": "Victory Road B1F - Cooltrainer Mitchell",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MIU_AND_YUKI_REWARD": {
+    "label": "Route 123 - Twins Miu and Yuki",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MOLLIE_REWARD": {
+    "label": "Route 133 - Expert Mollie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_MYLES_REWARD": {
+    "label": "Route 121 - Pokemon Breeder Myles",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NANCY_REWARD": {
+    "label": "Route 114 - Picnicker Nancy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NAOMI_REWARD": {
+    "label": "SS Tidal - Lady Naomi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NATE_REWARD": {
+    "label": "Mossdeep Gym - Gentleman Nate",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NED_REWARD": {
+    "label": "Route 106 - Fisherman Ned",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NICHOLAS_REWARD": {
+    "label": "Mossdeep Gym - Psychic Nicholas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NICOLAS_1_REWARD": {
+    "label": "Meteor Falls 1F - Dragon Tamer Nicolas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NIKKI_REWARD": {
+    "label": "Route 126 - Swimmer Nikki",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOB_1_REWARD": {
+    "label": "Route 115 - Black Belt Nob",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOLAN_REWARD": {
+    "label": "Route 114 - Fisherman Nolan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NOLEN_REWARD": {
+    "label": "Route 125 - Swimmer Nolen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_NORMAN_1_REWARD": {
+    "label": "Petalburg Gym - Leader Norman",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_OLIVIA_REWARD": {
+    "label": "Sootopolis Gym - Beauty Olivia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_OWEN_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Owen",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PABLO_1_REWARD": {
+    "label": "Route 126 - Triathlete Pablo",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PARKER_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Parker",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAT_REWARD": {
+    "label": "Route 121 - Pokemon Breeder Pat",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PAXTON_REWARD": {
+    "label": "Route 132 - Expert Paxton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PERRY_REWARD": {
+    "label": "Route 118 - Bird Keeper Perry",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PETE_REWARD": {
+    "label": "Route 103 - Swimmer Pete",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHILLIP_REWARD": {
+    "label": "SS Tidal - Sailor Phillip",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHIL_REWARD": {
+    "label": "Route 119 - Bird Keeper Phil",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PHOEBE_REWARD": {
+    "label": "Ever Grande City - Elite Four Phoebe",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PRESLEY_REWARD": {
+    "label": "Route 125 - Bird Keeper Presley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_PRESTON_REWARD": {
+    "label": "Mossdeep Gym - Psychic Preston",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_QUINCY_REWARD": {
+    "label": "Victory Road 1F - Cooltrainer Quincy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RACHEL_REWARD": {
+    "label": "Route 119 - Parasol Lady Rachel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RANDALL_REWARD": {
+    "label": "Petalburg Gym - Cooltrainer Randall",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_REED_REWARD": {
+    "label": "Route 129 - Swimmer Reed",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RELI_AND_IAN_REWARD": {
+    "label": "Route 131 - Sis and Bro Reli and Ian",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_REYNA_REWARD": {
+    "label": "Route 134 - Battle Girl Reyna",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RHETT_REWARD": {
+    "label": "Route 103 - Black Belt Rhett",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICHARD_REWARD": {
+    "label": "Route 131 - Swimmer Richard",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICKY_1_REWARD": {
+    "label": "Route 109 - Tuber Ricky",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RICK_REWARD": {
+    "label": "Route 102 - Bug Catcher Rick",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RILEY_REWARD": {
+    "label": "Route 120 - Ninja Boy Riley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROBERT_1_REWARD": {
+    "label": "Route 120 - Bird Keeper Robert",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RODNEY_REWARD": {
+    "label": "Route 130 - Swimmer Rodney",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROGER_REWARD": {
+    "label": "Route 127 - Fisherman Roger",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROLAND_REWARD": {
+    "label": "Route 124 - Swimmer Roland",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RONALD_REWARD": {
+    "label": "Route 132 - Fisherman Ronald",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROSE_1_REWARD": {
+    "label": "Route 118 - Aroma Lady Rose",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ROXANNE_1_REWARD": {
+    "label": "Rustboro Gym - Leader Roxanne",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_RUBEN_REWARD": {
+    "label": "Route 128 - Cooltrainer Ruben",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAMANTHA_REWARD": {
+    "label": "Mossdeep Gym - Psychic Samantha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAMUEL_REWARD": {
+    "label": "Victory Road B1F - Cooltrainer Samuel",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SANTIAGO_REWARD": {
+    "label": "Route 130 - Swimmer Santiago",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SARAH_REWARD": {
+    "label": "Route 116 - Lady Sarah",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SAWYER_1_REWARD": {
+    "label": "Mt Chimney - Hiker Sawyer",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHANE_REWARD": {
+    "label": "Route 114 - Camper Shane",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHANNON_REWARD": {
+    "label": "Victory Road B1F - Cooltrainer Shannon",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHARON_REWARD": {
+    "label": "Route 125 - Swimmer Sharon",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHAWN_REWARD": {
+    "label": "Mauville Gym - Guitarist Shawn",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHAYLA_REWARD": {
+    "label": "Route 112 - Aroma Lady Shayla",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHEILA_REWARD": {
+    "label": "Mt Chimney - Beauty Sheila",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELBY_1_REWARD": {
+    "label": "Mt Chimney - Expert Shelby",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELLY_SEAFLOOR_CAVERN_REWARD": {
+    "label": "Seafloor Cavern Room 3 - Aqua Admin Shelly",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHELLY_WEATHER_INSTITUTE_REWARD": {
+    "label": "Weather Institute 2F - Aqua Admin Shelly",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SHIRLEY_REWARD": {
+    "label": "Mt Chimney - Beauty Shirley",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIDNEY_REWARD": {
+    "label": "Ever Grande City - Elite Four Sidney",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIENNA_REWARD": {
+    "label": "Route 126 - Swimmer Sienna",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SIMON_REWARD": {
+    "label": "Route 109 - Tuber Simon",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SOPHIE_REWARD": {
+    "label": "Route 113 - Picnicker Sophie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SPENCER_REWARD": {
+    "label": "Route 124 - Swimmer Spencer",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STAN_REWARD": {
+    "label": "Route 125 - Swimmer Stan",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STEVEN_REWARD": {
+    "label": "Meteor Falls 1F - Rival Steven",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_STEVE_1_REWARD": {
+    "label": "Route 114 - Pokemaniac Steve",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SUSIE_REWARD": {
+    "label": "Route 131 - Swimmer Susie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_SYLVIA_REWARD": {
+    "label": "Mossdeep Gym - Hex Maniac Sylvia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TABITHA_MAGMA_HIDEOUT_REWARD": {
+    "label": "Magma Hideout 4F - Magma Admin Tabitha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TABITHA_MT_CHIMNEY_REWARD": {
+    "label": "Mt Chimney - Magma Admin Tabitha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAKAO_REWARD": {
+    "label": "Dewford Gym - Black Belt Takao",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAKASHI_REWARD": {
+    "label": "Route 119 - Ninja Boy Takashi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TALIA_REWARD": {
+    "label": "Route 131 - Triathlete Talia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAMMY_REWARD": {
+    "label": "Route 121 - Hex Maniac Tammy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TANYA_REWARD": {
+    "label": "Route 125 - Swimmer Tanya",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TARA_REWARD": {
+    "label": "Route 108 - Swimmer Tara",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TASHA_REWARD": {
+    "label": "Mt Pyre 4F - Hex Maniac Tasha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TATE_AND_LIZA_1_REWARD": {
+    "label": "Mossdeep Gym - Leader Tate and Liza",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TAYLOR_REWARD": {
+    "label": "Route 119 - Bug Maniac Taylor",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TYRA_AND_IVY_REWARD": {
+    "label": "Route 114 - Sr. and Jr. Tyra and Ivy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_THALIA_1_REWARD": {
+    "label": "Abandoned Ship 1F - Beauty Thalia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_THOMAS_REWARD": {
+    "label": "SS Tidal - Gentleman Thomas",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIANA_REWARD": {
+    "label": "Route 102 - Lass Tiana",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIFFANY_REWARD": {
+    "label": "Sootopolis Gym - Beauty Tiffany",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIMMY_REWARD": {
+    "label": "Route 110 - Youngster Timmy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TIMOTHY_1_REWARD": {
+    "label": "Route 115 - Expert Timothy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TISHA_REWARD": {
+    "label": "Route 129 - Swimmer Tisha",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TOMMY_REWARD": {
+    "label": "Rustboro Gym - Youngster Tommy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TONY_1_REWARD": {
+    "label": "Route 107 - Swimmer Tony",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TORI_AND_TIA_REWARD": {
+    "label": "Route 113 - Twins Tori and Tia",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TRAVIS_REWARD": {
+    "label": "Route 111 - Camper Travis",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TRENT_1_REWARD": {
+    "label": "Route 112 - Hiker Trent",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_TYRON_REWARD": {
+    "label": "Route 111 - Camper Tyron",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VALERIE_1_REWARD": {
+    "label": "Mt Pyre 6F - Hex Maniac Valerie",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VANESSA_REWARD": {
+    "label": "Route 121 - Pokefan Vanessa",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICKY_REWARD": {
+    "label": "Route 111 - Winstrate Vicky",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICTORIA_REWARD": {
+    "label": "Route 111 - Winstrate Victoria",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VICTOR_REWARD": {
+    "label": "Route 111 - Winstrate Victor",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIOLET_REWARD": {
+    "label": "Route 123 - Aroma Lady Violet",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIRGIL_REWARD": {
+    "label": "Mossdeep Gym - Psychic Virgil",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VITO_REWARD": {
+    "label": "Victory Road B2F - Cooltrainer Vito",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIVIAN_REWARD": {
+    "label": "Mauville Gym - Battle Girl Vivian",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_VIVI_REWARD": {
+    "label": "Route 111 - Winstrate Vivi",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WADE_REWARD": {
+    "label": "Route 118 - Fisherman Wade",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLACE_REWARD": {
+    "label": "Ever Grande City - Champion Wallace",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALTER_1_REWARD": {
+    "label": "Route 121 - Gentleman Walter",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLY_MAUVILLE_REWARD": {
+    "label": "Mauville City - Rival Wally",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WALLY_VR_1_REWARD": {
+    "label": "Victory Road 1F - Rival Wally",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WATTSON_1_REWARD": {
+    "label": "Mauville Gym - Leader Wattson",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WARREN_REWARD": {
+    "label": "Route 133 - Cooltrainer Warren",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WAYNE_REWARD": {
+    "label": "Route 128 - Fisherman Wayne",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WENDY_REWARD": {
+    "label": "Route 123 - Cooltrainer Wendy",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WILLIAM_REWARD": {
+    "label": "Mt Pyre 3F - Psychic William",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WILTON_1_REWARD": {
+    "label": "Route 111 - Cooltrainer Wilton",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WINONA_1_REWARD": {
+    "label": "Fortree Gym - Leader Winona",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WINSTON_1_REWARD": {
+    "label": "Route 104 - Rich Boy Winston",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_WYATT_REWARD": {
+    "label": "Route 113 - Pokemaniac Wyatt",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_YASU_REWARD": {
+    "label": "Route 119 - Ninja Boy Yasu",
+    "tags": ["Trainer"]
+  },
+  "TRAINER_ZANDER_REWARD": {
+    "label": "Mt Pyre 2F - Black Belt Zander",
+    "tags": ["Trainer"]
   }
 }
