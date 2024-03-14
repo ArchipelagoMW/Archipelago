@@ -103,7 +103,15 @@ class AutopelagoWorld(World):
         return item
 
     def create_items(self):
-        self.multiworld.itempool += (self.create_item(item) for item in location_name_to_unrandomized_progression_item_name.values())
+        new_items = [self.create_item(item) for item in location_name_to_unrandomized_progression_item_name.values()]
+
+        # skip balancing for the normal_rat items that take us beyond the minimum limit
+        rat_items = sorted((item for item in new_items if item.name in item_name_to_rat_count), key=lambda item: (item_name_to_rat_count[item.name], 0 if item.name == item_key_to_name['normal_rat'] else 1))
+        for i in range(total_available_rat_count - max_required_rat_count):
+            assert rat_items[i].name == item_key_to_name['normal_rat'], 'Expected there to be enough normal_rat fillers for this calculation.'
+            rat_items[i].classification |= ItemClassification.skip_balancing
+
+        self.multiworld.itempool += new_items
 
         nonprogression_item_table = { c: [item_name for item_name in items] for c, items in generic_nonprogression_item_table.items() }
         dlc_games = { game for game in game_specific_nonprogression_items }

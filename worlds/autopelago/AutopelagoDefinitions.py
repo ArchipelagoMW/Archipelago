@@ -225,9 +225,24 @@ for rk, r in _defs['regions']['fillers'].items():
         _cur += 1
     autopelago_regions[rk] = AutopelagoRegionDefinition(rk, r['exits'], _locations, [])
 
+def _get_required_rat_count(req: AutopelagoGameRequirement):
+    if 'all' in req:
+        return max(_get_required_rat_count(sub_req) for sub_req in req['all']) if req['all'] else 0
+    elif 'any' in req:
+        return min(_get_required_rat_count(sub_req) for sub_req in req['any'])
+    elif 'rat_count' in req:
+        return req['rat_count']
+    else:
+        return 0
+
+max_required_rat_count = max(_get_required_rat_count(req) for req in [location_name_to_requirement.values()] + [r.requires for r in autopelago_regions.values()])
+total_available_rat_count = sum(item_name_to_rat_count[i] for i in location_name_to_unrandomized_progression_item_name.values() if i in item_name_to_rat_count)
+assert total_available_rat_count >= max_required_rat_count, f'Game is probably not winnable: {max_required_rat_count} rat(s) might be required with only {total_available_rat_count} available'
+
 del _append_nonprogression
 del _cur
 del _defs
+del _get_required_rat_count
 del _item_id_gen
 del _location_id_gen
 del _locations
