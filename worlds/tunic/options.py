@@ -30,7 +30,7 @@ class AbilityShuffling(Toggle):
     player-facing codes.
     """
     internal_name = "ability_shuffling"
-    display_name = "Ability Shuffling"
+    display_name = "Shuffle Abilities"
 
 
 class LogicRules(Choice):
@@ -115,7 +115,7 @@ class FixedShop(Toggle):
     """Forces the Windmill entrance to lead to a shop, and places only one other shop in the pool.
     Has no effect if Entrance Rando is not enabled."""
     internal_name = "fixed_shop"
-    display_name = "ER Fixed Shop"
+    display_name = "Fewer Shops in Entrance Rando"
 
 
 class LaurelsLocation(Choice):
