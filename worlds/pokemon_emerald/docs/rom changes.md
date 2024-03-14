@@ -1,7 +1,20 @@
+## New Behaviors
+
+- The union room receptionist on the second floor of Pokemon Centers was reworked for wonder trading via Archipelago
+- Norman will give you all event ticket items when he gives you the S.S. Ticket
+- Use of event tickets is streamlined and the scripts are refactored to skip "first time use" stuff
+- The roaming pokemon is forced to Latios
+- The pokemon at Southern Island is forced to Latias
+- There is new code for changing your party's levels during trainer battles which also modifies exp gain
+
 ## QoL
 
+- The menu has a GO HOME option instead of EXIT, which will immediately teleport you to Birch's Lab
+- It is possible to teach over HM moves
 - The catch tutorial and cutscenes during your first visit to Petalburg are skipped
 - The match call tutorial after you leave Devon Corp is skipped
+- Random match calls in general are skipped, and trainers no longer ask to register you after a battle
+- Searching by type in the pokedex includes species you have seen but not yet caught
 - Cycling and running is allowed in every map (some exceptions like Fortree and Pacifidlog)
 - When you run out of Repel steps, you'll be prompted to use another one if you have more in your bag
 - Text is always rendered in its entirety on the first frame (instant text)
@@ -12,6 +25,9 @@ you can still read the species when deciding whether to change pokemon
 - When receiving TMs and HMs, the move that it teaches is consistently displayed in the "received item" message (by
 default, certain ways of receiving items would only display the TM/HM number)
 - The Pokedex starts in national mode
+- The fishing minigame is always successful at finding a catch, only requires one round, and will always show four dots
+- With an option in Archipelago, spinning trainers become predictable
+- Removed a ledge on Route 123 which allows you to collect every item without backtracking
 - The Oldale Pokemart sells Poke Balls at the start of the game
 - Pauses during battles (e.g. the ~1 second pause at the start of a turn before an opponent uses a potion) are shorter
 by 62.5%
@@ -29,6 +45,10 @@ predetermined priority
 - Shoal cave changes state every time you reload the map and is no longer tied to the RTC
 - Increased safari zone steps from 500 to 50000
 - Trainers will not approach the player if the blind trainers option is set
+- Defeating the elite 4 respawns all legendary encounters where the encounter ended by fainting the pokemon
+- The cutscene revealing the existence of Latios also gives you dex info for having seen Latios
+- The braille wall hinting at the solution to the Wailord/Relicanth puzzle gives you dex info for having seen Wailord
+and Relicanth
 - Changed trade evolutions to be possible without trading:
   - Politoed: Use King's Rock in bag menu
   - Alakazam: Level 37
@@ -47,11 +67,23 @@ predetermined priority
 ## Game State Changes/Softlock Prevention
 
 - Mr. Briney never disappears or stops letting you use his ferry
+- Upon releasing Kyogre, Sootopolis and Sky Pillar will be advanced to after Rayquaza has been awakened, skipping the
+Wallace and Rayquaza fetch quest
 - Prevent the player from flying or surfing until they have received the Pokedex
-- The S.S. Tidal will be available at all times if you have the option enabled
+- The S.S. Tidal will be available at all times
+- All time-based berry gifts are locked to a one-time gift of a specific berry
+- Terra and Marine Cave are given fixed locations, and the weather events revealing them are permanent until the
+legendary encounter is resolved
+- Mirage Island is always present
+- During dexsanity, certain trainers don't disappear/deactivate
+- During berry randomization, it is impossible to plant berries or for berry trees to change state
 - Some NPCs or tiles are removed on the creation of a new save file based on player options
 - Ensured that every species has some damaging move by level 5
-- Route 115 may have strength boulders between the beach and cave entrance based on player options
+- Route 115 has an alternate layout (must be enabled through Archipelago) which includes a bumpy slope that can cross
+the ledge normally blocking you from entering Meteor Falls from Rustboro City
+- Route 115 may have strength boulders (must be enabled through Archipelago) between the beach and cave entrance
+- Route 118 has an alternate layout (must be enabled through Archipelago) that blocks you from surfing between shores
+and adds a rail so that it can be crossed using the Acro Bike
 - The Petalburg Gym is set up based on your player options rather than after the first 4 gyms
 - The E4 guards will actually check all your badges (or gyms beaten based on your options) instead of just the Feather
 Badge
