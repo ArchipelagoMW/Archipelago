@@ -7,7 +7,7 @@ from typing import Optional, Any
 import Utils
 from .Locations import AdventureLocation, LocationData
 from settings import get_settings
-from worlds.Files import APDeltaPatch, AutoPatchRegister, APContainer
+from worlds.Files import APPatch, AutoPatchRegister
 
 import bsdiff4
 
@@ -78,7 +78,7 @@ class BatNoTouchLocation:
         return ret_dict
 
 
-class AdventureDeltaPatch(APContainer, metaclass=AutoPatchRegister):
+class AdventureDeltaPatch(APPatch, metaclass=AutoPatchRegister):
     hash = ADVENTUREHASH
     game = "Adventure"
     patch_file_ending = ".apadvn"
