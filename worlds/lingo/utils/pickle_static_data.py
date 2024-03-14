@@ -5,6 +5,7 @@ import sys
 
 sys.path.append(os.path.join("worlds", "lingo"))
 sys.path.append(".")
+sys.path.append("..")
 from datatypes import Door, Painting, Panel, Progression, Room, RoomAndDoor, RoomAndPanel, RoomEntrance
 
 import hashlib
