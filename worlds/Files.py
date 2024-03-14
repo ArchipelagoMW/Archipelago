@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import abc
 import json
-import struct
 import zipfile
 from enum import IntEnum
 import os
@@ -310,19 +309,19 @@ class APTokenMixin:
         :return: A bytes object representing the token data.
         """
         data = bytearray()
-        data.extend(struct.pack("I", len(self.tokens)))
+        data.extend(len(self.tokens).to_bytes(4, "little"))
         for token_type, offset, args in self.tokens:
             data.append(token_type)
-            data.extend(struct.pack("I", offset))
+            data.extend(offset.to_bytes(4, "little"))
             if token_type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
-                data.extend(struct.pack("I", 1))
+                data.extend(int.to_bytes(1, 4, "little"))
                 data.append(args)
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
-                data.extend(struct.pack("I", 8))
-                data.extend(struct.pack("I", args[0]))
-                data.extend(struct.pack("I", args[1]))
+                data.extend(int.to_bytes(4, 4, "little"))
+                data.extend(args[0].to_bytes(4, "little"))
+                data.extend(args[1].to_bytes(4, "little"))
             else:
-                data.extend(struct.pack("I", len(args)))
+                data.extend(len(args).to_bytes(4, "little"))
                 data.extend(args)
         return data
 
@@ -358,12 +357,12 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         """Applies the given token file from the patch onto the current file."""
         token_data = caller.get_file(token_file)
         rom_data = bytearray(rom)
-        token_count = struct.unpack("I", token_data[0:4])[0]
+        token_count = int.from_bytes(token_data[0:4], "little")
         bpr = 4
         for _ in range(token_count):
             token_type = token_data[bpr:bpr + 1][0]
-            offset = struct.unpack("I", token_data[bpr + 1:bpr + 5])[0]
-            size = struct.unpack("I", token_data[bpr + 5:bpr + 9])[0]
+            offset = int.from_bytes(token_data[bpr + 1:bpr + 5], "little")
+            size = int.from_bytes(token_data[bpr + 5:bpr + 9], "little")
             data = token_data[bpr + 9:bpr + 9 + size]
             if token_type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
                 arg = data[0]
@@ -374,9 +373,8 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
                 else:
                     rom_data[offset] = rom_data[offset] ^ arg
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
-                args = struct.unpack("II", data)
-                length = args[0]
-                value = args[1]
+                length = int.from_bytes(data[:4], "little")
+                value = int.from_bytes(data[4:], "little")
                 if token_type == APTokenTypes.COPY:
                     rom_data[offset: offset + length] = rom_data[value: value + length]
                 else:
