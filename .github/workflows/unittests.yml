@@ -8,6 +8,7 @@ on:
     paths:
       - '**'
       - '!docs/**'
+      - '!worlds/*/docs/**'
       - '!setup.py'
       - '!*.iss'
       - '!.gitignore'
@@ -17,6 +18,7 @@ on:
     paths:
       - '**'
       - '!docs/**'
+      - '!worlds/*/docs/**'
       - '!setup.py'
       - '!*.iss'
       - '!.gitignore'
