@@ -970,7 +970,7 @@ class Region:
             self.locations.append(location_type(self.player, location, address, self))
 
     def add_event(self, location_name: str, item_name: Optional[str] = None,
-                  rule: Optional[Callable[[CollectionState], bool]] = None) -> None:
+                  rule: Optional[Callable[[CollectionState], bool]] = None) -> Location:
         """
         Adds an event location/item pair to a region.
 
@@ -986,6 +986,8 @@ class Region:
             event_location.access_rule = rule
         self.locations.append(event_location)
         event_location.place_locked_item(Item(item_name, ItemClassification.progression, None, self.player))
+
+        return event_location
 
     def connect(self, connecting_region: Region, name: Optional[str] = None,
                 rule: Optional[Callable[[CollectionState], bool]] = None) -> entrance_type:
