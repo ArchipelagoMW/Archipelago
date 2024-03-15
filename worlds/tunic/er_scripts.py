@@ -228,7 +228,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                         break
                 if p_exit in ["Shop Portal", "Shop"]:
                     portal2 = Portal(name="Shop Portal", region=f"Shop",
-                                     destination="Previous Region_")
+                                     destination="Previous Region", tag="_")
                     shop_count -= 1
                     if shop_count < 0:
                         shop_count += 2
@@ -373,7 +373,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 break
         if portal1 is None:
             raise Exception("Too many shops in the pool, or something else went wrong.")
-        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region", tag="_")
         
         portal_pairs[portal1] = portal2
 
