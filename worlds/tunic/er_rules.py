@@ -981,24 +981,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
     regions["Far Shore to Library Region"].connect(
         connecting_region=regions["Far Shore"])
 
-    # Misc, to be consolidated when that plando connections pr gets merged
-    regions["Shop Entrance 1"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 2"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 3"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 4"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 5"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 6"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 7"].connect(
-        connecting_region=regions["Shop"])
-    regions["Shop Entrance 8"].connect(
-        connecting_region=regions["Shop"])
-
+    # Misc
     regions["Spirit Arena"].connect(
         connecting_region=regions["Spirit Arena Victory"],
         rule=lambda state: (state.has(gold_hexagon, player, world.options.hexagon_goal.value) if
