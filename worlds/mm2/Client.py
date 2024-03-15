@@ -72,6 +72,7 @@ MM2_CONSUMABLE_TABLE: Dict[int, Tuple[int, int]] = {
 class MegaMan2Client(BizHawkClient):
     game = "Mega Man 2"
     system = "NES"
+    patch_suffix = ".apmm2"
     item_queue: typing.List = []
     pending_death_link: bool = False
     # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
