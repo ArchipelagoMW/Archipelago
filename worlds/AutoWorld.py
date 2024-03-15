@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import logging
 import pathlib
+import random
 import re
 import sys
 import time
@@ -296,8 +297,11 @@ class World(metaclass=AutoWorldRegister):
     """path it was loaded from"""
 
     def __init__(self, multiworld: "MultiWorld", player: int):
+        assert multiworld is not None
         self.multiworld = multiworld
         self.player = player
+        self.random = random.Random(multiworld.random.getrandbits(64))
+        multiworld.per_slot_randoms[player] = self.random
 
     def __getattr__(self, item: str) -> Any:
         if item == "settings":
@@ -306,13 +310,15 @@ class World(metaclass=AutoWorldRegister):
 
     # overridable methods that get called by Main.py, sorted by execution order
     # can also be implemented as a classmethod and called "stage_<original_name>",
-    # in that case the MultiWorld object is passed as an argument and it gets called once for the entire multiworld.
+    # in that case the MultiWorld object is passed as an argument, and it gets called once for the entire multiworld.
     # An example of this can be found in alttp as stage_pre_fill
 
     @classmethod
     def stage_assert_generate(cls, multiworld: "MultiWorld") -> None:
-        """Checks that a game is capable of generating, usually checks for some base file like a ROM.
-        This gets called once per present world type. Not run for unittests since they don't produce output"""
+        """
+        Checks that a game is capable of generating, such as checking for some base file like a ROM.
+        This gets called once per present world type. Not run for unittests since they don't produce output.
+        """
         pass
 
     def generate_early(self) -> None:
@@ -357,16 +363,21 @@ class World(metaclass=AutoWorldRegister):
         pass
 
     def post_fill(self) -> None:
-        """Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
-        This happens before progression balancing, so the items may not be in their final locations yet."""
+        """
+        Optional Method that is called after regular fill. Can be used to do adjustments before output generation.
+        This happens before progression balancing, so the items may not be in their final locations yet.
+        """
 
     def generate_output(self, output_directory: str) -> None:
-        """This method gets called from a threadpool, do not use multiworld.random here.
-        If you need any last-second randomization, use self.random instead."""
+        """
+        This method gets called from a threadpool, do not use multiworld.random here.
+        If you need any last-second randomization, use self.random instead.
+        """
         pass
 
     def fill_slot_data(self) -> Mapping[str, Any]:  # json of WebHostLib.models.Slot
-        """What is returned from this function will be in the `slot_data` field
+        """
+        What is returned from this function will be in the `slot_data` field
         in the `Connected` network package.
         It should be a `dict` with `str` keys, and should be serializable with json.
 
@@ -374,15 +385,18 @@ class World(metaclass=AutoWorldRegister):
         The client will receive this as JSON in the `Connected` response.
 
         The generation does not wait for `generate_output` to complete before calling this.
-        `threading.Event` can be used if you need to wait for something from `generate_output`."""
+        `threading.Event` can be used if you need to wait for something from `generate_output`.
+        """
         # The reason for the `Mapping` type annotation, rather than `dict`
         # is so that type checkers won't worry about the mutability of `dict`,
         # so you can have more specific typing in your world implementation.
         return {}
 
     def extend_hint_information(self, hint_data: Dict[int, Dict[int, str]]):
-        """Fill in additional entrance information text into locations, which is displayed when hinted.
-        structure is {player_id: {location_id: text}} You will need to insert your own player_id."""
+        """
+        Fill in additional entrance information text into locations, which is displayed when hinted.
+        structure is {player_id: {location_id: text}} You will need to insert your own player_id.
+        """
         pass
 
     def modify_multidata(self, multidata: Dict[str, Any]) -> None:  # TODO: TypedDict for multidata?
@@ -391,13 +405,17 @@ class World(metaclass=AutoWorldRegister):
 
     # Spoiler writing is optional, these may not get called.
     def write_spoiler_header(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler header. If individual it's right at the end of that player's options,
-        if as stage it's right under the common header before per-player options."""
+        """
+        Write to the spoiler header. If individual it's right at the end of that player's options,
+        if as stage it's right under the common header before per-player options.
+        """
         pass
 
     def write_spoiler(self, spoiler_handle: TextIO) -> None:
-        """Write to the spoiler "middle", this is after the per-player options and before locations,
-        meant for useful or interesting info."""
+        """
+        Write to the spoiler "middle", this is after the per-player options and before locations,
+        meant for useful or interesting info.
+        """
         pass
 
     def write_spoiler_end(self, spoiler_handle: TextIO) -> None:
@@ -407,8 +425,10 @@ class World(metaclass=AutoWorldRegister):
     # end of ordered Main.py calls
 
     def create_item(self, name: str) -> "Item":
-        """Create an item for this world type and player.
-        Warning: this may be called with self.world = None, for example by MultiServer"""
+        """
+        Create an item for this world type and player.
+        Warning: this may be called with self.world = None, for example by MultiServer
+        """
         raise NotImplementedError
 
     def get_filler_item_name(self) -> str:
@@ -418,34 +438,42 @@ class World(metaclass=AutoWorldRegister):
 
     @classmethod
     def create_group(cls, multiworld: "MultiWorld", new_player_id: int, players: Set[int]) -> World:
-        """Creates a group, which is an instance of World that is responsible for multiple others.
-        An example case is ItemLinks creating these."""
+        """
+        Creates a group, which is an instance of World that is responsible for multiple others.
+        An example case is ItemLinks creating these.
+        """
         # TODO remove loop when worlds use options dataclass
         for option_key, option in cls.options_dataclass.type_hints.items():
-            getattr(multiworld, option_key)[new_player_id] = option(option.default)
+            getattr(multiworld, option_key)[new_player_id] = option.from_any(option.default)
         group = cls(multiworld, new_player_id)
-        group.options = cls.options_dataclass(**{option_key: option(option.default)
+        group.options = cls.options_dataclass(**{option_key: option.from_any(option.default)
                                                  for option_key, option in cls.options_dataclass.type_hints.items()})
 
         return group
 
     # decent place to implement progressive items, in most cases can stay as-is
     def collect_item(self, state: "CollectionState", item: "Item", remove: bool = False) -> Optional[str]:
-        """Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
+        """
+        Collect an item name into state. For speed reasons items that aren't logically useful get skipped.
         Collect None to skip item.
         :param state: CollectionState to collect into
         :param item: Item to decide on if it should be collected into state
-        :param remove: indicate if this is meant to remove from state instead of adding."""
+        :param remove: indicate if this is meant to remove from state instead of adding.
+        """
         if item.advancement:
             return item.name
         return None
 
-    # called to create all_state, return Items that are created during pre_fill
     def get_pre_fill_items(self) -> List["Item"]:
+        """
+        Used to return items that need to be collected when creating a fresh all_state, but don't exist in the
+        multiworld itempool.
+        """
         return []
 
     # these two methods can be extended for pseudo-items on state
     def collect(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is collected in to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item)
         if name:
             state.prog_items[self.player][name] += 1
@@ -453,6 +481,7 @@ class World(metaclass=AutoWorldRegister):
         return False
 
     def remove(self, state: "CollectionState", item: "Item") -> bool:
+        """Called when an item is removed from to state. Useful for things such as progressive items or currency."""
         name = self.collect_item(state, item, True)
         if name:
             state.prog_items[self.player][name] -= 1
@@ -461,6 +490,7 @@ class World(metaclass=AutoWorldRegister):
             return True
         return False
 
+    # following methods should not need to be overridden.
     def create_filler(self) -> "Item":
         return self.create_item(self.get_filler_item_name())
 
@@ -509,7 +539,8 @@ def data_package_checksum(data: "GamesPackage") -> str:
 
 
 def _normalize_description(description):
-    """Normalizes a description in item_descriptions or location_descriptions.
+    """
+    Normalizes a description in item_descriptions or location_descriptions.
 
     This allows authors to write descritions with nice indentation and line lengths in their world
     definitions without having it affect the rendered format.

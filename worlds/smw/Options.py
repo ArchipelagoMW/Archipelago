@@ -1,6 +1,6 @@
-import typing
+from dataclasses import dataclass
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Toggle, DeathLink, DefaultOnToggle, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -27,11 +27,13 @@ class BossesRequired(Range):
 
 class NumberOfYoshiEggs(Range):
     """
-    How many Yoshi Eggs are in the pool for Yoshi Egg Hunt
+    Maximum possible number of Yoshi Eggs that will be in the item pool
+    If fewer available locations exist in the pool than this number, the number of available locations will be used instead.
+    Required Percentage of Yoshi Eggs will be calculated based off of that number.
     """
-    display_name = "Total Number of Yoshi Eggs"
+    display_name = "Max Number of Yoshi Eggs"
     range_start = 1
-    range_end = 80
+    range_end = 255
     default = 50
 
 
@@ -50,6 +52,40 @@ class DragonCoinChecks(Toggle):
     Whether collecting 5 Dragon Coins in each level will grant a check
     """
     display_name = "Dragon Coin Checks"
+
+
+class MoonChecks(Toggle):
+    """
+    Whether collecting a 3-Up Moon in a level will grant a check
+    """
+    display_name = "3up Moon Checks"
+
+
+class Hidden1UpChecks(Toggle):
+    """
+    Whether collecting a hidden 1-Up mushroom in a level will grant a check
+    These checks are considered cryptic as there's no actual indicator that they're in their respective places
+    Enable this option at your own risk
+    """
+    display_name = "Hidden 1-Up Checks"
+
+
+class BonusBlockChecks(Toggle):
+    """
+    Whether collecting a 1-Up mushroom from a Bonus Block in a level will grant a check
+    """
+    display_name = "Bonus Block Checks"
+
+
+class Blocksanity(Toggle):
+    """
+    Whether hitting a block with an item or coin inside will grant a check
+    Note that some blocks are excluded due to how the option and the game works!
+    Exclusion list:
+      * Blocks in Top Secret Area & Front Door/Bowser Castle
+      * Blocks that are unreachable unless you glitch your way in
+    """
+    display_name = "Blocksanity"
 
 
 class BowserCastleDoors(Choice):
@@ -127,16 +163,6 @@ class SwapDonutGhostHouseExits(Toggle):
     display_name = "Swap Donut GH Exits"
 
 
-class DisplaySentItemPopups(Choice):
-    """
-    What messages to display in-game for items sent
-    """
-    display_name = "Display Sent Item Popups"
-    option_none = 0
-    option_all = 1
-    default = 1
-
-
 class DisplayReceivedItemPopups(Choice):
     """
     What messages to display in-game for items received
@@ -145,7 +171,18 @@ class DisplayReceivedItemPopups(Choice):
     option_none = 0
     option_all = 1
     option_progression = 2
-    default = 2
+    option_progression_minus_yoshi_eggs = 3
+    default = 3
+
+
+class JunkFillPercentage(Range):
+    """
+    Replace a percentage of non-required Yoshi Eggs in the item pool with random junk items (only applicable on Yoshi Egg Hunt goal)
+    """
+    display_name = "Junk Fill Percentage"
+    range_start = 0
+    range_end = 100
+    default = 0
 
 
 class TrapFillPercentage(Range):
@@ -197,6 +234,20 @@ class TimerTrapWeight(BaseTrapWeight):
     display_name = "Timer Trap Weight"
 
 
+class ReverseTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes the controls to be reversed in the current level
+    """
+    display_name = "Reverse Trap Weight"
+    
+    
+class ThwimpTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of a receiving a trap which causes a Thwimp to spawn above the player
+    """
+    display_name = "Thwimp Trap Weight"
+    
+
 class Autosave(DefaultOnToggle):
     """
     Whether a save prompt will appear after every level
@@ -239,6 +290,21 @@ class MusicShuffle(Choice):
     default = 0
 
 
+class SFXShuffle(Choice):
+    """
+    Shuffles almost every instance of sound effect playback
+    Archipelago elements that play sound effects aren't randomized
+    None: No SFX are shuffled
+    Full: Each individual SFX call has a random SFX
+    Singularity: The entire game uses one SFX for every SFX call
+    """
+    display_name = "Sound Effect Shuffle"
+    option_none = 0
+    option_full = 1
+    option_singularity = 2
+    default = 0
+
+
 class MarioPalette(Choice):
     """
     Mario palette color
@@ -255,25 +321,32 @@ class MarioPalette(Choice):
     default = 0
 
 
-class ForegroundPaletteShuffle(Toggle):
+class LevelPaletteShuffle(Choice):
     """
-    Whether to shuffle level foreground palettes
+    Whether to shuffle level palettes
+    Off: Do not shuffle palettes
+    On Legacy: Uses only the palette sets from the original game
+    On Curated: Uses custom, hand-crafted palette sets
     """
-    display_name = "Foreground Palette Shuffle"
+    display_name = "Level Palette Shuffle"
+    option_off = 0
+    option_on_legacy = 1
+    option_on_curated = 2
+    default = 0
 
 
-class BackgroundPaletteShuffle(Toggle):
-    """
-    Whether to shuffle level background palettes
-    """
-    display_name = "Background Palette Shuffle"
-
-
-class OverworldPaletteShuffle(Toggle):
+class OverworldPaletteShuffle(Choice):
     """
     Whether to shuffle overworld palettes
+    Off: Do not shuffle palettes
+    On Legacy: Uses only the palette sets from the original game
+    On Curated: Uses custom, hand-crafted palette sets
     """
     display_name = "Overworld Palette Shuffle"
+    option_off = 0
+    option_on_legacy = 1
+    option_on_curated = 2
+    default = 0
 
 
 class StartingLifeCount(Range):
@@ -286,34 +359,39 @@ class StartingLifeCount(Range):
     default = 5
 
 
-
-smw_options: typing.Dict[str, type(Option)] = {
-    "death_link": DeathLink,
-    "goal": Goal,
-    "bosses_required": BossesRequired,
-    "number_of_yoshi_eggs": NumberOfYoshiEggs,
-    "percentage_of_yoshi_eggs": PercentageOfYoshiEggs,
-    "dragon_coin_checks": DragonCoinChecks,
-    "bowser_castle_doors": BowserCastleDoors,
-    "bowser_castle_rooms": BowserCastleRooms,
-    "level_shuffle": LevelShuffle,
-    "exclude_special_zone": ExcludeSpecialZone,
-    "boss_shuffle": BossShuffle,
-    "swap_donut_gh_exits": SwapDonutGhostHouseExits,
-    #"display_sent_item_popups": DisplaySentItemPopups,
-    "display_received_item_popups": DisplayReceivedItemPopups,
-    "trap_fill_percentage": TrapFillPercentage,
-    "ice_trap_weight": IceTrapWeight,
-    "stun_trap_weight": StunTrapWeight,
-    "literature_trap_weight": LiteratureTrapWeight,
-    "timer_trap_weight": TimerTrapWeight,
-    "autosave": Autosave,
-    "early_climb": EarlyClimb,
-    "overworld_speed": OverworldSpeed,
-    "music_shuffle": MusicShuffle,
-    "mario_palette": MarioPalette,
-    "foreground_palette_shuffle": ForegroundPaletteShuffle,
-    "background_palette_shuffle": BackgroundPaletteShuffle,
-    "overworld_palette_shuffle": OverworldPaletteShuffle,
-    "starting_life_count": StartingLifeCount,
-}
+@dataclass
+class SMWOptions(PerGameCommonOptions):
+    death_link: DeathLink
+    goal: Goal
+    bosses_required: BossesRequired
+    max_yoshi_egg_cap: NumberOfYoshiEggs
+    percentage_of_yoshi_eggs: PercentageOfYoshiEggs
+    dragon_coin_checks: DragonCoinChecks
+    moon_checks: MoonChecks
+    hidden_1up_checks: Hidden1UpChecks
+    bonus_block_checks: BonusBlockChecks
+    blocksanity: Blocksanity
+    bowser_castle_doors: BowserCastleDoors
+    bowser_castle_rooms: BowserCastleRooms
+    level_shuffle: LevelShuffle
+    exclude_special_zone: ExcludeSpecialZone
+    boss_shuffle: BossShuffle
+    swap_donut_gh_exits: SwapDonutGhostHouseExits
+    display_received_item_popups: DisplayReceivedItemPopups
+    junk_fill_percentage: JunkFillPercentage
+    trap_fill_percentage: TrapFillPercentage
+    ice_trap_weight: IceTrapWeight
+    stun_trap_weight: StunTrapWeight
+    literature_trap_weight: LiteratureTrapWeight
+    timer_trap_weight: TimerTrapWeight
+    reverse_trap_weight: ReverseTrapWeight
+    thwimp_trap_weight: ThwimpTrapWeight
+    autosave: Autosave
+    early_climb: EarlyClimb
+    overworld_speed: OverworldSpeed
+    music_shuffle: MusicShuffle
+    sfx_shuffle: SFXShuffle
+    mario_palette: MarioPalette
+    level_palette_shuffle: LevelPaletteShuffle
+    overworld_palette_shuffle: OverworldPaletteShuffle
+    starting_life_count: StartingLifeCount

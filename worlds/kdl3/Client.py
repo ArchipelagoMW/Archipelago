@@ -97,6 +97,7 @@ def cmd_gift(self: "SNIClientCommandProcessor"):
 
 class KDL3SNIClient(SNIClient):
     game = "Kirby's Dream Land 3"
+    patch_suffix = ".apkdl3"
     levels = None
     consumables = None
     stars = None
@@ -308,10 +309,13 @@ class KDL3SNIClient(SNIClient):
             if current_bgm[0] in (0x00, 0x21, 0x22, 0x23, 0x25, 0x2A, 0x2B):
                 return  # null, title screen, opening, save select, true and false endings
             game_state = await snes_read(ctx, KDL3_GAME_STATE, 1)
-            current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
             if "DeathLink" in ctx.tags and game_state[0] == 0x00 and ctx.last_death_link + 1 < time.time():
+                current_hp = await snes_read(ctx, KDL3_KIRBY_HP, 1)
+                current_world = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_WORLD, 2))[0]
+                current_level = struct.unpack("H", await snes_read(ctx, KDL3_CURRENT_LEVEL, 2))[0]
                 currently_dead = current_hp[0] == 0x00
-                await ctx.handle_deathlink_state(currently_dead)
+                message = deathlink_messages[self.levels[current_world][current_level - 1]]
+                await ctx.handle_deathlink_state(currently_dead, f"{ctx.player_names[ctx.slot]}{message}")
 
             recv_count = await snes_read(ctx, KDL3_RECV_COUNT, 2)
             recv_amount = unpack("H", recv_count)[0]
@@ -406,7 +410,8 @@ class KDL3SNIClient(SNIClient):
                 ctx.locations_checked.add(new_check_id)
                 location = ctx.location_names[new_check_id]
                 snes_logger.info(
-                    f'New Check: {location} ({len(ctx.locations_checked)}/{len(ctx.missing_locations) + len(ctx.checked_locations)})')
+                    f'New Check: {location} ({len(ctx.locations_checked)}/'
+                    f'{len(ctx.missing_locations) + len(ctx.checked_locations)})')
                 await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
         except Exception as ex:
             # we crashed, so print log and clean up

@@ -207,7 +207,7 @@ Clothier;                           Npc;                                        
 Dungeon;                            ;                                           Skeletron;
 Dungeon Heist;                      Achievement;                                Dungeon;
 Bone;                               ;                                           Dungeon | (@calamity & #Skeletron);
-Bewitching Table;                   Minions(1);                                 Dungeon;
+Bewitching Table;                   Minions(1);                                 Dungeon | (Witch Doctor & Wizard);
 Mechanic;                           ;                                           Dungeon;
 Wire;                               ;                                           Mechanic;
 Decryption Computer;                Calamity;                                   Mysterious Circuitry & Dubious Plating & Wire;
