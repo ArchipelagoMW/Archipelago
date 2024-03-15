@@ -132,6 +132,8 @@ class ScrollBox(ScrollView):
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.add_widget(self.layout)
         self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["content", "bars"]
 
 
 class HovererableLabel(HoverBehavior, Label):
@@ -750,8 +752,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + \
-                        "<br> ".join(self.ctx.player_names[player] for player in slot_info.group_members)
+                text += f"<br>Members:<br> " + "<br> ".join(
+                    escape_markup(self.ctx.player_names[player])
+                    for player in slot_info.group_members
+                )
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
