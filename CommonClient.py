@@ -758,8 +758,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
         if 'InvalidSlot' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible. '
