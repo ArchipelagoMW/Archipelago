@@ -1839,6 +1839,15 @@ def update_client_status(ctx: Context, client: Client, new_status: ClientStatus)
     if current != ClientStatus.CLIENT_GOAL:  # can't undo goal completion
         if new_status == ClientStatus.CLIENT_GOAL:
             ctx.on_goal_achieved(client)
+            relevant_players = [player for player in ctx.player_names
+                                if player[0] == client.team and player[1] != client.slot]
+            for player in relevant_players:
+                if player not in ctx.client_game_state:
+                    break  # player has yet to ever connect to the server
+                if ctx.client_game_state[player] != ClientStatus.CLIENT_GOAL:
+                    break
+            else:
+                ctx.broadcast_text_all(f"Team #{client.team + 1} has completed all games! Congratulations!")
 
         ctx.client_game_state[client.team, client.slot] = new_status
         ctx.on_client_status_change(client.team, client.slot)
