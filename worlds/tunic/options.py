@@ -1,7 +1,8 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
-
+from Options import (DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PlandoConnections,
+                     PerGameCommonOptions)
+from .er_data import portal_mapping
 
 class SwordProgression(DefaultOnToggle):
     """Adds four sword upgrades to the item pool that will progressively grant stronger melee weapons, including two new
@@ -136,6 +137,10 @@ class LaurelsLocation(Choice):
     option_10_fairies = 3
     default = 0
 
+
+class TUNICPlandoConnections(PlandoConnections):
+    entrances = {portal.name for portal in portal_mapping}
+    exits = {portal.name for portal in portal_mapping}
 
 @dataclass
 class TunicOptions(PerGameCommonOptions):
