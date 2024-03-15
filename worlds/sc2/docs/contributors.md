@@ -39,4 +39,4 @@ Not all contributors to older versions of Archipelago Starcraft 2 are known.
 
 TheCondor (@TheCondor07) is the original maintainer of the project. Other known contributors include:
 * soldieroforder
-
+* Berserker (@Berserker66)
