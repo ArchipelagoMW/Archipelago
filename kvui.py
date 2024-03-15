@@ -135,6 +135,7 @@ class ScrollBox(ScrollView):
         self.bar_width = dp(12)
         self.scroll_type = ["content", "bars"]
 
+
 class HovererableLabel(HoverBehavior, Label):
     pass
 
