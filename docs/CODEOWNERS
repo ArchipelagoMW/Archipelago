@@ -28,6 +28,9 @@
 # Bumper Stickers
 /worlds/bumpstik/ @FelicitusNeko
 
+# Celeste 64
+/worlds/celeste64/ @PoryGone
+
 # ChecksFinder
 /worlds/checksfinder/ @jonloveslegos
 
@@ -66,6 +69,9 @@
 
 # Hylics 2
 /worlds/hylics2/ @TRPG0
+
+# Kirby's Dream Land 3
+/worlds/kdl3/ @Silvris
 
 # Kingdom Hearts 2
 /worlds/kh2/ @JaredWeakStrike
@@ -128,8 +134,8 @@
 # Sonic Adventure 2 Battle
 /worlds/sa2b/ @PoryGone @RaspberrySpace
 
-# Starcraft 2 Wings of Liberty
-/worlds/sc2wol/ @Ziktofel
+# Starcraft 2
+/worlds/sc2/ @Ziktofel
 
 # Super Metroid
 /worlds/sm/ @lordlou
@@ -184,6 +190,9 @@
 
 # Zillion
 /worlds/zillion/ @beauxq
+
+# Zork Grand Inquisitor
+/worlds/zork_grand_inquisitor/ @nbrochu
 
 ##################################
 ## Disabled Unmaintained Worlds ##
