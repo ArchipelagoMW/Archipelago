@@ -72,6 +72,7 @@ joke_hints = [
     "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
     "Have you tried The Witness?\nOh. I guess you already have. Thanks for playing!",
     "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
+    "Have you tried Zork: Grand Inquisitor?\nThis 1997 game uses Z-Vision technology to simulate 3D environments.\nCome on, I know you wanna find out what \"Z-Vision\" is.",
 
     "Quaternions break my brain",
     "Eclipse has nothing, but you should do it anyway.",
