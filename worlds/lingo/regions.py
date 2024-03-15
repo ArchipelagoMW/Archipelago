@@ -1,11 +1,12 @@
 from typing import Dict, Optional, TYPE_CHECKING
 
 from BaseClasses import Entrance, ItemClassification, Region
+from .datatypes import Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation
 from .player_logic import LingoPlayerLogic
 from .rules import lingo_can_use_entrance, make_location_lambda
-from .static_logic import ALL_ROOMS, PAINTINGS, Room, RoomAndDoor
+from .static_logic import ALL_ROOMS, PAINTINGS
 
 if TYPE_CHECKING:
     from . import LingoWorld
