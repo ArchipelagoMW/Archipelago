@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING
+from typing import Dict, List, NamedTuple
 
 from BaseClasses import Item, ItemClassification
 from .static_logic import DOORS_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, get_door_item_id, \
@@ -18,7 +18,7 @@ class ItemData(NamedTuple):
     code: int
     classification: ItemClassification
     type: ItemType
-    door_ids: List[str]
+    has_doors: bool
     painting_ids: List[str]
 
 
@@ -51,11 +51,11 @@ def load_item_data():
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name),
                          ItemClassification.filler if door.junk_item else ItemClassification.progression,
-                         ItemType.NORMAL, door.door_ids, door.painting_ids)
+                         ItemType.NORMAL, door.has_doors, door.painting_ids)
 
     for group, group_door_ids in door_groups.items():
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
-                                         ItemClassification.progression, ItemType.NORMAL, group_door_ids, [])
+                                         ItemClassification.progression, ItemType.NORMAL, True, [])
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,
@@ -70,11 +70,11 @@ def load_item_data():
 
     for item_name, classification in special_items.items():
         ALL_ITEM_TABLE[item_name] = ItemData(get_special_item_id(item_name), classification,
-                                             ItemType.NORMAL, [], [])
+                                             ItemType.NORMAL, False, [])
 
     for item_name in PROGRESSIVE_ITEMS:
         ALL_ITEM_TABLE[item_name] = ItemData(get_progressive_item_id(item_name),
-                                             ItemClassification.progression, ItemType.NORMAL, [], [])
+                                             ItemClassification.progression, ItemType.NORMAL, False, [])
 
 
 # Initialize the item data at module scope.

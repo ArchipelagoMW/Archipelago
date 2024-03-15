@@ -1,12 +1,13 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
+from .datatypes import Door, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
-from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
+from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
     PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, \
-    SUNWARP_ENTRANCES, SUNWARP_EXITS, DoorType, RoomAndDoor, RoomAndPanel
+    SUNWARP_ENTRANCES, SUNWARP_EXITS
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -310,8 +311,9 @@ class LingoPlayerLogic:
 
             # When painting shuffle is off, most Starting Room paintings give color hallways access. The Wondrous's
             # painting does not, but it gives access to SHRINK and WELCOME BACK.
-            for painting_obj in PAINTINGS_BY_ROOM["Starting Room"]:
-                if not painting_obj.enter_only or painting_obj.required_door is None:
+            for painting_obj in PAINTINGS.values():
+                if not painting_obj.enter_only or painting_obj.required_door is None\
+                        or painting_obj.room != "Starting Room":
                     continue
 
                 # If painting shuffle is on, we only want to consider paintings that actually go somewhere.

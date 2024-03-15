@@ -1,12 +1,13 @@
 from typing import Dict, Optional, TYPE_CHECKING
 
 from BaseClasses import Entrance, ItemClassification, Region
+from .datatypes import EntranceType, Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation
 from .options import SunwarpAccess
 from .player_logic import AccessRequirements, LingoPlayerLogic, PlayerLocation
 from .rules import lingo_can_do_pilgrimage, lingo_can_use_entrance, make_location_lambda
-from .static_logic import ALL_ROOMS, PAINTINGS, EntranceType, Room, RoomAndDoor
+from .static_logic import ALL_ROOMS, PAINTINGS
 
 if TYPE_CHECKING:
     from . import LingoWorld
