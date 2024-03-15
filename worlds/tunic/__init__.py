@@ -59,8 +59,19 @@ class TunicWorld(World):
     er_portal_hints: Dict[int, str]
 
     def generate_early(self) -> None:
-        if self.options.start_with_sword and "Sword" not in self.options.start_inventory:
-            self.options.start_inventory.value["Sword"] = 1
+        # Universal tracker stuff, shouldn't do anything in standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "TUNIC" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.options.start_with_sword.value = passthrough["start_with_sword"]
+                self.options.keys_behind_bosses.value = passthrough["keys_behind_bosses"]
+                self.options.sword_progression.value = passthrough["sword_progression"]
+                self.options.ability_shuffling.value = passthrough["ability_shuffling"]
+                self.options.logic_rules.value = passthrough["logic_rules"]
+                self.options.lanternless.value = passthrough["lanternless"]
+                self.options.maskless.value = passthrough["maskless"]
+                self.options.hexagon_quest.value = passthrough["hexagon_quest"]
+                self.options.entrance_rando.value = passthrough["entrance_rando"]
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
@@ -79,6 +90,9 @@ class TunicWorld(World):
         for money_fool in fool_tiers[self.options.fool_traps]:
             items_to_create["Fool Trap"] += items_to_create[money_fool]
             items_to_create[money_fool] = 0
+
+        if self.options.start_with_sword:
+            self.multiworld.push_precollected(self.create_item("Sword"))
 
         if sword_progression:
             items_to_create["Stick"] = 0
@@ -150,10 +164,20 @@ class TunicWorld(World):
         self.tunic_portal_pairs = {}
         self.er_portal_hints = {}
         self.ability_unlocks = randomize_ability_unlocks(self.random, self.options)
+        
+        # stuff for universal tracker support, can be ignored for standard gen
+        if hasattr(self.multiworld, "re_gen_passthrough"):
+            if "TUNIC" in self.multiworld.re_gen_passthrough:
+                passthrough = self.multiworld.re_gen_passthrough["TUNIC"]
+                self.ability_unlocks["Pages 24-25 (Prayer)"] = passthrough["Hexagon Quest Prayer"]
+                self.ability_unlocks["Pages 42-43 (Holy Cross)"] = passthrough["Hexagon Quest Holy Cross"]
+                self.ability_unlocks["Pages 52-53 (Icebolt)"] = passthrough["Hexagon Quest Icebolt"]
+            
         if self.options.entrance_rando:
             portal_pairs, portal_hints = create_er_regions(self)
             for portal1, portal2 in portal_pairs.items():
                 self.tunic_portal_pairs[portal1.scene_destination()] = portal2.scene_destination()
+
             self.er_portal_hints = portal_hints
 
         else:
@@ -199,10 +223,13 @@ class TunicWorld(World):
             "ability_shuffling": self.options.ability_shuffling.value,
             "hexagon_quest": self.options.hexagon_quest.value,
             "fool_traps": self.options.fool_traps.value,
-            "entrance_rando": self.options.entrance_rando.value,
+            "logic_rules": self.options.logic_rules.value,
+            "lanternless": self.options.lanternless.value,
+            "maskless": self.options.maskless.value,
+            "entrance_rando": bool(self.options.entrance_rando.value),
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
-            "Hexagon Quest Ice Rod": self.ability_unlocks["Pages 52-53 (Ice Rod)"],
+            "Hexagon Quest Icebolt": self.ability_unlocks["Pages 52-53 (Icebolt)"],
             "Hexagon Quest Goal": self.options.hexagon_goal.value,
             "Entrance Rando": self.tunic_portal_pairs
         }
@@ -236,44 +263,7 @@ class TunicWorld(World):
         return slot_data
 
     # for the universal tracker, doesn't get called in standard gen
-    def interpret_slot_data(self, slot_data: Dict[str, Any]) -> None:
-        # bypassing random yaml settings
-        self.options.start_with_sword.value = slot_data["start_with_sword"]
-        self.options.keys_behind_bosses.value = slot_data["keys_behind_bosses"]
-        self.options.sword_progression.value = slot_data["sword_progression"]
-        self.options.ability_shuffling.value = slot_data["ability_shuffling"]
-        self.options.hexagon_quest.value = slot_data["hexagon_quest"]
-        self.ability_unlocks["Pages 24-25 (Prayer)"] = slot_data["Hexagon Quest Prayer"]
-        self.ability_unlocks["Pages 42-43 (Holy Cross)"] = slot_data["Hexagon Quest Holy Cross"]
-        self.ability_unlocks["Pages 52-53 (Ice Rod)"] = slot_data["Hexagon Quest Ice Rod"]
-
-        # swapping entrances around so the mapping matches what was generated
-        if slot_data["entrance_rando"]:
-            from BaseClasses import Entrance
-            from .er_data import portal_mapping
-            entrance_dict: Dict[str, Entrance] = {entrance.name: entrance
-                                                  for region in self.multiworld.get_regions(self.player)
-                                                  for entrance in region.entrances}
-            slot_portals: Dict[str, str] = slot_data["Entrance Rando"]
-            for portal1, portal2 in slot_portals.items():
-                portal_name1: str = ""
-                portal_name2: str = ""
-                entrance1 = None
-                entrance2 = None
-                for portal in portal_mapping:
-                    if portal.scene_destination() == portal1:
-                        portal_name1 = portal.name
-                    if portal.scene_destination() == portal2:
-                        portal_name2 = portal.name
-
-                for entrance_name, entrance in entrance_dict.items():
-                    if entrance_name.startswith(portal_name1):
-                        entrance1 = entrance
-                    if entrance_name.startswith(portal_name2):
-                        entrance2 = entrance
-                if entrance1 is None:
-                    raise Exception("entrance1 not found, portal1 is " + portal1)
-                if entrance2 is None:
-                    raise Exception("entrance2 not found, portal2 is " + portal2)
-                entrance1.connected_region = entrance2.parent_region
-                entrance2.connected_region = entrance1.parent_region
+    @staticmethod
+    def interpret_slot_data(slot_data: Dict[str, Any]) -> Dict[str, Any]:
+        # returning slot_data so it regens, giving it back in multiworld.re_gen_passthrough
+        return slot_data

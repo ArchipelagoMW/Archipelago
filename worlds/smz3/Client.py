@@ -32,6 +32,7 @@ SMZ3_RECV_ITEM_PLAYER_ADDR = SAVEDATA_START + 0x4D3   # 1 byte
 
 class SMZ3SNIClient(SNIClient):
     game = "SMZ3"
+    patch_suffix = ".apsmz3"
 
     async def validate_rom(self, ctx):
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read

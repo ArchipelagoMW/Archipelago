@@ -113,6 +113,7 @@
       HI:
         id: Entry Room/Panel_hi_hi
         tag: midwhite
+        check: True
       HIDDEN:
         id: Entry Room/Panel_hidden_hidden
         tag: midwhite
@@ -7007,10 +7008,12 @@
       MASTERY:
         id: Master Room/Panel_mastery_mastery
         tag: midwhite
-        colors: gray
         required_door:
           room: Orange Tower Seventh Floor
           door: Mastery
+        required_panel:
+          room: Room Room
+          panel: WALL (2)
     doors:
       Excavation:
         event: True
