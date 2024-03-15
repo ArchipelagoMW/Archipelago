@@ -182,7 +182,7 @@ class WL4World(World):
         return WL4Item.from_name(name, self.player, force_non_progression)
 
     def set_rules(self):
-        if self.options.goal == Goal.option_defeat_golden_diva:
+        if self.options.goal == Goal.option_golden_diva:
             condition = lambda state: state.has('Escape the Pyramid', self.player)
         if self.options.goal == Goal.option_golden_treasure_hunt:
             condition = rules.has_treasures().apply_world(self)

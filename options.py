@@ -5,12 +5,13 @@ from Options import Choice, PerGameCommonOptions, Toggle, DeathLink, Range
 
 class Goal(Choice):
     '''
-    TODO
+    Golden Diva: Defeat the four main passage bosses, reach the depths of the pyramid, and defeat the Golden Diva
+    Golden Treasure Hunt: Find the golden treasures scattered in the world, and escape through the Sound Room
     '''
     display_name = 'Goal'
-    option_defeat_golden_diva = 0
+    option_golden_diva = 0
     option_golden_treasure_hunt = 1
-    default = option_defeat_golden_diva
+    default = option_golden_diva
 
 
 class GoldenTreasureCount(Range):
