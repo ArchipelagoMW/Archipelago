@@ -39,7 +39,3 @@ class TestGridGeneration(Sc2TestBase):
         self.assertNotIn(MissionTables.SC2Mission.ZERO_HOUR.mission_name, self.multiworld.regions)
         # WoL has 29 missions. -1 for Zero Hour being excluded, +1 for the automatically-added menu location
         self.assertEqual(len(self.multiworld.regions), 29)
-
-
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
