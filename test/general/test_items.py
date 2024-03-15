@@ -23,8 +23,8 @@ class TestBase(unittest.TestCase):
                 {"Pendants", "Crystals"},
             "Ocarina of Time":
                 {"medallions", "stones", "rewards", "logic_bottles"},
-            "Starcraft 2 Wings of Liberty":
-                {"Missions"},
+            "Starcraft 2":
+                {"Missions", "WoL Missions"},
         }
         for game_name, world_type in AutoWorldRegister.world_types.items():
             with self.subTest(game_name, game_name=game_name):
