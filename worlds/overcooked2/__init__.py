@@ -221,6 +221,10 @@ class Overcooked2World(World):
     def generate_early(self):
         self.player_name = self.multiworld.player_name[self.player]
 
+        # if single player, this setting doesn't matter, and disabling it removes test failures
+        if self.multiworld.players == 1:
+            self.options.location_balancing.value = LocationBalancingMode.disabled
+
         # 0.0 to 1.0 where 1.0 is World Record
         self.star_threshold_scale = self.options.star_threshold_scale / 100.0
 
