@@ -997,9 +997,14 @@ class ConnectionsMeta(AssembleOptions):
 
 
 class PlandoConnection(typing.NamedTuple):
+    class Direction:
+        entrance = "entrance"
+        exit = "exit"
+        both = "both"
+
     entrance: str
     exit: str
-    direction: str  # entrance, exit or both
+    direction: Direction  # entrance, exit or both
     percentage: int = 100
 
 
@@ -1016,10 +1021,6 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
       percentage: 100
     Direction must be one of 'entrance', 'exit', or 'both', and defaults to 'both' if omitted.
     Percentage is an integer from 1 to 100, and defaults to 100 when omitted."""
-    class Direction:
-        Entrance = "entrance"
-        Exit = "exit"
-        Both = "both"
 
     display_name = "Plando Connections"
 
@@ -1055,9 +1056,9 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
             entrance = connection.entrance
             exit = connection.exit
             direction = connection.direction
-            if direction not in (PlandoConnections.Direction.Entrance,
-                                 PlandoConnections.Direction.Exit,
-                                 PlandoConnections.Direction.Both):
+            if direction not in (PlandoConnection.Direction.entrance,
+                                 PlandoConnection.Direction.exit,
+                                 PlandoConnection.Direction.both):
                 raise ValueError(f"Unknown direction: {direction}")
             if entrance in used_entrances:
                 raise ValueError(f"Duplicate Entrance {entrance} not allowed.")
