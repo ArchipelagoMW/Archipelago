@@ -703,6 +703,13 @@ class HintLog(RecycleView):
     def hint_sorter(element: dict) -> str:
         return ""
 
+    def fix_heights(self):
+        """Workaround fix for divergent texture and layout heights"""
+        for element in self.children[0].children:
+            max_height = max(child.texture_size[1] for child in element.children)
+            if element.height != max_height:
+                element.height = max_height
+
 
 class E(ExceptionHandler):
     logger = logging.getLogger("Client")
