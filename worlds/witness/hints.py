@@ -1,6 +1,6 @@
 import logging
 from dataclasses import dataclass
-from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional
+from typing import Tuple, List, TYPE_CHECKING, Set, Dict, Optional, Union
 from BaseClasses import Item, ItemClassification, Location, LocationProgressType, CollectionState
 from . import StaticWitnessLogic
 from .utils import weighted_sample
@@ -8,7 +8,72 @@ from .utils import weighted_sample
 if TYPE_CHECKING:
     from . import WitnessWorld
 
+CompactItemData = Tuple[str, Union[str, int], int]
+
 joke_hints = [
+    "Have you tried Adventure?\n...Holy crud, that game is 17 years older than me.",
+    "Have you tried A Link to the Past?\nThe Archipelago game that started it all!",
+    "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
+    "Have you tried Blasphemous?\nYou haven't? Blasphemy!\n...Sorry. You should try it, though!",
+    "Have you tried Bumper Stickers?\nDecades after its inception, people are still inventing unique twists on the match-3 genre.",
+    "Have you tried Bumper Stickers?\nMaybe after spending so much time on this island, you are longing for a simpler puzzle game.",
+    "Have you tried Celeste 64?\nYou need smol low-poly Madeline in your life. TRUST ME.",
+    "Have you tried ChecksFinder?\nIf you like puzzles, you might enjoy it!",
+    "Have you tried Clique?\nIt's certainly a lot less complicated than this game!",
+    "Have you tried Dark Souls III?\nA tough game like this feels better when friends are helping you!",
+    "Have you tried Donkey Kong Country 3?\nA legendary game from a golden age of platformers!",
+    "Have you tried DLC Quest?\nI know you all like parody games.\nI got way too many requests to make a randomizer for \"The Looker\".",
+    "Have you tried Doom?\nI wonder if a smart fridge can connect to Archipelago.",
+    "Have you tried Doom II?\nGot a good game on your hands? Just make it bigger and better.",
+    "Have you tried Factorio?\nAlone in an unknown multiworld. Sound familiar?",
+    "Have you tried Final Fantasy?\nExperience a classic game improved to fit modern standards!",
+    "Have you tried Final Fantasy Mystic Quest?\nApparently, it was made in an attempt to simplify Final Fantasy for the western market.\nThey were right, I suck at RPGs.",
+    "Have you tried Heretic?\nWait, there is a Doom Engine game where you can look UP AND DOWN???",
+    "Have you tried Hollow Knight?\nAnother independent hit revolutionising a genre!",
+    "Have you tried Hylics 2?\nStop motion might just be the epitome of unique art styles.",
+    "Have you tried Kirby's Dream Land 3?\nAll good things must come to an end, including Nintendo's SNES library.\nWent out with a bang though!",
+    "Have you tried Kingdom Hearts II?\nI'll wait for you to name a more epic crossover.",
+    "Have you tried Link's Awakening DX?\nHopefully, Link won't be obsessed with circles when he wakes up.",
+    "Have you tried Landstalker?\nThe Witness player's greatest fear: A diagonal movement grid...\nWait, I guess we have the Monastery puzzles.",
+    "Have you tried Lingo?\nIt's an open world puzzle game. It features puzzle panels with non-verbally explained mechanics.\nIf you like this game, you'll like Lingo too.",
+    "(Middle Yellow)\nYOU AILED OVERNIGHT\nH--- --- ----- -----?",
+    "Have you tried Lufia II?\nRoguelites are not just a 2010s phenomenon, turns out.",
+    "Have you tried Meritous?\nYou should know that obscure games are often groundbreaking!",
+    "Have you tried The Messenger?\nOld ideas made new again. It's how all art is made.",
+    "Have you tried Minecraft?\nI have recently learned this is a question that needs to be asked.",
+    "Have you tried Mega Man Battle Network 3?\nIt's a Mega Man RPG. How could you not want to try that?",
+    "Have you tried Muse Dash?\nRhythm game with cute girls!\n(Maybe skip if you don't like the Jungle panels)",
+    "Have you tried Noita?\nIf you like punishing yourself, you will like it.",
+    "Have you tried Ocarina of Time?\nOne of the biggest randomizers, big inspiration for this one's features!",
+    "Have you tried Overcooked 2?\nWhen you're done relaxing with puzzles, use your energy to yell at your friends.",
+    "Have you tried Pokemon Emerald?\nI'm going to say it: 10/10, just the right amount of water.",
+    "Have you tried Pokemon Red&Blue?\nA cute pet collecting game that fascinated an entire generation.",
+    "Have you tried Raft?\nHaven't you always wanted to explore the ocean surrounding this island?",
+    "Have you tried Rogue Legacy?\nAfter solving so many puzzles it's the perfect way to rest your \"thinking\" brain.",
+    "Have you tried Risk of Rain 2?\nI haven't either. But I hear it's incredible!",
+    "Have you tried Sonic Adventure 2?\nIf the silence on this island is getting to you, there aren't many games more energetic.",
+    "Have you tried Starcraft 2?\nUse strategy and management to crush your enemies!",
+    "Have you tried Shivers?\nWitness 2 should totally feature a haunted museum.",
+    "Have you tried Super Metroid?\nA classic game, yet still one of the best in the genre.",
+    "Have you tried Super Mario 64?\n3-dimensional games like this owe everything to that game.",
+    "Have you tried Super Mario World?\nI don't think I need to tell you that it is beloved by many.",
+    "Have you tried SMZ3?\nWhy play one incredible game when you can play 2 at once?",
+    "Have you tried Secret of Evermore?\nI haven't either. But I hear it's great!",
+    "Have you tried Slay the Spire?\nExperience the thrill of combat without needing fast fingers!",
+    "Have you tried Stardew Valley?\nThe Farming game that gave a damn. It's so easy to lose hours and days to it...",
+    "Have you tried Subnautica?\nIf you like this game's lonely atmosphere, I would suggest you try it.",
+    "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
+    "Have you tried Timespinner?\nEveryone who plays it ends up loving it!",
+    "Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of \"adventure\" in video games.",
+    "Have you tried TUNC?\nWhat? No, I'm pretty sure I spelled that right.",
+    "Have you tried TUNIC?\nRemember what discovering your first Environmental Puzzle was like?\nTUNIC will make you feel like that at least 5 times over.",
+    "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
+    "Have you tried VVVVVV?\nExperience the essence of gaming distilled into its purest form!",
+    "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
+    "Have you tried The Witness?\nOh. I guess you already have. Thanks for playing!",
+    "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
+    "Have you tried Zork: Grand Inquisitor?\nThis 1997 game uses Z-Vision technology to simulate 3D environments.\nCome on, I know you wanna find out what \"Z-Vision\" is.",
+
     "Quaternions break my brain",
     "Eclipse has nothing, but you should do it anyway.",
     "Beep",
@@ -21,67 +86,6 @@ joke_hints = [
     "When you think about it, there are actually a lot of bubbles in a stream.",
     "Never gonna give you up\nNever gonna let you down\nNever gonna run around and desert you",
     "Thanks to the Archipelago developers for making this possible.",
-    "Have you tried ChecksFinder?\nIf you like puzzles, you might enjoy it!",
-    "Have you tried Dark Souls III?\nA tough game like this feels better when friends are helping you!",
-    "Have you tried Donkey Kong Country 3?\nA legendary game from a golden age of platformers!",
-    "Have you tried Factorio?\nAlone in an unknown multiworld. Sound familiar?",
-    "Have you tried Final Fantasy?\nExperience a classic game improved to fit modern standards!",
-    "Have you tried Hollow Knight?\nAnother independent hit revolutionising a genre!",
-    "Have you tried A Link to the Past?\nThe Archipelago game that started it all!",
-    "Have you tried Meritous?\nYou should know that obscure games are often groundbreaking!",
-    "Have you tried Ocarina of Time?\nOne of the biggest randomizers, big inspiration for this one's features!",
-    "Have you tried Raft?\nHaven't you always wanted to explore the ocean surrounding this island?",
-    "Have you tried Risk of Rain 2?\nI haven't either. But I hear it's incredible!",
-    "Have you tried Rogue Legacy?\nAfter solving so many puzzles it's the perfect way to rest your \"thinking\" brain.",
-    "Have you tried Secret of Evermore?\nI haven't either. But I hear it's great!",
-    "Have you tried Slay the Spire?\nExperience the thrill of combat without needing fast fingers!",
-    "Have you tried SMZ3?\nWhy play one incredible game when you can play 2 at once?",
-    "Have you tried Starcraft 2?\nUse strategy and management to crush your enemies!",
-    "Have you tried Super Mario 64?\n3-dimensional games like this owe everything to that game.",
-    "Have you tried Super Metroid?\nA classic game, yet still one of the best in the genre.",
-    "Have you tried Timespinner?\nEveryone who plays it ends up loving it!",
-    "Have you tried VVVVVV?\nExperience the essence of gaming distilled into its purest form!",
-    "Have you tried The Witness?\nOh. I guess you already have. Thanks for playing!",
-    "Have you tried Super Mario World?\nI don't think I need to tell you that it is beloved by many.",
-    "Have you tried Overcooked 2?\nWhen you're done relaxing with puzzles, use your energy to yell at your friends.",
-    "Have you tried Zillion?\nMe neither. But it looks fun. So, let's try something new together?",
-    "Have you tried Hylics 2?\nStop motion might just be the epitome of unique art styles.",
-    "Have you tried Pokemon Red&Blue?\nA cute pet collecting game that fascinated an entire generation.",
-    "Have you tried Lufia II?\nRoguelites are not just a 2010s phenomenon, turns out.",
-    "Have you tried Minecraft?\nI have recently learned this is a question that needs to be asked.",
-    "Have you tried Subnautica?\nIf you like this game's lonely atmosphere, I would suggest you try it.",
-
-    "Have you tried Sonic Adventure 2?\nIf the silence on this island is getting to you, "
-    "there aren't many games more energetic.",
-
-    "Waiting to get your items?\nTry BK Sudoku! Make progress even while stuck.",
-
-    "Have you tried Adventure?\n...Holy crud, that game is 17 years older than me.",
-    "Have you tried Muse Dash?\nRhythm game with cute girls!\n(Maybe skip if you don't like the Jungle panels)",
-    "Have you tried Clique?\nIt's certainly a lot less complicated than this game!",
-    "Have you tried Bumper Stickers?\nDecades after its inception, people are still inventing unique twists on the match-3 genre.",
-    "Have you tried DLC Quest?\nI know you all like parody games.\nI got way too many requests to make a randomizer for \"The Looker\".",
-    "Have you tried Doom?\nI wonder if a smart fridge can connect to Archipelago.",
-    "Have you tried Kingdom Hearts II?\nI'll wait for you to name a more epic crossover.",
-    "Have you tried Link's Awakening DX?\nHopefully, Link won't be obsessed with circles when he wakes up.",
-    "Have you tried The Messenger?\nOld ideas made new again. It's how all art is made.",
-    "Have you tried Mega Man Battle Network 3?\nIt's a Mega Man RPG. How could you not want to try that?",
-    "Have you tried Noita?\nIf you like punishing yourself, you will like it.",
-    "Have you tried Stardew Valley?\nThe Farming game that gave a damn. It's so easy to lose hours and days to it...",
-    "Have you tried The Legend of Zelda?\nIn some sense, it was the starting point of \"adventure\" in video games.",
-    "Have you tried Undertale?\nI hope I'm not the 10th person to ask you that. But it's, like, really good.",
-    "Have you tried Wargroove?\nI'm glad that for every abandoned series, enough people are yearning for its return that one of them will know how to code.",
-    "Have you tried Blasphemous?\nYou haven't? Blasphemy!\n...Sorry. You should try it, though!",
-    "Have you tried Doom II?\nGot a good game on your hands? Just make it bigger and better.",
-    "Have you tried Lingo?\nIt's an open world puzzle game. It features panels with non-verbally explained mechanics.\nIf you like this game, you'll like Lingo too.",
-    "(Middle Yellow)\nYOU AILED OVERNIGHT\nH--- --- ----- -----?",
-    "Have you tried Bumper Stickers?\nMaybe after spending so much time on this island, you are longing for a simpler puzzle game.",
-    "Have you tried Pokemon Emerald?\nI'm going to say it: 10/10, just the right amount of water.",
-    "Have you tried Terraria?\nA prime example of a survival sandbox game that beats the \"Wide as an ocean, deep as a puddle\" allegations.",
-    "Have you tried Final Fantasy Mystic Quest?\nApparently, it was made in an attempt to simplify Final Fantasy for the western market.\nThey were right, I suck at RPGs.",
-    "Have you tried Shivers?\nWitness 2 should totally feature a haunted Museum.",
-    "Have you tried Heretic?\nWait, there is a Doom Engine game where you can look UP AND DOWN???",
-    
     "One day I was fascinated by the subject of generation of waves by wind.",
     "I don't like sandwiches. Why would you think I like sandwiches? Have you ever seen me with a sandwich?",
     "Where are you right now?\nI'm at soup!\nWhat do you mean you're at soup?",
@@ -161,8 +165,23 @@ joke_hints = [
     "Welcome Back! (:",
     "R R R U L L U L U R U R D R D R U U",
     "Have you tried checking your tracker?",
-    
-    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady,"
+    "Lines are drawn on grids\nAll symbols must be obeyed\nIt's snowing on Mt. Fuji",
+    "If you're BK, you could try today's Wittle:\nhttps://www.fourisland.com/wittle/",
+    "They say that plundering Outside Ganon's Castle is a foolish choice.",
+    "You should try to BLJ. Maybe that'll get you through that door.",
+    "Error: Witness Randomizer disconnected from Archipelago.\n(lmao gottem)",
+    "You have found: One (1) Audio Log!\nSeries of 49! Collect them all!",
+    "In the Town area, you will find 1 good boi.\nGo pet him.",
+    "If you're ever stuck on a panel, feel free to ask Rever.\nSurely you'll understand his drawing!",
+    "[This hint has been removed as part of the Witness Protection Program]",
+    "Panel Diddle",
+    "Witness AP when",
+    "This game is my favorite walking simulator.",
+    "Did you hear that? It said --\n\nCosmic background radiation is a riot!",
+    "Well done solving those puzzles.\nPray return to the Waking Sands.",
+    "Having trouble finding your checks?\nTry the PopTracker pack!\nIt's got auto-tracking and a detailed map.",
+
+    "Hints suggested by:\nIHNN, Beaker, MrPokemon11, Ember, TheM8, NewSoupVi, Jasper Bird, T1mshady, "
     "KF, Yoshi348, Berserker, BowlinJim, oddGarrett, Pink Switch, Rever, Ishigh, snolid.",
 ]
 
@@ -634,14 +653,15 @@ def make_area_hints(world: "WitnessWorld", amount: int, already_hinted_locations
     return hints, unhinted_locations_per_area
 
 
-def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -> List[WitnessWordedHint]:
+def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int,
+                     already_hinted_locations: Set[Location]) -> List[WitnessWordedHint]:
     generated_hints: List[WitnessWordedHint] = []
 
     state = CollectionState(world.multiworld)
 
     # Keep track of already hinted locations. Consider early Tutorial as "already hinted"
 
-    already_hinted_locations = {
+    already_hinted_locations |= {
         loc for loc in world.multiworld.get_reachable_locations(state, world.player)
         if loc.address and StaticWitnessLogic.ENTITIES_BY_NAME[loc.name]["area"]["name"] == "Tutorial (Inside)"
     }
@@ -721,3 +741,29 @@ def create_all_hints(world: "WitnessWorld", hint_amount: int, area_hints: int) -
                         f"Generated {len(generated_hints)} instead.")
 
     return generated_hints
+
+
+def make_compact_hint_data(hint: WitnessWordedHint, local_player_number: int) -> CompactItemData:
+    location = hint.location
+    area_amount = hint.area_amount
+
+    # None if junk hint, address if location hint, area string if area hint
+    arg_1 = location.address if location else (hint.area if hint.area else None)
+
+    # self.player if junk hint, player if location hint, progression amount if area hint
+    arg_2 = area_amount if area_amount is not None else (location.player if location else local_player_number)
+
+    return hint.wording, arg_1, arg_2
+
+
+def make_laser_hints(world: "WitnessWorld", laser_names: List[str]) -> Dict[str, WitnessWordedHint]:
+    laser_hints_by_name = dict()
+
+    for item_name in laser_names:
+        location_hint = hint_from_item(world, item_name, world.own_itempool)
+        if not location_hint:
+            continue
+
+        laser_hints_by_name[item_name] = word_direct_hint(world, location_hint)
+
+    return laser_hints_by_name
