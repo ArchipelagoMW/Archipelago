@@ -98,7 +98,7 @@ def vanilla_portals() -> Dict[Portal, Portal]:
         portal2_sdt = portal1.destination_scene()
 
         if portal2_sdt.startswith("Shop,"):
-            portal2 = Portal(name=f"Shop", region=f"Shop Entrance {shop_num}",
+            portal2 = Portal(name=f"Shop", region="Shop",
                              destination="Previous Region", tag="_")
             shop_num += 1
 
