@@ -7,7 +7,7 @@ import typing
 from .Options import get_option_value, RequiredTactics
 from .MissionTables import SC2Mission, SC2Race, SC2Campaign, campaign_mission_table
 from . import ItemNames
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 
 class ItemData(typing.NamedTuple):

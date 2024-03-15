@@ -10,7 +10,7 @@ from .Options import get_option_value, MissionOrder, \
     TakeOverAIAllies, SpearOfAdunPresence, SpearOfAdunAutonomouslyCastAbilityPresence, campaign_depending_orders, \
     ShuffleCampaigns, get_excluded_missions, ShuffleNoBuild, ExtraLocations, GrantStoryLevels
 from . import ItemNames
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 # Items with associated upgrades
 UPGRADABLE_ITEMS = {item.parent_item for item in get_full_item_list().values() if item.parent_item}

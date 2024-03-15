@@ -4,7 +4,7 @@ from typing import FrozenSet, Union, Set
 from Options import Choice, Toggle, DefaultOnToggle, ItemSet, OptionSet, Range, PerGameCommonOptions
 from .MissionTables import SC2Campaign, SC2Mission, lookup_name_to_mission, MissionPools, get_no_build_missions, \
     campaign_mission_table
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 
 class GameDifficulty(Choice):

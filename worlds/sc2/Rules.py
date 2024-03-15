@@ -8,7 +8,7 @@ from .Items import get_basic_units, defense_ratings, zerg_defense_ratings, kerri
     kerrigan_levels, get_full_item_list
 from .MissionTables import SC2Race, SC2Campaign
 from . import ItemNames
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 
 class SC2Logic:

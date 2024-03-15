@@ -8,7 +8,7 @@ from .Options import get_option_value, MissionOrder, get_enabled_campaigns, camp
 from .MissionTables import MissionInfo, mission_orders, vanilla_mission_req_table, \
     MissionPools, SC2Campaign, get_goal_location, SC2Mission, MissionConnection
 from .PoolFilter import filter_missions
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 
 class SC2MissionSlot(NamedTuple):

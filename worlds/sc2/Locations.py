@@ -7,7 +7,7 @@ from .Options import get_option_value, kerrigan_unit_available, RequiredTactics,
 from .Rules import SC2Logic
 
 from BaseClasses import Location
-from ..AutoWorld import World
+from worlds.AutoWorld import World
 
 SC2WOL_LOC_ID_OFFSET = 1000
 SC2HOTS_LOC_ID_OFFSET = 20000000  # Avoid clashes with The Legend of Zelda
