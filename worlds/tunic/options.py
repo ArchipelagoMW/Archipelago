@@ -159,3 +159,4 @@ class TunicOptions(PerGameCommonOptions):
     maskless: Maskless
     laurels_location: LaurelsLocation
     start_inventory_from_pool: StartInventoryPool
+    plando_connections: TUNICPlandoConnections
