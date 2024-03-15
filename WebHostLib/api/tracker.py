@@ -1,83 +1,135 @@
-import datetime
-
-from typing import Optional
-from flask import abort, jsonify
-
-from Utils import restricted_loads
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
 from uuid import UUID
 
-from WebHostLib.models import Room
-from WebHostLib.api import api_endpoints
-from WebHostLib.tracker import get_static_room_data
+from flask import abort, jsonify
+
+from NetUtils import SlotType
 from WebHostLib import cache
+from WebHostLib.api import api_endpoints
+from WebHostLib.models import Room
+from WebHostLib.tracker import TrackerData
 
 
-# outputs json data to <root_path>/api/tracker/<id of current session tracker>
 @api_endpoints.route('/tracker/<suuid:tracker>')
 @cache.memoize(timeout=60)
 def tracker_data(tracker: UUID):
+    """outputs json data to <root_path>/api/tracker/<id of current session tracker>"""
     room: Optional[Room] = Room.get(tracker=tracker)
     if not room:
         abort(404)
 
-    locations, names, use_door_tracker, player_checks_in_area, \
-        player_location_to_area, precollected_items, games, slot_data, groups = get_static_room_data(room)
+    tracker_data = TrackerData(room)
 
-    checks_done = {team_number: {player_number: 0
-                                 for player_number in range(1, len(team) + 1) if player_number not in groups}
-                   for team_number, team in enumerate(names)}
+    all_players: Dict[int, List[int]] = tracker_data.get_all_players()
 
-    hints = {team: [] for team in range(len(names))}
-
-    player_status = checks_done
-    if room.multisave:
-        multisave = restricted_loads(room.multisave)
-    else:
-        multisave = {}
-
-    if "hints" in multisave:
-        for (team, slot), slot_hints in multisave["hints"].items():
-            hints[team] = [hint for hint in slot_hints]
-
-    for player in locations:
-        locations[player] = [loc for loc in locations[player]]
-
-    for (team, player), locations_checked in multisave.get("location_checks", {}).items():
-        if player in groups:
-            continue
-        player_locations = locations[player]
-        for location in locations_checked:
-            if location not in player_locations or location not in player_location_to_area[player]:
+    groups: Dict[int, Dict[int, List[int]]] = {}
+    """The Slot ID of groups and the IDs of the group's members."""
+    for team, players in tracker_data.get_all_slots().items():
+        for player in players:
+            slot_info = tracker_data.get_slot_info(team, player)
+            if slot_info.type != SlotType.group or not slot_info.group_members:
                 continue
-            checks_done[team][player] += 1
+            groups.setdefault(team, {})[player] = list(slot_info.group_members)
 
-    for (team, player), game_state in multisave.get("client_game_state", {}).items():
-        if player in groups:
-            continue
-        player_status[team][player] = game_state
+    player_names: Dict[int, Dict[int, str]] = {
+        team: {
+            player: tracker_data.get_player_name(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """Slot names of all players."""
 
-    activity_timers = {}
-    now = datetime.datetime.utcnow()
-    for (team, player), timestamp in multisave.get("client_activity_timers", []):
-        inactive_time = now - datetime.datetime.utcfromtimestamp(timestamp)
-        activity_timers[team] = {player: str(inactive_time)}
+    player_aliases: Dict[int, Dict[int, str]] = {
+        team: {
+            player: tracker_data.get_player_alias(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """Slot aliases of all players."""
 
-    player_names = {}
-    for team, names in enumerate(names):
-        for player, name in enumerate(names, 1):
-            player_names[team] = {player: name}
+    player_checks_done: Dict[int, Dict[int, List[int]]] = {
+        team: {
+            player: list(tracker_data.get_player_checked_locations(team, player))
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """ID of all locations checked by each player."""
 
-    aliases = {}
-    for (team, player), alias in multisave.get("name_aliases", {}).items():
-        aliases[team][player] = alias
+    total_checks_done: Dict[int, int] = tracker_data.get_team_locations_checked_count()
+    """Total number of locations checked for the entire multiworld per team."""
 
-    return jsonify({
-        "groups": groups,
-        "player_names": player_names,
-        "aliases": aliases,
-        "checks_done": checks_done,
-        "total_checks": locations,
-        "hints": hints,
-        "recent_activity": activity_timers,
-        "game_states": player_status,
-    })
+    hints: Dict[int, Dict[int, List[str]]] = {}
+    """Hints that all players have used or received."""
+    for team, players in tracker_data.get_all_slots().items():
+        for player in players:
+            player_hints = list(tracker_data.get_player_hints(team, player))
+            hints.setdefault(team, {})[player] = player_hints
+            slot_info = tracker_data.get_slot_info(team, player)
+            # this currently assumes groups are always after players
+            if slot_info.type != SlotType.group:
+                continue
+            for member in slot_info.group_members:
+                hints[team][member] += player_hints
+
+    activity_timers: Dict[int, Dict[int, Optional[datetime]]] = {
+        team: {
+            player: None
+        }
+        for team, players in all_players.items() for player in players
+    }
+    """Time of last activity per player. Returned as RFC 1123 format and null if no connection has been made."""
+    client_activity_timers: Tuple[Tuple[int, int], float] = tracker_data._multisave.get("client_activity_timers", ())
+    for (team, player), timestamp in client_activity_timers:
+        activity_timers[team][player] = datetime.utcfromtimestamp(timestamp)
+
+    connection_timers: Dict[int, Dict[int, Optional[datetime]]] = {
+        team: {
+            player: None
+        }
+        for team, players in all_players.items() for player in players
+    }
+    """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
+
+    client_connection_timers: Tuple[Tuple[int, int], float] = tracker_data._multisave.get("client_connection_timers", ())
+    for (team, player), timestamp in client_connection_timers:
+        connection_timers[team][player] = datetime.utcfromtimestamp(timestamp)
+
+    player_status = {
+        team: {
+            player: tracker_data.get_player_client_status(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """The current client status for each player."""
+
+    slot_data: Dict[int, Dict[int, Dict[str, Any]]] = {
+        team: {
+            player: tracker_data.get_slot_data(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """Slot data for each player."""
+
+    seed: str = tracker_data.get_seed_name()
+    """The Seed name for this multiworld."""
+
+    return jsonify(
+        {
+            "groups": groups,
+            "player_names": player_names,
+            "player_aliases": player_aliases,
+            "player_checks_done": player_checks_done,
+            "total_checks_done": total_checks_done,
+            "hints": hints,
+            "activity_timers": activity_timers,
+            "connection_timers": connection_timers,
+            "player_status": player_status,
+            "slot_data": slot_data,
+            "seed": seed,
+        })
