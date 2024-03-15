@@ -13,6 +13,7 @@ def fruity(name: str) -> str:
 
 
 class Fruit:
+    sweet_gem_berry = fruity("Sweet Gem Berry")
     any = "Any Fruit"
     blueberry = fruity("Blueberry")
     melon = fruity("Melon")
@@ -38,6 +39,7 @@ class Vegetable:
     any = "Any Vegetable"
     parsnip = veggie("Parsnip")
     garlic = veggie("Garlic")
+    bok_choy = "Bok Choy"
     wheat = "Wheat"
     potato = veggie("Potato")
     corn = veggie("Corn")
@@ -57,3 +59,24 @@ class Vegetable:
     yam = veggie("Yam")
     radish = veggie("Radish")
     taro_root = veggie("Taro Root")
+
+
+class SVEFruit:
+    slime_berry = "Slime Berry"
+    monster_fruit = "Monster Fruit"
+    salal_berry = "Salal Berry"
+
+
+class SVEVegetable:
+    monster_mushroom = "Monster Mushroom"
+    void_root = "Void Root"
+    ancient_fiber = "Ancient Fiber"
+
+
+class DistantLandsCrop:
+    void_mint = "Void Mint Leaves"
+    vile_ancient_fruit = "Vile Ancient Fruit"
+
+
+all_vegetables = tuple(all_vegetables)
+all_fruits = tuple(all_fruits)

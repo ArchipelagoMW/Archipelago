@@ -9,7 +9,7 @@ class MagicSpell:
     buff = "Spell: Buff"
     shockwave = "Spell: Shockwave"
     fireball = "Spell: Fireball"
-    frostbite = "Spell: Frostbite"
+    frostbite = "Spell: Frostbolt"
     teleport = "Spell: Teleport"
     lantern = "Spell: Lantern"
     tendrils = "Spell: Tendrils"

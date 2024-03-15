@@ -21,3 +21,7 @@ class ArtisanGood:
     caviar = "Caviar"
     green_tea = "Green Tea"
     mead = "Mead"
+
+
+class ModArtisanGood:
+    pterodactyl_egg = "Pterodactyl Egg"

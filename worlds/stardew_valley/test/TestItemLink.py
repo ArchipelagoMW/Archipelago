@@ -9,7 +9,7 @@ class TestItemLinksEverythingIncluded(SVTestBase):
                options.TrapItems.internal_name: options.TrapItems.option_medium}
 
     def test_filler_of_all_types_generated(self):
-        max_number_filler = 115
+        max_number_filler = 114
         filler_generated = []
         at_least_one_trap = False
         at_least_one_island = False
@@ -60,7 +60,7 @@ class TestItemLinksNoTraps(SVTestBase):
                options.TrapItems.internal_name: options.TrapItems.option_no_traps}
 
     def test_filler_has_no_traps_but_has_island(self):
-        max_number_filler = 100
+        max_number_filler = 99
         filler_generated = []
         at_least_one_island = False
         for i in range(0, max_iterations):

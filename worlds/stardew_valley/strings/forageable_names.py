@@ -14,6 +14,7 @@ class Forageable:
     hay = "Hay"
     hazelnut = "Hazelnut"
     holly = "Holly"
+    journal_scrap = "Journal Scrap"
     leek = "Leek"
     magma_cap = "Magma Cap"
     morel = "Morel"
@@ -32,4 +33,29 @@ class Forageable:
     spring_onion = "Spring Onion"
 
 
+class SVEForage:
+    ornate_treasure_chest = "Ornate Treasure Chest"
+    swirl_stone = "Swirl Stone"
+    void_pebble = "Void Pebble"
+    void_soul = "Void Soul"
+    ferngill_primrose = "Ferngill Primrose"
+    goldenrod = "Goldenrod"
+    winter_star_rose = "Winter Star Rose"
+    bearberrys = "Bearberrys"
+    poison_mushroom = "Poison Mushroom"
+    red_baneberry = "Red Baneberry"
+    big_conch = "Big Conch"
+    dewdrop_berry = "Dewdrop Berry"
+    dried_sand_dollar = "Dried Sand Dollar"
+    golden_ocean_flower = "Golden Ocean Flower"
+    lucky_four_leaf_clover = "Lucky Four Leaf Clover"
+    mushroom_colony = "Mushroom Colony"
+    poison_mushroom = "Poison Mushroom"
+    rusty_blade = "Rusty Blade"
+    smelly_rafflesia = "Smelly Rafflesia"
+    thistle = "Thistle"
 
+
+class DistantLandsForageable:
+    brown_amanita = "Brown Amanita"
+    swamp_herb = "Swamp Herb"
