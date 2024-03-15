@@ -6,7 +6,7 @@ from worlds.AutoWorld import World, WebWorld
 from .Items import item_table, group_table, base_id
 from .Locations import location_table
 from .Rules import create_rules, get_min_feathers
-from .Options import ShortHikeOptions, Goal
+from .Options import ShortHikeOptions
 
 class ShortHikeWeb(WebWorld):
     theme = "ocean"
@@ -87,25 +87,25 @@ class ShortHikeWorld(World):
 
         menu_region.connect(main_region)
 
-        if self.options.goal == Goal.option_nap:
+        if self.options.goal == "nap":
             # Nap
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
-        elif self.options.goal == Goal.option_photo:
+        elif self.options.goal == "photo":
             # Photo
             self.multiworld.completion_condition[self.player] = lambda state: state.has("Golden Feather", self.player, 12)
-        elif self.options.goal == Goal.option_photo:
+        elif self.options.goal == "races":
             # Races
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7)))
-        elif self.options.goal == Goal.option_help_everyone:
+        elif self.options.goal == "help_everyone":
             # Help Everyone
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, 12)
                 and state.has("Toy Shovel", self.player) and state.has("Camping Permit", self.player)
                 and state.has("Motorboat Key", self.player) and state.has("Headband", self.player)
                 and state.has("Wristwatch", self.player) and state.has("Seashell", self.player, 15)
                 and state.has("Shell Necklace", self.player))
-        elif self.options.goal == Goal.option_fishmonger:
+        elif self.options.goal == "fishmonger":
             # Fishmonger
             self.multiworld.completion_condition[self.player] = lambda state: (state.has("Golden Feather", self.player, get_min_feathers(self, 7, 9))
                 or (state.has("Bucket", self.player) and state.has("Golden Feather", self.player, 7))
