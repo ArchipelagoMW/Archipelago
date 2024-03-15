@@ -320,7 +320,7 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
         region2 = regions[portal2.region]
         region1.connect(connecting_region=region2, name=portal1.name)
         # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if portal2.name not in ["Shop", "Shop Portal"]:
+        if portal2.name not in {"Shop", "Shop Portal"}:
             region2.connect(connecting_region=region1, name=portal2.name)
 
 
@@ -372,8 +372,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
             return True
 
     # fortress teleporter needs only the left fuses
-    elif check_portal.scene_destination() in ["Fortress Arena, Transit_teleporter_spidertank",
-                                              "Transit, Fortress Arena_teleporter_spidertank"]:
+    elif check_portal.scene_destination() in {"Fortress Arena, Transit_teleporter_spidertank",
+                                              "Transit, Fortress Arena_teleporter_spidertank"}:
         i = j = k = 0
         for portal in two_plus:
             if portal.scene() == "Fortress Courtyard":
@@ -390,8 +390,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
     elif check_portal.scene_destination() == "Swamp Redux 2, Cathedral Redux_main":
         i = 0
         for portal in two_plus:
-            if portal.region in ["Swamp Front", "Swamp to Cathedral Treasure Room",
-                                 "Swamp to Cathedral Main Entrance Region"]:
+            if portal.region in {"Swamp Front", "Swamp to Cathedral Treasure Room",
+                                 "Swamp to Cathedral Main Entrance Region"}:
                 i += 1
         if i == 4:
             return True
@@ -407,8 +407,8 @@ def gate_before_switch(check_portal: Portal, two_plus: List[Portal]) -> bool:
 
     # Quarry teleporter needs you to hit the Darkwoods fuse
     # Since it's physically in Quarry, we don't need to check for it
-    elif check_portal.scene_destination() in ["Quarry Redux, Transit_teleporter_quarry teleporter",
-                                              "Quarry Redux, ziggurat2020_0_"]:
+    elif check_portal.scene_destination() in {"Quarry Redux, Transit_teleporter_quarry teleporter",
+                                              "Quarry Redux, ziggurat2020_0_"}:
         i = 0
         for portal in two_plus:
             if portal.scene() == "Darkwoods Tunnel":
