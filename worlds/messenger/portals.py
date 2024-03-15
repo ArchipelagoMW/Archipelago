@@ -1,8 +1,7 @@
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
-from .options import ShufflePortals
-from ..generic import PlandoConnection
+from Options import PlandoConnection
 
 if TYPE_CHECKING:
     from . import MessengerWorld
@@ -15,24 +14,6 @@ PORTALS = [
     "Sunken Shrine",
     "Searing Crags",
     "Glacial Peak",
-]
-
-
-REGION_ORDER = [
-    "Autumn Hills",
-    "Forlorn Temple",
-    "Catacombs",
-    "Bamboo Creek",
-    "Howling Grotto",
-    "Quillshroom Marsh",
-    "Searing Crags",
-    "Glacial Peak",
-    "Tower of Time",
-    "Cloud Ruins",
-    "Underworld",
-    "Riviere Turquoise",
-    "Elemental Skylands",
-    "Sunken Shrine",
 ]
 
 
@@ -204,7 +185,27 @@ CHECKPOINTS = {
 }
 
 
+REGION_ORDER = [
+    "Autumn Hills",
+    "Forlorn Temple",
+    "Catacombs",
+    "Bamboo Creek",
+    "Howling Grotto",
+    "Quillshroom Marsh",
+    "Searing Crags",
+    "Glacial Peak",
+    "Tower of Time",
+    "Cloud Ruins",
+    "Underworld",
+    "Riviere Turquoise",
+    "Elemental Skylands",
+    "Sunken Shrine",
+]
+
+
 def shuffle_portals(world: "MessengerWorld") -> None:
+    from .options import ShufflePortals, MessengerPlandoConnections
+
     def create_mapping(in_portal: str, warp: str) -> None:
         nonlocal available_portals
         parent = out_to_parent[warp]
@@ -229,7 +230,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
 
     def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
         for connection in plando_connections:
-            if connection.entrance not in PORTALS:
+            if connection.entrance not in MessengerPlandoConnections.portals:
                 continue
             # let it crash here if input is invalid
             create_mapping(connection.entrance, connection.exit)
@@ -244,7 +245,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     out_to_parent = {checkpoint: parent for parent, checkpoints in shop_points.items() for checkpoint in checkpoints}
     available_portals = [val for zone in shop_points.values() for val in zone]
 
-    plando = world.multiworld.plando_connections[world.player]
+    plando = world.options.plando_connections
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
         handle_planned_portals(plando)
         world.multiworld.plando_connections[world.player] = [connection for connection in plando
