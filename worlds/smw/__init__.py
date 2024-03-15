@@ -58,7 +58,7 @@ class SMWWorld(World):
     options: SMWOptions
 
     topology_present = False
-    required_client_version = (0, 4, 4)
+    required_client_version = (0, 4, 5)
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = all_locations
