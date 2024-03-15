@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, List, NamedTuple
+from typing import Dict, List, NamedTuple, Set
 
 from BaseClasses import Item, ItemClassification
 from .static_logic import DOORS_BY_ROOM, PROGRESSIVE_ITEMS, get_door_group_item_id, get_door_item_id, \
