@@ -70,11 +70,12 @@ class CV64World(World):
     active_stage_exits: typing.Dict[str, typing.Dict]
     active_stage_list: typing.List[str]
     active_warp_list: typing.List[str]
+
+    # Default values to possibly be updated in generate_early
     reinhardt_stages: bool = True
     carrie_stages: bool = True
     branching_stages: bool = False
     starting_stage: str = rname.forest_of_silence
-
     total_s1s: int = 7
     s1s_per_warp: int = 1
     total_s2s: int = 0
