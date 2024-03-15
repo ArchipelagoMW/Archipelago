@@ -33,6 +33,7 @@ from .strings.entrance_names import dig_to_mines_floor, dig_to_skull_floor, Entr
 from .strings.generic_names import Generic
 from .strings.material_names import Material
 from .strings.metal_names import MetalBar
+from .strings.performance_names import Performance
 from .strings.quest_names import Quest
 from .strings.region_names import Region
 from .strings.season_names import Season
@@ -862,7 +863,7 @@ def set_sve_rules(logic: StardewLogic, multiworld: MultiWorld, player: int, worl
     set_entrance_rule(multiworld, player, SVEEntrance.forest_to_lost_woods, logic.bundle.can_complete_community_center)
     set_entrance_rule(multiworld, player, SVEEntrance.enter_summit, logic.mod.sve.has_iridium_bomb())
     set_entrance_rule(multiworld, player, SVEEntrance.backwoods_to_grove, logic.mod.sve.has_any_rune())
-    set_entrance_rule(multiworld, player, SVEEntrance.badlands_to_cave, logic.has("Aegis Elixir"))
+    set_entrance_rule(multiworld, player, SVEEntrance.badlands_to_cave, logic.has("Aegis Elixir") | logic.combat.can_fight_at_level(Performance.maximum))
     set_entrance_rule(multiworld, player, SVEEntrance.forest_west_to_spring, logic.quest.can_complete_quest(Quest.magic_ink))
     set_entrance_rule(multiworld, player, SVEEntrance.railroad_to_grampleton_station, logic.received(SVEQuestItem.scarlett_job_offer))
     set_entrance_rule(multiworld, player, SVEEntrance.secret_woods_to_west, logic.tool.has_tool(Tool.axe, ToolMaterial.iron))
