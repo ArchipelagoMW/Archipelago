@@ -82,10 +82,14 @@ class WL4World(World):
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
-        if self.options.goal != Goal.option_golden_treasure_hunt:
-            golden_diva = self.multiworld.get_location('Golden Diva', self.player)
-            golden_diva.place_locked_item(self.create_item('Escape the Pyramid'))
-            golden_diva.show_in_spoiler = False
+        if self.options.goal == Goal.option_defeat_golden_diva:
+            goal = 'Golden Diva'
+        if self.options.goal == Goal.option_golden_treasure_hunt:
+            goal = 'Sound Room - Emergency Exit'
+
+        goal = self.multiworld.get_location(goal, self.player)
+        goal.place_locked_item(self.create_item('Escape the Pyramid'))
+        goal.show_in_spoiler = False
 
     def create_items(self):
         difficulty = self.options.difficulty
@@ -186,17 +190,18 @@ class WL4World(World):
         return WL4Item.from_name(name, self.player, force_non_progression)
 
     def set_rules(self):
-        if self.options.goal == Goal.option_defeat_golden_diva:
-            condition = lambda state: state.has('Escape the Pyramid', self.player)
-        if self.options.goal == Goal.option_golden_treasure_hunt:
-            condition = rules.has_treasures().apply_world(self)
-        self.multiworld.completion_condition[self.player] = condition
+        self.multiworld.completion_condition[self.player] = (
+            lambda state: state.has('Escape the Pyramid', self.player))
 
     def setup_locations(self):
         checks = filter(lambda p: self.options.difficulty in p[1].difficulties,
                                   locations.location_table.items())
-        if (self.options.goal == Goal.option_golden_treasure_hunt):
-            checks = filter(lambda p: p[0] != 'Golden Diva', checks)
-        else:
+        if (self.options.goal != Goal.option_golden_treasure_hunt):
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
-        return {name for name, _ in checks}
+        checks = {name for name, _ in checks}
+
+        if (self.options.goal != Goal.option_defeat_golden_diva):
+            checks.remove('Golden Diva')
+        if (self.options.goal != Goal.option_golden_treasure_hunt):
+            checks.remove('Sound Room - Emergency Exit')
+        return checks

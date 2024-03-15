@@ -68,6 +68,8 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
     catbat = boss_region(Passage.SAPPHIRE, 'Catbat')
     golden_diva = boss_region(Passage.GOLDEN, 'Golden Diva')
 
+    sound_room = basic_region('Sound Room', ['Sound Room - Emergency Exit'])
+
     world.multiworld.regions += [
         menu_region,
         *passage_regions,
@@ -78,6 +80,7 @@ def create_main_regions(world: WL4World, location_table: Set[str]):
         aerodent,
         catbat,
         golden_diva,
+        sound_room,
     ]
 
 
@@ -285,6 +288,8 @@ def connect_regions(world: WL4World):
         connect_level_exit('Golden Passage', 'Golden Minigame Shop')
         connect('Golden Minigame Shop', 'Golden Pyramid Boss',
                 rules.make_boss_access_rule(world, Passage.GOLDEN, required_jewels_entry))
+
+    connect('Menu', 'Sound Room')
 
 
 def create_region(world: WL4World, location_table: Set[str], name: str,

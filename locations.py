@@ -245,6 +245,8 @@ location_table = {
     'Golden Passage - Mad Scienstein Box':                LocationData(LocationType.BOX,   (Passage.GOLDEN,   0, ItemFlag.JEWEL_NW),       'Passage',         _ALL),
 
     'Golden Diva':                                        LocationData(LocationType.BOSS,  (Passage.GOLDEN,   4, 0x10),                    None,              _ALL),
+
+    'Sound Room - Emergency Exit':                        LocationData(LocationType.EVENT, (None,          None, None),                    None,              _ALL),
 }
 
 
@@ -261,7 +263,7 @@ class WL4Location(Location):
         self.type = type
         self.passage, self.level, self.flag = status_position
         self.difficulty = difficulty
-        if type in (LocationType.BOSS, LocationType.KEYZER) or code is None:
+        if type in (LocationType.BOSS, LocationType.KEYZER, LocationType.EVENT) or code is None:
             self.address = None
             self.event = True
 

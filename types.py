@@ -27,6 +27,7 @@ class LocationType(IntEnum):
     BOSS = 1
     KEYZER = 2
     CHEST = 3
+    EVENT = 4
 
 
 class ItemFlag(IntFlag):

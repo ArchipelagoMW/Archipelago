@@ -11,6 +11,7 @@ class TestEntrances(WL4TestBase):
             ['Menu -> Ruby Passage', True, []],
             ['Menu -> Topaz Passage', True, []],
             ['Menu -> Sapphire Passage', True, []],
+            ['Menu -> Sound Room', True, []],
 
             ['Menu -> Golden Pyramid', False, []],
             ['Menu -> Golden Pyramid', False, ['Emerald Passage Clear']],

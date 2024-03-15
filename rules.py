@@ -219,6 +219,8 @@ location_rules: Mapping[str, Requirement] = {
     'Catbat - 0:55':        has('Ground Pound') & (has('Enemy Jump') | logic(advanced) & not_difficulty(s_hard)),
     'Golden Diva':          has('Grab'),
 
+    'Sound Room - Emergency Exit': has_treasures(),
+
     'Wildflower Fields - 8-Shaped Cave Box':
             has('Super Ground Pound') & ((difficulty(hard) & has('Grab')) | (difficulty(s_hard) & has('Heavy Grab'))),
     'Mystic Lake - Large Cave Box':                   has('Head Smash'),
