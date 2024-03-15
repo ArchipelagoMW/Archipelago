@@ -61,7 +61,7 @@ Currently, the following games are supported:
 * TUNIC
 * Kirby's Dream Land 3
 * Celeste 64
-* Zork Grand Inquisitior
+* Zork Grand Inquisitor
 * A Short Hike
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
