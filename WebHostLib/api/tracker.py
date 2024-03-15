@@ -1,10 +1,10 @@
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple, Union
 from uuid import UUID
 
 from flask import abort, jsonify
 
-from NetUtils import SlotType
+from NetUtils import NetworkItem, SlotType
 from WebHostLib import cache
 from WebHostLib.api import api_endpoints
 from WebHostLib.models import Room
@@ -23,14 +23,17 @@ def tracker_data(tracker: UUID):
 
     all_players: Dict[int, List[int]] = tracker_data.get_all_players()
 
-    groups: Dict[int, Dict[int, List[int]]] = {}
+    groups: Dict[int, Dict[int, Dict[str, Union[str, List[int]]]]] = {}
     """The Slot ID of groups and the IDs of the group's members."""
     for team, players in tracker_data.get_all_slots().items():
         for player in players:
             slot_info = tracker_data.get_slot_info(team, player)
             if slot_info.type != SlotType.group or not slot_info.group_members:
                 continue
-            groups.setdefault(team, {})[player] = list(slot_info.group_members)
+            groups.setdefault(team, {})[player] = {
+                "name": slot_info.name,
+                "members": list(slot_info.group_members),
+            }
 
     player_names: Dict[int, Dict[int, str]] = {
         team: {
@@ -49,6 +52,15 @@ def tracker_data(tracker: UUID):
         for team, players in all_players.items()
     }
     """Slot aliases of all players."""
+
+    player_items_received: Dict[int, Dict[int, List[NetworkItem]]] = {
+        team: {
+            player: tracker_data.get_player_received_items(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """Items received by each player."""
 
     player_checks_done: Dict[int, Dict[int, List[int]]] = {
         team: {
@@ -78,8 +90,9 @@ def tracker_data(tracker: UUID):
     activity_timers: Dict[int, Dict[int, Optional[datetime]]] = {
         team: {
             player: None
+            for player in players
         }
-        for team, players in all_players.items() for player in players
+        for team, players in all_players.items()
     }
     """Time of last activity per player. Returned as RFC 1123 format and null if no connection has been made."""
     client_activity_timers: Tuple[Tuple[int, int], float] = tracker_data._multisave.get("client_activity_timers", ())
@@ -89,8 +102,9 @@ def tracker_data(tracker: UUID):
     connection_timers: Dict[int, Dict[int, Optional[datetime]]] = {
         team: {
             player: None
+            for player in players
         }
-        for team, players in all_players.items() for player in players
+        for team, players in all_players.items()
     }
     """Time of last connection per player. Returned as RFC 1123 format and null if no connection has been made."""
 
@@ -124,6 +138,7 @@ def tracker_data(tracker: UUID):
             "groups": groups,
             "player_names": player_names,
             "player_aliases": player_aliases,
+            "player_items_received": player_items_received,
             "player_checks_done": player_checks_done,
             "total_checks_done": total_checks_done,
             "hints": hints,
@@ -131,5 +146,4 @@ def tracker_data(tracker: UUID):
             "connection_timers": connection_timers,
             "player_status": player_status,
             "slot_data": slot_data,
-            "seed": seed,
         })
