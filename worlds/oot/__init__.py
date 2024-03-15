@@ -92,7 +92,7 @@ class OOTSettings(settings.Group):
 
 class OOTWeb(WebWorld):
     setup = Tutorial(
-        "Multiworld Setup Tutorial",
+        "Multiworld Setup Guide",
         "A guide to setting up the Archipelago Ocarina of Time software on your computer.",
         "English",
         "setup_en.md",
