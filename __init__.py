@@ -82,7 +82,7 @@ class WL4World(World):
             location.place_locked_item(self.create_item(f'{passage} Passage Clear'))
             location.show_in_spoiler = False
 
-        if self.options.goal == Goal.option_defeat_golden_diva:
+        if self.options.goal == Goal.option_golden_diva:
             goal = 'Golden Diva'
         if self.options.goal == Goal.option_golden_treasure_hunt:
             goal = 'Sound Room - Emergency Exit'
@@ -200,7 +200,7 @@ class WL4World(World):
             checks = filter(lambda p: p[1].source != LocationType.CHEST, checks)
         checks = {name for name, _ in checks}
 
-        if (self.options.goal != Goal.option_defeat_golden_diva):
+        if (self.options.goal != Goal.option_golden_diva):
             checks.remove('Golden Diva')
         if (self.options.goal != Goal.option_golden_treasure_hunt):
             checks.remove('Sound Room - Emergency Exit')

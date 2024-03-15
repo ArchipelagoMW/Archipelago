@@ -11,6 +11,7 @@ from worlds._bizhawk.client import BizHawkClient
 
 from .data import encode_str, get_symbol
 from .locations import get_level_locations, location_name_to_id, location_table
+from .options import Goal
 from .types import Passage
 
 if TYPE_CHECKING:
@@ -236,11 +237,16 @@ class WL4Client(BizHawkClient):
 
         # Ensure safe state
         gameplay_state = (game_mode, game_state)
-        safe_states = [
+        write_safe_states = [
             (1, 2),  # Passage select
             (2, 2),  # Playing level
         ]
-        if gameplay_state not in safe_states:
+        read_safe_states = [
+            *write_safe_states,
+            *((0, seq) for seq in range(0x1A, 0x20)),  # End of game cutscene
+        ]
+
+        if gameplay_state not in read_safe_states:
             return
 
         # Turn on death link if it is on, and if the client hasn't overriden it
@@ -315,6 +321,9 @@ class WL4Client(BizHawkClient):
                     await client_ctx.send_death(death_text)
             else:
                 self.death_link.sent_this_death = False
+
+        if gameplay_state not in write_safe_states:
+            return
 
         write_list = []
         guard_list = [

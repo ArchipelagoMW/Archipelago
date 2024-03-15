@@ -365,6 +365,9 @@ def patch_rom(rom: LocalRom, world: WL4World):
     rom.write_bytes(get_symbol('PlayerName'), player_name)
     rom.write_byte(get_symbol('PlayerID'), world.player)
 
+    rom.write_byte(get_symbol('GoalType'), world.options.goal.value)
+    rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
+
     # Set deathlink
     rom.write_byte(get_symbol('DeathLinkFlag'), world.options.death_link.value)
 
