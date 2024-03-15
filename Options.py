@@ -12,7 +12,7 @@ from dataclasses import dataclass
 
 from schema import And, Optional, Or, Schema
 
-from Utils import get_fuzzy_results, is_iterable_of_str
+from Utils import get_fuzzy_results, is_iterable_except_str
 
 if typing.TYPE_CHECKING:
     from BaseClasses import PlandoOptions
@@ -41,6 +41,11 @@ class AssembleOptions(abc.ABCMeta):
         aliases = {name[6:].lower(): option_id for name, option_id in attrs.items() if
                    name.startswith("alias_")}
 
+        assert (
+            name in {"Option", "VerifyKeys"} or  # base abstract classes don't need default
+            "default" in attrs or
+            any(hasattr(base, "default") for base in bases)
+        ), f"Option class {name} needs default value"
         assert "random" not in aliases, "Choice option 'random' cannot be manually assigned."
 
         # auto-alias Off and On being parsed as True and False
@@ -96,7 +101,7 @@ T = typing.TypeVar('T')
 
 class Option(typing.Generic[T], metaclass=AssembleOptions):
     value: T
-    default = 0
+    default: typing.ClassVar[typing.Any]  # something that __init__ will be able to convert to the correct type
 
     # convert option_name_long into Name Long as display_name, otherwise name_long is the result.
     # Handled in get_option_name()
@@ -106,8 +111,9 @@ class Option(typing.Generic[T], metaclass=AssembleOptions):
     supports_weighting = True
 
     # filled by AssembleOptions:
-    name_lookup: typing.Dict[T, str]
-    options: typing.Dict[str, int]
+    name_lookup: typing.ClassVar[typing.Dict[T, str]]  # type: ignore
+    # https://github.com/python/typing/discussions/1460 the reason for this type: ignore
+    options: typing.ClassVar[typing.Dict[str, int]]
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.current_option_name})"
@@ -160,6 +166,8 @@ class FreeText(Option[str]):
     """Text option that allows users to enter strings.
     Needs to be validated by the world or option definition."""
 
+    default = ""
+
     def __init__(self, value: str):
         assert isinstance(value, str), "value of FreeText must be a string"
         self.value = value
@@ -179,6 +187,14 @@ class FreeText(Option[str]):
     @classmethod
     def get_option_name(cls, value: str) -> str:
         return value
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return other.value == self.value
+        elif isinstance(other, str):
+            return other == self.value
+        else:
+            raise TypeError(f"Can't compare {self.__class__.__name__} with {other.__class__.__name__}")
 
 
 class NumericOption(Option[int], numbers.Integral, abc.ABC):
@@ -728,7 +744,7 @@ class SpecialRange(NamedRange):
                   "Consider switching to NamedRange, which supports all use-cases of SpecialRange, and more. In "
                   "NamedRange, range_start specifies the lower end of the regular range, while special values can be "
                   "placed anywhere (below, inside, or above the regular range).")
-        return super().__new__(cls, value)
+        return super().__new__(cls)
 
     @classmethod
     def weighted_range(cls, text) -> Range:
@@ -803,7 +819,7 @@ class VerifyKeys(metaclass=FreezeValidKeys):
 
 
 class OptionDict(Option[typing.Dict[str, typing.Any]], VerifyKeys, typing.Mapping[str, typing.Any]):
-    default: typing.Dict[str, typing.Any] = {}
+    default = {}
     supports_weighting = False
 
     def __init__(self, value: typing.Dict[str, typing.Any]):
@@ -844,10 +860,10 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
     # If only unique entries are needed and input order of elements does not matter, OptionSet should be used instead.
     # Not a docstring so it doesn't get grabbed by the options system.
 
-    default: typing.Union[typing.List[typing.Any], typing.Tuple[typing.Any, ...]] = ()
+    default = ()
     supports_weighting = False
 
-    def __init__(self, value: typing.Iterable[str]):
+    def __init__(self, value: typing.Iterable[typing.Any]):
         self.value = list(deepcopy(value))
         super(OptionList, self).__init__()
 
@@ -857,7 +873,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
@@ -870,7 +886,7 @@ class OptionList(Option[typing.List[typing.Any]], VerifyKeys):
 
 
 class OptionSet(Option[typing.Set[str]], VerifyKeys):
-    default: typing.Union[typing.Set[str], typing.FrozenSet[str]] = frozenset()
+    default = frozenset()
     supports_weighting = False
 
     def __init__(self, value: typing.Iterable[str]):
@@ -883,7 +899,7 @@ class OptionSet(Option[typing.Set[str]], VerifyKeys):
 
     @classmethod
     def from_any(cls, data: typing.Any):
-        if is_iterable_of_str(data):
+        if is_iterable_except_str(data):
             cls.verify_keys(data)
             return cls(data)
         return cls.from_text(str(data))
