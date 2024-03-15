@@ -19,14 +19,14 @@ class MessengerPlandoConnections(PlandoConnections):
     Plando connections to be used with portal shuffle. Direction is ignored.
     List of valid connections can be found here: .
     The entering Portal should *not* have "Portal" appended.
-    For the exits, those in PORTALS must have "Portal" added to the end, those in SHOP_POINTS should be "<Area> - <point> Shop", and those in checkpoint should be "<Area> - <point> Checkpoint".
+    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
     Format is:
     - entrance: Riviere Turquoise
-      exit: Howling Grotto - Wingsuit Shop
+      exit: Wingsuit
     """
     portals = [f"{portal} Portal" for portal in PORTALS]
-    shop_points = [f"{area} - {spot} Shop" for area, spots in SHOP_POINTS.items() for spot in spots]
-    checkpoints = [f"{area} - {spot} Checkpoint" for area, spots in CHECKPOINTS.items() for spot in spots]
+    shop_points = [point for points in SHOP_POINTS.values() for point in points]
+    checkpoints = [point for points in CHECKPOINTS.values() for point in points]
     portal_entrances = PORTALS
     portal_exits = portals + shop_points + checkpoints
     entrances = portal_entrances
