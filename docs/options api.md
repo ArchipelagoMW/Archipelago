@@ -11,7 +11,6 @@ Archipelago will be abbreviated as "AP" from now on.
 Option parsing in AP is done using different Option classes. For each option you would like to have in your game, you
 need to create:
 - A new option class, with a docstring detailing what the option does, to be exposed to the user.
-- A `display_name` to be displayed on the webhost.
 - A new entry in the `options_dataclass` definition for your World.
 By style and convention, the dataclass attributes should be `snake_case`.
 
@@ -43,7 +42,7 @@ from Options import Toggle, Range, Choice, PerGameCommonOptions
 
 class StartingSword(Toggle):
     """Adds a sword to your starting inventory."""
-    display_name = "Start With Sword"
+    display_name = "Start With Sword"  # this is the option name as it's displayed to the user on the webhost and in the spoiler log
 
 
 class Difficulty(Choice):
