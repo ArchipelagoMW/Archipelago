@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
-from .datatypes import Door, RoomAndDoor, RoomAndPanel
+from .datatypes import Door, DoorType, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE, ItemType
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, SunwarpAccess, VictoryCondition
