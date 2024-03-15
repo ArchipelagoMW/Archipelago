@@ -1075,33 +1075,33 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
 
     @classmethod
     def from_any(cls, data: PlandoConFromAnyType) -> Self:
-        if isinstance(data, typing.Iterable):
-            value: typing.List[PlandoConnection] = []
-            for connection in data:
-                if isinstance(connection, typing.Mapping):
-                    percentage = connection.get("percentage", 100)
-                    if random.random() < float(percentage / 100):
-                        entrance = connection.get("entrance", None)
-                        exit = connection.get("exit", None)
-                        direction = connection.get("direction", "both")
-
-                        if not entrance or not exit:
-                            raise Exception("Plando connection must have an entrance and an exit.")
-                        value.append(PlandoConnection(
-                            entrance,
-                            exit,
-                            direction,
-                            percentage
-                        ))
-                elif isinstance(connection, PlandoConnection):
-                    if random.random() < float(connection.percentage / 100):
-                        value.append(connection)
-                else:
-                    raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
-            cls.validate_plando_connections(value)
-            return cls(value)
-        else:
+        if not isinstance(data, typing.Iterable):
             raise Exception(f"Cannot create plando connections from non-List value, got {type(data)}.")
+
+        value: typing.List[PlandoConnection] = []
+        for connection in data:
+            if isinstance(connection, typing.Mapping):
+                percentage = connection.get("percentage", 100)
+                if random.random() < float(percentage / 100):
+                    entrance = connection.get("entrance", None)
+                    exit = connection.get("exit", None)
+                    direction = connection.get("direction", "both")
+
+                    if not entrance or not exit:
+                        raise Exception("Plando connection must have an entrance and an exit.")
+                    value.append(PlandoConnection(
+                        entrance,
+                        exit,
+                        direction,
+                        percentage
+                    ))
+            elif isinstance(connection, PlandoConnection):
+                if random.random() < float(connection.percentage / 100):
+                    value.append(connection)
+            else:
+                raise Exception(f"Cannot create connection from non-Dict type, got {type(connection)}.")
+        cls.validate_plando_connections(value)
+        return cls(value)
 
     def verify(self, world: typing.Type[World], player_name: str, plando_options: "PlandoOptions") -> None:
         from BaseClasses import PlandoOptions
@@ -1114,8 +1114,8 @@ class PlandoConnections(Option[typing.List[PlandoConnection]], metaclass=Connect
     @classmethod
     def get_option_name(cls, value: typing.List[PlandoConnection]) -> str:
         return ", ".join(["%s %s %s" % (connection.entrance,
-                                        "<=>" if connection.direction == cls.Direction.Both else
-                                        "<=" if connection.direction == cls.Direction.Exit else
+                                        "<=>" if connection.direction == PlandoConnection.Direction.both else
+                                        "<=" if connection.direction == PlandoConnection.Direction.exit else
                                         "=>",
                                         connection.exit) for connection in value])
 
