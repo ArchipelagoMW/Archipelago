@@ -54,6 +54,13 @@ class GoldenFeatherProgression(Choice):
     option_hard = 2
     default = 1
 
+class CostMultiplier(Range):
+    """The percentage that all item shop costs will be of the vanilla values."""
+    display_name = "Shop Cost Multiplier"
+    range_start = 25
+    range_end = 200
+    default = 100
+
 @dataclass
 class ShortHikeOptions(PerGameCommonOptions):
     start_inventory_from_pool: StartInventoryPool
@@ -63,3 +70,4 @@ class ShortHikeOptions(PerGameCommonOptions):
     silver_feathers: SilverFeathers
     buckets: Buckets
     golden_feather_progression: GoldenFeatherProgression
+    cost_multiplier: CostMultiplier
