@@ -11,13 +11,21 @@ class OpenRCT2Item(Item):
 
 
 
-def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler):
+def set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps, spam_traps, bathroom_traps, skips, filler, atm, first_aid):
     # print("\nThis is the selected scenario:")
     # print(scenario)
     # print("And these items will be randomized:")
     # print(Scenario_Items[scenario])
     openRCT2_items = copy.deepcopy(Scenario_Items[scenario])
     
+    if atm:
+        if "Cash Machine" not in openRCT2_items:
+            openRCT2_items.append("Cash Machine")
+
+    if first_aid:
+        if "First Aid" not in openRCT2_items:
+            openRCT2_items.append("First Aid")
+
     if monopoly_mode:
         count = 0
         while count < 20:

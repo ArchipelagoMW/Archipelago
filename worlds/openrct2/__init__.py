@@ -127,6 +127,8 @@ class OpenRCT2World(World):
         bathroom_traps = self.options.bathroom_traps.value
         skips = self.options.skips.value
         filler = self.options.filler.value
+        atm = self.options.include_atm
+        first_aid = self.options.include_first_aid
         rules = [self.options.difficult_guest_generation.value,
                  self.options.difficult_park_rating.value,
                  self.options.forbid_high_construction.value,
@@ -134,7 +136,7 @@ class OpenRCT2World(World):
                  self.options.forbid_marketing_campaigns.value,
                  self.options.forbid_tree_removal.value]
         items = set_openRCT2_items(scenario, rules, monopoly_mode, include_gamespeed_items, furry_convention_traps,
-                                   spam_traps, bathroom_traps, skips, filler)
+                                   spam_traps, bathroom_traps, skips, filler, atm, first_aid)
 
         self.item_table = items[0]
         self.item_frequency = items[1]

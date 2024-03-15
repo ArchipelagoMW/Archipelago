@@ -736,6 +736,14 @@ class Filler(Range):
     range_end = 50
     default = 10
 
+class Include_ATM(OpenRCT2OnToggle):
+    """Includes an ATM in the item list, regardless of whether it appears in the chosen scenario"""
+    display_name = "Include ATM"
+
+class Include_First_Aid(OpenRCT2OnToggle):
+    """Includes a First Aid Room in the item list, regardless of whether it appears in the chosen scenario"""
+    display_name = "Include First Aid Room"
+
 class Skips(Range):
     """By default, every game starts with a single skip to ignore a shop requirement. This will add additional skips to 
     be found in the item pool."""
@@ -758,6 +766,8 @@ class openRCT2Options(PerGameCommonOptions):
     scenario_length: SelectedScenarioLength
     scenario: SelectedScenario
     filler: Filler
+    include_atm: Include_ATM
+    include_first_aid: Include_First_Aid
     skips: Skips
 
     # deathlink
