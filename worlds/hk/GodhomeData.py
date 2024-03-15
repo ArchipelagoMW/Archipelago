@@ -35,8 +35,8 @@ def set_godhome_rules(hk_world, hk_set_rule):
 
         # MISC
         'Warp-Junk_Pit_to_Godhome': lambda state: state.count('GG_Waterways', player) and state.count('GODTUNERUNLOCK', player) and state.count('DREAMNAIL', player),
-        'Bench-Godhome_Atrium': lambda state: state.count('GG_Atrium', player) and (state.count('RIGHTCLAW', player) and (state.count('RIGHTDASH', player) or state.count('LEFTCLAW', player) and state.count('RIGHTSUPERDASH', player) or state.count('WINGS', player)) or state.count('LEFTCLAW', player) and state.count('WINGS', player)) or state.count('Bench-Godhome_Atrium', player),
-        'Bench-Hall_of_Gods': lambda state: state.count('GG_Workshop', player) and ((state.count('LEFTCLAW', player) or state.count('RIGHTCLAW', player))) or state.count('Bench-Hall_of_Gods/', player),
+        'Bench-Godhome_Atrium': lambda state: state.count('GG_Atrium', player) and (state.count('RIGHTCLAW', player) and (state.count('RIGHTDASH', player) or state.count('LEFTCLAW', player) and state.count('RIGHTSUPERDASH', player) or state.count('WINGS', player)) or state.count('LEFTCLAW', player) and state.count('WINGS', player)),
+        'Bench-Hall_of_Gods': lambda state: state.count('GG_Workshop', player) and ((state.count('LEFTCLAW', player) or state.count('RIGHTCLAW', player))),
 
         "GODTUNERUNLOCK": lambda state: state.count('SIMPLE', player) > 3,
         # 'WARPSTARTTOBENCH': lambda state: True,  # ap always allows warp to start
