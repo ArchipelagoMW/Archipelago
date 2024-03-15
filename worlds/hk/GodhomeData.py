@@ -1,7 +1,7 @@
 from functools import partial
 
 
-godhome_event_names = ["Defeated_Pantheon_5", "GG_Atrium_Roof", "Defeated_Pantheon_1", "Defeated_Pantheon_2", "Defeated_Pantheon_3", "Opened_Pantheon_4", "Defeated_Pantheon_4", "GG_Atrium", "Hit_Pantheon_5_Unlock_Orb", "GG_Workshop", "Can_Damage_Crystal_Guardian", 'Defeated_Any_Soul_Warrior', "Defeated_Colosseum_3", "COMBAT[Radiance]", "COMBAT[Pantheon_1]", "COMBAT[Pantheon_2]", "COMBAT[Pantheon_3]", "COMBAT[Pantheon_4]", "COMBAT[Pantheon_5]", "COMBAT[Colosseum_3]", 'Warp-Junk_Pit_to_Godhome', 'Bench-Godhome_Atrium', 'Bench-Hall_of_Gods', "GODTUNERUNLOCK", 'WARPSTARTTOBENCH', "GG_Waterways", "Warp-Godhome_to_Junk_Pit", "NAILCOMBAT", "BOSS", "AERIALMINIBOSS"]
+godhome_event_names = ["Defeated_Pantheon_5", "GG_Atrium_Roof", "Defeated_Pantheon_1", "Defeated_Pantheon_2", "Defeated_Pantheon_3", "Opened_Pantheon_4", "Defeated_Pantheon_4", "GG_Atrium", "Hit_Pantheon_5_Unlock_Orb", "GG_Workshop", "Can_Damage_Crystal_Guardian", 'Defeated_Any_Soul_Warrior', "Defeated_Colosseum_3", "COMBAT[Radiance]", "COMBAT[Pantheon_1]", "COMBAT[Pantheon_2]", "COMBAT[Pantheon_3]", "COMBAT[Pantheon_4]", "COMBAT[Pantheon_5]", "COMBAT[Colosseum_3]", 'Warp-Junk_Pit_to_Godhome', 'Bench-Godhome_Atrium', 'Bench-Hall_of_Gods', "GODTUNERUNLOCK", "GG_Waterways", "Warp-Godhome_to_Junk_Pit", "NAILCOMBAT", "BOSS", "AERIALMINIBOSS"]
 
 
 def set_godhome_rules(hk_world, hk_set_rule):
@@ -39,7 +39,6 @@ def set_godhome_rules(hk_world, hk_set_rule):
         'Bench-Hall_of_Gods': lambda state: state.has('GG_Workshop', player) and ((state.has('LEFTCLAW', player) or state.has('RIGHTCLAW', player))),
 
         "GODTUNERUNLOCK": lambda state: state.count('SIMPLE', player) > 3,
-        # 'WARPSTARTTOBENCH': lambda state: True,  # ap always allows warp to start
         "GG_Waterways": lambda state: state.has('GG_Waterways[door1]', player) or state.has('GG_Waterways[right1]', player) and (state.has('LEFTSUPERDASH', player) or state.has('SWIM', player)) or state.has('Warp-Godhome_to_Junk_Pit', player),
         "Warp-Godhome_to_Junk_Pit": lambda state: state.has('Warp-Junk_Pit_to_Godhome', player) or state.has('GG_Atrium', player),
 
