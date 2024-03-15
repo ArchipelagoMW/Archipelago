@@ -1034,6 +1034,31 @@ class OOTWorld(World):
 
 
     def generate_output(self, output_directory: str):
+
+        # Write entrances to spoiler log
+        all_entrances = self.get_shuffled_entrances()
+        all_entrances.sort(reverse=True, key=lambda x: (x.type, x.name))
+        if not self.decouple_entrances:
+            while all_entrances:
+                loadzone = all_entrances.pop()
+                if loadzone.type != 'Overworld':
+                    if loadzone.primary:
+                        entrance = loadzone
+                    else:
+                        entrance = loadzone.reverse
+                    if entrance.reverse is not None:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
+                    else:
+                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+                else:
+                    reverse = loadzone.replaces.reverse
+                    if reverse in all_entrances:
+                        all_entrances.remove(reverse)
+                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
+        else:
+            for entrance in all_entrances:
+                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
+
         if self.hints != 'none':
             self.hint_data_available.wait()
 
@@ -1229,37 +1254,14 @@ class OOTWorld(World):
 
     def write_spoiler(self, spoiler_handle: typing.TextIO) -> None:
         required_trials_str = ", ".join(t for t in self.skipped_trials if not self.skipped_trials[t])
+        if required_trials_str == "":
+            required_trials_str = "None"
         spoiler_handle.write(f"\n\nTrials ({self.multiworld.get_player_name(self.player)}): {required_trials_str}\n")
 
         if self.shopsanity != 'off':
             spoiler_handle.write(f"\nShop Prices ({self.multiworld.get_player_name(self.player)}):\n")
             for k, v in self.shop_prices.items():
                 spoiler_handle.write(f"{k}: {v} Rupees\n")
-
-        # Write entrances to spoiler log
-        all_entrances = self.get_shuffled_entrances()
-        all_entrances.sort(reverse=True, key=lambda x: x.name)
-        all_entrances.sort(reverse=True, key=lambda x: x.type)
-        if not self.decouple_entrances:
-            while all_entrances:
-                loadzone = all_entrances.pop()
-                if loadzone.type != 'Overworld':
-                    if loadzone.primary:
-                        entrance = loadzone
-                    else:
-                        entrance = loadzone.reverse
-                    if entrance.reverse is not None:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces.reverse, 'both', self.player)
-                    else:
-                        self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
-                else:
-                    reverse = loadzone.replaces.reverse
-                    if reverse in all_entrances:
-                        all_entrances.remove(reverse)
-                    self.multiworld.spoiler.set_entrance(loadzone, reverse, 'both', self.player)
-        else:
-            for entrance in all_entrances:
-                self.multiworld.spoiler.set_entrance(entrance, entrance.replaces, 'entrance', self.player)
 
 
     # Key ring handling:
