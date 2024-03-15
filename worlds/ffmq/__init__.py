@@ -97,20 +97,20 @@ class FFMQWorld(World):
         rooms_data = {}
 
         for world in multiworld.get_game_worlds("Final Fantasy Mystic Quest"):
-            if (world.multiworld.map_shuffle[world.player] or world.multiworld.crest_shuffle[world.player] or
-                    world.multiworld.crest_shuffle[world.player]):
-                if world.multiworld.map_shuffle_seed[world.player].value.isdigit():
-                    multiworld.random.seed(int(world.multiworld.map_shuffle_seed[world.player].value))
-                elif world.multiworld.map_shuffle_seed[world.player].value != "random":
-                    multiworld.random.seed(int(hash(world.multiworld.map_shuffle_seed[world.player].value))
-                                                + int(world.multiworld.seed))
+            if (world.options.map_shuffle or world.options.crest_shuffle or world.options.shuffle_battlefield_rewards
+                    or world.options.companions_locations):
+                if world.options.map_shuffle_seed.value.isdigit():
+                    multiworld.random.seed(int(world.options.map_shuffle_seed.value))
+                elif world.options.map_shuffle_seed.value != "random":
+                    multiworld.random.seed(int(hash(world.options.map_shuffle_seed.value))
+                                           + int(world.multiworld.seed))
 
                 seed = hex(multiworld.random.randint(0, 0xFFFFFFFF)).split("0x")[1].upper()
-                map_shuffle = multiworld.map_shuffle[world.player].value
-                crest_shuffle = multiworld.crest_shuffle[world.player].current_key
-                battlefield_shuffle = multiworld.shuffle_battlefield_rewards[world.player].current_key
-                companion_shuffle = multiworld.companions_locations[world.player].value
-                kaeli_mom = multiworld.kaelis_mom_fight_minotaur[world.player].current_key
+                map_shuffle = world.options.map_shuffle.value
+                crest_shuffle = world.options.crest_shuffle.current_key
+                battlefield_shuffle = world.options.shuffle_battlefield_rewards.current_key
+                companion_shuffle = world.options.companions_locations.value
+                kaeli_mom = world.options.kaelis_mom_fight_minotaur.current_key
 
                 query = f"s={seed}&m={map_shuffle}&c={crest_shuffle}&b={battlefield_shuffle}&cs={companion_shuffle}&km={kaeli_mom}"
 

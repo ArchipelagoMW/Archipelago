@@ -99,7 +99,7 @@ def generate_output(self, output_directory):
              hex(self.multiworld.per_slot_randoms[self.player].randint(0, 0xFFFFFFFF)).split("0x")[1].upper()}
 
     starting_items = [output_item_name(item) for item in self.multiworld.precollected_items[self.player]]
-    if self.multiworld.sky_coin_mode[self.player] == "shattered_sky_coin":
+    if self.options.sky_coin_mode == "shattered_sky_coin":
         starting_items.append("SkyCoin")
 
     file_path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.apmq")

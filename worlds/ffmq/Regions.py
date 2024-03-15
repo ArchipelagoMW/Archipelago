@@ -67,7 +67,7 @@ def create_regions(self):
             location_table else None, object["type"], object["access"],
             self.create_item(yaml_item(object["on_trigger"][0])) if object["type"] == "Trigger" else None) for object in
             room["game_objects"] if "Hero Chest" not in object["name"] and object["type"] not in ("BattlefieldGp",
-            "BattlefieldXp") and (object["type"] != "Box" or self.multiworld.brown_boxes[self.player] == "include") and
+            "BattlefieldXp") and (object["type"] != "Box" or self.options.brown_boxes == "include") and
             not (object["name"] == "Kaeli Companion" and not object["on_trigger"])], room["links"]))
 
     dark_king_room = self.multiworld.get_region("Doom Castle Dark King Room", self.player)
@@ -210,7 +210,7 @@ def set_rules(self) -> None:
 def stage_set_rules(multiworld):
     # If there's no enemies, there's no repeatable income sources
     no_enemies_players = [player for player in multiworld.get_game_players("Final Fantasy Mystic Quest")
-                          if multiworld.enemies_density[player] == "none"]
+                          if multiworld.worlds[player].options.enemies_density == "none"]
     if (len([item for item in multiworld.itempool if item.classification in (ItemClassification.filler,
             ItemClassification.trap)]) > len([player for player in no_enemies_players if
                                               multiworld.worlds[player].options.accessibility == "minimal"]) * 3):
