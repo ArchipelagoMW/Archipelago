@@ -120,6 +120,7 @@ class ShortHikeWorld(World):
         settings = {
             "goal": int(options.goal),
             "logicLevel": int(options.golden_feather_progression),
+            "costMultiplier": int(options.cost_multiplier),
         }
     
         slot_data = {
