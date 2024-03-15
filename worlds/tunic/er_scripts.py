@@ -112,9 +112,6 @@ def vanilla_portals() -> Dict[Portal, Portal]:
         portal_pairs[portal1] = portal2
         portal_map.remove(portal1)
         if not portal2_sdt.startswith("Shop,"):
-            if portal2 not in portal_map:
-                print(portal1.scene_destination())
-                print(portal1.destination_scene())
             portal_map.remove(portal2)
 
     return portal_pairs
