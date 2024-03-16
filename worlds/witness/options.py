@@ -106,7 +106,7 @@ class ShuffleVaultBoxes(Toggle):
 
 class ShuffleEnvironmentalPuzzles(Choice):
     """
-    Add Environmental/Obelisk Puzzles into the location pool.
+    Adds Environmental/Obelisk Puzzles into the location pool.
     If set to "individual", every Environmental Puzzle sends an item.
     If set to "Obelisk Sides", completing every puzzle on one side of an Obelisk sends an item.
 
