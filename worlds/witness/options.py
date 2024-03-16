@@ -209,7 +209,7 @@ class ChallengeLasers(Range):
 
 class ElevatorsComeToYou(Toggle):
     """
-    If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
     This does actually affect logic as it allows unintended backwards / early access into these areas.
     """
     display_name = "All Bridges & Elevators come to you"
