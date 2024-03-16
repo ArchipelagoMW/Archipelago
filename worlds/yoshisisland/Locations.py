@@ -350,3 +350,4 @@ def get_locations(world: Optional["YIWorld"]) -> List[LocationData]:
         ]
         
     return location_table
+    

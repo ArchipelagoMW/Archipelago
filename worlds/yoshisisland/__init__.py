@@ -45,7 +45,6 @@ class YIWorld(World):
         As Yoshi, you must run, jump, and throw eggs to escort the baby Mario across the island to defeat Bowser and reunite the two brothers with their parents."""
     game = "Yoshi's Island"
     option_definitions = YoshisIslandOptions
-    data_version = 1
     required_client_version = (0, 4, 4)
 
     item_name_to_id = {item: item_table[item].code for item in item_table}
@@ -370,17 +369,12 @@ class YIWorld(World):
     def extend_hint_information(self, hint_data: typing.Dict[int, typing.Dict[int, str]]) -> None:
         stage_pos_data = {}
         for loc in self.multiworld.get_locations(self.player):
-            if loc.LevelID is not None and loc.address is not None:
-                if loc.LevelID in self.world_1_stages:
-                    stage_pos_data[loc.address] = "World 1"
-                elif loc.LevelID in self.world_2_stages:
-                    stage_pos_data[loc.address] = "World 2"
-                if loc.LevelID in self.world_3_stages:
-                    stage_pos_data[loc.address] = "World 3"
-                if loc.LevelID in self.world_4_stages:
-                    stage_pos_data[loc.address] = "World 4"
-                if loc.LevelID in self.world_5_stages:
-                    stage_pos_data[loc.address] = "World 5"
-                if loc.LevelID in self.world_6_stages:
-                    stage_pos_data[loc.address] = "World 6"
+            if loc.address:
+                level_id = getattr(loc, "LevelID")
+                for level, stages in zip([f"World {i}" for i in range(1, 7)], [self.world_1_stages, self.world_2_stages,
+                                                                               self.world_3_stages, self.world_4_stages,
+                                                                               self.world_5_stages, self.world_6_stages]):
+                    if level_id in stages:
+                        stage_pos_data[loc.address] = level
+                        break
         hint_data[self.player] = stage_pos_data

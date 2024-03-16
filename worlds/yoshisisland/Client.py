@@ -9,12 +9,8 @@ from worlds.AutoSNIClient import SNIClient
 
 if typing.TYPE_CHECKING:
     from SNIClient import SNIContext
-else:
-    SNIContext = typing.Any
 
 snes_logger = logging.getLogger("SNES")
-
-GAME_YI = "Yoshi's Island"
 
 ROM_START = 0x000000
 WRAM_START = 0xF50000
@@ -40,7 +36,7 @@ VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 class YISNIClient(SNIClient):
     game = "Yoshi's Island"
 
-    async def deathlink_kill_player(self, ctx: SNIContext) -> None:
+    async def deathlink_kill_player(self, ctx: "SNIContext") -> None:
         from SNIClient import DeathState, snes_buffered_write, snes_flush_writes, snes_read
         game_state = await snes_read(ctx, GAME_MODE, 0x1)
         if game_state[0] != 0x0F:
@@ -57,7 +53,7 @@ class YISNIClient(SNIClient):
         ctx.death_state = DeathState.dead
         ctx.last_death_link = time.time()
 
-    async def validate_rom(self, ctx: SNIContext) -> None:
+    async def validate_rom(self, ctx: "SNIContext") -> None:
         from SNIClient import snes_read
 
         rom_name = await snes_read(ctx, YOSHISISLAND_ROMHASH_START, ROMHASH_SIZE)
@@ -73,18 +69,18 @@ class YISNIClient(SNIClient):
             await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
 
-    async def game_watcher(self, ctx: SNIContext) -> None:
+    async def game_watcher(self, ctx: "SNIContext") -> None:
         from SNIClient import snes_buffered_write, snes_flush_writes, snes_read
 
 
         game_mode = await snes_read(ctx, GAME_MODE, 0x1)
         item_received = await snes_read(ctx, ITEM_RECEIVED, 0x1)
         game_music = await snes_read(ctx, DEATHMUSIC_FLAG, 0x1)
-        death_flag = await snes_read(ctx, DEATHFLAG, 0x1)
-        deathlink_death = await snes_read(ctx, DEATHLINKRECV, 0x1)
         goal_flag = await snes_read(ctx, GOALFLAG, 0x1)
 
         if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
+            death_flag = await snes_read(ctx, DEATHFLAG, 0x1)
+            deathlink_death = await snes_read(ctx, DEATHLINKRECV, 0x1)
             currently_dead = (game_music[0] == 0x07 or game_mode[0] == 0x12 or
                               (death_flag [0] == 0x00 and game_mode[0] == 0x11)) and deathlink_death[0] == 0x00
             await ctx.handle_deathlink_state(currently_dead)

@@ -179,11 +179,6 @@ def create_location(player: int, location_data: LocationData, region: Region, lo
     location = YILocation(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
     location.LevelID = location_data.LevelID
-
-    if id is None:
-        location.event = True
-        location.locked = True
-
     location_cache.append(location)
 
     return location
@@ -205,13 +200,8 @@ def connect_starting_region(world: "YIWorld") -> None:
     world_main = multiworld.get_region('Overworld', player)
 
     starting_region = multiworld.get_region(f'World {world.options.starting_world + 1}', player)
-
-    load_file = Entrance(player, 'Overworld', menu)
-    load_file.connect(world_main)
+    
     menu.connect(world_main, "Start Game")
-
-    starting_world = Entrance(player, 'Overworld', world_main)
-    starting_world.connect(starting_region)
     world_main.connect(starting_region, "Overworld")
 
 
