@@ -312,6 +312,7 @@ class LateBasinOfVowsOption(Toggle):
     """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, but you wont have to fight Dancer to find your Small Lothric Banner."""
     display_name = "Late Basin of Vows"
 
+
 class LateDLCOption(Toggle):
     """This option makes it so you are guaranteed to find your Small Doll without having to venture off into the DLC, effectively putting anything in the DLC in logic after finding both Contraption Key and Small Doll, and being able to get into Irithyll of the Boreal Valley."""
     display_name = "Late DLC"
