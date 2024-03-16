@@ -102,7 +102,9 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
 
 class ShuffleDog(Toggle):
-    """Add petting the Town dog into the location pool."""
+    """
+    Add petting the Town dog into the location pool.
+    """
 
     display_name = "Pet the Dog"
 
@@ -130,22 +132,26 @@ class ObeliskKeys(DefaultOnToggle):
 
 
 class ShufflePostgame(Toggle):
-    """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
+    """
+    Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
     Use this if you don't play with release on victory.
 
-    IMPORTANT NOTE: The possibility of your second "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
+    IMPORTANT NOTE: The possibility of your second "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings.
+    """
     display_name = "Shuffle Postgame"
 
 
 class VictoryCondition(Choice):
-    """Set the victory condition for this world.
+    """
+    Set the victory condition for this world.
     Elevator: Start the elevator at the bottom of the mountain (requires Mountain Lasers).
     Challenge: Beat the secret Challenge (requires Challenge Lasers).
     Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
     Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
 
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
-    to count, the laser locks on the Elevator and Challenge Timer panels do not."""
+    to count, the laser locks on the Elevator and Challenge Timer panels do not.
+    """
     display_name = "Victory Condition"
     option_elevator = 0
     option_challenge = 1
@@ -154,7 +160,9 @@ class VictoryCondition(Choice):
 
 
 class PuzzleRandomization(Choice):
-    """Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles."""
+    """
+    Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles.
+    """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
     option_sigma_expert = 1
@@ -162,9 +170,11 @@ class PuzzleRandomization(Choice):
 
 
 class MountainLasers(Range):
-    """Sets the amount of lasers required to enter the Mountain.
+    """
+    Sets the amount of lasers required to enter the Mountain.
     If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
-    This change will also be applied logically to the long solution ("Challenge Lasers" setting)."""
+    This change will also be applied logically to the long solution ("Challenge Lasers" setting).
+    """
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
     range_end = 11
@@ -172,7 +182,9 @@ class MountainLasers(Range):
 
 
 class ChallengeLasers(Range):
-    """Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard."""
+    """
+    Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard.
+    """
     display_name = "Required Lasers for Challenge"
     range_start = 1
     range_end = 11
@@ -180,13 +192,17 @@ class ChallengeLasers(Range):
 
 
 class ElevatorsComeToYou(Toggle):
-    """If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
-    This does actually affect logic as it allows unintended backwards / early access into these areas."""
+    """
+    If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    This does actually affect logic as it allows unintended backwards / early access into these areas.
+    """
     display_name = "All Bridges & Elevators come to you"
 
 
 class TrapPercentage(Range):
-    """Replaces junk items with traps, at the specified rate."""
+    """
+    Replaces junk items with traps, at the specified rate.
+    """
     display_name = "Trap Percentage"
     range_start = 0
     range_end = 100
@@ -194,9 +210,11 @@ class TrapPercentage(Range):
 
 
 class TrapWeights(OptionDict):
-    """Specify the weights determining how many copies of each trap item will be in your itempool.
+    """
+    Specify the weights determining how many copies of each trap item will be in your itempool.
     If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
-    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option."""
+    If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
+    """
 
     display_name = "Trap Weights"
     schema = Schema({
@@ -212,7 +230,9 @@ class TrapWeights(OptionDict):
 
 
 class PuzzleSkipAmount(Range):
-    """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel."""
+    """
+    Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
+    """
     display_name = "Puzzle Skips"
     range_start = 0
     range_end = 30
@@ -220,8 +240,10 @@ class PuzzleSkipAmount(Range):
 
 
 class HintAmount(Range):
-    """Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
-    Remaining Audio Logs will have junk hints."""
+    """
+    Adds hints to Audio Logs. If set to a low amount, up to 2 additional duplicates of each hint will be added.
+    Remaining Audio Logs will have junk hints.
+    """
     display_name = "Hints on Audio Logs"
     range_start = 0
     range_end = 49
@@ -229,10 +251,12 @@ class HintAmount(Range):
 
 
 class AreaHintPercentage(Range):
-    """There are two types of hints for The Witness.
+    """
+    There are two types of hints for The Witness.
     "Location hints" hint one location in your world / containing an item for your world.
     "Area hints" will tell you some general info about the items you can find in one of the main geographic areas on the island.
-    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints."""
+    Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
+    """
     display_name = "Area Hint Percentage"
     range_start = 0
     range_end = 100
@@ -240,20 +264,26 @@ class AreaHintPercentage(Range):
 
 
 class LaserHints(Toggle):
-    """If on, lasers will tell you where their items are if you walk close to them in-game.
-    Only applies if laser shuffle is enabled."""
+    """
+    If on, lasers will tell you where their items are if you walk close to them in-game.
+    Only applies if laser shuffle is enabled.
+    """
     display_name = "Laser Hints"
 
 
 class DeathLink(Toggle):
-    """If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
-    The effect of a "death" in The Witness is a Bonk Trap."""
+    """
+    If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
+    The effect of a "death" in The Witness is a Bonk Trap.
+    """
     display_name = "Death Link"
 
 
 class DeathLinkAmnesty(Range):
-    """Number of panel fails to allow before sending a death through Death Link.
-    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc."""
+    """
+    Number of panel fails to allow before sending a death through Death Link.
+    0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc.
+    """
     display_name = "Death Link Amnesty"
     range_start = 0
     range_end = 5
