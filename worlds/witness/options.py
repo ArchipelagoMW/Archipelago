@@ -39,7 +39,7 @@ class ShuffleSymbols(DefaultOnToggle):
     If on, you will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
 
     Please note that there is no minimum set of progression items in this randomizer.
-    If you turn this setting off from default settings and don't turn on e.g. door shuffle, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
+    If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
     """
     display_name = "Shuffle Symbols"
 
