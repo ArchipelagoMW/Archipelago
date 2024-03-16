@@ -308,17 +308,8 @@ class EarlySmallLothricBanner(Choice):
     default = option_off
 
 
-class LateBasinOfVowsOption(Choice):
-    """This option makes it so the Basin of Vows is still randomized, but you can choose the requirements to venture into Lothric Castle.
-    "Off": You may have to enter Lothric Castle and the areas beyond it before finding your Small Lothric Banner.
-    "After Small Lothric Banner": You are guaranteed to find your Small Lothric Banner before needing to enter Lothric Castle.
-    "After Small Doll": You are guaranteed to find your Small Lothric Banner and your Small Doll before needing to enter Lothric Castle."""
-    display_name = "Late Basin of Vows"
-    option_off = 0
-    alias_false = 0
-    option_after_small_lothric_banner = 1
-    alias_true = 1
-    option_after_small_doll = 2
+class LateBasinOfVowsOption(Toggle):
+    """This option makes it so the Basin of Vows is still randomized, but guarantees you that you wont have to venture into Lothric Castle to find your Small Lothric Banner to get out of High Wall of Lothric. So you may find Basin of Vows early, but you wont have to fight Dancer to find your Small Lothric Banner."""
 
 
 class LateDLCOption(Toggle):
