@@ -69,7 +69,7 @@ jobs:
           echo -e "setup.py dist output:\n `ls dist`"
           cd dist && export APPIMAGE_NAME="`ls *.AppImage`" && cd ..
           export TAR_NAME="${APPIMAGE_NAME%.AppImage}.tar.gz"
-          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -czvf ../dist/$TAR_NAME Archipelago && mv Archipelago "$DIR_NAME")
+          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -cv Archipelago | gzip -8 > ../dist/$TAR_NAME && mv Archipelago "$DIR_NAME")
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - code above copied from build.yml -
