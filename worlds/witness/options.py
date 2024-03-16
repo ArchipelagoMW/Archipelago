@@ -284,7 +284,7 @@ class AreaHintPercentage(Range):
 class LaserHints(Toggle):
     """
     If on, lasers will tell you where their items are if you walk close to them in-game.
-    Only applies if laser shuffle is enabled.
+    Only applies if Laser Shuffle is enabled.
     """
     display_name = "Laser Hints"
 
