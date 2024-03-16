@@ -643,7 +643,10 @@ async def server_loop(ctx: CommonContext, address: typing.Optional[str] = None) 
         ctx.username = server_url.username
     if server_url.password:
         ctx.password = server_url.password
-    port = server_url.port or 38281
+    try:
+        port = server_url.port or 38281
+    except ValueError as e:
+        logger.info("Given Port could not be converted into an Integer")
 
     def reconnect_hint() -> str:
         return ", type /connect to reconnect" if ctx.server_address else ""
