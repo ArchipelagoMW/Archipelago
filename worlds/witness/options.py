@@ -291,7 +291,7 @@ class LaserHints(Toggle):
 
 class DeathLink(Toggle):
     """
-    If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
+    If on: Whenever you fail a puzzle (with some exceptions), you and everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Bonk Trap.
     """
     display_name = "Death Link"
