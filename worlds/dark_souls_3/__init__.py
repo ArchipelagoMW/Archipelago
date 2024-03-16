@@ -5,6 +5,7 @@ import json
 from typing import Callable, Dict, Set, List, Optional, TextIO, Union
 
 from BaseClasses import CollectionState, MultiWorld, Region, Item, Location, LocationProgressType, Entrance, Tutorial, ItemClassification
+from logging import warning
 from Options import Toggle
 
 from worlds.AutoWorld import World, WebWorld
@@ -327,7 +328,8 @@ class DarkSouls3World(World):
         guaranteed_items = {"Path of the Dragon": 1}
         guaranteed_items.update(self.options.guaranteed_items)
         if len(removable_items) == 0 and num_required_extra_items == 0:
-            raise Exception("Can't add Path of the Dragon to the item pool")
+            warning(f"Couldn't add \"Path of the Dragon\" to the item pool for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
+            self.multiworld.push_precollected(self.create_item("Path of the Dragon"))
 
         for item_name in guaranteed_items:
             # Break early just in case nothing is removable (if user is trying to guarantee more
@@ -367,12 +369,21 @@ class DarkSouls3World(World):
         injectable_items = [
             item for item
             in item_dictionary.values()
-            if item.inject and (not item.is_dlc or self.options.enable_dlc)
+            if item.inject and (not item.is_dlc or self.options.enable_dlc) and item.classification != ItemClassification.progression
         ]
+        injectable_prog = ["Mendicant's Staff", "Seed of a Giant Tree", "Large Leather Shield"]
+        self.multiworld.random.shuffle(injectable_prog)
         number_to_inject = min(num_required_extra_items, len(injectable_items))
+        for item in self.multiworld.random.sample(injectable_prog, k=min(3, number_to_inject)):
+            num_required_extra_items -= 1
+            number_to_inject -= 1
+            itempool.append(self.create_item(injectable_prog.pop()))
         for item in self.multiworld.random.sample(injectable_items, k=number_to_inject):
             num_required_extra_items -= 1
             itempool.append(self.create_item(item.name))
+        for item in injectable_prog:
+            self.multiworld.push_precollected(self.create_item(item))
+            warning(f"Couldn't add \"{item}\" to the item pool for {self.multiworld.get_player_name(self.player)}. Adding it to starting inventory instead.")
 
         # Extra filler items for locations containing skip items
         itempool.extend(self.create_filler() for _ in range(num_required_extra_items))
