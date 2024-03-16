@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, Self
+from typing import Dict
 
 from schema import And, Optional, Or, Schema
 
