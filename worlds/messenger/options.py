@@ -1,16 +1,36 @@
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, Self
 
 from schema import And, Optional, Or, Schema
 
-from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, Range, \
-    StartInventoryPool, Toggle
+from Options import Accessibility, Choice, DeathLinkMixin, DefaultOnToggle, OptionDict, PerGameCommonOptions, \
+    PlandoConnections, Range, StartInventoryPool, Toggle
+from worlds.messenger.portals import CHECKPOINTS, PORTALS, SHOP_POINTS
 
 
 class MessengerAccessibility(Accessibility):
     default = Accessibility.option_locations
     # defaulting to locations accessibility since items makes certain items self-locking
     __doc__ = Accessibility.__doc__.replace(f"default {Accessibility.default}", f"default {default}")
+
+
+class MessengerPlandoConnections(PlandoConnections):
+    """
+    Plando connections to be used with portal shuffle. Direction is ignored.
+    List of valid connections can be found here: .
+    The entering Portal should *not* have "Portal" appended.
+    For the exits, those in checkpoints and shops should just be the name of the spot, while portals should have " Portal" at the end.
+    Format is:
+    - entrance: Riviere Turquoise
+      exit: Wingsuit
+    """
+    portals = [f"{portal} Portal" for portal in PORTALS]
+    shop_points = [point for points in SHOP_POINTS.values() for point in points]
+    checkpoints = [point for points in CHECKPOINTS.values() for point in points]
+    portal_entrances = PORTALS
+    portal_exits = portals + shop_points + checkpoints
+    entrances = portal_entrances
+    exits = portal_exits
 
 
 class Logic(Choice):
@@ -184,6 +204,7 @@ class PlannedShopPrices(OptionDict):
 @dataclass
 class MessengerOptions(DeathLinkMixin, PerGameCommonOptions):
     accessibility: MessengerAccessibility
+    plando_connections: MessengerPlandoConnections
     start_inventory: StartInventoryPool
     logic_level: Logic
     shuffle_shards: MegaShards
