@@ -249,7 +249,7 @@ class TrapWeights(OptionDict):
 
 class PuzzleSkipAmount(Range):
     """
-    Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
+    Adds this many Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
     """
     display_name = "Puzzle Skips"
     range_start = 0
