@@ -78,8 +78,7 @@ class VictoryCondition(Choice):
 
 
 class ExtraOrbs(Range):
-    """Add extra orbs to your item pool, to prevent you from needing to wait as long
-    for the last orb you need for your victory condition.
+    """Add extra orbs to your item pool, to prevent you from needing to wait as long for the last orb you need for your victory condition.
     Extra orbs received past your victory condition's amount will be received as hearts instead.
     Can be turned on for the Greed Ending goal, but will only really make it harder."""
     display_name = "Extra Orbs"
