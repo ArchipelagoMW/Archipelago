@@ -23,7 +23,7 @@ class EarlyCaves(Choice):
     Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
     You can either add this item to the pool to be found on one of your randomized checks, or you can outright start with it and have immediate access to the Caves.
 
-    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing.
+    If you choose "Add To Pool" and you are already playing a remote Door Shuffle mode, this option will do nothing.
     """
     display_name = "Early Caves"
     option_off = 0
