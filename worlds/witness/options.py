@@ -128,9 +128,9 @@ class ShuffleDog(Toggle):
 class EnvironmentalPuzzlesDifficulty(Choice):
     """
     When "Shuffle Environmental Puzzles" is on, this setting governs which EPs are eligible for the location pool.
-    On "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
-    On "tedious", Theater Eclipse EP is excluded from the location pool.
-    On "normal", several other difficult or long EPs are excluded as well.
+    If set to "eclipse", every EP in the game is eligible, including the 1-hour-long "Theater Eclipse EP".
+    If set to "tedious", Theater Eclipse EP is excluded from the location pool.
+    If set to "normal", several other difficult or long EPs are excluded as well.
     """
     display_name = "Environmental Puzzles Difficulty"
     option_normal = 0
