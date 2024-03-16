@@ -1229,7 +1229,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and (state.has_any({"Ladders to West Bell", "Ladder in Dark Tomb"}, player)))
+                    and (state.has("Ladders to West Bell", player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
             elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
                     and not options.entrance_rando:
@@ -1255,20 +1255,44 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     rule=lambda state: has_stick(state, player) and state.has_any(ladders, player)
                     and state.has_any({"Ladders to West Bell", laurels}, player))
             # soft locked if you can't get back out
-            elif portal_name == "Fortress Courtyard to Beneath the Vault" \
-                    and not options.entrance_rando and options.shuffle_ladders:
+            elif portal_name == "Fortress Courtyard to Beneath the Vault" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has_all({ladder, "Ladder to Beneath the Vault"}, player))
+                    and state.has_all({ladder, "Ladder to Beneath the Vault"}, player)
+                    and has_lantern(state, player, options))
+            elif portal_name == "Atoll Lower Entrance" and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has_any({"Ladders in Overworld Town", grapple}, player))
+            elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has(grapple, player) or has_ability(state, player, prayer, options, ability_unlocks))
             # soft lock potential
-            elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain"} \
-                    and not options.entrance_rando:
+            elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain", "Swamp Upper Entrance",
+                                 "Swamp Lower Entrance", "Caustic Light Cave Entrance"} and not options.entrance_rando:
                 continue
-            # soft lock if you don't have the ladder, just exclude it for simplicity
-            elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando and options.shuffle_ladders:
-                continue
+            # soft lock if you don't have the ladder, I regret writing unrestricted logic
+            elif portal_name == "Temple Rafters Entrance" and not options.entrance_rando:
+                regions[region_name].connect(
+                    regions[paired_region],
+                    name=portal_name + " (LS) " + region_name,
+                    rule=lambda state: has_stick(state, player)
+                    and state.has(ladder, player)
+                    and (state.has("Ladder near Temple Rafters", player)
+                         or (state.has_all({laurels, grapple}, player)
+                             and ((state.has("Ladders near Patrol Cave", player)
+                                   and (state.has("Ladders near Dark Tomb", player)
+                                        or state.has("Ladder to Quarry", player)
+                                        and (state.has(fire_wand, player) or has_sword(state, player))))
+                                  or state.has("Ladders near Overworld Checkpoint", player)
+                                  or has_ice_grapple_logic(True, state, player, options, ability_unlocks)))))
             # if no ladder items are required, just do the basic stick only lambda
             elif not ladders or not options.shuffle_ladders:
                 regions[region_name].connect(
