@@ -39,7 +39,9 @@ class ShuffleSymbols(DefaultOnToggle):
 
 
 class ShuffleLasers(Choice):
-    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them."""
+    """
+    If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
+    """
     display_name = "Shuffle Lasers"
     option_off = 0
     alias_false = 0
@@ -50,10 +52,12 @@ class ShuffleLasers(Choice):
 
 
 class ShuffleDoors(Choice):
-    """If on, opening doors, moving bridges etc. will require a "key".
+    """
+    If on, opening doors, moving bridges etc. will require a "key".
     If set to "panels", the panel on the door will be locked until receiving its corresponding key.
     If set to "doors", the door will open immediately upon receiving its key. Door panels are added as location checks.
-    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels"."""
+    "Mixed" includes all doors from "doors", and all control panels (bridges, elevators etc.) from "panels".
+    """
     display_name = "Shuffle Doors"
     option_off = 0
     option_panels = 1
@@ -62,28 +66,36 @@ class ShuffleDoors(Choice):
 
 
 class DoorGroupings(Choice):
-    """If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
-    If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity."""
+    """
+    If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
+    If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
+    """
     display_name = "Door Groupings"
     option_off = 0
     option_regional = 1
 
 
 class ShuffleBoat(DefaultOnToggle):
-    """If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat."""
+    """
+    If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
+    """
     display_name = "Shuffle Boat"
 
 
 class ShuffleDiscardedPanels(Toggle):
-    """Add Discarded Panels into the location pool.
+    """
+    Add Discarded Panels into the location pool.
 
-    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example of this being the alternate activation triggers in disable_non_randomized."""
+    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example of this being the alternate activation triggers in disable_non_randomized.
+    """
 
     display_name = "Shuffle Discarded Panels"
 
 
 class ShuffleVaultBoxes(Toggle):
-    """Add Vault Boxes to the location pool."""
+    """
+    Add Vault Boxes to the location pool.
+    """
     display_name = "Shuffle Vault Boxes"
 
 
