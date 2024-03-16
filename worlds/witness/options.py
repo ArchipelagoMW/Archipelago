@@ -73,7 +73,7 @@ class ShuffleDoors(Choice):
 
 class DoorGroupings(Choice):
     """
-    If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
+    If set to "none", there will be one key for each door, potentially resulting in upwards of 120 keys being added to the item pool.
     If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity.
     """
     display_name = "Door Groupings"
