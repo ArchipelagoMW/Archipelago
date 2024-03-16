@@ -173,27 +173,6 @@ class MM2World(World):
             logger.warning(
                 f"Incompatible starting Robot Master, changing to {self.options.starting_robot_master.current_key.replace('_', ' ').title()}")
 
-    def fill_hook(self,
-                  progitempool: typing.List["Item"],
-                  usefulitempool: typing.List["Item"],
-                  filleritempool: typing.List["Item"],
-                  fill_locations: typing.List["Location"]) -> None:
-        if self.multiworld.players == 1 and self.options.starting_robot_master.value in (2, 3, 4, 5, 7):
-            valid_second = [item for item in progitempool
-                            if item.name in (Names.air_man_stage, Names.flash_man_stage)
-                            and item.player == self.player]
-            if self.options.yoku_jumps:
-                valid_second.append(next(item for item in progitempool
-                                         if item.player == self.player
-                                         and item.name == Names.heat_man_stage))
-            placed_item = self.random.choice(valid_second)
-            rbm_defeated = f"{self.options.starting_robot_master.get_option_name(self.options.starting_robot_master.value)} - Defeated"
-            rbm_location = self.get_location(rbm_defeated)
-            rbm_location.place_locked_item(placed_item)
-            progitempool.remove(placed_item)
-            fill_locations.remove(rbm_location)
-            self.multiworld.itempool.remove(placed_item)
-
     def generate_basic(self) -> None:
         goal_location = self.multiworld.get_location(Names.dr_wily, self.player)
         goal_location.place_locked_item(MM2Item("Victory", ItemClassification.progression, None, self.player))
