@@ -12,7 +12,7 @@ class DisableNonRandomizedPuzzles(Toggle):
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
 
     The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
-    Additionally, the panels activating Monastery Laser and Jungle Popup Wall will be on from the start."""
+    Additionally, the panel activating the Jungle Popup Wall will be on from the start."""
     display_name = "Disable non randomized puzzles"
 
 
@@ -33,14 +33,13 @@ class EarlyCaves(Choice):
 class ShuffleSymbols(DefaultOnToggle):
     """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
 
-    If you turn this off, there will be no progression items in the game unless you turn on door shuffle."""
+    Please note that there is no minimum set of progression items in this randomizer.
+    If you turn this setting off from default settings and don't turn on e.g. door shuffle, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation."""
     display_name = "Shuffle Symbols"
 
 
 class ShuffleLasers(Choice):
-    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
-
-    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still be redirected as normal, for both applications of redirection."""
+    """If on, the 11 lasers are turned into items and will activate on their own upon receiving them."""
     display_name = "Shuffle Lasers"
     option_off = 0
     alias_false = 0
