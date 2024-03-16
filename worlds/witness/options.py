@@ -8,19 +8,23 @@ from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLog
 
 
 class DisableNonRandomizedPuzzles(Toggle):
-    """Disables puzzles that cannot be randomized.
+    """
+    Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
 
     The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
-    Additionally, the panel activating the Jungle Popup Wall will be on from the start."""
+    Additionally, the panel activating the Jungle Popup Wall will be on from the start.
+    """
     display_name = "Disable non randomized puzzles"
 
 
 class EarlyCaves(Choice):
-    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
+    """
+    Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
     You can either add this item to the pool to be found on one of your randomized checks, or you can outright start with it and have immediate access to the Caves.
 
-    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing."""
+    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing.
+    """
     display_name = "Early Caves"
     option_off = 0
     alias_false = 0
@@ -31,10 +35,12 @@ class EarlyCaves(Choice):
 
 
 class ShuffleSymbols(DefaultOnToggle):
-    """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
+    """
+    If on, you will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
 
     Please note that there is no minimum set of progression items in this randomizer.
-    If you turn this setting off from default settings and don't turn on e.g. door shuffle, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation."""
+    If you turn this setting off from default settings and don't turn on e.g. door shuffle, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
+    """
     display_name = "Shuffle Symbols"
 
 
