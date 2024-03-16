@@ -272,7 +272,7 @@ class AreaHintPercentage(Range):
     """
     There are two types of hints for The Witness.
     "Location hints" hint one location in your world / containing an item for your world.
-    "Area hints" will tell you some general info about the items you can find in one of the main geographic areas on the island.
+    "Area hints" tell you some general info about the items you can find in one of the main geographic areas on the island.
     Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
     """
     display_name = "Area Hint Percentage"
