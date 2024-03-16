@@ -58,6 +58,8 @@ jobs:
         with:
           name: ${{ env.ZIP_NAME }}
           path: dist/${{ env.ZIP_NAME }}
+          compression-level: 0  # .7z is incompressible by zip
+          if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
       - name: Build Setup
         run: |
@@ -74,6 +76,7 @@ jobs:
         with:
           name: ${{ env.SETUP_NAME }}
           path: setups/${{ env.SETUP_NAME }}
+          if-no-files-found: error
           retention-days: 7  # keep for 7 days, should be enough
 
   build-ubuntu2004:
@@ -114,7 +117,7 @@ jobs:
           echo -e "setup.py dist output:\n `ls dist`"
           cd dist && export APPIMAGE_NAME="`ls *.AppImage`" && cd ..
           export TAR_NAME="${APPIMAGE_NAME%.AppImage}.tar.gz"
-          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -czvf ../dist/$TAR_NAME Archipelago && mv Archipelago "$DIR_NAME")
+          (cd build && DIR_NAME="`ls | grep exe`" && mv "$DIR_NAME" Archipelago && tar -cv Archipelago | gzip -8 > ../dist/$TAR_NAME && mv Archipelago "$DIR_NAME")
           echo "APPIMAGE_NAME=$APPIMAGE_NAME" >> $GITHUB_ENV
           echo "TAR_NAME=$TAR_NAME" >> $GITHUB_ENV
       # - copy code above to release.yml -
@@ -127,10 +130,13 @@ jobs:
         with:
           name: ${{ env.APPIMAGE_NAME }}
           path: dist/${{ env.APPIMAGE_NAME }}
+          if-no-files-found: error
           retention-days: 7
       - name: Store .tar.gz
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TAR_NAME }}
           path: dist/${{ env.TAR_NAME }}
+          compression-level: 0  # .gz is incompressible by zip
+          if-no-files-found: error
           retention-days: 7
