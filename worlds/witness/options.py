@@ -90,7 +90,7 @@ class ShuffleBoat(DefaultOnToggle):
 
 class ShuffleDiscardedPanels(Toggle):
     """
-    Add Discarded Panels into the location pool.
+    Adds Discarded Panels into the location pool.
 
     Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example of this being the alternate activation triggers in disable_non_randomized.
     """
