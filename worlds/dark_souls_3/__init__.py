@@ -477,8 +477,6 @@ class DarkSouls3World(World):
                 # useful for smooth item placement.
                 and self._has_any_scroll(state)
             ))
-            if self.options.late_basin_of_vows == "after_small_doll":
-                self._add_entrance_rule("Lothric Castle", "Small Doll")
 
         # DLC Access Rules Below
         if self.options.enable_dlc:
@@ -534,8 +532,6 @@ class DarkSouls3World(World):
                 # useful for smooth item placement.
                 and self._has_any_scroll(state)
             ))
-            if self.options.late_basin_of_vows == "after_small_doll":
-                self._add_location_rule("HWL: Soul of the Dancer", "Small Doll")
 
         self._add_location_rule([
             "LC: Grand Archives Key - by Grand Archives door, after PC and AL bosses",
