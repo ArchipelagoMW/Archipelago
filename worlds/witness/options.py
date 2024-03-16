@@ -197,7 +197,7 @@ class MountainLasers(Range):
 
 class ChallengeLasers(Range):
     """
-    Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard.
+    Sets the amount of beams required to enter the Caves through the Mountain Bottom Floor Discard and to unlock the Challenge Timer Panel.
     """
     display_name = "Required Lasers for Challenge"
     range_start = 1
