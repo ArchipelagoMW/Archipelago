@@ -108,7 +108,7 @@ class ShuffleEnvironmentalPuzzles(Choice):
     """
     Add Environmental/Obelisk Puzzles into the location pool.
     In "individual", every Environmental Puzzle sends an item.
-    In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+    If set to "Obelisk Sides", completing every puzzle on one side of an Obelisk sends an item.
 
     Note: In Obelisk Sides, any EPs excluded through another option will be pre-completed on their Obelisk.
     """
