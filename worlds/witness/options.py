@@ -99,7 +99,7 @@ class ShuffleDiscardedPanels(Toggle):
 
 class ShuffleVaultBoxes(Toggle):
     """
-    Add Vault Boxes to the location pool.
+    Adds Vault Boxes to the location pool.
     """
     display_name = "Shuffle Vault Boxes"
 
