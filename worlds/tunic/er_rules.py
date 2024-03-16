@@ -1223,7 +1223,9 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
                     and has_ability(state, player, holy_cross, options, ability_unlocks)
-                    and (has_ladder("Ladders in Swamp", state, player, options) or not options.entrance_rando))
+                    and (has_ladder("Ladders in Swamp", state, player, options)
+                         or has_ice_grapple_logic(True, state, player, options, ability_unlocks)
+                         or not options.entrance_rando))
             elif portal_name == "West Garden Exit after Boss" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
@@ -1269,7 +1271,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
                     and state.has_any(ladders, player)
-                    and state.has_any({"Ladders in Overworld Town", grapple}, player))
+                    and (state.has_any({"Ladders in Overworld Town", grapple}, player)
+                         or has_ice_grapple_logic(True, state, player, options, ability_unlocks)))
             elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
