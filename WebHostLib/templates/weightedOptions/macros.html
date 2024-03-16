@@ -42,11 +42,11 @@
             </ul>
         {% endif %}
         <div class="add-option-div">
-            <input type="number" id="{{ world_name }}-{{ option_name }}" class="range-option-add" />
-            <button >Add</button>
+            <input type="number" class="range-option-value" data-option="{{ world_name }}-{{ option_name }}" />
+            <button class="add-range-option-button" data-option="{{ world_name }}-{{ option_name }}">Add</button>
         </div>
     </div>
-    <table>
+    <table class="range-rows" data-option="{{ world_name }}-{{ option_name }}">
         <tbody>
             {{ RangeRow(world_name, option_name, option, option.range_start, option.range_start, True) }}
             {% if option.range_start < option.default < option.range_end %}
