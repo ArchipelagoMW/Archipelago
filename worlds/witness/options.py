@@ -21,9 +21,9 @@ class DisableNonRandomizedPuzzles(Toggle):
 class EarlyCaves(Choice):
     """
     Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
-    You can either add this item to the pool to be found on one of your randomized checks, or you can outright start with it and have immediate access to the Caves.
+    You can either add this item to the pool to be found in the multiworld, or you can outright start with it and have immediate access to the Caves.
 
-    If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing.
+    If you choose "Add To Pool" and you are already playing a remote Door Shuffle mode, this option will do nothing.
     """
     display_name = "Early Caves"
     option_off = 0
@@ -39,7 +39,7 @@ class ShuffleSymbols(DefaultOnToggle):
     If on, you will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
 
     Please note that there is no minimum set of progression items in this randomizer.
-    If you turn this setting off from default settings and don't turn on e.g. door shuffle, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
+    If you turn this option off and don't turn on door shuffle or obelisk keys, there will be no progression items, which will disallow you from adding your yaml to a multiworld generation.
     """
     display_name = "Shuffle Symbols"
 
@@ -83,35 +83,34 @@ class DoorGroupings(Choice):
 
 class ShuffleBoat(DefaultOnToggle):
     """
-    If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
+    If on, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
     """
     display_name = "Shuffle Boat"
 
 
 class ShuffleDiscardedPanels(Toggle):
     """
-    Add Discarded Panels into the location pool.
+    Adds Discarded Panels into the location pool.
 
-    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example of this being the alternate activation triggers in disable_non_randomized.
+    Even if this is off, solving certain Discarded Panels may still be necessary to beat the game - The main example of this being the alternate activation triggers in "Disable non randomized puzzles".
     """
-
     display_name = "Shuffle Discarded Panels"
 
 
 class ShuffleVaultBoxes(Toggle):
     """
-    Add Vault Boxes to the location pool.
+    Adds Vault Boxes to the location pool.
     """
     display_name = "Shuffle Vault Boxes"
 
 
 class ShuffleEnvironmentalPuzzles(Choice):
     """
-    Add Environmental/Obelisk Puzzles into the location pool.
-    In "individual", every Environmental Puzzle sends an item.
-    In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+    Adds Environmental/Obelisk Puzzles into the location pool.
+    If set to "individual", every Environmental Puzzle sends an item.
+    If set to "Obelisk Sides", completing every puzzle on one side of an Obelisk sends an item.
 
-    Note: In Obelisk Sides, any EPs excluded through another setting will be counted as pre-completed on their Obelisk.
+    Note: In Obelisk Sides, any EPs excluded through another option will be pre-completed on their Obelisk.
     """
     display_name = "Shuffle Environmental Puzzles"
     option_off = 0
@@ -121,9 +120,8 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
 class ShuffleDog(Toggle):
     """
-    Add petting the Town dog into the location pool.
+    Adds petting the Town dog into the location pool.
     """
-
     display_name = "Pet the Dog"
 
 
@@ -154,7 +152,7 @@ class ShufflePostgame(Toggle):
     Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
     Use this if you don't play with release on victory.
 
-    IMPORTANT NOTE: The possibility of your second "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings.
+    IMPORTANT NOTE: The possibility of your second "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base options.
     """
     display_name = "Shuffle Postgame"
 
@@ -179,7 +177,7 @@ class VictoryCondition(Choice):
 
 class PuzzleRandomization(Choice):
     """
-    Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles.
+    Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
@@ -189,9 +187,9 @@ class PuzzleRandomization(Choice):
 
 class MountainLasers(Range):
     """
-    Sets the amount of lasers required to enter the Mountain.
-    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
-    This change will also be applied logically to the long solution ("Challenge Lasers" setting).
+    Sets the number of lasers required to enter the Mountain.
+    If set to a higher number than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
+    This change will also be applied logically to the long solution ("Challenge Lasers" option).
     """
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
@@ -211,7 +209,7 @@ class ChallengeLasers(Range):
 
 class ElevatorsComeToYou(Toggle):
     """
-    If true, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
+    If on, the Quarry Elevator, Bunker Elevator and Swamp Long Bridge will "come to you" if you approach them.
     This does actually affect logic as it allows unintended backwards / early access into these areas.
     """
     display_name = "All Bridges & Elevators come to you"
@@ -233,7 +231,6 @@ class TrapWeights(OptionDict):
     If you don't want a specific type of trap, you can set the weight for it to 0 (Do not delete the entry outright!).
     If you set all trap weights to 0, you will get no traps, bypassing the "Trap Percentage" option.
     """
-
     display_name = "Trap Weights"
     schema = Schema({
         trap_name: And(int, lambda n: n >= 0)
@@ -249,7 +246,7 @@ class TrapWeights(OptionDict):
 
 class PuzzleSkipAmount(Range):
     """
-    Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
+    Adds this many Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
     """
     display_name = "Puzzle Skips"
     range_start = 0
@@ -272,7 +269,7 @@ class AreaHintPercentage(Range):
     """
     There are two types of hints for The Witness.
     "Location hints" hint one location in your world / containing an item for your world.
-    "Area hints" will tell you some general info about the items you can find in one of the main geographic areas on the island.
+    "Area hints" tell you some general info about the items you can find in one of the main geographic areas on the island.
     Use this option to specify how many of your hints you want to be area hints. The rest will be location hints.
     """
     display_name = "Area Hint Percentage"
@@ -284,14 +281,14 @@ class AreaHintPercentage(Range):
 class LaserHints(Toggle):
     """
     If on, lasers will tell you where their items are if you walk close to them in-game.
-    Only applies if laser shuffle is enabled.
+    Only applies if Laser Shuffle is enabled.
     """
     display_name = "Laser Hints"
 
 
 class DeathLink(Toggle):
     """
-    If on: Whenever you fail a puzzle (with some exceptions), everyone who is also on Death Link dies.
+    If on: Whenever you fail a puzzle (with some exceptions), you and everyone who is also on Death Link dies.
     The effect of a "death" in The Witness is a Bonk Trap.
     """
     display_name = "Death Link"
@@ -299,7 +296,7 @@ class DeathLink(Toggle):
 
 class DeathLinkAmnesty(Range):
     """
-    Number of panel fails to allow before sending a death through Death Link.
+    The number of panel fails to allow before sending a death through Death Link.
     0 means every panel fail will send a death, 1 means every other panel fail will send a death, etc.
     """
     display_name = "Death Link Amnesty"
