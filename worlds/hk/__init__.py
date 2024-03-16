@@ -308,7 +308,7 @@ class HKWorld(World):
             _add("Elevator_Pass", "Elevator_Pass", randomized)
 
         # check for any goal that godhome events are relevant to
-        if self.multiworld.Goal[self.player] in [Goal.option_godhome]:
+        if self.multiworld.Goal[self.player] in [Goal.option_godhome, Goal.option_godhome_flower]:
             from .GodhomeData import godhome_event_names
             for item_name in godhome_event_names:
                 _add(item_name, item_name, False)
@@ -439,6 +439,8 @@ class HKWorld(World):
             world.completion_condition[player] = lambda state: state._hk_can_beat_radiance(player)
         elif goal == Goal.option_godhome:
             world.completion_condition[player] = lambda state: state.count("Defeated_Pantheon_5", player)
+        elif goal == Goal.option_godhome_flower:
+            world.completion_condition[player] = lambda state: state.count("Godhome_Flower_Quest", player)
         else:
             # Any goal
             world.completion_condition[player] = lambda state: state._hk_can_beat_thk(player) or state._hk_can_beat_radiance(player)

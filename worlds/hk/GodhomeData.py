@@ -1,7 +1,7 @@
 from functools import partial
 
 
-godhome_event_names = ["Defeated_Pantheon_5", "GG_Atrium_Roof", "Defeated_Pantheon_1", "Defeated_Pantheon_2", "Defeated_Pantheon_3", "Opened_Pantheon_4", "Defeated_Pantheon_4", "GG_Atrium", "Hit_Pantheon_5_Unlock_Orb", "GG_Workshop", "Can_Damage_Crystal_Guardian", 'Defeated_Any_Soul_Warrior', "Defeated_Colosseum_3", "COMBAT[Radiance]", "COMBAT[Pantheon_1]", "COMBAT[Pantheon_2]", "COMBAT[Pantheon_3]", "COMBAT[Pantheon_4]", "COMBAT[Pantheon_5]", "COMBAT[Colosseum_3]", 'Warp-Junk_Pit_to_Godhome', 'Bench-Godhome_Atrium', 'Bench-Hall_of_Gods', "GODTUNERUNLOCK", "GG_Waterways", "Warp-Godhome_to_Junk_Pit", "NAILCOMBAT", "BOSS", "AERIALMINIBOSS"]
+godhome_event_names = ["Godhome_Flower_Quest", "Defeated_Pantheon_5", "GG_Atrium_Roof", "Defeated_Pantheon_1", "Defeated_Pantheon_2", "Defeated_Pantheon_3", "Opened_Pantheon_4", "Defeated_Pantheon_4", "GG_Atrium", "Hit_Pantheon_5_Unlock_Orb", "GG_Workshop", "Can_Damage_Crystal_Guardian", 'Defeated_Any_Soul_Warrior', "Defeated_Colosseum_3", "COMBAT[Radiance]", "COMBAT[Pantheon_1]", "COMBAT[Pantheon_2]", "COMBAT[Pantheon_3]", "COMBAT[Pantheon_4]", "COMBAT[Pantheon_5]", "COMBAT[Colosseum_3]", 'Warp-Junk_Pit_to_Godhome', 'Bench-Godhome_Atrium', 'Bench-Hall_of_Gods', "GODTUNERUNLOCK", "GG_Waterways", "Warp-Godhome_to_Junk_Pit", "NAILCOMBAT", "BOSS", "AERIALMINIBOSS"]
 
 
 def set_godhome_rules(hk_world, hk_set_rule):
@@ -9,6 +9,8 @@ def set_godhome_rules(hk_world, hk_set_rule):
     fn = partial(hk_set_rule, hk_world)
 
     required_events = {
+        "Godhome_Flower_Quest": lambda state: state.count('Defeated_Pantheon_5', player) and state.count('Room_Mansion[left1]', player) and state.count('Fungus3_49[right1]', player),
+
         "Defeated_Pantheon_5": lambda state: state.has('GG_Atrium_Roof', player) and state.has('WINGS', player) and (state.has('LEFTCLAW', player) or state.has('RIGHTCLAW', player)) and ((state.has('Defeated_Pantheon_1', player) and state.has('Defeated_Pantheon_2', player) and state.has('Defeated_Pantheon_3', player) and state.has('Defeated_Pantheon_4', player) and state.has('COMBAT[Radiance]', player))),
         "GG_Atrium_Roof": lambda state: state.has('GG_Atrium', player) and state.has('Hit_Pantheon_5_Unlock_Orb', player) and state.has('LEFTCLAW', player),
 
