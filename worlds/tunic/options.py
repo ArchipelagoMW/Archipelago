@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, PerGameCommonOptions
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
 
 
 class SwordProgression(DefaultOnToggle):
@@ -23,21 +23,21 @@ class KeysBehindBosses(Toggle):
 
 
 class AbilityShuffling(Toggle):
-    """Locks the usage of Prayer, Holy Cross*, and Ice Rod until the relevant pages of the manual have been found.
+    """Locks the usage of Prayer, Holy Cross*, and the Icebolt combo until the relevant pages of the manual have been found.
     If playing Hexagon Quest, abilities are instead randomly unlocked after obtaining 25%, 50%, and 75% of the required
     Hexagon goal amount.
     *Certain Holy Cross usages are still allowed, such as the free bomb codes, the seeking spell, and other
     player-facing codes.
     """
     internal_name = "ability_shuffling"
-    display_name = "Ability Shuffling"
+    display_name = "Shuffle Abilities"
 
 
 class LogicRules(Choice):
     """Set which logic rules to use for your world.
     Restricted: Standard logic, no glitches.
-    No Major Glitches: Ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
-    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer
+    No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
+    * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
     Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
     *Special Shop is not in logic without the Hero's Laurels due to soft lock potential.
     *Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
@@ -47,7 +47,9 @@ class LogicRules(Choice):
     display_name = "Logic Rules"
     option_restricted = 0
     option_no_major_glitches = 1
+    alias_nmg = 1
     option_unrestricted = 2
+    alias_ur = 2
     default = 0
 
 
@@ -102,18 +104,24 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
-class EntranceRando(Toggle):
+class EntranceRando(TextChoice):
     """Randomize the connections between scenes.
+    You can choose a custom seed by editing this option.
     A small, very lost fox on a big adventure."""
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
+    alias_false = 0
+    option_no = 0
+    alias_true = 1
+    option_yes = 1
+    default = 0
 
 
 class FixedShop(Toggle):
     """Forces the Windmill entrance to lead to a shop, and places only one other shop in the pool.
     Has no effect if Entrance Rando is not enabled."""
     internal_name = "fixed_shop"
-    display_name = "ER Fixed Shop"
+    display_name = "Fewer Shops in Entrance Rando"
 
 
 class LaurelsLocation(Choice):
