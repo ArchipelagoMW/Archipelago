@@ -1,3 +1,5 @@
+import typing
+
 from . import MessengerTestBase
 from ..constants import NOTES, PHOBEKINS
 
@@ -22,11 +24,27 @@ class AccessTest(MessengerTestBase):
     def test_dart(self) -> None:
         """locations that hard require the Rope Dart"""
         locations = [
-            "Ninja Village Seal - Tree House", "Autumn Hills - Key of Hope", "Howling Grotto Seal - Crushing Pits",
-            "Glacial Peak Seal - Ice Climbers", "Tower of Time Seal - Time Waster", "Tower of Time Seal - Lantern Climb",
-            "Tower of Time Seal - Arcane Orbs", "Cloud Ruins Seal - Ghost Pit", "Underworld Seal - Rising Fanta",
-            "Elemental Skylands - Key of Symbiosis", "Elemental Skylands Seal - Water",
-            "Elemental Skylands Seal - Fire", "Earth Mega Shard", "Water Mega Shard", "Rescue Phantom",
+            "Ninja Village Seal - Tree House",
+            "Autumn Hills - Key of Hope",
+            "Forlorn Temple - Demon King",
+            "Down Under Mega Shard",
+            "Howling Grotto Seal - Crushing Pits",
+            "Glacial Peak Seal - Ice Climbers",
+            "Tower of Time Seal - Time Waster",
+            "Tower of Time Seal - Lantern Climb",
+            "Tower of Time Seal - Arcane Orbs",
+            "Cloud Ruins Seal - Ghost Pit",
+            "Cloud Ruins Seal - Money Farm Room",
+            "Cloud Ruins Seal - Toothbrush Alley",
+            "Money Farm Room Mega Shard 1",
+            "Money Farm Room Mega Shard 2",
+            "Underworld Seal - Rising Fanta",
+            "Elemental Skylands - Key of Symbiosis",
+            "Elemental Skylands Seal - Water",
+            "Elemental Skylands Seal - Fire",
+            "Earth Mega Shard",
+            "Water Mega Shard",
+            "Rescue Phantom",
         ]
         items = [["Rope Dart"]]
         self.assertAccessDependency(locations, items)
@@ -136,11 +154,37 @@ class AccessTest(MessengerTestBase):
         items = [["Demon King Crown"]]
         self.assertAccessDependency(locations, items)
 
+    def test_dboost(self) -> None:
+        """
+        short for damage boosting, d-boosting is a technique in video games where the player intentionally or
+        unintentionally takes damage and uses the several following frames of invincibility to defeat or get past an
+        enemy or obstacle, most commonly used in platformers such as the Super Mario games
+        """
+        locations = [
+            "Riviere Turquoise Seal - Bounces and Balls", "Searing Crags Seal - Triple Ball Spinner",
+            "Forlorn Temple - Demon King", "Forlorn Temple Seal - Rocket Maze", "Forlorn Temple Seal - Rocket Sunset",
+            "Sunny Day Mega Shard", "Down Under Mega Shard",
+        ]
+        items = [["Path of Resilience", "Meditation", "Second Wind"]]
+        self.assertAccessDependency(locations, items)
+
+    def test_currents(self) -> None:
+        """there's one of these but oh man look at it go"""
+        self.assertAccessDependency(["Elemental Skylands Seal - Water"], [["Currents Master"]])
+
+    def test_strike(self) -> None:
+        """strike is pretty cool but it doesn't block much"""
+        locations = [
+            "Glacial Peak Seal - Projectile Spike Pit", "Elemental Skylands Seal - Fire",
+        ]
+        items = [["Strike of the Ninja"]]
+        self.assertAccessDependency(locations, items)
+
     def test_goal(self) -> None:
         """Test some different states to verify goal requires the correct items"""
-        self.collect_all_but([*NOTES, "Rescue Phantom"])
+        self.collect_all_but([*NOTES, "Do the Thing!"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), False)
-        self.collect_all_but(["Key of Love", "Rescue Phantom"])
+        self.collect_all_but(["Key of Love", "Do the Thing!"])
         self.assertBeatable(False)
         self.collect_by_name(["Key of Love"])
         self.assertEqual(self.can_reach_location("Rescue Phantom"), True)
@@ -159,14 +203,15 @@ class ItemsAccessTest(MessengerTestBase):
             "Searing Crags - Key of Strength": ["Power Thistle"],
             "Sunken Shrine - Key of Love": ["Sun Crest", "Moon Crest"],
             "Corrupted Future - Key of Courage": ["Demon King Crown"],
-            "Cloud Ruins - Acro": ["Ruxxtin's Amulet"],
-            "Forlorn Temple - Demon King": PHOBEKINS
         }
 
-        self.multiworld.state = self.multiworld.get_all_state(True)
-        self.remove_by_name(location_lock_pairs.values())
+        self.collect_all_but([item for items in location_lock_pairs.values() for item in items])
         for loc in location_lock_pairs:
             for item_name in location_lock_pairs[loc]:
                 item = self.get_item_by_name(item_name)
                 with self.subTest("Fulfills Accessibility", location=loc, item=item_name):
-                    self.assertTrue(self.multiworld.get_location(loc, self.player).can_fill(self.multiworld.state, item, True))
+                    location = self.multiworld.get_location(loc, self.player)
+                    self.assertTrue(location.can_fill(self.multiworld.state, item, True))
+                    location.item = item
+                    self.multiworld.state.update_reachable_regions(self.player)
+                    self.assertTrue(self.can_reach_location(loc))
