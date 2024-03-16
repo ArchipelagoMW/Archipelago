@@ -123,7 +123,6 @@ class ShuffleDog(Toggle):
     """
     Add petting the Town dog into the location pool.
     """
-
     display_name = "Pet the Dog"
 
 
