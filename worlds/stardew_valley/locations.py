@@ -216,7 +216,7 @@ def extend_fishsanity_locations(randomized_locations: List[LocationData], option
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish]
         randomized_locations.extend(filter_disabled_locations(options, fish_locations))
     elif fishsanity == Fishsanity.option_exclude_legendaries:
-        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish not in legendary_fish]
+        fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if not fish.legendary]
         randomized_locations.extend(filter_disabled_locations(options, fish_locations))
     elif fishsanity == Fishsanity.option_exclude_hard_fish:
         fish_locations = [location_table[f"{prefix}{fish.name}"] for fish in active_fish if fish.difficulty < 80]
