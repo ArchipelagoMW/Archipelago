@@ -120,7 +120,7 @@ class ShuffleEnvironmentalPuzzles(Choice):
 
 class ShuffleDog(Toggle):
     """
-    Add petting the Town dog into the location pool.
+    Adds petting the Town dog into the location pool.
     """
     display_name = "Pet the Dog"
 
