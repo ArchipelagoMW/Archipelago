@@ -1,12 +1,12 @@
 from enum import Enum
 from typing import Dict, List, NamedTuple, Optional, Set, Tuple, TYPE_CHECKING
 
+from .datatypes import Door, RoomAndDoor, RoomAndPanel
 from .items import ALL_ITEM_TABLE
 from .locations import ALL_LOCATION_TABLE, LocationClassification
 from .options import LocationChecks, ShuffleDoors, VictoryCondition
-from .static_logic import DOORS_BY_ROOM, Door, PAINTINGS, PAINTINGS_BY_ROOM, PAINTING_ENTRANCES, PAINTING_EXITS, \
-    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS, RoomAndDoor, \
-    RoomAndPanel
+from .static_logic import DOORS_BY_ROOM, PAINTINGS, PAINTING_ENTRANCES, PAINTING_EXITS, \
+    PANELS_BY_ROOM, PROGRESSION_BY_ROOM, REQUIRED_PAINTING_ROOMS, REQUIRED_PAINTING_WHEN_NO_DOORS_ROOMS
 
 if TYPE_CHECKING:
     from . import LingoWorld
@@ -248,30 +248,45 @@ class LingoPlayerLogic:
                                 "kind of logic error.")
 
         if door_shuffle != ShuffleDoors.option_none and location_classification != LocationClassification.insanity \
-                and not early_color_hallways:
-            # If shuffle doors is on, force a useful item onto the HI panel. This may not necessarily get you out of BK,
-            # but the goal is to allow you to reach at least one more check. The non-painting ones are hardcoded right
-            # now. We only allow the entrance to the Pilgrim Room if color shuffle is off, because otherwise there are
-            # no extra checks in there. We only include the entrance to the Rhyme Room when color shuffle is off and
-            # door shuffle is on simple, because otherwise there are no extra checks in there.
+                and not early_color_hallways and world.multiworld.players > 1:
+            # Under the combination of door shuffle, normal location checks, and no early color hallways, sphere 1 is
+            # only three checks. In a multiplayer situation, this can be frustrating for the player because they are
+            # more likely to be stuck in the starting room for a long time. To remedy this, we will force a useful item
+            # onto the GOOD LUCK check under these circumstances. The goal is to expand sphere 1 to at least four
+            # checks (and likely more than that).
+            #
+            # Note: A very low LEVEL 2 requirement would naturally expand sphere 1 to four checks, but this is a very
+            # uncommon configuration, so we will ignore it and force a good item anyway.
+
+            # Starting Room - Back Right Door gives access to OPEN and DEAD END.
+            # Starting Room - Exit Door gives access to OPEN and TRACE.
             good_item_options: List[str] = ["Starting Room - Back Right Door", "Second Room - Exit Door"]
 
             if not color_shuffle:
+                # HOT CRUST and THIS.
                 good_item_options.append("Pilgrim Room - Sun Painting")
 
+                if door_shuffle == ShuffleDoors.option_simple:
+                    # WELCOME BACK, CLOCKWISE, and DRAWL + RUNS.
+                    good_item_options.append("Welcome Back Doors")
+                else:
+                    # WELCOME BACK and CLOCKWISE.
+                    good_item_options.append("Welcome Back Area - Shortcut to Starting Room")
+
             if door_shuffle == ShuffleDoors.option_simple:
-                good_item_options += ["Welcome Back Doors"]
+                # Color hallways access (NOTE: reconsider when sunwarp shuffling exists).
+                good_item_options.append("Rhyme Room Doors")
 
-                if not color_shuffle:
-                    good_item_options.append("Rhyme Room Doors")
-            else:
-                good_item_options += ["Welcome Back Area - Shortcut to Starting Room"]
-
-            for painting_obj in PAINTINGS_BY_ROOM["Starting Room"]:
-                if not painting_obj.enter_only or painting_obj.required_door is None:
+            # When painting shuffle is off, most Starting Room paintings give color hallways access. The Wondrous's
+            # painting does not, but it gives access to SHRINK and WELCOME BACK.
+            for painting_obj in PAINTINGS.values():
+                if not painting_obj.enter_only or painting_obj.required_door is None\
+                        or painting_obj.room != "Starting Room":
                     continue
 
                 # If painting shuffle is on, we only want to consider paintings that actually go somewhere.
+                #
+                # NOTE: This does not guarantee that there will be any checks on the other side.
                 if painting_shuffle and painting_obj.id not in self.painting_mapping.keys():
                     continue
 

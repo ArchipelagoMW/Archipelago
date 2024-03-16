@@ -31,8 +31,11 @@ ArchitecturesAllowed=x64 arm64
 AllowNoIcons=yes
 SetupIconFile={#MyAppIcon}
 UninstallDisplayIcon={app}\{#MyAppExeName}
-; you will likely have to remove the following signtool line when testing/debugging locally. Don't include that change in PRs.
+#ifndef NO_SIGNTOOL
+; You will likely have to remove the SignTool= line when testing/debugging locally or run with iscc.exe /DNO_SIGNTOOL.
+; Don't include that change in PRs.
 SignTool= signtool
+#endif
 LicenseFile= LICENSE
 WizardStyle= modern
 SetupLogging=yes
@@ -130,6 +133,11 @@ Root: HKCR; Subkey: ".apl2ac";                                   ValueData: "{#M
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch";                     ValueData: "Archipelago Lufia II Ancient Cave Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}l2acpatch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
+
+Root: HKCR; Subkey: ".apkdl3";                                   ValueData: "{#MyAppName}kdl3patch";        Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch";                     ValueData: "Archipelago Kirby's Dream Land 3 Patch"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch\DefaultIcon";         ValueData: "{app}\ArchipelagoSNIClient.exe,0";                           ValueType: string;  ValueName: "";
+Root: HKCR; Subkey: "{#MyAppName}kdl3patch\shell\open\command";  ValueData: """{app}\ArchipelagoSNIClient.exe"" ""%1""";                  ValueType: string;  ValueName: "";
 
 Root: HKCR; Subkey: ".apmc";                                     ValueData: "{#MyAppName}mcdata";         Flags: uninsdeletevalue; ValueType: string;  ValueName: "";
 Root: HKCR; Subkey: "{#MyAppName}mcdata";                        ValueData: "Archipelago Minecraft Data"; Flags: uninsdeletekey;   ValueType: string;  ValueName: "";

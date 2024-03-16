@@ -2,6 +2,21 @@ from functools import lru_cache
 from math import floor
 from typing import List, Collection, FrozenSet, Tuple, Dict, Any, Set
 from pkgutil import get_data
+from random import random
+
+
+def weighted_sample(world_random: random, population: List, weights: List[float], k: int):
+    positions = range(len(population))
+    indices = []
+    while True:
+        needed = k - len(indices)
+        if not needed:
+            break
+        for i in world_random.choices(positions, weights, k=needed):
+            if weights[i]:
+                weights[i] = 0.0
+                indices.append(i)
+    return [population[i] for i in indices]
 
 
 def build_weighted_int_list(inputs: Collection[float], total: int) -> List[int]:
@@ -160,6 +175,10 @@ def get_ep_all_individual() -> List[str]:
 
 def get_ep_obelisks() -> List[str]:
     return get_adjustment_file("settings/EP_Shuffle/EP_Sides.txt")
+
+
+def get_obelisk_keys() -> List[str]:
+    return get_adjustment_file("settings/Door_Shuffle/Obelisk_Keys.txt")
 
 
 def get_ep_easy() -> List[str]:

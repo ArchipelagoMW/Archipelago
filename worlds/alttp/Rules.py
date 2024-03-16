@@ -8,7 +8,7 @@ from worlds.generic.Rules import (add_item_rule, add_rule, forbid_item,
 
 from . import OverworldGlitchRules
 from .Bosses import GanonDefeatRule
-from .Items import ItemFactory, item_name_groups, item_table, progression_items
+from .Items import item_factory, item_name_groups, item_table, progression_items
 from .Options import small_key_shuffle
 from .OverworldGlitchRules import no_logic_rules, overworld_glitches_rules
 from .Regions import LTTPRegionType, location_table
@@ -89,7 +89,7 @@ def set_rules(world):
 
     if world.mode[player] != 'inverted':
         set_big_bomb_rules(world, player)
-        if world.glitches_required[player] in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player] not in {'insanity', 'insanity_legacy', 'madness'}:
+        if world.glitches_required[player].current_key in {'overworld_glitches', 'hybrid_major_glitches', 'no_logic'} and world.entrance_shuffle[player].current_key not in {'insanity', 'insanity_legacy', 'madness'}:
             path_to_courtyard = mirrorless_path_to_castle_courtyard(world, player)
             add_rule(world.get_entrance('Pyramid Fairy', player), lambda state: state.multiworld.get_entrance('Dark Death Mountain Offset Mirror', player).can_reach(state) and all(rule(state) for rule in path_to_courtyard), 'or')
     else:
@@ -420,11 +420,7 @@ def global_rules(world, player):
     set_rule(world.get_location('Ice Palace - Jelly Key Drop', player), lambda state: can_melt_things(state, player))
     set_rule(world.get_location('Ice Palace - Compass Chest', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: can_melt_things(state, player) and state._lttp_has_key('Small Key (Ice Palace)', player) and can_use_bombs(state, player))
-    if not world.enemy_shuffle[player]:
-        # Stalfos Knights can be killed by damaging them repeatedly with boomerang, swords, etc. if bombs are
-        # unavailable. If bombs are available, the pots can be thrown at them, so no other weapons are needed
-        add_rule(world.get_entrance('Ice Palace (Second Section)', player), lambda state: (can_use_bombs(state, player)
-            or state.has('Blue Boomerang', player) or state.has('Red Boomerang', player) or has_sword(state, player) or state.has("Hammer", player)))
+
     set_rule(world.get_entrance('Ice Palace (Main)', player), lambda state: state._lttp_has_key('Small Key (Ice Palace)', player, 2))
     set_rule(world.get_location('Ice Palace - Big Chest', player), lambda state: state.has('Big Key (Ice Palace)', player))
     set_rule(world.get_entrance('Ice Palace (Kholdstare)', player), lambda state: can_lift_rocks(state, player) and state.has('Hammer', player) and state.has('Big Key (Ice Palace)', player) and (state._lttp_has_key('Small Key (Ice Palace)', player, 6) or (state.has('Cane of Somaria', player) and state._lttp_has_key('Small Key (Ice Palace)', player, 5))))
@@ -1185,7 +1181,7 @@ def set_trock_key_rules(world, player):
                         forbid_item(world.get_location(location, player), 'Big Key (Turtle Rock)', player)
                 else:
                     # A key is required in the Big Key Chest to prevent a possible softlock.  Place an extra key to ensure 100% locations still works
-                    item = ItemFactory('Small Key (Turtle Rock)', player)
+                    item = item_factory('Small Key (Turtle Rock)', world.worlds[player])
                     location = world.get_location('Turtle Rock - Big Key Chest', player)
                     location.place_locked_item(item)
                     location.event = True
