@@ -102,7 +102,7 @@ class DopplerSubTankCount(Range):
     range_end = 4
     default = 4
 
-class VileOpen(Range):
+class VileOpen(Choice):
     """
     Under what conditions will Vile's Stage open.
       multiworld: Access will require an Access Code multiworld item, similar to the main stages.
@@ -180,10 +180,10 @@ class MMX3Options(PerGameCommonOptions):
     doppler_upgrade_count: DopplerArmorUpgradeCount
     doppler_heart_tank_count: DopplerHeartTankCount
     doppler_sub_tank_count: DopplerSubTankCount
-    vile_open: DopplerOpen
-    vile_medal_count: DopplerMedalCount
-    vile_weapon_count: DopplerWeaponCount
-    vile_upgrade_count: DopplerArmorUpgradeCount
-    vile_heart_tank_count: DopplerHeartTankCount
-    vile_sub_tank_count: DopplerSubTankCount
+    vile_open: VileOpen
+    vile_medal_count: VileMedalCount
+    vile_weapon_count: VileWeaponCount
+    vile_upgrade_count: VileArmorUpgradeCount
+    vile_heart_tank_count: VileHeartTankCount
+    vile_sub_tank_count: VileSubTankCount
 
