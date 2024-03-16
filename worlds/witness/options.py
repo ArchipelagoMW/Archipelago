@@ -83,7 +83,7 @@ class DoorGroupings(Choice):
 
 class ShuffleBoat(DefaultOnToggle):
     """
-    If set, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
+    If on, adds a "Boat" item to the item pool. Before receiving this item, you will not be able to use the boat.
     """
     display_name = "Shuffle Boat"
 
