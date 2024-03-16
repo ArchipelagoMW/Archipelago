@@ -141,19 +141,43 @@ def patch_rom(world: "MM2World", rom: RomData):
         0xEA  # NOP
     ])
     rom.write_bytes(0x3F607, [
-        0xE6, 0x99,  # INC $99
-        0xA5, 0x99,  # LDA $99
-        0xC9, 0x08,  # CMP $08 ; This is our check for the requirement
-        0xB0, 0x03,  # BCS $F602 ; Branch if we meet it
+        0xA9, 0x01,  # LDA #$01
+        0xA2, 0x08,  # LDX #$08
+        0xA0, 0x00,  # LDY #$00
+        # Head:
+        0x24, 0xBC,  # BIT $BC
+        0xF0, 0x01,  # BEQ Skip
+        0xC8,  # INY
+        # Skip:
+        0xCA,  # DEX
+        0x0A,  # ASL
+        0xE0, 0x00,  # CPX #$00
+        0xD0, 0xF5,  # BNE Head
+        0xC0, world.options.wily_5_requirement.value,  # CPY Wily Requirement
+        0xB0, 0x03,  # BCS SpawnTeleporter
         0x4C, 0x50, 0x84,  # JMP $8450
+        # SpawnTeleporter:
         0xA9, 0xFF,  # LDA #$FF
         0x85, 0xBC,  # STA $BC
+        0xA9, 0x01,  # LDA #$01
+        0x85, 0x99,  # STA $99
         0x4C, 0x33, 0x84,  # JMP $8433
     ])
-    rom.write_byte(0x3F60C, world.options.wily_5_requirement.value)
-    rom.write_bytes(0x381F0, [  # This spawns the actual teleport object, while the earlier branch spawns the visual
-        0xC9, world.options.wily_5_requirement.value,  # LDA our requirement
-        0x90, 0x15  # BCC $81F9
+    rom.write_bytes(0x381EE, [  # This spawns the actual teleport object, while the earlier branch spawns the visual
+        0xA5, 0x99,  # LDA $99
+        0xC9, 0x01,  # CMP #$01
+        0x90, 0x15,  # BCC $81F9
+    ])
+    # clean $99 on stage load
+    rom.write_bytes(0x3F62A, [
+        0xA9, 0x00,  # LDA #$01
+        0x85, 0xBC,  # STA $BC
+        0x85, 0x99,  # STA $99
+        0x4C, 0xAB, 0x80,  # JMP $80AB
+    ])
+    rom.write_bytes(0x380B7, [
+        0x4C, 0x1A, 0xF6,  # JMP $F61A
+        0xEA,  # NOP
     ])
 
     # text writing
