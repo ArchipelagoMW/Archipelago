@@ -1217,7 +1217,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
         for region_name, scene_dest, ladders in ladder_storages:
             portal_name, paired_region = get_portal_info(scene_dest)
             # this is the only exception, requiring holy cross as well
-            if portal_name == "Swamp to Cathedral Secret Legend Room Entrance":
+            if portal_name == "Swamp to Cathedral Secret Legend Room Entrance" and region_name == "Back of Swamp":
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
@@ -1229,6 +1229,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
+                    and state.has_any(ladders, player)
                     and (state.has("Ladders to West Bell", player)))
             # soft locked unless you have either ladder. if you have laurels, you use the other Entrance
             elif portal_name in {"Furnace Exit towards West Garden", "Furnace Exit to Dark Tomb"} \
@@ -1260,19 +1261,21 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has_all({ladder, "Ladder to Beneath the Vault"}, player)
+                    and state.has("Ladder to Beneath the Vault", player)
                     and has_lantern(state, player, options))
             elif portal_name == "Atoll Lower Entrance" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
+                    and state.has_any(ladders, player)
                     and state.has_any({"Ladders in Overworld Town", grapple}, player))
             elif portal_name == "Atoll Upper Entrance" and not options.entrance_rando:
                 regions[region_name].connect(
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
+                    and state.has_any(ladders, player)
                     and state.has(grapple, player) or has_ability(state, player, prayer, options, ability_unlocks))
             # soft lock potential
             elif portal_name in {"Special Shop Entrance", "Stairs to Top of the Mountain", "Swamp Upper Entrance",
@@ -1284,7 +1287,7 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
                     regions[paired_region],
                     name=portal_name + " (LS) " + region_name,
                     rule=lambda state: has_stick(state, player)
-                    and state.has(ladder, player)
+                    and state.has_any(ladders, player)
                     and (state.has("Ladder near Temple Rafters", player)
                          or (state.has_all({laurels, grapple}, player)
                              and ((state.has("Ladders near Patrol Cave", player)
