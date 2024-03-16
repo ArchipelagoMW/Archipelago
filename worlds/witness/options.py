@@ -179,7 +179,7 @@ class VictoryCondition(Choice):
 
 class PuzzleRandomization(Choice):
     """
-    Puzzles in this randomizer are randomly generated. This setting changes the difficulty/types of puzzles.
+    Puzzles in this randomizer are randomly generated. This option changes the difficulty/types of puzzles.
     """
     display_name = "Puzzle Randomization"
     option_sigma_normal = 0
