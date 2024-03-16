@@ -20,8 +20,8 @@ if __name__ == "__main__":
     Utils.init_logging("TextClient", exception_logger="Client")
 
 from MultiServer import CommandProcessor
-from NetUtils import Endpoint, decode, NetworkItem, encode, JSONtoTextParser, \
-    ClientStatus, Permission, NetworkSlot, RawJSONtoTextParser
+from NetUtils import (Endpoint, decode, NetworkItem, encode, JSONtoTextParser, ClientStatus, Permission, NetworkSlot,
+                      RawJSONtoTextParser, add_json_text, add_json_location, add_json_item, JSONTypes)
 from Utils import Version, stream_input, async_start
 from worlds import network_data_package, AutoWorldRegister
 import os
@@ -72,9 +72,16 @@ class ClientCommandProcessor(CommandProcessor):
 
     def _cmd_received(self) -> bool:
         """List all received items"""
-        self.output(f'{len(self.ctx.items_received)} received items:')
+        item: NetworkItem
+        self.output(f'{len(self.ctx.items_received)} received items, sorted by time:')
         for index, item in enumerate(self.ctx.items_received, 1):
-            self.output(f"{self.ctx.item_names[item.item]} from {self.ctx.player_names[item.player]}")
+            parts = []
+            add_json_item(parts, item.item, self.ctx.slot, item.flags)
+            add_json_text(parts, " from ")
+            add_json_location(parts, item.location, item.player)
+            add_json_text(parts, " by ")
+            add_json_text(parts, item.player, type=JSONTypes.player_id)
+            self.ctx.on_print_json({"data": parts, "cmd": "PrintJSON"})
         return True
 
     def _cmd_missing(self, filter_text = "") -> bool:
@@ -751,8 +758,10 @@ async def process_server_cmd(ctx: CommonContext, args: dict):
     elif cmd == 'ConnectionRefused':
         errors = args["errors"]
         if 'InvalidSlot' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_slot()
         elif 'InvalidGame' in errors:
+            ctx.disconnected_intentionally = True
             ctx.event_invalid_game()
         elif 'IncompatibleVersion' in errors:
             raise Exception('Server reported your client version as incompatible. '
