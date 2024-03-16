@@ -4,6 +4,7 @@ from ..override import override
 from ..vanilla.ginger_island import ginger_island as ginger_island_content_pack
 from ...data import villagers_data, fish_data
 from ...mods.mod_data import ModNames
+from ...strings.region_names import Region
 
 
 class SVEContentPack(ContentPack):
@@ -82,6 +83,7 @@ register_mod_content_pack(SVEContentPack(
         villagers_data.scarlett,
         villagers_data.susan,
         villagers_data.morris,
-        override(villagers_data.wizard, bachelor=True, mod_name=ModNames.sve),
+        # The wizard leaves his tower on sunday, for like 1 hour... Good enough for entrance rando!
+        override(villagers_data.wizard, locations=(Region.wizard_tower, Region.forest), bachelor=True, mod_name=ModNames.sve),
     )
 ))
