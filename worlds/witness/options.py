@@ -10,16 +10,16 @@ from .static_logic import WeightedItemDefinition, ItemCategory, StaticWitnessLog
 class DisableNonRandomizedPuzzles(Toggle):
     """Disables puzzles that cannot be randomized.
     This includes many puzzles that heavily involve the environment, such as Shadows, Monastery or Orchard.
+
     The lasers for those areas will activate as you solve optional puzzles, such as Discarded Panels.
     Additionally, the panels activating Monastery Laser and Jungle Popup Wall will be on from the start."""
     display_name = "Disable non randomized puzzles"
 
 
 class EarlyCaves(Choice):
-    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain,
-    allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
-    You can either add this item to the pool to be found on one of your randomized checks,
-    or you can outright start with it and have immediate access to the Caves.
+    """Adds an item that opens the Caves Shortcuts to Swamp and Mountain, allowing early access to the Caves even if you are not playing a remote Door Shuffle mode.
+    You can either add this item to the pool to be found on one of your randomized checks, or you can outright start with it and have immediate access to the Caves.
+
     If you choose "add_to_pool" and you are already playing a remote Door Shuffle mode, this setting will do nothing."""
     display_name = "Early Caves"
     option_off = 0
@@ -32,14 +32,15 @@ class EarlyCaves(Choice):
 
 class ShuffleSymbols(DefaultOnToggle):
     """You will need to unlock puzzle symbols as items to be able to solve the panels that contain those symbols.
+
     If you turn this off, there will be no progression items in the game unless you turn on door shuffle."""
     display_name = "Shuffle Symbols"
 
 
 class ShuffleLasers(Choice):
     """If on, the 11 lasers are turned into items and will activate on their own upon receiving them.
-    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still
-    be redirected as normal, for both applications of redirection."""
+
+    Note: There is a visual bug that can occur with the Desert Laser. It does not affect gameplay - The Laser can still be redirected as normal, for both applications of redirection."""
     display_name = "Shuffle Lasers"
     option_off = 0
     alias_false = 0
@@ -63,8 +64,7 @@ class ShuffleDoors(Choice):
 
 class DoorGroupings(Choice):
     """If set to "none", there will be one key for every door, resulting in up to 120 keys being added to the item pool.
-    If set to "regional", all doors in the same general region will open at once with a single key,
-    reducing the amount of door items and complexity."""
+    If set to "regional", all doors in the same general region will open at once with a single key, reducing the amount of door items and complexity."""
     display_name = "Door Groupings"
     option_off = 0
     option_regional = 1
@@ -77,8 +77,8 @@ class ShuffleBoat(DefaultOnToggle):
 
 class ShuffleDiscardedPanels(Toggle):
     """Add Discarded Panels into the location pool.
-    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example
-    of this being the alternate activation triggers in disable_non_randomized."""
+
+    Solving certain Discarded Panels may still be necessary to beat the game, even if this is off - The main example of this being the alternate activation triggers in disable_non_randomized."""
 
     display_name = "Shuffle Discarded Panels"
 
@@ -93,6 +93,7 @@ class ShuffleEnvironmentalPuzzles(Choice):
     Add Environmental/Obelisk Puzzles into the location pool.
     In "individual", every Environmental Puzzle sends an item.
     In "obelisk_sides", completing every puzzle on one side of an Obelisk sends an item.
+
     Note: In Obelisk Sides, any EPs excluded through another setting will be counted as pre-completed on their Obelisk.
     """
     display_name = "Shuffle Environmental Puzzles"
@@ -123,6 +124,7 @@ class EnvironmentalPuzzlesDifficulty(Choice):
 class ObeliskKeys(DefaultOnToggle):
     """
     Add one Obelisk Key item per Obelisk, locking you out of solving any of the associated Environmental Puzzles.
+
     Does nothing if "Shuffle Environmental Puzzles" is set to "off".
     """
     display_name = "Obelisk Keys"
@@ -130,8 +132,9 @@ class ObeliskKeys(DefaultOnToggle):
 
 class ShufflePostgame(Toggle):
     """Adds locations into the pool that are guaranteed to become accessible after or at the same time as your goal.
-    Use this if you don't play with release on victory. IMPORTANT NOTE: The possibility of your second
-    "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
+    Use this if you don't play with release on victory.
+
+    IMPORTANT NOTE: The possibility of your second "Progressive Dots" showing up in the Caves is ignored, they will still be considered "postgame" in base settings."""
     display_name = "Shuffle Postgame"
 
 
@@ -141,6 +144,7 @@ class VictoryCondition(Choice):
     Challenge: Beat the secret Challenge (requires Challenge Lasers).
     Mountain Box Short: Input the short solution to the Mountaintop Box (requires Mountain Lasers).
     Mountain Box Long: Input the long solution to the Mountaintop Box (requires Challenge Lasers).
+
     It is important to note that while the Mountain Box requires Desert Laser to be redirected in Town for that laser
     to count, the laser locks on the Elevator and Challenge Timer panels do not."""
     display_name = "Victory Condition"
@@ -160,8 +164,7 @@ class PuzzleRandomization(Choice):
 
 class MountainLasers(Range):
     """Sets the amount of lasers required to enter the Mountain.
-    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without
-    the hatch being opened.
+    If set to a higher amount than 7, the mountaintop box will be slightly rotated to make it possible to solve without the hatch being opened.
     This change will also be applied logically to the long solution ("Challenge Lasers" setting)."""
     display_name = "Required Lasers for Mountain Entry"
     range_start = 1
@@ -210,8 +213,7 @@ class TrapWeights(OptionDict):
 
 
 class PuzzleSkipAmount(Range):
-    """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel.
-    Works on most panels in the game - The only big exception is The Challenge."""
+    """Adds this number of Puzzle Skips into the pool, if there is room. Puzzle Skips let you skip one panel."""
     display_name = "Puzzle Skips"
     range_start = 0
     range_end = 30
@@ -230,8 +232,7 @@ class HintAmount(Range):
 class AreaHintPercentage(Range):
     """There are two types of hints for The Witness.
     "Location hints" hint one location in your world / containing an item for your world.
-    "Area hints" will tell you some general info about the items you can find in one of the
-    main geographic areas on the island.
+    "Area hints" will tell you some general info about the items you can find in one of the main geographic areas on the island.
     Use this option to specify how many of your hints you want to be area hints. The rest will be location hints."""
     display_name = "Area Hint Percentage"
     range_start = 0
