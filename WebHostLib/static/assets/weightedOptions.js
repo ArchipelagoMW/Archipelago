@@ -50,6 +50,10 @@ window.addEventListener('load', () => {
 
   // Listen for enter presses on inputs intended to add range rows
   document.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+    }
+
     if (evt.key === 'Enter' && evt.target.classList.contains('range-option-value')) {
       const [worldName, optionName] = evt.target.getAttribute('data-option').split('-');
       addRangeRow(worldName, optionName);
@@ -58,7 +62,35 @@ window.addEventListener('load', () => {
 
   // Detect form submission
   document.getElementById('weighted-options-form').addEventListener('submit', (evt) => {
-    // TODO: Save data to localStorage
+    // Save data to localStorage
+    const weightedOptions = {};
+    document.querySelectorAll('input[name]').forEach((input) => {
+      const keys = input.getAttribute('name').split('||');
+
+      // Determine keys
+      const worldName = keys[0] ?? null;
+      const optionName = keys[1] ?? null;
+      const subOption = keys[2] ?? null;
+
+      // World name must be present
+      if (!worldName) {
+        return console.error(`Invalid option parsed: ${JSON.stringify(keys)}`);
+      }
+
+      // Ensure keys exist
+      if (!weightedOptions[worldName]) { weightedOptions[worldName] = {}; }
+      if (optionName && !weightedOptions[worldName][optionName]) { weightedOptions[worldName][optionName] = {}; }
+      if (subOption && !weightedOptions[worldName][optionName][subOption]) {
+        weightedOptions[worldName][optionName][subOption] = null;
+      }
+
+      if (subOption) { return weightedOptions[worldName][optionName][subOption] = determineValue(input); }
+      if (optionName) { return weightedOptions[worldName][optionName] = determineValue(input); }
+      if (worldName) { return weightedOptions[worldName] = determineValue(input); }
+    });
+
+    localStorage.setItem('weightedOptions', JSON.stringify(weightedOptions))
+
     evt.preventDefault();
   });
 
@@ -66,10 +98,11 @@ window.addEventListener('load', () => {
 });
 
 const addRangeRow = (worldName, optionName) => {
-  const inputTarget = document.querySelector(`input[type=number][data-option="${worldName}-${optionName}"].range-option-value`);
+  const inputQuery = `input[type=number][data-option="${worldName}-${optionName}"].range-option-value`;
+  const inputTarget = document.querySelector(inputQuery);
   const newValue = inputTarget.value;
   if (!/^\d+$/.test(newValue)) {
-    alert('Range values must be a number!');
+    alert('Range values must be a whole number!');
     return;
   }
   inputTarget.value = '';
@@ -110,4 +143,8 @@ const addRangeRow = (worldName, optionName) => {
   tdDelete.appendChild(deleteSpan);
   tr.appendChild(tdDelete);
   tBody.appendChild(tr);
+};
+
+const determineValue = (input) => {
+  return input.type === 'checkbox' ? (input.checked ? 1 : 0) : parseInt(input.value, 10);
 };

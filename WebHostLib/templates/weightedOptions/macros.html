@@ -111,7 +111,7 @@
                 <input
                     type="number"
                     id="{{ world_name }}-{{ option_name }}-{{ item_name }}-qty"
-                    name="{{ world_name }}-{{ option_name }}-{{ item_name }}-qty"
+                    name="{{ world_name }}||{{ option_name }}||{{ item_name }}"
                     value="0"
                 />
             </div>
@@ -126,7 +126,7 @@
                 <input
                     type="checkbox"
                     id="{{ world_name }}-{{ option_name }}-{{ key }}"
-                    name="{{ world_name }}-{{ option_name }}-{{ key }}"
+                    name="{{ world_name }}||{{ option_name }}||{{ key }}"
                     value="1"
                 />
                 <label for="{{ world_name }}-{{ option_name }}-{{ key }}">
@@ -142,7 +142,7 @@
         {% for group_name in world.location_name_groups.keys()|sort %}
             {% if group_name != "Everywhere" %}
                 <div class="set-entry">
-                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if grop_name in option.default }} />
+                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ world_name }}||{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if grop_name in option.default }} />
                     <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                 </div>
             {% endif %}
@@ -152,7 +152,7 @@
         {% endif %}
         {% for location_name in world.location_names|sort %}
             <div class="set-entry">
-                <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ option_name }}" value="{{ location_name }}" {{ "checked" if location_name in option.default }} />
+                <input type="checkbox" id="{{ option_name }}-{{ location_name }}" name="{{ world_name }}||{{ option_name }}||{{ location_name }}" value="1" {{ "checked" if location_name in option.default }} />
                 <label for="{{ option_name }}-{{ location_name }}">{{ location_name }}</label>
             </div>
         {% endfor %}
@@ -164,7 +164,7 @@
         {% for group_name in world.item_name_groups.keys()|sort %}
             {% if group_name != "Everything" %}
                 <div class="set-entry">
-                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ option_name }}" value="{{ group_name }}" {{ "checked" if group_name in option.default }} />
+                    <input type="checkbox" id="{{ option_name }}-{{ group_name }}" name="{{ world_name }}||{{ option_name }}||{{ group_name }}" value="1" {{ "checked" if group_name in option.default }} />
                     <label for="{{ option_name }}-{{ group_name }}">{{ group_name }}</label>
                 </div>
             {% endif %}
@@ -174,7 +174,7 @@
         {% endif %}
         {% for item_name in world.item_names|sort %}
             <div class="set-entry">
-                <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ option_name }}" value="{{ item_name }}" {{ "checked" if item_name in option.default }} />
+                <input type="checkbox" id="{{ option_name }}-{{ item_name }}" name="{{ world_name }}||{{ option_name }}||{{ item_name }}" value="1" {{ "checked" if item_name in option.default }} />
                 <label for="{{ option_name }}-{{ item_name }}">{{ item_name }}</label>
             </div>
         {% endfor %}
@@ -185,7 +185,7 @@
     <div class="set-container">
         {% for key in option.valid_keys %}
             <div class="set-entry">
-                <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ option_name }}" value="{{ key }}" {{ "checked" if key in option.default }} />
+                <input type="checkbox" id="{{ option_name }}-{{ key }}" name="{{ world_name }}||{{ option_name }}||{{ key }}" value="1" {{ "checked" if key in option.default }} />
                 <label for="{{ option_name }}-{{ key }}">{{ key }}</label>
             </div>
         {% endfor %}
