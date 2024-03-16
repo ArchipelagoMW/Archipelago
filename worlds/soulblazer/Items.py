@@ -1,14 +1,26 @@
+from dataclasses import dataclass
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification
+from typing import Optional
+from . import ItemID, ItemName, NPCID, NPCName, SoulBlazerWorld
 
 
 class SoulBlazerItem(Item):  # or from Items import MyGameItem
     game = "Soul Blazer"  # name of the game/world this item is from
 
+@dataclass
 class SoulBlazerItemData():
     id: int
     """Internal item ID"""
-    operand: int
+    operand: Optional[int]
     """Either Gems/Exp Quantity or Lair ID"""
+    classification: ItemClassification
+    
+    @property
+    def code(self) -> int:
+        """The unique ID used by archipelago for this item"""
+        if id == ItemID.LAIR_RELEASE:
+            return SoulBlazerWorld.base_id + SoulBlazerWorld.lair_id_offset + self.operand
+        return SoulBlazerWorld.base_id + self.id
 
     @property
     def operand_bcd(self) -> int:
@@ -36,3 +48,294 @@ class SoulBlazerItemData():
             digit += 1
 
         operand = decimal
+
+herbs_count = 20
+"""Number of Herbs in vanilla item pool"""
+
+gems_values = [1, 12, 40, 50, 50, 50, 50, 50, 60, 60, 80, 80, 80, 80, 80, 100, 100, 100, 100, 150, 200]
+"""Gem reward values in vanilla item pool"""
+
+exp_values = [1, 30, 80, 150, 180, 200, 250, 300, 300, 300, 300, 300, 400]
+"""Exp reward values in vanilla item pool"""
+
+#TODO: Unsure which progression items should skip balancing
+swords_table = {
+    ItemName.LIFESWORD     : SoulBlazerItemData(ItemID.LIFESWORD    , None, ItemClassification.progression_skip_balancing),
+    ItemName.PSYCHOSWORD   : SoulBlazerItemData(ItemID.PSYCHOSWORD  , None, ItemClassification.progression_skip_balancing),
+    ItemName.CRITICALSWORD : SoulBlazerItemData(ItemID.CRITICALSWORD, None, ItemClassification.progression_skip_balancing),
+    ItemName.LUCKYBLADE    : SoulBlazerItemData(ItemID.LUCKYBLADE   , None, ItemClassification.progression),
+    ItemName.ZANTETSUSWORD : SoulBlazerItemData(ItemID.ZANTETSUSWORD, None, ItemClassification.progression),
+    ItemName.SPIRITSWORD   : SoulBlazerItemData(ItemID.SPIRITSWORD  , None, ItemClassification.progression),
+    ItemName.RECOVERYSWORD : SoulBlazerItemData(ItemID.RECOVERYSWORD, None, ItemClassification.progression_skip_balancing),
+    ItemName.SOULBLADE     : SoulBlazerItemData(ItemID.SOULBLADE    , None, ItemClassification.progression),
+}
+
+armors_table = {
+    ItemName.IRONARMOR      : SoulBlazerItemData(ItemID.IRONARMOR     , None, ItemClassification.useful),
+    ItemName.ICEARMOR       : SoulBlazerItemData(ItemID.ICEARMOR      , None, ItemClassification.progression),
+    ItemName.BUBBLEARMOR    : SoulBlazerItemData(ItemID.BUBBLEARMOR   , None, ItemClassification.progression),
+    ItemName.MAGICARMOR     : SoulBlazerItemData(ItemID.MAGICARMOR    , None, ItemClassification.useful),
+    ItemName.MYSTICARMOR    : SoulBlazerItemData(ItemID.MYSTICARMOR   , None, ItemClassification.useful),
+    ItemName.LIGHTARMOR     : SoulBlazerItemData(ItemID.LIGHTARMOR    , None, ItemClassification.useful),
+    ItemName.ELEMENTALARMOR : SoulBlazerItemData(ItemID.ELEMENTALARMOR, None, ItemClassification.useful),
+    ItemName.SOULARMOR      : SoulBlazerItemData(ItemID.SOULARMOR     , None, ItemClassification.progression),
+}
+
+magic_table = {
+    ItemName.FLAMEBALL   : SoulBlazerItemData(ItemID.FLAMEBALL  , None, ItemClassification.progression),
+    ItemName.LIGHTARROW  : SoulBlazerItemData(ItemID.LIGHTARROW , None, ItemClassification.progression_skip_balancing),
+    ItemName.MAGICFLARE  : SoulBlazerItemData(ItemID.MAGICFLARE , None, ItemClassification.progression_skip_balancing),
+    ItemName.ROTATOR     : SoulBlazerItemData(ItemID.ROTATOR    , None, ItemClassification.progression_skip_balancing),
+    ItemName.SPARKBOMB   : SoulBlazerItemData(ItemID.SPARKBOMB  , None, ItemClassification.progression_skip_balancing),
+    ItemName.FLAMEPILLAR : SoulBlazerItemData(ItemID.FLAMEPILLAR, None, ItemClassification.progression_skip_balancing),
+    ItemName.TORNADO     : SoulBlazerItemData(ItemID.TORNADO    , None, ItemClassification.progression_skip_balancing),
+    ItemName.PHOENIX     : SoulBlazerItemData(ItemID.PHOENIX    , None, ItemClassification.progression_skip_balancing),
+}
+
+emblems_table = {
+    ItemName.EMBLEMA         : SoulBlazerItemData(ItemID.EMBLEMA, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMB         : SoulBlazerItemData(ItemID.EMBLEMB, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMC         : SoulBlazerItemData(ItemID.EMBLEMC, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMD         : SoulBlazerItemData(ItemID.EMBLEMD, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEME         : SoulBlazerItemData(ItemID.EMBLEME, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMF         : SoulBlazerItemData(ItemID.EMBLEMF, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMG         : SoulBlazerItemData(ItemID.EMBLEMG, None, ItemClassification.progression_skip_balancing),
+    ItemName.EMBLEMH         : SoulBlazerItemData(ItemID.EMBLEMH, None, ItemClassification.progression_skip_balancing),
+}
+
+redhots_table = {
+    ItemName.REDHOTMIRROR    : SoulBlazerItemData(ItemID.REDHOTMIRROR, None, ItemClassification.progression),
+    ItemName.REDHOTBALL      : SoulBlazerItemData(ItemID.REDHOTBALL  , None, ItemClassification.progression),
+    ItemName.REDHOTSTICK     : SoulBlazerItemData(ItemID.REDHOTSTICK , None, ItemClassification.progression),
+}
+
+stones_table = {
+    ItemName.BROWNSTONE      : SoulBlazerItemData(ItemID.BROWNSTONE , None, ItemClassification.progression),
+    ItemName.GREENSTONE      : SoulBlazerItemData(ItemID.GREENSTONE , None, ItemClassification.progression),
+    ItemName.BLUESTONE       : SoulBlazerItemData(ItemID.BLUESTONE  , None, ItemClassification.progression),
+    ItemName.SILVERSTONE     : SoulBlazerItemData(ItemID.SILVERSTONE, None, ItemClassification.progression),
+    ItemName.PURPLESTONE     : SoulBlazerItemData(ItemID.PURPLESTONE, None, ItemClassification.progression),
+    ItemName.BLACKSTONE      : SoulBlazerItemData(ItemID.BLACKSTONE , None, ItemClassification.progression),
+}
+
+inventory_items_table = {
+    ItemName.GOATSFOOD       : SoulBlazerItemData(ItemID.GOATSFOOD      , None, ItemClassification.useful),
+    ItemName.HARPSTRING      : SoulBlazerItemData(ItemID.HARPSTRING     , None, ItemClassification.progression),
+    ItemName.APASS           : SoulBlazerItemData(ItemID.APASS          , None, ItemClassification.progression),
+    ItemName.DREAMROD        : SoulBlazerItemData(ItemID.DREAMROD       , None, ItemClassification.progression),
+    ItemName.LEOSBRUSH       : SoulBlazerItemData(ItemID.LEOSBRUSH      , None, ItemClassification.progression),
+    ItemName.TURBOSLEAVES    : SoulBlazerItemData(ItemID.TURBOSLEAVES   , None, ItemClassification.progression),
+    ItemName.MOLESRIBBON     : SoulBlazerItemData(ItemID.MOLESRIBBON    , None, ItemClassification.progression),
+    ItemName.BIGPEARL        : SoulBlazerItemData(ItemID.BIGPEARL       , None, ItemClassification.progression),
+    ItemName.MERMAIDSTEARS   : SoulBlazerItemData(ItemID.MERMAIDSTEARS  , None, ItemClassification.progression),
+    ItemName.MUSHROOMSHOES   : SoulBlazerItemData(ItemID.MUSHROOMSHOES  , None, ItemClassification.progression),
+    ItemName.AIRSHIPKEY      : SoulBlazerItemData(ItemID.AIRSHIPKEY     , None, ItemClassification.progression),
+    ItemName.THUNDERRING     : SoulBlazerItemData(ItemID.THUNDERRING    , None, ItemClassification.progression),
+    ItemName.DELICIOUSSEEDS  : SoulBlazerItemData(ItemID.DELICIOUSSEEDS , None, ItemClassification.progression),
+    ItemName.ACTINIDIALEAVES : SoulBlazerItemData(ItemID.ACTINIDIALEAVES, None, ItemClassification.progression),
+    ItemName.DOORKEY         : SoulBlazerItemData(ItemID.DOORKEY        , None, ItemClassification.progression),
+    ItemName.PLATINUMCARD    : SoulBlazerItemData(ItemID.PLATINUMCARD   , None, ItemClassification.progression),
+    ItemName.VIPCARD         : SoulBlazerItemData(ItemID.VIPCARD        , None, ItemClassification.progression),
+    **emblems_table,
+    **redhots_table,
+    ItemName.POWERBRACELET   : SoulBlazerItemData(ItemID.POWERBRACELET  , None, ItemClassification.useful),
+    ItemName.SHIELDBRACELET  : SoulBlazerItemData(ItemID.SHIELDBRACELET , None, ItemClassification.useful),
+    ItemName.SUPERBRACELET   : SoulBlazerItemData(ItemID.SUPERBRACELET  , None, ItemClassification.useful),
+    ItemName.MEDICALHERB     : SoulBlazerItemData(ItemID.MEDICALHERB    , None, ItemClassification.filler),
+    ItemName.STRANGEBOTTLE   : SoulBlazerItemData(ItemID.STRANGEBOTTLE  , None, ItemClassification.filler),
+    **stones_table,
+    ItemName.MAGICBELL       : SoulBlazerItemData(ItemID.MAGICBELL      , None, ItemClassification.useful),
+}
+
+
+misc_table = {
+    ItemName.NOTHING : SoulBlazerItemData(ItemID.NOTHING, None, ItemClassification.trap),
+    ItemName.GEMS    : SoulBlazerItemData(ItemID.GEMS   , 0   , ItemClassification.filler),
+    ItemName.EXP     : SoulBlazerItemData(ItemID.EXP    , 0   , ItemClassification.filler),
+}
+
+items_table = {
+    **swords_table,
+    **armors_table,
+    **magic_table,
+    **inventory_items_table,
+    **misc_table,
+}
+
+npc_release_table = {
+    NPCName.OLD_WOMAN                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.OLD_WOMAN                    , ItemClassification.progression),
+    NPCName.TOOL_SHOP_OWNER               : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TOOL_SHOP_OWNER              , ItemClassification.progression),
+    NPCName.TULIP                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TULIP                        , ItemClassification.filler),
+    NPCName.BRIDGE_GUARD                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BRIDGE_GUARD                 , ItemClassification.progression),
+    NPCName.VILLAGE_CHIEF                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.VILLAGE_CHIEF                , ItemClassification.progression),
+    NPCName.IVY_CHEST_ROOM                : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.IVY_CHEST_ROOM               , ItemClassification.progression),
+    NPCName.WATER_MILL                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.WATER_MILL                   , ItemClassification.progression),
+    NPCName.GOAT_HERB                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GOAT_HERB                    , ItemClassification.progression),
+    NPCName.LISA                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.LISA                         , ItemClassification.progression),
+    NPCName.TULIP2                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TULIP2                       , ItemClassification.filler),
+    NPCName.ARCHITECT                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ARCHITECT                    , ItemClassification.progression),
+    NPCName.IVY                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.IVY                          , ItemClassification.progression),
+    NPCName.GOAT                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GOAT                         , ItemClassification.progression),
+    NPCName.TEDDY                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TEDDY                        , ItemClassification.progression),
+    NPCName.TULIP3                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TULIP3                       , ItemClassification.filler),
+    NPCName.LEOS_HOUSE                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.LEOS_HOUSE                   , ItemClassification.progression),
+    NPCName.LONELY_GOAT                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.LONELY_GOAT                  , ItemClassification.filler),
+    NPCName.TULIP_PASS                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TULIP_PASS                   , ItemClassification.progression),
+    NPCName.BOY_CABIN                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BOY_CABIN                    , ItemClassification.filler),
+    NPCName.BOY_CAVE                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BOY_CAVE                     , ItemClassification.progression),
+    NPCName.OLD_MAN                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.OLD_MAN                      , ItemClassification.filler),
+    NPCName.OLD_MAN2                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.OLD_MAN2                     , ItemClassification.filler),
+    NPCName.IVY2                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.IVY2                         , ItemClassification.filler),
+    NPCName.IVY_EMBLEM_A                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.IVY_EMBLEM_A                 , ItemClassification.progression),
+    NPCName.IVY_RECOVERY_SWORD            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.IVY_RECOVERY_SWORD           , ItemClassification.progression),
+    NPCName.TULIP4                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.TULIP4                       , ItemClassification.filler),
+    NPCName.GOAT2                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GOAT2                        , ItemClassification.filler),
+    NPCName.BIRD_RED_HOT_MIRROR           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BIRD_RED_HOT_MIRROR          , ItemClassification.progression),
+    NPCName.BIRD                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BIRD                         , ItemClassification.filler),
+    NPCName.DOG                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOG                          , ItemClassification.filler),
+    NPCName.DOG2                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOG2                         , ItemClassification.filler),
+    NPCName.DOG3                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOG3                         , ItemClassification.progression),
+    NPCName.MOLE_SHIELD_BRACELET          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOLE_SHIELD_BRACELET         , ItemClassification.progression),
+    NPCName.SQUIRREL_EMBLEM_C             : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL_EMBLEM_C            , ItemClassification.progression),
+    NPCName.SQUIRREL_PSYCHO_SWORD         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL_PSYCHO_SWORD        , ItemClassification.progression),
+    NPCName.BIRD2                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BIRD2                        , ItemClassification.filler),
+    NPCName.MOLE_SOUL_OF_LIGHT            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOLE_SOUL_OF_LIGHT           , ItemClassification.progression),
+    NPCName.DEER                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DEER                         , ItemClassification.progression),
+    NPCName.CROCODILE                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CROCODILE                    , ItemClassification.progression),
+    NPCName.SQUIRREL                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL                     , ItemClassification.filler),
+    NPCName.GREENWOODS_GUARDIAN           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GREENWOODS_GUARDIAN          , ItemClassification.progression),
+    NPCName.MOLE                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOLE                         , ItemClassification.progression),
+    NPCName.DOG4                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOG4                         , ItemClassification.filler),
+    NPCName.SQUIRREL_ICE_ARMOR            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL_ICE_ARMOR           , ItemClassification.progression),
+    NPCName.SQUIRREL2                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL2                    , ItemClassification.filler),
+    NPCName.DOG5                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOG5                         , ItemClassification.filler),
+    NPCName.CROCODILE2                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CROCODILE2                   , ItemClassification.progression),
+    NPCName.MOLE2                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOLE2                        , ItemClassification.filler),
+    NPCName.SQUIRREL3                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SQUIRREL3                    , ItemClassification.progression),
+    NPCName.BIRD_GREENWOOD_LEAF           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BIRD_GREENWOOD_LEAF          , ItemClassification.progression),
+    NPCName.MOLE3                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOLE3                        , ItemClassification.progression),
+    NPCName.DEER_MAGIC_BELL               : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DEER_MAGIC_BELL              , ItemClassification.progression),
+    NPCName.BIRD3                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BIRD3                        , ItemClassification.filler),
+    NPCName.CROCODILE3                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CROCODILE3                   , ItemClassification.progression),
+    NPCName.MONMO                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MONMO                        , ItemClassification.progression),
+    NPCName.DOLPHIN                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLPHIN                      , ItemClassification.filler),
+    NPCName.ANGELFISH                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ANGELFISH                    , ItemClassification.filler),
+    NPCName.MERMAID                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID                      , ItemClassification.progression),
+    NPCName.ANGELFISH2                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ANGELFISH2                   , ItemClassification.filler),
+    NPCName.MERMAID_PEARL                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_PEARL                , ItemClassification.progression),
+    NPCName.MERMAID2                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID2                     , ItemClassification.filler),
+    NPCName.DOLPHIN_SAVES_LUE             : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLPHIN_SAVES_LUE            , ItemClassification.progression),
+    NPCName.MERMAID_STATUE_BLESTER        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_STATUE_BLESTER       , ItemClassification.progression),
+    NPCName.MERMAID_RED_HOT_STICK         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_RED_HOT_STICK        , ItemClassification.progression),
+    NPCName.LUE                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.LUE                          , ItemClassification.progression),
+    NPCName.MERMAID3                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID3                     , ItemClassification.filler),
+    NPCName.MERMAID_NANA                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_NANA                 , ItemClassification.filler),
+    NPCName.MERMAID4                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID4                     , ItemClassification.filler),
+    NPCName.DOLPHIN2                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLPHIN2                     , ItemClassification.progression),
+    NPCName.MERMAID_STATUE_ROCKBIRD       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_STATUE_ROCKBIRD      , ItemClassification.progression),
+    NPCName.MERMAID_BUBBLE_ARMOR          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_BUBBLE_ARMOR         , ItemClassification.progression),
+    NPCName.MERMAID5                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID5                     , ItemClassification.filler),
+    NPCName.MERMAID6                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID6                     , ItemClassification.filler),
+    NPCName.MERMAID_TEARS                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_TEARS                , ItemClassification.filler),
+    NPCName.MERMAID_STATUE_DUREAN         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_STATUE_DUREAN        , ItemClassification.progression),
+    NPCName.ANGELFISH3                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ANGELFISH3                   , ItemClassification.filler),
+    #TODO: consider putting souls in logic
+    NPCName.ANGELFISH_SOUL_OF_SHIELD      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ANGELFISH_SOUL_OF_SHIELD     , ItemClassification.useful),
+    NPCName.MERMAID_MAGIC_FLARE           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_MAGIC_FLARE          , ItemClassification.progression),
+    NPCName.MERMAID_QUEEN                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_QUEEN                , ItemClassification.progression),
+    NPCName.MERMAID_STATUE_GHOST_SHIP     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID_STATUE_GHOST_SHIP    , ItemClassification.progression),
+    NPCName.DOLPHIN_SECRET_CAVE           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLPHIN_SECRET_CAVE          , ItemClassification.progression),
+    NPCName.MERMAID7                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID7                     , ItemClassification.filler),
+    NPCName.ANGELFISH4                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.ANGELFISH4                   , ItemClassification.filler),
+    NPCName.MERMAID8                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID8                     , ItemClassification.filler),
+    NPCName.DOLPHIN_PEARL                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLPHIN_PEARL                , ItemClassification.progression),
+    NPCName.MERMAID9                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MERMAID9                     , ItemClassification.filler),
+    NPCName.GRANDPA                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA                      , ItemClassification.filler),
+    NPCName.GIRL                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GIRL                         , ItemClassification.filler),
+    NPCName.MUSHROOM                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MUSHROOM                     , ItemClassification.filler),
+    NPCName.BOY                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BOY                          , ItemClassification.progression),
+    NPCName.GRANDPA2                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA2                     , ItemClassification.filler),
+    NPCName.SNAIL_JOCKEY                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL_JOCKEY                 , ItemClassification.filler),
+    NPCName.NOME                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.NOME                         , ItemClassification.progression),
+    NPCName.BOY2                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BOY2                         , ItemClassification.filler),
+    NPCName.MUSHROOM_EMBLEM_F             : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MUSHROOM_EMBLEM_F            , ItemClassification.progression),
+    NPCName.DANCING_GRANDMA               : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DANCING_GRANDMA              , ItemClassification.progression),
+    NPCName.DANCING_GRANDMA2              : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DANCING_GRANDMA2             , ItemClassification.progression),
+    NPCName.SNAIL_EMBLEM_E                : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL_EMBLEM_E               , ItemClassification.progression),
+    NPCName.BOY_MUSHROOM_SHOES            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.BOY_MUSHROOM_SHOES           , ItemClassification.progression),
+    NPCName.GRANDMA                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDMA                      , ItemClassification.filler),
+    NPCName.GIRL2                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GIRL2                        , ItemClassification.filler),
+    NPCName.MUSHROOM2                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MUSHROOM2                    , ItemClassification.progression),
+    NPCName.SNAIL_RACER                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL_RACER                  , ItemClassification.filler),
+    NPCName.SNAIL_RACER2                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL_RACER2                 , ItemClassification.filler),
+    NPCName.GIRL3                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GIRL3                        , ItemClassification.progression),
+    NPCName.MUSHROOM3                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MUSHROOM3                    , ItemClassification.filler),
+    NPCName.SNAIL                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL                        , ItemClassification.filler),
+    NPCName.GRANDPA3                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA3                     , ItemClassification.progression),
+    NPCName.SNAIL2                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SNAIL2                       , ItemClassification.filler),
+    NPCName.GRANDPA4                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA4                     , ItemClassification.progression),
+    NPCName.GRANDPA_LUNE                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA_LUNE                 , ItemClassification.progression),
+    NPCName.GRANDPA5                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GRANDPA5                     , ItemClassification.progression),
+    NPCName.MOUNTAIN_KING                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUNTAIN_KING                , ItemClassification.progression),
+    NPCName.PLANT_HERB                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.PLANT_HERB                   , ItemClassification.progression),
+    NPCName.PLANT                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.PLANT                        , ItemClassification.filler),
+    NPCName.CHEST_OF_DRAWERS_MYSTIC_ARMOR : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CHEST_OF_DRAWERS_MYSTIC_ARMOR, ItemClassification.progression),
+    NPCName.CAT                           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CAT                          , ItemClassification.progression),
+    NPCName.GREAT_DOOR_ZANTETSU_SWORD     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GREAT_DOOR_ZANTETSU_SWORD    , ItemClassification.progression),
+    NPCName.CAT2                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CAT2                         , ItemClassification.progression),
+    NPCName.GREAT_DOOR                    : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GREAT_DOOR                   , ItemClassification.progression),
+    NPCName.CAT3                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CAT3                         , ItemClassification.filler),
+    NPCName.MODEL_TOWN1                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MODEL_TOWN1                  , ItemClassification.progression),
+    NPCName.GREAT_DOOR_MODEL_TOWNS        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GREAT_DOOR_MODEL_TOWNS       , ItemClassification.progression),
+    NPCName.STEPS_UPSTAIRS                : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.STEPS_UPSTAIRS               , ItemClassification.progression),
+    NPCName.CAT_DOOR_KEY                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CAT_DOOR_KEY                 , ItemClassification.progression),
+    NPCName.MOUSE                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE                        , ItemClassification.progression),
+    NPCName.MARIE                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MARIE                        , ItemClassification.progression),
+    NPCName.DOLL                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DOLL                         , ItemClassification.filler),
+    NPCName.CHEST_OF_DRAWERS              : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CHEST_OF_DRAWERS             , ItemClassification.filler),
+    NPCName.PLANT2                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.PLANT2                       , ItemClassification.filler),
+    NPCName.MOUSE2                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE2                       , ItemClassification.filler),
+    NPCName.MOUSE_SPARK_BOMB              : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE_SPARK_BOMB             , ItemClassification.progression),
+    NPCName.MOUSE3                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE3                       , ItemClassification.filler),
+    NPCName.GREAT_DOOR_SOUL_OF_DETECTION  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.GREAT_DOOR_SOUL_OF_DETECTION , ItemClassification.useful), 
+    NPCName.MODEL_TOWN2                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MODEL_TOWN2                  , ItemClassification.progression),
+    NPCName.MOUSE4                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE4                       , ItemClassification.filler),
+    NPCName.STEPS_MARIE                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.STEPS_MARIE                  , ItemClassification.progression),
+    NPCName.CHEST_OF_DRAWERS2             : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CHEST_OF_DRAWERS2            , ItemClassification.progression),
+    NPCName.PLANT_ACTINIDIA_LEAVES        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.PLANT_ACTINIDIA_LEAVES       , ItemClassification.progression),
+    NPCName.MOUSE5                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MOUSE5                       , ItemClassification.filler),
+    NPCName.CAT4                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.CAT4                         , ItemClassification.filler),
+    NPCName.STAIRS_POWER_PLANT            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.STAIRS_POWER_PLANT           , ItemClassification.progression),
+    NPCName.SOLDIER                       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER                      , ItemClassification.filler),
+    NPCName.SOLDIER2                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER2                     , ItemClassification.filler),
+    NPCName.SOLDIER3                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER3                     , ItemClassification.filler),
+    NPCName.SOLDIER_ELEMENTAL_MAIL        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_ELEMENTAL_MAIL       , ItemClassification.progression),
+    NPCName.SOLDIER4                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER4                     , ItemClassification.filler),
+    NPCName.SOLDIER5                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER5                     , ItemClassification.filler),
+    NPCName.SINGER_CONCERT_HALL           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SINGER_CONCERT_HALL          , ItemClassification.progression),
+    NPCName.SOLDIER6                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER6                     , ItemClassification.filler),
+    NPCName.MAID                          : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MAID                         , ItemClassification.filler),
+    NPCName.SOLDIER_LEFT_TOWER            : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_LEFT_TOWER           , ItemClassification.progression),
+    NPCName.SOLDIER_DOK                   : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_DOK                  , ItemClassification.progression),
+    NPCName.SOLDIER_PLATINUM_CARD         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_PLATINUM_CARD        , ItemClassification.progression),
+    NPCName.SINGER                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SINGER                       , ItemClassification.filler),
+    NPCName.SOLDIER_SOUL_OF_REALITY       : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_SOUL_OF_REALITY      , ItemClassification.useful),
+    NPCName.MAID2                         : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MAID2                        , ItemClassification.filler),
+    NPCName.QUEEN_MAGRIDD                 : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.QUEEN_MAGRIDD                , ItemClassification.progression),
+    NPCName.SOLDIER_WITH_LEO              : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_WITH_LEO             , ItemClassification.progression),
+    NPCName.SOLDIER_RIGHT_TOWER           : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_RIGHT_TOWER          , ItemClassification.progression),
+    NPCName.DR_LEO                        : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.DR_LEO                       , ItemClassification.progression),
+    NPCName.SOLDIER7                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER7                     , ItemClassification.filler),
+    NPCName.SOLDIER8                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER8                     , ItemClassification.filler),
+    NPCName.MAID_HERB                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.MAID_HERB                    , ItemClassification.progression),
+    NPCName.SOLDIER_CASTLE                : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER_CASTLE               , ItemClassification.progression),
+    NPCName.SOLDIER9                      : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER9                     , ItemClassification.filler),
+    NPCName.SOLDIER10                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER10                    , ItemClassification.filler),
+    NPCName.SOLDIER11                     : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.SOLDIER11                    , ItemClassification.filler),
+    NPCName.KING_MAGRIDD                  : SoulBlazerItemData(ItemID.LAIR_RELEASE, NPCID.KING_MAGRIDD                 , ItemClassification.progression),
+}
+
+all_items_table = {
+    **items_table,
+    **npc_release_table,
+}

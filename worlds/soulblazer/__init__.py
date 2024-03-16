@@ -38,9 +38,13 @@ class SoulBlazerWorld(World):
     settings: typing.ClassVar[SoulBlazerSettings]  # will be automatically assigned from type hint
     # topology_present = True  # show path to required location checks in spoiler
 
-    # ID of first item and location, could be hard-coded but code may be easier
-    # to read with this as a property.
+    #Chosen randomly. Probably wont collide with any other game
     base_id = 374518970000
+    """Base ID for items and locations"""
+
+    lair_id_offset = 1000
+    """ID offset for lairids/NPC unlocks"""
+
     # Instead of dynamic numbering, IDs could be part of data.
 
     # The following two dicts are required for the generation to know which
