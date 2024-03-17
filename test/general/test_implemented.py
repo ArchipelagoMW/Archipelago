@@ -51,17 +51,24 @@ class TestImplemented(unittest.TestCase):
 
     def test_world_determinism(self):
         """Tests that the state of a generated multiworld is the same per world."""
-        for i in range(0, 5):
+        fill_iterations = 10
+        no_fill_iterations = 100
+        for i in range(fill_iterations+no_fill_iterations):
+            do_fill = i < fill_iterations
+            iteration_name = i if do_fill else i - fill_iterations
             for game_name, world_type in AutoWorldRegister.world_types.items():
-                with self.subTest(game=game_name, iteration=i):
+                with self.subTest(game=game_name, iteration=iteration_name, fill=do_fill):
                     seed = random.randint(0, pow(10, 20) - 1)
                     multi_one = setup_solo_multiworld(world_type, seed=seed)
                     multi_two = setup_solo_multiworld(world_type, seed=seed)
                     self.assertEqual(multi_one.random.randrange(99999), multi_two.random.randrange(99999))
-                    distribute_items_restrictive(multi_one)
-                    distribute_items_restrictive(multi_two)
-                    call_all(multi_one, "post_fill")
-                    call_all(multi_two, "post_fill")
+
+                    if do_fill:
+                        distribute_items_restrictive(multi_one)
+                        distribute_items_restrictive(multi_two)
+                        call_all(multi_one, "post_fill")
+                        call_all(multi_two, "post_fill")
+
                     for region_name in multi_one.regions.region_cache:
                         self.assertIn(region_name, multi_two.regions.region_cache)
                         self.assertEqual(list(multi_one.regions.region_cache.keys()).index(region_name),
