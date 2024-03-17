@@ -226,9 +226,9 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         world.spoiler_portal_mapping[in_portal] = exit_string
         connect_portal(world, in_portal, exit_string)
 
-        available_portals.remove(warp)
         if shuffle_type < ShufflePortals.option_anywhere:
             available_portals = [port for port in available_portals if port not in shop_points[parent]]
+            world.random.shuffle(available_portals)
 
     def handle_planned_portals(plando_connections: List[PlandoConnection]) -> None:
         """checks the provided plando connections for portals and connects them"""
@@ -248,6 +248,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
             shop_points[area] += points
     out_to_parent = {checkpoint: parent for parent, checkpoints in shop_points.items() for checkpoint in checkpoints}
     available_portals = [val for zone in shop_points.values() for val in zone]
+    world.random.shuffle(available_portals)
 
     plando = world.multiworld.plando_connections[world.player]
     if plando and world.multiworld.plando_options & PlandoOptions.connections:
@@ -257,7 +258,7 @@ def shuffle_portals(world: "MessengerWorld") -> None:
     for portal in PORTALS:
         if portal in world.plando_portals:
             continue
-        warp_point = world.random.choice(available_portals)
+        warp_point = available_portals.pop()
         create_mapping(portal, warp_point)
 
 
