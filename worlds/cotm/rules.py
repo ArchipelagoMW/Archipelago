@@ -83,3 +83,5 @@ class CotMRules:
                 loc_rule = get_location_info(loc.name, "rule")
                 if loc_rule is not None:
                     loc.access_rule = self.rules[loc_rule]
+
+        multiworld.completion_condition[self.player] = lambda state: state.has(iname.victory, self.player)

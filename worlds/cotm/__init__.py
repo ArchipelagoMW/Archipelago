@@ -50,11 +50,11 @@ class CotMWorld(World):
     through Camilla's castle and rescue your master.
     """
     game = "Castlevania Circle of the Moon"
-    item_name_groups = {
-        "Card": {},
-        "Action Card": {},
-        "Attribute Card": {},
-    }
+    # item_name_groups = {
+    #     "Card": {},
+    #     "Action Card": {},
+    #     "Attribute Card": {},
+    # }
     # location_name_groups = {stage: set(get_locations_from_stage(stage)) for stage in vanilla_stage_order}
     options_dataclass = CotMOptions
     options: CotMOptions
