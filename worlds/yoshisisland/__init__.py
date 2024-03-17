@@ -179,12 +179,12 @@ class YoshisIslandWorld(World):
 
     def set_rules(self) -> None:
         rules_per_difficulty = {
-            0: set_easy_rules(self),
-            1: set_normal_rules(self),
-            2: set_hard_rules(self)
+            0: set_easy_rules,
+            1: set_normal_rules,
+            2: set_hard_rules
         }
 
-        rules_per_difficulty[self.options.stage_logic]
+        rules_per_difficulty[self.options.stage_logic](self)
         self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
         self.multiworld.get_location("Burt The Bashful's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
         self.multiworld.get_location("Salvo The Slime's Boss Room", self.player).place_locked_item(self.create_item("Boss Clear"))
