@@ -8,44 +8,54 @@ if TYPE_CHECKING:
 
 
 def water_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Water Pot Bottom", "Water Pot Top", "Water Pot Bottom DUPE", "Water Pot Top DUPE"}, player)
+    return state.has_all({"Water Pot Bottom", "Water Pot Top", "Water Pot Bottom DUPE", "Water Pot Top DUPE"}, player) or \
+        state.has_all({"Water Pot Complete", "Water Pot Complete DUPE"}, player)
 
 
 def wax_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Wax Pot Bottom", "Wax Pot Top", "Wax Pot Bottom DUPE", "Wax Pot Top DUPE"}, player)
+    return state.has_all({"Wax Pot Bottom", "Wax Pot Top", "Wax Pot Bottom DUPE", "Wax Pot Top DUPE"}, player) or \
+        state.has_all({"Wax Pot Complete", "Wax Pot Complete DUPE"}, player)
 
 
 def ash_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Ash Pot Bottom", "Ash Pot Top", "Ash Pot Bottom DUPE", "Ash Pot Top DUPE"}, player)
+    return state.has_all({"Ash Pot Bottom", "Ash Pot Top", "Ash Pot Bottom DUPE", "Ash Pot Top DUPE"}, player) or \
+        state.has_all({"Ash Pot Complete", "Ash Pot Complete DUPE"}, player)
 
 
 def oil_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Oil Pot Bottom", "Oil Pot Top", "Oil Pot Bottom DUPE", "Oil Pot Top DUPE"}, player)
+    return state.has_all({"Oil Pot Bottom", "Oil Pot Top", "Oil Pot Bottom DUPE", "Oil Pot Top DUPE"}, player) or \
+        state.has_all({"Oil Pot Complete", "Oil Pot Complete DUPE"}, player)
 
 
 def cloth_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Cloth Pot Bottom", "Cloth Pot Top", "Cloth Pot Bottom DUPE", "Cloth Pot Top DUPE"}, player)
+    return state.has_all({"Cloth Pot Bottom", "Cloth Pot Top", "Cloth Pot Bottom DUPE", "Cloth Pot Top DUPE"}, player) or \
+        state.has_all({"Cloth Pot Complete", "Cloth Pot Complete DUPE"}, player)
 
 
 def wood_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Wood Pot Bottom", "Wood Pot Top", "Wood Pot Bottom DUPE", "Wood Pot Top DUPE"}, player)
+    return state.has_all({"Wood Pot Bottom", "Wood Pot Top", "Wood Pot Bottom DUPE", "Wood Pot Top DUPE"}, player) or \
+        state.has_all({"Wood Pot Complete", "Wood Pot Complete DUPE"}, player)
 
 
 def crystal_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Crystal Pot Bottom", "Crystal Pot Top", "Crystal Pot Bottom DUPE", "Crystal Pot Top DUPE"}, player)
+    return state.has_all({"Crystal Pot Bottom", "Crystal Pot Top", "Crystal Pot Bottom DUPE", "Crystal Pot Top DUPE"}, player) or \
+        state.has_all({"Crystal Pot Complete", "Crystal Pot Complete DUPE"}, player)
 
 
 def sand_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Sand Pot Bottom", "Sand Pot Top", "Sand Pot Bottom DUPE", "Sand Pot Top DUPE"}, player)
+    return state.has_all({"Sand Pot Bottom", "Sand Pot Top", "Sand Pot Bottom DUPE", "Sand Pot Top DUPE"}, player) or \
+        state.has_all({"Sand Pot Complete", "Sand Pot Complete DUPE"}, player)
 
 
 def metal_capturable(state: CollectionState, player: int) -> bool:
-    return state.has_all({"Metal Pot Bottom", "Metal Pot Top", "Metal Pot Bottom DUPE", "Metal Pot Top DUPE"}, player)
+    return state.has_all({"Metal Pot Bottom", "Metal Pot Top", "Metal Pot Bottom DUPE", "Metal Pot Top DUPE"}, player) or \
+        state.has_all({"Metal Pot Complete", "Metal Pot Complete DUPE"}, player)
 
 
 def lightning_capturable(state: CollectionState, player: int) -> bool:
     return (first_nine_ixupi_capturable or state.multiworld.early_lightning[player].value) \
-        and state.has_all({"Lightning Pot Bottom", "Lightning Pot Top", "Lightning Pot Bottom DUPE", "Lightning Pot Top DUPE"}, player)
+        and (state.has_all({"Lightning Pot Bottom", "Lightning Pot Top", "Lightning Pot Bottom DUPE", "Lightning Pot Top DUPE"}, player) or \
+             state.has_all({"Lightning Pot Complete", "Lightning Pot Complete DUPE"}, player))
 
 
 def beths_body_available(state: CollectionState, player: int) -> bool:
@@ -185,8 +195,10 @@ def set_rules(world: "ShiversWorld") -> None:
     # forbid cloth in janitor closet and oil in tar river
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Janitor Closet", player), "Cloth Pot Complete DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Bottom DUPE", player)
     forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Top DUPE", player)
+    forbid_item(multiworld.get_location("Accessible: Storage: Tar River", player), "Oil Pot Complete DUPE", player)
 
     # Filler Item Forbids
     forbid_item(multiworld.get_location("Puzzle Solved Lyre", player), "Easier Lyre", player)

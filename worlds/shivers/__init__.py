@@ -30,6 +30,8 @@ class ShiversWorld(World):
 
     item_name_to_id = {name: data.code for name, data in item_table.items()}
     location_name_to_id = Constants.location_name_to_id
+    pot_completed_list = []
+    shivers_item_id_offset = 27000
     
     def create_item(self, name: str) -> Item:
         data = item_table[name]
@@ -78,8 +80,27 @@ class ShiversWorld(World):
         #Add items to item pool
         itempool = []
         for name, data in item_table.items():
-            if data.type in {"pot", "key", "ability", "filler2"}:
+            if data.type in {"key", "ability", "filler2"}:
                 itempool.append(self.create_item(name))
+
+        # Pot pieces/Completed/Mixed:
+        for i in range(10):
+            if self.options.full_pots == 0:
+                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
+                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
+            elif self.options.full_pots == 1:
+                itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
+            else:
+                # Roll for if pieces or a complete pot will be used.
+                # Pot Pieces
+                if self.random.randint(0, 1) == 0:
+                    self.pot_completed_list.append(0)
+                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + i]))
+                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 10 + i]))
+                # Completed Pot
+                else:
+                    self.pot_completed_list.append(1)
+                    itempool.append(self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 20 + i]))
 
         #Add Filler
         itempool += [self.create_item("Easier Lyre") for i in range(9)]
@@ -87,7 +108,6 @@ class ShiversWorld(World):
         #Extra filler is random between Heals and Easier Lyre. Heals weighted 95%.
         filler_needed = len(self.multiworld.get_unfilled_locations(self.player)) - 24 - len(itempool)
         itempool += [self.random.choices([self.create_item("Heal"), self.create_item("Easier Lyre")], weights=[95, 5])[0] for i in range(filler_needed)]
-
 
         #Place library escape items. Choose a location to place the escape item
         library_region = self.multiworld.get_region("Library", self.player)
@@ -140,9 +160,9 @@ class ShiversWorld(World):
 
         #Pot piece shuffle location:
         if self.options.location_pot_pieces == 0:
-            self.options.local_items.value.update({name for name, data in item_table.items() if data.type == "pot"})
+            self.options.local_items.value.update({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
         if self.options.location_pot_pieces == 1:
-            self.options.non_local_items.value.update({name for name, data in item_table.items() if data.type == "pot"})
+            self.options.non_local_items.value.update({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
 
         #Ixupi captures priority locations:
         if self.options.ixupi_captures_priority == 1:
@@ -159,7 +179,26 @@ class ShiversWorld(World):
                 if loc_name.startswith("Accessible: "):
                     storagelocs.append(self.multiworld.get_location(loc_name, self.player))
 
-        storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
+        #Pot pieces/Completed/Mixed:
+        if self.options.full_pots == 0:
+            storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate']
+        elif self.options.full_pots == 1:
+            storageitems += [self.create_item(name) for name, data in item_table.items() if data.type == 'potduplicate_type2']
+            storageitems += [self.create_item("Empty") for i in range(10)]
+        else:
+            for i in range(10):
+                #Pieces
+                if self.pot_completed_list[i] == 0:
+                    self.pot_completed_list.append(0)
+                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 70 + i])]
+                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 80 + i])]
+                #Complete
+                else:
+                    self.pot_completed_list.append(1)
+                    storageitems += [self.create_item(self.item_id_to_name[self.shivers_item_id_offset + 140 + i])]
+                    storageitems += [self.create_item("Empty")]
+
+
         storageitems += [self.create_item("Empty") for i in range(3)]
 
         state = self.multiworld.get_all_state(True)

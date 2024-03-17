@@ -56,10 +56,6 @@ class EarlyLightning(Toggle):
     """
     display_name = "Early Lightning"
 
-class IxupiCapturesPriority(DefaultOnToggle):
-    """Ixupi captures are set to priority locations. This forces a progression item into these locations if possible."""
-    display_name = "Ixupi Captures are Priority"
-
 class LocationPotPieces(Choice):
     """Chooses where pot pieces will be located within the multiworld.
     - Own World: Pot pieces will be located within your own world
@@ -69,6 +65,20 @@ class LocationPotPieces(Choice):
     option_own_world = 0
     option_different_world = 1
     option_any_world = 2
+
+class FullPots(Choice):
+    """Chooses if pots will be in pieces or already completed
+    - Pieces: Only pot pieces will be added to the item pool
+    - Complete: Only completed pots will be added to the item pool
+    - Mixed: Each pot will be randomly chosen to be pieces or already completed."""
+    display_name = "Full Pots"
+    option_pieces = 0
+    option_complete = 1
+    option_mixed = 2
+
+class IxupiCapturesPriority(DefaultOnToggle):
+    """Ixupi captures are set to priority locations. This forces a progression item into these locations if possible."""
+    display_name = "Ixupi Captures are Priority"
 
 
 @dataclass
@@ -83,3 +93,4 @@ class ShiversOptions(PerGameCommonOptions):
     early_lightning: EarlyLightning
     location_pot_pieces: LocationPotPieces
     ixupi_captures_priority: IxupiCapturesPriority
+    full_pots: FullPots
