@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, PerGameCommonOptions
+from Options import DefaultOnToggle, Toggle, StartInventoryPool, Choice, Range, TextChoice, PerGameCommonOptions
 
 
 class SwordProgression(DefaultOnToggle):
@@ -30,7 +30,7 @@ class AbilityShuffling(Toggle):
     player-facing codes.
     """
     internal_name = "ability_shuffling"
-    display_name = "Ability Shuffling"
+    display_name = "Shuffle Abilities"
 
 
 class LogicRules(Choice):
@@ -104,18 +104,24 @@ class ExtraHexagonPercentage(Range):
     default = 50
 
 
-class EntranceRando(Toggle):
+class EntranceRando(TextChoice):
     """Randomize the connections between scenes.
+    You can choose a custom seed by editing this option.
     A small, very lost fox on a big adventure."""
     internal_name = "entrance_rando"
     display_name = "Entrance Rando"
+    alias_false = 0
+    option_no = 0
+    alias_true = 1
+    option_yes = 1
+    default = 0
 
 
 class FixedShop(Toggle):
     """Forces the Windmill entrance to lead to a shop, and places only one other shop in the pool.
     Has no effect if Entrance Rando is not enabled."""
     internal_name = "fixed_shop"
-    display_name = "ER Fixed Shop"
+    display_name = "Fewer Shops in Entrance Rando"
 
 
 class LaurelsLocation(Choice):
