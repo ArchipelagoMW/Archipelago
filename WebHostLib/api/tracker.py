@@ -55,6 +55,15 @@ def tracker_data(tracker: UUID):
     }
     """Slot aliases of all players."""
 
+    games: Dict[int, Dict[int, str]] ={
+        team: {
+            player: tracker_data.get_player_game(team, player)
+            for player in players
+        }
+        for team, players in all_players.items()
+    }
+    """The game each player is playing."""
+
     player_items_received: Dict[int, Dict[int, List[NetworkItem]]] = {
         team: {
             player: tracker_data.get_player_received_items(team, player)
@@ -132,14 +141,12 @@ def tracker_data(tracker: UUID):
     }
     """Slot data for each player."""
 
-    seed: str = tracker_data.get_seed_name()
-    """The Seed name for this multiworld."""
-
     return jsonify(
         {
             "groups": groups,
             "player_names": player_names,
             "player_aliases": player_aliases,
+            "games": games,
             "player_items_received": player_items_received,
             "player_checks_done": player_checks_done,
             "total_checks_done": total_checks_done,
