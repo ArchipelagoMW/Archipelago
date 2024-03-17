@@ -85,8 +85,8 @@ class YuGiOh2006Client(BizHawkClient):
                                             [(0x6c38,
                                               (money + (money_received - amount_items) * 5000).to_bytes(4, "little"),
                                               "EWRAM"),
-                                             (0x5325, money_received.to_bytes(4, "little"), "EWRAM")],
-                                            [(0x6c38, money.to_bytes(2, "little"), "EWRAM"),
+                                             (0x5325, money_received.to_bytes(2, "little"), "EWRAM")],
+                                            [(0x6c38, money.to_bytes(4, "little"), "EWRAM"),
                                              (0x5325, amount_items.to_bytes(2, "little"), "EWRAM")])
 
             locs_to_send = set()
