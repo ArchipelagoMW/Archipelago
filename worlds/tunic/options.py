@@ -31,14 +31,16 @@ class AbilityShuffling(Toggle):
 
 
 class LogicRules(Choice):
-    """Set which logic rules to use for your world.
+    """
+    Set which logic rules to use for your world.
     Restricted: Standard logic, no glitches.
     No Major Glitches: Sneaky Laurels zips, ice grapples through doors, shooting the west bell, and boss quick kills are included in logic.
     * Ice grappling through the Ziggurat door is not in logic since you will get stuck in there without Prayer.
     Unrestricted: Logic in No Major Glitches, as well as ladder storage to get to certain places early.
-    *Special Shop is not in logic without the Hero's Laurels due to soft lock potential.
+    *Torch is given to the player at the start of the game due to the high softlock potential with various tricks. Using the torch is not required in logic.
     *Using Ladder Storage to get to individual chests is not in logic to avoid tedium.
-    *Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on."""
+    *Getting knocked out of the air by enemies during Ladder Storage to reach places is not in logic, except for in Rooted Ziggurat Lower. This is so you're not punished for playing with enemy rando on.
+    """
     internal_name = "logic_rules"
     display_name = "Logic Rules"
     option_restricted = 0
