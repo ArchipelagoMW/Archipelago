@@ -7,7 +7,7 @@ from enum import IntEnum
 import os
 import threading
 
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO
+from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload
 
 import bsdiff4
 
@@ -39,8 +39,7 @@ class AutoPatchRegister(abc.ABCMeta):
         return None
 
 
-
-class AutoPatchExtensionRegister(type):
+class AutoPatchExtensionRegister(abc.ABCMeta):
     extension_types: ClassVar[Dict[str, AutoPatchExtensionRegister]] = {}
     required_extensions: List[str] = []
 
@@ -64,6 +63,7 @@ class AutoPatchExtensionRegister(type):
             return handlers
         else:
             return handler
+
 
 container_version: int = 6
 
@@ -296,7 +296,7 @@ class APTokenMixin:
     A class that defines functions for generating a token binary, for use in patches.
     """
     tokens: List[
-        Tuple[int, int,
+        Tuple[APTokenTypes, int,
         Union[
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
@@ -314,16 +314,42 @@ class APTokenMixin:
             data.append(token_type)
             data.extend(offset.to_bytes(4, "little"))
             if token_type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
+                assert isinstance(args, int), f"Arguments to AND/OR/XOR must be of type int, not {type(args)}"
                 data.extend(int.to_bytes(1, 4, "little"))
                 data.append(args)
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
+                assert isinstance(args, tuple), f"Arguments to COPY/RLE must be of type tuple, not {type(args)}"
                 data.extend(int.to_bytes(4, 4, "little"))
                 data.extend(args[0].to_bytes(4, "little"))
                 data.extend(args[1].to_bytes(4, "little"))
-            else:
+            elif token_type == APTokenTypes.WRITE:
+                assert isinstance(args, bytes), f"Arguments to WRITE must be of type bytes, not {type(args)}"
                 data.extend(len(args).to_bytes(4, "little"))
                 data.extend(args)
-        return data
+            else:
+                raise ValueError(f"Unknown token type {token_type}")
+        return bytes(data)
+
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8],
+                    offset: int,
+                    data: int) -> None:
+        ...
+
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.COPY, APTokenTypes.RLE],
+                    offset: int,
+                    data: Tuple[int, int]) -> None:
+        ...
+
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.WRITE],
+                    offset: int,
+                    data: bytes) -> None:
+        ...
 
     def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]):
         """
@@ -382,7 +408,7 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
             else:
                 rom_data[offset:offset + len(data)] = data
             bpr += 9 + size
-        return rom_data
+        return bytes(rom_data)
 
     @staticmethod
     def calc_snes_crc(caller: APProcedurePatch, rom: bytes):
@@ -393,4 +419,4 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         crc = (sum(rom_data[:0x7FDC] + rom_data[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         rom_data[0x7FDC:0x7FE0] = [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF]
-        return rom_data
+        return bytes(rom_data)
