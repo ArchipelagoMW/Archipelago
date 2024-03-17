@@ -19,6 +19,13 @@
   Mod interactions can be unpredictable, and no support will be offered for related bugs.
     * The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
+## Notes About Game Versions
+The randomizer is built for a specific version of Stardew Valley. When a new version gets released, we will try our best to support it as fast as possible, but can't make promises.
+
+You may need to downgrade your game in order to play Archipelago when Stardew Valley itself has had a recent update.
+
+The SMAPI mod will tell you what version is currently supported.
+
 ## Configuring your YAML file
 
 ### What is a YAML file and why do I need one?
@@ -37,8 +44,7 @@ You can customize your options by visiting the [Stardew Valley Player Options Pa
 - Install [SMAPI](https://smapi.io/) by following the instructions on their website
 - Download and extract the [StardewArchipelago](https://github.com/agilbert1412/StardewArchipelago/releases) mod into 
 your Stardew Valley "Mods" folder
-- *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options:
-    - "[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%
+- *OPTIONAL*: If you want to launch your game through Steam, add the following to your Stardew Valley launch options: `"[PATH TO STARDEW VALLEY]\Stardew Valley\StardewModdingAPI.exe" %command%`
 - Otherwise just launch "StardewModdingAPI.exe" in your installation folder directly
 - Stardew Valley should launch itself alongside a console which allows you to read mod information and interact with some of them.
 
