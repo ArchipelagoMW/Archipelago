@@ -160,13 +160,13 @@ class ShiversWorld(World):
 
         #Pot piece shuffle location:
         if self.options.location_pot_pieces == 0:
-            self.options.local_items.value.update({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
+            self.options.local_items.value |= ({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
         if self.options.location_pot_pieces == 1:
-            self.options.non_local_items.value.update({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
+            self.options.non_local_items.value |= ({name for name, data in item_table.items() if data.type == "pot" or data.type == "pot_type2"})
 
         #Ixupi captures priority locations:
         if self.options.ixupi_captures_priority == 1:
-            self.options.priority_locations.value.update({name for name in self.location_names if name.startswith('Ixupi Captured')})
+            self.options.priority_locations.value |= ({name for name in self.location_names if name.startswith('Ixupi Captured')})
 
     def pre_fill(self) -> None:
         # Prefills event storage locations with duplicate pots
