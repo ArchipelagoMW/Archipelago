@@ -1,5 +1,6 @@
 import typing
-from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice
+from dataclasses import dataclass, make_dataclass
+from Options import Option, DefaultOnToggle, Range, Toggle, DeathLink, Choice, PerGameCommonOptions
 from .Items import action_item_table
 
 class EnableCoinStars(DefaultOnToggle):
@@ -114,35 +115,39 @@ class StrictMoveRequirements(DefaultOnToggle):
     if Move Randomization is enabled"""
     display_name = "Strict Move Requirements"
 
-def getMoveRandomizerOption(action: str):
-    class MoveRandomizerOption(Toggle):
-        """Mario is unable to perform this action until a corresponding item is picked up.
-        This option is incompatible with builds using a 'nomoverando' branch."""
-        display_name = f"Randomize {action}"
-    return MoveRandomizerOption
+class MoveRandomizerOption(Toggle):
+    """Mario is unable to perform this action until a corresponding item is picked up.
+    This option is incompatible with builds using a 'nomoverando' branch."""
 
+for action in action_item_table:
+    move_option_class_name = f"MoveRandoOption_{action.replace(' ','')}"
+    vars()[move_option_class_name] = type(move_option_class_name, MoveRandomizerOption.__bases__, dict(MoveRandomizerOption.__dict__))
+    vars()[move_option_class_name].display_name = f"Randomize {action}"
 
-sm64_options: typing.Dict[str, type(Option)] = {
-    "AreaRandomizer": AreaRandomizer,
-    "BuddyChecks": BuddyChecks,
-    "ExclamationBoxes": ExclamationBoxes,
-    "ProgressiveKeys": ProgressiveKeys,
-    "EnableCoinStars": EnableCoinStars,
-    "StrictCapRequirements": StrictCapRequirements,
-    "StrictCannonRequirements": StrictCannonRequirements,
-    "StrictMoveRequirements": StrictMoveRequirements,
-    "AmountOfStars": AmountOfStars,
-    "FirstBowserStarDoorCost": FirstBowserStarDoorCost,
-    "BasementStarDoorCost": BasementStarDoorCost,
-    "SecondFloorStarDoorCost": SecondFloorStarDoorCost,
-    "MIPS1Cost": MIPS1Cost,
-    "MIPS2Cost": MIPS2Cost,
-    "StarsToFinish": StarsToFinish,
-    "death_link": DeathLink,
-    "CompletionType": CompletionType,
-}
+dataclass_members = [
+    ("area_rando", AreaRandomizer),
+    ("buddy_checks", BuddyChecks),
+    ("exclamation_boxes", ExclamationBoxes),
+    ("progressive_keys", ProgressiveKeys),
+    ("enable_coin_stars", EnableCoinStars),
+    ("strict_cap_requirements", StrictCapRequirements),
+    ("strict_cannon_requirements", StrictCannonRequirements),
+    ("strict_move_requirements", StrictMoveRequirements),
+    ("amount_of_stars", AmountOfStars),
+    ("first_bowser_star_door_cost", FirstBowserStarDoorCost),
+    ("basement_star_door_cost", BasementStarDoorCost),
+    ("second_floor_star_door_cost", SecondFloorStarDoorCost),
+    ("mips1_cost", MIPS1Cost),
+    ("mips2_cost", MIPS2Cost),
+    ("stars_to_finish", StarsToFinish),
+    ("death_link", DeathLink),
+    ("completion_type", CompletionType)
+]
 
 for action in action_item_table:
     # HACK: Disable randomization of double jump
     if action == 'Double Jump': continue
-    sm64_options[f"MoveRandomizer{action.replace(' ','')}"] = getMoveRandomizerOption(action)
+    dataclass_members.append((f"move_randomizer_{action.replace(' ','')}", vars()[f"MoveRandoOption_{action.replace(' ','')}"]))
+
+SM64Options = make_dataclass(cls_name="SM64Options", fields=dataclass_members, bases=(PerGameCommonOptions,))
+
