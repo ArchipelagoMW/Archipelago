@@ -64,7 +64,7 @@ class YoshisIslandSNIClient(SNIClient):
         ctx.items_handling = 0b111  # remote items
         ctx.rom = rom_name
 
-        death_link = await snes_read(ctx, YDEATHLINK_ADDR, 1)
+        death_link = await snes_read(ctx, DEATHLINK_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True
