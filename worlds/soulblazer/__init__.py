@@ -2,7 +2,7 @@ import settings
 import typing
 from .Options import SoulBlazerOptions  # the options we defined earlier
 from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table  # data used below to add items to the World
-from .Locations import SoulBlazerLocation  # same as above
+from .Locations import SoulBlazerLocation, all_locations_table  # same as above
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
 
@@ -55,11 +55,12 @@ class SoulBlazerWorld(World):
     # include events, but don't have to since events will be placed manually.
     item_name_to_id = {name: data.code for
                        name, data in all_items_table.items()}
-    location_name_to_id = {name: id for
-                           id, name in enumerate(mygame_locations, base_id)}
+    location_name_to_id = {name: data.code for
+                       name, data in all_locations_table.items()}
 
     # Items can be grouped using their names to allow easy checking if any item
     # from that group has been collected. Group names can also be used for !hint
+    # TODO: Define groups?
     item_name_groups = {
         "weapons": {"sword", "lance"},
     }
