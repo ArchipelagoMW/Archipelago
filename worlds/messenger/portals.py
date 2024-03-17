@@ -213,12 +213,12 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         if "Portal" in warp:
             exit_string += "Portal"
             world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}00"))
-        elif warp_point in SHOP_POINTS[parent]:
-            exit_string += f"{warp_point} Shop"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp_point)}"))
+        elif warp in SHOP_POINTS[parent]:
+            exit_string += f"{warp} Shop"
+            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}1{SHOP_POINTS[parent].index(warp)}"))
         else:
-            exit_string += f"{warp_point} Checkpoint"
-            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp_point)}"))
+            exit_string += f"{warp} Checkpoint"
+            world.portal_mapping.append(int(f"{REGION_ORDER.index(parent)}2{CHECKPOINTS[parent].index(warp)}"))
 
         world.spoiler_portal_mapping[in_portal] = exit_string
         connect_portal(world, in_portal, exit_string)
