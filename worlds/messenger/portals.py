@@ -250,6 +250,8 @@ def shuffle_portals(world: "MessengerWorld") -> None:
         world.multiworld.plando_connections[world.player] = [connection for connection in plando
                                                              if connection.entrance not in PORTALS]
     for portal in PORTALS:
+        if portal in world.plando_portals:
+            continue
         warp_point = world.random.choice(available_portals)
         create_mapping(portal, warp_point)
 
