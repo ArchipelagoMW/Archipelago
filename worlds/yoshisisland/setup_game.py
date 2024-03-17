@@ -1,10 +1,10 @@
 import struct
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import YIWorld
+    from . import YoshisIslandWorld
 
 
-def setup_gamevars(world: "YIWorld") -> None:
+def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.playergoal = world.options.goal.value
     if world.options.luigi_pieces_in_pool.value < world.options.luigi_pieces_required.value:
         world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)

@@ -5,7 +5,7 @@ from worlds.Files import APDeltaPatch
 from settings import get_settings
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import YIWorld
+    from . import YoshisIslandWorld
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
 ROM_PLAYER_LIMIT = 65535
 
@@ -1028,7 +1028,7 @@ def ExtendedItemHandler(rom: LocalRom) -> None:
     rom.write_bytes(0x10B440, bytearray([0x01, 0xA9, 0x97, 0x8D, 0x53, 0x00, 0x5C, 0x0A, 0xF5, 0x0B, 0xFA, 0x5C, 0x10, 0xF5, 0x0B]))
 
 
-def patch_rom(world: "YIWorld", rom: LocalRom, player: int) -> None:
+def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     handle_items(rom) #Implement main item functionality
     Item_Data(rom) #Pointers necessary for item functionality
     write_lives(rom) #Writes the number of lives as set in AP
@@ -1191,7 +1191,7 @@ def patch_rom(world: "YIWorld", rom: LocalRom, player: int) -> None:
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)
 
-class YIDeltaPatch(APDeltaPatch):
+class YoshisIslandDeltaPatch(APDeltaPatch):
     hash = USHASH
     game: str = "Yoshi's Island"
     patch_file_ending = ".apyi"

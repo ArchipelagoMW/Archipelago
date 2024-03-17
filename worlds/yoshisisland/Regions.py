@@ -4,9 +4,9 @@ from .Locations import LocationData
 from .level_logic import YoshiLogic
 from .setup_bosses import BossReqs
 if TYPE_CHECKING:
-    from . import YIWorld
+    from . import YoshisIslandWorld
 
-class YILocation(Location):
+class YoshisIslandLocation(Location):
     game: str = "Yoshi's Island"
     LevelID: int
 
@@ -15,7 +15,7 @@ class YILocation(Location):
         self.LevelID = LevelID
 
 
-def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
+def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> None:
     multiworld = world.multiworld
     player = world.player
     location_cache = world.location_cache
@@ -176,14 +176,14 @@ def init_areas(world: "YIWorld", locations: List[LocationData]) -> None:
             {'6-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 6'}, player)})
 
 def create_location(player: int, location_data: LocationData, region: Region, location_cache: List[Location]) -> Location:
-    location = YILocation(player, location_data.name, location_data.code, region)
+    location = YoshisIslandLocation(player, location_data.name, location_data.code, region)
     location.access_rule = location_data.rule
     location.LevelID = location_data.LevelID
     location_cache.append(location)
 
     return location
 
-def create_region(world: "YIWorld", player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
+def create_region(world: "YoshisIslandWorld", player: int, locations_per_region: Dict[str, List[LocationData]], location_cache: List[Location], name: str) -> Region:
     region = Region(name, player, world.multiworld)
 
     if name in locations_per_region:
@@ -193,7 +193,7 @@ def create_region(world: "YIWorld", player: int, locations_per_region: Dict[str,
 
     return region
 
-def connect_starting_region(world: "YIWorld") -> None:
+def connect_starting_region(world: "YoshisIslandWorld") -> None:
     multiworld = world.multiworld
     player = world.player
     menu = multiworld.get_region('Menu', player)

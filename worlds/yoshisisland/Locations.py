@@ -1,6 +1,6 @@
 from typing import List, Optional, Callable, NamedTuple, TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import YIWorld
+    from . import YoshisIslandWorld
 from .level_logic import YoshiLogic
 
 
@@ -12,7 +12,7 @@ class LocationData(NamedTuple):
     rule: Callable = lambda state: True
 
 
-def get_locations(world: Optional["YIWorld"]) -> List[LocationData]:
+def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
     if world:
         logic = YoshiLogic(world)
 
@@ -313,7 +313,7 @@ def get_locations(world: Optional["YIWorld"]) -> List[LocationData]:
             LocationData("6-Extra", "Castles - Masterpiece Set: Level Clear", 0x3050F7, 0x44),
         ]
 
-    if not world or world.options.minigame_checks.value == 1 or world.options.minigame_checks.value == 3:
+    if not world or world.options.minigame_checks in (1, 3):
         location_table += [
             LocationData("1-3", "The Cave Of Chomp Rock: Bandit Game", 0x3050F8, 0x02, lambda state: logic._13Game(state)),
             LocationData("1-7", "Touch Fuzzy Get Dizzy: Bandit Game", 0x3050F9, 0x06, lambda state: logic._17Game(state)),

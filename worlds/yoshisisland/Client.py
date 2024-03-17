@@ -25,7 +25,7 @@ ITEM_RECEIVED = WRAM_START + 0x1467
 DEATH_RECEIVED = WRAM_START + 0x7E23B0
 GAME_MODE = WRAM_START + 0x0118
 YOSHI_STATE = SRAM_START + 0x00AC
-YI_DEATHLINK_ADDR = ROM_START + 0x06FC8C
+DEATHLINK_ADDR = ROM_START + 0x06FC8C
 DEATHMUSIC_FLAG = WRAM_START + 0x004F
 DEATHFLAG = WRAM_START + 0x00DB
 DEATHLINKRECV = WRAM_START + 0x00E0
@@ -33,7 +33,7 @@ GOALFLAG = WRAM_START + 0x14B6
 
 VALID_GAME_STATES = [0x0F, 0x10, 0x2C]
 
-class YISNIClient(SNIClient):
+class YoshisIslandSNIClient(SNIClient):
     game = "Yoshi's Island"
 
     async def deathlink_kill_player(self, ctx: "SNIContext") -> None:
@@ -64,7 +64,7 @@ class YISNIClient(SNIClient):
         ctx.items_handling = 0b111  # remote items
         ctx.rom = rom_name
 
-        death_link = await snes_read(ctx, YI_DEATHLINK_ADDR, 1)
+        death_link = await snes_read(ctx, YDEATHLINK_ADDR, 1)
         if death_link:
             await ctx.update_death_link(bool(death_link[0] & 0b1))
         return True

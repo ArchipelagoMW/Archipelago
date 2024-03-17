@@ -3,9 +3,9 @@ from worlds.generic.Rules import set_rule
 from BaseClasses import MultiWorld
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from . import YIWorld
+    from . import YoshisIslandWorld
 
-def set_easy_rules(world: "YIWorld") -> None:
+def set_easy_rules(world: "YoshisIslandWorld") -> None:
     logic = YoshiLogic(world)
     player = world.player
 
@@ -205,9 +205,11 @@ def set_easy_rules(world: "YIWorld") -> None:
     set_rule(world.multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68CollectibleRoute(state))
     set_rule(world.multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68Route(state))
 
-    set_easy_extra_rules(world, player, logic)
+    set_easy_extra_rules(world)
 
-def set_easy_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> None:
+def set_easy_extra_rules(world: "YoshisIslandWorld") -> None:
+    player = world.player
+    logic = YoshiLogic(world)
     if not world.options.extras_enabled:
         return
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
@@ -235,7 +237,7 @@ def set_easy_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> No
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 2) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
 
         
-def set_normal_rules(world: "YIWorld") -> None:
+def set_normal_rules(world: "YoshisIslandWorld") -> None:
     logic = YoshiLogic(world)
     multiworld = world.multiworld
     player = world.player
@@ -410,9 +412,11 @@ def set_normal_rules(world: "YIWorld") -> None:
     set_rule(world.multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68CollectibleRoute(state))
     set_rule(world.multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph', 'Egg Plant'}, player) and logic._68Route(state))
 
-    set_normal_extra_rules(world, player, logic)
+    set_normal_extra_rules(world)
 
-def set_normal_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> None:
+def set_normal_extra_rules(world: "YoshisIslandWorld") -> None:
+    player = world.player
+    logic = YoshiLogic(world)
     if not world.options.extras_enabled:
         return
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
@@ -439,7 +443,7 @@ def set_normal_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> 
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: logic.has_midring(state) or state.has(('Large Spring Ball'), player))
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has('Egg Capacity Upgrade', player, 1) or logic.combat_item(state)) and state.has(('Large Spring Ball'), player))
 
-def set_hard_rules(world: "YIWorld"):
+def set_hard_rules(world: "YoshisIslandWorld"):
     logic = YoshiLogic(world)
     multiworld = world.multiworld
     player = world.player
@@ -573,9 +577,11 @@ def set_hard_rules(world: "YIWorld"):
     set_rule(world.multiworld.get_location("King Bowser's Castle: Flowers", player), lambda state: state.has_all({'Helicopter Morph'}, player) and logic._68CollectibleRoute(state))
     set_rule(world.multiworld.get_location("King Bowser's Castle: Stars", player), lambda state: state.has_all({'Helicopter Morph'}, player) and logic._68Route(state))
 
-    set_hard_extra_rules(world, player, logic)
+    set_hard_extra_rules(world)
 
-def set_hard_extra_rules(world: "YIWorld", player: int, logic: YoshiLogic) -> None:
+def set_hard_extra_rules(world: "YoshisIslandWorld") -> None:
+    player = world.player
+    logic = YoshiLogic(world)
     if not world.options.extras_enabled:
         return
     set_rule(world.multiworld.get_location("Poochy Ain't Stupid: Red Coins", player), lambda state: state.has_all({'Poochy'}, player))
