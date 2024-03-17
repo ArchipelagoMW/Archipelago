@@ -320,8 +320,6 @@ def set_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) -> 
              lambda state: state.has(laurels, player))
     set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
              lambda state: has_sword(state, player))
-    set_rule(multiworld.get_location("Swamp - [South Graveyard] Guarded By Tentacles", player),
-             lambda state: has_sword(state, player))
 
     # Hero's Grave
     set_rule(multiworld.get_location("Hero's Grave - Tooth Relic", player),

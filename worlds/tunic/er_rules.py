@@ -1489,8 +1489,6 @@ def set_er_location_rules(world: "TunicWorld", ability_unlocks: Dict[str, int]) 
     # these two swamp checks really want you to kill the big skeleton first
     set_rule(multiworld.get_location("Swamp - [South Graveyard] 4 Orange Skulls", player),
              lambda state: has_sword(state, player))
-    set_rule(multiworld.get_location("Swamp - [South Graveyard] Guarded By Tentacles", player),
-             lambda state: has_sword(state, player))
 
     # Hero's Grave and Far Shore
     set_rule(multiworld.get_location("Hero's Grave - Tooth Relic", player),
