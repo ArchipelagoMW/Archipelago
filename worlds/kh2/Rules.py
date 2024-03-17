@@ -202,14 +202,18 @@ class KH2Rules:
 
     def get_form_level_max(self, state, amount):
         forms_available = 0
-        forms_available += sum([1 for func in [
-            self.kh2_has_valor_form(state),
-            self.kh2_has_wisdom_form(state),
-            self.kh2_has_limit_form(state),
-            self.kh2_has_master_form(state),
-            self.kh2_has_final_form(state)
-        ] if func])
-        return forms_available >= amount
+        forms = [
+            self.kh2_has_valor_form,
+            self.kh2_has_wisdom_form,
+            self.kh2_has_limit_form,
+            self.kh2_has_master_form,
+            self.kh2_has_final_form,
+        ]
+        for form in forms:
+            forms_available += form(state)
+            if forms_available >= amount:
+                return True
+        return False
 
 
 class KH2WorldRules(KH2Rules):
@@ -435,11 +439,11 @@ class KH2PuzzlePiecesRules(KH2Rules):
     def __init__(self, world: KH2World) -> None:
         super().__init__(world)
         self.puzzle_pieces_location_rules = {
-            LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state), #af
+            LocationName.DaylightPuzzleTT2MarketStreet:       lambda state: self.has_vertical(state, 2) and self.has_glide(state),  # af
             LocationName.SunsetPuzzleTT3TSunsetTerrace1:      lambda state: self.has_vertical(state) and self.has_glide(state),  # one over the water fall #af
-            LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state), #af
+            LocationName.SunsetPuzzleTT3OldMansion:           lambda state: self.has_vertical(state, 2) and self.has_glide(state),  # af
             LocationName.DaylightPuzzleTT3MansionFoyer2:      lambda state: self.has_vertical(state) and self.has_glide(state, 3),  # one over the door #af
-            LocationName.HeartPuzzleHB1MarketplaceItem:       lambda state: self.has_vertical(state), # hj2 or ad 1 or any has final,master,limit,valor
+            LocationName.HeartPuzzleHB1MarketplaceItem:       lambda state: self.has_vertical(state),  # hj2 or ad 1 or any has final,master,limit,valor
             LocationName.SunsetPuzzleHB1Borough:              lambda state: self.has_vertical(state, 2) and self.has_glide(state, 2),
             LocationName.SunsetPuzzleHB2Corridors:            lambda state: self.has_vertical(state) and self.has_glide(state),
             LocationName.FrontierPuzzleHB2PosternDoorway:     lambda state: self.has_vertical(state) and self.has_glide(state),
@@ -589,6 +593,195 @@ class KH2FightRules(KH2Rules):
             RegionName.FinalXemnas:       lambda state: self.get_final_xemnas_rules(state),
             RegionName.DataXemnas:        lambda state: self.get_data_xemnas_rules(state),
         }
+        if self.fight_logic == "Easy":
+            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_easy_shanyu_rules(state),
+            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_easy_ansemriku_rules(state),
+            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_easy_stormrider_rules(state),
+            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_easy_dataxigbar_rules(state),
+            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_easy_twinlords_rules(state),
+            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_easy_geniejafar_rules(state),
+            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_easy_datalexaeus_rules(state),
+            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_easy_oldpete_rules(state),
+            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_easy_futurepete_rules(state),
+            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_easy_terra_rules(state),
+            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_easy_datamarluxia_rules(state),
+            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_easy_barbosa_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_easy_grimreaper1_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_easy_grimreaper2_rules(state),
+            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_easy_dataluxord_rules(state),
+            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_easy_cerberus_rules(state),
+            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_easy_olympuspete_rules(state),
+            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_easy_hydra_rules(state),
+            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_easy_hades_rules(state),
+            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_easy_datazexion_rules(state),
+            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_easy_ocpainandpaniccup_rules(state),
+            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_easy_occerberuscup_rules(state),
+            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_easy_oc2titancup_rules(state),
+            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_easy_oc2gofcup_rules(state),
+            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_easy_hadescups_rules(state),
+            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_easy_thresholder_rules(state),
+            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_easy_beast_rules(state),
+            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_easy_darkthorn_rules(state),
+            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_easy_xaldin_rules(state),
+            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_easy_dataxaldin_rules(state),
+            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_easy_hostileprogram_rules(state),
+            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_easy_mcp_rules(state),
+            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_easy_datalarxene_rules(state),
+            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_easy_prisonkeeper_rules(state),
+            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_easy_oogieboogie_rules(state),
+            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_easy_experiment_rules(state),
+            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_easy_datavexen_rules(state),
+            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_easy_hbdemyx_rules(state),
+            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_easy_thousandheartless_rules(state),
+            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_easy_datademyx_rules(state),
+            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_easy_sephi_rules(state),
+            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_easy_corfirstfight_rules(state),
+            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_easy_corsecondfight_rules(state),
+            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_easy_transport_rules(state),
+            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_easy_scar_rules(state),
+            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_easy_groundshaker_rules(state),
+            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_easy_datasaix_rules(state),
+            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_easy_twilightthorn_rules(state),
+            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_easy_axel1_rules(state),
+            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_easy_axel2_rules(state),
+            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_easy_dataroxas_rules(state),
+            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_easy_dataaxel_rules(state),
+            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_easy_roxas_rules(state),
+            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_easy_xigbar_rules(state),
+            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_easy_luxord_rules(state),
+            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_easy_saix_rules(state),
+            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_easy_xemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_easy_armoredxemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_easy_armoredxemnas2_rules(state),
+            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_easy_finalxemnas_rules(state),
+            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_easy_dataxemnas_rules(state),
+
+        elif self.fight_logic == "Normal":
+            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_normal_shanyu_rules(state),
+            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_normal_ansemriku_rules(state),
+            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_normal_stormrider_rules(state),
+            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_normal_dataxigbar_rules(state),
+            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_normal_twinlords_rules(state),
+            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_normal_geniejafar_rules(state),
+            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_normal_datalexaeus_rules(state),
+            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_normal_oldpete_rules(state),
+            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_normal_futurepete_rules(state),
+            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_normal_terra_rules(state),
+            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_normal_datamarluxia_rules(state),
+            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_normal_barbosa_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_normal_grimreaper1_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_normal_grimreaper2_rules(state),
+            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_normal_dataluxord_rules(state),
+            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_normal_cerberus_rules(state),
+            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_normal_olympuspete_rules(state),
+            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_normal_hydra_rules(state),
+            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_normal_hades_rules(state),
+            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_normal_datazexion_rules(state),
+            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_normal_ocpainandpaniccup_rules(state),
+            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_normal_occerberuscup_rules(state),
+            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_normal_oc2titancup_rules(state),
+            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_normal_oc2gofcup_rules(state),
+            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_normal_hadescups_rules(state),
+            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_normal_thresholder_rules(state),
+            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_normal_beast_rules(state),
+            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_normal_darkthorn_rules(state),
+            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_normal_xaldin_rules(state),
+            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_normal_dataxaldin_rules(state),
+            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_normal_hostileprogram_rules(state),
+            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_normal_mcp_rules(state),
+            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_normal_datalarxene_rules(state),
+            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_normal_prisonkeeper_rules(state),
+            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_normal_oogieboogie_rules(state),
+            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_normal_experiment_rules(state),
+            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_normal_datavexen_rules(state),
+            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_normal_hbdemyx_rules(state),
+            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_normal_thousandheartless_rules(state),
+            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_normal_datademyx_rules(state),
+            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_normal_sephi_rules(state),
+            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_normal_corfirstfight_rules(state),
+            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_normal_corsecondfight_rules(state),
+            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_normal_transport_rules(state),
+            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_normal_scar_rules(state),
+            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_normal_groundshaker_rules(state),
+            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_normal_datasaix_rules(state),
+            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_normal_twilightthorn_rules(state),
+            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_normal_axel1_rules(state),
+            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_normal_axel2_rules(state),
+            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_normal_dataroxas_rules(state),
+            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_normal_dataaxel_rules(state),
+            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_normal_roxas_rules(state),
+            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_normal_xigbar_rules(state),
+            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_normal_luxord_rules(state),
+            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_normal_saix_rules(state),
+            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_normal_xemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_normal_armoredxemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_normal_armoredxemnas2_rules(state),
+            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_normal_finalxemnas_rules(state),
+            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_normal_dataxemnas_rules(state),
+        else:
+            self.fight_region_rules[RegionName.ShanYu] = lambda state: self.get_hard_shanyu_rules(state),
+            self.fight_region_rules[RegionName.AnsemRiku] = lambda state: self.get_hard_ansemriku_rules(state),
+            self.fight_region_rules[RegionName.StormRider] = lambda state: self.get_hard_stormrider_rules(state),
+            self.fight_region_rules[RegionName.DataXigbar] = lambda state: self.get_hard_dataxigbar_rules(state),
+            self.fight_region_rules[RegionName.TwinLords] = lambda state: self.get_hard_twinlords_rules(state),
+            self.fight_region_rules[RegionName.GenieJafar] = lambda state: self.get_hard_geniejafar_rules(state),
+            self.fight_region_rules[RegionName.DataLexaeus] = lambda state: self.get_hard_datalexaeus_rules(state),
+            self.fight_region_rules[RegionName.OldPete] = lambda state: self.get_hard_oldpete_rules(state),
+            self.fight_region_rules[RegionName.FuturePete] = lambda state: self.get_hard_futurepete_rules(state),
+            self.fight_region_rules[RegionName.Terra] = lambda state: self.get_hard_terra_rules(state),
+            self.fight_region_rules[RegionName.DataMarluxia] = lambda state: self.get_hard_datamarluxia_rules(state),
+            self.fight_region_rules[RegionName.Barbosa] = lambda state: self.get_hard_barbosa_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper1] = lambda state: self.get_hard_grimreaper1_rules(state),
+            self.fight_region_rules[RegionName.GrimReaper2] = lambda state: self.get_hard_grimreaper2_rules(state),
+            self.fight_region_rules[RegionName.DataLuxord] = lambda state: self.get_hard_dataluxord_rules(state),
+            self.fight_region_rules[RegionName.Cerberus] = lambda state: self.get_hard_cerberus_rules(state),
+            self.fight_region_rules[RegionName.OlympusPete] = lambda state: self.get_hard_olympuspete_rules(state),
+            self.fight_region_rules[RegionName.Hydra] = lambda state: self.get_hard_hydra_rules(state),
+            self.fight_region_rules[RegionName.Hades] = lambda state: self.get_hard_hades_rules(state),
+            self.fight_region_rules[RegionName.DataZexion] = lambda state: self.get_hard_datazexion_rules(state),
+            self.fight_region_rules[RegionName.OcPainAndPanicCup] = lambda state: self.get_hard_ocpainandpaniccup_rules(state),
+            self.fight_region_rules[RegionName.OcCerberusCup] = lambda state: self.get_hard_occerberuscup_rules(state),
+            self.fight_region_rules[RegionName.Oc2TitanCup] = lambda state: self.get_hard_oc2titancup_rules(state),
+            self.fight_region_rules[RegionName.Oc2GofCup] = lambda state: self.get_hard_oc2gofcup_rules(state),
+            self.fight_region_rules[RegionName.HadesCups] = lambda state: self.get_hard_hadescups_rules(state),
+            self.fight_region_rules[RegionName.Thresholder] = lambda state: self.get_hard_thresholder_rules(state),
+            self.fight_region_rules[RegionName.Beast] = lambda state: self.get_hard_beast_rules(state),
+            self.fight_region_rules[RegionName.DarkThorn] = lambda state: self.get_hard_darkthorn_rules(state),
+            self.fight_region_rules[RegionName.Xaldin] = lambda state: self.get_hard_xaldin_rules(state),
+            self.fight_region_rules[RegionName.DataXaldin] = lambda state: self.get_hard_dataxaldin_rules(state),
+            self.fight_region_rules[RegionName.HostileProgram] = lambda state: self.get_hard_hostileprogram_rules(state),
+            self.fight_region_rules[RegionName.Mcp] = lambda state: self.get_hard_mcp_rules(state),
+            self.fight_region_rules[RegionName.DataLarxene] = lambda state: self.get_hard_datalarxene_rules(state),
+            self.fight_region_rules[RegionName.PrisonKeeper] = lambda state: self.get_hard_prisonkeeper_rules(state),
+            self.fight_region_rules[RegionName.OogieBoogie] = lambda state: self.get_hard_oogieboogie_rules(state),
+            self.fight_region_rules[RegionName.Experiment] = lambda state: self.get_hard_experiment_rules(state),
+            self.fight_region_rules[RegionName.DataVexen] = lambda state: self.get_hard_datavexen_rules(state),
+            self.fight_region_rules[RegionName.HBDemyx] = lambda state: self.get_hard_hbdemyx_rules(state),
+            self.fight_region_rules[RegionName.ThousandHeartless] = lambda state: self.get_hard_thousandheartless_rules(state),
+            self.fight_region_rules[RegionName.DataDemyx] = lambda state: self.get_hard_datademyx_rules(state),
+            self.fight_region_rules[RegionName.Sephi] = lambda state: self.get_hard_sephi_rules(state),
+            self.fight_region_rules[RegionName.CorFirstFight] = lambda state: self.get_hard_corfirstfight_rules(state),
+            self.fight_region_rules[RegionName.CorSecondFight] = lambda state: self.get_hard_corsecondfight_rules(state),
+            self.fight_region_rules[RegionName.Transport] = lambda state: self.get_hard_transport_rules(state),
+            self.fight_region_rules[RegionName.Scar] = lambda state: self.get_hard_scar_rules(state),
+            self.fight_region_rules[RegionName.GroundShaker] = lambda state: self.get_hard_groundshaker_rules(state),
+            self.fight_region_rules[RegionName.DataSaix] = lambda state: self.get_hard_datasaix_rules(state),
+            self.fight_region_rules[RegionName.TwilightThorn] = lambda state: self.get_hard_twilightthorn_rules(state),
+            self.fight_region_rules[RegionName.Axel1] = lambda state: self.get_hard_axel1_rules(state),
+            self.fight_region_rules[RegionName.Axel2] = lambda state: self.get_hard_axel2_rules(state),
+            self.fight_region_rules[RegionName.DataRoxas] = lambda state: self.get_hard_dataroxas_rules(state),
+            self.fight_region_rules[RegionName.DataAxel] = lambda state: self.get_hard_dataaxel_rules(state),
+            self.fight_region_rules[RegionName.Roxas] = lambda state: self.get_hard_roxas_rules(state),
+            self.fight_region_rules[RegionName.Xigbar] = lambda state: self.get_hard_xigbar_rules(state),
+            self.fight_region_rules[RegionName.Luxord] = lambda state: self.get_hard_luxord_rules(state),
+            self.fight_region_rules[RegionName.Saix] = lambda state: self.get_hard_saix_rules(state),
+            self.fight_region_rules[RegionName.Xemnas] = lambda state: self.get_hard_xemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas] = lambda state: self.get_hard_armoredxemnas_rules(state),
+            self.fight_region_rules[RegionName.ArmoredXemnas2] = lambda state: self.get_hard_armoredxemnas2_rules(state),
+            self.fight_region_rules[RegionName.FinalXemnas] = lambda state: self.get_hard_finalxemnas_rules(state),
+            self.fight_region_rules[RegionName.DataXemnas] = lambda state: self.get_hard_dataxemnas_rules(state),
+
+
 
     def set_kh2_fight_rules(self) -> None:
         for region_name, rules in self.fight_region_rules.items():
@@ -599,6 +792,8 @@ class KH2FightRules(KH2Rules):
         for loc_name in [LocationName.TransportEventLocation, LocationName.TransporttoRemembrance]:
             location = self.multiworld.get_location(loc_name, self.player)
             add_rule(location, lambda state: self.get_transport_fight_rules(state))
+
+
 
     def get_shan_yu_rules(self, state: CollectionState) -> bool:
         # easy: gap closer, defensive tool,drive form
