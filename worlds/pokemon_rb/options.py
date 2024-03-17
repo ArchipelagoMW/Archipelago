@@ -881,7 +881,7 @@ class PokemonRBOptions(PerGameCommonOptions):
     game_version: GameVersion
     trainer_name: TrainerName
     rival_name: RivalName
-    goal: Goal
+    # goal: Goal
     elite_four_badges_condition: EliteFourBadgesCondition
     elite_four_key_items_condition: EliteFourKeyItemsCondition
     elite_four_pokedex_condition: EliteFourPokedexCondition
