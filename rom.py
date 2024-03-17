@@ -196,7 +196,7 @@ def give_item(rom: LocalRom, item: WL4Item):
         rom.write_byte(address, count)
     elif item.type == ItemType.TREASURE:
         treasure_type = item.code - (ap_id_offset + 0x70)
-        address = level_to_start_inventory_address(treasure_type / 3, 4)
+        address = level_to_start_inventory_address(treasure_type / 3 + 1, 4)
         flag = 1 << (treasure_type % 3)
         status = rom.read_byte(address)
         status |= flag
