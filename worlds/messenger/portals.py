@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List, TYPE_CHECKING
 
 from BaseClasses import CollectionState, PlandoOptions
@@ -239,11 +240,12 @@ def shuffle_portals(world: "MessengerWorld") -> None:
             world.plando_portals.append(connection.entrance)
 
     shuffle_type = world.options.shuffle_portals
-    shop_points = SHOP_POINTS.copy()
+    shop_points = deepcopy(SHOP_POINTS)
     for portal in PORTALS:
         shop_points[portal].append(f"{portal} Portal")
     if shuffle_type > ShufflePortals.option_shops:
-        shop_points.update(CHECKPOINTS)
+        for area, points in CHECKPOINTS.items():
+            shop_points[area] += points
     out_to_parent = {checkpoint: parent for parent, checkpoints in shop_points.items() for checkpoint in checkpoints}
     available_portals = [val for zone in shop_points.values() for val in zone]
 
