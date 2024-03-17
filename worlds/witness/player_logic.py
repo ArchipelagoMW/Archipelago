@@ -63,26 +63,30 @@ class WitnessPlayerLogic:
         if panel_hex in self.DOOR_ITEMS_BY_ID:
             door_items = frozenset({frozenset([item]) for item in self.DOOR_ITEMS_BY_ID[panel_hex]})
 
-            all_options = set()
+            all_options: Set[FrozenSet[str]] = set()
 
             for dependentItem in door_items:
                 self.PROG_ITEMS_ACTUALLY_IN_THE_GAME_NO_MULTI.update(dependentItem)
                 for items_option in these_items:
                     all_options.add(items_option.union(dependentItem))
 
-            # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
-            # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
-            # In the future, it would be wise to make a distinction between "power dependencies" and other dependencies.
-            if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
-                these_items = all_options
+            # If this entity is not an EP, and it has an associated door item, ignore the original power dependencies
+            if StaticWitnessLogic.ENTITIES_BY_HEX[panel_hex]["entityType"] != "EP":
+                # 0x28A0D depends on another entity for *non-power* reasons -> This dependency needs to be preserved,
+                # except in Expert, where that dependency doesn't exist, but now there *is* a power dependency.
+                # In the future, it'd be wise to make a distinction between "power dependencies" and other dependencies.
+                if panel_hex == "0x28A0D" and not any("0x28998" in option for option in these_panels):
+                    these_items = all_options
 
-            # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
-            elif panel_hex == "0x1C349":
-                these_items = all_options
+                # Another dependency that is not power-based: The Symmetry Island Upper Panel latches
+                elif panel_hex == "0x1C349":
+                    these_items = all_options
 
-            # For any other door entity, we just return a set with the item that opens it & disregard power dependencies
+                else:
+                    return frozenset(all_options)
+
             else:
-                return frozenset(all_options)
+                these_items = all_options
 
         disabled_eps = {eHex for eHex in self.COMPLETELY_DISABLED_ENTITIES
                         if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[eHex]["entityType"] == "EP"}
@@ -101,8 +105,11 @@ class WitnessPlayerLogic:
             for option_entity in option:
                 dep_obj = self.REFERENCE_LOGIC.ENTITIES_BY_HEX.get(option_entity)
 
-                if option_entity in self.EVENT_NAMES_BY_HEX:
+                if option_entity in self.ALWAYS_EVENT_NAMES_BY_HEX:
                     new_items = frozenset({frozenset([option_entity])})
+                elif (panel_hex, option_entity) in self.CONDITIONAL_EVENTS:
+                    new_items = frozenset({frozenset([option_entity])})
+                    self.USED_EVENT_NAMES_BY_HEX[option_entity] = self.CONDITIONAL_EVENTS[(panel_hex, option_entity)]
                 elif option_entity in {"7 Lasers", "11 Lasers", "7 Lasers + Redirect", "11 Lasers + Redirect",
                                        "PP2 Weirdness", "Theater to Tunnels"}:
                     new_items = frozenset({frozenset([option_entity])})
@@ -170,14 +177,11 @@ class WitnessPlayerLogic:
         if adj_type == "Event Items":
             line_split = line.split(" - ")
             new_event_name = line_split[0]
-            hex_set = line_split[1].split(",")
+            entity_hex = line_split[1]
+            dependent_hex_set = line_split[2].split(",")
 
-            for entity, event_name in self.EVENT_NAMES_BY_HEX.items():
-                if event_name == new_event_name:
-                    self.DONT_MAKE_EVENTS.add(entity)
-
-            for hex_code in hex_set:
-                self.EVENT_NAMES_BY_HEX[hex_code] = new_event_name
+            for dependent_hex in dependent_hex_set:
+                self.CONDITIONAL_EVENTS[(entity_hex, dependent_hex)] = new_event_name
 
             return
 
@@ -429,6 +433,9 @@ class WitnessPlayerLogic:
         if lasers:
             adjustment_linesets_in_order.append(get_laser_shuffle())
 
+        if world.options.shuffle_EPs and world.options.obelisk_keys:
+            adjustment_linesets_in_order.append(get_obelisk_keys())
+
         if world.options.shuffle_EPs == "obelisk_sides":
             ep_gen = ((ep_hex, ep_obj) for (ep_hex, ep_obj) in self.REFERENCE_LOGIC.ENTITIES_BY_HEX.items()
                       if ep_obj["entityType"] == "EP")
@@ -437,12 +444,12 @@ class WitnessPlayerLogic:
                 obelisk = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[self.REFERENCE_LOGIC.EP_TO_OBELISK_SIDE[ep_hex]]
                 obelisk_name = obelisk["checkName"]
                 ep_name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[ep_hex]["checkName"]
-                self.EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
+                self.ALWAYS_EVENT_NAMES_BY_HEX[ep_hex] = f"{obelisk_name} - {ep_name}"
         else:
             adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_obelisks()[1:])
 
         if not world.options.shuffle_EPs:
-            adjustment_linesets_in_order.append(["Irrelevant Locations:"] + get_ep_all_individual()[1:])
+            adjustment_linesets_in_order.append(["Disabled Locations:"] + get_ep_all_individual()[1:])
 
         for yaml_disabled_location in self.YAML_DISABLED_LOCATIONS:
             if yaml_disabled_location not in self.REFERENCE_LOGIC.ENTITIES_BY_NAME:
@@ -505,7 +512,8 @@ class WitnessPlayerLogic:
                 for option in connection[1]:
                     individual_entity_requirements = []
                     for entity in option:
-                        if entity in self.EVENT_NAMES_BY_HEX or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX:
+                        if (entity in self.ALWAYS_EVENT_NAMES_BY_HEX
+                                or entity not in self.REFERENCE_LOGIC.ENTITIES_BY_HEX):
                             individual_entity_requirements.append(frozenset({frozenset({entity})}))
                         else:
                             entity_req = self.reduce_req_within_region(entity)
@@ -522,6 +530,72 @@ class WitnessPlayerLogic:
 
             self.CONNECTIONS_BY_REGION_NAME[region] = new_connections
 
+    def solvability_guaranteed(self, entity_hex: str):
+        return not (
+            entity_hex in self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY
+            or entity_hex in self.COMPLETELY_DISABLED_ENTITIES
+            or entity_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES
+        )
+
+    def determine_unrequired_entities(self, world: "WitnessWorld"):
+        """Figure out which major items are actually useless in this world's settings"""
+
+        # Gather quick references to relevant options
+        eps_shuffled = world.options.shuffle_EPs
+        come_to_you = world.options.elevators_come_to_you
+        difficulty = world.options.puzzle_randomization
+        discards_shuffled = world.options.shuffle_discarded_panels
+        boat_shuffled = world.options.shuffle_boat
+        symbols_shuffled = world.options.shuffle_symbols
+        disable_non_randomized = world.options.disable_non_randomized_puzzles
+        postgame_included = world.options.shuffle_postgame
+        goal = world.options.victory_condition
+        doors = world.options.shuffle_doors
+        shortbox_req = world.options.mountain_lasers
+        longbox_req = world.options.challenge_lasers
+
+        # Make some helper booleans so it is easier to follow what's going on
+        mountain_upper_is_in_postgame = (
+                goal == "mountain_box_short"
+                or goal == "mountain_box_long" and longbox_req <= shortbox_req
+        )
+        mountain_upper_included = postgame_included or not mountain_upper_is_in_postgame
+        remote_doors = doors >= 2
+        door_panels = doors == "panels" or doors == "mixed"
+
+        # It is easier to think about when these items *are* required, so we make that dict first
+        # If the entity is disabled anyway, we don't need to consider that case
+        is_item_required_dict = {
+            "0x03750": eps_shuffled,  # Monastery Garden Entry Door
+            "0x275FA": eps_shuffled,  # Boathouse Hook Control
+            "0x17D02": eps_shuffled,  # Windmill Turn Control
+            "0x0368A": symbols_shuffled or door_panels,  # Quarry Stoneworks Stairs Door
+            "0x3865F": symbols_shuffled or door_panels or eps_shuffled,  # Quarry Boathouse 2nd Barrier
+            "0x17CC4": come_to_you or eps_shuffled,  # Quarry Elevator Panel
+            "0x17E2B": come_to_you and boat_shuffled or eps_shuffled,  # Swamp Long Bridge
+            "0x0CF2A": False,  # Jungle Monastery Garden Shortcut
+            "0x17CAA": remote_doors,  # Jungle Monastery Garden Shortcut Panel
+            "0x0364E": False,  # Monastery Laser Shortcut Door
+            "0x03713": remote_doors,  # Monastery Laser Shortcut Panel
+            "0x03313": False,  # Orchard Second Gate
+            "0x337FA": remote_doors,  # Jungle Bamboo Laser Shortcut Panel
+            "0x3873B": False,  # Jungle Bamboo Laser Shortcut Door
+            "0x335AB": False,  # Caves Elevator Controls
+            "0x335AC": False,  # Caves Elevator Controls
+            "0x3369D": False,  # Caves Elevator Controls
+            "0x01BEA": difficulty == "none" and eps_shuffled,  # Keep PP2
+            "0x0A0C9": eps_shuffled or discards_shuffled or disable_non_randomized,  # Cargo Box Entry Door
+            "0x09EEB": discards_shuffled or mountain_upper_included,  # Mountain Floor 2 Elevator Control Panel
+            "0x09EDD": mountain_upper_included,  # Mountain Floor 2 Exit Door
+            "0x17CAB": symbols_shuffled or not disable_non_randomized or "0x17CAB" not in self.DOOR_ITEMS_BY_ID,
+            # Jungle Popup Wall Panel
+        }
+
+        # Now, return the keys of the dict entries where the result is False to get unrequired major items
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY |= {
+            item_name for item_name, is_required in is_item_required_dict.items() if not is_required
+        }
+
     def make_event_item_pair(self, panel: str):
         """
         Makes a pair of an event panel and its event item
@@ -529,21 +603,23 @@ class WitnessPlayerLogic:
         action = " Opened" if self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["entityType"] == "Door" else " Solved"
 
         name = self.REFERENCE_LOGIC.ENTITIES_BY_HEX[panel]["checkName"] + action
-        if panel not in self.EVENT_NAMES_BY_HEX:
+        if panel not in self.USED_EVENT_NAMES_BY_HEX:
             warning("Panel \"" + name + "\" does not have an associated event name.")
-            self.EVENT_NAMES_BY_HEX[panel] = name + " Event"
-        pair = (name, self.EVENT_NAMES_BY_HEX[panel])
+            self.USED_EVENT_NAMES_BY_HEX[panel] = name + " Event"
+        pair = (name, self.USED_EVENT_NAMES_BY_HEX[panel])
         return pair
 
     def make_event_panel_lists(self):
-        self.EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
+        self.ALWAYS_EVENT_NAMES_BY_HEX[self.VICTORY_LOCATION] = "Victory"
 
-        for event_hex, event_name in self.EVENT_NAMES_BY_HEX.items():
-            if event_hex in self.COMPLETELY_DISABLED_ENTITIES or event_hex in self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES:
-                continue
-            self.EVENT_PANELS.add(event_hex)
+        self.USED_EVENT_NAMES_BY_HEX.update(self.ALWAYS_EVENT_NAMES_BY_HEX)
 
-        for panel in self.EVENT_PANELS:
+        self.USED_EVENT_NAMES_BY_HEX = {
+            event_hex: event_name for event_hex, event_name in self.USED_EVENT_NAMES_BY_HEX.items()
+            if self.solvability_guaranteed(event_hex)
+        }
+
+        for panel in self.USED_EVENT_NAMES_BY_HEX:
             pair = self.make_event_item_pair(panel)
             self.EVENT_ITEM_PAIRS[pair[0]] = pair[1]
 
@@ -555,6 +631,8 @@ class WitnessPlayerLogic:
         self.EVENT_PANELS_FROM_REGIONS = set()
 
         self.IRRELEVANT_BUT_NOT_DISABLED_ENTITIES = set()
+
+        self.ENTITIES_WITHOUT_ENSURED_SOLVABILITY = set()
 
         self.THEORETICAL_ITEMS = set()
         self.THEORETICAL_ITEMS_NO_MULTI = set()
@@ -580,16 +658,14 @@ class WitnessPlayerLogic:
 
         # Determining which panels need to be events is a difficult process.
         # At the end, we will have EVENT_ITEM_PAIRS for all the necessary ones.
-        self.EVENT_PANELS = set()
         self.EVENT_ITEM_PAIRS = dict()
-        self.DONT_MAKE_EVENTS = set()
         self.COMPLETELY_DISABLED_ENTITIES = set()
         self.PRECOMPLETED_LOCATIONS = set()
         self.EXCLUDED_LOCATIONS = set()
         self.ADDED_CHECKS = set()
         self.VICTORY_LOCATION = "0x0356B"
 
-        self.EVENT_NAMES_BY_HEX = {
+        self.ALWAYS_EVENT_NAMES_BY_HEX = {
             "0x00509": "+1 Laser (Symmetry Laser)",
             "0x012FB": "+1 Laser (Desert Laser)",
             "0x09F98": "Desert Laser Redirection",
@@ -602,10 +678,14 @@ class WitnessPlayerLogic:
             "0x0C2B2": "+1 Laser (Bunker Laser)",
             "0x00BF6": "+1 Laser (Swamp Laser)",
             "0x028A4": "+1 Laser (Treehouse Laser)",
-            "0x09F7F": "Mountain Entry",
+            "0x17C34": "Mountain Entry",
             "0xFFF00": "Bottom Floor Discard Turns On",
         }
 
+        self.USED_EVENT_NAMES_BY_HEX = {}
+        self.CONDITIONAL_EVENTS = {}
+
         self.make_options_adjustments(world)
+        self.determine_unrequired_entities(world)
         self.make_dependency_reduced_checklist()
         self.make_event_panel_lists()

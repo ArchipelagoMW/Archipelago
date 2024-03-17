@@ -1,6 +1,7 @@
+from dataclasses import dataclass
 import typing
 
-from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList
+from Options import Choice, Range, Option, Toggle, DeathLink, DefaultOnToggle, OptionList, PerGameCommonOptions
 
 
 class Goal(Choice):
@@ -158,21 +159,21 @@ class StartingLifeCount(Range):
     default = 5
 
 
-dkc3_options: typing.Dict[str, type(Option)] = {
-    #"death_link": DeathLink,                                 # Disabled
-    "goal": Goal,
-    #"include_trade_sequence": IncludeTradeSequence,          # Disabled
-    "dk_coins_for_gyrocopter": DKCoinsForGyrocopter,
-    "krematoa_bonus_coin_cost": KrematoaBonusCoinCost,
-    "percentage_of_extra_bonus_coins": PercentageOfExtraBonusCoins,
-    "number_of_banana_birds": NumberOfBananaBirds,
-    "percentage_of_banana_birds": PercentageOfBananaBirds,
-    "kongsanity": KONGsanity,
-    "level_shuffle": LevelShuffle,
-    "difficulty": Difficulty,
-    "autosave": Autosave,
-    "merry": MERRY,
-    "music_shuffle": MusicShuffle,
-    "kong_palette_swap": KongPaletteSwap,
-    "starting_life_count": StartingLifeCount,
-}
+@dataclass
+class DKC3Options(PerGameCommonOptions):
+    #death_link: DeathLink                                 # Disabled
+    goal: Goal
+    #include_trade_sequence: IncludeTradeSequence          # Disabled
+    dk_coins_for_gyrocopter: DKCoinsForGyrocopter
+    krematoa_bonus_coin_cost: KrematoaBonusCoinCost
+    percentage_of_extra_bonus_coins: PercentageOfExtraBonusCoins
+    number_of_banana_birds: NumberOfBananaBirds
+    percentage_of_banana_birds: PercentageOfBananaBirds
+    kongsanity: KONGsanity
+    level_shuffle: LevelShuffle
+    difficulty: Difficulty
+    autosave: Autosave
+    merry: MERRY
+    music_shuffle: MusicShuffle
+    kong_palette_swap: KongPaletteSwap
+    starting_life_count: StartingLifeCount
