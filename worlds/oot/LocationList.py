@@ -46,7 +46,7 @@ def shop_address(shop_id, shelf_id):
 #   Location:                                                        Type             Scene  Default Addresses                      Vanilla Item                             Categories
 location_table = OrderedDict([
     ## Dungeon Rewards
-    ("Links Pocket", ("Boss", None, None, None,'Light Medallion',None)),
+    ("Links Pocket",                                                 ("Boss",         None,  None, None,                            'Light Medallion',                       None)),
     ("Queen Gohma",                                                  ("Boss",         None,  0x6C, (0x0CA315F, 0x2079571),          'Kokiri Emerald',                        None)),
     ("King Dodongo",                                                 ("Boss",         None,  0x6D, (0x0CA30DF, 0x2223309),          'Goron Ruby',                            None)),
     ("Barinade",                                                     ("Boss",         None,  0x6E, (0x0CA36EB, 0x2113C19),          'Zora Sapphire',                         None)),

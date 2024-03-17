@@ -7,8 +7,6 @@ class HardMode(Toggle):
     """Only for the most masochistically inclined... Requires button activation!"""
     display_name = "Hard Mode"
 
-class MQDungeons(toggle):
-    display_name = "Enable MQ Dungeons"
 
 class ButtonColor(Choice):
     """Customize your button! Now available in 12 unique colors."""
