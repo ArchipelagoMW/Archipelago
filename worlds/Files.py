@@ -297,8 +297,7 @@ class APTokenMixin:
     A class that defines functions for generating a token binary, for use in patches.
     """
     tokens: List[
-        Tuple[APTokenTypes, int,
-        Union[
+        Tuple[APTokenTypes, int, Union[
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
             int  # AND_8, OR_8, XOR_8
