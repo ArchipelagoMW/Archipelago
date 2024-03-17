@@ -105,11 +105,11 @@ def create_dungeons(world: "ALTTPWorld"):
                         'Palace of Darkness (North)', 'Palace of Darkness (Maze)',
                         'Palace of Darkness (Harmless Hellway)', 'Palace of Darkness (Final Section)'],
                        item_factory('Big Key (Palace of Darkness)', world),
-                       item_factory(['Small Key (Palace of Darkness)'] * 6, world),
+                       item_factory(['Small Key (Palace of Darkness)'] * (1 if usk else 6), world),
                        item_factory(['Map (Palace of Darkness)', 'Compass (Palace of Darkness)'], world))
     TT = make_dungeon('Thieves Town', 'Blind', ['Thieves Town (Entrance)', 'Thieves Town (Deep)', 'Blind Fight'],
                       item_factory('Big Key (Thieves Town)', world),
-                      item_factory(['Small Key (Thieves Town)'] * 3, world),
+                      item_factory(['Small Key (Thieves Town)'] * (1 if usk else 3), world),
                       item_factory(['Map (Thieves Town)', 'Compass (Thieves Town)'], world))
     SW = make_dungeon('Skull Woods', 'Mothula', ['Skull Woods Final Section (Entrance)', 'Skull Woods First Section',
                                                  'Skull Woods Second Section', 'Skull Woods Second Section (Drop)',
@@ -117,23 +117,23 @@ def create_dungeons(world: "ALTTPWorld"):
                                                  'Skull Woods First Section (Right)',
                                                  'Skull Woods First Section (Left)', 'Skull Woods First Section (Top)'],
                       item_factory('Big Key (Skull Woods)', world),
-                      item_factory(['Small Key (Skull Woods)'] * 5, world),
+                      item_factory(['Small Key (Skull Woods)'] * (1 if usk else 5), world),
                       item_factory(['Map (Skull Woods)', 'Compass (Skull Woods)'], world))
     SP = make_dungeon('Swamp Palace', 'Arrghus',
                       ['Swamp Palace (Entrance)', 'Swamp Palace (First Room)', 'Swamp Palace (Starting Area)',
                        'Swamp Palace (West)', 'Swamp Palace (Center)', 'Swamp Palace (North)'],
                       item_factory('Big Key (Swamp Palace)', world),
-                      item_factory(['Small Key (Swamp Palace)'] * 6, world),
+                      item_factory(['Small Key (Swamp Palace)'] * (1 if usk else 6), world),
                       item_factory(['Map (Swamp Palace)', 'Compass (Swamp Palace)'], world))
     IP = make_dungeon('Ice Palace', 'Kholdstare',
                       ['Ice Palace (Entrance)', 'Ice Palace (Second Section)', 'Ice Palace (Main)', 'Ice Palace (East)',
                        'Ice Palace (East Top)', 'Ice Palace (Kholdstare)'], item_factory('Big Key (Ice Palace)', world),
-                      item_factory(['Small Key (Ice Palace)'] * 6, world),
+                      item_factory(['Small Key (Ice Palace)'] * (1 if usk else 6), world),
                       item_factory(['Map (Ice Palace)', 'Compass (Ice Palace)'], world))
     MM = make_dungeon('Misery Mire', 'Vitreous',
                       ['Misery Mire (Entrance)', 'Misery Mire (Main)', 'Misery Mire (West)', 'Misery Mire (Final Area)',
                        'Misery Mire (Vitreous)'], item_factory('Big Key (Misery Mire)', world),
-                      item_factory(['Small Key (Misery Mire)'] * 6, world),
+                      item_factory(['Small Key (Misery Mire)'] * (1 if usk else 6), world),
                       item_factory(['Map (Misery Mire)', 'Compass (Misery Mire)'], world))
     TR = make_dungeon('Turtle Rock', 'Trinexx',
                       ['Turtle Rock (Entrance)', 'Turtle Rock (First Section)', 'Turtle Rock (Chain Chomp Room)',
@@ -141,30 +141,30 @@ def create_dungeons(world: "ALTTPWorld"):
                        'Turtle Rock (Second Section)', 'Turtle Rock (Big Chest)', 'Turtle Rock (Crystaroller Room)',
                        'Turtle Rock (Dark Room)', 'Turtle Rock (Eye Bridge)', 'Turtle Rock (Trinexx)'],
                       item_factory('Big Key (Turtle Rock)', world),
-                      item_factory(['Small Key (Turtle Rock)'] * 6, world),
+                      item_factory(['Small Key (Turtle Rock)'] * (1 if usk else 6), world),
                       item_factory(['Map (Turtle Rock)', 'Compass (Turtle Rock)'], world))
 
     if multiworld.mode[player] != 'inverted':
         AT = make_dungeon('Agahnims Tower', 'Agahnim', ['Agahnims Tower', 'Agahnim 1'], None,
-                          item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
+                          item_factory(['Small Key (Agahnims Tower)'] * (1 if usk else 4), world), [])
         GT = make_dungeon('Ganons Tower', 'Agahnim2',
                           ['Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)', 'Ganons Tower (Compass Room)',
                            'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)', 'Ganons Tower (Firesnake Room)',
                            'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)', 'Ganons Tower (Top)',
                            'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)', 'Agahnim 2'],
                           item_factory('Big Key (Ganons Tower)', world),
-                          item_factory(['Small Key (Ganons Tower)'] * 8, world),
+                          item_factory(['Small Key (Ganons Tower)'] * (1 if usk else 8), world),
                           item_factory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], world))
     else:
         AT = make_dungeon('Inverted Agahnims Tower', 'Agahnim', ['Inverted Agahnims Tower', 'Agahnim 1'], None,
-                          item_factory(['Small Key (Agahnims Tower)'] * 4, world), [])
+                          item_factory(['Small Key (Agahnims Tower)'] * (1 if usk else 4), world), [])
         GT = make_dungeon('Inverted Ganons Tower', 'Agahnim2',
                           ['Inverted Ganons Tower (Entrance)', 'Ganons Tower (Tile Room)',
                            'Ganons Tower (Compass Room)', 'Ganons Tower (Hookshot Room)', 'Ganons Tower (Map Room)',
                            'Ganons Tower (Firesnake Room)', 'Ganons Tower (Teleport Room)', 'Ganons Tower (Bottom)',
                            'Ganons Tower (Top)', 'Ganons Tower (Before Moldorm)', 'Ganons Tower (Moldorm)',
                            'Agahnim 2'], item_factory('Big Key (Ganons Tower)', world),
-                          item_factory(['Small Key (Ganons Tower)'] * 8, world),
+                          item_factory(['Small Key (Ganons Tower)'] * (1 if usk else 8), world),
                           item_factory(['Map (Ganons Tower)', 'Compass (Ganons Tower)'], world))
 
     GT.bosses['bottom'] = BossFactory('Armos Knights', player)

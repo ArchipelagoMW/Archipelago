@@ -353,7 +353,7 @@ def generate_itempool(world):
     if multiworld.master_keys[player]:
         items_to_add = 60 if multiworld.small_key_shuffle[player] == "universal" else 48
         # add replacement items for the keys removed from the dungeon item pool
-        multiworld.itempool += [ItemFactory(GetBeemizerItem(multiworld, player, world.get_filler_item_name()), player)
+        multiworld.itempool += [item_factory(GetBeemizerItem(multiworld, player, world.get_filler_item_name()), world)
                                 for _ in range(items_to_add)]
 
     dungeon_items = [item for item in get_dungeon_item_pool_player(world)
@@ -539,7 +539,7 @@ def set_up_take_anys(world, player):
     if swords:
         sword = world.random.choice(swords)
         world.itempool.remove(sword)
-        world.itempool.append(item_factory('Rupees (20)', world))
+        world.itempool.append(item_factory('Rupees (20)', world.worlds[player]))
         old_man_take_any.shop.add_inventory(0, sword.name, 0, 0)
         loc_name = "Old Man Sword Cave"
         location = ALttPLocation(player, loc_name, shop_table_by_location[loc_name], parent=old_man_take_any)
@@ -565,7 +565,7 @@ def set_up_take_anys(world, player):
         location = ALttPLocation(player, take_any.name, shop_table_by_location[take_any.name], parent=take_any)
         location.shop_slot = 1
         take_any.locations.append(location)
-        location.place_locked_item(item_factory("Boss Heart Container", world))
+        location.place_locked_item(item_factory("Boss Heart Container", world.worlds[player]))
 
 
 def get_pool_core(world, player: int):
