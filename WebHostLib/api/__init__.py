@@ -4,10 +4,8 @@ from uuid import UUID
 
 from flask import Blueprint, abort
 
-from MultiServer import Context
-from Utils import restricted_loads
 from .. import cache
-from ..models import GameDataPackage, Room, Seed
+from ..models import Room, Seed
 
 api_endpoints = Blueprint('api', __name__, url_prefix="/api")
 
@@ -24,14 +22,12 @@ def room_info(room: UUID):
     if room is None:
         return abort(404)
     from base64 import urlsafe_b64encode
-    multidata = Context.decompress(room.seed.multidata)
     return {
         "tracker": urlsafe_b64encode(room.tracker.bytes).rstrip(b'=').decode('ascii'),
         "players": get_players(room.seed),
         "last_port": room.last_port,
         "last_activity": room.last_activity,
         "timeout": room.timeout,
-        "datapackage": multidata["datapackage"],
     }
 
 
@@ -59,16 +55,6 @@ def get_datapackage_checksums():
         game: game_data["checksum"] for game, game_data in network_data_package["games"].items()
     }
     return version_package
-
-
-@api_endpoints.route("/datapackage/<suuid:room>/<string:game>")
-@cache.cached()
-def get_gamepackage(room: UUID, game: str):
-    room = Room.get(id=room)
-    if room is None:
-        return abort(404)
-    multidata = Context.decompress(room.seed.multidata)
-    return restricted_loads(GameDataPackage.get(checksum=multidata["datapackage"][game]["checksum"]).data)
 
 
 from . import generate, user, tracker  # trigger registration

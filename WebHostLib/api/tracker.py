@@ -4,10 +4,12 @@ from uuid import UUID
 
 from flask import abort, jsonify
 
+from MultiServer import Context
 from NetUtils import NetworkItem, SlotType
+from Utils import restricted_loads
 from WebHostLib import cache
 from WebHostLib.api import api_endpoints
-from WebHostLib.models import Room
+from WebHostLib.models import GameDataPackage, Room
 from WebHostLib.tracker import TrackerData
 
 
@@ -146,4 +148,16 @@ def tracker_data(tracker: UUID):
             "connection_timers": connection_timers,
             "player_status": player_status,
             "slot_data": slot_data,
+            "datapackage": tracker_data._multidata["datapackage"],
         })
+
+
+@api_endpoints.route("/datapackage/<suuid:tracker>/<string:game>")
+@cache.cached()
+def get_gamepackage(tracker: UUID, game: str):
+    room = Room.get(tracker=tracker)
+    if room is None:
+        return abort(404)
+    multidata = Context.decompress(room.seed.multidata)
+    return restricted_loads(GameDataPackage.get(checksum=multidata["datapackage"][game]["checksum"]).data)
+
