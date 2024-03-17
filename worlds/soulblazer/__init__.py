@@ -1,7 +1,7 @@
 import settings
 import typing
 from .Options import SoulBlazerOptions  # the options we defined earlier
-from .Items import SoulBlazerItem  # data used below to add items to the World
+from .Items import SoulBlazerItem, SoulBlazerItemData, all_items_table  # data used below to add items to the World
 from .Locations import SoulBlazerLocation  # same as above
 from worlds.AutoWorld import WebWorld, World
 from BaseClasses import Region, Location, Entrance, Item, ItemClassification, Tutorial
@@ -43,15 +43,18 @@ class SoulBlazerWorld(World):
     """Base ID for items and locations"""
 
     lair_id_offset = 1000
-    """ID offset for lairids/NPC unlocks"""
+    """ID offset for Lair IDs"""
+
+    npc_reward_offset = 500
+    """ID offset for NPC rewards"""
 
     # Instead of dynamic numbering, IDs could be part of data.
 
     # The following two dicts are required for the generation to know which
     # items exist. They could be generated from json or something else. They can
     # include events, but don't have to since events will be placed manually.
-    item_name_to_id = {name: id for
-                       id, name in enumerate(mygame_items, base_id)}
+    item_name_to_id = {name: data.code for
+                       name, data in all_items_table.items()}
     location_name_to_id = {name: id for
                            id, name in enumerate(mygame_locations, base_id)}
 
