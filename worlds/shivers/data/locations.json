@@ -13,7 +13,7 @@
     "Puzzle Solved Columns of RA",
     "Puzzle Solved Burial Door",
     "Puzzle Solved Chinese Solitaire",
-    "Puzzle Solved Tiki Drums",
+    "Puzzle Solved Shaman Drums",
     "Puzzle Solved Lyre",
     "Puzzle Solved Red Door",
     "Puzzle Solved Fortune Teller Door",
@@ -38,7 +38,7 @@
     "Flashback Memory Obtained Theater Movie",
     "Flashback Memory Obtained Museum Blueprints",
     "Flashback Memory Obtained Beth's Address Book",
-    "Flashback Memory Obtained Merick's Notebook",
+    "Flashback Memory Obtained Merrick's Notebook",
     "Flashback Memory Obtained Professor Windlenot's Diary",
     "Ixupi Captured Water",
     "Ixupi Captured Wax",
@@ -68,48 +68,48 @@
     "Puzzle Hint Found: Gallows Information Plaque",
     "Puzzle Hint Found: Mastermind Information Plaque",
     "Puzzle Hint Found: Elevator Writing",
-    "Puzzle Hint Found: Tiki Security Camera",
+    "Puzzle Hint Found: Shaman Security Camera",
     "Puzzle Hint Found: Tape Recorder Heard",
-    "Information Plaque: Transforming Masks (Lobby)",
-    "Information Plaque: Jade Skull (Lobby)",
-    "Information Plaque: Bronze Unicorn (Prehistoric)",
-    "Information Plaque: Griffin (Prehistoric)",
-    "Information Plaque: Eagles Nest (Prehistoric)",
-    "Information Plaque: Large Spider (Prehistoric)",
-    "Information Plaque: Starfish (Prehistoric)",
-    "Information Plaque: Quartz Crystal (Ocean)",
-    "Information Plaque: Poseidon (Ocean)",
-    "Information Plaque: Colossus of Rhodes (Ocean)",
-    "Information Plaque: Poseidon's Temple (Ocean)",
-    "Information Plaque: Subterranean World (Underground Maze)",
-    "Information Plaque: Dero (Underground Maze)",
-    "Information Plaque: Tomb of the Ixupi (Egypt)",
-    "Information Plaque: The Sphinx (Egypt)",
-    "Information Plaque: Curse of Anubis (Egypt)",
-    "Information Plaque: Norse Burial Ship (Burial)",
-    "Information Plaque: Paracas Burial Bundles (Burial)",
-    "Information Plaque: Spectacular Coffins of Ghana (Burial)",
-    "Information Plaque: Cremation (Burial)",
-    "Information Plaque: Animal Crematorium (Burial)",
-    "Information Plaque: Witch Doctors of the Congo (Tiki)",
-    "Information Plaque: Sarombe doctor of Mozambique (Tiki)",
-    "Information Plaque: Fisherman's Canoe God (Gods)",
-    "Information Plaque: Mayan Gods (Gods)",
-    "Information Plaque: Thor (Gods)",
-    "Information Plaque: Celtic Janus Sculpture (Gods)",
-    "Information Plaque: Sumerian Bull God - An (Gods)",
-    "Information Plaque: Sumerian Lyre (Gods)",
-    "Information Plaque: Chuen (Gods)",
-    "Information Plaque: African Creation Myth (Anansi)",
-    "Information Plaque: Apophis the Serpent (Anansi)",
-    "Information Plaque: Death (Anansi)",
-    "Information Plaque: Cyclops (Pegasus)",
-    "Information Plaque: Lycanthropy (Werewolf)",
-    "Information Plaque: Coincidence or Extraterrestrial Visits? (UFO)",
-    "Information Plaque: Planets (UFO)",
-    "Information Plaque: Astronomical Construction (UFO)",
-    "Information Plaque: Guillotine (Torture)",
-    "Information Plaque: Aliens (UFO)",
+    "Information Plaque: (Lobby) Transforming Masks",
+    "Information Plaque: (Lobby) Jade Skull",
+    "Information Plaque: (Prehistoric) Bronze Unicorn",
+    "Information Plaque: (Prehistoric) Griffin",
+    "Information Plaque: (Prehistoric) Eagles Nest",
+    "Information Plaque: (Prehistoric) Large Spider",
+    "Information Plaque: (Prehistoric) Starfish",
+    "Information Plaque: (Ocean) Quartz Crystal",
+    "Information Plaque: (Ocean) Poseidon",
+    "Information Plaque: (Ocean) Colossus of Rhodes",
+    "Information Plaque: (Ocean) Poseidon's Temple",
+    "Information Plaque: (Underground Maze) Subterranean World",
+    "Information Plaque: (Underground Maze) Dero",
+    "Information Plaque: (Egypt) Tomb of the Ixupi",
+    "Information Plaque: (Egypt) The Sphinx",
+    "Information Plaque: (Egypt) Curse of Anubis",
+    "Information Plaque: (Burial) Norse Burial Ship",
+    "Information Plaque: (Burial) Paracas Burial Bundles",
+    "Information Plaque: (Burial) Spectacular Coffins of Ghana",
+    "Information Plaque: (Burial) Cremation",
+    "Information Plaque: (Burial) Animal Crematorium",
+    "Information Plaque: (Shaman) Witch Doctors of the Congo",
+    "Information Plaque: (Shaman) Sarombe doctor of Mozambique",
+    "Information Plaque: (Gods) Fisherman's Canoe God",
+    "Information Plaque: (Gods) Mayan Gods",
+    "Information Plaque: (Gods) Thor",
+    "Information Plaque: (Gods) Celtic Janus Sculpture",
+    "Information Plaque: (Gods) Sumerian Bull God - An",
+    "Information Plaque: (Gods) Sumerian Lyre",
+    "Information Plaque: (Gods) Chuen",
+    "Information Plaque: (Anansi) African Creation Myth",
+    "Information Plaque: (Anansi) Apophis the Serpent",
+    "Information Plaque: (Anansi) Death",
+    "Information Plaque: (Pegasus) Cyclops",
+    "Information Plaque: (Werewolf) Lycanthropy",
+    "Information Plaque: (UFO) Coincidence or Extraterrestrial Visits?",
+    "Information Plaque: (UFO) Planets",
+    "Information Plaque: (UFO) Astronomical Construction",
+    "Information Plaque: (Torture) Guillotine",
+    "Information Plaque: (UFO) Aliens",
     "Puzzle Solved Office Elevator",
     "Puzzle Solved Bedroom Elevator",
     "Puzzle Solved Three Floor Elevator",
@@ -176,10 +176,10 @@
     "Lobby": [
       "Puzzle Solved Theater Door",
       "Flashback Memory Obtained Museum Brochure",
-      "Information Plaque: Jade Skull (Lobby)",
-      "Information Plaque: Transforming Masks (Lobby)",
+      "Information Plaque: (Lobby) Jade Skull",
+      "Information Plaque: (Lobby) Transforming Masks",
       "Accessible: Storage: Slide",
-      "Accessible: Storage: Eagles Head"
+      "Accessible: Storage: Transforming Mask"
     ],
     "Generator": [
       "Final Riddle: Beth's Body Page 17"
@@ -193,7 +193,7 @@
     "Clock Tower": [
       "Flashback Memory Obtained Beth's Ghost",
       "Accessible: Storage: Clock Tower",
-      "Puzzle Hint Found: Tiki Security Camera"
+      "Puzzle Hint Found: Shaman Security Camera"
     ],
     "Projector Room": [
       "Flashback Memory Obtained Theater Movie"
@@ -204,10 +204,10 @@
       "Flashback Memory Obtained Museum Blueprints",
       "Accessible: Storage: Ocean",
       "Puzzle Hint Found: Sirens Song Heard",
-      "Information Plaque: Quartz Crystal (Ocean)",
-      "Information Plaque: Poseidon (Ocean)",
-      "Information Plaque: Colossus of Rhodes (Ocean)",
-      "Information Plaque: Poseidon's Temple (Ocean)"
+      "Information Plaque: (Ocean) Quartz Crystal",
+      "Information Plaque: (Ocean) Poseidon",
+      "Information Plaque: (Ocean) Colossus of Rhodes",
+      "Information Plaque: (Ocean) Poseidon's Temple"
     ],
     "Maze Staircase": [
       "Puzzle Solved Maze Door"
@@ -217,38 +217,38 @@
       "Puzzle Solved Burial Door",
       "Accessible: Storage: Egypt",
       "Puzzle Hint Found: Egyptian Sphinx Heard",
-      "Information Plaque: Tomb of the Ixupi (Egypt)",
-      "Information Plaque: The Sphinx (Egypt)",
-      "Information Plaque: Curse of Anubis (Egypt)"
+      "Information Plaque: (Egypt) Tomb of the Ixupi",
+      "Information Plaque: (Egypt) The Sphinx",
+      "Information Plaque: (Egypt) Curse of Anubis"
     ],
     "Burial": [
       "Puzzle Solved Chinese Solitaire",
-      "Flashback Memory Obtained Merick's Notebook",
+      "Flashback Memory Obtained Merrick's Notebook",
       "Accessible: Storage: Chinese Solitaire",
-      "Information Plaque: Norse Burial Ship (Burial)",
-      "Information Plaque: Paracas Burial Bundles (Burial)",
-      "Information Plaque: Spectacular Coffins of Ghana (Burial)",
-      "Information Plaque: Animal Crematorium (Burial)",
-      "Information Plaque: Cremation (Burial)"
+      "Information Plaque: (Burial) Norse Burial Ship",
+      "Information Plaque: (Burial) Paracas Burial Bundles",
+      "Information Plaque: (Burial) Spectacular Coffins of Ghana",
+      "Information Plaque: (Burial) Animal Crematorium",
+      "Information Plaque: (Burial) Cremation"
     ],
-    "Tiki": [
-      "Puzzle Solved Tiki Drums",
-      "Accessible: Storage: Tiki Hut",
-      "Information Plaque: Witch Doctors of the Congo (Tiki)",
-      "Information Plaque: Sarombe doctor of Mozambique (Tiki)"
+    "Shaman": [
+      "Puzzle Solved Shaman Drums",
+      "Accessible: Storage: Shaman Hut",
+      "Information Plaque: (Shaman) Witch Doctors of the Congo",
+      "Information Plaque: (Shaman) Sarombe doctor of Mozambique"
     ],
     "Gods Room": [
       "Puzzle Solved Lyre",
       "Puzzle Solved Red Door",
       "Accessible: Storage: Lyre",
       "Final Riddle: Norse God Stone Message",
-      "Information Plaque: Fisherman's Canoe God (Gods)",
-      "Information Plaque: Mayan Gods (Gods)",
-      "Information Plaque: Thor (Gods)",
-      "Information Plaque: Celtic Janus Sculpture (Gods)",
-      "Information Plaque: Sumerian Bull God - An (Gods)",
-      "Information Plaque: Sumerian Lyre (Gods)",
-      "Information Plaque: Chuen (Gods)"
+      "Information Plaque: (Gods) Fisherman's Canoe God",
+      "Information Plaque: (Gods) Mayan Gods",
+      "Information Plaque: (Gods) Thor",
+      "Information Plaque: (Gods) Celtic Janus Sculpture",
+      "Information Plaque: (Gods) Sumerian Bull God - An",
+      "Information Plaque: (Gods) Sumerian Lyre",
+      "Information Plaque: (Gods) Chuen"
     ],
     "Blue Maze": [
       "Puzzle Solved Fortune Teller Door"
@@ -265,28 +265,28 @@
       "Puzzle Solved UFO Symbols",
       "Accessible: Storage: UFO",
       "Final Riddle: Planets Aligned",
-      "Information Plaque: Coincidence or Extraterrestrial Visits? (UFO)",
-      "Information Plaque: Planets (UFO)",
-      "Information Plaque: Astronomical Construction (UFO)",
-      "Information Plaque: Aliens (UFO)"
+      "Information Plaque: (UFO) Coincidence or Extraterrestrial Visits?",
+      "Information Plaque: (UFO) Planets",
+      "Information Plaque: (UFO) Astronomical Construction",
+      "Information Plaque: (UFO) Aliens"
     ],
     "Anansi": [
       "Puzzle Solved Anansi Musicbox",
       "Flashback Memory Obtained Ancient Astrology",
       "Accessible: Storage: Skeleton",
       "Accessible: Storage: Anansi",
-      "Information Plaque: African Creation Myth (Anansi)",
-      "Information Plaque: Apophis the Serpent (Anansi)",
-      "Information Plaque: Death (Anansi)",
-      "Information Plaque: Cyclops (Pegasus)",
-      "Information Plaque: Lycanthropy (Werewolf)"
+      "Information Plaque: (Anansi) African Creation Myth",
+      "Information Plaque: (Anansi) Apophis the Serpent",
+      "Information Plaque: (Anansi) Death",
+      "Information Plaque: (Pegasus) Cyclops",
+      "Information Plaque: (Werewolf) Lycanthropy"
     ],
     "Torture": [
       "Puzzle Solved Gallows",
-      "Accessible: Storage: Hanging",
+      "Accessible: Storage: Gallows",
       "Final Riddle: Guillotine Dropped",
       "Puzzle Hint Found: Gallows Information Plaque",
-      "Information Plaque: Guillotine (Torture)"
+      "Information Plaque: (Torture) Guillotine"
     ],
     "Puzzle Room Mastermind": [
       "Puzzle Solved Mastermind",
@@ -296,17 +296,17 @@
       "Puzzle Solved Marble Flipper"
     ],
     "Prehistoric": [
-      "Information Plaque: Bronze Unicorn (Prehistoric)",
-      "Information Plaque: Griffin (Prehistoric)",
-      "Information Plaque: Eagles Nest (Prehistoric)",
-      "Information Plaque: Large Spider (Prehistoric)",
-      "Information Plaque: Starfish (Prehistoric)",
+      "Information Plaque: (Prehistoric) Bronze Unicorn",
+      "Information Plaque: (Prehistoric) Griffin",
+      "Information Plaque: (Prehistoric) Eagles Nest",
+      "Information Plaque: (Prehistoric) Large Spider",
+      "Information Plaque: (Prehistoric) Starfish",
       "Accessible: Storage: Eagles Nest"
     ],
     "Tar River": [
       "Accessible: Storage: Tar River",
-      "Information Plaque: Subterranean World (Underground Maze)",
-      "Information Plaque: Dero (Underground Maze)"
+      "Information Plaque: (Underground Maze) Subterranean World",
+      "Information Plaque: (Underground Maze) Dero"
     ],
     "Theater": [
       "Accessible: Storage: Theater"

@@ -68,7 +68,6 @@ non_apworlds: set = {
     "Archipelago",
     "ChecksFinder",
     "Clique",
-    "DLCQuest",
     "Final Fantasy",
     "Lufia II Ancient Cave",
     "Meritous",
@@ -80,13 +79,11 @@ non_apworlds: set = {
     "Super Mario 64",
     "VVVVVV",
     "Wargroove",
-    "Zillion",
 }
 
 # LogicMixin is broken before 3.10 import revamp
 if sys.version_info < (3,10):
     non_apworlds.add("Hollow Knight")
-    non_apworlds.add("Starcraft 2 Wings of Liberty")
 
 def download_SNI():
     print("Updating SNI")
@@ -396,8 +393,6 @@ class BuildExeCommand(cx_Freeze.command.build_exe.BuildEXE):
                     folders_to_remove.append(file_name)
                 shutil.rmtree(world_directory)
         shutil.copyfile("meta.yaml", self.buildfolder / "Players" / "Templates" / "meta.yaml")
-        # TODO: fix LttP options one day
-        shutil.copyfile("playerSettings.yaml", self.buildfolder / "Players" / "Templates" / "A Link to the Past.yaml")
         try:
             from maseya import z3pr
         except ImportError:

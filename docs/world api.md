@@ -170,6 +170,7 @@ could also be progress in a research tree, or even something more abstract like 
 Each location has a `name` and an `address` (hereafter referred to as an `id`), is placed in a Region, has access rules,
 and has a classification. The name needs to be unique within each game and must not be numeric (must contain least 1
 letter or symbol). The ID needs to be unique across all games, and is best kept in the same range as the item IDs.
+Locations and items can share IDs, so typically a game's locations and items start at the same ID.
 
 World-specific IDs must be in the range 1 to 2<sup>53</sup>-1; IDs ≤ 0 are global and reserved.
 
@@ -737,8 +738,9 @@ def generate_output(self, output_directory: str) -> None:
 
 If the game client needs to know information about the generated seed, a preferred method of transferring the data
 is through the slot data. This is filled with the `fill_slot_data` method of your world by returning
-a `Dict[str, Any]`, but, to not waste resources, should be limited to data that is absolutely necessary. Slot data is
-sent to your client once it has successfully [connected](network%20protocol.md#connected).
+a `dict` with `str` keys that can be serialized with json.
+But, to not waste resources, it should be limited to data that is absolutely necessary. Slot data is sent to your client
+once it has successfully [connected](network%20protocol.md#connected).
 If you need to know information about locations in your world, instead of propagating the slot data, it is preferable
 to use [LocationScouts](network%20protocol.md#locationscouts), since that data already exists on the server. The most
 common usage of slot data is sending option results that the client needs to be aware of.

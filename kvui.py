@@ -2,6 +2,7 @@ import os
 import logging
 import sys
 import typing
+import re
 
 if sys.platform == "win32":
     import ctypes
@@ -38,11 +39,13 @@ from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import BooleanProperty, ObjectProperty
 from kivy.metrics import dp
+from kivy.effects.scroll import ScrollEffect
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.layout import Layout
 from kivy.uix.textinput import TextInput
+from kivy.uix.scrollview import ScrollView
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelItem
 from kivy.uix.boxlayout import BoxLayout
@@ -69,6 +72,8 @@ if typing.TYPE_CHECKING:
     context_type = CommonClient.CommonContext
 else:
     context_type = object
+
+remove_between_brackets = re.compile(r"\[.*?]")
 
 
 # I was surprised to find this didn't already exist in kivy :(
@@ -116,6 +121,19 @@ class ToolTip(Label):
 
 class ServerToolTip(ToolTip):
     pass
+
+
+class ScrollBox(ScrollView):
+    layout: BoxLayout
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.layout = BoxLayout(size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter("height"))
+        self.add_widget(self.layout)
+        self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["content", "bars"]
 
 
 class HovererableLabel(HoverBehavior, Label):
@@ -290,7 +308,6 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
     selected = BooleanProperty(False)
     striped = BooleanProperty(False)
     index = None
-    no_select = []
 
     def __init__(self):
         super(HintLabel, self).__init__()
@@ -308,9 +325,7 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
 
     def refresh_view_attrs(self, rv, index, data):
         self.index = index
-        if "select" in data and not data["select"] and index not in self.no_select:
-            self.no_select.append(index)
-        self.striped = data["striped"]
+        self.striped = data.get("striped", False)
         self.receiving_text = data["receiving"]["text"]
         self.item_text = data["item"]["text"]
         self.finding_text = data["finding"]["text"]
@@ -324,24 +339,44 @@ class HintLabel(RecycleDataViewBehavior, BoxLayout):
         """ Add selection on touch down """
         if super(HintLabel, self).on_touch_down(touch):
             return True
-        if self.index not in self.no_select:
+        if self.index:  # skip header
             if self.collide_point(*touch.pos):
                 if self.selected:
                     self.parent.clear_selection()
                 else:
-                    text = "".join([self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
+                    text = "".join((self.receiving_text, "\'s ", self.item_text, " is at ", self.location_text, " in ",
                                     self.finding_text, "\'s World", (" at " + self.entrance_text)
                                     if self.entrance_text != "Vanilla"
-                                    else "", ". (", self.found_text.lower(), ")"])
+                                    else "", ". (", self.found_text.lower(), ")"))
                     temp = MarkupLabel(text).markup
                     text = "".join(
                         part for part in temp if not part.startswith(("[color", "[/color]", "[ref=", "[/ref]")))
                     Clipboard.copy(escape_markup(text).replace("&amp;", "&").replace("&bl;", "[").replace("&br;", "]"))
                     return self.parent.select_with_touch(self.index, touch)
+        else:
+            parent = self.parent
+            parent.clear_selection()
+            parent: HintLog = parent.parent
+            # find correct column
+            for child in self.children:
+                if child.collide_point(*touch.pos):
+                    key = child.sort_key
+                    parent.hint_sorter = lambda element: remove_between_brackets.sub("", element[key]["text"]).lower()
+                    if key == parent.sort_key:
+                        # second click reverses order
+                        parent.reversed = not parent.reversed
+                    else:
+                        parent.sort_key = key
+                        parent.reversed = False
+                    break
+            else:
+                logging.warning("Did not find clicked header for sorting.")
+
+            App.get_running_app().update_hints()
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
-        if self.index not in self.no_select:
+        if self.index:
             self.selected = is_selected
 
 
@@ -633,8 +668,10 @@ class HintLog(RecycleView):
         "entrance": {"text": "[u]Entrance[/u]"},
         "found": {"text": "[u]Status[/u]"},
         "striped": True,
-        "select": False,
     }
+
+    sort_key: str = ""
+    reversed: bool = False
 
     def __init__(self, parser):
         super(HintLog, self).__init__()
@@ -642,11 +679,9 @@ class HintLog(RecycleView):
         self.parser = parser
 
     def refresh_hints(self, hints):
-        self.data = [self.header]
-        striped = False
+        data = []
         for hint in hints:
-            self.data.append({
-                "striped": striped,
+            data.append({
                 "receiving": {"text": self.parser.handle_node({"type": "player_id", "text": hint["receiving_player"]})},
                 "item": {"text": self.parser.handle_node(
                     {"type": "item_id", "text": hint["item"], "flags": hint["item_flags"]})},
@@ -659,7 +694,16 @@ class HintLog(RecycleView):
                     "text": self.parser.handle_node({"type": "color", "color": "green" if hint["found"] else "red",
                                                      "text": "Found" if hint["found"] else "Not Found"})},
             })
-            striped = not striped
+
+        data.sort(key=self.hint_sorter, reverse=self.reversed)
+        for i in range(0, len(data), 2):
+            data[i]["striped"] = True
+        data.insert(0, self.header)
+        self.data = data
+
+    @staticmethod
+    def hint_sorter(element: dict) -> str:
+        return ""
 
 
 class E(ExceptionHandler):
@@ -708,8 +752,10 @@ class KivyJSONtoTextParser(JSONtoTextParser):
             text = f"Game: {slot_info.game}<br>" \
                    f"Type: {SlotType(slot_info.type).name}"
             if slot_info.group_members:
-                text += f"<br>Members:<br> " + \
-                        "<br> ".join(self.ctx.player_names[player] for player in slot_info.group_members)
+                text += f"<br>Members:<br> " + "<br> ".join(
+                    escape_markup(self.ctx.player_names[player])
+                    for player in slot_info.group_members
+                )
             node.setdefault("refs", []).append(text)
         return super(KivyJSONtoTextParser, self)._handle_player_id(node)
 
