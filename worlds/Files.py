@@ -56,10 +56,10 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
         if handler.required_extensions:
             handlers = [handler]
             for required in handler.required_extensions:
-                if required in AutoPatchExtensionRegister.extension_types:
-                    handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
-                else:
+                ext = AutoPatchExtensionRegister.extension_types.get(required)
+                if not ext:
                     raise NotImplementedError(f"No handler for {required}.")
+                handlers.append(ext)
             return handlers
         else:
             return handler
@@ -250,6 +250,7 @@ class APProcedurePatch(APAutoPatchInterface):
         self.read()
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
+        assert not isinstance(self.procedure, str), f"{type(self)} must define procedures"
         for step, args in self.procedure:
             if isinstance(patch_extender, list):
                 extension = next((item for item in [getattr(extender, step, None) for extender in patch_extender]
