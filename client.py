@@ -4,6 +4,7 @@ import functools
 import itertools
 from typing import TYPE_CHECKING, Dict, Iterable, Iterator, List
 
+import Utils
 from NetUtils import ClientStatus
 import worlds._bizhawk as bizhawk
 from worlds._bizhawk import RequestFailedError
@@ -111,17 +112,16 @@ TRACKER_EVENT_FLAGS = [
 ]
 
 
-# class WL4CommandProcessor(ClientCommandProcessor):
-#     def _cmd_deathlink(self):
-#         '''Toggle death link from client. Overrides default setting.'''
-#
-#         if isinstance(self.ctx, WL4Context):
-#             self.ctx.death_link.client_override = True
-#             self.ctx.death_link.enabled = not self.ctx.death_link.enabled
-#             Utils.async_start(
-#                 self.ctx.update_death_link(self.ctx.death_link.enabled),
-#                 name='Update Death Link'
-#             )
+def cmd_deathlink(self):
+    '''Toggle death link from client. Overrides default setting.'''
+
+    client_handler = self.ctx.client_handler
+    client_handler.death_link.client_override = True
+    client_handler.death_link.enabled = not client_handler.death_link.enabled
+    Utils.async_start(
+        self.ctx.update_death_link(client_handler.death_link.enabled),
+        name='Update Death Link'
+    )
 
 
 class DeathLinkCtx:
@@ -154,6 +154,8 @@ class WL4Client(BizHawkClient):
         super().__init__()
         self.local_checked_locations = []
         self.local_set_events = {}
+        self.rom_slot_name = None
+        self.death_link = None
 
     async def validate_rom(self, client_ctx: BizHawkClientContext) -> bool:
         from CommonClient import logger
@@ -185,7 +187,7 @@ class WL4Client(BizHawkClient):
         client_ctx.items_handling = 0b001
         client_ctx.want_slot_data = True
 
-        # bizhawk_ctx.command_processor = WL4CommandProcessor(client_ctx)
+        client_ctx.command_processor.commands["deathlink"] = cmd_deathlink
         self.death_link = DeathLinkCtx()
 
         return True
