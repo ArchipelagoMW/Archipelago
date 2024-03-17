@@ -18,24 +18,6 @@ PORTALS = [
 ]
 
 
-REGION_ORDER = [
-    "Autumn Hills",
-    "Forlorn Temple",
-    "Catacombs",
-    "Bamboo Creek",
-    "Howling Grotto",
-    "Quillshroom Marsh",
-    "Searing Crags",
-    "Glacial Peak",
-    "Tower of Time",
-    "Cloud Ruins",
-    "Underworld",
-    "Riviere Turquoise",
-    "Elemental Skylands",
-    "Sunken Shrine",
-]
-
-
 SHOP_POINTS = {
     "Autumn Hills": [
         "Climbing Claws",
@@ -202,6 +184,24 @@ CHECKPOINTS = {
         "Moon Crest",
     ]
 }
+
+
+REGION_ORDER = [
+    "Autumn Hills",
+    "Forlorn Temple",
+    "Catacombs",
+    "Bamboo Creek",
+    "Howling Grotto",
+    "Quillshroom Marsh",
+    "Searing Crags",
+    "Glacial Peak",
+    "Tower of Time",
+    "Cloud Ruins",
+    "Underworld",
+    "Riviere Turquoise",
+    "Elemental Skylands",
+    "Sunken Shrine",
+]
 
 
 def shuffle_portals(world: "MessengerWorld") -> None:
