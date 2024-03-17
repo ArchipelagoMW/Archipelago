@@ -271,7 +271,7 @@ class TunicWorld(World):
             "logic_rules": self.options.logic_rules.value,
             "lanternless": self.options.lanternless.value,
             "maskless": self.options.maskless.value,
-            "entrance_rando": bool(self.options.entrance_rando.value),
+            "entrance_rando": int(bool(self.options.entrance_rando.value)),
             "shuffle_ladders": self.options.shuffle_ladders.value,
             "Hexagon Quest Prayer": self.ability_unlocks["Pages 24-25 (Prayer)"],
             "Hexagon Quest Holy Cross": self.ability_unlocks["Pages 42-43 (Holy Cross)"],
