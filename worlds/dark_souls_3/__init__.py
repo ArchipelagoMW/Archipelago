@@ -498,9 +498,13 @@ class DarkSouls3World(World):
         self._add_location_rule("ID: Bellowing Dragoncrest Ring - drop from B1 towards pit",
                                 "Jailbreaker's Key")
         self._add_location_rule("ID: Covetous Gold Serpent Ring - Siegward's cell", "Old Cell Key")
-        self._add_location_rule(
+        self._add_location_rule([
             "UG: Hornet Ring - environs, right of main path after killing FK boss",
-            lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher"),
+            "UG: Wolf Knight Helm - shop after killing FK boss",
+            "UG: Wolf Knight Armor - shop after killing FK boss",
+            "UG: Wolf Knight Gauntlets - shop after killing FK boss",
+            "UG: Wolf Knight Leggings - shop after killing FK boss"
+        ], lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
         )
         self._add_location_rule(
             "ID: Prisoner Chief's Ashes - B2 near, locked cell by stairs",
@@ -793,9 +797,10 @@ class DarkSouls3World(World):
 
         # Hawkwood only leaves after defating Abyss Watchers, Curse-Rotted Greatwood, Deacons of the Deep and Crystal Sage
         # All of these are covered by the Farron Keep placement except for Abyss Watchers
-        self._add_location_rule(
-            "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
-            lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
+        self._add_location_rule([
+                "FS: Hawkwood's Shield - gravestone after Hawkwood leaves",
+                "FS: Farron Ring - Hawkwood"
+        ], lambda state: self._can_get(state, "FK: Cinders of a Lord - Abyss Watcher")
         )
         
         # After Hawkwood leaves and once you have the Torso Stone, you can fight him for dragon
@@ -936,6 +941,10 @@ class DarkSouls3World(World):
         # before killing Abyss Watchers.
         self._add_location_rule("FK: Soul of the Blood of the Wolf", self._has_any_scroll)
         self._add_location_rule("FK: Cinders of a Lord - Abyss Watcher", self._has_any_scroll)
+        self._add_location_rule("FS: Undead Legion Helm - shop after killing FK boss", self._has_any_scroll)
+        self._add_location_rule("FS: Undead Legion Armor - shop after killing FK boss", self._has_any_scroll)
+        self._add_location_rule("FS: Undead Legion Gauntlet - shop after killing FK boss", self._has_any_scroll)
+        self._add_location_rule("FS: Undead Legion Leggings - shop after killing FK boss", self._has_any_scroll)
         self._add_entrance_rule("Catacombs of Carthus", self._has_any_scroll)
         # Not really necessary but ensures players can decide which way to go
         if self.options.enable_dlc:
