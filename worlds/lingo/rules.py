@@ -50,18 +50,6 @@ def lingo_can_use_level_2_location(state: CollectionState, world: "LingoWorld", 
     return False
 
 
-def lingo_can_do_pilgrimage(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
-    if world.options.sunwarp_access >= SunwarpAccess.option_unlock and\
-            not _lingo_can_open_door(state, "Sunwarps", "1 Sunwarp", world, player_logic):
-        return False
-
-    for i in range(1, 6):
-        if not state.has(f"{i+1} Sunwarp Reached", world.player):
-            return False
-
-    return True
-
-
 def _lingo_can_satisfy_requirements(state: CollectionState, access: AccessRequirements, world: "LingoWorld",
                                     player_logic: LingoPlayerLogic):
     for req_room in access.rooms:

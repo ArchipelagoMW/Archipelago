@@ -5,8 +5,8 @@ from .datatypes import EntranceType, Room, RoomAndDoor
 from .items import LingoItem
 from .locations import LingoLocation
 from .options import SunwarpAccess
-from .player_logic import AccessRequirements, LingoPlayerLogic, PlayerLocation
-from .rules import lingo_can_do_pilgrimage, lingo_can_use_entrance, make_location_lambda
+from .player_logic import LingoPlayerLogic
+from .rules import lingo_can_use_entrance, make_location_lambda
 from .static_logic import ALL_ROOMS, PAINTINGS
 
 if TYPE_CHECKING:
@@ -23,24 +23,6 @@ def create_region(room: Room, world: "LingoWorld", player_logic: LingoPlayerLogi
             event_name = player_logic.event_loc_to_item[location.name]
             event_item = LingoItem(event_name, ItemClassification.progression, None, world.player)
             new_location.place_locked_item(event_item)
-
-    return new_region
-
-
-def create_pilgrimage_region(room: Room, part: int, world: "LingoWorld", player_logic: LingoPlayerLogic) -> Region:
-    new_region = Region(f"{room.name} (Pilgrimage Part {part})", world.player, world.multiworld)
-
-    if player_logic.sunwarp_entrances[part] == room.name:
-        access_reqs: AccessRequirements = AccessRequirements()
-        if world.options.sunwarp_access >= SunwarpAccess.option_unlock:
-            access_reqs.doors.add(RoomAndDoor("Sunwarps", f"{part+1} Sunwarp"))
-
-        event_name = f"{part+1} Sunwarp Reached"
-        new_location = LingoLocation(world.player, event_name, None, new_region)
-        new_location.access_rule = make_location_lambda(PlayerLocation(event_name, None, access_reqs), world,
-                                                        player_logic)
-        new_location.place_locked_item(LingoItem(event_name, ItemClassification.progression, None, world.player))
-        new_region.locations.append(new_location)
 
     return new_region
 
@@ -122,8 +104,8 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
 
         if world.options.enable_pilgrimage:
             for part in range(1, 6):
-                pilgrimage_region = create_pilgrimage_region(room, part, world, player_logic)
-                regions[pilgrimage_region.name] = pilgrimage_region
+                pilgrimage_region_name = f"{room.name} (Pilgrimage Part {part})"
+                regions[pilgrimage_region_name] = Region(pilgrimage_region_name, world.player, world.multiworld)
 
     # Connect all created regions now that they exist.
     for room in ALL_ROOMS:
@@ -152,15 +134,22 @@ def create_regions(world: "LingoWorld", player_logic: LingoPlayerLogic) -> None:
                              entrance.type, False, world, player_logic)
 
     if world.options.enable_pilgrimage:
-        # Create connections from Menu for the beginning of each pilgrimage segment.
-        for i in range(0, 5):
-            regions["Menu"].connect(regions[f"{player_logic.sunwarp_exits[i]} (Pilgrimage Part {i+1})"],
-                                    f"Pilgrimage Part {i+1}")
+        # Create connections between each segment of the pilgrimage.
+        for i in range(0, 6):
+            required_door = None
+            if world.options.sunwarp_access >= SunwarpAccess.option_unlock:
+                required_door = RoomAndDoor("Sunwarps", f"{i+1} Sunwarp")
 
-        # Create the actual pilgrimage.
-        regions[player_logic.sunwarp_entrances[0]].connect(regions["Pilgrim Antechamber"], "Pilgrimage",
-                                                           lambda state: lingo_can_do_pilgrimage(state, world,
-                                                                                                 player_logic))
+            from_room = player_logic.sunwarp_entrances[i]
+            if i > 0:
+                from_room += f" (Pilgrimage Part {i})"
+
+            to_room = f"{player_logic.sunwarp_exits[i]} (Pilgrimage Part {i+1})"
+            if i == 5:
+                to_room = "Pilgrim Antechamber"
+
+            connect_entrance(regions, regions[from_room], regions[to_room], f"Pilgrimage Part {i+1}", required_door,
+                             EntranceType.NORMAL, True, world, player_logic)
     else:
         connect_entrance(regions, regions["Starting Room"], regions["Pilgrim Antechamber"], "Sun Painting",
                          RoomAndDoor("Pilgrim Antechamber", "Sun Painting"), EntranceType.PAINTING, False, world,
