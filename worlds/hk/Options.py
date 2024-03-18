@@ -139,12 +139,14 @@ for option_name in logic_options.values():
     if option_name in hollow_knight_randomize_options:
         continue
     extra_data = {"__module__": __name__}
+    # some options, such as elevator pass, are appear in logic_options despite explicitly being
+    # handled below as classes.
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
-    option = type(option_name, (Toggle,), extra_data)
-    option.display_name = splitter_pattern.sub(" ", option_name)
-    globals()[option.__name__] = option
-    hollow_knight_logic_options[option.__name__] = option
+        option = type(option_name, (Toggle,), extra_data)
+        option.display_name = splitter_pattern.sub(" ", option_name)
+        globals()[option.__name__] = option
+        hollow_knight_logic_options[option.__name__] = option
 
 
 class RandomizeElevatorPass(Toggle):
