@@ -2,9 +2,9 @@ from typing import List
 
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
-from .Items import OoTMMItem, item_data_table, item_table
-from .Locations import OoTMMLocation, location_data_table, location_table, locked_locations
-from .Options import ootmm_options
+from .items import OoTMMItem, item_data_table, item_table
+from .locations import OoTMMLocation, location_data_table, location_table, locked_locations
+from .options import ootmm_options
 from .Regions import region_data_table
 from .Rules import get_button_rule
 
@@ -81,6 +81,12 @@ class OoTMMWorld(World):
 
         # Set priority location for the Big Red Button!
         # self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
+    
+    def generate_output(self, output_directory: str) -> None:
+        multiworld = self.multiworld
+        player = self.player
+        
+        path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.json")
 
     # def get_filler_item_name(self) -> str:
     #     return "A Cool Filler Item (No Satisfaction Guaranteed)"
