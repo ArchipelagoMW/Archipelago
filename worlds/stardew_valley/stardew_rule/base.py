@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from collections import deque
+from collections import deque, Counter
+from dataclasses import dataclass, field
 from functools import cached_property
 from itertools import chain
 from threading import Lock
@@ -295,7 +296,10 @@ class AggregatingStardewRule(BaseStardewRule, ABC):
                 self.simplification_state.original_simplifiable_rules == self.simplification_state.original_simplifiable_rules)
 
     def __hash__(self):
-        return hash((id(self.combinable_rules), self.simplification_state.original_simplifiable_rules))
+        if len(self.combinable_rules) + len(self.simplification_state.original_simplifiable_rules) > 5:
+            return id(self)
+
+        return hash((*self.combinable_rules.values(), self.simplification_state.original_simplifiable_rules))
 
 
 class Or(AggregatingStardewRule):
@@ -361,25 +365,43 @@ class Count(BaseStardewRule):
     rules: List[StardewRule]
 
     def __init__(self, rules: List[StardewRule], count: int):
-        self.rules = rules
         self.count = count
+        self.counter = Counter(rules)
+        self.rules = sorted(self.counter.keys(), key=lambda x: self.counter[x], reverse=True)
+        self.rule_mapping = {}
 
-    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
-        c = 0
-        for i in range(self.rules_count):
-            self.rules[i], value = self.rules[i].evaluate_while_simplifying(state)
-            if value:
-                c += 1
-
-            if c >= self.count:
-                return self, True
-            if c + self.rules_count - i < self.count:
-                break
-
-        return self, False
+        assert self.counter.total() == len(rules)
 
     def __call__(self, state: CollectionState) -> bool:
-        return self.evaluate_while_simplifying(state)[1]
+        c = 0
+        t = self.counter.total()
+
+        for i in range(self.rules_count):
+            original_rule = self.rules[i]
+            evaluation_value = self.call_evaluate_while_simplifying_cached(original_rule, state)
+            rule_value = self.counter[original_rule]
+
+            if evaluation_value:
+                c += rule_value
+            else:
+                t -= rule_value
+
+            if c >= self.count:
+                return True
+            elif t < self.count:
+                break
+
+        return False
+
+    def call_evaluate_while_simplifying_cached(self, rule: StardewRule, state: CollectionState) -> bool:
+        try:
+            return self.rule_mapping[rule].evaluate_while_simplifying(state)
+        except KeyError:
+            self.rule_mapping[rule], value = rule.evaluate_while_simplifying(state)
+            return value
+
+    def evaluate_while_simplifying(self, state: CollectionState) -> Tuple[StardewRule, bool]:
+        return self, self(state)
 
     @cached_property
     def rules_count(self):
@@ -395,14 +417,12 @@ class Count(BaseStardewRule):
         return f"Received {self.count} {repr(self.rules)}"
 
 
+@dataclass(frozen=True, slots=True)
 class Has(BaseStardewRule):
     item: str
     # For sure there is a better way than just passing all the rules everytime
-    other_rules: Dict[str, StardewRule]
-
-    def __init__(self, item: str, other_rules: Dict[str, StardewRule]):
-        self.item = item
-        self.other_rules = other_rules
+    other_rules: Dict[str, StardewRule] = field(repr=False, hash=False, compare=False)
+    group: str = "item"
 
     def __call__(self, state: CollectionState) -> bool:
         return self.evaluate_while_simplifying(state)[1]
@@ -415,16 +435,13 @@ class Has(BaseStardewRule):
 
     def __str__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} -> {MISSING_ITEM}"
-        return f"Has {self.item}"
+            return f"Has {self.item} {self.group} -> {MISSING_ITEM}"
+        return f"Has {self.item} {self.group}"
 
     def __repr__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} -> {MISSING_ITEM}"
-        return f"Has {self.item} -> {repr(self.other_rules[self.item])}"
-
-    def __hash__(self):
-        return hash(self.item)
+            return f"Has {self.item} {self.group} -> {MISSING_ITEM}"
+        return f"Has {self.item} {self.group} -> {repr(self.other_rules[self.item])}"
 
 
 class RepeatableChain(Iterable, Sized):
