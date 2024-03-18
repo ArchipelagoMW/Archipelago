@@ -39,8 +39,16 @@ the flag for the location so that the client can detect the location check.
 The textbox(s) for the item will appear as if the player picked up the item in-game normally, and they will get it.
 
 ## What are the item name groups?
-The groups you can use for Castlevania: Circle of the Moon are `Action Card` and `Attribute Card`, both of which will
-hint for a random card of their type.
+When you attempt to hint for items in Archipelago you can use either the name for the specific item, or the name of a group
+of items. Hinting for a group will choose a random item from the group that you do not currently have and hint for it. The
+groups you can use for Castlevania: Circle of the Moon are as follows:
+
+* `DSS` or `Card`: Any DSS Card of either type.
+* `Action` or `Action Card`: Any Action Card.
+* `Attribute` or `Attribute Card`: Any Attribute Card.
+* `Freeze`: Any card that logically lets you freeze enemies to use as platforms.
+* `Action Freeze`: Either Action Card that logically lets you freeze enemies.
+* `Attribute Freeze`: Either Attribute Card that logically lets you freeze enemies.
 
 ## What are the location name groups?
 In Castlevania: Circle of the Moon, every location is part of a location group under that location's area name.

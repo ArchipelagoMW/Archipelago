@@ -96,7 +96,7 @@ class DisableBattleArenaMPDrain(Toggle):
 
 class RequireAllBosses(Toggle):
     """Forces a Last Key behind every boss and requires all 8 of them to enter the Ceremonial Room.
-    The Required and Available Last Keys settings will be ignored."""
+    The Required and Available Last Keys settings will both be forced to 8."""
     display_name = "Require All Bosses"
 
 

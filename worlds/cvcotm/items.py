@@ -1,8 +1,10 @@
+import random
+
 from BaseClasses import Item
 from .data import iname
 from .locations import base_id
 
-from typing import TYPE_CHECKING, Dict, Union
+from typing import TYPE_CHECKING, Dict, Union, List
 
 if TYPE_CHECKING:
     from . import CVCotMWorld
@@ -53,6 +55,12 @@ item_info = {
     iname.victory:     {"default classification": "progression"}
 }
 
+action_cards = {iname.mercury, iname.venus, iname.jupiter, iname.mars, iname.diana, iname.apollo, iname.neptune,
+                iname.saturn, iname.uranus, iname.pluto}
+
+attribute_cards = {iname.salamander, iname.serpent, iname.mandragora, iname.golem, iname.cockatrice, iname.griffin,
+                   iname.manticore, iname.thunderbird, iname.unicorn, iname.black_dog}
+
 filler_item_names = [iname.heart_max, iname.hp_max, iname.mp_max]
 
 
@@ -73,14 +81,32 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
         "filler": {},
     }
     total_items = 0
+    excluded_cards = []
+
+    # If Halve DSS Cards Placed is on, determine which cards we will exclude here.
+    if world.options.halve_dss_cards_placed:
+        excluded_cards = list(action_cards.union(attribute_cards))
+
+        # Remove a valid combo of ice/stone cards from the exclusions.
+        excluded_cards.remove(world.random.choice([iname.serpent, iname.cockatrice]))
+        excluded_cards.remove(world.random.choice([iname.mercury, iname.mars]))
+
+        # Remove 8 more random cards from the exclusions.
+        excluded_cards = world.random.sample(excluded_cards, 10)
 
     # Add one of each Item to the pool that is not filler or progression skip balancing.
     for item in item_info:
         classification = get_item_info(item, "default classification")
         code = get_item_info(item, "code")
-        # Skip event Items.
-        if code is None:
+
+        # Skip event Items and cards that are excluded with Halve DSS Cards Placed.
+        if code is None or item in excluded_cards:
             continue
+
+        # Classify the Cleansing as Useful instead of Progression if Ignore Cleansing is on.
+        if item == iname.cleansing and world.options.ignore_cleansing:
+            classification = "useful"
+
         if classification in ["filler", "progression_skip_balancing"]:
             item_counts[classification][item] = 0
             continue
@@ -92,7 +118,7 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
         item_counts["progression_skip_balancing"][iname.last_key] = world.options.available_last_keys.value
         total_items += world.options.available_last_keys.value
 
-    # Add filler items at random until the total items = the total locations.
+    # Add filler items at random until the total Items = the total Locations.
     while total_items < len(world.multiworld.get_unfilled_locations(world.player)):
         item_counts["filler"][world.random.choice(filler_item_names)] += 1
         total_items += 1

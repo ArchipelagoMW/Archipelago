@@ -1,7 +1,8 @@
 from BaseClasses import Location
 from .data import lname, iname
+from .options import CVCotMOptions
 
-from typing import Dict, Union, List, Tuple, Optional
+from typing import Dict, Union, List, Tuple, Optional, Set
 
 base_id = 0xD55C0000
 
@@ -17,6 +18,7 @@ class CVCotMLocation(Location):
 # "rule" = What rule should be applied to the Location during set_rules, as defined in self.rules in the CVCotMRules
 #          class definition in rules.py.
 # "event" = What event Item to place on that Location, for Locations that are events specifically.
+# "type" = Anything special about this Location that should be considered, whether it be a boss Location, etc.
 # "countdown" = What Countdown number in the array of Countdown numbers that Location contributes to.
 location_info = {
     # Sealed Room
@@ -37,7 +39,7 @@ location_info = {
     lname.cc16:  {"code": 0x3E,  "offset": 0xD0C40},
     lname.cc20:  {"code": 0x42,  "offset": 0xD103C},
     lname.cc22:  {"code": 0x3F,  "offset": 0xD07C0},
-    lname.cc24:  {"code": 0xA9,  "offset": 0xD1288},
+    lname.cc24:  {"code": 0xA9,  "offset": 0xD1288, "type": "boss"},
     lname.cc25:  {"code": 0x44,  "offset": 0xD12A0, "rule": "Double"},
     # Abyss Staircase
     lname.as2:   {"code": 0x47,  "offset": 0xD181C},
@@ -59,7 +61,7 @@ location_info = {
     lname.ar18:  {"code": 0x4E,  "offset": 0xD1FA8},
     lname.ar19:  {"code": 0x6A,  "offset": 0xD44A4, "rule": "Kick"},
     lname.ar21:  {"code": 0x55,  "offset": 0xD238C},
-    lname.ar25:  {"code": 0xAA,  "offset": 0xD1E04},
+    lname.ar25:  {"code": 0xAA,  "offset": 0xD1E04, "type": "boss"},
     lname.ar26:  {"code": 0x59,  "offset": 0xD3370, "rule": "Tackle AND Roc"},
     lname.ar27:  {"code": 0x58,  "offset": 0xD34E4, "rule": "Tackle AND Push"},
     lname.ar30:  {"code": 0x99,  "offset": 0xD6A24, "rule": "Roc"},
@@ -83,7 +85,7 @@ location_info = {
     lname.mt13:  {"code": 0x5C,  "offset": 0xD3580},
     lname.mt14:  {"code": 0x60,  "offset": 0xD2A64, "rule": "Tackle"},
     lname.mt17:  {"code": 0x64,  "offset": 0xD3520},
-    lname.mt19:  {"code": 0xAB,  "offset": 0xD283C},
+    lname.mt19:  {"code": 0xAB,  "offset": 0xD283C, "type": "boss"},
     # Eternal Corridor
     lname.ec5:   {"code": 0x66,  "offset": 0xD3B50},
     lname.ec7:   {"code": 0x65,  "offset": 0xD3A90},
@@ -101,7 +103,7 @@ location_info = {
     lname.ct16:  {"code": 0x70,  "offset": 0xD3DA8},
     lname.ct18:  {"code": 0x74,  "offset": 0xD47C8},
     lname.ct_switch: {"event": iname.ironmaidens},
-    lname.ct22:  {"code": 0x71,  "offset": 0xD3CF4},
+    lname.ct22:  {"code": 0x71,  "offset": 0xD3CF4, "type": "boss"},
     lname.ct26:  {"code": 0x9C,  "offset": 0xD6ACC, "rule": "Roc"},
     lname.ct26b: {"code": 0x9B,  "offset": 0xD6AC0, "rule": "Roc"},
     # Underground Gallery
@@ -114,7 +116,7 @@ location_info = {
     lname.ug10:  {"code": 0x87,  "offset": 0xD5F68},
     lname.ug13:  {"code": 0x88,  "offset": 0xD5AB8},
     lname.ug15:  {"code": 0x89,  "offset": 0xD5BD8},
-    lname.ug20:  {"code": 0xAC,  "offset": 0xD5470},
+    lname.ug20:  {"code": 0xAC,  "offset": 0xD5470, "type": "boss"},
     # Underground Warehouse
     lname.uw1:   {"code": 0x75,  "offset": 0xD48DC},
     lname.uw6:   {"code": 0x76,  "offset": 0xD4D20},
@@ -126,7 +128,7 @@ location_info = {
     lname.uw16:  {"code": 0x7A,  "offset": 0xD5050},
     lname.uw16b: {"code": 0x7B,  "offset": 0xD505C, "rule": "Roc"},
     lname.uw19:  {"code": 0x7C,  "offset": 0xD5344},
-    lname.uw23:  {"code": 0xAE,  "offset": 0xD53B0},
+    lname.uw23:  {"code": 0xAE,  "offset": 0xD53B0, "type": "boss"},
     lname.uw24:  {"code": 0x80,  "offset": 0xD5434},
     lname.uw25:  {"code": 0x7D,  "offset": 0xD4FC0},
     # Underground Waterway
@@ -142,7 +144,7 @@ location_info = {
     lname.uy12:  {"code": 0x91, "offset": 0xD673C, "rule": "Cleansing"},
     lname.uy12b: {"code": 0x90, "offset": 0xD6730},
     lname.uy13:  {"code": 0x92, "offset": 0xD685C, "rule": "Roc"},
-    lname.uy17:  {"code": 0xAF, "offset": 0xD6940, "rule": "Cleansing"},
+    lname.uy17:  {"code": 0xAF, "offset": 0xD6940, "rule": "Cleansing", "type": "boss"},
     lname.uy18:  {"code": 0x96, "offset": 0xD69C4, "rule": "Roc"},
     # Observation Tower
     lname.ot1:   {"code": 0x9D, "offset": 0xD6B38},
@@ -154,7 +156,7 @@ location_info = {
     lname.ot12:  {"code": 0xA6, "offset": 0xD75C4},
     lname.ot13:  {"code": 0xA3, "offset": 0xD6F64},
     lname.ot16:  {"code": 0xA1, "offset": 0xD751C},
-    lname.ot20:  {"code": 0xB0, "offset": 0xD6E20},
+    lname.ot20:  {"code": 0xB0, "offset": 0xD6E20, "type": "boss"},
     # Ceremonial Room
     lname.cr1:   {"code": 0xA7, "offset": 0xD7690},
     lname.victory: {"event": iname.victory}
@@ -176,11 +178,35 @@ def get_location_names_to_ids() -> Dict[str, int]:
             is not None}
 
 
-def get_named_locations_data(locations: List[str]) -> Tuple[Dict[str, Optional[int]], Dict[str, str]]:
+def get_locations_by_area() -> Dict[str, Set[str]]:
+    areas_to_locations = {}
+
+    for loc_name in location_info:
+        # If we are looking at an event Location, don't include it.
+        if get_location_info(loc_name, "event") is not None:
+            continue
+
+        # The part of the Location name's string before the colon is its area name.
+        area_name = loc_name.split(":")[0]
+
+        if area_name not in areas_to_locations:
+            areas_to_locations[area_name] = {loc_name}
+        else:
+            areas_to_locations[area_name].add(loc_name)
+
+    return areas_to_locations
+
+
+def get_named_locations_data(locations: List[str], options: CVCotMOptions) -> \
+        Tuple[Dict[str, Optional[int]], Dict[str, str]]:
     locations_with_ids = {}
     events = {}
 
     for loc in locations:
+        # If Break Iron Maidens is on, don't place the Broke Iron Maidens Location.
+        if loc == lname.ct_switch and options.break_iron_maidens:
+            continue
+
         loc_code = get_location_info(loc, "code")
 
         # If we are looking at an event Location, add its associated event Item to the events' dict.
@@ -190,5 +216,9 @@ def get_named_locations_data(locations: List[str]) -> Tuple[Dict[str, Optional[i
         else:
             loc_code += base_id
         locations_with_ids.update({loc: loc_code})
+
+        # If Require All Bosses is on, add a Last Key to the events dict for all Locations marked "boss" for their type.
+        if options.require_all_bosses and get_location_info(loc, "type") == "boss":
+            events[loc] = iname.last_key
 
     return locations_with_ids, events

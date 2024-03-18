@@ -5,8 +5,10 @@ import base64
 import logging
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
-from .items import CVCotMItem, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
-from .locations import CVCotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data
+from .items import CVCotMItem, filler_item_names, action_cards, attribute_cards, get_item_info, get_item_names_to_ids,\
+    get_item_counts
+from .locations import CVCotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data,\
+    get_locations_by_area
 from .options import CVCotMOptions, SubWeaponShuffle
 from .regions import get_region_info, get_all_region_names, get_named_entrances_data
 from .rules import CVCotMRules
@@ -50,12 +52,18 @@ class CVCotMWorld(World):
     through Camilla's castle and rescue your master.
     """
     game = "Castlevania - Circle of the Moon"
-    # item_name_groups = {
-    #     "Card": {},
-    #     "Action Card": {},
-    #     "Attribute Card": {},
-    # }
-    # location_name_groups = {stage: set(get_locations_from_stage(stage)) for stage in vanilla_stage_order}
+    item_name_groups = {
+        "DSS": action_cards.union(attribute_cards),
+        "Card": action_cards.union(attribute_cards),
+        "Action": action_cards,
+        "Action Card": action_cards,
+        "Attribute": attribute_cards,
+        "Attribute Card": attribute_cards,
+        "Freeze": {iname.serpent, iname.cockatrice, iname.mercury, iname.mars},
+        "Freeze Action": {iname.mercury, iname.mars},
+        "Freeze Attribute": {iname.serpent, iname.cockatrice}
+    }
+    location_name_groups = get_locations_by_area()
     options_dataclass = CVCotMOptions
     options: CVCotMOptions
     settings: typing.ClassVar[CVCotMSettings]
@@ -81,6 +89,11 @@ class CVCotMWorld(World):
     def generate_early(self) -> None:
         # Generate the player's unique authentication
         self.auth = bytearray(self.multiworld.random.getrandbits(8) for _ in range(16))
+
+        # If Require All Bosses is on, force Required and Available Last Keys to 8.
+        if self.options.require_all_bosses:
+            self.options.required_last_keys.value = 8
+            self.options.available_last_keys.value = 8
 
         self.total_last_keys = self.options.available_last_keys.value
         self.required_last_keys = self.options.required_last_keys.value
@@ -113,7 +126,7 @@ class CVCotMWorld(World):
             loc_names = get_region_info(reg.name, "locations")
             if loc_names is None:
                 continue
-            locations_with_ids, events = get_named_locations_data(loc_names)
+            locations_with_ids, events = get_named_locations_data(loc_names, self.options)
             reg.add_locations(locations_with_ids, CVCotMLocation)
 
             # Place event Items on all of their associated Locations.
@@ -143,7 +156,7 @@ class CVCotMWorld(World):
 
     def set_rules(self) -> None:
         # Set all the Entrance and Location rules properly.
-        CVCotMRules(self).set_CVCotM_rules()
+        CVCotMRules(self).set_cvcotm_rules()
 
     # def generate_output(self, output_directory: str) -> None:
     #    active_locations = self.multiworld.get_locations(self.player)

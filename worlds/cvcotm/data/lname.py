@@ -1,4 +1,4 @@
-sr3   = "Sealed Room: Left main shaft wall"
+sr3   = "Sealed Room: Main shaft left fake wall"
 cc1   = "Catacomb: Push crate arc treasure room"
 cc3   = "Catacomb: Fleamen brain room - Lower"
 cc3b  = "Catacomb: Fleamen brain room - Upper"
