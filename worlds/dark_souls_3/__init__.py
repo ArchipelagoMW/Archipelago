@@ -486,10 +486,8 @@ class DarkSouls3World(World):
             self._add_entrance_rule("Ringed City", "Small Envoy Banner")
 
             if self.options.late_dlc:
-                self._add_entrance_rule(
-                    "Painted World of Ariandel (Before Contraption)",
-                    "Small Doll"
-                )
+                self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", "Small Doll")
+                self._add_entrance_rule("Painted World of Ariandel (Before Contraption)", self._has_any_scroll)
 
         # Define the access rules to some specific locations
         if self._is_location_available("FS: Lift Chamber Key - Leonhard"):
