@@ -318,10 +318,10 @@ class Yugioh06World(World):
             if item in boosters:
                 self.starting_booster = item
         if not self.starting_opponent:
-            self.starting_opponent = self.wolrd.random.choice(opponents)
+            self.starting_opponent = self.random.choice(opponents)
         self.multiworld.push_precollected(self.create_item(self.starting_opponent))
         if not self.starting_booster:
-            self.starting_booster = self.world.random.choice(boosters)
+            self.starting_booster = self.random.choice(boosters)
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))
