@@ -60,7 +60,7 @@ class KHRECOMWorld(World):
         starting_worlds = self.random.sample(list(starting_worlds.keys()),3)
         i = 0
         while i < 4:
-            if i < 3:
+            if i < 3 and self.options.starting_worlds:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item(starting_worlds[i]))
             elif i == 3 and self.options.early_cure:
                 self.multiworld.get_location(starting_locations[i], self.player).place_locked_item(self.create_item("Card Set Cure"))
@@ -72,7 +72,7 @@ class KHRECOMWorld(World):
             # Ignore filler, it will be added in a later stage.
             if data.category not in ["World Unlocks", "Gold Map Cards", "Friend Cards", "Enemy Cards", "Sleights"]:
                 continue
-            if name not in starting_worlds:
+            if not self.options.starting_worlds or name not in starting_worlds:
                 item_pool += [self.create_item(name) for _ in range(0, quantity)]
 
         # Fill any empty locations with filler items.
