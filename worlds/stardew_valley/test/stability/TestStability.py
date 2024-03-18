@@ -26,8 +26,8 @@ class TestGenerationIsStable(SVTestCase):
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
 
-        result_a = json.loads(output_a)
-        result_b = json.loads(output_b)
+        result_a = json.loads(output_a[:-4])
+        result_b = json.loads(output_b[:-4])
 
         for i, ((room_a, bundles_a), (room_b, bundles_b)) in enumerate(zip(result_a["bundles"].items(), result_b["bundles"].items())):
             self.assertEqual(room_a, room_b, f"Bundle rooms at index {i} is different between both executions. Seed={seed}")
