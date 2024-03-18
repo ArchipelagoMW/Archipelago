@@ -28,11 +28,11 @@ class Yugioh06Web(WebWorld):
     theme = "stone"
     setup = Tutorial(
         "Multiworld Setup Tutorial",
-        "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006"
+        "A guide to setting up Yu-Gi-Oh! - Ultimate Masters Edition - World Championship Tournament 2006 "
         "for Archipelago on your computer.",
         "English",
-        "multiworld_en.md",
-        "multiworld/en",
+        "docs/setup_en.md",
+        "setup/en",
         ["Rensen"]
     )
     tutorials = [setup]
@@ -318,10 +318,10 @@ class Yugioh06World(World):
             if item in boosters:
                 self.starting_booster = item
         if not self.starting_opponent:
-            self.starting_opponent = self.multiworld.random.choice(opponents)
+            self.starting_opponent = self.wolrd.random.choice(opponents)
         self.multiworld.push_precollected(self.create_item(self.starting_opponent))
         if not self.starting_booster:
-            self.starting_booster = self.multiworld.random.choice(boosters)
+            self.starting_booster = self.world.random.choice(boosters)
         self.multiworld.push_precollected(self.create_item(self.starting_booster))
         banlist = self.options.banlist.value
         self.multiworld.push_precollected(self.create_item(Banlist_Items.get(banlist)))

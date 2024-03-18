@@ -11,7 +11,6 @@ As we are using Bizhawk, this guide is only applicable to Windows and Linux syst
   - Detailed installation instructions for Bizhawk can be found at the above link.
   - Windows users must run the prereq installer first, which can also be found at the above link.
 - The built-in Archipelago client, which can be installed [here](https://github.com/ArchipelagoMW/Archipelago/releases)
-  (select `Bizhawk Client` during installation).
 - A US or European Yu-Gi-Oh! Ultimate Masters: World Championship Tournament 2006 Rom
 
 ## Configuring Bizhawk
@@ -46,7 +45,7 @@ an experience customized for their taste, and different players in the same mult
 ### Where do I get a YAML file?
 
 You can customize your settings by visiting the 
-[Yu-Gi-Oh! 2006 Player Settings Page](/games/Yu-Gi-Oh%202006player-settings)
+[Yu-Gi-Oh! 2006 Player Settings Page](/games/Yu-Gi-Oh!%202006/player-options)
 
 ## Joining a MultiWorld Game
 

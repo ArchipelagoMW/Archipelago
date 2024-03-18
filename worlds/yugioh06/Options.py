@@ -1,7 +1,7 @@
 import typing
 from dataclasses import dataclass
 
-from Options import Option, Choice, Range, Toggle, PerGameCommonOptions
+from Options import Option, Choice, Range, Toggle, PerGameCommonOptions, DefaultOnToggle
 
 
 class StructureDeck(Choice):
@@ -31,21 +31,21 @@ class Banlist(Choice):
 
 
 class FinalCampaignBossUnlockCondition(Choice):
-    """How to unlock the final campaign boss (Who is the goal)"""
+    """How to unlock the final campaign boss and goal for the world"""
     display_name = "Final Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
 
 
 class FourthTier5UnlockCondition(Choice):
-    """How to unlock the forth campaign boss"""
+    """How to unlock the fourth campaign boss"""
     display_name = "Fourth Tier 5 Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
 
 
 class ThirdTier5UnlockCondition(Choice):
-    """How to unlock the third campaign boss (Which is the goal)"""
+    """How to unlock the third campaign boss"""
     display_name = "Third Tier 5 Campaign Boss unlock Condition"
     option_campaign_opponents = 0
     option_challenges = 1
@@ -60,7 +60,7 @@ class FinalCampaignBossChallenges(Range):
 
 
 class FourthTier5CampaignBossChallenges(Range):
-    """Number of Limited/Theme Duels completed for the Forth Level 5 Campaign Opponent to appear"""
+    """Number of Limited/Theme Duels completed for the Fourth Level 5 Campaign Opponent to appear"""
     display_name = "Fourth Tier 5 Campaign Boss unlock amount"
     range_start = 0
     range_end = 91
@@ -84,8 +84,8 @@ class FinalCampaignBossCampaignOpponents(Range):
 
 
 class FourthTier5CampaignBossCampaignOpponents(Range):
-    """Number of Campaign Opponents Duels defeated for the Forth Level 5 Campaign Opponent to appear"""
-    display_name = "Fourth Tier 5 Campaign Boss campaign opponent  unlock amount"
+    """Number of Campaign Opponents Duels defeated for the Fourth Level 5 Campaign Opponent to appear"""
+    display_name = "Fourth Tier 5 Campaign Boss campaign opponent unlock amount"
     range_start = 0
     range_end = 23
     default = 7
@@ -100,7 +100,7 @@ class ThirdTier5CampaignBossCampaignOpponents(Range):
 
 
 class NumberOfChallenges(Range):
-    """Number of random Limited/Theme Duels that are included. The rest will be unaccessible."""
+    """Number of random Limited/Theme Duels that are included. The rest will be inaccessible."""
     display_name = "Number of Challenges"
     range_start = 0
     range_end = 91
@@ -111,7 +111,7 @@ class StartingMoney(Range):
     """The amount of money you start with"""
     display_name = "Starting Money"
     range_start = 0
-    range_end = 99999999
+    range_end = 100000
     default = 3000
 
 
@@ -123,10 +123,9 @@ class MoneyRewardMultiplier(Range):
     default = 20
 
 
-class NormalizeBoostersPacks(Toggle):
+class NormalizeBoostersPacks(DefaultOnToggle):
     """If enabled every booster pack costs the same otherwise vanilla cost is used"""
     display_name = "Normalize Booster Packs"
-    default = True
 
 
 class BoosterPackPrices(Range):
@@ -148,13 +147,11 @@ class AddEmptyBanList(Toggle):
 class CampaignOpponentsShuffle(Toggle):
     """Replaces the campaign with random opponents from the entire game"""
     display_name = "Campaign Opponents Shuffle"
-    default = False
 
 
 class OCGArts(Toggle):
     """Always use the OCG artworks for cards"""
     display_name = "OCG Arts"
-    default = False
 
 @dataclass
 class Yugioh06Options(PerGameCommonOptions):
