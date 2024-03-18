@@ -417,7 +417,7 @@ class Count(BaseStardewRule):
         return f"Received {self.count} {repr(self.rules)}"
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Has(BaseStardewRule):
     item: str
     # For sure there is a better way than just passing all the rules everytime

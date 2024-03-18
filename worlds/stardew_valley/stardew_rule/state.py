@@ -47,7 +47,7 @@ class TotalReceived(BaseStardewRule):
         return f"Received {self.count} {self.items}"
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Received(CombinableStardewRule):
     item: str
     player: int
@@ -80,7 +80,7 @@ class Received(CombinableStardewRule):
         return self.count
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class Reach(BaseStardewRule):
     spot: str
     resolution_hint: str
@@ -101,7 +101,7 @@ class Reach(BaseStardewRule):
         return 1
 
 
-@dataclass(frozen=True, slots=True)
+@dataclass(frozen=True)
 class HasProgressionPercent(CombinableStardewRule):
     player: int
     percent: int
