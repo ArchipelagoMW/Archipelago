@@ -85,7 +85,7 @@ class MultiWorld():
     game: Dict[int, str]
 
     random: random.Random
-    per_slot_randoms: Dict[int, random.Random]
+    per_slot_randoms: Utils.DeprecateDict[int, random.Random]
     """Deprecated. Please use `self.random` instead."""
 
     class AttributeProxy():
@@ -110,10 +110,14 @@ class MultiWorld():
             return self
 
         def append(self, region: Region):
+            assert region.name not in self.region_cache[region.player], \
+                f"{region.name} already exists in region cache."
             self.region_cache[region.player][region.name] = region
 
         def extend(self, regions: Iterable[Region]):
             for region in regions:
+                assert region.name not in self.region_cache[region.player], \
+                    f"{region.name} already exists in region cache."
                 self.region_cache[region.player][region.name] = region
 
         def add_group(self, new_id: int):
@@ -159,11 +163,11 @@ class MultiWorld():
         self.fix_trock_doors = self.AttributeProxy(
             lambda player: self.shuffle[player] != 'vanilla' or self.mode[player] == 'inverted')
         self.fix_skullwoods_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_palaceofdarkness_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
         self.fix_trock_exit = self.AttributeProxy(
-            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeonssimple'])
+            lambda player: self.shuffle[player] not in ['vanilla', 'simple', 'restricted', 'dungeons_simple'])
 
         for player in range(1, players + 1):
             def set_player_attr(attr, val):
@@ -213,7 +217,8 @@ class MultiWorld():
             set_player_attr('game', "A Link to the Past")
             set_player_attr('completion_condition', lambda state: True)
         self.worlds = {}
-        self.per_slot_randoms = {}
+        self.per_slot_randoms = Utils.DeprecateDict("Using per_slot_randoms is now deprecated. Please use the "
+                                                      "world's random object instead (usually self.random)")
         self.plando_options = PlandoOptions.none
 
     def get_all_ids(self) -> Tuple[int, ...]:
@@ -247,14 +252,13 @@ class MultiWorld():
         return {group_id for group_id, group in self.groups.items() if player in group["players"]}
 
     def set_seed(self, seed: Optional[int] = None, secure: bool = False, name: Optional[str] = None):
+        assert not self.worlds, "seed needs to be initialized before Worlds"
         self.seed = get_seed(seed)
         if secure:
             self.secure()
         else:
             self.random.seed(self.seed)
         self.seed_name = name if name else str(self.seed)
-        self.per_slot_randoms = {player: random.Random(self.random.getrandbits(64)) for player in
-                                 range(1, self.players + 1)}
 
     def set_options(self, args: Namespace) -> None:
         # TODO - remove this section once all worlds use options dataclasses
@@ -271,7 +275,6 @@ class MultiWorld():
         for player in self.player_ids:
             world_type = AutoWorld.AutoWorldRegister.world_types[self.game[player]]
             self.worlds[player] = world_type(self, player)
-            self.worlds[player].random = self.per_slot_randoms[player]
             options_dataclass: typing.Type[Options.PerGameCommonOptions] = world_type.options_dataclass
             self.worlds[player].options = options_dataclass(**{option_key: getattr(args, option_key)[player]
                                                                for option_key in options_dataclass.type_hints})
@@ -713,13 +716,22 @@ class CollectionState():
             assert isinstance(player, int), "can_reach: player is required if spot is str"
             # try to resolve a name
             if resolution_hint == 'Location':
-                spot = self.multiworld.get_location(spot, player)
+                return self.can_reach_location(spot, player)
             elif resolution_hint == 'Entrance':
-                spot = self.multiworld.get_entrance(spot, player)
+                return self.can_reach_entrance(spot, player)
             else:
                 # default to Region
-                spot = self.multiworld.get_region(spot, player)
+                return self.can_reach_region(spot, player)
         return spot.can_reach(self)
+
+    def can_reach_location(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_location(spot, player).can_reach(self)
+
+    def can_reach_entrance(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_entrance(spot, player).can_reach(self)
+
+    def can_reach_region(self, spot: str, player: int) -> bool:
+        return self.multiworld.get_region(spot, player).can_reach(self)
 
     def sweep_for_events(self, key_only: bool = False, locations: Optional[Iterable[Location]] = None) -> None:
         if locations is None:
@@ -877,6 +889,8 @@ class Region:
             del(self.region_manager.location_cache[location.player][location.name])
 
         def insert(self, index: int, value: Location) -> None:
+            assert value.name not in self.region_manager.location_cache[value.player], \
+                f"{value.name} already exists in the location cache."
             self._list.insert(index, value)
             self.region_manager.location_cache[value.player][value.name] = value
 
@@ -887,6 +901,8 @@ class Region:
             del(self.region_manager.entrance_cache[entrance.player][entrance.name])
 
         def insert(self, index: int, value: Entrance) -> None:
+            assert value.name not in self.region_manager.entrance_cache[value.player], \
+                f"{value.name} already exists in the entrance cache."
             self._list.insert(index, value)
             self.region_manager.entrance_cache[value.player][value.name] = value
 
@@ -1016,7 +1032,7 @@ class Location:
     locked: bool = False
     show_in_spoiler: bool = True
     progress_type: LocationProgressType = LocationProgressType.DEFAULT
-    always_allow = staticmethod(lambda item, state: False)
+    always_allow = staticmethod(lambda state, item: False)
     access_rule: Callable[[CollectionState], bool] = staticmethod(lambda state: True)
     item_rule = staticmethod(lambda item: True)
     item: Optional[Item] = None
@@ -1272,12 +1288,12 @@ class Spoiler:
             for location in sphere:
                 state.collect(location.item, True, location)
 
-            required_locations -= sphere
-
             collection_spheres.append(sphere)
 
             logging.debug('Calculated final sphere %i, containing %i of %i progress items.', len(collection_spheres),
                           len(sphere), len(required_locations))
+
+            required_locations -= sphere
             if not sphere:
                 raise RuntimeError(f'Not all required items reachable. Unreachable locations: {required_locations}')
 
