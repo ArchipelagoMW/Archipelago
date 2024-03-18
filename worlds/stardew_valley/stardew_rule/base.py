@@ -393,6 +393,8 @@ class Count(BaseStardewRule):
 
     def call_evaluate_while_simplifying_cached(self, rule: StardewRule, state: CollectionState) -> bool:
         try:
+            # A mapping table with the original rule is used here because two rules could resolve to the same rule.
+            #  This would require to change the counter to merge both rules, and quickly become complicated.
             return self.rule_mapping[rule].evaluate_while_simplifying(state)
         except KeyError:
             self.rule_mapping[rule], value = rule.evaluate_while_simplifying(state)

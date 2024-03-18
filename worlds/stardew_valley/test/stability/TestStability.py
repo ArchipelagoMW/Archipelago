@@ -29,7 +29,6 @@ class TestGenerationIsStable(SVTestCase):
         output_a = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
         output_b = subprocess.check_output([sys.executable, '-m', 'worlds.stardew_valley.test.stability.StabilityOutputScript', '--seed', str(seed)])
 
-        #
         result_a = json.loads(output_a[:-BYTES_TO_REMOVE])
         result_b = json.loads(output_b[:-BYTES_TO_REMOVE])
 
