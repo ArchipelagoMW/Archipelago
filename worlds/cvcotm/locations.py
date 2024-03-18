@@ -6,7 +6,7 @@ from typing import Dict, Union, List, Tuple, Optional
 base_id = 0xD55C0000
 
 
-class CotMLocation(Location):
+class CVCotMLocation(Location):
     game: str = "Castlevania Circle of the Moon"
 
 
@@ -14,8 +14,8 @@ class CotMLocation(Location):
 # "code" = The unique part of the Location's AP code attribute, as well as the in-game bitflag index starting from
 #          0x80389BE4 that indicates the Location has been checked. Add this + base_id to get the actual AP code.
 # "offset" = The offset in the ROM to overwrite to change the Item on that Location.
-# "rule" = What rule should be applied to the Location during set_rules, as defined in self.rules in the CotMRules class
-#          definition in rules.py.
+# "rule" = What rule should be applied to the Location during set_rules, as defined in self.rules in the CVCotMRules
+#          class definition in rules.py.
 # "event" = What event Item to place on that Location, for Locations that are events specifically.
 # "countdown" = What Countdown number in the array of Countdown numbers that Location contributes to.
 location_info = {

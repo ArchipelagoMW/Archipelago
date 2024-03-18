@@ -171,8 +171,8 @@ region_info = {
 
 # # #    KEY    # # #
 # "connection" = The name of the Region the Entrance connects into.
-# "rule" = What rule should be applied to the Entrance during set_rules, as defined in self.rules in the CotMRules class
-#          definition in rules.py.
+# "rule" = What rule should be applied to the Entrance during set_rules, as defined in self.rules in the CVCotMRules
+#          class definition in rules.py.
 entrance_info = {
     "At an Old Austrian Castle": {"destination": "Catacomb"},
     "Catacomb to Stairway": {"destination": "Abyss Stairway", "rule": "Double OR Kick"},

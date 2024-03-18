@@ -5,10 +5,10 @@ from .locations import base_id
 from typing import TYPE_CHECKING, Dict, Union
 
 if TYPE_CHECKING:
-    from . import CotMWorld
+    from . import CVCotMWorld
 
 
-class CotMItem(Item):
+class CVCotMItem(Item):
     game: str = "Castlevania Circle of the Moon"
 
 
@@ -64,7 +64,7 @@ def get_item_names_to_ids() -> Dict[str, int]:
     return {name: get_item_info(name, "code")+base_id for name in item_info if get_item_info(name, "code") is not None}
 
 
-def get_item_counts(world: "CotMWorld") -> Dict[str, Dict[str, int]]:
+def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
 
     item_counts = {
         "progression": {},

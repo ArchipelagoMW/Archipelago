@@ -5,31 +5,31 @@ import base64
 import logging
 
 from BaseClasses import Item, Region, MultiWorld, Tutorial, ItemClassification
-from .items import CotMItem, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
-from .locations import CotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data
-from .options import CotMOptions, SubWeaponShuffle
+from .items import CVCotMItem, filler_item_names, get_item_info, get_item_names_to_ids, get_item_counts
+from .locations import CVCotMLocation, get_location_info, get_location_names_to_ids, base_id, get_named_locations_data
+from .options import CVCotMOptions, SubWeaponShuffle
 from .regions import get_region_info, get_all_region_names, get_named_entrances_data
-from .rules import CotMRules
+from .rules import CVCotMRules
 from .data import iname
 from ..AutoWorld import WebWorld, World
 
 
 # from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
-# from .rom import LocalRom, patch_rom, get_base_rom_path, CotMDeltaPatch
-# from .client import CastlevaniaCotMClient
+# from .rom import LocalRom, patch_rom, get_base_rom_path, CVCotMDeltaPatch
+# from .client import CastlevaniaCVCotMClient
 
 
-class CotMSettings(settings.Group):
+class CVCotMSettings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the Castlevania CotM US rom"""
+        """File name of the Castlevania CVCotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
-        description = "Castlevania CotM (US) ROM File"
-        md5s = [0x50a1089600603a94e15ecf287f8d5a1f]  # CotMDeltaPatch.hash
+        description = "Castlevania CVCotM (US) ROM File"
+        md5s = [0x50a1089600603a94e15ecf287f8d5a1f]  # CVCotMDeltaPatch.hash
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
-class CotMWeb(WebWorld):
+class CVCotMWeb(WebWorld):
     theme = "stone"
 
     tutorials = [Tutorial(
@@ -43,22 +43,22 @@ class CotMWeb(WebWorld):
     )]
 
 
-class CotMWorld(World):
+class CVCotMWorld(World):
     """
     Castlevania: Circle of the Moon is the first of three Castlevania games released on the GameBoy Advance.
     As Nathan Graves, utilizing the Dual Set-Up System in conjunction with the Hunter Whip, you must battle your way
     through Camilla's castle and rescue your master.
     """
-    game = "Castlevania Circle of the Moon"
+    game = "Castlevania - Circle of the Moon"
     # item_name_groups = {
     #     "Card": {},
     #     "Action Card": {},
     #     "Attribute Card": {},
     # }
     # location_name_groups = {stage: set(get_locations_from_stage(stage)) for stage in vanilla_stage_order}
-    options_dataclass = CotMOptions
-    options: CotMOptions
-    settings: typing.ClassVar[CotMSettings]
+    options_dataclass = CVCotMOptions
+    options: CVCotMOptions
+    settings: typing.ClassVar[CVCotMSettings]
     topology_present = True
 
     item_name_to_id = get_item_names_to_ids()
@@ -70,7 +70,7 @@ class CotMWorld(World):
 
     auth: bytearray
 
-    web = CotMWeb()
+    web = CVCotMWeb()
 
     # @classmethod
     # def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
@@ -114,7 +114,7 @@ class CotMWorld(World):
             if loc_names is None:
                 continue
             locations_with_ids, events = get_named_locations_data(loc_names)
-            reg.add_locations(locations_with_ids, CotMLocation)
+            reg.add_locations(locations_with_ids, CVCotMLocation)
 
             # Place event Items on all of their associated Locations.
             for event_loc, event_item in events.items():
@@ -130,7 +130,7 @@ class CotMWorld(World):
         if code is not None:
             code += base_id
 
-        created_item = CotMItem(name, classification, code, self.player)
+        created_item = CVCotMItem(name, classification, code, self.player)
 
         return created_item
 
@@ -143,7 +143,7 @@ class CotMWorld(World):
 
     def set_rules(self) -> None:
         # Set all the Entrance and Location rules properly.
-        CotMRules(self).set_cotm_rules()
+        CVCotMRules(self).set_CVCotM_rules()
 
     # def generate_output(self, output_directory: str) -> None:
     #    active_locations = self.multiworld.get_locations(self.player)
@@ -160,15 +160,15 @@ class CotMWorld(World):
     #    offset_data.update(get_start_inventory_data(self.player, self.options,
     #                                                self.multiworld.precollected_items[self.player]))
 
-    #    cotm_rom = LocalRom(get_base_rom_path())
+    #    CVCotM_rom = LocalRom(get_base_rom_path())
 
     #    rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
 
-    #    patch_rom(self, cotm_rom, offset_data, active_locations)
+    #    patch_rom(self, CVCotM_rom, offset_data, active_locations)
 
-    #    cotm_rom.write_to_file(rompath)
+    #    CVCotM_rom.write_to_file(rompath)
 
-    #    patch = CotMDeltaPatch(os.path.splitext(rompath)[0] + CotMDeltaPatch.patch_file_ending, player=self.player,
+    #    patch = CVCotMDeltaPatch(os.path.splitext(rompath)[0] + CVCotMDeltaPatch.patch_file_ending, player=self.player,
     #                           player_name=self.multiworld.player_name[self.player], patched_path=rompath)
     #    patch.write()
     #    os.unlink(rompath)

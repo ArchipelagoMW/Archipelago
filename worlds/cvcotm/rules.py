@@ -7,18 +7,18 @@ from .locations import get_location_info
 from .data import iname
 
 if TYPE_CHECKING:
-    from . import CotMWorld
+    from . import CVCotMWorld
 
 
-class CotMRules:
+class CVCotMRules:
     player: int
-    world: "CotMWorld"
+    world: "CVCotMWorld"
     rules: Dict[str, CollectionRule]
     required_last_keys: int
     break_iron_maidens: int
     ignore_cleansing: int
 
-    def __init__(self, world: "CotMWorld") -> None:
+    def __init__(self, world: "CVCotMWorld") -> None:
         self.player = world.player
         self.world = world
         self.required_last_keys = world.required_last_keys
@@ -68,7 +68,7 @@ class CotMRules:
             return state.has(iname.last_key, self.player, self.required_last_keys)
         return True
 
-    def set_cotm_rules(self) -> None:
+    def set_cvcotm_rules(self) -> None:
         multiworld = self.world.multiworld
 
         for region in multiworld.get_regions(self.player):

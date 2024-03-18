@@ -101,7 +101,7 @@ class RequireAllBosses(Toggle):
 
 
 @dataclass
-class CotMOptions(PerGameCommonOptions):
+class CVCotMOptions(PerGameCommonOptions):
     ignore_cleansing: IgnoreCleansing
     auto_run: AutoRun
     dss_patch: DSSPatch
