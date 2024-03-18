@@ -367,19 +367,17 @@ class Count(BaseStardewRule):
     def __init__(self, rules: List[StardewRule], count: int):
         self.count = count
         self.counter = Counter(rules)
+        self.total = sum(self.counter.values())
         self.rules = sorted(self.counter.keys(), key=lambda x: self.counter[x], reverse=True)
         self.rule_mapping = {}
 
-        assert self.counter.total() == len(rules)
-
     def __call__(self, state: CollectionState) -> bool:
         c = 0
-        t = sum(self.counter.values())
+        t = self.total
 
-        for i in range(self.rules_count):
-            original_rule = self.rules[i]
-            evaluation_value = self.call_evaluate_while_simplifying_cached(original_rule, state)
-            rule_value = self.counter[original_rule]
+        for rule in self.rules:
+            evaluation_value = self.call_evaluate_while_simplifying_cached(rule, state)
+            rule_value = self.counter[rule]
 
             if evaluation_value:
                 c += rule_value
