@@ -44,8 +44,8 @@ an experience customized for their taste, and different players in the same mult
 
 ### Where do I get a YAML file?
 
-You can customize your settings by visiting the 
-[Yu-Gi-Oh! 2006 Player Settings Page](/games/Yu-Gi-Oh!%202006/player-options)
+You can customize your options by visiting the 
+[Yu-Gi-Oh! 2006 Player Options Page](/games/Yu-Gi-Oh!%202006/player-options)
 
 ## Joining a MultiWorld Game
 
