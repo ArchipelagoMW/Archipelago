@@ -35,6 +35,12 @@ class DaysLocations(Toggle):
     """
     display_name = "Days Locations"
 
+class StartingWorlds(Toggle):
+    """
+    Toggle whether 3 world cards are guaranteed as part of your starting checks.
+    """
+    display_name = "Starting Worlds"
+
 class ChecksBehindLeon(Toggle):
     """
     Toggle whether to include checks behind the Leon sleight tutorial.  If left off, the player can safely skip that room.
@@ -73,3 +79,4 @@ class KHRECOMOptions(PerGameCommonOptions):
     levels: ChecksBehindSleightsLevels
     zeroes: Zeroes
     attack_power: AttackPower
+    starting_worlds: StartingWorlds
