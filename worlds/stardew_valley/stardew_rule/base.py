@@ -435,13 +435,13 @@ class Has(BaseStardewRule):
 
     def __str__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} {self.group} -> {MISSING_ITEM}"
-        return f"Has {self.item} {self.group}"
+            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+        return f"Has {self.item} ({self.group})"
 
     def __repr__(self):
         if self.item not in self.other_rules:
-            return f"Has {self.item} {self.group} -> {MISSING_ITEM}"
-        return f"Has {self.item} {self.group} -> {repr(self.other_rules[self.item])}"
+            return f"Has {self.item} ({self.group}) -> {MISSING_ITEM}"
+        return f"Has {self.item} ({self.group}) -> {repr(self.other_rules[self.item])}"
 
 
 class RepeatableChain(Iterable, Sized):
