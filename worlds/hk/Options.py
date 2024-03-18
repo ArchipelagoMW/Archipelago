@@ -1,4 +1,5 @@
 import typing
+import re
 from .ExtractedData import logic_options, starts, pool_options
 from .Rules import cost_terms
 
@@ -49,8 +50,7 @@ option_docstrings = {
     "RandomizeBossEssence": "Randomize boss essence drops, such as those for defeating Warrior Dreams, into the item "
                             "pool and open their locations\n    for randomization.",
     "RandomizeGrubs": "Randomize Grubs into the item pool and open their locations for randomization.",
-    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization."
-                       "Mimic Grubs are always placed\n    in your own game.",
+    "RandomizeMimics": "Randomize Mimic Grubs into the item pool and open their locations for randomization.",
     "RandomizeMaps": "Randomize Maps into the item pool. This causes Cornifer to give you a message allowing you to see"
                      " and buy an item\n    that is randomized into that location as well.",
     "RandomizeStags": "Randomize Stag Stations unlocks into the item pool as well as placing randomized items "
@@ -99,8 +99,12 @@ default_on = {
     "RandomizeKeys",
     "RandomizeMaskShards",
     "RandomizeVesselFragments",
+    "RandomizeCharmNotches",
     "RandomizePaleOre",
-    "RandomizeRelics"
+    "RandomizeRancidEggs"
+    "RandomizeRelics",
+    "RandomizeStags",
+    "RandomizeLifebloodCocoons"
 }
 
 shop_to_option = {
@@ -117,6 +121,7 @@ shop_to_option = {
 
 hollow_knight_randomize_options: typing.Dict[str, type(Option)] = {}
 
+splitter_pattern = re.compile(r'(?<!^)(?=[A-Z])')
 for option_name, option_data in pool_options.items():
     extra_data = {"__module__": __name__, "items": option_data[0], "locations": option_data[1]}
     if option_name in option_docstrings:
@@ -125,6 +130,7 @@ for option_name, option_data in pool_options.items():
         option = type(option_name, (DefaultOnToggle,), extra_data)
     else:
         option = type(option_name, (Toggle,), extra_data)
+    option.display_name = splitter_pattern.sub(" ", option_name)
     globals()[option.__name__] = option
     hollow_knight_randomize_options[option.__name__] = option
 
@@ -135,7 +141,8 @@ for option_name in logic_options.values():
     extra_data = {"__module__": __name__}
     if option_name in option_docstrings:
         extra_data["__doc__"] = option_docstrings[option_name]
-        option = type(option_name, (Toggle,), extra_data)
+    option = type(option_name, (Toggle,), extra_data)
+    option.display_name = splitter_pattern.sub(" ", option_name)
     globals()[option.__name__] = option
     hollow_knight_logic_options[option.__name__] = option
 
@@ -404,6 +411,7 @@ class WhitePalace(Choice):
 
 class ExtraPlatforms(DefaultOnToggle):
     """Places additional platforms to make traveling throughout Hallownest more convenient."""
+    display_name = "Extra Platforms"
 
 
 class AddUnshuffledLocations(Toggle):
@@ -413,6 +421,7 @@ class AddUnshuffledLocations(Toggle):
     Note: This will increase the number of location checks required to purchase
     hints to the total maximum.
     """
+    display_name = "Add Unshuffled Locations"
 
 
 class DeathLinkShade(Choice):
@@ -430,6 +439,7 @@ class DeathLinkShade(Choice):
     option_shadeless = 1
     option_shade = 2
     default = 2
+    display_name = "Deathlink Shade Handling"
 
 
 class DeathLinkBreaksFragileCharms(Toggle):
@@ -439,6 +449,7 @@ class DeathLinkBreaksFragileCharms(Toggle):
     ** Self-death fragile charm behavior is not changed; if a self-death normally breaks fragile charms in vanilla, it
         will continue to do so.
     """
+    display_name = "Deathlink Breaks Fragile Charms"
 
 
 class StartingGeo(Range):
@@ -462,18 +473,20 @@ class CostSanity(Choice):
     alias_yes = 1
     option_shopsonly = 2
     option_notshops = 3
-    display_name = "Cost Sanity"
+    display_name = "Costsanity"
 
 
 class CostSanityHybridChance(Range):
     """The chance that a CostSanity cost will include two components instead of one, e.g. Grubs + Essence"""
     range_end = 100
     default = 10
+    display_name = "Costsanity Hybrid Chance"
 
 
 cost_sanity_weights: typing.Dict[str, type(Option)] = {}
 for term, cost in cost_terms.items():
     option_name = f"CostSanity{cost.option}Weight"
+    display_name = f"Costsanity {cost.option} Weight"
     extra_data = {
         "__module__": __name__, "range_end": 1000,
         "__doc__": (
@@ -486,6 +499,7 @@ for term, cost in cost_terms.items():
         extra_data["__doc__"] += " Geo costs will never be chosen for Grubfather, Seer, or Egg Shop."
 
     option = type(option_name, (Range,), extra_data)
+    option.display_name = display_name
     globals()[option.__name__] = option
     cost_sanity_weights[option.__name__] = option
 
