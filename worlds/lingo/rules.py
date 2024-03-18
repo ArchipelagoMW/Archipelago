@@ -18,6 +18,10 @@ def lingo_can_use_entrance(state: CollectionState, room: str, door: RoomAndDoor,
     return _lingo_can_open_door(state, effective_room, door.door, world, player_logic)
 
 
+def lingo_can_do_pilgrimage(state: CollectionState, world: "LingoWorld", player_logic: LingoPlayerLogic):
+    return all(_lingo_can_open_door(state, "Sunwarps", f"{i} Sunwarp", world, player_logic) for i in range(1, 7))
+
+
 def lingo_can_use_location(state: CollectionState, location: PlayerLocation, world: "LingoWorld",
                            player_logic: LingoPlayerLogic):
     return _lingo_can_satisfy_requirements(state, location.access, world, player_logic)
