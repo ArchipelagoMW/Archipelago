@@ -374,7 +374,7 @@ class Count(BaseStardewRule):
 
     def __call__(self, state: CollectionState) -> bool:
         c = 0
-        t = self.counter.total()
+        t = sum(self.counter.values())
 
         for i in range(self.rules_count):
             original_rule = self.rules[i]
