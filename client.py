@@ -151,6 +151,8 @@ class WL4Client(BizHawkClient):
 
     death_link: DeathLinkCtx
 
+    dc_pending: bool
+
     def __init__(self) -> None:
         super().__init__()
         self.local_checked_locations = []
@@ -164,16 +166,26 @@ class WL4Client(BizHawkClient):
         bizhawk_ctx = client_ctx.bizhawk_ctx
         try:
             read_result = iter(await bizhawk.read(bizhawk_ctx, [
-                read(0x080000A0, 10),
-                read(get_symbol('PlayerName'), 64)
+                read(0x080000A0, 12),
+                read(get_symbol('PlayerName'), 64),
+                read(get_symbol('SeedName'), 64),
             ]))
         except RequestFailedError:
             return False  # Should verify on the next pass
 
         game_name = next(read_result).decode('ascii')
-        slot_name_bytes = bytes(filter(None, next(read_result)))
+        slot_name_bytes = next(read_result).rstrip(b'\0')
+        seed_name_bytes = next(read_result).rstrip(b'\0')
 
-        if game_name not in ('WARIOLANDE', 'WARIOLAND\0'):
+        if not game_name.startswith('WARIOLAND'):
+            return False
+        if game_name in ('WARIOLANDE\0\0', 'WARIOLAND\0\0\0'):
+            logger.info('You appear to be running an unpatched version of Wario Land 4. You need '
+                        'to generate a patch file and use it to create a patched ROM.')
+            return False
+        if game_name not in ('WARIOLANDAPE', 'WARIOLANDAPJ'):
+            logger.info('The patch file used to create this ROM is not compatible with this client. '
+                        'Double check your client version against the version being used by the generator.')
             return False
 
         # Check if we can read the slot name. Doing this here instead of set_auth as a protection against
@@ -181,15 +193,22 @@ class WL4Client(BizHawkClient):
         try:
             self.rom_slot_name = slot_name_bytes.decode('utf-8')
         except UnicodeDecodeError:
-            logger.info("Could not read slot name from ROM. Are you sure this ROM matches this client version?")
+            logger.info('Could not read slot name from ROM. Are you sure this ROM matches this client version?')
             return False
 
         client_ctx.game = self.game
         client_ctx.items_handling = 0b001
         client_ctx.want_slot_data = True
+        try:
+            client_ctx.seed_name = seed_name_bytes.decode('utf-8')
+        except UnicodeDecodeError:
+            logger.info('Could not determine seed name from ROM. Are you sure this ROM matches this client version?')
+            return False
 
         client_ctx.command_processor.commands["deathlink"] = cmd_deathlink
         self.death_link = DeathLinkCtx()
+
+        self.dc_pending = False
 
         return True
 
@@ -197,6 +216,10 @@ class WL4Client(BizHawkClient):
         client_ctx.auth = self.rom_slot_name
 
     async def game_watcher(self, client_ctx: BizHawkClientContext) -> None:
+        if self.dc_pending:
+            await client_ctx.disconnect()
+            return
+
         get_int = functools.partial(int.from_bytes, byteorder='little')
         bizhawk_ctx = client_ctx.bizhawk_ctx
 
@@ -368,3 +391,7 @@ class WL4Client(BizHawkClient):
             tags = args.get('tags', [])
             if 'DeathLink' in tags and args['data']['source'] != ctx.auth:
                 self.death_link.pending = True
+        if cmd == 'RoomInfo':
+            if ctx.seed_name and ctx.seed_name != args["seed_name"]:
+                # CommonClient's on_package displays an error to the user in this case, but connection is not cancelled.
+                self.dc_pending = True

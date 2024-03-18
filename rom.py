@@ -360,10 +360,20 @@ def shuffle_wario_voice_sets(rom: LocalRom, shuffle: WarioVoiceShuffle):
 def patch_rom(rom: LocalRom, world: WL4World):
     fill_items(rom, world)
 
+    # Change game name
+    game_name = rom.read_bytes(0x080000A0, 12).decode('ascii')
+    if game_name == 'WARIOLANDE\0\0':
+        game_name = 'WARIOLANDAPE'
+    elif game_name == 'WARIOLAND\0\0\0':
+        game_name = 'WARIOLANDAPJ'
+    rom.write_bytes(0x080000A0, game_name.encode('ascii'))
+
     # Write player name and number
     player_name = world.multiworld.player_name[world.player].encode('utf-8')
+    seed_name = world.multiworld.seed_name.encode('utf-8')[:64]
     rom.write_bytes(get_symbol('PlayerName'), player_name)
     rom.write_byte(get_symbol('PlayerID'), world.player)
+    rom.write_bytes(get_symbol('SeedName'), seed_name)
 
     rom.write_byte(get_symbol('GoalType'), world.options.goal.value)
     rom.write_byte(get_symbol('GoldenTreasuresNeeded'), world.options.golden_treasure_count.value)
