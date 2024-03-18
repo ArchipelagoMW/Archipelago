@@ -77,7 +77,9 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.blizzard_buffalo_region, LocationName.blizzard_buffalo_heart_tank,
         lambda state: (
                 state.has(ItemName.tornado_fang, player) or
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player)
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.blizzard_buffalo_region, LocationName.blizzard_buffalo_sub_tank,
         lambda state: (
@@ -176,7 +178,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_heart_tank)
     add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_sub_tank,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_body,
         lambda state: (
@@ -204,7 +209,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.crush_crawfish_region, LocationName.crush_crawfish_heart_tank,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.crush_crawfish_region, LocationName.crush_crawfish_hawk_ride,
         lambda state: (
@@ -213,7 +221,10 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.crush_crawfish_region, LocationName.crush_crawfish_body,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
 
 
@@ -270,7 +281,9 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
             ))
     add_location_to_region(multiworld, player, active_locations, LocationName.gravity_beetle_region, LocationName.gravity_beetle_arms,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_hawk, player)
             ))
 
 
@@ -311,9 +324,7 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
     add_location_to_region(multiworld, player, active_locations, LocationName.blast_hornet_region, LocationName.blast_hornet_helmet,
         lambda state: (
                 state.has(ItemName.third_armor_legs, player, 2) or
-                state.has(ItemName.ride_chimera, player) or
-                state.has(ItemName.ride_hawk, player) or
-                state.has(ItemName.ride_kangaroo, player)
+                state.has(ItemName.ride_hawk, player)
             ))
 
 
@@ -431,25 +442,40 @@ def create_regions(multiworld: MultiWorld, player: int, world: World, active_loc
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_energy_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_energy_2,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_energy_3,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_hp_1)
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_hp_2)
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_hp_3,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_hp_4,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
         add_location_to_region(multiworld, player, active_locations, LocationName.volt_catfish_region, LocationName.volt_catfish_hp_5,
         lambda state: (
-                state.has(ItemName.ride_chimera, player)
+                state.has(ItemName.ride_chimera, player) or
+                state.has(ItemName.ride_hawk, player) or
+                state.has(ItemName.ride_kangaroo, player) or
+                state.has(ItemName.ride_frog, player)
             ))
 
         # Crush Crawfish

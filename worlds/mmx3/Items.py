@@ -54,8 +54,8 @@ tanks_table = {
 
 ride_table = {
     ItemName.ride_chimera:      ItemData(0xBD0015, True),
-    ItemName.ride_kangaroo:     ItemData(0xBD0016, False, True),
-    ItemName.ride_hawk:         ItemData(0xBD0017, False, True),
+    ItemName.ride_kangaroo:     ItemData(0xBD0016, True),
+    ItemName.ride_hawk:         ItemData(0xBD0017, True),
     ItemName.ride_frog:         ItemData(0xBD0018, True),
 }
 
