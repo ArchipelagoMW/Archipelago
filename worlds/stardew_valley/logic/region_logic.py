@@ -42,6 +42,9 @@ class RegionLogic(BaseLogic[Union[RegionLogicMixin, HasLogicMixin]]):
 
     @cache_self1
     def can_reach_any(self, region_names: Tuple[str, ...]) -> StardewRule:
+        if any(r in always_regions_by_setting[self.options.entrance_randomization] for r in region_names):
+            return true_
+
         return self.logic.or_(*(self.logic.region.can_reach(spot) for spot in region_names))
 
     @cache_self1

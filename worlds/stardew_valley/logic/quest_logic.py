@@ -110,7 +110,7 @@ FishingLogicMixin, CookingLogicMixin, CombatLogicMixin, SeasonLogicMixin, SkillL
         self.registry.quest_rules.update(new_rules)
 
     def can_complete_quest(self, quest: str) -> StardewRule:
-        return Has(quest, self.registry.quest_rules)
+        return Has(quest, self.registry.quest_rules, "quest")
 
     def has_club_card(self) -> StardewRule:
         if self.options.quest_locations < 0:
