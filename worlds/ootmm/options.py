@@ -336,6 +336,15 @@ class OpenDungeonsMM(Choice):
     option_specifc = 3
     option_random = 4
 
+class OpenDungeonsMMList(OptionSet):
+    display_name = "Open Dungeons"
+    valid_keys = {
+        "WF",
+        "SH",
+        "GB",
+        "ST",
+    }
+
 class ClearStateDungeonsMM(Choice):
     display_name = "ClearState Dungeons (MM)"
     option_none = 1
@@ -482,7 +491,7 @@ class VoidWarpInMM(Toggle):
     display_name = "Void Warp in MM"
 
 
-ootmm_options: Dict[str, Type[Option]] = {
+ootmm_main_options: Dict[str, Type[Option]] = {
     "goal": Goal,
     "triforce_goal": TriforceGoal,
     "triforce_pieces": TriforcePieces,
@@ -538,12 +547,14 @@ ootmm_options: Dict[str, Type[Option]] = {
     "mm_shops_prices": MMShopsPrices,
     "mm_tingle_prices": MMTinglePrices,
     "ganon_trials": GanonTrials,
+    "ganon_trials_list": GanonTrialsList,
     "moon_crash_behavior": MoonCrashBehavior,
     "starting_age": StartingAge,
     "door_of_time": DoorOfTime,
     "age_change_upon_song_of_time": AgeChangeUponSongOfTime,
     "deku_tree": DekuTree,
     "open_dungeons_mm": OpenDungeonsMM,
+    "open_dungeon_list_mm": OpenDungeonsMMList,
     "clear_state_dungeons_mm": ClearStateDungeonsMM,
     "kakariko_gate": KakarikoGate,
     "king_zora": KingZora,
@@ -579,5 +590,9 @@ ootmm_options: Dict[str, Type[Option]] = {
     "restore_broken_actors": RestoreBrokenActors,
     "alter_lost_woods_exits": AlterLostWoodsExits,
     "void_warp_in_mm": VoidWarpInMM,
-    # "death_link": DeathLink,
+    # "death_link": DeathLink, 
+}
+
+ootmm_options: Dict[str, Type[Option]] = {
+    **ootmm_main_options
 }
