@@ -17,16 +17,16 @@ from ..AutoWorld import WebWorld, World
 
 
 # from .aesthetics import shuffle_sub_weapons, get_start_inventory_data, get_location_data, get_countdown_numbers
-# from .rom import LocalRom, patch_rom, get_base_rom_path, CVCotMDeltaPatch
-# from .client import CastlevaniaCVCotMClient
+from .rom import LocalRom, patch_rom, get_base_rom_path, CVCotMDeltaPatch
+from .client import CastlevaniaCotMClient
 
 
 class CVCotMSettings(settings.Group):
     class RomFile(settings.UserFilePath):
         """File name of the Castlevania CVCotM US rom"""
         copy_to = "Castlevania - Circle of the Moon (USA).gba"
-        description = "Castlevania CVCotM (US) ROM File"
-        md5s = [0x50a1089600603a94e15ecf287f8d5a1f]  # CVCotMDeltaPatch.hash
+        description = "Castlevania CotM (US) ROM File"
+        md5s = [CVCotMDeltaPatch.hash]
 
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
@@ -80,11 +80,11 @@ class CVCotMWorld(World):
 
     web = CVCotMWeb()
 
-    # @classmethod
-    # def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
-    #    rom_file = get_base_rom_path()
-    #    if not os.path.exists(rom_file):
-    #        raise FileNotFoundError(rom_file)
+    @classmethod
+    def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
+        rom_file = get_base_rom_path()
+        if not os.path.exists(rom_file):
+            raise FileNotFoundError(rom_file)
 
     def generate_early(self) -> None:
         # Generate the player's unique authentication
@@ -158,33 +158,34 @@ class CVCotMWorld(World):
         # Set all the Entrance and Location rules properly.
         CVCotMRules(self).set_cvcotm_rules()
 
-    # def generate_output(self, output_directory: str) -> None:
-    #    active_locations = self.multiworld.get_locations(self.player)
+    def generate_output(self, output_directory: str) -> None:
+        active_locations = self.multiworld.get_locations(self.player)
 
     # Location data
-    #    offset_data = get_location_data(self, active_locations)
+        offset_data = {}
+        #offset_data = get_location_data(self, active_locations)
     # Sub-weapons
-    #    if self.options.sub_weapon_shuffle:
-    #        offset_data.update(shuffle_sub_weapons(self))
+        #if self.options.sub_weapon_shuffle:
+        #    offset_data.update(shuffle_sub_weapons(self))
     # Countdown
-    #    if self.options.countdown:
-    #        offset_data.update(get_countdown_numbers(self.options, active_locations))
+        #if self.options.countdown:
+        #    offset_data.update(get_countdown_numbers(self.options, active_locations))
     # Start Inventory
-    #    offset_data.update(get_start_inventory_data(self.player, self.options,
-    #                                                self.multiworld.precollected_items[self.player]))
+        #offset_data.update(get_start_inventory_data(self.player, self.options,
+        #                                            self.multiworld.precollected_items[self.player]))
 
-    #    CVCotM_rom = LocalRom(get_base_rom_path())
+        cvcotm_rom = LocalRom(get_base_rom_path())
 
-    #    rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
+        rompath = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.z64")
 
-    #    patch_rom(self, CVCotM_rom, offset_data, active_locations)
+        patch_rom(self, cvcotm_rom, offset_data, active_locations)
 
-    #    CVCotM_rom.write_to_file(rompath)
+        cvcotm_rom.write_to_file(rompath)
 
-    #    patch = CVCotMDeltaPatch(os.path.splitext(rompath)[0] + CVCotMDeltaPatch.patch_file_ending, player=self.player,
-    #                           player_name=self.multiworld.player_name[self.player], patched_path=rompath)
-    #    patch.write()
-    #    os.unlink(rompath)
+        patch = CVCotMDeltaPatch(os.path.splitext(rompath)[0] + CVCotMDeltaPatch.patch_file_ending, player=self.player,
+                                 player_name=self.multiworld.player_name[self.player], patched_path=rompath)
+        patch.write()
+        os.unlink(rompath)
 
     def get_filler_item_name(self) -> str:
         return self.random.choice(filler_item_names)

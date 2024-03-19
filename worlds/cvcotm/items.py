@@ -125,11 +125,12 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
             # Remove the cards we're not keeping from start_inventory_from_pool.
             for card in removed_start_cards:
                 del world.options.start_inventory_from_pool.value[card]
-            start_cards = kept_start_cards
 
             logging.warning(f"[{world.multiworld.player_name[world.player]}] Too many DSS Cards in "
                             f"start_inventory_from_pool to satisfy the Halve DSS Cards Placed option. The following "
                             f"{len(removed_start_cards)} card(s) were removed: {removed_start_cards}")
+
+            start_cards = kept_start_cards
 
         # Remove the starting cards from the excluded cards.
         for card in action_cards.union(attribute_cards):
