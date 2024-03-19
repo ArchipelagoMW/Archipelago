@@ -167,6 +167,8 @@ class SA2BWorld(World):
                 self.options.platformer_trap_weight.value = 4
                 self.options.fishing_trap_weight.value = 4
                 self.options.trivia_trap_weight.value = 4
+                self.options.pokemon_trivia_trap_weight.value = 4
+                self.options.pokemon_count_trap_weight.value = 4
 
             if self.options.kart_race_checks.value == 0:
                 self.options.kart_race_checks.value = 2
