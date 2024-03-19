@@ -16,7 +16,7 @@ class ItemData(NamedTuple):
     code: int
     classification: ItemClassification
     mode: Optional[str]
-    door_ids: List[str]
+    has_doors: bool
     painting_ids: List[str]
 
     def should_include(self, world: "LingoWorld") -> bool:
@@ -24,14 +24,6 @@ class ItemData(NamedTuple):
             return world.options.shuffle_colors > 0
         elif self.mode == "doors":
             return world.options.shuffle_doors != ShuffleDoors.option_none
-        elif self.mode == "orange tower":
-            # door shuffle is on and tower isn't progressive
-            return world.options.shuffle_doors != ShuffleDoors.option_none \
-                and not world.options.progressive_orange_tower
-        elif self.mode == "the colorful":
-            # complex door shuffle is on and colorful isn't progressive
-            return world.options.shuffle_doors == ShuffleDoors.option_complex \
-                and not world.options.progressive_colorful
         elif self.mode == "complex door":
             return world.options.shuffle_doors == ShuffleDoors.option_complex
         elif self.mode == "door group":
@@ -69,24 +61,19 @@ def load_item_data():
                 door_mode = "doors"
             else:
                 door_mode = "complex door"
-                door_groups.setdefault(door.group, []).extend(door.door_ids)
+                door_groups.setdefault(door.group, [])
 
             if room_name in PROGRESSION_BY_ROOM and door_name in PROGRESSION_BY_ROOM[room_name]:
-                if room_name == "Orange Tower":
-                    door_mode = "orange tower"
-                elif room_name == "The Colorful":
-                    door_mode = "the colorful"
-                else:
-                    door_mode = "special"
+                door_mode = "special"
 
             ALL_ITEM_TABLE[door.item_name] = \
                 ItemData(get_door_item_id(room_name, door_name),
                          ItemClassification.filler if door.junk_item else ItemClassification.progression, door_mode,
-                         door.door_ids, door.painting_ids)
+                         door.has_doors, door.painting_ids)
 
     for group, group_door_ids in door_groups.items():
         ALL_ITEM_TABLE[group] = ItemData(get_door_group_item_id(group),
-                                         ItemClassification.progression, "door group", group_door_ids, [])
+                                         ItemClassification.progression, "door group", True, [])
 
     special_items: Dict[str, ItemClassification] = {
         ":)":                        ItemClassification.filler,
@@ -101,11 +88,11 @@ def load_item_data():
 
     for item_name, classification in special_items.items():
         ALL_ITEM_TABLE[item_name] = ItemData(get_special_item_id(item_name), classification,
-                                             "special", [], [])
+                                             "special", False, [])
 
     for item_name in PROGRESSIVE_ITEMS:
         ALL_ITEM_TABLE[item_name] = ItemData(get_progressive_item_id(item_name),
-                                             ItemClassification.progression, "special", [], [])
+                                             ItemClassification.progression, "special", False, [])
 
 
 # Initialize the item data at module scope.

@@ -25,7 +25,7 @@ Currently, the following games are supported:
 * Hollow Knight
 * The Witness
 * Sonic Adventure 2: Battle
-* Starcraft 2: Wings of Liberty
+* Starcraft 2
 * Donkey Kong Country 3
 * Dark Souls 3
 * Super Mario World
@@ -59,6 +59,9 @@ Currently, the following games are supported:
 * Landstalker: The Treasures of King Nole
 * Final Fantasy Mystic Quest
 * TUNIC
+* Kirby's Dream Land 3
+* Celeste 64
+* Zork Grand Inquisitor
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled

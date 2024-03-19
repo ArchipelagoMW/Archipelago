@@ -1,0 +1,46 @@
+name: Label Pull Request
+on:
+  pull_request_target:
+    types: ['opened', 'reopened', 'synchronize', 'ready_for_review', 'converted_to_draft', 'closed']
+    branches: ['main']
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  labeler:
+    name: 'Apply content-based labels'
+    if: github.event.action == 'opened' || github.event.action == 'reopened' || github.event.action == 'synchronize'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/labeler@v5
+        with:
+          sync-labels: false
+  peer_review:
+    name: 'Apply peer review label'
+    needs: labeler
+    if: >-
+      (github.event.action == 'opened' || github.event.action == 'reopened' || 
+      github.event.action == 'ready_for_review') && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Add label'
+        run: "gh pr edit \"$PR_URL\" --add-label 'waiting-on: peer-review'"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  unblock_draft_prs:
+    name: 'Remove waiting-on labels'
+    needs: labeler
+    if: github.event.action == 'converted_to_draft' || github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Remove labels'
+        run: |-
+          gh pr edit "$PR_URL" --remove-label 'waiting-on: peer-review' \
+            --remove-label 'waiting-on: core-review' \
+            --remove-label 'waiting-on: world-maintainer' \
+            --remove-label 'waiting-on: author'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

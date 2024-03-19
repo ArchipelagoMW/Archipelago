@@ -2,8 +2,10 @@ from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from BaseClasses import Region, ItemClassification, Item, Location
 from .locations import location_table
 from .er_data import Portal, tunic_er_regions, portal_mapping, hallway_helper, hallway_helper_ur, \
-    dependent_regions, dependent_regions_nmg, dependent_regions_ur
+    dependent_regions_restricted, dependent_regions_nmg, dependent_regions_ur
 from .er_rules import set_er_region_rules
+from worlds.generic import PlandoConnection
+from random import Random
 
 if TYPE_CHECKING:
     from . import TunicWorld
@@ -22,12 +24,17 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
     portal_pairs: Dict[Portal, Portal] = pair_portals(world)
     logic_rules = world.options.logic_rules
 
+    # output the entrances to the spoiler log here for convenience
+    for portal1, portal2 in portal_pairs.items():
+        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+
     # check if a portal leads to a hallway. if it does, update the hint text accordingly
     def hint_helper(portal: Portal, hint_string: str = "") -> str:
         # start by setting it as the name of the portal, for the case we're not using the hallway helper
         if hint_string == "":
             hint_string = portal.name
 
+        # unrestricted has fewer hallways, like the well rail
         if logic_rules == "unrestricted":
             hallways = hallway_helper_ur
         else:
@@ -69,6 +76,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
         return hint_string
 
     # create our regions, give them hint text if they're in a spot where it makes sense to
+    # we're limiting which ones get hints so that it still gets that ER feel with a little less BS
     for region_name, region_data in tunic_er_regions.items():
         hint_text = "error"
         if region_data.hint == 1:
@@ -90,7 +98,7 @@ def create_er_regions(world: "TunicWorld") -> Tuple[Dict[Portal, Portal], Dict[i
                     break
             regions[region_name] = Region(region_name, world.player, world.multiworld, hint_text)
         elif region_data.hint == 3:
-            # only the west garden portal item for now
+            # west garden portal item is at a dead end in restricted, otherwise just in west garden
             if region_name == "West Garden Portal Item":
                 if world.options.logic_rules:
                     for portal1, portal2 in portal_pairs.items():
@@ -178,8 +186,21 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
-    fixed_shop = False
     logic_rules = world.options.logic_rules.value
+    player_name = world.multiworld.get_player_name(world.player)
+
+    shop_scenes: Set[str] = set()
+    shop_count = 6
+    if world.options.fixed_shop.value:
+        shop_count = 1
+        shop_scenes.add("Overworld Redux")
+
+    if not logic_rules:
+        dependent_regions = dependent_regions_restricted
+    elif logic_rules == 1:
+        dependent_regions = dependent_regions_nmg
+    else:
+        dependent_regions = dependent_regions_ur
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
@@ -200,9 +221,114 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     start_region = "Overworld"
     connected_regions.update(add_dependent_regions(start_region, logic_rules))
 
+    plando_connections = world.multiworld.plando_connections[world.player]
+
+    # universal tracker support stuff, don't need to care about region dependency
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        if "TUNIC" in world.multiworld.re_gen_passthrough:
+            plando_connections.clear()
+            # universal tracker stuff, won't do anything in normal gen
+            for portal1, portal2 in world.multiworld.re_gen_passthrough["TUNIC"]["Entrance Rando"].items():
+                portal_name1 = ""
+                portal_name2 = ""
+
+                for portal in portal_mapping:
+                    if portal.scene_destination() == portal1:
+                        portal_name1 = portal.name
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                    if portal.scene_destination() == portal2:
+                        portal_name2 = portal.name
+                        # connected_regions.update(add_dependent_regions(portal.region, logic_rules))
+                # shops have special handling
+                if not portal_name2 and portal2 == "Shop, Previous Region_":
+                    portal_name2 = "Shop Portal"
+                plando_connections.append(PlandoConnection(portal_name1, portal_name2, "both"))
+
+    non_dead_end_regions = set()
+    for region_name, region_info in tunic_er_regions.items():
+        if not region_info.dead_end:
+            non_dead_end_regions.add(region_name)
+        elif region_info.dead_end == 2 and logic_rules:
+            non_dead_end_regions.add(region_name)
+
+    if plando_connections:
+        for connection in plando_connections:
+            p_entrance = connection.entrance
+            p_exit = connection.exit
+
+            if p_entrance.startswith("Shop"):
+                p_entrance = p_exit
+                p_exit = "Shop Portal"
+
+            portal1 = None
+            portal2 = None
+
+            # search two_plus for both at once
+            for portal in two_plus:
+                if p_entrance == portal.name:
+                    portal1 = portal
+                if p_exit == portal.name:
+                    portal2 = portal
+
+            # search dead_ends individually since we can't really remove items from two_plus during the loop
+            if not portal1:
+                for portal in dead_ends:
+                    if p_entrance == portal.name:
+                        portal1 = portal
+                        break
+                if not portal1:
+                    raise Exception(f"Could not find entrance named {p_entrance} for "
+                                    f"plando connections in {player_name}'s YAML.")
+                dead_ends.remove(portal1)
+            else:
+                two_plus.remove(portal1)
+
+            if not portal2:
+                for portal in dead_ends:
+                    if p_exit == portal.name:
+                        portal2 = portal
+                        break
+                if p_exit in ["Shop Portal", "Shop"]:
+                    portal2 = Portal(name="Shop Portal", region=f"Shop",
+                                     destination="Previous Region_")
+                    shop_count -= 1
+                    if shop_count < 0:
+                        shop_count += 2
+                    for p in portal_mapping:
+                        if p.name == p_entrance:
+                            shop_scenes.add(p.scene())
+                            break
+                else:
+                    if not portal2:
+                        raise Exception(f"Could not find entrance named {p_exit} for "
+                                        f"plando connections in {player_name}'s YAML.")
+                    dead_ends.remove(portal2)
+            else:
+                two_plus.remove(portal2)
+
+            portal_pairs[portal1] = portal2
+
+            # update dependent regions based on the plando'd connections, to ensure the portals connect well, logically
+            for origins, destinations in dependent_regions.items():
+                if portal1.region in origins:
+                    if portal2.region in non_dead_end_regions:
+                        destinations.append(portal2.region)
+                if portal2.region in origins:
+                    if portal1.region in non_dead_end_regions:
+                        destinations.append(portal1.region)
+
+        # if we have plando connections, our connected regions may change somewhat
+        while True:
+            test1 = len(connected_regions)
+            for region in connected_regions.copy():
+                connected_regions.update(add_dependent_regions(region, logic_rules))
+            test2 = len(connected_regions)
+            if test1 == test2:
+                break
+    
     # need to plando fairy cave, or it could end up laurels locked
-    # fix this later to be random? probably not?
-    if world.options.laurels_location == "10_fairies":
+    # fix this later to be random after adding some item logic to dependent regions
+    if world.options.laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         portal2 = None
         for portal in two_plus:
@@ -213,41 +339,59 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             if portal.scene_destination() == "Waterfall, Overworld Redux_":
                 portal2 = portal
                 break
+        if not portal1:
+            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
+                            f"Did {player_name} plando connection the Secret Gathering Place Entrance?")
+        if not portal2:
+            raise Exception(f"Failed to do Laurels Location at 10 Fairies option. "
+                            f"Did {player_name} plando connection the Secret Gathering Place Exit?")
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
         dead_ends.remove(portal2)
 
-    if world.options.fixed_shop:
-        fixed_shop = True
+    if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
                 portal1 = portal
                 break
-        portal2 = Portal(name="Shop Portal", region=f"Shop Entrance 2", destination="Previous Region_")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
+        if not portal1:
+            raise Exception(f"Failed to do Fixed Shop option. "
+                            f"Did {player_name} plando connection the Windmill Shop entrance?")
         portal_pairs[portal1] = portal2
         two_plus.remove(portal1)
 
+    random_object: Random = world.random
+    if world.options.entrance_rando.value != 1:
+        random_object = Random(world.options.entrance_rando.value)
     # we want to start by making sure every region is accessible
-    non_dead_end_regions = set()
-    for region_name, region_info in tunic_er_regions.items():
-        if not region_info.dead_end:
-            non_dead_end_regions.add(region_name)
-        elif region_info.dead_end == 2 and logic_rules:
-            non_dead_end_regions.add(region_name)
-
-    world.random.shuffle(two_plus)
+    random_object.shuffle(two_plus)
     check_success = 0
     portal1 = None
     portal2 = None
+    previous_conn_num = 0
+    fail_count = 0
     while len(connected_regions) < len(non_dead_end_regions):
+        # if the connected regions length stays unchanged for too long, it's stuck in a loop
+        # should, hopefully, only ever occur if someone plandos connections poorly
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
+        if previous_conn_num == len(connected_regions):
+            fail_count += 1
+            if fail_count >= 500:
+                raise Exception(f"Failed to pair regions. Check plando connections for {player_name} for loops.")
+        else:
+            fail_count = 0
+        previous_conn_num = len(connected_regions)
+
         # find a portal in an inaccessible region
         if check_success == 0:
             for portal in two_plus:
                 if portal.region in connected_regions:
                     # if there's risk of self-locking, start over
                     if gate_before_switch(portal, two_plus):
-                        world.random.shuffle(two_plus)
+                        random_object.shuffle(two_plus)
                         break
                     portal1 = portal
                     two_plus.remove(portal)
@@ -260,7 +404,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 if portal.region not in connected_regions:
                     # if there's risk of self-locking, shuffle and try again
                     if gate_before_switch(portal, two_plus):
-                        world.random.shuffle(two_plus)
+                        random_object.shuffle(two_plus)
                         break
                     portal2 = portal
                     two_plus.remove(portal)
@@ -272,17 +416,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
             connected_regions.update(add_dependent_regions(portal2.region, logic_rules))
             portal_pairs[portal1] = portal2
             check_success = 0
-            world.random.shuffle(two_plus)
+            random_object.shuffle(two_plus)
 
-    # add 6 shops, connect them to unique scenes
-    # this is due to a limitation in Tunic -- you wrong warp if there's multiple shops
-    shop_scenes: Set[str] = set()
-    shop_count = 6
-
-    if fixed_shop:
-        shop_count = 1
-        shop_scenes.add("Overworld Redux")
-
+    # for universal tracker, we want to skip shop gen
+    if hasattr(world.multiworld, "re_gen_passthrough"):
+        if "TUNIC" in world.multiworld.re_gen_passthrough:
+            shop_count = 0
+    
     for i in range(shop_count):
         portal1 = None
         for portal in two_plus:
@@ -292,13 +432,15 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
                 two_plus.remove(portal)
                 break
         if portal1 is None:
-            raise Exception("Too many shops in the pool, or something else went wrong")
-        portal2 = Portal(name="Shop Portal", region=f"Shop Entrance {i + 1}", destination="Previous Region_")
+            raise Exception("Too many shops in the pool, or something else went wrong.")
+        portal2 = Portal(name="Shop Portal", region="Shop", destination="Previous Region_")
         portal_pairs[portal1] = portal2
 
     # connect dead ends to random non-dead ends
     # none of the key events are in dead ends, so we don't need to do gate_before_switch
     while len(dead_ends) > 0:
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
         portal1 = two_plus.pop()
         portal2 = dead_ends.pop()
         portal_pairs[portal1] = portal2
@@ -306,15 +448,14 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     # then randomly connect the remaining portals to each other
     # every region is accessible, so gate_before_switch is not necessary
     while len(two_plus) > 1:
+        if hasattr(world.multiworld, "re_gen_passthrough"):
+            break
         portal1 = two_plus.pop()
         portal2 = two_plus.pop()
         portal_pairs[portal1] = portal2
 
     if len(two_plus) == 1:
-        raise Exception("two plus had an odd number of portals, investigate this")
-
-    for portal1, portal2 in portal_pairs.items():
-        world.multiworld.spoiler.set_entrance(portal1.name, portal2.name, "both", world.player)
+        raise Exception("two plus had an odd number of portals, investigate this. last portal is " + two_plus[0].name)
 
     return portal_pairs
 
@@ -326,15 +467,16 @@ def create_randomized_entrances(portal_pairs: Dict[Portal, Portal], regions: Dic
         region2 = regions[portal2.region]
         region1.connect(region2, f"{portal1.name} -> {portal2.name}")
         # prevent the logic from thinking you can get to any shop-connected region from the shop
-        if portal2.name != "Shop":
+        if not portal2.name.startswith("Shop"):
             region2.connect(region1, f"{portal2.name} -> {portal1.name}")
 
 
 # loop through the static connections, return regions you can reach from this region
+# todo: refactor to take region_name and dependent_regions
 def add_dependent_regions(region_name: str, logic_rules: int) -> Set[str]:
     region_set = set()
     if not logic_rules:
-        regions_to_add = dependent_regions
+        regions_to_add = dependent_regions_restricted
     elif logic_rules == 1:
         regions_to_add = dependent_regions_nmg
     else:
