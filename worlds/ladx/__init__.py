@@ -190,15 +190,16 @@ class LinksAwakeningWorld(World):
 
             dungeon_item_types[option.ladxr_item] = option.value
 
-            num_items = 9 if dungeon_item_type == "instruments" else 10
+            # The color dungeon does not contain an instrument
+            num_items = 8 if dungeon_item_type == "instruments" else 9
 
             if option.value == DungeonItemShuffle.option_own_world:
                 self.multiworld.local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items)
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
             elif option.value == DungeonItemShuffle.option_different_world:
                 self.multiworld.non_local_items[self.player].value |= {
-                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items)
+                    ladxr_item_to_la_item_name[f"{option.ladxr_item}{i}"] for i in range(1, num_items + 1)
                 }
         # option_original_dungeon = 0
         # option_own_dungeons = 1
