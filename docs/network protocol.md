@@ -31,7 +31,7 @@ There are also a number of community-supported libraries available that implemen
 | GameMaker: Studio 2.x+        | [see Discord](https://discord.com/channels/731205301247803413/1166418532519653396)                 |                                                                                 |
 
 ## Synchronizing Items
-After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may already have processed in a previous play session.
+After a client connects, it will receive all previously collected items for its associated slot in a [ReceivedItems](#ReceivedItems) packet. This will include items the client may already have processed in a previous play session.  
 To ensure the client is able to reject those items if it needs to, each item in the packet will have an associated `index` argument. You will need to find a way to save the "last processed item index" to the player's local savegame, a local file, or something to that effect. Before connecting, you should load that "last processed item index" value and compare against it in your received items handling.
 
 When the client receives a [ReceivedItems](#ReceivedItems) packet, if the `index` argument does not match the next index that the client expects then it is expected that the client will re-sync items with the server. This can be accomplished by sending the server a [Sync](#Sync) packet and then a [LocationChecks](#LocationChecks) packet.
