@@ -20,7 +20,7 @@
     * The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
 ## Notes About Game Versions
-The randomizer is built for a specific version of Stardew Valley. When a new version gets released, we will try our best to support it as fast as possible, but we can't make promises.
+The randomizer is built for a specific version of Stardew Valley. When a new version gets released, we will try our best to support it as fast as possible, but we can't make any promises.
 
 You may need to downgrade your game in order to play Archipelago when Stardew Valley itself has had a recent update.
 
