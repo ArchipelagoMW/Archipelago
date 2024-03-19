@@ -2646,8 +2646,7 @@ location_tables = {
         DS3LocationData("PW2 -> DH", None),
 
         # Corvian Settler after killing Friede
-        DS3LocationData("PW1: Titanite Slab - Corvian", "Titanite Slab", missable = True,
-                        npc = True),
+        DS3LocationData("PW1: Titanite Slab - Corvian", "Titanite Slab", npc = True),
 
         # Shrine Handmaid after killing Sister Friede
         DS3LocationData("FS: Ordained Hood - shop after killing PW2 boss", "Ordained Hood",
