@@ -250,8 +250,8 @@ class TestCount(unittest.TestCase):
     def test_duplicate_rule_count_double(self):
         expected_result = True
         collection_state = MagicMock()
-        simplified_rule = MagicMock()
-        other_rule = MagicMock(spec=StardewRule)
+        simplified_rule = Mock()
+        other_rule = Mock(spec=StardewRule)
         other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
         rule = Count([other_rule, other_rule, other_rule], 2)
 
@@ -261,10 +261,10 @@ class TestCount(unittest.TestCase):
         self.assertEqual(expected_result, actual_result)
 
     def test_simplified_rule_is_reused(self):
-        expected_result = True
+        expected_result = False
         collection_state = MagicMock()
-        simplified_rule = MagicMock(return_value=expected_result)
-        other_rule = MagicMock(spec=StardewRule)
+        simplified_rule = Mock(return_value=expected_result)
+        other_rule = Mock(spec=StardewRule)
         other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
         rule = Count([other_rule, other_rule, other_rule], 2)
 
@@ -278,15 +278,15 @@ class TestCount(unittest.TestCase):
         actual_result = rule(collection_state)
 
         other_rule.evaluate_while_simplifying.assert_not_called()
-        simplified_rule.assert_not_called()
+        simplified_rule.assert_called()
         self.assertEqual(expected_result, actual_result)
 
     def test_break_if_not_enough_rule_to_complete(self):
         expected_result = False
         collection_state = MagicMock()
-        simplified_rule = MagicMock()
-        never_called_rule = MagicMock()
-        other_rule = MagicMock(spec=StardewRule)
+        simplified_rule = Mock()
+        never_called_rule = Mock()
+        other_rule = Mock(spec=StardewRule)
         other_rule.evaluate_while_simplifying = Mock(return_value=(simplified_rule, expected_result))
         rule = Count([other_rule, other_rule, other_rule, never_called_rule], 2)
 
@@ -296,3 +296,8 @@ class TestCount(unittest.TestCase):
         never_called_rule.assert_not_called()
         never_called_rule.evaluate_while_simplifying.assert_not_called()
         self.assertEqual(expected_result, actual_result)
+
+    def test_evaluate_without_shortcircuit_when_rules_are_all_different(self):
+        rule = Count([Mock(), Mock(), Mock(), Mock()], 2)
+
+        self.assertEqual(rule.evaluate, rule.evaluate_without_shortcircuit)

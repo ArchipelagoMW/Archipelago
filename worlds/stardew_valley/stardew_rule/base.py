@@ -363,15 +363,44 @@ class And(AggregatingStardewRule):
 class Count(BaseStardewRule):
     count: int
     rules: List[StardewRule]
+    counter: Counter[StardewRule]
+    evaluate: Callable[[CollectionState], bool]
+
+    total: Optional[int]
+    rule_mapping: Optional[Dict[StardewRule, StardewRule]]
 
     def __init__(self, rules: List[StardewRule], count: int):
         self.count = count
         self.counter = Counter(rules)
-        self.total = sum(self.counter.values())
-        self.rules = sorted(self.counter.keys(), key=lambda x: self.counter[x], reverse=True)
-        self.rule_mapping = {}
+
+        if len(self.counter) / len(rules) < .66:
+            # Checking if it's worth using the count operation with shortcircuit or not. Value should be fine-tuned when Count has more usage.
+            self.total = sum(self.counter.values())
+            self.rules = sorted(self.counter.keys(), key=lambda x: self.counter[x], reverse=True)
+            self.rule_mapping = {}
+            self.evaluate = self.evaluate_with_shortcircuit
+        else:
+            self.rules = rules
+            self.evaluate = self.evaluate_without_shortcircuit
 
     def __call__(self, state: CollectionState) -> bool:
+        return self.evaluate(state)
+
+    def evaluate_without_shortcircuit(self, state: CollectionState) -> bool:
+        c = 0
+        for i in range(self.rules_count):
+            self.rules[i], value = self.rules[i].evaluate_while_simplifying(state)
+            if value:
+                c += 1
+
+            if c >= self.count:
+                return True
+            if c + self.rules_count - i < self.count:
+                break
+
+        return False
+
+    def evaluate_with_shortcircuit(self, state: CollectionState) -> bool:
         c = 0
         t = self.total
 
@@ -395,7 +424,7 @@ class Count(BaseStardewRule):
         try:
             # A mapping table with the original rule is used here because two rules could resolve to the same rule.
             #  This would require to change the counter to merge both rules, and quickly become complicated.
-            return self.rule_mapping[rule].evaluate_while_simplifying(state)
+            return self.rule_mapping[rule](state)
         except KeyError:
             self.rule_mapping[rule], value = rule.evaluate_while_simplifying(state)
             return value
