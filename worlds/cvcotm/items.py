@@ -1,4 +1,4 @@
-import random
+import logging
 
 from BaseClasses import Item
 from .data import iname
@@ -86,12 +86,63 @@ def get_item_counts(world: "CVCotMWorld") -> Dict[str, Dict[str, int]]:
     # If Halve DSS Cards Placed is on, determine which cards we will exclude here.
     if world.options.halve_dss_cards_placed:
         excluded_cards = list(action_cards.union(attribute_cards))
+        freeze_actions = [iname.mercury, iname.mars]
+        freeze_attrs = [iname.serpent, iname.cockatrice]
+        has_freeze_action = False
+        has_freeze_attr = False
+        start_card_cap = 8
 
-        # Remove a valid combo of ice/stone cards from the exclusions.
-        excluded_cards.remove(world.random.choice([iname.serpent, iname.cockatrice]))
-        excluded_cards.remove(world.random.choice([iname.mercury, iname.mars]))
+        start_cards = [item for item in world.options.start_inventory_from_pool.value if "Card" in item]
 
-        # Remove 8 more random cards from the exclusions.
+        # Check for ice/stone cards that are in the player's starting cards. Increase the starting card capacity by 1
+        # for each card type satisfied.
+        for card in start_cards:
+            if card in freeze_actions and not has_freeze_action:
+                has_freeze_action = True
+                start_card_cap += 1
+            if card in freeze_attrs and not has_freeze_attr:
+                has_freeze_attr = True
+                start_card_cap += 1
+
+        # If we are over our starting card capacity, some starting cards will need to be removed...
+        if len(start_cards) > start_card_cap:
+            kept_start_cards = []
+            removed_start_cards = []
+
+            # Remove all but the ice/stone cards; these we'll keep no matter what.
+            for card in start_cards:
+                if card in freeze_actions + freeze_attrs:
+                    kept_start_cards.append(card)
+                else:
+                    removed_start_cards.append(card)
+
+            # Continue re-adding the removed start cards at random until we are back at the starting card capacity.
+            while len(kept_start_cards) < start_card_cap:
+                returned_card = world.random.choice(removed_start_cards)
+                kept_start_cards.append(returned_card)
+                removed_start_cards.remove(returned_card)
+
+            # Remove the cards we're not keeping from start_inventory_from_pool.
+            for card in removed_start_cards:
+                del world.options.start_inventory_from_pool.value[card]
+            start_cards = kept_start_cards
+
+            logging.warning(f"[{world.multiworld.player_name[world.player]}] Too many DSS Cards in "
+                            f"start_inventory_from_pool to satisfy the Halve DSS Cards Placed option. The following "
+                            f"{len(removed_start_cards)} card(s) were removed: {removed_start_cards}")
+
+        # Remove the starting cards from the excluded cards.
+        for card in action_cards.union(attribute_cards):
+            if card in start_cards:
+                excluded_cards.remove(card)
+
+        # Remove a valid ice/stone action and/or attribute card if the player isn't starting with one.
+        if not has_freeze_action:
+            excluded_cards.remove(world.random.choice(freeze_actions))
+        if not has_freeze_attr:
+            excluded_cards.remove(world.random.choice(freeze_attrs))
+
+        # Remove 10 random cards from the exclusions.
         excluded_cards = world.random.sample(excluded_cards, 10)
 
     # Add one of each Item to the pool that is not filler or progression skip balancing.
