@@ -24,7 +24,7 @@ The randomizer is built for a specific version of Stardew Valley. When a new ver
 
 You may need to downgrade your game in order to play Archipelago when Stardew Valley itself has had a recent update.
 
-The SMAPI mod will tell you what version is currently supported.
+The SMAPI mod will tell you what version is currently supported. If you are having trouble, feel free to join the Archipelago Discord to ask for assistance.
 
 ## Configuring your YAML file
 
