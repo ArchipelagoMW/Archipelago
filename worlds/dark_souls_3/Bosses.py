@@ -146,6 +146,7 @@ all_bosses = [
         "UG: Ring of Steel Protection+1 - environs, behind bell tower",
         "FS: Ring of Sacrifice - Yuria shop",
         "UG: Ember - shop",
+        "UG: Priestess Ring - shop",
         "UG: Wolf Knight Helm - shop after killing FK boss",
         "UG: Wolf Knight Armor - shop after killing FK boss",
         "UG: Wolf Knight Gauntlets - shop after killing FK boss",
