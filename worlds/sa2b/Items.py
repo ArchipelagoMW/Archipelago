@@ -86,10 +86,12 @@ trap_table = {
     ItemName.reverse_trap:    ItemData(0xFF003A, False, True),
     ItemName.literature_trap: ItemData(0xFF003B, False, True),
 
-    ItemName.pong_trap:       ItemData(0xFF0050, False, True),
-    ItemName.platformer_trap: ItemData(0xFF0051, False, True),
-    ItemName.fishing_trap:    ItemData(0xFF0052, False, True),
-    ItemName.trivia_trap:     ItemData(0xFF0053, False, True),
+    ItemName.pong_trap:           ItemData(0xFF0050, False, True),
+    ItemName.platformer_trap:     ItemData(0xFF0051, False, True),
+    ItemName.fishing_trap:        ItemData(0xFF0052, False, True),
+    ItemName.trivia_trap:         ItemData(0xFF0053, False, True),
+    ItemName.pokemon_trivia_trap: ItemData(0xFF0054, False, True),
+    ItemName.pokemon_count_trap:  ItemData(0xFF0055, False, True),
 }
 
 emeralds_table = {

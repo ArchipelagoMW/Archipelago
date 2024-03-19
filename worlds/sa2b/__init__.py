@@ -155,7 +155,9 @@ class SA2BWorld(World):
                                  self.options.pong_trap_weight.value + \
                                  self.options.platformer_trap_weight.value + \
                                  self.options.fishing_trap_weight.value + \
-                                 self.options.trivia_trap_weight.value
+                                 self.options.trivia_trap_weight.value + \
+                                 self.options.pokemon_trivia_trap_weight.value + \
+                                 self.options.pokemon_count_trap_weight.value
 
             if valid_trap_weights == 0:
                 self.options.exposition_trap_weight.value = 4
@@ -304,6 +306,8 @@ class SA2BWorld(World):
         trap_weights += ([ItemName.platformer_trap] * self.options.platformer_trap_weight.value)
         trap_weights += ([ItemName.fishing_trap] * self.options.fishing_trap_weight.value)
         trap_weights += ([ItemName.trivia_trap] * self.options.trivia_trap_weight.value)
+        trap_weights += ([ItemName.pokemon_trivia_trap] * self.options.pokemon_trivia_trap_weight.value)
+        trap_weights += ([ItemName.pokemon_count_trap] * self.options.pokemon_count_trap_weight.value)
 
         junk_count += extra_junk_count
         trap_count = 0 if (len(trap_weights) == 0) else math.ceil(junk_count * (self.options.trap_fill_percentage.value / 100.0))

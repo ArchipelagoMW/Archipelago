@@ -182,6 +182,20 @@ class TriviaTrapWeight(BaseTrapWeight):
     display_name = "Trivia Trap Weight"
 
 
+class PokemonTriviaTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pokemon Trivia minigame
+    """
+    display_name = "Pokemon Trivia Trap Weight"
+
+
+class PokemonCountTrapWeight(BaseTrapWeight):
+    """
+    Likelihood of receiving a trap which forces you to play a Pokemon Count minigame
+    """
+    display_name = "Pokemon Count Trap Weight"
+
+
 class MinigameTrapDifficulty(Choice):
     """
     How difficult any Minigame-style traps are
@@ -875,6 +889,8 @@ sa2b_options: typing.Dict[str, type(Option)] = {
     "platformer_trap_weight": PlatformerTrapWeight,
     "fishing_trap_weight": FishingTrapWeight,
     "trivia_trap_weight": TriviaTrapWeight,
+    "pokemon_trivia_trap_weight": PokemonTriviaTrapWeight,
+    "pokemon_count_trap_weight": PokemonCountTrapWeight,
     "minigame_trap_difficulty": MinigameTrapDifficulty,
 
     "sadx_music": SADXMusic,
