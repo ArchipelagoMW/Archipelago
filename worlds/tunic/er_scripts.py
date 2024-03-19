@@ -188,10 +188,15 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     two_plus: List[Portal] = []
     logic_rules = world.options.logic_rules.value
     player_name = world.multiworld.get_player_name(world.player)
+    fixed_shop = world.options.fixed_shop
+    laurels_location = world.options.laurels_location
 
+    # check seed group, sync up entrance-altering settings
+    # for player in world.multiworld.get_players()
+    
     shop_scenes: Set[str] = set()
     shop_count = 6
-    if world.options.fixed_shop.value:
+    if fixed_shop:
         shop_count = 1
         shop_scenes.add("Overworld Redux")
 
@@ -328,7 +333,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     
     # need to plando fairy cave, or it could end up laurels locked
     # fix this later to be random after adding some item logic to dependent regions
-    if world.options.laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if laurels_location == "10_fairies" and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         portal2 = None
         for portal in two_plus:
@@ -349,7 +354,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         two_plus.remove(portal1)
         dead_ends.remove(portal2)
 
-    if world.options.fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
+    if fixed_shop and not hasattr(world.multiworld, "re_gen_passthrough"):
         portal1 = None
         for portal in two_plus:
             if portal.scene_destination() == "Overworld Redux, Windmill_":
@@ -363,6 +368,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
         two_plus.remove(portal1)
 
     random_object: Random = world.random
+    # use the seed given in the options to shuffle the portals
     if world.options.entrance_rando.value != 1:
         random_object = Random(world.options.entrance_rando.value)
     # we want to start by making sure every region is accessible
