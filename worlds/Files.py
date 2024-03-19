@@ -191,7 +191,7 @@ class APProcedurePatch(APAutoPatchInterface):
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
     patch_file_ending: str = ""
-    files: Dict[str, bytes] = {}
+    files: Dict[str, bytes]
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -206,6 +206,7 @@ class APProcedurePatch(APAutoPatchInterface):
 
     def __init__(self, *args: Any, **kwargs: Any):
         super(APProcedurePatch, self).__init__(*args, **kwargs)
+        self.files = dict()
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APProcedurePatch, self).get_manifest()
@@ -301,7 +302,7 @@ class APTokenMixin:
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
             int  # AND_8, OR_8, XOR_8
-        ]]] = []
+        ]]]
 
     def get_token_binary(self) -> bytes:
         """
@@ -355,6 +356,8 @@ class APTokenMixin:
         """
         Stores a token to be used by patching.
         """
+        if not getattr(self, "tokens", None):
+            self.tokens = list()
         self.tokens.append((token_type, offset, data))
 
 
