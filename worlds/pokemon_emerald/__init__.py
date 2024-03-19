@@ -127,9 +127,6 @@ class PokemonEmeraldWorld(World):
     def stage_assert_generate(cls, multiworld: MultiWorld) -> None:
         from .sanity_check import validate_regions
 
-        if not os.path.exists(cls.settings.rom_file):
-            raise FileNotFoundError(cls.settings.rom_file)
-
         assert validate_regions()
 
     def get_filler_item_name(self) -> str:
