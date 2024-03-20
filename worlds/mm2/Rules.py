@@ -11,10 +11,10 @@ if typing.TYPE_CHECKING:
 
 weapon_damage: typing.Dict[int, typing.List[int]] = {
     0: [2, 2, 1, 1, 2, 2, 1, 1, 1, 7, 1, 0, 1, -1],  # Mega Buster
-    1: [-1, 6, 0xE, 0, 0xA, 6, 4, 6, 8, 0x14, 8, 0, 0xE, -1],  # Atomic Fire
+    1: [-1, 6, 0xE, 0, 0xA, 6, 4, 6, 8, 0x13, 8, 0, 0xE, -1],  # Atomic Fire
     2: [2, 0, 4, 0, 2, 0, 0, 0xA, 0, 0, 0, 0, 1, -1],  # Air Shooter
     3: [0, 8, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1],  # Leaf Shield
-    4: [6, 0, 0, -1, 0, 2, 0, 1, 0, 0, 1, 0, 0, 1],  # Bubble Lead
+    4: [6, 0, 0, -1, 0, 2, 0, 1, 0, 0x14, 1, 0, 0, 1],  # Bubble Lead
     5: [2, 2, 0, 2, 0, 0, 4, 1, 1, 7, 2, 0, 1, -1],  # Quick Boomerang
     6: [-1, 0, 2, 2, 4, 3, 0, 0, 1, 0, 1, 0x14, 1, -1],  # Crash Bomber
     7: [1, 0, 2, 4, 0, 4, 0xE, 0, 0, 7, 0, 0, 1, -1],  # Metal Blade
