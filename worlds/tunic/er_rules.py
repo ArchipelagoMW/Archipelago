@@ -627,7 +627,8 @@ def set_er_region_rules(world: "TunicWorld", ability_unlocks: Dict[str, int], re
 
     # connecting the regions portals are in to other portals you can access via ladder storage
     # using has_stick instead of can_ladder_storage since it's already checking the logic rules
-    if options.logic_rules == "unrestricted":
+    # todo: unfalse this when merging with ladder branch
+    if options.logic_rules == "unrestricted" and False:
         def get_paired_region(portal_sd: str) -> str:
             for portal1, portal2 in portal_pairs.items():
                 if portal1.scene_destination() == portal_sd:

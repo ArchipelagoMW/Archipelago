@@ -1,6 +1,6 @@
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple, TypedDict
 
-from BaseClasses import Region, Location, Item, Tutorial, ItemClassification
+from BaseClasses import Region, Location, Item, Tutorial, ItemClassification, MultiWorld
 from .items import item_name_to_id, item_table, item_name_groups, fool_tiers, filler_items, slot_data_item_names
 from .locations import location_table, location_name_groups, location_name_to_id, hexagon_locations
 from .rules import set_location_rules, set_region_rules, randomize_ability_unlocks, gold_hexagon
@@ -35,6 +35,12 @@ class TunicLocation(Location):
     game: str = "TUNIC"
 
 
+class SeedGroup(TypedDict):
+    logic_rules: int  # logic rules value
+    laurels_at_10_fairies: bool  # laurels location value
+    fixed_shop: bool  # fixed shop value
+
+
 class TunicWorld(World):
     """
     Explore a land filled with lost legends, ancient powers, and ferocious monsters in TUNIC, an isometric action game
@@ -57,6 +63,7 @@ class TunicWorld(World):
     slot_data_items: List[TunicItem]
     tunic_portal_pairs: Dict[str, str]
     er_portal_hints: Dict[int, str]
+    seed_groups: Dict[str, SeedGroup] = {}
 
     def generate_early(self) -> None:
         # Universal tracker stuff, shouldn't do anything in standard gen
@@ -72,6 +79,29 @@ class TunicWorld(World):
                 self.options.maskless.value = passthrough["maskless"]
                 self.options.hexagon_quest.value = passthrough["hexagon_quest"]
                 self.options.entrance_rando.value = passthrough["entrance_rando"]
+
+    @classmethod
+    def stage_generate_early(cls, multiworld: MultiWorld) -> None:
+        tunc_worlds: Tuple[TunicWorld] = multiworld.get_game_worlds("TUNIC")
+        for tunc in tunc_worlds:
+            if isinstance(tunc.options.entrance_rando.value, str):
+                group = tunc.options.entrance_rando.value
+                # if this is the first world in the group, set the rules equal to its rules
+                if group not in cls.seed_groups:
+                    cls.seed_groups[group] = SeedGroup(logic_rules=tunc.options.logic_rules.value,
+                                                       laurels_at_10_fairies=tunc.options.laurels_location == 3,
+                                                       fixed_shop=bool(tunc.options.fixed_shop))
+                else:
+                    # lower value is more restrictive
+                    if tunc.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
+                        print("restricting logic rules")
+                        cls.seed_groups[group]["logic_rules"] = tunc.options.logic_rules.value
+                    if tunc.options.laurels_location == 3:
+                        print("restricting for laurels location")
+                        cls.seed_groups[group]["laurels_at_10_fairies"] = True
+                    if tunc.options.fixed_shop:
+                        print("restricting for fixed shop")
+                        cls.seed_groups[group]["fixed_shop"] = True
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]

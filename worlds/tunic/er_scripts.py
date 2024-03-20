@@ -186,13 +186,16 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
     portal_pairs: Dict[Portal, Portal] = {}
     dead_ends: List[Portal] = []
     two_plus: List[Portal] = []
-    logic_rules = world.options.logic_rules.value
     player_name = world.multiworld.get_player_name(world.player)
+    logic_rules = world.options.logic_rules.value
     fixed_shop = world.options.fixed_shop
     laurels_location = world.options.laurels_location
 
-    # check seed group, sync up entrance-altering settings
-    # for player in world.multiworld.get_players()
+    if isinstance(world.options.entrance_rando.value, str):
+        seed_group = world.seed_groups[world.options.entrance_rando.value]
+        logic_rules = seed_group["logic_rules"]
+        fixed_shop = seed_group["fixed_shop"]
+        laurels_location = "10_fairies" if seed_group["laurels_at_10_fairies"] is True else False
     
     shop_scenes: Set[str] = set()
     shop_count = 6
@@ -202,10 +205,13 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     if not logic_rules:
         dependent_regions = dependent_regions_restricted
+        print("not logic rules")
     elif logic_rules == 1:
         dependent_regions = dependent_regions_nmg
+        print("logic rules is 1")
     else:
         dependent_regions = dependent_regions_ur
+        print("logic rules is more than 1")
 
     # create separate lists for dead ends and non-dead ends
     if logic_rules:
@@ -369,7 +375,7 @@ def pair_portals(world: "TunicWorld") -> Dict[Portal, Portal]:
 
     random_object: Random = world.random
     # use the seed given in the options to shuffle the portals
-    if world.options.entrance_rando.value != 1:
+    if isinstance(world.options.entrance_rando.value, str):
         random_object = Random(world.options.entrance_rando.value)
     # we want to start by making sure every region is accessible
     random_object.shuffle(two_plus)
