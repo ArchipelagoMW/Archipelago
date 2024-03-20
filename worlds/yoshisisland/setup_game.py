@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 def setup_gamevars(world: "YoshisIslandWorld") -> None:
     if world.options.luigi_pieces_in_pool < world.options.luigi_pieces_required:
-        world.options.luigi_pieces_in_pool = world.random.randint(world.options.luigi_pieces_required.value, 100)
+        world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)
     world.starting_lives = struct.pack("H", world.options.starting_lives)
 
     world.level_colors = []
