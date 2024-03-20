@@ -92,7 +92,7 @@ class TunicWorld(World):
                 if group not in cls.seed_groups:
                     cls.seed_groups[group] = SeedGroup(logic_rules=tunc.options.logic_rules.value,
                                                        laurels_at_10_fairies=tunc.options.laurels_location == 3,
-                                                       fixed_shop=bool(tunc.options.fixed_shop)
+                                                       fixed_shop=bool(tunc.options.fixed_shop),
                                                        plando=multiworld.plando_connections[tunc.player])
                 else:
                     # lower value is more restrictive
