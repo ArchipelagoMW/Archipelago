@@ -4,17 +4,17 @@
 
 - Stardew Valley on PC (Recommended: [Steam version](https://store.steampowered.com/app/413150/Stardew_Valley/))
 - SMAPI ([Mod loader for Stardew Valley](https://smapi.io/))
-- [StardewArchipelago Mod Release 4.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
-    - It is important to use a mod release of version 4.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
+- [StardewArchipelago Mod Release 5.x.x](https://github.com/agilbert1412/StardewArchipelago/releases)
+    - It is important to use a mod release of version 5.x.x to play seeds that have been generated here. Later releases can only be used with later releases of the world generator, that are not hosted on archipelago.gg yet.
 
 ## Optional Software
 - Archipelago from the [Archipelago Releases Page](https://github.com/ArchipelagoMW/Archipelago/releases)
-    - (Only for the TextClient)
+    * (Only for the TextClient)
 - Other Stardew Valley Mods [Nexus Mods](https://www.nexusmods.com/stardewvalley)
-    - There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md) that you can add to your yaml to include them with the Archipelago randomization
+    * There are [supported mods](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md) that you can add to your yaml to include them with the Archipelago randomization
 
-    - It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
-    - The more unsupported mods you have, and the bigger they are, the more likely things are to break.
+    * It is **not** recommended to further mod Stardew Valley with unsupported mods, although it is possible to do so. Mod interactions can be unpredictable, and no support will be offered for related bugs.
+    * The more unsupported mods you have, and the bigger they are, the more likely things are to break.
 
 ## Configuring your YAML file
 
@@ -80,7 +80,7 @@ For a better chat experience, you can also use the official Archipelago Text Cli
 
 ### Playing with supported mods
 
-See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/4.x.x/Documentation/Supported%20Mods.md)
+See the [Supported mods documentation](https://github.com/agilbert1412/StardewArchipelago/blob/5.x.x/Documentation/Supported%20Mods.md)
 
 ### Multiplayer
 

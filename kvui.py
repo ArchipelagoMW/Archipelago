@@ -132,6 +132,8 @@ class ScrollBox(ScrollView):
         self.layout.bind(minimum_height=self.layout.setter("height"))
         self.add_widget(self.layout)
         self.effect_cls = ScrollEffect
+        self.bar_width = dp(12)
+        self.scroll_type = ["content", "bars"]
 
 
 class HovererableLabel(HoverBehavior, Label):

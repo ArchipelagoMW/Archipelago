@@ -7,7 +7,7 @@ from enum import IntEnum
 import os
 import threading
 
-from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO
+from typing import ClassVar, Dict, List, Literal, Tuple, Any, Optional, Union, BinaryIO, overload
 
 import bsdiff4
 
@@ -39,10 +39,9 @@ class AutoPatchRegister(abc.ABCMeta):
         return None
 
 
-
-class AutoPatchExtensionRegister(type):
+class AutoPatchExtensionRegister(abc.ABCMeta):
     extension_types: ClassVar[Dict[str, AutoPatchExtensionRegister]] = {}
-    required_extensions: List[str] = []
+    required_extensions: Tuple[str, ...] = ()
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchExtensionRegister:
         # construct class
@@ -52,15 +51,17 @@ class AutoPatchExtensionRegister(type):
         return new_class
 
     @staticmethod
-    def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
+    def get_handler(game: Optional[str]) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
+        if not game:
+            return APPatchExtension
         handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
         if handler.required_extensions:
             handlers = [handler]
             for required in handler.required_extensions:
-                if required in AutoPatchExtensionRegister.extension_types:
-                    handlers.append(AutoPatchExtensionRegister.extension_types.get(required))
-                else:
+                ext = AutoPatchExtensionRegister.extension_types.get(required)
+                if not ext:
                     raise NotImplementedError(f"No handler for {required}.")
+                handlers.append(ext)
             return handlers
         else:
             return handler
@@ -191,7 +192,7 @@ class APProcedurePatch(APAutoPatchInterface):
     hash: Optional[str]  # base checksum of source file
     source_data: bytes
     patch_file_ending: str = ""
-    files: Dict[str, bytes] = {}
+    files: Dict[str, bytes]
 
     @classmethod
     def get_source_data(cls) -> bytes:
@@ -206,6 +207,7 @@ class APProcedurePatch(APAutoPatchInterface):
 
     def __init__(self, *args: Any, **kwargs: Any):
         super(APProcedurePatch, self).__init__(*args, **kwargs)
+        self.files = {}
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APProcedurePatch, self).get_manifest()
@@ -250,6 +252,7 @@ class APProcedurePatch(APAutoPatchInterface):
         self.read()
         base_data = self.get_source_data_with_cache()
         patch_extender = AutoPatchExtensionRegister.get_handler(self.game)
+        assert not isinstance(self.procedure, str), f"{type(self)} must define procedures"
         for step, args in self.procedure:
             if isinstance(patch_extender, list):
                 extension = next((item for item in [getattr(extender, step, None) for extender in patch_extender]
@@ -276,7 +279,7 @@ class APDeltaPatch(APProcedurePatch):
         super(APDeltaPatch, self).__init__(*args, **kwargs)
         self.patched_path = patched_path
 
-    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         self.write_file("delta.bsdiff4",
                         bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()))
         super(APDeltaPatch, self).write_contents(opened_zipfile)
@@ -295,13 +298,12 @@ class APTokenMixin:
     """
     A class that defines functions for generating a token binary, for use in patches.
     """
-    tokens: List[
-        Tuple[int, int,
-        Union[
+    _tokens: List[
+        Tuple[APTokenTypes, int, Union[
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
             int  # AND_8, OR_8, XOR_8
-        ]]] = []
+        ]]]
 
     def get_token_binary(self) -> bytes:
         """
@@ -309,27 +311,55 @@ class APTokenMixin:
         :return: A bytes object representing the token data.
         """
         data = bytearray()
-        data.extend(len(self.tokens).to_bytes(4, "little"))
-        for token_type, offset, args in self.tokens:
+        data.extend(len(self._tokens).to_bytes(4, "little"))
+        for token_type, offset, args in self._tokens:
             data.append(token_type)
             data.extend(offset.to_bytes(4, "little"))
             if token_type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
+                assert isinstance(args, int), f"Arguments to AND/OR/XOR must be of type int, not {type(args)}"
                 data.extend(int.to_bytes(1, 4, "little"))
                 data.append(args)
             elif token_type in [APTokenTypes.COPY, APTokenTypes.RLE]:
+                assert isinstance(args, tuple), f"Arguments to COPY/RLE must be of type tuple, not {type(args)}"
                 data.extend(int.to_bytes(4, 4, "little"))
                 data.extend(args[0].to_bytes(4, "little"))
                 data.extend(args[1].to_bytes(4, "little"))
-            else:
+            elif token_type == APTokenTypes.WRITE:
+                assert isinstance(args, bytes), f"Arguments to WRITE must be of type bytes, not {type(args)}"
                 data.extend(len(args).to_bytes(4, "little"))
                 data.extend(args)
-        return data
+            else:
+                raise ValueError(f"Unknown token type {token_type}")
+        return bytes(data)
 
-    def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]):
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8],
+                    offset: int,
+                    data: int) -> None:
+        ...
+
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.COPY, APTokenTypes.RLE],
+                    offset: int,
+                    data: Tuple[int, int]) -> None:
+        ...
+
+    @overload
+    def write_token(self,
+                    token_type: Literal[APTokenTypes.WRITE],
+                    offset: int,
+                    data: bytes) -> None:
+        ...
+
+    def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]) -> None:
         """
         Stores a token to be used by patching.
         """
-        self.tokens.append((token_type, offset, data))
+        if not hasattr(self, "_tokens"):
+            self._tokens = []
+        self._tokens.append((token_type, offset, data))
 
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
@@ -345,10 +375,10 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     Patch extension functions must return the changed bytes.
     """
     game: str
-    required_extensions: List[str] = []
+    required_extensions: ClassVar[Tuple[str, ...]] = ()
 
     @staticmethod
-    def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str):
+    def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str) -> bytes:
         """Applies the given bsdiff4 from the patch onto the current file."""
         return bsdiff4.patch(rom, caller.get_file(patch))
 
@@ -382,10 +412,10 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
             else:
                 rom_data[offset:offset + len(data)] = data
             bpr += 9 + size
-        return rom_data
+        return bytes(rom_data)
 
     @staticmethod
-    def calc_snes_crc(caller: APProcedurePatch, rom: bytes):
+    def calc_snes_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
         """Calculates and applies a valid CRC for the SNES rom header."""
         rom_data = bytearray(rom)
         if len(rom) < 0x8000:
@@ -393,4 +423,4 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         crc = (sum(rom_data[:0x7FDC] + rom_data[0x7FE0:]) + 0x01FE) & 0xFFFF
         inv = crc ^ 0xFFFF
         rom_data[0x7FDC:0x7FE0] = [inv & 0xFF, (inv >> 8) & 0xFF, crc & 0xFF, (crc >> 8) & 0xFF]
-        return rom_data
+        return bytes(rom_data)
