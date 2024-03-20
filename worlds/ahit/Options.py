@@ -1,10 +1,13 @@
-from typing import List
+from typing import List, TYPE_CHECKING
 from dataclasses import dataclass
-from worlds.AutoWorld import World, PerGameCommonOptions
+from worlds.AutoWorld import PerGameCommonOptions
 from Options import Range, Toggle, DeathLink, Choice, OptionDict
 
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
+    
 
-def adjust_options(world: World):
+def adjust_options(world: "HatInTimeWorld"):
     world.options.HighestChapterCost.value = max(
         world.options.HighestChapterCost.value,
         world.options.LowestChapterCost.value)
@@ -81,7 +84,7 @@ def adjust_options(world: World):
         world.options.DWTimePieceRequirement.value = 0
 
 
-def get_total_time_pieces(world: World) -> int:
+def get_total_time_pieces(world: "HatInTimeWorld") -> int:
     count: int = 40
     if world.is_dlc1():
         count += 6
@@ -566,13 +569,13 @@ class DWExcludeAnnoyingBonuses(Toggle):
     - Zero Jumps
     - Bird Sanctuary
     - Wound-Up Windmill
-	- Vault Codes in the Wind
+    - Vault Codes in the Wind
     - Boss Rush
     - Camera Tourist
     - The Mustache Gauntlet
     - Rift Collapse: Deep Sea
     - Cruisin' for a Bruisin'
-	- Seal the Deal"""
+    - Seal the Deal"""
     display_name = "Exclude Annoying Death Wish Full Completions"
     default = 1
 

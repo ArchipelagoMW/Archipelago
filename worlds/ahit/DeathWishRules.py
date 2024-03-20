@@ -1,12 +1,16 @@
-from worlds.AutoWorld import World, CollectionState
+from worlds.AutoWorld import CollectionState
 from .Rules import can_use_hat, can_use_hookshot, can_hit, zipline_logic, get_difficulty, has_paintings
 from .Types import HatType, Difficulty, HatInTimeLocation, HatInTimeItem, LocData
 from .DeathWishLocations import dw_prereqs, dw_candles
 from BaseClasses import Entrance, Location, ItemClassification
 from worlds.generic.Rules import add_rule, set_rule
-from typing import List, Callable
+from typing import List, Callable, TYPE_CHECKING
 from .Regions import act_chapters
 from .Locations import zero_jumps, zero_jumps_expert, zero_jumps_hard, death_wishes
+
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
+
 
 # Any speedruns expect the player to have Sprint Hat
 dw_requirements = {
@@ -98,7 +102,7 @@ required_snatcher_coins = {
 }
 
 
-def set_dw_rules(world: World):
+def set_dw_rules(world: "HatInTimeWorld"):
     if "Snatcher's Hit List" not in world.get_excluded_dws() \
        or "Camera Tourist" not in world.get_excluded_dws():
         set_enemy_rules(world)
@@ -221,7 +225,7 @@ def set_dw_rules(world: World):
                                                                                       world.player)
 
 
-def modify_dw_rules(world: World, name: str):
+def modify_dw_rules(world: "HatInTimeWorld", name: str):
     difficulty: Difficulty = get_difficulty(world)
     main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
     full_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
@@ -267,7 +271,7 @@ def modify_dw_rules(world: World, name: str):
         set_candle_dw_rules(name, world)
 
 
-def get_total_dw_stamps(state: CollectionState, world: World) -> int:
+def get_total_dw_stamps(state: CollectionState, world: "HatInTimeWorld") -> int:
     if world.options.DWShuffle.value > 0:
         return 999  # no stamp costs in death wish shuffle
 
@@ -290,7 +294,7 @@ def get_total_dw_stamps(state: CollectionState, world: World) -> int:
     return count
 
 
-def set_candle_dw_rules(name: str, world: World):
+def set_candle_dw_rules(name: str, world: "HatInTimeWorld"):
     main_objective = world.multiworld.get_location(f"{name} - Main Objective", world.player)
     full_clear = world.multiworld.get_location(f"{name} - All Clear", world.player)
 
@@ -327,7 +331,7 @@ def set_candle_dw_rules(name: str, world: World):
             add_rule(full_clear, lambda state: state.has(coin, world.player))
 
 
-def get_zero_jump_clear_count(state: CollectionState, world: World) -> int:
+def get_zero_jump_clear_count(state: CollectionState, world: "HatInTimeWorld") -> int:
     total: int = 0
 
     for name in act_chapters.keys():
@@ -349,7 +353,7 @@ def get_zero_jump_clear_count(state: CollectionState, world: World) -> int:
     return total
 
 
-def get_reachable_enemy_count(state: CollectionState, world: World) -> int:
+def get_reachable_enemy_count(state: CollectionState, world: "HatInTimeWorld") -> int:
     count: int = 0
     for enemy in hit_list.keys():
         if enemy in bosses:
@@ -361,7 +365,7 @@ def get_reachable_enemy_count(state: CollectionState, world: World) -> int:
     return count
 
 
-def can_reach_all_bosses(state: CollectionState, world: World) -> bool:
+def can_reach_all_bosses(state: CollectionState, world: "HatInTimeWorld") -> bool:
     for boss in bosses:
         if not state.has(boss, world.player):
             return False
@@ -369,7 +373,7 @@ def can_reach_all_bosses(state: CollectionState, world: World) -> bool:
     return True
 
 
-def create_enemy_events(world: World):
+def create_enemy_events(world: "HatInTimeWorld"):
     no_tourist = "Camera Tourist" in world.get_excluded_dws() or "Camera Tourist" in world.get_excluded_bonuses()
 
     for enemy, regions in hit_list.items():
@@ -413,7 +417,7 @@ def create_enemy_events(world: World):
             add_rule(event, lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.DWELLER))
 
 
-def set_enemy_rules(world: World):
+def set_enemy_rules(world: "HatInTimeWorld"):
     no_tourist = "Camera Tourist" in world.get_excluded_dws() or "Camera Tourist" in world.get_excluded_bonuses()
 
     for enemy, regions in hit_list.items():

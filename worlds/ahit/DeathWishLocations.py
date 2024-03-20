@@ -2,9 +2,11 @@ from .Types import HatInTimeLocation, HatInTimeItem
 from .Regions import connect_regions, create_region
 from BaseClasses import Region, LocationProgressType, ItemClassification
 from worlds.generic.Rules import add_rule
-from worlds.AutoWorld import World
-from typing import List
+from typing import List, TYPE_CHECKING
 from .Locations import death_wishes
+
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
 
 
 dw_prereqs = {
@@ -81,17 +83,17 @@ annoying_bonuses = [
     "So You're Back From Outer Space",
     "Encore! Encore!",
     "Snatcher's Hit List",
-	"Vault Codes in the Wind",
+    "Vault Codes in the Wind",
     "10 Seconds until Self-Destruct",
     "Killing Two Birds",
     "Zero Jumps",
-	"Boss Rush",
+    "Boss Rush",
     "Bird Sanctuary",
-	"The Mustache Gauntlet",
+    "The Mustache Gauntlet",
     "Wound-Up Windmill",
-	"Camera Tourist",
-	"Rift Collapse: Deep Sea",
-	"Cruisin' for a Bruisin'",
+    "Camera Tourist",
+    "Rift Collapse: Deep Sea",
+    "Cruisin' for a Bruisin'",
     "Seal the Deal",
 ]
 
@@ -144,7 +146,7 @@ dw_classes = {
 }
 
 
-def create_dw_regions(world: World):
+def create_dw_regions(world: "HatInTimeWorld"):
     if world.options.DWExcludeAnnoyingContracts.value > 0:
         for name in annoying_dws:
             world.get_excluded_dws().append(name)

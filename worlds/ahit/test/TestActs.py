@@ -1,6 +1,6 @@
 from worlds.ahit.Regions import act_chapters
 from worlds.ahit.Rules import act_connections
-from worlds.ahit.test.TestBase import HatInTimeTestBase
+from . import HatInTimeTestBase
 
 
 class TestActs(HatInTimeTestBase):

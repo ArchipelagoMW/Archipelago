@@ -1,11 +1,14 @@
-from worlds.AutoWorld import World
 from .Types import HatDLC, HatType, LocData, Difficulty
-from typing import Dict
+from typing import Dict, TYPE_CHECKING
 from .Options import TasksanityCheckCount
+
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
 
 TASKSANITY_START_ID = 2000300204
 
-def get_total_locations(world: World) -> int:
+
+def get_total_locations(world: "HatInTimeWorld") -> int:
     total: int = 0
 
     if not world.is_dw_only():
@@ -34,7 +37,7 @@ def get_total_locations(world: World) -> int:
     return total
 
 
-def location_dlc_enabled(world: World, location: str) -> bool:
+def location_dlc_enabled(world: "HatInTimeWorld", location: str) -> bool:
     data = location_table.get(location) or event_locs.get(location)
 
     if data.dlc_flags == HatDLC.none:
@@ -53,7 +56,7 @@ def location_dlc_enabled(world: World, location: str) -> bool:
     return False
 
 
-def is_location_valid(world: World, location: str) -> bool:
+def is_location_valid(world: "HatInTimeWorld", location: str) -> bool:
     if not location_dlc_enabled(world, location):
         return False
 

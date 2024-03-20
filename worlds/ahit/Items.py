@@ -1,12 +1,14 @@
 from BaseClasses import Item, ItemClassification
-from worlds.AutoWorld import World
 from .Types import HatDLC, HatType, hat_type_to_item, Difficulty, ItemData, HatInTimeItem
 from .Locations import get_total_locations
 from .Rules import get_difficulty
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
 
 
-def create_itempool(world: World) -> List[Item]:
+def create_itempool(world: "HatInTimeWorld") -> List[Item]:
     itempool: List[Item] = []
     if not world.is_dw_only() and world.options.HatItems.value == 0:
         calculate_yarn_costs(world)
@@ -87,7 +89,7 @@ def create_itempool(world: World) -> List[Item]:
     return itempool
 
 
-def calculate_yarn_costs(world: World):
+def calculate_yarn_costs(world: "HatInTimeWorld"):
     mw = world.multiworld
     min_yarn_cost = int(min(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
     max_yarn_cost = int(max(world.options.YarnCostMin.value, world.options.YarnCostMax.value))
@@ -107,7 +109,7 @@ def calculate_yarn_costs(world: World):
         world.options.YarnAvailable.value += (max_cost + world.options.MinExtraYarn.value) - available_yarn
 
 
-def item_dlc_enabled(world: World, name: str) -> bool:
+def item_dlc_enabled(world: "HatInTimeWorld", name: str) -> bool:
     data = item_table[name]
 
     if data.dlc_flags == HatDLC.none:
@@ -122,12 +124,12 @@ def item_dlc_enabled(world: World, name: str) -> bool:
     return False
 
 
-def create_item(world: World, name: str) -> Item:
+def create_item(world: "HatInTimeWorld", name: str) -> Item:
     data = item_table[name]
     return HatInTimeItem(name, data.classification, data.code, world.player)
 
 
-def create_multiple_items(world: World, name: str, count: int = 1,
+def create_multiple_items(world: "HatInTimeWorld", name: str, count: int = 1,
                           item_type: Optional[ItemClassification] = ItemClassification.progression) -> List[Item]:
 
     data = item_table[name]
@@ -139,7 +141,7 @@ def create_multiple_items(world: World, name: str, count: int = 1,
     return itemlist
 
 
-def create_junk_items(world: World, count: int) -> List[Item]:
+def create_junk_items(world: "HatInTimeWorld", count: int) -> List[Item]:
     trap_chance = world.options.TrapChance.value
     junk_pool: List[Item] = []
     junk_list: Dict[str, int] = {}

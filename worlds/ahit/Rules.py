@@ -1,11 +1,14 @@
-from worlds.AutoWorld import World, CollectionState
+from worlds.AutoWorld import CollectionState
 from worlds.generic.Rules import add_rule, set_rule
 from .Locations import location_table, zipline_unlocks, is_location_valid, contract_locations, \
     shop_locations, event_locs, snatcher_coins
 from .Types import HatType, ChapterIndex, hat_type_to_item, Difficulty, HatDLC
 from BaseClasses import Location, Entrance, Region
-import typing
+from typing import TYPE_CHECKING, List, Callable, Union, Dict
 
+if TYPE_CHECKING:
+    from . import HatInTimeWorld
+    
 
 act_connections = {
     "Mafia Town - Act 2": ["Mafia Town - Act 1"],
@@ -31,14 +34,14 @@ act_connections = {
 }
 
 
-def can_use_hat(state: CollectionState, world: World, hat: HatType) -> bool:
+def can_use_hat(state: CollectionState, world: "HatInTimeWorld", hat: HatType) -> bool:
     if world.options.HatItems.value > 0:
         return state.has(hat_type_to_item[hat], world.player)
 
     return state.count("Yarn", world.player) >= get_hat_cost(world, hat)
 
 
-def get_hat_cost(world: World, hat: HatType) -> int:
+def get_hat_cost(world: "HatInTimeWorld", hat: HatType) -> int:
     cost: int = 0
     costs = world.get_hat_yarn_costs()
     for h in world.get_hat_craft_order():
@@ -49,20 +52,20 @@ def get_hat_cost(world: World, hat: HatType) -> int:
     return cost
 
 
-def can_sdj(state: CollectionState, world: World):
+def can_sdj(state: CollectionState, world: "HatInTimeWorld"):
     return can_use_hat(state, world, HatType.SPRINT)
 
 
-def painting_logic(world: World) -> bool:
+def painting_logic(world: "HatInTimeWorld") -> bool:
     return world.options.ShuffleSubconPaintings.value > 0
 
 
 # -1 = Normal, 0 = Moderate, 1 = Hard, 2 = Expert
-def get_difficulty(world: World) -> Difficulty:
+def get_difficulty(world: "HatInTimeWorld") -> Difficulty:
     return Difficulty(world.options.LogicDifficulty.value)
 
 
-def has_paintings(state: CollectionState, world: World, count: int, allow_skip: bool = True) -> bool:
+def has_paintings(state: CollectionState, world: "HatInTimeWorld", count: int, allow_skip: bool = True) -> bool:
     if not painting_logic(world):
         return True
 
@@ -74,35 +77,35 @@ def has_paintings(state: CollectionState, world: World, count: int, allow_skip: 
     return state.count("Progressive Painting Unlock", world.player) >= count
 
 
-def zipline_logic(world: World) -> bool:
+def zipline_logic(world: "HatInTimeWorld") -> bool:
     return world.options.ShuffleAlpineZiplines.value > 0
 
 
-def can_use_hookshot(state: CollectionState, world: World):
+def can_use_hookshot(state: CollectionState, world: "HatInTimeWorld"):
     return state.has("Hookshot Badge", world.player)
 
 
-def can_hit(state: CollectionState, world: World, umbrella_only: bool = False):
+def can_hit(state: CollectionState, world: "HatInTimeWorld", umbrella_only: bool = False):
     if world.options.UmbrellaLogic.value == 0:
         return True
 
     return state.has("Umbrella", world.player) or not umbrella_only and can_use_hat(state, world, HatType.BREWING)
 
 
-def can_surf(state: CollectionState, world: World):
+def can_surf(state: CollectionState, world: "HatInTimeWorld"):
     return state.has("No Bonk Badge", world.player)
 
 
-def has_relic_combo(state: CollectionState, world: World, relic: str) -> bool:
+def has_relic_combo(state: CollectionState, world: "HatInTimeWorld", relic: str) -> bool:
     return state.has_group(relic, world.player, len(world.item_name_groups[relic]))
 
 
-def get_relic_count(state: CollectionState, world: World, relic: str) -> int:
+def get_relic_count(state: CollectionState, world: "HatInTimeWorld", relic: str) -> int:
     return state.count_group(relic, world.player)
 
 
 # Only use for rifts
-def can_clear_act(state: CollectionState, world: World, act_entrance: str) -> bool:
+def can_clear_act(state: CollectionState, world: "HatInTimeWorld", act_entrance: str) -> bool:
     entrance: Entrance = world.multiworld.get_entrance(act_entrance, world.player)
     if not state.can_reach(entrance.connected_region, "Region", world.player):
         return False
@@ -114,12 +117,12 @@ def can_clear_act(state: CollectionState, world: World, act_entrance: str) -> bo
     return world.multiworld.get_location(name, world.player).access_rule(state)
 
 
-def can_clear_alpine(state: CollectionState, world: World) -> bool:
+def can_clear_alpine(state: CollectionState, world: "HatInTimeWorld") -> bool:
     return state.has("Birdhouse Cleared", world.player) and state.has("Lava Cake Cleared", world.player) \
             and state.has("Windmill Cleared", world.player) and state.has("Twilight Bell Cleared", world.player)
 
 
-def can_clear_metro(state: CollectionState, world: World) -> bool:
+def can_clear_metro(state: CollectionState, world: "HatInTimeWorld") -> bool:
     return state.has("Nyakuza Intro Cleared", world.player) \
            and state.has("Yellow Overpass Station Cleared", world.player) \
            and state.has("Yellow Overpass Manhole Cleared", world.player) \
@@ -130,14 +133,14 @@ def can_clear_metro(state: CollectionState, world: World) -> bool:
            and state.has("Pink Paw Manhole Cleared", world.player)
 
 
-def set_rules(world: World):
+def set_rules(world: "HatInTimeWorld"):
     # First, chapter access
     starting_chapter = ChapterIndex(world.options.StartingChapter.value)
     world.set_chapter_cost(starting_chapter, 0)
 
     # Chapter costs increase progressively. Randomly decide the chapter order, except for Finale
-    chapter_list: typing.List[ChapterIndex] = [ChapterIndex.MAFIA, ChapterIndex.BIRDS,
-                                               ChapterIndex.SUBCON, ChapterIndex.ALPINE]
+    chapter_list: List[ChapterIndex] = [ChapterIndex.MAFIA, ChapterIndex.BIRDS,
+                                        ChapterIndex.SUBCON, ChapterIndex.ALPINE]
 
     final_chapter = ChapterIndex.FINALE
     if world.options.EndGoal.value == 2:
@@ -333,7 +336,7 @@ def set_rules(world: World):
 
         add_rule(loc, lambda state: can_use_hookshot(state, world))
 
-    dummy_entrances: typing.List[Entrance] = []
+    dummy_entrances: List[Entrance] = []
       
     for (key, acts) in act_connections.items():
         if "Arctic Cruise" in key and not world.is_dlc1():
@@ -342,11 +345,11 @@ def set_rules(world: World):
         i: int = 1
         entrance: Entrance = world.multiworld.get_entrance(key, world.player)
         region: Region = entrance.connected_region
-        access_rules: typing.List[typing.Callable[[CollectionState], bool]] = []
+        access_rules: List[Callable[[CollectionState], bool]] = []
         dummy_entrances.append(entrance)
 
         # Entrances to this act that we have to set access_rules on
-        entrances: typing.List[Entrance] = []
+        entrances: List[Entrance] = []
 
         for act in acts:
             act_entrance: Entrance = world.multiworld.get_entrance(act, world.player)
@@ -358,7 +361,7 @@ def set_rules(world: World):
 
             # Copy access rules from act completions
             if "Free Roam" not in required_region.name:
-                rule: typing.Callable[[CollectionState], bool]
+                rule: Callable[[CollectionState], bool]
                 name = f"Act Completion ({required_region.name})"
                 rule = world.multiworld.get_location(name, world.player).access_rule
                 access_rules.append(rule)
@@ -380,7 +383,7 @@ def set_rules(world: World):
         world.multiworld.completion_condition[world.player] = lambda state: state.has("Rush Hour Cleared", world.player)
 
 
-def set_specific_rules(world: World):
+def set_specific_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_location("Mafia Boss Shop Item", world.player),
              lambda state: state.has("Time Piece", world.player, 12)
              and state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.BIRDS)))
@@ -411,7 +414,7 @@ def set_specific_rules(world: World):
         set_expert_rules(world)
 
 
-def set_moderate_rules(world: World):
+def set_moderate_rules(world: "HatInTimeWorld"):
     # Moderate: Gallery without Brewing Hat
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Gallery)", world.player), lambda state: True)
 
@@ -488,7 +491,7 @@ def set_moderate_rules(world: World):
             set_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player), lambda state: True)
 
 
-def set_hard_rules(world: World):
+def set_hard_rules(world: "HatInTimeWorld"):
     # Hard: clear Time Rift - The Twilight Bell with Sprint+Scooter only
     add_rule(world.multiworld.get_location("Act Completion (Time Rift - The Twilight Bell)", world.player),
              lambda state: can_use_hat(state, world, HatType.SPRINT)
@@ -545,7 +548,7 @@ def set_hard_rules(world: World):
                      and state.has("Metro Ticket - Pink", world.player))
 
 
-def set_expert_rules(world: World):
+def set_expert_rules(world: "HatInTimeWorld"):
     # Finale Telescope with no hats
     set_rule(world.multiworld.get_entrance("Telescope -> Time's End", world.player),
              lambda state: state.has("Time Piece", world.player, world.get_chapter_cost(ChapterIndex.FINALE)))
@@ -623,7 +626,7 @@ def set_expert_rules(world: World):
                      and state.has("Metro Ticket - Pink", world.player))
 
 
-def set_mafia_town_rules(world: World):
+def set_mafia_town_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_location("Mafia Town - Behind HQ Chest", world.player),
              lambda state: state.can_reach("Act Completion (Heating Up Mafia Town)", "Location", world.player)
              or state.can_reach("Down with the Mafia!", "Region", world.player)
@@ -683,7 +686,7 @@ def set_mafia_town_rules(world: World):
                  and state.has("Scooter Badge", world.player), "or")
 
 
-def set_botb_rules(world: World):
+def set_botb_rules(world: "HatInTimeWorld"):
     if world.options.UmbrellaLogic.value == 0 and get_difficulty(world) < Difficulty.MODERATE:
         set_rule(world.multiworld.get_location("Dead Bird Studio - DJ Grooves Sign Chest", world.player),
                  lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
@@ -695,7 +698,7 @@ def set_botb_rules(world: World):
                  lambda state: state.has("Umbrella", world.player) or can_use_hat(state, world, HatType.BREWING))
 
 
-def set_subcon_rules(world: World):
+def set_subcon_rules(world: "HatInTimeWorld"):
     set_rule(world.multiworld.get_location("Act Completion (Time Rift - Village)", world.player),
              lambda state: can_use_hat(state, world, HatType.BREWING) or state.has("Umbrella", world.player)
              or can_use_hat(state, world, HatType.DWELLER))
@@ -733,7 +736,7 @@ def set_subcon_rules(world: World):
             add_rule(world.multiworld.get_location(key, world.player), lambda state: has_paintings(state, world, 1))
 
 
-def set_alps_rules(world: World):
+def set_alps_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("-> The Birdhouse", world.player),
              lambda state: can_use_hookshot(state, world) and can_use_hat(state, world, HatType.BREWING))
 
@@ -753,7 +756,7 @@ def set_alps_rules(world: World):
              lambda state: can_clear_alpine(state, world))
 
 
-def set_dlc1_rules(world: World):
+def set_dlc1_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("Cruise Ship Entrance BV", world.player),
              lambda state: can_use_hookshot(state, world))
 
@@ -763,7 +766,7 @@ def set_dlc1_rules(world: World):
              or state.can_reach("Ship Shape", "Region", world.player))
 
 
-def set_dlc2_rules(world: World):
+def set_dlc2_rules(world: "HatInTimeWorld"):
     add_rule(world.multiworld.get_entrance("-> Bluefin Tunnel", world.player),
              lambda state: state.has("Metro Ticket - Green", world.player)
              or state.has("Metro Ticket - Blue", world.player))
@@ -786,7 +789,7 @@ def set_dlc2_rules(world: World):
                      lambda state: state.has("Metro Ticket - Yellow", world.player), "or")
 
 
-def reg_act_connection(world: World, region: typing.Union[str, Region], unlocked_entrance: typing.Union[str, Entrance]):
+def reg_act_connection(world: "HatInTimeWorld", region: Union[str, Region], unlocked_entrance: Union[str, Entrance]):
     reg: Region
     entrance: Entrance
     if isinstance(region, str):
@@ -804,7 +807,7 @@ def reg_act_connection(world: World, region: typing.Union[str, Region], unlocked
 
 # See randomize_act_entrances in Regions.py
 # Called before set_rules
-def set_rift_rules(world: World, regions: typing.Dict[str, Region]):
+def set_rift_rules(world: "HatInTimeWorld", regions: Dict[str, Region]):
 
     # This is accessing the regions in place of these time rifts, so we can set the rules on all the entrances.
     for entrance in regions["Time Rift - Gallery"].entrances:
@@ -890,7 +893,7 @@ def set_rift_rules(world: World, regions: typing.Dict[str, Region]):
 
 # Basically the same as above, but without the need of the dict since we are just setting defaults
 # Called if Act Rando is disabled
-def set_default_rift_rules(world: World):
+def set_default_rift_rules(world: "HatInTimeWorld"):
 
     for entrance in world.multiworld.get_region("Time Rift - Gallery", world.player).entrances:
         add_rule(entrance, lambda state: can_use_hat(state, world, HatType.BREWING)
@@ -964,7 +967,7 @@ def set_default_rift_rules(world: World):
             add_rule(entrance, lambda state: has_relic_combo(state, world, "Necklace"))
 
 
-def set_event_rules(world: World):
+def set_event_rules(world: "HatInTimeWorld"):
     for (name, data) in event_locs.items():
         if not is_location_valid(world, name):
             continue
