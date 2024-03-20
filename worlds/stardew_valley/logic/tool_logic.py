@@ -44,7 +44,8 @@ class ToolLogicMixin(BaseLogicMixin):
 class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixin, RegionLogicMixin, SeasonLogicMixin, MoneyLogicMixin, MagicLogicMixin]]):
     # Should be cached
     def has_tool(self, tool: str, material: str = ToolMaterial.basic) -> StardewRule:
-        assert tool != Tool.fishing_rod, "Use `has_fishing_rod` instead of `has_tool`."
+        if tool == Tool.fishing_rod:
+            return self.logic.tool.has_fishing_rod(tool_materials[material])
 
         if material == ToolMaterial.basic or tool == Tool.scythe:
             return True_()

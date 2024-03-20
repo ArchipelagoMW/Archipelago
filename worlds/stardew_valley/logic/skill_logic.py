@@ -15,7 +15,7 @@ from .. import options
 from ..data import all_crops
 from ..mods.logic.magic_logic import MagicLogicMixin
 from ..mods.logic.mod_skills_levels import get_mod_skill_levels
-from ..stardew_rule import StardewRule, True_, False_
+from ..stardew_rule import StardewRule, True_, False_, true_
 from ..strings.craftable_names import Fishing
 from ..strings.machine_names import Machine
 from ..strings.performance_names import Performance
@@ -48,10 +48,10 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         if self.options.skill_progression != options.SkillProgression.option_vanilla:
             previous_level_rule = self.logic.skill.has_level(skill, level - 1)
         else:
-            previous_level_rule = True_()
+            previous_level_rule = true_
 
         if skill == Skill.fishing:
-            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 1))
+            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 3))
         elif skill == Skill.farming:
             xp_rule = self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
