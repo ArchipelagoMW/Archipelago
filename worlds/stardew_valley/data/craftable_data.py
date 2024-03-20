@@ -138,10 +138,15 @@ oil_maker = skill_recipe(Machine.oil_maker, Skill.farming, 8, {Loot.slime: 50, M
 preserves_jar = skill_recipe(Machine.preserves_jar, Skill.farming, 4, {Material.wood: 50, Material.stone: 40, Material.coal: 8})
 
 basic_fertilizer = skill_recipe(Fertilizer.basic, Skill.farming, 1, {Material.sap: 2})
-quality_fertilizer = skill_recipe(Fertilizer.quality, Skill.farming, 9, {Material.sap: 2, Fish.any: 1})
+
+# 1.6 doubled the sap requirement
+quality_fertilizer = skill_recipe(Fertilizer.quality, Skill.farming, 9, {Material.sap: 4, Fish.any: 1})
 deluxe_fertilizer = ap_recipe(Fertilizer.deluxe, {MetalBar.iridium: 1, Material.sap: 40})
-basic_speed_gro = skill_recipe(SpeedGro.basic, Skill.farming, 3, {ArtisanGood.pine_tar: 1, Fish.clam: 1})
-deluxe_speed_gro = skill_recipe(SpeedGro.deluxe, Skill.farming, 8, {ArtisanGood.oak_resin: 1, WaterItem.coral: 1})
+
+# 1.6 went changed from clam to moss. Keep both requirements for now. Update properly later
+basic_speed_gro = skill_recipe(SpeedGro.basic, Skill.farming, 3, {ArtisanGood.pine_tar: 1, Fish.clam: 1, Material.moss: 5})
+# 1.6 went changed from coral to bone fragments. Keep both requirements for now. Update properly later
+deluxe_speed_gro = skill_recipe(SpeedGro.deluxe, Skill.farming, 8, {ArtisanGood.oak_resin: 1, WaterItem.coral: 1, Fossil.bone_fragment: 5})
 hyper_speed_gro = ap_recipe(SpeedGro.hyper, {Ore.radioactive: 1, Fossil.bone_fragment: 3, Loot.solar_essence: 1})
 basic_retaining_soil = skill_recipe(RetainingSoil.basic, Skill.farming, 4, {Material.stone: 2})
 quality_retaining_soil = skill_recipe(RetainingSoil.quality, Skill.farming, 7, {Material.stone: 3, Material.clay: 1})
