@@ -51,7 +51,9 @@ class AutoPatchExtensionRegister(abc.ABCMeta):
         return new_class
 
     @staticmethod
-    def get_handler(game: str) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
+    def get_handler(game: Optional[str]) -> Union[AutoPatchExtensionRegister, List[AutoPatchExtensionRegister]]:
+        if not game:
+            return APPatchExtension
         handler = AutoPatchExtensionRegister.extension_types.get(game, APPatchExtension)
         if handler.required_extensions:
             handlers = [handler]
@@ -278,7 +280,7 @@ class APDeltaPatch(APProcedurePatch):
         super(APDeltaPatch, self).__init__(*args, **kwargs)
         self.patched_path = patched_path
 
-    def write_contents(self, opened_zipfile: zipfile.ZipFile):
+    def write_contents(self, opened_zipfile: zipfile.ZipFile) -> None:
         self.write_file("delta.bsdiff4",
                         bsdiff4.diff(self.get_source_data_with_cache(), open(self.patched_path, "rb").read()))
         super(APDeltaPatch, self).write_contents(opened_zipfile)
@@ -352,7 +354,7 @@ class APTokenMixin:
                     data: bytes) -> None:
         ...
 
-    def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]):
+    def write_token(self, token_type: APTokenTypes, offset: int, data: Union[bytes, Tuple[int, int], int]) -> None:
         """
         Stores a token to be used by patching.
         """
@@ -377,7 +379,7 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
     required_extensions: ClassVar[Tuple[str, ...]] = ()
 
     @staticmethod
-    def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str):
+    def apply_bsdiff4(caller: APProcedurePatch, rom: bytes, patch: str) -> bytes:
         """Applies the given bsdiff4 from the patch onto the current file."""
         return bsdiff4.patch(rom, caller.get_file(patch))
 
@@ -414,7 +416,7 @@ class APPatchExtension(metaclass=AutoPatchExtensionRegister):
         return bytes(rom_data)
 
     @staticmethod
-    def calc_snes_crc(caller: APProcedurePatch, rom: bytes):
+    def calc_snes_crc(caller: APProcedurePatch, rom: bytes) -> bytes:
         """Calculates and applies a valid CRC for the SNES rom header."""
         rom_data = bytearray(rom)
         if len(rom) < 0x8000:
