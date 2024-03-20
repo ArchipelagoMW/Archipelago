@@ -995,9 +995,6 @@ doors:
     Traveled Entrance:
       item: 444433
       location: 444438
-    Lost Door:
-      item: 444435
-      location: 444440
   Pilgrim Antechamber:
     Sun Painting:
       item: 444436

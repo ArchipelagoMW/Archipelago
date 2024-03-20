@@ -450,6 +450,7 @@
         id: Shuffle Room/Panel_lost_found
         colors: black
         tag: botblack
+        check: True
       FORWARD:
         id: Entry Room/Panel_forward_forward
         tag: midwhite
@@ -492,11 +493,6 @@
         group: Entrance to The Traveled
         panels:
           - OPEN
-      Lost Door:
-        id: Shuffle Room Area Doors/Door_lost_found
-        junk_item: True
-        panels:
-          - LOST
     paintings:
       - id: maze_painting
         orientation: west
