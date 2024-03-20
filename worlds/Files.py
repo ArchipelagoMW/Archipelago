@@ -297,7 +297,7 @@ class APTokenMixin:
     """
     A class that defines functions for generating a token binary, for use in patches.
     """
-    tokens: List[
+    _tokens: List[
         Tuple[APTokenTypes, int, Union[
             bytes,  # WRITE
             Tuple[int, int],  # COPY, RLE
@@ -310,8 +310,8 @@ class APTokenMixin:
         :return: A bytes object representing the token data.
         """
         data = bytearray()
-        data.extend(len(self.tokens).to_bytes(4, "little"))
-        for token_type, offset, args in self.tokens:
+        data.extend(len(self._tokens).to_bytes(4, "little"))
+        for token_type, offset, args in self._tokens:
             data.append(token_type)
             data.extend(offset.to_bytes(4, "little"))
             if token_type in [APTokenTypes.AND_8, APTokenTypes.OR_8, APTokenTypes.XOR_8]:
@@ -356,9 +356,9 @@ class APTokenMixin:
         """
         Stores a token to be used by patching.
         """
-        if not getattr(self, "tokens", None):
-            self.tokens = []
-        self.tokens.append((token_type, offset, data))
+        if not hasattr(self, "tokens"):
+            self._tokens = []
+        self._tokens.append((token_type, offset, data))
 
 
 class APPatchExtension(metaclass=AutoPatchExtensionRegister):
