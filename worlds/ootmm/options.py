@@ -1,15 +1,15 @@
 from typing import Dict, Type
-
+import random
 from Options import Choice, Option, DefaultOnToggle, Toggle, Range, OptionList, OptionSet, DeathLink
 
 class Goal(Choice):
     display_name = "Goal"
-    option_any = 1
-    option_ganon = 2
-    option_majora = 3
-    option_both = 4
-    option_triforce = 5
-    option_triforce3 = 6
+    option_any = 0
+    option_ganon = 1
+    option_majora = 2
+    option_both = 3
+    option_triforce = 4
+    option_triforce2 = 5
     
 class TriforceGoal(Range):
     display_name = "Required Triforce Pieces"
@@ -25,89 +25,89 @@ class TriforcePieces(Range):
     
 class ItemPool(Choice):
     display_name = "Goal"
-    option_plentiful = 1
-    option_normal = 2
-    option_scarce = 3
-    option_minimal = 4
-    option_barren = 5
+    option_plentiful = 0
+    option_normal = 1
+    option_scarce = 2
+    option_minimal = 3
+    option_barren = 4
     
 class HintImportance(Toggle):
     display_name = "Hint Importance"
 
 class SongShuffle(Choice):
     display_name = "Song Shuffle"
-    option_song_locations = 1
-    option_anywhere = 2
+    option_song_locations = 0
+    option_anywhere = 1
 
 class GoldSkulltulaTokensShuffle(Choice):
     display_name = "Gold Skulltula Tokens Shuffle"
-    option_none = 1
-    option_dungeons = 2
-    option_overworld = 3
-    option_all = 4
+    option_none = 0
+    option_dungeons = 1
+    option_overworld = 2
+    option_all = 3
 
 class HouseSkulltulaTokensShuffle(Choice):
     display_name = "House Skulltula Tokens Shuffle"
-    option_none = 1
-    option_cross = 2
-    option_all = 3
+    option_none = 0
+    option_cross = 1
+    option_all = 2
 
 class TingleMapsShuffle(Choice):
     display_name = "Tingle Map Shuffle"
-    option_vanilla = 1
-    option_anywhere = 2
-    option_starting = 3
-    option_removed = 4
+    option_vanilla = 0
+    option_anywhere = 1
+    option_starting = 2
+    option_removed = 3
     
 class MapCompassShuffle(Choice):
     display_name = "Map/Compass Shuffle"
-    option_own_dungeon = 1
-    option_anywhere = 2
-    option_starting = 3
-    option_removed = 4
+    option_own_dungeon = 0
+    option_anywhere = 1
+    option_starting = 2
+    option_removed = 3
 
 class SmallKeyShuffleOoT(Choice):
     display_name = "Small Key Shuffle (OoT)"
-    option_own_dungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_own_dungeon = 0
+    option_anywhere = 1
+    option_removed = 2
     
 class SmallKeyShuffleMM(Choice):
     display_name = "Small Key Shuffle (MM)"
-    option_own_dungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_own_dungeon = 0
+    option_anywhere = 1
+    option_removed = 2
 
 class HideoutSmallKeyShuffle(Choice):
     display_name = "Hideout Small Key Shuffle"
-    option_ownDungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
 
 class ChestGameSmallKeyShuffle(Choice):
     display_name = "Chest Game Small Key Shuffle"
-    option_own_dungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_own_dungeon = 0
+    option_anywhere = 1
+    option_removed = 2
 
 class BossKeyShuffleOoT(Choice):
     display_name = "Boss Key Shuffle (OoT)"
-    option_own_dungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_own_dungeon = 0
+    option_anywhere = 1
+    option_removed = 2
 
 class BossKeyShuffleMM(Choice):
     display_name = "Boss Key Shuffle (MM)"
-    option_ownDungeon = 1
-    option_anywhere = 2
-    option_removed = 3
+    option_ownDungeon = 0
+    option_anywhere = 1
+    option_removed = 2
 
 class SmallKeyRingOoT(Choice):
     display_name = "Small Key Ring (OoT)"
-    option_none = 1
-    option_all = 2
-    option_specifc = 3
-    option_random = 4
+    option_none = 0
+    option_all = 1
+    option_specifc = 2
+    option_randomized = 3
     
 class KeyRingListOoT(OptionSet):
     """With key rings as Choose: select areas with key rings rather than individual small keys."""
@@ -126,10 +126,10 @@ class KeyRingListOoT(OptionSet):
 
 class SmallKeyRingMM(Choice):
     display_name = "Small Key Ring (MM)"
-    option_none = 1
-    option_all = 2
-    option_specifc = 3
-    option_random = 4
+    option_none = 0
+    option_all = 1
+    option_specifc = 2
+    option_randomized = 3
     
 class KeyRingListMM(OptionSet):
     """With key rings as Choose: select areas with key rings rather than individual small keys."""
@@ -143,51 +143,51 @@ class KeyRingListMM(OptionSet):
 
 class SilverRupeeShuffle(Choice):
     display_name = "Silver Rupee Shuffle"
-    option_vanilla = 1
-    option_own_dungeon = 2
-    option_anywhere = 3
+    option_vanilla = 0
+    option_own_dungeon = 1
+    option_anywhere = 2
     
 class TownStrayFairyShuffle(Choice):
     display_name = "Town Stray Fairy Shuffle"
-    option_vanilla = 1
-    option_anywhere = 2
+    option_vanilla = 0
+    option_anywhere = 1
     
 class DungeonChestFairyShuffle(Choice):
     display_name = "Dungeon Chest Fairy Shuffle"
-    option_vanilla = 1
-    option_own_dungeon = 2
-    option_anywhere = 3
-    option_starting = 4
+    option_vanilla = 0
+    option_own_dungeon = 1
+    option_anywhere = 2
+    option_starting = 3
     
 class DungeonFreestandingFairyShuffle(Choice):
     display_name = "Dungeon Freestanding Fairy Shuffle"
-    option_vanilla = 1
-    option_own_dungeon = 2
-    option_anywhere = 3
-    option_starting = 4
-    option_removed = 5
+    option_vanilla = 0
+    option_own_dungeon = 1
+    option_anywhere = 2
+    option_starting = 3
+    option_removed = 4
 
 class DungeonRewardShuffle(Choice):
     display_name = "Dungeon Reward Shuffle"
-    option_dungeons_blue_warps = 1
-    option_dungeons_limited = 2
-    option_dungeons = 3
-    option_anywhere = 4
+    option_dungeons_blue_warps = 0
+    option_dungeons_limited = 1
+    option_dungeons = 2
+    option_anywhere = 3
 
 class ShopShuffleOoT(Choice):
     display_name = "Shop Shuffle (OoT)"
-    option_none = 1
-    option_full = 2
+    option_none = 0
+    option_full = 1
 
 class ShopShuffleMM(Choice):
     display_name = "Shop Shuffle (MM)"
-    option_none = 1
-    option_full = 2
+    option_none = 0
+    option_full = 1
 
 class OwlStatueShuffle(Choice):
     display_name = "Owl Statue Shuffle"
-    option_none = 1
-    option_anywhere = 2
+    option_none = 0
+    option_anywhere = 1
 
 class ScrubShuffleOoT(Toggle):
     display_name = "Scrub Shuffle (OoT)"
@@ -257,38 +257,38 @@ class WeirdPocketEggContentShuffle(Toggle):
 
 class OoTShopsPrices(Choice):
     display_name = "OoT Shops Prices"
-    option_affordable = 1
-    option_vanilla = 2
-    option_weighted = 3
-    option_random = 4
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_randomized = 3
 
 class OoTScrubsPrices(Choice):
     display_name = "OoT Scrubs Prices"
-    option_affordable = 1
-    option_vanilla = 2
-    option_weighted = 3
-    option_random = 4
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_randomized = 3
 
 class MMShopsPrices(Choice):
     display_name = "MM Shops Prices"
-    option_affordable = 1
-    option_vanilla = 2
-    option_weighted = 3
-    option_random = 4
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_randomized = 3
 
 class MMTinglePrices(Choice):
     display_name = "MM Tingle Prices"
-    option_affordable = 1
-    option_vanilla = 2
-    option_weighted = 3
-    option_random = 4
+    option_affordable = 0
+    option_vanilla = 1
+    option_weighted = 2
+    option_randomized = 3
 
 class GanonTrials(Choice):
     display_name = "Ganon Trials"
-    option_none = 1
-    option_all = 2
-    option_specifc = 3
-    option_random = 4
+    option_none = 0
+    option_all = 1
+    option_specifc = 2
+    option_randomized = 3
     
 class GanonTrialsList(OptionSet):
     """With key rings as Choose: select areas with key rings rather than individual small keys."""
@@ -304,37 +304,37 @@ class GanonTrialsList(OptionSet):
 
 class MoonCrashBehavior(Choice):
     display_name = "Moon Crash Behavior"
-    option_reset = 1
-    option_cycle = 2
+    option_reset = 0
+    option_cycle = 1
 
 class StartingAge(Choice):
     display_name = "Starting Age"
-    option_child = 1
-    option_adult = 2
-    option_random = 2
+    option_child = 0
+    option_adult = 1
+    option_randomized = 2
 
 class DoorOfTime(Choice):
     display_name = "Door of Time"
-    option_closed = 1
-    option_open = 2
+    option_closed = 0
+    option_open = 1
 
 class AgeChangeUponSongOfTime(Choice):
     display_name = "Age Change upon Song of Time"
-    option_none = 1
-    option_oot = 2
-    option_always = 3
+    option_none = 0
+    option_oot = 1
+    option_always = 2
 
 class DekuTree(Choice):
     display_name = "Deku Tree"
-    option_closed = 1
-    option_open = 2
+    option_closed = 0
+    option_open = 1
 
 class OpenDungeonsMM(Choice):
     display_name = "Open Dungeons (MM)"
-    option_none = 1
-    option_all = 2
-    option_specifc = 3
-    option_random = 4
+    option_none = 0
+    option_all = 1
+    option_specifc = 2
+    option_randomized = 3
 
 class OpenDungeonsMMList(OptionSet):
     display_name = "Open Dungeons"
@@ -347,44 +347,44 @@ class OpenDungeonsMMList(OptionSet):
 
 class ClearStateDungeonsMM(Choice):
     display_name = "ClearState Dungeons (MM)"
-    option_none = 1
-    option_wf = 2
-    option_gb = 3
-    option_both = 4
+    option_none = 0
+    option_wf = 1
+    option_gb = 2
+    option_both = 3
 
 class KakarikoGate(Choice):
     display_name = "Kakariko Gate"
-    option_closed = 1
-    option_open = 2
+    option_closed = 0
+    option_open = 1
 
 class KingZora(Choice):
     display_name = "King Zora"
-    option_vanilla = 1
-    option_adult = 2
-    option_open = 3
+    option_vanilla = 0
+    option_adult = 1
+    option_open = 2
 
 class GerudoFortress(Choice):
     display_name = "Gerudo Fortress"
-    option_vanilla = 1
-    option_sinlge = 2
-    option_open = 3
+    option_vanilla = 0
+    option_sinlge = 1
+    option_open = 2
 
 class LightArrowCutscene(Choice):
     display_name = "Light Arrow Cutscene"
-    option_vanilla = 1
-    option_custom = 2
+    option_vanilla = 0
+    option_custom = 1
 
 class RainbowBridge(Choice):
     display_name = "Rainbow Bridge"
-    option_open = 1
-    option_vanilla = 2
-    option_medallions = 3
-    option_custom = 4
+    option_open = 0
+    option_vanilla = 1
+    option_medallions = 2
+    option_custom = 3
     
 class BossWarpPads(Choice):
     display_name = "Boss Warp Pads"
-    option_boss_beaten = 1
-    option_remains = 2
+    option_boss_beaten = 0
+    option_remains = 1
 
 class DekuTreeAsAdult(Toggle):
     display_name = "Deku Tree as Adult"
@@ -415,41 +415,41 @@ class OpenMaskShopAtNight(Toggle):
 
 class CrossGamesMMSongOfSoaring(Choice):
     display_name = "Cross Games MM Song of Soaring"
-    option_none = 1
-    option_child_only = 2
-    option_full = 3
+    option_none = 0
+    option_child_only = 1
+    option_full = 2
 
 class CrossGamesOoTWarpSongs(Toggle):
     display_name = "Cross Games OoT Warp Songs"
 
 class ContainerAppearanceMatchesContent(Choice):
     display_name = "Container Appearance Matches Content"
-    option_never = 1
-    option_agony = 2
-    option_always = 3
+    option_never = 0
+    option_agony = 1
+    option_always = 2
 
 class BlastMaskCooldown(Choice):
     display_name = "Blast Mask Cooldown"
-    option_instant = 1
-    option_very_short = 2
-    option_short = 3
-    option_default = 4
-    option_long = 5
-    option_verylong = 6
+    option_instant = 0
+    option_very_short = 1
+    option_short = 2
+    option_default = 3
+    option_long = 4
+    option_verylong = 5
 
 class ClockSpeed(Choice):
     display_name = "Clock Speed"
-    option_very_slow = 1
-    option_slow = 2
-    option_default = 3
-    option_fast = 4
-    option_superfast = 5
+    option_very_slow = 0
+    option_slow = 1
+    option_default = 2
+    option_fast = 3
+    option_superfast = 4
 
 class AutoInvertTimeMM(Choice):
     display_name = "Auto Invert Time (MM)"
-    option_never = 1
-    option_first_cycle = 2
-    option_always = 3
+    option_never = 0
+    option_first_cycle = 1
+    option_always = 2
 
 class CAMCForHeartPiecesContainers(Toggle):
     display_name = "CAMC for Heart Pieces Containers"
@@ -498,8 +498,8 @@ ootmm_main_options: Dict[str, Type[Option]] = {
     "item_pool": ItemPool,
     "hint_importance": HintImportance,
     "song_shuffle": SongShuffle,
-    "gold_skulltula_tokens_shuffle": GoldSkulltulaTokensShuffle,
-    "house_skulltula_tokens_shuffle": HouseSkulltulaTokensShuffle,
+    "gold_skulltula_tokens": GoldSkulltulaTokensShuffle,
+    "house_skulltula_tokens": HouseSkulltulaTokensShuffle,
     "tingle_maps_shuffle": TingleMapsShuffle,
     "map_compass_shuffle": MapCompassShuffle,
     "small_key_shuffle_oot": SmallKeyShuffleOoT,
@@ -565,18 +565,18 @@ ootmm_main_options: Dict[str, Type[Option]] = {
     "deku_tree_as_adult": DekuTreeAsAdult,
     "well_as_adult": WellAsAdult,
     "fire_temple_as_child": FireTempleAsChild,
-    "open_zora's_domain_shortcut": OpenZorasDomainShortcut,
+    "open_zoras_domain_shortcut": OpenZorasDomainShortcut,
     "skip_child_zelda": SkipChildZelda,
     "skip_oath_to_order": SkipOathToOrder,
     "free_scarecrow_oot": FreeScarecrowOoT,
-    "pre-completed_dungeons": PreCompletedDungeons,
+    "precompleted_dungeons": PreCompletedDungeons,
     "open_mask_shop_at_night": OpenMaskShopAtNight,
-    "cross-games_mm_song_of_soaring": CrossGamesMMSongOfSoaring,
-    "cross-games_oot_warp_songs": CrossGamesOoTWarpSongs,
+    "crossgames_mm_song_of_soaring": CrossGamesMMSongOfSoaring,
+    "crossgames_oot_warp_songs": CrossGamesOoTWarpSongs,
     "container_appearance_matches_content": ContainerAppearanceMatchesContent,
     "blast_mask_cooldown": BlastMaskCooldown,
     "clock_speed": ClockSpeed,
-    "auto-invert_time_mm": AutoInvertTimeMM,
+    "autoinvert_time_mm": AutoInvertTimeMM,
     "camc_for_heart_piecescontainers": CAMCForHeartPiecesContainers,
     "skulltula_camc": SkulltulaCAMC,
     "fierce_deity_anywhere_in_mm": FierceDeityAnywhereInMM,
@@ -591,6 +591,234 @@ ootmm_main_options: Dict[str, Type[Option]] = {
     "alter_lost_woods_exits": AlterLostWoodsExits,
     "void_warp_in_mm": VoidWarpInMM,
     # "death_link": DeathLink, 
+}
+
+
+class FillWallets(Toggle):
+    display_name = "Fill Wallets"
+
+class OoTShields(Choice):
+    display_name = "OOT Shields"
+    option_separate = 0
+    option_progressive = 1
+
+class OoTSwords(Choice):
+    display_name = "OOT Swords"
+    option_separate = 0
+    option_goron = 1
+    option_progressive = 2
+
+class MMShields(Choice):
+    display_name = "MM Shields"
+    option_separate = 0
+    option_progressive = 1
+
+class MMGreatFairySword(Choice):
+    display_name = "MM Great Fairy Sword"
+    option_separate = 0
+    option_progressive = 1
+    
+class MMGoronLullaby(Choice):
+    display_name = "MM Goron Lullaby"
+    option_separate = 0
+    option_progressive = 1
+    
+class SharedNutsSticks(Toggle):
+    display_name = "Shared Nuts & Sticks"
+    
+class SharedBows(Toggle):
+    display_name = "Shared Bows"
+
+class SharedBombBags(Toggle):
+    display_name = "Shared Bomb Bags"
+
+class SharedMagic(Toggle):
+    display_name = "Shared Magic"
+
+class SharedFireArrow(Toggle):
+    display_name = "Shared Fire Arrows"
+
+class SharedIceArrow(Toggle):
+    display_name = "Shared Ice Arrows"
+
+class SharedLightArrow(Toggle):
+    display_name = "Shared Light Arrows"
+
+class SharedEponasSong(Toggle):
+    display_name = "Shared Epona's Song"
+
+class SharedSongofStorms(Toggle):
+    display_name = "Shared Song of Storms"
+
+class SharedSongofTime(Toggle):
+    display_name = "Shared Song of Time"
+
+class SharedHookshots(Toggle):
+    display_name = "Shared Hookshots"
+
+class SharedLensofTruth(Toggle):
+    display_name = "Shared Lens of Truth"
+
+class SharedOcarinaofTime(Toggle):
+    display_name = "Shared Ocarina of Time"
+
+class SharedGoronMask(Toggle):
+    display_name = "Shared Goron Mask"
+
+class SharedZoraMask(Toggle):
+    display_name = "Shared Zora Mask"
+
+class SharedBunnyHood(Toggle):
+    display_name = "Shared Bunny Hood"
+
+class SharedKeatonMask(Toggle):
+    display_name = "Shared Keaton Mask"
+
+class SharedMaskofTruth(Toggle):
+    display_name = "Shared Mask of Truth"
+
+class SharedWallets(Toggle):
+    display_name = "Shared Wallets"
+
+class SharedHealth(Toggle):
+    display_name = "Shared Health"
+
+class SharedShields(Toggle):
+    display_name = "Shared Shields"
+
+class RandomBottleContents(Toggle):
+    display_name = "Random Bottle Contents"
+
+class SunsSonginMM(Toggle):
+    display_name = "Sun's Song in MM"
+
+class FairyOcarinainMM(Toggle):
+    display_name = "Fairy Ocarina in MM"
+
+class BlueFireArrows(Toggle):
+    display_name = "Blue Fire Arrows"
+
+class SunlightArrows(Toggle):
+    display_name = "Sunlight Arrows"
+
+class ShortHookshotinMM(Toggle):
+    display_name = "Short Hookshot in MM"
+
+class ChildWallets(Toggle):
+    display_name = "Child Wallets"
+
+class ColossalWallets(Toggle):
+    display_name = "Colossal Wallets"
+
+class SkeletonKeyOoT(Toggle):
+    display_name = "Skeleton Key (OoT)"
+
+class SkeletonKeyMM(Toggle):
+    display_name = "Skeleton Key (MM)"
+
+class BombchuBagOoT(Toggle):
+    display_name = "Bombchu Bag (OoT)"
+
+class BombchuBagMM(Toggle):
+    display_name = "Bombchu Bag (MM)"
+
+class DinsFireMM(Toggle):
+    display_name = "Din's Fire (MM)"
+
+class FaroresWindMM(Toggle):
+    display_name = "Farore's Wind (MM)"
+
+class NayrusLoveMM(Toggle):
+    display_name = "Nayru's Love (MM)"
+
+class IronBootsMM(Toggle):
+    display_name = "Iron Boots (MM)"
+
+class HoverBootsMM(Toggle):
+    display_name = "Hover Boots (MM)"
+
+class GoronTunicMM(Toggle):
+    display_name = "Goron Tunic (MM)"
+
+class ZoraTunicMM(Toggle):
+    display_name = "Zora Tunic (MM)"
+
+class ScalesMM(Toggle):
+    display_name = "Scales (MM)"
+
+class StrengthMM(Toggle):
+    display_name = "Strength (MM)"
+
+class BlastMaskOoT(Toggle):
+    display_name = "Blast Mask (Oot)"
+
+class StoneMaskOoT(Toggle):
+    display_name = "Stone Mask (OoT)"
+
+class OcarinaButtonsShuffleOoT(Toggle):
+    display_name = "Ocarina Buttons Shuffle (OoT)"
+
+class OcarinaButtonsShuffleMM(Toggle):
+    display_name = "Ocarina Buttons Shuffle (MM)"
+
+class EnemySoulsOoT(Toggle):
+    display_name = "Enemy Souls (OoT)"
+
+class EnemySoulsMM(Toggle):
+    display_name = "Enemy Souls (MM)"
+
+class BossSoulsOoT(Toggle):
+    display_name = "Boss Souls (OoT)"
+
+class BossSoulsMM(Toggle):
+    display_name = "Boss Souls (MM)"
+
+class NPCSoulsOoTEXPERIMENTAL(Toggle):
+    display_name = "NPC Souls (OoT) (EXPERIMENTAL)"
+
+class ClocksasItems(Toggle):
+    display_name = "Clocks as Items"
+
+class LenientGoronSpikes(Toggle):
+    display_name = "Lenient Goron Spikes"
+
+class BombersTracker(Toggle):
+    display_name = "Bombers' Tracker"
+
+class Coins(Toggle):
+    display_name = "Coins"
+
+class Rupoors(Toggle):
+    display_name = "Rupoors"
+
+class AgelessSwords(Toggle):
+    display_name = "Ageless Swords"
+
+class AgelessShields(Toggle):
+    display_name = "Ageless Shields"
+
+class AgelessTunics(Toggle):
+    display_name = "Ageless Tunics"
+
+class AgelessBoots(Toggle):
+    display_name = "Ageless Boots"
+
+class AgelessSticks(Toggle):
+    display_name = "Ageless Sticks"
+
+class AgelessBoomerang(Toggle):
+    display_name = "Ageless Boomerang"
+
+class AgelessHammer(Toggle):
+    display_name = "Ageless Hammer"
+
+class AgelessHookshot(Toggle):
+    display_name = "Ageless Hookshot"
+
+class AgelessChildTrade(Toggle):
+    display_name = "Ageless Child Trade"
+
+ootmm_item_options: Dict[str, Type[Option]] = {
 }
 
 ootmm_options: Dict[str, Type[Option]] = {
