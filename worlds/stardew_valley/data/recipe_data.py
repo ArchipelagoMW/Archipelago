@@ -165,7 +165,9 @@ stir_fry_qos = queen_of_sauce_recipe(Meal.stir_fry, 1, Season.spring, 7, stir_fr
 strange_bun = friendship_recipe(Meal.strange_bun, NPC.shane, 7, {Ingredient.wheat_flour: 1, Fish.periwinkle: 1, ArtisanGood.void_mayonnaise: 1})
 stuffing = friendship_recipe(Meal.stuffing, NPC.pam, 7, {Meal.bread: 1, Fruit.cranberries: 1, Forageable.hazelnut: 1})
 super_meal = friendship_recipe(Meal.super_meal, NPC.kent, 7, {Vegetable.bok_choy: 1, Fruit.cranberries: 1, Vegetable.artichoke: 1})
-survival_burger = skill_recipe(Meal.survival_burger, Skill.foraging, 2, {Meal.bread: 1, Forageable.cave_carrot: 1, Vegetable.eggplant: 1})
+
+# 1.6 went from 2 to 8. Keep highest requirement for now. Update properly later
+survival_burger = skill_recipe(Meal.survival_burger, Skill.foraging, 8, {Meal.bread: 1, Forageable.cave_carrot: 1, Vegetable.eggplant: 1})
 tom_kha_soup = friendship_recipe(Meal.tom_kha_soup, NPC.sandy, 7, {Forageable.coconut: 1, Fish.shrimp: 1, Forageable.common_mushroom: 1})
 tortilla_ingredients = {Vegetable.corn: 1}
 tortilla_qos = queen_of_sauce_recipe(Meal.tortilla, 1, Season.fall, 7, tortilla_ingredients)
