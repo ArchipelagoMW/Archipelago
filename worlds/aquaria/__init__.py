@@ -98,7 +98,7 @@ class AquariaWorld(World):
         Create every Region in `regions`
         """
         self.regions.add_regions_to_world()
-        self.regions.connect_regions()
+        self.regions.connect_regions(self.options.objective.value != 0)
 
     def create_items(self) -> None:
         """Create every items in the world"""
@@ -155,5 +155,10 @@ class AquariaWorld(World):
         aquarian_translation = False
         if self.options.aquarian_translation:
             aquarian_translation = True
-        return {"ingredientReplacement": self.ingredients_substitution,
+        death_link = False
+        if self.options.death_link:
+            death_link = True
+        return {"secret_needed": self.options.objective.value != 0,
+                "death_link": death_link,
+                "ingredientReplacement": self.ingredients_substitution,
                 "aquarianTranslate": aquarian_translation}

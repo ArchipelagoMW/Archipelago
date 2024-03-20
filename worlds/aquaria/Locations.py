@@ -241,12 +241,13 @@ class AquariaLocations:
         "Mithalas cathedral, first urn in the bottom right path": 698140,
         "Mithalas cathedral, second urn in the bottom right path": 698141,
         "Mithalas cathedral, urn behind the flesh vein": 698142,
-        "Mithalas cathedral, urn in the top right path": 698143,
+        "Mithalas cathedral, urn in the top left eyes boss room": 698143,    # Before: Mithalas cathedral, urn in the top right path
         "Mithalas cathedral, first urn in the path behind the flesh vein": 698144,
         "Mithalas cathedral, second urn in the path behind the flesh vein": 698145,
         "Mithalas cathedral, third urn in the path behind the flesh vein": 698146,
         "Mithalas cathedral, one of the urns in the top right room": 698147,
         "Mithalas cathedral, Mithalan Dress in the book shelf after the current": 698189,
+        "Mithalas cathedral right area, bellow the left entrance": 698198,
     }
 
     locations_cathedral_underground = {
@@ -585,6 +586,7 @@ location_table = {
     **AquariaLocations.locations_forest_sprite_cave_tube,
     **AquariaLocations.locations_forest_fish_cave,
     **AquariaLocations.locations_home_water,
+    **AquariaLocations.locations_home_water_nautilus,
     **AquariaLocations.locations_body_l,
     **AquariaLocations.locations_body_rt,
     **AquariaLocations.locations_body_rb,

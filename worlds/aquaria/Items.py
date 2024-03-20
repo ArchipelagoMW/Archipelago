@@ -158,7 +158,7 @@ item_table = {
     "Healing poultice x 2": (698106, 2, ItemType.NORMAL, ItemGroup.RECIPE),
     "Hot soup x 2": (698107, 3, ItemType.PROGRESSION, ItemGroup.RECIPE),
     "Leadership roll x 2": (698108, 1, ItemType.NORMAL, ItemGroup.RECIPE),
-    "Leaf poultice x 3": (698109, 1, ItemType.PROGRESSION, ItemGroup.RECIPE),
+    "Leaf poultice x 3": (698109, 2, ItemType.PROGRESSION, ItemGroup.RECIPE),
     "Plant leaf x 2": (698110, 2, ItemType.NORMAL, ItemGroup.INGREDIENT),
     "Plant leaf x 3": (698111, 4, ItemType.NORMAL, ItemGroup.INGREDIENT),
     "Rotten meat x 2": (698112, 1, ItemType.JUNK, ItemGroup.INGREDIENT),

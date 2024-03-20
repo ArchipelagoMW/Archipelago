@@ -43,6 +43,7 @@ class AquariaRegions:
     arnassi_crab_boss: Region
     simon: Region
     mithalas_city: Region
+    mithalas_city_secret_2: Region
     mithalas_city_urns: Region
     mithalas_city_top_path: Region
     mithalas_city_top_path_urn: Region
@@ -89,6 +90,7 @@ class AquariaRegions:
     turtle_cave_top_bubble: Region
     sun_temple_l: Region
     sun_temple_r: Region
+    sun_temple_secret_3: Region
     sun_temple_boss_lt: Region
     sun_temple_boss_lb: Region
     sun_temple_boss_r: Region
@@ -96,6 +98,7 @@ class AquariaRegions:
     abyss_lb: Region
     abyss_l_fp: Region
     abyss_r: Region
+    abyss_r_secret_1: Region
     ice_cave: Region
     bubble_cave: Region
     king_jellyfish_cave: Region
@@ -252,6 +255,10 @@ class AquariaRegions:
             self.__add_region("mithalas_city",
                               "Mithalas city",
                               AquariaLocations.locations_mithalas_city))
+        self.mithalas_city_secret_2 = (
+            self.__add_region("mithalas_city_secret_2",
+                              "Mithalas city",
+                              None))
         self.mithalas_city_urns = (
             self.__add_region("mithalas_city_urns",
                               "Mithalas city",
@@ -431,6 +438,9 @@ class AquariaRegions:
         self.sun_temple_r = self.__add_region("sun_temple_r",
                                               "Sun temple right area",
                                               AquariaLocations.locations_sun_temple_r)
+        self.sun_temple_secret_3 = self.__add_region("sun_temple_secret_3",
+                                              "Sun temple's secret",
+                                              None)
         self.sun_temple_boss_lt = (
             self.__add_region("sun_temple_boss_lt",
                               "Sun temple before boss area, " +
@@ -462,6 +472,9 @@ class AquariaRegions:
         self.abyss_r = self.__add_region("abyss_r",
                                          "Abyss right area",
                                          AquariaLocations.locations_abyss_r)
+        self.abyss_r_secret_1 = self.__add_region("abyss_r_secret_1",
+                                                  "Abyss right area's secret",
+                                                  None)
         self.ice_cave = self.__add_region("ice_cave",
                                           "Ice cave",
                                           AquariaLocations.locations_ice_cave)
@@ -650,6 +663,9 @@ class AquariaRegions:
         self.__connect_regions("mithalas_city", "mithalas_city_urns",
                                self.mithalas_city,
                                self.mithalas_city_urns)  # Energy form needed one-way
+        self.__connect_regions("mithalas_city", "mithalas_city_secret_2",
+                               self.mithalas_city,
+                               self.mithalas_city_secret_2)
         self.__connect_regions("mithalas_city", "mithalas_city_top_path",
                                self.mithalas_city,
                                self.mithalas_city_top_path)  # Beast form needed one-way
@@ -780,6 +796,8 @@ class AquariaRegions:
                                self.turtle_cave_bubble)  # Beast form needed
         self.__connect_regions("veil_tr_r", "sun_temple_r",
                                self.veil_tr_r, self.sun_temple_r)
+        self.__connect_regions("sun_temple_r", "sun_temple_secret_3",
+                               self.sun_temple_r, self.sun_temple_secret_3)
         self.__connect_regions("sun_temple_r", "sun_temple_l",
                                self.sun_temple_r,
                                self.sun_temple_l)  # bind song needed
@@ -793,8 +811,8 @@ class AquariaRegions:
             lambda state: state.has("ingredient_hotsoup", self.player)
             # Beast form needed
         )
-
-        self.__connect_one_way_regions("sun_temple_boss_lt", "sun_temple_boss_lb",
+        self.__connect_one_way_regions("sun_temple_boss_lt",
+                                       "sun_temple_boss_lb",
                                        self.sun_temple_boss_lt,
                                        self.sun_temple_boss_lb)
         self.__connect_regions("sun_temple_boss_lb", "sun_temple_boss_r",
@@ -858,6 +876,10 @@ class AquariaRegions:
                                self.abyss_r,
                                self.bubble_cave)  # Beast form needed
 
+        self.__connect_regions("whale", "abyss_r_secret_1",
+                               self.whale, self.abyss_r_secret_1) # Energy form and bind song needed
+
+
     def __connect_sunken_city_regions(self):
         """
         Connect entrances of the different regions around The Sunken City
@@ -870,7 +892,7 @@ class AquariaRegions:
         self.__connect_regions("sunken_city_l", "sunken_city_boss",
                                self.sunken_city_l, self.sunken_city_boss)
 
-    def __connect_body_regions(self):
+    def __connect_body_regions(self, secret_required):
         """
         Connect entrances of the different regions around The body
         """
@@ -896,11 +918,18 @@ class AquariaRegions:
         self.__connect_one_way_regions("final_boss", "final_boss_3_form",
                                        self.final_boss,
                                        self.final_boss_3_form)  # Need final boss conditions
+
+        secret_condition = None
+        if secret_required:
+            secret_condition = \
+                lambda state: (state.has("Secret 1 acquired", self.player) and
+                               state.has("Secret 2 acquired", self.player) and
+                               state.has("Secret 3 acquired", self.player))
         self.__connect_one_way_regions("final_boss_3_form", "final_boss_end",
                                        self.final_boss_3_form,
-                                       self.final_boss_end)
+                                       self.final_boss_end, secret_condition)
 
-    def connect_regions(self):
+    def connect_regions(self, secret_required):
         """
         Connect every region (entrances and exits)
         """
@@ -911,7 +940,7 @@ class AquariaRegions:
         self.__connect_veil_regions()
         self.__connect_abyss_regions()
         self.__connect_sunken_city_regions()
-        self.__connect_body_regions()
+        self.__connect_body_regions(secret_required)
 
     def __add_event_location(self, region:Region, name: str, event_name: str):
         """
@@ -925,7 +954,6 @@ class AquariaRegions:
         location.place_locked_item(AquariaItem(event_name,
                                    ItemClassification.progression, None,
                                                self.player))
-
 
     def add_event_locations(self):
         """
@@ -943,6 +971,14 @@ class AquariaRegions:
                                   "Body door 3 opened")
         self.__add_event_location(self.body_rb, "Erulian spirit freed",
                                   "Body door 4 opened")
+        self.__add_event_location(self.abyss_r_secret_1, "Getting secret 1",
+                                  "Secret 1 acquired")
+        self.__add_event_location(self.mithalas_city_secret_2,
+                                  "Getting secret 2",
+                                  "Secret 2 acquired")
+        self.__add_event_location(self.sun_temple_secret_3,
+                                  "Getting secret 3",
+                                  "Secret 3 acquired")
         self.__add_event_location(self.final_boss_end, "Objective complete",
                                   "Victory")
 
@@ -986,6 +1022,7 @@ class AquariaRegions:
         Add every region around Mithalas to the `world`
         """
         self.world.regions.append(self.mithalas_city)
+        self.world.regions.append(self.mithalas_city_secret_2)
         self.world.regions.append(self.mithalas_city_urns)
         self.world.regions.append(self.mithalas_city_top_path)
         self.world.regions.append(self.mithalas_city_top_path_urn)
@@ -1042,6 +1079,7 @@ class AquariaRegions:
         self.world.regions.append(self.turtle_cave_top_bubble)
         self.world.regions.append(self.sun_temple_l)
         self.world.regions.append(self.sun_temple_r)
+        self.world.regions.append(self.sun_temple_secret_3)
         self.world.regions.append(self.sun_temple_boss_lt)
         self.world.regions.append(self.sun_temple_boss_lb)
         self.world.regions.append(self.sun_temple_boss_r)
@@ -1054,6 +1092,7 @@ class AquariaRegions:
         self.world.regions.append(self.abyss_lb)
         self.world.regions.append(self.abyss_l_fp)
         self.world.regions.append(self.abyss_r)
+        self.world.regions.append(self.abyss_r_secret_1)
         self.world.regions.append(self.ice_cave)
         self.world.regions.append(self.bubble_cave)
         self.world.regions.append(self.king_jellyfish_cave)
