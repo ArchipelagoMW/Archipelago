@@ -1,7 +1,7 @@
 from typing import List, Optional, NamedTuple, TYPE_CHECKING
 
 from .Options import PlayerGoal, MinigameChecks
-from ..generic.Rules import CollectionRule
+from worlds.generic.Rules import CollectionRule
 
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
