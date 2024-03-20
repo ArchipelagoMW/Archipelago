@@ -65,11 +65,12 @@ SMW_RECV_PROGRESS_ADDR = WRAM_START + 0x01F2B
 
 SMW_BLOCKSANITY_BLOCK_COUNT = 582
 
-SMW_GOAL_LEVELS          = [0x28, 0x31, 0x32]
-SMW_INVALID_MARIO_STATES = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
-SMW_BAD_TEXT_BOX_LEVELS  = [0x00, 0x26, 0x02, 0x4B]
-SMW_BOSS_STATES          = [0x80, 0xC0, 0xC1]
-SMW_UNCOLLECTABLE_LEVELS = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
+SMW_GOAL_LEVELS                = [0x28, 0x31, 0x32]
+SMW_INVALID_MARIO_STATES       = [0x05, 0x06, 0x0A, 0x0C, 0x0D]
+SMW_BAD_TEXT_BOX_LEVELS        = [0x00, 0x26, 0x02, 0x4B]
+SMW_BOSS_STATES                = [0x80, 0xC0, 0xC1]
+SMW_UNCOLLECTABLE_LEVELS       = [0x25, 0x07, 0x0B, 0x40, 0x0E, 0x1F, 0x20, 0x1B, 0x1A, 0x35, 0x34, 0x31, 0x32]
+SMW_UNCOLLECTABLE_DRAGON_COINS = [0x24]
 
 
 class SMWSNIClient(SNIClient):
@@ -604,6 +605,8 @@ class SMWSNIClient(SNIClient):
 
                 if level_data[1] == 2:
                     # Dragon Coins Check
+                    if level_data[0] in SMW_UNCOLLECTABLE_DRAGON_COINS:
+                        continue
 
                     progress_byte = (level_data[0] // 8)
                     progress_bit  = 7 - (level_data[0] % 8)
