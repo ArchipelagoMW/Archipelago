@@ -44,7 +44,7 @@ class BuildingLogic(BaseLogic[Union[BuildingLogicMixin, MoneyLogicMixin, RegionL
             Building.well: self.logic.money.can_spend(1000) & self.logic.has(Material.stone),
             Building.shipping_bin: self.logic.money.can_spend(250) & self.logic.has(Material.wood),
             Building.kitchen: self.logic.money.can_spend(10000) & self.logic.has(Material.wood) & self.logic.building.has_house(0),
-            Building.kids_room: self.logic.money.can_spend(50000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
+            Building.kids_room: self.logic.money.can_spend(65000) & self.logic.has(Material.hardwood) & self.logic.building.has_house(1),
             Building.cellar: self.logic.money.can_spend(100000) & self.logic.building.has_house(2),
             # @formatter:on
         })
