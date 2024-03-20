@@ -47,10 +47,10 @@ class YoshiLogic:
         return (state.has('Bandit Consumables', self.player) or state.has('Bandit Watermelons', self.player))
 
     def item_bonus(self, state: CollectionState) -> bool:
-        return state.has_any({'Bonus Consumables'}, self.player)
+        return state.has('Bonus Consumables', self.player)
 
     def combat_item(self, state: CollectionState) -> bool:
-        if self.consumable_logic == False:
+        if self.consumable_logic:
             return False
         else:
             if self.game_logic == "Easy":
@@ -59,7 +59,7 @@ class YoshiLogic:
                 return self.bandit_bonus(state) or self.item_bonus(state)
 
     def melon_item(self, state: CollectionState) -> bool:
-        if self.consumable_logic == False:
+        if self.consumable_logic:
             return False
         else:
             if self.game_logic == "Easy":
@@ -68,7 +68,7 @@ class YoshiLogic:
                 return state.has('Bandit Watermelons', self.player) or self.item_bonus(state)
 
     def default_vis(self, state: CollectionState) -> bool:
-        if self.clouds_always_visible == True:
+        if self.clouds_always_visible:
             return True
         else:
             return False
@@ -83,17 +83,17 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Egg Plant', '! Switch'}, self.player) and state.has('Egg Capacity Upgrade', self.player, 2)
         elif self.game_logic == "Normal":
-            return state.has_all({'Egg Plant'}, self.player) and state.has('Egg Capacity Upgrade', self.player, 1)
+            return state.has('Egg Plant', self.player) and state.has('Egg Capacity Upgrade', self.player, 1)
         else:
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has('Egg Plant', self.player)
 
     def bowserdoor_2(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return ((state.has('Egg Capacity Upgrade', self.player, 3) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has_all({'Key'}, self.player)
+            return ((state.has('Egg Capacity Upgrade', self.player, 3) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return ((state.has('Egg Capacity Upgrade', self.player, 2) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has_all({'Key'}, self.player)
+            return ((state.has('Egg Capacity Upgrade', self.player, 2) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has('Key', self.player)
         else:
-            return ((state.has('Egg Capacity Upgrade', self.player, 1) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has_all({'Key'}, self.player)
+            return ((state.has('Egg Capacity Upgrade', self.player, 1) and state.has('Egg Plant', self.player)) or self.combat_item(state)) and state.has('Key', self.player)
 
     def bowserdoor_3(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -143,11 +143,11 @@ class YoshiLogic:
 ##############################################################################
     def _13Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _14Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -159,9 +159,9 @@ class YoshiLogic:
 
     def _14Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has('Egg Plant', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has('Egg Plant', self.player)
         else:
             return (state.has('Egg Capacity Upgrade', self.player, 5) or state.has('Egg Plant', self.player))
 
@@ -171,11 +171,11 @@ class YoshiLogic:
 ##############################################################################
     def _17Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _18Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -219,7 +219,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'! Switch', 'Dashed Stairs'}, self.player)
         else:
-            return state.has_all({'! Switch'}, self.player)
+            return state.has('! Switch', self.player)
 
     def _24Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -243,11 +243,11 @@ class YoshiLogic:
 ##############################################################################
     def _27Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _28Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -287,7 +287,7 @@ class YoshiLogic:
 
     def _34Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Giant Eggs'}, self.player)
+            return state.has('Giant Eggs', self.player)
         elif self.game_logic == "Normal":
             return True
         else:
@@ -301,9 +301,9 @@ class YoshiLogic:
         if self.game_logic == "Easy":
             return state.has_all({'Key', 'Large Spring Ball'}, self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _38Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -331,7 +331,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Large Spring Ball', 'Key'}, self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _44Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -392,11 +392,11 @@ class YoshiLogic:
 ######################################################################################################################
     def _51Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _54Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -444,7 +444,7 @@ class YoshiLogic:
         elif self.game_logic == "Normal":
             return state.has_all({'Dashed Platform', 'Key', 'Beanstalk'}, self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _64Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
@@ -456,9 +456,9 @@ class YoshiLogic:
 
     def _64Boss(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has('Egg Plant', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Egg Plant'}, self.player)
+            return state.has('Egg Plant', self.player)
         else:
             return True
 
@@ -468,11 +468,11 @@ class YoshiLogic:
 ##############################################################################
     def _67Game(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         elif self.game_logic == "Normal":
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
         else:
-            return state.has_all({'Key'}, self.player)
+            return state.has('Key', self.player)
 ##############################################################################
     def _68Clear(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

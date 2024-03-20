@@ -15,15 +15,15 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.level_colors = []
     world.color_order = []
     for i in range(72):
-        world.level_colors.append(world.random.randint(0,7))
+        world.level_colors.append(world.random.randint(0, 7))
     if world.options.yoshi_colors.value == 3:
         singularity_color = world.options.yoshi_singularity_color.value
         for i in range(len(world.level_colors)):
             world.level_colors[i] = singularity_color
     elif world.options.yoshi_colors.value == 1:
-        world.leader_color = world.random.randint(0,7)
+        world.leader_color = world.random.randint(0, 7)
         for i in range(7):
-            world.color_order.append(world.random.randint(0,7))
+            world.color_order.append(world.random.randint(0, 7))
 
     bonus_valid = [0x00, 0x02, 0x04, 0x06, 0x08, 0x0A]
 
@@ -54,10 +54,10 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
 
     boss_list = ["Burt The Bashful's Boss Room", "Salvo The Slime's Boss Room",
                  "Bigger Boo's Boss Room", "Roger The Ghost's Boss Room",
-                "Prince Froggy's Boss Room", "Naval Piranha's Boss Room",
-                "Marching Milde's Boss Room", "Hookbill The Koopa's Boss Room",
-                "Sluggy The Unshaven's Boss Room", "Raphael The Raven's Boss Room",
-                "Tap-Tap The Red Nose's Boss Room"]
+                 "Prince Froggy's Boss Room", "Naval Piranha's Boss Room",
+                 "Marching Milde's Boss Room", "Hookbill The Koopa's Boss Room",
+                 "Sluggy The Unshaven's Boss Room", "Raphael The Raven's Boss Room",
+                 "Tap-Tap The Red Nose's Boss Room"]
 
     world.boss_order = []
 
@@ -125,7 +125,6 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.tap_tap_room = boss_levels[world.boss_room_id.index(10)]
     world.boss_ap_loc = [boss_check_list[roomnum] for roomnum in world.boss_order]
 
-
     world.boss_burt_data = boss_data_list[world.boss_room_id[0]]
 
     world.boss_slime_data = boss_data_list[world.boss_room_id[1]]
@@ -149,11 +148,11 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.boss_tap_data = boss_data_list[world.boss_room_id[10]]
 
     world.global_level_list = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-                              0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13,
-                              0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
-                              0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B,
-                              0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
-                              0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42]
+                               0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13,
+                               0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
+                               0x24, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2A, 0x2B,
+                               0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                               0x3C, 0x3D, 0x3E, 0x3F, 0x40, 0x41, 0x42]
     level_id_list = {
                     0x00: "1-1",
                     0x01: "1-2",
@@ -293,7 +292,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
                                            if item not in boss_lv]
             world.random.shuffle(boss_lv)
 
-            world.global_level_list.insert(3 - world_1_offsets[world.options.starting_world.value], boss_lv[0]) #1 if starting world is 1, 0 otherwise
+            world.global_level_list.insert(3 - world_1_offsets[world.options.starting_world.value], boss_lv[0])  # 1 if starting world is 1, 0 otherwise
             world.global_level_list.insert(7 - world_1_offsets[world.options.starting_world.value], boss_lv[1])
             world.global_level_list.insert(11 - world_2_offsets[world.options.starting_world.value], boss_lv[2])
             world.global_level_list.insert(15 - world_2_offsets[world.options.starting_world.value], boss_lv[3])
@@ -355,13 +354,13 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
                     0x3F: [0x58, 0x24, 0x53],
                     0x40: [0x74, 0x24, 0x53],
                     0x41: [0x90, 0x24, 0x53],
-                    0x42: [0xAC, 0x24, 0x53]
+                    0x42: [0xAC, 0x24, 0x53],
                         }
     panel_palette_1 = [0x00, 0x03, 0x04, 0x05, 0x0C, 0x10, 0x12, 0x13, 0x19, 0x1A, 0x1B, 0x1C, 0x1D,
                        0x24, 0x26, 0x27, 0x29, 0x2A, 0x2B, 0x30, 0x32, 0x34,
-                       0x35, 0x37, 0x3C, 0x3D, 0x40, 0x41] #000C
+                       0x35, 0x37, 0x3C, 0x3D, 0x40, 0x41]  # 000C
     panel_palette_2 = [0x01, 0x02, 0x06, 0x07, 0x0D, 0x0E, 0x0F, 0x11, 0x18, 0x1E, 0x1F, 0x25, 0x28,
-                       0x31, 0x33, 0x36, 0x3E, 0x3F, 0x42] #0010
+                       0x31, 0x33, 0x36, 0x3E, 0x3F, 0x42]  # 0010
 
     stage_number = 0
     world_number = 1
@@ -378,7 +377,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.palette_panel_list = []
 
     for i in range(47):
-        if world.global_level_list[i] >=0x30:
+        if world.global_level_list[i] >= 0x30:
             world.level_gfx_table.append(0x15)
         else:
             world.level_gfx_table.append(0x11)
@@ -419,14 +418,13 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.level_gfx_table.insert(56, 0x15)
     world.level_gfx_table.insert(56, 0x15)
 
-
     castle_door_dict = {
-                    0: [0xB8, 0x05, 0x77, 0x00],
-                    1: [0xB8, 0x05, 0x77, 0x00],
-                    2: [0xC6, 0x07, 0x7A, 0x00],
-                    3: [0xCD, 0x05, 0x5B, 0x00],
-                    4: [0xD3, 0x00, 0x77, 0x06],
-                    5: [0xB8, 0x05, 0x77, 0x00]
+        0: [0xB8, 0x05, 0x77, 0x00],
+        1: [0xB8, 0x05, 0x77, 0x00],
+        2: [0xC6, 0x07, 0x7A, 0x00],
+        3: [0xCD, 0x05, 0x5B, 0x00],
+        4: [0xD3, 0x00, 0x77, 0x06],
+        5: [0xB8, 0x05, 0x77, 0x00],
     }
 
     world.castle_door = castle_door_dict[world.options.bowser_door_mode.value]
@@ -446,14 +444,14 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     world.world_6_stages.extend([0x43, 0x44, 0x45])
 
     bowser_text_table = {
-        0: [0xDE, 0xEE, 0xDC, 0xDC, 0xE5], #Gween
-        1: [0xE7, 0xE0, 0xE5, 0xE2, 0xD0], #Pink
-        3: [0xEB, 0xDF, 0xF0, 0xD8, 0xE5], #Thyan
-        2: [0xF0, 0xDC, 0xEE, 0xEE, 0xE6], #Yewow
-        4: [0xE7, 0xEC, 0xDF, 0xE7, 0xE3], #puhpl
-        5: [0xD9, 0xEE, 0xE6, 0xEE, 0xE5], #Bwown
-        6: [0xEE, 0xDC, 0xDB, 0xD0, 0xD0], #Wed
-        7: [0xD9, 0xEE, 0xEC, 0xDC, 0xD0] #Bwue
+        0: [0xDE, 0xEE, 0xDC, 0xDC, 0xE5],  # Gween
+        1: [0xE7, 0xE0, 0xE5, 0xE2, 0xD0],  # Pink
+        3: [0xEB, 0xDF, 0xF0, 0xD8, 0xE5],  # Thyan
+        2: [0xF0, 0xDC, 0xEE, 0xEE, 0xE6],  # Yewow
+        4: [0xE7, 0xEC, 0xDF, 0xE7, 0xE3],  # puhpl
+        5: [0xD9, 0xEE, 0xE6, 0xEE, 0xE5],  # Bwown
+        6: [0xEE, 0xDC, 0xDB, 0xD0, 0xD0],  # Wed
+        7: [0xD9, 0xEE, 0xEC, 0xDC, 0xD0]  # Bwue
     }
 
     if world.options.yoshi_colors == 1:
