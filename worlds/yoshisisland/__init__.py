@@ -272,7 +272,7 @@ class YoshisIslandWorld(World):
         if not item.advancement:
             return item
 
-        if name == "Car Morph" and not self.options.stage_logic:
+        if name == "Car Morph" and self.options.stage_logic != StageLogic.option_strict:
             item.classification = ItemClassification.useful
 
         secret_lens_visibility_check = (
