@@ -4,6 +4,9 @@ import Utils
 from worlds.Files import APDeltaPatch
 from settings import get_settings
 from typing import TYPE_CHECKING
+
+from .Options import YoshiColors, BowserDoor, PlayerGoal
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 USHASH = 'cb472164c5a71ccd3739963390ec6a50'
@@ -1058,7 +1061,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x06FC99, bytearray([world.options.luigi_pieces_required.value]))
     rom.write_bytes(0x06FC9A, bytearray([world.options.goal.value]))
 
-    if world.options.yoshi_colors != 0:
+    if world.options.yoshi_colors != YoshiColors.option_normal:
         rom.write_bytes(0x113A33, bytearray(world.bowser_text))
 
     rom.write_bytes(0x0A060C, bytearray(world.boss_burt_data))
@@ -1134,7 +1137,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     rom.write_bytes(0x0BDBAF, bytearray(world.level_gfx_table))
     rom.write_bytes(0x0BDC4F, bytearray(world.palette_panel_list))
 
-    if world.options.yoshi_colors.value == 1:
+    if world.options.yoshi_colors == YoshiColors.option_random_order:
         rom.write_bytes(0x010000, ([world.leader_color]))
         rom.write_bytes(0x010008, ([world.leader_color]))
         rom.write_bytes(0x010009, ([world.leader_color]))
@@ -1160,32 +1163,32 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
         rom.write_bytes(0x010045, ([world.leader_color]))
         rom.write_bytes(0x01003D, bytearray(world.color_order))
         rom.write_bytes(0x010043, ([world.leader_color]))
-    elif world.options.yoshi_colors.value in {2, 3}:
+    elif world.options.yoshi_colors in {YoshiColors.option_random_color, YoshiColors.option_singularity}:
         rom.write_bytes(0x010000, bytearray(world.level_colors))
 
-    if world.options.minigame_checks.value in {2, 3}:
+    if world.options.minigame_checks in {YoshiColors.option_random_color, YoshiColors.option_singularity}:
         bonus_checks(rom)
 
-    if world.options.minigame_checks.value in {1, 3}:
+    if world.options.minigame_checks in {YoshiColors.option_random_order, YoshiColors.option_singularity}:
         bandit_checks(rom)
 
     rom.write_bytes(0x00BF2C, bytearray(world.world_bonus))
 
-    if world.options.softlock_prevention == 1:
+    if world.options.softlock_prevention:
         rom.write_bytes(0x00C18F, bytearray([0x5C, 0x58, 0xFB, 0x0B]))  # R + X Code
 
-    if world.options.bowser_door_mode.value != 0:
+    if world.options.bowser_door_mode != BowserDoor.option_manual:
         rom.write_bytes(0x07891F, bytearray(world.castle_door))  # 1 Entry
         rom.write_bytes(0x078923, bytearray(world.castle_door))  # 2 Entry
         rom.write_bytes(0x078927, bytearray(world.castle_door))  # 3 Entry
         rom.write_bytes(0x07892B, bytearray(world.castle_door))  # 4 Entry
 
-    if world.options.bowser_door_mode.value == 5:
+    if world.options.bowser_door_mode == BowserDoor.option_gauntlet:
         rom.write_bytes(0x0AF517, bytearray([0xC6, 0x07, 0x7A, 0x00]))  # Door 2
         rom.write_bytes(0x0AF6B7, bytearray([0xCD, 0x05, 0x5B, 0x00]))  # Door 3
         rom.write_bytes(0x0AF8F2, bytearray([0xD3, 0x00, 0x77, 0x06]))  # Door 4
 
-    if world.options.goal == 1:
+    if world.options.goal == PlayerGoal.option_luigi_hunt:
         rom.write_bytes(0x1153F6, bytearray([0x16, 0x28, 0x10, 0x0C, 0x10, 0x4E, 0x1E, 0x10, 0x08, 0x04, 0x08, 0x24, 0x36, 0x82, 0x83, 0x83, 0x34, 0x84, 0x85, 0x85]))  # Luigi piece clear text
         rom.write_bytes(0x06FC86, bytearray([0xFF]))  # Boss clear goal = 255, renders bowser inaccessible
 

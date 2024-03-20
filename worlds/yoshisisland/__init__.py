@@ -10,7 +10,7 @@ import settings
 from .Items import get_item_names_per_category, item_table, filler_items, trap_items
 from .Locations import get_locations
 from .Regions import init_areas
-from .Options import YoshisIslandOptions
+from .Options import YoshisIslandOptions, PlayerGoal, ObjectVis, StageLogic, MinigameChecks
 from .setup_game import setup_gamevars
 from .Client import YoshisIslandSNIClient
 from .Rules import set_easy_rules, set_normal_rules, set_hard_rules
@@ -74,7 +74,6 @@ class YoshisIslandWorld(World):
     leader_color: int
     boss_order: list
     boss_burt: int
-    luigi_pieces: int
     luigi_count: int
 
     rom_name: bytearray
@@ -176,7 +175,7 @@ class YoshisIslandWorld(World):
     def get_filler_item_name(self) -> str:
         trap_chance: int = self.options.trap_percent.value
 
-        if self.random.random() < (trap_chance / 100) and self.options.traps_enabled.value == 1:
+        if self.random.random() < (trap_chance / 100) and self.options.traps_enabled:
             return self.random.choice(trap_items)
         else:
             return self.random.choice(filler_items)
@@ -202,7 +201,7 @@ class YoshisIslandWorld(World):
         self.get_location("Raphael The Raven's Boss Room").place_locked_item(self.create_item("Boss Clear"))
         self.get_location("Tap-Tap The Red Nose's Boss Room").place_locked_item(self.create_item("Boss Clear"))
 
-        if self.options.goal.value == 1:
+        if self.options.goal == PlayerGoal.option_luigi_hunt:
             self.get_location("Reconstituted Luigi").place_locked_item(self.create_item("Saved Baby Luigi"))
         else:
             self.get_location("King Bowser's Castle: Level Clear").place_locked_item(
@@ -276,18 +275,25 @@ class YoshisIslandWorld(World):
         if name == 'Car Morph' and not self.options.stage_logic:
             item.classification = ItemClassification.useful
 
-        if name == 'Secret Lens' and (self.options.hidden_object_visibility >= 2 or self.options.stage_logic != 0):
+        secret_lens_visibility_check = (
+                self.options.hidden_object_visibility >= ObjectVis.option_clouds_only
+                or self.options.stage_logic != StageLogic.option_strict
+        )
+        if name == 'Secret Lens' and secret_lens_visibility_check:
             item.classification = ItemClassification.useful
 
-        if name in {"Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"} \
-                and self.options.minigame_checks <= 1:
+        is_bonus_location = name in {"Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"}
+        bonus_games_disabled = (
+            self.options.minigame_checks not in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}
+        )
+        if is_bonus_location and bonus_games_disabled:
             item.classification = ItemClassification.useful
 
-        if name in {"Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'} and self.options.item_logic == 1:
+        if name in {"Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'} and self.options.item_logic:
             item.classification = ItemClassification.progression
 
-        if name == 'Piece of Luigi' and self.options.goal != 0:
-            if self.luigi_count >= self.options.luigi_pieces_required.value:
+        if name == 'Piece of Luigi' and self.options.goal == PlayerGoal.option_luigi_hunt:
+            if self.luigi_count >= self.options.luigi_pieces_required:
                 item.classification = ItemClassification.useful
             else:
                 item.classification = ItemClassification.progression_skip_balancing
@@ -296,7 +302,7 @@ class YoshisIslandWorld(World):
         return item
 
     def generate_filler(self, pool: List[Item]) -> None:
-        if self.playergoal == 1:
+        if self.options.goal == PlayerGoal.option_luigi_hunt:
             for _ in range(self.options.luigi_pieces_in_pool.value):
                 item = self.create_item_with_correct_settings("Piece of Luigi")
                 pool.append(item)
@@ -319,7 +325,7 @@ class YoshisIslandWorld(World):
     def create_items(self) -> None:
         self.luigi_count = 0
 
-        if self.options.minigame_checks.value >= 2:
+        if self.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
             self.multiworld.get_location("Flip Cards", self.player).place_locked_item(
                 self.create_item("Bonus Consumables"))
             self.multiworld.get_location("Drawing Lots", self.player).place_locked_item(

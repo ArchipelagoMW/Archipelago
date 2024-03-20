@@ -1,7 +1,11 @@
 from BaseClasses import CollectionState
 from typing import Optional, TYPE_CHECKING
+
+from .Options import StageLogic, BowserDoor, ObjectVis
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
+
 
 class YoshiLogic:
     player: int
@@ -11,40 +15,38 @@ class YoshiLogic:
     consumable_logic: bool
     luigi_pieces: int
 
-
-    def __init__(self, world: Optional["YoshisIslandWorld"]) -> None:
+    def __init__(self, world: "YoshisIslandWorld") -> None:
         self.player = world.player
         self.boss_order = world.boss_order
-        self.luigi_pieces = world.luigi_pieces
+        self.luigi_pieces = world.options.luigi_pieces_required.value
 
-        if world:
-            if world.options.stage_logic == 0:
-                self.game_logic = "Easy"
-            elif world.options.stage_logic == 1:
-                self.game_logic = "Normal"
-            else:
-                self.game_logic = "Hard"
+        if world.options.stage_logic == StageLogic.option_strict:
+            self.game_logic = "Easy"
+        elif world.options.stage_logic == StageLogic.option_loose:
+            self.game_logic = "Normal"
+        else:
+            self.game_logic = "Hard"
 
-            self.midring_start = world.options.shuffle_midrings == 0
-            self.consumable_logic = world.options.item_logic != 0
+        self.midring_start = not world.options.shuffle_midrings
+        self.consumable_logic = not world.options.item_logic
 
-            if world.options.hidden_object_visibility >= 2:
-                self.clouds_always_visible = True
-            else:
-                self.clouds_always_visible = False
+        if world.options.hidden_object_visibility >= ObjectVis.option_clouds_only:
+            self.clouds_always_visible = True
+        else:
+            self.clouds_always_visible = False
 
-            self.bowser_door = world.options.bowser_door_mode
-            if self.bowser_door not in {0, 1, 2, 5}:
-                self.bowser_door = 3
+        self.bowser_door = world.options.bowser_door_mode.value
+        if self.bowser_door == BowserDoor.option_door_4:
+            self.bowser_door = BowserDoor.option_door_3
 
     def has_midring(self, state: CollectionState) -> bool:
         return self.midring_start or state.has('Middle Ring', self.player)
 
-    def ReconstituteLuigi(self, state: CollectionState) -> bool:
+    def reconstitute_luigi(self, state: CollectionState) -> bool:
         return state.has('Piece of Luigi', self.player, self.luigi_pieces)
 
     def bandit_bonus(self, state: CollectionState) -> bool:
-        return (state.has('Bandit Consumables', self.player) or state.has('Bandit Watermelons', self.player))
+        return state.has('Bandit Consumables', self.player) or state.has('Bandit Watermelons', self.player)
 
     def item_bonus(self, state: CollectionState) -> bool:
         return state.has('Bonus Consumables', self.player)

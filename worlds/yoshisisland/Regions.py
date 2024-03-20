@@ -1,6 +1,7 @@
 from typing import List, Dict, TYPE_CHECKING
 from BaseClasses import Region, Location
 from .Locations import LocationData
+from .Options import MinigameChecks
 from .level_logic import YoshiLogic
 from .setup_bosses import BossReqs
 if TYPE_CHECKING:
@@ -108,7 +109,7 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
         regions.insert(28, create_region(world, player, locations_per_region, "2-Extra"))
         regions.insert(18, create_region(world, player, locations_per_region, "1-Extra"))
 
-    if world.options.minigame_checks >= 2:
+    if world.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
         regions.insert(74, create_region(world, player, locations_per_region, "6-Bonus"))
         regions.insert(63, create_region(world, player, locations_per_region, "5-Bonus"))
         regions.insert(52, create_region(world, player, locations_per_region, "4-Bonus"))
@@ -181,7 +182,7 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
             {'6-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 6'}, player)}
         )
 
-    if world.options.minigame_checks >= 2:
+    if world.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
         multiworld.get_region('World 1', player).add_exits(
             ['1-Bonus'],
             {'1-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 1'}, player)}

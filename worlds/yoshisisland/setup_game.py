@@ -1,26 +1,26 @@
 import struct
 from typing import TYPE_CHECKING
+
+from .Options import YoshiColors, BabySound, LevelShuffle
+
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
 
 
 def setup_gamevars(world: "YoshisIslandWorld") -> None:
-    world.playergoal = world.options.goal.value
-    if world.options.luigi_pieces_in_pool.value < world.options.luigi_pieces_required.value:
-        world.options.luigi_pieces_in_pool.value = world.random.randint(world.options.luigi_pieces_required.value, 100)
-    world.luigi_pieces = world.options.luigi_pieces_required.value
-
+    if world.options.luigi_pieces_in_pool < world.options.luigi_pieces_required:
+        world.options.luigi_pieces_in_pool = world.random.randint(world.options.luigi_pieces_required.value, 100)
     world.starting_lives = struct.pack("H", world.options.starting_lives)
 
     world.level_colors = []
     world.color_order = []
     for i in range(72):
         world.level_colors.append(world.random.randint(0, 7))
-    if world.options.yoshi_colors.value == 3:
+    if world.options.yoshi_colors == YoshiColors.option_singularity:
         singularity_color = world.options.yoshi_singularity_color.value
         for i in range(len(world.level_colors)):
             world.level_colors[i] = singularity_color
-    elif world.options.yoshi_colors.value == 1:
+    elif world.options.yoshi_colors == YoshiColors.option_random_order:
         world.leader_color = world.random.randint(0, 7)
         for i in range(7):
             world.color_order.append(world.random.randint(0, 7))
@@ -45,9 +45,9 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
                         0x8C, 0x8D, 0x8E, 0x8F, 0x90, 0x91, 0x92, 0x93, 0x94, 0x95, 0x96, 0x97,
                         0x98, 0x99, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2]
 
-    if world.options.baby_mario_sound == 2:
+    if world.options.baby_mario_sound == BabySound.option_random_sound_effect:
         world.baby_mario_sfx = world.random.choice(safe_baby_sounds)
-    elif world.options.baby_mario_sound == 1:
+    elif world.options.baby_mario_sound == BabySound.option_disabled:
         world.baby_mario_sfx = 0x42
     else:
         world.baby_mario_sfx = 0x44
@@ -61,7 +61,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
 
     world.boss_order = []
 
-    if world.options.boss_shuffle == 1:
+    if world.options.boss_shuffle:
         world.random.shuffle(boss_list)
     world.boss_order = boss_list
 
@@ -269,24 +269,24 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     diff_level = diff_index[world.options.stage_logic.value]
     boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
     world.world_start_lv = [0, 8, 16, 24, 32, 40]
-    if world.options.shuffle_midrings.value == 0:
+    if world.options.shuffle_midrings:
         easy_start_lv.extend([0x1A, 0x24, 0x34])
         norm_start_lv.extend([0x24, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
 
-    if world.options.level_shuffle.value != 1:
+    if world.options.level_shuffle != LevelShuffle.option_bosses_guranteed:
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
-        if world.options.shuffle_midrings.value == 0:
+        if world.options.shuffle_midrings:
             easy_start_lv.extend([0x1B])
             norm_start_lv.extend([0x1B, 0x2B, 0x37])
 
     starting_level = world.random.choice(diff_level)
 
     starting_level_entrance = world.world_start_lv[world.options.starting_world.value]
-    if world.options.level_shuffle.value != 0:
+    if world.options.level_shuffle:
         world.global_level_list.remove(starting_level)
         world.random.shuffle(world.global_level_list)
-        if world.options.level_shuffle.value == 1:
+        if world.options.level_shuffle == LevelShuffle.option_bosses_guranteed:
             for i in range(11):
                 world.global_level_list = [item for item in world.global_level_list
                                            if item not in boss_lv]
@@ -454,7 +454,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
         7: [0xD9, 0xEE, 0xEC, 0xDC, 0xD0],  # Bwue
     }
 
-    if world.options.yoshi_colors == 1:
+    if world.options.yoshi_colors == YoshiColors.option_random_order:
         world.bowser_text = bowser_text_table[world.leader_color]
     else:
         world.bowser_text = bowser_text_table[world.level_colors[67]]
