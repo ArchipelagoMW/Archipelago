@@ -626,12 +626,12 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
         collect_all_except(self.multiworld, railroad_item)
 
-        for fishing_rod_level in [2, 3]:
+        for fishing_rod_level in [3, 4]:
             self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
 
         self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
 
-        for fishing_rod_level in [2, 3]:
+        for fishing_rod_level in [3, 4]:
             self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
 
 
