@@ -8,6 +8,7 @@ from ..options import ToolProgression, BuildingProgression, ExcludeGingerIsland,
     FriendsanityHeartSize, BundleRandomization, SkillProgression
 from ..strings.entrance_names import Entrance
 from ..strings.region_names import Region
+from ..strings.tool_names import Tool, ToolMaterial
 
 
 class TestProgressiveToolsLogic(SVTestBase):
@@ -594,6 +595,38 @@ def swap_museum_and_bathhouse(multiworld, player):
     bathhouse_entrance = multiworld.get_entrance(Entrance.enter_bathhouse_entrance, player)
     museum_entrance.connect(bathhouse_region)
     bathhouse_entrance.connect(museum_region)
+
+
+class TestToolVanillaRequiresBlacksmith(SVTestBase):
+    options = {
+        options.EntranceRandomization: options.EntranceRandomization.option_buildings,
+        options.ToolProgression: options.ToolProgression.option_vanilla,
+    }
+
+    def test_cannot_make_get_any_tool_without_blacksmith_access(self):
+        railroad_item = "Railroad Boulder Removed"
+        swap_blacksmith_and_bathhouse(self.multiworld, self.player)
+        collect_all_except(self.multiworld, railroad_item)
+
+        for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
+            for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
+                self.assert_rule_false(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
+
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
+
+        for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
+            for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
+                self.assert_rule_true(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
+
+
+def swap_blacksmith_and_bathhouse(multiworld, player):
+    blacksmith_region = multiworld.get_region(Region.blacksmith, player)
+    bathhouse_entrance = multiworld.get_entrance(Entrance.enter_bathhouse_entrance, player)
+
+    blacksmith_entrance = blacksmith_region.entrances[0]
+    bathhouse_region = bathhouse_entrance.connected_region
+    blacksmith_entrance.connect(bathhouse_region)
+    bathhouse_entrance.connect(blacksmith_region)
 
 
 def collect_all_except(multiworld, item_to_not_collect: str):
