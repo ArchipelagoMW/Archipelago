@@ -237,7 +237,7 @@ def set_easy_extra_rules(world: "YoshisIslandWorld") -> None:
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Stars", player), lambda state: logic.has_midring(state) and state.has(("Large Spring Ball"), player))
     set_rule(world.multiworld.get_location("Castles - Masterpiece Set: Level Clear", player), lambda state: (state.has("Egg Capacity Upgrade", player, 2) or logic.combat_item(state)) and state.has(("Large Spring Ball"), player))
 
-        
+
 def set_normal_rules(world: "YoshisIslandWorld") -> None:
     logic = YoshiLogic(world)
     player = world.player
@@ -254,7 +254,7 @@ def set_normal_rules(world: "YoshisIslandWorld") -> None:
     set_rule(world.multiworld.get_location("Burt The Bashful's Fort: Flowers", player), lambda state: state.has_all({"Spring Ball", "Key"}, player) and (state.has("Egg Capacity Upgrade", player, 3) or logic.combat_item(state)))
     set_rule(world.multiworld.get_location("Burt The Bashful's Fort: Stars", player), lambda state: state.has("Spring Ball", player))
     set_rule(world.multiworld.get_location("Burt The Bashful's Fort: Level Clear", player), lambda state: logic._14CanFightBoss(state))
-    
+
 
     set_rule(world.multiworld.get_location("Shy-Guys On Stilts: Red Coins", player), lambda state: state.has_all({"Large Spring Ball", "Flashing Eggs", "Mole Tank Morph", "! Switch"}, player))
     set_rule(world.multiworld.get_location("Shy-Guys On Stilts: Flowers", player), lambda state: state.has("Large Spring Ball", player))

@@ -100,7 +100,7 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
         create_region(world, player, locations_per_region, "6-8"),
         create_region(world, player, locations_per_region, "Bowser's Room"),
     ]
-    
+
     if world.options.extras_enabled:
         regions.insert(68, create_region(world, player, locations_per_region, "6-Extra"))
         regions.insert(58, create_region(world, player, locations_per_region, "5-Extra"))
@@ -116,7 +116,7 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
         regions.insert(41, create_region(world, player, locations_per_region, "3-Bonus"))
         regions.insert(29, create_region(world, player, locations_per_region, "2-Bonus"))
         regions.insert(19, create_region(world, player, locations_per_region, "1-Bonus"))
-        
+
     multiworld.regions += regions
 
     connect_starting_region(world)
@@ -134,7 +134,7 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
               "World 6": lambda state: state.has("World 6 Gate", player)
          }
     )
-    
+
     for cur_world in range(1, 7):
         for cur_level in range(8):
             if cur_world != 6 or cur_level != 7:
@@ -234,7 +234,7 @@ def connect_starting_region(world: "YoshisIslandWorld") -> None:
     world_main = multiworld.get_region("Overworld", player)
 
     starting_region = multiworld.get_region(f"World {world.options.starting_world + 1}", player)
-    
+
     menu.connect(world_main, "Start Game")
     world_main.connect(starting_region, "Overworld")
 

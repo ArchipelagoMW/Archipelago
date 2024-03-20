@@ -351,6 +351,5 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         location_table += [
             LocationData("Bowser's Room", "King Bowser's Castle: Level Clear", None, 0x43, lambda state: logic._68Clear(state)),
         ]
-        
+
     return location_table
-    

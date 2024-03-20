@@ -120,7 +120,7 @@ class LuigiPiecesReq(Range):
 
 
 class LuigiPiecesAmt(Range):
-    """This will set how many Luigi Pieces are in the item pool. 
+    """This will set how many Luigi Pieces are in the item pool.
        If the number in the pool is lower than the number required,
        the amount in the pool will be randomized, with the minimum being the amount required."""
     display_name = "Amount of Luigi Pieces"
@@ -217,7 +217,7 @@ class BabySound(Choice):
 
 
 class TrapsEnabled(Toggle):
-    """Will place traps into the item pool. 
+    """Will place traps into the item pool.
        Traps have a variety of negative effects, and will only replace filler items."""
     display_name = "Traps Enabled"
 
