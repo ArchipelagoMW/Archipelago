@@ -342,6 +342,7 @@ class StardewLogic(ReceivedLogicMixin, HasLogicMixin, RegionLogicMixin, BuffLogi
             Material.coal: self.mine.can_mine_in_the_mines_floor_41_80() | self.action.can_pan(),
             Material.fiber: True_(),
             Material.hardwood: self.tool.has_tool(Tool.axe, ToolMaterial.copper) & (self.region.can_reach(Region.secret_woods) | self.region.can_reach(Region.island_west)),
+            Material.moss: True_(),
             Material.sap: self.ability.can_chop_trees(),
             Material.stone: self.tool.has_tool(Tool.pickaxe),
             Material.wood: self.tool.has_tool(Tool.axe),
