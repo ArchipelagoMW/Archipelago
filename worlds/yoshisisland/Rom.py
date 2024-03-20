@@ -9,7 +9,7 @@ from .Options import YoshiColors, BowserDoor, PlayerGoal
 
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
-USHASH = 'cb472164c5a71ccd3739963390ec6a50'
+USHASH = "cb472164c5a71ccd3739963390ec6a50"
 ROM_PLAYER_LIMIT = 65535
 
 item_values = {
@@ -404,7 +404,7 @@ class LocalRom(object):
         self.hash = hash
         self.orig_buffer = None
 
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = Utils.read_snes_rom(stream)
 
     def read_bit(self, address: int, bit_number: int) -> bool:
@@ -424,11 +424,11 @@ class LocalRom(object):
         self.buffer[startaddress:startaddress + len(values)] = values
 
     def write_to_file(self, file: str) -> None:
-        with open(file, 'wb') as outfile:
+        with open(file, "wb") as outfile:
             outfile.write(self.buffer)
 
     def read_from_file(self, file: str) -> None:
-        with open(file, 'rb') as stream:
+        with open(file, "rb") as stream:
             self.buffer = bytearray(stream.read())
 
 def handle_items(rom: LocalRom) -> None:
@@ -1193,7 +1193,7 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
         rom.write_bytes(0x06FC86, bytearray([0xFF]))  # Boss clear goal = 255, renders bowser inaccessible
 
     from Main import __version__
-    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', 'utf8')[:21]
+    rom.name = bytearray(f'YOSHIAP{__version__.replace(".", "")[0:3]}_{player}_{world.multiworld.seed:11}\0', "utf8")[:21]
     rom.name.extend([0] * (21 - len(rom.name)))
     rom.write_bytes(0x007FC0, rom.name)
 
@@ -1217,8 +1217,8 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if USHASH != basemd5.hexdigest():
-            raise Exception('Supplied Base Rom does not match known MD5 for US(1.0) release. '
-                            'Get the correct game and version, then dump it')
+            raise Exception("Supplied Base Rom does not match known MD5 for US(1.0) release. "
+                            "Get the correct game and version, then dump it")
         get_base_rom_bytes.base_rom_bytes = base_rom_bytes
     return base_rom_bytes
 

@@ -370,7 +370,7 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
             world_number += 1
             stage_number = 1
         for _ in range(3):
-            setattr(world, f'Stage{world_number}{stage_number}StageGFX',
+            setattr(world, f"Stage{world_number}{stage_number}StageGFX",
                     level_panel_dict[world.global_level_list[i]])
 
     world.level_gfx_table = []

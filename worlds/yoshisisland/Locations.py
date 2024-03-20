@@ -21,20 +21,20 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         logic = YoshiLogic(world)
 
     location_table: List[LocationData] = [
-        LocationData('1-1', 'Make Eggs, Throw Eggs: Red Coins', 0x305020, 0x00),
-        LocationData('1-1', 'Make Eggs, Throw Eggs: Flowers', 0x305021, 0x00),
-        LocationData('1-1', 'Make Eggs, Throw Eggs: Stars', 0x305022, 0x00),
-        LocationData('1-1', 'Make Eggs, Throw Eggs: Level Clear', 0x305023, 0x00),
+        LocationData("1-1", "Make Eggs, Throw Eggs: Red Coins", 0x305020, 0x00),
+        LocationData("1-1", "Make Eggs, Throw Eggs: Flowers", 0x305021, 0x00),
+        LocationData("1-1", "Make Eggs, Throw Eggs: Stars", 0x305022, 0x00),
+        LocationData("1-1", "Make Eggs, Throw Eggs: Level Clear", 0x305023, 0x00),
 
-        LocationData('1-2', 'Watch Out Below!: Red Coins', 0x305024, 0x01),
-        LocationData('1-2', 'Watch Out Below!: Flowers', 0x305025, 0x01),
-        LocationData('1-2', 'Watch Out Below!: Stars', 0x305026, 0x01),
-        LocationData('1-2', 'Watch Out Below!: Level Clear', 0x305027, 0x01),
+        LocationData("1-2", "Watch Out Below!: Red Coins", 0x305024, 0x01),
+        LocationData("1-2", "Watch Out Below!: Flowers", 0x305025, 0x01),
+        LocationData("1-2", "Watch Out Below!: Stars", 0x305026, 0x01),
+        LocationData("1-2", "Watch Out Below!: Level Clear", 0x305027, 0x01),
 
-        LocationData('1-3', 'The Cave Of Chomp Rock: Red Coins', 0x305028, 0x02),
-        LocationData('1-3', 'The Cave Of Chomp Rock: Flowers', 0x305029, 0x02),
-        LocationData('1-3', 'The Cave Of Chomp Rock: Stars', 0x30502A, 0x02),
-        LocationData('1-3', 'The Cave Of Chomp Rock: Level Clear', 0x30502B, 0x02),
+        LocationData("1-3", "The Cave Of Chomp Rock: Red Coins", 0x305028, 0x02),
+        LocationData("1-3", "The Cave Of Chomp Rock: Flowers", 0x305029, 0x02),
+        LocationData("1-3", "The Cave Of Chomp Rock: Stars", 0x30502A, 0x02),
+        LocationData("1-3", "The Cave Of Chomp Rock: Level Clear", 0x30502B, 0x02),
 
         LocationData("1-4", "Burt The Bashful's Fort: Red Coins", 0x30502C, 0x03),
         LocationData("1-4", "Burt The Bashful's Fort: Flowers", 0x30502D, 0x03),
@@ -56,7 +56,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("1-7", "Touch Fuzzy Get Dizzy: Flowers", 0x30503A, 0x06),
         LocationData("1-7", "Touch Fuzzy Get Dizzy: Stars", 0x30503B, 0x06),
         LocationData("1-7", "Touch Fuzzy Get Dizzy: Level Clear", 0x30503C, 0x06),
-        LocationData("1-7", 'Touch Fuzzy Get Dizzy: Gather Coins', None, 0x06, lambda state: logic._17Game(state)),
+        LocationData("1-7", "Touch Fuzzy Get Dizzy: Gather Coins", None, 0x06, lambda state: logic._17Game(state)),
 
         LocationData("1-8", "Salvo The Slime's Castle: Red Coins", 0x30503D, 0x07),
         LocationData("1-8", "Salvo The Slime's Castle: Flowers", 0x30503E, 0x07),
@@ -64,7 +64,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("1-8", "Salvo The Slime's Castle: Level Clear", 0x305040, 0x07, lambda state: logic._18CanFightBoss(state)),
         LocationData("Salvo The Slime's Boss Room", "Salvo The Slime's Boss Room", None, 0x07, lambda state: logic._18Boss(state)),
 
-        LocationData("1-Bonus", 'Flip Cards', None, 0x09),
+        LocationData("1-Bonus", "Flip Cards", None, 0x09),
         ############################################################################################
         LocationData("2-1", "Visit Koopa And Para-Koopa: Red Coins", 0x305041, 0x0C),
         LocationData("2-1", "Visit Koopa And Para-Koopa: Flowers", 0x305042, 0x0C),
@@ -96,7 +96,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("2-6", "The Cave Of The Mystery Maze: Flowers", 0x305056, 0x11),
         LocationData("2-6", "The Cave Of The Mystery Maze: Stars", 0x305057, 0x11),
         LocationData("2-6", "The Cave Of The Mystery Maze: Level Clear", 0x305058, 0x11),
-        LocationData("2-6", 'The Cave Of the Mystery Maze: Seed Spitting Contest', None, 0x11, lambda state: logic._26Game(state)),
+        LocationData("2-6", "The Cave Of the Mystery Maze: Seed Spitting Contest", None, 0x11, lambda state: logic._26Game(state)),
 
         LocationData("2-7", "Lakitu's Wall: Red Coins", 0x305059, 0x12),
         LocationData("2-7", "Lakitu's Wall: Flowers", 0x30505A, 0x12),
@@ -152,7 +152,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("3-8", "Naval Piranha's Castle: Level Clear", 0x305080, 0x1F, lambda state: logic._38CanFightBoss(state)),
         LocationData("Naval Piranha's Boss Room", "Naval Piranha's Boss Room", None, 0x1F, lambda state: logic._38Boss(state)),
 
-        LocationData("3-Bonus", 'Drawing Lots', None, 0x21),
+        LocationData("3-Bonus", "Drawing Lots", None, 0x21),
         ##############################################################################################
         LocationData("4-1", "GO! GO! MARIO!!: Red Coins", 0x305081, 0x24),
         LocationData("4-1", "GO! GO! MARIO!!: Flowers", 0x305082, 0x24),
@@ -189,7 +189,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("4-7", "Ride Like The Wind: Flowers", 0x30509A, 0x2A),
         LocationData("4-7", "Ride Like The Wind: Stars", 0x30509B, 0x2A),
         LocationData("4-7", "Ride Like The Wind: Level Clear", 0x30509C, 0x2A),
-        LocationData("4-7", 'Ride Like The Wind: Gather Coins', None, 0x2A, lambda state: logic._47Game(state)),
+        LocationData("4-7", "Ride Like The Wind: Gather Coins", None, 0x2A, lambda state: logic._47Game(state)),
 
         LocationData("4-8", "Hookbill The Koopa's Castle: Red Coins", 0x30509D, 0x2B),
         LocationData("4-8", "Hookbill The Koopa's Castle: Flowers", 0x30509E, 0x2B),
@@ -197,7 +197,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         LocationData("4-8", "Hookbill The Koopa's Castle: Level Clear", 0x3050A0, 0x2B, lambda state: logic._48CanFightBoss(state)),
         LocationData("Hookbill The Koopa's Boss Room", "Hookbill The Koopa's Boss Room", None, 0x2B, lambda state: logic._48Boss(state)),
 
-        LocationData("4-Bonus", 'Match Cards', None, 0x2D),
+        LocationData("4-Bonus", "Match Cards", None, 0x2D),
         ######################################################################################################
         LocationData("5-1", "BLIZZARD!!!: Red Coins", 0x3050A1, 0x30),
         LocationData("5-1", "BLIZZARD!!!: Flowers", 0x3050A2, 0x30),
@@ -345,7 +345,7 @@ def get_locations(world: Optional["YoshisIslandWorld"]) -> List[LocationData]:
         ]
     if not world or world.options.goal == PlayerGoal.option_luigi_hunt:
         location_table += [
-            LocationData("Overworld", 'Reconstituted Luigi', None, 0x00, lambda state: logic.reconstitute_luigi(state)),
+            LocationData("Overworld", "Reconstituted Luigi", None, 0x00, lambda state: logic.reconstitute_luigi(state)),
         ]
     if not world or world.options.goal == PlayerGoal.option_bowser:
         location_table += [

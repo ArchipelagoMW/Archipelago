@@ -25,23 +25,23 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
     locations_per_region = get_locations_per_region(locations)
 
     regions = [
-        create_region(world, player, locations_per_region, 'Menu'),
-        create_region(world, player, locations_per_region, 'Overworld'),
-        create_region(world, player, locations_per_region, 'World 1'),
-        create_region(world, player, locations_per_region, 'World 2'),
-        create_region(world, player, locations_per_region, 'World 3'),
-        create_region(world, player, locations_per_region, 'World 4'),
-        create_region(world, player, locations_per_region, 'World 5'),
-        create_region(world, player, locations_per_region, 'World 6'),
+        create_region(world, player, locations_per_region, "Menu"),
+        create_region(world, player, locations_per_region, "Overworld"),
+        create_region(world, player, locations_per_region, "World 1"),
+        create_region(world, player, locations_per_region, "World 2"),
+        create_region(world, player, locations_per_region, "World 3"),
+        create_region(world, player, locations_per_region, "World 4"),
+        create_region(world, player, locations_per_region, "World 5"),
+        create_region(world, player, locations_per_region, "World 6"),
 
-        create_region(world, player, locations_per_region, '1-1'),
-        create_region(world, player, locations_per_region, '1-2'),
-        create_region(world, player, locations_per_region, '1-3'),
+        create_region(world, player, locations_per_region, "1-1"),
+        create_region(world, player, locations_per_region, "1-2"),
+        create_region(world, player, locations_per_region, "1-3"),
         create_region(world, player, locations_per_region, "1-4"),
         create_region(world, player, locations_per_region, "Burt The Bashful's Boss Room"),
-        create_region(world, player, locations_per_region, '1-5'),
-        create_region(world, player, locations_per_region, '1-6'),
-        create_region(world, player, locations_per_region, '1-7'),
+        create_region(world, player, locations_per_region, "1-5"),
+        create_region(world, player, locations_per_region, "1-6"),
+        create_region(world, player, locations_per_region, "1-7"),
         create_region(world, player, locations_per_region, "1-8"),
         create_region(world, player, locations_per_region, "Salvo The Slime's Boss Room"),
 
@@ -123,15 +123,15 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
 
     bosses = BossReqs(world)
 
-    multiworld.get_region('Overworld', player).add_exits(
-    ['World 1', 'World 2', 'World 3', 'World 4', 'World 5', 'World 6'],
+    multiworld.get_region("Overworld", player).add_exits(
+    ["World 1", "World 2", "World 3", "World 4", "World 5", "World 6"],
          {
-              'World 1': lambda state: state.has('World 1 Gate', player),
-              'World 2': lambda state: state.has('World 2 Gate', player),
-              'World 3': lambda state: state.has('World 3 Gate', player),
-              'World 4': lambda state: state.has('World 4 Gate', player),
-              'World 5': lambda state: state.has('World 5 Gate', player),
-              'World 6': lambda state: state.has('World 6 Gate', player)
+              "World 1": lambda state: state.has("World 1 Gate", player),
+              "World 2": lambda state: state.has("World 2 Gate", player),
+              "World 3": lambda state: state.has("World 3 Gate", player),
+              "World 4": lambda state: state.has("World 4 Gate", player),
+              "World 5": lambda state: state.has("World 5 Gate", player),
+              "World 6": lambda state: state.has("World 6 Gate", player)
          }
     )
     
@@ -142,70 +142,70 @@ def init_areas(world: "YoshisIslandWorld", locations: List[LocationData]) -> Non
                     [world.level_location_list[(cur_world - 1) * 8 + cur_level]]
                 )
 
-    multiworld.get_region('1-4', player).add_exits([world.boss_order[0]],{world.boss_order[0]: lambda state: logic._14Clear(state)})
-    multiworld.get_region('1-8', player).add_exits([world.boss_order[1]],{world.boss_order[1]: lambda state: logic._18Clear(state)})
-    multiworld.get_region('2-4', player).add_exits([world.boss_order[2]],{world.boss_order[2]: lambda state: logic._24Clear(state)})
-    multiworld.get_region('2-8', player).add_exits([world.boss_order[3]],{world.boss_order[3]: lambda state: logic._28Clear(state)})
-    multiworld.get_region('3-4', player).add_exits([world.boss_order[4]],{world.boss_order[4]: lambda state: logic._34Clear(state)})
-    multiworld.get_region('3-8', player).add_exits([world.boss_order[5]],{world.boss_order[5]: lambda state: logic._38Clear(state)})
-    multiworld.get_region('4-4', player).add_exits([world.boss_order[6]],{world.boss_order[6]: lambda state: logic._44Clear(state)})
-    multiworld.get_region('4-8', player).add_exits([world.boss_order[7]],{world.boss_order[7]: lambda state: logic._48Clear(state)})
-    multiworld.get_region('5-4', player).add_exits([world.boss_order[8]],{world.boss_order[8]: lambda state: logic._54Clear(state)})
-    multiworld.get_region('5-8', player).add_exits([world.boss_order[9]],{world.boss_order[9]: lambda state: logic._58Clear(state)})
-    multiworld.get_region('World 6', player).add_exits(["6-8"],{"6-8": lambda state: bosses.castle_access(state)})
-    multiworld.get_region('6-4', player).add_exits([world.boss_order[10]],{world.boss_order[10]: lambda state: logic._64Clear(state)})
-    multiworld.get_region('6-8', player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
+    multiworld.get_region("1-4", player).add_exits([world.boss_order[0]],{world.boss_order[0]: lambda state: logic._14Clear(state)})
+    multiworld.get_region("1-8", player).add_exits([world.boss_order[1]],{world.boss_order[1]: lambda state: logic._18Clear(state)})
+    multiworld.get_region("2-4", player).add_exits([world.boss_order[2]],{world.boss_order[2]: lambda state: logic._24Clear(state)})
+    multiworld.get_region("2-8", player).add_exits([world.boss_order[3]],{world.boss_order[3]: lambda state: logic._28Clear(state)})
+    multiworld.get_region("3-4", player).add_exits([world.boss_order[4]],{world.boss_order[4]: lambda state: logic._34Clear(state)})
+    multiworld.get_region("3-8", player).add_exits([world.boss_order[5]],{world.boss_order[5]: lambda state: logic._38Clear(state)})
+    multiworld.get_region("4-4", player).add_exits([world.boss_order[6]],{world.boss_order[6]: lambda state: logic._44Clear(state)})
+    multiworld.get_region("4-8", player).add_exits([world.boss_order[7]],{world.boss_order[7]: lambda state: logic._48Clear(state)})
+    multiworld.get_region("5-4", player).add_exits([world.boss_order[8]],{world.boss_order[8]: lambda state: logic._54Clear(state)})
+    multiworld.get_region("5-8", player).add_exits([world.boss_order[9]],{world.boss_order[9]: lambda state: logic._58Clear(state)})
+    multiworld.get_region("World 6", player).add_exits(["6-8"],{"6-8": lambda state: bosses.castle_access(state)})
+    multiworld.get_region("6-4", player).add_exits([world.boss_order[10]],{world.boss_order[10]: lambda state: logic._64Clear(state)})
+    multiworld.get_region("6-8", player).add_exits(["Bowser's Room"],{"Bowser's Room": lambda state: bosses.castle_clear(state)})
 
     if world.options.extras_enabled:
-        multiworld.get_region('World 1', player).add_exits(
-            ['1-Extra'],
-            {'1-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 1'}, player)}
+        multiworld.get_region("World 1", player).add_exits(
+            ["1-Extra"],
+            {"1-Extra": lambda state: state.has_any({"Extra Panels", "Extra 1"}, player)}
         )
-        multiworld.get_region('World 2', player).add_exits(
-            ['2-Extra'],
-            {'2-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 2'}, player)}
+        multiworld.get_region("World 2", player).add_exits(
+            ["2-Extra"],
+            {"2-Extra": lambda state: state.has_any({"Extra Panels", "Extra 2"}, player)}
         )
         multiworld.get_region(
-            'World 3', player).add_exits(['3-Extra'],
-            {'3-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 3'}, player)}
+            "World 3", player).add_exits(["3-Extra"],
+            {"3-Extra": lambda state: state.has_any({"Extra Panels", "Extra 3"}, player)}
         )
-        multiworld.get_region('World 4', player).add_exits(
-            ['4-Extra'],
-            {'4-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 4'}, player)}
+        multiworld.get_region("World 4", player).add_exits(
+            ["4-Extra"],
+            {"4-Extra": lambda state: state.has_any({"Extra Panels", "Extra 4"}, player)}
         )
-        multiworld.get_region('World 5', player).add_exits(
-            ['5-Extra'],
-            {'5-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 5'}, player)}
+        multiworld.get_region("World 5", player).add_exits(
+            ["5-Extra"],
+            {"5-Extra": lambda state: state.has_any({"Extra Panels", "Extra 5"}, player)}
         )
-        multiworld.get_region('World 6', player).add_exits(
-            ['6-Extra'],
-            {'6-Extra': lambda state: state.has_any({'Extra Panels', 'Extra 6'}, player)}
+        multiworld.get_region("World 6", player).add_exits(
+            ["6-Extra"],
+            {"6-Extra": lambda state: state.has_any({"Extra Panels", "Extra 6"}, player)}
         )
 
     if world.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
-        multiworld.get_region('World 1', player).add_exits(
-            ['1-Bonus'],
-            {'1-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 1'}, player)}
+        multiworld.get_region("World 1", player).add_exits(
+            ["1-Bonus"],
+            {"1-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 1"}, player)}
         )
-        multiworld.get_region('World 2', player).add_exits(
-            ['2-Bonus'],
-            {'2-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 2'}, player)}
+        multiworld.get_region("World 2", player).add_exits(
+            ["2-Bonus"],
+            {"2-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 2"}, player)}
         )
-        multiworld.get_region('World 3', player).add_exits(
-            ['3-Bonus'],
-            {'3-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 3'}, player)}
+        multiworld.get_region("World 3", player).add_exits(
+            ["3-Bonus"],
+            {"3-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 3"}, player)}
         )
-        multiworld.get_region('World 4', player).add_exits(
-            ['4-Bonus'],
-            {'4-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 4'}, player)}
+        multiworld.get_region("World 4", player).add_exits(
+            ["4-Bonus"],
+            {"4-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 4"}, player)}
         )
-        multiworld.get_region('World 5', player).add_exits(
-            ['5-Bonus'],
-            {'5-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 5'}, player)}
+        multiworld.get_region("World 5", player).add_exits(
+            ["5-Bonus"],
+            {"5-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 5"}, player)}
         )
-        multiworld.get_region('World 6', player).add_exits(
-            ['6-Bonus'],
-            {'6-Bonus': lambda state: state.has_any({'Bonus Panels', 'Bonus 6'}, player)}
+        multiworld.get_region("World 6", player).add_exits(
+            ["6-Bonus"],
+            {"6-Bonus": lambda state: state.has_any({"Bonus Panels", "Bonus 6"}, player)}
         )
 
 
@@ -230,10 +230,10 @@ def create_region(world: "YoshisIslandWorld", player: int, locations_per_region:
 def connect_starting_region(world: "YoshisIslandWorld") -> None:
     multiworld = world.multiworld
     player = world.player
-    menu = multiworld.get_region('Menu', player)
-    world_main = multiworld.get_region('Overworld', player)
+    menu = multiworld.get_region("Menu", player)
+    world_main = multiworld.get_region("Overworld", player)
 
-    starting_region = multiworld.get_region(f'World {world.options.starting_world + 1}', player)
+    starting_region = multiworld.get_region(f"World {world.options.starting_world + 1}", player)
     
     menu.connect(world_main, "Start Game")
     world_main.connect(starting_region, "Overworld")

@@ -13,7 +13,7 @@ class BossReqs:
         self.boss_unlock = world.options.castle_clear_condition.value
 
     def castle_access(self, state: CollectionState) -> bool:
-        return state.has('Boss Clear', self.player, self.castle_unlock)
+        return state.has("Boss Clear", self.player, self.castle_unlock)
 
     def castle_clear(self, state: CollectionState) -> bool:
-        return state.has('Boss Clear', self.player, self.boss_unlock)
+        return state.has("Boss Clear", self.player, self.boss_unlock)

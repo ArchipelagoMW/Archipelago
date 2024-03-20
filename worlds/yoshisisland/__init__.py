@@ -188,7 +188,7 @@ class YoshisIslandWorld(World):
         }
 
         rules_per_difficulty[self.options.stage_logic.value](self)
-        self.multiworld.completion_condition[self.player] = lambda state: state.has('Saved Baby Luigi', self.player)
+        self.multiworld.completion_condition[self.player] = lambda state: state.has("Saved Baby Luigi", self.player)
         self.get_location("Burt The Bashful's Boss Room").place_locked_item(self.create_item("Boss Clear"))
         self.get_location("Salvo The Slime's Boss Room").place_locked_item(self.create_item("Boss Clear"))
         self.get_location("Bigger Boo's Boss Room", ).place_locked_item(self.create_item("Boss Clear"))
@@ -229,39 +229,39 @@ class YoshisIslandWorld(World):
         excluded_items.add(starting_gate[self.options.starting_world])
 
         if not self.options.shuffle_midrings:
-            excluded_items.add('Middle Ring')
+            excluded_items.add("Middle Ring")
 
         if not self.options.add_secretlens:
-            excluded_items.add('Secret Lens')
+            excluded_items.add("Secret Lens")
 
         if not self.options.extras_enabled:
-            excluded_items.add('Extra Panels')
-            excluded_items.add('Extra 1')
-            excluded_items.add('Extra 2')
-            excluded_items.add('Extra 3')
-            excluded_items.add('Extra 4')
-            excluded_items.add('Extra 5')
-            excluded_items.add('Extra 6')
+            excluded_items.add("Extra Panels")
+            excluded_items.add("Extra 1")
+            excluded_items.add("Extra 2")
+            excluded_items.add("Extra 3")
+            excluded_items.add("Extra 4")
+            excluded_items.add("Extra 5")
+            excluded_items.add("Extra 6")
 
         if self.options.split_extras:
-            excluded_items.add('Extra Panels')
+            excluded_items.add("Extra Panels")
         else:
-            excluded_items.add('Extra 1')
-            excluded_items.add('Extra 2')
-            excluded_items.add('Extra 3')
-            excluded_items.add('Extra 4')
-            excluded_items.add('Extra 5')
-            excluded_items.add('Extra 6')
+            excluded_items.add("Extra 1")
+            excluded_items.add("Extra 2")
+            excluded_items.add("Extra 3")
+            excluded_items.add("Extra 4")
+            excluded_items.add("Extra 5")
+            excluded_items.add("Extra 6")
 
         if self.options.split_bonus:
-            excluded_items.add('Bonus Panels')
+            excluded_items.add("Bonus Panels")
         else:
-            excluded_items.add('Bonus 1')
-            excluded_items.add('Bonus 2')
-            excluded_items.add('Bonus 3')
-            excluded_items.add('Bonus 4')
-            excluded_items.add('Bonus 5')
-            excluded_items.add('Bonus 6')
+            excluded_items.add("Bonus 1")
+            excluded_items.add("Bonus 2")
+            excluded_items.add("Bonus 3")
+            excluded_items.add("Bonus 4")
+            excluded_items.add("Bonus 5")
+            excluded_items.add("Bonus 6")
 
         return excluded_items
 
@@ -272,14 +272,14 @@ class YoshisIslandWorld(World):
         if not item.advancement:
             return item
 
-        if name == 'Car Morph' and not self.options.stage_logic:
+        if name == "Car Morph" and not self.options.stage_logic:
             item.classification = ItemClassification.useful
 
         secret_lens_visibility_check = (
                 self.options.hidden_object_visibility >= ObjectVis.option_clouds_only
                 or self.options.stage_logic != StageLogic.option_strict
         )
-        if name == 'Secret Lens' and secret_lens_visibility_check:
+        if name == "Secret Lens" and secret_lens_visibility_check:
             item.classification = ItemClassification.useful
 
         is_bonus_location = name in {"Bonus 1", "Bonus 2", "Bonus 3", "Bonus 4", "Bonus 5", "Bonus 6", "Bonus Panels"}
@@ -289,10 +289,10 @@ class YoshisIslandWorld(World):
         if is_bonus_location and bonus_games_disabled:
             item.classification = ItemClassification.useful
 
-        if name in {"Bonus 1", "Bonus 3", "Bonus 4", 'Bonus Panels'} and self.options.item_logic:
+        if name in {"Bonus 1", "Bonus 3", "Bonus 4", "Bonus Panels"} and self.options.item_logic:
             item.classification = ItemClassification.progression
 
-        if name == 'Piece of Luigi' and self.options.goal == PlayerGoal.option_luigi_hunt:
+        if name == "Piece of Luigi" and self.options.goal == PlayerGoal.option_luigi_hunt:
             if self.luigi_count >= self.options.luigi_pieces_required:
                 item.classification = ItemClassification.useful
             else:
