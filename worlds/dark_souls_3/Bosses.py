@@ -238,7 +238,13 @@ all_bosses = [
         "RC: Soul of Slave Knight Gael",
         "RC: Blood of the Dark Soul - end boss drop",
     }),
-    DS3BossInfo("Lords of Cinder", 4100800),
+    DS3BossInfo("Lords of Cinder", 4100800, locations = {
+        "KFF: Soul of the Lords",
+        "FS: Billed Mask - Yuria after killing KFF boss",
+        "FS: Black Dress - Yuria after killing KFF boss",
+        "FS: Black Gauntlets - Yuria after killing KFF boss",
+        "FS: Black Leggings - Yuria after killing KFF boss"
+    }),
 ]
 
 default_yhorm_location = DS3BossInfo("Yhorm the Giant", 3900800, locations = {
