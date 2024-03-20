@@ -695,6 +695,8 @@
           door: Hollow Hallway
         tag: midwhite
       SWAP:
+        # In vanilla doors, solving this panel will open the way to Hub Room. This does not impact logic at all because
+        # Hub Room is always sphere 1 in vanilla doors.
         id: Shuffle Room/Panel_swap_wasp
         colors: yellow
         tag: midyellow
