@@ -461,7 +461,12 @@
         tag: midwhite
     doors:
       Crossroads Entrance:
-        id: Shuffle Room Area Doors/Door_chaos
+        id:
+          - Shuffle Room Area Doors/Door_chaos
+          - Shuffle Room Area Doors/Door_swap
+          - Shuffle Room Area Doors/Door_swap2
+          - Shuffle Room Area Doors/Door_swap3
+          - Shuffle Room Area Doors/Door_swap4
         panels:
           - ORDER
       Tenacious Entrance:
@@ -1287,7 +1292,7 @@
         id: Antonym Room/Panel_star_rats
         colors: black
         tag: midblack
-      TAME:
+      TUBE:
         id: Antonym Room/Panel_tame_mate
         colors: black
         tag: topblack
@@ -1952,6 +1957,7 @@
         door: Shortcut to Tower
       Rhyme Room (Smiley):
         door: Rhyme Room Entrance
+      Art Gallery: True # mark this as a warp in the sunwarps branch
     panels:
       RED:
         id: Color Arrow Room/Panel_red_afar
@@ -4952,7 +4958,7 @@
         colors:
           - red
           - blue
-        tag: mid red blue
+        tag: chain mid red blue
         required_panel:
           - room: Knight Night (Right Lower Segment)
             panel: ADJUST
