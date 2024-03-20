@@ -30,10 +30,7 @@ class YoshiLogic:
         self.midring_start = not world.options.shuffle_midrings
         self.consumable_logic = not world.options.item_logic
 
-        if world.options.hidden_object_visibility >= ObjectVis.option_clouds_only:
-            self.clouds_always_visible = True
-        else:
-            self.clouds_always_visible = False
+        self.clouds_always_visible =  world.options.hidden_object_visibility >= ObjectVis.option_clouds_only
 
         self.bowser_door = world.options.bowser_door_mode.value
         if self.bowser_door == BowserDoor.option_door_4:
@@ -52,7 +49,7 @@ class YoshiLogic:
         return state.has("Bonus Consumables", self.player)
 
     def combat_item(self, state: CollectionState) -> bool:
-        if self.consumable_logic:
+        if not self.consumable_logic:
             return False
         else:
             if self.game_logic == "Easy":
@@ -61,7 +58,7 @@ class YoshiLogic:
                 return self.bandit_bonus(state) or self.item_bonus(state)
 
     def melon_item(self, state: CollectionState) -> bool:
-        if self.consumable_logic:
+        if not self.consumable_logic:
             return False
         else:
             if self.game_logic == "Easy":
@@ -79,7 +76,7 @@ class YoshiLogic:
         if self.game_logic != "Easy":
             return True
         else:
-            return (self.default_vis(state) or state.has("Secret Lens", self.player) or self.combat_item(state))
+            return self.default_vis(state) or state.has("Secret Lens", self.player) or self.combat_item(state)
 
     def bowserdoor_1(self, state: CollectionState) -> bool:
         if self.game_logic == "Easy":

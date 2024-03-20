@@ -269,14 +269,14 @@ def setup_gamevars(world: "YoshisIslandWorld") -> None:
     diff_level = diff_index[world.options.stage_logic.value]
     boss_lv = [0x03, 0x07, 0x0F, 0x13, 0x1B, 0x1F, 0x27, 0x2B, 0x33, 0x37, 0x3F]
     world.world_start_lv = [0, 8, 16, 24, 32, 40]
-    if world.options.shuffle_midrings:
+    if not world.options.shuffle_midrings:
         easy_start_lv.extend([0x1A, 0x24, 0x34])
         norm_start_lv.extend([0x24, 0x3C])
         hard_start_lv.extend([0x1D, 0x3C])
 
     if world.options.level_shuffle != LevelShuffle.option_bosses_guranteed:
         hard_start_lv.extend([0x07, 0x1B, 0x1F, 0x2B, 0x33, 0x37])
-        if world.options.shuffle_midrings:
+        if not world.options.shuffle_midrings:
             easy_start_lv.extend([0x1B])
             norm_start_lv.extend([0x1B, 0x2B, 0x37])
 

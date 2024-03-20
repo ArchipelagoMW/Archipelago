@@ -5,7 +5,7 @@ from worlds.Files import APDeltaPatch
 from settings import get_settings
 from typing import TYPE_CHECKING
 
-from .Options import YoshiColors, BowserDoor, PlayerGoal
+from .Options import YoshiColors, BowserDoor, PlayerGoal, MinigameChecks
 
 if TYPE_CHECKING:
     from . import YoshisIslandWorld
@@ -1166,10 +1166,10 @@ def patch_rom(world: "YoshisIslandWorld", rom: LocalRom, player: int) -> None:
     elif world.options.yoshi_colors in {YoshiColors.option_random_color, YoshiColors.option_singularity}:
         rom.write_bytes(0x010000, bytearray(world.level_colors))
 
-    if world.options.minigame_checks in {YoshiColors.option_random_color, YoshiColors.option_singularity}:
+    if world.options.minigame_checks in {MinigameChecks.option_bonus_games, MinigameChecks.option_both}:
         bonus_checks(rom)
 
-    if world.options.minigame_checks in {YoshiColors.option_random_order, YoshiColors.option_singularity}:
+    if world.options.minigame_checks in {MinigameChecks.option_bandit_games, MinigameChecks.option_both}:
         bandit_checks(rom)
 
     rom.write_bytes(0x00BF2C, bytearray(world.world_bonus))
