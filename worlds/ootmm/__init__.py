@@ -3,10 +3,11 @@ from typing import List
 from BaseClasses import Region, Tutorial
 from worlds.AutoWorld import WebWorld, World
 from .items import OoTMMItem, item_data_table, item_table
-from .locations import OoTMMLocation, location_data_table, location_table, locked_locations
+from .locations import OoTMMLocation, OoTMMLocationData, location_data_table, location_table, locked_locations
 from .options import ootmm_options
 from .Regions import region_data_table
 from .Rules import get_button_rule
+import json
 
 
 class OoTMMWebWorld(WebWorld):
@@ -82,11 +83,18 @@ class OoTMMWorld(World):
         # Set priority location for the Big Red Button!
         # self.multiworld.priority_locations[self.player].value.add("The Big Red Button")
     
-    def generate_output(self, output_directory: str) -> None:
-        multiworld = self.multiworld
-        player = self.player
+    def generate_output(self, output_directory):
+        zetable = []
+        for  location in self.multiworld.get_locations(self.player):
+            assert(isinstance(location, OoTMMLocation))
+            key = location.name
+            data = location_data_table[key]
+            zetable.append({"Location": data.name, "Game": data.game, "Id": data.id, "Item": location.item.name,})
+            pass
+        with open (output_directory + "/output.json","w", encoding="utf-8") as outfile:
+            outfile.write(json.dumps(zetable))
         
-        path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.json")
+        # path = os.path.join(output_directory, f"{self.multiworld.get_out_file_name_base(self.player)}.json")
 
     # def get_filler_item_name(self) -> str:
     #     return "A Cool Filler Item (No Satisfaction Guaranteed)"
@@ -103,7 +111,7 @@ class OoTMMWorld(World):
     #     # Completion condition.
     #     self.multiworld.completion_condition[self.player] = lambda state: state.has("The Urge to Push", self.player)
 
-    def fill_slot_data(self):
-        return {
-            "color": getattr(self.multiworld, "color")[self.player].current_key
-        }
+    # def fill_slot_data(self):
+    #     return {
+    #         "color": getattr(self.multiworld, "color")[self.player].current_key
+    #     }
