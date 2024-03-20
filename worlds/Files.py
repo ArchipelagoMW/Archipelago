@@ -357,7 +357,7 @@ class APTokenMixin:
         Stores a token to be used by patching.
         """
         if not getattr(self, "tokens", None):
-            self.tokens = list()
+            self.tokens = []
         self.tokens.append((token_type, offset, data))
 
 
