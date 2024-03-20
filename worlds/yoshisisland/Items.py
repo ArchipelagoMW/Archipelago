@@ -80,10 +80,10 @@ item_table: Dict[str, ItemData] = {
     'Bandit Consumables': ItemData('Events', None, ItemClassification.progression, 0),
     'Bandit Watermelons': ItemData('Events', None, ItemClassification.progression, 0),
 
-    'Fuzzy Trap': ItemData('Traps', 0x302090, "trap", 0),
-    'Reversal Trap': ItemData('Traps', 0x302091, "trap", 0),
-    'Darkness Trap': ItemData('Traps', 0x302092, "trap", 0),
-    'Freeze Trap': ItemData('Traps', 0x302093, "trap", 0),
+    'Fuzzy Trap': ItemData('Traps', 0x302090, ItemClassification.trap, 0),
+    'Reversal Trap': ItemData('Traps', 0x302091, ItemClassicication.trap, 0),
+    'Darkness Trap': ItemData('Traps', 0x302092, ItemClassification.trap, 0),
+    'Freeze Trap': ItemData('Traps', 0x302093, ItemClassification.trap, 0),
 
     'Boss Clear': ItemData('Events', None, ItemClassification.progression, 0),
     'Piece of Luigi': ItemData('Items', 0x302095, ItemClassification.progression, 0),
