@@ -358,7 +358,7 @@ class APTokenMixin:
         """
         Stores a token to be used by patching.
         """
-        if not hasattr(self, "tokens"):
+        if not hasattr(self, "_tokens"):
             self._tokens = []
         self._tokens.append((token_type, offset, data))
 
