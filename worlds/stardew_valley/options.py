@@ -356,7 +356,7 @@ class QuestLocations(NamedRange):
 class Fishsanity(Choice):
     """Locations for catching a fish the first time?
     None: There are no locations for catching fish
-    Legendaries: Each of the 5 legendary fish are checks
+    Legendaries: Each of the 5 legendary fish are checks, plus the extended family if qi board is turned on
     Special: A curated selection of strong fish are checks
     Randomized: A random selection of fish are checks
     All: Every single fish in the game is a location that contains an item. Pairs well with the Master Angler Goal
