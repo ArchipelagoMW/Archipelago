@@ -16,8 +16,8 @@ from ..strings.spells import MagicSpell
 from ..strings.tool_names import ToolMaterial, Tool
 
 fishing_rod_prices = {
-    2: 1800,  # Fibreglass
-    3: 7500,  # Iridium
+    3: 1800,
+    4: 7500,
 }
 
 tool_materials = {
@@ -59,12 +59,12 @@ class ToolLogic(BaseLogic[Union[ToolLogicMixin, HasLogicMixin, ReceivedLogicMixi
 
     @cache_self1
     def has_fishing_rod(self, level: int) -> StardewRule:
-        assert 0 <= level <= 3, "Fishing rod 0 is Training, 1 is Bamboo, 2 is Fiberglass and 3 is Iridium."
+        assert 1 <= level <= 4, "Fishing rod 0 isn't real, it can't hurt you. Training is 1, Bamboo is 2, Fiberglass is 3 and Iridium is 4."
 
         if self.options.tool_progression & ToolProgression.option_progressive:
             return self.logic.received(f"Progressive {Tool.fishing_rod}", level)
 
-        if level <= 1:
+        if level <= 2:
             # We assume you always have access to the Bamboo pole, because mod side there is a builtin way to get it back.
             return self.logic.region.can_reach(Region.beach)
 

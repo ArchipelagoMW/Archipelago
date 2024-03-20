@@ -33,7 +33,7 @@ class AbilityLogic(BaseLogic[Union[AbilityLogicMixin, RegionLogicMixin, Received
 
     def can_fish_perfectly(self) -> StardewRule:
         skill_rule = self.logic.skill.has_level(Skill.fishing, 10)
-        return skill_rule & self.logic.tool.has_fishing_rod(3)
+        return skill_rule & self.logic.tool.has_fishing_rod(4)
 
     def can_chop_trees(self) -> StardewRule:
         return self.logic.tool.has_tool(Tool.axe) & self.logic.region.can_reach(Region.forest)

@@ -51,7 +51,7 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
             previous_level_rule = True_()
 
         if skill == Skill.fishing:
-            xp_rule = self.logic.tool.has_fishing_rod(min(tool_level, 3))
+            xp_rule = self.logic.tool.has_fishing_rod(max(tool_level, 1))
         elif skill == Skill.farming:
             xp_rule = self.logic.tool.has_tool(Tool.hoe, tool_material) & self.logic.tool.can_water(tool_level)
         elif skill == Skill.foraging:
@@ -152,7 +152,7 @@ CombatLogicMixin, CropLogicMixin, MagicLogicMixin]]):
         skill_rule = self.logic.skill.has_level(Skill.fishing, skill_required)
         region_rule = self.logic.region.can_reach_any(regions)
         # Training rod only works with fish < 50. Fiberglass does not help you to catch higher difficulty fish, so it's skipped in logic.
-        number_fishing_rod_required = 0 if difficulty < 50 else (1 if difficulty < 80 else 3)
+        number_fishing_rod_required = 1 if difficulty < 50 else (2 if difficulty < 80 else 4)
         return self.logic.tool.has_fishing_rod(number_fishing_rod_required) & skill_rule & region_rule
 
     @cache_self1

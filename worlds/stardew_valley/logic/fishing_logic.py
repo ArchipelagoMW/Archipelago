@@ -30,11 +30,11 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
 
     def has_max_fishing(self) -> StardewRule:
         skill_rule = self.logic.skill.has_level(Skill.fishing, 10)
-        return self.logic.tool.has_fishing_rod(3) & skill_rule
+        return self.logic.tool.has_fishing_rod(4) & skill_rule
 
     def can_fish_chests(self) -> StardewRule:
         skill_rule = self.logic.skill.has_level(Skill.fishing, 6)
-        return self.logic.tool.has_fishing_rod(3) & skill_rule
+        return self.logic.tool.has_fishing_rod(4) & skill_rule
 
     def can_fish_at(self, region: str) -> StardewRule:
         return self.logic.skill.can_fish() & self.logic.region.can_reach(region)
@@ -66,7 +66,7 @@ class FishingLogic(BaseLogic[Union[FishingLogicMixin, ReceivedLogicMixin, Region
     def can_catch_quality_fish(self, fish_quality: str) -> StardewRule:
         if fish_quality == FishQuality.basic:
             return True_()
-        rod_rule = self.logic.tool.has_fishing_rod(1)
+        rod_rule = self.logic.tool.has_fishing_rod(2)
         if fish_quality == FishQuality.silver:
             return rod_rule
         if fish_quality == FishQuality.gold:
