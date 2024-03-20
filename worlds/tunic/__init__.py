@@ -9,6 +9,7 @@ from .regions import tunic_regions
 from .er_scripts import create_er_regions
 from .options import TunicOptions
 from worlds.AutoWorld import WebWorld, World
+from worlds.generic import PlandoConnection
 from decimal import Decimal, ROUND_HALF_UP
 
 
@@ -39,6 +40,7 @@ class SeedGroup(TypedDict):
     logic_rules: int  # logic rules value
     laurels_at_10_fairies: bool  # laurels location value
     fixed_shop: bool  # fixed shop value
+    plando: List[PlandoConnection] = []  # consolidated list of plando connections for the seed group
 
 
 class TunicWorld(World):
@@ -90,18 +92,43 @@ class TunicWorld(World):
                 if group not in cls.seed_groups:
                     cls.seed_groups[group] = SeedGroup(logic_rules=tunc.options.logic_rules.value,
                                                        laurels_at_10_fairies=tunc.options.laurels_location == 3,
-                                                       fixed_shop=bool(tunc.options.fixed_shop))
+                                                       fixed_shop=bool(tunc.options.fixed_shop)
+                                                       plando=multiworld.plando_connections[tunc.player])
                 else:
                     # lower value is more restrictive
                     if tunc.options.logic_rules.value < cls.seed_groups[group]["logic_rules"]:
-                        print("restricting logic rules")
+                        print("restricting logic rules")  # debug print, remove later
                         cls.seed_groups[group]["logic_rules"] = tunc.options.logic_rules.value
                     if tunc.options.laurels_location == 3:
-                        print("restricting for laurels location")
+                        print("restricting for laurels location")  # debug print, remove later
                         cls.seed_groups[group]["laurels_at_10_fairies"] = True
                     if tunc.options.fixed_shop:
-                        print("restricting for fixed shop")
+                        print("restricting for fixed shop")  # debug print, remove later
                         cls.seed_groups[group]["fixed_shop"] = True
+                    if multiworld.plando_connections[tunc.player]:
+                        # loop through the connections in the player's yaml
+                        for cxn in multiworld.plando_conections[tunc.player]:
+                            new_conn = True
+                            # check if either of the entrances in the pair match. If one matches and the other doesn't, error out
+                            for group_cxn in cls.seed_group[group]["plando"]:
+                                # todo: figure out what to do regarding shops
+                                if cxn.entrance == group_cxn.entrance:
+                                    new_conn = False
+                                    if cxn.exit == group_cxn.exit:
+                                        continue
+                                    else:
+                                        # todo: figure out what to do with shop vs shop portal
+                                        raise Exception(f"Conflict between group and plando_connections for {tunc.get_player_name()} for their connection {cxn.entrance} <-> {cxn.exit} and the group's connection {group_cxn.entrance} <-> {group_cxn.exit}")
+                                # if a connection exit matches an entrance in the seed group, check if the entrance matches
+                                if cxn.entrance == group_cxn.exit:
+                                    new_conn = False
+                                    if cxn.exit == group_cxn.entrance:
+                                        continue
+                                    else:
+                                        raise Exception(f"Conflict between group and plando_connections for {tunc.get_player_name()} for their connection {cxn.entrance} <-> {cxn.exit} and the group's connection {group_cxn.entrance} <-> {group_cxn.exit}")
+                            if new_conn:
+                                cls.seed_groups[group]["plando"].append(cxn)
+                                
 
     def create_item(self, name: str) -> TunicItem:
         item_data = item_table[name]
