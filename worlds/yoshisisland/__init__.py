@@ -265,7 +265,7 @@ class YoshisIslandWorld(World):
         if not item.advancement:
             return item
 
-        if name == 'Car Morph' and not self.options.stage_logic:
+        if name == 'Car Morph' and self.options.stage_logic.value != 0:
             item.classification = ItemClassification.useful
 
         if name == 'Secret Lens' and (self.options.hidden_object_visibility >= 2 or self.options.stage_logic != 0):
