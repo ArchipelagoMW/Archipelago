@@ -62,6 +62,7 @@ Currently, the following games are supported:
 * Kirby's Dream Land 3
 * Celeste 64
 * Zork Grand Inquisitor
+* Castlevania 64
 
 For setup and instructions check out our [tutorials page](https://archipelago.gg/tutorial/).
 Downloads can be found at [Releases](https://github.com/ArchipelagoMW/Archipelago/releases), including compiled
