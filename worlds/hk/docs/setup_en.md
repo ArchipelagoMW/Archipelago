@@ -4,7 +4,7 @@
 * Download and unzip the Lumafly Mod Manager from the [Lumafly website](https://themulhima.github.io/Lumafly/).
 * A legal copy of Hollow Knight.
    * Steam, Gog, and Xbox Game Pass versions of the game are supported.
-   * Windows, Mac, and Linux (including Steam deck) are supported.
+   * Windows, Mac, and Linux (including Steam Deck) are supported.
 
 ## Installing the Archipelago Mod using Lumafly
 1. Launch Lumafly and ensure it locates your Hollow Knight installation directory.
@@ -22,7 +22,7 @@
    * Steam:
       1. You likely put your Steam library in a non-standard place. If this is the case, you probably know where 
          it is. Find your steam library and then find the Hollow Knight folder and copy the path.
-         * Windows - C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight
+         * Windows - `C:\Program Files (x86)\Steam\steamapps\common\Hollow Knight`
          * Linux/Steam Deck - ~/.local/share/Steam/steamapps/common/Hollow Knight
          * Mac - ~/Library/Application Support/Steam/steamapps/common/Hollow Knight/hollow_knight.app
 2. Run Lumafly as an administrator and, when it asks you for the path, paste the path you copied.
@@ -49,5 +49,5 @@ website to generate a YAML using a graphical interface.
 ## Hints and other commands
 While playing in a multiworld, you can interact with the server using various commands listed in the 
 [commands guide](/tutorial/Archipelago/commands/en). As this game does not have an in-game text client at the moment,
-You can optionally connect to the multiworld using the text client, which can be found in the 
+you can optionally connect to the multiworld using the text client, which can be found in the 
 [main Archipelago installation](https://github.com/ArchipelagoMW/Archipelago/releases) as Archipelago Text Client to enter these commands.
