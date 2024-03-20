@@ -602,10 +602,13 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
         options.EntranceRandomization: options.EntranceRandomization.option_buildings,
         options.ToolProgression: options.ToolProgression.option_vanilla,
     }
+    seed = 4111845104987680262
 
-    def test_cannot_make_get_any_tool_without_blacksmith_access(self):
+    # Seed is hardcoded to make sure the ER is a valid roll that actually lock the blacksmith behind the Railroad Boulder Removed.
+
+    def test_cannot_get_any_tool_without_blacksmith_access(self):
         railroad_item = "Railroad Boulder Removed"
-        swap_blacksmith_and_bathhouse(self.multiworld, self.player)
+        place_region_at_entrance(self.multiworld, self.player, Region.blacksmith, Entrance.enter_bathhouse_entrance)
         collect_all_except(self.multiworld, railroad_item)
 
         for tool in [Tool.pickaxe, Tool.axe, Tool.hoe, Tool.trash_can, Tool.watering_can]:
@@ -618,15 +621,28 @@ class TestToolVanillaRequiresBlacksmith(SVTestBase):
             for material in [ToolMaterial.copper, ToolMaterial.iron, ToolMaterial.gold, ToolMaterial.iridium]:
                 self.assert_rule_true(self.world.logic.tool.has_tool(tool, material), self.multiworld.state)
 
+    def test_cannot_get_fishing_rod_without_willy_access(self):
+        railroad_item = "Railroad Boulder Removed"
+        place_region_at_entrance(self.multiworld, self.player, Region.fish_shop, Entrance.enter_bathhouse_entrance)
+        collect_all_except(self.multiworld, railroad_item)
 
-def swap_blacksmith_and_bathhouse(multiworld, player):
-    blacksmith_region = multiworld.get_region(Region.blacksmith, player)
-    bathhouse_entrance = multiworld.get_entrance(Entrance.enter_bathhouse_entrance, player)
+        for fishing_rod_level in [2, 3]:
+            self.assert_rule_false(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
 
-    blacksmith_entrance = blacksmith_region.entrances[0]
-    bathhouse_region = bathhouse_entrance.connected_region
-    blacksmith_entrance.connect(bathhouse_region)
-    bathhouse_entrance.connect(blacksmith_region)
+        self.multiworld.state.collect(self.world.create_item(railroad_item), event=False)
+
+        for fishing_rod_level in [2, 3]:
+            self.assert_rule_true(self.world.logic.tool.has_fishing_rod(fishing_rod_level), self.multiworld.state)
+
+
+def place_region_at_entrance(multiworld, player, region, entrance):
+    region_to_place = multiworld.get_region(region, player)
+    entrance_to_place_region = multiworld.get_entrance(entrance, player)
+
+    entrance_to_switch = region_to_place.entrances[0]
+    region_to_switch = entrance_to_place_region.connected_region
+    entrance_to_switch.connect(region_to_switch)
+    entrance_to_place_region.connect(region_to_place)
 
 
 def collect_all_except(multiworld, item_to_not_collect: str):
