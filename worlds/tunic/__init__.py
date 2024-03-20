@@ -120,7 +120,7 @@ class TunicWorld(World):
                                         # todo: figure out what to do with shop vs shop portal
                                         raise Exception(f"Conflict between group and plando_connections for {tunc.get_player_name()} for their connection {cxn.entrance} <-> {cxn.exit} and the group's connection {group_cxn.entrance} <-> {group_cxn.exit}")
                                 # if a connection exit matches an entrance in the seed group, check if the entrance matches
-                                if cxn.entrance == group_cxn.exit:
+                                elif cxn.entrance == group_cxn.exit:
                                     new_conn = False
                                     if cxn.exit == group_cxn.entrance:
                                         continue
