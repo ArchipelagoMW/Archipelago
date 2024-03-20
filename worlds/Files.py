@@ -41,7 +41,7 @@ class AutoPatchRegister(abc.ABCMeta):
 
 class AutoPatchExtensionRegister(abc.ABCMeta):
     extension_types: ClassVar[Dict[str, AutoPatchExtensionRegister]] = {}
-    required_extensions: ClassVar[Tuple[str]] = ()
+    required_extensions: ClassVar[Tuple[str, ...]] = ()
 
     def __new__(mcs, name: str, bases: Tuple[type, ...], dct: Dict[str, Any]) -> AutoPatchExtensionRegister:
         # construct class
