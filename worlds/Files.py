@@ -206,7 +206,7 @@ class APProcedurePatch(APAutoPatchInterface):
 
     def __init__(self, *args: Any, **kwargs: Any):
         super(APProcedurePatch, self).__init__(*args, **kwargs)
-        self.files = dict()
+        self.files = {}
 
     def get_manifest(self) -> Dict[str, Any]:
         manifest = super(APProcedurePatch, self).get_manifest()
