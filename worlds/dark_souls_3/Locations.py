@@ -1958,13 +1958,13 @@ location_tables = {
 
         # Shrine Handmaid after killing Anri or completing their quest
         DS3LocationData("FS: Elite Knight Helm - shop after Anri quest", "Elite Knight Helm",
-                        missable = True, npc = True, shop = True),
+                        npc = True, shop = True),
         DS3LocationData("FS: Elite Knight Armor - shop after Anri quest", "Elite Knight Armor",
-                        missable = True, npc = True, shop = True),
+                        npc = True, shop = True),
         DS3LocationData("FS: Elite Knight Gauntlets - shop after Anri quest",
-                        "Elite Knight Gauntlets", missable = True, npc = True, shop = True),
+                        "Elite Knight Gauntlets", npc = True, shop = True),
         DS3LocationData("FS: Elite Knight Leggings - shop after Anri quest",
-                        "Elite Knight Leggings", missable = True, npc = True, shop = True),
+                        "Elite Knight Leggings", npc = True, shop = True),
 
         # Ringfinger Leonhard (quest or kill)
         DS3LocationData("AL: Crescent Moon Sword - Leonhard drop", "Crescent Moon Sword",
